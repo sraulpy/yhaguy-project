@@ -1,0 +1,38 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row visible="@load(!vm.dato.filtro.todosLosClientes)">
+			<field value="Usuario:" />
+			<bandbox hflex="true" placeholder="Todo.."
+				readonly="true" value="@load(vm.dato.filtro.usuario.nombre)"
+				id="bndUsu">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.usuarios)"
+						selectedItem="@bind(vm.dato.filtro.usuario)"
+						onSelect="bndUsu.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.nombreUsuario)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.nombre.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+	</rows>
+
+</grid>

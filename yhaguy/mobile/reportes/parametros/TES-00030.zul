@@ -1,0 +1,16 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Rubro:" sclass="mobile" />
+		<combobox
+			value="@load(vm.filtro.rubro.descripcion.toUpperCase())"
+			selectedItem="@bind(vm.filtro.rubro)" instant="true"
+			model="@load(vm.filtro.rubros)" hflex="true">
+			<template name="model">
+				<comboitem
+					label="@load(each.descripcion.toUpperCase())" />
+			</template>
+		</combobox>
+	</vlayout>
+
+</vlayout>

@@ -1,0 +1,71 @@
+<window border="normal" title="Forma de Pago" width="420px"
+	top="25%" left="35%"
+	id="gastoFp">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="150px"/>
+			<column/>
+		</columns>
+		<rows>		
+			<row>
+				<field value="Tipo de Pago:"/>
+				<hlayout>
+					<combobox model="@load(vm.formasDePago)"
+						hflex="true" selectedItem="@bind(vm.nvoFormaPago.tipo)"
+						onChange="@command('seleccionarFormaPago')" instant="true">
+					</combobox>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<!-- ________________________ Forma Pago Retención _________________________ -->
+			
+			<row id="rwNroRetencion" visible="false">
+				<field value="Número:" />
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.retencionNumero)"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row id="rwTimbradoRetencion" visible="false">
+				<field value="Timbrado:" />
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.retencionTimbrado)"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row id="rwTimbradoVencimiento" visible="false">
+				<field value="Vencimiento Timbrado:" />
+				<hlayout>
+					<datebox value="@bind(vm.nvoFormaPago.retencionVencimiento)"
+						constraint="no past"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row>
+				<field value="Monto:"/>
+				<hlayout>
+					<guaranibox id="dbxGs" value="@bind(vm.nvoFormaPago.montoGs)" />
+					<label value="@load(vm.dtoUtil.simboloMonedaLocal)" 
+						style="font-weight:bold;font-size:11px"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+		
+	<hbox width="100%" pack="center" style="margin-top:15px;margin-bottom:3px">
+		<button label="ACEPTAR" tooltiptext="Aceptar"
+			iconSclass="z-icon-check"
+			width="150px" onClick="@command('addFormaPago')"
+			style="font-weight:bold;padding:7px" dir="normal" />
+		<space />
+		<button label="CANCELAR" tooltiptext="Cancelar"
+			iconSclass="z-icon-times" width="150px"
+			onClick="gastoFp.detach()" 
+			style="font-weight:bold;padding:7px" dir="normal" />
+	</hbox>
+</window>

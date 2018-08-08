@@ -1,0 +1,224 @@
+<zk>
+	<style>
+		.sin-toolbar .z-label, .sin-toolbar .z-toolbarbutton[disabled]
+		{visibility:visible} .sin-toolbar .z-tab {width:150px}
+	</style>
+	<div vflex="true" sclass="sin-toolbar">
+		<grid sclass="vgrid">
+			<columns>
+				<column hflex="min" />
+				<column hflex="max" />
+				<column hflex="min" />
+				<column hflex="max" />
+				<column hflex="min" />
+				<column hflex="min" />
+				<column hflex="min" />
+				<column hflex="max" />
+				<column hflex="min" />
+				<column hflex="max" />
+				<column hflex="min" />
+			</columns>
+
+			<rows>
+				<row>
+
+					<label value="Movimientos:"
+						style="visibility:visible" />
+					<combobox
+						model="@load(vm.dtoUtil.ctaCteEmpresaSeleccionMov)"
+						readonly="@load(vm.infoCtaCteDisable)"
+						buttonVisible="@load(!vm.infoCtaCteDisable)"
+						value="@load(vm.selectedMovimientos)"
+						selectedItem="@bind(vm.selectedMovimientos)"
+						tooltiptext="Seleccionar los movimientos que desee obtener"
+						hflex="true">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>
+					</combobox>
+
+
+					<field value="Sucursal:" />
+					<combobox
+						model="@load(vm.dtoUtil.sucursalesAppSeleccion)" width="100px"
+						readonly="@load(vm.infoCtaCteDisable)"
+						buttonVisible="@load(!vm.infoCtaCteDisable)"
+						selectedItem="@bind(vm.sucursalSeleccionada)"
+						tooltiptext="Seleccionar sucursal donde se realizaron los movimientos">
+						<template name="model">
+							<comboitem label="@load(each.text)" />
+						</template>
+					</combobox>
+
+
+					<field value="Emitido entre:" />
+					<checkbox checked="@load(vm.buscarPorFecha)"
+						onCheck="@command('checkBuscarPorFecha')"
+						disabled="@load(vm.infoCtaCteDisable)"
+						tooltiptext="Activar/Desactivar busqueda por rango de fechas" />
+
+
+					<field value="Desde:" />
+					<datebox id="db0" cols="12" format="dd-MM-yyyy"
+						value="@bind(vm.fechaDesde)" width="100px"
+						readonly="@load(vm.buscarPorFechaDisable)"
+						buttonVisible="@load(!vm.buscarPorFechaDisable)" />
+
+
+					<field value="Hasta:" />
+					<datebox id="db1" cols="12" format="dd-MM-yyyy"
+						value="@bind(vm.fechaHasta)" width="100px"
+						readonly="@load(vm.buscarPorFechaDisable)"
+						buttonVisible="@load(!vm.buscarPorFechaDisable)" />
+
+					<button label="Mostrar"
+						disabled="@load(vm.infoCtaCteDisable)"
+						onClick="@command('buscarMovimientos')" style="margin:10px" />
+				</row>
+				<row>
+					<cell colspan="4">
+						<hlayout style="margin-top:5px">
+							<field value="Movimientos seleccionados:" />
+							<label value="@load(vm.infoBusqueda)"
+								style="font-weight:bold;color:green" />
+						</hlayout>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+		<listbox id="movimientos" vflex="true" multiple="true"
+			sclass="small-list" emptyMessage="No existen movimientos que mostrar"
+			model="@load(vm.movimientos)" width="100%">
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+
+			<listhead menupopup="auto" sizable="true">
+				<listheader label="Emision" style="text-align:center"
+					sort="auto(pos3)" />
+				<listheader label="Vencimiento"
+					style="text-align:center" sort="auto(pos4)" hflex="min" />
+				<listheader label="Sucursal" style="text-align:center"
+					sort="auto(pos11)" />
+				<listheader label="Tipo Movimiento"
+					style="text-align:center" align="right" sort="auto(pos8)" />
+				<listheader label="Comprobante"
+					style="text-align:center" align="right" sort="auto(pos2)"
+					hflex="min" />
+				<listheader label="Moneda" style="text-align:center"
+					sort="auto(pos7.text)" hflex="min" />
+				<listheader label="Importe Original"
+					style="text-align:center" align="right" sort="auto(pos5)" />
+				<listheader label="Saldo" style="text-align:center"
+					align="right" sort="auto(pos6)" />
+				<listheader label="Saldo Gs" style="text-align:center"
+					align="right" sort="auto(pos12)" />
+			</listhead>
+			<auxhead>
+				<auxheader colspan="1">
+					<textbox readonly="@load(vm.infoCtaCteDisable)"
+						instant="true" disabled="false"
+						value="@bind(vm.filtroMovimiento.emision)"
+						onChange="@command('changeFilter')" hflex="true" />
+				</auxheader>
+				<auxheader colspan="1">
+					<textbox readonly="@load(vm.infoCtaCteDisable)"
+						instant="true" disabled="false"
+						value="@bind(vm.filtroMovimiento.vencimiento)"
+						onChange="@command('changeFilter')" hflex="true" />
+				</auxheader>
+				<auxheader colspan="1">
+					<textbox readonly="@load(vm.infoCtaCteDisable)"
+						instant="true" disabled="false"
+						value="@bind(vm.filtroMovimiento.sucursal)"
+						onChange="@command('changeFilter')" hflex="true" />
+				</auxheader>
+				<auxheader colspan="1">
+					<textbox instant="true"
+						readonly="@load(vm.infoCtaCteDisable)" disabled="false"
+						value="@bind(vm.filtroMovimiento.tipoMovimiento)"
+						onChange="@command('changeFilter')" hflex="true" />
+				</auxheader>
+				<auxheader colspan="1">
+					<textbox instant="true"
+						readonly="@load(vm.infoCtaCteDisable)" disabled="false"
+						value="@bind(vm.filtroMovimiento.comprobanteNro)"
+						onChange="@command('changeFilter')" hflex="true" />
+				</auxheader>
+				<auxheader colspan="1">
+					<textbox instant="true"
+						readonly="@load(vm.infoCtaCteDisable)" disabled="false"
+						value="@bind(vm.filtroMovimiento.moneda)"
+						onChange="@command('changeFilter')" hflex="true" />
+				</auxheader>
+				<auxheader colspan="3"></auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem
+					onDoubleClick="@command('mostrarMovimientoCtaCte', movimiento=each)">
+					<listcell
+						label="@load(each.pos3) @converter('formatedDate', format='dd-MM-yyyy')"
+						style="color:black;text-align:center"
+						tooltiptext="@load(each.pos3) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<!--  
+						<listcell
+						label="@load(each.pos4 eq null ? 'vacio' : each.pos4) 
+						@converter(each.pos4 eq null ? vm.cnv.facturaPy:'formatedDate', format='dd-MM-yyyy')"
+						style="color:black;text-align:center" />-->
+					<listcell
+						label="@load(each.pos4) @converter('formatedDate', format='dd-MM-yyyy')"
+						style="color:black;text-align:center"
+						tooltiptext="@load(each.pos4) @converter('formatedDate', format='dd-MM-yyyy')" />
+
+					<listcell label="@load(each.pos11)"
+						style="color:black;text-align:left"
+						tooltiptext="@load(each.pos11)" />
+
+					<listcell label="@load(each.pos8)"
+						style="color:black;text-align:left"
+						tooltiptext="@load(each.pos8)" />
+
+					<listcell label="@load(each.pos2)"
+						style="color:black;text-align:left" />
+
+
+					<listcell label="@load(each.pos7.text)"
+						style="color:black;text-align:left" />
+
+
+					<listcell>
+						<monedabox value="@load(each.pos5)"
+							inplace="true" readonly="true" style="text-align:right"
+							format="#,###,###,##0.00" />
+					</listcell>
+
+					<listcell>
+						<monedabox value="@load(each.pos6)"
+							inplace="true" readonly="true" style="text-align:right"
+							format="#,###,###,##0.00" />
+					</listcell>
+					<listcell>
+						<guaranibox value="@load(each.pos12)"
+							inplace="true" readonly="true" />
+					</listcell>
+
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter>
+					<guaranibox value="@load(vm.saldoSuma)"
+						style="background:#dddddd;text-align:right; font-weight:bold ; font-size:12px"
+						readonly="true"
+						tooltiptext="Subtotal en Gs. de los movimientos listados" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</div>
+</zk>

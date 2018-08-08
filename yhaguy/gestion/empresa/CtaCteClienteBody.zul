@@ -1,0 +1,23 @@
+<vlayout hflex="true" vflex="true">
+	<hlayout sclass="button-container" valign="middle">
+		<field value="Estado:" />
+		<textbox
+			value="@load(vm.dto.cuentaBloqueada ? 'Bloqueado' : 'Habilitado')"
+			style="@load(vm.dto.cuentaBloqueada ? 'color:red' : '')"
+			readonly="true">
+		</textbox>
+		<space />
+		<field value="Límite de Crédito:" />
+		<guaranibox value="@bind(vm.dto.limiteCredito)" readonly="true"/>
+		<space />
+		<field value="Condición de Venta:" />
+		<textbox
+			value="@load(vm.dto.ventaCredito ? 'Crédito' : 'Contado')"
+			readonly="true">
+		</textbox>
+		<space />
+	</hlayout>
+	<include
+		src="/yhaguy/gestion/empresa/CtaCteEmpresaListadoMovimientos.zul"
+		vflex="true" />
+</vlayout>

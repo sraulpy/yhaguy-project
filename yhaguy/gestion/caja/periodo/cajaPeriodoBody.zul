@@ -1,0 +1,245 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoControlBody')"
+		height="100%" width="100%">
+		
+		<timer delay="5000" repeats="true" onTimer="@command('verificarPedidosAprobados')" ></timer>
+
+		<!-- ___________________________ CABECERA ___________________________ -->
+
+		<hlayout style="margin:10px 5px" valign="top">
+			<vlayout sclass="vcab">
+				<field value="Caja"/>
+				<hlayout
+					visible="@load(vm.dto.verificador.esNuevo())">
+					<textbox value="@bind(vm.dto.caja.numero)"
+						width="100px" onOK="@command('buscarCaja')"
+						placeholder="Caja Principal.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarCaja')" />
+				</hlayout>
+				<textbox value="@load(vm.dto.caja.numero)"
+					visible="@load(!vm.dto.verificador.esNuevo())"
+					readonly="true"
+					width="100px"/>
+			</vlayout>
+			
+			<vlayout sclass="vcab">
+				<field value="Planilla"/>
+				<textbox value="@load(vm.dto.numero)" readonly="true"
+					width="100px" />
+			</vlayout>
+			
+			<vlayout sclass="vcab">
+				<field value="Apertura"/>
+				<textbox
+					value="@load(vm.dto.apertura) @converter('formatedDate',format='dd-MM-yyyy')"
+					readonly="true" width="100px" />
+			</vlayout>
+			
+			<vlayout sclass="vcab">
+				<field value="Cierre"/>
+				<textbox
+					value="@load(vm.dto.cierre) @converter('formatedDate', format='dd-MM-yyyy')"
+					readonly="true" width="100px" />
+			</vlayout>
+			
+			<vlayout sclass="vcab" hflex="true">
+				<field value="Estado"/>				
+				<textbox value="@load(vm.dto.estado.text.toUpperCase())" 
+					readonly="true" hflex="true"/>							
+			</vlayout>
+			
+			<vlayout sclass="vcab" hflex="true">
+				<field value="Tipo"/>				
+				<combobox model="@load(vm.tiposCajas)"
+					value="@load(vm.dto.tipo)"
+					selectedItem="@bind(vm.dto.tipo)"
+					hflex="true">			
+					<template name="model">
+						<comboitem label="@load(each)"/>
+					</template>	
+				</combobox>						
+			</vlayout>
+			
+			<vlayout sclass="vcab" hflex="true">
+				<field value="Responsable"/>
+				<textbox value="@load(vm.dto.responsable.pos1.toUpperCase())"
+					readonly="true" hflex="true" />
+			</vlayout>					
+		</hlayout>
+
+		<!-- _______________________________ BOTONERA _______________________________ -->
+
+		
+		<solicitarCabecera visible="@load(vm.dto.esNuevo)" />
+
+		<hlayout sclass="button-container"
+			visible="@load(vm.botoneraVisible)"
+			id="botonera">
+			<button mold="bs" sclass="btn-info btn-sm" width="105px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('abrirVentanaRecibo', tipo=4)"
+				disabled="@load(!vm.dto.caja.cobro)" label=" Cobro" />
+			<button mold="bs" sclass="btn-primary btn-sm" width="105px"
+				iconSclass="z-icon-plus-circle"
+				disabled="@load(!vm.dto.caja.cobro)" label=" Reembolsos" 
+				onClick='popReembolso.open(self)'/>
+			<button mold="bs" sclass="btn-success btn-sm" width="105px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('abrirVentanaReposicion', tipo=2)"
+				disabled="@load(!vm.dto.caja.reposicion)" label=" Reposición" />	
+			<button mold="bs" sclass="btn-warning btn-sm" width="105px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('facturar', tipo=4)"
+				disabled="@load(!vm.dto.caja.facturacion)" label=" Facturación" />
+			<space width="30px" />
+			<button mold="bs" sclass="btn-info btn-sm" width="105px"
+				iconSclass="z-icon-minus-circle"
+				onClick="@command('abrirVentanaRecibo', tipo=1)"
+				disabled="@load(!vm.dto.caja.pago)" label=" Pago" />	
+			<button mold="bs" sclass="btn-primary btn-sm" width="105px"
+				iconSclass="z-icon-minus-circle"
+				onClick="@command('showFormGastos')"
+				disabled="@load(!vm.dto.caja.gasto)" label=" Gasto" />
+			<button mold="bs" sclass="btn-success btn-sm" width="105px"
+				iconSclass="z-icon-minus-circle"
+				onClick="@command('abrirVentanaReposicion', tipo=3)"
+				disabled="@load(!vm.dto.caja.egreso)" label=" Egreso" />	
+			<button mold="bs" sclass="btn-warning btn-sm" width="105px"
+				iconSclass="z-icon-minus-circle"
+				onClick="@command('devolucionConNotaDeCredito')"
+				disabled="@load(!vm.dto.caja.notaCredito)" label=" N. Crédito" />			
+			<space hflex="true" />
+			<button mold="bs" sclass="btn-primary btn-sm" width="105px"
+				iconSclass="z-icon-print"
+				onClick="@command('imprimirItem')"
+				disabled="@load(vm.selectedItem eq null)" label=" Imprimir" />	
+			<button mold="bs" sclass="btn-danger btn-sm" width="105px"
+				iconSclass="z-icon-lock"
+				onClick="@command('cerrarCaja')"
+				disabled="@load(vm.dto.detalles.size() eq 0 or vm.abrirCajaDisabled)" label=" Cerrar" />	
+		</hlayout>
+		
+		<hlayout sclass="button-container"
+			visible="@load(!vm.botoneraVisible and !vm.dto.readonly and !vm.dto.esNuevo)"
+			id="abrirCaja">
+			<button mold="bs" sclass="btn-success btn-sm" width="110px"
+				iconSclass="z-icon-unlock"
+				onClick="botonera.setVisible(true); abrirCaja.setVisible(false)"
+				disabled="@load(vm.abrirCajaDisabled)" label=" Abrir Caja" />	
+		</hlayout>
+
+		<hlayout sclass="button-container"
+			visible="@load(vm.dto.readonly)">
+			<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				onClick="@command('reporteCajaPlanilla')"
+				disabled="@load(!vm.siempreHabilitado)" label=" Resumen de Caja" />	
+			<space />	
+			<button mold="bs" sclass="btn-primary btn-sm" width="110px"
+				iconSclass="z-icon-print"
+				onClick="@command('imprimirItem')"
+				disabled="@load(vm.selectedItem eq null)" label=" Imprimir" />
+		</hlayout>
+
+		<listbox model="@load(vm.dto.detallesOrdenado)" vflex="true"
+			sclass="small-list" selectedItem="@bind(vm.selectedItem)"
+			onSelect="@command('selectItem')" visible="@load(!vm.dto.esNuevo)"
+			emptyMessage="AGREGUE MOVIMIENTOS A ESTA CAJA..">
+			<listhead>
+				<listheader label="" width="30px" align="center" />
+				<listheader label="Concepto" style="text-align:center"
+					width="170px" />
+				<listheader label="Fecha" style="text-align:center"
+					width="120px" />
+				<listheader label="Número" style="text-align:center"
+					width="120px" sort="auto(pos14)" onCreate="self.sort(true)"/>
+				<listheader label="Descripción"
+					style="text-align:center" />
+				<listheader label="Moneda Extranjera"
+					style="text-align:center" width="150px" align="right" />
+				<listheader label="Moneda Local"
+					style="text-align:center" width="150px" align="right" />
+			</listhead>
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+			<template name="model">
+				<listitem
+					onDoubleClick="@command('verItem', item=each)"
+					style="@load(each.pos13.sigla eq 'EST-CBT-ANU'? 'text-decoration:line-through' : '')">
+					<listcell>
+						<image src="@load(each.pos6)"
+							tooltiptext="@load(each.pos7)" context="editPopup" />
+					</listcell>
+					<listcell label="@load(each.pos8)" />
+					<listcell
+						label="@load(each.pos2) @converter('formatedDate', format='dd/MM/yyyy HH:mm')" />
+					<listcell
+						label="@load(each.pos14)"/>
+					<listcell>
+						<hlayout>
+							<label value="@load(each.pos3)" hflex="true"/>
+							<label value="@load(each.pos20)" style="font-style:italic; font-size:10px; color:green; margin-right:5px" />
+						</hlayout>
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.pos4) @converter(vm.cnv.monedaExtranjera)"
+							visible="@load(!each.pos12)" />
+						<div width="5px" />
+						<label value="@load(each.pos11)"
+							style="color:black;font-size:11px" visible="@load(!each.pos12)" />
+						<label value="..."
+							visible="@load(each.pos12)" />
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.pos5) @converter('formatedNumber', format='#,##0')" />
+						<div width="5px" />
+						<label value="@load(each.pos10)"
+							style="color:black;font-size:11px" />
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="6" align="left">
+					<hlayout sclass="z-valign-middle">
+						<field
+							value="@load(vm.dto.detallesOrdenado.size())" />
+						<field value="ítems" />
+						<space></space>
+						<label style="font-style:italic">Pedidos Aprobados</label>
+						<label class="badge primary" value="@load(vm.totalPedidosPendientes)"
+							style="background-color:#428bca"></label>
+						<space hflex="true" />
+						<label value="Saldo en Efectivo Gs."
+							sclass="label-moneda-footer" />
+						<space />
+						<guaranibox
+							value="@load(vm.saldoCajaPagoPeriodoGs)" readonly="true"
+							sclass="footer-input" style="background:#dddddd" 
+							visible="false"/>
+						<space />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<popup id="popReembolso" width="200px" sclass="rounded">
+			<vlayout>
+				<button mold="bs" sclass="btn-primary btn-sm"
+					hflex="true" disabled="@load(!vm.dto.caja.cobro)"
+					label="Cheques Rechazados"
+					onClick="@command('abrirVentanaRecibo', tipo=9)" />
+				<div height="5px"></div>
+				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
+					disabled="@load(!vm.dto.caja.cobro)" label="Préstamos"
+					onClick="@command('abrirVentanaRecibo', tipo=10)" />
+			</vlayout>
+		</popup>
+
+	</window>
+	<style>
+		.vcab {margin-right:5px}
+	</style>
+</zk>

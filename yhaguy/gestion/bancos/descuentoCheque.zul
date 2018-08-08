@@ -1,0 +1,253 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.descuentos.DescuentoChequesVM')"
+	height="100%">
+
+	<grid sclass="vgrid" width="100%">
+		<columns>
+			<column width="150px" />
+			<column width="150px" />
+			<column width="150px" />
+			<column width="150px" />
+			<column width="150px" />
+			<column></column>
+			<column width="150px" />
+		</columns>
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@load(vm.chequeDescuento.id)"
+						readonly="true"
+						tooltiptext="Identificador del descuento de cheques."
+						hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Fecha" />
+					<datebox value="@bind(vm.chequeDescuento.fecha)"
+						hflex="true" 
+						format="dd-MM-yyyy" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Banco" />
+					<combobox hflex="true"
+						value="@load(vm.chequeDescuento.banco.pos1.text)"
+						selectedItem="@bind(vm.chequeDescuento.banco)"
+						model="@load(vm.bancos)">
+						<template name="model">
+							<comboitem label="@load(each.pos1.text)"></comboitem>
+						</template>
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Moneda" />
+					<combobox hflex="true"
+						model="@load(vm.dtoUtil.monedas)"
+						value="@load(vm.chequeDescuento.moneda)"
+						selectedItem="@bind(vm.chequeDescuento.moneda)"
+						tooltiptext="Seleccione la moneda de los cheques a descontar.">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Total Gs." />
+					<guaranibox
+						value="@bind(vm.chequeDescuento.totalChequesDescontado)"
+						tooltiptext="Monto total de los cheques seleccionados."
+						hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Observación" />
+					<textbox
+						hflex="true" value="@bind(vm.chequeDescuento.observacion)"
+						tooltiptext="@load(vm.chequeDescuento.observacion)" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Estado" />
+					<hlayout>
+						<textbox value="@load(vm.chequeDescuento.confirmado? 'CERRADO' : 'PENDIENTE')"
+							readonly="true" hflex="true" />
+						<image src="@load(vm.chequeDescuento.confirmado? '/core/images/accept_.png' : '/core/images/delete_.png')"></image>
+					</hlayout>
+				</vlayout>
+			</row>
+			<row height="10px"/>
+		</rows>
+	</grid>
+
+	<solicitarCabecera visible="@load(vm.chequeDescuento.esNuevo)">
+	</solicitarCabecera>
+
+	<hbox width="100%" vflex="1"
+		visible="@load(!vm.chequeDescuento.esNuevo)">
+		<vbox hflex="1" vflex="1">
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-danger btn-sm"
+					iconSclass="z-icon-minus-circle"
+					onClick="@command('removerChequesSeleccionados')" label=" Eliminar" width="150px" />
+				<space/>
+				<button mold="bs" sclass="btn-success btn-sm"
+					iconSclass="z-icon-plus-circle"
+					onClick="@command('buscarChequeTercero')" label=" Insertar" width="150px" />
+				<space />
+				<button mold="bs" sclass="btn-info btn-sm"
+					iconSclass="z-icon-plus-circle" label=" Cheque Propio" width="150px" 
+					visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo')"
+					onClick="@command('buscarChequePropio')"/>
+				<space visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo')" />
+				<button mold="bs" sclass="btn-warning btn-sm"
+					iconSclass="z-icon-money" label=" Otros Valores" width="150px" 
+					visible="@load(vm.tipo eq 'prestamo')" 
+					onClick="@command('formaDePago')" disabled="@load(!vm.siempreHabilitado)"/>
+				<space visible="@load(vm.tipo eq 'prestamo')" />
+				<button mold="bs" sclass="btn-primary btn-sm"
+					iconSclass="z-icon-check"
+					onClick="@command('cerrarDescuentoCheque')" label=" Cerrar" width="150px" />
+				<space />
+				<button mold="bs" sclass="btn-info btn-sm" disabled="@load(!vm.siempreHabilitado or !vm.chequeDescuento.readonly)"
+					iconSclass="z-icon-exchange" label=" Liquidación Préstamo" width="170px" 
+					onClick='pop_liq.open(self, "after_start")'
+					visible="@load(vm.tipo eq 'descuento')"/>
+				<space />
+				<hlayout visible="@load(vm.chequeDescuento.formasPago.size() eq 0? 'false':'true')">
+					<field value="OTROS VALORES:"/>
+					<space />
+					<label value="@load(vm.chequeDescuento.otrosValores)"></label>
+				</hlayout>				
+			</hlayout>
+
+			<listbox model="@load(vm.chequeDescuento.cheques_)"
+				vflex="true" hflex="1" sclass="small-list" multiple="true"
+				selectedItems="@bind(vm.selectedCheques)" checkmark="true"
+				emptyMessage="INGRESE LOS CHEQUES A DESCONTAR..">
+				<custom-attributes
+					org.zkoss.zul.listbox.autoSort="true" />
+
+				<listhead>
+					<listheader label="" width="40px" align="center" />
+					<listheader label="Fecha" sort="auto(pos1)" onCreate="self.sort(true)" />
+					<listheader label="Banco" />
+					<listheader label="Número de Cheque" sort="auto(pos3)" />
+					<listheader label="Cliente" sort="auto(pos9)" width="25%"/>
+					<listheader label="Librado Por" sort="auto(pos4)" width="25%"/>
+					<listheader label="Depositado" width="100px"
+						style="text-align:center" align="center" />
+					<listheader label="Descontado" width="100px"
+						style="text-align:center" align="center" />
+					<listheader label="Importe" align="right" sort="auto(pos6)" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell></listcell>
+						<listcell
+							label="@load(each.pos1)  @converter('formatedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(each.pos2.toString().toUpperCase())" />
+						<listcell label="@load(each.pos3)"
+							tooltiptext="@load(each.pos3)" />
+						<listcell label="@load(each.pos9.toString().toUpperCase())"
+							tooltiptext="@load(each.pos9)" />
+						<listcell label="@load(each.pos4.toString().toUpperCase())"
+							tooltiptext="@load(each.pos4)" />
+						<listcell>
+							<hlayout>
+								<label value="SI"
+									style="color:green; font-size:11px" visible="@load(each.pos6)" />
+								<label value="NO"
+									style="color:red; font-size:11px" visible="@load(!each.pos6)" />
+							</hlayout>
+						</listcell>
+						<listcell>
+							<hlayout>
+								<label value="SI"
+									style="color:green; font-size:11px" visible="@load(each.pos8)" />
+								<label value="NO"
+									style="color:red; font-size:11px" visible="@load(!each.pos8)" />
+							</hlayout>
+						</listcell>
+						<listcell>
+							<label value="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="9" align="left">
+						<hlayout>
+							<field value=""/>
+							<field value="ítems" />
+							<space />
+							<label value="*Genera saldo en cuenta Casa Central para su posterior reembolso.."
+								style="color:red;font-style:italic"
+								visible="@load(vm.tipo eq 'prestamo')"></label>
+							<space hflex="true" />
+							<field value="Importe Total Gs." />
+							<guaranibox style="background:#EEF7FA;font-weight:bold;text-align:right;margin-right:10px"
+								value="@load(vm.chequeDescuento.totalImporte)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vbox>
+	</hbox>
+
+	<popup id="pop_liq" sclass="rounded">
+		<grid width="350px" sclass="vgrid">
+			<rows>
+				<row>
+					<field>Monto del Préstamo:</field>
+					<guaranibox hflex="true" readonly="true"
+						value="@load(vm.chequeDescuento.totalImporte)"/>
+				</row>
+				<row>
+					<field>Impuestos:</field>
+					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
+						value="@bind(vm.chequeDescuento.liq_impuestos)"/>
+				</row>
+				<row>
+					<field>Gastos Administrativos:</field>
+					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
+						value="@bind(vm.chequeDescuento.liq_gastos_adm)"/>
+				</row>
+				<row>
+					<field>Interes:</field>
+					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
+						value="@bind(vm.chequeDescuento.liq_intereses)"/>
+				</row>
+				<row>
+					<field>Neto (Cheques al Dia):</field>
+					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
+						value="@bind(vm.chequeDescuento.liq_neto_aldia)"/>
+				</row>
+				<row>
+					<field>Neto (Cheques Diferidos):</field>
+					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
+						value="@bind(vm.chequeDescuento.liq_neto_diferidos)"/>
+				</row>
+				<row>
+					<cell colspan="2">
+						<div height="10px" style="border-bottom:solid 1px silver"></div>
+					</cell>
+				</row>
+				<row>
+					<field>Total Neto Gs.:</field>
+					<guaranibox hflex="true" style="background:#EEF7FA;font-weight:bold;text-align:right" 
+						readonly="true" value="@bind(vm.chequeDescuento.liq_neto_aldia + vm.chequeDescuento.liq_neto_diferidos)"/>
+				</row>
+				<row>
+					<cell colspan="2">
+						<div height="5px"></div>
+					</cell>
+				</row>
+				<row>
+					<cell colspan="2">
+						<button mold="bs" sclass="btn-success btn-sm"
+							iconSclass="z-icon-check" hflex="true" 
+							disabled="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)"
+							onClick="@command('addLiquidacionPrestamo')"/>
+					</cell>
+				</row>
+			</rows>
+		</grid>		
+	</popup>
+	
+</window>

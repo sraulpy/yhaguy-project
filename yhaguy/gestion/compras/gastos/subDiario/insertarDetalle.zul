@@ -1,0 +1,78 @@
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.subdiario.GastoSoloViewModel')"
+		style="padding: 10px">
+
+
+		<grid sclass="vgrid">
+			<columns>
+				<column width="130px" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<field value="Código Cuenta:" />
+					<hlayout>
+						<textbox
+							value="@bind(vm.dato.nvoItem.articuloGasto.cuentaContable.pos1)"
+							hflex="true" onOK="@command('selectItemDeGasto', filtro=0)"
+							placeholder="Código.." />
+						<button iconSclass="z-icon-search"
+							onClick="@command('selectItemDeGasto', filtro=0)" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Descripción Cuenta:" />
+					<hlayout>
+						<textbox
+							value="@bind(vm.dato.nvoItem.articuloGasto.cuentaContable.pos2)"
+							onOK="@command('selectItemDeGasto', filtro=1)"
+							placeholder="Descripción.." hflex="true" />
+						<button iconSclass="z-icon-search"
+							onClick="@command('selectItemDeGasto', filtro=1)" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Descripción Gasto:" />
+					<textbox value="@bind(vm.dato.nvoItem.observacion)"
+						hflex="true" />
+				</row>
+				<row>
+					<field value="Iva:" />
+					<hlayout>
+						<combobox
+							model="@load(vm.dato.dtoUtil.tiposDeIva)"
+							selectedItem="@bind(vm.dato.nvoItem.tipoIva)"
+							value="@load(vm.dato.nvoItem.tipoIva.pos1)" instant="true"
+							visible="@load(!vm.dato.dto.autoFactura and !vm.dato.dto.boletaVenta)" 
+							hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.pos1)" />
+							</template>
+						</combobox>
+						<textbox
+							visible="@load(vm.dato.dto.autoFactura or vm.dato.dto.boletaVenta)" 
+							value="@load(vm.dato.nvoItem.tipoIva.pos1)"
+							readonly="true" 
+							hflex="true" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Importe Gs." />
+					<hlayout>
+						<guaranibox
+							value="@bind(vm.dato.nvoItem.montoGs)" />
+						<label value="Iva incluído" visible="@load(!vm.dato.nvoItem.exenta)"/>
+					</hlayout>
+				</row>
+				<row>
+					<field value="Impuesto Gs." />
+					<hlayout>
+						<guaranibox
+							value="@bind(vm.dato.nvoItem.ivaCalculado)" readonly="true" />
+					</hlayout>
+				</row>
+			</rows>
+		</grid>
+	</div>
+</zk>

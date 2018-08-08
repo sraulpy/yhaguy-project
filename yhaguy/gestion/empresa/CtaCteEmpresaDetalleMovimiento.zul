@@ -1,0 +1,118 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoSimpleControl')"
+		sclass="sin-toolbar">
+		<vlayout>
+			<groupbox title="Datos del Movimiento">
+				<grid sclass="vgrid">
+					<columns>
+						<column width="20%" />
+						<column width="30%" />
+						<column width="20%" />
+						<column width="30%" />
+					</columns>
+					<rows>
+						<row>
+							<field value="Número de Comprobante:" />
+							<textbox
+								value="@load(vm.movimientoSelecDto.nroComprobante)"
+								readonly="true" width="75%" />
+							<field value="Tipo de Movimiento:"/>
+							<textbox
+								value="@load(vm.movimientoSelecDto.tipoMovimiento.pos1)"
+								readonly="true" width="75%" />
+						</row>
+						<row>
+							<field value="Fecha Emision:" />
+							<textbox
+								value="@load(vm.movimientoSelecDto.fechaEmision) @converter('formatedDate', format='dd-MM-yyyy')"
+								readonly="true" width="50%" />
+							<field value="Fecha Vencimiento:" />
+							<textbox
+								value="@load(vm.movimientoSelecDto.fechaVencimiento) @converter('formatedDate', format='dd-MM-yyyy')"
+								readonly="true" width="50%" />
+						</row>
+						<row>
+							<field value="Monto Original:" />
+							<monedabox
+								value="@load(vm.movimientoSelecDto.importeOriginal)"
+								readonly="true"
+								style="text-align:left;color:green;font-weight:bold"
+								width="50%" format="#,###,###,##0.00" />
+							<field value="Saldo:" />
+							<monedabox
+								value="@load(vm.movimientoSelecDto.saldo)" readonly="true"
+								style="text-align:left;color:green;font-weight:bold"
+								width="50%" format="#,###,###,##0.00" />
+						</row>
+						<row>
+							<field value="Moneda del movimiento:" />
+							<textbox
+								value="@load(vm.movimientoSelecDto.moneda)" readonly="true"
+								width="50%" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<groupbox title="Imputaciones del Movimiento">
+				<toolbarbutton label="Aplicar a Movimiento"
+					image="/core/images/insertar.png"
+					onClick="@command('asignarImputacion')"
+					disabled="@load(vm.movimientoAplicable)" />	
+				<separator />
+				<listbox id="Imputaciones" height="200px" 
+					emptyMessage="Sin imputaciones"
+					model="@load(vm.movimientoSelecDto.imputaciones)">
+
+					<custom-attributes
+						org.zkoss.zul.listbox.autoSort="true" />
+
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Imputo a"
+							style="text-align:center" hflex="min" />
+						<listheader label="Imputado por"
+							style="text-align:center" hflex="min" />
+						<listheader label="Tipo de Imputacion"
+							style="text-align:center" hflex="min" />
+						<listheader label="Monto Imputado"
+							style="text-align:center" align="right"  hflex="min" />
+						<listheader label="Moneda"
+							style="text-align:center" hflex="min" />
+						<listheader label="Tipo Cambio"
+							style="text-align:center" align="right"  hflex="min"/>
+
+					</listhead>
+
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.dondeImputa)"
+								style="color:black;text-align:center" />
+
+							<listcell label="@load(each.quienImputa)"
+								style="color:black;text-align:center" />
+
+							<listcell
+								label="@load(each.tipoImputacion.text)"
+								style="color:black;text-align:center" />
+
+							<listcell>
+								<monedabox
+									value="@load(each.montoImputado)" inplace="true"
+									readonly="true" style="text-align:right"
+									format="#,###,###,##0.00" />
+							</listcell>
+							<listcell label="@load(each.moneda.text)"
+								style="color:black;text-align:center" />
+							<listcell>
+								<monedabox
+									value="@load(each.tipoCambio)" inplace="true" readonly="true"
+									style="text-align:right" />
+							</listcell>
+						</listitem>
+					</template>
+
+				</listbox>
+			</groupbox>
+		</vlayout>
+	</window>
+</zk>

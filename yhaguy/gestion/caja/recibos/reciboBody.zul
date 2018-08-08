@@ -1,0 +1,299 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.recibos.ReciboSimpleControl')"
+	style="padding: 10px" height="100%">
+
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@bind(vm.dato.reciboDTO.numero)  @converter(vm.dato.reciboDTO.cobro ? vm.cnv.facturaPy:vm.cnv)" 
+						hflex="true" 
+						readonly="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')"
+						visible="@load(vm.dato.reciboDTO.cobro ? 'true' : 'false')" />
+					<textbox value="@bind(vm.dato.reciboDTO.numero)" 
+						hflex="true" 
+						readonly="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')"
+						visible="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Fecha" />
+					<datebox
+						value="@bind(vm.dato.reciboDTO.fechaEmision)"
+						hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Moneda" />
+					<combobox
+						value="@load(vm.dato.reciboDTO.moneda.pos1)"
+						selectedItem="@bind(vm.dato.reciboDTO.moneda)" hflex="true"
+						model="@load(vm.dtoUtil.monedasConSimbolo)" instant="true"
+						visible="@load(vm.dato.reciboDTO.detalleVacio)">
+						<template name="model">
+							<comboitem label="@load(each.pos1)" />
+						</template>
+					</combobox>
+					<hlayout>
+						<textbox
+							value="@load(vm.dato.reciboDTO.moneda.pos1)"
+							visible="@load(!vm.dato.reciboDTO.detalleVacio)" readonly="true"
+							width="100px" />
+					</hlayout>
+				</vlayout>
+				<hlayout>
+					<vlayout spacing="0" hflex="true">
+						<field value="T. Cambio" />
+						<guaranibox
+							value="@bind(vm.dato.reciboDTO.tipoCambio)" hflex="true" />
+					</vlayout>
+					<vlayout spacing="0"
+						visible="@load(vm.dato.reciboDTO.cobro)">
+						<field value="Cobrador" />
+						<combobox hflex="true" model="@load(vm.cobradores)"
+							selectedItem="@bind(vm.dato.reciboDTO.cobrador)"
+							instant="true"
+							value="@load(vm.dato.reciboDTO.cobrador)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</vlayout>
+				</hlayout>
+			</row>
+
+			<row>
+				<cell colspan="2">
+					<vlayout style="margin-top:7px">
+						<field
+							value="@load(vm.dato.reciboDTO.labelEmpresa)" />
+						<hlayout>
+							<hlayout visible="@load(!vm.dato.cobro and !vm.dato.cancelacionCheque and !vm.dato.reembolsoPrestamo)"
+								valign="top" hflex="true">
+								<buscadorProveedor
+									value="@bind(vm.dato.reciboDTO)" campo="ruc" width="100px"
+									buttonVisible="false" />
+								<buscadorProveedor
+									value="@bind(vm.dato.reciboDTO)" campo="razonSocial"
+									hflex="true" />
+							</hlayout>
+							<hlayout visible="@load(vm.dato.cobro || vm.dato.cancelacionCheque || vm.dato.reembolsoPrestamo)"
+								valign="top" hflex="true">
+								<buscadorCliente
+									value="@bind(vm.dato.reciboDTO)" campo="ruc" width="100px"
+									buttonVisible="false" />
+								<buscadorCliente
+									value="@bind(vm.dato.reciboDTO)" campo="razonSocial"
+									hflex="true" />
+							</hlayout>
+						</hlayout>
+					</vlayout>
+				</cell>
+				<hlayout valign="top">
+					<vlayout spacing="0"
+						visible="@load(!vm.pendienteCobro)">
+						<field value="Anticipo" />
+						<checkbox
+							checked="@bind(vm.dato.reciboDTO.anticipo)"
+							onCheck="@command('checkAnticipo', check=self.checked)" />
+					</vlayout>
+					<space />
+					<vlayout spacing="0"
+						visible="false">
+						<field value="A Cobrar"/>
+						<checkbox
+							checked="@bind(vm.dato.reciboDTO.pendienteCobro)"
+							onCheck="@command('checkPendienteCobro')" />
+					</vlayout>
+					<space />
+					<vlayout spacing="0"
+						visible="@load((vm.dato.cobro) and (!vm.anticipo))">
+						<field value="Otra Suc."/>
+						<checkbox
+							checked="@bind(vm.dato.reciboDTO.cobroExterno)" />
+					</vlayout>
+				</hlayout>				
+				<hlayout>				
+					<label
+						value="@load(vm.dato.reciboDTO.tipoMovimiento.pos1.toUpperCase())"
+						class="label label-primary" style="font-size:10pt"
+						maxlength="23"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+	<solicitarCabecera
+		visible="@load(vm.dato.reciboDTO.cobro ? 
+			(vm.dato.reciboDTO.cliente.esNuevo() or vm.dato.reciboDTO.numero.isEmpty() or vm.dato.reciboDTO.cobrador.isEmpty()) 
+			: (vm.dato.cancelacionCheque or vm.dato.reembolsoPrestamo ? 
+			(vm.dato.reciboDTO.cliente.esNuevo() or vm.dato.reciboDTO.numero.isEmpty()) 
+			: vm.dato.reciboDTO.proveedor.esNuevo()))" />
+
+	<hlayout width="100%" height="100%"
+		visible="@load(!(vm.dato.reciboDTO.cobro or vm.dato.cancelacionCheque or vm.dato.reembolsoPrestamo ? 
+			vm.dato.reciboDTO.cliente.esNuevo() : vm.dato.reciboDTO.proveedor.esNuevo()))">
+
+		<vbox
+			visible="@load(!vm.anticipo)"
+			hflex="true"
+			spacing="0"
+			vflex="true">
+			<hlayout sclass="button-container">
+				<field value="@load(vm.dato.reciboDTO.tituloDetalles)"/>
+				<space></space>
+				<separator orient="vertical" bar="true" />
+				<space></space>
+				<button mold="bs" sclass="btn-danger btn-sm"
+					width="100px" iconSclass="z-icon-minus-circle"
+					onClick="@command('eliminarItemFactura')" label=" Eliminar" 
+					disabled="@load(vm.selectedFacturaItems.size() eq 0? 'true':'false')"/>
+				<space />
+				<button mold="bs" sclass="btn-success btn-sm"
+					width="100px" iconSclass="z-icon-plus-circle"
+					onClick="@command('insertarDetalle')" label=" Insertar" />
+				<space />
+				<button mold="bs" sclass="btn-info btn-sm"
+					width="100px" iconSclass="z-icon-plus-circle"
+					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
+					onClick='pop_dif_tc.open(self, "after_end")' 
+					visible="@load(vm.dato.reciboDTO.ordenPago)"/>
+			</hlayout>
+
+			<listbox height="355px"
+				hflex="true"
+				sclass="small-list"
+				emptyMessage="BUSQUE LOS MOVIMIENTOS CON SALDO.."
+				model="@load(vm.dato.reciboDTO.detalles)" multiple="true"
+				checkmark="@load(vm.checkmarkFacturas)"
+				selectedItems="@bind(vm.selectedFacturaItems)">
+				<listhead>
+					<listheader width="35px" align="center" />
+					<listheader label="Descripción"
+						style="text-align:center" />
+					<listheader label="@load(vm.headerMonto[0])"
+						style="text-align:center" align="right" width="105px" />
+					<listheader label="@load(vm.headerMonto[1])"
+						style="text-align:center" align="right" width="100px"
+						visible="@load(!vm.pagoEnMonedaLocal)" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell />
+						<listcell>
+							<label value="@load(each.descripcion)"
+								style="font-size:11px;color:black"
+								tooltiptext="@load(each.descripcion)" />
+						</listcell>
+						<listcell
+							label="@load(each.montoGs) @converter('formatedNumber', format='#,##0')"
+							style="font-size:11px;color:black" />
+						<listcell
+							label="@load(each.montoDs) @converter('formatedNumber', format='#,##0.00')"
+							style="font-size:11px;color:black" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="3">
+						<hlayout hflex="true">
+							<space hflex="true"></space>
+							<label value="Totales:"
+								sclass="label-moneda-footer" />
+							<guaranibox
+								value="@load(vm.datosMovimientosApagar[0])" readonly="true"
+								style="text-align:right;background:#EEF7FA;font-weight:bold" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vbox>
+
+		<!-- ____________ FORMAS DE PAGO ____________ -->
+
+		<vbox
+			visible="@load(!vm.pendienteCobro)"
+			hflex="true"
+			spacing="0"
+			vflex="true">
+			
+				<hlayout sclass="button-container" hflex="true">
+					<field value="Formas de Pago" />
+					<space></space>
+					<separator orient="vertical" bar="true" />
+					<space></space>
+					<button mold="bs" sclass="btn-danger btn-sm"
+						width="100px" iconSclass="z-icon-minus-circle"
+						onClick="@command('eliminarItemFormaPago')" label=" Eliminar"
+						disabled="@load(vm.selectedFormaPagoItems.size() eq 0? 'true':'false')" />
+					<space />
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="100px" iconSclass="z-icon-plus-circle"
+						onClick="@command('abrirPopupFormaPago')" label=" Insertar" 
+						disabled="@load((!vm.anticipo) and (vm.dato.reciboDTO.detalles.size() eq 0? 'true':'false'))" />
+					<space />
+				</hlayout>
+
+				<listbox height="355px"
+					hflex="true"
+					emptyMessage="ESPECIFIQUE LA FORMA DE PAGO.."
+					model="@load(vm.dato.reciboDTO.formasPago)" multiple="true"
+					checkmark="@load(vm.checkmarkFormasPago)"
+					selectedItems="@bind(vm.selectedFormaPagoItems)"
+					sclass="small-list">
+					<listhead>
+						<listheader width="35px" align="center" />
+						<listheader label="Descripción"
+							style="text-align:center" />
+						<listheader label="@load(vm.headerMonto[0])"
+							style="text-align:center" align="right" width="105px" />
+						<listheader label="@load(vm.headerMonto[1])"
+							style="text-align:center" align="right" width="100px"
+							visible="@load(!vm.pagoEnMonedaLocal)" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell />
+							<listcell>
+								<label
+									value="@load(each.descripcion.toUpperCase())"
+									style="font-size:11px;color:black" 
+									tooltiptext="@load(each.descripcion)" />
+							</listcell>
+							<listcell
+								label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"
+								style="font-size:11px;color:black" />
+							<listcell
+								label="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)"
+								style="font-size:11px;color:black" />
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="3"> 
+							<hlayout>
+								<space hflex="true" />
+								<label value="Totales:"
+									sclass="label-moneda-footer" />
+								<guaranibox
+									value="@load(vm.datosMovimientosApagar[2])" readonly="true"
+									style="text-align:right;background:#EEF7FA;font-weight:bold" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>			
+		</vbox>
+	</hlayout>
+	
+	<popup id="pop_dif_tc" sclass="rounded">
+		<vlayout width="350px">
+			<hlayout>
+				<textbox hflex="true" readonly="true"
+					value="@load(vm.nvoItem_dif_cambio.descripcion)"></textbox>
+				<guaranibox value="@bind(vm.nvoItem_dif_cambio.montoGs)"/>
+				<field value="Gs." />
+			</hlayout>
+			<button mold="bs" sclass="btn-info btn-sm"
+				iconSclass="z-icon-check" hflex="true" 
+				onClick="@command('addDetalleDiferenciaCambio', comp=pop_dif_tc)"/>
+		</vlayout>
+	</popup>
+
+</div>

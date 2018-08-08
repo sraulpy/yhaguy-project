@@ -1,0 +1,48 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.notacredito.NotaCreditoSimpleControl')">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="30%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Factura:" />
+				<label value="@load(vm.dato.nvoItem.descripcion)" />
+			</row>
+			<row>
+				<field value="Importe Factura:" />
+				<hlayout>
+					<label
+						value="@load(vm.dato.dto.notaCreditoVenta? vm.dato.nvoItem.venta.pos5 : 
+						(vm.dato.nvoItem.facturaCompra? vm.dato.nvoItem.compra.pos5 : (vm.dato.nvoItem.facturaImportacion? vm.dato.nvoItem.importacion.pos5 : vm.dato.nvoItem.gasto.pos5))) 
+							@converter(vm.dato.dto.monedaLocal? 
+						vm.cnv.monedaLocal : vm.cnv.monedaExtranjera)" />
+					<label></label>
+					<label value="@load(vm.dato.dto.moneda.sigla)"
+						sclass="label-moneda" />
+				</hlayout>
+			</row>
+			<row>				
+				<field value="Monto a Aplicar:" />
+				<hlayout>
+					<div visible="@load(vm.dato.dto.monedaLocal)">
+						<guaranibox
+							value="@bind(vm.dato.nvoItem.montoGs)" hflex="true" />
+						<label
+							value="@load(vm.utiDto.simboloMonedaLocal)"
+							sclass="label-moneda" />
+					</div>
+					<div visible="@load(!vm.dato.dto.monedaLocal)">
+						<dolarbox value="@bind(vm.dato.nvoItem.montoDs)"
+							onChange="@command('convertirMoneda')" hflex="true" />
+						<label></label>
+						<label value="U$D" sclass="label-moneda" />
+					</div>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+</window>

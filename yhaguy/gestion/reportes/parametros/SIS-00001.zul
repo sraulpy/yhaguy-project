@@ -1,0 +1,17 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Usiarios Ativos" />
+			<checkbox checked="@bind(vm.dato.filtro.usuariosActivos)" />
+		</row>
+		<row>
+			<field value="Usiarios Inactivos" />
+			<checkbox checked="@bind(vm.dato.filtro.usuariosInactivos)" />
+		</row>
+	</rows>
+
+</grid>

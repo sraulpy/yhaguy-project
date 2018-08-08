@@ -1,0 +1,46 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.conciliacionSimpleControl')">
+		<grid sclass="vgrid">
+			<columns>
+				<column width="110px" />
+				<column width="220px" />
+			</columns>
+			<rows>
+				<row>
+					Fecha:
+					<datebox value="@bind(vm.fecha)" width="150px"
+						format="dd-MM-yyyy" />
+				</row>
+				<row>
+					Nro. Referencia:
+					<textbox
+						value="@bind(vm.dato.nvoItem.nroReferencia)" width="150px"
+						constraint="${vm.check.noVacio}" />
+				</row>
+				<row>
+					Descripción:
+					<textbox value="@bind(vm.dato.nvoItem.descripcion)"
+						width="150px" multiline="true" rows="3" />
+				</row>
+				<row>
+					Tipo:
+					<combobox
+						model="@load(vm.dato.dtoUtil.movimientosBancarios)"
+						value="@load(vm.dato.nvoItem.tipoMovimiento.pos1)" width="150px"
+						selectedItem="@bind(vm.dato.nvoItem.tipoMovimiento)">
+						<template name="model">
+							<comboitem label="@load(each.pos1)" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					Monto:
+					<guaranibox value="@bind(vm.dato.nvoItem.monto)"
+						width="150px" constraint="${vm.check.noVacio}" />
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

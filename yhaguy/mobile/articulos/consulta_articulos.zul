@@ -1,0 +1,126 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel')"
+	vflex="true">
+
+	<vlayout height="100%">
+
+		<listbox id="lstArticulo" emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+			model="@load(vm.articulos)" selectedItem="@bind(vm.selectedItem)"
+			onSelect="@command('obtenerValores')"
+			style="overflow:auto" vflex="2">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							value="@bind(vm.codInterno)" instant="true" id="tbox_codint" />
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)" />
+				</listitem>
+			</template>
+		</listbox>
+
+		<listbox id="lstExistencia" style="overflow:auto" model="@load(vm.existencia)"
+			vflex="2" visible="false">
+			<auxhead>
+				<auxheader colspan="2" label="STOCK" style="font-size:15pt;text-align:center"></auxheader>
+			</auxhead>
+			<listhead>
+				<listheader width="70%"/>
+				<listheader align="right" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell
+						label="@load(each.pos1.toString().toUpperCase())" />
+					<listcell
+						label="@load(each.pos2) @converter('formattedNumber', format='###,###,###')" />
+				</listitem>
+			</template>
+		</listbox>
+
+		<listbox id="lstPrecio" style="overflow:auto" model="@load(vm.preciosMobile)"
+			vflex="1" selectedItem="@bind(vm.selectedPrecio)"
+			visible="false">
+			<auxhead>
+				<auxheader colspan="2" label="PRECIO" style="font-size:15pt;text-align:center"/>
+			</auxhead>
+			<listhead>
+				<listheader width="70%"></listheader>
+				<listheader align="right" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)" />
+					<listcell label="@load(each.pos5)" />
+				</listitem>
+			</template>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			onClick="lstExistencia.setVisible(true); lstPrecio.setVisible(true); lstArticulo.setVisible(false); btn_img.setVisible(true); self.setVisible(false)"
+			disabled="@load(vm.selectedItem eq null? 'true':'false')"
+			label=" Ver Stock y Precios" height="150px" style="font-size:30pt"
+			dir="normal" />
+			
+		<button id="btn_img" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-camera" visible="false"
+			disabled="@load(vm.selectedItem eq null? 'true':'false')"
+			label=" Ver Foto" height="150px" style="font-size:30pt"
+			dir="normal" 
+			onClick="@command('verImagen')"/>
+	</vlayout>
+
+	<popup id="pop_img" sclass="rounded" height="750px" width="850px">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="FOTO DEL ARTICULO: " />
+				<field value="@load(vm.selectedItem.pos1)" />
+			</hbox>
+			<button onClick="pop_img.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="5px"/>
+		<vbox pack="center" align="center" width="100%">
+			<html><![CDATA[
+        		<img id="foto" alt="" onerror="this.src='http://190.211.240.30/images/default.png'" 
+        			style ="height:720px; width:830px;"></img>  ]]>
+    		</html>
+		</vbox>	
+	</popup>
+	
+	<script>
+			function setImage(url) {
+				var imagen = document.getElementById("foto");
+				imagen.src = url;
+			}
+	</script>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+	</style>
+</div>

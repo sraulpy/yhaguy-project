@@ -1,0 +1,98 @@
+<zk>
+	<window
+		viewModel="@id('vm') @init('com.yhaguy.gestion.contable.asientos.AsientosViewModel')"
+		apply="org.zkoss.bind.BindComposer"
+		height="100%" id="win_">
+		
+		<grid sclass="vgrid" style="margin-right:20px; margin-left:20px">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Mes" />
+					<combobox placeholder="MES.." hflex="true"
+						model="@load(vm.meses)" selectedItem="@bind(vm.selectedMes)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.pos2)"/>
+						</template>	
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Año" />
+					<combobox placeholder="AÑO.." hflex="true"
+						selectedItem="@bind(vm.selectedAnho)"
+						value="@load(vm.selectedAnho)"
+						model="@load(vm.anhos)">
+						<template name="model">
+							<comboitem label="@load(each)"/>
+						</template>	
+					</combobox>
+				</vlayout>
+			</row>
+		</rows>		
+	</grid>
+	<solicitarCabecera visible="@load(vm.selectedMes eq null? 'true':'false')" />
+	
+	<hlayout sclass="button-container" visible="@load(vm.selectedMes eq null? 'false':'true')"
+		style="margin-right:20px; margin-left:20px">
+		<button mold="bs" sclass="btn-primary btn-sm" label="Procesar Asientos"
+			iconSclass="z-icon-cogs" width="215px"
+			disabled="@load(vm.asientos.size() eq 0? 'false':'true')"
+			onClick="@command('procesarAsientos')">
+		</button>
+		<space></space>
+		<button mold="bs" sclass="btn-info btn-sm" label="Imprimir"
+			iconSclass="z-icon-print" width="200px"
+			disabled="@load(vm.selectedMes eq null? 'true':'false')">
+		</button>
+	</hlayout>
+	<vbox id="vl_asien" pack="start" align="center" width="97%" height="450px"
+		style="margin:20px; padding-right:10px; border-radius:8px"
+		visible="@load(vm.selectedMes eq null? 'false': (vm.asientos.size() eq 0? 'true':'false'))"
+		onLater="@command('clearProgress')">
+		<label id="lb_msg" style="font-style:italic">PENDIENTE DE PROCESAR DATOS..</label>	
+	</vbox>
+	
+	<vlayout children="@load(vm.asientos)" style="margin:20px; padding-right:10px; overflow:auto" height="800px"
+		visible="@load(vm.selectedMes eq null? 'false':'true')">
+		<template name="children">
+			<div style="border-bottom: solid 1px silver">
+				<hlayout>
+					<label value="@load(each.numero)" style="font-weight:bold"></label>
+					<space></space>
+					<label value="@load(each.descripcion)" style="font-weight:bold"></label>
+				</hlayout>				
+			</div>
+			<listbox sclass="small-list" model="@load(each.detallesOrdenadoPorDebe)">
+				<listhead>
+					<listheader label="Código" width="150px"/>
+					<listheader label="Descripción" />
+					<listheader label="Debe" width="150px" align="right" />
+					<listheader label="Haber" width="150px" align="right" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.cuenta.codigo)"></listcell>
+						<listcell label="@load(item.cuenta.descripcion)"></listcell>
+						<listcell label="@load(item.debe) @converter(vm.cnv.monedaLocal)"></listcell>
+						<listcell label="@load(item.haber) @converter(vm.cnv.monedaLocal)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="2"/>
+					<listfooter>
+						<guaranibox readonly="true" value="@load(each.totalDebe)" hflex="true"
+							style="text-align:right;background:#EEF7FA;font-weight:bold" />
+					</listfooter>
+					<listfooter>
+						<guaranibox readonly="true" value="@load(each.totalHaber)" hflex="true"
+							style="text-align:right;background:#EEF7FA;font-weight:bold" />
+					</listfooter>
+				</listfoot>
+			</listbox>
+			<space></space>
+		</template>
+	</vlayout>
+			
+	</window>
+</zk>

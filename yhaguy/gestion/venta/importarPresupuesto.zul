@@ -1,0 +1,20 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaSimpleControl')">
+	
+	<groupbox>
+	<listbox model="@load(vm.dato.presupuestosPendientes)"
+		height="385px">
+		<listhead>
+			<listheader label="Número" />
+			<listheader label="Cliente" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)"/>
+			</listitem>
+		</template>
+	</listbox>
+	</groupbox>
+	
+</window>

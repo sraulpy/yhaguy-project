@@ -1,0 +1,40 @@
+<window height="100%" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')">
+		
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<field value="Total en Efectivo:"/>
+					<hlayout>
+						<guaranibox value="@bind(vm.dato.arqueo.pos1)"/>
+						<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"/>
+					</hlayout>									
+				</row>
+				<row>
+					<field value="Total en Cheque:"/>
+					<hlayout>
+						<guaranibox value="@bind(vm.dato.arqueo.pos2)"/>
+						<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"/>
+					</hlayout>
+				</row>
+				<row>
+					<field value="Total en Tarjeta:"/>
+					<hlayout>
+						<guaranibox value="@bind(vm.dato.arqueo.pos3)"/>
+						<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"/>
+					</hlayout>
+				</row>	
+				<row>
+					<div height="10px"/>
+				</row>
+				<row>
+					<field value="Total:"/>
+					<hlayout>
+						<guaranibox readonly="true"
+							value="@load(vm.dato.totalArqueo)"/>
+						<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"/>
+					</hlayout>
+				</row>			
+			</rows>
+		</grid>	
+</window>

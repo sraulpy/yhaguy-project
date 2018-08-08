@@ -1,0 +1,30 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				Sub-Diario Confirmado?
+				<radiogroup>
+					<radio label="Si "/>
+					<radio label="No"/>	
+				</radiogroup>
+			</row>
+			<row>
+				Sub-Diario Número:
+				<textbox readonly="true"/>
+			</row>
+			<row>
+				Orden de Pago Número:
+				<textbox readonly="true"/>
+			</row>
+			<row>
+				Caja Número:
+				<textbox readonly="true"/>
+			</row>
+		</rows>
+	</grid>
+	
+</window>
+</zk>

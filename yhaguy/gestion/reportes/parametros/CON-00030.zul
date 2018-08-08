@@ -1,0 +1,18 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="30%" />
+		<column/>
+	</columns>
+	<rows>
+		<row>
+			<field value="Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+	</rows>
+</grid>

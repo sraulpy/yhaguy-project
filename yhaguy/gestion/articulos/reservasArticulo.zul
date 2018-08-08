@@ -1,0 +1,42 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.MostrarReservasControl')">
+
+	<!-- ================================== LISTADO DETALLES ============================== -->
+	<div id="reservasArticulo">
+		<listbox height="550px" model="@load(vm.dato.reservasArticulo)"
+			emptyMessage="No existen reservas para este artículo...">
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+			<listhead>
+				<listheader style="text-align:center" width="100px">
+					<label value="Cantidad" />
+				</listheader>
+				<listheader style="text-align:center" width="200px">
+					<label value="Funcionario" />
+				</listheader>
+				<listheader style="text-align:center" width="200px">
+					<label value="Tipo Reserva" />
+				</listheader>
+				<listheader style="text-align:center" width="150px">
+					<label value="Fecha Reserva" />
+				</listheader>
+
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<longbox value="@load(each[0])" inplace="true" readonly="true"/>
+					</listcell>
+					<listcell label="@load(each[1])"
+						style="color:black" />
+					<listcell label="@load(each[3])"
+						style="color:black" />
+					<listcell>
+						<datebox value="@load(each[2])" buttonVisible="false"
+							readonly="true"  format="dd-MM-yyyy (H:m)" width="150px"/>
+					</listcell>
+
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</window>

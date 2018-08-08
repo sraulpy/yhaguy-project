@@ -1,0 +1,12 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Solo Pendientes:" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)" />
+		</row>
+	</rows>
+</grid>

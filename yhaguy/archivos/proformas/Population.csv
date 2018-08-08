@@ -1,0 +1,11 @@
+Cliente,Metal Plus,,
+Fecha,02-07-12,,
+Codigo,1,,
+Tipo de Compra,Credito,,
+,,,
+articulo,codigo,cantidad,valor
+Bateria Toyo,1,20,5000
+Filtros Lanss,3,10,4000
+Aceite Valvoline k7,4,6,3000
+,,,
+totales,8,36,12000

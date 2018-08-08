@@ -1,0 +1,59 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaSimpleControl')"
+	style="padding:10px"
+	onCreate="cantServ.focus()">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="130px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Código:" />
+				<textbox value="@bind(vm.dato.nvoItem.articulo.pos1)"
+					hflex="true" readonly="true"/>
+			</row>
+			<row>
+				<field value="Descripción:" />
+				<textbox value="@bind(vm.dato.nvoItem.articulo.pos4)"
+					hflex="true" readonly="true"/>
+			</row>
+			<row>
+				<field value="Cantidad:" />
+				<longbox id="cantServ" value="@bind(vm.dato.nvoItem.cantidad)"
+					instant="true"
+					onChange='priceServ.focus()'/>
+			</row>
+			<row visible="@load(vm.dato.nvoItem.cantidad gt 0? 'true':'false')">
+				<field value="Precio IVA incluído:" />
+				<hlayout>
+					<guaranibox id="priceServ" value="@bind(vm.dato.nvoItem.precioGs)" />
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+					<space />
+					<field value="IVA:" />
+					<guaranibox value="@load(vm.dato.nvoItem.iva)" readonly="true"/>
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+				</hlayout>				
+			</row>
+			<row visible="@load(vm.dato.nvoItem.cantidad gt 0? 'true':'false')">
+				<field value="Tipo IVA:" />
+				<combobox value="@load(vm.dato.nvoItem.tipoIVA.text)"
+					model="@load(vm.dato.tiposDeIva)"
+					selectedItem="@bind(vm.dato.nvoItem.tipoIVA)">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
+					</template>
+				</combobox>
+			</row>
+			<row visible="@load(vm.dato.nvoItem.cantidad gt 0? 'true':'false')">
+				<field value="Importe:" />
+				<hlayout>
+					<guaranibox readonly="true" value="@load(vm.dato.nvoItem.importeGs)"/>
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+</div>

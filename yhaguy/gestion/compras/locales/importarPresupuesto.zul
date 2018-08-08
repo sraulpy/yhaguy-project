@@ -1,0 +1,48 @@
+<div 
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.CompraLocalSimpleControl')"
+	height="440px" style="padding:5px">
+	
+	<listbox vflex="true"
+		model="@load(vm.dato.dto.detallesPresupuesto)"
+		checkmark="true"
+		multiple="true"
+		selectedItems="@bind(vm.dato.selectedImportarItems)">
+		<listhead style="text-align:center">
+			<listheader width="40px" align="center"/>
+			<listheader label="Código" width="120px"/>
+			<listheader label="Descripción" />
+			<listheader label="Cantidad" width="110px" align="right" style="text-align:center"/>
+			<listheader label="Precio Gs." width="110px" align="right" style="text-align:center"/>
+			<listheader label="IVA" width="100px"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell>
+					<label value="@load(each.articulo.pos1)" maxlength="15"/>
+				</listcell>
+				<listcell>
+					<label value="@load(each.articulo.pos4)" />
+				</listcell>
+				<listcell>
+					<intbox value="@bind(each.cantidad)"/>
+				</listcell>
+				<listcell>
+					<dolarbox value="@bind(each.costoGs)" />
+				</listcell>
+				<listcell>
+					<combobox hflex="true"
+						model="@load(vm.dato.tiposDeIva)"
+						value="@load(each.iva.text)"
+						selectedItem="@bind(each.iva)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.text)" />
+						</template>
+					</combobox>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+</div>

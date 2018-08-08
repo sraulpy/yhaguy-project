@@ -1,0 +1,316 @@
+<zk>
+	<div
+		viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.RepartoViewModel')"
+		apply="org.zkoss.bind.BindComposer" height="100%">
+
+		<!-- ___________________ CABECERA ___________________  -->
+
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox id="txNro" value="@load(vm.dto.numero)"
+							readonly="true" 
+							placeholder="Pendiente.."
+							hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Tipo" />
+						<div visible="@load(!vm.esRepartoYhaguy)">
+							<combobox
+								model="@load(vm.dtoUtil.repartoTipos)"
+								value="@load(vm.dto.tipoReparto.text)"
+								selectedItem="@bind(vm.dto.tipoReparto)"
+								instant="true"
+								hflex="true">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+						</div>
+						<textbox value="@load(vm.dto.tipoReparto.text)"
+							readonly="true" visible="@load(vm.esRepartoYhaguy)" 
+							hflex="true"/>
+					</vlayout>
+					<cell colspan="2">
+						<vlayout style="margin-top:6px">
+							<field value="Creación" />
+							<hlayout>
+								<textbox
+									value="@load(vm.dto.fechaCreacion) @converter('formattedDate', format='dd-MM-yyyy')"
+									readonly="true" 
+									width="100px"/>
+								<textbox
+									value="@load(vm.dto.creador.pos1)" readonly="true" 
+									hflex="true"/>
+							</hlayout>
+						</vlayout>
+					</cell>
+					<cell colspan="2">
+						<vlayout style="margin-top:6px">
+							<field value="Recepción" />
+							<hlayout>
+								<textbox
+									value="@load(vm.dto.fechaRecepcion) @converter('formattedDate', format='dd-MM-yyyy')"
+									readonly="true" 
+									width="100px"
+									placeholder="Fecha.."/>
+								<textbox
+									value="@load(vm.dto.receptor.pos1)" readonly="true" 
+									placeholder="Receptor.."
+									hflex="true"/>
+							</hlayout>
+						</vlayout>
+					</cell>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<textbox
+							value="@load(vm.dto.estadoReparto.text)" readonly="true" 
+							hflex="true"/>
+					</vlayout>
+					<div>
+						<vlayout spacing="0"
+							visible="@load(vm.esRepartoYhaguy)">
+							<field value="Vehículo" />
+							<hlayout>
+								<combobox model="@load(vm.vehiculos)"
+									value="@load(vm.dto.vehiculo.pos1)"
+									selectedItem="@bind(vm.dto.vehiculo)"
+									hflex="true">
+									<template name="model" var="each">
+										<comboitem
+											label="@load(each.pos1)" />
+									</template>
+								</combobox>
+								<labelConstrain />
+							</hlayout>
+						</vlayout>
+						<vlayout spacing="0"
+							visible="@load(!vm.esRepartoYhaguy)">
+							<field value="Proveedor" />
+							<hlayout>
+								<textbox
+									value="@bind(vm.dto.proveedor.pos2)"
+									onOK="@command('buscarProveedor')" hflex="true" />
+								<button label="Buscar.."
+									onClick="@command('buscarProveedor')" />
+							</hlayout>
+						</vlayout>
+					</div>
+
+					<div>
+						<vlayout spacing="0"
+							visible="@load(vm.esRepartoYhaguy)">
+							<field value="Repartidor" />
+							<combobox
+								model="@load(vm.repartidores)"
+								value="@load(vm.dto.repartidor.text.toUpperCase())"
+								selectedItem="@bind(vm.dto.repartidor)"
+								hflex="true">
+								<template name="model">
+									<comboitem label="@load(each.text.toUpperCase())" />
+								</template>
+							</combobox>
+						</vlayout>
+						<vlayout spacing="0"
+							visible="@load(!vm.esRepartoYhaguy)"
+							hflex="true">
+							<field value="Costo" />
+							<guaranibox value="@bind(vm.dto.costo)" />
+						</vlayout>
+					</div>
+					
+					<vlayout spacing="0">
+						<field value="Servicio Técnico" />
+						<hlayout>
+							<textbox hflex="true" readonly="true" value="@load(vm.dto.serviciosTecnicos_)" />
+							<button iconSclass="z-icon-search"
+								onClick='pop_serv_tec.open(self, "after_start"); tx_servtec.focus()' />
+						</hlayout>
+					</vlayout>
+
+					<cell colspan="2">
+						<vlayout style="margin-top:6px">
+							<field value="Observación" />
+							<textbox hflex="true"
+								value="@bind(vm.dto.observaciones)"/>
+						</vlayout>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+		<div height="5px" />
+		
+		<!-- ___________________ BOTONERA ___________________  -->
+
+		<hlayout sclass="button-container" valign="middle"
+			visible="@load(vm.detalleVisible)">
+
+			<button label=" Eliminar" mold="bs" sclass="btn-danger btn-sm"
+				iconSclass="z-icon-times-circle"
+				onClick="@command('eliminarItem')"
+				disabled="@load(vm.eliminarItemDisabled)" width="140px" />
+			<space />
+			<button label=" Insertar" mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('abrirVentanaInsertarDetalle')"
+				disabled="@load(vm.insertarItemDisabled)" width="140px" />
+			<space />
+			<button label="Confirmar Envío" mold="bs" sclass="btn-info btn-sm"
+				iconSclass="z-icon-check"
+				onClick="@command('confirmarEnvio')" 
+				disabled="@load(vm.confirmarEnvioDisabled)" width="140px" />
+			<space />
+			<button label=" Confirmar Entrega" mold="bs" sclass="btn-primary btn-sm"
+				iconSclass="z-icon-check"
+				disabled="@load(vm.confirmarEntregaDisabled)"
+				onClick="@command('confirmarEntrega')" width="140px" />
+			<space hflex="true"></space>			
+			<label>Capacidad Vehículo KG:</label>
+			<label value="@load(vm.dto.vehiculo.pos5)" style="font-size:10pt" class="label label-primary"></label>
+			<space />
+			<label>Peso Total Reparto KG:</label>
+			<label value="@load(vm.dto.pesoTotal)" style="font-size:10pt" class="label label-success"
+				visible="@load(!vm.dto.capacidadMenor)"></label>
+			<label value="@load(vm.dto.pesoTotal)" style="font-size:10pt" class="label label-danger"
+				visible="@load(vm.dto.capacidadMenor)"></label>
+			<image src="/core/images/exclamation.png"
+				visible="@load(vm.dto.capacidadMenor)"></image>
+			<space width="100px"/>
+		</hlayout>
+		
+		<solicitarCabecera visible="@load(vm.solicitarCabeceraVisible)" />
+
+		<!-- ___________________ DETALLE ___________________  -->
+
+		<listbox sclass="small-list" vflex="true"
+			model="@load(vm.dto.detalles)" multiple="true"
+			checkmark="@load(vm.checkmarkHabilitado)"
+			selectedItems="@bind(vm.selectedItems)"
+			selectedItem="@bind(vm.selectedItem_)"
+			visible="@load(vm.detalleVisible)">
+			<listhead style="text-align:center">
+				<listheader width="40px" align="center" />
+				<listheader label="Fecha" width="100px" align="center" />
+				<listheader label="Número" width="120px" />
+				<listheader label="Tipo" width="150px" />
+				<listheader label="Ciente" />
+				<listheader label="Observación" />
+				<listheader label="Peso Kg." width="80px" align="right"/>
+				<listheader label="Entrega" width="80px" align="center"
+					visible="@load(vm.colEntregaVisible)"/>
+				<listheader width="70px" align="center" />
+			</listhead>
+
+			<template name="model">
+				<listitem style="@load(each.style)">
+					<listcell />
+					<listcell>
+						<label
+							value="@load(each.detalle.pos3) @converter('formattedDate', format='dd-MM-yyyy')" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.detalle.pos2)" />
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.tipoMovimiento.pos1.toUpperCase())" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.detalle.pos4)" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.observacion)"/>
+					</listcell>
+					<listcell>
+						<label value="@load(each.peso)"/>
+					</listcell>
+					<listcell>
+						<checkbox checked="@bind(each.entregado)"/>
+					</listcell>
+					<listcell>
+						<a label="Detalles"
+							style="text-decoration:underline"
+							onClick="@command('verDetalle', item=each, comp=self)" />
+					</listcell>
+				</listitem>
+			</template>
+
+			<listfoot>
+				<listfooter span="7" align="left">
+					<hlayout>
+						<field value="@load(vm.dto.detalles.size())" />
+						<field value="ítems" />
+						<space hflex="true"></space>
+						<field>Peso total kg.</field>
+						<guaranibox readonly="true"
+							value="@load(vm.dto.pesoTotal)"
+							style="background:#EEF7FA;text-align:right;font-weight:bold" 
+							width="70px" />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+			
+		</listbox>
+
+		<popup id="popDetalle" width="600px" sclass="rounded">
+			<vlayout>
+			<listbox height="300px" sclass="small-list"
+				model="@load(vm.itemsReparto)">
+				<listhead style="text-align:center">
+					<listheader label="Código" width="120px" />
+					<listheader label="Descripción" />
+					<listheader label="Cantidad" width="80px" align="right" style="text-align:center" />
+					<listheader label="Entrega" width="80px" align="right" style="text-align:center" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)" />
+						<listcell label="@load(each.pos2)" />
+						<listcell label="@load(each.pos3)" />
+						<listcell>
+							<longbox value="@bind(each.pos5)" vflex="true" hflex="true" 
+								onClick="self.setReadonly(false)"
+								onChange="@command('saveCantidadEntregada', item=each)" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<hbox pack="center" align="end">
+				<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-print"
+					label="Imprimir Constancia" width="150px" disabled="@load(!vm.siempreHabilitado)"
+					onClick="@command('imprimirConstanciaEntrega')"></button>
+			</hbox>
+			</vlayout>
+		</popup>
+		
+		<popup id="pop_serv_tec" sclass="rounded">
+		<vbox width="300px">
+			<textbox id="tx_servtec" sclass="filter" hflex="true" placeholder="Nro. Servicio Técnico.."
+				value="@bind(vm.filter_numero)" instant="true"></textbox>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="Servicios Técnicos.."
+				model="@load(vm.serviciosTecnicos)"
+				height="200px"
+				selectedItem="@bind(vm.selectedServicioTecnico)"
+				onSelect="@command('selectServicioTecnico', comp=pop_serv_tec)">
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</popup>
+		
+	</div>
+	
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+		.z-longbox {min-height:20px}
+	</style>
+</zk>

@@ -1,0 +1,130 @@
+<window title=" Mis ventas del mes" border="normal" closable="true"
+	width="90%" height="80%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.misventas.MisVentasViewModel')" >
+	<caption image="/core/images/barchart.png"></caption>
+	<hlayout sclass="button-container">
+		<field value="Desde" />
+		<label value="@load(vm.fechaDesde) @converter('formattedDate', format='dd-MM-yyyy')"/>
+		<space/>
+		<field value="Hasta" />
+		<datebox value="@bind(vm.fechaHasta)"/>
+		<space />
+		<label value="Total (CONT + CRED) - (N.CRED)" />
+		<space />
+		<label value="@load(vm.totalContado) @converter(vm.cnv.monedaLocal)" 
+			style="color:blue"/>
+		<label value="+"/>
+		<label value="@load(vm.totalCredito) @converter(vm.cnv.monedaLocal)" 
+			style="color:green"/>
+		<label value="-"/>
+		<label value="@load(vm.totalNotaCredito) @converter(vm.cnv.monedaLocal)" 
+			style="color:red"/>
+		<label value="="/>
+		<field value="@load(vm.total) @converter(vm.cnv.monedaLocal)" 
+			/>
+		<space hflex="true"/>
+		<image src="/core/images/_user.png"/>
+		<label value="@load(vm.acceso.funcionario.pos1)" style="font-style:italic"/>
+	</hlayout>
+	
+	<hbox vflex="true">
+		<listbox sclass="small-list" vflex="true" hflex="true"
+			model="@load(vm.ventasContado)"
+			emptyMessage="SIN VENTAS CONTADO..">
+			<auxhead>
+				<auxheader colspan="3" label="VENTAS CONTADO"/>
+			</auxhead>
+			<listhead>
+				<listheader label="" width="60px"/>
+				<listheader label=""/>
+				<listheader label="" align="right" width="80px"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"/>
+					<listcell label="@load(each.pos2)"/>
+					<listcell label="@load(each.pos3) @converter(vm.cnv.monedaLocal)"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="3">
+					<hlayout>
+						<field value="@load(vm.ventasContado.size())"/>
+						<field value="ítems" />
+						<space hflex="true" />
+						<field value="Total Gs." />
+						<guaranibox
+							style="background:lightyellow;margin-right:25px;font-weight:bold;text-align:right;color:blue"
+							value="@load(vm.totalContado)" />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		<listbox sclass="small-list" vflex="true" hflex="true"
+			model="@load(vm.ventasCredito)"
+			emptyMessage="SIN VENTAS CRÉDITO..">
+			<auxhead>
+				<auxheader colspan="3" label="VENTAS CRÉDITO"/>
+			</auxhead>
+			<listhead>
+				<listheader label="" width="60px"/>
+				<listheader label=""/>
+				<listheader label="" align="right" width="80px"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"/>
+					<listcell label="@load(each.pos2)"/>
+					<listcell label="@load(each.pos3) @converter(vm.cnv.monedaLocal)"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="3">
+					<hlayout>
+						<field value="@load(vm.ventasCredito.size())"/>
+						<field value="ítems" />
+						<space hflex="true" />
+						<field value="Total Gs." />
+						<guaranibox 
+							style="background:lightyellow;margin-right:25px;font-weight:bold;text-align:right;color:green"
+							value="@load(vm.totalCredito)"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		<listbox sclass="small-list" vflex="true" hflex="true"
+			model="@load(vm.notasCredito)"
+			emptyMessage="SIN NOTAS DE CRÉDITO..">
+			<auxhead>
+				<auxheader colspan="3" label="NOTAS DE CRÉDITO" />
+			</auxhead>
+			<listhead>
+				<listheader label="" width="60px"/>
+				<listheader label=""/>
+				<listheader label="" align="right" width="80px"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"/>
+					<listcell label="@load(each.pos2)"/>
+					<listcell label="@load(each.pos3) @converter(vm.cnv.monedaLocal)"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="3">
+					<hlayout>
+						<field value="@load(vm.notasCredito.size())"/>
+						<field value="ítems" />
+						<space hflex="true" />
+						<field value="Total Gs." />
+						<guaranibox 
+							style="background:lightyellow;margin-right:25px;font-weight:bold;text-align:right;color:red"
+							value="@load(vm.totalNotaCredito)"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</hbox>
+
+</window>

@@ -1,0 +1,45 @@
+<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">	 
+	<grid sclass="vgrid">
+		<columns>
+			<column width="25%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				Remitente:
+				<label value="@load(vm.dato.correo.remitente)" />
+			</row>
+			<row>
+				Destinatario:
+				<textbox value="@bind(vm.dato.correo.destinatario)"
+					width="450px"/>
+			</row>
+			<row>
+				C.C.:
+				<textbox value="@bind(vm.dato.correo.destinatarioCopia)"
+					width="450px" />
+			</row>
+			<row>
+				C.C.O.:
+				<textbox
+					value="@bind(vm.dato.correo.destinatarioCopiaOculta)" width="450px" />
+			</row>
+			<row>
+				Asunto:
+				<hlayout sclass="z-valign-middle">
+					<textbox value="@bind(vm.dato.correo.asunto)"
+						width="300px" />
+					<toolbarbutton image="/core/images/adjunto.png"
+						label="@load(vm.nombreArchivoAdjunto)"
+						href="@load(vm.dato.linkImportacionPedidoCompra)" target="_blank" />
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+	<div height="10px"/>
+	<groupbox title="Texto del Correo" mold="3d">
+		<textbox multiline="true" rows="10" width="99%"
+			value="@bind(vm.dato.correo.cuerpo)" />
+	</groupbox>
+</window>

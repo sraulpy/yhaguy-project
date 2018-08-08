@@ -1,0 +1,48 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="40%" />
+		<column/>
+	</columns>
+	<rows>
+		<row>
+			<field value="Desde:" />
+			<textbox value="@load(vm.dato.filtro.fechaInicioOperaciones) @converter('formattedDate', format='dd-MM-yyyy')"
+				placeholder="Desde.." hflex="true" readonly="true" />
+		</row>
+		<row>
+			<field value="Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedor.razonSocial)"
+				id="bndCli" onOpen="search.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedoresExterior)"
+						selectedItem="@bind(vm.dato.filtro.proveedor)"
+						onSelect="bndCli.close()">
+						<listhead>
+							<listheader>
+								<textbox id="search" hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedor)"
+										instant="true" placeholder="Buscar.." sclass="filter"/>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cuenta:" />
+			<textbox hflex="true" readonly="true"
+				value="@load(vm.dato.filtro.monedaDs)"></textbox>
+		</row>
+	</rows>
+</grid>

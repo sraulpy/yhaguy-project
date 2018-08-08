@@ -1,0 +1,28 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.VerDetallesControl')">
+
+	<!-- ================================== LISTADO DETALLES ============================== -->
+	<div id="dvVerDetalles">
+
+		<listbox height="500px" model="@load(vm.dato.listaDet)">
+			<listhead>
+				<listheader label="Código" style="text-align:center"
+					width="200px" />
+				<listheader label="Descripción"
+					style="text-align:center" width="500px" />
+				<listheader label="Cantidad" style="text-align:center"
+					width="100px" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"
+						style="color:black" />
+					<listcell label="@load(each.pos2)"
+						style="color:black" />
+					<listcell label="@load(each.pos3)"
+						style="text-align:center" />
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</window>

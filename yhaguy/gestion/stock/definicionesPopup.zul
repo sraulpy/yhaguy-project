@@ -1,0 +1,21 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.definiciones.DefinicionesSimpleViewModel')">
+
+	<grid sclass="vgrid" >
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Sigla:" />
+				<textbox value="@bind(vm.dato.nuevoItem.sigla)" hflex="true" />
+			</row>
+			<row>
+				<field value="Descripción:" />
+				<textbox value="@bind(vm.dato.nuevoItem.text)"
+					hflex="true" />
+			</row>
+		</rows>
+	</grid>
+</window>

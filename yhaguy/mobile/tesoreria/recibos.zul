@@ -1,0 +1,354 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.RecibosMobileViewModel')"
+	vflex="true">
+
+	<vlayout vflex="true" style="overflow:auto">
+	
+		<button id="btn_sel_cli" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedEmpresa eq null? 'true':'false')"
+			label=" Seleccionar Cliente" height="150px" style="font-size:30pt"
+			dir="normal"
+			onClick="btn_crear_rec.setVisible(true); lstCobradores.setVisible(true); lstClientes.setVisible(false); self.setVisible(false)" />
+
+		<button id="btn_crear_rec" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedCobrador eq null? 'true':'false')"
+			label=" Seleccionar Cobrador" height="150px" style="font-size:30pt"
+			dir="normal" visible="false"
+			onClick="btn_formaPago.setVisible(true); lstMovimientos.setVisible(true); lstCobradores.setVisible(false); self.setVisible(false)" />
+			
+		<button id="btn_formaPago" mold="bs" sclass="btn-success btn-lg" hflex="true"
+			iconSclass="z-icon-money"
+			label=" Seleccionar Facturas" height="150px" style="font-size:30pt"
+			disabled="@load(vm.selectedDetalles.size() eq 0? 'true' : 'false')"
+			onClick="btn_selFormaPago.setVisible(true);lstMovimientos.setVisible(false); lst_formaPagos.setVisible(true); self.setVisible(false)"
+			dir="normal" visible="false"/>
+			
+		<button id="btn_selFormaPago" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Seleccionar Forma de Pago" height="150px" style="font-size:30pt"
+			disabled="@load(vm.selectedTipoFormaPago eq null? 'true' : 'false')"
+			dir="normal" visible="false"
+			onClick="@command('seleccionarFormaPago', comp1 = vl_formaPago, comp2 = lst_formaPagos, comp3 = self, comp4 = hl_gen_recibo)"/>
+			
+		<hlayout id="hl_gen_recibo" visible="false">
+			<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+				iconSclass="z-icon-plus"
+				label=" Agregar Forma Pago" height="150px" style="font-size:30pt"
+				dir="normal"
+				onClick="@command('agregarFormaPago', comp1 = hl_gen_recibo, comp2 = vl_formaPago, 
+				comp3 = btn_selFormaPago, comp4 = lst_formaPagos)"
+				disabled="@load(!vm.agregarFormaPagoEnabled)"/>
+			<button mold="bs" sclass="btn-success btn-lg" hflex="true"
+				iconSclass="z-icon-check"
+				label=" Generar Recibo" height="150px" style="font-size:30pt"
+				dir="normal"
+				onClick="@command('agregarFormaPago', comp1 = hl_gen_recibo, comp2 = vl_formaPago, 
+					comp3 = btn_gen_recibo, comp4 = vl_confirmar, montoGs = lbl1.value)"
+					disabled="@load(!vm.agregarFormaPagoEnabled)"/>
+		</hlayout>
+		
+		<button id="btn_gen_recibo" mold="bs" sclass="btn-success btn-lg" hflex="true"
+				iconSclass="z-icon-check"
+				label=" Confirmar" height="150px" style="font-size:30pt"
+				dir="normal" visible="false"
+				onClick="@command('generarRecibo', comp1 = vl_confirmar, comp2 = self, comp3 = vl_mensaje, comp4 = vl_mensaje)"/>
+
+		<!-- LISTA DE CLIENTES -->	
+		
+		<listbox 
+			id="lstClientes"
+			emptyMessage="BUSQUE UN CLIENTE.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedEmpresa)"
+			onSelect="@command('buscarMovimientos')">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" id="tbox_codint" 
+							value="@bind(vm.razonSocial)"/>
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.razonSocial)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- LISTA DE COBRADORES -->
+		
+		<listbox 
+			id="lstCobradores"
+			emptyMessage="BUSQUE UN COBRADOR.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.cobradores)" selectedItem="@bind(vm.selectedCobrador)"
+			visible="false">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" 
+							value="@bind(vm.razonSocialCobrador)"/>
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.razonSocial)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- LISTA DE FACTURAS CON SALDO -->
+		
+		<listbox id="lstMovimientos"
+			style="overflow:auto" vflex="true"
+			emptyMessage="NO SE ENCONTRARON MOVIMIENTOS PARA ESTA CUENTA.."
+			model="@load(vm.movimientos)"
+			visible="false"
+			checkmark="true" multiple="true"
+			selectedItems="@bind(vm.selectedDetalles)"
+			onSelect="@command('setMonto')">
+			<listhead>
+				<listheader width="90px"></listheader>
+				<listheader></listheader>
+				<listheader align="right"></listheader>
+				<listheader align="right"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="@load(each.movimiento._NroComprobante)"
+						style="@load(each.movimiento.vencido ? 'color:red' : '')" />
+					<listcell
+						label="@load(each.movimiento.saldo) @converter('formattedNumber', format='###,###,###,##0')"
+						style="@load(each.movimiento.vencido ? 'color:red' : '')" />
+					<listcell>
+						<doublebox
+							style="text-align:right;font-weight:bold"
+							format="###,###,###,##0" 
+							hflex="true"
+							value="@bind(each.montoGs)"
+							readonly="@load(each.selected? 'false':'true')"
+							onChange="@command('refresh')"
+							instant="true"/>
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="4" align="left">
+					<hlayout>
+						<div hflex="true"></div>
+						<label value="Total Gs." style="font-size: 30pt;font-weight:bold"/>
+						<doublebox
+							style="background:#EEF7FA;text-align:right;font-weight:bold"
+							value="@load(vm.totalImporteGs)" format="###,###,###,##0" />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<listbox id="lst_formaPagos" visible="false"
+			style="overflow:auto" vflex="1"
+			model="@load(vm.formasDePago)"
+			selectedItem="@bind(vm.selectedTipoFormaPago)">
+				<template name="model">
+					<listitem label="@load(each.descripcion.toUpperCase())" />
+				</template>
+		</listbox>
+		
+		<vlayout id="vl_formaPago" vflex="true" visible="false" style="padding:30px">
+			
+			<div style="border-bottom:solid 1px">
+				<label value="@load(vm.selectedTipoFormaPago.descripcion.toUpperCase())"
+					sclass="mobile" />
+			</div>
+			<space></space>
+			
+			<!-- FORMA DE PAGO EFECTIVO O RECAUDACION CC -->
+			
+			<vlayout visible="@load(vm.efectivo or vm.recaudacionCC)">
+				<label value="Monto Gs." sclass="mobile" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
+					format="###,###,##0" style="text-align:right"/>
+			</vlayout>
+			
+			<!-- FORMA DE PAGO CHEQUE DE TERCERO -->
+						
+			<vlayout visible="@load(vm.chequeTercero)">
+				<label value="Banco" sclass="mobile" />
+				<combobox hflex="true" 
+					model="@load(vm.bancos)"
+					selectedItem="@bind(vm.nvoFormaPago.chequeBanco)"
+					value="@load(vm.nvoFormaPago.chequeBanco.descripcion.toUpperCase())">
+					<template name="model">
+						<comboitem label="@load(each.descripcion.toUpperCase())"/>
+					</template>
+				</combobox>
+				<space></space>
+				<label value="Número Cheque" sclass="mobile" />
+				<textbox hflex="true" value="@bind(vm.nvoFormaPago.chequeNumero)"/>
+				<space></space>
+				<label value="Monto del Cheque Gs." sclass="mobile" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
+					format="###,###,##0" style="text-align:right"/>
+				<space></space>
+				<label value="Fecha del Cheque" sclass="mobile" />
+				<datebox readonly="true" hflex="true" value="@bind(vm.nvoFormaPago.chequeFecha)"/>
+				<space></space>
+				<label value="Librador" sclass="mobile" />
+				<textbox hflex="true" value="@bind(vm.nvoFormaPago.chequeLibrador)" />
+			</vlayout>
+			
+			
+			<!-- FORMA DE PAGO DEPOSITO BANCARIO -->
+			
+			<vlayout visible="@load(vm.depositoBancario)">
+				<label value="Banco" sclass="mobile" />
+				<combobox hflex="true" 
+					model="@load(vm.bancosCuentas)"
+					selectedItem="@bind(vm.nvoFormaPago.depositoBancoCta)">
+					<template name="model">
+						<comboitem label="@load(each.banco.descripcion.toUpperCase())"/>
+					</template>
+				</combobox>
+				<space></space>
+				<label value="Número Referencia" sclass="mobile" />
+				<textbox hflex="true" value="@bind(vm.nvoFormaPago.depositoNroReferencia)"/>
+				<space></space>
+				<label value="Monto Gs." sclass="mobile" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
+					format="###,###,##0" style="text-align:right"/>
+			</vlayout>
+			
+			<!-- FORMA DE PAGO RETENCION -->
+			
+			<vlayout visible="@load(vm.retencion)">
+				<label value="Monto Gs." sclass="mobile" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
+					format="###,###,##0" style="text-align:right"/>
+			</vlayout>
+			
+			<space vflex="true"></space>
+			<hbox hflex="true" style="margin:0px 30px 0px 30px;border-bottom: solid 2px">
+					<space></space>
+					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;">Sub-total Facturas:</label>
+					<space hflex="true"></space>
+					<label style="font-size:32pt" value="@load(vm.totalImporteGs) @converter(vm.cnv.monedaLocal)"></label>
+					<space></space>
+				</hbox>
+			<space></space>
+			<hbox hflex="true" style="margin:0px 30px 0px 30px;border-bottom: solid 2px">
+					<space></space>
+					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;">Sub-total Formas Pago:</label>
+					<space hflex="true"></space>
+					<label style="font-size:32pt" value="@load(vm.totalImporteFormasPagoGs_) @converter(vm.cnv.monedaLocal)"></label>
+					<space></space>
+			</hbox>
+		</vlayout>
+		
+		<!-- VISTA PRELIMINAR DEL RECIBO -->
+		
+		<vlayout id="vl_confirmar" vflex="true" style="padding:30px" visible="false">
+			
+			<div style="text-align:center">
+				<label value="RECIBO DE DINERO" sclass="mobile" style="font-weight:bold" />
+			</div>
+			<space></space>
+			<label value="Número" sclass="mobile" style="font-weight:bold" />
+			<label value="@load(vm.numero)" sclass="mobile" />
+			<space></space>
+			<label value="Cliente" sclass="mobile" style="font-weight:bold" />
+			<label value="@load(vm.selectedEmpresa.razonSocial)" sclass="mobile" />
+			<space></space>
+			<label value="Facturas" sclass="mobile" style="font-weight:bold" />
+			<listbox style="overflow:auto" vflex="1"
+				model="@load(vm.selectedDetalles)">
+				<listhead>
+					<listheader /><listheader align="right" width="40%"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.movimiento._NroComprobante)" />
+						<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<label style="font-size:32pt;font-weight:bold" value="Total Gs."></label>
+					</listfooter>
+					<listfooter>
+						<doublebox hflex="true" value="@bind(vm.totalImporteGs)"
+							format="###,###,##0" style="text-align:right;font-weight:bold;background:#EEF7FA"
+							readonly="true"/>
+					</listfooter>
+				</listfoot>
+			</listbox>
+			<space></space>
+			<label value="Formas de Pago" sclass="mobile" style="font-weight:bold" />
+			<listbox style="overflow:auto" vflex="1"
+				model="@load(vm.selectedFormasPagos)">
+				<listhead>
+					<listheader/><listheader align="right" width="40%"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.tipo.descripcion.toUpperCase())" />
+						<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<label style="font-size:32pt;font-weight:bold" value="Total Gs."></label>
+					</listfooter>
+					<listfooter>
+						<doublebox hflex="true" value="@bind(vm.totalImporteFormasPagoGs)"
+							format="###,###,##0" style="text-align:right;font-weight:bold;background:#EEF7FA"
+							readonly="true"/>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+		
+		<!-- MENSAJE -->
+		
+		<vbox id="vl_mensaje" vflex="true" visible="false" style="margin:100px"
+			pack="center" align="center">
+			<label value="@load(vm.mensaje)" sclass="mobile" style="font-weight:bold" />			
+		</vbox>		
+	</vlayout>
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+		.z-listitem-checkable { height:50px; width:50px }
+		.z-listitem-selected>.z-listcell>.z-listcell-content>.z-listitem-checkable .z-listitem-icon { line-height:50px; }
+		.z-combobox-popup { height:500px }
+	</style>
+</div>

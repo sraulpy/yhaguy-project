@@ -1,0 +1,176 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctacte.CtaCteAsignarImputacionSimpleControl')">
+
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<label value="Comprobante: "
+						style="font-weight:bold ; font-size:12px" />
+					<textbox value="@load(vm.dto.nroComprobante)"
+						readonly="true" inplace="true" />
+
+					<label value="Tipo Movimiento: "
+						style="font-weight:bold ; font-size:12px" />
+					<textbox value="@load(vm.dto.tipoMovimiento.pos1)"
+						readonly="true" inplace="true" />
+
+					<label value=" Moneda: "
+						style="font-weight:bold ; font-size:12px" />
+					<textbox value="@load(vm.dto.moneda.text)"
+						readonly="true" inplace="true" />
+				</row>
+				<row>
+					<label value="Monto Aplicable: "
+						style="font-weight:bold ; font-size:12px" />
+					<doublebox value="@load(vm.dto.saldo)"
+						style="text-align:center;color:green;font-weight:bold"
+						format="#,###,###,##0.00" readonly="true" inplace="true" />
+					<label value="Tipo Cambio: "
+						style="font-weight:bold ; font-size:12px" />
+					<doublebox value="@load(vm.tipoCambio)"
+						style="text-align:center" format="#,###,###,##0.00"
+						readonly="true" inplace="true" />
+					<label value="Monto Aplicable Gs.: "
+						style="font-weight:bold ; font-size:12px" />
+					<guaranibox
+						value="@load(vm.montoAplicableMonedaLocal)"
+						style="text-align:center;color:green;font-weight:bold"
+						readonly="true" inplace="true" />
+				</row>
+			</rows>
+		</grid>
+
+		<listbox height="370px" model="@load(vm.movimientosPendientes)"
+			multiple="true" checkmark="true"
+			selectedItems="@bind(vm.selectedMovs)"
+			onSelect="@command('habilitarMontos')">
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+			<auxhead>
+				<auxheader label="Comprobante" colspan="6"
+					align="center" />
+				<auxheader label="Moneda" colspan="2" align="center" />
+				<auxheader label="Saldo" colspan="2" align="center" />
+				<auxheader label="Monto a Imputar" colspan="2"
+					align="center" />
+			</auxhead>
+			<listhead menupopup="auto" sizable="true">
+				<listheader hflex="min" />
+				<listheader label="Tipo Movimiento"
+					style="text-align:center" align="right" sort="auto" hflex="min"
+					visible="false" />
+				<listheader label="Comprobante"
+					style="text-align:center" align="right" sort="auto" hflex="min" />
+				<listheader label="Emision" style="text-align:center"
+					sort="auto" hflex="min" />
+				<listheader label="Vencimiento"
+					style="text-align:center" sort="auto" hflex="min" />
+				<listheader label="Importe" style="text-align:center"
+					align="right" sort="auto" />
+				<listheader label="Moneda" style="text-align:center"
+					sort="auto" hflex="min" />
+				<listheader label="Cambio" style="text-align:center"
+					sort="auto" hflex="min" />
+				<listheader label="Extranjera" style="text-align:center"
+					align="right" sort="auto" />
+				<listheader label="Local" style="text-align:center"
+					align="right" sort="auto" />
+				<listheader label="Extranjera" style="text-align:center"
+					align="right" sort="auto" />
+				<listheader label="Local" style="text-align:center"
+					align="right" sort="auto" />
+
+
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+
+					<listcell>
+						<label
+							value="@load(each.movimiento.tipoMovimiento.pos1)" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.movimiento.nroComprobante)" maxlength="33" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.movimiento.fechaEmision) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.movimiento.fechaVencimiento) 
+						@converter('formatedDate', format='dd-MM-yyyy')"
+							style="@load(each.styleVencimiento)" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.movimiento.importeOriginal) 
+						@converter(each.format)" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.movimiento.moneda.text)" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.tipoCambio) @converter(vm.cnv.monedaLocal)" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.saldoDs) 
+						@converter(vm.cnv.monedaExtranjera)"
+							style="@load(each.styleSaldoDs)" />
+					</listcell>
+
+					<listcell>
+						<label
+							value="@load(each.saldoGs) 
+						@converter(vm.cnv.monedaLocal)"
+							style="@load(each.styleSaldoGs)" />
+					</listcell>
+
+					<listcell>
+						<dolarbox value="@bind(each.montoDs)"
+							onChange="@command('cambiarAmonedaLocal', item=each, comp=self)"
+							onOK="@command('cambiarAmonedaLocal', item=each, comp=self)"
+							disabled="@load(!each.selected)" inplace="@load(!each.selected)" />
+					</listcell>
+					<listcell>
+						<guaranibox value="@bind(each.montoGs)"
+							onChange="@command('cambiarAmonedaExtranjera', item=each, comp=self)"
+							onOK="@command('cambiarAmonedaExtranjera', item=each, comp=self)"
+							disabled="@load(!each.selected)" inplace="@load(!each.selected)" />
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<groupbox width="100%">
+
+			<space hflex="true" />
+
+			<label value="Total a Imputar:"
+				style="font-weight:bold ; font-size:12px" />
+
+			<dolarbox value="@load(vm.datosMovimientosPendientes[0])"
+				readonly="true" style="background:#dddddd; text-align:right" />
+
+			<space />
+
+			<label value="Total a Imputar Gs.:"
+				style="font-weight:bold ; font-size:12px" />
+
+			<guaranibox value="@load(vm.datosMovimientosPendientes[1])"
+				readonly="true" style="background:#dddddd; text-align:right" />
+
+		</groupbox>
+	</window>
+</zk>

@@ -1,0 +1,90 @@
+<window title="Pedidos Pendientes de Facturar" border="normal"
+	width="80%" height="70%" closable="false"
+	id="win_pedidos_pendientes">
+	
+	<hlayout sclass="button-container">
+		<field value="Desde:" />
+		<datebox value="@bind(vm.fechaDesde)" instant="true"></datebox>
+		<space/>
+		<field value="Hasta:" />
+		<datebox value="@bind(vm.fechaHasta)" instant="true"></datebox>
+	</hlayout>
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN PEDIDOS PENDIENTES.."
+		model="@load(vm.pedidosPendientes)"
+		selectedItem="@bind(vm.selectedVenta)"
+		checkmark="true"
+		style="background:#B5D5ED"
+		onSelect="@command('mostrarObservacion', ref=self)">
+		<listhead>
+			<listheader width="40px" align="center"/>
+			<listheader label="Fecha" width="120px" />
+			<listheader label="Número" width="120px" />
+			<listheader label="Cliente" />
+			<listheader label="Vendedor" width="130px" />
+			<listheader label="Condición" width="120px" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell
+					label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.numero)" />
+				<listcell>
+					<hlayout>
+						<label value="@load(each.denominacion)"
+							hflex="true" />
+						<listbox mold="select" model="@load(each.denominaciones)"
+							width="20px"
+							selectedItem="@bind(vm.selectedDenominacion)"
+							onSelect="@command('selectDenominacion')"
+							visible="@load(each.id eq vm.selectedVenta.id? 'true' : 'false')">
+							<template name="model">
+								<listitem label="@load(each)" />
+							</template>
+						</listbox>						
+					</hlayout>
+				</listcell>
+				<listcell label="@load(each.vendedor.pos1)" />
+				<listcell>
+					<hlayout>
+						<label value="@load(each.condicionPago.pos1)"
+							hflex="true" />
+						<!-- <listbox mold="select" model="@load(vm.condiciones)"
+							width="20px"
+							visible="@load(each.id eq vm.selectedVenta.id? 'true' : 'false')"
+							selectedItem="@bind(each.condicionPago)">
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.pos1)" style="margin-right:10px;margin-left:10px"/>
+								</listitem>
+							</template>
+						</listbox> -->						
+					</hlayout>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<hbox pack="center" width="100%"
+		style="margin-top:10px;margin-bottom:5px">
+		<button label="ACEPTAR" iconSclass="z-icon-check"
+			width="150px" 
+			onClick="@command('facturarVenta')"
+			disabled="@load(vm.selectedVenta eq null? 'true':'false')"
+			style="font-weight:bold;padding:7px"
+			dir="normal"/>
+		<space />
+		<button label="CANCELAR" iconSclass="z-icon-times"
+			width="150px" 
+			onClick="@command('cancelarFacturacion')"
+			style="font-weight:bold;padding:7px"
+			dir="normal"/>
+	</hbox>
+	
+	<style>
+		.z-notification
+		.z-notification-content { font-size: 14px; font-weight: normal;
+		margin: 80px 50px 80px 0px !important; overflow: hidden; color:
+		white; width: 350px; min-height: 200px; white-space: pre; background: #357ebd}
+	</style>
+</window>

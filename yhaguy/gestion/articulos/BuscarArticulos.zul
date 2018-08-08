@@ -1,0 +1,388 @@
+<window title="Buscador de Artículos" border="normal" closable="true"
+	width="90%" height="90%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel')"
+	onCreate="tbox_codint.focus()"
+	id="findArt">
+	<caption image="/core/images/searching2_.png"></caption>
+	<listbox sclass="small-list"
+		vflex="4"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.articulos)"
+		selectedItem="@bind(vm.selectedItem)"
+		id="listArt">	
+		
+		<listhead>
+			<listheader label="Código Interno" width="180px"/>
+			<listheader label="Código Original" width="180px"/>
+			<listheader label="Código Proveedor" width="180px"/>
+			<listheader label="Descripción"/>
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						value="@bind(vm.codInterno)" instant="true"
+						id="tbox_codint"/>
+				</hlayout>				
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						value="@bind(vm.codOriginal)" instant="true"/>
+				</hlayout>				
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						value="@bind(vm.codProveedor)" instant="true"/>
+				</hlayout>				
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						sclass="filter"
+						value="@bind(vm.descripcion)" instant="true" />
+				</hlayout>				
+			</auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem onDoubleClick="@command('obtenerValores')"
+				onOK="@command('obtenerValores')">
+				<listcell label="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)" />
+				<listcell label="@load(each.pos3)" />
+				<listcell label="@load(each.pos4)" />
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="3">
+				<hlayout>
+					<field value="@load(vm.articulos.size())"/>
+					<field value="ítems"/>
+					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:100px"/>
+				</hlayout>
+			</listfooter>
+			<listfooter>
+			<hbox hflex="true" align="center">
+				<hbox tooltiptext="@load(vm.ultimaCompra)"
+					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">
+					<label value="Últ. Compra:"
+						style="font-style:italic;font-weight:bold" />
+					<label value="@load(vm.ultimaCompra)"
+						style="font-style:italic" />
+				</hbox>
+				<hbox width="60px" style="margin-right:10px">
+					<toolbarbutton image="/core/images/table_chart.png"
+					tooltiptext="Ver Historial" onClick="@command('loadHistorico')"
+					disabled="@load(vm.selectedItem eq null? 'true':'false')" />
+				<toolbarbutton image="/core/images/camara.png"
+					tooltiptext="Ver Foto.." onClick="@command('verImagen')"
+					disabled="@load(vm.selectedItem eq null? 'true':'false')" />
+				<toolbarbutton image="/core/images/barcode.png"
+					tooltiptext="Generar Código de Barras.." onClick="@command('verBarcode')"
+					disabled="@load(vm.selectedItem eq null? 'true':'false')" />
+				</hbox>				
+				<space></space>
+			</hbox>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<hlayout style="margin-top:5px" vflex="3">
+		<listbox rows="5" hflex="true" sclass="small-list"
+			model="@load(vm.existencia)" vflex="true">
+			<auxhead>
+				<auxheader colspan="2" label="Existencia">
+					<a style="margin-left:15px"
+							iconSclass="z-icon-truck"
+							label=" Ver Importación En Curso" 
+							visible="@load(vm.importaciones.size() eq 0? 'false':'true')"
+							onClick='importaciones.open(self, "end_after")'/>
+					<label class="badge" style="margin-left:15px;background:#357ebd;color:white"
+						visible="@load(vm.existencia eq null? 'false':'true')" value="@load(vm.stock)"></label>
+				</auxheader>
+			</auxhead>
+			<listhead>
+				<listheader/>
+				<listheader width="60px" align="right"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1.toString().toUpperCase())"/>
+					<listcell label="@load(each.pos2) @converter('formattedNumber', format='###,###,###')"/>
+				</listitem>
+			</template>
+		</listbox>
+		<vlayout hflex="true" vflex="true">
+			<listbox rows="5" hflex="true" vflex="true"
+				sclass="small-list custom-listheader"
+				emptyMessage="SIN UBICACIÓN.."
+				model="@load(vm.selectedItem.pos5)">
+				<auxhead>
+					<auxheader label="Ubicación" colspan="3"></auxheader>
+				</auxhead>
+				<listhead style="text-align:center">
+					<listheader label="Estante" align="right" />
+					<listheader label="Fila" align="right" />
+					<listheader label="Columna" align="right" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)"></listcell>
+						<listcell label="@load(each.pos2)"></listcell>
+						<listcell label="@load(each.pos3)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</vlayout>
+		<listbox rows="5" hflex="true" sclass="small-list"
+			model="@load(vm.precios)" vflex="true"
+			selectedItem="@bind(vm.selectedPrecio)">
+			<auxhead>
+				<auxheader colspan="4" label="Precio"/>
+			</auxhead>
+			<listhead>
+				<listheader/>
+				<listheader align="right" width="200px"/>
+				<listheader width="30px" align="center"/>
+				<listheader width="30px" align="center" visible="@load(vm.loginNombre eq 'hugog' or vm.loginNombre eq 'david')"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"/>
+					<listcell label="@load(each.pos5)"/>
+					<listcell>						
+						<a image="/core/images/accessories-calculator-3.png"
+							onClick='calc.open(self, "after_end")'></a>
+					</listcell>
+					<listcell>						
+						<a image="/core/images/lock_open.png"
+							onClick='unlock.open(self, "after_end")'
+							visible="@load(each.pos1 eq 'MAYORISTA')"></a>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</hlayout>
+	
+	<popup id="calc" sclass="rounded" onOpen="@command('reloadCalc')">
+		<grid sclass="vgrid" width="200px">
+			<columns>
+				<column/>
+				<column align="right"/>
+			</columns>
+			<rows>
+				<row>
+					<hlayout>
+						<toolbarbutton iconSclass="z-icon-plus" sclass="custom-tbutton" style="color:green"/>
+						<intbox width="40px" style="background:lightyellow; text-align:right"
+							onOK="@command('calculadora')"
+							value="@bind(vm.calcPorcentaje)"/>
+						<field value="%" />
+						<field value="=" />
+					</hlayout>
+					<label value="@load(vm.selectedPrecio.pos3) @converter('formattedNumber', format='###,###,###')" 
+						style="font-weight:bold;color:green"/>
+				</row>
+				<row>
+					<hlayout>
+						<toolbarbutton iconSclass="z-icon-minus" sclass="custom-tbutton" style="color:red"/>
+						<intbox width="40px" style="background:lightyellow; text-align:right"
+							onOK="@command('calculadora')"
+							value="@bind(vm.calcPorcentaje_)"/>
+						<field value="%" />
+						<field value="=" />
+					</hlayout>
+					<label value="@load(vm.selectedPrecio.pos4) @converter('formattedNumber', format='###,###,###')" 
+						style="font-weight:bold;color:red"/>
+				</row>
+			</rows>
+		</grid>
+	</popup>
+	
+	<popup id="unlock" sclass="rounded" onOpen="@command('reloadCalc')">
+		<grid sclass="vgrid" width="250px">
+			<columns>
+				<column />
+				<column width="100px" align="right"/>
+			</columns>
+			<rows>
+				<row>
+					<hlayout>
+						<guaranibox style="background:lightyellow; text-align:right"
+							placeholder="Monto.."
+							value="@bind(vm.selectedPrecio.pos4)"/>
+						<field value="Gs." />
+					</hlayout>
+					<label value="@load(vm.selectedPrecio.pos4) @converter('formattedNumber', format='###,###,###')" 
+						style="font-weight:bold;color:green"/>
+				</row>
+				<row>
+					<hlayout>
+						<intbox style="background:lightyellow; text-align:right"
+							onOK="@command('calculadora')"
+							value="@bind(vm.calcPorcentaje_)"
+							placeholder="Porcentaje.."/>
+						<field value="%" />
+					</hlayout>
+					<label value="@load(vm.selectedPrecio.pos4) @converter('formattedNumber', format='###,###,###')" 
+						style="font-weight:bold;color:green"/>
+				</row>
+			</rows>
+		</grid>
+		<button label="Habilitar Precio" width="100%" style="margin-top:10px"
+			onClick="@command('habilitarPrecio')">
+			<attribute name="onClick">
+				unlock.close();
+			</attribute>	
+		</button>
+	</popup>
+	
+	<popup id="historial" sclass="rounded">
+		<hlayout sclass="button-container">
+			<field value="@load(vm.selectedItem.pos4)" />
+			<space hflex="true"/>
+			<field value = "Costo S/iva Gs.:" 
+				visible="@load(vm.isOperacionHabilitada('verCostos'))" />
+			<label value="@load(vm.costoGs) @converter(vm.cnv.monedaLocal)" 
+				visible="@load(vm.isOperacionHabilitada('verCostos'))"/>
+			<space />
+			<field value="Desde:" />
+			<datebox value="@bind(vm.desde)"
+				onChange="@command('refreshHistorico')"/>
+			<space />
+			<field value="Hasta:" />
+			<datebox value="@bind(vm.hasta)"
+				onChange="@command('refreshHistorico')"/>
+		</hlayout>
+		<vlayout>
+			<div>
+				<label value="Entrada a Stock : " style="margin-left:5px;font-style:italic;color:green"/>
+				<label value="@load(vm.stockEntrada)" style="margin-left:5px;font-style:italic;color:green"/>
+			</div>
+			<listbox sclass="small-list" width="930px" height="215px"
+				model="@load(vm.historicoEntrada)"
+				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
+				<listhead>
+					<listheader label="Concepto" width="160px" />
+					<listheader label="Empresa" />
+					<listheader label="Fecha" width="100px" />
+					<listheader label="Número" width="120px" />
+					<listheader label="Cant." width="60px"
+						align="right" />
+					<listheader label="Precio Gs." width="120px"
+						align="right" visible="@load(vm.isOperacionHabilitada('verCostos'))" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each[0])" />
+						<listcell label="@load(each[5])" />
+						<listcell
+							label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(each[2])" />
+						<listcell label="@load(each[3])" />
+						<listcell
+							label="@load(each[4]) @converter(vm.cnv.monedaLocal)" />
+					</listitem>
+				</template>
+			</listbox>
+			<div>
+				<label value="Salida de Stock : " style="margin-left:5px;font-style:italic;color:red"/>
+				<label value="@load(vm.stockSalida)" style="margin-left:5px;font-style:italic;color:red"/>
+			</div>
+			<listbox sclass="small-list" width="930px" height="220px"
+				model="@load(vm.historicoSalida)"
+				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
+			<listhead>
+				<listheader label="Concepto" width="160px" />
+				<listheader label="Empresa" />
+				<listheader label="Fecha" width="100px" />
+				<listheader label="Número" width="120px" />
+				<listheader label="Cant." width="60px" align="right" />
+				<listheader label="Precio Gs." width="120px"
+					align="right" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each[0])" />
+					<listcell label="@load(each[5])" />
+					<listcell
+						label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')" />
+					<listcell label="@load(each[2])" />
+					<listcell label="@load(each[3])" />
+					<listcell
+						label="@load(each[4]) @converter(vm.cnv.monedaLocal)" />
+				</listitem>
+			</template>
+		</listbox>
+		</vlayout>
+	</popup>
+	
+	<popup id="importaciones" sclass="rounded">
+		<listbox sclass="small-list" width="400px" height="200px"
+				model="@load(vm.importaciones)"
+				emptyMessage="SIN IMPORTACIONES EN CURSO..">
+				<listhead>
+					<listheader label="Nro. Importación" />
+					<listheader label="Cantidad" width="100px" align="right" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)" />
+						<listcell label="@load(each.pos2)" />
+					</listitem>
+				</template>
+			</listbox>
+	</popup>
+	
+	<popup id="pop_img" sclass="rounded" height="550px" width="600px">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="FOTO DEL ARTICULO: " />
+				<field value="@load(vm.selectedItem.pos1)" />
+			</hbox>
+			<button onClick="pop_img.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="5px"/>
+		<vbox pack="center" align="center" width="100%">
+			<html><![CDATA[
+        		<img id="foto" alt="" onerror="this.src='http://190.211.240.30/images/default.png'" 
+        			style ="height:500px; width:580px;"></img>  ]]>
+    		</html>
+		</vbox>	
+	</popup>
+	
+	<popup id="pop_barcode" sclass="rounded" height="550px" width="600px">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="CODIGO DE BARRA DEL ARTICULO: " />
+				<field value="@load(vm.selectedItem.pos1)" />
+			</hbox>
+			<button onClick="pop_barcode.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="5px"/>
+		<iframe width="580px" height="490px" src="@load(vm.urlBarcode)"></iframe>	
+	</popup>
+	
+	<script>
+			function setImage(url) {
+				var imagen = document.getElementById("foto");
+				imagen.src = url;
+			}
+	</script>
+	
+	<style>
+		.custom-tbutton {cursor:default; background:transparent; border:0px}
+		.custom-tbutton:hover {cursor:default; background:transparent; border:0px}
+		.custom-tbox {margin-right:5px; background:lightyellow}
+		.custom-listheader .z-listheader-content { line-height: 15px; font-weight:normal}	
+		.z-html {
+			display:block;
+		}	
+	</style>
+	
+</window>

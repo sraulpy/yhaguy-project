@@ -1,0 +1,73 @@
+<menubar id="menubar" width="750px"  visible="@load(vm.menuVisible)">
+	<menuseparator width="100%" />
+	
+
+	<menu label="Inventario">
+		<menupopup>
+	<zk forEach="${vm.menuItem(self,'InvPlanilla') }" />
+	<menuseparator />
+	
+					<zk forEach="${vm.menuItem(self,'InvPanelControl') }" />
+					<zk forEach="${vm.menuItem(self,'InvLote') }" />
+			
+
+			
+		</menupopup>
+	</menu>
+
+	<menu label="Tablero">
+		<menupopup>
+			<menuitem  label="Ir..."
+				onClick='principalBody.src = "/core/inicio/okLogin.zul";
+				nombreFormulario.value="&#160;" ' />
+			<menu label="Panel de Control">
+				<menupopup>
+					<!-- <menuitem disabled="true" label="Cuentas de Usuarios" onClick="alert(self.label)" 
+						/> -->
+					<zk forEach="${vm.menuItem(self,'UsuarioABM')}" />
+					<menuseparator />
+					<menu label="Seguridad">
+						<menupopup>
+							<menuitem disabled="true" label="Generar Backup"
+								onClick="alert(self.label)" />
+							<menuitem disabled="true" label="Restaurar Sistema"
+								onClick="alert(self.label)" />
+						</menupopup>
+					</menu>
+					<menuseparator />
+					<menuitem disabled="true"
+						label="Información/Herramientas de Rendimiento" onClick="alert(self.label)" />
+					<menuseparator />
+					<menuitem disabled="true" label="Apariencia y Personalización"
+						onClick="alert(self.label)" />
+					<menuseparator />
+					<menuitem disabled="true" label="Reloj, Idioma, Moneda"
+						onClick="alert(self.label)" />
+					<menuseparator />
+					<menu label="Sistema y Mantenimiento">
+						<menupopup>
+							<menuitem disabled="true" label="Bloqueo de Sistema"
+								onClick="alert(self.label)" />
+							<menuitem disabled="true" label="Registros: Login"
+								onClick="alert(self.label)" />
+						</menupopup>
+					</menu>
+					<menuseparator />
+					<menuitem disabled="true" label="Impresoras y Dispositivos"
+						onClick="alert(self.label)" />
+					<menuseparator />
+					<menuitem disabled="true" label="Pantalla" onClick="alert(self.label)" />
+				</menupopup>
+			</menu>
+			<menuseparator></menuseparator>
+			<menuitem label="Logearse al sistema"
+				onClick='principalBody.src = "/core/inicio/login.zul";' />
+			<menuitem label="Salir"
+				onClick='principalBody.src = "/core/inicio/login.zul";' />
+		</menupopup>
+	</menu>
+
+
+</menubar>
+
+			

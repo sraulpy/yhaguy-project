@@ -1,0 +1,34 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaSimpleControl')">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="32%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Ítems para Reparto:"/>
+				<radiogroup>
+					<radio label="Total "
+						checked="@bind(vm.dato.dto.repartoTotal)" />
+					<radio label="Parcial"
+						checked="@bind(vm.dato.dto.repartoParcial)" 
+						style="margin: 20px"/>
+				</radiogroup>
+			</row>
+			<row>
+				<field value="Tipo de Reparto:"/>				
+				<textbox value="@load(vm.dato.dto.tipoReservaReparto.text)" hflex="true"
+					readonly="true"/>				
+			</row>
+			<row>
+				<field value="Observación:"/>				
+				<textbox hflex="true"
+					value="@bind(vm.dato.dto.obsReparto)"
+					placeholder="Ingrese una Observación del Reparto.." />
+			</row>
+		</rows>
+	</grid>
+
+</window>

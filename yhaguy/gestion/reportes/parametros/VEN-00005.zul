@@ -1,0 +1,76 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Vendedor:" />
+			<bandbox hflex="true" placeholder="Vendedor.."
+				readonly="true" value="@load(vm.dato.filtro.vendedor.razonSocial)"
+				id="bndVend_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.vendedores)"
+						selectedItem="@bind(vm.dato.filtro.vendedor)"
+						onSelect="bndVend_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialVendedor)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedorExterior.razonSocial)"
+				id="bndProv_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedoresExterior)"
+						selectedItem="@bind(vm.dato.filtro.proveedorExterior)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedorExterior)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+	</rows>
+</grid>

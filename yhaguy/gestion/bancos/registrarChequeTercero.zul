@@ -1,0 +1,67 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.cheques.ChequesTercerosSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Banco:" />
+				<combobox hflex="true"
+					model="@load(vm.dtoUtil.bancosTerceros)"
+					selectedItem="@bind(vm.dato.nvoCheque.pos1)">
+					<template name="model">
+						<comboitem label="@load(each.text)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Nro. Cheque:" />
+				<textbox value="@bind(vm.dato.nvoCheque.pos2)"
+					hflex="true" />
+			</row>
+			<row>
+				<field value="Fecha del Cheque:" />
+				<datebox value="@bind(vm.dato.nvoCheque.pos3)"
+					hflex="true" />
+			</row>
+			<row>
+			<field value="Cliente:" />
+			<bandbox hflex="true" placeholder="SELECCIONE UN CLIENTE.."
+				readonly="true"
+				value="@load(vm.dato.nvoCheque.pos4.text.toUpperCase())"
+				id="bndCli_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.clientes)"
+						selectedItem="@bind(vm.dato.nvoCheque.pos4)"
+						onSelect="bndCli_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filterCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.text.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+			<row>
+				<field value="Importe Gs." />
+				<guaranibox value="@bind(vm.dato.nvoCheque.pos5)" />
+			</row>
+		</rows>
+	</grid>
+</div>

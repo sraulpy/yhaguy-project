@@ -1,0 +1,32 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.FuncionarioPopupSucuViewModel')"
+	width="100%" height="100%">
+
+	<listbox id="sucursales" model="@load(vm.dato.sucursalesAnhadir)"
+		width="100%" vflex="true" hflex="true"
+		selectedItems="@bind(vm.dato.selectedSucursalesAnhadir)"
+		multiple="true" checkmark="true"
+		emptyMessage="Seleccione un usuario asignado">
+		<listhead>
+			<listheader width="30px"></listheader>
+			<listheader label="Sucursal" />
+			<listheader label="Descripción" />
+			<listheader label="Establecimiento" />
+			<listheader label="Dirección" />
+			<listheader label="Teléfono" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell></listcell>
+				<listcell label="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)" />
+				<listcell label="@load(each.pos3)" />
+				<listcell label="@load(each.pos4)" />
+				<listcell label="@load(each.pos5)" />
+			</listitem>
+		</template>
+	</listbox>
+
+
+
+</window>

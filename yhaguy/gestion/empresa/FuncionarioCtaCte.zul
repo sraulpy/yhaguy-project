@@ -1,0 +1,75 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctactefuncionarios.FuncionarioCtaCteViewModel')"
+	height="100%">
+	
+	
+	<grid sclass="vgrid">		
+		<rows>
+			<row>
+				<vlayout spacing="0" style="margin-right:20px">
+					<field value="Funcionario" />
+					<hlayout>
+						<textbox placeholder="Nombre.." hflex="true"
+							onOK="@command('buscarFuncionario')"
+							value="@bind(vm.funcionario.pos1)"/>
+						<button iconSclass="z-icon-search"
+							onClick="@command('buscarFuncionario')"/>
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Movimientos" />
+					<hlayout spacing="10px">
+						<datebox placeholder="Desde.."
+							value="@bind(vm.desde)" />					
+						<datebox placeholder="Hasta.."
+							value="@bind(vm.hasta)"
+							visible="@load(vm.desde eq null? 'false' : 'true')"/>
+					</hlayout>
+				</vlayout>
+			</row>
+		</rows>		
+	</grid>
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<toolbarbutton image="/core/images/printer.png"
+			label="Imprimir"
+			onClick="@command('imprimir')"
+			disabled="@load(vm.movimientos.size() gt 0? 'false':'true')"/>
+	</hlayout>
+	<listbox vflex="true" sclass="small-list"
+		emptyMessage="SIN MOVIMIENTOS.."
+		model="@load(vm.movimientos)">
+		<listhead>
+			<listheader label="Fecha" />
+			<listheader label="Nro. Comprobante" />
+			<listheader label="Descripción"/>
+			<listheader label="Monto Gs." align="right"/>
+		</listhead>
+		<template name="model">
+			<listitem style="@load(each.pos5? 'text-decoration:line-through':'')">
+				<listcell label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy')"/>
+				<listcell label="@load(each.pos2)"/>
+				<listcell label="@load(each.pos3.toUpperCase())"/>
+				<listcell label="@load(each.pos4) @converter(vm.cnv.monedaLocal)"/>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="4">
+				<hlayout>
+					<field value="@load(vm.movimientos.size())" />
+					<field value="ítems" />
+					<space hflex="true"/>
+					<field value="Total Gs." />
+					<guaranibox sclass="total-input"
+						value="@load(vm.totalGs)"
+						readonly="true"
+						style="background:lightgrey"/>
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	<style>
+		.total-input
+		{text-align:right;margin-right:10px;margin-left:10px;width:120px;font-weight:bold}
+	</style>
+</window>

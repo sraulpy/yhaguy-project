@@ -1,0 +1,10 @@
+<tabbox height="100%">
+	<tabs>
+		<tab label="Artículos" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			DEFINICIONES DE ARTICULOS..
+		</tabpanel>
+	</tabpanels>
+</tabbox>

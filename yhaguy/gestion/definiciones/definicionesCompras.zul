@@ -1,0 +1,14 @@
+<tabbox height="100%">
+	<tabs>
+		<tab label="Proveedores" />
+		<tab label="Ítems de Gastos" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			DEFINICIONES DE PROVEEDORES..
+		</tabpanel>
+		<tabpanel>
+			DEFINICIONES ÍTEMS DE GASTOS..
+		</tabpanel>
+	</tabpanels>
+</tabbox>

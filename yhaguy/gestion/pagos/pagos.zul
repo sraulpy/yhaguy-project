@@ -1,0 +1,276 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.pagos.PagosViewModel')"
+	height="100%">
+	
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<navbar mold="bs-pills">
+			<navitem label=" Todos" selected="true"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=1)" />
+			<navitem label=" Con Recibo"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=2)" />
+			<navitem label=" Sin Recibo"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=3)" />
+		</navbar>
+		<space />
+		<space />
+		<button mold="bs" sclass="btn-success btn-sm" width="150px"
+				iconSclass="z-icon-money"
+				label=" Registrar Recibo" 
+				onClick="@command('registrarRecibo')"
+				disabled="@load(vm.selectedItem eq null or vm.entregado)"/>
+		<space/>
+		<button mold="bs" sclass="btn-info btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				onClick="@command('listadoPagos')"
+				label=" Imprimir Listado" />
+		<space/>
+		<button mold="bs" sclass="btn-warning btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				onClick='popFormato.open(self)'
+				label=" Imprimir Pago" 
+				disabled="@load(vm.selectedItem eq null)"/>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.pagos)"
+		selectedItem="@bind(vm.selectedItem)">
+		<listhead>
+			<listheader label="Caja" width="150px" />
+			<listheader label="Fecha" width="150px" />
+			<listheader label="Número" width="150px" />
+			<listheader label="Nro. Recibo" width="150px" />
+			<listheader label="Proveedor" />
+			<listheader label="Ruc" width="150px" />
+			<listheader label="Importe Gs." align="right" width="120px" />
+			<listheader label="Detalle" align="center" width="70px"/>
+			<listheader label="Rec." align="center" width="40px"
+				tooltiptext="Recibo registrado.."/>
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Planilla.."
+						value="@bind(vm.filterCaja)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						value="@bind(vm.filterFechaDD)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						value="@bind(vm.filterFechaMM)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						value="@bind(vm.filterFechaAA)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Número.."
+						value="@bind(vm.filterNumero)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Nro. Recibo.."
+						value="@bind(vm.filterNumeroRecibo)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Razón Social.."
+						value="@bind(vm.filterRazonSocial)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Ruc.."
+						value="@bind(vm.filterRuc)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader />
+			<auxheader />
+			<auxheader />
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos6)"/>
+				<listcell label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy')"/>
+				<listcell label="@load(each.pos2)" />
+				<listcell label="@load(each.pos10)" />
+				<listcell label="@load(each.pos3.toString().toUpperCase())" />
+				<listcell label="@load(each.pos4)" />
+				<listcell label="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
+				<listcell>
+					<a label="ítems"
+						onClick="@command('verItems', item=each, parent=self)" />
+				</listcell>
+				<listcell>
+					<div>
+						<label value="SI" class="label label-success" visible="@load(each.pos11)" />
+						<label value="NO" class="label label-danger" visible="@load(!each.pos11)" />
+					</div>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="9" align="right">
+				<hlayout>
+					<field value="@load(vm.listSize)" />
+					<field value="ítems" />
+					<space hflex="true"></space>
+					<field value="Total Gs.:" />
+					<guaranibox readonly="true"
+						style="text-align:right;background:#EEF7FA;font-weight:bold" 
+						value="@load(vm.totalImporteGs)"/>
+					<space></space>
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="popFormato" width="250px" sclass="rounded">
+		<vlayout>
+			<field value="Formato:" />
+			<combobox hflex="true" placeholder="Seleccione un Formato.."
+				model="@load(vm.formatos)"
+				selectedItem="@bind(vm.selectedFormato)">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>	
+			</combobox>
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-print" 
+				label=" Imprimir" hflex="true"
+				onClick="@command('imprimirItem')" />
+		</vlayout>
+	</popup>
+	
+	<popup id="popDetallePagos" width="900px" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="@load(vm.detalle.tipoMovimiento)" />
+			</hbox>
+			<button onClick="popDetallePagos.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<hbox pack="start" align="start" sclass="button-container" width="100%">
+			<field value="Emisión:" />
+			<label value="@load(vm.detalle.emision) @converter('formattedDate', format='dd-MM-yyyy')" />
+			<space />
+			<field value="Número:" />
+			<label value="@load(vm.detalle.numero)" />			
+			<space />
+			<field value="Proveedor:" />
+			<label value="@load(vm.detalle.proveedor)" />		
+		</hbox>
+		
+		<hlayout>
+		<listbox height="300px" sclass="small-list"
+			model="@load(vm.detalle.detalles)" hflex="3">
+			<auxhead>
+				<auxheader label="Facturas" colspan="4"/>
+			</auxhead>
+			<listhead style="text-align:center">
+				<listheader label="Emisión" width="100px" />
+				<listheader label="Vencimiento" width="100px" />	
+				<listheader label="Número" />
+				<listheader label="Importe Gs." width="100px" align="right"
+					style="text-align:center" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)" />
+					<listcell label="@load(each.pos2)" />
+					<listcell label="@load(each.pos3)" />
+					<listcell label="@load(each.pos4) @converter(vm.cnv.monedaLocal)" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2">
+					<hlayout>
+						<field value="@load(vm.detalle.detalles.size())" />
+						<field value="ítems" />
+					</hlayout>
+				</listfooter>
+				<listfooter span="2">
+					<hbox pack="end" align="end" hflex="true">
+						<field value="Total Gs.:" />
+						<div width="5px"/>
+						<field value="@load(vm.detalle.totalImporteGs) @converter(vm.cnv.monedaLocal)" />
+						<div width="5px"/>
+					</hbox>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<listbox height="300px" sclass="small-list"
+			model="@load(vm.detalle.formasPago)" hflex="2">
+			<auxhead>
+				<auxheader label="Formas de Pago" colspan="2"/>
+			</auxhead>
+			<listhead style="text-align:center">
+				<listheader label="Descripción" />
+				<listheader label="Importe Gs." width="100px" align="right"
+					style="text-align:center" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1.toString().toUpperCase())" />
+					<listcell label="@load(each.pos2) @converter(vm.cnv.monedaLocal)" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2">
+					<hlayout hflex="true">
+						<field value="@load(vm.detalle.formasPago.size())" />
+						<field value="ítems" />
+						<hbox hflex="true" align="end" pack="end">
+							<field value="Total Gs.:" />
+							<div width="5px"/>
+							<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.detalle.totalImporteGs)"/>
+							<div width="5px"/>
+						</hbox>						
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		</hlayout>
+	</popup>
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+	</style>
+</window>

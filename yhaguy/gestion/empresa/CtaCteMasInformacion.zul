@@ -1,0 +1,47 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMasInforSimpleControl')">
+
+			<grid sclass = "vgrid">
+				<rows>
+					<row
+						visible="@load(vm.dato.tipoControl eq 1 ? 'true' : 'false')">
+						Fecha de Apertura de Cuenta:
+						<datebox format="short"
+							value="@bind(vm.dato.ctaCteEmpresa.fechaAperturaCuentaCliente)"
+							readonly ="true" style="text-align:center" width="75%"/>
+					</row>
+					<row 
+						visible="@load(vm.dato.tipoControl eq 1 ? 'false' : 'true')">
+						Fecha de Apertura de Cuenta:
+						<datebox format="short"
+							value="@bind(vm.dato.ctaCteEmpresa.fechaAperturaCuentaCliente)"
+							readonly ="true" style="text-align:center" width="75%" />
+					</row>
+					<row
+						visible="@load(vm.dato.tipoControl eq 1 ? 'true' : 'false')">
+						Linea Credito:
+						<guaranibox value="@load(vm.lineaCredito)"
+							readonly="true" width="75%" />
+					</row>
+					<row
+						visible="@load(vm.dato.tipoControl eq 1 ? 'true' : 'false')">
+						Credito Disponible:
+						<guaranibox
+							value="@load(vm.lineaCreditoDisponible)" readonly="true" width="75%"/>
+					</row>
+					<row>
+						Pendiente total en Gs.:
+						<guaranibox
+							value="@load(vm.saldoPendienteCtaCteEmpresa)" readonly="true" width="75%"/>
+					</row>
+					<row>
+						<label
+							value="@load(vm.dato.tipoControl eq 1 ? 'Saldo a favor del cliente:' : 'Saldo a favor de la empresa:')" />
+						<guaranibox
+							value="@load(vm.saldoFavorCtaCteEmpresa)" readonly="true" width="75%"/>
+					</row>
+				</rows>
+			</grid>
+	</window>
+</zk>

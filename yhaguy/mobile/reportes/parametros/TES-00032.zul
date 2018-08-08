@@ -1,0 +1,18 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+</vlayout>

@@ -1,0 +1,43 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.CompraLocalSimpleControl')"
+	style="padding:10px">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="120px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Factura Gasto:" />
+				<hlayout>
+					<textbox placeholder="Número Factura.."
+						value="@load(vm.dato.nvoGasto.gasto.pos1)"
+						readonly="true" hflex="true"/>
+					<button iconSclass="z-icon-search"
+						sclass="searchBtn" onClick="@command('buscarGastos')"/>
+				</hlayout>
+			</row>
+			<row>				
+				<field value="Proveedor:" />
+				<textbox readonly="true" hflex="true" value="@load(vm.dato.nvoGasto.gasto.pos2)"/>
+			</row>
+			<row>				
+				<field value="Porcentaje:" />
+				<hlayout>
+					<intbox value="@bind(vm.dato.nvoGasto.porcentaje)"/>
+					<label value="%"/>
+				</hlayout>
+			</row>
+			<row>				
+				<field value="Importe:" />
+				<hlayout>
+					<guaranibox value="@bind(vm.dato.nvoGasto.montoGs)"
+						onChange="@command('dolarizarGasto')"
+						onOk="@command(dolarizarGasto)"/>
+					<label value="Gs." style="font-size:11px"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+</div>

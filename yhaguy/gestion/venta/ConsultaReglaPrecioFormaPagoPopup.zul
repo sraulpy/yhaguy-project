@@ -1,0 +1,154 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.reglaPrecio.reglaPrecioFormaPago.PopupConsultaFormaPago')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+		<vlayout>
+			<groupbox>
+
+				<grid>
+					<auxhead>
+						<auxheader colspan="2" label="Articulo" />
+					</auxhead>
+					<columns></columns>
+					<rows>
+						<row>
+							<label value="Articulo" />
+							<buscadorArticulo value="@bind(vm)"
+								campo="descripcion" />
+						</row>
+					</rows>
+				</grid>
+
+			</groupbox>
+			<div height="10px" />
+			<groupbox>
+				<hbox>
+					<div width="20px" />
+					<vbox>
+						<label value="Forma de pago" />
+						<combobox width="100px"
+							selectedItem="@bind(vm.selectedModoPagoPopup)"
+							placeholder="Forma de pago"
+							model="@load(vm.uDto.formasDePago)">
+							<template name="model">
+								<comboitem label="@load(each.text)"
+									value="@load(each)" />
+							</template>
+						</combobox>
+					</vbox>
+					<div width="20px" />
+					<vbox>
+						<label value="Bancos" />
+						<combobox width="100px"
+							model="@load(vm.uDto.tarjetas)" placeholder="Tarjetas"
+							selectedItem="@bind(vm.selectedTarjetaPopup)"
+							value="@bind(vm.selectedTarjetaPopup.pos1)">
+							<template name="model">
+								<comboitem label="@load(each.pos1)" />
+							</template>
+						</combobox>
+					</vbox>
+					<div width="20px" />
+					<vbox>
+						<label value="Tarjetas" />
+						<combobox width="100px"
+							model="@load(vm.selectedTarjetaPopup.pos2)" placeholder="Emisor"
+							selectedItem="@bind(vm.selectedEmisorPopup)"
+							value="@bind(vm.selectedEmisorPopup.text)">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+
+					</vbox>
+					<div width="20px" />
+					<checkbox  checked = "@bind(vm.chequeAlDiaCheckbox)"/>
+					<label value="Cheque al dia"/>
+				</hbox>
+				<div height="10px" />
+			</groupbox>
+
+
+			<button label="Calcular"
+				onClick="@command('calculoPrecio')" />
+			<groupbox>
+				<grid>
+					<auxhead>
+						<auxheader colspan="2"
+							label="Se realizaran los calculos sobre el siguiente articulo" />
+					</auxhead>
+					<columns>
+						<column label="Campo" />
+						<column label="Valor" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Marca" />
+							<label value="@load(vm.selectedFabrica)" />
+						</row>
+
+						<row>
+							<label value="Familia" />
+							<label value="@load(vm.selectedFamilia)" />
+						</row>
+
+
+						<row>
+							<label value="Parte" />
+							<label value="@load(vm.selectedParte)" />
+						</row>
+
+						<row>
+							<label value="Rubro" />
+							<label value="@load(vm.selectedRubro)" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<groupbox>
+				<grid>
+					<auxhead>
+						<auxheader colspan="2" label="Precio" />
+					</auxhead>
+					<columns>
+						<column label="Campo" />
+						<column label="Valor" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Nombre de la regla a aplicar" />
+							<label value="@load(vm.nombreRegla) " />
+						</row>
+
+						<row>
+							<label value="Nombre corto de la regla" />
+							<label value="@load(vm.nombreCorto) " />
+						</row>
+
+						<row>
+							<label value="Precio de referencia" />
+							<label
+								value="@load(vm.precio)  @converter('formatedNumber', format='###,###.##')" />
+						</row>
+
+						<row>
+							<label value="Descuento a aplicar" />
+							<label
+								value="@load(vm.descuento)  @converter('formatedNumber', format='###,###.##')" />
+						</row>
+
+
+						<row>
+							<label value="Precio final" />
+							<label
+								value="@load(vm.precioFinal) @converter('formatedNumber', format='###,###.##')" />
+						</row>
+
+
+					</rows>
+				</grid>
+			</groupbox>
+		</vlayout>
+	</window>
+</zk>

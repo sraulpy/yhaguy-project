@@ -1,0 +1,101 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.notacredito.NotaCreditoSimpleControl')"
+	vflex="true" style="padding:5px">
+	
+	<listbox vflex="true"
+		model="@load(vm.dato.dto.notaCreditoCompra? vm.dato.selectedItemFac.articulosCompra : vm.dato.selectedItemFac.articulosVenta)"
+		multiple="true" checkmark="true"
+		selectedItems="@bind(vm.dato._selectedItemsArt)"
+		visible="@load(vm.dato.dto.motivoDevolucion or vm.dato.dto.motivoReclamo)">
+		<auxhead>
+			<auxheader colspan="5" label="ítem" />
+			<auxheader colspan="2" label="Cantidad" />
+		</auxhead>
+		<listhead>
+			<listheader width="40px" align="center" />
+			<listheader label="Código" width="140px" />
+			<listheader label="Descripción" />
+			<listheader label="Precio Gs." align="right" width="90px" />
+			<listheader label="Descuento" align="right" width="90px" />
+			<listheader label="Factura" align="right" width="90px" />
+			<listheader label="Devolución" align="right" width="90px" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)" />
+				<listcell>
+					<guaranibox value="@bind(each.pos4)" hflex="true" />
+				</listcell>
+				<listcell
+					label="@load(each.pos8) @converter('formattedNumber', format='###,###,##0')" 
+					style="color:red"/>
+				<listcell label="@load(each.pos3)" />
+				<listcell>
+					<intbox hflex="true" value="@bind(each.pos6)"
+						onChange="@command('validarCantidad', item=each, comp=self)" />
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="5" align="left">
+				<hlayout>
+					<field
+						value="@load(vm.dato.dto.notaCreditoCompra? vm.dato.selectedItemFac.articulosCompra.size() : vm.dato.selectedItemFac.articulosVenta.size())" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+	<listbox
+		vflex="true"
+		model="@load(vm.dato.selectedItemFac.articulosCompra)"
+		multiple="true"
+		checkmark="true"
+		selectedItems="@bind(vm.dato._selectedItemsArt)"
+		visible="@load(vm.dato.dto.motivoDiferenciaPrecio)">
+		<auxhead>
+			<auxheader colspan="4" label="ítem"/>
+			<auxheader colspan="2" label="Precio Gs."/>
+		</auxhead>
+		<listhead>
+			<listheader width="40px" align="center"/>
+			<listheader label="Código" width="140px"/>
+			<listheader label="Descripción"/>
+			<listheader label="Cantidad" align="right"
+				width="90px"/>
+			<listheader label="Factura" align="right"
+				width="90px"/>
+			<listheader label="Diferencia" align="right"
+				width="90px"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)" />
+				<listcell label="@load(each.pos3)" />
+				<listcell
+					label="@load(each.pos4) @converter('formattedNumber', format='###,###,##0')" />
+				<listcell>
+					<guaranibox hflex="true" value="@bind(each.pos7)" 
+						onChange="@command('validarDiferencia', item=each, comp=self)"/>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="5" align="left">
+				<hlayout>
+					<field value="@load(vm.dato.selectedItemFac.articulosCompra.size())" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>	
+	<style>
+		.z-listcell-content {text-overflow: ellipsis; white-space:
+		nowrap;}
+	</style>
+</div>

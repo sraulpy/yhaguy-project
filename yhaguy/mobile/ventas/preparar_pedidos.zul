@@ -1,0 +1,122 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.preparacion.PreparacionPedidosMobileVM')"
+	vflex="true">
+
+	<vlayout id="vl_preparador" height="100%">
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					PREPARADOR DEL PEDIDO
+				</label>
+		</hbox>
+		<listbox 
+			emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+			model="@load(vm.preparadores)" style="overflow:auto" vflex="2"
+			selectedItem="@bind(vm.selectedPreparador)">
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each)" />
+				</listitem>
+			</template>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-info btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Seleccionar Preparador" height="150px" style="font-size:30pt"
+			dir="normal" 
+			disabled="@load(vm.selectedPreparador eq null)"
+			onClick="vl_principal.setVisible(true);vl_preparador.setVisible(false)"/>
+		
+	</vlayout>
+
+	<vlayout id="vl_principal" height="100%" visible="false">
+
+		<listbox id="lstPedidos" emptyMessage="SIN PEDIDOS.."
+			model="@load(vm.pedidosPendientes)"
+			style="overflow:auto" vflex="2"
+			selectedItem="@bind(vm.selectedVenta)">
+			<listhead>
+				<listheader width="350px"/>
+				<listheader></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.numero)" />
+					<listcell label="@load(each.cliente.razonSocial)" />
+				</listitem>
+			</template>
+		</listbox>
+		
+		<vlayout id="vlDet" vflex="2" visible="false" style="padding:10px">
+			<hlayout>
+				<label value="@load(vm.selectedVenta.numero)" style="font-size:30pt;font-weight:bold;color:#357ebd"></label>
+				<space></space>
+				<label value="@load(vm.selectedVenta.cliente.razonSocial)" style="font-size:30pt;font-weight:bold;color:#357ebd"></label>
+			</hlayout>
+			<hlayout>
+				<label value="OBS:" style="font-size:30pt;font-weight:bold;color:#357ebd"></label>
+				<label value="@load(vm.selectedVenta.observacion.toUpperCase())" style="font-size:30pt;font-weight:bold;color:#357ebd"></label>
+			</hlayout>
+			<div height="20px"></div>
+			<listbox model="@load(vm.selectedVenta.detalles)" style="overflow:auto" vflex="2">
+				<listhead>
+					<listheader width="150px"/>
+					<listheader />
+					<listheader width="350px"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							<button iconSclass="z-icon-times" hflex="true" vflex="true"
+								style="font-size:25pt"
+								onClick="@command('deleteItem', venta=vm.selectedVenta, item=each)"></button>
+						</listcell>
+						<listcell label="@load(each.articulo.codigoInterno)" />
+						<listcell>
+							<spinner
+								value="@bind(each.cantidad)"
+								mold="rounded" hflex="true">
+							</spinner>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</vlayout>
+
+		<button id="btnPreparar" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Preparar Pedido" height="150px" style="font-size:30pt"
+			dir="normal" 
+			disabled="@load(vm.selectedVenta eq null)"
+			onClick="lstPedidos.setVisible(false);vlDet.setVisible(true);self.setVisible(false);btnEnviar.setVisible(true)"/>
+			
+		<button id="btnEnviar" mold="bs" sclass="btn-success btn-lg" hflex="true"
+			iconSclass="z-icon-check" visible="false"
+			label=" Aprobar Pedido" height="150px" style="font-size:30pt"
+			dir="normal" 
+			disabled="@load(vm.selectedVenta eq null)" 
+			onClick="@command('aprobarPedido', venta=vm.selectedVenta, comp1=lstPedidos, comp2=vlDet, comp3=btnPreparar, comp4=btnEnviar)"/>
+
+	</vlayout>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+	</style>
+</div>

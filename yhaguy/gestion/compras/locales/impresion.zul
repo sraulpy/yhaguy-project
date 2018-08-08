@@ -1,0 +1,23 @@
+<window height="250px" width="250px" closable="true"
+	title="Seleccionar Impresión"
+	border="normal">
+
+	<vbox pack="center" align="center" width="100%" height="100%"
+		style="padding:20px">
+		<button label="Presupuesto" hflex="true"
+			onClick="@command('printPresupuesto')"/>
+		<div height="10px" />
+		<button label="Orden de Compra" hflex="true"
+			onClick="@command('printOrdenCompra')"
+			disabled="@load(!vm.dto.autorizado)"/>
+		<div height="10px" />
+		<button label="Recepción de Mercadería" hflex="true"
+			onClick="@command('printRecepcion')"
+			disabled="@load(!vm.dto.autorizado)"/>
+		<div height="10px" />
+		<button label="Resumen de Compra" hflex="true"
+			onClick='Clients.showNotification("resumen de la compra..")'
+			disabled="@load(!vm.dto.autorizado)"/>
+	</vbox>
+
+</window>

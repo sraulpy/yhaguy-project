@@ -1,0 +1,1532 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.configuracion.ConfiguracionControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+
+		<vlayout>
+			<tabbox height="550px">
+				<tabs>
+					<tab label="Empresa"
+						visible="@load(vm.tab('empresa'))" />
+					<tab label="Cliente"
+						visible="@load(vm.tab('cliente'))" />
+					<tab label="Proveedor"
+						visible="@load(vm.tab('proveedor'))" />
+					<tab label="Articulo"
+						visible="@load(vm.tab('articulo'))" />
+					<tab label="Cuenta Corriente"
+						visible="@load(vm.tab('ctacte'))" />
+					<tab label="Banco" visible="@load(vm.tab('banco'))" />
+					<tab label="Funcionario"
+						visible="@load(vm.tab('funcionario'))" />
+					<tab label="Departamentos"
+						visible="@load(vm.tab('departamentos'))" />
+					<tab label="Sucursales"
+						visible="@load(vm.tab('sucursales'))" />
+					<tab label="Importación"
+						visible="@load(vm.tab('importacion'))" />
+					<tab label="Otros" visible="@load(vm.tab('otros'))" />
+
+				</tabs>
+				<tabpanels>
+					<!-- ======================== Empresa =========================== -->
+					<tabpanel visible="@load(vm.tab('empresa'))">
+						<vlayout>
+							<groupbox title="Rubro">
+								<hlayout>
+									<vlayout>
+										<listbox id="xRubro"
+											model="@load(vm.dto.rubroEmpresa)" width="200px"
+											selectedItem="@bind(vm.selectedRubroEmpresa)" rows="3">
+											<template name="model"
+												var="rubro">
+												<listitem
+													label="@load(rubro.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarRubroEmpresa')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarRubroEmpresa')"
+												disabled="@load(!vm.selectedRubroEmpresa.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedRubroEmpresa.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedRubroEmpresa.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+							<groupbox
+								title="Tipo de Contacto Interno">
+								<hlayout>
+									<vlayout>
+										<listbox
+											id="xtipoContactoInterno"
+											model="@load(vm.dto.tipoContactoInterno)" width="200px"
+											selectedItem="@bind(vm.selectedTipoContactoInterno)"
+											rows="3">
+											<template name="model"
+												var="tipoC">
+												<listitem
+													label="@load(tipoC.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarTipoContactoInterno')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarTipoContactoInterno')"
+												disabled="@load(!vm.selectedTipoContactoInterno.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedTipoContactoInterno.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedTipoContactoInterno.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+						</vlayout>
+					</tabpanel>
+					<!-- ======================== Clientes =========================== -->
+					<tabpanel visible="@load(vm.tab('cliente'))">
+						<vlayout>
+							<groupbox title="Categoría" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.categoriaCliente)" width="200px"
+											selectedItem="@bind(vm.selectedCatCliente)" rows="3">
+											<template name="model"
+												var="catC">
+												<listitem
+													label="@load(catC.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarCatCliente')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarCatCliente')"
+												disabled="@load(!vm.selectedCatCliente.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedCatCliente.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedCatCliente.sigla)" readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+							<groupbox title="Tipo" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.tipoCliente)" width="200px"
+											selectedItem="@bind(vm.selectedTipoCliente)" rows="3">
+											<template name="model"
+												var="tipoCliente">
+												<listitem
+													label="@load(tipoCliente.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarTipoCliente')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarTipoCliente')"
+												disabled="@load(!vm.selectedTipoCliente.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedTipoCliente.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedTipoCliente.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+
+							<groupbox title="Estado" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.estadoCliente)" width="200px"
+											selectedItem="@bind(vm.selectedEstadoCliente)" rows="3">
+											<template name="model"
+												var="estadoC">
+												<listitem
+													label="@load(estadoC.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarEstadoCliente')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarEstadoCliente')"
+												disabled="@load(!vm.selectedEstadoCliente.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedEstadoCliente.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedEstadoCliente.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+
+						</vlayout>
+					</tabpanel>
+					<!-- ======================== Proveedores =========================== -->
+					<tabpanel visible="@load(vm.tab('proveedor'))">
+						<vlayout>
+							<hlayout>
+								<groupbox title="Tipo" hflex="min">
+									<hlayout>
+										<vlayout>
+											<listbox
+												model="@load(vm.dto.proveedorTipo)" width="200px"
+												selectedItem="@bind(vm.selectedProveedorTipo)" rows="3">
+												<template name="model"
+													var="tipoP">
+													<listitem
+														label="@load(tipoP.text)" />
+												</template>
+											</listbox>
+
+											<hlayout>
+												<button label="Agregar"
+													onClick="@command('agregarProveedorTipo')" />
+												<button label="Eliminar"
+													onClick="@command('eliminarProveedorTipo')"
+													disabled="@load(!vm.selectedProveedorTipo.esNuevo())" />
+											</hlayout>
+										</vlayout>
+
+										<grid hflex="min">
+											<rows>
+												<row>
+													Descripción:
+													<textbox
+														value="@bind(vm.selectedProveedorTipo.text)"
+														constraint="${vm.check.noVacio}" />
+												</row>
+												<row>
+													Sigla:
+													<textbox
+														value="@bind(vm.selectedProveedorTipo.sigla)"
+														readonly="true" />
+												</row>
+											</rows>
+										</grid>
+
+									</hlayout>
+
+								</groupbox>
+								<groupbox title="Tipo de Pago"
+									hflex="min">
+									<hlayout>
+										<vlayout>
+											<listbox
+												model="@load(vm.dto.proveedorTipoPago)" width="200px"
+												selectedItem="@bind(vm.selectedProveedorTipoPago)"
+												rows="3">
+												<template name="model"
+													var="tipoPago">
+													<listitem
+														label="@load(tipoPago.text)" />
+												</template>
+											</listbox>
+
+											<hlayout>
+												<button label="Agregar"
+													onClick="@command('agregarProveedorTipoPago')" />
+												<button label="Eliminar"
+													onClick="@command('eliminarProveedorTipoPago')"
+													disabled="@load(!vm.selectedProveedorTipoPago.esNuevo())" />
+											</hlayout>
+										</vlayout>
+
+										<grid hflex="min">
+											<rows>
+												<row>
+													Descripción:
+													<textbox
+														value="@bind(vm.selectedProveedorTipoPago.text)"
+														constraint="${vm.check.noVacio}" />
+												</row>
+												<row>
+													Sigla:
+													<textbox
+														value="@bind(vm.selectedProveedorTipoPago.sigla)"
+														readonly="true" />
+												</row>
+											</rows>
+										</grid>
+
+									</hlayout>
+
+								</groupbox>
+							</hlayout>
+							<hlayout>
+								<groupbox title="Estado" hflex="min">
+									<hlayout>
+										<vlayout>
+											<listbox
+												model="@load(vm.dto.proveedorEstado)" width="200px"
+												selectedItem="@bind(vm.selectedProveedorEstado)" rows="3">
+												<template name="model"
+													var="estadoP">
+													<listitem
+														label="@load(estadoP.text)" />
+												</template>
+											</listbox>
+
+											<hlayout>
+												<button label="Agregar"
+													onClick="@command('agregarProveedorEstado')" />
+												<button label="Eliminar"
+													onClick="@command('eliminarProveedorEstado')"
+													disabled="@load(!vm.selectedProveedorEstado.esNuevo())" />
+											</hlayout>
+										</vlayout>
+
+										<grid hflex="min">
+											<rows>
+												<row>
+													Descripción:
+													<textbox
+														value="@bind(vm.selectedProveedorEstado.text)"
+														constraint="${vm.check.noVacio}" />
+												</row>
+												<row>
+													Sigla:
+													<textbox
+														value="@bind(vm.selectedProveedorEstado.sigla)"
+														readonly="true" />
+												</row>
+											</rows>
+										</grid>
+
+									</hlayout>
+
+								</groupbox>
+								<!-- 	<groupbox title="Condicion Pago"
+									hflex="min">
+									<hlayout>
+									<vlayout>
+									<listbox
+									model="@load(vm.dto.proveedorCondicionPago)" width="200px"
+									selectedItem="@bind(vm.selectedProveedorCondicionPago)"
+									rows="3">
+									<template name="model"
+									var="cPago">
+									<listitem
+									label="@load(cPago.pos1)" />
+									</template>
+									</listbox>
+									
+									<hlayout>
+									<button label="Agregar"
+									onClick="@command('agregarProveedorCondicionPago')" />
+									<button label="Eliminar"
+									onClick="@command('eliminarProveedorCondicionPago')"
+									disabled="@load(!vm.selectedProveedorCondicionPago.esNuevo())" />
+									</hlayout>
+									</vlayout>
+									
+									<grid hflex="min">
+									<rows>
+									<row>
+									Descripción:
+									<textbox
+									value="@bind(vm.selectedProveedorCondicionPago.pos1)"
+									constraint="${vm.check.noVacio}" />
+									</row>
+									<row>
+									Plazo:
+									<longbox
+									value="@bind(vm.selectedProveedorCondicionPago.pos2)"
+									constraint="${vm.check.noVacio}" />
+									</row>
+									</rows>
+									</grid>
+									
+									</hlayout>
+									
+									</groupbox> -->
+							</hlayout>
+						</vlayout>
+					</tabpanel>
+					<!-- ======================== Articulos =========================== -->
+					<tabpanel visible="@load(vm.tab('articulo'))">
+						<tabbox>
+							<tabs>
+								<tab label="Pagina 1" />
+								<tab label="Pagina 2" />
+							</tabs>
+							<tabpanels>
+								<tabpanel>
+									<hlayout>
+										<groupbox title="Familia"
+											hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloFamilia)" width="140px"
+														selectedItem="@bind(vm.selectedArticuloFamilia)"
+														rows="3">
+														<template
+															name="model" var="familia">
+															<listitem
+																label="@load(familia.text)" />
+														</template>
+													</listbox>
+
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloFamilia')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloFamilia')"
+															disabled="@load(!vm.selectedArticuloFamilia.esNuevo())" />
+													</hlayout>
+												</vlayout>
+
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloFamilia.text)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Sigla:
+															<textbox
+																value="@bind(vm.selectedArticuloFamilia.sigla)"
+																readonly="true" />
+														</row>
+													</rows>
+												</grid>
+
+											</hlayout>
+
+										</groupbox>
+										<groupbox title="Parte"
+											hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloParte)" width="140px"
+														selectedItem="@bind(vm.selectedArticuloParte)" rows="3">
+														<template
+															name="model" var="parte">
+															<listitem
+																label="@load(parte.text)" />
+														</template>
+													</listbox>
+
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloParte')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloParte')"
+															disabled="@load(!vm.selectedArticuloParte.esNuevo())" />
+													</hlayout>
+												</vlayout>
+
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloParte.text)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Sigla:
+															<textbox
+																value="@bind(vm.selectedArticuloParte.sigla)"
+																readonly="true" />
+														</row>
+													</rows>
+												</grid>
+
+											</hlayout>
+
+										</groupbox>
+
+									</hlayout>
+									<hlayout>
+										<groupbox title="Línea"
+											hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloLinea)" width="140px"
+														selectedItem="@bind(vm.selectedArticuloLinea)" rows="3">
+														<template
+															name="model" var="linea">
+															<listitem
+																label="@load(linea.text)" />
+														</template>
+													</listbox>
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloLinea')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloLinea')"
+															disabled="@load(!vm.selectedArticuloLinea.esNuevo())" />
+													</hlayout>
+												</vlayout>
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloLinea.text)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Sigla:
+															<textbox
+																value="@bind(vm.selectedArticuloLinea.sigla)"
+																readonly="true" />
+														</row>
+													</rows>
+												</grid>
+											</hlayout>
+										</groupbox>
+										<groupbox
+											title="Unidad de Medida" hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloUnidadMedida)" width="140px"
+														selectedItem="@bind(vm.selectedArticuloUnidadMedida)"
+														rows="3">
+														<template
+															name="model" var="unidad">
+															<listitem
+																label="@load(unidad.text)" />
+														</template>
+													</listbox>
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloUnidadMedida')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloUnidadMedida')"
+															disabled="@load(!vm.selectedArticuloUnidadMedida.esNuevo())" />
+													</hlayout>
+												</vlayout>
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloUnidadMedida.text)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Sigla:
+															<textbox
+																value="@bind(vm.selectedArticuloUnidadMedida.sigla)"
+																readonly="true" />
+														</row>
+													</rows>
+												</grid>
+
+											</hlayout>
+
+										</groupbox>
+
+									</hlayout>
+									<hlayout>
+										<groupbox title="Marca Producto"
+											hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloMarca)" width="140px"
+														selectedItem="@bind(vm.selectedArticuloMarca)" rows="3">
+														<template
+															name="model" var="marca">
+															<listitem
+																label="@load(marca.text)" />
+														</template>
+													</listbox>
+
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloMarca')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloMarca')"
+															disabled="@load(!vm.selectedArticuloMarca.esNuevo())" />
+													</hlayout>
+												</vlayout>
+
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloMarca.text)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Sigla:
+															<textbox
+																value="@bind(vm.selectedArticuloMarca.sigla)"
+																readonly="true" />
+														</row>
+													</rows>
+												</grid>
+
+											</hlayout>
+
+										</groupbox>
+
+										<groupbox title="Estado"
+											hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloEstado)" width="140px"
+														selectedItem="@bind(vm.selectedArticuloEstado)"
+														rows="3">
+														<template
+															name="model" var="estadoA">
+															<listitem
+																label="@load(estadoA.text)" />
+														</template>
+													</listbox>
+
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloEstado')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloEstado')"
+															disabled="@load(!vm.selectedArticuloEstado.esNuevo())" />
+													</hlayout>
+												</vlayout>
+
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloEstado.text)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Sigla:
+															<textbox
+																value="@bind(vm.selectedArticuloEstado.sigla)"
+																readonly="true" />
+														</row>
+													</rows>
+												</grid>
+
+											</hlayout>
+
+										</groupbox>
+
+									</hlayout>
+								</tabpanel>
+								<tabpanel>
+									<vlayout>
+										<groupbox
+											title="Marca Aplicacion" hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloMarcaAplicacion)"
+														width="200px"
+														selectedItem="@bind(vm.selectedArticuloMarcaAplicacion)"
+														rows="3">
+														<template
+															name="model" var="marcaA">
+															<listitem
+																label="@load(marcaA.pos1)" />
+														</template>
+													</listbox>
+
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloMarcaAplicacion')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloMarcaAplicacion')"
+															disabled="@load(!vm.selectedArticuloMarcaAplicacion.esNuevo())" />
+													</hlayout>
+												</vlayout>
+
+												<vlayout>
+													<grid hflex="min">
+														<rows>
+															<row>
+																Descripción:
+																<textbox
+																	value="@bind(vm.selectedArticuloMarcaAplicacion.pos1)"
+																	constraint="${vm.check.noVacio}" />
+															</row>
+														</rows>
+													</grid>
+													<groupbox
+														title="Modelos" hflex="min">
+														<hlayout>
+															<vlayout>
+																<listbox
+																	model="@load(vm.selectedArticuloMarcaAplicacion.pos2)"
+																	width="150px"
+																	selectedItem="@bind(vm.selectedArticuloModeloAplicacion)"
+																	rows="3">
+																	<template
+																		name="model" var="modeloA">
+																		<listitem
+																			label="@load(modeloA.text)" />
+																	</template>
+																</listbox>
+
+																<hlayout>
+																	<button
+																		label="Agregar"
+																		onClick="@command('agregarArticuloModeloAplicacion')" />
+																	<button
+																		label="Eliminar"
+																		onClick="@command('eliminarArticuloModeloAplicacion')"
+																		disabled="@load(!vm.selectedArticuloModeloAplicacion.esNuevo())" />
+																</hlayout>
+															</vlayout>
+															<vlayout>
+																<grid
+																	hflex="min">
+																	<rows>
+																		<row>
+																			Descripción:
+																			<textbox
+																				value="@bind(vm.selectedArticuloModeloAplicacion.text)"
+																				constraint="${vm.check.noVacio}" />
+																		</row>
+																	</rows>
+																</grid>
+															</vlayout>
+														</hlayout>
+													</groupbox>
+												</vlayout>
+											</hlayout>
+
+										</groupbox>
+										<groupbox title="Presentacion"
+											hflex="min">
+											<hlayout>
+												<vlayout>
+													<listbox
+														model="@load(vm.dto.articuloPresentacion)" width="150px"
+														selectedItem="@bind(vm.selectedArticuloPresentacion)"
+														rows="3">
+														<template
+															name="model" var="presentacion">
+															<listitem
+																label="@load(presentacion.pos1)" />
+														</template>
+													</listbox>
+													<hlayout>
+														<button
+															label="Agregar"
+															onClick="@command('agregarArticuloPresentacion')" />
+														<button
+															label="Eliminar"
+															onClick="@command('eliminarArticuloPresentacion')"
+															disabled="@load(!vm.selectedArticuloPresentacion.esNuevo())" />
+													</hlayout>
+												</vlayout>
+												<grid hflex="min">
+													<rows>
+														<row>
+															Descripción:
+															<textbox
+																value="@bind(vm.selectedArticuloPresentacion.pos1)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Unidad:
+															<longbox
+																value="@bind(vm.selectedArticuloPresentacion.pos2)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Peso:
+															<doublebox
+																value="@bind(vm.selectedArticuloPresentacion.pos3)"
+																constraint="${vm.check.noVacio}" />
+														</row>
+														<row>
+															Unidad de
+															Medida:
+															<combobox
+																model="@load(vm.dtoUtil.articuloUnidadMedida)"
+																width="200px"
+																value="@load(vm.selectedArticuloPresentacion.pos4)"
+																selectedItem="@bind(vm.selectedArticuloPresentacion.pos4)"
+																constraint="${vm.check.noVacio}">
+																<template
+																	name="model">
+																	<comboitem
+																		label="@load(each)" />
+																</template>
+															</combobox>
+														</row>
+													</rows>
+												</grid>
+											</hlayout>
+
+										</groupbox>
+
+									</vlayout>
+
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+
+					</tabpanel>
+					<!-- ======================== Cuenta Corriente =========================== -->
+					<tabpanel visible="@load(vm.tab('ctacte'))">
+						<vlayout>
+							<groupbox title="Línea Crédito"
+								hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.ctaCteLineaCredito)" width="200px"
+											selectedItem="@bind(vm.selectedLineaCredito)" rows="3">
+											<template name="model"
+												var="lineaC">
+												<listitem
+													label="@load(lineaC.pos1)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarLineaCredito')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarLineaCredito')"
+												disabled="@load(!vm.selectedLineaCredito.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedLineaCredito.pos1)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Línea:
+												<longbox
+													value="@bind(vm.selectedLineaCredito.pos2)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+							<groupbox title="Tipo de Operación"
+								hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.ctaCteTipoOperacion)" width="200px"
+											selectedItem="@bind(vm.selectedTipoOperacion)" rows="3">
+											<template name="model"
+												var="tipoOp">
+												<listitem
+													label="@load(tipoOp.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarTipoOperacion')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarTipoOperacion')"
+												disabled="@load(!vm.selectedTipoOperacion.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedTipoOperacion.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedTipoOperacion.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+							<groupbox title="Estado" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.ctaCteEstado)" width="200px"
+											selectedItem="@bind(vm.selectedCtaCteEstado)" rows="3">
+											<template name="model"
+												var="estadoCC">
+												<listitem
+													label="@load(estadoCC.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarCtaCteEstado')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarCtaCteEstado')"
+												disabled="@load(!vm.selectedCtaCteEstado.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedCtaCteEstado.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedCtaCteEstado.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+						</vlayout>
+					</tabpanel>
+
+
+					<!-- ======================== Banco =========================== -->
+					<tabpanel visible="@load(vm.tab('banco'))">
+
+						<include
+							src="/yhaguy/gestion/bancos/definicionesBanco.zul">
+						</include>
+
+						<!-- 	<vlayout>
+							<groupbox title="Bancos">
+							<hlayout>
+							<vlayout>
+							<listbox
+							model="@load(vm.dto.bancos)" width="200px"
+							selectedItem="@bind(vm.selectedBanco)" rows="3">
+							<template name="model"
+							var="banco">
+							<listitem
+							label="@load(banco.pos1)" />
+							</template>
+							</listbox>
+							
+							<hlayout>
+							<button label="Agregar"
+							onClick="@command('agregarBanco')" />
+							<button label="Eliminar"
+							onClick="@command('eliminarBanco')" 
+							disabled="@load(!vm.selectedBanco.esNuevo())"/>
+							</hlayout>
+							</vlayout>
+							<hlayout>
+							<grid hflex="min">
+							<rows>
+							<row>
+							Descripción:
+							<textbox
+							value="@bind(vm.selectedBanco.pos1)"
+							constraint="${vm.check.noVacio}" />
+							</row>
+							<row>
+							Dirección:
+							<textbox
+							value="@bind(vm.selectedBanco.pos2)"
+							constraint="${vm.check.noVacio}" />
+							</row>
+							<row>
+							Teléfono:
+							<textbox
+							value="@bind(vm.selectedBanco.pos3)"
+							constraint="${vm.check.noVacio}" />
+							</row>
+							<row>
+							Correo:
+							<textbox
+							value="@bind(vm.selectedBanco.pos4)"
+							constraint="${vm.check.noVacio}" />
+							</row>
+							<row>
+							Contacto:
+							<textbox
+							value="@bind(vm.selectedBanco.pos5)"
+							constraint="${vm.check.noVacio}" />
+							</row>
+							</rows>
+							
+							</grid>
+							<listbox
+							model="@load(vm.selectedBanco.pos6)" width="200px"
+							rows="3">
+							<template name="model"
+							var="bancoS">
+							<listitem
+							label="@load(bancoS.text)" />
+							</template>
+							</listbox>
+							
+							</hlayout>
+							
+							</hlayout>
+							
+							</groupbox>
+							<groupbox title="Banco Cuenta Tipos">
+							<hlayout>
+							<vlayout>
+							<listbox
+							model="@load(vm.dto.bancoCtaTipos)" width="200px"
+							selectedItem="@bind(vm.selectedBancoCuentaTipos)" rows="3">
+							<template name="model"
+							var="bancoT">
+							<listitem
+							label="@load(bancoT.text)" />
+							</template>
+							</listbox>
+							
+							<hlayout>
+							<button label="Agregar"
+							onClick="@command('agregarBancoCuentaTipos')" />
+							<button label="Eliminar"
+							onClick="@command('eliminarBancoCuentaTipos')" 
+							disabled="@load(!vm.selectedBancoCuentaTipos.esNuevo())"/>
+							</hlayout>
+							</vlayout>
+							
+							<grid hflex="min">
+							<rows>
+							<row>
+							Descripción:
+							<textbox
+							value="@bind(vm.selectedBancoCuentaTipos.text)"
+							constraint="${vm.check.noVacio}" />
+							</row>
+							</rows>
+							</grid>
+							
+							</hlayout>
+							
+							</groupbox>
+							</vlayout> -->
+					</tabpanel>
+
+
+
+					<!-- ======================== Funcionario =========================== -->
+					<tabpanel visible="@load(vm.tab('funcionario'))">
+						<vlayout>
+							<groupbox title="Estado" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.funcionarioEstado)" width="200px"
+											selectedItem="@bind(vm.selectedFuncionarioEstado)"
+											rows="3">
+											<template name="model"
+												var="estadoF">
+												<listitem
+													label="@load(estadoF.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarFuncionarioEstado')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarFuncionarioEstado')"
+												disabled="@load(!vm.selectedFuncionarioEstado.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedFuncionarioEstado.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedFuncionarioEstado.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+							<groupbox title="Cargo" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.funcionarioCargo)" width="200px"
+											selectedItem="@bind(vm.selectedFuncionarioCargo)" rows="3">
+											<template name="model"
+												var="cargo">
+												<listitem
+													label="@load(cargo.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarFuncionarioCargo')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarFuncionarioCargo')"
+												disabled="@load(!vm.selectedFuncionarioCargo.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedFuncionarioCargo.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedFuncionarioCargo.sigla)"
+													readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+
+						</vlayout>
+					</tabpanel>
+
+					<!-- ======================== Departamentos =========================== -->
+					<tabpanel
+						visible="@load(vm.tab('departamentos'))">
+						<vlayout>
+							<groupbox title="Departamentos">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.departamentos)" width="200px"
+											selectedItem="@bind(vm.selectedDepartamento)" rows="3">
+											<template name="model"
+												var="dpto">
+												<listitem
+													label="@load(dpto.pos1)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarDepartamento')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarDepartamento')"
+												disabled="@load(!vm.selectedDepartamento.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Nombre:
+												<textbox
+													value="@bind(vm.selectedDepartamento.pos1)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedDepartamento.pos3)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sucursal Operativa:
+												<combobox
+													model="@load(vm.dtoUtil.sucursalesMyPair)" width="200px"
+													value="@load(vm.selectedDepartamento.pos2)"
+													selectedItem="@bind(vm.selectedDepartamento.pos2)"
+													constraint="${vm.check.noVacio}">
+													<template
+														name="model">
+														<comboitem
+															label="@load(each)" />
+													</template>
+												</combobox>
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+						</vlayout>
+					</tabpanel>
+
+					<!-- ======================== Sucursales =========================== -->
+					<tabpanel visible="@load(vm.tab('sucursales'))">
+						<vlayout>
+							<groupbox title="Sucursales">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.sucursales)" width="200px"
+											selectedItem="@bind(vm.selectedSucursal)" rows="3">
+											<listhead>
+												<listheader
+													label="Sucursales" sort="auto(pos1)" />
+											</listhead>
+											<template name="model"
+												var="sucursal">
+												<listitem
+													label="@load(sucursal.pos1)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarSucursal')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarSucursal')"
+												disabled="@load(!vm.selectedSucursal.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Nombre:
+												<textbox
+													value="@bind(vm.selectedSucursal.pos1)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedSucursal.pos2)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Establecimiento:
+												<textbox
+													value="@bind(vm.selectedSucursal.pos3)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Dirección:
+												<textbox
+													value="@bind(vm.selectedSucursal.pos4)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Teléfono:
+												<textbox
+													value="@bind(vm.selectedSucursal.pos5)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+										</rows>
+									</grid>
+
+									<vlayout>
+										<listbox
+											model="@load(vm.selectedSucursal.pos6)" width="200px"
+											selectedItem="@bind(vm.selectedDeposito)" rows="3">
+											<listhead>
+												<listheader
+													label="Depósitos" sort="auto(text)" />
+											</listhead>
+											<template name="model"
+												var="deposito">
+												<listitem
+													label="@load(deposito.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarDeposito')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarDeposito')"
+												disabled="@load(!vm.selectedDeposito.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Nombre:
+												<textbox
+													value="@bind(vm.selectedDeposito.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+
+							</groupbox>
+						</vlayout>
+					</tabpanel>
+					<!-- ======================== Importación =========================== -->
+
+					<tabpanel>
+						<vlayout>
+							<groupbox title="Importación Estado Pedido"
+								hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.importacionEstados)" width="200px"
+											selectedItem="@bind(vm.selectedImportacionEstadoPedido)"
+											rows="3">
+											<template name="model"
+												var="estadoPI">
+												<listitem
+													label="@load(estadoPI.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarImportacionEstadoPedido')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarImportacionEstadoPedido')"
+												disabled="@load(!vm.selectedImportacionEstadoPedido.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedImportacionEstadoPedido.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+							</groupbox>
+						</vlayout>
+					</tabpanel>
+					<!-- ======================== Otros =========================== -->
+					<tabpanel visible="@load(vm.tab('otros'))">
+						<vlayout>
+							<groupbox title="Profesion" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.profesion)" width="200px"
+											selectedItem="@bind(vm.selectedProfesion)" rows="3">
+											<template name="model"
+												var="profesion">
+												<listitem
+													label="@load(profesion.text)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarProfesion')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarProfesion')"
+												disabled="@load(!vm.selectedProfesion.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedProfesion.text)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Sigla:
+												<textbox
+													value="@bind(vm.selectedProfesion.sigla)" readonly="true" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+							</groupbox>
+							<groupbox title="Moneda" hflex="min">
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dto.monedasConSimbolo)" width="200px"
+											selectedItem="@bind(vm.selectedMoneda)" rows="3">
+											<template name="model"
+												var="moneda">
+												<listitem
+													label="@load(moneda.pos1)" />
+											</template>
+										</listbox>
+
+										<hlayout>
+											<button label="Agregar"
+												onClick="@command('agregarMoneda')" />
+											<button label="Eliminar"
+												onClick="@command('eliminarMoneda')"
+												disabled="@load(!vm.selectedMoneda.esNuevo())" />
+										</hlayout>
+									</vlayout>
+
+									<grid hflex="min">
+										<rows>
+											<row>
+												Descripción:
+												<textbox
+													value="@bind(vm.selectedMoneda.pos1)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+											<row>
+												Símbolo:
+												<textbox
+													value="@bind(vm.selectedMoneda.pos2)"
+													constraint="${vm.check.noVacio}" />
+											</row>
+										</rows>
+									</grid>
+
+								</hlayout>
+							</groupbox>
+
+						</vlayout>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+		</vlayout>
+	</window>
+</zk>

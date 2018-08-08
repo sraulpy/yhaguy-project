@@ -1,0 +1,363 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.reglaPrecio.ReglaPrecioControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+
+		<groupbox>
+			<hbox align="center">
+				Nombre Corto:
+				<textbox value="@bind(vm.dto.nombreCorto)" width="50px" />
+				Nombre:
+				<textbox value="@bind(vm.dto.nombre)" width="200px" />
+
+				Activa:
+				<checkbox checked="@bind(vm.dto.activa)" />
+				<div width="20px" />
+
+				<groupbox>
+					<caption label="Periodo" />
+
+					<hbox align="center">
+						Permanente:
+						<checkbox value="@bind(vm.dto.permanente)" />
+
+						Desde:
+						<datebox value="@bind(vm.dto.fechaDesde)" />
+						Hasta:
+						<datebox value="@bind(vm.dto.fechaHasta)" />
+					</hbox>
+				</groupbox>
+			</hbox>
+
+		</groupbox>
+
+		<!-- ======================================= RESTRICCIONES ======================================= -->
+		<groupbox>
+			<caption label="Restricciones" />
+
+			<vlayout>
+				<!-- =================================================================================================== -->
+				<!-- ======== RESTRICCIONES ============================================================================ -->
+				<!-- =================================================================================================== -->
+
+
+
+
+				<tabbox id="tbx1" hflex="1" height="100px">
+					<tabs>
+						<tab>Cliente</tab>
+						<tab>Artículo</tab>
+						<tab>Venta</tab>
+						<tab>Vendedor</tab>
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<!-- ======== clientes ========== -->
+							<hbox>
+								<toolbarbutton image="/core/images/insertar.png"
+									tooltiptext="Insertar" onClick="@command('agregarRestriccion',  tipoRestriccion='cliente' )" />
+
+								<groupbox>
+									<!-- categorias clientes -->
+									<vbox>
+										<hbox>
+											Todas las categorias
+											de clientes
+											<checkbox checked="true" />
+										</hbox>
+										<hbox>
+											Categoría
+											<div width="10px" />
+											<combobox width="100px" placeholder="categoria"
+												model="@load(vm.dtoUtil.tipoCliente)" selectedItem="@bind(vm.selectedTipoCliente)">
+
+												<template name="model">
+													<comboitem label="@load(each)" />
+												</template>
+											</combobox>
+										</hbox>
+									</vbox>
+								</groupbox>
+								<div width="5px" />
+
+								<groupbox>
+									<!-- rubros del cliente -->
+									<vbox>
+										<hbox>
+											Todos los rubros de
+											clientes
+											<checkbox checked="true" />
+										</hbox>
+										<hbox>
+											Rubro
+											<div width="10px" />
+											<combobox width="100px" model="@load(vm.dtoUtil.rubroEmpresa)"
+												placeholder="Rubro" selectedItem="@bind(vm.selectedRubroCliente)">
+												<template name="model">
+													<comboitem label="@load(each)" />
+												</template>
+											</combobox>
+										</hbox>
+									</vbox>
+								</groupbox>
+
+								<div width="5px" />
+								<!-- cliente -->
+								<groupbox>
+									<vbox>
+										<hbox>
+											Todos los clientes
+											<checkbox checked="true" />
+										</hbox>
+										<hbox>
+											Cliente
+											<buscadorCliente value="@bind(vm)" campo="razonSocial" readonly="@load(vm.deshabilitado)"/>
+										</hbox>
+									</vbox>
+								</groupbox>
+
+							</hbox>
+
+
+						</tabpanel>
+						<tabpanel>
+							<!-- ======== articulos ========== -->
+
+
+							<hbox>
+								<toolbarbutton image="/core/images/insertar.png"
+									tooltiptext="Insertar" onClick="@command('agregarRestriccion',  tipoRestriccion='articulo' )" />
+								<groupbox>
+									<hbox>
+										Todas las marcas
+										<checkbox checked="true" />
+									</hbox>
+									<hbox>
+										Marca
+										<div width="5px" />
+										<combobox width="100px" model="@load(vm.dtoUtil.articuloMarca)"
+											placeholder="Marca" selectedItem="@bind(vm.selectedArticuloMarca)">
+											<template name="model">
+												<comboitem label="@load(each)" />
+											</template>
+										</combobox>
+									</hbox>
+								</groupbox>
+
+								<groupbox>
+									<hbox>
+										Todas las familias
+										<checkbox checked="true" />
+									</hbox>
+									<hbox>
+										Familias
+										<div width="5px" />
+										<combobox width="100px" model="@load(vm.dtoUtil.articuloFamilia)"
+											placeholder="Familia" instant="true" selectedItem="@bind(vm.selectedArticuloFamilia)">
+											<template name="model">
+												<comboitem label="@load(each)" />
+											</template>
+										</combobox>
+									</hbox>
+								</groupbox>
+								<groupbox>
+									<hbox>
+										Todas las partes
+										<checkbox checked="true" />
+									</hbox>
+									<hbox>
+										Partes
+										<div width="5px" />
+										<combobox width="100px" model="@load(vm.dtoUtil.articuloParte)"
+											placeholder="Parte" instant="true" selectedItem="@bind(vm.selectedArticuloParte)">
+											<template name="model">
+												<comboitem label="@load(each)" />
+											</template>
+										</combobox>
+									</hbox>
+								</groupbox>
+								<groupbox>
+									<hbox>
+										Todas las líneas
+										<checkbox checked="true" />
+									</hbox>
+									<hbox>
+										Líneas
+										<div width="5px" />
+
+										<combobox width="100px" model="@load(vm.dtoUtil.articuloLinea)"
+											selectedItem="@bind(vm.selectedArticuloLinea)" placeholder="Linea">
+											<template name="model">
+												<comboitem label="@load(each )" />
+											</template>
+										</combobox>
+									</hbox>
+								</groupbox>
+								<groupbox>
+									<vbox>
+										<hbox>
+											Todos los artículos
+											<checkbox checked="true" />
+										</hbox>
+										<hbox>
+											Artículo
+											<buscadorArticulo value="@bind(vm)" campo="descripcion" />
+										</hbox>
+									</vbox>
+								</groupbox>
+							</hbox>
+
+						</tabpanel>
+
+						<tabpanel>
+							<!-- ======== modo de venta ========== -->
+
+
+
+							<hbox>
+								<toolbarbutton image="/core/images/insertar.png"
+									tooltiptext="Insertar" onClick="@command('agregarRestriccion',  tipoRestriccion='venta' )" />
+								<groupbox>
+									<vbox>
+										<hbox>
+											Todos los modos de
+											venta
+											<checkbox checked="true" />
+										</hbox>
+										<combobox width="100px" model="@load(vm.dtoUtil.modosVenta)"
+											placeholder="modo de venta" selectedItem="@bind(vm.selectedTipoVenta)">
+											<template name="model">
+												<comboitem label="@load(each )" />
+											</template>
+										</combobox>
+
+									</vbox>
+								</groupbox>
+								<groupbox>
+									<vbox>
+										<hbox>
+											Todas las sucursales
+											de venta
+											<checkbox checked="true" />
+										</hbox>
+										<combobox width="100px" model="@load(vm.dtoUtil.sucursalesMyPair)"
+											placeholder="sucursal" selectedItem="@bind(vm.selectedSucursalesMyPair)">
+											<template name="model">
+												<comboitem label="@load(each )" />
+											</template>
+										</combobox>
+
+									</vbox>
+								</groupbox>
+
+
+							</hbox>
+
+						</tabpanel>
+						<tabpanel>
+						<!-- ======== vendedores ========== --> 
+							<hbox>
+								<toolbarbutton image="/core/images/insertar.png"
+									tooltiptext="Insertar" onClick="@command('agregarRestriccion',  tipoRestriccion='vendedor' )" />
+								<groupbox>
+									<vbox>
+										<hbox>
+											Todos los rubros de vendedores
+											<checkbox checked="true" />
+										</hbox>
+										<combobox width="100px" model="@load(vm.dtoUtil.articuloFamilia)"
+											placeholder="rubro" selectedItem="@bind(vm.selectedVendedorRubro)">
+											<template name="model">
+												<comboitem label="@load(each )" />
+											</template>
+										</combobox>
+
+									</vbox>
+								</groupbox>
+								<groupbox>
+									<vbox>
+										<hbox>
+											Todos los vendedores
+											<checkbox checked="true" />
+										</hbox>
+										<hbox>
+											Vendedor
+											<buscadorFuncionario value="@bind(vm)" campo="nombre" />
+										</hbox>
+									</vbox>
+								</groupbox>
+
+
+							</hbox>
+						</tabpanel>
+
+
+					</tabpanels>
+				</tabbox>
+
+
+
+
+				<!-- =================================================================================================== -->
+				<!-- ======== DETALLE ================================================================================= -->
+				<!-- =================================================================================================== -->
+
+				<hlayout>
+
+					<listbox model="@load(vm.dto.restricciones)" rows="8"
+						width="570px" height="300px">
+						<listhead>
+							<listheader label="Grupo" width="150px"></listheader>
+							<listheader label="Tipo" width="150px"></listheader>
+							<listheader label="Valor" width="150px"></listheader>
+							<listheader label="" width="100px"></listheader>
+						</listhead>
+						<template name="model" var="ma">
+							<listitem>
+								<listcell label="@load(ma.pos1)" />
+								<listcell label="@load(ma.pos2)" />
+								<listcell label="@load(ma.pos3)" />
+								<listcell>
+									<button label="Borrar" onClick="@command('eliminarRestriccionItem', dato=ma)" />
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<div width="5px" />
+
+					<groupbox>
+
+						<vlayout>
+							
+							<hlayout>
+								Coheficiente:
+								<textbox width="50px" value="@bind(vm.dto.coheficiente)" />
+							</hlayout>
+
+							<hlayout>
+								Prioridad de la regla:
+								<textbox width="70px" value="@bind(vm.dto.prioridadRegla)"/>
+							</hlayout>
+							
+							<hlayout>
+								Margen de negocio:
+								<textbox width="35px" value="@bind(vm.dto.margenDeNegocio)"/>
+							</hlayout>
+							
+							<button label = "Probar regla" onClick="@command('probarReglaDePrecios')" disabled="@load(!(vm.siempreHabilitado || true))"/>
+						</vlayout>
+					</groupbox>
+					
+					 
+				</hlayout>
+				
+
+			</vlayout>
+
+		</groupbox>
+
+		<!-- ======================================= FIN RESTRICCIONES ======================================= -->
+
+	</window>
+</zk>
+

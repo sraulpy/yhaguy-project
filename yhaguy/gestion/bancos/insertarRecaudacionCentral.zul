@@ -1,0 +1,101 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.depositos.BoletaDepositoSimpleViewModel')"
+	style="padding:10px">
+
+	<vbox>
+		<grid sclass="vgrid">
+			<columns>
+				<column width="20%" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<field value="Cheque:" />
+					<bandbox hflex="true"
+						placeholder="SELECCIONE UN CHEQUE.." readonly="true"
+						value="@load(vm.dato.chequeRecaudacionCentral.pos3)"
+						id="bndChe_">
+						<bandpopup>
+							<listbox sclass="small-list" width="450px"
+								height="200px" model="@load(vm.dato.cheques)"
+								selectedItem="@bind(vm.dato.chequeRecaudacionCentral)"
+								onSelect="bndChe_.close()">
+								<listhead>
+									<listheader>
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												value="@bind(vm.dato.filterCheque)" instant="true"
+												placeholder="Buscar.." />
+										</hlayout>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem
+										label="@load(each.pos3)" />
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>
+				<row>
+					<field value="Importe:" />
+					<hlayout>
+						<guaranibox value="@load(vm.dato.chequeRecaudacionCentral.pos6)" 
+							readonly="true"/>
+						<label value="Gs."/>
+					</hlayout>
+				</row>
+			</rows>
+		</grid>
+		
+		<div style="border-bottom: solid 1px silver;margin-bottom:2px">
+			<label value="Recaudaciones a Descontar.." style="font-style:italic"></label>
+		</div>
+		<listbox height="290px"
+			emptyMessage="NO SE ENCONTRARON RECAUDACIONES PENDIENTES.."
+			model="@load(vm.dato.recaudacionesPendientes)"
+			multiple="true" checkmark="true"
+			selectedItems="@bind(vm.dato.selectedsRecaudacionesCentral)"
+			visible="@load(!vm.dato.chequeRecaudacionCentral.esNuevo())">
+			<listhead style="text-align:center">
+				<listheader width="40px" align="center"></listheader>
+				<listheader label="Recibo Nro."></listheader>
+				<listheader label="Saldo Gs." width="130px" align="right"></listheader>
+				<listheader label="Descuento Gs." width="130px" align="right"></listheader>
+			</listhead>	
+			<auxhead>
+				<auxheader></auxheader>
+				<auxheader>
+					<textbox sclass="filter" hflex="true"
+						value="@bind(vm.dato.filterNumeroRecibo)" instant="true"></textbox>
+				</auxheader>
+				<auxheader></auxheader>
+				<auxheader></auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="@load(each.pos1)" />
+					<listcell label="@load(each.pos3) @converter(vm.cnv.monedaLocal)" />
+					<listcell>
+						<guaranibox value="@bind(each.pos4)" onChange="@command('notifyTotalRecaudacion', item=each)" />
+					</listcell>
+				</listitem>
+			</template>	
+			<listfoot>
+				<listfooter span="4" align="right">
+					<hlayout>
+						<field value="Importe Gs." />
+						<guaranibox readonly="true"
+							style="background:#EEF7FA;text-align:right;font-weight:bold" 
+							value="@load(vm.dato.totalRecaudacionCentral)"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>	
+		</listbox>
+		
+	</vbox>
+	
+</div>

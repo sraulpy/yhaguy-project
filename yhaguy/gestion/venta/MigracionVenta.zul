@@ -1,0 +1,54 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.MigracionVentasViewModel')">
+
+	<groupbox>
+		<hbox width="100%" widths="50%,50%">
+			<hbox width="100%" align="start">
+				<hlayout>
+					Desde:
+					<datebox id="db0" cols="12" format="short"
+						value="@bind(vm.fechaDesde)" />
+					Hasta:
+					<datebox id="db1" cols="12" format="short"
+						value="@bind(vm.fechaHasta)" />
+					Caja:
+					<combobox model="@load(vm.cajas)"
+						value="@load(vm.selectedCaja)"
+						selectedItem="@bind(vm.selectedCaja)">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>
+					</combobox>
+					<separator />
+					<toolbarbutton id="ventaMigracionUpload"
+						label="Migrar" upload="true, accept=.csv"
+						image="/core/images/adjunto_.png"
+						tooltiptext="Migrar ventas desde un archivo .csv" />
+				</hlayout>
+			</hbox>
+		</hbox>
+
+	</groupbox>
+	<grid model="@load(vm.migraciones)" width="100%"
+		emptyMessage="No existen migraciones">
+		<columns>
+			<column label="Fecha Migración" align="center" />
+			<column label="Periodo Desde" align="center" />
+			<column label="Periodo Hasta" align="center" />
+			<column label="Caja" align="center" />
+		</columns>
+		<template name="model">
+			<row>
+				<label
+					value="@load(each.pos1) @converter('formatedDate', format='dd-MM-yyyy')" />
+				<label
+					value="@load(each.pos2) @converter('formatedDate', format='dd-MM-yyyy')" />
+				<label
+					value="@load(each.pos3) @converter('formatedDate', format='dd-MM-yyyy')" />
+				<label
+					value="@load(each.pos4)" />
+			</row>
+		</template>
+	</grid>
+
+</window>

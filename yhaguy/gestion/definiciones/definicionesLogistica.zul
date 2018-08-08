@@ -1,0 +1,8 @@
+<tabbox height="100%">
+	<tabs>
+		<tab label="Vehículos" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>DEFINICIONES VEHICULOS..</tabpanel>
+	</tabpanels>
+</tabbox>

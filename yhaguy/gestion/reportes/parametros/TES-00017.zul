@@ -1,0 +1,45 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Planilla:" />
+			<bandbox hflex="true" placeholder="Planilla.."
+				readonly="true" value="@load(vm.dato.filtro.cajaPlanilla.numero)"
+				id="bndPla">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.cajaPlanillas)"
+						selectedItem="@bind(vm.dato.filtro.cajaPlanilla)"
+						onSelect="bndPla.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.nroPlanillaCaja)" instant="true"
+										placeholder="Buscar por Número.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem label="@load(each.numero)" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

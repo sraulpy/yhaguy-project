@@ -1,0 +1,39 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Artículo:" sclass="mobile" />
+		<bandbox hflex="true" readonly="true"
+			value="@load(vm.dato.filtro.articulo.codigoInterno)" id="bndArti">
+			<bandpopup>
+				<listbox hflex="true"
+					height="500px" model="@load(vm.filtro.articulos)"
+					selectedItem="@bind(vm.filtro.articulo)"
+					onSelect="bndArti.close()">
+					<listhead>
+						<listheader>
+							<hlayout>
+								<toolbarbutton
+									iconSclass="z-icon-filter" disabled="true" />
+								<textbox hflex="true"
+									value="@bind(vm.filtro.codigoArticulo)" instant="true"
+									placeholder="Buscar por Código.." />
+							</hlayout>
+						</listheader>
+					</listhead>
+					<template name="model">
+						<listitem
+							label="@load(each.codigoInterno.toUpperCase())" />
+					</template>
+				</listbox>
+			</bandpopup>
+		</bandbox>
+	</vlayout>
+
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="A la fecha:" sclass="mobile" />
+		<datebox value="@bind(vm.filtro.fechaHasta)" hflex="true" />
+	</vlayout>
+
+</vlayout>

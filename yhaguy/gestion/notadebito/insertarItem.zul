@@ -1,0 +1,35 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.notadebito.NotaDebitoSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="120px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Descripción:" />
+				<textbox value="@bind(vm.dato.nvoDetalle.descripcion)" hflex="true"></textbox>
+			</row>
+			<row>
+				<field value="Iva:" />
+				<hlayout>
+					<combobox model="@load(vm.tiposDeIva)"
+						selectedItem="@bind(vm.dato.nvoDetalle.tipoIva)"
+						value="@load(vm.dato.nvoDetalle.tipoIva.text.toString().toUpperCase())" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.text.toString().toUpperCase())" />
+						</template>
+					</combobox>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Importe Gs.:" />
+				<guaranibox 
+					value="@bind(vm.dato.nvoDetalle.importeGs)"/>
+			</row>
+		</rows>
+	</grid>
+
+</div>

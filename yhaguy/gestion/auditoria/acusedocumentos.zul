@@ -1,0 +1,121 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.auditoria.AcuseDocumentosViewModel')"
+	height="100%">
+	
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-success btn-sm" width="150px"
+				iconSclass="z-icon-plus-circle"
+				label=" Agregar" 
+				onClick="@command('addAcuse')" />
+		<space />		
+		<button mold="bs" sclass="btn-warning btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Imprimir"  
+				disabled="@load(vm.selectedItem eq null)" 
+				onClick="@command('imprimirItem')"/>	
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.acusesDocumentos)"
+		selectedItem="@bind(vm.selectedItem)">
+		<listhead>
+			<listheader label="Fecha" width="150px" />
+			<listheader label="Nro. Acuse" width="130px" />
+			<listheader label="Tipo Documento" width="180px"/>
+			<listheader label="Motivo" />			
+			<listheader label="Receptor" width="180px" />
+			<listheader label="Documentos" width="120px" />
+			<listheader label="Devuelto" align="center" width="70px" />
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Nro. Acuse.."
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Tipo Documento.."
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Motivo.."
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Receptor.."
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader/>
+			<auxheader/>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format = 'dd-MM-yyyy')"/>
+				<listcell label="@load(each.numero)"/>
+				<listcell label="@load(each.tipoMovimiento)"/>
+				<listcell label="@load(each.motivo)"/>
+				<listcell label="@load(each.receptor)"/>
+				<listcell>
+					<listbox mold="select" model="@load(each.detalles)" hflex="true">
+						<template name="model" var="doc">
+							<listitem label="@load(doc.numeroDocumento)" />
+						</template>
+					</listbox>
+				</listcell>
+				<listcell>
+					<div onClick="@command('openAcuse', popup = popAcuse, acuse = each, comp = self)">
+						<label value="SI" class="label label-success" visible="@load(each.devuelto)" />
+						<label value="NO" class="label label-danger" visible="@load(!each.devuelto)" />
+					</div>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="9">
+				<hlayout hflex="true">
+					<field value="ítems" />
+					<space hflex="true"></space>
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	<popup id="popAcuse" width="120px" sclass="rounded">
+		<hlayout>
+			<button mold="bs" sclass="btn-success btn-sm"
+				label="SI" width="45px" 
+				onClick="@command('setDevuelto', devuelto = true, comp=popAcuse)"/>
+			<button mold="bs" sclass="btn-danger btn-sm"
+				label="NO" width="45px" 
+				onClick="@command('setDevuelto', devuelto = false, comp=popAcuse)"/>
+		</hlayout>
+	</popup>
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+	</style>
+</window>

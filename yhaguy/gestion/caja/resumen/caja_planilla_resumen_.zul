@@ -1,0 +1,1068 @@
+<zk>
+<div id="dv_res">
+		<hbox hflex="true">
+			<vlayout width="550px" spacing="0">
+				<div
+					style="margin:0px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<label sclass="title">CAJAS DE VENTAS</label>
+				</div>
+				<hlayout
+					children="@load(vm.selectedResumen_.planillasVentas)"
+					style="margin:0px 10px 0px 10px; overflow:auto">
+					<template name="children">
+						<listbox sclass="small-list" width="260px"
+							style="border: solid 1px silver; border-radius:8px; padding:10px">
+							<listhead>
+								<listheader></listheader>
+								<listheader align="right"></listheader>
+							</listhead>
+							<listitem>
+								<listcell>
+									<label value="Efectivo:" 
+									tooltiptext="Ingresos - Egresos en efectivo"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalEfectivoIngreso - each.totalEfectivoEgreso) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Nota de Crédito:" 
+									tooltiptext="Total Notas de Crédito Contado"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalNotaCreditoContado) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Retención:" 
+									tooltiptext="Total de Retenciones de Ventas Contado"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalRetencionesVentas) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque al Día:" 
+									tooltiptext="Total de Cheques al Día"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.getTotalChequeAlDia(vm.selectedResumen_.fecha)) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Transf. Bancaria:" 
+										tooltiptext="Total de Transferencias Bancarias"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalTransferenciasBancarias) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>
+							</listitem>
+							<listfoot>
+								<listfooter>
+									<hlayout>
+										<field value="@load(each.numero)"></field>
+										<button iconSclass="z-icon-print"
+											onClick="@command('printPlanilla', planilla=each)"/>
+									</hlayout>
+								</listfooter>
+								<listfooter align="right">
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="@load(each.getTotalResumenEfectivo(vm.selectedResumen_.fecha))"/>
+								</listfooter>
+							</listfoot>
+						</listbox>
+					</template>
+				</hlayout>
+				
+				<div
+					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<label sclass="title">CAJAS DE COBRANZAS</label>
+				</div>
+				<hlayout
+					children="@load(vm.selectedResumen_.planillasCobranzas)"
+					style="margin:0px 10px 0px 10px; overflow:auto">
+					<template name="children">
+						<listbox sclass="small-list" width="260px"
+							style="border: solid 1px silver; border-radius:8px; padding:10px">
+							<listhead>
+								<listheader width="55%"></listheader>
+								<listheader align="right"></listheader>
+							</listhead>
+							<listitem>
+								<listcell>
+									<label value="Efectivo:" style="color:#428bca"
+										tooltiptext="Ingresos en Efectivo - Reembolsos de Cheq.Rechazados con efectivo"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalEfectivoIngreso - each.totalReembolsoChequeRechazadoEfectivo) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Reembolso Préstamo:" 
+										tooltiptext="Total de Reembolsos de Prestamos Casa Central"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalReembolsoPrestamos) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Retenciones Contado:" style="color:#428bca"
+										tooltiptext="Total Retenciones de Recibos con Cheque al Día"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.getTotalRetencionesAlDia(vm.selectedResumen_.fecha)) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Retenciones Crédito:" 
+									tooltiptext="Total Retenciones de Recibos con Cheque Diferido"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.getTotalRetencionesDiferidos(vm.selectedResumen_.fecha)) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Recaudación C.C.:" 
+										tooltiptext="Total Recaudaciones Casa Central"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalRecaudacionCentral) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Reembolso Efectivo:" style="color:#428bca" 
+										tooltiptext="Total Reembolsos de Cheq.Rechazados con efectivo"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalReembolsoChequeRechazadoEfectivo) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Reembolso Cheque:" style="color:#428bca" 
+										tooltiptext="Total Reembolsos de Cheq.Rechazados con cheque"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.getTotalReembolsoChequeRechazadoCheque(vm.selectedResumen_.fecha)) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque al Día:" style="color:#428bca" 
+										tooltiptext="Total Cheques al Día - Reembolso Ch.Rechazados con cheque al dia"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.getTotalChequeAlDia(vm.selectedResumen_.fecha) - each.getTotalReembolsoChequeRechazadoChequeAldia(vm.selectedResumen_.fecha)) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Saldo Cliente Generado:" 
+										tooltiptext="Total Saldos de Clientes Generados"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalSaldoClienteGenerado) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Saldo Cliente Cobrado:" 
+										tooltiptext="Total Saldos de Clientes Cobrados"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalSaldoClienteCobrado) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque Diferido:" 
+										tooltiptext="Total Cheques Diferidos"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.getTotalChequeDiferido(vm.selectedResumen_.fecha)) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Transf. Bancaria:" style="color:#428bca" 
+										tooltiptext="Total Transferencias Bancarias"/>
+								</listcell>
+								<listcell>
+									<label value="@load(each.totalTransferenciasBancarias) @converter(vm.cnv.monedaLocal)" />
+								</listcell>
+							</listitem>
+							<listfoot>
+								<listfooter>
+									<hlayout>
+										<field value="@load(each.numero)"></field>
+										<button iconSclass="z-icon-print"
+											onClick="@command('printPlanilla', planilla=each)"/>
+									</hlayout>
+								</listfooter>
+								<listfooter align="right">
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="@load(each.getTotalResumenCobranzasAlDia(vm.selectedResumen_.fecha))"
+										hflex="true"/>
+								</listfooter>
+							</listfoot>
+						</listbox>
+						<div height="5px"></div>
+					</template>
+				</hlayout>
+			</vlayout>
+			<vlayout hflex="true" vflex="true" spacing="0">
+				<div
+					style="margin:0px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<label sclass="title">RESUMEN</label>
+				</div>
+				<hlayout
+					style="margin:0px 10px 0px 10px" valign="top">
+						<listbox sclass="small-list" hflex="true"
+							style="border: solid 1px silver; border-radius:8px; padding:10px">
+							<listhead>
+								<listheader width="55%"></listheader>
+								<listheader align="right"></listheader>
+							</listhead>
+							<listitem>
+								<listcell>
+									<label value="Efectivo:" 
+										tooltiptext="Total Ingresos - Egresos en efectivo"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenEfectivo) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque:" 
+										tooltiptext="Total Cheques al Día"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeAlDia) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Transf. Bancaria:" 
+										tooltiptext="Total Transferencias Bancarias + Total Reembolsos Prestamos C.C."/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenTransferenciasBancarias) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Tarjeta:" 
+										tooltiptext="Total en Tarjeta"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenTarjeta) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Sobrante / Faltante:" 
+										tooltiptext="Ajuste para redondear efectivo"/>
+								</listcell>
+								<listcell>
+									<guaranibox value="@bind(vm.selectedResumen_.sobranteFaltante)" 
+										onChange="@command('saveResumen', comp=null)" hflex="true" vflex="true" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Caj.No Dep.(Efectivo)" 
+										tooltiptext="Recaudacion no depositada efectivo"/>
+								</listcell>
+								<listcell>
+									<guaranibox value="@bind(vm.selectedResumen_.efectivoNoDepositado)" 
+											onChange='tx_obs.focus();pop_obs_ef_nodep.open(self, "after_end")' hflex="true" vflex="true" 
+											tooltiptext="@load(vm.selectedResumen_.obs_efectivo_no_depositado)"/>							
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Caj.No Dep.(Cheque)"  
+										tooltiptext="Recaudacion no depositada cheque"/>
+								</listcell>
+								<listcell>
+									<guaranibox value="@bind(vm.selectedResumen_.chequeNoDepositado)" 
+											onChange='tx_obs_ch.focus();pop_obs_ch_nodep.open(self, "after_end")' hflex="true" vflex="true" 
+											tooltiptext="@load(vm.selectedResumen_.obs_cheque_no_depositado)" />									
+								</listcell>
+							</listitem>
+							<listfoot>
+								<listfooter>
+									<field value="AL DÍA"></field>
+								</listfooter>
+								<listfooter align="right">
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="@load(vm.selectedResumen_.totalResumenAlDia)" 
+										hflex="true"/>
+								</listfooter>
+							</listfoot>
+						</listbox>
+						<listbox sclass="small-list" hflex="true"
+							style="border: solid 1px silver; border-radius:8px; padding:10px">
+							<listhead>
+								<listheader></listheader>
+								<listheader align="right"></listheader>
+							</listhead>
+							<listitem>
+								<listcell>
+									<label value="Cheque Diferido:" 
+										tooltiptext="Total en cheques diferidos"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeDiferido) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listitem>
+								<listcell>
+								</listcell>
+								<listcell>
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listfoot>
+								<listfooter>
+									<field value="ADELANTADO"></field>
+								</listfooter>
+								<listfooter align="right">
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="@load(vm.selectedResumen_.totalResumenAdelantado)"
+										hflex="true"/>
+								</listfooter>
+							</listfoot>
+						</listbox>
+						<listbox sclass="small-list" hflex="true"
+							style="border: solid 1px silver; border-radius:8px; padding:10px">
+							<listhead>
+								<listheader width="55%"></listheader>
+								<listheader align="right"></listheader>
+							</listhead>
+							<listitem>
+								<listcell>
+									<label value="Efectivo:" 
+										tooltiptext="Total Ingresos - Egresos en efectivo +- Sobrante/Faltante +- Caja No Depositada (Efectivo)"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenEfectivo_) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque al Día:" 
+										tooltiptext="Total de Cheques al Día - Reembolsos Ch.Rechazados con cheque - Cheques al Dia de Prestamos C.C. +- Caja No Depositada (Cheque)"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeAlDiaSinReembolsos) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Reembolso Valores:" 
+										tooltiptext="Total Reembolso de Valores Baterías"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.totalDepositosValoresBat) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Transferencias:" 
+										tooltiptext="(Total Transferencias Bancarias + Total Reembolsos prestamos)"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenTransferenciasBancarias) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque Adelantado:" 
+										tooltiptext="Total Depósito de Cheques diferidos"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeDiferidoADepositar) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Reembolso Cheques:" 
+										tooltiptext="Total de Reembolso de Ch.Rechazados con cheque al dia"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenReembolsoChequesRechazados) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Prestamo C.Central:" 
+										tooltiptext="Total de Prestamos C.Central con cheque al dia"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeAlDiaPrestamoCC) @converter('formattedNumber', format='###,###,##0')" />
+								</listcell>
+							</listitem>
+							<listfoot>
+								<listfooter>
+									<field value="A DEPOSITAR"></field>
+								</listfooter>
+								<listfooter align="right">
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="@load(vm.selectedResumen_.totalADepositar)" 
+										hflex="true"/>
+								</listfooter>
+							</listfoot>
+						</listbox>
+				</hlayout>
+			
+				<div
+					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<a sclass="title" onClick='pop_val_bat.open(self, "after_start"); tx_filter_val_bat.focus()'>REEMBOLSOS VALORES BATERÍAS</a>
+				</div>				
+				<hlayout visible="@load(vm.selectedResumen_.depositos_valores_bat.size() eq 0)">
+					<space></space>
+					<label style="font-style:italic">...</label>
+				</hlayout>
+				<vlayout children="@load(vm.selectedResumen_.depositos_valores_bat)" spacing="0">
+					<template name="children">
+						<hlayout>
+							<space></space>
+							<label>Nro.</label>
+							<label value="@load(each.numeroBoleta)"></label>
+							<space></space>
+							<label>Gs.</label>
+							<label value="@load(each.totalImporteGs) @converter(vm.cnv.monedaLocal)"></label>
+							<space></space>
+							<a label="ver depósito.." onClick="@command('verDeposito', comp=pop_ver_deposito, ref=self, deposito=each)"></a>
+						</hlayout>
+					</template>
+				</vlayout>
+				<hlayout visible="@load(vm.selectedResumen_.depositos_valores_bat.size() eq 0? 'false' : 'true')">
+					<space></space>
+					<field>Total Importe</field>
+					<label value="        "></label>
+					<space></space>
+					<field>Gs.</field>
+					<field value="@load(vm.selectedResumen_.totalDepositosValoresBat) @converter('formattedNumber', format='###,###,##0')" />
+				</hlayout>
+				
+				
+				<div
+					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<label sclass="title">PRESTAMOS CASA CENTRAL (CHEQUE AL DÍA)</label>
+				</div>
+				<hlayout visible="@load(vm.selectedResumen_.chequesAlDiaPrestamoCC.size() eq 0)">
+					<space></space>
+					<label style="font-style:italic">...</label>
+				</hlayout>
+				<vlayout children="@load(vm.selectedResumen_.chequesAlDiaPrestamoCC)" spacing="0">
+					<template name="children">
+						<hlayout>
+							<space></space>
+							<label>Cheque Nro.</label>
+							<label value="@load(each.numero)"></label>
+							<space></space>
+							<label>Gs.</label>
+							<label value="@load(each.monto) @converter(vm.cnv.monedaLocal)"></label>	
+							<space></space>
+							<label>Nro.</label>
+							<label value="@load(each.numeroDescuento)"></label>						
+						</hlayout>
+					</template>
+				</vlayout>
+				
+				<div
+					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<label sclass="title">DEPÓSITOS CHEQUES DIFERIDOS</label>
+				</div>
+				<hlayout visible="@load(vm.selectedResumen_.depositos_diferidos.size() eq 0)">
+					<space></space>
+					<label style="font-style:italic">...</label>
+				</hlayout>
+				<vlayout children="@load(vm.selectedResumen_.depositos_diferidos)" spacing="0">
+					<template name="children">
+						<hlayout>
+							<space></space>
+							<label>Nro.</label>
+							<label value="@load(each.numeroBoleta)"></label>
+							<space></space>
+							<label>Gs.</label>
+							<label value="@load(each.totalImporteGs) @converter(vm.cnv.monedaLocal)"></label>
+							<space></space>
+							<a label="ver depósito.." onClick="@command('verDeposito', comp=pop_ver_deposito, ref=self, deposito=each)"></a>
+						</hlayout>
+					</template>
+				</vlayout>
+				<hlayout visible="@load(vm.selectedResumen_.depositos_diferidos.size() eq 0? 'false' : 'true')">
+					<space></space>
+					<field>Total Importe</field>
+					<label value="        "></label>
+					<space></space>
+					<field>Gs.</field>
+					<field value="@load(vm.selectedResumen_.totalDepositosDiferidos) @converter('formattedNumber', format='###,###,##0')" />
+				</hlayout>		
+				
+				<div
+					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					<label sclass="title">DEPÓSITOS GENERADOS</label>
+				</div>
+				<hlayout visible="@load(vm.selectedResumen_.depositos_generados.size() eq 0)">
+					<space></space>
+					<label style="font-style:italic">...</label>
+				</hlayout>				
+				<vlayout children="@load(vm.selectedResumen_.depositos_generados)" spacing="0">
+					<template name="children">
+						<hlayout>
+							<space></space>
+							<label>Nro.</label>
+							<label value="@load(each.numeroBoleta)"></label>
+							<space></space>
+							<label>Gs.</label>
+							<label value="@load(each.totalImporteGs) @converter(vm.cnv.monedaLocal)"></label>
+							<space></space>
+							<a label="ver depósito.." onClick="@command('verDeposito', comp=pop_ver_deposito, ref=self, deposito=each)"></a>
+						</hlayout>
+					</template>
+				</vlayout>
+				<vlayout children="@load(vm.selectedResumen_.transferenciasBancarias)" spacing="0">
+					<template name="children">
+						<hlayout>
+							<space></space>
+							<label style="color:#428bca">Nro.</label>
+							<label value="@load(each.depositoNroReferencia)" style="color:#428bca"></label>
+							<space></space>
+							<label style="color:#428bca">Gs.</label>
+							<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" style="color:#428bca"></label>
+						</hlayout>
+					</template>
+				</vlayout>
+				<hlayout>
+					<space></space>
+					<field>Total Importe</field>
+					<label value="        "></label>
+					<space></space>
+					<field>Gs.</field>
+					<field value="@load(vm.selectedResumen_.totalDepositosGenerados 
+						+ vm.selectedResumen_.resumenTransferenciasBancarias
+						+ vm.selectedResumen_.resumenChequeAlDiaPrestamoCC
+						+ vm.selectedResumen_.totalDepositosDiferidos) @converter('formattedNumber', format='###,###,##0')" />
+				</hlayout>
+				<space></space>
+				<hlayout sclass="button-container">
+					<button mold="bs" sclass="btn-success btn-sm"
+						iconSclass="z-icon-plus-circle" label=" Generar Depósito" 
+						width="150px"
+						onClick='pop_add_deposito.open(self, "before_end")'/>
+					<space></space>
+					<button mold="bs" sclass="btn-info btn-sm"
+						iconSclass="z-icon-plus-circle" label=" Depósito Diferidos" 
+						width="150px"
+						onClick='pop_add_deposito_dif.open(self, "before_end")'/>
+					<space></space>
+					<button mold="bs" sclass="btn-warning btn-sm"
+						iconSclass="z-icon-print" label=" Imprimir Resumen" 
+						width="150px" onClick="@command('printResumen')"/>
+					<space></space>
+					<button mold="bs" sclass="btn-primary btn-sm"
+						iconSclass="z-icon-reply" label=" Volver.." 
+						onClick="inc_res.setVisible(false);lst_res.setVisible(true);hl_btn.setVisible(true)"
+						width="150px"/>
+				</hlayout>
+				<hlayout>
+					<space></space>
+					<field value="RESUMEN " />
+					<field value="@load(vm.selectedResumen_.numero)"/>
+					<space></space>
+					<field value="FECHA " />
+					<field value="@load(vm.selectedResumen_.fecha) @converter('formattedDate', format='dd-MM-yyyy')" />
+					<space></space>
+					<field value="CAJAS " />
+					<field value="@load(vm.selectedResumen_.numeroPlanillas)" />
+				</hlayout>
+			</vlayout>
+		</hbox>		
+	</div>
+	
+	<!-- GENERAR BOLETA DEPOSITO -->
+	
+	<popup id="pop_add_deposito" sclass="rounded">
+		<vlayout height="400px" width="650px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="0">
+							<field value="Cuenta" />
+							<combobox hflex="true"
+								model="@load(vm.bancoCuentas)"
+								selectedItem="@bind(vm.nvoDeposito.nroCuenta)"
+								value="@load(vm.nvoDeposito.nroCuenta.banco.descripcion)">
+								<template name="model">
+									<comboitem label="@load(each.banco.descripcion)"/>
+								</template>
+							</combobox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Fecha" />
+							<datebox hflex="true" value="@bind(vm.nvoDeposito.fecha)"/>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox hflex="true" value="@bind(vm.nvoDeposito.numeroBoleta)"/>
+						</vlayout>
+					</row>
+					<row>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+							<field value="Observación" />
+							<textbox hflex="true" value="@bind(vm.nvoDeposito.observacion)"/>
+						</vlayout>
+						</cell>
+						<cell>
+							<vlayout spacing="5px">
+							<field value="Total Efectivo Gs." />
+							<guaranibox hflex="true" value="@bind(vm.nvoDeposito.totalEfectivo)" />
+						</vlayout>
+						</cell>						
+					</row>
+				</rows>			
+			</grid>
+			<listbox sclass="small-list" vflex="true" emptyMessage="SIN CHEQUES AL DÍA.."
+				model="@load(vm.nvoDeposito.cheques)">
+				<listhead>
+					<listheader label="Fecha"></listheader>
+					<listheader label="Banco"></listheader>
+					<listheader label="Número"></listheader>
+					<listheader label="Monto Gs." align="right"></listheader>
+					<listheader width="50px" align="center"></listheader>
+				</listhead>
+				<auxhead>
+					<auxheader>
+						<textbox hflex="true" readonly="true"
+							value="@load(vm.selectedCheque_.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></textbox>
+					</auxheader>
+					<auxheader>
+						<textbox hflex="true" readonly="true"
+							value="@load(vm.selectedCheque_.banco.descripcion.toUpperCase())"></textbox>
+					</auxheader>
+					<auxheader>
+						<bandbox placeholder="Búsqueda de Cheques.."
+							hflex="true" readonly="true"
+							value="@load(vm.selectedCheque_.numero)" id="bndCheq_">
+							<bandpopup>
+								<listbox sclass="small-list"
+									height="200px" width="400px" model="@load(vm.cheques)"
+									selectedItem="@bind(vm.selectedCheque_)"
+									onSelect="bndCheq_.close()"
+									emptyMessage="NO SE ENCONTRARÓN DATOS..">
+									<listhead>
+										<listheader></listheader>
+										<listheader></listheader>
+										<listheader></listheader>
+										<listheader align="right"></listheader>
+									</listhead>
+									<auxhead>
+										<auxheader colspan="4">
+											<textbox sclass="filter"
+												hflex="true" value="@bind(vm.filterNumeroCheque)"
+												instant="true" placeholder="Número Cheque.." />
+										</auxheader>
+									</auxhead>
+									<template name="model">
+										<listitem>
+											<listcell
+												label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')">
+											</listcell>
+											<listcell
+												label="@load(each.numero)">
+											</listcell>
+											<listcell
+												label="@load(each.banco.descripcion.toUpperCase())">
+											</listcell>
+											<listcell
+												label="@load(each.monto) @converter('formattedNumber', format='###,###,##0')">
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</auxheader>
+					<auxheader>
+						<guaranibox hflex="true" readonly="true"
+							value="@load(vm.selectedCheque_.monto)"></guaranibox>
+					</auxheader>
+					<auxheader>
+						<button iconSclass="z-icon-plus" onClick="@command('addCheque_')"
+							disabled="@load(vm.selectedCheque_ eq null)"></button>
+					</auxheader>
+				</auxhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
+						<listcell label="@load(each.banco.descripcion.toUpperCase())"/>
+						<listcell label="@load(each.numero)"/>
+						<listcell label="@load(each.monto) @converter(vm.cnv.monedaLocal)"/>
+						<listcell>
+							<a iconSclass="z-icon-times"
+								onClick="@command('deleteItem_', item=each)"/>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="5">
+						<hlayout>
+							<field value="Depósito:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito.totalImporteGs)"/>
+							<space />
+							<field value="Efectivo:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito.totalEfectivo)"/>
+							<space />
+							<field value="Cheque:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito.totalImporteCheques)"/>
+							<space hflex="true"/>
+							<button mold="bs"
+								sclass="btn-success btn-sm"
+								iconSclass="z-icon-check" width="80px"
+								disabled="@load(vm.nvoDeposito.numeroBoleta eq null or vm.nvoDeposito.numeroBoleta.isEmpty())"
+								onClick="@command('generarDeposito', comp=pop_add_deposito)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	
+	<!-- GENERAR BOLETA DEPOSITO DIFERIDOS -->
+	
+	<popup id="pop_add_deposito_dif" sclass="rounded">
+		<vlayout height="400px" width="650px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="0">
+							<field value="Cuenta" />
+							<combobox hflex="true"
+								model="@load(vm.bancoCuentas)"
+								selectedItem="@bind(vm.nvoDeposito_.nroCuenta)"
+								value="@load(vm.nvoDeposito_.nroCuenta.banco.descripcion)">
+								<template name="model">
+									<comboitem label="@load(each.banco.descripcion)"/>
+								</template>
+							</combobox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Fecha" />
+							<datebox hflex="true" value="@bind(vm.nvoDeposito_.fecha)"/>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox hflex="true" value="@bind(vm.nvoDeposito_.numeroBoleta)"/>
+						</vlayout>
+					</row>
+					<row>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+							<field value="Observación" />
+							<textbox hflex="true" value="@bind(vm.nvoDeposito_.observacion)"/>
+						</vlayout>
+						</cell>
+						<cell>
+							<vlayout spacing="5px">
+							<field value="Total Efectivo Gs." />
+							<guaranibox hflex="true" value="@bind(vm.nvoDeposito_.totalEfectivo)" />
+						</vlayout>
+						</cell>						
+					</row>
+				</rows>			
+			</grid>
+			<listbox sclass="small-list" vflex="true" emptyMessage="SIN CHEQUES AL DÍA.."
+				model="@load(vm.nvoDeposito_.cheques)">
+				<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+				<listhead>
+					<listheader label="Fecha" sort="auto(fecha)" onCreate="self.sort(false)"></listheader>
+					<listheader label="Banco"></listheader>
+					<listheader label="Número"></listheader>
+					<listheader label="Monto Gs." align="right"></listheader>
+					<listheader width="50px" align="center">
+					</listheader>
+				</listhead>
+				<auxhead>
+					<auxheader>
+						<textbox hflex="true" readonly="true"
+							value="@load(vm.selectedCheque.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></textbox>
+					</auxheader>
+					<auxheader>
+						<textbox hflex="true" readonly="true"
+							value="@load(vm.selectedCheque.banco.descripcion.toUpperCase())"></textbox>
+					</auxheader>
+					<auxheader>
+						<bandbox placeholder="Búsqueda de Cheques.."
+							hflex="true" readonly="true"
+							value="@load(vm.selectedCheque.numero)" id="bndCheq">
+							<bandpopup>
+								<listbox sclass="small-list"
+									height="200px" width="400px" model="@load(vm.cheques)"
+									selectedItem="@bind(vm.selectedCheque)"
+									onSelect="bndCheq.close()"
+									emptyMessage="NO SE ENCONTRARÓN DATOS..">
+									<listhead>
+										<listheader></listheader>
+										<listheader></listheader>
+										<listheader></listheader>
+										<listheader align="right"></listheader>
+									</listhead>
+									<auxhead>
+										<auxheader colspan="4">
+											<textbox sclass="filter"
+												hflex="true" value="@bind(vm.filterNumeroCheque)"
+												instant="true" placeholder="Número Cheque.."
+												id="tx_nroCheque" />
+										</auxheader>
+									</auxhead>
+									<template name="model">
+										<listitem>
+											<listcell
+												label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')">
+											</listcell>
+											<listcell
+												label="@load(each.numero)">
+											</listcell>
+											<listcell
+												label="@load(each.banco.descripcion.toUpperCase())">
+											</listcell>
+											<listcell
+												label="@load(each.monto) @converter('formattedNumber', format='###,###,##0')">
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</auxheader>
+					<auxheader>
+						<guaranibox hflex="true" readonly="true"
+							value="@load(vm.selectedCheque.monto)"></guaranibox>
+					</auxheader>
+					<auxheader>
+						<button iconSclass="z-icon-plus" onClick="@command('addCheque')"
+							disabled="@load(vm.selectedCheque eq null)"></button>
+					</auxheader>
+				</auxhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
+						<listcell label="@load(each.banco.descripcion.toUpperCase())"/>
+						<listcell label="@load(each.numero)"/>
+						<listcell label="@load(each.monto) @converter(vm.cnv.monedaLocal)"/>
+						<listcell>
+							<a iconSclass="z-icon-times"
+								onClick="@command('_deleteItem', item=each)"/>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="5">
+						<hlayout>
+							<field value="Depósito:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito_.totalImporteGs)"/>
+							<space />
+							<field value="Efectivo:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito_.totalEfectivo)"/>
+							<space />
+							<field value="Cheque:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito_.totalImporteCheques)"/>
+							<space hflex="true"/>
+							<button mold="bs"
+								sclass="btn-success btn-sm"
+								iconSclass="z-icon-check" width="80px"
+								disabled="@load(vm.nvoDeposito_.numeroBoleta eq null or vm.nvoDeposito_.numeroBoleta.isEmpty())"
+								onClick="@command('generarDepositoDiferido', comp=pop_add_deposito_dif)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	
+	<!-- VER BOLETA DEPOSITO -->
+	
+	<popup id="pop_ver_deposito" sclass="rounded">
+		<vlayout height="400px" width="700px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="0">
+							<field value="Cuenta" />
+							<textbox hflex="true" readonly="true"
+								value="@load(vm.selectedDeposito_.nroCuenta.banco.descripcion)"></textbox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Fecha" />
+							<textbox hflex="true" readonly="true" value="@bind(vm.selectedDeposito_.fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox hflex="true" value="@bind(vm.selectedDeposito_.numeroBoleta)" readonly="true"/>
+						</vlayout>
+					</row>
+					<row>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+							<field value="Observación" />
+							<textbox hflex="true" value="@bind(vm.selectedDeposito_.observacion)" readonly="true"/>
+						</vlayout>
+						</cell>
+						<cell>
+							<vlayout spacing="5px">
+							<field value="Total Efectivo Gs." />
+							<guaranibox hflex="true" value="@bind(vm.selectedDeposito_.totalEfectivo)" readonly="true"/>
+						</vlayout>
+						</cell>						
+					</row>
+				</rows>			
+			</grid>
+			<listbox sclass="small-list" vflex="true" emptyMessage="SIN CHEQUES AL DÍA.."
+				model="@load(vm.selectedDeposito_.cheques)">
+				<listhead>
+					<listheader label="Fecha" width="70px"></listheader>
+					<listheader label="Banco"></listheader>
+					<listheader label="Número"></listheader>
+					<listheader label="Recibo Nro."></listheader>
+					<listheader label="Caja Nro."></listheader>
+					<listheader label="Monto Gs." align="right" width="80px"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yy')"/>
+						<listcell label="@load(each.banco.descripcion.toUpperCase())"/>
+						<listcell label="@load(each.numero)"/>
+						<listcell label="@load(each.numeroRecibo)"/>
+						<listcell label="@load(each.numeroPlanilla)"/>
+						<listcell label="@load(each.monto) @converter(vm.cnv.monedaLocal)"/>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="6">
+						<hlayout>
+							<field value="Depósito:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.selectedDeposito_.totalImporteGs)"/>
+							<space />
+							<field value="Efectivo:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.selectedDeposito_.totalEfectivo)"/>
+							<space />
+							<field value="Cheque:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.selectedDeposito_.totalImporteCheques)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	<popup sclass="rounded" id="pop_obs_ef_nodep">
+		<hlayout>
+			<textbox id="tx_obs" placeholder="Observación.." value="@bind(vm.selectedResumen_.obs_efectivo_no_depositado)"
+				width="300px"></textbox>
+			<button mold="bs" sclass="btn-success btn-xs" iconSclass="z-icon-check"
+			 onClick="@command('saveResumen', comp=pop_obs_ef_nodep)"/>
+		</hlayout>
+	</popup>
+	<popup sclass="rounded" id="pop_obs_ch_nodep">
+		<hlayout>
+			<textbox id="tx_obs_ch" placeholder="Observación.." value="@bind(vm.selectedResumen_.obs_cheque_no_depositado)"
+				width="300px"></textbox>
+			<button mold="bs" sclass="btn-success btn-xs" iconSclass="z-icon-check"
+			 onClick="@command('saveResumen', comp=pop_obs_ch_nodep)"/>
+		</hlayout>
+	</popup>
+	<popup sclass="rounded" id="pop_val_bat">
+		<listbox sclass="small-list" width="300px" height="200px"
+			model="@load(vm.bancoDepositosValoresBaterias)"
+			emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+			selectedItem="@bind(vm.selectedDepositoValoresBaterias)"
+			onSelect="@command('asignarValoresBaterias', comp=pop_val_bat)">
+			<listhead>
+				<listheader>
+					<textbox hflex="true"
+						placeholder="Número Depósito.." sclass="filter"
+						value="@bind(vm.filterNumeroDepositoValoresBaterias)"
+						instant="true" id="tx_filter_val_bat">
+					</textbox>
+				</listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.numeroBoleta)"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</popup>
+	<style>
+		.title { font-weight:bold;font-style:italic;font-size:11px }
+	</style>
+</zk>

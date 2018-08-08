@@ -1,0 +1,36 @@
+<vlayout>
+	<grid sclass="vgrid">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Mes:" />
+				<combobox hflex="true"
+					model="@load(vm.dato.filtro.meses)"
+					selectedItem="@bind(vm.dato.filtro.selectedMes)">
+					<template name="model">
+						<comboitem
+							label="@load(each.pos2)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Año:" />
+				<textbox readonly="true" value="@load(vm.dato.filtro.selectedAnho)"></textbox>
+			</row>
+			<row>
+				<field value="Formato:" />
+				<combobox hflex="true"
+					model="@load(vm.dato.filtro.formatos)"
+					selectedItem="@bind(vm.dato.filtro.formato)">
+					<template name="model">
+						<comboitem
+							label="@load(each[0].toString().toUpperCase())" />
+					</template>
+				</combobox>
+			</row>
+		</rows>
+	</grid>
+</vlayout>

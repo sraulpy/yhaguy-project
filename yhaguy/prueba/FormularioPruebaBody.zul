@@ -1,0 +1,117 @@
+<zk>
+	<window id="Body" viewModel="@id('vm') @init('com.yhaguy.prueba.BodyPrueba')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+
+		<button onClick="@command('agenda')" image="/core/images/agenda.png"
+			width="28px" />
+		<!-- <textbox value="@load(vm.dolar1)" /> <textbox value="@load(vm.dolar2)" 
+			/> <textbox value="@load(vm.dolar3)" /> -->
+
+		<div
+			form="@id('fx') @init(vm.myForm) @load(vm.DTOCorriente) @save(vm.DTOCorriente, before='save') ">
+			<vlayout>
+			
+				<button label="browser2"  onClick="@command('browser2')"/>
+			
+				<hlayout>
+					aca[
+					<label value="@load(fxStatus.dirty)" />
+					]
+					<label value="Articulo:" />
+
+					<textbox value="@bind(vm.dato)" onOK="@command('popupAC')" />
+
+					<button onClick="@command('popupAC')" image="/core/images/find-small.png"
+						width="28px" />
+
+					<!-- label value="@load(vm.dato2)" / -->
+				</hlayout>
+				<dolarbox value="123456.0000000000"  
+					readonly="@load(vm.datoTextoA)"
+				/>
+				<guaranibox value="0" 
+					disabled="${!vm.operacionHabilitada('ValorTextoA')}"
+				
+				/>
+				<longbox value="123456" />
+				<label value="dato1:" />
+				<textbox id="kkk" value="@bind(vm.dato2)" constraint="no empty" />
+				<button id="btkkk" label="click me" onClick="@command('cmdKKK')" />
+
+				<hlayout>
+					<label value="Pedido confirmado:" />
+
+					<checkbox checked="@bind(fx.pedidoConfirmado)" disabled="@load(vm.dto.confirmadoVentas)" />
+					<label value="disabled:" />
+					<label value="@load(vm.dto.confirmadoVentas)" />
+					<checkbox checked="@bind(vm.dto.confirmadoVentas)" />
+
+					<button id="btejemplo1" label="@load(vm.dto.confirmadoVentas)"
+						disabled="@load(vm.dto.confirmadoVentas)" />
+
+					<toolbarbutton id="btejemplo2" label="SOLO LECTURA"
+						disabled="@load(vm.dto.confirmadoVentas)" onClick="@command('winPopupSL')" />
+
+					<toolbarbutton id="btejemplo3" label="Editable"
+						disabled="@load(vm.dto.confirmadoVentas)" onClick="@command('winPopupED')" />
+
+					<toolbarbutton id="btejemplo4" label="Nuevo"
+						disabled="@load(vm.dto.confirmadoVentas)" onClick="@command('winPopupNU')" />
+				</hlayout>
+
+				<textbox value="Solo readonly" readonly="true" />
+				<textbox value="Solo disabled" disabled="true" />
+				<textbox value="T normal" />
+				<button label="Solo disabled" disabled="true" />
+				<button label="Normal" />
+				<checkbox disabled="true" />
+
+				<radiogroup id="rgSexo" model="@load(vm.dtoUtil.contactoSexo)">
+					<template name="model">
+						<radio label="@load(each.text)" value="@load(each)"
+							radiogroup="rgSexo" />
+					</template>
+				</radiogroup>
+
+				<zk>
+					<grid id="detalle" model="@load(vm.dto.importacionPedidoCompraDetalle)"
+						height="255px" width="995px" emptyMessage="AGREGUE ITEMS AL PEDIDO">
+						<columns menupopup="auto" sizable="true">
+							<column width="45px" align="center">
+								<checkbox tooltiptext="Seleccionar Todos.." />
+							</column>
+							<column label="Código" width="100px" />
+							<column label="Descripción" width="315px" />
+							<column label="U.Med." width="50px" />
+							<column label="Presentacion" width="110px" />
+						</columns>
+						<template name="model">
+							<row align="left">
+								<checkbox checked="@bind(each.checked)" />
+								<textbox value="@load(each.articulo.codigoInterno)"
+									width="90px" />
+								<textbox value="@load(each.articulo.descripcion)" width="305px" />
+								<label value="@load(each.articulo.articuloUnidadMedida.text)" />
+								<label value="@load(each.articulo.articuloPresentacion.pos1)" />
+
+							</row>
+						</template>
+					</grid>
+				</zk>
+
+				<!-- <zk> <listbox model="@load(vm.dto.importacionPedidoCompraDetalle)" 
+					height="255px" width="995px" emptyMessage="AGREGUE ITEMS AL PEDIDO"> <listhead> 
+					<listheader width="45px" align="center"> <checkbox tooltiptext="Seleccionar 
+					Todos.." /> </listheader> <listheader label="Código" width="100px" /> <listheader 
+					label="Descripción" width="315px" /> <listheader label="U.Med." width="50px" 
+					/> <listheader label="Presentacion" width="110px" /> </listhead> <template 
+					name="model"> <listitem> <listcell> <checkbox checked="@bind(each.checked)" 
+					/> </listcell> <listcell> <textbox value="@load(each.articulo.codigoInterno)" 
+					width="90px" /> </listcell> <listcell> <textbox value="@load(each.articulo.descripcion)" 
+					width="305px" /> </listcell> <listcell> <label value="@load(each.articulo.articuloUnidadMedida.text)" 
+					/> </listcell> <listcell> <label value="@load(each.articulo.articuloPresentacion.pos1)" 
+					/> </listcell> </listitem> </template> </listbox> </zk> -->
+			</vlayout>
+		</div>
+	</window>
+</zk>

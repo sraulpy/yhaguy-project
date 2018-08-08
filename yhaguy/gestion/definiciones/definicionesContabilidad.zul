@@ -1,0 +1,8 @@
+<tabbox height="100%">
+	<tabs>
+		<tab label="Cuentas Contables" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>DEFINICIONES CUENTAS CONTABLES..</tabpanel>
+	</tabpanels>
+</tabbox>

@@ -1,0 +1,31 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.pagos.PagosSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Nro. Recibo:" />
+				<hlayout>
+					<textbox 
+						value="@bind(vm.dato.nvoRecibo.pos1)"
+						hflex="true" />
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Fecha Recibo:" />
+				<hlayout>
+					<datebox
+					value="@bind(vm.dato.nvoRecibo.pos2)"
+					hflex="true" />
+					<labelConstrain />
+				</hlayout>				
+			</row>
+		</rows>
+	</grid>
+</div>

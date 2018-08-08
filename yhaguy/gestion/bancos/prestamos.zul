@@ -1,0 +1,329 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.prestamos.BancoPrestamosViewModel')">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick='pop_prestamo.open(self, "after_start")'></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-list" label="Ver Detalle" width="150px"
+			onClick='pop_selected.open(self, "after_start")'
+			disabled="@load(vm.selected_prestamo eq null ? 'true':'false')"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE PRÉSTAMOS.."
+		model="@load(vm.prestamos)"
+		selectedItem="@bind(vm.selected_prestamo)">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Banco"></listheader>
+			<listheader label="Número"></listheader>
+			<listheader label="Importe" align="right"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" sclass="filter" placeholder="Día.."
+						value="@bind(vm.filterFechaDD)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Mes.."
+						value="@bind(vm.filterFechaMM)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Año.."
+						value="@bind(vm.filterFechaAA)" instant="true"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Banco.."
+					value="@bind(vm.filter_banco)" instant="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Nro. Operacion.."
+					value="@bind(vm.filter_numero)" instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.banco.banco.descripcion)"></listcell>
+				<listcell label="@load(each.numero)"></listcell>
+				<listcell label="@load(each.capital - each.impuestos - each.gastosAdministrativos) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_prestamo" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE PRESTAMO" />
+			</hbox>
+			<button onClick="pop_prestamo.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<hlayout>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox hflex="true"
+						value="@bind(vm.nvo_prestamo.fecha)"></datebox>
+				</row>
+				<row>
+					<field value="Banco:" />
+					<combobox hflex="true"
+						value="@load(vm.nvo_prestamo.banco.banco.descripcion.toUpperCase())"
+						model="@load(vm.bancos)"
+						selectedItem="@bind(vm.nvo_prestamo.banco)"
+						onSelect="@command('addFilter')" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.banco.descripcion.toUpperCase())" />
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Cuenta Corriente:" />
+					<bandbox hflex="true" placeholder="Cta.Cte. Banco.."
+						readonly="true" value="@load(vm.nvo_prestamo.ctacte.razonSocial)"
+						id="bnd_ctacte">
+						<bandpopup>
+							<listbox sclass="small-list" width="400px"
+								height="200px" model="@load(vm.empresas)"
+								selectedItem="@bind(vm.nvo_prestamo.ctacte)"
+								onSelect="bnd_ctacte.close()">
+								<listhead>
+									<listheader width="100px">
+										<textbox hflex="true"
+												value="@bind(vm.filter_ruc)" instant="true"
+												placeholder="Ruc.." />
+									</listheader>
+									<listheader>
+										<textbox hflex="true"
+												value="@bind(vm.filter_razonSocial)" instant="true"
+												placeholder="Razón Social.." />
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.ruc)"></listcell>
+										<listcell label="@load(each.razonSocial)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>
+				<row>
+					<field value="Número Operación:" />
+					<textbox hflex="true"
+						value="@bind(vm.nvo_prestamo.numero)"></textbox>
+				</row>
+				<row>
+					<field value="Moneda:" />
+					<combobox hflex="true"
+						value="@load(vm.nvo_prestamo.moneda.descripcion.toUpperCase())"
+						model="@load(vm.monedas)"
+						selectedItem="@bind(vm.nvo_prestamo.moneda)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Nro. Cuotas:" />
+					<spinner hflex="true"
+						value="@bind(vm.nvo_prestamo.cuotas)"></spinner>
+				</row>
+				<row>
+					<field value="Tipo Vencimiento:" />
+					<combobox value="@load(vm.nvo_prestamo.tipoVencimiento)"
+						selectedItem="@bind(vm.nvo_prestamo.tipoVencimiento)"
+						model="@load(vm.tiposVencimiento)"
+						hflex="true">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Tipo Cuotas:" />
+					<combobox value="@load(vm.nvo_prestamo.tipoCuotas)"
+						selectedItem="@bind(vm.nvo_prestamo.tipoCuotas)"
+						model="@load(vm.nvo_prestamo.tiposCuotas)"
+						hflex="true">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Capital:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_prestamo.capital)" />
+				</row>
+				<row>
+					<field value="Interes:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_prestamo.interes)" />
+				</row>
+				<row>
+					<field value="Impuestos:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_prestamo.impuestos)" />
+				</row>
+				<row>
+					<field value="Gastos administrativos:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_prestamo.gastosAdministrativos)" />
+				</row>
+				<row>
+					<field value="Seguro:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_prestamo.seguro)" />
+				</row>
+				<row>
+					<field value="Deuda total:" />
+					<guaranibox hflex="true"  
+						style="background:#EEF7FA;text-align:right;font-weight:bold"
+						readonly="true" value="@load(vm.nvo_prestamo.deudaTotal)"/>
+				</row>
+			</rows>
+		</grid>
+		<vlayout vflex="true">
+			<button label="Calcular cuotas" hflex="true" iconSclass="z-icon-refresh"
+				onClick="@command('calcularCuotas')"></button>
+			<listbox width="350px" sclass="small-list" vflex="true"
+				model="@load(vm.cuotas)" emptyMessage="VISTA PREVIA DE CUOTAS..">
+				<listhead>
+					<listheader label="Nro." align="center" width="70px"></listheader>
+					<listheader label="Vencimiento"></listheader>
+					<listheader label="Importe" align="right"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each[0])"></listcell>
+						<listcell
+							label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
+						</listcell>
+						<listcell
+							label="@load(each[2]) @converter(vm.cnv.monedaLocal)">
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</vlayout>
+		</hlayout>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addPrestamo', comp=pop_prestamo)"></button>
+		</hbox>
+	</popup>
+	
+	<popup id="pop_selected" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="CONSULTA REGISTRO DE PRESTAMO" />
+			</hbox>
+			<button onClick="pop_selected.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_prestamo.fecha) @converter('formattedDate', format='dd-MM-yyyy')"
+						readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Banco:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_prestamo.banco.banco.descripcion.toUpperCase())"
+						readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Número Operación:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_prestamo.numero)"
+						readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Moneda:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_prestamo.moneda.descripcion.toUpperCase())"
+						readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Nro. Cuotas:" />
+					<intbox hflex="true"
+						value="@load(vm.selected_prestamo.cuotas)"
+						readonly="true"></intbox>
+				</row>
+				<row>
+					<field value="Tipo Vencimiento:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_prestamo.tipoVencimiento)"
+						readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Capital:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.selected_prestamo.capital)" 
+						readonly="true"/>
+				</row>
+				<row>
+					<field value="Interes:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.selected_prestamo.interes)" 
+						readonly="true"/>
+				</row>
+				<row>
+					<field value="Impuestos:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.selected_prestamo.impuestos)" 
+						readonly="true"/>
+				</row>
+				<row>
+					<field value="Gastos administrativos:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.selected_prestamo.gastosAdministrativos)" 
+						readonly="true"/>
+				</row>
+				<row>
+					<field value="Seguro:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.selected_prestamo.seguro)" 
+						readonly="true"/>
+				</row>
+				<row>
+					<field value="Deuda total:" />
+					<guaranibox hflex="true"  
+						style="background:#EEF7FA;text-align:right;font-weight:bold"
+						readonly="true" value="@load(vm.selected_prestamo.deudaTotal)"/>
+				</row>
+			</rows>
+		</grid>
+	</popup>
+	
+</window>

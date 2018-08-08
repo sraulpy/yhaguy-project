@@ -1,0 +1,33 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Tipo:" sclass="mobile"/>
+			<combobox model="@load(vm.filtro.tiposRetenciones)"
+				value="@load(vm.filtro.tipoRetencion)"
+				selectedItem="@bind(vm.filtro.tipoRetencion)"
+				hflex="true">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+</vlayout>

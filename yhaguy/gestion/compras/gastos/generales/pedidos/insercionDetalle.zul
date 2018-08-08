@@ -1,0 +1,65 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.generales.pedidos.OrdenPedidoGastoSimpleControl')">
+		<grid sclass="vgrid">
+			<columns>
+				<column width="130px" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<field value="Código Cuenta:" />
+					<hlayout>
+						<textbox
+							value="@bind(vm.dato.nvoDetalle.articuloGasto.cuentaContable.pos1)"
+							hflex="true" onOK="@command('selectItemDeGasto', filtro=0)"
+							placeholder="Código.." />
+						<button iconSclass="z-icon-search"
+							onClick="@command('selectItemDeGasto', filtro=0)" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Descripción Cuenta:" />
+					<hlayout>
+						<textbox
+							value="@bind(vm.dato.nvoDetalle.articuloGasto.cuentaContable.pos2)"
+							onOK="@command('selectItemDeGasto', filtro=1)"
+							placeholder="Descripción.." hflex="true" />
+						<button iconSclass="z-icon-search"
+							onClick="@command('selectItemDeGasto', filtro=1)" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Descripción Gasto:" />
+					<textbox value="@bind(vm.dato.nvoDetalle.descripcion)" hflex="true"/>
+				</row>
+				<row>
+					<field value="Iva:" />
+					<combobox model="@load(vm.dato.tiposDeIva)"
+						selectedItem="@bind(vm.dato.nvoDetalle.iva)"
+						value="@load(vm.dato.nvoDetalle.iva.text)" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.text)" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<field value="Importe Gs." />
+					<hlayout>
+						<guaranibox
+							value="@bind(vm.dato.nvoDetalle.importe)" />
+						<label value="Iva incluído" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Impuesto Gs." />
+					<hlayout>
+						<guaranibox
+							value="@bind(vm.dato.nvoDetalle.impuesto)" 
+							readonly="true"/>
+					</hlayout>
+				</row>				
+			</rows>
+		</grid>
+	</window>
+</zk>

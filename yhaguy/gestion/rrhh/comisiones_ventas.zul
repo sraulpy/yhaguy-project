@@ -1,0 +1,302 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer" height="100%"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.ComisionesVentasViewModel')"
+	id="win_" hflex="true">
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Mes" />
+					<combobox placeholder="MES.." hflex="true"
+						model="@load(vm.meses)" selectedItem="@bind(vm.selectedMes)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.pos2)"/>
+						</template>	
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Año" />
+					<combobox placeholder="AÑO.." hflex="true"
+						selectedItem="@bind(vm.selectedAnho)"
+						value="@load(vm.selectedAnho)"
+						model="@load(vm.anhos)">
+						<template name="model">
+							<comboitem label="@load(each)"/>
+						</template>	
+					</combobox>
+				</vlayout>
+			</row>
+		</rows>		
+	</grid>
+	<solicitarCabecera visible="@load(vm.selectedMes eq null? 'true':'false')" />
+	
+	<hlayout sclass="button-container" visible="@load(vm.selectedMes eq null? 'false':'true')">
+		<button mold="bs" sclass="btn-primary btn-sm" label="Procesar Ventas/Cobranzas"
+			iconSclass="z-icon-cogs" width="210px"
+			disabled="@load(vm.comisiones.size() eq 0? 'false':'true')"
+			onClick="@command('procesarMovimientos_')">
+		</button>
+		<space></space>
+		<button mold="bs" sclass="btn-info btn-sm" label="Imprimir"
+			iconSclass="z-icon-print" width="210px"
+			disabled="@load(vm.selectedMes eq null? 'true':'false')"
+			onClick='pop_formato.open(self, "after_start")'>
+		</button>
+		<space></space>
+		<textbox sclass="filter" placeholder="Vendedor.." width="210px"
+			value="@bind(vm.filterVendedor)" instant="true"></textbox>
+	</hlayout>
+	
+	<vbox id="vl_coms" pack="start" align="center" width="97%" height="450px"
+		style="margin:20px; padding-right:10px; border-radius:8px"
+		visible="@load(vm.selectedMes eq null? 'false': (vm.comisiones.size() eq 0? 'true':'false'))"
+		onLater="@command('clearProgress')">
+		<label id="lb_msg" style="font-style:italic">PENDIENTE DE PROCESAR DATOS..</label>	
+	</vbox>
+	
+	<vlayout children="@load(vm.comisiones)"
+					style="margin:20px; padding-right:10px; overflow:auto" vflex="true"
+					visible="@load(vm.selectedMes eq null? 'false':'true')">
+					<template name="children">
+						<div style="border-bottom: solid 1px silver">
+							<label value="@load(each[0])"
+								style="font-weight:bold; color:#357ebd" >
+							</label>
+						</div>
+						<div height="5px" />
+						<listbox sclass="small-list"
+							model="@load(each[1])">
+							<listhead>
+								<listheader label="Proveedor" />
+								<listheader label="Contado"
+									width="110px" align="right" />
+								<listheader label="%" width="50px"
+									align="center" />
+								<listheader label="Comisión"
+									width="110px" align="right" />
+								<listheader label="Cobrado"
+									width="110px" align="right" />
+								<listheader label="%" width="50px"
+									align="center" />
+								<listheader label="Comisión"
+									width="110px" align="right" />
+								<listheader label="Saldo Gs."
+									width="110px" align="right" />
+								<listheader label="Comisión Gs."
+									width="110px" align="right" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem>
+									<listcell
+										label="@load(item.proveedor)">
+									</listcell>
+									<listcell
+										label="@load(item.importeVenta) @converter(vm.cnv.monedaLocal)">
+									</listcell>
+									<listcell>
+										<doublebox
+											value="@bind(item.porc_Venta)" vflex="true" hflex="true"
+											style="background:#EEF7FA;text-align:right"
+											onChange="@command('updateComision', item=item, det=each)" />
+									</listcell>
+									<listcell
+										label="@load(item.comisionVenta) @converter(vm.cnv.monedaLocal)"
+										style="color:#357ebd">
+									</listcell>
+									<listcell
+										label="@load(item.importeCobro) @converter(vm.cnv.monedaLocal)">
+									</listcell>
+									<listcell>
+										<doublebox
+											value="@bind(item.porc_Cobro)" vflex="true" hflex="true"
+											style="background:#EEF7FA;text-align:right"
+											onChange="@command('updateComision', item=item, det=each)" />
+									</listcell>
+									<listcell
+										label="@load(item.comisionCobro) @converter(vm.cnv.monedaLocal)"
+										style="color:#357ebd">
+									</listcell>
+									<listcell
+										label="@load(item.totalSaldoGs) @converter(vm.cnv.monedaLocal)">
+									</listcell>
+									<listcell
+										label="@load(item.totalComision) @converter(vm.cnv.monedaLocal)"
+										style="color:#357ebd">
+									</listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										value="@load(each[2])"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" />
+								</listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										value="@load(each[3])"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" />
+								</listfooter>
+							</listfoot>
+						</listbox>
+						<space></space>
+					</template>
+				</vlayout>
+	
+	<!--  
+	<tabbox vflex="true" visible="@load(vm.selectedMes eq null? 'false':'true')">
+		<tabs>
+			<tab label="RESUMIDO" width="200px"></tab>
+			<tab label="DETALLADO" width="200px"></tab>
+		</tabs>
+		<tabpanels>
+		
+			<tabpanel>
+				<vlayout children="@load(vm.comisiones)"
+					style="margin:20px; padding-right:10px; overflow:auto" vflex="true"
+					visible="@load(vm.selectedMes eq null? 'false':'true')">
+					<template name="children">
+						<div style="border-bottom: solid 1px silver">
+							<label value="@load(each[0])"
+								style="font-weight:bold; color:#357ebd">
+							</label>
+						</div>
+						<listbox sclass="small-list"
+							model="@load(vm.familiasArticulos)">
+							<listhead>
+								<listheader label="Familia" />
+								<listheader label="Contado"
+									width="110px" align="right" />
+								<listheader label="%" width="50px"
+									align="center" />
+								<listheader label="Comisión"
+									width="110px" align="right" />
+								<listheader label="Cobrado"
+									width="110px" align="right" />
+								<listheader label="%" width="50px"
+									align="center" />
+								<listheader label="Comisión"
+									width="110px" align="right" />
+								<listheader label="Saldo Gs."
+									width="110px" align="right" />
+								<listheader label="Comisión Gs."
+									width="110px" align="right" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem>
+									<listcell
+										label="@load(item.descripcion)">
+									</listcell>
+									<listcell label="0"></listcell>
+									<listcell>
+										<doublebox vflex="true"
+											hflex="true" style="background:#EEF7FA;text-align:right" 
+											value="0"/>
+									</listcell>
+									<listcell label="0"
+										style="color:#357ebd">
+									</listcell>
+									<listcell label="0"></listcell>
+									<listcell>
+										<doublebox vflex="true"
+											hflex="true" style="background:#EEF7FA;text-align:right" 
+											value="0"/>
+									</listcell>
+									<listcell label="0"
+										style="color:#357ebd">
+									</listcell>
+									<listcell label="0"></listcell>
+									<listcell label="0"
+										style="color:#357ebd">
+									</listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold" 
+										value="0"/>
+								</listfooter>
+							</listfoot>
+						</listbox>
+						<space></space>
+					</template>
+				</vlayout>
+			</tabpanel>
+			
+			<tabpanel>
+				
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	-->
+	
+	<popup id="pop_formato" sclass="rounded">
+		<div style="padding:10px">
+			<combobox placeholder="Formato.."
+				onSelect="@command('verReporte')" width="200px"
+				model="@load(vm.formatos)"
+				selectedItem="@bind(vm.selectedFormato)">
+				<template name="model">
+					<comboitem label="@load(each[0])"></comboitem>
+				</template>
+			</combobox>
+		</div>
+	</popup>
+		
+	<style>
+		.z-doublebox { min-height: 20px }
+	</style>
+</window>
+</zk>

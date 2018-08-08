@@ -1,0 +1,251 @@
+<zk>
+	<window
+		viewModel="@id('vm') @init('com.yhaguy.gestion.inventario.planilla.InvPlanillaControlBody')"
+		apply="org.zkoss.bind.BindComposer">
+		<div height="5px" />
+		<hlayout sclass="z-valign-middle">
+			<button mold="trendy" image="/core/images/user1.png" id="loginButton" label="@load(vm.usuarioCorriente)" onClick="@command('buscarLogin')"
+			 style="font-weight:bold;font-size:11px" dir="normal"/>
+		</hlayout>
+		<div height="5px" />
+		<hlayout>
+			<groupbox title="Datos de la Planilla" width="550px" height="90px">
+
+				<hlayout>
+
+					<vlayout>
+						<hlayout sclass="z-valign-middle">
+							<label value="Lote:" style="font-weight:bold" />
+							<space />
+							<longbox value="@bind(vm.dto.lote)" width="35px" onBlur='txVerif.focus()'/>
+						</hlayout>
+						<div height="3px" />
+						<hlayout sclass="z-valign-middle">
+							<label value="Conteo:" style="font-weight:bold" />
+							<longbox value="@load(vm.dto.conteo)" width="35px" readonly="@load(vm.siempreHabilitado)"/>
+						</hlayout>
+					</vlayout>
+					<space />
+					<vlayout>
+						<hlayout sclass="z-valign-middle">
+							<label value="Cód. verif.:" style="font-weight:bold" />
+							<textbox id="txVerif" value="@bind(vm.dto.codigoVerificacion)" width="60px"
+								onOK="@command('buscarPlanilla')" onChange="@command('buscarPlanilla')"/>
+							<toolbarbutton id="tbPlanilla" image="/core/images/find-small.png"
+								onClick="@command('buscarPlanilla')" disabled="@load(vm.buscarPlanillaBo)" />
+						</hlayout>
+						<div height="3px" />
+						<hlayout sclass="z-valign-middle">
+							<label value="Fecha:" style="font-weight:bold" width="60px" />
+							<space width="18px" />
+							<textbox
+								value="@load(vm.dto.fechaCarga) @converter('formatedDate',format='dd-MM-yyyy')"
+								readonly="@load(vm.siempreHabilitado)" width="80px" />
+						</hlayout>
+					</vlayout>
+					<space />
+					<vlayout>
+						<hlayout sclass="z-valign-middle">
+							<label value="Ubicación:" style="font-weight:bold" />
+							<space />
+							<textbox value="@load(vm.dto.ubicacion)" readonly="@load(vm.siempreHabilitado)"
+								width="160px" />
+						</hlayout>
+						<div height="3px" />
+						<hlayout sclass="z-valign-middle">
+							<label value="Observación:" style="font-weight:bold" />
+							<textbox value="@load(vm.dto.observacion)" width="160px" />
+						</hlayout>
+					</vlayout>
+
+				</hlayout>
+
+				<div height="5px" />
+			</groupbox>
+
+			<groupbox title="1ra Carga" height="90px">
+				<vlayout>
+					<textbox width="100px" readonly="@load(vm.siempreHabilitado)" value="@load(vm.dto.cargador1A)" />
+					<div height="3px" />
+					<hlayout sclass="z-valign-middle">
+						<textbox width="100px" readonly="@load(vm.siempreHabilitado)" value="@load(vm.dto.cargador1B)" />
+						<toolbarbutton image="/core/images/find-small.png"
+							onClick="@command('buscarcargador')" disabled="@load(vm.nuevoCerrado)"/>
+					</hlayout>
+				</vlayout>
+			</groupbox>
+
+			<groupbox title="2da Carga" height="90px">
+				<vlayout>
+					<textbox width="100px" readonly="@load(vm.siempreHabilitado)" value="@load(vm.dto.cargador2A)" />
+					<div height="3px" />
+					<hlayout sclass="z-valign-middle">
+						<textbox width="100px" readonly="@load(vm.siempreHabilitado)" value="@load(vm.dto.cargador2B)" />
+						<toolbarbutton image="/core/images/find-small.png"
+							onClick="@command('buscarcargador2')" disabled="@load(vm.nuevoCerrado)" />
+					</hlayout>
+				</vlayout>
+			</groupbox>
+
+			<groupbox title="Contadores" height="90px">
+				<vlayout>
+					<hlayout sclass="z-valign-middle">
+						<textbox width="100px" value="@load(vm.dto.contador1)"
+							readonly="@load(vm.siempreHabilitado)" />
+						<toolbarbutton image="/core/images/find-small.png"
+							onClick="@command('buscarcontador1')" disabled="@load(vm.nuevoCerrado)" />
+					</hlayout>
+					<div height="3px" />
+					<hlayout sclass="z-valign-middle">
+						<textbox width="100px" value="@load(vm.dto.contador2)"
+							readonly="@load(vm.siempreHabilitado)" />
+						<toolbarbutton image="/core/images/find-small.png"
+							onClick="@command('buscarcontador2')" disabled="@load(vm.nuevoCerrado)" />
+					</hlayout>
+				</vlayout>
+			</groupbox>
+
+		</hlayout>
+
+		<div height="5px" />
+
+
+
+		<groupbox>
+			<hlayout sclass="z-valign-middle">
+				<toolbarbutton label="Agregar Item" image="/core/images/insertar.png"
+					onClick="@command('agregarArticulo')" style="font-family:tahoma" disabled="@load(vm.nuevoCerrado)" />
+				<space />
+				<toolbarbutton image="/core/images/guardar.png"
+					onClick="@command('guardarCarga')" label="Guardar Carga" disabled="@load(vm.guardarCarga)"
+					style="font-family:tahoma" />
+				<space />
+				<toolbarbutton image="/core/images/page_edit.png"
+					onClick="@command('editarCarga')" label="Editar 1ra Carga"
+					disabled="@load(vm.editarCarga)" style="font-family:tahoma" />
+				<space />
+				<toolbarbutton image="/core/images/confirmado.png"
+					onClick="@command('cerrarPlanilla')" label="Cerrar Planilla"
+					disabled="@load(vm.cerrarPlanilla)" style="font-family:tahoma" />
+				<space />
+				<separator orient="vertical" bar="true" />
+				<textbox readonly="@load(vm.siempreHabilitado)" inplace="true" value="@load(vm.textoEstado.toUpperCase())" style="font-weight:bold;color:blue" width="150px"/>
+				<space width="200px" />
+				<toolbarbutton image="/core/images/exclamation_.png"
+					onClick="@command('salirSinGuardar')" label="Salir sin Guardar"
+					disabled="@load(vm.nuevoCerrado)" style="font-family:tahoma" />
+			</hlayout>
+		</groupbox>
+
+		<div height="5px" />
+
+		<listbox id="itemPlanilla" model="@load(vm.dto.invPlanillaDetalle)" height="400px">
+			<auxhead>
+				<auxheader colspan="7" />
+				<auxheader colspan="4" label="1ra Carga"
+					style="text-align:center;font-size:11px" />
+				<auxheader colspan="4" label="2da Carga"
+					style="text-align:center;font-size:11px" />
+				<auxheader colspan="1" />
+			</auxhead>
+			<listhead menupopup="auto">
+				<listheader label="#" width="25px" />
+				<listheader label="Cod. Interno" width="100px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Cod. Proveedor" width="110px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Cod. Original" width="110px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Marca" width="100px" visible="false"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Descripción" width="110px" visible="false"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Ubicación" width="75px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Caja" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Apto" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Averiado" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Total" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Caja" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Apto" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Averiado" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Total" width="60px"
+					style="text-align:center;font-size:11px" />
+				<listheader label="Observacion" width="90px"
+					style="text-align:center;font-size:11px" />
+			</listhead>
+			<template name="model" var="det" status='s'>
+				<listitem>
+					<listcell label="@load(det.numero)" style="color:black" />
+					<listcell>
+						<textbox width="80px" value="@load(det.invArticulo.pos1)"
+							inplace="true" readonly="true" onFocus='itemPlanilla.setSelectedIndex(s.index)' />
+					</listcell>
+					<listcell>
+						<textbox width="80px" value="@load(det.invArticulo.pos2)"
+							inplace="true" readonly="true"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<textbox width="80px" value="@load(det.invArticulo.pos3)"
+							inplace="true" readonly="true"  onFocus='itemPlanilla.setSelectedIndex(s.index)' />
+					</listcell>
+					<listcell>
+						<textbox width="80px" value="@load(det.invArticulo.pos4)"
+							inplace="true" readonly="true"  onFocus='itemPlanilla.setSelectedIndex(s.index)' />
+					</listcell>
+					<listcell>
+						<textbox width="80px" value="@load(det.invArticulo.pos5)"
+							inplace="true" readonly="true"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<textbox width="80px" value="@load(det.invUbicacion.text)"
+							inplace="true" readonly="true"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.caja)" width="40px"
+							visible="@load(vm.modoCarga || vm.modoCerrado)" onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.aptos)" width="40px"
+							visible="@load(vm.modoCarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.averiados)" width="40px"
+							visible="@load(vm.modoCarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)' />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.total)" width="40px"
+							visible="@load(vm.modoCarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.caja2)" width="40px"
+							visible="@load(vm.modoRecarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.aptos2)" width="40px"
+							visible="@load(vm.modoRecarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.averiados2)" width="40px"
+							visible="@load(vm.modoRecarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<longbox value="@bind(det.total2)" width="40px"
+							visible="@load(vm.modoRecarga || vm.modoCerrado)"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+					<listcell>
+						<textbox value="@bind(det.observacion)" width="70px"  onFocus='itemPlanilla.setSelectedIndex(s.index)'  />
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+
+	</window>
+</zk>

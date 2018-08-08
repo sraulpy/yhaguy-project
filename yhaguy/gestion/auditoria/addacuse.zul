@@ -1,0 +1,76 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.auditoria.AcuseDocumentosSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="35%" />
+		</columns>
+		<rows>
+			<row>
+				<field value="Fecha:" />
+				<datebox value="@bind(vm.dato.nvoAcuse.fecha)"></datebox>
+			</row>
+			<row>
+				<field value="Acuse Nro.:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoAcuse.numero)" readonly="true">
+					</textbox>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Tipo Documento:" />
+				<hlayout>
+					<combobox hflex="true" model="@load(vm.tiposDeMovimientos)"
+						selectedItem="@bind(vm.dato.nvoAcuse.tipoMovimiento)">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>
+					</combobox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Motivo:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoAcuse.motivo)" hflex="true">
+					</textbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Documentos:" />
+				<vlayout spacing="0">
+					<listbox sclass="small-list" height="100px"
+						emptyMessage="NROS. DE DOCUMENTOS.."
+						model="@load(vm.dato.nvoAcuse.detalles)">
+						<template name="model">
+							<listitem label="@load(each.numeroDocumento)" />
+						</template>
+					</listbox>
+					<button iconSclass="z-icon-plus"
+								onClick="popDoc.open(self);tx_doc.focus()"></button>
+				</vlayout>
+			</row>
+			<row>
+				<field value="Receptor:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoAcuse.receptor)" hflex="true">
+					</textbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+	<popup id="popDoc" width="220px" sclass="rounded">
+		<hlayout>
+			<textbox id="tx_doc" placeholder="Nro. Documento.." value="@bind(vm.nvoDocumento.numeroDocumento) @converter(vm.cnv.facturaPy)" hflex="true"
+				onOK="@command('addDocumento', comp=popDoc)"></textbox>
+			<button iconSclass="z-icon-check" 
+				onClick="@command('addDocumento')"/>
+		</hlayout>
+	</popup>
+</div>

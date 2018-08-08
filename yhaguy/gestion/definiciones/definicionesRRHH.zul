@@ -1,0 +1,209 @@
+<tabbox height="100%" width="100%">
+	<tabs>
+		<tab label="Comisiones" />
+		<tab label="Funcionarios" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			
+			<hlayout style="margin:5px">
+				<navbar mold="bs-pills">
+					<navitem label=" PROVEEDOR" selected="true"
+						width="200px"
+						style="text-align:center; font-size:12px; font-weight:bold"
+						iconSclass="z-icon-filter" 
+						onClick='hb_prov.setVisible(true); hb_flia.setVisible(false); hb_desc.setVisible(false)' />
+					<navitem label=" FAMILIA"
+						iconSclass="z-icon-filter"
+						width="200px"
+						style="text-align:center; font-size:12px; font-weight:bold" 
+						onClick='hb_prov.setVisible(false); hb_flia.setVisible(true); hb_desc.setVisible(false)' />
+					<navitem label=" DESCUENTO FINANCIERO"
+						width="200px"
+						style="text-align:center; font-size:12px; font-weight:bold"
+						iconSclass="z-icon-filter" 
+						onClick='hb_prov.setVisible(false); hb_flia.setVisible(false); hb_desc.setVisible(true)' />
+				</navbar>
+			</hlayout>
+
+			<hbox id="hb_prov" vflex="true">
+				<listbox sclass="small-list" vflex="true" hflex="2"
+					model="@load(vm.proveedoresInternacionales)"
+					selectedItem="@bind(vm.selectedProveedor)">
+					<listhead>
+						<listheader label="Proveedor"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.razonSocial)"></listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter>
+							<field value="ítems"/>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<listbox sclass="small-list" vflex="true" hflex="3"
+					emptyMessage="SELECCIONE UN PROVEEDOR.."
+					model="@load(vm.vendedoresComision)" mold="paging">
+					<listhead>
+						<listheader label="Vendedor"></listheader>
+						<listheader label="% Contado" width="130px" align="right"></listheader>
+						<listheader label="% Cobrado" width="130px" align="right"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.razonSocial)"></listcell>
+							<listcell>
+								<doublebox vflex="true" width="50px" 
+									style="background:#EEF7FA;text-align:right" 
+									value="@bind(each.porc_comision)"
+									onChange="@command('updateComision', vendedor=each)"/>
+							</listcell>
+							<listcell>
+								<doublebox vflex="true" width="50px" 
+									style="background:#EEF7FA;text-align:right" 
+									value="@bind(each.porc_comision_cobros)"
+									onChange="@command('updateComision', vendedor=each)"/>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</hbox>
+			
+			<hbox id="hb_flia" vflex="true" visible="false">
+				<listbox sclass="small-list" vflex="true" hflex="2"
+					model="@load(vm.familiasArticulos)"
+					selectedItem="@bind(vm.selectedFamilia)">
+					<listhead>
+						<listheader label="Familia"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.descripcion)"></listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter>
+							<field value="ítems"/>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<listbox sclass="small-list" vflex="true" hflex="3"
+					emptyMessage="SELECCIONE UN PROVEEDOR.."
+					model="@load(vm.vendedoresComision)" mold="paging">
+					<listhead>
+						<listheader label="Vendedor"></listheader>
+						<listheader label="% Contado" width="130px" align="right"></listheader>
+						<listheader label="% Cobrado" width="130px" align="right"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.razonSocial)"></listcell>
+							<listcell>
+								<doublebox vflex="true" width="50px" 
+									style="background:#EEF7FA;text-align:right" 
+									value="@bind(each.porc_comision)"
+									onChange="@command('updateComision', vendedor=each)"/>
+							</listcell>
+							<listcell>
+								<doublebox vflex="true" width="50px" 
+									style="background:#EEF7FA;text-align:right" 
+									value="@bind(each.porc_comision_cobros)"
+									onChange="@command('updateComision', vendedor=each)"/>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</hbox>
+			
+			<hbox id="hb_desc" vflex="true" visible="false">
+				<listbox sclass="small-list" vflex="true" hflex="true"
+					emptyMessage="SIN VENDEDORES.."
+					model="@load(vm.vendedoresComision)" mold="paging">
+					<listhead>
+						<listheader label="Vendedor"></listheader>
+						<listheader label="% Descuento" align="center"></listheader>
+					</listhead>
+					<auxhead>
+						<auxheader></auxheader>
+						<auxheader>
+							<doublebox vflex="true" width="50px" 
+									style="background:#EEF7FA;text-align:right" />
+						</auxheader>
+					</auxhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.razonSocial)"></listcell>
+							<listcell>
+								<doublebox vflex="true" width="50px" 
+									style="background:#EEF7FA;text-align:right" 
+									value="@bind(each.porc_comision)"
+									onChange="@command('updateComision', vendedor=each)"/>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</hbox>
+		</tabpanel>
+		<tabpanel>
+			<hbox width="100%" vflex="true">
+				<vbox width="100%" vflex="true">
+					<hlayout sclass="button-container">
+						<button mold="bs" sclass="btn-primary btn-sm" label="Agregar" 
+							onClick="@command('addCargoFuncionario')" width="130px"/>
+						<button mold="bs" sclass="btn-warning btn-sm" label="Modificar" 
+							onClick="@command('editCargoFuncionario')" width="130px"/>
+						<button label="Eliminar" mold="bs" sclass="btn-info btn-sm"
+							onClick="@command('deleteCargoFuncionario')" width="130px"/>
+					</hlayout>
+					<listbox sclass="small-list"
+						model="@load(vm.cargosFuncionario)"
+						selectedItem="@bind(vm.selectedCargoFuncionario)" vflex="true"
+						width="100%">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Cargos"
+								style="text-align:center" />
+							<listheader label="Sigla"
+								style="text-align:center" />
+						</listhead>
+						<template name="model" status='s'>
+							<listitem>
+								<listcell label="@load(each.text)" />
+								<listcell label="@load(each.sigla)" />
+							</listitem>
+						</template>
+					</listbox>					
+				</vbox>
+				<vbox vflex="true" width="100%">
+					<hlayout sclass="button-container">
+						<button mold="bs" sclass="btn-primary btn-sm" label="Agregar" 
+							onClick="@command('addEstadoFuncionario')" width="130px"/>
+						<button mold="bs" sclass="btn-warning btn-sm" label="Modificar" 
+							onClick="@command('editEstadoFuncionario')" width="130px"/>
+						<button label="Eliminar" mold="bs" sclass="btn-info btn-sm"
+							onClick="@command('deleteEstadoFuncionaro')" width="130px"/>
+					</hlayout>
+					<listbox sclass="small-list"
+						model="@load(vm.estadosFuncionario)"
+						selectedItem="@bind(vm.selectedEstadoFuncionario)" vflex="true"
+						width="100%">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Estados"
+								style="text-align:center" />
+							<listheader label="Sigla"
+								style="text-align:center" />
+						</listhead>
+						<template name="model" status='s'>
+							<listitem>
+								<listcell label="@load(each.text)" />
+								<listcell label="@load(each.sigla)" />
+							</listitem>
+						</template>
+					</listbox>
+				</vbox>
+			</hbox>
+		</tabpanel>
+	</tabpanels>
+</tabbox>

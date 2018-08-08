@@ -1,0 +1,6 @@
+<zk>
+<window>
+	<space/>
+	<include src="/yhaguy/gestion/inventario/buscarPlanilla.zul"/>
+</window>
+</zk>

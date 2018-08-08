@@ -1,0 +1,66 @@
+<div apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.yhaguy.gestion.cobranzas.CobranzasSimpleViewModel')"
+	style="padding:10px">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="30%"/>
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Cliente:" />
+				<textbox readonly="true" hflex="true"
+					value="@load(vm.dato.nuevaLlamada.pos1.pos2)"/>
+			</row>
+			<row>
+				<field value="Fecha Hora:" />
+				<hlayout>
+					<textbox readonly="true" 
+						value="@load(vm.dato.nuevaLlamada.pos2) @converter('formattedDate', format='dd-MM-yyyy')"/>
+					<textbox readonly="true" 
+						value="@load(vm.dato.nuevaLlamada.pos2) @converter('formattedDate', format='hh:mm:ss')"
+						width="60px"/>
+					<label>hs.</label>
+				</hlayout>
+				
+			</row>
+			<row>
+				<field value="Usuario:" />
+				<textbox readonly="true" value="@load(vm.us.nombre)"/>
+			</row>
+			<row>
+				<div height="3px"></div>
+			</row>
+			<row>
+				<field value="Detalle:" />
+				<textbox placeholder="Ingrese el detalle de la llamada.."
+					rows="3" hflex="true"
+					value="@bind(vm.dato.nuevaLlamada.pos3)"/>
+			</row>
+			<row>
+				<div height="3px"></div>
+			</row>
+			<row>
+				<field value="Resultado:"/>
+				<combobox hflex="true"
+					model="@load(vm.dato.resultados)"
+					selectedItem="@bind(vm.dato.selectedResultado)"
+					instant="true">
+					<template name="model">
+						<comboitem label="@load(each)"/>
+					</template>
+				</combobox>
+			</row>
+			<row visible="@load(vm.dato.fieldTareasVisible)">
+				<field value="Fecha Hora:" />
+				<hlayout>
+					<datebox readonly="true" 
+						value="@bind(vm.dato.nuevaLlamada.pos4)"/>
+					<timebox value="@bind(vm.dato.nuevaLlamada.pos4)" width="100px"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+	
+</div>

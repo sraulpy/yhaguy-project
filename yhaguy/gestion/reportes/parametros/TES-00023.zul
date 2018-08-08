@@ -1,0 +1,21 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Estado:" />
+			<combobox
+				placeholder="TODOS.."
+				selectedItem="@bind(vm.dato.filtro.estadoCuentaCliente)"
+				model="@load(vm.dato.filtro.estadosCuentaCliente)"
+				instant="true"
+				hflex="true">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

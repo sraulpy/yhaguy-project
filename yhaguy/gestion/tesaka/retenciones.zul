@@ -1,0 +1,112 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.tesaka.TesakaViewModel')"
+	height="100%">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column />
+			<column width="40%"/>
+		</columns>
+		<rows>
+			<row>
+				<vlayout sclass="vgrid" spacing="0">
+					<field value="Órden de Pago" />
+					<hlayout>
+						<textbox placeholder="Número.."
+							style="background:lightyellow"
+							value="@bind(vm.selectedPago.numero)"
+							onOK="@command('buscarPagos', posFiltro=0)" 
+							width="140px" />
+						<textbox placeholder="Ruc.."
+							style="background:lightyellow"
+							value="@bind(vm.selectedPago.proveedor.pos3)"
+							onOK="@command('buscarPagos', posFiltro=1)" 
+							width="140px" />
+						<textbox hflex="true" placeholder="Razón Social.."
+							style="background:lightyellow"
+							value="@bind(vm.selectedPago.proveedor.pos2)" 
+							onOK="@command('buscarPagos', posFiltro=2)" />
+						<button iconSclass="z-icon-search"
+							onClick="@command('buscarPagos', posFiltro=2)" />
+					</hlayout>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+	
+	<hlayout sclass="button-container">
+		<toolbarbutton image="/core/images/inbox_download.png" label="Generar Archivo"
+			onClick="@command('generarArchivo')"
+			disabled="@load(vm.generarArchivoDisabled)"
+			visible="@load(vm.checkmarkVisible)"
+			tooltiptext="Generar Archivo de Retención para enviarlo al Tesaka.."/>	
+		<space />
+		<a label="Archivo Generado" onClick="@command('downloadFile')"
+			visible="@load(!vm.checkmarkVisible)"/>
+		<space />
+		<label value="@load(vm.selectedPago.tesaka)"
+			style="font-style:italic;font-size:11px"/>
+		<separator orient="vertical" bar="true"/>
+		<space />
+		<field value="Retenciones Registradas en Tesaka:"/>
+		<combobox placeholder="Periodo.." width="120px"
+			model="@load(vm.periodos)"
+			selectedItem="@bind(vm.selectedPeriodo)">
+			<template name="model">
+				<comboitem label="@load(vm.getMes(each))"/>
+			</template>
+		</combobox>
+		<space />
+		<radiogroup model="@load(vm.tiposRetenciones)"
+			selectedItem="@bind(vm.selectedTipoRetencion)">
+			<template name="model">
+				<radio label="@load(each)" style="margin-right:10px"></radio>
+			</template>
+		</radiogroup>		
+		<space />
+		<toolbarbutton image="/core/images/inbox_upload.png" label="Importar Archivo" 
+			tooltiptext="Importar Archivo de Retenciones del Tesaka.."
+			upload="true"
+			onUpload="@command('uploadFile', file=event.media)"
+			disabled="@load(vm.selectedPeriodo eq 0? 'true' : 'false')"/>
+		<space />
+		<toolbarbutton image="/core/images/printer_.png" label="Imprimir" 
+			tooltiptext="Imprimir Retenciones del Tesaka.."
+			disabled="@load(vm.selectedPeriodo eq 0? 'true' : 'false')"
+			onClick="@command('imprimir')"/>
+	</hlayout>
+	<div height="5px" />
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="BUSQUE LA ÓRDEN DE PAGO.."
+		model="@load(vm.selectedPago.detalles)"
+		checkmark="@load(vm.checkmarkVisible)"
+		multiple="true"
+		selectedItems="@bind(vm.selectedItems)">
+		<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+		<listhead>
+			<listheader label="" width="40px" align="center" />
+			<listheader label="Concepto" />
+			<listheader label="Fecha" sort="auto(movimiento.fechaEmision)" onCreate="self.sort(true)"/>
+			<listheader label="Número" />
+			<listheader label="Importe Gs." align="right" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.movimiento.tipoMovimiento.pos1)" />
+				<listcell label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.movimiento.nroComprobante)" />
+				<listcell label="@load(each.movimiento.importeOriginal) @converter(vm.cnv.monedaLocal)" />
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="5" align="left">
+				<hlayout>
+					<field value="0" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+</window>

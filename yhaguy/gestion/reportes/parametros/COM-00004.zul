@@ -1,0 +1,47 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Artículo:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.articulo.codigoInterno)"
+				id="bndArti">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.articulos)"
+						selectedItem="@bind(vm.dato.filtro.articulo)"
+						onSelect="bndArti.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.codigoArticulo)" instant="true"
+										placeholder="Buscar por Código.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.codigoInterno.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Lista de Precio:" />
+			<combobox model="@load(vm.dato.filtro.listasDePrecio)"
+				selectedItem="@bind(vm.dato.filtro.listaPrecio)"
+				instant="true" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)"/>
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

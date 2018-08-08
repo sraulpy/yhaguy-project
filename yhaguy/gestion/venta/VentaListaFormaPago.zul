@@ -1,0 +1,58 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')"
+	style="padding:10px" height="100%">
+
+	<hlayout sclass="button-container">
+		<toolbarbutton label="Eliminar"
+			image="/core/images/borrarItem.png" 
+			disabled="@load(vm.deleteFormaPagoDisabled)"/>
+		<space />
+		<toolbarbutton label="Insertar"
+			image="/core/images/insertar.png"
+			onClick="@command('asignarFormaPago')" />
+	</hlayout>
+
+	<listbox sclass="small-list" vflex="true"
+		model="@load(vm.dato.selectedVenta.formasPago)"
+		emptyMessage="INGRESE LA FORMA DE PAGO.."
+		checkmark="@load(vm.checkMarkFormaPago)" multiple="true"
+		selectedItems="@bind(vm.selectedFormasPago)">
+		<listhead>
+			<listheader width="40px" align="center" />
+			<listheader label="Descripción" style="text-align:center" />
+			<listheader label="Monto Gs" align="right"
+				style="text-align:center" width="105px" />
+			<listheader label="Monto U$" align="right"
+				style="text-align:center" width="105px"
+				visible="@load(!vm.dato.selectedVenta.monedaLocal)" />
+		</listhead>
+
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.descripcion)" />
+				<listcell
+					label="@load(each.montoGs) 
+						@converter('formattedNumber', format='###,###,##0')" />
+				<listcell
+					label="@load(each.montoDs)
+						@converter('formattedNumber', format='#,##0.00')" />
+			</listitem>
+		</template>
+
+		<listfoot>
+			<listfooter span="3" align="left">
+				<hlayout>
+					<field value="@load(vm.dato.selectedVenta.formasPago.size())" />
+					<field value="ítems" />
+					<space hflex="true" />
+					<field value="Importe:" />
+					<guaranibox readonly="true"
+						value="@load(vm.datosFormasPago[0])"
+						style="background:#dddddd;text-align:right;font-weight:bold" />
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+</div>

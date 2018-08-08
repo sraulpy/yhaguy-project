@@ -1,0 +1,50 @@
+<zk>
+	<window id="timbrado"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.timbrado.WindowTimbrado')"
+		apply="org.zkoss.bind.BindComposer">
+		<listbox model="@load(vm.dato.timbrados)"
+			rows="5" emptyMessage="No Encontrado.."
+			selectedItem="@bind(vm.dato.selectedTimbrado)" onSelect="@command('deshabilitarNvoTimbrado')"
+			sclass="small-list">
+			<listhead>
+				<listheader label="Numero" style="text-align:center" align="right"/>
+				<listheader label="Vencimiento" style="text-align:center" align="right"/>
+			</listhead>
+			<template name="model" var="myarray">
+				<listitem>
+            		<listcell label="@load(myarray.pos1)"/>
+            		<listcell label="@load(myarray.pos2) @converter('formatedDate',format='dd-MM-yyyy')"/>
+        		</listitem>
+			</template>
+		</listbox>
+		<div height="5px"></div>
+		<button label="Agregar Timbrado" mold="trendy"
+			onClick="@command('nuevoTimbrado')" style="font-weight:bold" width="100%">
+			<attribute name="onClick">
+				tm.setVisible(true);
+				txNum.setDisabled(false);
+			</attribute>
+		</button>	
+		<div height="5px"></div>		
+		<grid id="tm" sclass="vgrid" visible="false">
+			<rows>
+				<row>
+					<field value="Número:" />
+					<hlayout>
+						<textbox id="txNum"
+							value="@bind(vm.dato.selectedTimbrado.pos1)"
+							onChange="@command('validarNumero', 
+							nro= vm.dato.selectedTimbrado.pos1, cmp=self)" hflex="true" />
+						<label value="(*)" style="color:red" />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Vencimiento:" />
+					<datebox
+						value="@bind(vm.dato.selectedTimbrado.pos2)"
+						constraint="no past, no today" hflex="true" />
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>

@@ -1,0 +1,324 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.FuncionarioControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%" style="padding:5px">
+		
+		<tabbox width="100%" vflex="true">
+			<tabs vflex="true">
+				<tab label="Datos Generales" width="170px" vflex="true"/>
+				<tab label="Geolocalización" width="170px" vflex="true"/>
+				<tab label="Documentos" width="170px" vflex="true"/>
+				<tab label="Sanciones" width="170px" vflex="true" />
+				<tab label="Configuración" width="170px" vflex="true"/>
+			</tabs>
+			
+			<tabpanels vflex="true">
+				
+				<!-- _____________________ DATOS GENERALES _____________________ -->
+			
+				<tabpanel style="padding:50px 100px 50px 100px" vflex="true">
+					
+					<vbox>
+					<div height="100px" width="100px">
+						<image src="@load(vm.dto.esNuevo? '/core/images/sin_imagen.png' : '/core/images/test.jpg')" vflex="true"></image>
+					</div>
+					<div hflex="true" style="color:#B5D5ED;border-bottom:solid 1px;margin:0px 5px 0px 5px"></div>
+					<div height="5px"></div>
+					<grid sclass="vgrid" hflex="true">
+						<columns>
+							<column width="35%"></column>
+							<column></column>
+						</columns>
+						<rows>
+							<row>
+								<field value="Nombre Completo:" />
+								<textbox value="@bind(vm.dto.nombre)" hflex="true" />
+							</row>
+							<row>
+								<field value="Cédula de Identidad:" />
+								<textbox value="@bind(vm.dto.ci)" hflex="true" />
+							</row>
+							<row>
+								<field value="RUC:" />
+								<textbox value="@bind(vm.dto.ruc)" hflex="true" />
+							</row>
+							<row>
+								<field value="Fecha Nacimiento: " />
+								<datebox value="@bind(vm.dto.fechaCumpleanhos)" hflex="true" />
+							</row>
+							<row>
+								<field value="Dirección:" />
+								<textbox value="@bind(vm.dto.direccion)" hflex="true" />
+							</row>
+							<row>
+								<field value="Teléfono:" />
+								<textbox value="@bind(vm.dto.telefono)" hflex="true" />
+							</row>
+							<row>
+								<field value="Correo Particular:" />
+								<textbox value="@bind(vm.dto.correoPersonal)" hflex="true" />
+							</row>
+							<row>
+								<field value="Correo de Funcionario" />
+								<textbox value="@bind(vm.dto.correoFuncionario)" hflex="true" />
+							</row>
+							<row>
+								<field value="Estado Funcionario:" />
+								<combobox
+									selectedItem="@bind(vm.dto.funcionarioEstado)"
+									value="@load(vm.dto.funcionarioEstado)"
+									model="@load(vm.dtoUtil.funcionarioEstado)" hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)" />
+									</template>
+								</combobox>
+							</row>
+							<row>
+								<field value="Cargo:" />
+								<combobox
+									model="@load(vm.dtoUtil.funcionarioCargo)"
+									value="@load(vm.dto.funcionarioCargo)"
+									selectedItem="@bind(vm.dto.funcionarioCargo)"
+									hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)" />
+									</template>
+								</combobox>
+							</row>
+							<row>
+								<field value="Fecha Ingreso: " />
+								<datebox value="@bind(vm.dto.fechaIngreso)" hflex="true" />
+							</row>
+							<row>
+								<field value="Observación:" />
+									<textbox value="@bind(vm.dto.observacion)" hflex="true" />
+							</row>
+						</rows>
+					</grid>
+					</vbox>
+				</tabpanel>
+				
+				<!-- _____________________ GEOLOCALIZACION _____________________ -->
+				
+				<tabpanel>				
+					<div sclass="rounded" hflex="true" vflex="true">
+						<gmaps version="3.26" id="gmaps" hflex="true"
+							lat="-25.3054494" lng="-57.5351386"
+							zoom="9"
+							vflex="true" showSmallCtrl="true" protocol="https">
+							<gmarker id="marker" lat="@load(vm.dto.empresa.latitud)"
+								lng="@load(vm.dto.empresa.longitud)" 
+								open="@load(!vm.dto.esNuevo())"
+								content="@load(vm.dto.empresa.direccion)"/>
+						</gmaps>
+					</div>				
+				</tabpanel>
+				
+				<!-- _____________________ DOCUMENTOS _____________________ -->
+				
+				<tabpanel>
+					<vbox hflex="true" vflex="true" style="margin:50px 100px 50px 100px">
+						<field value="DOCUMENTOS DEL FUNCIONARIO" />
+						<div hflex="true" style="color:#B5D5ED;border-bottom:solid 1px;margin:0px 5px 0px 5px"></div>
+						<space></space>
+						<space></space>
+						<hlayout valign="bottom">
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="CEDULA DE IDENTIDAD" href="/core/images/cedula.jpg" target="_blank"></a>
+						</hlayout>
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="CURRICULUM VITAE" href="/core/images/Curriculum.pdf" target="_blank"></a>
+						</hlayout>						
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="ANTECEDENTES POLICIALES"></a>
+						</hlayout>						
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="CERTIFICADO DE RESIDENCIA"></a>
+						</hlayout>	
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="ANÁLISIS MÉDICO"></a>
+						</hlayout>
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="CONTRATO"></a>
+						</hlayout>
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="ANTECEDENTES JUDICIALES"></a>
+						</hlayout>
+						<space></space>	
+						<hlayout>
+							<space></space>
+							<space></space>
+							<button iconSclass="z-icon-upload" />
+							<space></space>
+							<a label="ENTRADAS A I.P.S."></a>
+						</hlayout>		
+					</vbox>
+				</tabpanel>
+				
+				<!-- _____________________ SANCIONES _____________________ -->
+				
+				<tabpanel vflex="true">
+					
+					<div style="padding:50px 0px 0px 50px">
+						<field value="SANCIONES DEL FUNCIONARIO" />
+						<div hflex="true" style="color:#B5D5ED;border-bottom:solid 1px;"></div>
+					</div>
+					
+					<div style="padding:0px 100px 50px 100px" vflex="true">
+						<hlayout valign="top" vflex="true">					
+							<vbox hflex="20%">
+								<space></space>
+								<space></space>
+								<a label="JUSTIFIQUES"></a>
+								<space></space>	
+								<a label="LLAMADOS DE ATENCIÓN"></a>						
+								<space></space>	
+								<a label="AMONESTACIONES"></a>						
+								<space></space>	
+								<a label="SUSPENCIONES"></a>		
+							</vbox>					
+							<vbox hflex="80%" vflex="true" style="margin:50px 100px 50px 100px">
+								<hlayout sclass="button-container">
+									<button mold="bs" sclass="btn-sm btn-success" 
+										iconSclass="z-icon-plus-circle" label="Agregar"
+										width="150px"></button>
+								</hlayout>
+								<listbox sclass="small-list" hflex="true" vflex="true">
+									<listhead>
+										<listheader label="Fecha"></listheader>
+										<listheader label="Descripción"></listheader>
+									</listhead>
+								</listbox>
+							</vbox>
+						</hlayout>
+					</div>
+				</tabpanel>
+				
+				<!-- _____________________ ACCESO SISTEMA _____________________ -->
+				
+				<tabpanel>
+					<hlayout vflex="true" width="100%"
+						visible="@load(!vm.dto.esNuevo)">
+						<vbox vflex="true" width="50%">
+							<hbox sclass="button-container" width="100%"
+								style="margin:5px 2px 0px 2px">
+								<field value="Accesos del sistema"></field>
+							</hbox>
+							<listbox model="@load(vm.dto.accesos)"
+								width="100%" vflex="true" hflex="true"
+								selectedItem="@bind(vm.selectedAcceso)">
+								<listhead>
+									<listheader
+										label="Usuarios Asignados" align="center" />
+									<listheader label="Login"
+										align="center" />
+									<listheader label="Departamento"
+										align="center" />
+									<listheader
+										label="Sucursal Operativa" align="center" />
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.usuario.pos1)" />
+										<listcell
+											label="@load(each.usuario.pos2)" />
+										<listcell
+											label="@load(each.departamento.pos1)" />
+										<listcell
+											label="@load(each.departamento.pos2.text)" />
+									</listitem>
+
+								</template>
+							</listbox>
+							<hbox sclass="button-container"
+								width="100%">
+								<button label="Agregar"
+									onClick="@command('agregarUsuario')" />
+								<button label="Eliminar"
+									onClick="@command('eliminarAcceso')" />
+							</hbox>
+						</vbox>
+
+						<vbox vflex="true" width="50%">
+							<hbox sclass="button-container" width="100%"
+								style="margin:5px 2px 0px 2px">
+								<field
+									value="Sucursales Habilitadas por acceso">
+								</field>
+							</hbox>
+							<listbox id="sucursales"
+								model="@load(vm.selectedAcceso.sucursales)" width="100%"
+								vflex="true" hflex="true"
+								selectedItem="@bind(vm.selectedSucursalHab)" multiple="true"
+								emptyMessage="Seleccione un acceso asignado">
+								<listhead>
+									<listheader label="Sucursal" />
+									<listheader label="Descripción" />
+									<listheader label="Establecimiento" />
+									<listheader label="Dirección" />
+									<listheader label="Teléfono" />
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.pos1)" />
+										<listcell
+											label="@load(each.pos2)" />
+										<listcell
+											label="@load(each.pos3)" />
+										<listcell
+											label="@load(each.pos4)" />
+										<listcell
+											label="@load(each.pos5)" />
+									</listitem>
+								</template>
+							</listbox>
+							<hbox sclass="button-container"
+								width="100%">
+								<button label="Agregar"
+									onClick="@command('agregarSucursalHab')" />
+								<button label="Eliminar Sucursal"
+									onClick="@command('eliminarSucursalHab')" />
+							</hbox>
+						</vbox>
+					</hlayout>
+				</tabpanel>
+
+			</tabpanels>			
+		</tabbox>		
+	</window>
+</zk>

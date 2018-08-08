@@ -1,0 +1,78 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.definiciones.DefinicionesSimpleVM')"
+	style="padding:10px"
+	onCreate="punto.focus()">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="100px" />
+			<column />
+			<column width="100px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Número:" />
+				<textbox readonly="true"
+					value="@load(vm.dato.selectedTalonario.pos1)"/>
+			</row>
+			<row>
+				<field value="Boca:" />
+				<intbox readonly="true"
+					value="@load(vm.dato.selectedTalonario.pos2)" />
+				<field value="Punto:" />
+				<intbox id="punto" 
+					value="@bind(vm.dato.selectedTalonario.pos3)" />
+			</row>
+			<row>
+				<field value="Desde:" />
+				<longbox 
+					value="@bind(vm.dato.selectedTalonario.pos4)" 
+					onChange="@command('validarDesde', comp=self)" />
+				<field value="Hasta:" />
+				<longbox 
+					value="@bind(vm.dato.selectedTalonario.pos5)" 
+					onChange="@command('validarHasta', comp=self)" />
+			</row>
+			<row>
+				<field value="Timbrado:" />
+				<hlayout>
+					<textbox hflex="true" placeholder="Nro. Timbrado"
+						readonly="true"
+						value="@load(vm.dato.selectedTalonario.pos6.pos1)"/>
+					<button iconSclass="z-icon-search"
+						onClick="@command('abrirVentanaTimbrado')"/>
+				</hlayout>
+				<field value="Vencimiento:" />
+				<textbox readonly="true" 
+					value="@bind(vm.dato.selectedTalonario.pos7) @converter('formattedDate', format='dd-MM-yyyy')"/>
+			</row>
+			<row>
+				<field value="Sucursal:" />
+				<textbox readonly="true" 
+					value="@load(vm.dato.selectedTalonario.pos9)"/>
+			</row>
+			<row>
+				<field value="Movimientos:" />
+				<vlayout spacing="0">
+					<listbox rows="3" sclass="small-list"
+						emptyMessage="Asigne Movimientos.." 
+						model="@load(vm.dato.selectedTalonario.pos10)"
+						selectedItem="@bind(vm.selectedTipoMovimiento)">
+						<template name="model">
+							<listitem label="@load(each.text)" />
+						</template>	
+					</listbox>
+					<hlayout>
+						<button iconSclass="z-icon-plus" 
+							onClick="@command('selectTipoMovimiento')"/>
+						<button iconSclass="z-icon-times" 
+							onClick="@command('deleteTipoMovimiento')"
+							disabled="@load(vm.selectedTipoMovimiento eq null? 'true':'false')"/>
+					</hlayout>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+
+</div>

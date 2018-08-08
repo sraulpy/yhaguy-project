@@ -1,0 +1,58 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Excluir Clientes:" />
+			<bandbox hflex="true" placeholder="CLIENTE A EXCLUIR.."
+				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
+				id="bndCli_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.clientes)"
+						selectedItem="@bind(vm.dato.filtro.cliente)"
+						onSelect="@command('excluirCliente', comp = bndCli_)">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Excluídos:" />
+			<listbox sclass="small-list" hflex="true" height="150px"
+				model="@load(vm.dato.filtro.selectedClientes)"
+				emptyMessage="CLIENTES EXCLUÍDOS..">
+				<template name="model">
+					<listitem
+						label="@load(each.razonSocial.toUpperCase())" />
+				</template>
+			</listbox>
+		</row>
+	</rows>
+</grid>

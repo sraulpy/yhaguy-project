@@ -1,0 +1,42 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.definiciones.ComprasDefinicionesViewModel')"
+	height="100%">
+
+	<tabbox>
+		<tabs>
+			<tab label="Cuenta Contable" />
+			<tab label="Tipo de Cambio" />
+			<tab label="Ítem de Gasto" />
+			<tab label="Timbrados" />
+			<tab label="Talonarios" />
+		</tabs>
+
+		<tabpanels>
+			<tabpanel apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('ctvm') @init('com.yhaguy.gestion.compras.definiciones.CuentasContablesDefinicionesViewModel')">
+				<include
+					src="/yhaguy/gestion/compras/definicionesCuentasContables.zul">
+				</include>
+			</tabpanel>
+			<tabpanel apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('tcvm') @init('com.yhaguy.gestion.compras.definiciones.ComprasDefinicionesViewModel')">
+				<include
+					src="/yhaguy/gestion/compras/definicionesTipoCambio.zul">
+				</include>
+			</tabpanel>
+			<tabpanel apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('agvm') @init('com.yhaguy.gestion.compras.definiciones.ArticuloGastoDefinicionesViewModel')"
+				height="500px">
+				<include
+					src="/yhaguy/gestion/compras/definicionesArticuloGasto.zul">
+				</include>
+			</tabpanel>
+		</tabpanels>
+
+	</tabbox>
+	
+	<style>
+		.z-tab {width:150px}
+	</style>
+
+</window>

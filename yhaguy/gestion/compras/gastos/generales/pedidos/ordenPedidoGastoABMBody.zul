@@ -1,0 +1,424 @@
+<zk>
+	<window
+		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.generales.pedidos.OrdenPedidoGastoControlBody')"
+		apply="org.zkoss.bind.BindComposer" height="100%">
+
+		<tabbox width="100%" vflex="1">
+			<tabs>
+				<tab label="Orden de Compra" width="150px" 
+					id="tabOrdenCompra"/>
+				<tab label="Factura" width="150px" 
+					visible="@load(vm.dto.autorizado)"/>
+			</tabs>
+
+
+			<!-- ______________________ ORDEN DE COMPRA ______________________ -->
+
+			<tabpanels>
+				<tabpanel>
+					<grid sclass="vgrid">
+						<rows>
+							<row>
+								<vlayout spacing="0">
+									<field value="Número" />
+									<textbox
+										value="@load(vm.dto.numero)" readonly="true" hflex="true"/>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Fecha" />
+									<textbox
+										value="@load(vm.dto.fechaCarga) @converter('formatedDate', format='dd-MM-yyyy')"
+										readonly="true" 
+										hflex="true"/>
+								</vlayout>								
+								<vlayout spacing="0">
+									<field value="Departamento" />
+									<textbox
+										value="@load(vm.dto.departamento.pos1)" readonly="true" 
+										hflex="true"/>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Sucursal" />
+									<textbox
+										value="@load(vm.dto.sucursal.text)" readonly="true" 
+										hflex="true"/>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Estado" />
+									<textbox
+										value="@load(vm.estado.toUpperCase())" readonly="true" 
+										hflex="true"/>
+								</vlayout>
+							</row>
+							<row>
+								<cell colspan="2">
+									<vlayout>
+										<field value="Proveedor" />
+										<hlayout>
+											<buscadorProveedor
+												value="@bind(vm.dto)" campo="razonSocial" hflex="true"
+												visible="@load(!vm.dto.autorizado)" />
+											<label
+												value="@load(vm.dto.proveedor.pos2)"
+												visible="@load(vm.dto.autorizado)" />
+										</hlayout>
+									</vlayout>
+								</cell>
+								<cell>
+									<vlayout>
+										<field value="Ruc" />
+										<hlayout>
+											<buscadorProveedor
+												value="@bind(vm.dto)" campo="ruc"
+												visible="@load(!vm.dto.autorizado)" />
+											<label
+												value="@load(vm.dto.proveedor.pos3)"
+												visible="@load(vm.dto.autorizado)" />
+										</hlayout>
+									</vlayout>
+								</cell>
+								<cell colspan="2">
+									<vlayout>
+										<field value="Descripción" />
+										<textbox hflex="true"
+											value="@bind(vm.dto.descripcion)"
+											readonly="@load(vm.insertarItemDisabled)" />
+									</vlayout>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+
+					<!-- _____________________ DETALLE _____________________  -->
+
+
+					<hlayout sclass="button-container" valign="middle"
+						visible="@load(vm.detalleVisible)">
+						<button mold="bs" sclass="btn-danger btn-sm"
+							width="105px" iconSclass="z-icon-times-circle"
+							onClick="@command('eliminarItem')"
+							disabled="@load(vm.eliminarItemDisabled)" label=" Eliminar" />
+						<space />
+						<button mold="bs" sclass="btn-success btn-sm"
+							width="105px" iconSclass="z-icon-plus-circle"
+							onClick="@command('insertarItemDetalle')"
+							disabled="@load(vm.insertarItemDisabled)" label=" Insertar" />
+						<space />
+						<button mold="bs" sclass="btn-primary btn-sm"
+							width="105px" iconSclass="z-icon-check"
+							onClick="@command('autorizarOrden')"
+							disabled="@load(vm.autorizarDisabled)" label=" Autorizar" />
+						<space />
+						<separator orient="vertical" bar="true" />
+						<space />
+						<field value="Autorizado Por:" />
+						<textbox
+							value="@load(vm.dto.nombreUsuarioAutoriza)" readonly="true"
+							width="135px" />
+					</hlayout>
+
+					<solicitarCabecera
+						visible="@load(!vm.detalleVisible)" />
+
+					<listbox
+						model="@load(vm.dto.ordenPedidoGastoDetalle)" vflex="true"
+						multiple="true" selectedItems="@bind(vm.selectedItems)"
+						checkmark="@load(vm.checkmarkDetalle)"
+						emptyMessage="AGREGUE ÍTEMS A LA ORDEN DE COMPRA.."
+						sclass="small-list" visible="@load(vm.detalleVisible)">
+						<listhead>
+							<listheader width="50px" align="center" />
+							<listheader label="Código Cuenta"
+								width="130px" />
+							<listheader label="Descripción Cuenta" />
+							<listheader label="Descripción Gasto" />
+							<listheader label="Importe"
+								style="text-align:center" align="right" width="120px" />
+							<listheader label="Iva"
+								style="text-align:center" width="90px" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell />
+								<listcell
+									label="@load(each.articuloGasto.cuentaContable.pos1)" />
+								<listcell
+									label="@load(each.articuloGasto.cuentaContable.pos2)" />
+								<listcell
+									label="@load(each.descripcion)" />
+								<listcell
+									label="@load(each.importe) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.iva.text)" />
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter span="6">
+								<hlayout>
+									<field
+										value="@load(vm.dto.ordenPedidoGastoDetalle.size())" />
+									<field value="ítems" />
+									<div hflex="true" />
+									<field value="Iva 5%" />
+									<guaranibox
+										value="@load(vm.dto.totalIva5)"
+										readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold" />
+									<space/>
+									<field value="Iva 10%" />
+									<guaranibox
+										value="@load(vm.dto.totalIva10)"
+										readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold" />
+									<space/>
+									<field value="Importe Gs." />
+									<guaranibox
+										value="@load(vm.totalImporte)" readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold" />
+								</hlayout>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
+				
+				<!-- _____________________ FACTURA _____________________ -->
+				
+				<tabpanel>
+					<grid sclass="vgrid">
+						<rows>
+							<row>
+								<vlayout spacing="0">
+									<field value="Tipo Movimiento"/>
+									<combobox model="@load(vm.movimientosDeGasto)"
+										value="@load(vm.dtoGasto.tipoMovimiento.pos1)"
+										selectedItem="@bind(vm.dtoGasto.tipoMovimiento)"
+										instant="true"
+										onChange="@command('selectCondicion')"
+										hflex="true">
+										<template name="model">
+											<comboitem label="@load(each.pos1)"/>
+										</template>									
+									</combobox>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Condición"/>
+									<combobox model="@load(vm.condiciones)"
+										value="@load(vm.dtoGasto.condicionPago.pos1)"
+										selectedItem="@bind(vm.dtoGasto.condicionPago)"
+										instant="true"
+										visible="@load(vm.dtoGasto.credito)"
+										onChange="@command('selectVencimiento')"
+										hflex="true">
+										<template name="model">
+											<comboitem label="@load(each.pos1)"/>
+										</template>
+									</combobox>
+									<textbox value="@load(vm.dtoGasto.condicionPago.pos1)"
+										readonly="true"
+										visible="@load(!vm.dtoGasto.credito)"
+										hflex="true"/>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Fecha"/>
+									<datebox value="@bind(vm.dtoGasto.fecha)"
+										onChange="@command('selectVencimiento')"
+										hflex="true"/>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Vencimiento"/>
+									<datebox value="@bind(vm.dtoGasto.vencimiento)"
+										visible="@load(vm.dtoGasto.credito)"
+										hflex="true"/>
+									<textbox value="@bind(vm.dtoGasto.vencimiento) @converter('formattedDate', format='dd-MM-yyyy')"
+										visible="@load(!vm.dtoGasto.credito)"
+										readonly="true"
+										hflex="true"/>
+								</vlayout>
+								<vlayout spacing="0">
+									<field value="Estado"/>
+									<textbox value="@load(vm.dtoGasto.estadoComprobante.text)"
+										readonly="true"
+										hflex="true"/>
+								</vlayout>
+							</row>
+							<row>
+								<cell>
+									<vlayout>
+										<field value="Número" />
+										<textbox value="@bind(vm.dtoGasto.numeroFactura)"
+											hflex="true"/>
+									</vlayout>
+								</cell>
+								<cell>
+									<vlayout>
+										<field value="Timbrado" />
+										<hlayout>
+											<textbox value="@load(vm.dtoGasto.timbrado.pos1)"
+												readonly="true" placeholder="Nro. Timbrado"
+												hflex="true"/>
+											<button
+												iconSclass="z-icon-search" 
+												onClick="@command('asignarTimbrado')"/>
+										</hlayout>
+									</vlayout>
+								</cell>
+								<cell visible="@load(vm.dtoGasto.debitoBancario? 'true':'false')">
+									<vlayout>
+										<field value="Banco" />
+										<combobox model="@load(vm.bancos)" hflex="true"
+											selectedItem="@bind(vm.dtoGasto.banco)"
+											value="@load(vm.dtoGasto.banco.pos1)">
+											<template name="model">
+												<comboitem label="@load(each.pos1)"/>
+											</template>
+										</combobox>
+									</vlayout>
+								</cell>
+								<cell colspan="2">
+									<vlayout>
+										<field value="Proveedor" />
+										<hlayout>
+											<label value="@load(vm.dtoGasto.proveedor.pos3)"/>
+											<space/>
+											<label value="@load(vm.dtoGasto.proveedor.pos2)" />
+										</hlayout>
+									</vlayout>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+					<solicitarCabecera
+						visible="@load(!vm.detalleFacturaVisible)" />
+					<hlayout sclass="button-container"
+						visible="@load(vm.detalleFacturaVisible)">
+						<button mold="bs" sclass="btn-danger btn-sm"
+							width="115px" iconSclass="z-icon-times-circle"
+							onClick="@command('deleteItemFac')"
+							disabled="@load(vm.eliminarItemFacDisabled)" label=" Eliminar" />
+						<space />
+						<button mold="bs" sclass="btn-success btn-sm"
+							width="115px" iconSclass="z-icon-plus-circle"
+							onClick="@command('insertItemFactura')" label=" Insertar" />
+						<space />
+						<button mold="bs" sclass="btn-info btn-sm"
+							width="115px" iconSclass="z-icon-share"
+							onClick="@command('importarOrdenCompra')" label=" Importar O.C." 
+							tooltiptext="Importar Orden de Compra.."/>
+						<space />
+						<button mold="bs" sclass="btn-primary btn-sm"
+							width="115px" iconSclass="z-icon-check"
+							onClick="@command('confirmarGasto')" label=" Confirmar" 
+							disabled="@load(vm.confirmarDisabled)"/>
+						<space />
+						<separator orient="vertical" bar="true" />
+						<space />
+						<hbox align="center">
+							<checkbox checked="@bind(vm.dtoGasto.debitoBancario)"></checkbox>
+							<label value="Débito Bancario"></label>
+							<space></space>
+							<checkbox checked="@bind(vm.dtoGasto.gastoImportacion)"></checkbox>
+							<label value="Gasto Importación"></label>
+							<space></space>
+							<checkbox checked="@bind(vm.dtoGasto.no_generar_saldo)"></checkbox>
+							<label value="No generar saldo en Cta.Cte."
+								tooltiptext="Ej: Facturas Contado que se debitan de la Cta.Cte.."></label>
+							<space></space>
+						<hlayout valign="middle" visible="@load(vm.dtoGasto.gastoImportacion)">
+							<bandbox width="120px" placeholder="Importación Nro."
+								readonly="true"
+								value="@load(vm.dtoGasto.numeroImportacion)"
+								id="bndImp"
+								visible="@load(!vm.dto.readonly)">
+								<bandpopup>
+									<listbox sclass="small-list"
+										width="400px" height="200px"
+										onSelect="bndImp.close()"
+										model="@load(vm.importaciones)"
+										selectedItem="@bind(vm.dtoGasto.importacion)">
+										<listhead>
+											<listheader>
+												<hlayout>
+													<toolbarbutton
+														iconSclass="z-icon-filter" disabled="true" />
+													<textbox
+														hflex="true"
+														value="@bind(vm.filterNumeroImportacion)"
+														instant="true" placeholder="Buscar por Nro. Importación.." />
+												</hlayout>
+											</listheader>
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell label="@load(each.pos1)"/>
+												<listcell label="@load(each.pos2)"></listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</bandpopup>
+							</bandbox>
+							<label value="@load(vm.dtoGasto.numeroImportacion)" visible="@load(vm.dto.readonly)"></label>
+							<space></space>
+							<label value="@load(vm.dtoGasto.despachante)"></label>
+						</hlayout>
+						</hbox>
+					</hlayout>
+					<listbox emptyMessage="AGREGUE ÍTEMS A LA FACTURA.."
+						sclass="small-list" vflex="true"
+						model="@load(vm.dtoGasto.detalles)" multiple="true"
+						checkmark="@load(vm.checkmarkFacVisible)"
+						selectedItems="@bind(vm.selectedItemsFac)"
+						visible="@load(vm.detalleFacturaVisible)">
+						<listhead>
+							<listheader width="50px" align="center" />
+							<listheader label="Código Cuenta" width="130px" />
+							<listheader label="Descripción Cuenta" />
+							<listheader label="Descripción Gasto" />
+							<listheader label="Importe"
+								style="text-align:center" align="right" width="120px" />
+							<listheader label="Iva"
+								style="text-align:center" width="90px" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell />
+								<listcell
+									label="@load(each.articuloGasto.cuentaContable.pos1)" />
+								<listcell
+									label="@load(each.articuloGasto.cuentaContable.pos2)" />
+								<listcell
+									label="@load(each.observacion)" />
+								<listcell
+									label="@load(each.importeGs) @converter('formattedNumber', format='###,###,##0')" />
+								<listcell
+									label="@load(each.tipoIva.pos1)" />
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter span="6">
+								<hlayout>
+									<field
+										value="@load(vm.dtoGasto.detalles.size())" />
+									<field value="ítems" />
+									<div hflex="true" />
+									<field value="Iva 5%" />
+									<guaranibox readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold"
+										value="@load(vm.dtoGasto.totalIva5)" />
+									<space />
+									<field value="Iva 10%" />
+									<guaranibox readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold"
+										value="@load(vm.dtoGasto.totalIva10)" />
+									<space />
+									<field value="Importe Gs." />
+									<guaranibox readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold"
+										value="@load(vm.dtoGasto.totalImporteGs)" />
+								</hlayout>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

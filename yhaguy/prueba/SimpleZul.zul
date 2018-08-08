@@ -1,0 +1,14 @@
+<zk>
+  <window border="normal" title="Reporte"  sizable="false" maximizable="false" 
+  viewModel="@id('vm') @init('com.yhaguy.prueba.SimpleVMPrueba')"
+   apply="org.zkoss.bind.BindComposer"
+   >
+  	
+  <!--  	<div>PDF Browser</div>  -->
+  	
+  <textbox value="@bind(vm.dato)" />
+		
+
+
+  </window>
+</zk>

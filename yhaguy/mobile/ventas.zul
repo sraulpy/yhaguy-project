@@ -1,0 +1,13 @@
+<window id="templateInicio"
+	viewModel="@id('vm') @init('com.coreweb.login.ControlSinLogin')"
+	apply="org.zkoss.bind.BindComposer"
+	height="100%" width="100%">
+	
+	<style src="/core/css/yhaguy.css" />	
+	<label id="nombreFormulario" value=" " visible="false"/>
+
+	<div fulfill="self.onCreate" vflex="true"> 		
+			<include aliasForm="Ventas"
+				src="/yhaguy/mobile/ventas/ventas.zul" />
+		</div>
+</window>

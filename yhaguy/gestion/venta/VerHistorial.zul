@@ -1,0 +1,28 @@
+<window title="@load(vm.titleHistorial)" 
+	border="normal" closable="true"
+	height="250px" width="500px"
+	position="center, center">
+
+	<listbox sclass="small-list"
+		model="@load(vm.historial)"
+		vflex="true"
+		emptyMessage="NO SE ENCONTRARON REGISTROS..">
+		<listhead>
+			<listheader label="Fecha" width="90px" />
+			<listheader label="Concepto" width="90px" />
+			<listheader label="Número" />
+			<listheader label="Cant." align="right" width="60px" />
+			<listheader label="Precio Gs." width="90px" align="right" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.pos2)" />
+				<listcell label="@load(each.pos3)" />
+				<listcell label="@load(each.pos4)" />
+				<listcell label="@load(each.pos5) @converter('formattedNumber', format='###,###,###')" />
+			</listitem>
+		</template>
+	</listbox>
+
+</window>

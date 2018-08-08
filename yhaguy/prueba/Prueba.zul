@@ -1,0 +1,6 @@
+<zk>
+ <hlayout>
+	<label value="anda!!:"/>
+	<textbox value="${dato}"/>
+ </hlayout>
+</zk>

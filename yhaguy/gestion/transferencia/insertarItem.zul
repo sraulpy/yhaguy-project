@@ -1,0 +1,60 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.transferencia.TransferenciaSimpleVM')"
+	style="margin:10px">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="25%"/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Código:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoDetalle.articulo.pos1)"
+						onOK="@command('buscarArticulo')"
+						placeholder="Código Interno.." 
+						hflex="true"/>
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo')" />
+
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Descripción:" />
+				<textbox hflex="true" value="@load(vm.dato.nvoDetalle.articulo.pos2)"
+					readonly="true" />
+			</row>
+			<row>
+				<field value="Cantidad:" />
+				<hlayout>
+					<intbox value="@bind(vm.dato.nvoDetalle.cantidad)"
+						onChange="@command('validarCantidad', comp=self)"
+						format="###,###,##0"/>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Disponible:" />
+				<longbox readonly="true" value="@load(vm.dato.nvoDetalle.stockDisponible)"
+					format="###,###,##0"/>
+			</row>
+			<row>
+				<field value="Costo:" />
+				<hlayout>
+					<dolarbox value="@bind(vm.dato.nvoDetalle.costo)" />
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Total Costo:" />
+				<hlayout>
+					<dolarbox value="@load(vm.dato.nvoDetalle.costoTotal)" readonly="true"/>
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"/>
+				</hlayout>				
+			</row>
+		</rows>
+	</grid>
+	
+</div>

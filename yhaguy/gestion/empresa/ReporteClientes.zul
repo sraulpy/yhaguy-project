@@ -1,0 +1,40 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ReporteClientesControl')"
+		apply="org.zkoss.bind.BindComposer" width="100%">
+
+		<groupbox title="Reporte de Cliente" height="min">
+			<grid hflex="min">
+				<rows>
+					<row>
+						Fecha de modificación:
+						<hlayout>
+							Desde
+							<datebox value="@bind(vm.fechaDesde)" />
+							Hasta
+							<datebox value="@bind(vm.fechaHasta)" />
+						</hlayout>
+					</row>
+					<row>
+						Ordenado x Prioridad:
+						<checkbox checked="@bind(vm.prioridad)" />
+
+					</row>
+					<row>
+						Completos:
+						<checkbox checked="@bind(vm.soloCompleto)" />
+
+					</row>
+					<row>
+						<toolbarbutton image="/core/images/pdf.png"
+							onClick="@command('generarReporte')" label="Generar"
+							width="80px" height="26px" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+
+
+	</window>
+</zk>

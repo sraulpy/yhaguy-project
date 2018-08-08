@@ -1,0 +1,68 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.metas.VentaMetaViewModel')"
+	height="100%">
+
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-success btn-sm" width="120px"
+			iconSclass="z-icon-plus-circle" label=" Agregar" 
+			onClick="@command('addVentaMeta')"/>
+		<space />
+		<button mold="bs" sclass="btn-warning btn-sm" width="120px"
+			iconSclass="z-icon-edit" label=" Modificar" 
+			onClick="@command('editVentaMeta')"
+			disabled="@load(vm.selectedItem eq null or vm.selectedItem.esNuevo())"/>
+		<space />
+		<button mold="bs" sclass="btn-primary btn-sm" width="120px"
+			iconSclass="z-icon-print" label=" Imprimir" 
+			onClick="@command('print')"/>
+	</hlayout>
+
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN METAS DE VENTAS.."
+		model="@load(vm.metas)"
+		selectedItem="@bind(vm.selectedItem)">
+		<listhead style="text-align:center">
+			<listheader label="Vendedor" width="160px"></listheader>
+			<listheader label="Anho" width="60px" align="right"></listheader>
+			<listheader label="Ene." align="right"></listheader>
+			<listheader label="Feb." align="right"></listheader>
+			<listheader label="Mar." align="right"></listheader>
+			<listheader label="Abr." align="right"></listheader>
+			<listheader label="May." align="right"></listheader>
+			<listheader label="Jun." align="right"></listheader>
+			<listheader label="Jul." align="right"></listheader>
+			<listheader label="Ago." align="right"></listheader>
+			<listheader label="Set." align="right"></listheader>
+			<listheader label="Oct." align="right"></listheader>
+			<listheader label="Nov." align="right"></listheader>
+			<listheader label="Dic." align="right"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos1)"></listcell>
+				<listcell label="@load(each.pos2)"></listcell>
+				<listcell label="@load(each.pos3) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos4) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos5) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos6) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos8) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos9) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos10) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos11) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos12) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos13) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos14) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter>
+				<hlayout>
+					<field value="@load(vm.size)" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+</window>

@@ -1,0 +1,34 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Número desde:" sclass="mobile" />
+			<hlayout>
+				<spinner value="@bind(vm.filtro.cantidadDesde)"
+					width="150px"
+					mold="rounded"></spinner>				
+			</hlayout>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Número hasta:" sclass="mobile" />
+			<hlayout>
+				<spinner value="@bind(vm.filtro.cantidadHasta)"
+					width="150px" mold="rounded"></spinner>				
+			</hlayout>	
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Sucursal:" sclass="mobile" />
+		<combobox hflex="true" model="@load(vm.filtro.sucursales)"
+			selectedItem="@bind(vm.filtro.selectedSucursal)">
+			<template name="model">
+				<comboitem label="@load(each.descripcion)" />
+			</template>
+		</combobox>
+	</vlayout>
+
+</vlayout>

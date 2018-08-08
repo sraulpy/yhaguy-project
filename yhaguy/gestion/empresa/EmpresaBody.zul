@@ -1,0 +1,314 @@
+<tabbox width="100%" vflex="true">
+	<tabs>
+		<tab label="Datos de Empresa" closable="false" width="150px" />
+		<tab label="@load(vm.tabSucursalLabel)" closable="false"
+			width="150px" />
+		<tab label="@load(vm.tabContactoLabel)" closable="false"
+			width="150px" />
+		<tab label="@load(vm.cliente ? 'Datos Cliente' : 'Datos Proveedor')" closable="false" width="150px" />
+		<tab label="Cuenta Corriente" closable="false" width="150px" />
+	</tabs>
+
+	<tabpanels>
+
+		<!-- ___________________ DATOS DE EMPRESA ___________________ -->
+
+		<tabpanel vflex="true" style="padding:15px">
+			<hlayout valign="top">
+				<vlayout hflex="true" style="padding:20px">
+					<grid sclass="vgrid" width="800px">
+						<columns>
+							<column width="30%" />
+							<column width="70%" />
+						</columns>
+						<rows>
+							<row>
+								<field value="Razon Social:" />
+								<textbox
+									value="@bind(vm.dtoEmp.razonSocial)" id="t1"
+									onChange="@command('copiarRazonSocial')" instant="true"
+									hflex="true" />
+							</row>
+							<row>
+								<field value="Nom. Fantasía:" />
+								<textbox value="@bind(vm.dtoEmp.nombre)" id="copy" hflex="true" />
+							</row>
+							<row>
+								<field value="Rubro:" />
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dtoEmp.rubroEmpresas)" width="170px"
+											height="77px" rows="1"
+											selectedItem="@bind(vm.selectedRubroEmpresa)">
+										</listbox>
+										<hlayout>
+											<button label="Agregar" onClick="@command('agregarRubro')" />
+											<button label="Eliminar" onClick="@command('eliminarRubro')" />
+										</hlayout>
+									</vlayout>
+									<textbox placeholder="Descripción.."
+										hflex="true" value="@load(vm.selectedRubroEmpresa.text)"
+										readonly="true" />
+								</hlayout>
+							</row>
+							<row>
+								<field value="Moneda:" />
+								<hlayout>
+									<vlayout>
+										<listbox
+											model="@load(vm.dtoEmp.monedas)" width="170px" height="78px"
+											selectedItem="@bind(vm.selectedMoneda)" rows="1">
+											<template name="model"
+												var="mone">
+												<listitem
+													label="@load(mone.text)" />
+											</template>
+										</listbox>
+									</vlayout>
+								</hlayout>
+							</row>
+
+							<row height="75px">
+								<field value="Observación:" />
+								<textbox rows="1"
+									value="@bind(vm.dtoEmp.observacion)" hflex="true" />
+							</row>
+						</rows>
+					</grid>
+				</vlayout>
+			</hlayout>
+		</tabpanel>
+
+		<!-- ___________________ SUCURSALES ___________________ -->
+
+		<tabpanel style="padding:15px" vflex="true">
+			<hlayout vflex="true" valign="top">
+				<vlayout hflex="true" vflex="true">
+					<listbox model="@load(vm.dtoEmp.sucursales)"
+						hflex="true" selectedItem="@bind(vm.selectedSucursal)"
+						vflex="true" sclass="small-list"
+						emptyMessage="SIN SUCURSALES..">
+						<listhead>
+							<listheader label="Sucursales" />
+						</listhead>
+						<template name="model" var="suc">
+							<listitem label="@load(suc.pos1)" />
+						</template>
+					</listbox>
+					<hlayout sclass="button-container">
+						<button label="Agregar"
+							onClick="@command('agregarSucursal')" />
+						<button label="Eliminar"
+							onClick="@command('eliminarSucursal')" />
+					</hlayout>
+					<space />
+				</vlayout>
+				<space />
+				<grid sclass="vgrid" hflex="true">
+					<columns>
+						<column width="30%" />
+						<column width="70%" />
+					</columns>
+					<rows>
+						<row>
+							<field value="Nombre:" />
+							<textbox
+								value="@bind(vm.selectedSucursal.pos1)"
+								readonly="@load(vm.sinSucursal)"
+								constraint="${vm.check.noVacio}" hflex="true" />
+						</row>
+						<row>
+							<field value="Teléfono:" />
+							<textbox
+								value="@bind(vm.selectedSucursal.pos3)"
+								readonly="@load(vm.sinSucursal)" />
+						</row>
+						<row>
+							<field value="Correo:" />
+							<textbox
+								value="@bind(vm.selectedSucursal.pos4)"
+								readonly="@load(vm.sinSucursal)" constraint="${vm.check.email}"
+								hflex="true" />
+						</row>
+						<row>
+							<field value="Dirección:" />
+							<textbox
+								value="@bind(vm.selectedSucursal.pos2)"
+								readonly="@load(vm.sinSucursal)"
+								constraint="${vm.check.noVacio}" hflex="true" />
+						</row>
+						<row>
+							<field value="Localidad:" />
+							<hlayout hflex="true">
+								<textbox
+									value="@bind(vm.selectedSucursal.pos6)"
+									onOK="@command('buscarLocalidad')"
+									readonly="@load(vm.sinSucursal)" hflex="true" />
+								<button iconSclass="z-icon-search"
+									onClick="@command('buscarLocalidad')" />
+							</hlayout>
+						</row>
+						<row>
+							<field value="Zona:" />
+							<combobox
+								value="@load(vm.selectedSucursal.pos5)"
+								model="@load(vm.dtoUtil.zonas)"
+								selectedItem="@bind(vm.selectedSucursal.pos5)"
+								readonly="@load(vm.sinSucursal)"
+								constraint="${vm.check.noVacio}" />
+						</row>
+						<row>
+							<field value="Id Persona:" />
+							<textbox
+								value="@load(vm.selectedSucursal.pos7)" readonly="true" />
+						</row>
+					</rows>
+				</grid>
+
+			</hlayout>
+		</tabpanel>
+
+		<!-- ___________________ CONTACTOS ___________________ -->
+
+		<tabpanel vflex="true" style="padding:15px">
+			<hlayout vflex="true" hflex="true" valign="top">
+				<vlayout vflex="true" hflex="true">
+					<listbox model="@load(vm.dtoEmp.contactos)"
+						hflex="true" selectedItem="@bind(vm.selectedContacto)"
+						vflex="true" sclass="small-list" emptyMessage="SIN CONTACTOS..">
+						<listhead>
+							<listheader label="Contactos" />
+						</listhead>
+						<template name="model" var="con">
+							<listitem label="@load(con.nombre)" />
+						</template>
+					</listbox>
+					<hlayout sclass="button-container">
+						<button label="Agregar"
+							onClick="@command('agregarContacto')" />
+						<button label="Eliminar"
+							onClick="@command('eliminarContacto')" />
+					</hlayout>
+					<space />
+				</vlayout>
+				<space />
+				<grid hflex="true" sclass="vgrid">
+					<columns>
+						<column width="30%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<field value="Nombre:" />
+							<textbox
+								value="@bind(vm.selectedContacto.nombre)" hflex="true"
+								readonly="@load(vm.sinContacto)"
+								constraint="${vm.check.noVacio}" />
+						</row>
+						<row>
+							<field value="Sucursal:" />
+							<combobox
+								model="@load(vm.dtoEmp.sucursales)"
+								value="@load(vm.selectedContacto.sucursal.pos1)"
+								selectedItem="@bind(vm.selectedContacto.sucursal)" hflex="true"
+								constraint="${vm.check.noVacio}"
+								readonly="@load(vm.sinContacto)">
+								<template name="model">
+									<comboitem label="@load(each.pos1)" />
+								</template>
+							</combobox>
+						</row>
+						<row>
+							<field value="Cargo:" />
+							<textbox
+								value="@bind(vm.selectedContacto.cargo)" hflex="true"
+								readonly="@load(vm.sinContacto)"
+								constraint="${vm.check.noVacio}" />
+						</row>
+						<row>
+
+							<field value="Teléfono:" />
+							<textbox
+								value="@bind(vm.selectedContacto.telefono)"
+								readonly="@load(vm.sinContacto)" />
+						</row>
+						<row>
+							<field value="Profesión:" />
+							<combobox
+								model="@load(vm.dtoUtil.profesion)"
+								value="@load(vm.selectedContacto.profesion)"
+								selectedItem="@bind(vm.selectedContacto.profesion)"
+								readonly="@load(vm.sinContacto)">
+								<template name="model">
+									<comboitem label="@load(each)" />
+								</template>
+							</combobox>
+						</row>
+						<row>
+							<field value="Correo:" />
+							<textbox
+								value="@bind(vm.selectedContacto.correo)"
+								readonly="@load(vm.sinContacto)" />
+						</row>
+						<row>
+							<field value="Cumpleaños:" />
+							<hlayout>
+								<datebox
+									value="@bind(vm.selectedContacto.fechaCumpleanhos)"
+									format="dd-MM-yyyy" readonly="@load(vm.sinContacto)" />
+								(dd-mm-aaaa)
+							</hlayout>
+
+						</row>
+						<row>
+							<field value="Sexo:" />
+							<radiogroup id="rgSexo"
+								selectedItem="@bind(vm.selectedContacto.contactoSexo)"
+								model="@load(vm.dtoUtil.contactoSexo)">
+								<template name="model">
+									<radio label="@load(each.text)"
+										value="@load(each)" radiogroup="rgSexo"
+										disabled="@load(vm.sinContacto)" style="margin-right:10px" />
+								</template>
+							</radiogroup>
+
+						</row>
+						<row>
+							<field value="Estado Civil:" />
+							<combobox
+								model="@load(vm.dtoUtil.estadoCivil)"
+								value="@load(vm.selectedContacto.estadoCivil)"
+								selectedItem="@bind(vm.selectedContacto.estadoCivil)"
+								readonly="@load(vm.sinContacto)">
+								<template name="model">
+									<comboitem label="@load(each)" />
+								</template>
+							</combobox>
+						</row>
+						<row>
+							<field value="Cedula:" />
+							<textbox
+								value="@bind(vm.selectedContacto.cedula)"
+								readonly="@load(vm.sinContacto)" />
+						</row>
+
+					</rows>
+				</grid>
+			</hlayout>
+		</tabpanel>
+
+		<tabpanel style="padding:15px">
+			<include
+				src="@load(vm.cliente? '/yhaguy/gestion/empresa/ClienteBody.zul' : '/yhaguy/gestion/empresa/ProveedorBody.zul')" />
+		</tabpanel>
+
+		<tabpanel>
+			<include
+				src="@load(vm.tipoControl eq 1? '/yhaguy/gestion/empresa/CtaCteClienteBody.zul' : '/yhaguy/gestion/empresa/CtaCteProveedorBody.zul')" />
+
+		</tabpanel>
+
+	</tabpanels>
+
+</tabbox>

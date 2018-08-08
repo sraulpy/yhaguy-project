@@ -1,0 +1,53 @@
+<window	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="115px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Número:"/>
+				<label value="@load(vm.dato.selectedVenta.numero)"/>
+			</row>
+			<row>
+				<field value="Cliente:"/>
+				<label value="@load(vm.dato.selectedVenta.cliente.pos2)"/>
+			</row>
+			<row>
+				<field value="Formas de Pago:"/>
+				<listbox
+					sclass="small-list"
+					rows="3"
+					model="@load(vm.dato.selectedVenta.formasPago)"
+					emptyMessage="Sin Formas de Pago..">
+					<listhead>
+						<listheader width="60%"/>
+						<listheader align="right"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.tipo.text)"/>
+							<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" 
+								style="text-align:right"/>
+						</listitem>
+					</template>
+				</listbox>
+			</row>	
+			<row>
+				<field value="Moneda:"/>
+				<label value="@load(vm.dato.selectedVenta.moneda.pos2)"/>
+			</row>
+			<row>
+				<field value="Importe:"/>
+				<label value="@load(vm.dato.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)"/>
+			</row>	
+			<row></row>
+			<row>
+				<field value="Motivo Anulación:" />
+				<label value="@load(vm.dato.selectedVenta.observacion.toUpperCase())"/>
+			</row>	
+		</rows>
+	</grid>
+</window>

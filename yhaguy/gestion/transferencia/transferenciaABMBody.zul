@@ -1,0 +1,301 @@
+<zk>
+	<window
+		viewModel="@id('vm') @init('com.yhaguy.gestion.transferencia.TransferenciaControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+
+		<!-- ___________________ CABECERA ___________________ -->
+
+
+		<!-- TRANSFERENCIA INTERNA -->
+
+		<grid sclass="vgrid" visible="@load(vm.transferenciaInterna)">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox value="@load(vm.dto.numero)"
+							readonly="true" 
+							placeholder="Pendiente.."
+							hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Creación" />
+						<datebox
+								value="@load(vm.dto.fechaCreacion)"
+								readonly="false" hflex="true" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<textbox
+							value="@load(vm.dto.transferenciaEstado.text)" readonly="true" 
+							hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal" />
+						<textbox value="@load(vm.dto.sucursal.text.toUpperCase())"
+							readonly="true" 
+							hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Origen" />
+						<hlayout visible="@load(!vm.detalleVisible)">
+							<combobox model="@load(vm.depositos)"
+								selectedItem="@bind(vm.dto.depositoSalida)"
+								value="@load(vm.dto.depositoSalida.text)" instant="true"
+								hflex="true">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+							<labelConstrain />
+						</hlayout>
+						<hlayout visible="@load(vm.detalleVisible)"
+							style="margin-right:30px">
+							<textbox
+								value="@load(vm.dto.depositoSalida.text)" readonly="true" 
+								hflex="true"/>
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0"
+						visible="@load(!vm.dto.depositoSalida.esNuevo())">
+						<field value="Destino" />
+						<hlayout>
+							<combobox model="@load(vm.depositosDestino)"
+								selectedItem="@bind(vm.dto.depositoEntrada)"
+								value="@load(vm.dto.depositoEntrada.text)" instant="true"
+								hflex="true">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+
+		<!-- TRANSFERENCIA EXTERNA -->
+
+		<grid sclass="vgrid"
+			visible="@load(!vm.transferenciaInterna)">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox value="@load(vm.dto.numero)"
+							readonly="true" 
+							placeholder="Pendiente.."/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Creación" />
+						<hlayout>
+							<datebox
+								value="@load(vm.dto.fechaCreacion)"
+								readonly="false" width="100px"/>
+							<textbox
+								value="@load(vm.dto.funcionarioCreador.pos1)" readonly="true" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0"
+						visible="@load(!vm.transferenciaInterna)">
+						<field value="Recepción" />
+						<hlayout>
+							<textbox
+								value="@load(vm.dto.fechaRecepcion) @converter('formattedDate', format='dd-MM-yyyy')" 
+								readonly="true"
+								width="80px" />
+							<textbox
+								value="@load(vm.dto.funcionarioReceptor.pos1)" readonly="true" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<textbox
+							value="@load(vm.dto.transferenciaEstado.text)" readonly="true" />
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Origen" />
+						<hlayout visible="@load(!vm.detalleVisibleExt)"
+							style="margin-right:30px">
+							<textbox hflex="true"
+								readonly="true"
+								value="@load(vm.dto.sucursal.text.toUpperCase())"/>
+							<combobox model="@load(vm.depositos)"
+								selectedItem="@bind(vm.dto.depositoSalida)"
+								value="@load(vm.dto.depositoSalida.text)" instant="true"
+								width="80px">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+							<labelConstrain />
+						</hlayout>
+						<hlayout visible="@load(vm.detalleVisibleExt)"
+							style="margin-right:30px">
+							<textbox hflex="true"
+								readonly="true"
+								value="@load(vm.dto.sucursal.text.toUpperCase())"/>
+							<textbox 
+								value="@load(vm.dto.depositoSalida.text)"
+								readonly="true" width="70px" />
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0"
+						visible="@load(!vm.dto.depositoSalida.esNuevo())">
+						<field value="Destino" />
+						<hlayout style="margin-right:30px" visible="@load(!vm.transferido)">
+							<combobox hflex="true"
+								model="@load(vm.sucursales)"
+								selectedItem="@bind(vm.dto.sucursalDestino)"
+								instant="true"
+								value="@load(vm.dto.sucursalDestino.text)">
+								<template name="model">
+									<comboitem label="@load(each.text)"/>
+								</template>
+							</combobox>
+							<combobox
+								width="80px"
+								model="@load(vm.depositosDestinoExt)"
+								selectedItem="@bind(vm.dto.depositoEntrada)"
+								value="@load(vm.dto.depositoEntrada.text)"
+								instant="true">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+							<labelConstrain />
+						</hlayout>
+						<hlayout style="margin-right:30px" visible="@load(vm.transferido)">
+							<textbox hflex="true"
+								readonly="true"
+								value="@load(vm.dto.sucursalDestino.text)"/>
+							<textbox width="80px" readonly="true"
+								placeholder="Depósito"
+								value="@load(vm.dto.depositoEntrada.text)"/>
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Observación" />
+						<textbox
+							value="@bind(vm.dto.observacion)" 
+							hflex="true"/>
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+
+		<div height="5px" />
+		
+		<solicitarCabecera 
+			visible="@load(vm.transferenciaInterna? vm.solicitarCabeceraVisible : vm.solicitarCabeceraVisibleExt)" />
+
+		<!-- ___________________ BOTONERA ___________________  -->
+
+		<hlayout sclass="button-container"
+			visible="@load(vm.transferenciaInterna? vm.detalleVisible : vm.detalleVisibleExt)">
+			<toolbarbutton label="Eliminar"
+				image="/core/images/borrarItem.png"
+				onClick="@command('eliminarItem')"
+				disabled="@load(vm.transferenciaInterna? vm.eliminarItemDisabled : vm.eliminarItemExtDisabled)" />
+			<space />
+			<toolbarbutton label="Insertar"
+				image="/core/images/insertar.png"
+				onClick="@command('insertarItem')" 
+				disabled="@load(vm.insertarDisabled)"/>
+			<space />
+			<toolbarbutton label="Confirmar"
+				image="/core/images/accept2.png"
+				onClick="@command('confirmarTransferencia')"
+				disabled="@load(vm.transferenciaInterna? vm.confirmarDisabled : vm.confirmarExtDisabled)" />
+			<space />
+		</hlayout>
+
+		<!-- ___________________ DETALLE ___________________ -->
+
+
+		<listbox sclass="small-list" model="@load(vm.dto.detalles)"
+			vflex="true" checkmark="@load(vm.checkmarkVisible)" multiple="true"
+			visible="@load(vm.transferenciaInterna? vm.detalleVisible : vm.detalleVisibleExt)"
+			selectedItems="@bind(vm.selectedItems)">
+			<auxhead style="text-align:center"
+				visible="@load(!vm.transferenciaInterna)">
+				<auxheader colspan="4" label="Artículo"/>
+				<auxheader colspan="2" label="Cantidad"/>
+				<auxheader colspan="2" label="Valores"/>
+				<auxheader label=""/>
+			</auxhead>
+			<listhead style="text-align:center">
+				<listheader width="40px" align="center" />
+				<listheader label="Código" width="180px" />
+				<listheader label="Descripción" />
+				<listheader label="U.Medida" width="100px" />
+				<listheader label="@load(vm.transferenciaInterna? 'Cantidad':'Enviada')" 
+					width="100px" align="right"
+					style="text-align:center" />
+				<listheader label="Recibida" width="100px" align="right"
+					style="text-align:center" 
+					visible="@load(!vm.transferenciaInterna)"/>
+				<listheader label="Costo" width="140px"
+					visible="@load(!vm.transferenciaInterna)" 
+					align="right"
+					style="text-align:center"/>
+				<listheader label="Importe" width="140px"
+					visible="@load(!vm.transferenciaInterna)" 
+					align="right"
+					style="text-align:center"/>
+				<listheader label="Estado" width="80px" align="center" />
+				<listheader width="60px" align="center"
+					visible="@load(!vm.insertarDisabled)" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="@load(each.articulo.pos1)" />
+					<listcell label="@load(each.articulo.pos2)" />
+					<listcell label="UND." />
+					<listcell
+						label="@load(each.cantidad) @converter('formattedNumber', format='###,###,##0')" />
+					<listcell
+						label="@load(each.cantidadRecibida) @converter('formattedNumber', format='###,###,##0')" 
+						style="@load(each.styleRecibida)"/>
+					<listcell label="@load(each.costo) @converter('formattedNumber', format='###,###,##0')"  />
+					<listcell label="@load(each.costoTotal) @converter('formattedNumber', format='###,###,##0')" />
+					<listcell
+						label="@load(each.editado? 'Modificado' : each.getEstado(vm.transferenciaInterna))"
+						style="@load(each.style)" />
+					<listcell>
+						<a label="Editar"
+							style="text-decoration:underline"
+							onClick="@command('editarItem', item=each)" />
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="6" align="left">
+					<hlayout>
+						<field value="@load(vm.dto.detalles.size())" />
+						<field value="ítems" />
+					</hlayout>
+				</listfooter>
+				<listfooter align="right">
+					<field value="Total Gs." 
+						visible="@load(!vm.transferenciaInterna)"/>
+				</listfooter>
+				<listfooter align="right">
+					<hlayout style="margin-right:5px"
+						visible="@load(!vm.transferenciaInterna)">
+						<dolarbox hflex="true"
+							style="background:#dddddd;font-weight:bold;text-align:right"
+							value="@load(vm.dto.totalCosto)"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</window>
+</zk>

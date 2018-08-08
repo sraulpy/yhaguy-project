@@ -1,0 +1,39 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Periodo:" />
+			<combobox model="@load(vm.dato.filtro.anhos)"
+				selectedItem="@bind(vm.dato.filtro.anhoDesde)"
+				instant="true" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>			
+			</combobox>
+		</row>
+		<row>
+			<field value="Cuenta:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.monedas)"
+				selectedItem="@bind(vm.dato.filtro.moneda)"
+				value="@load(vm.dato.filtro.moneda.descripcion)">
+				<template name="model">
+					<comboitem
+						label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

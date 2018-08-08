@@ -1,0 +1,41 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.CompraLocalSimpleControl')"
+	style="padding:5px">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="130px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Ítem:" />
+				<label value="@load(vm.dato.nvoItem.articulo.pos2)"/>
+			</row>
+			<row>				
+				<field value="Tipo:" />
+				<combobox hflex="true" model="@load(vm.dtoUtil.compraTiposDescuento)"
+					selectedItem="@bind(vm.dato.nvoItem.tipoDescuento)"
+					placeholder="Tipo Descuento..">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
+					</template>
+				</combobox>
+			</row>
+			<row>				
+				<field value="% Descuento:" />
+				<hlayout sclass="z-valign-middle">
+				<doublebox id="porcDesc" onChange="@command('calcularDescuento', porc=self.value)"
+					onOK="@command('calcularDescuento', porc=self.value)"/>
+				<label value="%" style="font-size:11px" />
+				</hlayout>
+			</row>
+			<row>				
+				<field value="Valor Descuento:" />
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@bind(vm.dato.nvoItem.costoGs)"/>
+					<label value="Gs." style="font-size:11px" />
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+</div>

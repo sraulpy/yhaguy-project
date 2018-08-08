@@ -1,0 +1,185 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.libro.BancoControlBody')"
+	height="100%" width="100%">
+
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Banco" />
+					<hlayout>
+						<combobox model="@load(vm.dtoUtil.bancos)"
+							value="@load(vm.dto.banco.pos1)"
+							selectedItem="@bind(vm.dto.banco)"
+							onSelect="@command('verificarCuenta')" hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.pos1)" />
+							</template>
+						</combobox>
+						<labelConstrain />
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Moneda" />
+					<combobox
+						model="@load(vm.dtoUtil.monedasConSimbolo)"
+						value="@load(vm.dto.moneda.pos1)"
+						selectedItem="@bind(vm.dto.moneda)" hflex="true">
+						<template name="model">
+							<comboitem label="@load(each.pos1)" />
+						</template>
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Desde" />
+					<datebox width="150px"
+						readonly="@load(!vm.siempreHabilitado)"
+						buttonVisible="@load(vm.siempreHabilitado)"
+						value="@bind(vm.desde)" hflex="true" style="background:#eef7fa">
+					</datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Hasta" />
+					<datebox width="150px"
+						readonly="@load(!vm.siempreHabilitado)"
+						buttonVisible="@load(vm.siempreHabilitado)"
+						value="@bind(vm.hasta)" hflex="true" style="background:#eef7fa">
+					</datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Saldo inicial mensual" />
+					<button label="Registrar saldo inicial" hflex="true" iconSclass="z-icon-check"
+						disabled="@load(!vm.siempreHabilitado)"
+						onClick='pop_saldo_inicial.open(self, "after_end")'/>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+
+	<solicitarCabecera visible="@load(!vm.tabsVisible)">
+	</solicitarCabecera>
+	<div height="10px"></div>
+	<listbox model="@load(vm.movimientosBanco)" sclass="small-list"
+		vflex="true" visible="@load(vm.tabsVisible)"
+		emptyMessage="SIN MOVIMIENTOS..">
+		<listhead sizable="true">
+			<listheader label="Concepto" width="190px" style="text-align:center" />
+			<listheader label="Fecha" width="100px" style="text-align:center" />
+			<listheader label="Hora" width="100px" style="text-align:center" />
+			<listheader label="Número" width="130px" style="text-align:center" align="right" />
+			<listheader label="Origen" style="text-align:center" />
+			<listheader label="Debe" width="150px"
+				style="text-align:center" align="right" />
+			<listheader label="Haber" width="150px"
+				style="text-align:center" align="right" />
+			<listheader label="Saldo" width="150px"
+				style="text-align:center" align="right" />
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<textbox sclass="filter" hflex="true" readonly="@load(!vm.siempreHabilitado)"
+					placeholder="Concepto.." value="@bind(vm.filterConcepto)" instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader>
+				<textbox sclass="filter" hflex="true" readonly="@load(!vm.siempreHabilitado)"
+					placeholder="Número.." value="@bind(vm.filterNumero)" instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem style="@load(each[3] eq vm.descripcionSaldoInicial ? 'background:#b5d5ed' : '')">
+				<listcell label="@load(each[3])" />
+				<listcell label="@load(each[0])" />
+				<listcell label="@load(each[1])" />
+				<listcell label="@load(each[2])" />
+				<listcell label="@load(each[10])" />
+				<listcell label="@load(each[4])" />
+				<listcell label="@load(each[5])" />
+				<listcell label="@load(each[6])" />
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter align="left">
+				<field value="ítems" />
+			</listfooter>
+			<listfooter span="4" align="right"></listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+						value="@load(vm.totalDebe)" />
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+						value="@load(vm.totalHaber)" />
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+						value="@load(vm.totalSaldo)"/>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_saldo_inicial" sclass="rounded">
+		<grid sclass="vgrid" width="400px" style="margin:10px">
+			<columns>
+				<column width="25%"></column>
+				<column></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Banco:" />
+					<textbox hflex="true" readonly="true"
+						value="@load(vm.saldoInicial.nroCuenta.banco.descripcion.toUpperCase())"></textbox>
+				</row>
+				<row>
+					<field value="Concepto:" />
+					<textbox hflex="true" readonly="true"
+						value="@load(vm.saldoInicial.tipoMovimiento.descripcion.toUpperCase())"></textbox>
+				</row>
+				<row>
+					<field value="Año:" />
+					<combobox hflex="true"
+						readonly="@load(!vm.siempreHabilitado)"
+						buttonVisible="@load(vm.siempreHabilitado)"
+						model="@load(vm.anhos)" instant="true"
+						value="@load(vm.selectedAnho)"
+						selectedItem="@bind(vm.selectedAnho)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<field value="Mes:" />
+					<combobox hflex="true"
+						readonly="@load(!vm.siempreHabilitado)"
+						buttonVisible="@load(vm.siempreHabilitado)"
+						model="@load(vm.meses)" instant="true"
+						value="@load(vm.selectedMes)"
+						selectedItem="@bind(vm.selectedMes)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<field value="Importe Gs.:" />
+					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado)"
+						value="@bind(vm.saldoInicial.monto)"></guaranibox>
+				</row>
+			</rows>
+		</grid>
+		<hbox width="100%" style="margin: 0px 10px 0px 10px">
+			<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-check" hflex="true"
+				disabled="@load(!vm.siempreHabilitado)"
+				onClick="@command('registrarSaldoInicial', comp=pop_saldo_inicial)"></button>
+		</hbox>
+	</popup>
+</window>

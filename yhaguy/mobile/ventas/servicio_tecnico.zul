@@ -1,0 +1,339 @@
+<div apply="org.zkoss.bind.BindComposer" vflex="true"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.ServicioTecnicoMobileVM')">
+		
+	<vlayout id="vl_receptor" height="100%">
+		<space></space>
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					RECEPTOR DEL SERVICIO
+				</label>
+		</hbox>
+		<listbox 
+			emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+			model="@load(vm.receptores)" style="overflow:auto" vflex="2"
+			selectedItem="@bind(vm.nvoServicio.receptor)">
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each)" />
+				</listitem>
+			</template>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Seleccionar Receptor" height="150px" style="font-size:30pt"
+			dir="normal" 
+			disabled="@load(vm.nvoServicio.receptor eq null)"
+			onClick="vl_tecnico.setVisible(true);vl_receptor.setVisible(false)"/>
+		
+	</vlayout>	
+	
+	<vlayout id="vl_tecnico" height="100%">
+		<space></space>
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					TÉCNICO DEL SERVICIO
+				</label>
+		</hbox>
+		<listbox 
+			emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+			model="@load(vm.tecnicos)" style="overflow:auto" vflex="2"
+			selectedItem="@bind(vm.nvoServicio.tecnico)">
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each)" />
+				</listitem>
+			</template>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Seleccionar Técnico" height="150px" style="font-size:30pt"
+			dir="normal" 
+			disabled="@load(vm.nvoServicio.tecnico eq null)"
+			onClick="vl_cliente.setVisible(true);vl_tecnico.setVisible(false)"/>
+		
+	</vlayout>
+	
+	<vlayout id="vl_cliente" height="100%">
+		<space></space>
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					CLIENTE
+				</label>
+		</hbox>
+		<listbox 
+			emptyMessage="BUSQUE UN CLIENTE.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.clientes)"
+			selectedItem="@bind(vm.nvoServicio.cliente)">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" id="tbox_cliente" 
+							value="@bind(vm.razonSocial)" />
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.razonSocial)"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Seleccionar Cliente" height="150px" style="font-size:30pt"
+			dir="normal" onClick="vl_facturas.setVisible(true); vl_cliente.setVisible(false)"
+			disabled="@load(vm.nvoServicio.cliente eq null)"/>		
+	</vlayout>
+	
+	<vlayout id="vl_facturas" height="100%">
+		<space></space>
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					FACTURAS
+				</label>
+		</hbox>
+		<listbox 
+			emptyMessage="BUSQUE FACTURAS SEGUN NRO.."
+			style="overflow:auto" vflex="3"
+			model="@load(vm.facturas)"
+			selectedItem="@bind(vm.selectedVenta)"
+			onSelect="@command('addFactura')">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" id="tbox_factura"  
+							value="@bind(vm.filterNumero)" />
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each[1])"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		
+		<space></space>
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					FACTURAS SELECCIONADAS
+				</label>
+		</hbox>
+		
+		<listbox vflex="2" style="overflow:auto"
+			model="@load(vm.nvoServicio.facturas)">
+			<listhead>
+				<listheader></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.numero)"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Siguiente Paso" height="150px" style="font-size:30pt"
+			dir="normal" disabled="@load(vm.nvoServicio.facturasList.size() eq 0 ? 'true':'false')"
+			onClick="vl_facturas.setVisible(false); vl_detalle.setVisible(true)"/>		
+	</vlayout>
+	
+	<vlayout id="vl_detalle" height="100%" visible="false">
+		<space></space>
+		<hbox hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					DETALLES DEL SERVICIO TÉCNICO
+				</label>
+		</hbox>
+		
+		<vlayout vflex="true" style="overflow:auto; padding:0px 100px 0px 100px">
+			<space></space>
+			<combobox placeholder="Factura.." hflex="true"
+				model="@load(vm.nvoServicio.facturas__)"
+				selectedItem="@bind(vm.nvoDetalle.numeroFactura)"
+				value="@load(vm.nvoDetalle.numeroFactura)">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+			<space></space>
+			<combobox placeholder="Código.." hflex="true"
+				model="@load(vm.nvoServicio.articulos)"
+				selectedItem="@bind(vm.nvoDetalle.articulo)"
+				value="@load(vm.nvoDetalle.articulo.codigoInterno)">
+				<template name="model">
+					<comboitem label="@load(each.codigoInterno)" />
+				</template>
+			</combobox>
+			<space></space>
+			<combobox placeholder="Estado.." hflex="true"
+				model="@load(vm.nvoServicio.estados)"
+				selectedItem="@bind(vm.nvoDetalle.estado)"
+				value="@load(vm.nvoDetalle.estado)">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+			<space></space>
+			<combobox placeholder="Carga.." hflex="true"
+				model="@load(vm.nvoServicio.cargas)"
+				selectedItem="@bind(vm.nvoDetalle.verifica_carga)"
+				value="@load(vm.nvoDetalle.verifica_carga)">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+			<space></space>
+			<combobox placeholder="Borne.." hflex="true"
+				model="@load(vm.nvoServicio.bornes)"
+				selectedItem="@bind(vm.nvoDetalle.verifica_borne)"
+				value="@load(vm.nvoDetalle.verifica_borne)">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+			<space></space>
+			<combobox placeholder="Celda.." hflex="true"
+				model="@load(vm.nvoServicio.celdas)"
+				selectedItem="@bind(vm.nvoDetalle.verifica_celda)"
+				value="@load(vm.nvoDetalle.verifica_celda)">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+			<space></space>
+			<combobox placeholder="Conexión.." hflex="true"
+				model="@load(vm.nvoServicio.conexiones)"
+				selectedItem="@bind(vm.nvoDetalle.verifica_conexion)"
+				value="@load(vm.nvoDetalle.verifica_conexion)">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+			<space></space>
+			<textbox placeholder="Observación.." value="@bind(vm.nvoDetalle.observacion)" hflex="true"></textbox>
+			<space></space>
+		</vlayout>
+		
+		<hlayout>
+			<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+				iconSclass="z-icon-plus"
+				label=" Agregar ítem" height="150px" style="font-size:30pt"
+				dir="normal" 
+				disabled="@load(vm.insertarItemDisabled)"
+				onClick="@command('addDetalle')" />
+			<button mold="bs" sclass="btn-success btn-lg" hflex="true"
+				iconSclass="z-icon-search"
+				label=" Vista Previa" height="150px" style="font-size:30pt"
+				dir="normal" 
+				disabled="@load(vm.nvoServicio.detallesList.size() eq 0 ? 'true':'false')"
+				onClick="vl_detalle.setVisible(false); vl_preview.setVisible(true)" />
+		</hlayout>		
+	</vlayout>
+	
+	<vlayout id="vl_preview" height="100%" visible="false">
+		<space></space>
+		<hbox id="hb_preview" hflex="true" pack="center">
+				<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+					SERVICIO TÉCNICO
+				</label>
+		</hbox>
+		
+		<hbox id="hb_mensaje" hflex="true" vflex="true" pack="center" align="center" visible="false">
+				<vbox width="100%" align="center" pack="center">
+					<image src="/core/images/check_128.png" height="200px"></image>
+					<div sclass="rounded" style="border: solid 1px #357ebd; padding:50px">
+						<label style="font-size:30pt;font-weight:bold;color:#357ebd;text-align:center">
+							SERVICIO TÉCNICO ENVIADO
+						</label>
+					</div>
+				</vbox>
+		</hbox>
+		
+		<vlayout id="vl_preview_" vflex="true" style="overflow:auto; padding:0px 100px 0px 100px">
+			<space></space>
+			<label value="Fecha / Número" sclass="mobile"></label>
+			<hlayout>
+				<textbox hflex="true" readonly="true"
+					value="@load(vm.nvoServicio.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></textbox>
+				<textbox hflex="true" readonly="true"
+					value="@load(vm.nvoServicio.numero)"></textbox>
+			</hlayout>
+			<space></space>
+			<label value="Receptor" sclass="mobile"></label>
+			<textbox hflex="true" readonly="true"
+					value="@load(vm.nvoServicio.receptor)"></textbox>
+			<space></space>
+			<label value="Técnico" sclass="mobile"></label>
+			<textbox hflex="true" readonly="true"
+					value="@load(vm.nvoServicio.tecnico)"></textbox>
+			<space></space>
+			<label value="Cliente" sclass="mobile"></label>
+			<textbox hflex="true" readonly="true"
+				value="@load(vm.nvoServicio.cliente.razonSocial)"></textbox>
+			<space></space>
+			<label value="Detalles" sclass="mobile"></label>
+			<listbox height="400px" model="@load(vm.nvoServicio.detalles)">
+				<listhead>
+					<listheader></listheader>
+					<listheader></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.numeroFactura)" />
+						<listcell label="@load(each.articulo.codigoInterno)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vlayout>
+		
+		<hlayout id="hl_preview">
+			<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+				iconSclass="z-icon-plus"
+				label=" Agregar ítem" height="150px" style="font-size:30pt"
+				dir="normal"  
+				onClick="vl_preview.setVisible(false); vl_detalle.setVisible(true)"/>
+			<button mold="bs" sclass="btn-success btn-lg" hflex="true"
+				iconSclass="z-icon-check"
+				label=" Enviar Serv.Técnico" height="150px" style="font-size:30pt"
+				dir="normal"  
+				onClick="@command('addServicioTecnico', comp1 = hl_preview, comp2 = hb_mensaje, comp3 = vl_preview_, comp4 = hb_preview)" />
+		</hlayout>
+		
+	</vlayout>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; font-weight:bold }
+		.z-listbox-emptybody td{ font-size: 30pt }
+	</style>
+</div>

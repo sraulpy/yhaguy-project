@@ -1,0 +1,175 @@
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.cheques.WindowCheque')"
+		onCreate='txCuenta.focus()' style="padding: 7px">
+
+		<grid sclass="vgrid rounded"
+			style="background:#ffffe0; border: solid 1px silver; margin-bottom:30px; padding: 0px 10px 0px 10px"
+			height="230px">
+
+			<columns>
+				<column width="30%" />
+				<column width="40%" />
+				<column width="30%" />
+			</columns>
+			<rows>
+				<row valign="bottom">
+					<vlayout spacing="0">
+						<hlayout>
+							<label value="Banco"
+								style="font-weight:bold; font-size:16px; color:#003366" />
+							<label
+								value="@load(vm.cuentaDTO.banco.pos1)"
+								style="font-weight:bold; font-size:16px; color:#003366" />
+						</hlayout>
+						<hlayout>
+							<label value="Cta." style="font-size:11px" />
+							<label value="@load(vm.cuentaDTO.nroCuenta)"
+								style="font-size:11px" />
+						</hlayout>
+						<hlayout>
+							<label value="Nro."
+								style="font-weight:bold" />
+							<label value="@load(vm.chequeDTO.numero)"
+								style="font-weight:bold" />
+						</hlayout>
+					</vlayout>
+
+					<vlayout spacing="0">
+						<label value="Lugar y Fecha de Emisión"
+							style="font-size:11px" />
+						<label
+							value="@load(vm.chequeDTO.fechaEmisionFormateado)"
+							style="font-weight:bold" />
+					</vlayout>
+
+					<vlayout spacing="0">
+						<hlayout valign="bottom">
+							<label
+								value="@load(vm.chequeDTO.moneda.pos2)"
+								style="font-weight:bold ; font-size:15px" />
+							<space hflex="true" />
+							<label
+								value="@load(vm.chequeDTO.monto) @converter(vm.cnv.monedaLocal)"
+								style="font-weight:bold ; font-size:15px; text-align:right" />
+						</hlayout>
+					</vlayout>
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row valign="bottom">
+					<cell colspan="3">
+						<hlayout valign="bottom"
+							style="border-bottom: solid 1px silver">
+							<label value="Páguese a la Orden de: " />
+							<label
+								value="@load(vm.chequeDTO.beneficiario)"
+								style="font-weight:bold" />
+						</hlayout>
+					</cell>
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row valign="bottom">
+					<cell colspan="3">
+						<hlayout valign="bottom"
+							style="border-bottom: solid 1px silver">
+							<label value="La suma de " />
+							<label
+								value="@load(vm.chequeDTO.moneda.pos2)" />
+							<label
+								value="@load(vm.chequeDTO.textoMonto)" style="font-weight:bold" />
+						</hlayout>
+					</cell>
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row valign="bottom">
+					<cell colspan="3">
+						<hlayout valign="bottom">
+							<label value="YHAGUY REPUESTOS S.A."
+								style="font-weight:bold" />
+						</hlayout>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+		<hlayout>
+			<grid sclass="vgrid" hflex="true" style="margin-right: 15px">
+				<columns>
+					<column width="75px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<field value="Cuenta:" />
+						<hlayout>
+							<textbox id="txCuenta"
+								value="@bind(vm.cuentaDTO.banco.pos1)"
+								onOK="@command('buscarBanco')" placeholder="Descripción.."
+								hflex="true" />
+							<button
+								iconSclass="z-icon-search" onClick="@command('buscarBanco')" />
+						</hlayout>
+					</row>
+					<row>
+						<field value="Número:" />					
+						<hlayout sclass="z-valign-bottom">
+							<longbox value="@bind(vm.chequeDTO.numero)" 
+								hflex="true"/>
+							<labelConstrain />
+						</hlayout>
+					</row>
+					<row>
+						<field value="Monto:" />						
+						<hlayout sclass="z-valign-bottom">
+							<doublebox value="@bind(vm.chequeDTO.monto)"
+								format="@load(vm.format)" 
+								hflex="true"/>
+							<label
+								value="@load(vm.chequeDTO.moneda.pos2)" style="font-size:11px" />
+							<labelConstrain />
+						</hlayout>
+					</row>
+				</rows>
+			</grid>
+			<grid sclass="vgrid" hflex="true">
+				<columns>
+					<column width="110px" />
+					<column />
+				</columns>
+				<rows>
+					<row height="36px">
+						<field value="Emisión:" />						
+						<datebox
+							value="@bind(vm.chequeDTO.fechaEmision)" format="dd-MM-yyyy" 
+							hflex="true"/>
+					</row>
+					<row>
+						<field value="Vencimiento:" />						
+						<datebox
+							value="@bind(vm.chequeDTO.fechaVencimiento)" format="dd-MM-yyyy" 
+							hflex="true"/>
+					</row>
+					<row>
+						<field value="Beneficiario:" />						
+						<textbox width="200px"
+							value="@bind(vm.chequeDTO.beneficiario)"
+							constraint="${vm.check.noVacio}" 
+							hflex="true"/>
+					</row>
+					<row>
+						<field value="Concepto:" />						
+						<textbox width="200px"
+							value="@bind(vm.chequeDTO.concepto)" readonly="true" 
+							hflex="true"/>
+					</row>
+				</rows>
+			</grid>
+		</hlayout>
+	</div>
+</zk>

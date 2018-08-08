@@ -1,0 +1,57 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.definiciones.RepartoDefinicionesVM')"
+	height="100%">
+	<tabbox vflex="true">
+		<tabs>
+			<tab label="Vehículos" />
+		</tabs>
+
+		<tabpanels>
+			<tabpanel vflex="true">
+				<listbox sclass="small-list"
+					model="@load(vm.listaVehiculos)"
+					selectedItem="@bind(vm.selectedItem)"
+					vflex="true"
+					emptyMessage="AGREGUE VEHÍCULOS..">
+					<listhead>
+						<listheader label="Código"
+							style="text-align:center" />
+						<listheader label="Marca"
+							style="text-align:center" />
+						<listheader label="Modelo"
+							style="text-align:center" />
+						<listheader label="Chapa"
+							style="text-align:center" />
+						<listheader label="Color"
+							style="text-align:center" />
+						<listheader label="Descripción"
+							style="text-align:center" />
+						<listheader label="Capacidad Kg."
+							style="text-align:center" width="120px" align="right"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.codigo)" />
+							<listcell label="@load(each.marca)" />
+							<listcell label="@load(each.modelo)" />
+							<listcell label="@load(each.chapa)" />
+							<listcell label="@load(each.color)" />
+							<listcell label="@load(each.descripcion)" />
+							<listcell label="@load(each.peso)" />
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar"
+						onClick="@command('abrirPopupVehiculo', agregar=true)" />
+					<button label="Modificar"
+						onClick="@command('abrirPopupVehiculo', agregar=false)" />
+					<button label="Eliminar" disabled="true" />
+				</hlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<style>
+		.z-tab {width:150px}
+	</style>
+</window>

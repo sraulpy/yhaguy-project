@@ -1,0 +1,76 @@
+<zk>
+	<hlayout valign="middle">
+			<space/>	
+			<field value="Número:" />	
+			<textbox value="@bind(vm.dto.subDiario.numero)" readonly="true" width="110px"/>		
+			<space/>
+			<field value="Descripción:"/>
+			<textbox value="@bind(vm.dto.subDiario.descripcion)" constraint="${vm.check.noVacio}"
+				readonly="@load(vm.disabled)"/>
+			<space/>						
+			<field value="Total Gastos:"/>
+			<hlayout sclass="z-valign-middle">
+			<doublebox value="@load(vm.totalGastos)" readonly="true" format="#,##0" 
+					style="text-align:right"/>
+			<label value="Gs." style="font-size:11px"/>
+			</hlayout>
+			<space/>
+			<field value="Confirmado:" />
+			<checkbox id="confirmado" checked="@load(vm.dto.subDiario.confirmado)" disabled="true" />
+			<space/><space/>
+			<toolbarbutton label="Eliminar Gasto"
+				image="/core/images/borrarItem.png"
+				onClick="@command('deleteItem')"
+				disabled="@load(vm.eliminarItemDisabled)"/>	
+			<space/>				
+			<toolbarbutton label="Agregar Gasto"
+				image="/core/images/insertar.png" 
+				onClick="@command('abrirVentanaGastos')" 
+				disabled="@load(vm.disabled)"/>
+			<space/>
+			<toolbarbutton label="Confirmar Sub-Diario"
+				image="/core/images/accept2.png" 
+				onClick="@command('confirmarSubDiario')" 
+				disabled="@load(vm.confirmarDisabled)"/>
+			
+		</hlayout>
+		
+		<div height="15px"/>
+		
+		<listbox height="340px" sclass="small-list" 
+			model="@load(vm.dto.subDiario.detallesTemporal)"
+			checkmark="true" selectedItem="@bind(vm.selectedItem)"
+			onSelect="@command('notifyList')">
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+			<listhead>
+				<listheader width="50px" align="center"/>
+				<listheader label="Tipo" style="text-align:center" sort="auto(tipoCuenta)"  width="100px"/>
+				<listheader label="Cuenta" style="text-align:center" width="320px"/>
+				<listheader label="Descripción" style="text-align:center" sort="auto(descripcion)" 
+					onCreate="self.sort(false);" />
+				<listheader label="Importe" style="text-align:center" align="right" width="140px"/>
+			</listhead>
+			<template name="model">
+				<listitem style="@load(each.colorCuentaHaber)" 
+					onDoubleClick="@command('mostrarVentanaGastos', detalle=each)"
+					checkable="@load(each.editable)">
+					<listcell />
+					<listcell label="@load(each.tipoCuenta)"/>
+					<listcell label="@load(each.cuenta.pos2)"/>
+					<listcell label="@load(each.descripcion)"/>
+					<listcell>
+						<label value="@load(each.importe) @converter(vm.cnv.monedaLocal)" 	
+							style="color:black"/>
+					</listcell>					
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="5" align="right">
+					<label value="Saldo en Gs." sclass="label-moneda-footer"/>
+					<space/>
+					<guaranibox value="@load(vm.totalSubDiarioDetalle)" readonly="true"
+						style="background:#dddddd;text-align:right; font-weight:bold"/>
+				</listfooter>
+			</listfoot>
+		</listbox>
+</zk>

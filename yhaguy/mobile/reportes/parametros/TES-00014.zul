@@ -1,0 +1,38 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Librado por:" sclass="mobile" />
+		<textbox value="@bind(vm.filtro.libradoPor)"
+			tooltiptext="Nombre o razón social del emitente del cheque"
+			hflex="true" />
+	</vlayout>
+
+	<space height="50px"/>
+
+	<vlayout>
+		<label value="Nro. Comprobante:" sclass="mobile" />
+		<textbox value="@bind(vm.filtro.nroComprobanteCheque)"
+			width="100%"
+			tooltiptext="Número del comprobante de la operación asociada al cheque (Nro. de facturo y/o recibo)"
+			hflex="true" />
+	</vlayout>
+
+</vlayout>

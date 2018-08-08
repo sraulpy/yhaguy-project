@@ -1,0 +1,415 @@
+<zk>
+	<window
+		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaControlBody')"
+		apply="org.zkoss.bind.BindComposer"
+		height="100%"
+		ctrlKeys="^i"
+		onCtrlKey="@command('insertarPedidoDetalle')">
+
+		<!-- ______________________________ CABECERA ______________________________ -->
+		
+		<div>
+		<grid sclass="vgrid" ctrlKeys="^i^s"
+			onCtrlKey="@command('insertarPedidoDetalle')">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Tipo Movimiento" />
+						<label value="@load(vm.labelTipoMovimiento[0])"
+							style="@load(vm.labelTipoMovimiento[1])" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox id="txNro" readonly="true"
+							value="@load(vm.dto.numero)"
+							hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Fecha" />
+						<datebox value="@load(vm.dto.fecha)"
+							readonly="true" hflex="true" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal" />
+						<textbox value="@load(vm.dto.sucursal.text)"
+							readonly="true" 
+							hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Depósito" />
+						<combobox model="@load(vm.depositosSucursal)"
+							value="@load(vm.dto.deposito.text)"
+							selectedItem="@bind(vm.dto.deposito)"
+							hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.text)"/>
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<hlayout>
+							<textbox readonly="true" hflex="true"
+								value="@load(vm.dto.estado.pos1)" />
+							<image
+								src="@load(vm.presupuesto? 
+								vm.srcEstadoPresupuesto : vm.srcEstadoPedido)"
+								tooltiptext="@load(vm.dto.estado.pos1)" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Atendido por" />
+						<textbox readonly="true"
+							value="@load(vm.dto.atendido.pos1)" 
+							hflex="true"/>
+					</vlayout>
+				</row>
+				<row>
+					<cell colspan="5">
+						<vlayout>
+							<div />
+							<field value="Cliente" />
+							<hlayout valign="top">
+								<buscadorCliente value="@bind(vm.dto)"
+									campo="ruc" width="100px"
+									readonly="@load(!vm.clienteEditable)" 
+									buttonVisible="false"
+									id="bruc"/>
+								<buscadorCliente value="@bind(vm.dto)"
+									campo="razonSocial" hflex="true"
+									readonly="@load(!vm.clienteEditable)" 
+									buttonVisible="false"/>	
+								<buscadorCliente value="@bind(vm.dto)"
+									campo="nombre" hflex="true"
+									readonly="@load(!vm.clienteEditable)" />							
+								<button
+									iconSclass="@load(vm.addClienteOcasionalIcono[0])"
+									onClick="@command('addClienteOcasional')"
+									tooltiptext="@load(vm.addClienteOcasionalIcono[1])"/>
+								<div width="5px"/>
+							</hlayout>
+						</vlayout>
+					</cell>
+					<vlayout spacing="0">
+						<field value="Condición" />
+						<combobox
+							value="@load(vm.dto.condicionPago.pos1)"
+							selectedItem="@bind(vm.dto.condicionPago)"
+							model="@load(vm.condicionesPagos)"
+							onChange="@command('calcularVencimiento')" instant="true"
+							hflex="true" 
+							visible="@load(vm.dto.clienteOcasional eq null ? 'true' : 'false')">
+							<template name="model">
+								<comboitem label="@load(each.pos1)" />
+							</template>
+						</combobox>
+						<textbox hflex="true" value="@load(vm.dto.condicionPago.pos1)"
+							readonly="true" 
+							visible="@load(vm.dto.clienteOcasional eq null ? 'false' : 'true')"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Vendedor" />
+						<hlayout>
+							<textbox value="@bind(vm.dto.vendedor.pos1)"
+								onOK="@command('buscarVendedor')" placeholder="Nombre.."
+								readonly="@load(!vm.clienteEditable)" 
+								hflex="true"/>
+							<button								
+								iconSclass="z-icon-search"
+								onClick="@command('buscarVendedor')"
+								disabled="@load(!vm.clienteEditable)" />
+						</hlayout>
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Línea de Crédito" />
+						<hlayout>
+							<guaranibox hflex="true"
+								value="@load(vm.dto.limiteCredito)" readonly="true" />
+							<label
+								value="@load(vm.dtoUtil.simboloMonedaLocal)"
+								sclass="label-moneda" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Saldo Pendiente" />
+						<hlayout>
+							<guaranibox hflex="true"
+								value="@load(vm.dto.saldoCtaCte)" readonly="true" />
+							<label
+								value="@load(vm.dtoUtil.simboloMonedaLocal)"
+								sclass="label-moneda" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<hlayout>
+							<field value="Disponible" />
+							<label style="font-style:italic" value="(Línea + 30%) - Saldo"></label>
+						</hlayout>
+						<hlayout>
+							<guaranibox readonly="true" hflex="true"
+								value="@load(vm.dto.creditoDisponible)"/>
+							<label
+								value="@load(vm.dtoUtil.simboloMonedaLocal)"
+								sclass="label-moneda" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Envío por Reparto?" />
+						<checkbox checked="@bind(vm.dto.reparto)" />
+					</vlayout>
+					<cell colspan="2">
+						<vlayout>
+							<div />
+							<field value="Observación" />
+							<textbox value="@bind(vm.dto.observacion)"
+								hflex="true" />
+						</vlayout>
+					</cell>
+					<vlayout spacing="0" visible="@load(vm.presupuesto)">
+						<field value="Validéz" />
+						<hlayout>
+							<spinner value="@bind(vm.dto.validez)"></spinner>
+							<label value="Días"></label>
+						</hlayout>						
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+		</div>
+
+		<!-- ______________________________ BOTONERA ______________________________ -->
+		
+		<solicitarCabecera visible="@load(!vm.detalleVisible)" />
+
+		<div sclass="button-container"
+			ctrlKeys="^i"
+			onCtrlKey="@command('insertarPedidoDetalle')"
+			visible="@load(vm.detalleVisible)">
+			<button mold="bs" sclass="btn-danger btn-sm" width="120px"
+				iconSclass="z-icon-times-circle"
+				onClick="@command('eliminarItem')"
+				disabled="@load(vm.deleteItemDisabled)" label=" Eliminar" />
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm" width="120px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('insertarPedidoDetalle')" label=" Insertar" />
+			<space />
+			<button mold="bs" sclass="btn-info btn-sm" width="120px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('insertarServicio')" label=" Servicio" />
+			<space />
+			<button mold="bs" sclass="btn-primary btn-sm" width="120px"
+				iconSclass="z-icon-check"
+				visible="@load(vm.presupuesto)"
+				onClick="@command('pasarAPedido')" label=" Aprobar" />
+			<button mold="bs" sclass="btn-warning btn-sm" width="120px"
+				iconSclass="z-icon-share"
+				visible="@load(!vm.presupuesto	)"
+				onClick="@command('importarPresupuesto')" label=" Importar" />
+			<space />
+			<button mold="bs" sclass="btn-primary btn-sm" width="120px"
+				iconSclass="z-icon-check"
+				visible="@load(!vm.presupuesto)"
+				disabled="@load(vm.cerrarDisabled)"
+				onClick='pop_prep.open(self, "end_before"); txt_prep.focus()' label=" Aprobar" />
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm" width="130px"
+				id="btnFormaPago" 
+				iconSclass="z-icon-money"
+				onClick="@command('formaDePago')" label=" Formas de Pago" 
+				visible="false"/>
+			<space visible="@load(vm.facturaContado)"/>
+			<button mold="bs" sclass="btn-info btn-sm" width="130px" 
+				iconSclass="z-icon-camera"
+				onClick="@command('verImagen', parent=self, popup=pop_img)" label=" Ver Foto" 
+				visible="@load(vm.factura)"
+				disabled="@load(!vm.siempreHabilitado)"/>
+		</div>
+
+		<!-- ______________________________ DETALLE ______________________________ -->
+
+		<listbox id="detalle" model="@load(vm.dto.detalles)"
+			height="270px" multiple="true"
+			selectedItems="@bind(vm.selectedItems)"
+			emptyMessage="AGREGUE ÍTEMS.."
+			checkmark="@load(vm.checkmarkVentaPedido)" sclass="small-list"
+			vflex="true"
+			ctrlKeys="^i"
+			onCtrlKey="@command('insertarPedidoDetalle')"
+			visible="@load(vm.detalleVisible)">
+			<listhead>
+				<listheader width="45px" align="center" />
+				<listheader label="Código" width="110px" />
+				<listheader label="Descripción" style="text-align:center" />
+				<listheader label="Lista" width="90px"
+					style="text-align:center" />
+				<listheader label="Ubicación" width="72px"
+					style="text-align:center" />
+				<listheader label="Cantidad" width="72px"
+					style="text-align:center" align="right" />
+				<listheader label="Stock" width="72px"
+					style="text-align:center" align="right" />
+				<listheader label="Costo Gs. S/iva" width="120px"
+					style="text-align:center" align="right" 
+					visible="@load(vm.factura and vm.isOperacionHabilitada('verCostos'))"/>
+				<listheader label="@load(vm.labelPrecio)" width="120px"
+					style="text-align:center" align="right" />
+				<listheader label="@load(vm.labelDescuento)"
+					width="110px" style="text-align:center" align="right" />
+				<listheader label="@load(vm.labelImporte)" width="120px"
+					style="text-align:center" align="right" />
+				<listheader label="IVA" width="50px" align="center" />
+			</listhead>
+			<template name="model">
+				<listitem
+					onOk="@command('editarPedidoDetalle', det=each)"
+					onDoubleClick="@command('editarPedidoDetalle', det=each)">
+					<listcell />
+					<listcell>
+						<label value="@load(each.articulo.pos1)"
+							tooltiptext="@load(each.articulo)" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.articulo.pos4)"
+							tooltiptext="@load(each.articulo)" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.listaPrecio.pos1)"
+							tooltiptext="@load(each.listaPrecio.pos1)" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.ubicacion)" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.cantidad)" />
+					</listcell>
+					<listcell>
+						<label value="@load(each.getStockActual(vm.dto.deposito.id))" />
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.costoUnitarioGs) @converter(vm.cnv.monedaLocal)" />
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)"
+							visible="@load(vm.ventaMonedaLocal)" />
+						<label
+							visible="@load(!vm.ventaMonedaLocal)" />
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.descuentoUnitarioGs) @converter(vm.cnv.monedaLocal)"
+							visible="@load(vm.ventaMonedaLocal)"
+							style="@load(each.descuentoUnitarioGs gt 0? 
+								'text-align:right; color:red':'text-align:right')" />
+						<label
+							value="@load(each.descuentoUnitarioDs) @converter(vm.cnv.monedaExtranjera)"
+							visible="@load(!vm.ventaMonedaLocal)"
+							style="@load(each.descuentoUnitarioDs gt 0? 
+								'text-align:right; color:red':'text-align:right')" />
+					</listcell>
+					<listcell>
+						<label
+							value="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"
+							visible="@load(vm.ventaMonedaLocal)" />
+						<label
+							visible="@load(!vm.ventaMonedaLocal)" />
+					</listcell>
+					<listcell label="@load(each.tipoIVA.sigla)" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="10" align="left">
+					<hlayout sclass="z-valign-bottom">
+						<label value="@load(vm.labelCantidad)"
+							sclass="label-moneda-footer" />
+						<space hflex="true"/>
+						<label value="@load(vm.labelIva10)"
+							sclass="label-moneda-footer" />
+						<guaranibox readonly="true"
+							style="background:#EEF7FA;text-align:right;font-weight:bold"
+							value="@load(vm.dto.totalIva10)"
+							format="###,###,##0"/>
+						<label
+							value="@load(vm.dtoUtil.simboloMonedaLocal)"
+							sclass="small-font" />
+						<space />
+						<label value="@load(vm.labelIva5)"
+							sclass="label-moneda-footer" />
+						<guaranibox readonly="true"
+							style="background:#EEF7FA;text-align:right;font-weight:bold" 
+							value="@load(vm.dto.totalIva5)"
+							format="###,###,##0"/>
+						<label
+							value="@load(vm.dtoUtil.simboloMonedaLocal)"
+							sclass="small-font" />
+						<space />
+						<field value="Cant. Total:" />
+						<longbox width="50px" readonly="true"
+							style="background:#EEF7FA;text-align:right;font-weight:bold" 
+							value="@load(vm.dto.totalCantidad)" />
+						<space/>
+						<label value="@load(vm.labelDescuento_)"
+							sclass="label-moneda-footer" />
+						<guaranibox readonly="true"
+							value="@load(vm.dto.totalDescuentoGs)"
+							style="background:#EEF7FA;text-align:right;font-weight:bold" 
+							format="###,###,##0"/>
+						<label value="@load(vm.dto.moneda.pos2)"
+							sclass="small-font" />
+						<space />
+						<label value="@load(vm.labelTotalPagar)"
+							sclass="label-moneda-footer" />
+						<guaranibox
+							readonly="true" value="@load(vm.dto.totalImporteGs)" width="105px" 
+							style="background:#EEF7FA;text-align:right;font-weight:bold"
+							format="###,###,##0" />
+						<label value="@load(vm.dto.moneda.pos2)" sclass="small-font" />
+						<div width="10px"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<popup id="pop_prep" width="200px" sclass="rounded">
+			<vlayout hflex="true" vflex="true">
+				<textbox id="txt_prep" placeholder="Preparado por.." hflex="true"
+					value="@bind(vm.dto.preparadoPor)" instant="true"></textbox>
+				<button mold="bs" sclass="btn-primary btn-sm"
+				iconSclass="z-icon-check" hflex="true"
+				onClick="@command('cerrarPedido')" 
+				disabled="@load(vm.dto.preparadoPor.isEmpty()? 'true' : 'false')"/>
+			</vlayout>
+		</popup>
+		
+		<popup id="pop_img" sclass="rounded" height="520px" width="620px">
+			<hbox align="end" pack="end" width="100%">		
+				<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+					<field value="FOTO DEL COMPROBANTE" />
+				</hbox>
+				<button onClick="pop_img.close()" iconSclass="z-icon-times"
+					disabled="@load(!vm.siempreHabilitado)"></button>
+			</hbox>
+			<div height="5px"/>
+			<html><![CDATA[
+        		<img id="foto" style ="height:470px; width:600px;" alt="" 
+        			onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+    		</html>
+		</popup>
+		
+		<script>
+			function setImage(url) {
+				var imagen = document.getElementById("foto");
+				imagen.src = url;
+			}
+		</script>
+		
+		<style>
+			.small-font {font-size:11px}
+		</style>
+		
+	</window>
+</zk>

@@ -1,0 +1,24 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.definiciones.DefinicionesSimpleVM')"
+	style="padding:10px" onCreate="descripcion.focus()">
+	<grid>
+		<rows>
+			<row>
+				<field value="Descripción:" />
+				<hbox>
+					<textbox id="descripcion" hflex="true"
+						value="@bind(vm.dato.selectedLineaDeCredito.pos1)" width="150px" />
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+			<row>
+				<field value="Monto linea gs.:" />
+				<hbox>
+					<guaranibox hflex="true" width="150px"
+						value="@bind(vm.dato.selectedLineaDeCredito.pos2)" />
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</div>

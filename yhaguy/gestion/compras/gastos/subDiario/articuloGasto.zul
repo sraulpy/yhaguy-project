@@ -1,0 +1,48 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.subdiario.GastoSoloViewModel')">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="170px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				Descripción:
+				<textbox value="@bind(vm.dato.nvoItemGasto.descripcion)" width="220px"/>
+			</row>
+			<row>
+				Cuenta Contable:
+				<hlayout sclass="z-valign-middle">
+					<textbox value="@bind(vm.dato.nvoItemGasto.cuentaContable.pos1)" width="70px"
+						onOK="@command('buscarCuentaContable', filtro=1)" placeholder="Código.."/>
+					<textbox value="@bind(vm.dato.nvoItemGasto.cuentaContable.pos2)"
+						placeholder="Descripción.." width="170px"
+						onOK="@command('buscarCuentaContable', filtro=2)"/>
+					<toolbarbutton image="/core/images/find-small.png" onClick="@command('buscarCuentaContable', filtro=1)"/>
+				</hlayout>
+			</row>
+			<row>
+				Tipo IVA:
+				<combobox id="cmbTipoIva" model="@load(vm.dtoUtil.tiposDeIva)"
+					value="@load(vm.dato.nvoItemGasto.tipoIva.pos1)"
+					selectedItem="@bind(vm.dato.nvoItemGasto.tipoIva)">
+					<template name="model">
+						<comboitem label="@load(each.pos1)"/>
+					</template>
+				</combobox>
+			</row>
+			<row>
+				Creado Por:
+				<textbox value="@load(vm.dato.nvoItemGasto.creadoPor)" width="220px" readonly="true"/>
+			</row>
+			<row>
+				Verificado Por:
+				<textbox width="220px" readonly="true"/>
+			</row>
+		</rows>
+	</grid>
+	
+</window>
+</zk>

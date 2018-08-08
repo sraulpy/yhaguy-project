@@ -1,0 +1,53 @@
+<zk>
+<window id="nvaFactura" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="25%"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				Número:
+				<textbox id="nroFactura" value="@bind(vm.dato.nvaFactura.numero)" width="105px"
+					style="text-align:right"/>
+			</row>
+			<row>
+				Fecha:
+				<datebox value="@bind(vm.dato.nvaFactura.fechaOriginal)" width="120px"/>
+			</row>
+			<row>
+				Condición:
+				<textbox value="@load(vm.dato.nvaFactura.condicionPago.pos1)" readonly="true"/>
+			</row>
+			<row>
+				Moneda:
+				<hlayout valign="middle">
+					<textbox value="@load(vm.dato.nvaFactura.moneda.pos1)" readonly="true"/>	
+					<label value="T. Cambio:" style="font-size:11px;font-style:italic"/>
+					<label value="@load(vm.dato.dto.cambio) @converter(vm.cnv.monedaLocal)" 
+						style="font-size:11px;font-style:italic"/>
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)"
+						style="font-size:11px;font-style:italic"/>
+				</hlayout>				
+			</row>
+			<row>
+				Total Factura:
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@bind(vm.dato.nvaFactura.totalAsignadoGs)"
+						onChange="@command('dolarizarTotal', comp=self)"/>
+					<label value="Gs" style="font-size:11px"/>					
+					<space/>
+					<dolarbox value="@bind(vm.dato.nvaFactura.totalAsignadoDs)"
+						onChange="@command('guaranizarTotal', comp=self)"/>
+					<label value="U$D" style="font-size:11px"/>
+				</hlayout>				
+			</row>			
+			<row>
+				Observación:
+				<textbox value="@bind(vm.dato.nvaFactura.observacion)" rows="2" width="200px"/>
+			</row>
+		</rows>		
+	</grid>
+</window>
+</zk>

@@ -1,0 +1,49 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.contable.plancuentas.PlanCuentasSimpleViewModel')"
+	height="100%">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle" 
+			label=" Agregar" width="150px" />
+		<space />
+		<button mold="bs" sclass="btn-warning btn-sm" iconSclass="z-icon-edit" 
+			label=" Modificar" width="150px" />
+		<space />
+		<button mold="bs" sclass="btn-info btn-sm" iconSclass="z-icon-times-circle" 
+			label=" Eliminar" width="150px" />
+		<space hflex="true"></space>
+		<button mold="bs" sclass="btn-success btn-sm" iconSclass="z-icon-print" 
+			label=" Imprimir" width="150px" />
+	</hlayout>
+	
+	<listbox sclass="small-list" model="@load(vm.planDeCuentas)" vflex="true">
+		<listhead>
+			<listheader label="Código" width="150px"></listheader>
+			<listheader label="Descripción"></listheader>
+			<listheader label="Nivel" align="center" width="80px"></listheader>
+			<listheader label="Asentable" width="80px" align="center"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.codigo)" style="@load(each.nivel gt 2? '':'font-weight:bold')"/>
+				<listcell>
+					<hlayout>
+						<div width="50px" visible="@load(each.nivel gt 1? 'true' : 'false')"></div>
+						<div width="50px" visible="@load(each.nivel gt 2? 'true' : 'false')"></div>
+						<div width="50px" visible="@load(each.nivel gt 3? 'true' : 'false')"></div>
+						<div width="50px" visible="@load(each.nivel gt 4? 'true' : 'false')"></div>
+						<label value="@load(each.descripcion)" style="@load(each.nivel gt 2? '':'font-weight:bold')"></label>
+					</hlayout>
+				</listcell>
+				<listcell label="@load(each.nivel)"/>
+				<listcell>
+					<a disabled="true" iconSclass="z-icon-check" visible="@load(each.nivel gt 2? 'true':'false')"
+						style="color:#357ebd"></a>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	
+</window>
+</zk>

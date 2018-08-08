@@ -1,0 +1,45 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.contabilidad.subdiario.LibroMayorSimpleControl')">
+		<groupbox>
+			<hlayout>
+				Desde:
+				<datebox id="db0" format="short " readonly="true"
+					value="@bind(vm.fechaDesde)" />
+				Hasta:
+				<datebox id="db1" format="short " readonly="true"
+					value="@bind(vm.fechaHasta)" />
+				<separator />
+				Cuenta Contable:
+				<hlayout spacing="0">
+					<div sclass="searchform" width="245px">
+						<textbox value="@bind(vm.cuentaContable.pos1)"
+							sclass="searchfield" height="17px" width="215px"
+							onOK="@command('buscarCtaContable')" placeholder="Buscar.."
+							readonly="@load(vm.mostrarCC)" />
+						<toolbarbutton
+							image="/core/images/searchbox.png" sclass="searchBtn"
+							onClick="@command('buscarCtaContable')" disabled="@load(vm.mostrarCC)" />
+					</div>
+				</hlayout>
+				Plan de Cuentas:
+				<hlayout spacing="0" >
+					<div sclass="searchform" width="245px" >
+						<textbox value="@bind(vm.planCuenta.pos1)"
+							sclass="searchfield" height="17px" width="215px"
+							onOK="@command('buscarPlanDeCuenta')" placeholder="Buscar.."
+							readonly="@load(vm.mostrarPC)" />
+						<toolbarbutton
+							image="/core/images/searchbox.png" sclass="searchBtn"
+							onClick="@command('buscarPlanDeCuenta')" disabled="@load(vm.mostrarPC)"  />
+					</div>
+				</hlayout>
+
+				<button label="Buscar" mold="trendy"
+					onClick="@command('buscar')" />
+			</hlayout>
+		</groupbox>
+		<div height="5px" />
+
+	</window>
+</zk>

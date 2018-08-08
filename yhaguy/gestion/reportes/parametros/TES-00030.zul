@@ -1,0 +1,21 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Rubro:" />
+			<combobox value="@load(vm.dato.filtro.rubro.descripcion.toUpperCase())"
+				selectedItem="@bind(vm.dato.filtro.rubro)"
+				instant="true"
+				model="@load(vm.dato.filtro.rubros)"
+				hflex="true"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion.toUpperCase())" />
+				</template>	
+			</combobox>
+		</row>
+	</rows>
+</grid>

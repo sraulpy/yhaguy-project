@@ -1,0 +1,32 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.notacredito.NotaCreditoSimpleControl')">
+
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<label
+						value="@load(vm.dato.dto.solicitudNotaCreditoVenta? 'Nota de Crédito Número:':'Solicitud N.C. Número:')" />
+					<textbox value="@load(vm.dato.dto.enlace)"
+						readonly="true" />
+				</row>
+				<row>
+					Caja:
+					<textbox value="@load(vm.dato.dto.cajaNro)"
+						readonly="true" />
+				</row>
+				<row>
+					Planilla de Caja:
+					<textbox value="@load(vm.dato.dto.planillaCajaNro)"
+						readonly="true" />
+				</row>
+				<row>
+					Cajero:
+					<textbox value="@load(vm.dato.dto.cajero)"
+						readonly="true" />
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

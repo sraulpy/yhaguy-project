@@ -1,0 +1,122 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.RomaneoControl')">
+
+	<!-- ============================== LISTADO ARTICULOS ROMANEO ========================== -->
+	<div id="detRomaneo">
+		<vlayout>
+
+			<groupbox title="Datos del Reparto" width="770px">
+				<vlayout>
+					<hlayout>
+						<hlayout sclass="z-valign-middle">
+							<grid width="370px">
+								<columns>
+									<column width="260px"></column>
+								</columns>
+								<rows>
+									<row>
+										<hlayout>
+											Número:
+											<textbox
+												value="@load(vm.dato.dto.numero)" readonly="true"
+												width="250px" />
+										</hlayout>
+									</row>
+									<row>
+										<hlayout>
+											Vehículo:
+											<textbox
+												value="@load(vm.dato.dto.vehiculo.pos1)" readonly="true"
+												width="250px" />
+										</hlayout>
+									</row>
+								</rows>
+							</grid>
+						</hlayout>
+
+						<hlayout>
+							<grid width="370px">
+								<columns>
+									<column width="260px"></column>
+								</columns>
+								<rows>
+									<row>
+										<hlayout>
+											Fecha:
+											<datebox
+												value="@load(vm.dato.dto.fechaCreacion)" readonly="true"
+												width="250px" />
+										</hlayout>
+									</row>
+									<row>
+										<hlayout>
+											Repartidor:
+											<textbox
+												value="@load(vm.dato.dto.repartidor.text)" readonly="true"
+												width="250px" />
+										</hlayout>
+									</row>
+								</rows>
+							</grid>
+						</hlayout>
+					</hlayout>
+
+					<hlayout>
+						<grid hflex="min">
+							<rows>
+								<row>
+									Comprobantes:
+									<textbox
+										value="@load(vm.dato.comprobantes)" readonly="true"
+										width="500px" rows="3" />
+								</row>
+							</rows>
+						</grid>
+						<toolbarbutton label="Reporte"
+							image="/core/images/pdf.png"
+							onClick="@command('generarReporteRomaneo')" />
+					</hlayout>
+				</vlayout>
+
+			</groupbox>
+
+
+			<grid width="770px" height="300px"
+				model="@load(vm.dato.romaneoModel)">
+				<columns menupopup="auto">
+					<column label="Código" width="200px" />
+					<column label="Descripción" width="370px" />
+					<column label="Cantidad" width="200px"
+						align="center" />
+				</columns>
+
+				<!-- template for group -->
+				<template name="model:group">
+					<group label="@load(each)" />
+				</template>
+
+				<!-- template for each element in model -->
+				<template name="model">
+					<row>
+						<label value="@load(each.pos1)" />
+						<label value="@load(each.pos2)" />
+						<label value="@load(each.pos3)" />
+					</row>
+				</template>
+
+				<!-- template for footer -->
+				<template name="model:groupfoot">
+					<groupfoot>
+						<cell colspan="5" style="text-align: center">
+							<label value="@load(each)"
+								style="font-weight:bold;" />
+						</cell>
+					</groupfoot>
+				</template>
+
+			</grid>
+
+
+		</vlayout>
+	</div>
+</window>

@@ -1,0 +1,26 @@
+<window title="Motivo de Bloqueo de Cuenta.." border="normal"
+	position="center, center"
+	width="350px" height="200px">
+
+	<vlayout height="100%">
+		<textbox placeholder="Ingrese el motivo de Bloqueo de Cuenta.."
+			rows="3" hflex="true" vflex="true" id="txMot" 
+			style="margin:10px"/>
+		<toolbar align="center" style="padding:5px">
+		<hlayout>
+			<button label="ACEPTAR"
+					onClick="@command('aceptarBloqueo', motivo=txMot.text)" 
+					iconSclass="z-icon-check"
+					style="font-weight:bold;padding:7px"
+					width="150px"/>
+				<space />
+				<button label="CANCELAR"
+					onClick="@command('cancelarBloqueo')" 
+					iconSclass="z-icon-times"
+					style="font-weight:bold;padding:7px"
+					width="150px"/>
+		</hlayout>
+		</toolbar>
+	</vlayout>
+
+</window>

@@ -1,0 +1,30 @@
+<window id="win_rep" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.ReportesSimpleVM')"
+	height="475px" width="450px" title="Parámetros del Reporte"
+	style="padding:8px" closable="true">
+	
+	<borderlayout>
+		<center style="padding:10px">
+			<include src="@load(vm.parametroZul)"></include>
+		</center>
+		<south>
+			<toolbar align="center" style="padding:5px">
+				<hlayout>
+					<button label="ACEPTAR" tooltiptext="Aceptar"
+						iconSclass="z-icon-check" width="150px"
+						style="font-weight:bold;padding:7px" dir="normal" 
+						onClick="@global-command('imprimirReporte')"/>
+					<button id="btnCancel" label="CANCELAR"
+						tooltiptext="Cancelar" iconSclass="z-icon-times" width="150px"
+						style="font-weight:bold;padding:7px" dir="normal"
+						onClick="win_rep.detach()" />
+				</hlayout>
+			</toolbar>
+		</south>
+	</borderlayout>
+	
+	
+	
+	<div vflex="true"></div>
+
+</window>

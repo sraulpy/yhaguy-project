@@ -1,0 +1,11 @@
+<window height="250px" width="250px" closable="true"
+	title="Seleccionar Impresión" border="normal">
+
+	<vbox pack="center" align="center" width="100%" height="100%"
+		style="padding:20px">
+		<button label="Movimientos Cta. Cte." hflex="true"
+			onClick="@command('imprimirMovimientosCtaCte')"
+			tooltiptext="Imprime los movimetos de Cta. Cte. seleccionados." />
+	</vbox>
+
+</window>

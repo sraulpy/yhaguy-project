@@ -1,0 +1,163 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.caja.tesoreria.CajaTesoreriaPeriodoControlBody')">
+		<!-- ___________________________ CABECERA ___________________________ -->
+
+		<hlayout style="margin:10px 5px" valign="top">
+			<vlayout>
+				<field value="Caja Tesorería" />
+				<hlayout visible="@load(vm.dto.cajaTesoreria.esNuevo())">
+					<hlayout spacing="0" sclass="searchform" width="150px"
+						style="margin:0px">
+						<textbox value="@bind(vm.dto.cajaTesoreria.numero)" width="127px"
+							sclass="searchfield" height="17px" onOK="@command('buscarCajaTesoreria')"
+							placeholder="Caja Tesorería .." />
+						<toolbarbutton iconSclass="z-icon-search" sclass="searchBtn"
+							onClick="@command('buscarCajaTesoreria')" width="20px" />
+					</hlayout>
+					<label value="(*)" style="color:red" />
+				</hlayout>
+				<textbox value="@load(vm.dto.cajaTesoreria.numero)" visible="@load(!vm.dto.cajaTesoreria.esNuevo())"
+					readonly="true" />
+			</vlayout>
+			<space />
+			<vlayout>
+				<field value="Tesorería Planilla" />
+				<textbox value="@load(vm.dto.numero)" readonly="true" width="130px" />
+			</vlayout>
+			<space />
+			<vlayout>
+				<field value="Apertura" />
+				<textbox
+					value="@load(vm.dto.apertura) @converter('formatedDate',format='dd-MM-yyyy')"
+					readonly="true" width="100px" />
+			</vlayout>
+			<space />
+			<vlayout>
+				<field value="Cierre" />
+				<textbox
+					value="@load(vm.dto.cierre) @converter('formatedDate', format='dd-MM-yyyy')"
+					readonly="true" width="100px" />
+			</vlayout>
+			<space />
+			<vlayout>
+				<field value="Estado" />
+				<textbox value="@load(vm.dto.estado.text)" readonly="true" />
+			</vlayout>
+			<space />
+			<vlayout>
+				<field value="Responsable" />
+				<textbox value="@load(vm.dto.responsable.pos1)" readonly="true"
+					width="150px" />
+			</vlayout>
+			<space />
+			<vlayout>
+				<field value="Sucursal" />
+				<textbox value="@load(vm.dto.cajaTesoreria.sucursal.text)"
+					readonly="true" />
+			</vlayout>
+			<space />
+			<toolbarbutton label="Cerrar" onClick="@command('cerrarCajaTesoreria')"
+				image="/core/images/lock.png" />
+
+		</hlayout>
+
+
+		<!-- _____________________fin cabecera _____________________________________ -->
+
+
+		<!-- ___________________________ detalle 1 ___________________________ -->
+
+		<hlayout visible="@load(!vm.dto.cajaTesoreria.esNuevo())">
+
+			<listbox model="@load(vm.cajasPeriodoResumen)" selectedItem="@bind(vm.selectedCajaPeriodoResumen)">
+				<listhead>
+					<listheader label="Proc." width="50px" />
+					<listheader label="Número" />
+					<listheader label="Responsable" />
+					<listheader label="Estado" width="50px" />
+					<listheader label="Pend." width="50px" />
+				</listhead>
+				<template name="model" var="item" status="s">
+					<listitem>
+						<listcell>
+							<image src="@load(item.imagenProcesada)" />
+						</listcell>
+						<listcell label="@load(item.numero)" />
+						<listcell label="@load(item.responsable)" />
+						<listcell>
+							<image src="@load(item.imagenEstado)" />
+						</listcell>
+						<listcell>
+							<image src="@load(item.imagenHayPendientes)" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hlayout>
+
+		<separator />
+		<separator />
+		<separator />
+		<!-- ___________________________ detalle 2 ___________________________ -->
+
+		<vlayout visible="@load(!vm.dto.cajaTesoreria.esNuevo())">
+			<hlayout>
+				<field value="Detalle de la Caja " />
+				<textbox readonly="true"
+					value="@load(vm.selectedCajaPeriodoResumen.cajaPeriodoDTO.stringResumen)"
+					width="500px" />
+			</hlayout>
+
+
+			<listbox
+				model="@load(vm.selectedCajaPeriodoResumen.cajaPeriodoDTO.detallesOrdenado)"
+				selectedItem="@bind(vm.detalleCajaPeriodoDTOSelected)">
+
+				<listhead>
+					<listheader label="id" width="50px" />
+					<listheader label="Tipo" width="120px" />
+					<listheader label="Fecha" width="120px" />
+					<listheader label="Descripción" />
+
+					<listheader label="Gs" width="120px" align="right" />
+					<listheader label="Moneda" width="120px" align="right" />
+					<listheader label="Estado" width="120px" align="center" />
+				</listhead>
+				<template name="model" var="each" status="s">
+					<listitem>
+						<listcell label="@load(each.id)" />
+						<listcell label="@load(each.pos8)" />
+						<listcell label="@load(vm.getStrFecha(each.pos2))" />
+						<listcell label="@load(each.pos3)" />
+						<listcell>
+							<guaranibox value="@load(each.pos4)" readonly="true"/>
+						</listcell>
+						<listcell>
+							<label value="@load(vm.getOtroImporte(each))" />
+						</listcell>
+						<listcell>
+							<label value="@load(each.pos13.text)" />
+							<image src="@load(each.pos6)" />
+						</listcell>
+
+					</listitem>
+				</template>
+			</listbox>
+		</vlayout>
+
+
+	</window>
+
+	<!-- <listhead> <listheader label="id" width="50px" /> <listheader label="Tipo" 
+		width="150px" /> <listheader label="Fecha" width="200px" /> <listheader label="Descripción" 
+		width="400px"/> <listheader label="Importe" width="150px" align="right" /> 
+		</listhead> <template name="model" var="each" status="s"> <listitem> <listcell 
+		label="@load(each.id)" /> <listcell label="@load(vm.getStrTipo(each.pos1))" 
+		/> <listcell label="@load(vm.getStrFecha(each.pos2))" /> <listcell label="@load(each.pos3)" 
+		/> <listcell> <guaranibox value="@load(each.pos4)"/> </listcell> </listitem> 
+		</template> -->
+
+</zk>
+
+

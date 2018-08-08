@@ -1,0 +1,23 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.contabilidad.subdiario.LibroCompraSimpleControl')">
+
+		<groupbox>
+			<hlayout>
+				Desde:
+				<datebox id="db0" format="short " readonly="true"
+					value="@bind(vm.fechaDesde)" />
+				Hasta:
+				<datebox id="db1" format="short " readonly="true"
+					value="@bind(vm.fechaHasta)" />
+				<separator />
+				<button label="Buscar" mold="trendy"
+					onClick="@command('buscar')" />
+				<toolbarbutton label="Reporte Libro Compra"
+					image="/core/images/pdf.png"
+					onClick="@command('reporteLibroCompra')"
+					visible="@load(vm.visible)" />
+			</hlayout>
+		</groupbox>
+	</window>
+</zk>

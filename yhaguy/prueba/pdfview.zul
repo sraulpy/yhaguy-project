@@ -1,0 +1,13 @@
+<zk>
+  <window border="normal" title="Reporte" mode="modal" closable="true" sizable="true" maximizable="true" 
+  width="70%" height="80%"  >
+  	
+  <!--  	<div>PDF Browser</div>  -->
+  	
+<iframe src="/yhaguy/prueba/venta.pdf" 
+	width="100%" height="100%" style="border: 1px solid gray" />
+		
+
+
+  </window>
+</zk>

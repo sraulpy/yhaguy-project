@@ -1,0 +1,151 @@
+<div
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaItemControl')"
+	apply="org.zkoss.bind.BindComposer" style="margin:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="25%" />
+			<column />
+			<column width="20%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Código Interno:" />
+				<cell colspan="3">
+				<hlayout>
+					<textbox value="@bind(vm.det.articulo.pos1)"
+						onOK="@command('buscarArticulo', filtro=0)"
+						readonly="@load(!vm.editarArticulo)"
+						hflex="true"
+						placeholder="Código Interno.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', filtro=0)"
+						disabled="@load(!vm.editarArticulo)" />
+				</hlayout>
+				</cell>
+			</row>			
+			<row>
+				<field value="Descripción:" />
+				<cell colspan="3">
+				<hlayout>
+					<textbox value="@bind(vm.det.descripcion)"
+						onOK="@command('buscarArticulo', filtro=3)"
+						readonly="${!vm.operacionHabilitada('EditarDescripcion')}"
+						hflex="true" placeholder="Descripción.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', filtro=3)"
+						disabled="@load(!vm.editarArticulo)" />
+				</hlayout>
+				</cell>
+			</row>
+			<row visible="@load(!vm.det.articulo.esNuevo())">
+				<field value="Cantidad:" />
+				<longbox id="cant" value="@bind(vm.det.cantidad)"
+					readonly="@load((vm.det.articulo.esNuevo()) || (vm.det.precioVentaFinalGs gt 0))"
+					onChange="@command('verificarCantidad', comp=self)" instant="true"
+					format="###,###,###" />
+				<field value="Disponible:" sclass="cell-margen"/>
+				<longbox value="@load(vm.det.stockDisponible)"
+					readonly="true" />
+			</row>
+			<row visible="@load(!vm.det.articulo.esNuevo())">
+				<field value="Ubicación:" />
+				<cell colspan="3">
+					<textbox readonly="true" hflex="true"
+						value="@load(vm.det.ubicacion)"></textbox>
+				</cell>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<field value="Lista de Precio:" />
+				<cell colspan="3">
+				<combobox
+					id="cmblistaPrecio"
+					model="@load(vm.listasDePrecioHabilitadas)"
+					selectedItem="@bind(vm.det.listaPrecio)"
+					value="@load(vm.det.listaPrecio.pos1)"
+					instant="true"
+					onChange="@command('obtenerPrecioVenta')"
+					hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.pos1)" />
+					</template>
+				</combobox>
+				</cell>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<button label="Ver Historial" 
+					onClick="@command('verHistorial')" 
+					iconSclass="z-icon-search"
+					dir="normal" 
+					hflex="true"/>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true' and !vm.empresaBaterias)">
+				<field value="Precio Mínimo:" />
+				<hlayout>
+					<guaranibox readonly="true" sclass="red"
+						value="@load(vm.det.precioMinimoGs)" />
+					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						sclass="label-moneda" />
+				</hlayout>
+				<field value="Tipo de IVA:" sclass="cell-margen"/>
+				<textbox readonly="true"
+					value="@load(vm.det.tipoIVA.text)"
+					hflex="true"/>
+			</row>
+			<row
+				visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<field value="Precio IVA incluído:" />
+				<hlayout>
+					<guaranibox id="dbxPrecio"
+						value="@bind(vm.det.precioGs)" 
+						onChange="@command('validarPrecio', comp=self)"
+						readonly="${!vm.operacionHabilitada('ModificarPrecio')}" />
+					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						sclass="label-moneda" />
+				</hlayout>
+				<field value="IVA:" sclass="cell-margen"/>
+				<hlayout>
+					<guaranibox value="@load(vm.det.iva)"
+						readonly="true" />
+					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						sclass="label-moneda" />
+				</hlayout>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<field value="Descuento:" />
+				<hlayout>
+					<guaranibox
+						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
+						readonly="${!vm.operacionHabilitada('ModificarPrecio')}" />
+					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						sclass="label-moneda" />					
+				</hlayout>
+				<field value="Porcentaje:" sclass="cell-margen"/>
+				<hlayout>
+					<dolarbox
+						value="@bind(vm.det.descuentoPorcentaje) @converter(vm.convert)"
+						width="50px"
+						sclass="label-red"
+						onChange="@command('descontarPorcentaje', cmp=self)"
+						onOK="@command('descontarPorcentaje', cmp=self)" 
+						readonly="${!vm.operacionHabilitada('ModificarPrecio')}" />
+					<label value="%" sclass="label-moneda" />
+				</hlayout>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<field value="Importe:" />
+				<hlayout>
+					<guaranibox value="@load(vm.det.importeGs)"
+						readonly="true" />
+					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						sclass="label-moneda"/>					
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+	<style>
+		.cell-margen {margin-left:15px;font-weight:bold}
+		.red {color:red}
+	</style>
+</div>

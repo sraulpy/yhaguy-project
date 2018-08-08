@@ -1,0 +1,4 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.importacion.GastoImportacionSimpleViewModel')">
+	Informacion Adicional Gastos Importacion!
+</window>

@@ -1,0 +1,79 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.pendientes.RepartoPendientesSimpleVM')"
+	height="100%">
+	
+	<hlayout sclass="button-container">
+		<button iconSclass="z-icon-refresh" mold="trendy"
+			tooltiptext="Actualizar Datos" onClick="@command('refresh')"/>
+		<space></space>
+		<label value="FACTURAS DE VENTA PENDIENTES DE REPARTO" 
+			style="font-weight:bold;color:#428bca;font-size:10pt"/>
+		<space></space>
+		<button label=" Imprimir" mold="bs" sclass="btn-primary btn-sm"
+				iconSclass="z-icon-print" width="140px" 
+				onClick="@command('reporte')"/>
+	</hlayout>
+	
+	<listbox sclass="small-list"
+		model="@load(vm.ventas)" vflex="true"
+		emptyMessage="SIN FACTURAS PENDIENTES DE REPARTO..">
+		<listhead>
+			<listheader label="Fecha" width="150px"></listheader>
+			<listheader label="Número" width="150px"></listheader>
+			<listheader label="Concepto" width="150px"></listheader>
+			<listheader label="Cliente"></listheader>
+			<listheader label="Importe" align="right" width="150px"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						value="@bind(vm.filterFechaDD)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						value="@bind(vm.filterFechaMM)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						value="@bind(vm.filterFechaAA)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox placeholder="Numero.." sclass="filter"
+					value="@bind(vm.filter_numero)"
+					instant="true" hflex="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader>
+				<textbox placeholder="Cliente.." sclass="filter"
+					value="@bind(vm.filter_razonSocial)"
+					instant="true" hflex="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3])"></listcell>
+				<listcell label="@load(each[4]) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter>
+				<hlayout>
+					<field value="@load(vm.size)"/>
+					<field value="ítems"/>
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+</window>

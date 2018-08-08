@@ -1,0 +1,41 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.depositos.BoletaDepositoSimpleViewModel')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="120px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Planilla:" />
+				<bandbox hflex="true" readonly="true" id="bndPlanilla"
+					value="@load(vm.dato.selectedPlanilla)">
+					<bandpopup>
+						<listbox sclass="small-list" width="400px"
+							height="200px" model="@load(vm.dato.planillasCaja)"
+							onSelect="bndPlanilla.close()"
+							selectedItem="@bind(vm.dato.selectedPlanilla)">
+							<listhead>
+								<listheader>
+									<hlayout>
+										<toolbarbutton
+											iconSclass="z-icon-filter" disabled="true" />
+										<textbox hflex="true"
+											value="@bind(vm.dato.filterNumeroPlanilla)" instant="true"
+											placeholder="Buscar por Nro. de Planilla.." />
+									</hlayout>
+								</listheader>
+							</listhead>
+							<template name="model">
+								<listitem label="@load(each)" />
+							</template>
+						</listbox>
+					</bandpopup>
+				</bandbox>
+			</row>
+		</rows>
+	</grid>
+
+</div>

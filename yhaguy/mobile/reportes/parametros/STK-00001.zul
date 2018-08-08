@@ -1,0 +1,27 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Depósito:" />
+			<combobox
+				model="@load(vm.dato.filtro.getDepositos(vm.dato.acceso.sucursalOperativa.id))"
+				selectedItem="@bind(vm.dato.filtro.deposito)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Familia:" />
+			<combobox model="@load(vm.dato.filtro.familias)"
+				selectedItem="@bind(vm.dato.filtro.familia)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

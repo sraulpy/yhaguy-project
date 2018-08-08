@@ -1,0 +1,75 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.RepartoSimpleVM')"
+	style="padding:5px"
+	height="100%">
+
+	<listbox model="@load(vm.movimientos)"
+		selectedItems="@bind(vm.dato.selectedMovimientosReparto)"
+		emptyMessage="No existen movimientos pendientes..."
+		sclass="small-list" vflex="true" checkmark="true" multiple="true"
+		style="overflow:auto">
+		<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+		<listhead>
+			<listheader hflex="min" align="center" />
+			<listheader label="Fecha" align="center" width="80px" />
+			<listheader label="Número" style="text-align:center"
+				width="120px" align="right" />
+			<listheader label="Tipo" style="text-align:center"
+				width="170px" />
+			<listheader label="Cliente" style="text-align:center" />
+			<listheader align="center" hflex="min" />
+		</listhead>
+		<auxhead>
+			<auxheader />
+			<auxheader />
+			<auxheader>
+				<textbox placeholder="Número.." hflex="true" sclass="filter"
+					value="@bind(vm.filterNumero)" instant="true"></textbox>
+			</auxheader>
+			<auxheader />
+			<auxheader />
+			<auxheader />
+		</auxhead>
+		<template name="model">
+			<listitem
+				onDoubleClick="@command('mostrarDetalles', movimiento=each)">
+				<listcell />
+				<listcell
+					label="@load(each.pos3) @converter('formatedDate', format='dd-MM-yyyy')"
+					style="color:black" />
+				<listcell label="@load(each.pos2)" style="color:black" />
+				<listcell label="@load(each.pos5)" style="color:black" />
+				<listcell label="@load(each.pos4)" style="color:black" />
+				<listcell>
+					<a label="Detalle"
+						style="text-decoration: underline;" 
+						onClick="@command('verDetalle', item=each, comp=self)"/>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	
+	<popup id="popDetalle" width="600px" sclass="rounded">
+		<listbox
+			height="300px"
+			sclass="small-list"
+			model="@load(vm.listaDet)">
+			<listhead style="text-align:center">
+				<listheader label="Código" width="120px"/>
+				<listheader label="Descripción"/>
+				<listheader label="Cant." width="60px" 
+					align="right"
+					style="text-align:center"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"/>
+					<listcell label="@load(each.pos2)"/>
+					<listcell label="@load(each.pos3)"/>
+				</listitem>
+			</template>
+		</listbox>
+	</popup>
+	
+</div>
+

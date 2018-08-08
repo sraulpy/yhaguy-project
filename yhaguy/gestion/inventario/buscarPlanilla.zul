@@ -1,0 +1,40 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.inventario.panel.InvPanelControlBody')">
+	<groupbox title="Buscar Planilla" width="300px">
+	
+		<div height="10px"/>
+		<hbox width="100%" pack="center">
+		<vlayout>
+		<hlayout sclass="z-valign-middle">
+			<textbox value="@bind(vm.selectedPlanilla.ubicacion)" onOK="@command('buscarPlanilla')" />
+			<toolbarbutton image="/core/images/find-small.png" onClick="@command('buscarPlanilla')" />
+		</hlayout>
+		
+		<div height="10px"/>
+		
+		
+			<hlayout>
+				<label value="Ubicación:" style="font-weight:bold"/>
+				<space/>
+				<label value="@load(vm.selectedPlanilla.ubicacion)"/>
+			</hlayout>
+			
+			<hlayout>
+				<label value="Lote:" style="font-weight:bold"/>
+				<space width="40px"/>
+				<label value="@load(vm.selectedPlanilla.lote)"/>
+			</hlayout>
+			
+			<hlayout>
+				<label value="Conteo:" style="font-weight:bold"/>
+				<space width="25px"/>
+				<label value="@load(vm.selectedPlanilla.conteo)"/>
+			</hlayout>
+						
+		</vlayout>
+		</hbox>
+		<hbox pack="end" width="280px">
+			<toolbarbutton label="VER" style="font-weight:bold" onClick="@command('verPlanilla')" image="/core/images/page_find.png" />
+		</hbox>
+	</groupbox>
+</window>

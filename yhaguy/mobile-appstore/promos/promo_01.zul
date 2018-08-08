@@ -1,0 +1,70 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.appstore.Promo1ViewModel')"
+	vflex="true">
+
+	<vlayout id="vl_preparador" height="100%" style="padding:50px;overflow:auto">
+		<label value="Ingrese sus Datos" sclass="mobile"></label>
+		<space></space>
+		<textbox hflex="true" placeholder="RUC.." value="@bind(vm.ruc)"></textbox>
+		<space></space>	
+		<textbox hflex="true" placeholder="Nombre y Apellido.."
+			value="@bind(vm.nombreApellido)"></textbox>
+		<space></space>
+		<textbox hflex="true" placeholder="Dirección.."
+			value="@bind(vm.direccion)"></textbox>
+		<space></space>
+		<textbox hflex="true" placeholder="Teléfono (al cual enviar la transferencia).."
+			value="@bind(vm.telefono)"></textbox>
+		<space></space>
+		<combobox hflex="true" placeholder="Operadora"
+			model="@load(vm.operadoras)" value="@load(vm.operadora)"
+			selectedItem="@bind(vm.operadora)">
+			<template name="model">
+				<comboitem label="@load(each)"></comboitem>
+			</template>	
+		</combobox>
+		<space></space>
+		<datebox hflex="true" placeholder="Fecha Nacimiento.."
+			value="@bind(vm.fechaNacimiento)"></datebox>
+		<space></space>
+		<textbox hflex="true" placeholder="Correo.."
+			value="@bind(vm.correo)"></textbox>
+		<space></space>
+		<space></space>
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Confirmar Registro" height="150px" style="font-size:30pt"
+			dir="normal" onClick="@command('registrarse')" />
+		<space></space>
+		<space></space>
+		<label sclass="mobile" value="@load(vm.mensaje)"></label>
+		<div vflex="true"></div>
+		<hbox align="end" hflex="true">
+			<div hflex="true" style="border-bottom:solid 2px #428bca"></div>
+			<image src="/core/css/logo.png" height="70px"></image>
+			<div width="5px" />
+		</hbox>
+	</vlayout>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+	</style>
+</div>

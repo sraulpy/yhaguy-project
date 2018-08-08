@@ -1,0 +1,126 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.tesoreria.CajaTesoreriaControlBody')">
+	<space height="10px" />
+	<hbox pack="center" width="100%">
+		<groupbox title="Caja Tesorería" width="715px" mold="3d"
+			sclass="rounded">
+			<grid width="700px" sclass="vgrid">
+				<columns>
+					<column align="right" />
+					<column align="left" />
+				</columns>
+				<rows>
+					<row>
+						<cell>
+							<field value="Fecha y Hora Creación:" />
+						</cell>
+						<hlayout>
+							<datebox value="@load(vm.dto.fecha)" readonly="true" />
+							<timebox value="@load(vm.dto.fecha)" readonly="true"
+								buttonVisible="false" width="80px" />
+						</hlayout>
+					</row>
+
+					<row>
+						<cell>
+							<field value="Número:" />
+						</cell>
+						<textbox value="@load(vm.dto.numero)" readonly="true" />
+
+					</row>
+
+					<row>
+						<cell>
+							<field value="Sucursal:" />
+						</cell>
+						<textbox value="@load(vm.dto.sucursal.text)" readonly="true" />
+					</row>
+
+					<row>
+						<cell>
+							<field value="Responsable:" />
+						</cell>
+						<hlayout>
+							<hlayout spacing="0" sclass="searchform" width="250px"
+								style="margin:0px">
+								<textbox id="txResponsable" value="@bind(vm.dto.responsable.pos1)"
+									width="227px" sclass="searchfield" height="17px"
+									onOK="@command('buscarResponsable')" placeholder="Responsable de Caja.." />
+								<toolbarbutton iconSclass="z-icon-search" sclass="searchBtn"
+									onClick="@command('buscarResponsable')" width="20px" />
+							</hlayout>
+							<label value="(*)" style="color:red" />
+						</hlayout>
+					</row>
+					<row>
+						<cell>
+							<field value="Descripción:" />
+						</cell>
+						<hlayout>
+							<textbox value="@bind(vm.dto.descripcion)" width="250px"
+								rows="2" constraint="${vm.check.getNoVacio()}" />
+						</hlayout>
+					</row>
+					<row>
+						<cell>
+							<field value="Tipo:" />
+						</cell>
+						<hlayout>
+							<combobox value="@load(vm.dto.tipoCaja.text)" model="@load(vm.dtoUtil.cajaTipos)"
+								width="250px" constraint="${vm.check.getNoVacio()}"
+								selectedItem="@bind(vm.dto.tipoCaja)">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+						</hlayout>
+					</row>
+					<row>
+						<cell>
+							<field value="Estado:"/>
+						</cell>
+						<radiogroup model="@load(vm.dtoUtil.cajaEstados)"
+							width="250px" selectedItem="@bind(vm.dto.estado)">
+							<template name="model">
+								<radio label="@load(each.text)"/>
+							</template>
+						</radiogroup>
+					</row>
+
+
+					<row>
+						<cell>
+							<field value="Cajas asignadas:"/>
+						</cell>
+						<vlayout>
+							<hlayout valign="top">
+								<listbox id="lst"
+									model="@load(vm.dto.cajas)" height="100px" width="250px"
+									rows="3" emptyMessage="Asignar Cajas.."
+									selectedItem="@bind(vm.selectedCaja)">
+									<template name="model" var="caj">
+										<listitem
+											label="@load(caj)" />
+									</template>
+								</listbox>
+								<label value="(*)" style="color:red"/>
+							</hlayout>
+							<hlayout>
+								<button label="Agregar" mold="trendy" 
+									style="font-size:11px" width="70px"
+									onClick="@command('buscarCaja')"/>
+								<button label="Eliminar" mold="trendy" 
+									style="font-size:11px" width="70px"
+									onClick="@command('removerCaja')" 
+									disabled="@load(!not empty vm.selectedCaja)"/>
+							</hlayout>
+						</vlayout>
+					</row>
+
+
+
+				</rows>
+			</grid>
+		</groupbox>
+	</hbox>
+</window>

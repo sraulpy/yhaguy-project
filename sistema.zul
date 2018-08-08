@@ -1,0 +1,6 @@
+<?forward uri="/core/inicio/inicio.zul?title=Gestión-Yhaguy&menu=/yhaguy/inicio/menu.zul&menuSistema=/yhaguy/inicio/menuSistema.zul&prefix=yhaguy&css=/core/css/yhaguy.css" if="${true}"?>
+
+<window title="Yhaguy" border="normal" width="200px">
+Bienvenidos!
+</window>
+

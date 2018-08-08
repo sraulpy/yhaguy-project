@@ -1,0 +1,87 @@
+<hbox vflex="true" hflex="true" pack="center">
+
+	<grid sclass="vgrid" hflex="true">
+		<columns>
+			<column width="30%"></column>
+			<column></column>
+		</columns>
+		<rows>
+			<row>
+				<field value="Tipo:" />
+				<combobox model="@load(vm.dtoUtil.tipoCliente)"
+					value="@load(vm.dto.tipoCliente)"
+					selectedItem="@bind(vm.dto.tipoCliente)" hflex="true"
+					constraint="${vm.check.noVacio}">
+					<template name="model">
+						<comboitem label="@load(each)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Categoria:" />
+				<combobox model="@load(vm.dtoUtil.categoriaCliente)"
+					value="@load(vm.dto.categoriaCliente)"
+					selectedItem="@bind(vm.dto.categoriaCliente)" hflex="true"
+					constraint="${vm.check.noVacio}">
+					<template name="model">
+						<comboitem label="@load(each)" />
+					</template>
+				</combobox>
+			</row>		
+			<row>
+				<field value="Cobrador:" />
+				<combobox  hflex="true" model="@load(vm.cobradores)"
+					value="@load(vm.dto.cobrador.pos1)"
+					selectedItem="@bind(vm.dto.cobrador)"
+					instant="true">
+					<template name="model">
+						<comboitem label="@load(each.pos1)"/>
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Lista de Precio:" />
+				<combobox model="@load(vm.listasDePrecio)"
+					value="@load(vm.dto.listaPrecio.pos1.toString().toUpperCase())"
+					selectedItem="@bind(vm.dto.listaPrecio)" hflex="true"
+					instant="true">
+					<template name="model">
+						<comboitem label="@load(each.pos1.toString().toUpperCase())" />
+					</template>
+				</combobox>
+			</row>
+		</rows>
+	</grid>
+	<space></space>
+	<vlayout hflex="true" vflex="true">
+		<div style="border-bottom: solid 1px;margin-bottom:2px">
+			<label value="Cheques Rechazados.." style="font-style:italic"></label>
+		</div>	
+		<listbox sclass="small-list" vflex="true"
+			emptyMessage="NO REGISTRA CHEQUES RECHAZADOS.."
+			model="@load(vm.dto.chequesRechazados)">
+			<listhead style="text-align:center">
+				<listheader label="Banco"></listheader>
+				<listheader label="Número"></listheader>
+				<listheader label="Fecha"></listheader>
+				<listheader label="Importe" align="right"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)"/>
+					<listcell label="@load(each.pos2)"/>
+					<listcell label="@load(each.pos3)"/>
+					<listcell label="@load(each.pos4)"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="4">
+					<hlayout>
+						<field value="@load(vm.dto.chequesRechazados.size())" />
+						<field value="ítems" />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</vlayout>
+</hbox>

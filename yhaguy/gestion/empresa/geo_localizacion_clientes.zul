@@ -1,0 +1,269 @@
+<window width="100%" height="100%" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.geolocalizacion.GeolocalizacionViewModel')"
+	id="win"
+	onCreate="@command('buscarClientes')">
+
+	<borderlayout id="body">
+		<west width="20%" collapsible="true" open="false"
+			style="text-align:center" title="Parámetros">
+			<div vflex="true">
+			<vlayout id="vl_params" sclass="button-container" vflex="true">
+				<hlayout>
+				<bandbox hflex="true" placeholder="CLIENTE.."
+					readonly="true" value="@load(vm.selectedEmpresa.razonSocial)"
+					id="bndCli">
+					<bandpopup>
+						<listbox sclass="small-list" width="400px"
+							height="200px" model="@load(vm.clientesUbicados)"
+							selectedItem="@bind(vm.selectedEmpresa)"
+							onSelect="@command('selectCliente', comp=bndCli)"
+							emptyMessage="BUSQUEDA DE CLIENTES..">
+							<listhead>
+								<listheader>
+									<hlayout>
+										<textbox hflex="true"
+											sclass="filter" value="@bind(vm.razonSocial)" instant="true"
+											placeholder="Buscar.." />
+									</hlayout>
+								</listheader>
+							</listhead>
+							<template name="model">
+								<listitem
+									label="@load(each.razonSocial)" />
+							</template>
+						</listbox>
+					</bandpopup>
+				</bandbox>
+				<a iconSclass="z-icon-refresh" visible="@load(vm.selectedEmpresa eq null? 'false':'true')"
+					onClick="@command('refreshSelectedEmpresa')"/>
+				</hlayout>
+				<space></space>
+				<hlayout>
+				<combobox placeholder="ZONA.." hflex="true"
+					model="@load(vm.zonas)"
+					selectedItem="@bind(vm.selectedZona)"
+					onSelect="@command('selectZona')">
+					<template name="model">
+						<comboitem label="@load(each.descripcion)"></comboitem>
+					</template>	
+				</combobox>
+				<a iconSclass="z-icon-refresh" visible="@load(vm.selectedZona eq null? 'false':'true')"
+					onClick="@command('refreshSelectedZona')"/>
+				</hlayout>
+				<space />
+				<hlayout>	
+					<combobox placeholder="VENDEDOR.." hflex="true"
+						model="@load(vm.vendedores_)"
+					selectedItem="@bind(vm.selectedVendedor)"
+					onSelect="@command('selectVendedor')">
+					<template name="model">
+						<comboitem label="@load(each.razonSocial)"></comboitem>
+					</template>	
+				</combobox>
+					<a iconSclass="z-icon-refresh" visible="@load(vm.selectedVendedor eq null? 'false':'true')" 
+						onClick="@command('refreshSelectedVendedor')"/>
+				</hlayout>
+				<space />
+				<hlayout>	
+					<combobox placeholder="COBRADOR.." hflex="true"
+						model="@load(vm.cobradores_)"
+					selectedItem="@bind(vm.selectedCobrador)"
+					onSelect="@command('selectCobrador')">
+					<template name="model">
+						<comboitem label="@load(each.razonSocial)"></comboitem>
+					</template>	
+				</combobox>
+					<a iconSclass="z-icon-refresh" visible="@load(vm.selectedCobrador eq null? 'false':'true')" 
+						onClick="@command('refreshSelectedCobrador')"/>
+				</hlayout>
+				<space />
+				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
+					iconSclass="z-icon-map-marker" label=" Registrar Ubicación" 
+					onClick="@command('registrarUbicacion', comp1=vl_params, comp2=vl_registrar)"/>
+				<space />
+				<button mold="bs" sclass="btn-success btn-sm"
+					hflex="true" iconSclass="z-icon-check"
+					label=" Clientes Localizados" 
+					onClick="@command('verClientesUbicados', comp1=vl_params, comp2=vl_clientes)"/>
+				<space />
+				<button mold="bs" sclass="btn-warning btn-sm"
+					hflex="true" iconSclass="z-icon-exclamation-circle" label=" Pendientes de Localizar" 
+					onClick="@command('verPendientesLocalizacion')" />
+				<space />
+				<button mold="bs" sclass="btn-primary btn-sm"
+					hflex="true" iconSclass="z-icon-print" label=" Imprimir" 
+					onClick="@command('print')" />
+				<space />
+				<space></space>
+			</vlayout>
+			<vlayout id="vl_clientes" sclass="button-container" visible="false" vflex="true">
+				<listbox vflex="true" model="@load(vm.clientesUbicados_)"
+					sclass="small-list" selectedItem="@bind(vm.selectedEmpresa)">
+					<listhead>
+						<listheader align="left"></listheader>
+					</listhead>
+					<auxhead>
+						<auxheader>
+							<textbox hflex="true" sclass="filter"
+								value="@bind(vm.razonSocial)" instant="true"
+								placeholder="Cliente.."></textbox>
+						</auxheader>
+					</auxhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.razonSocial)"></listcell>
+						</listitem>
+					</template>
+				</listbox>
+				<button mold="bs" sclass="btn-primary btn-sm"
+					hflex="true" iconSclass="z-icon-reply"
+					label=" Volver.." 
+					onClick="@command('verClientesUbicados', comp1=vl_clientes, comp2=vl_params)"/>
+			</vlayout>
+			<vlayout id="vl_registrar" sclass="button-container" vflex="true"
+				visible="false">
+				<bandbox hflex="true" placeholder="CLIENTE.."
+					readonly="true" value="@load(vm.selectedCliente.razonSocial)"
+					id="bndCli_">
+					<bandpopup>
+						<listbox sclass="small-list" width="400px"
+							height="200px" model="@load(vm.clientes)"
+							selectedItem="@bind(vm.selectedCliente)"
+							onSelect="bndCli_.close()">
+							<listhead>
+								<listheader>
+									<hlayout>
+										<textbox hflex="true"
+											sclass="filter" value="@bind(vm.razonSocial_)" instant="true"
+											placeholder="Buscar.." />
+									</hlayout>
+								</listheader>
+							</listhead>
+							<template name="model">
+								<listitem
+									label="@load(each.empresa.razonSocial)" />
+							</template>
+						</listbox>
+					</bandpopup>
+				</bandbox>
+				<space></space>
+				<combobox placeholder="ZONA.." hflex="true"
+					model="@load(vm.zonas_)"
+					selectedItem="@bind(vm.selectedCliente.empresa.zona)"
+					buttonVisible="@load(vm.selectedCliente eq null? 'false':'true')">
+					<template name="model">
+						<comboitem label="@load(each)"></comboitem>
+					</template>	
+				</combobox>
+				<space />
+				<combobox placeholder="VENDEDOR.." hflex="true" model="@load(vm.vendedores_)"
+					selectedItem="@bind(vm.selectedCliente.empresa.vendedor)"
+					buttonVisible="@load(vm.selectedCliente eq null? 'false':'true')">
+					<template name="model">
+						<comboitem label="@load(each.razonSocial)"></comboitem>
+					</template>	
+				</combobox>
+				<space />
+				<combobox placeholder="COBRADOR.." hflex="true" model="@load(vm.cobradores_)"
+					selectedItem="@bind(vm.selectedCliente.empresa.cobrador)"
+					buttonVisible="@load(vm.selectedCliente eq null? 'false':'true')">
+					<template name="model">
+						<comboitem label="@load(each.razonSocial)"></comboitem>
+					</template>	
+				</combobox>
+				<space />
+				<hlayout>
+					<button mold="bs" sclass="btn-success btn-sm" hflex="true"
+						iconSclass="z-icon-check" label=" Guardar" 
+						onClick="@command('saveCliente', comp1=vl_registrar, comp2=vl_params)"/>
+					<button mold="bs" sclass="btn-danger btn-sm" hflex="true"
+						iconSclass="z-icon-times" label=" Cancelar" 
+						onClick="@command('cancelarRegistrar', comp1=vl_registrar, comp2=vl_params)"/>
+				</hlayout>
+			</vlayout>
+			</div>
+		</west>
+
+		<center>
+			<div id="dv_mapa" sclass="rounded" vflex="true" hflex="true"
+				onLater="@command('clearProgress')">
+				<gmaps version="3.26" hflex="true" lat="-25.3054494"
+					lng="-57.5351386" zoom="12" vflex="true" showSmallCtrl="true"
+					children="@load(vm.empresas_)" protocol="https"
+					onMapDoubleClick="@command('getCoordenadas', map=self, ref=bndCli_)">
+					<template name="children">
+						<gmarker lat="@load(each.latitud)"
+							lng="@load(each.longitud)" open="@load(vm.selectedEmpresa eq null? 'false':'true')"
+							iconImage="/core/images/map.png" content="@load(each.razonSocial)"
+							tooltip="@load(each.id)" />
+					</template>
+				</gmaps>
+				<vlayout children="@load(vm.empresas_)">
+					<template name="children">
+						<popup id="${each.id}" sclass="rounded"
+							width="330px" style="padding:10px">
+							<hbox width="100%" align="end">
+								<div hflex="true"
+									style="border-bottom:solid 1px">
+								</div>
+								<image height="17px"
+									src="/core/images/map.png" />
+							</hbox>
+							<div height="5px" />
+							<field value="@load(each.razonSocial)"></field>
+							<div height="5px" />
+							<label value="@load(each.direccion_)"></label>
+							<div height="5px" />
+							<label value="@load(each.telefono_)"></label>
+							<div height="5px" />
+							<field value="Zona"></field>
+							<hlayout>
+								<combobox model="@load(vm.zonas_)"
+									value="@load(each.zona)"
+									selectedItem="@bind(each.zona)"
+									hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)"/>
+									</template>
+								</combobox>
+								<button width="50px" mold="bs" sclass="btn-success btn-xs" 
+									iconSclass="z-icon-check" vflex="true"
+									onClick="@command('saveEmpresa', emp=each)"></button>
+							</hlayout>
+							<div height="5px" />
+							<field value="Vendedor"></field>
+							<hlayout>
+								<combobox model="@load(vm.vendedores_)"
+									value="@load(each.vendedor.razonSocial)"
+									selectedItem="@bind(each.vendedor)"
+									hflex="true" placeholder="Vendedor..">
+									<template name="model">
+										<comboitem label="@load(each.razonSocial)"/>
+									</template>
+								</combobox>
+								<button width="50px" mold="bs" sclass="btn-success btn-xs" 
+									iconSclass="z-icon-check" vflex="true"
+									onClick="@command('saveEmpresa', emp=each)"></button> 	
+							</hlayout>
+							<div height="5px" />
+							<field value="Cobrador"></field>
+							<hlayout>
+								<combobox model="@load(vm.cobradores_)"
+									value="@load(each.cobrador.razonSocial)"
+									selectedItem="@bind(each.cobrador)"
+									hflex="true" placeholder="Cobrador..">
+									<template name="model">
+										<comboitem label="@load(each.razonSocial)"/>
+									</template>
+								</combobox>
+								<button width="50px" mold="bs" sclass="btn-success btn-xs" 
+									iconSclass="z-icon-check" vflex="true"
+									onClick="@command('saveEmpresa', emp=each)"></button> 	
+							</hlayout>
+						</popup>
+					</template>
+				</vlayout>
+			</div>
+		</center>
+	</borderlayout>
+</window>

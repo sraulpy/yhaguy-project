@@ -1,0 +1,15 @@
+<zk>
+	<window id="winPropietarioFactura" title="Lista Propietarios"
+		border="normal" mode="modal" closable="true" width="300px">
+		<listbox
+			model="@load(vm.propietariosImportacionFactura)"
+			selectedItem="@bind(vm.selectedPropietarioImportacionFactura)"
+			onSelect="@command('derivarImportacionFactura')">			
+			<template name="model" var="prop">
+				<listitem value="@load(prop)">
+					<listcell label="@load(prop)" />
+				</listitem>
+			</template>
+		</listbox>
+	</window>
+</zk>

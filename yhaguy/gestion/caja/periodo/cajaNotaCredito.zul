@@ -1,0 +1,36 @@
+<window	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="110px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Número:"/>
+				<label value="@load(vm.dato.selectedNotaCredito.numero)"/>
+			</row>
+			<row>
+				<field value="Motivo:"/>
+				<label value="@load(vm.dato.selectedNotaCredito.motivo.text)"/>
+			</row>
+			<row>
+				<field value="Cliente:"/>
+				<label value="@load(vm.dato.selectedNotaCredito.cliente.pos2)"/>
+			</row>	
+			<row>
+				<field value="Moneda:"/>
+				<label value="@load(vm.dato.selectedNotaCredito.moneda.text)"/>
+			</row>
+			<row>
+				<field value="Importe"/>
+				<label value="@load(vm.dato.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)"/>
+			</row>
+			<row>
+				<field value="Observación:"/>
+				<label value="@load(vm.dato.selectedNotaCredito.observacion)"/>
+			</row>		
+		</rows>
+	</grid>
+</window>

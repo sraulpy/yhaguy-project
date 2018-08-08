@@ -1,0 +1,114 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.CompraLocalSimpleControl')"
+	style="padding:5px">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="130px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Código:" />
+				<hlayout>
+					<textbox
+						hflex="true" value="@bind(vm.dato.nvoDetalle.articulo.pos1)"
+						onOK="@command('buscarArticulo', tipo=vm.dato.nvoDetalle, filtro=0)"
+						placeholder="Código Interno.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', tipo=vm.dato.nvoDetalle, filtro=0)" />
+				</hlayout>
+			</row>
+
+			<!-- 
+			<row>
+				<field value="Código Proveedor:"/>
+				<hlayout>
+					<textbox
+						hflex="true" value="@bind(vm.dato.nvoDetalle.articulo.pos2)"
+						onOK="@command('buscarArticulo', tipo=vm.dato.nvoDetalle, filtro=1)"
+						placeholder="Código Proveedor.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', tipo=vm.dato.nvoDetalle, filtro=1)" />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Código Original:"/>
+				<hlayout>
+					<textbox
+						hflex="true" value="@bind(vm.dato.nvoDetalle.articulo.pos3)"
+						onOK="@command('buscarArticulo', tipo=vm.dato.nvoDetalle, filtro=2)"
+						placeholder="Código Original.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', tipo=vm.dato.nvoDetalle, filtro=2)" />
+				</hlayout>
+			</row> 
+			-->
+			
+			<row>
+				<field value="Descripción:"/>
+				<textbox readonly="true" value="@load(vm.dato.nvoDetalle.articulo.pos4)" hflex="true"/>
+			</row>
+			<row>				
+				<field value="Cantidad:"/>
+				<hlayout>
+					<intbox value="@bind(vm.dato.nvoDetalle.cantidad)"/>
+					<space hflex="true" />
+					<field value="Stock:"/>
+					<longbox value="@load(vm.dato.nvoDetalle.stock)" readonly="true"
+						format="###,##0"/>
+				</hlayout>
+			</row>
+			<row visible="@load(!vm.dato.nvoDetalle.presupuesto)">
+				<field value="Precio Iva incluído:"/>			
+				<hlayout sclass="z-valign-middle">
+					<guaranibox
+						value="@bind(vm.dato.nvoDetalle.costoGs)"
+						onChange="@command('dolarizar', item=vm.dato.nvoDetalle)" />
+					<label value="Gs." style="font-size:11px" />
+					<space />
+					<guaranibox value="@bind(vm.dato.nvoDetalle.costoDs)"
+						onChange="@command('guaranizar', item=vm.dato.nvoDetalle)" 
+						visible="@load(!vm.dato.dto.monedaLocal)"/>
+					<label value="U$D" style="font-size:11px" 
+						visible="@load(!vm.dato.dto.monedaLocal)"/>
+				</hlayout>
+			</row>	
+			<row visible="false">
+				<field value="Descuento:" style="color:red;font-weight:bold" />			
+				<hlayout sclass="z-valign-middle">
+					<guaranibox />
+					<label value="Gs." style="font-size:11px" />
+					<space />
+					<guaranibox width="50px" />
+					<label value="%" style="font-size:11px" />
+				</hlayout>
+			</row>
+			<row visible="@load(!vm.dato.nvoDetalle.presupuesto)">
+				<field value="Iva:"/>
+				<combobox model="@load(vm.dato.tiposDeIva)"
+					selectedItem="@bind(vm.dato.nvoDetalle.iva)"
+					instant="true" hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
+					</template>				
+				</combobox>
+			</row>		
+			<row visible="@load(!vm.dato.nvoDetalle.presupuesto)">
+				<field value="Importe Iva incluído:"/>
+				<hlayout sclass="z-valign-middle">
+					<guaranibox
+						value="@load(vm.dato.nvoDetalle.importeGs)"
+						readonly="true"/>
+					<label value="Gs." style="font-size:11px" />
+					<space />
+					<guaranibox
+						value="@load(vm.dato.nvoDetalle.importeDs)"
+						readonly="true" 
+						visible="@load(!vm.dato.dto.monedaLocal)"/>
+					<label value="U$D" style="font-size:11px" 
+						visible="@load(!vm.dato.dto.monedaLocal)"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+</div>

@@ -1,0 +1,217 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.resumen.CajaPlanillaResumenVM')"
+	height="100%" id="win_">	
+	<hlayout id="hl_btn" sclass="button-container">	
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-check"
+				label=" Ver Resumen" 
+				onClick="@command('verResumen')"
+				disabled="@load(vm.selectedResumen eq null)"/>
+	</hlayout>
+	
+	<listbox id="lst_res" sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.resumenPlanillas)"
+		selectedItem="@bind(vm.selectedResumen)"
+		onLater="@command('clearProgress', comp1 = lst_res, comp2 = hl_btn, inc = inc_res)">
+		<listhead>
+			<listheader label="Fecha" width="200px" />
+			<listheader label="Número" />
+			<listheader label="Planillas" />
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						value="@bind(vm.filterFechaDD)"
+						sclass="filter" instant="true"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						value="@bind(vm.filterFechaMM)"
+						sclass="filter" instant="true"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						value="@bind(vm.filterFechaAA)"
+						sclass="filter" instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Número.."
+						value="@bind(vm.filterNumero)"
+						sclass="filter"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Planillas.."
+						value="@bind(vm.filterPlanillas)"
+						sclass="filter"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0]) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="4">
+				<hlayout hflex="true">
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<include id="inc_res"></include>
+
+	<popup id="pop_add" sclass="rounded" style="margin: 0px 500px 0px 0px">
+		<vlayout height="300px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="0">
+							<field value="Fecha" />
+							<datebox value="@bind(vm.nvoResumen.fecha)" hflex="true"></datebox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox value="@bind(vm.nvoResumen.numero)" hflex="true"
+								readonly="true"/>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Reembolso Valores Baterías"/>
+							<bandbox placeholder="Búsqueda de Depósitos.." hflex="true" readonly="true"
+									value="@load(vm.nvoResumen.deposito_diferidos.numeroBoleta)"
+									id="bndDep">
+									<bandpopup>
+										<listbox sclass="small-list"
+											height="200px" width="300px"
+											model="@load(vm.bancoDepositos)"
+											selectedItem="@bind(vm.nvoResumen.deposito_diferidos)"
+											onSelect="bndDep.close()"
+											emptyMessage="NO SE ENCONTRARÓN DATOS..">
+											<listhead>
+												<listheader>
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterNumeroDeposito)"
+															instant="true" placeholder="Número Depósito.." />
+												</listheader>
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell label="@load(each.numeroBoleta)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+						</vlayout>
+					</row>
+				</rows>							
+			</grid>
+			<listbox sclass="small-list" vflex="true"
+				model="@load(vm.nvoResumen.planillas)">
+				<listhead>
+					<listheader label="Planillas de Caja" width="210px"></listheader>
+					<listheader label="Fecha"></listheader>
+					<listheader label="Responsable"></listheader>
+					<listheader label="Tipo"></listheader>
+					<listheader width="45px" align="center"></listheader>
+				</listhead>
+				<auxhead>
+					<auxheader>
+						<bandbox placeholder="Búsqueda de Planillas.." readonly="true"
+									value="@load(vm.selectedPlanilla.numero)"
+									id="bndPla" hflex="true" onOpen="tx_nro.focus()">
+									<bandpopup>
+										<listbox sclass="small-list"
+											height="200px" width="300px"
+											
+											selectedItem="@bind(vm.selectedPlanilla)"
+											onSelect="bndPla.close()"
+											emptyMessage="NO SE ENCONTRARÓN DATOS..">
+											<listhead>
+												<listheader>
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterNumeroPlanilla)"
+															instant="true" placeholder="Número Planilla.." 
+															id="tx_nro"/>
+												</listheader>
+												<listheader>
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterFechaPlanilla)"
+															instant="true" placeholder="Fecha Cierre.." />
+												</listheader>
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell label="@load(each.numero)"></listcell>
+													<listcell label="@load(each.cierre) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+					</auxheader>
+					<auxheader>
+						<textbox readonly="true" hflex="true" 
+							value="@load(vm.selectedPlanilla.apertura) @converter('formattedDate', format='dd-MM-yyyy')"></textbox>
+					</auxheader>
+					<auxheader>
+						<textbox readonly="true" hflex="true" value="@load(vm.selectedPlanilla.responsable.razonSocial)"></textbox>
+					</auxheader>
+					<auxheader>
+						<textbox readonly="true" hflex="true" value="@load(vm.selectedPlanilla.tipo)"></textbox>
+					</auxheader>
+					<auxheader>
+						<button iconSclass="z-icon-plus"
+							onClick="@command('addDetalle')"></button>
+					</auxheader>
+				</auxhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.numero)"/>
+						<listcell label="@load(each.apertura) @converter('formattedDate', format='dd-MM-yyyy')"/>
+						<listcell label="@load(each.responsable.razonSocial)"/>
+						<listcell label="@load(each.tipo)"/>
+						<listcell>
+							<a iconSclass="z-icon-times" onClick="@command('deleteItem', item=each)"></a>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="5">
+						<hlayout>
+							<field value="@load(vm.nvoResumen.planillas.size())" />
+							<field value="ítems" />
+							<space hflex="true"></space>
+							<button mold="bs"
+								sclass="btn-success btn-sm"
+								iconSclass="z-icon-check"
+								width="100px" 
+								onClick="@command('addResumen', comp = pop_add, comp1 = hl_btn, comp2 = lst_res, comp3 = dv_res)"
+								disabled="@load(vm.nvoResumen.planillas.size() eq 0)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+		.z-doublebox {min-height:20px}
+	</style>
+</window>

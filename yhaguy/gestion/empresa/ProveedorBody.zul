@@ -1,0 +1,30 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="150px"/>
+		<column />
+	</columns>
+	<rows>
+		<row>			
+			<field value="Tipo:" />
+			<combobox model="@load(vm.dtoUtil.proveedorTipo)"
+				value="@load(vm.dto.tipoProveedor)"
+				selectedItem="@bind(vm.dto.tipoProveedor)" width="200px"
+				constraint="${vm.check.noVacio}">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		<row>			
+			<field value="Estado:" />
+			<radiogroup selectedItem="@bind(vm.dto.estadoProveedor)"
+				model="@load(vm.dtoUtil.proveedorEstado)">
+				<template name="model">
+					<radio label="@load(each.text)" value="@load(each)" 
+						style="margin-right:10px"/>
+				</template>
+			</radiogroup>
+		</row>
+	</rows>
+</grid>
+

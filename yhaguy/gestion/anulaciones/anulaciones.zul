@@ -1,0 +1,139 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.anulaciones.AnulacionesViewModel')"
+	width="100%" height="100%">
+
+	<hbox vflex="true" width="100%" style="padding:5px">
+
+		<listbox vflex="true" width="400px" sclass="small-list"
+			model="@load(vm.tiposMovimientos)" checkmark="true"
+			selectedItem="@bind(vm.selectedItem)">
+			<listhead>
+				<listheader width="50px" align="center" />
+				<listheader label="Tipos de Movimientos" />
+			</listhead>
+			<auxhead>
+				<auxheader/>
+				<auxheader>
+					<hlayout>
+						<toolbarbutton disabled="true" iconSclass="z-icon-filter"/>
+						<textbox hflex="true" placeholder="Descripción.."
+							value="@bind(vm.filterDesc)" instant="true"/>
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="@load(each.text.toUpperCase())" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2" align="left">
+					<hlayout>
+						<field
+							value="@load(vm.tiposMovimientos.size())" />
+						<field value="ítems" />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		<space />
+
+		<solicitarCabecera
+			visible="@load(vm.selectedItem eq null ? 'true' : 'false')"
+			hflex="true" />
+
+		<vbox hflex="true" vflex="true"
+			visible="@load(vm.selectedItem eq null ? 'false' : 'true')">
+			<hlayout sclass="button-container">
+				<toolbarbutton image="/core/images/anular.png"
+					label="Anular" tooltiptext="Anular Movimiento.."
+					onClick="@command('anularMovimiento')" 
+					disabled="@load(vm.selectedMovimiento.esNuevo()? 'true' : 'false'
+						or vm.selectedMovimiento.pos6? 'true' : 'false')"/>
+			</hlayout>
+			<grid sclass="vgrid">
+				<columns>
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<vlayout sclass="vgrid" spacing="0"
+							hflex="true">
+							<field
+								value="@load(vm.selectedItem eq null? 'Tipo Movimiento' : vm.selectedItem.text)" />
+							<hlayout hflex="true">
+								<textbox placeholder="Número.."
+									style="background:lightyellow" width="140px"
+									value="@bind(vm.selectedMovimiento.pos1)"
+									onOK="@command('buscarMovimientos', posFiltro=0)" />
+								<textbox placeholder="Ruc.."
+									style="background:lightyellow" width="140px"
+									value="@bind(vm.selectedMovimiento.pos2)"
+									onOK="@command('buscarMovimientos', posFiltro=1)" />
+								<textbox hflex="true"
+									value="@bind(vm.selectedMovimiento.pos3)"
+									placeholder="Razón Social.." style="background:lightyellow"
+									onOK="@command('buscarMovimientos', posFiltro=2)" />
+								<button iconSclass="z-icon-search"
+									onClick="@command('buscarMovimientos', posFiltro=2)" />
+							</hlayout>
+						</vlayout>
+					</row>
+				</rows>
+			</grid>
+			<div style="@load(vm.selectedMovimiento.pos6? 'opacity:0.6' : '')">
+				<vbox pack="center" align="center"
+					visible="@load(vm.selectedMovimiento.pos6)"
+					style="position:absolute;z-index:1;width:inherit;height:200px;text-align:center">
+					<label value="ANULADO"
+						style="font-size:50pt;text-align:center;color:red" />
+				</vbox>
+
+				<grid sclass="vgrid">
+					<columns>
+						<column width="20%" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<field value="Tipo Movimiento:" />
+							<textbox readonly="true" hflex="true"
+								value="@bind(vm.selectedMovimiento.pos4)" />
+						</row>
+						<row>
+							<field value="Fecha Emisión:" />
+							<textbox readonly="true" hflex="true"
+								value="@bind(vm.selectedMovimiento.pos5) @converter('formattedDate', format = 'dd-MM-yyyy')" />
+						</row>
+						<row>
+							<field value="Número:" />
+							<textbox readonly="true" hflex="true"
+								value="@bind(vm.selectedMovimiento.pos1)" />
+						</row>
+						<row>
+							<field value="Razón Social:" />
+							<textbox readonly="true" hflex="true"
+								value="@bind(vm.selectedMovimiento.pos3)" />
+						</row>
+						<row>
+							<field value="Ruc:" />
+							<textbox readonly="true" hflex="true"
+								value="@bind(vm.selectedMovimiento.pos2)" />
+						</row>
+						<row>
+							<field value="Importe Gs:" />
+							<textbox readonly="true" hflex="true" />
+						</row>
+						<row>
+							<field value="Planilla de Caja Nro.:" />
+							<textbox readonly="true" hflex="true" />
+						</row>
+					</rows>
+				</grid>
+			</div>
+		</vbox>
+
+	</hbox>
+
+</window>

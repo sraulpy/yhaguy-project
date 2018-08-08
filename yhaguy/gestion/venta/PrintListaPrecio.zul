@@ -1,0 +1,43 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.listaprecio.VentaListaPrecioSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="100px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.selectedProveedor.razonSocial)"
+				id="bndProv_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.proveedoresExterior)"
+						selectedItem="@bind(vm.dato.selectedProveedor)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.razonSocialProveedorExterior)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		</rows>
+	</grid>
+
+</div>

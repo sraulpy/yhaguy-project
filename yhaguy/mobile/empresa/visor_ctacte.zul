@@ -1,0 +1,101 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctacte.visor.VisorCtaCteViewModel')"
+	vflex="true">
+
+	<vlayout height="100%">
+
+		<listbox 
+			id="lstClientes"
+			emptyMessage="BUSQUE UN CLIENTE.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedItem)"
+			onSelect="@command('obtenerValoresMobile')">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" id="tbox_codint" 
+							value="@bind(vm.razonSocial)"/>
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos3)" />
+			</listitem>
+		</template>
+		</listbox>
+
+		<listbox id="lstMovimientos"
+			style="overflow:auto" vflex="true"
+			emptyMessage="NO SE ENCONTRARON MOVIMIENTOS PARA ESTA CUENTA.."
+			model="@load(vm.movimientos)"
+			visible="false">
+			<listhead>
+				<listheader width="70%"></listheader>
+				<listheader align="right"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos4)"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell
+						label="@load(each.pos6) @converter('formattedNumber', format='###,###,###,###')"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2" align="left">
+					<hlayout>
+						<div hflex="true"></div>
+						<label value="Total Gs." style="font-size: 30pt;font-weight:bold"/>
+						<doublebox
+							style="background:#EEF7FA;text-align:right;font-weight:bold"
+							value="@load(vm.totalSaldoGs)" format="###,###,###,###" />
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			onClick="lstMovimientos.setVisible(true); lstClientes.setVisible(false); btnDownload.setVisible(true); self.setVisible(false)"
+			disabled="@load(vm.selectedItem eq null? 'true':'false')"
+			label=" Ver Estado de Cuenta" height="150px" style="font-size:30pt"
+			dir="normal" />
+			
+		<button
+			id="btnDownload" visible="false"
+			mold="bs" sclass="btn-info btn-lg" hflex="true"
+			iconSclass="z-icon-download"
+			label=" Descargar Estado de Cuenta" height="150px" style="font-size:30pt"
+			dir="normal" 
+			onClick="@command('imprimirMobile')"/>
+		
+	</vlayout>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+	</style>
+</div>

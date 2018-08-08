@@ -1,0 +1,32 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctacte.CuentasCobrarControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%"
+		sclass="sin-toolbar">
+
+		<tabbox vflex="true">
+			<tabs>
+				<tab label="Cuentas Clientes" closable="false"/>
+				<tab id="tb2" label="Movimientos" closable="false"/>
+			</tabs>
+
+			<tabpanels>
+				<tabpanel>
+					<include src = "/yhaguy/gestion/empresa/CtaCteListadoCuentas.zul" />
+				</tabpanel>
+				<tabpanel  >
+					<label  value="Cliente Seleccionado:"/>
+					<label  value="@load(vm.razonSocial)" style="font-weight:bold;color:red;font-size:15px" />
+					<include src="/yhaguy/gestion/empresa/CtaCteEmpresaListadoMovimientos.zul" vflex="true"/>
+				</tabpanel>
+			</tabpanels>
+
+		</tabbox>
+		
+		<style>
+			.z-toolbarbutton[disabled], .z-label {visibility:hidden}
+			.sin-toolbar .z-label, .sin-toolbar .z-toolbarbutton[disabled] {visibility:visible}
+			.sin-toolbar .z-tab {width:150px}
+		</style>
+	</window>
+</zk>

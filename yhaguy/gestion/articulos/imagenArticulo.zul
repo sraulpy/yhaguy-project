@@ -1,0 +1,7 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.ArticuloSimpleControl')"
+	style="padding:10px">
+	
+	<image src="@load(vm.dato.dto.urlImagenWeb)" height="435px" hflex="true"/>
+	
+</div>

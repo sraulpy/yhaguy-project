@@ -1,0 +1,422 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.servicio.ServicioTecnicoViewModel')"
+	height="100%">	
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-success btn-sm" width="150px"
+				iconSclass="z-icon-plus-circle"
+				label=" Agregar" onClick='pop_add.open(self,"after_start")'/>
+		<space />	
+		<button mold="bs" sclass="btn-warning btn-sm" width="150px"
+				iconSclass="z-icon-wrench"
+				label=" Diagnóstico" onClick='pop_diag.open(self,"after_start")'
+				disabled="@load(vm.selectedServicio eq null)" />
+		<space />
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Imprimir Orden" onClick="@command('imprimirOrden')"
+				disabled="@load(vm.selectedServicio eq null)" />
+		<space />
+		<button mold="bs" sclass="btn-info btn-sm" width="150px"
+				iconSclass="z-icon-tags"
+				label=" Etiqueta" onClick="@command('imprimirEtiqueta')"
+				disabled="@load(vm.selectedServicio eq null)" />
+		<space />
+		<button mold="bs" sclass="btn-success btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Informe Técnico" onClick="@command('informeTecnico')"
+				disabled="@load(vm.selectedServicio eq null)" />
+		<space />
+		<button mold="bs" sclass="btn-warning btn-sm" width="150px"
+				iconSclass="z-icon-check"
+				label=" Confirmar Entrega" onClick="@command('confirmarEntrega')"
+				disabled="@load(vm.selectedServicio eq null ? 'true' : (vm.selectedServicio.diagnosticado? 'false':'true'))" />
+		<space />
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Imprimir Listado" onClick="@command('reporte')" />
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.serviciosTecnicos_)"
+		selectedItem="@bind(vm.selectedItem)"
+		onSelect="@command('selectItem')">
+		<listhead menupopup="auto">
+			<listheader label="Fecha" width="150px" />
+			<listheader label="Número" width="150px" />
+			<listheader label="Reclamo Nro." width="130px" />
+			<listheader label="Reparto Nro." width="170px" />
+			<listheader label="Receptor" width="180px" />
+			<listheader label="Técnico" width="180px" visible="false" />
+			<listheader label="Cliente" />
+			<listheader label="Observación" width="200px"/>
+			<listheader width="60px" align="center"/>
+			<listheader width="60px" align="center"/>
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaDD)"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaMM)"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaAA)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Número.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterNumeroServicio)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Receptor.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterReceptor)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" 
+						placeholder="Técnico.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterTecnico)"/>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" 
+						placeholder="Cliente.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterRazonSocial_)"/>
+			</auxheader>
+			<auxheader />
+			<auxheader>
+				<textbox hflex="true" 
+						placeholder="S / N"
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterDiagnosticado)"/>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" 
+						placeholder="S / N"
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterEntregado)"/>
+			</auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[2]) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each[1])" />
+				<listcell label="@load(each[3])" />
+				<listcell label="@load(each[4])" />
+				<listcell label="@load(each[5])" />
+				<listcell label="@load(each[6])" />
+				<listcell label="@load(each[7])" />
+				<listcell label="@load(each[8])" />
+				<listcell>
+					<image vflex="true" src="@load(each[9]? '/core/images/tick.png' : '/core/images/exclamation.png')"
+						tooltiptext="@load(each[9]? 'Diagnosticado' : 'Pendiente' )"></image>
+				</listcell>
+				<listcell>
+					<image vflex="true" src="@load(each[10]? '/core/images/tick.png' : '')"
+						tooltiptext="Entregado.."></image>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="6">
+				<hlayout hflex="true">
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_add" sclass="rounded" style="margin: 0px 30px 0px 0px">
+		<vlayout height="450px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="0">
+							<field value="Fecha" />
+							<datebox hflex="true"
+								value="@bind(vm.nvoServicio.fecha)"></datebox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox readonly="true" hflex="true"
+								value="@load(vm.nvoServicio.numero)"></textbox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Receptor" />
+							<combobox hflex="true" value="@load(vm.nvoServicio.receptor)"
+								model="@load(vm.receptores)"
+								selectedItem="@bind(vm.nvoServicio.receptor)">
+								<template name="model">
+									<comboitem label="@load(each)"/>
+								</template>
+							</combobox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Técnico" />
+							<combobox hflex="true" value="@load(vm.nvoServicio.tecnico)"
+								model="@load(vm.tecnicos)"
+								selectedItem="@bind(vm.nvoServicio.tecnico)">
+								<template name="model">
+									<comboitem label="@load(each)"/>
+								</template>
+							</combobox>
+						</vlayout>
+					</row>
+					<row>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+								<field value="Cliente" />
+								<bandbox hflex="true" readonly="true"
+									value="@load(vm.nvoServicio.cliente.razonSocial)"
+									id="bndCli_">
+									<bandpopup>
+										<listbox sclass="small-list"
+											height="200px" width="600px"
+											model="@load(vm.clientes)"
+											selectedItem="@bind(vm.nvoServicio.cliente)"
+											onSelect="bndCli_.close()">
+											<listhead>
+												<listheader width="130px">
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterRuc)"
+															instant="true" placeholder="Ruc.." />
+												</listheader>
+												<listheader>
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterRazonSocial)"
+															instant="true" placeholder="Razón Social.." />
+												</listheader>
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell label="@load(each.ruc)"></listcell>
+													<listcell label="@load(each.razonSocial)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+							</vlayout>
+						</cell>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+							<field value="Facturas" />
+							<hlayout>
+								<bandbox width="150px" readonly="true"
+									id="bndFac_">
+									<bandpopup>
+										<listbox sclass="small-list"
+											height="200px" width="200px"
+											model="@load(vm.facturas)"
+											onSelect="@command('addFactura', comp=bndFac_)"
+											emptyMessage="BUSQUE POR NÚMERO.."
+											selectedItem="@bind(vm.selectedVenta)">
+											<listhead>
+												<listheader>
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterNumero)"
+															instant="true" placeholder="Número Factura.." />
+												</listheader>
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell label="@load(each.numero)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+								<label value="@load(vm.nvoServicio.facturas_)"></label>
+							</hlayout>
+						</vlayout>
+						</cell>
+					</row>
+				</rows>
+			</grid>
+			<solicitarCabecera visible="@load(!vm.detalleVisible)" />
+			<listbox sclass="small-list" vflex="true"
+				emptyMessage="AGREGUE ÍTEMS AL DETALLE.."
+				model="@load(vm.nvoServicio.detalles)"
+				visible="@load(vm.detalleVisible)">
+				<listhead>
+					<listheader label="Factura"></listheader>
+					<listheader label="Código"></listheader>
+					<listheader label="Estado"></listheader>
+					<listheader label="Carga"></listheader>
+					<listheader label="Borne"></listheader>
+					<listheader label="Celda"></listheader>
+					<listheader label="Conexión"></listheader>
+					<listheader label="Observación"></listheader>
+					<listheader width="45px" align="center">
+					</listheader>
+				</listhead>
+				<auxhead>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.facturas__)"
+							selectedItem="@bind(vm.nvoDetalle.numeroFactura)"
+							value="@load(vm.nvoDetalle.numeroFactura)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.articulos)"
+							selectedItem="@bind(vm.nvoDetalle.articulo)"
+							value="@load(vm.nvoDetalle.articulo.codigoInterno)">
+							<template name="model">
+								<comboitem label="@load(each.codigoInterno)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.estados)"
+							selectedItem="@bind(vm.nvoDetalle.estado)"
+							value="@load(vm.nvoDetalle.estado)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.cargas)"
+							selectedItem="@bind(vm.nvoDetalle.verifica_carga)"
+							value="@load(vm.nvoDetalle.verifica_carga)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.bornes)"
+							selectedItem="@bind(vm.nvoDetalle.verifica_borne)"
+							value="@load(vm.nvoDetalle.verifica_borne)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.celdas)"
+							selectedItem="@bind(vm.nvoDetalle.verifica_celda)"
+							value="@load(vm.nvoDetalle.verifica_celda)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<combobox hflex="true" model="@load(vm.nvoServicio.conexiones)"
+							selectedItem="@bind(vm.nvoDetalle.verifica_conexion)"
+							value="@load(vm.nvoDetalle.verifica_conexion)">
+							<template name="model">
+								<comboitem label="@load(each)"/>
+							</template>
+						</combobox>
+					</auxheader>
+					<auxheader>
+						<textbox value="@bind(vm.nvoDetalle.observacion)" hflex="true"></textbox>
+					</auxheader>
+					<auxheader>
+						<button iconSclass="z-icon-plus"
+							onClick="@command('addDetalle')"
+							disabled="@load(vm.addDetalleDisabled)"></button>
+					</auxheader>
+				</auxhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.articulo.codigoInterno)" />
+						<listcell label="@load(each.estado)" />
+						<listcell label="@load(each.verifica_carga)" />
+						<listcell label="@load(each.verifica_borne)" />
+						<listcell label="@load(each.verifica_celda)" />
+						<listcell label="@load(each.verifica_conexion)" />
+						<listcell label="@load(each.observacion)" />
+						<listcell>
+							<a iconSclass="z-icon-times" onClick="@command('deleteItem', item=each)"></a>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="8">
+						<hlayout>
+							<field value="@load(vm.nvoServicio.detalles.size())" />
+							<field value="ítems" />
+							<space hflex="true"></space>
+							<button mold="bs"
+								sclass="btn-success btn-sm"
+								iconSclass="z-icon-check"
+								disabled="@load(vm.nvoServicio.detalles.size() eq 0)"
+								width="100px" onClick="@command('addServicioTecnico', comp = pop_add)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_diag" sclass="rounded" style="margin: 0px 30px 0px 0px">
+		<listbox model="@load(vm.selectedServicio.detalles)"
+			width="550px" height="400px" sclass="rounded">
+			<listhead>
+				<listheader label="Artículo" width="150px"></listheader>
+				<listheader label="Diagnóstico"></listheader>
+				<listheader width="90px" label="Reposición" align="center"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articulo.codigoInterno)" />
+					<listcell>
+						<textbox placeholder="INGRESE EL DIAGNÓSTICO.." hflex="true" 
+							value="@bind(each.diagnostico)" rows="3"></textbox>
+					</listcell>
+					<listcell>
+						<checkbox checked="@bind(each.verifica_reposicion)"></checkbox>
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="3">
+					<hlayout>
+						<space hflex="true"></space>
+						<button mold="bs" sclass="btn-success btn-sm"
+							iconSclass="z-icon-check"
+							width="100px" 
+							onClick="@command('saveServicioTecnico', comp = pop_diag)"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</popup>
+	
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+	</style>
+</window>

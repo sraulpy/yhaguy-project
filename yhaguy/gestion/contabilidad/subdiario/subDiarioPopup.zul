@@ -1,0 +1,85 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.contabilidad.subdiario.SubdiarioPopapViewModel')">
+
+	<groupbox title="Subdiario">
+		<hlayout>
+			<groupbox>
+				<hlayout sclass="z-valign-middle">
+					Fecha
+					<datebox format="short "
+						value="@bind(vm.dato.subDiarioNuevoEditar.fecha)"
+						onChange="@command('numeroProvisorio')"
+						readonly="@load(vm.dato.nuevoSD)" />
+					<labelConstrain />
+				</hlayout>
+			</groupbox>
+			<groupbox>
+				<hlayout sclass="z-valign-middle">
+					Número:
+					<textbox
+						value="@load(vm.dato.subDiarioNuevoEditar.numero)"
+						readonly="true" />
+				</hlayout>
+			</groupbox>
+			<groupbox>
+				<hlayout sclass="z-valign-middle">
+					Descripción:
+					<textbox
+						value="@bind(vm.dato.subDiarioNuevoEditar.descripcion)"
+						width="270px" />
+					<labelConstrain />
+				</hlayout>
+			</groupbox>
+		</hlayout>
+	</groupbox>
+
+	<tabbox>
+		<tabs>
+			<tab label="Movimientos" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<hlayout>
+					<toolbarbutton label="Agregar Subdiario Detalle"
+						image="/core/images/insertar.png"
+						onClick="@command('agregarSubDiarioDetalle')" />
+					<toolbarbutton label="Borrar Subdiario Detalle"
+						image="/core/images/borrarItem.png"
+						onClick="@command('borrarSubDiarioDetalle')" />
+						
+						Balanceo:
+						<guaranibox value="@load(vm.balanceado)"
+							readonly="true"  />
+							
+				</hlayout>
+				<div height="2px" />
+				<listbox multiple="false" checkmark="true"
+					model="@load(vm.dato.subDiarioNuevoEditar.detalles)" height="840px"
+					selectedItem="@bind(vm.subDiarioBorrar)">
+					<listhead>
+						<listheader label=" " width="40px" />
+						<listheader label="Cuenta" width="250px"
+							style="text-align:center" sort="auto" />
+						<listheader label="Descripción" width="300px"
+							style="text-align:center" sort="auto" />
+						<listheader label="Debe" width="100px"
+							style="text-align:center" align="center" sort="auto" />
+						<listheader label="Haber" width="100px"
+							style="text-align:center" align="right" sort="auto" />
+
+					</listhead>
+					<template name="model">
+						<listitem
+							style="@load(each.esHaber ? each.colorCuentaHaber : '')">
+							<listcell />
+							<listcell label="@load(each.cuenta.pos1)" />
+							<listcell label="@load(each.descripcion)" />
+							<listcell label="@load(each.debe)" />
+							<listcell label="@load(each.haber)" />
+						</listitem>
+					</template>
+				</listbox>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

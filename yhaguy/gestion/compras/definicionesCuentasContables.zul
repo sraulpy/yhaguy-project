@@ -1,0 +1,161 @@
+<zk>
+	<vbox width="100%" pack="center" align="start">
+
+		<hlayout style="margin-top:20px" valign="top">
+
+			<!-- _____________________ DEPARTAMENTOS _____________________ -->
+			
+			<vlayout hflex="true" spacing="0">
+				<listbox height="180px" sclass="small-list"
+					model="@load(ctvm.departamentos)"
+					selectedItem="@bind(ctvm.selectedDepartamento)">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+					<listhead>
+						<listheader label="Departamentos" style="text-align:center"
+							sort="auto(pos1)" onCreate="self.sort(true)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each.pos1)"/>
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar" 
+						onClick="@command('abrirPopupDatos', tipo=4, operacion=1)"/>
+					<button label="Modificar" 
+						onClick="@command('abrirPopupDatos', tipo=4, operacion=2)"/>
+					<button label="Eliminar" disabled="true"/>
+				</hlayout>
+			</vlayout>			
+
+			<vlayout hflex="true" spacing="0">
+				<listbox height="180px" hflex="true" sclass="small-list"
+					model="@load(ctvm.selectedDepartamento.pos4)">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+					<listhead>
+						<listheader label="Centros de Costo Asignados"
+							style="text-align:center" 
+							sort="auto(pos1)" onCreate="self.sort(true)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(ctvm.concat(each.pos1, each.pos2))" />
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Asignar"
+						onClick="@command('abrirPopupDatos', tipo=5, operacion=3)"
+						disabled="@load(ctvm.selectedDepartamento.esNuevo())" />
+				</hlayout>
+			</vlayout>
+
+			<vlayout hflex="true" spacing="0">
+				<listbox height="180px" hflex="true" sclass="small-list"
+					model="@load(ctvm.selectedDepartamento.pos5)">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+					<listhead>
+						<listheader label="Cuentas Asignadas"
+							style="text-align:center" 
+							sort="auto(pos1)" onCreate="self.sort(true)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(ctvm.concat(each.pos1, each.pos2))" />
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Asignar"
+						onClick="@command('abrirPopupDatos', tipo=6, operacion=3)"
+						disabled="@load(ctvm.selectedDepartamento.esNuevo())" />
+				</hlayout>
+			</vlayout>
+		</hlayout>
+		
+		
+		<!-- _____________________ CUENTAS CONTABLES _____________________ -->
+		
+		<hlayout style="margin-top:20px" valign="top">
+		
+			<vlayout hflex="true" spacing="0">
+				<listbox height="180px" sclass="small-list"
+					model="@load(ctvm.cuentasContables)"
+					selectedItem="@bind(ctvm.newCuentaContable)">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+					<listhead>
+						<listheader label="Cuentas Contables" style="text-align:center"
+							sort="auto(pos1)" onCreate="self.sort(true)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(ctvm.concat(each.pos1, each.pos2))"/>
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar" 
+						onClick="@command('abrirPopupDatos', tipo=1, operacion=1)"/>
+					<button label="Modificar" 
+						onClick="@command('abrirPopupDatos', tipo=1, operacion=2)"/>
+					<button label="Eliminar" 
+						disabled="true"/>
+				</hlayout>
+			</vlayout>
+			
+			<!-- _____________________ PLAN DE CUENTAS _____________________ -->
+			
+			<vlayout hflex="true" spacing="0">
+				<listbox height="180px" sclass="small-list"
+					model="@load(ctvm.planDeCuentas)"
+					selectedItem="@bind(ctvm.newPlanCuenta)">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+					<listhead>
+						<listheader label="Plan de Cuentas" style="text-align:center"
+							sort="auto(pos1)" onCreate="self.sort(true)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(ctvm.concat(each.pos1, each.pos2))"/>
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar" 
+						onClick="@command('abrirPopupDatos', tipo=2, operacion=1)"/>
+					<button label="Modificar" 
+						onClick="@command('abrirPopupDatos', tipo=2, operacion=2)"/>
+					<button label="Eliminar" disabled="true"/>
+				</hlayout>
+			</vlayout>
+			
+			<!-- _____________________ CENTROS DE COSTO _____________________ -->
+			
+			<vlayout hflex="true" spacing="0">
+				<listbox height="180px" sclass="small-list"
+					model="@load(ctvm.centrosDeCosto)"
+					selectedItem="@bind(ctvm.newCentroCosto)">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+					<listhead>
+						<listheader label="Centros de Costo" style="text-align:center"
+							sort="auto(pos1)" onCreate="self.sort(true)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(ctvm.concat(each.pos1, each.pos2))"/>
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar" 
+						onClick="@command('abrirPopupDatos', tipo=3, operacion=1)"/>
+					<button label="Modificar" 
+						onClick="@command('abrirPopupDatos', tipo=3, operacion=2)"/>
+					<button label="Eliminar" disabled="true"/>
+				</hlayout>
+			</vlayout>		
+		</hlayout>
+
+	</vbox>
+</zk>

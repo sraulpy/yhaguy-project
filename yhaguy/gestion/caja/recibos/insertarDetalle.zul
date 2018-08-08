@@ -1,0 +1,118 @@
+<window height="80%" width="1000px"
+	border="normal">
+	<caption>
+		<hlayout style="margin-left:10px">
+			<field value="Proveedor:"
+				visible="@load(vm.dato.reciboDTO.cobro or vm.dato.reciboDTO.cancelacionChequeRechazado ? 'false':'true')" />
+			<label value="@load(vm.dato.reciboDTO.proveedor.pos2)"
+				visible="@load(vm.dato.reciboDTO.cobro or vm.dato.reciboDTO.cancelacionChequeRechazado ? 'false':'true')" />
+			<field value="Cliente:"
+				visible="@load(vm.dato.reciboDTO.cobro or vm.dato.reciboDTO.cancelacionChequeRechazado ? 'true':'false')" />
+			<label value="@load(vm.dato.reciboDTO.cliente.pos2)"
+				visible="@load(vm.dato.reciboDTO.cobro or vm.dato.reciboDTO.cancelacionChequeRechazado ? 'true':'false')" />
+		</hlayout>
+	</caption>
+
+	<listbox vflex="true" model="@load(vm.movimientosPendientes_)"
+		multiple="true" checkmark="true"
+		selectedItems="@bind(vm.selectedMovimientos)"
+		onSelect="@command('habilitarMontos')"
+		sclass="rounded"
+		emptyMessage="SIN MOVIMIENTOS PENDIENTES..">
+		<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+		<listhead>
+			<listheader width="40px" align="center"/>
+			<listheader label="Descripción" style="text-align:center" sort="auto(movimiento.nroComprobante)"/>
+			<listheader label="Vencimiento" style="text-align:center" width="100px" align="right" sort="auto(movimiento.fechaVencimiento)"
+				onCreate='self.sort(true)' />
+			<listheader label="@load(vm.pagoEnMonedaLocal ? 'Importe Gs.' : 'Importe U$D')" style="text-align:center" align="right" width="120px" />
+			<listheader label="@load(vm.pagoEnMonedaLocal ? 'Saldo Gs.' : 'Saldo U$D')" style="text-align:center" 
+				align="right" width="120px" />
+			<listheader label="@load(vm.pagoEnMonedaLocal ? 'Pago Gs.' : 'Pago U$D')" style="text-align:center"
+				align="right" width="120px" />
+		</listhead>
+		<auxhead>
+			<auxheader></auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter"
+					placeholder="Buscar por Número.."
+					value="@bind(vm.filterNro)"
+					instant="true"></textbox>
+			</auxheader>
+			<auxheader colspan="4"></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell>
+					<label value="@load(each.descripcion)" tooltiptext="@load(each.descripcion)" />
+				</listcell>
+				<listcell>
+					<label
+						value="@load(each.movimiento.fechaVencimiento) 
+						@converter('formatedDate', format='dd-MM-yyyy')"
+						style="@load(each.styleVencimiento)" />
+				</listcell>
+				<listcell>
+					<label
+						value="@load(each.movimiento.importeOriginal) @converter(each.format)" />
+				</listcell>
+				<listcell>
+					<label
+						value="@load(vm.pagoEnMonedaLocal ? each.saldoGs : each.saldoDs) @converter(vm.pagoEnMonedaLocal ? vm.cnv.monedaLocal : vm.cnv.monedaExtranjera)"
+						style="@load(vm.pagoEnMonedaLocal ? each.styleSaldoGs : each.styleSaldoDs)" />
+				</listcell>
+				<listcell>
+					<hlayout visible="@load(vm.pagoEnMonedaLocal)">
+						<guaranibox value="@bind(each.montoGs)"
+							onChange="@command('dolarizar', item=each, comp=self)"
+							visible="@load(each.selected)" />
+						<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" 
+							visible="@load(!each.selected)" />
+					</hlayout>
+					<hlayout visible="@load(!vm.pagoEnMonedaLocal)">
+						<dolarbox value="@bind(each.montoDs)"
+							onChange="@command('guaranizar', item=each, comp=self)"
+							visible="@load(each.selected)" />
+						<label value="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)" 
+							visible="@load(!each.selected)" />
+					</hlayout>					
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="6" align="right">
+				<hlayout visible="@load(vm.pagoEnMonedaLocal)">
+					<label value="Total a Pagar Gs.:"
+						sclass="label-moneda-footer" />
+					<guaranibox
+						value="@load(vm.datosMovimientosPendientes[0])" readonly="true"
+						style="text-align:right;background:#EEF7FA;font-weight:bold" />				
+				</hlayout>
+				<hlayout visible="@load(!vm.pagoEnMonedaLocal)">
+					<label value="Total a Pagar U$D:" sclass="label-moneda-footer"
+						visible="@load(!vm.pagoEnMonedaLocal)" />
+					<dolarbox
+						value="@load(vm.datosMovimientosPendientes[1])" readonly="true"
+						visible="@load(!vm.pagoEnMonedaLocal)"
+						style="text-align:right;background:#EEF7FA;font-weight:bold" />	
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+	<toolbar align="center" style="margin-top:10px">
+		<hlayout>
+			<button label="ACEPTAR" tooltiptext="Aceptar"
+				iconSclass="z-icon-check" width="150px"
+				onClick="@command('agregarFactura')" 
+				style="font-weight:bold;padding:7px"
+				dir="normal"/>
+			<button id="btnCancel" label="CANCELAR"
+				tooltiptext="CANCELAR" iconSclass="z-icon-times" width="150px"
+				onClick="@command('cancelarFactura')" 
+				style="font-weight:bold;padding:7px"
+				dir="normal"/>
+		</hlayout>
+	</toolbar>
+</window>

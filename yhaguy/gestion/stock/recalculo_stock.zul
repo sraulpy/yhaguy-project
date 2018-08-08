@@ -1,0 +1,49 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.recalculo.RecalculoStockViewModel')"
+	id="win">
+	
+	<vbox pack="center" align="center"
+		vflex="true" hflex="true" style="margin:50px 200px 50px 200px">	
+		<div hflex="true" style="border-bottom: solid 1px">
+			<label>HISTORIAL DE RECALCULOS</label>
+		</div>
+		<listbox sclass="small-list" hflex="true" vflex="true"
+			model="@load(vm.recalculos)"
+			id="listRecalc"
+			onLater="@command('clearProgress')">
+			<listhead>
+				<listheader label="Fecha"></listheader>
+				<listheader label="Observación"></listheader>
+				<listheader label="Usuario"></listheader>
+			</listhead>		
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy hh:mm:ss')"></listcell>
+					<listcell label="@load(each.observacion.toUpperCase())" />
+					<listcell label="@load(each.usuario.toUpperCase())" />
+				</listitem>
+			</template>
+		</listbox>
+		<hlayout>
+			<space hflex="true"/>
+			<button mold="bs" sclass="btn-primary" 
+				iconSclass="z-icon-refresh" label=" Recalcular Stock" 
+				onClick='pop_recalc.open(self, "before_end")' 
+				id="btnRecalc"/>
+		</hlayout>
+	</vbox>
+	
+	<popup id="pop_recalc" sclass="rounded">
+		<hlayout width="300px">
+			<textbox rows="2" hflex="true"
+				placeholder="INGRESE UNA OBSERVACIÓN.."
+				value="@bind(vm.observacion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success"
+				iconSclass="z-icon-check"
+				onClick="@command('test', comp=pop_recalc)" vflex="true" />
+		</hlayout>
+	</popup>
+	
+</window>

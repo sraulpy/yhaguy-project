@@ -1,0 +1,46 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Vencimiento Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Vencimiento Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Vendedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.vendedor.razonSocial)"
+				id="bndVend">
+				<bandpopup>
+					<listbox sclass="small-list" width="300px"
+						height="200px" model="@load(vm.dato.filtro.vendedores)"
+						selectedItem="@bind(vm.dato.filtro.vendedor)"
+						onSelect="bndVend.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialVendedor)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem label="@load(each.razonSocial)" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+	</rows>
+</grid>

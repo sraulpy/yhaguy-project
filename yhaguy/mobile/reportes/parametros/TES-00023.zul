@@ -1,0 +1,15 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Estado:" sclass="mobile" />
+		<combobox
+			selectedItem="@bind(vm.dato.filtro.estadoCuentaCliente)"
+			model="@load(vm.filtro.estadosCuentaCliente)" instant="true"
+			hflex="true">
+			<template name="model">
+				<comboitem label="@load(each)" />
+			</template>
+		</combobox>
+	</vlayout>
+
+</vlayout>

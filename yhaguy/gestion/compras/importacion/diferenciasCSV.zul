@@ -1,0 +1,31 @@
+<window height="300px" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	<grid model="@load(vm.dato.diferenciasCSV)" height="315px">
+		<columns>
+			<column label="Codigo" style="text-align:center"/>
+			<column label="Descripcion" width="300px" style="text-align:center"/>
+			<column label="Cantidad Sistema" 
+				style="text-align:center" align="center"/>
+			<column label="Cantidad Archivo" 
+				style="text-align:center" align="center"/>
+			<column label="Cantidad a Respetar" 
+				style="text-align:center" align="center"/>
+			<column label="Motivo Diferencia" width="200px" style="text-align:center"/>
+			<column label="Modificar" align="center" width="70px"/>
+		</columns>
+		<template name="model">
+			<row>
+			 	<label value="@load(each.articulo.codigoInterno)"/>
+			 	<label value="@load(each.articulo.descripcion)"/>
+			 	<doublebox value="@load(each.cantidadSistema)" readonly="true"
+			 		style="text-align:right"/>
+			 	<doublebox value="@load(each.cantidad)" readonly="true"
+			 		style="text-align:right"/>
+			 	<doublebox value="@bind(each.cantidadSistema)"
+			 		style="text-align:right"/>
+			 	<label value="@load(each.textoMotivo)"/>
+			 	<checkbox checked="@bind(each.checked)"/> 
+			</row>
+		</template>
+	</grid>
+</window>

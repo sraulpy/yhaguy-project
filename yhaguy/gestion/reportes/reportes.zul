@@ -1,0 +1,90 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.ReportesViewModel')"
+	height="100%">
+	
+	<hlayout vflex="true" valign="top">
+		<listbox vflex="true" width="250px"
+			sclass="rounded"
+			model="@load(vm.modulos)"
+			selectedItem="@bind(vm.selectedItem)"
+			onSelect="@command('selectModulo')">
+			<auxhead>
+				<auxheader colspan="2" label="Módulos" />
+			</auxhead>
+			<listhead>
+				<listheader width="40px" align="center" />
+				<listheader />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<a iconSclass="@load(each.pos3)" style="color:#357ebd" disabled="true"></a>
+					</listcell>
+					<listcell label="@load(each.pos1.toString().toUpperCase())" style="color:#357ebd"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2" align="left">
+					<hlayout>
+						<field value="@load(vm.modulos.size())" />
+						<field value="ítems"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<vbox hflex="true" vflex="true" spacing="0">
+							
+			<hlayout sclass="button-container" valign="bottom">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="150px" iconSclass="z-icon-print"
+					onClick="@command('imprimir')"
+					disabled="@load(vm.imprimirDisabled)" label=" Imprimir" />
+				
+				<div style="border-bottom:solid 1px" visible="@load(vm.selectedReporte eq null? 'false':'true')">
+					<label>ACCESO AL REPORTE:</label>
+					<label value="@load(vm.imprimirDisabled? 'DENEGADO':'PERMITIDO')"></label>
+					<a iconSclass="@load(vm.imprimirDisabled? 'z-icon-times':'z-icon-check')" disabled="true" style="color:#357ebd"></a>
+				</div>
+					
+			</hlayout>
+						
+			<hlayout hflex="true" children="@load(vm.grupo)"
+				style="margin:0px 5px 5px 5px; padding:5px; border-bottom: solid 1px #428bca"> 
+				<template name="children">
+					<a hflex="true" label="@load(each)" iconSclass="z-icon-angle-right" 
+						onClick="@command('selectGrupo', grupo=each)"/>
+				</template>
+			</hlayout>
+			
+			<listbox sclass="small-list" vflex="true" hflex="true"
+				emptyMessage="SIN REPORTES.."
+				model="@load(vm.reportesSistema)"
+				selectedItem="@bind(vm.selectedReporte)">
+				<listhead>
+					<listheader label="Código" width="150px"/>
+					<listheader label="Descripción"/>
+					<listheader label="Favoritos" width="150px" align="center"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)"/>
+						<listcell label="@load(each.pos2)"/>
+						<listcell>
+							<a iconSclass="@load(each.pos5 ? 'z-icon-star' : 'z-icon-star-o')"
+								onClick="@command('setFavoritos', item=each)"></a>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="3" align="left">
+						<hlayout>
+							<field value="ítems"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vbox>
+		
+	</hlayout>
+</window>

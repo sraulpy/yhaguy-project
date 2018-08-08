@@ -1,0 +1,34 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.listaprecio.VentaListaPrecioSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="100px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Descripción" />
+				<textbox
+					value="@bind(vm.dato.selectedLista.pos1)" hflex="true"/>
+			</row>
+			<row>
+				<field value="Margen:" />
+				<intbox
+					value="@bind(vm.dato.selectedLista.pos2)" />
+			</row>
+			<row>
+				<field value="Desde:" />
+				<datebox 
+					value="@bind(vm.dato.selectedLista.pos6)"  />
+			</row>
+			<row>
+				<field value="Hasta:" />
+				<datebox 
+					value="@bind(vm.dato.selectedLista.pos7)"  />
+			</row>
+		</rows>
+	</grid>
+
+</div>

@@ -1,0 +1,8 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.recibos.ReciboSimpleControl')">
+	<hbox width="100%" pack="center" align="center" height="80px">
+		<textbox value="@bind(vm.dato.ordenPagoDTO.motivoAnulado)" rows="3" width="300px" placeholder="Especifique el Motivo de Anulación.."/>
+	</hbox>
+</window>
+</zk>

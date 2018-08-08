@@ -1,0 +1,63 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Cliente:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
+				id="bndCli_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.clientes)"
+						selectedItem="@bind(vm.dato.filtro.cliente)"
+						onSelect="bndCli_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Notas Créd./Cont.:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)" />
+		</row>
+		<row>
+			<field value="Notas Crédito/Créd.:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirNCR_CRED)" />
+		</row>
+		<row>
+			<field value="Ventas Crédito:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirVCR)" />
+		</row>
+		<row>
+			<field value="Ventas Contado:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirVCT)" />
+		</row>
+	</rows>
+</grid>

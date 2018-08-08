@@ -1,0 +1,143 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.listaprecio.VentaListaPrecioViewModel')"
+	height="100%">
+
+	<hbox vflex="true">
+		<vbox hflex="4" vflex="true" spacing="0">
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-danger btn-sm" width="120px"
+					iconSclass="z-icon-minus-circle"
+					onClick="@command('deleteItem')"
+					disabled="@load(vm.selectedLista eq null ? 'true' : 'false')" label=" Eliminar" />
+				<space/>
+				<button mold="bs" sclass="btn-success btn-sm" width="120px"
+					iconSclass="z-icon-plus-circle"
+					onClick="@command('insertItem')"
+					label=" Insertar" />
+				<space/>
+				<button mold="bs" sclass="btn-warning btn-sm" width="120px"
+					iconSclass="z-icon-edit"
+					disabled="@load(vm.selectedLista eq null ? 'true' : 'false')"
+					onClick="@command('editItem')"
+					label=" Modificar" />
+			</hlayout>
+			<listbox sclass="small-list" vflex="true"
+				model="@load(vm.listasDePrecio)"
+				selectedItem="@bind(vm.selectedLista)">
+				<auxhead>
+					<auxheader label="Listas de Precios" colspan="2"></auxheader>
+					<auxheader label="Vigencia" colspan="3"></auxheader>
+				</auxhead>
+				<listhead style="text-align:center">
+					<listheader label="Descripción"></listheader>
+					<listheader label="Margen" width="60px"
+						align="right">
+					</listheader>
+					<listheader label="Fórmula" />
+					<listheader label="Desde" width="80px"></listheader>
+					<listheader label="Hasta" width="80px"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)"></listcell>
+						<listcell label="@load(each.pos2)"></listcell>
+						<listcell label="@load(each.pos8)"></listcell>
+						<listcell label="@load(each.pos4)"></listcell>
+						<listcell label="@load(each.pos5)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="5">
+						<hlayout>
+							<field value="@load(vm.listaPrecioSize)" />
+							<field value="ítems" />
+							<label value="(modificación de fórmulas con dpto. sistemas)" 
+								style="font-style:italic"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vbox>
+
+		<vbox hflex="6" vflex="true" spacing="0">
+			<hlayout sclass="button-container" hflex="true">
+				<button mold="bs" sclass="btn-warning btn-sm" width="120px"
+					iconSclass="z-icon-edit"
+					disabled="@load(vm.selectedListaPrecioDetalle eq null ? 'true' : 'false')"
+					onClick="@command('editDetalle')"
+					label=" Modificar" />
+				<space hflex="true"/>
+				<button mold="bs" sclass="btn-primary btn-sm" width="120px"
+					iconSclass="z-icon-print"
+					disabled="@load(vm.selectedLista eq null ? 'true' : 'false')"
+					onClick="@command('imprimir')"
+					label=" Imprimir" />
+			</hlayout>
+			<listbox sclass="small-list" vflex="true"
+				model="@load(vm.articulos)"
+				selectedItem="@bind(vm.selectedListaPrecioDetalle)"
+				emptyMessage="SELECCIONE UNA LISTA DE PRECIO..">
+				<listhead style="text-align:center">
+					<listheader label="Código"></listheader>
+					<listheader label="Lista"></listheader>
+					<listheader label="Costo S/iva" align="right"
+						width="110px"/>
+					<listheader label="Costo S/iva" align="right"
+						width="110px">
+					</listheader>
+					<listheader label="Precio Cont." align="right"
+						width="110px">
+					</listheader>
+					<listheader label="Precio Créd." align="right"
+						width="110px">
+					</listheader>
+					<listheader label="Margen" align="right"
+						width="100px">
+					</listheader>
+				</listhead>
+				<auxhead>
+					<auxheader>
+						<textbox hflex="true" placeholder="Código.."
+							sclass="filter" value="@bind(vm.filterCodigo)"
+							instant="true"
+							visible="@load(vm.selectedLista eq null ? 'false' : 'true')">
+						</textbox>
+					</auxheader>
+					<auxheader></auxheader>
+					<auxheader></auxheader>
+					<auxheader></auxheader>
+					<auxheader></auxheader>
+					<auxheader></auxheader>
+					<auxheader></auxheader>
+				</auxhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)"></listcell>
+						<listcell label="@load(each.pos2.pos1)" />
+						<listcell label="@load(each.pos4) @converter(vm.cnv.monedaLocal)"></listcell>
+						<listcell
+							label="@load(each.pos3.pos3) @converter(vm.cnv.monedaLocal)" />
+						<listcell
+							label="@load(each.pos3.pos1) @converter(vm.cnv.monedaLocal)" />
+						<listcell
+							label="@load(each.pos3.pos2) @converter(vm.cnv.monedaLocal)" />
+						<listcell
+							label="@load(each.pos3.pos4) @converter(vm.cnv.monedaExtranjera)" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="@load(vm.listaDetalleSize)" />
+							<field value="ítems" />
+							<label value="(máx 10 ítems)"
+								style="font-style:italic">
+							</label>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vbox>
+	</hbox>
+
+</window>

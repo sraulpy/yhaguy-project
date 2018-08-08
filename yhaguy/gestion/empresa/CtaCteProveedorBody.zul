@@ -1,0 +1,30 @@
+<div vflex="true">
+	<vlayout hflex="min" vflex="true">
+
+		<hlayout>
+			<!-- ================================================================== -->
+			<groupbox title="Cuenta Corriente" hflex="max"
+				height="min">
+				<hbox>
+					Estado:
+					<combobox
+						model="@load(vm.dtoUtil.ctaCteEmpresaEstado)"
+						value="@load(vm.ctaCteEmpresa.estadoComoProveedor)"
+						selectedItem="@bind(vm.ctaCteEmpresa.estadoComoProveedor)"
+						disabled="@load(vm.ctaCteDisabled)" width="150px">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>
+					</combobox>
+					<space />
+
+				</hbox>
+			</groupbox>
+			<!-- ================================================================== -->
+		</hlayout>
+		<include
+			src="/yhaguy/gestion/empresa/CtaCteEmpresaListadoMovimientos.zul"
+			vflex="true" />
+	</vlayout>
+</div>
+

@@ -1,0 +1,50 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Vendedor:"  sclass="mobile"/>
+			<bandbox hflex="true"
+				readonly="true" value="@load(vm.filtro.vendedor.razonSocial)"
+				id="bndVend">
+				<bandpopup>
+					<listbox hflex="true"
+						height="500px" model="@load(vm.filtro.vendedores)"
+						selectedItem="@bind(vm.filtro.vendedor)"
+						onSelect="bndVend.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.filtro.razonSocialVendedor)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem label="@load(each.razonSocial)" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+	</vlayout>
+	
+</vlayout>

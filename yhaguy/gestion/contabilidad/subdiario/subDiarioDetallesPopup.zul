@@ -1,0 +1,50 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.contabilidad.subdiario.SubdiarioDetallePopapViewModel')">
+
+
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Cta Contable:" />
+				<hlayout spacing="0">
+					<div sclass="searchform" width="245px">
+						<textbox
+							value="@bind(vm.dato.subDiarioDetalleNuevo.cuenta.pos1)"
+							sclass="searchfield" height="17px" width="215px"
+							onOK="@command('buscarCtaContable')" placeholder="Buscar.."
+							readonly="false" />
+						<toolbarbutton
+							image="/core/images/searchbox.png" sclass="searchBtn"
+							onClick="@command('buscarCtaContable')" disabled="false" />
+					</div>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Descripción:" />
+				<textbox
+					value="@bind(vm.dato.subDiarioDetalleNuevo.descripcion)"
+					hflex="true" />
+			</row>
+			<row>
+				<field value="Tipo:" />
+				<hlayout>
+					<checkbox label="Debe" onCheck="@command('debe')"
+						checked="@load(vm.dato.debe)" />
+					<checkbox label="Haber" onCheck="@command('haber') "
+						checked="@load(vm.dato.haber)" />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Importe:" />
+				<guaranibox
+					value="@bind(vm.dato.subDiarioDetalleNuevo.importe)" />
+			</row>
+		</rows>
+	</grid>
+
+</window>

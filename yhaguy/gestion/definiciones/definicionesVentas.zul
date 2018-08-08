@@ -1,0 +1,65 @@
+<zk>
+<tabbox height="100%">
+	<tabs>
+		<tab label="Zonas" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="130px" iconSclass="z-icon-plus" label=" Agregar" 
+					onClick='pop_add_zona.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-warning btn-sm"
+					width="130px" iconSclass="z-icon-edit" label=" Editar" 
+					disabled="@load(vm.selectedZona eq null? 'true':'false')"
+					onClick='pop_edit_zona.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-info btn-sm"
+					width="130px" iconSclass="z-icon-times" label=" Eliminar"
+					disabled="@load(vm.selectedZona eq null? 'true':'false')" 
+					onClick="@command('deleteZona')"/>
+				<space></space>
+			</hlayout>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="SIN ZONAS.."
+				model="@load(vm.zonas)" selectedItem="@bind(vm.selectedZona)">
+				<listhead>
+					<listheader label="Descripción"/>							
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.descripcion)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="0" />
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+<popup id="pop_add_zona" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.nuevaZona.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('addZona', comp=pop_add_zona)" />
+	</hlayout>
+</popup>
+<popup id="pop_edit_zona" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.selectedZona.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('saveZona', comp=pop_edit_zona)" />
+	</hlayout>
+</popup>
+</zk>

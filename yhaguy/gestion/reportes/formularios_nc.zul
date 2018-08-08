@@ -1,0 +1,56 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.formularios.ReportesViewModel')"
+	height="1050px" width="740px" border="none"
+	onCreate="@command('showReport_')"
+	id="win" sclass="printable" position="center,center">
+	
+	<timer delay="1000" repeats="false">
+		<attribute name="onTimer">
+			Clients.print();
+		</attribute>
+	</timer>
+	
+	<timer delay="1100" repeats="false">
+		<attribute name="onTimer">
+			win.detach();
+		</attribute>
+	</timer>
+
+	<vlayout hflex="true" vflex="true" spacing="0">
+		<jasperreport id="report" hflex="true" height="320px"
+			src="@load(vm.reportConfig.source, after='showReport_')"
+			parameters="@load(vm.reportConfig.parameters, after='showReport_')"
+			type="@load(vm.selectedFormato[1], after='showReport_')"
+			datasource="@load(vm.reportConfig.dataSource, after='showReport_')">
+		</jasperreport>
+		<space height="30px"></space>
+		<jasperreport hflex="true" height="320px"
+			src="@load(vm.reportConfig.source, after='showReport_')"
+			parameters="@load(vm.reportConfig.parameters, after='showReport_')"
+			type="@load(vm.selectedFormato[1], after='showReport_')"
+			datasource="@load(vm.reportConfig.notaCreditoDataSource1, after='showReport_')">
+		</jasperreport>
+		<space height="30px"></space>
+		<jasperreport hflex="true" height="320px"
+			src="@load(vm.reportConfig.source, after='showReport_')"
+			parameters="@load(vm.reportConfig.parameters, after='showReport_')"
+			type="@load(vm.selectedFormato[1], after='showReport_')"
+			datasource="@load(vm.reportConfig.notaCreditoDataSource2, after='showReport_')">
+		</jasperreport>
+	</vlayout>
+	
+	<style media="print">
+    	body > *:not(.printable) {
+        	display: none !important;
+    	}
+    	.printable {
+        	top: 0 !important;
+        	left: 0 !important;
+    	}
+		@page 
+		{
+    		size: auto;  
+    		margin: 0mm; 
+		}
+	</style>
+</window>

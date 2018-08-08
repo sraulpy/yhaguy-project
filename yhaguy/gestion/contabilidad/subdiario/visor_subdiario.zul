@@ -1,0 +1,86 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.contabilidad.subdiario.SubdiarioSimpleControl')">
+	<div height="5px" />
+
+	<groupbox>
+
+
+		<hbox width="100%" widths="50%,50%">
+			<hbox width="100%" align="start">
+
+				<hlayout>
+					Desde:
+					<datebox id="db0" cols="12" format="short "
+						value="@bind(vm.fechaDesde)" />
+					Hasta:
+					<datebox id="db1" cols="12" format="short "
+						value="@bind(vm.fechaHasta)" />
+					<separator />
+					<button label="Buscar" mold="trendy"
+						onClick="@command('buscarSubdiarios')" />
+					<button label="Nuevo" mold="trendy"
+						onClick="@command('crearNuevoSubdiarios')" />
+
+				</hlayout>
+				<hbox pack="end">
+					<toolbarbutton label="imprimir"
+						image="/core/images/printer.png"
+						onClick="@command('reporteSubdiario')"
+						visible="@load(vm.habilitarImprimir)" />
+				</hbox>
+			</hbox>
+		</hbox>
+
+	</groupbox>
+	<div height="5px" />
+
+	<style src="/widgets/grid/master_detail/style.css" />
+	<grid model="@load(vm.subdiarios)" oddRowSclass="myodd" width="100%"
+		emptyMessage="No hay subdiarios en las fechas seleccionadas">
+		<columns>
+			<column width="40px" />
+			<column label="Número Subdiario" width="140px" />
+			<column label="Descripción" />
+			<column label="Sistema" width="260px" />
+			<column width="40px" />
+		</columns>
+		<template name="model">
+			<row style="background-color: #BDBDBD;">
+				<detail open="true">
+					<listbox model="@load(each.detalles)">
+						<listhead>
+							<listheader label="Plan de Cuenta"
+								width="270px" />
+							<listheader label="Cuenta" width="250px" />
+							<listheader label="Descripción"
+								width="440px" />
+							<listheader label="Debe" width="120px"
+								align="right" />
+							<listheader label="Haber" width="120px"
+								align="right" />
+						</listhead>
+						<template name="model" var="det">
+							<listitem
+								style="@load(det.esHaber  ? det.colorCuentaHaber : '')">
+								<listcell label="@load(det.planCuenta)" />
+								<listcell
+									label="@load(det.cuentaDetalle)" />
+								<listcell
+									label="@load(det.descripcion)" />
+								<listcell label="@load(det.debe)" />
+								<listcell label="@load(det.haber)" />
+							</listitem>
+						</template>
+					</listbox>
+				</detail>
+				<label value="@load(each.numero)" />
+				<label value="@load(each.descripcion)" />
+				<label value="@load(each.sistema)" />
+				<toolbarbutton label="editar"
+					onClick="@command('editarSubdiarios', subd=each)"
+					visible="@load(each.esManual)" />
+			</row>
+		</template>
+	</grid>
+
+</window>

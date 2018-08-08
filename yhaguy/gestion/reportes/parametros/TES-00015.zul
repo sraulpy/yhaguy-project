@@ -1,0 +1,20 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="50%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Vto. Cheque Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." 
+				format="dd-MM-yyyy" hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Vto. Cheque Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." 
+				format="dd-MM-yyyy" hflex="true" />
+		</row>
+	</rows>
+</grid>

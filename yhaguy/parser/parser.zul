@@ -1,0 +1,13 @@
+<zk>
+	<window id="Body" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.yhaguy.parser.ParserControlBody')">
+		<groupbox title="Carga de perfiles de usuarios" height="min">
+			<grid hflex="min">
+				<rows>
+					<row>
+					<button	onClick="@command('parser')" label="Poblar" width="112px" height="26px" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+	</window>
+</zk>

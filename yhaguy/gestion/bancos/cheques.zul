@@ -1,0 +1,201 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.cheques.ChequesViewModel')"
+	height="100%">
+		
+	<div height="5px" />
+	<hlayout sclass="button-container">	
+		<navbar mold="bs-pills">
+			<navitem label=" TODOS" selected="true"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=1)" />
+			<navitem label=" AL DÍA"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=2)" />
+			<navitem label=" DIFERIDOS"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=3)" />
+			<navitem label=" No conciliados"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=4)" 
+				visible="false"/>
+			<navitem label=" A VENCER"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=5)" />
+			<navitem label=" PENDIENTES DE COBRO"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=6)" />			
+		</navbar>
+		<space hflex="true"></space>
+		<button mold="bs" sclass="btn-success btn-sm"
+			width="170px"
+			iconSclass="z-icon-plus-circle"
+			onClick="@command('registrarCheque')">Registrar Cheque</button>
+		<space />
+		<button mold="bs" sclass="btn-warning btn-sm"
+			width="170px" iconSclass="z-icon-print"
+			onClick="@command('imprimirCheque')"
+			disabled="@load(vm.selectedItem eq null? 'true':'false')"
+			label=" Imprimir Cheque" />
+		<space />		
+		<button mold="bs" sclass="btn-info btn-sm"
+			width="170px" iconSclass="z-icon-print"
+			onClick="@command('listadoCheques')"
+			label=" Imprimir Listado" />
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.cheques)"
+		selectedItem="@bind(vm.selectedItem)">
+		<auxhead>
+			<auxheader colspan="2" label="Origen"/>
+			<auxheader colspan="9" label="Cheque"/>
+		</auxhead>
+		<listhead>
+			<listheader label="Caja" width="110px" />
+			<listheader label="Orden de Pago" width="110px" />
+			<listheader label="Banco" width="140px" />
+			<listheader label="Número" align="right" width="120px" />
+			<listheader label="Emisión" width="110px" />
+			<listheader label="Vencimiento" width="110px" />
+			<listheader label="Fecha Cobro" width="110px" />
+			<listheader label="Tipo" width="80px" />
+			<listheader label="Beneficiario" />
+			<listheader label="Importe Gs." align="right" width="140px" />
+			<listheader label="Cobrado" align="center" width="65px"
+				tooltiptext="Cheque Cobrado.."/>
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						placeholder="Caja.."
+						value="@bind(vm.filterNumeroCaja)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						placeholder="Órden Pago.."
+						value="@bind(vm.filterNumeroOrdenPago)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						placeholder="Banco.."
+						value="@bind(vm.filterBanco)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						placeholder="Número.."
+						value="@bind(vm.filterNro)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						sclass="filter"
+						placeholder="Emisión.."/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="D.."
+						value="@bind(vm.filterFechaDD)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="M.."
+						value="@bind(vm.filterFechaMM)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="A.."
+						value="@bind(vm.filterFechaAA)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader/>
+			<auxheader/>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						sclass="filter"
+						placeholder="Beneficiario.."
+						value="@bind(vm.filterBeneficiario)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+			</auxheader>
+			<auxheader />
+		</auxhead>
+		<template name="model">
+			<listitem style="@load(each.pos12? 'text-decoration:line-through; color:red' : '')">
+				<listcell label="@load(each.pos9)" />
+				<listcell label="@load(each.pos10)" />
+				<listcell label="@load(each.pos2.toString().toUpperCase())" />
+				<listcell label="@load(each.pos3)" />
+				<listcell label="@load(each.pos4) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.pos5) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.pos13) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.pos8 ? 'AL DÍA' : 'DIFERIDO')" />
+				<listcell label="@load(each.pos6.toString().toUpperCase())" />
+				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" />
+				<listcell>
+					<div onClick="@command('openChequeCobrado', popup=popCob, cheque=each, comp=self)">
+						<label value="SI" class="label label-success" visible="@load(each.pos11)" />
+						<label value="NO" class="label label-danger" visible="@load(!each.pos11)" />
+					</div>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="10">
+				<hlayout>
+					<field value="@load(vm.cheques.size())" />
+					<field value="ítems" />
+					<space hflex="true"></space>
+					<field value="Total Gs.:" />
+					<guaranibox readonly="true" value="@load(vm.totalImporteGs)" 
+						style="text-align:right;background:#EEF7FA;font-weight:bold" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="popCob" width="140px" sclass="rounded">
+		<vbox width="100%">
+			<hlayout>
+				<button mold="bs" sclass="btn-success btn-sm" label="SI"
+					width="55px"
+					onClick="@command('setChequeCobrado', cobrado = true, comp=popCob)" />
+				<button mold="bs" sclass="btn-danger btn-sm" label="NO"
+					width="55px"
+					onClick="@command('setChequeCobrado', cobrado = false, comp=popCob)" />
+			</hlayout>
+			<div height="5px"></div>
+			<datebox placeholder="Fecha Cobro.." hflex="true"
+				value="@bind(vm.fechaCobro)"></datebox>
+		</vbox>
+	</popup>
+</window>

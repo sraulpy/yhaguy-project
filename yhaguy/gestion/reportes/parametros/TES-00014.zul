@@ -1,0 +1,35 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				width="100%" style="text-align:center" format="dd-MM-yyyy"
+				tooltiptext="Fecha utilizada como rango inicial de búsqueda. Deje en blanco si no desea especificar un rango de inicio."
+				placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				width="100%" style="text-align:center" format="dd-MM-yyyy"
+				tooltiptext="Fecha utilizada como rango final de búsqueda. Deje en blanco si no desea especificar un rango final."
+				placeholder="dd-MM-aaaa" hflex="true" />
+		</row>
+		<row>
+			<field value="Librado por:" />
+			<textbox value="@bind(vm.dato.filtro.libradoPor)"
+				tooltiptext="Nombre o razón social del emitente del cheque"
+				width="100%" hflex="true" />
+		</row>
+		<row>
+			<field value="Nro. Comprobante:" />
+			<textbox value="@bind(vm.dato.filtro.nroComprobanteCheque)"
+				width="100%"
+				tooltiptext="Número del comprobante de la operación asociada al cheque (Nro. de facturo y/o recibo)"
+				hflex="true" />
+		</row>
+	</rows>
+</grid>

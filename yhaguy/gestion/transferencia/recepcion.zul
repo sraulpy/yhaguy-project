@@ -1,0 +1,47 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.transferencia.TransferenciaSimpleVM')"
+	style="padding:5px">
+	
+	<vlayout>
+		
+		<hlayout style="margin:5px">
+			<field value="Destino:"/>
+			<space/>
+			<combobox
+				model="@load(vm.dato.depositosDestinoExt)"
+				selectedItem="@bind(vm.dato.selectedDestinoExt)"
+				instant="true">
+				<template name="model">
+					<comboitem label="@load(each.text)" />
+				</template>
+			</combobox>
+			<labelConstrain />
+		</hlayout>
+	
+		<listbox height="320px"
+			model="@load(vm.dato.dto.detalles)">
+			<listhead style="text-align:center">
+				<listheader label="Código" width="120px"/>
+				<listheader label="Descripción" />
+				<listheader label="U.Medida" width="100px" />
+				<listheader label="Recibido" width="100px" 
+					align="right" style="text-align:center"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articulo.pos1)"/>
+					<listcell label="@load(each.articulo.pos2)"/>
+					<listcell label="UND." />
+					<listcell>
+						<longbox value="@bind(each.cantidadRecibida)" 
+							width="80px"/>
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter label="ítems"/>
+			</listfoot>
+		</listbox>
+	</vlayout>
+
+</div>

@@ -1,0 +1,79 @@
+<div width="100%" height="100%">
+
+	<grid id="cc" model="@load(vm.listadoCuentasClientes)"
+		vflex="true" hflex="true">
+		<custom-attributes org.zkoss.zul.grid.autoSort="true" />
+
+		<columns menupopup="auto" hflex="true">
+			<column width="40px" />
+			<column label="Id Empresa" hflex="min" align="center"
+				sort="auto(pos1)" />
+			<column label="Razon Social" hflex="max"
+				style="text-align:center" sort="auto(pos2)"
+				onCreate="self.sort(true)" />
+			<column label="Fecha Apertura Cuenta" align="center"
+				sort="auto(pos3)" hflex="min" />
+			<column label="Estado Cuenta" align="center" sort="auto(pos4.descripcion)" />
+			<column label="Linea Credito Gs" align="center" sort="auto(pos5.linea)" />
+			<column label="Pendiente Total Gs" align="center"
+				sort="auto(pos6)" />
+			<column label="Credito Disponible Gs" align="center"
+				sort="auto(pos7)" />
+			<column align="center" />
+		</columns>
+
+		<template name="model">
+
+			<row
+				onDoubleClick="@command('verMovimientos', seleccionado=each)">
+
+				<detail open="false" fulfill="onOpen">
+					<separator />
+					<grid width="500px" model="@load(each.pos8)">
+						<columns>
+							<column label="Moneda" />
+							<column label="Pendiente" />
+							<column label="Tipo Cambio" />
+							<column label="Pendiente Gs" />
+						</columns>
+						<template name="model">
+							<row>
+								<label
+									value="@load(each.pos1.descripcion)" />
+								<monedabox value="@load(each.pos2)"
+									inplace="true" readonly="true" style="text-align:right"
+									format="#,###,###,##0.00" />
+								<guaranibox value="@load(each.pos3)"
+									inplace="true" readonly="true" />
+								<guaranibox value="@load(each.pos4)"
+									inplace="true" readonly="true" />
+							</row>
+						</template>
+					</grid>
+					<separator height="20px" />
+				</detail>
+
+				<label value="@load(each.pos1)" />
+				<label value="@load(each.pos2)" />
+				<label
+					value="@load(each.pos3) @converter ('formatedDate',format='dd-MM-yyyy' )"
+					style="color:black;text-align:center" />
+				<label value="@load(each.pos4.descripcion)" />
+				<guaranibox value="@load(each.pos5.linea)"
+					inplace="true" readonly="true" />
+				<guaranibox value="@load(each.pos6)" inplace="true"
+					readonly="true" />
+				<guaranibox value="@load(each.pos7)" inplace="true"
+					readonly="true" />
+				<div style="cursor: pointer"
+					tooltiptext="Click para ver los movimientos"
+					onClick="@command('verMovimientos', seleccionado=each)">
+					Ver Movimientos
+					<image src="/core/images/searching2.png"
+						onClick="@command('verMovimientos', seleccionado=each)" />
+				</div>
+
+			</row>
+		</template>
+	</grid>
+</div>

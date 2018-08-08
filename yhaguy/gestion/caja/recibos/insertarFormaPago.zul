@@ -1,0 +1,348 @@
+<window border="normal" title="Forma de Pago" width="500px"
+	top="25%" left="35%">
+	<div width="500px">
+	
+	<grid width="470px" sclass="vgrid">
+		<columns>
+			<column width="180px"/>
+			<column/>
+		</columns>
+		<rows>		
+			<row>
+				<field value="Tipo de Pago:"/>
+				<combobox model="@load(vm.formasDePago)" hflex="true"
+					selectedItem="@bind(vm.nvoFormaPago.tipo)"
+					onChange="@command('seleccionarFormaPago')" instant="true">
+					<template name="model">
+						<comboitem
+							label="@load(each.text.toUpperCase())" />
+					</template>
+				</combobox>
+			</row>
+			
+			<!-- ___________________________ Datos de la Tarjeta __________________________ -->
+			
+			<row id="rwTarjeta" visible="false">
+				<field value="Tipo de Tarjeta:"/>
+				<hlayout>
+					<combobox model="@load(vm.dtoUtil.tarjetas)"
+						hflex="true" selectedItem="@bind(vm.selectedTarjetaCredito)"
+						instant="true" onChange="@command('refreshTipoTarjeta')"
+						value="@load(vm.selectedTarjetaCredito.pos1)">
+						<template name="model">
+							<comboitem label="@load(each.pos1)" />
+						</template>
+					</combobox>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			<row id="rwEmisor" visible="false">
+				<field value="Emisor:"/>
+				<hlayout>
+					<combobox
+						model="@load(vm.selectedTarjetaCredito.pos2)"
+						selectedItem="@bind(vm.nvoFormaPago.tarjetaTipo)" instant="true"
+						hflex="true" value="@load(vm.nvoFormaPago.tarjetaTipo.text)">
+						<template name="model">
+							<comboitem label="@load(each.text)" />
+						</template>
+					</combobox>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			<row id="rwProcesadora" visible="false">
+				<field value="Procesadora:"/>
+				<hlayout>
+					<combobox
+						value="@load(vm.nvoFormaPago.tarjetaProcesadora.pos1)"
+						hflex="true" model="@load(vm.dtoUtil.procesadoras)"
+						selectedItem="@bind(vm.nvoFormaPago.tarjetaProcesadora)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.pos1)" />
+						</template>
+					</combobox>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			<row id="rwNroTarjeta" visible="false">
+				<field value="Número de Tarjeta:"/>
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.tarjetaNumero)
+						@converter(vm.cnv.creditCard)" 
+						width="85px" sclass="formato-numerico"/>
+					<labelConstrain/>
+					<label value="últimos 4 dígitos"
+						style="color:red;font-style:oblique"/>
+				</hlayout>				
+			</row>
+			<row id="rwNroComprobante" visible="false">
+				<field value="Número Comprobante:"/>
+				<hlayout>
+					<textbox
+						value="@bind(vm.nvoFormaPago.tarjetaNumeroComprobante)"
+						width="85px" sclass="formato-numerico" />
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			<row id="rwCuotas" visible="false">
+				<field value="Cuotas:"/>
+				<hlayout>
+					<spinner
+						value="@bind(vm.nvoFormaPago.tarjetaCuotas)" width="85px" />
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<!-- ____________________________ Datos del Cheque ____________________________ -->
+						
+			<row id="rwBanco" visible="false">
+				<field value="Cuenta Banco:"/>
+				<textbox readonly="true" width="175px"
+					value="@load(vm.nvoFormaPago.bancoCta.banco.pos1)"/>
+			</row>
+			
+			<row id="rwChequera" visible="false">
+				<field value="Chequera:"/>
+				<textbox readonly="true" width="175px"
+					value="@load(vm.dato.selectedChequera.pos2)"/>
+			</row>
+			
+			<row id="rwChequeBanco" visible="false">
+				<field value="Banco:"/>
+				<hlayout>
+					<combobox model="@load(vm.dtoUtil.bancosTerceros)"
+						hflex="true" selectedItem="@bind(vm.nvoFormaPago.chequeBanco)"
+						instant="true" value="@load(vm.nvoFormaPago.chequeBanco)">
+						<template name="model">
+							<comboitem label="@load(each.text)" />
+						</template>
+					</combobox>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+						
+			<row id="rwNroCheque" visible="false">
+				<field value="Nro. Cheque:"/>
+				<hlayout sclass="z-valign-middle">
+				<textbox value="@bind(vm.nvoFormaPago.chequeNumero)"/>
+				<labelConstrain/>
+				</hlayout>				
+			</row>
+			
+			<row id="rwLibrador" visible="false">
+				<field value="Librador:"/>
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.chequeLibrador)" hflex="true"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row id="rwVencimiento" visible="false">
+				<field value="Fecha del Cheque:"/>
+				<hlayout>
+					<datebox readonly="true" value="@bind(vm.nvoFormaPago.chequeFecha)" />
+					<labelConstrain/>
+				</hlayout>				
+			</row>	
+			
+			<row id="rwMontoCheque" visible="false">
+				<field>Monto del Cheque:</field>
+				<hlayout>
+					<guaranibox value="@bind(vm.nvoFormaPago.montoChequeGs)" />
+					<label value="Gs." style="font-size:11px"/>
+				</hlayout>
+			</row>		
+			
+			
+			<!-- ________________________ Forma Pago Depósito Bancario _________________________ -->	
+			
+			<row id="rwDepositoBanco" visible="false">
+				<field value="Banco:"/>
+				<combobox readonly="true"
+					value="@load(vm.nvoFormaPago.depositoBancoCta.pos1)"
+					model="@load(vm.dtoUtil.bancos)" hflex="true"
+					selectedItem="@bind(vm.nvoFormaPago.depositoBancoCta)"
+					instant="true">
+					<template name="model">
+						<comboitem label="@load(each.pos1)" />
+					</template>
+				</combobox>
+			</row>
+			
+			<row id="rwDepositoReferencia" visible="false">
+				<field value="Número de Referencia:"/>
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.depositoNroReferencia)"/>
+					<labelConstrain/>
+				</hlayout>				
+			</row>
+			
+			<!-- ________________________ Forma Pago Retención _________________________ -->
+			
+			<row id="rwNroRetencion" visible="false">
+				<field value="Número:" />
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.retencionNumero)"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row id="rwTimbradoRetencion" visible="false">
+				<field value="Timbrado:" />
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.retencionTimbrado)"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row id="rwTimbradoVencimiento" visible="false">
+				<field value="Vencimiento Timbrado:" />
+				<hlayout>
+					<datebox value="@bind(vm.nvoFormaPago.retencionVencimiento)"
+						constraint="no past"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<!-- ________________________ Forma Pago Cheque Autocobranza _________________________ -->
+			
+			<row id="rwChequeAutoCobranza" visible="false">
+				<field value="Cheque:" />
+				<hlayout>
+					<bandbox placeholder="Cheque Nro.."
+						readonly="true" value="@load(vm.selectedChequeAutoCobranza.numero)"
+						id="bndCheq"
+						hflex="true">
+						<bandpopup>
+							<listbox sclass="small-list" width="600px"
+								height="250px"
+								onSelect="@command('setFormaPagoAutoCobranza')"
+								model="@load(vm.chequesTercero)"
+								selectedItem="@bind(vm.selectedChequeAutoCobranza)">
+								<listhead>
+									<listheader width="120px" align="right">
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Cheque Nro.." 
+												value="@bind(vm.filterChequeNro)"/>
+										</hlayout>
+									</listheader>
+									<listheader width="120px">
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Banco.." 
+												value="@bind(vm.filterChequeBanco)"/>
+										</hlayout>
+									</listheader>
+									<listheader>
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Cliente.." 
+												value="@bind(vm.filterChequeCliente)"/>
+										</hlayout>
+									</listheader>
+									<listheader width="100px" align="right"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.numero)"></listcell>
+										<listcell label="@load(each.banco.descripcion.toUpperCase())"></listcell>
+										<listcell label="@load(each.cliente.razonSocial)"></listcell>
+										<listcell label="@load(each.monto) @converter(vm.cnv.monedaLocal)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			
+			<row id="rwChequeBancoAutoCobro" visible="false">
+				<field value="Banco:"/>
+				<textbox value="@load(vm.nvoFormaPago.chequeBanco.text.toUpperCase())" readonly="true"
+					hflex="true"></textbox>
+			</row>
+			
+			<!-- ________________________ Forma Pago Debito Cobranza Central _________________________ -->
+			
+			<row id="rwDebitoCobroCentral" visible="false">
+				<field value="Recibo Nro.:"/>
+				<hlayout>
+					<textbox value="@bind(vm.nvoFormaPago.reciboDebitoNro)" 
+						hflex="true" />
+					<labelConstrain />
+				</hlayout>				
+			</row>
+			
+			<row id="rwVencimientoAutoCobro" visible="false">
+				<field value="Fecha del Cheque:"/>
+				<textbox readonly="true" value="@load(vm.nvoFormaPago.chequeFecha) @converter('formattedDate', format='dd-MM-yyyy')" 
+					hflex="true"/>			
+			</row>
+			
+			<row id="rwLibradorAutoCobro" visible="false">
+				<field value="Librador:"/>
+				<textbox value="@load(vm.nvoFormaPago.chequeLibrador)" readonly="true" 
+					hflex="true"/>
+			</row>	
+			
+			<!-- ________________________ Forma de Pago Saldo a Favor Cobrado _________________________ -->
+			
+			<row id="rwSaldoFavorCobrado" visible="false">
+				<field value="Saldo a Favor:"/>
+				<hlayout>
+					<combobox readonly="true"
+						hflex="true"
+						model="@load(vm.saldosFavor)"
+						selectedItem="@bind(vm.nvoFormaPago.ctaCteSaldoFavor)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.pos1)" />
+						</template>
+					</combobox>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			
+			<row id="rwMontoAplicado">
+				<field value="Importe:"/>
+				<hlayout>
+				<hlayout visible="@load(vm.dato.reciboDTO.monedaLocal ? 'true' : 'false')">
+					<guaranibox id="dbxGs" value="@bind(vm.nvoFormaPago.montoGs)"
+						onChange="@command('dolarizarFormaPago')"/>
+					<label value="@load(vm.dtoUtil.simboloMonedaLocal)" 
+						sclass="label-moneda"/>
+				</hlayout>
+				<hlayout visible="@load(vm.dato.reciboDTO.monedaLocal ? 'false' : 'true')">
+					<guaranibox id="dbxUS" value="@bind(vm.nvoFormaPago.montoDs)"
+						onChange="@command('guaranizarFormaPago')"/>
+					<label value="@load(vm.dato.reciboDTO.moneda.pos2)" 
+						sclass="label-moneda"/>
+				</hlayout>
+				</hlayout>
+			</row>
+			
+		</rows>
+	</grid>
+	</div>
+	<toolbar align="center" style="margin-top:15px">
+		<hlayout>
+			<button label="ACEPTAR" tooltiptext="Aceptar"
+				iconSclass="z-icon-check" width="150px" onClick="@command('agregarFormaPago')"
+				style="font-weight:bold;padding:7px"
+				dir="normal"/>
+			<button id="btnCancel" label="CANCELAR" tooltiptext="Cancelar"
+				iconSclass="z-icon-times" width="150px" onClick="@command('cancelarFormaPago')"
+				style="font-weight:bold;padding:7px"
+				dir="normal"/>
+		</hlayout>
+	</toolbar>
+</window>

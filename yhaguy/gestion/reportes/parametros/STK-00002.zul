@@ -1,0 +1,49 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Sucursal Origen:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.sucursales)"
+				selectedItem="@bind(vm.dato.filtro.sucursalOrigen)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Sucursal Destino:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.sucursales)"
+				selectedItem="@bind(vm.dato.filtro.sucursalDestino)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)">
+				<template name="model">
+					<comboitem
+						label="@load(each[0].toString().toUpperCase())" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

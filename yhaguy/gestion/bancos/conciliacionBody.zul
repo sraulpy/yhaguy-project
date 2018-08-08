@@ -1,0 +1,226 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.conciliacion.BancoConciliacionViewModel')"
+		height="100%" width="100%">
+
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Conciliación Nro." />
+						<textbox readonly="true" hflex="true"
+							value="@load(vm.dto.numero)"></textbox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Cuenta" />
+						<combobox hflex="true"
+							value="@load(vm.dto.banco.banco.pos1.toString().toUpperCase())"
+							model="@load(vm.bancos)"
+							selectedItem="@bind(vm.dto.banco)" instant="true">
+							<template name="model">
+								<comboitem label="@load(each.banco.pos1.toString().toUpperCase())"></comboitem>
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Desde" />
+						<datebox hflex="true"
+							value="@bind(vm.dto.desde)"></datebox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Hasta" />
+						<datebox hflex="true"
+							value="@bind(vm.dto.hasta)"></datebox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<textbox hflex="true"
+							value="@load(vm.dto.cerrado? 'CONFIRMADO' : 'PENDIENTE')"
+							readonly="true"></textbox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal" />
+						<textbox readonly="true" hflex="true"
+							value="@load(vm.dto.sucursal.text.toUpperCase())">
+						</textbox>
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+		
+		<div height="5px"></div>
+		
+		<solicitarCabecera visible="@load(!vm.detalleVisible)"/>
+		
+		<hbox width="100%" vflex="true" visible="@load(vm.detalleVisible)">
+			<vbox hflex="true" vflex="true">
+				<hlayout sclass="button-container">
+					<field value="Registros Internos" />
+					<separator orient="vertical" bar="true"></separator>
+					<button mold="bs" sclass="btn-primary btn-sm"
+						width="170px" iconSclass="z-icon-check-circle"
+						disabled="@load(!vm.conciliarEnable)"
+						onClick="@command('conciliar')"
+						label=" Conciliar Movimiento" />
+					<space />
+					<button mold="bs" sclass="btn-info btn-sm"
+						width="170px" iconSclass="z-icon-print"
+						disabled="@load(!vm.siempreHabilitado)"
+						onClick="@command('resumen')"
+						label=" Ver Resumen" />
+				</hlayout>
+				<listbox model="@load(vm.movimientosBanco)" visible="false"></listbox>
+				<listbox sclass="small-list" vflex="true"
+					emptyMessage="MOVIMIENTOS DE BANCO REGISTRADOS.."
+					model="@load(vm.movimientosBanco_)"
+					selectedItem="@bind(vm.selectedItem1)"
+					selectedItems="@bind(vm.selectedItems1)"
+					onSelect="@command('selectDetalle1')"
+					multiple="true">
+					<listhead>
+						<listheader width="30px" align="center"
+							sort="auto(15)"></listheader>
+						<listheader width="30px" align="center"></listheader>	
+						<listheader label="Fecha" style="text-align:center" align="right" width="100px" 
+							sort="auto(0)"/>
+						<listheader label="Número" style="text-align:center" align="right" width="120px" 
+							sort="auto(2)"/>
+						<listheader label="Concepto" 
+							sort="auto(3)"/>
+						<listheader label="Debe" style="text-align:center" align="right" width="110px"
+							sort="auto(16)"/>
+						<listheader label="Haber" style="text-align:center" align="right" width="110px"
+							sort="auto(17)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell image="@load(each[15] ? '/core/images/accept_.png' : '/core/images/exclamation.png')"></listcell>
+							<listcell>
+								<checkbox checked="@bind(each[18])"
+									onCheck="@command('selectItem1', item=each)"></checkbox>
+							</listcell>
+							<listcell label="@load(each[0])"/>
+							<listcell label="@load(each[2])"/>
+							<listcell label="@load(each[3])"/>
+							<listcell label="@load(each[16]) @converter(vm.cnv.monedaLocal)"/>
+							<listcell label="@load(each[17]) @converter(vm.cnv.monedaLocal)"/>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="7" align="left">
+							<hbox width="100%" align="center">
+								<field value="ítems" />
+								<space hflex="true"/>
+								<label value="@load(vm.selectedItems1.size())" style="color:blue"></label>
+								<label value="coincidencias" style="color:blue"></label>
+								<space hflex="true"/>
+								<field value="Debe:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.totalDebe)"/>
+								<space></space>
+								<field value="Haber:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.totalHaber)"/>
+								<space></space>
+								<field value="Saldo:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.totalDebe - vm.totalHaber)"/>
+							</hbox>
+						</listfooter>
+					</listfoot>
+				</listbox>
+			</vbox>
+			<vbox hflex="true" vflex="true">
+				<hlayout sclass="button-container">
+					<field value="Registros del Banco" />
+					<separator orient="vertical" bar="true"></separator>
+					<button mold="bs"
+						upload="true, accept=.csv"
+						onUpload="@command('uploadFile', file=event.media)"
+						width="170px" height="30px" iconSclass="z-icon-upload"
+						disabled="@load(vm.dto.detalles2.size() eq 0? 'false' : 'true')"
+						label=" Importar Extracto" />
+					<space></space>
+					<button mold="bs"
+						upload="true, accept=.csv"
+						onUpload="@command('uploadFile', file=event.media)"
+						disabled="true"
+						width="170px" height="30px" iconSclass="z-icon-download"
+						label=" Descargar Extracto" />
+					<space hflex="true"></space>
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="170px" iconSclass="z-icon-check"
+						disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"
+						onClick="@command('confirmar')"
+						label=" Confirmar" />
+				</hlayout>
+				<listbox sclass="small-list" vflex="true"
+					emptyMessage="IMPORTE EL ARCHIVO DE EXTRACTO.."
+					model="@load(vm.dto.detalles2)"
+					selectedItem="@bind(vm.selectedItem2)"
+					selectedItems="@bind(vm.selectedItems2)"
+					onSelect="@command('selectDetalle2')"
+					multiple="true">
+					<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+					<listhead>
+						<listheader width="30px" align="center" sort="auto(conciliado)"></listheader>
+						<listheader width="30px" align="center"></listheader>
+						<listheader label="Fecha" style="text-align:center" align="right" width="100px" 
+							sort="auto(fecha)" onCreate="self.sort(true)"/>
+						<listheader label="Número" style="text-align:center" align="right" width="120px"
+							sort="auto(numero)" />
+						<listheader label="Concepto" />
+						<listheader label="Debe" style="text-align:center" align="right" width="110px"
+							sort="auto(debe)"/>
+						<listheader label="Haber" style="text-align:center" align="right" width="110px"
+							sort="auto(haber)"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell image="@load(each.conciliado ? '/core/images/accept_.png' : '/core/images/exclamation.png')"></listcell>
+							<listcell>
+								<checkbox checked="@bind(each.checked)"
+									onCheck="@command('selectItem2', item=each)"></checkbox>
+							</listcell>
+							<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+							<listcell label="@load(each.numero)"/>
+							<listcell label="@load(each.descripcion)"/>
+							<listcell label="@load(each.debe) @converter(vm.cnv.monedaLocal)" />
+							<listcell label="@load(each.haber) @converter(vm.cnv.monedaLocal)" />
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="7" align="left">
+							<hbox width="100%" align="center">
+								<field value="@load(vm.dto.detalles2.size())" />
+								<field value="ítems" />
+								<space hflex="true"/>
+								<label value="@load(vm.selectedItems2.size())" style="color:blue"></label>
+								<label value="coincidencias" style="color:blue"></label>
+								<space hflex="true"></space>
+								<field value="Debe:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.totalDebe)"/>
+								<space></space>
+								<field value="Haber:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.totalHaber)"/>
+								<space></space>
+								<field value="Saldo:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.totalHaber - vm.dto.totalDebe)"/>
+							</hbox>
+						</listfooter>
+					</listfoot>
+				</listbox>
+			</vbox>
+		</hbox>
+		
+	</window>
+</zk>

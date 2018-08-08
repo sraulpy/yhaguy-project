@@ -1,0 +1,109 @@
+<div apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')"
+	style="padding: 10px">
+	
+	<grid sclass="vgrid">
+		<columns>
+			<column width="150px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row visible="@load(!vm.dato.reposicion.pos16)">
+				<field value="Tipo de Egreso:"/>
+				<hlayout>
+					<combobox
+						model="@load(vm.dato.dtoUtil.cajaReposicionEgresos)"
+						hflex="true"
+						selectedItem="@bind(vm.dato.reposicion.pos10)"
+						instant="true"
+						buttonVisible="@load(vm.dato.reposicion.esNuevo())">
+						<template name="model">
+							<comboitem label="@load(each.text.toUpperCase())" />
+						</template>
+					</combobox>
+				</hlayout>
+			</row>			
+			<row>
+				<field value="@load(vm.labelFuncionario)"/>
+				<hlayout>
+					<textbox value="@bind(vm.dato.reposicion.pos1)"
+						onOK="@command('buscarResponsable')" placeholder="Nombre.."
+						hflex="true" readonly="@load(!vm.dato.reposicion.esNuevo())" 
+						visible="@load(!vm.dato.reposicion.pos16)"/>
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarResponsable')"
+						disabled="@load(!vm.dato.reposicion.esNuevo())" 
+						visible="@load(!vm.dato.reposicion.pos16)"/>
+					<textbox hflex="true"
+						readonly="true"
+						visible="@load(vm.dato.reposicion.pos16)"
+						value="@load(vm.dato.reposicion.pos13.text.toUpperCase().replace('-',' '))"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Moneda:"/>
+				<combobox value="@load(vm.dato.reposicion.pos9.text)"
+					model="@load(vm.dato.dtoUtil.monedas)"
+					selectedItem="@bind(vm.dato.reposicion.pos9)"
+					instant="true" onChange="@command('refreshTipoCambio')"
+					hflex="true"
+					buttonVisible="@load(vm.dato.reposicion.esNuevo())">
+					<template name="model">
+						<comboitem label="@load(each.text.toUpperCase())"/>
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Tipo de Cambio:"/>
+				<hlayout sclass="z-valign-middle">
+					<guaranibox readonly="true" value="@bind(vm.dato.reposicion.pos4)"/>
+					<label value="@load(vm.dato.dtoUtil.monedaGuarani.sigla)"
+						sclass="label-moneda"/>
+				</hlayout>
+			</row>		
+			<row>
+				<field value="Monto:"/>
+				<hlayout>
+					<guaranibox value="@bind(vm.dato.reposicion.pos5)"
+						onChange="@command('dolarizarEgreso')" 
+						readonly="@load(!vm.dato.reposicion.esNuevo())"/>
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" 
+						sclass="label-moneda"/>					
+					<space/>
+					<dolarbox value="@bind(vm.dato.reposicion.pos6)"
+						onChange="@command('guaranizarEgreso')"
+						visible="@load(!vm.dato.reposicionMonedaLocal)"
+						readonly="@load(!vm.dato.reposicion.esNuevo())"/>
+					<label value="@load(vm.dato.selectedMoneda.sigla)" 
+						sclass="label-moneda"
+						visible="@load(!vm.dato.reposicionMonedaLocal)"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Tipo de Pago:"/>
+				<hlayout>
+					<combobox
+						value="@load(vm.dato.reposicion.pos14.tipo.text.toUpperCase())"
+						model="@load(vm.formasDePagoEgreso)" instant="true"
+						onChange="@command('seleccionarFormaPagoEgreso')"
+						selectedItem="@bind(vm.dato.reposicion.pos14.tipo)"
+						hflex="true"
+						buttonVisible="@load(vm.dato.reposicion.esNuevo())">
+						<template name="model">
+							<comboitem
+								label="@load(each.text.toUpperCase())" />
+						</template>
+					</combobox>
+				</hlayout>
+			</row>	
+			<row>
+				<field value="Observación:"/>
+				<hlayout valign="top">
+					<textbox value="@bind(vm.dato.reposicion.pos7)" 
+						hflex="true" rows="2"
+						readonly="@load(!vm.dato.reposicion.esNuevo())"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+</div>

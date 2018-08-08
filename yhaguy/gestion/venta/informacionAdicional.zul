@@ -1,0 +1,56 @@
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaSimpleControl')"
+		style="padding:10px">
+
+		<grid sclass="vgrid">
+			<columns>
+				<column width="35%"/>
+				<column/>
+			</columns>
+			<rows>
+				<row>
+					<field value="Modo Venta:" />
+					<label value="@load(vm.dato.dto.modoVenta.text)" />
+				</row>
+				<row>
+					<field value="Presupuesto:" />					
+					<label value="@load(vm.dato.dto.numeroPresupuesto.isEmpty() ? '---' : vm.dato.dto.numeroPresupuesto)" />
+				</row>
+				<row>
+					<field value="Pedido:" />					
+					<label value="@load(vm.dato.dto.numeroPedido.isEmpty() ? '---': vm.dato.dto.numeroPedido)" />
+				</row>
+				<row>
+					<field value="Factura:" />					
+					<label value="@load(vm.dato.dto.numeroFactura.isEmpty() ? '---' : vm.dato.dto.numeroFactura)" />
+				</row>
+				<row>
+					<field value="Nota de Crédito:" />					
+					<label />
+				</row>
+				<row>
+					<field value="Recibo de Cobro:" />					
+					<listbox mold="select" hflex="true" />
+				</row>
+				<row>
+					<field value="Planilla de Caja:" />					
+					<label value="@load(vm.dato.dto.numeroPlanillaCaja.isEmpty() ? '---' : vm.dato.dto.numeroPlanillaCaja)" />
+				</row>
+				<row>
+					<field value="Preparado Por:" />
+					<label value="@load(vm.dato.dto.preparadoPor)"></label>
+				</row>
+				<row>
+					<field value="Repartidor:" />
+					<label value="@load(vm.dato.dto.repartidor)"></label>
+				</row>
+			</rows>
+		</grid>
+	</div>
+
+	<style>
+		.cursiva { font-style: italic; } .negrita { font-weight: bold; }
+	</style>
+
+</zk>

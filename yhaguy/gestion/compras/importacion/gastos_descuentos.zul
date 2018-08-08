@@ -1,0 +1,52 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="30%"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				Código:
+				<combobox model="@load(vm.dato.itemsGastoDescuento)"
+					value="@load(vm.dato.nvoItem.articulo.descripcion)" onSelect="@command('notificarTipoDcto')"
+					selectedItem="@bind(vm.dato.nvoItem.articulo)" width="200px">
+					<template name="model">
+						<comboitem label="@load(each.descripcion)"/>
+					</template>
+				</combobox>
+			</row>
+			<row>
+				Tipo:
+				<combobox model="@load(vm.dato.tiposGastoDescuento)" width="200px" 					
+					selectedItem="@bind(vm.dato.nvoItem.tipoGastoDescuento)"
+					onSelect="@command('notificarProrrateo')">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
+					</template>
+				</combobox>
+			</row>
+			<row>
+				% sobre el total:
+				<hlayout sclass="z-valign-middle">
+				<doublebox id="porc" width="50px" onChange="@command('calcularDescuento', porc=self.value)"/>
+				<label value="%" style="font-size:11px" />
+				</hlayout>
+			</row>
+			<row>
+				Valor:
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@bind(vm.dato.nvoItem.importeGastoDescuentoGs)" width="80px"
+						onChange="@command('notificarGastoDctoDs')"/>
+					<label value="Gs." style="font-size:11px" />
+					<space/>
+					<dolarbox value="@bind(vm.dato.nvoItem.importeGastoDescuentoDs)" width="70px"
+						onChange="@command('notificarGastoDctoGs')"/>
+					<label value="U$D" style="font-size:11px" />
+				</hlayout>
+			</row>
+		</rows>	
+	</grid>
+</window>
+</zk>

@@ -1,0 +1,60 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.." readonly="true"
+				value="@load(vm.dato.filtro.proveedor.razonSocial)"
+				id="bndProv_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedores)"
+						selectedItem="@bind(vm.dato.filtro.proveedor)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedor)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cuenta:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.monedas)"
+				selectedItem="@bind(vm.dato.filtro.moneda)"
+				value="@load(vm.dato.filtro.moneda.descripcion)">
+				<template name="model">
+					<comboitem
+						label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)">
+				<template name="model">
+					<comboitem
+						label="@load(each[0].toString().toUpperCase())" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

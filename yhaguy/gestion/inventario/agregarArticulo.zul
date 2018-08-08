@@ -1,0 +1,36 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.inventario.planilla.AgregarInvArticuloControlBody')"
+		apply="org.zkoss.bind.BindComposer" >
+		<grid>
+			<columns>
+				<column width="100px" />
+
+			</columns>
+			<rows>
+				<row>
+					Articulo:
+					<hlayout>
+						<textbox
+							value="@bind(vm.dato.selectedArticulo.pos1)" onOK="@command('buscararticulo')" >
+						</textbox>
+						<button onClick="@command('buscararticulo')"
+							image="/core/images/find-small.png" width="28px" />
+					</hlayout>
+				</row>
+				<row>
+					Ubicacion:
+
+					<listbox model="@load(vm.dato.ubicaciones)" rows="3"
+						selectedItem="@bind(vm.dato.selectedUbicacion)">
+						<template name="model">
+							<listitem label="@load(each.text)" />
+						</template>
+					</listbox>
+				</row>
+			</rows>
+
+		</grid>
+
+	</window>
+</zk>

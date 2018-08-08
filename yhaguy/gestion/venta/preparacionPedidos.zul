@@ -1,0 +1,336 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.preparacion.PreparacionPedidosVM')"
+	height="100%" width="100%" mode="modal"
+	id="win" onCreate="@command('distribuirPedidos_')"
+	onLater="@command('clearProgress')">
+	
+	<hbox style="margin:0px 10px 0px 10px; border-bottom:solid 1px #428bca" width="99%">
+		<space></space>
+		<a label="PEDIDOS PARA PREPARAR:" sclass="subtitulo_"
+			onClick="@command('mostrarPedidosEnCola')"></a>
+		<label value="@load(vm.enCola)" class="badge"
+			style="background-color:#428bca"></label>
+		<space></space>
+		<space></space>
+		<a label="PEDIDOS PENDIENTES:" sclass="_subtitulo"
+			onClick="@command('mostrarPedidosPendientes')"></a>
+		<label value="@load(vm.pedidosPend.size())" class="badge"
+			style="background-color:#d43f3a"></label>
+		<space></space>
+		<space></space>
+		<a label=" NUEVOS PEDIDOS EN COLA" sclass="sub_titulo"
+			onClick="@command('distribuirPedidos_')"
+			visible="@load(vm.sizeNuevosPedidos eq 0? 'false' : 'true')"
+			iconSclass="z-icon-refresh"></a>
+		<space hflex="true"></space>
+		<button iconSclass="z-icon-times" onClick='win.detach()'></button>
+	</hbox>
+
+	<hlayout width="100%" height="100%">
+		<vlayout hflex="true" vflex="true" children="@load(vm.pedidos1)" spacing="0" style="margin:5px;overflow:auto">
+			<template name="children">
+				<hbox align="center" height="20px" hflex="true" sclass="rounded" style="@load(each.auxi eq 'PREPARANDO'? 'background:#4cae4c' : 'background:#428bca'
+				or each.auxi eq 'PENDIENTE'? 'background:#d43f3a':'background:#428bca')">
+					<space></space>
+					<vlayout spacing="0">
+						<label value="@load(each.cliente.razonSocial)" sclass="titulo"></label>
+						<hlayout>
+							<label value="@load(each.fecha) @converter('formattedDate', format='dd-MM-yy HH:mm')" sclass="titulo"></label>
+							<label value=" - " sclass="titulo"></label>
+							<label value="@load(each.observacion)" sclass="titulo"
+								tooltiptext="@load(each.observacion)"></label>
+						</hlayout>						
+					</vlayout>
+				</hbox>
+				<listbox height="120px" model="@load(each.detallesOrdenado)" sclass="small-list">
+					<listhead>
+						<listheader width="50px" align="center"></listheader>
+						<listheader></listheader>
+						<listheader width="100px"></listheader>
+					</listhead>
+					<template name="model" var="item">
+						<listitem>
+							<listcell>
+								<a iconSclass="z-icon-times" 
+									onClick="@command('deleteItem', venta=each, item=item)"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									vflex="true" hflex="true"/>
+							</listcell>
+							<listcell label="@load(item.articulo.codigoInterno)"></listcell>
+							<listcell>
+								<spinner hflex="true" value="@bind(item.cantidad)" onChange="@command('editando', venta=each)"
+									instant="true"></spinner>
+							</listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="3">
+							<hlayout>
+								<label value="@load(each.numero)" sclass="subtitulo"></label>
+								<combobox placeholder="Preparado por.." value="@load(each.preparadoPor)" model="@load(vm.preparadores)"
+									selectedItem="@bind(each.preparadoPor)"
+									onChange="@command('setPreparador', venta=each)" instant="true"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)" />
+									</template>	
+								</combobox>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-success btn-sm"
+									iconSclass="z-icon-check" 
+									disabled="@load(each.preparadoPor.isEmpty())"
+									onClick="@command('aprobarPedido', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-danger btn-sm"
+									iconSclass="z-icon-clock-o" 
+									onClick="@command('pedidoPendiente', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-primary btn-sm"
+									iconSclass="z-icon-reply" 
+									onClick="@command('pedidoEnCola', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-info btn-sm"
+									iconSclass="z-icon-times" 
+									onClick="@command('deleteVenta', venta=each)"
+									width="50px" disabled="@load(!vm.isOperacionHabilitada('EliminarPedido'))" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<div height="10px"/>
+			</template>
+		</vlayout>
+
+		<vlayout hflex="true" vflex="true" children="@load(vm.pedidos2)" spacing="0" style="margin:5px;overflow:auto">
+			<template name="children">
+				<hbox align="center" height="20px" hflex="true" sclass="rounded" style="@load(each.auxi eq 'PREPARANDO'? 'background:#4cae4c' : 'background:#428bca'
+				or each.auxi eq 'PENDIENTE'? 'background:#d43f3a':'background:#428bca')">
+					<space></space>
+					<vlayout spacing="0">
+						<label value="@load(each.cliente.razonSocial)" sclass="titulo"></label>
+						<hlayout>
+							<label value="@load(each.fecha) @converter('formattedDate', format='dd-MM-yy HH:mm')" sclass="titulo"></label>
+							<label value=" - " sclass="titulo"></label>
+							<label value="@load(each.observacion)" sclass="titulo"
+								tooltiptext="@load(each.observacion)"></label>
+						</hlayout>
+					</vlayout>
+				</hbox>
+				<listbox height="120px" model="@load(each.detallesOrdenado)" sclass="small-list">
+					<listhead>
+						<listheader width="50px" align="center"></listheader>
+						<listheader></listheader>
+						<listheader width="100px"></listheader>
+					</listhead>
+					<template name="model" var="item">
+						<listitem>
+							<listcell>
+								<a iconSclass="z-icon-times" 
+									onClick="@command('deleteItem', venta=each, item=item)"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									vflex="true" hflex="true"/>
+							</listcell>
+							<listcell label="@load(item.articulo.codigoInterno)"></listcell>
+							<listcell>
+								<spinner hflex="true" value="@bind(item.cantidad)" onChange="@command('editando', venta=each)"
+									instant="true"></spinner>
+							</listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="3">
+							<hlayout>
+								<label value="@load(each.numero)" sclass="subtitulo"></label>
+								<combobox placeholder="Preparado por.." value="@load(each.preparadoPor)" model="@load(vm.preparadores)"
+									selectedItem="@bind(each.preparadoPor)"
+									onChange="@command('setPreparador', venta=each)" instant="true"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)" />
+									</template>	
+								</combobox>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-success btn-sm"
+									iconSclass="z-icon-check" 
+									disabled="@load(each.preparadoPor.isEmpty())"
+									onClick="@command('aprobarPedido', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-danger btn-sm"
+									iconSclass="z-icon-clock-o" 
+									onClick="@command('pedidoPendiente', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-primary btn-sm"
+									iconSclass="z-icon-reply" 
+									onClick="@command('pedidoEnCola', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-info btn-sm"
+									iconSclass="z-icon-times" 
+									onClick="@command('deleteVenta', venta=each)"
+									width="50px" disabled="@load(!vm.isOperacionHabilitada('EliminarPedido'))" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<div height="10px"/>
+			</template>
+		</vlayout>
+		
+		<vlayout hflex="true" vflex="true" children="@load(vm.pedidos3)" spacing="0" style="margin:5px;overflow:auto">
+			<template name="children">
+				<hbox align="center" height="20px" hflex="true" sclass="rounded" style="@load(each.auxi eq 'PREPARANDO'? 'background:#4cae4c' : 'background:#428bca'
+				or each.auxi eq 'PENDIENTE'? 'background:#d43f3a':'background:#428bca')">
+					<space></space>
+					<vlayout spacing="0">
+						<label value="@load(each.cliente.razonSocial)" sclass="titulo"></label>
+						<hlayout>
+							<label value="@load(each.fecha) @converter('formattedDate', format='dd-MM-yy HH:mm')" sclass="titulo"></label>
+							<label value=" - " sclass="titulo"></label>
+							<label value="@load(each.observacion)" sclass="titulo"
+								tooltiptext="@load(each.observacion)"></label>
+						</hlayout>
+					</vlayout>
+				</hbox>
+				<listbox height="120px" model="@load(each.detallesOrdenado)" sclass="small-list">
+					<listhead>
+						<listheader width="50px" align="center"></listheader>
+						<listheader></listheader>
+						<listheader width="100px"></listheader>
+					</listhead>
+					<template name="model" var="item">
+						<listitem>
+							<listcell>
+								<a iconSclass="z-icon-times" 
+									onClick="@command('deleteItem', venta=each, item=item)"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									vflex="true" hflex="true"/>
+							</listcell>
+							<listcell label="@load(item.articulo.codigoInterno)"></listcell>
+							<listcell>
+								<spinner hflex="true" value="@bind(item.cantidad)" onChange="@command('editando', venta=each)"
+									instant="true"></spinner>
+							</listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="3">
+							<hlayout>
+								<label value="@load(each.numero)" sclass="subtitulo"></label>
+								<combobox placeholder="Preparado por.." value="@load(each.preparadoPor)" model="@load(vm.preparadores)"
+									selectedItem="@bind(each.preparadoPor)"
+									onChange="@command('setPreparador', venta=each)" instant="true"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)" />
+									</template>	
+								</combobox>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-success btn-sm"
+									iconSclass="z-icon-check" 
+									disabled="@load(each.preparadoPor.isEmpty())"
+									onClick="@command('aprobarPedido', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-danger btn-sm"
+									iconSclass="z-icon-clock-o" 
+									onClick="@command('pedidoPendiente', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-primary btn-sm"
+									iconSclass="z-icon-reply" 
+									onClick="@command('pedidoEnCola', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-info btn-sm"
+									iconSclass="z-icon-times" 
+									onClick="@command('deleteVenta', venta=each)"
+									width="50px" disabled="@load(!vm.isOperacionHabilitada('EliminarPedido'))" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<div height="10px"/>
+			</template>
+		</vlayout>
+		
+		<vlayout hflex="true" vflex="true" children="@load(vm.pedidos4)" spacing="0" style="margin:5px;overflow:auto">
+			<template name="children">
+				<hbox align="center" height="20px" hflex="true" sclass="rounded" style="@load(each.auxi eq 'PREPARANDO'? 'background:#4cae4c' : 'background:#428bca'
+				or each.auxi eq 'PENDIENTE'? 'background:#d43f3a':'background:#428bca')">
+					<space></space>
+					<vlayout spacing="0">
+						<label value="@load(each.cliente.razonSocial)" sclass="titulo"></label>
+						<hlayout>
+							<label value="@load(each.fecha) @converter('formattedDate', format='dd-MM-yy HH:mm')" sclass="titulo"></label>
+							<label value=" - " sclass="titulo"></label>
+							<label value="@load(each.observacion)" sclass="titulo"
+								tooltiptext="@load(each.observacion)"></label>
+						</hlayout>
+					</vlayout>
+				</hbox>
+				<listbox height="120px" model="@load(each.detallesOrdenado)" sclass="small-list">
+					<listhead>
+						<listheader width="50px" align="center"></listheader>
+						<listheader></listheader>
+						<listheader width="100px"></listheader>
+					</listhead>
+					<template name="model" var="item">
+						<listitem>
+							<listcell>
+								<a iconSclass="z-icon-times" 
+									onClick="@command('deleteItem', venta=each, item=item)"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									vflex="true" hflex="true"/>
+							</listcell>
+							<listcell label="@load(item.articulo.codigoInterno)"></listcell>
+							<listcell>
+								<spinner hflex="true" value="@bind(item.cantidad)" onChange="@command('editando', venta=each)"
+									instant="true"></spinner>
+							</listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="3">
+							<hlayout>
+								<label value="@load(each.numero)" sclass="subtitulo"></label>
+								<combobox placeholder="Preparado por.." value="@load(each.preparadoPor)" model="@load(vm.preparadores)"
+									selectedItem="@bind(each.preparadoPor)"
+									onChange="@command('setPreparador', venta=each)" instant="true"
+									visible="@load(each.auxi ne 'PENDIENTE')"
+									hflex="true">
+									<template name="model">
+										<comboitem label="@load(each)" />
+									</template>	
+								</combobox>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-success btn-sm"
+									iconSclass="z-icon-check" 
+									disabled="@load(each.preparadoPor.isEmpty())"
+									onClick="@command('aprobarPedido', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi ne 'PENDIENTE')" mold="bs" sclass="btn-danger btn-sm"
+									iconSclass="z-icon-clock-o" 
+									onClick="@command('pedidoPendiente', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-primary btn-sm"
+									iconSclass="z-icon-reply" 
+									onClick="@command('pedidoEnCola', venta=each)"
+									width="50px"/>
+								<button visible="@load(each.auxi eq 'PENDIENTE')" mold="bs" sclass="btn-info btn-sm"
+									iconSclass="z-icon-times"
+									onClick="@command('deleteVenta', venta=each)"
+									width="50px" disabled="@load(!vm.isOperacionHabilitada('EliminarPedido'))" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<div height="10px"/>
+			</template>
+		</vlayout>
+	</hlayout>
+	
+	<style>
+		.titulo { font-weight:bold; color:white; font-size: 8pt; white-space: nowrap }
+		.subtitulo { font-weight:bold; font-size: 8pt; color:black }
+		.subtitulo_ { font-weight:bold; font-size: 10pt; color:#428bca }
+		._subtitulo { font-weight:bold; font-size: 10pt; color:#d43f3a }
+		.sub_titulo { font-weight:bold; font-size: 10pt; color:#4cae4c }
+		.obs { color:white; font-style:italic; font-size:10pt; font-weight:bold }
+	</style>
+
+</window>

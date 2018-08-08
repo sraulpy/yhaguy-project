@@ -1,0 +1,69 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Resumen:" />
+			<bandbox hflex="true" placeholder="RESUMEN.."
+				readonly="true" value="@load(vm.dato.filtro.cajaPlanillaResumen[1])"
+				id="bndRes">
+				<bandpopup>
+					<listbox sclass="small-list" width="600px"
+						height="300px" model="@load(vm.dato.filtro.cajaPlanillaResumenes)"
+						selectedItem="@bind(vm.dato.filtro.cajaPlanillaResumen)"
+						onSelect="@command('selectResumen', comp=bndRes)">
+						<listhead>
+							<listheader width="150px">
+								<hlayout>
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.filterFechaDD)"
+										instant="true" placeholder="D.."
+										sclass="filter" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.filterFechaMM)"
+										instant="true" placeholder="M.."
+										sclass="filter" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.filterFechaAA)"
+										instant="true" placeholder="A.."
+										sclass="filter" />
+								</hlayout>
+							</listheader>
+							<listheader width="110px">
+								<textbox hflex="true"
+									value="@bind(vm.dato.filtro.nroPlanillaCajaResumen)"
+									instant="true" placeholder="Nro. Resumen"
+									sclass="filter" />
+							</listheader>
+							<listheader>
+								<textbox hflex="true"
+									value="@bind(vm.dato.filtro.nroPlanillaCaja)"
+									instant="true" placeholder="Nro. Planilla"
+									sclass="filter" />
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each[0]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+								<listcell label="@load(each[1])"></listcell>
+								<listcell label="@load(each[2])"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Fecha:"/>
+			<textbox value="@load(vm.dato.filtro.cajaPlanillaResumen[0]) @converter('formattedDate', format='dd-MM-yyyy')" 
+				readonly="true" hflex="true"></textbox>
+		</row>
+		<row>
+			<field value="Hora:"/>
+			<textbox value="@load(vm.dato.filtro.cajaPlanillaResumen[0]) @converter('formattedDate', format='hh:mm:ss')" 
+				readonly="true" hflex="true"></textbox>
+		</row>
+	</rows>
+</grid>

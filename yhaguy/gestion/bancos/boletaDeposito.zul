@@ -1,0 +1,227 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.depositos.BoletaDepositoViewModel')"
+		height="100%" width="100%">
+
+		<grid sclass="vgrid">
+			<columns>
+				<column hflex="max" />
+				<column hflex="max" />
+				<column hflex="max" />
+				<column hflex="max" />
+				<column hflex="max" />
+			</columns>
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Cuenta" />
+						<buscadorCuentaBanco
+							value="@bind(vm.bancoDeposito)" campo="nroCuenta" hflex="true" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Banco" />
+						<textbox value="@bind(vm.bancoCuenta)"
+							readonly="true"
+							tooltiptext="Nombre del banco de la cuenta seleccionada."
+							width="150px" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Número de Boleta" />
+						<textbox
+							value="@bind(vm.bancoDeposito.numeroBoleta)"
+							tooltiptext="Número de la Boleta de Depósito."
+							width="150px" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Fecha" />
+						<datebox value="@bind(vm.bancoDeposito.fecha)" width="130px" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<textbox
+							value="@load(vm.bancoDeposito.cerrado? 'CERRADO' : 'PENDIENTE')"
+							readonly="true"  />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal" />
+						<textbox
+							value="@load(vm.bancoDeposito.sucursalApp)" readonly="true"
+							tooltiptext="Sucursal operativa del usuario." width="170px" />
+					</vlayout>
+
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Monto Total" />
+						<monedabox value="@bind(vm.bancoDeposito.monto)"
+							tooltiptext="Monto total del depósito."
+							width="150px" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Efectivo Total" />
+						<monedabox
+							value="@bind(vm.bancoDeposito.totalEfectivo)" width="150px" />
+					</vlayout>
+					<cell colspan="3">
+						<vlayout style="margin-top:5px">
+							<field value="Observaciones" />
+							<textbox
+								value="@bind(vm.bancoDeposito.observacion)"
+								tooltiptext="@load(vm.bancoDeposito.observacion)" hflex="true" />
+						</vlayout>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+		<hbox vflex="true" width="100%">
+			<vbox vflex="true" hflex="20%">
+				<hlayout sclass="button-container">
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="100px" iconSclass="z-icon-plus-circle"
+						onClick="@command('insertarPlanilla')"
+						label=" Insertar" />
+				</hlayout>
+				<listbox
+					model="@load(vm.bancoDeposito.planillas)" vflex="true"
+					selectedItem="@bind(vm.selectedPlanilla)"
+					sclass="small-list" checkmark="true"
+					emptyMessage="INGRESE LAS PLANILLAS..">
+					<listhead>
+						<listheader width="40px" align="center"></listheader>
+						<listheader label="Planillas"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell />
+							<listcell label="@load(each)"/>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="2" align="left">
+							<hlayout>
+								<field
+									value="@load(vm.bancoDeposito.planillas.size())" />
+								<field value="ítems"/>
+								<space></space>
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+			</vbox>
+
+			<vbox vflex="true" hflex="80%">
+				<hlayout sclass="button-container">
+					<button mold="bs" sclass="btn-danger btn-sm"
+						width="140px" iconSclass="z-icon-minus-circle"
+						onClick="@command('removerChequesSeleccionados')"
+						label=" Eliminar" />
+					<space />
+					<button mold="bs" sclass="btn-primary btn-sm"
+						width="140px" iconSclass="z-icon-plus-circle"
+						onClick="@command('insertarChequesDePlanilla')"
+						disabled="@load(vm.selectedPlanilla eq null? 'true' : 'false')"
+						label=" Cheques Planilla" />
+					<space />
+					<button mold="bs" sclass="btn-info btn-sm"
+						width="150px" iconSclass="z-icon-plus-circle"
+						onClick="@command('buscarChequeTercero')"
+						label=" Cheques Pendientes" />
+					<space />
+					<button mold="bs" sclass="btn-warning btn-sm"
+						width="140px" iconSclass="z-icon-plus-circle"
+						onClick="@command('addRecaudacionCentral')"
+						label=" Rec. Casa Central" />
+					<space />
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="140px" iconSclass="z-icon-check"
+						onClick="@command('cerrarBoletaDeposito')"
+						label=" Cerrar" 
+						disabled="@load(vm.bancoDeposito.esNuevo() or vm.deshabilitado)"/>
+				</hlayout>
+
+				<listbox model="@load(vm.bancoDeposito.cheques)"
+					vflex="true" sclass="small-list" multiple="true"
+					selectedItems="@bind(vm.selectedCheques)" checkmark="true"
+					emptyMessage="INGRESE LOS CHEQUES DEL DEPÓSITO..">
+
+					<listhead>
+						<listheader label="" width="40px"
+							align="center" />
+						<listheader label="Fecha" width="150px"
+							style="text-align:center" sort="auto(pos1)" />
+						<listheader label="Banco" width="150px"
+							style="text-align:center" />
+						<listheader label="Número de Cheque"
+							style="text-align:center" sort="auto(pos3)" />
+						<listheader label="R.C.C." width="70px" align="center" />
+						<listheader label="Monto" width="150px"
+							style="text-align:center" align="right" sort="auto(pos6)" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell></listcell>
+							<listcell
+								label="@load(each.pos1)  @converter('formatedDate', format='dd-MM-yyyy')" />
+							<listcell
+								label="@load(each.pos2.toString().toUpperCase())" />
+							<listcell label="@load(each.pos3)"
+								tooltiptext="@load(each.pos3)" />
+							<listcell>
+								<a visible="false"
+									onClick="@command('verItems', item=each, parent=self)">ítems</a>
+							</listcell>
+							<listcell
+								label="@load(each.pos6) @converter(vm.cnv.monedaLocal)" />
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="6" align="left">
+							<hlayout>
+								<field
+									value="@load(vm.bancoDeposito.cheques.size())" />
+								<field value="ítems" />
+								<space hflex="true" />
+								<field value="A Depositar:" />
+								<guaranibox
+									style="background:#EEF7FA;text-align:right;font-weight:bold"
+									value="@load(vm.bancoDeposito.totalAdepositar)" />
+								<space />
+								<field value="Total Efectivo:" />
+								<guaranibox
+									style="background:#EEF7FA;text-align:right;font-weight:bold"
+									value="@load(vm.bancoDeposito.totalEfectivo)" />
+								<space />
+								<field value="Total Cheque:" />
+								<guaranibox
+									style="background:#EEF7FA;text-align:right;font-weight:bold"
+									value="@load(vm.bancoDeposito.totalImporteCheques)" />
+								<space />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+			</vbox>
+		</hbox>
+		<popup id="popRecaudacion" width="270px" sclass="rounded">
+			<hbox align="end" pack="end" width="100%">
+				<hbox pack="start" align="center" hflex="true"
+					vflex="true" style="border-bottom:solid 1px silver">
+					<field value="Recaudaciones Descontadas" />
+				</hbox>
+				<button onClick="popRecaudacion.close()"
+					iconSclass="z-icon-times">
+				</button>
+			</hbox>
+			<listbox height="200px" sclass="small-list" model="@load(vm.selectedRecaudacion.pos10)"
+				style="margin-top:5px">
+				<listhead>
+					<listheader label="Recibo - Importe"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem label="@load(each.text)" />
+				</template>
+			</listbox>
+		</popup>
+	</window>	
+</zk>

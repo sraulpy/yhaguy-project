@@ -1,0 +1,96 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.definiciones.ArticuloGastoDefinicionesSoloViewModel')">
+
+	<!-- ________________ AGREGAR ARTICULO GASTO _______________ -->
+
+	<grid sclass="vgrid" visible="@load(vm.dato.agregar)">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Creado por" />
+				<textbox value="@load(vm.dato.articuloGasto.pos2)"
+					hflex="true" readonly="true" />
+			</row>
+			<row>
+				<field value="Nombre:" />
+				<textbox value="@bind(vm.dato.articuloGasto.pos1)"
+					hflex="true" />
+			</row>
+			<row>
+				<field value="Tipo de IVA:" />
+				<combobox hflex="true"
+					model="@load(vm.listaTipoIvaMyPair)" instant="true"
+					selectedItem="@bind(vm.dato.articuloGasto.pos4)">
+					<template name="model">
+						<comboitem label="@load(each.text)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Cta Contable:" />
+				<hlayout spacing="0">
+					<div sclass="searchform" width="245px">
+						<textbox value="@bind(vm.dato.ctaContable.pos1)"
+							sclass="searchfield" height="17px" width="215px"
+							onOK="@command('buscarCtaContable')" placeholder="Buscar.."
+							readonly="false" />
+						<toolbarbutton
+							image="/core/images/searchbox.png" sclass="searchBtn"
+							onClick="@command('buscarCtaContable')"
+							disabled="false" />
+					</div>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+
+	<!-- ________________ EDITAR ARTICULO GASTO _______________ -->
+	<grid sclass="vgrid" visible="@load(vm.dato.editar)">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Creado por" />
+				<textbox value="@load(vm.dato.selectArticuloGasto.pos2)"
+					hflex="true" readonly="true" />
+			</row>
+			<row>
+				<field value="Nombre:" />
+				<textbox value="@bind(vm.dato.selectArticuloGasto.pos1)"
+					hflex="true" />
+			</row>
+			<row>
+				<field value="Tipo de IVA:" />
+				<combobox hflex="true"
+					model="@load(vm.listaTipoIvaMyPair)" instant="true"
+					selectedItem="@bind(vm.dato.selectArticuloGasto.pos4)">
+					<template name="model">
+						<comboitem label="@load(each.text)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Cta Contable:" />
+				<hlayout spacing="0">
+					<div sclass="searchform" width="245px">
+						<textbox value="@bind(vm.dato.ctaContable.pos1)"
+							sclass="searchfield" height="17px" width="215px"
+							onOK="@command('buscarCtaContable')" placeholder="@bind(vm.dato.selectArticuloGasto.pos5)"
+							readonly="false" />
+						<toolbarbutton
+							image="/core/images/searchbox.png" sclass="searchBtn"
+							onClick="@command('buscarCtaContable')"
+							disabled="false" />
+					</div>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+</window>

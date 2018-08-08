@@ -1,0 +1,446 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.notacredito.NotaCreditoControlBody')"
+	width="100%" height="100%">
+
+	<!-- ___________________________ CABECERA ___________________________ -->
+	
+	<!-- Notas de Credito - Venta -->
+	
+	<grid sclass="vgrid"
+		visible="@load(vm.dto.notaCreditoVenta || vm.dto.solicitudNotaCreditoVenta)">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Tipo Movimiento" />
+					<textbox
+						value="@load(vm.dto.tipoMovimiento.pos1.toUpperCase())"
+						readonly="true" hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@bind(vm.dto.numero)"
+						readonly="true" 
+						placeholder="Auto-generado.."
+						hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Fecha" />
+					<textbox
+						value="@load(vm.dto.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')"
+						readonly="true" hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Moneda" />
+					<hlayout>
+						<combobox model="@load(vm.dtoUtil.monedas)"
+							value="@load(vm.dto.moneda.text)"
+							selectedItem="@bind(vm.dto.moneda)"
+							onChange="@command('refreshTipoCambio')" instant="true"
+							visible="@load(vm.dto.detalleEmpty)"
+							hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+						<textbox value="@load(vm.dto.moneda.text)"
+							readonly="true" visible="@load(!vm.dto.detalleEmpty)" 
+							hflex="true"/>
+						<guaranibox value="@load(vm.dto.tipoCambio)"
+							readonly="true" 
+							width="60px"/>
+						<label
+							value="@load(vm.dtoUtil.simboloMonedaLocal)"
+							sclass="label-moneda" />
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Estado" />
+					<hlayout>
+						<textbox
+							value="@load(vm.dto.estadoComprobante.text)" readonly="true" hflex="true" />
+						<image src="@load(vm.srcEstadoComprobante)"
+							tooltiptext="@load(vm.dto.estadoComprobante.text)"
+							visible="@load(!vm.dto.estadoComprobante.esNuevo())" />
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Sucursal" />
+					<textbox value="@load(vm.dto.sucursal.text)"
+						readonly="true" hflex="true" />
+				</vlayout>
+			</row>
+			<row>
+				<cell colspan="2">
+					<vlayout style="margin-top:6px">
+						<field value="Cliente" />
+						<hlayout>
+							<buscadorCliente value="@bind(vm.dto)"
+								campo="ruc" visible="@load(vm.motivoEditable)" 
+								width="100px"
+								buttonVisible="false"/>
+							<buscadorCliente value="@bind(vm.dto)"
+								campo="razonSocial" hflex="true"
+								visible="@load(vm.motivoEditable)" />	
+							<textbox value="@load(vm.dto.cliente.pos3)"
+								readonly="true" visible="@load(!vm.motivoEditable)" 
+								width="100px"/>						
+							<textbox value="@load(vm.dto.cliente.pos2)"
+								readonly="true" visible="@load(!vm.motivoEditable)"
+								hflex="true" />							
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+				</cell>
+				<vlayout spacing="0">
+					<field value="Motivo" />
+					<hlayout>
+						<combobox
+							model="@load(vm.motivosNCVenta)"
+							value="@load(vm.dto.motivo.text)" hflex="true"
+							selectedItem="@bind(vm.dto.motivo)"
+							onChange="@command('refresh')" instant="true"
+							visible="@load(vm.motivoEditable)">
+							<template name="model">
+								<comboitem label="@load(each.text.toUpperCase())" />
+							</template>
+						</combobox>
+						<textbox value="@load(vm.dto.motivo.text)" hflex="true"
+							visible="@load(!vm.motivoEditable)" readonly="true" />
+						<labelConstrain />
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Servicio Técnico" />
+					<hlayout>
+						<textbox hflex="true" readonly="true"
+							value="@load(vm.dto.serviciosTecnicos_)"></textbox>
+						<button iconSclass="z-icon-search" visible="@load(vm.dto.motivoReclamo)"
+							onClick='pop_serv_tec.open(self, "after_start"); tx_servtec.focus()' />
+					</hlayout>					
+				</vlayout>
+				<cell colspan="2">
+					<vlayout style="margin-top:6px">
+						<field value="Observación" />
+						<textbox value="@bind(vm.dto.observacion)"
+							hflex="true" />
+					</vlayout>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+
+	<!-- Notas de Credito - Compra -->
+
+	<grid sclass="vgrid"
+		visible="@load(!(vm.dto.notaCreditoVenta || vm.dto.solicitudNotaCreditoVenta))">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Tipo Movimiento" />
+					<textbox
+						value="@load(vm.dto.tipoMovimiento.pos1.toUpperCase())"
+						readonly="true" hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@bind(vm.dto.numero)"
+						readonly="@load(vm.dto.notaCreditoVenta || vm.deshabilitado)" 
+						placeholder="@load(vm.dto.notaCreditoVenta? 'Autogenerado..':'Número..')"
+						constraint="${vm.check.noVacio}"
+						hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Timbrado"/>				
+					<hlayout>
+						<textbox readonly="true"
+							value="@load(vm.dto.timbrado.pos1)"
+							placeholder="Nro. Timbrado.." hflex="true"/>
+						<button iconSclass="z-icon-search" 
+							onClick="@command('findTimbrado')"
+							disabled="@load(vm.dto.proveedor.esNuevo())"/>
+					</hlayout>					
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Fecha" />
+					<textbox
+						value="@load(vm.dto.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')"
+						readonly="true" hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Sucursal" />
+					<textbox value="@load(vm.dto.sucursal.text)"
+						readonly="true" hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Estado" />
+					<hlayout>
+						<textbox
+							value="@load(vm.dto.estadoComprobante.text)" readonly="true" hflex="true" />
+						<image src="@load(vm.srcEstadoComprobante)"
+							tooltiptext="@load(vm.dto.estadoComprobante.text)"
+							visible="@load(!vm.dto.estadoComprobante.esNuevo())" />
+					</hlayout>
+				</vlayout>
+			</row>
+			<row>
+				<cell colspan="2">
+					<vlayout style="margin-top:5px">
+						<field value="Proveedor"/>
+						<hlayout>
+							<buscadorProveedor value="@bind(vm.dto)"
+								campo="ruc" width="100px" 
+								visible="@load(vm.motivoEditable)"
+								buttonVisible="false"/>
+							<buscadorProveedor value="@bind(vm.dto)"
+								campo="razonSocial" hflex="true" 
+								visible="@load(vm.motivoEditable)"/>
+							<textbox value="@load(vm.dto.proveedor.pos3)"
+								readonly="true" visible="@load(!vm.motivoEditable)"
+								hflex="true" />	
+							<textbox value="@load(vm.dto.proveedor.pos2)"
+								readonly="true" hflex="true" visible="@load(!vm.motivoEditable)" />													
+							<labelConstrain />							
+						</hlayout>
+					</vlayout>
+				</cell>
+				<vlayout spacing="0">
+					<field value="Motivo" />
+					<hlayout>
+						<combobox
+							model="@load(vm.motivosNCCompra)"
+							value="@load(vm.dto.motivo.text.toUpperCase())" hflex="true"
+							selectedItem="@bind(vm.dto.motivo)"
+							onChange="@command('refresh')" instant="true"
+							visible="@load(vm.motivoEditable)">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+						<textbox value="@load(vm.dto.motivo.text)"
+							visible="@load(!vm.motivoEditable)" readonly="true" hflex="true" />
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Moneda" />
+					<hlayout>
+						<combobox model="@load(vm.dtoUtil.monedas)"
+							value="@load(vm.dto.moneda.text)"
+							selectedItem="@bind(vm.dto.moneda)"
+							onChange="@command('refreshTipoCambio')" instant="true"
+							visible="@load(vm.dto.detalleEmpty)"
+							hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+						<textbox value="@load(vm.dto.moneda.text)"
+							readonly="true" visible="@load(!vm.dto.detalleEmpty)"  hflex="true" />
+					</hlayout>
+				</vlayout>
+
+				<cell colspan="2">
+					<vlayout style="margin-top:6px">
+						<field value="Observación" />
+						<textbox value="@bind(vm.dto.observacion)"
+							hflex="true" />
+					</vlayout>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+
+	<div height="5px" />
+	
+	<solicitarCabecera 
+			visible="@load(vm.solicitarCabeceraVisible)" />
+
+
+	<!-- _____________________________ DETALLE __________________________ -->
+								
+	<hlayout vflex="true"
+		width="@load(vm.detalleArticuloVisible? '100%':'100.5%')"
+		visible="@load(vm.detalleVisible)">
+
+		<vbox hflex="@load(vm.detalleArticuloVisible? '35%':'1')"
+			vflex="true" spacing="0">
+
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-danger btn-sm"
+					width="120px" iconSclass="z-icon-times-circle"
+					onClick="@command('eliminarItemFac')"
+					disabled="@load(vm.deleteFacturaDisabled)" label=" Eliminar" />
+				<space />
+				<button mold="bs" sclass="btn-success btn-sm"
+					width="120px" iconSclass="z-icon-plus-circle"
+					onClick="@command('buscarFacturas')" label=" Insertar" />
+				<space visible="@load(vm.dto.notaCreditoVenta)"/>
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="120px" iconSclass="z-icon-check"
+					disabled="@load(!vm.aprobarEnabled)"
+					visible="@load(vm.dto.notaCreditoVenta)"
+					onClick="@command('aprobarSolicitud')" label=" Aprobar" />			
+				<space />
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="120px" iconSclass="z-icon-check"
+					disabled="@load(vm.confirmarDisabled)"
+					visible="@load(vm.dto.notaCreditoCompra)"
+					onClick="@command('confirmar')" label=" Confirmar" />	
+			</hlayout>
+
+			<listbox vflex="true" sclass="small-list"
+				model="@load(vm.dto.detallesFacturas)"
+				selectedItem="@bind(vm.selectedItemFac)"
+				checkmark="@load(vm.checkmarkFacturas)"
+				emptyMessage="INGRESE LAS FACTURAS A APLICAR..">
+				<listhead>
+					<listheader width="40px" align="center" />
+					<listheader label="Factura"
+						width="@load(vm.detalleArticuloVisible? '63%':'83%')"
+						style="text-align:center" />
+					<listheader label="@load(vm.labelMonto)"
+						style="text-align:center" align="right" 
+						visible="@load(vm.dto.motivoDescuento)"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell />
+						<listcell label="@load(each.descripcion)" />
+						<listcell visible="@load(vm.dto.motivoDescuento)">
+							<label
+								value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"
+								visible="@load(vm.dto.monedaLocal)" />
+							<label
+								value="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)"
+								visible="@load(!vm.dto.monedaLocal)" />
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="3">
+						<hlayout visible="@load(!vm.dto.motivoDescuento)">
+							<field value="@load(vm.dto.detallesFacturas.size())" />
+							<field value="ítems" />
+							<space hflex="true"/>
+						</hlayout>
+						<hlayout visible="@load(vm.dto.motivoDescuento)">
+							<field value="@load(vm.dto.detallesFacturas.size())" />
+							<field value="ítems" />
+							<space hflex="true" />
+							<label value="IVA Gs."
+								sclass="label-moneda-footer" />
+							<guaranibox sclass="footer-input"
+								style="background:#EEF7FA" value="@load(vm.dto.importeIva)" />
+							<space/>
+							<label value="@load(vm.labelImporte)"
+								sclass="label-moneda-footer" />
+							<guaranibox sclass="footer-input"
+								value="@load(vm.dto.importesFacturas[0])"
+								style="background:#EEF7FA" visible="@load(vm.dto.monedaLocal)" />
+							<dolarbox sclass="footer-input"
+								value="@load(vm.dto.importesFacturas[1])"
+								style="background:#EEF7FA" visible="@load(!vm.dto.monedaLocal)" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+
+		</vbox>
+
+		<vbox hflex="55%" vflex="true"
+			visible="@load(vm.detalleArticuloVisible)" spacing="0">
+
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-danger btn-sm"
+					width="120px" iconSclass="z-icon-times-circle"
+					onClick="@command('eliminarItems', items=vm.selectedItemsArt)"
+					disabled="@load(vm.deleteArticuloDisabled)" label=" Eliminar" />
+				<space />
+				<button mold="bs" sclass="btn-success btn-sm"
+					width="120px" iconSclass="z-icon-plus-circle"
+					disabled="@load(vm.addArticuloDisabled)"
+					onClick="@command('insertarDevolucion')" label=" Insertar" />
+			</hlayout>
+
+			<listbox model="@load(vm.dto.detallesArticulos)"
+				multiple="true" vflex="true" sclass="small-list"
+				selectedItems="@bind(vm.selectedItemsArt)"
+				checkmark="@load(vm.checkmarkDevoluciones)"
+				emptyMessage="INGRESE LOS ARTÍCULOS..">
+				<listhead>
+					<listheader width="40px" align="center" />
+					<listheader label="Artículo"
+						style="text-align:center" />
+					<listheader label="Cantidad"
+						style="text-align:center" align="right" width="10%" />
+					<listheader label="Costo Gs. S/iva"
+						style="text-align:center" align="right" width="20%" 
+						visible="@load(vm.dto.notaCreditoVenta and !vm.dto.solicitudNotaCreditoVenta and vm.dto.motivoDevolucion)"/>
+					<listheader label="@load(vm.labelImporte)"
+						style="text-align:center" align="right" width="20%" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell />
+						<listcell>
+							<label
+								value="@load(vm.concat(each.articulo.pos1, each.articulo.pos2))"
+								tooltiptext="@load(vm.concat(each.articulo.pos1, each.articulo.pos2))"
+								maxlength="45" />
+						</listcell>
+						<listcell label="@load(each.cantidad)" />
+						<listcell
+							label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
+						<listcell
+							label="@load(vm.dto.monedaLocal? each.importeGs : each.importeDs)
+							@converter(vm.dto.monedaLocal? vm.cnv.monedaLocal : vm.cnv.monedaExtranjera)" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="4" align="right">
+						<hlayout>
+							<field value="@load(vm.dto.detallesArticulos.size())"/>
+							<field value="ítems"/>
+							<space hflex="true"/>
+							<label value="IVA Gs."
+								sclass="label-moneda-footer" />
+							<guaranibox sclass="footer-input"
+								style="background:#EEF7FA" value="@load(vm.dto.importeIva)" />
+							<space />
+							<label value="@load(vm.labelImporte)"
+								sclass="label-moneda-footer" />
+							<guaranibox
+								value="@load(vm.dto.importesDevoluciones[0])"
+								visible="@load(vm.dto.monedaLocal)" sclass="footer-input"
+								style="background:#EEF7FA" />
+							<dolarbox
+								value="@load(vm.dto.importesDevoluciones[1])"
+								visible="@load(!vm.dto.monedaLocal)" sclass="footer-input"
+								style="background:#EEF7FA" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+
+		</vbox>
+	</hlayout>
+	
+	<popup id="pop_serv_tec" sclass="rounded">
+		<vbox width="300px">
+			<textbox id="tx_servtec" sclass="filter" hflex="true" placeholder="Nro. Servicio Técnico.."
+				value="@bind(vm.filter_numero)" instant="true"></textbox>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="Servicios Técnicos.."
+				model="@load(vm.serviciosTecnicos)"
+				height="200px"
+				selectedItem="@bind(vm.selectedServicioTecnico)"
+				onSelect="@command('selectServicioTecnico', comp=pop_serv_tec)">
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</popup>
+
+</window>

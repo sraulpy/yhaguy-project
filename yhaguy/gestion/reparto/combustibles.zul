@@ -1,0 +1,135 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.combustible.ControlCombustibleViewModel')"
+	height="100%">
+	
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-success btn-sm" width="150px"
+				iconSclass="z-icon-plus-circle"
+				label=" Agregar" 
+				onClick="@command('addCombustible')" />
+		<space />	
+		<button mold="bs" sclass="btn-danger btn-sm" width="150px"
+				iconSclass="z-icon-times"
+				label=" Eliminar" 
+				onClick="@command('deleteCombustible')" 
+				disabled="@load(vm.selectedCombustible eq null)" />
+		<space />	
+		<space />	
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.controlCombustibles)"
+		selectedItem="@bind(vm.selectedCombustible)">
+		<listhead>
+			<listheader label="Fecha" width="150px" />
+			<listheader label="Factura Nro." width="150px" />
+			<listheader label="Orden Nro." width="150px" />
+			<listheader label="Vehículo" />
+			<listheader label="Chofer" />
+			<listheader label="Combustible" />
+			<listheader label="Kilometraje" align="right" width="90px" />
+			<listheader label="Litros" align="right" width="90px" />
+			<listheader label="Costo Gs" align="right" width="90px" />
+			<listheader label="Importe Gs." align="right" width="100px" />
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						sclass="filter"
+						value="@bind(vm.filterFechaDD)" instant="true"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						sclass="filter"
+						value="@bind(vm.filterFechaMM)" instant="true"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						sclass="filter"
+						value="@bind(vm.filterFechaAA)" instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Factura Nro.."
+						sclass="filter"
+						value="@bind(vm.filterFactura)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Orden Nro.."
+						sclass="filter"
+						value="@bind(vm.filterNroOrdenCompra)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Vehículo.."
+						sclass="filter"
+						value="@bind(vm.filterVehiculo)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Chofer.."
+						sclass="filter"
+						value="@bind(vm.filterChofer)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Combustible.."
+						sclass="filter"
+						value="@bind(vm.filterTipo)"
+						instant="true"/>
+				</hlayout>
+			</auxheader>
+			<auxheader />
+			<auxheader />
+			<auxheader />
+			<auxheader />
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos1) @converter('formattedDate', format = 'dd-MM-yyyy')"/>
+				<listcell label="@load(each.pos2)"/>
+				<listcell label="@load(each.pos10)"/>
+				<listcell label="@load(each.pos6)"/>
+				<listcell label="@load(each.pos7)"/>
+				<listcell label="@load(each.pos8)"/>
+				<listcell label="@load(each.pos3) @converter(vm.cnv.monedaLocal)"/>
+				<listcell label="@load(each.pos4) @converter(vm.cnv.monedaLocal)"/>
+				<listcell label="@load(each.pos5) @converter(vm.cnv.monedaLocal)"/>
+				<listcell label="@load(each.pos9) @converter(vm.cnv.monedaLocal)"/>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="10">
+				<hlayout hflex="true">
+					<field value="ítems" />
+					<field value="@load(vm.controlCombustibles.size())" />
+					<space hflex="true"></space>
+					<field value="Total Gs.:" />
+					<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.totalImporteGs)"/>
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+	</style>
+</window>

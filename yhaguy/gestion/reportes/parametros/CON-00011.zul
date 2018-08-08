@@ -1,0 +1,48 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Artículo:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.articulo.codigoInterno)"
+				id="bndArti" onOpen="tx_cod.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.articulos)"
+						selectedItem="@bind(vm.dato.filtro.articulo)"
+						onSelect="bndArti.close()">
+						<listhead>
+							<listheader>
+								<textbox id="tx_cod" hflex="true"
+										value="@bind(vm.dato.filtro.codigoArticulo)" instant="true"
+										placeholder="Buscar por Código.." sclass="filter"/>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.codigoInterno.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Tipo de Costo:" />
+			<combobox model="@load(vm.dato.filtro.tiposDeCosto)" hflex="true"
+				value="@load(vm.dato.filtro.tipoCosto)"
+				selectedItem="@bind(vm.dato.filtro.tipoCosto)" instant="true">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="A la fecha:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Fecha.." hflex="true" />
+		</row>
+	</rows>
+</grid>

@@ -1,0 +1,68 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	<grid width="450px" sclass="vgrid">
+		<columns>
+			<column width="130px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				Código:
+				<div sclass="searchform" style="margin:0px" width="165px">
+					<hlayout valign="top">
+						<textbox sclass="searchfield" height="17px"
+							placeholder="Código"
+							value="@bind(vm.dato.nvoItem.articulo.codigoInterno)"
+							onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, busqueda=0)" />
+						<toolbarbutton iconSclass="z-icon-search"
+							sclass="searchBtn" width="20px"
+							onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, busqueda=0)" />
+					</hlayout>
+				</div>
+			</row>
+			<row>
+				Descripción:
+				<div sclass="searchform" style="margin:0px" width="280px">
+					<hlayout valign="top">
+						<textbox 
+							sclass="searchfield" height="17px"
+							placeholder="Descripción" width="252px"
+							value="@bind(vm.dato.nvoItem.articulo.descripcion)"
+							onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, busqueda=1)"/>
+						<toolbarbutton iconSclass="z-icon-search"
+							sclass="searchBtn" width="20px" 
+							onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, busqueda=1)"/>
+					</hlayout>
+				</div>
+			</row>
+			<row>
+				Cantidad:
+				<intbox value="@bind(vm.dato.nvoItem.cantidad)" 
+				style="text-align: right"
+				onChange="@command('validarCantidadItemFactura', comp=self)"/>
+			</row>
+			<row>
+				Costo:
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@bind(vm.dato.nvoItem.costoGs)"
+						onChange="@command('notificarFacturaItemDs', comp=self)"/>
+					<label value="Gs." style="font-size:11px"/>
+					<space/>
+					<dolarbox value="@bind(vm.dato.nvoItem.costoDs)"
+						onChange="@command('notificarFacturaItemGs', comp=self)"/>
+					<label value="U$D" style="font-size:11px"/>
+				</hlayout>				
+			</row>
+			<row>
+				Importe:
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@load(vm.dato.nvoItem.importeGsCalculado)" readonly="true"/>
+					<label value="Gs." style="font-size:11px"/>
+					<space/>
+					<dolarbox value="@load(vm.dato.nvoItem.importeDsCalculado)" readonly="true"/>
+					<label value="U$D" style="font-size:11px"/>
+				</hlayout>				
+			</row>
+		</rows>
+	</grid>
+</window>

@@ -1,0 +1,15 @@
+<zk>
+	<window viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ProveedorControlBody')"
+		apply="org.zkoss.bind.BindComposer"
+		width="100%"
+		height="100%">
+		
+		<include src="/yhaguy/gestion/empresa/EmpresaRUC.zul" />
+		<div height="15px"/>
+			
+		<include src="/yhaguy/gestion/empresa/EmpresaBody.zul" visible="@load(vm.tabDatosVisible)"/>		
+		
+		<solicitarCabecera visible="@load(!vm.tabDatosVisible)"/>
+
+	</window>
+</zk>

@@ -1,0 +1,223 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" height="100%"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.BancoTarjetaExtractoControlBody')">
+
+		<hlayout style="margin:10px 5px">
+			<vlayout>
+				<field value="Nro. Extracto:" />
+				<textbox
+					value="@bind(vm.bancoTarjetaExtractoDto.nroEstracto)" width="110px"
+					tooltiptext="Número del extracto de tarjetas."
+					constraint="${vm.check.noVacio}" />
+			</vlayout>
+			<space width="10px" />
+
+			<vlayout>
+				<field value="Procesadora: " />
+				<combobox model="@load(vm.procesadoras)" width="120px"
+					value="@load(vm.bancoTarjetaExtractoDto.procesadora)"
+					selectedItem="@bind(vm.bancoTarjetaExtractoDto.procesadora)"
+					tooltiptext="Seleccione la procesadora de tarjetas correspondiente."
+					constraint="${vm.check.noVacio}"
+					onChange="@command('actualizarBancoSeleccionado')">
+					<template name="model">
+						<comboitem label="@load(each.pos1)" />
+					</template>
+				</combobox>
+			</vlayout>
+			<space width="10px" />
+			<vlayout>
+				<field value="Periodo Desde: " />
+				<datebox value="@bind(vm.periodoDesde)" width="120px"
+					format="dd-MM-yyyy" tooltiptext="Periodo desde."
+					constraint="${vm.check.noVacio}" />
+			</vlayout>
+			<space width="10px" />
+			<vlayout>
+				<field value="Periodo Hasta: " />
+				<datebox value="@bind(vm.periodoHasta)" width="120px"
+					format="dd-MM-yyyy" tooltiptext="Periodo hasta."
+					constraint="${vm.check.noVacio}" />
+			</vlayout>
+			<space width="10px" />
+			<vlayout>
+				<field value="Sucursal: " />
+				<textbox
+					value="@load(vm.bancoTarjetaExtractoDto.sucursalApp)"
+					readonly="true" width="120px"
+					tooltiptext="Sucursal operativa del usuario." />
+			</vlayout>
+			<space width="10px" />
+			<vlayout>
+				<field value="Cuenta:" />
+				<textbox value="@load(vm.nroCuenta)" readonly="true"
+					width="120px" tooltiptext="Número de cuenta bancaria." />
+			</vlayout>
+			<space width="10px" />
+			<vlayout>
+				<field value="Banco:" />
+				<textbox value="@load(vm.banco)" width="120px"
+					readonly="true"
+					tooltiptext="Nombre del banco de la cuenta seleccionada." />
+			</vlayout>
+			<space width="20 px" />
+			<vlayout>
+				<div height="15px" />
+				<button label="Cerrar"
+					onClick="@command('cerrarExtracto')" style="font-weight:bold"
+					tooltiptext="Cerrar extracto de tarjetas." />
+			</vlayout>
+		</hlayout>
+		<solicitarCabecera
+			visible="@load(vm.bancoTarjetaExtractoDto.esNuevo)">
+		</solicitarCabecera>
+		<hlayout width="100%" vflex="1" style="border-top: 1px solid  #dddddd"
+			visible="@load(!vm.bancoTarjetaExtractoDto.esNuevo)">
+			<vlayout hflex="1/2">
+				<div height="1px"></div>
+				<div align="right">
+					<hlayout>
+						<field
+							value="Ingrese el importe total del extracto: " />
+						<guaranibox
+							value="@bind(vm.bancoTarjetaExtractoDto.totalTarjeta)"
+							constraint="${vm.check.noVacio}"
+							tooltiptext="Monto total de los movimientos con tarjeta."
+							onChange="@command('actualizarDifTotalesTarjeta')" />
+					</hlayout>
+				</div>
+				<listbox model="@load(vm.detallesTodos)"
+					sclass="small-list"
+					selectedItems="@bind(vm.bancoTarjetaExtractoDto.detallesMovTarjeta)"
+					checkmark="@load(!vm.deshabilitado)" multiple="true" height="390px"
+					onSelect="@command('actualizarTotalTarjeta')" width="100%">
+
+					<custom-attributes
+						org.zkoss.zul.listbox.autoSort="true" />
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="" width="30px"
+							align="center" />
+						<listheader label="Fecha"
+							style="text-align:center" align="center" sort="auto(pos2)"
+							onCreate="self.sort(true)" />
+						<listheader label="Tarjeta"
+							style="text-align:center" align="center" sort="auto(pos7)" />
+						<listheader label="Importe Original"
+							style="text-align:center" align="center" sort="auto(pos3)" />
+						<listheader label="Importe Extracto"
+							style="text-align:center" align="center" sort="auto(pos4)" />
+						<listheader label="Saldo"
+							style="text-align:center" align="center" sort="auto(pos5)" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell></listcell>
+							<listcell
+								label="@load(each.pos2)  @converter('formatedDate', format='dd-MM-yyyy')" />
+							<listcell label="@load(each.pos7)" />
+							<listcell
+								label="@load(each.pos3) @converter('formatedNumber', format='#,###,###,###')" />
+							<listcell>
+								<monedabox value="@bind(each.pos4)"
+									onChange="@command('addMovTarjetaSeleccionado', seleccionado=each)" />
+							</listcell>
+							<listcell
+								label="@load(each.pos5) @converter('formatedNumber', format='#,###,###,###')" />
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter />
+						<listfooter align="right">
+							<label value="Dif.: "
+								sclass="label-moneda-footer" />
+						</listfooter>
+						<listfooter>
+							<guaranibox
+								value="@load(vm.difTotalesTarjeta)" readonly="true"
+								sclass="footer-input" style="background:#dddddd;color:red"
+								tooltiptext="Diferencia entre totales" />
+						</listfooter>
+						<listfooter align="right">
+
+						</listfooter>
+						<listfooter>
+							<guaranibox
+								value="@load(vm.totalImpCuoTarjetas)" readonly="true"
+								sclass="footer-input" style="background:#dddddd" />
+						</listfooter>
+						<listfooter />
+					</listfoot>
+				</listbox>
+			</vlayout>
+			<vlayout hflex="1/2">
+				<div height="1px"></div>
+
+				<div align="right">
+					<hlayout>
+						<label value="Porcentaje de diferencia: " />
+						<label
+							value="@load(vm.diferenciaPorcentaje) @converter('formatedNumber', format='#,###,###,###.#')"
+							style="color:red" />
+						<label value="%" />
+						<div width="5px"></div>
+						<toolbarbutton image="/core/images/add2.png"
+							label="Agregar" onClick="@command('addElementosMontoAcreditado')"
+							tooltiptext="Cargar acreditaciones.">
+						</toolbarbutton>
+						<field
+							value="Ingrese el importe total acreditado: " />
+						<guaranibox
+							value="@bind(vm.bancoTarjetaExtractoDto.totalAcreditado)"
+							constraint="${vm.check.noVacio}"
+							tooltiptext="Importe total acreditado."
+							onChange="@command('actualizarDifTotalesAcreditado')" />
+					</hlayout>
+				</div>
+
+				<listbox id="movAcreditados"
+					model="@load(vm.bancoTarjetaExtractoDto.detallesMontosAcreditados)"
+					sclass="small-list" height="390px" width="100%">
+
+					<custom-attributes
+						org.zkoss.zul.listbox.autoSort="true" />
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Fecha de Acreditación"
+							style="text-align:center" align="center"
+							onCreate="self.sort(true)" sort="auto(pos2)" />
+						<listheader label="Importe Acreditado"
+							style="text-align:center" align="center" sort="auto(pos3)" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<datebox value="@bind(each.pos2)"
+									style="text-align:center" format="dd-MM-yyyy" />
+							</listcell>
+							<listcell>
+								<guaranibox value="@bind(each.pos3)"
+									onChange="@command('actualizarTotalAcreditado')" />
+							</listcell>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter align="right">
+							<label value="Dif.: "
+								sclass="label-moneda-footer" />
+							<guaranibox
+								value="@load(vm.difTotalesAcreditado)" readonly="true"
+								sclass="footer-input" style="background:#dddddd;color:red"
+								tooltiptext="Diferencia entre totales" />
+						</listfooter>
+						<listfooter>
+							<label value="Total Acreditado: "
+								sclass="label-moneda-footer" />
+							<guaranibox
+								value="@load(vm.totalImpAcreditado)" readonly="true"
+								sclass="footer-input" style="background:#dddddd" />
+						</listfooter>
+					</listfoot>
+				</listbox>
+			</vlayout>
+		</hlayout>
+	</window>
+</zk>

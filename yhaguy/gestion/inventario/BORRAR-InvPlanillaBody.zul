@@ -1,0 +1,272 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.inventario.InvPlanillaControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="600px">
+		<hlayout>
+			<groupbox title="Datos Planilla" width="min" height="min"
+				hflex="min">
+
+				<grid hflex="min">
+					<rows>
+						<row>
+							Lote:
+							<longbox value="@bind(vm.dto.lote)" id="lote"
+								width="35px" constraint="${vm.check.noVacio}"
+								readonly="@load(vm.readOnlyDatos)" />
+							Cod.Verif.:
+							<hlayout>
+								<textbox
+									constraint="${vm.check.noVacio}" id="cod"
+									value="@bind(vm.dto.codigoVerificacion)" width="60px"
+									onOK="@command('buscarplanilla')"
+									readonly="@load(vm.readOnlyDatos)" />
+								<button
+									onClick="@command('buscarplanilla')"
+									image="/core/images/find-small.png" width="28px"
+									visible="@load(!vm.readOnlyDatos)" />
+							</hlayout>
+
+						</row>
+						<row>
+
+						</row>
+						<row>
+							Conteo:
+
+							<longbox value="@load(vm.dto.conteo)"
+								width="35px" readonly="true" />
+							Fecha:
+							<textbox value="@load(vm.dto.fechaCarga)"
+								width="80px" readonly="true" />
+
+						</row>
+						<row>
+							Ubicación:
+							<textbox value="@load(vm.dto.ubicacion)"
+								rows="3" cols="12" readonly="true" />
+							Observación:
+							<textbox value="@load(vm.dto.observacion)"
+								rows="3" cols="12" />
+
+						</row>
+					</rows>
+
+				</grid>
+			</groupbox>
+
+			<vlayout>
+				<hlayout>
+					<groupbox title="Cargadores" hflex="min" >
+						<grid hflex="min">
+							<rows>
+								<row>
+									<textbox readonly="true"
+										value="@load(vm.dto.cargador1A)" width="110px" />
+								</row>
+								<row>
+									<hlayout>
+										<textbox readonly="true"
+											value="@load(vm.dto.cargador1B)" width="110px" />
+										<button
+											onClick="@command('buscarcargador')"
+											image="/core/images/find-small.png" width="28px"
+											visible="@load(!vm.dto.recarga)" />
+									</hlayout>
+								</row>
+
+							</rows>
+
+						</grid>
+
+					</groupbox>
+					<groupbox title="Segunda Carga" width="180px" >
+						<grid width="165px">
+							<rows>
+								<row>
+									<textbox readonly="true"
+										value="@load(vm.dto.cargador2A)" width="110px" />
+								</row>
+								<row>
+									<hlayout>
+										<textbox readonly="true"
+											value="@load(vm.dto.cargador2B)" width="110px" />
+										<button
+											onClick="@command('buscarcargador2')"
+											image="/core/images/find-small.png" width="28px"
+											visible="@load(vm.dto.recarga)" />
+									</hlayout>
+								</row>
+
+							</rows>
+
+						</grid>
+
+					</groupbox>
+					<groupbox title="Contadores" width="180px">
+						<grid width="165px">
+							<rows>
+								<row>
+									<hlayout>
+										<textbox
+											value="@load(vm.dto.contador1)" readonly="true" width="110px" />
+										<button
+											onClick="@command('buscarcontador1')"
+											image="/core/images/find-small.png" width="28px"
+											visible="@load(!vm.dto.recarga)" />
+									</hlayout>
+								</row>
+								<row>
+									<hlayout>
+										<textbox
+											value="@load(vm.dto.contador2)" readonly="true" width="110px" />
+										<button
+											onClick="@command('buscarcontador2')"
+											image="/core/images/find-small.png" width="28px"
+											visible="@load(!vm.dto.recarga)" />
+									</hlayout>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+				</hlayout>
+
+
+			</vlayout>
+
+		</hlayout>
+
+
+		<groupbox title="Detalles de Planilla">
+			<grid>
+				<columns>
+					<column width="840px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+
+						<hlayout>
+							<groupbox title="Articulo" width="min"
+								height="min">
+								<toolbarbutton
+									image="/core/images/insertar.png"
+									onClick="@command('insertararticulo')" label="Agregar"
+									height="27px" disabled="@load(!vm.readOnlyDatos)" />
+							</groupbox>
+							<groupbox title="Primera Carga" width="min"
+								height="min" visible="@load(vm.dto.recarga)">
+								<hlayout>
+									<toolbarbutton
+										image="/core/images/edit.png"
+										onClick="@command('editarcarga')" label="Editar" height="27px"
+										visible="@load(!vm.editar)" disabled="@load(vm.correcta)"/>
+									<toolbarbutton
+										image="/core/images/accept2.png"
+										onClick="@command('cerraredicion')" label="Cerrar"
+										height="27px" visible="@load(vm.editar)" />
+								</hlayout>
+							</groupbox>
+							<groupbox title="Acciones" width="min"
+								height="min" >
+								<toolbarbutton
+									image="/core/images/guardar.png"
+									onClick="@command('cerrarcarga')" label="Cerrar Carga"
+									height="27px" disabled="@load(!vm.readOnlyDatos)" visible="@load(!vm.dto.recarga)" />
+								<toolbarbutton
+									image="/core/images/cancel.png"
+									onClick="@command('salirsinguardar')" label="Salir sin Guardar"
+									height="27px" disabled="@load(!vm.readOnlyDatos)" />
+							</groupbox>
+						</hlayout>
+						<div style="text-align: right;"
+							visible="@load(vm.dto.recarga)">
+							<vlayout>
+
+								<toolbarbutton
+									image="/core/images/accept.png" onClick="@command('cerrarplanilla')"
+									label="Cerrar Planilla" height="27px"
+									disabled="@load(!vm.correcta)" visible="@load(!vm.dto.cerrada)" />
+								<label value="Carga Correcta"
+									style="font-weight:bold; color:green;"
+									visible="@load(vm.correcta)" />
+								<label value="Carga no verificada..."
+									style="font-weight:bold; color:red;"
+									visible="@load(!vm.correcta)" />
+							</vlayout>
+						</div>
+					</row>
+
+				</rows>
+
+			</grid>
+			<grid id="detalle" model="@load(vm.dto.invPlanillaDetalle)"
+				height="330px" width="996px">
+				<columns>
+					<column label="#" width="25px" />
+					<column label="Cod. Interno" width="100px" />
+					<column label="Cod. Proveedor" width="110px" />
+					<column label="Cod. Original" width="110px" />
+					<column label="Marca" width="100px" />
+					<column label="Descripción" width="110px" />
+					<column label="Ubicación" width="75px" />
+					<column label="Caja" width="50px"
+						visible="@load(vm.visible1)" />
+					<column label="Aptos" width="70px"
+						visible="@load(vm.visible1)" />
+					<column label="Averiados" width="70px"
+						visible="@load(vm.visible1)" />
+					<column label="Total" width="70px"
+						visible="@load(vm.visible1)" />
+					<column label="Caja2" width="50px"
+						visible="@load(vm.visible2)" />
+					<column label="Aptos2" width="70px"
+						visible="@load(vm.visible2)" />
+					<column label="Averiados2" width="70px"
+						visible="@load(vm.visible2)" />
+					<column label="Total2" width="70px"
+						visible="@load(vm.visible2)" />
+					<column label="Observacion" width="85px" />
+				</columns>
+				<template name="model" var="det">
+					<row>
+						<label value="@load(det.numero)" width="20px" />
+						<label value="@load(det.invArticulo.pos1)"
+							width="85px" />
+						<label value="@load(det.invArticulo.pos2)"
+							width="85px" />
+						<label value="@load(det.invArticulo.pos3)"
+							width="85px" maxlength="11" />
+						<label value="@load(det.invArticulo.pos4)"
+							width="90px" />
+						<label value="@load(det.invArticulo.pos5)"
+							width="90px" maxlength="10" />
+						<label value="@load(det.invUbicacion.text)"
+							width="65px" />
+
+						<longbox value="@bind(det.caja)" width="35px"
+							visible="@load(vm.visible1)" readonly="@load(vm.rOnGrid)" />
+						<longbox value="@bind(det.aptos)" width="50px"
+							visible="@load(vm.visible1)" readonly="@load(vm.rOnGrid)" />
+						<longbox value="@bind(det.averiados)"
+							width="50px" visible="@load(vm.visible1)" readonly="@load(vm.rOnGrid)"  />
+						<longbox value="@bind(det.total)" width="50px"
+							visible="@load(vm.visible1)" readonly="@load(vm.rOnGrid)" />
+
+						<longbox value="@bind(det.caja2)" width="35px"
+							visible="@load(vm.visible2)" onChange="@command('controlcarga')" />
+						<longbox value="@bind(det.aptos2)" width="50px"
+							visible="@load(vm.visible2)" onChange="@command('controlcarga')" />
+						<longbox value="@bind(det.averiados2)"
+							width="50px" visible="@load(vm.visible2)"
+							onChange="@command('controlcarga')" />
+						<longbox value="@bind(det.total2)" width="50px"
+							visible="@load(vm.visible2)" onChange="@command('controlcarga')" />
+
+						<textbox value="@bind(det.observacion)"
+							width="75px" />
+					</row>
+				</template>
+			</grid>
+		</groupbox>
+	</window>
+</zk>

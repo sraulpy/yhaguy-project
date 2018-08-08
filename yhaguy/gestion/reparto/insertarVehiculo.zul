@@ -1,0 +1,63 @@
+<zk>
+	<div
+		viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.definiciones.DefinicionesSimpleViewModel')"
+		apply="org.zkoss.bind.BindComposer" style="padding:10px">
+		<grid sclass="vgrid">
+			<columns>
+				<column width="150px"/>
+				<column/>
+			</columns>
+			<rows>
+				<row>
+					<field value="Código:"/>
+					<textbox value="@bind(vm.dato.dto.codigo)"
+						readonly="true" placeholder="Auto-generado.."/>
+				</row>
+				<row>
+					<field value="Marca:"/>
+					<hlayout>
+						<textbox value="@bind(vm.dato.dto.marca)" hflex="true" />
+						<labelConstrain/>
+					</hlayout>
+					
+				</row>
+				<row>
+					<field value="Modelo:" />
+					<hlayout>
+						<textbox value="@bind(vm.dato.dto.modelo)" hflex="true" />
+						<labelConstrain/>
+					</hlayout>
+				</row>
+				<row>
+					<field value="Chapa:" />
+					<hlayout>
+						<textbox value="@bind(vm.dato.dto.chapa)" hflex="true" />
+						<labelConstrain />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Color:" />
+					<hlayout>
+						<textbox value="@bind(vm.dato.dto.color)" hflex="true" />
+						<labelConstrain />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Descripción:" />
+					<hlayout>
+						<textbox value="@bind(vm.dato.dto.descripcion)" hflex="true" />
+						<labelConstrain />
+					</hlayout>
+				</row>
+				<row>
+					<field value="Capacidad:" />
+					<hlayout>
+						<doublespinner value="@bind(vm.dato.dto.peso)" />
+						<field>Kg.</field>
+					</hlayout>
+				</row>
+			</rows>
+		</grid>
+
+	</div>
+</zk>

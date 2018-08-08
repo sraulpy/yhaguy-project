@@ -1,0 +1,47 @@
+<grid sclass="vgrid">
+	<rows>
+		<row>
+			<vlayout spacing="0">
+				<field value="País" />
+				<combobox model="@load(vm.dtoUtil.paisEmpresas)"
+					value="@load(vm.dtoEmp.pais)"
+					selectedItem="@bind(vm.dtoEmp.pais)"
+					constraint="${vm.check.noVacio}"
+					onChange="@command('verificarPais', comp1=ruc, comp2=ci)"
+					instant="true"
+					hflex="true">
+					<template name="model">
+						<comboitem label="@load(each)" />
+					</template>
+				</combobox>
+			</vlayout>
+			<vlayout spacing="0">
+				<field value="Ruc" />
+				<textbox id="ruc" value="@bind(vm.dtoEmp.ruc)"
+					constraint="${vm.check.ruc}"
+					placeholder="En blanco si no tiene ruc.." 
+					hflex="true"/>
+			</vlayout>
+			<vlayout spacing="0">
+				<field value="Cédula" />
+				<textbox id="ci" value="@bind(vm.dtoEmp.ci)"
+					constraint="${vm.check.noVacio}" readonly="@load(vm.ciReadonly)" 
+					hflex="true"/>
+			</vlayout>
+			
+			<vlayout spacing="0">
+				<field value="Verificación" />
+				<button label="Verificar RUC"
+					onClick="@command('buscarRUC')" 
+					hflex="true"/>
+			</vlayout>
+
+			<vlayout spacing="0"
+				visible="@load(vm.empresaSinRuc)">
+				<field value="Verificación" />
+				<label value="@load(vm.labelEmpresaSinRuc)"
+					style="color:red; font-weight:bold; font-style:oblique" />
+			</vlayout>
+		</row>
+	</rows>
+</grid>

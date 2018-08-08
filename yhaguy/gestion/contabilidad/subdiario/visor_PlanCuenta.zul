@@ -1,0 +1,12 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.contabilidad.subdiario.PlanCuentaVisorSimpleControl')">
+		<groupbox>
+			<hlayout>
+				<toolbarbutton label="Reporte Plan de Cuenta"
+					image="/core/images/pdf.png"
+					onClick="@command('reportePlanCuenta')"/>
+			</hlayout>
+		</groupbox>
+	</window>
+</zk>

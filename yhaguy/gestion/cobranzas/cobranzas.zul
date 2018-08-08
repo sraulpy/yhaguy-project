@@ -1,0 +1,339 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.cobranzas.CobranzasViewModel')"
+	height="100%"
+	id="win"
+	onCreate="@command('buscarClientes')">
+
+	<vbox vflex="true" style="padding:10px" spacing="0">
+		<hbox width="100%" spacing="0">	
+		<hlayout sclass="button-container">
+			<navbar mold="bs-pills">
+				<navitem label=" CLIENTES" selected="true"
+					style="text-align:center;font-size:11px"
+					iconSclass="z-icon-filter"
+					onClick="@command('selectFilter', filter=1)" />
+				<navitem label=" TAREAS"
+					style="text-align:center;font-size:11px"
+					iconSclass="z-icon-filter"
+					onClick="@command('selectFilter', filter=2)" />
+				<navitem label=" CALENDARIO"
+					style="text-align:center;font-size:11px"
+					iconSclass="z-icon-filter"
+					onClick="@command('selectFilter', filter=3)" />
+			</navbar>
+		</hlayout>
+		<hlayout sclass="button-container" hflex="true" vflex="true">
+			<radiogroup model="@load(vm.calendarios)"
+				selectedItem="@bind(vm.selectedCalendario)"
+				visible="@load(vm.calendarioVisible)">
+				<template name="model">
+					<radio label="@load(each)" style="margin-right:20px"/>
+				</template>
+			</radiogroup>
+			<button mold="bs" sclass="btn-warning btn-sm" width="160px"
+				iconSclass="z-icon-phone"
+				onClick="@command('registrarLlamada')"
+				disabled="@load(vm.selectedItem eq null)"
+				visible="@load(vm.clientesVisible)" label=" Registrar Llamada" />
+			<space />
+			<button mold="bs" sclass="btn-info btn-sm" width="160px"
+				iconSclass="z-icon-phone"
+				onClick='pop_tel.open(self, "after_start")'
+				disabled="@load(vm.selectedItem eq null)"
+				visible="@load(vm.clientesVisible)" label=" Actualizar Nro.Telefóno" />
+			<field value="Desde:" visible="@load(vm.tareasVisible)" />
+			<datebox value="@bind(vm.desde)" instant="true" visible="@load(vm.tareasVisible)" />
+			<space />
+			<field value="Hasta:" visible="@load(vm.tareasVisible)" />
+			<datebox value="@bind(vm.hasta)" instant="true" visible="@load(vm.tareasVisible)" />
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm" width="120px"
+				iconSclass="z-icon-check-circle"
+				onClick="@command('realizarTarea')"
+				disabled="@load(vm.selectedTarea eq null)"
+				visible="@load(vm.tareasVisible)" label=" Realizar Tarea" />
+			<space />
+			<button mold="bs" sclass="btn-warning btn-sm" width="120px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('registrarTarea')"
+				visible="@load(vm.tareasVisible or vm.calendarioVisible)" label=" Nueva Tarea" />
+			<space />
+			<button mold="bs" sclass="btn-info btn-sm" width="120px"
+				iconSclass="z-icon-print"
+				onClick="@command('imprimir')"
+				visible="@load(vm.tareasVisible)" label=" Imprimir" />
+		</hlayout>
+		</hbox>
+
+		<hbox vflex="true" visible="@load(vm.clientesVisible)">
+			<vbox vflex="true" spacing="0">
+				<label value="CLIENTES CON FACTURAS VENCIDAS"
+					style="font-style:italic;margin-left:10px;color:darkblue" />
+				<div hflex="true"
+					style="border-top:solid 1px; border-color:lightgrey;margin-left:10px;margin-right:10px"
+					height="7px" />
+				<listbox sclass="small-list" vflex="true" width="470px"
+					emptyMessage="NO SE ENCONTRARON REGISTROS.."
+					model="@load(vm.clientes_)"
+					selectedItem="@bind(vm.selectedItem)"
+					id="listCli"
+					onLater="@command('clearProgress')">
+					<listhead>
+						<listheader width="30px" align="center" />
+						<listheader label="Ruc" width="80px" />
+						<listheader label="Razón Social" />
+						<listheader label="Teléfono" width="150px" />
+					</listhead>
+					<auxhead>
+						<auxheader></auxheader>
+						<auxheader>
+							<textbox sclass="filter" placeholder="Ruc.."
+								value="@bind(vm.filter_ruc)"
+								instant="true" hflex="true"></textbox>
+						</auxheader>
+						<auxheader>
+							<textbox sclass="filter" placeholder="Razón Social.."
+								value="@bind(vm.filter_razonsocial)"
+								instant="true" hflex="true"></textbox>
+						</auxheader>
+						<auxheader></auxheader>
+					</auxhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<image src="@load(each.pos4 ? '/core/images/exclamation.png' : '/core/images/tick.png')"
+									tooltiptext="@load(each.pos4? 'Cuenta bloqueada..' : 'Cuenta habilitada..')"/>
+							</listcell>
+							<listcell label="@load(each.pos1)" style="font-size:10px;color:black"/>
+							<listcell label="@load(each.pos2)" style="font-size:10px;color:black"/>
+							<listcell label="@load(each.pos3)"
+								tooltiptext="@load(each.pos3)" style="font-size:10px;color:black"/>
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="4">
+							<hlayout>
+								<field value="@load(vm.clientes.size())" />
+								<field value="ítems" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+			</vbox>
+
+			<vbox vflex="true" hflex="true" spacing="0">
+				<hlayout>
+					<label value="CLIENTE SELECCIONADO:"
+						style="font-style:italic;margin-left:10px;color:darkblue" />
+					<label value="@load(vm.selectedItem.pos2)"
+						style="font-style:italic;margin-left:5px;color:" />
+				</hlayout>
+				<div hflex="true"
+					style="border-top:solid 1px; border-color:lightgrey;margin-left:10px;margin-right:10px"
+					height="7px" />
+				<tabbox vflex="true" hflex="true">
+					<tabs>
+						<tab label="Registro de Llamadas" width="200px" />
+						<tab label="Facturas Vencidas" width="200px" />
+						<tab label="Tareas Programadas" width="200px" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<listbox sclass="small-list" vflex="true"
+								emptyMessage="NO SE ENCONTRARON REGISTROS.."
+								model="@load(vm.llamadas)">
+								<listhead>
+									<listheader label="Fecha Hora"
+										width="140px" />
+									<listheader label="Usuario"
+										width="150px" />
+									<listheader label="Resultado"
+										width="150px" />
+									<listheader label="Detalle" />
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy hh:mm')"/>
+										<listcell label="@load(each.pos2.toString().toUpperCase())"/>
+										<listcell label="@load(each.pos3)"/>
+										<listcell label="@load(each.pos4)"/>
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="2">
+										<hlayout>
+											<field value="@load(vm.llamadas.size())" />
+											<field value="ítems" />
+										</hlayout>
+									</listfooter>
+								</listfoot>
+							</listbox>
+						</tabpanel>
+						<tabpanel>
+							<listbox sclass="small-list" vflex="true"
+								emptyMessage="NO SE ENCONTRARON REGISTROS.."
+								model="@load(vm.facturasVencidas)">
+								<listhead>
+									<listheader label="Emision"
+										width="90px" />
+									<listheader label="Vencimiento"
+										width="90px" />
+									<listheader label="Número" 
+										width="120px"/>
+									<listheader label="Concepto" />
+									<listheader label="Importe Gs."
+										width="90px" align="right"/>
+									<listheader label="Saldo Gs."
+										width="90px" align="right"/>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.pos1)" />
+										<listcell
+											label="@load(each.pos2)" />
+										<listcell
+											label="@load(each.pos3)" />
+										<listcell
+											label="@load(each.pos4)" />
+										<listcell
+											label="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
+										<listcell
+											label="@load(each.pos6) @converter(vm.cnv.monedaLocal)" />
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="6">
+										<hlayout>
+											<field value="@load(vm.facturasVencidas.size())" />
+											<field value="ítems" />
+											<div hflex="true" />
+											<field value="Total Saldo Gs." />
+											<guaranibox style="background:silver;font-weight:bold;text-align:right;margin-right:5px"
+												value="@load(vm.totalSaldo)"/>
+										</hlayout>
+									</listfooter>
+								</listfoot>
+							</listbox>
+						</tabpanel>
+						<tabpanel>
+							<listbox sclass="small-list" vflex="true"
+								emptyMessage="NO SE ENCONTRARON REGISTROS.."
+								model="@load(vm.tareasProgramadas)">
+								<listhead>
+									<listheader width="40px" align="center"/>
+									<listheader label="Fecha Hora"
+										width="130px" />									
+									<listheader label="Tarea" 
+										width="130px"/>
+									<listheader label="Observación"/>
+									<listheader label="Realizado Por" 
+										width="130px"/>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell tooltiptext="@load(each.pos1 eq 'true' ? 'Realizado':'Pendiente')">
+											<image src="@load(each.pos1 eq 'true' ? '/core/images/tick.png':'/core/images/exclamation.png')"/>
+										</listcell>
+										<listcell label="@load(each.pos2) @converter('formattedDate', format='dd-MM-yyyy hh:mm')"/>
+										<listcell label="@load(each.pos3)"/>	
+										<listcell label="@load(each.pos4)"/>
+										<listcell label="@load(each.pos5.toString().toUpperCase())"/>									
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="5" align="left">
+										<hlayout>
+											<field value="@load(vm.tareasProgramadas.size())" />
+											<field value="ítems" />
+										</hlayout>
+									</listfooter>
+								</listfoot>
+							</listbox>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</vbox>
+		</hbox>
+		
+		<!-- _______________ Tareas Programadas ______________ -->
+		
+		<vlayout vflex="true" hflex="true" spacing="0" id="tpr"
+			visible="@load(vm.tareasVisible)">
+			<label value="TAREAS PROGRAMADAS A LA FECHA"
+				style="font-style:italic;margin-left:10px;color:darkblue" />
+			<div hflex="true"
+				style="border-top:solid 1px; border-color:lightgrey;margin-left:10px;margin-right:10px"
+				height="7px" />
+			<listbox sclass="small-list" vflex="true"
+				emptyMessage="NO SE ENCONTRARON REGISTROS.."
+				model="@load(vm.todasLasTareasProgramadas)"
+				selectedItem="@bind(vm.selectedTarea)">
+				<listhead sizable="true" menupopup="auto">
+					<listheader width="40px" align="center" />
+					<listheader label="Tarea" width="150px"/>
+					<listheader label="Fecha Hora" width="140px" />
+					<listheader label="Cliente" />
+					<listheader label="Observación" />
+					<listheader width="20px"></listheader>
+					<listheader label="Realizado Por" width="150px"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell
+							tooltiptext="@load(each.pos3 eq 'true' ? 'Realizado':'Pendiente')">
+							<image
+								src="@load(each.pos3 eq 'true' ? '/core/images/tick.png':'/core/images/exclamation.png')" />
+						</listcell>
+						<listcell label="@load(each.pos6)" />
+						<listcell
+							label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy hh:mm')" />
+						<listcell label="@load(each.pos4)" />
+						<listcell label="@load(each.pos2)"></listcell>
+						<listcell>
+							<a iconSclass="z-icon-file-text" onClick="@command('verComentario', item=each, comp=self)"></a>
+						</listcell>
+						<listcell label="@load(each.pos5.toString().toUpperCase())" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="3" align="left">
+						<hlayout>
+							<field
+								value="@load(vm.todasLasTareasProgramadas.size())" />
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+		
+		<!-- ________________ Calendario _______________ -->
+		
+		<vlayout vflex="true" hflex="true" spacing="0" id="cal"
+			visible="@load(vm.calendarioVisible)">			
+			<calendars id="calendars" firstDayOfWeek="Monday" vflex="true"
+                timeZone="Main=GMT+0" mold="@load(vm.modoCalendario)" days="@load(vm.diasCalendario)" 
+                style="background:silver"
+                model="@load(vm.calendarModel)"
+                readonly="true"/>
+		</vlayout>
+	</vbox>
+	
+	<popup id="pop_coment" sclass="rounded" width="350px" style="background:#428bca">
+		<label id="coment" value="" style="font-weight:bold;color:white"></label>
+	</popup>
+	
+	<popup id="pop_tel" sclass="rounded">
+		<vlayout width="300px" spacing="10px" style="padding:10px">
+			<field value="Nro. Teléfono"/>
+			<textbox hflex="true" placeholder="Nro. Teléfono" value="@bind(vm.selectedItem.pos3)"></textbox>
+			<button mold="bs" sclass="btn-success btn-sm" label="Guardar" iconSclass="z-icon-check" hflex="true"
+				onClick="@command('updateTelefono', comp=pop_tel)"></button>
+		</vlayout>
+	</popup>
+	
+	<style>
+		.z-calendars-inner, .z-calendars-month-header { background: #f5f5f5 };
+	</style>
+</window>

@@ -1,0 +1,144 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.notadebito.NotaDebitoControlBody')"
+	width="100%" height="100%">
+	
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Tipo Movimiento" />
+					<textbox value="@load(vm.dto.tipoMovimiento.pos1)"
+						readonly="true"
+						hflex="true"/>					
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@bind(vm.dto.numero) @converter(vm.cnv.facturaPy)"
+						hflex="true"
+						placeholder="Nro. Nota de Débito.."/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Timbrado" />
+					<textbox value="@bind(vm.dto.timbrado)"
+						hflex="true"
+						placeholder="Timbrado Nota de Débito.."/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Fecha" />
+					<datebox value="@bind(vm.dto.fecha)" 
+						hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Sucursal" />
+					<textbox value="@load(vm.dto.sucursal.text.toString().toUpperCase())" readonly="true"
+						hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Estado" />
+					<textbox value="@load(vm.dto.estadoComprobante.text.toString().toUpperCase())" readonly="true"
+						hflex="true"/>
+				</vlayout>
+			</row>
+			<row>
+				<cell colspan="3">
+					<vlayout>
+						<div />
+						<field value="Cliente" />
+						<hlayout valign="top">
+							<buscadorCliente value="@bind(vm.dto)"
+								campo="ruc" width="100px" readonly="@load(!vm.clienteEditable)"
+								buttonVisible="false" id="bruc" />
+							<buscadorCliente value="@bind(vm.dto)"
+								campo="razonSocial" hflex="true"
+								readonly="@load(!vm.clienteEditable)" buttonVisible="true" />
+							<div width="5px" />
+						</hlayout>
+					</vlayout>
+				</cell>
+				<cell>
+					<vlayout>
+						<field value="Nota de Crédito" />
+						<bandbox hflex="true" placeholder="Aplicar a Nota de Crédito.."
+							readonly="true" id="bndNC">
+							<bandpopup>
+								<listbox sclass="small-list"
+									width="400px" height="200px"
+									onSelect="bndNC.close()">
+									<listhead>
+										<listheader>
+											<hlayout>
+												<textbox hflex="true" instant="true"
+													placeholder="Buscar por Número.." 
+													sclass="filter"/>
+											</hlayout>
+										</listheader>
+									</listhead>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</vlayout>
+				</cell>				
+			</row>
+		</rows>
+	</grid>
+	
+	<div height="10px" />
+	
+	<solicitarCabecera visible="@load(!vm.detalleVisible)"/>
+	
+	<hlayout sclass="button-container" visible="@load(vm.detalleVisible)">
+		<button mold="bs" sclass="btn-danger btn-sm" width="120px"
+			iconSclass="z-icon-minus-circle"
+			onClick="@command('deleteItems')"
+			disabled="@load((vm.selectedItems eq null or vm.selectedItems.size() eq 0) ? 'true' : 'false')"
+			label=" Eliminar" />
+		<space />
+		<button mold="bs" sclass="btn-success btn-sm" width="120px"
+			iconSclass="z-icon-plus-circle"
+			onClick="@command('insertItem')"
+			label=" Insertar" />
+		<space />
+		<button mold="bs" sclass="btn-primary btn-sm" width="120px"
+			iconSclass="z-icon-check"
+			label=" Confirmar" 
+			onClick="@command('confirmar')"
+			disabled="@load((vm.dto.esNuevo() or vm.deshabilitado) ? 'true':'false')"/>
+		<space />
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true" checkmark="@load(vm.checkmarkVisible)"
+		multiple="true" emptyMessage="AGREGUE ÍTEMS AL DETALLE.."
+		visible="@load(vm.detalleVisible)"
+		model="@load(vm.dto.detalles)"
+		selectedItems="@bind(vm.selectedItems)">
+		<listhead>
+			<listheader width="40px" align="center"/>
+			<listheader label="Descripción" />
+			<listheader label="Tipo Iva" width="150px"/>
+			<listheader label="Importe Gs." width="150px"
+				align="right"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.descripcion)" />
+				<listcell label="@load(each.tipoIva.text)" />
+				<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="4" align="left">
+				<hlayout>
+					<field value="@load(vm.dto.detalles.size())" />
+					<field value="ítems" />
+					<space hflex="true"></space>
+					<field value="Total Gs." />
+					<doublebox value="@load(vm.dto.totalImporteGs)"
+						format="###,###,##0" 
+						style="background:#EEF7FA; text-align:right; font-weight:bold" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+</window>

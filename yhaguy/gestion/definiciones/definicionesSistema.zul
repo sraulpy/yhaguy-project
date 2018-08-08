@@ -1,0 +1,72 @@
+<tabbox height="100%">
+	<tabs>
+		<tab label="Talonarios" />
+		<tab label="Sucursales" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					label="Agregar" onClick="@command('addTalonario')" width="130px" />
+				<button mold="bs" sclass="btn-warning btn-sm"
+					label="Modificar" onClick="@command('editTalonario')" width="130px"
+					disabled="@load(vm.editTalonarioDisabled)" />
+				<button label="Eliminar" mold="bs"
+					sclass="btn-info btn-sm" onClick="@command('deleteTalonario')"
+					width="130px" disabled="@load(vm.editTalonarioDisabled)" />
+			</hlayout>
+			<listbox sclass="small-list" vflex="true"
+				emptyMessage="SIN TALONARIOS.."
+				model="@load(vm.talonarios)"
+				selectedItem="@bind(vm.selectedTalonario)">
+				<listhead>
+					<listheader label="Número"/>					
+					<listheader label="Boca" align="right" width="60px"/>
+					<listheader label="Punto" align="right" width="60px"/>
+					<listheader label="Desde" align="right" width="60px"/>
+					<listheader label="Hasta" align="right" width="60px"/>
+					<listheader label="Saldo" align="right" width="60px"/>
+					<listheader label="Timbrado"/>
+					<listheader label="Vencimiento"/>
+					<listheader label="Sucursal"/>
+					<listheader label="Movimientos"/>					
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.pos1)" />
+						<listcell label="@load(each.pos2)" />
+						<listcell label="@load(each.pos3)" />
+						<listcell label="@load(each.pos4)" />
+						<listcell label="@load(each.pos5)" />
+						<listcell label="@load(each.pos8)" />
+						<listcell label="@load(each.pos6.pos1)" />
+						<listcell label="@load(each.pos7) @converter('formattedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(each.pos9.text)" />
+						<listcell>
+							<hlayout>
+								<label value="@load(each.pos10.size())"/>
+								<label value="ítems" />
+								<listbox model="@load(each.pos10)"
+									mold="select" hflex="true">
+									<template name="model">
+										<listitem
+											label="@load(each.text)" />
+									</template>
+								</listbox>
+							</hlayout>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="10">
+						<hlayout>
+							<field value="@load(vm.talonarios.size())" />
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>					
+		</tabpanel>
+		<tabpanel>DEFINICIONES SUCURSALES..</tabpanel>
+	</tabpanels>
+</tabbox>

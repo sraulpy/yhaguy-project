@@ -1,0 +1,25 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Periodo Emisión Cheque:" sclass="mobile" />
+		<combobox model="@load(vm.filtro.anhos)"
+			selectedItem="@bind(vm.filtro.anhoDesde)" instant="true">
+			<template name="model">
+				<comboitem label="@load(each)" />
+			</template>
+		</combobox>
+	</vlayout>
+
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Periodo Vencimiento Cheque:" sclass="mobile" />
+		<combobox model="@load(vm.dato.filtro.anhos)"
+			selectedItem="@bind(vm.dato.filtro.anhoHasta)" instant="true">
+			<template name="model">
+				<comboitem label="@load(each)" />
+			</template>
+		</combobox>
+	</vlayout>
+
+</vlayout>

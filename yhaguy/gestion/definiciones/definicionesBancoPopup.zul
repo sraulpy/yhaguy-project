@@ -1,0 +1,52 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.definiciones.DefinicionesSimpleVM')"
+	style="padding:10px" onCreate="banco.focus()">
+	<grid>
+		<rows>
+			<row>
+				<field value="Banco:" />
+				<hbox>
+					<combobox id="banco"
+						model="@load(vm.dato.bancosTipo)"
+						value="@load(vm.dato.selectedBanco.pos7)"
+						selectedItem="@bind(vm.dato.selectedBanco.pos7)" hflex="true"
+						onChange="@command('copiarDescricionBanco')" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.text)" />
+						</template>
+					</combobox>
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+
+			<row>
+				<field value="Dirección:" />
+				<hbox>
+					<textbox value="@bind(vm.dato.selectedBanco.pos2)" />
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+			<row>
+				<field value="Teléfono:" />
+				<hbox>
+					<textbox value="@bind(vm.dato.selectedBanco.pos3)" />
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+			<row>
+				<field value="E-mail:" />
+				<hbox>
+					<textbox value="@bind(vm.dato.selectedBanco.pos4)" />
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+			<row>
+				<field value="Contacto:" />
+				<hbox>
+					<textbox value="@bind(vm.dato.selectedBanco.pos5)" />
+					<label value="(*)" style="color:red"></label>
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</div>

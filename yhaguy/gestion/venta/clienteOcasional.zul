@@ -1,0 +1,71 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.WindowClienteOcasional')"
+	style="padding:10px" width="100%">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="100px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="País:" />
+				<combobox
+					value="@load(vm.dato.clienteDto.empresa.pais.text)"
+					model="@load(vm.dtoUtil.paisEmpresas)"
+					selectedItem="@bind(vm.dato.clienteDto.empresa.pais)"
+					onChange="@command('validarPais')">
+					<template name="model">
+						<comboitem label="@load(each.text)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="R.U.C:" />
+				<textbox value="@bind(vm.dato.clienteDto.ruc)"
+					readonly="@load(vm.paisExterior)" />
+			</row>
+			<row>
+				<field value="C.I:" />
+				<textbox value="@bind(vm.dato.clienteDto.empresa.ci)" />
+			</row>
+		</rows>
+	</grid>
+	
+	<button label="Verificar Datos"
+		onClick="@command('validarRuc')" style="margin-top:10px; margin-bottom:10px"/>	
+
+	<grid sclass="vgrid" visible="@load(vm.rucValido)">
+		<columns>
+			<column width="100px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Razón Social:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.clienteDto.razonSocial)"
+						onChange="@command('copiarRazonSocial')"
+						readonly="@load(vm.dato.clienteDto.empresa.razonSocialSet)" 
+						hflex="true"/>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Nombre:" />
+				<hlayout>
+					<textbox value="@bind(vm.dato.clienteDto.nombre)"
+						hflex="true" />
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Observación:" />
+				<textbox
+					value="@bind(vm.dato.clienteDto.empresa.observacion)"
+					hflex="true" />
+			</row>
+		</rows>
+	</grid>
+</div>

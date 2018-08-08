@@ -1,0 +1,12 @@
+<menubar id="menubarSistema" width="100%" style="@load(vm.colorBarra)" visible="false">
+	<menu id="menuSistemaItems" label="Sistema" style="@load(vm.colorBarra)">
+		<menupopup>
+			<zk forEach="${vm.menuItem(self,'ConfigABM', 'tab=all')}" />
+			<zk forEach="${vm.menuItem(self,'ModuloABM')}" />
+			<menuseparator />
+			<zk forEach="${vm.menuItem(self,'DatosABM')}" />
+			<zk forEach="${vm.menuItem(self,'FormularioPrueba')}" />
+			<zk forEach="${vm.menuItem(self,'FormularioPruebaBrowser2')}" />
+		</menupopup>
+	</menu>
+</menubar>

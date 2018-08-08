@@ -1,0 +1,104 @@
+
+<zk>
+	<window id="Body" viewModel="@id('vm') @init('com.yhaguy.gestion.inventario.lote.LoteControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+		
+	<div height="5px"/>
+	
+		<groupbox>
+			<hlayout sclass="z-valign-middle">
+				<label value="Lote:" style="font-weight:bold"/>
+				<space width="30px"/>			
+				<textbox value="@bind(vm.lote.lote)" onOK="@command('buscarLote')" />
+				<toolbarbutton onClick="@command('buscarLote')" image="/core/images/find-small.png"/>
+			</hlayout>
+		</groupbox>
+	
+	<div height="5px"/>	
+		
+		<groupbox>
+			<hlayout sclass="z-valign-middle">
+				<label value="Ubicación:" style="font-weight:bold"/>
+				<space width="1px"/>
+				<textbox value="@bind(vm.lote.ubicacion)" readonly="true" width="200px"/>
+				<space width="500px"/>
+				<toolbarbutton label="Crear Planilla" image="/core/images/nuevo.png"
+					visible="@load(!vm.lote.confirmado)" onClick="@command('agregarPlanilla')"/>
+				<space/>
+				<toolbarbutton label="Confirmar" image="/core/images/accept2.png"
+					visible="@load(!vm.lote.confirmado)" onClick="@command('confirmarLote')"/>
+				<space width="70px"/>
+				<hlayout sclass="z-valign-middle">
+					<image src="/core/images/confirmado.png" visible="@load(vm.lote.confirmado)"/>
+					<label value="Confirmado.." visible="@load(vm.lote.confirmado)" style="font-size:11px; font-weight:bold"/>
+				</hlayout>				
+			</hlayout>
+			<div height="5px"/>
+			<grid height="480px" model="@load(vm.lote.detalles)">
+				<auxhead>
+					<auxheader colspan="2"/>
+					<auxheader colspan="2" label="Conteo 1" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 2" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 3" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 4" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 5" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 6" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 7" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 8" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 9" style="text-align:center"/>
+					<auxheader colspan="2" label="Conteo 10" style="text-align:center"/>
+				</auxhead>
+				<columns>
+					<column label="Ubicación" width="70px"/>
+					<column label="Código Interno" width="115px"/>					
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+					<column label="Apto" align="right" style="font-size:11px;text-align:center"/>
+					<column label="Av." align="right" style="font-size:11px;text-align:center"/>
+				</columns>
+				<template name="model">
+					<row>
+						<label value="@load(each.invUbicacion.text)" style="color:black"/>
+						<textbox value="@load(each.invArticulo.pos1)" readonly="true" inplace="true"/>
+						<label value="@load(each.conteos[1].apto)" visible="@load(each.conteos[1].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[1].averiado)" visible="@load(each.conteos[1].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[2].apto)" visible="@load(each.conteos[2].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[2].averiado)" visible="@load(each.conteos[2].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[3].apto)" visible="@load(each.conteos[3].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[3].averiado)" visible="@load(each.conteos[3].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[4].apto)"  visible="@load(each.conteos[4].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[4].averiado)" visible="@load(each.conteos[4].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[5].apto)" visible="@load(each.conteos[5].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[5].averiado)" visible="@load(each.conteos[5].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[6].apto)" visible="@load(each.conteos[6].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[6].averiado)" visible="@load(each.conteos[6].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[7].apto)" visible="@load(each.conteos[7].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[7].averiado)" visible="@load(each.conteos[7].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[8].apto)" visible="@load(each.conteos[8].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[8].averiado)" visible="@load(each.conteos[8].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[9].apto)" visible="@load(each.conteos[9].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[9].averiado)" visible="@load(each.conteos[9].habilitado)" style="color:black"/>
+						<label value="@load(each.conteos[10].apto)" visible="@load(each.conteos[10].habilitado)" style="color:black"/>	
+						<label value="@load(each.conteos[10].averiado)" visible="@load(each.conteos[10].habilitado)" style="color:black"/>				
+					</row>
+				</template>
+			</grid>	
+		</groupbox>
+	</window>
+</zk>

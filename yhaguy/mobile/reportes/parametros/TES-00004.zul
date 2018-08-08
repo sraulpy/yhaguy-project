@@ -1,0 +1,83 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Vendedor:" sclass="mobile"/>
+			<bandbox hflex="true"
+				readonly="true" value="@load(vm.filtro.vendedor.razonSocial)"
+				id="bndVend_"
+				onOpen="txFilter.focus()">
+				<bandpopup>
+					<listbox hflex="true"
+						height="500px" model="@load(vm.filtro.vendedores)"
+						selectedItem="@bind(vm.filtro.vendedor)"
+						onSelect="bndVend_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.filtro.razonSocialVendedor)"
+										instant="true" placeholder="Buscar.." 
+										id="txFilter"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Cliente:" sclass="mobile" />
+			<bandbox hflex="true"
+				readonly="true" value="@load(vm.filtro.cliente.razonSocial)"
+				id="bndCli">
+				<bandpopup>
+					<listbox hflex="true"
+						height="500px" model="@load(vm.filtro.clientes)"
+						selectedItem="@bind(vm.filtro.cliente)"
+						onSelect="bndCli.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Rubro:" sclass="mobile" />
+		<combobox
+			value="@load(vm.filtro.rubro.descripcion.toUpperCase())"
+			selectedItem="@bind(vm.filtro.rubro)" instant="true"
+			model="@load(vm.filtro.rubros)" hflex="true"
+			placeholder="TODOS..">
+			<template name="model">
+				<comboitem
+					label="@load(each.descripcion.toUpperCase())" />
+			</template>
+		</combobox>
+	</vlayout>
+
+</vlayout>

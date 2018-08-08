@@ -1,0 +1,38 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.ArticuloSimpleControl')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="150px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Proveedor:" />
+				<hlayout>
+					<textbox placeholder="Razón Social.." hflex="true" readonly="true"
+						value="@load(vm.dato.nvoProveedorArticulo.proveedor.razonSocial)"/>
+					<button iconSclass="z-icon-search" 
+						onClick="@command('buscarProveedor')"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Código de Fábrica:" />
+				<hlayout>
+					<textbox value="@bind(vm.dato.nvoProveedorArticulo.codigoFabrica)"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Descripción de Fábrica:" />
+				<hlayout>
+					<textbox hflex="true" 
+						value="@bind(vm.dato.nvoProveedorArticulo.descripcionArticuloProveedor)"/>
+					<labelConstrain/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+</div>

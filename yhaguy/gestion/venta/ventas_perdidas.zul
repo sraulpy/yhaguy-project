@@ -1,0 +1,38 @@
+<window title=" Registro Ventas Perdidas" border="normal" closable="true"
+	width="400px" height="200px"
+	apply="org.zkoss.bind.BindComposer"
+	position="right,bottom"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.misventas.VentasPerdidasViewModel')" 
+	onCreate="tx_1.focus()">
+	<caption iconSclass="z-icon-minus-circle"></caption>
+	
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<hlayout>
+					<textbox id="tx_1" hflex="true" placeholder="Artículo"
+						value="@bind(vm.ventaPerdida.articulo)"></textbox>
+				</hlayout>				
+			</row>
+			<row>
+				<hlayout>
+					<textbox hflex="true" placeholder="Motivo"
+						value="@bind(vm.ventaPerdida.motivo)"></textbox>
+				</hlayout>				
+			</row>
+			<row>
+				<hlayout>
+					<textbox hflex="true" placeholder="Cliente"
+						value="@bind(vm.ventaPerdida.cliente)"></textbox>
+				</hlayout>				
+			</row>
+			<row>
+				<hlayout>
+					<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
+						iconSclass="z-icon-check" 
+						onClick="@command('addVentaPerdida')"/>
+				</hlayout>				
+			</row>
+		</rows>
+	</grid>
+</window>

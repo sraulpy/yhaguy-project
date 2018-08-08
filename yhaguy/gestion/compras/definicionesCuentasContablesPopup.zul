@@ -1,0 +1,136 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.definiciones.CuentasContablesDefinicionesSimpleVM')">
+	
+	<!-- ________________ CUENTA CONTABLE _______________ -->
+	
+	<grid sclass="vgrid" visible="@load(vm.cuentaContable)">
+		<columns>
+			<column width="35%"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Código:"/>
+				<textbox value="@bind(vm.dato.newCuentaContable.pos1)"
+					placeholder="Autogenerado.." readonly="true" hflex="true"/>
+			</row>
+			<row>
+				<field value="Descripción:"/>
+				<textbox value="@bind(vm.dato.newCuentaContable.pos2)" hflex="true"/>
+			</row>
+			<row>
+				<field value="Alias:"/>
+				<textbox value="@bind(vm.dato.newCuentaContable.pos3)"
+					placeholder="Autogenerado.." readonly="true" hflex="true"/>
+			</row>
+			<row>
+				<field value="Plan de Cuenta:"/>
+				<combobox model="@load(vm.dato.planDeCuentas)"
+					instant="true" selectedItem="@bind(vm.dato.newCuentaContable.pos4)"
+					hflex="true">
+					<template name="model">
+						<comboitem label="@load(vm.concat(each.pos1, each.pos2))"/>
+					</template>
+				</combobox>
+			</row>
+		</rows>
+	</grid>
+	
+	<!-- __________________ PLAN DE CUENTA _________________ -->
+	
+	<grid sclass="vgrid" visible="@load(vm.planDeCuenta)">
+		<columns>
+			<column width="35%"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Código:"/>
+				<textbox value="@bind(vm.dato.newPlanCuenta.pos1)" hflex="true"/>
+			</row>
+			<row>
+				<field value="Descripción:"/>
+				<textbox value="@bind(vm.dato.newPlanCuenta.pos2)" hflex="true"/>
+			</row>
+			<row>
+				<field value="Tipo:"/>
+				<combobox hflex="true" model="@load(vm.dato.util.cuentasContablesTipos)"
+					instant="true"
+					selectedItem="@bind(vm.dato.newPlanCuenta.pos3)">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
+					</template>
+				</combobox>
+			</row>
+		</rows>
+	</grid>
+	
+	
+	<!-- __________________ CENTRO DE COSTO _________________ -->
+	
+	<grid sclass="vgrid" visible="@load(vm.centroCosto)">
+		<columns>
+			<column width="40%"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Número:"/>
+				<textbox value="@load(vm.dato.newCentroCosto.pos1)"
+					readonly="true" placeholder="AutoGenerado"/>
+			</row>
+			<row>
+				<field value="Descripción:"/>
+				<textbox value="@bind(vm.dato.newCentroCosto.pos2)" hflex="true"/>
+			</row>
+			<row>
+				<field value="Monto Asignado:"/>
+				<hlayout valign="middle">
+					<guaranibox value="@bind(vm.dato.newCentroCosto.pos3)"/>
+					<label value="@load(vm.dato.util.simboloMonedaLocal)"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+	
+	<!-- __________________ DEPARTAMENTO _________________ -->
+	
+	<grid sclass="vgrid" visible="@load(vm.departamento)">
+		<columns>
+			<column width="40%"/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Nombre:"/>
+				<textbox value="@bind(vm.dato.selectedDepartamento.pos1)" hflex="true"/>
+			</row>
+			<row>
+				<field value="Descripción:"/>
+				<textbox value="@bind(vm.dato.selectedDepartamento.pos2)" hflex="true"/>
+			</row>
+		</rows>
+	</grid>
+	
+	<listbox sclass="small-list" visible="@load(vm.listCentroCosto)"
+		model="@load(vm.dato.centrosDeCostoSinAsignar)"
+		selectedItem="@bind(vm.dato.newCentroCosto)"
+		emptyMessage="Sin centros de costo para Asignar..">
+		<template name="model">
+			<listitem>
+				<listcell label="@load(vm.dato.concat(each.pos1, each.pos2))"/>
+			</listitem>
+		</template>
+	</listbox>
+	
+	<listbox sclass="small-list" visible="@load(vm.listCuentaContable)"
+		model="@load(vm.dato.cuentasSinAsignar)"
+		selectedItem="@bind(vm.dato.newCuentaContable)"
+		emptyMessage="Sin cuentas para Asignar..">
+		<template name="model">
+			<listitem>
+				<listcell label="@load(vm.dato.concat(each.pos1, each.pos2))"/>
+			</listitem>
+		</template>
+	</listbox>
+	
+</window>

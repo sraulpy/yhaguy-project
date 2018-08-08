@@ -1,0 +1,55 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Familia:" sclass="mobile" />
+			<combobox model="@load(vm.filtro.familias)"
+				selectedItem="@bind(vm.filtro.familia)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Ranking por:" sclass="mobile" />
+			<combobox model="@load(vm.filtro.tiposRanking)"
+				selectedItem="@bind(vm.filtro.tipoRanking)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Formato:" sclass="mobile" />
+			<combobox model="@load(vm.filtro.formatos)"
+				selectedItem="@bind(vm.filtro.formato)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+</vlayout>

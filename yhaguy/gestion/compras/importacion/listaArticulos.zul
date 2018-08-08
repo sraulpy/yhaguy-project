@@ -1,0 +1,30 @@
+<window id="listaArticulos" border="normal" title="Buscar Articulo"
+	closable="true" width="40%" height="385px">
+	<caption image="/core/images/searching2.png" />
+
+	<listbox model="@load(vm.articulos)"
+		rows="10" selectedItem="@bind(vm.selectedArticulo)">
+		<listhead>
+			<listheader width="35%">
+				<hlayout>
+					<image src="/core/images/filter.png" width="20px"/>
+					<textbox/>
+				</hlayout>
+			</listheader>
+			<listheader>
+				<hlayout>
+					<image src="/core/images/filter.png" width="20px"/>
+					<textbox width="200%"/>
+				</hlayout>
+			</listheader>
+		</listhead>
+		<template name="model" var="art">
+			<listitem>
+				<listcell label="@load(art.codigoInterno)"/>
+				<listcell label="@load(art.descripcion)"/>
+			</listitem>
+		</template>
+	</listbox>
+
+
+</window>

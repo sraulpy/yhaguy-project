@@ -1,0 +1,93 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="40%" />
+		<column/>
+	</columns>
+	<rows>
+		<row>
+			<field value="Vendedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.vendedor.razonSocial)"
+				id="bndVend_"
+				onOpen="txFilter.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.vendedores)"
+						selectedItem="@bind(vm.dato.filtro.vendedor)"
+						onSelect="bndVend_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialVendedor)"
+										instant="true" placeholder="Buscar.." 
+										id="txFilter"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cliente:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
+				id="bndCli">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.clientes)"
+						selectedItem="@bind(vm.dato.filtro.cliente)"
+						onSelect="bndCli.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cuenta:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.monedas)"
+				selectedItem="@bind(vm.dato.filtro.moneda)"
+				value="@load(vm.dato.filtro.moneda.descripcion)">
+				<template name="model">
+					<comboitem
+						label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Rubro:" />
+			<combobox value="@load(vm.dato.filtro.rubro.descripcion.toUpperCase())"
+				selectedItem="@bind(vm.dato.filtro.rubro)"
+				instant="true"
+				model="@load(vm.dato.filtro.rubros)"
+				hflex="true"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion.toUpperCase())" />
+				</template>	
+			</combobox>
+		</row>
+	</rows>
+</grid>

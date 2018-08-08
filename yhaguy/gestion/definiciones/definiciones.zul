@@ -1,0 +1,41 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.definiciones.DefinicionesViewModel')"
+	height="100%">
+	
+	<hlayout vflex="true" valign="top">
+		<listbox vflex="true" width="200px"
+			sclass="rounded"
+			model="@load(vm.modulos)"
+			checkmark="true"
+			selectedItem="@bind(vm.selectedItem)">
+			<auxhead>
+				<auxheader colspan="2" label="Módulos" />
+			</auxhead>
+			<listhead>
+				<listheader width="40px" align="center" />
+				<listheader />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell />
+					<listcell label="@load(each.pos1)" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2" align="left">
+					<hlayout>
+						<field value="@load(vm.modulos.size())" />
+						<field value="ítems"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<include src="@load(vm.selectedItem.pos3)" vflex="true" hflex="true" />
+		
+	</hlayout>
+	<style>
+		.z-tab {width:170px}
+		.z-doublebox { min-height: 20px }
+	</style>
+</window>

@@ -1,0 +1,30 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Vencimiento Entre:" />
+			<hlayout>
+				<spinner value="@bind(vm.dato.filtro.cantidadDesde)"
+					width="70px"></spinner>
+				<space></space>
+				<label value="A"></label>
+				<space></space>
+				<spinner value="@bind(vm.dato.filtro.cantidadHasta)"
+					width="70px"></spinner>
+				<label value="Días.."></label>				
+			</hlayout>			
+		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

@@ -1,0 +1,49 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.listaprecio.VentaListaPrecioSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="110px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Código:" />
+				<textbox readonly="true"
+					value="@load(vm.dato.selectedListaPrecioDetalle.pos1)" hflex="true" />
+			</row>
+			<row>
+				<field value="Lista:" />
+				<textbox readonly="true"
+					value="@load(vm.dato.selectedLista.pos1)" hflex="true" />
+			</row>
+			<row>
+				<field value="Costo:" />
+				<hlayout>
+					<guaranibox readonly="true"
+						value="@load(vm.dato.selectedListaPrecioDetalle.pos3.pos3)" />
+					<label value="Gs."></label>
+				</hlayout>
+				
+			</row>
+			<row>
+				<field value="Precio Contado:" />
+				<hlayout>
+					<guaranibox 
+						value="@bind(vm.dato.selectedListaPrecioDetalle.pos3.pos1)" />
+					<label value="Gs."></label>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Precio Crédito:" />
+				<hlayout>
+					<guaranibox 
+						value="@bind(vm.dato.selectedListaPrecioDetalle.pos3.pos2)" />
+					<label value="Gs."></label>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+
+</div>

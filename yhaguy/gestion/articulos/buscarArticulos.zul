@@ -1,0 +1,82 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.BuscarArticuloControl')">
+
+	<!-- ================================== LISTADO DETALLES ============================== -->
+	<div id="buscarArticulo">
+		<listbox height="500px" model="@load(vm.articulosDeposito)"
+			selectedItem="@bind(vm.selectedArticulo)" emptyMessage="@bind(vm.mensaje)">
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+			<listhead>
+				<listheader style="text-align:center" width="100px">
+					<vlayout>
+						<label value="Código:" />
+						<textbox value="@bind(vm.filtroCodigo)" width="80px"
+							onChange="@command('cargarArticulosDeposito')" onOK="@command('cargarArticulosDeposito')">
+						</textbox>
+					</vlayout>
+				</listheader>
+				<listheader style="text-align:center" width="200px">
+					<vlayout>
+						<label value="Descripción:" />
+						<textbox value="@bind(vm.filtroDescripcion)" width="180px"
+							onChange="@command('cargarArticulosDeposito')" onOK="@command('cargarArticulosDeposito')">
+						</textbox>
+					</vlayout>
+				</listheader>
+				<listheader style="text-align:center" width="100px">
+					<vlayout>
+						<label value="Buscar"/>
+					</vlayout>
+				</listheader>
+
+				<listheader style="text-align:center" width="100px">
+					<vlayout>
+						<label value="Stock Real" />
+					</vlayout>
+				</listheader>
+				<listheader style="text-align:center" width="100px">
+					<vlayout>
+						<label value="Disponible" />
+					</vlayout>
+				</listheader>
+				<listheader style="text-align:center" width="100px">
+					<vlayout>
+						<label value="Reservado" />
+					</vlayout>
+				</listheader>
+				<listheader style="text-align:center" width="150px">
+					<vlayout>
+						<label value="Detalle Reservas" />
+					</vlayout>
+				</listheader>
+				<listheader style="text-align:center" width="150px">
+					<vlayout>
+						<label value="Otros Depósitos" />
+					</vlayout>
+				</listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)" style="color:black" />
+					<listcell label="@load(each.pos2)" style="color:black" />
+					<listcell>
+						<button label="ver info" onClick="@command('cargarArticulosDepositoDetalle', dato=each)"/>
+					</listcell>
+					<listcell>
+						<longbox value="@load(each.pos5)" readonly="true" inplace="true" />
+					</listcell>
+					<listcell>
+						<longbox value="@load(each.pos3)" readonly="true" inplace="true" />
+					</listcell>
+					<listcell>
+						<longbox value="@load(each.pos4)" readonly="true" inplace="true" />
+					</listcell>
+					<listcell label="Ver Reservas" image="/core/images/preview.png"
+						style="text-align:center" onClick="@command('mostrarDetalleReservas', articulo=each)" />
+					<listcell label="Ver Otros Depósitos" style="text-align:center"
+						image="/core/images/preview.png" onClick="@command('mostrarOtrosDepositos', articulo=each)" />
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</window>

@@ -1,0 +1,131 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.ajustes.AjusteStockViewModel')"
+	height="100%">
+	
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Tipo Movimiento" />
+					<combobox model="@load(vm.tiposAjuste)"
+						value="@load(vm.dto.tipoMovimiento.pos1)"
+						selectedItem="@bind(vm.dto.tipoMovimiento)"
+						instant="true"
+						visible="@load(vm.dto.detalles.size() eq 0? 'true':'false')"
+						hflex="true">
+						<template name="model">
+							<comboitem label="@load(each.pos1)"/>
+						</template>
+					</combobox>
+					<textbox value="@load(vm.dto.tipoMovimiento.pos1)"
+						readonly="true"
+						visible="@load(vm.dto.detalles.size() eq 0? 'false':'true')"
+						hflex="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@load(vm.dto.numero)" readonly="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Fecha" />
+					<textbox value="@load(vm.dto.fecha) @converter('formattedDate', format='dd-MM-yyyy')" readonly="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Sucursal" />
+					<textbox value="@load(vm.dto.sucursal.text)" readonly="true"/>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Estado" />
+					<textbox value="@load(vm.dto.estadoComprobante.text)" readonly="true"/>
+				</vlayout>
+			</row>
+			<row>
+				<vlayout spacing="0">
+					<field value="Depósito" />
+					<combobox model="@load(vm.depositosSucursal)"
+						value="@load(vm.dto.deposito.text)"
+						selectedItem="@bind(vm.dto.deposito)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.text)"/>
+						</template>
+					</combobox>
+				</vlayout>
+				<cell colspan="3">
+					<vlayout style="margin-top:6px">
+					<field value="Descripción" />
+					<textbox value="@bind(vm.dto.descripcion)" hflex="true"/>
+				</vlayout>
+				</cell>
+				<vlayout spacing="0">
+					<field value="Autorizado por" />
+					<textbox readonly="true" 
+						value="@load(vm.dto.autorizadoPor)"/>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+	
+	<div height="10px" />
+	
+	<solicitarCabecera visible="@load(!vm.detalleVisible)"/>
+	
+	<hlayout sclass="button-container" visible="@load(vm.detalleVisible)">
+		<toolbarbutton label="Eliminar"
+				image="/core/images/borrarItem.png" 
+				onClick="@command('deleteItem')"
+				disabled="@load(vm.deleteItemDisabled)"/>
+			<space />
+			<toolbarbutton label="Insertar"
+				image="/core/images/insertar.png" 
+				onClick="@command('insertItem')"/>
+			<space />
+			<toolbarbutton label="Autorizar"
+				image="/core/images/accept2.png" 
+				onClick="@command('confirmar')"
+				disabled="@load(vm.confirmarDisabled)"/> 
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true" checkmark="@load(vm.checkmarkVisible)"
+		multiple="true" emptyMessage="AGREGUE ÍTEMS AL DETALLE.."
+		visible="@load(vm.detalleVisible)"
+		model="@load(vm.dto.detalles)"
+		selectedItems="@bind(vm.selectedItems)">
+		<listhead>
+			<listheader width="40px" align="center"/>
+			<listheader label="Código Interno" width="150px"/>
+			<listheader label="Código Proveedor" width="150px" />
+			<listheader label="Código Original" width="150px" />
+			<listheader label="Descripción" />
+			<listheader label="Cantidad" width="120px" align="right"/>
+			<listheader label="Costo Gs." width="120px" align="right"/>
+			<listheader label="Costo Total Gs." width="120px" align="right"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.articulo.pos1)" />
+				<listcell label="@load(each.articulo.pos2)" />
+				<listcell label="@load(each.articulo.pos3)" />
+				<listcell label="@load(each.articulo.pos4)" />
+				<listcell label="@load(each.cantidad)" />
+				<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
+				<listcell label="@load(each.totalCostoGs) @converter(vm.cnv.monedaLocal)" />
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="7" align="left">
+				<hlayout>
+					<field value="@load(vm.dto.detalles.size())" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.dto.totalCostoGs)"
+					format="###,###,##0" 
+					style="background:silver; text-align:right; font-weight:bold" />
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+</window>

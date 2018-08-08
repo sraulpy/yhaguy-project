@@ -1,0 +1,42 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.FuncionarioPopupUserViewModel')"
+	width="100%" height="100%">
+	<grid width="100%">
+		<rows>
+			<row>
+				<field value="Departamento:" />
+				<combobox model="@load(vm.dtoUtil.departamentos)"
+					value="@load(vm.dato.selectedDepartamento.pos1)"
+					selectedItem="@bind(vm.dato.selectedDepartamento)"
+					onSelect="@command('actualizarSucursalOperativa')"
+					constraint="${vm.check.noVacio}">
+					<template name="model">
+						<comboitem label="@load(each.pos1)" />
+					</template>
+				</combobox>
+
+				<field value="Sucursal Operativa:" />
+				<textbox
+					value="@load(vm.dato.selectedDepartamento.pos2)" readonly="true" />
+			</row>
+		</rows>
+	</grid>
+	<div height="5px" width="100%"></div>
+	<listbox model="@load(vm.dato.users)" width="100%" vflex="true"
+		checkmark="true" emptyMessage="Sin usuarios"
+		selectedItem="@bind(vm.dato.selectedUser)">
+		<listhead>
+			<listheader label="Nombre Usuario" />
+			<listheader label="Login" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)" />
+			</listitem>
+		</template>
+	</listbox>
+
+
+
+</window>

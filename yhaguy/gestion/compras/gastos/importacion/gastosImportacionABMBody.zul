@@ -1,0 +1,30 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.importacion.GastoImportacionControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%">
+		<vlayout>
+			<groupbox title="Orden de Compra" sclass="rounded">
+				<hlayout valign="middle">
+				
+					<field value="Número:"/>
+					<textbox readonly="true" value="@load(vm.dto.numeroPedidoCompra)" width="100px"/>
+					<space/>		
+					<field value="Fecha:"/>
+					<textbox value="@load(vm.dto.fechaCreacion) @converter('formatedDate', format='dd-MM-yyyy')" 
+						readonly="true" width="100px"/>
+					<space/>
+					<field value="Proveedor:"/>
+					<textbox value="@load(vm.dto.proveedor.pos2)" readonly="true" width="180px"/>
+					<space/>
+					<field value="Despachante:"/>
+					<textbox value="@load(vm.dto.resumenGastosDespacho.despachante.razonSocial)" 
+						readonly="true" width="180px"/>						
+				</hlayout>
+				<div height="10px"/>
+			</groupbox>
+			<groupbox title="Sub-Diario" style="padding: 0">
+				<include src="/yhaguy/gestion/compras/gastos/subDiario/gastosSubDiario.zul"/>
+			</groupbox>
+		</vlayout>
+	</window>
+</zk>

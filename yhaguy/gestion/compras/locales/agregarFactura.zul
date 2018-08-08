@@ -1,0 +1,61 @@
+<zk>
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.CompraLocalSimpleControl')"
+	style="padding:5px">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="130px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<field value="Tipo Movimiento:" />				
+				<combobox model="@load(vm.dato.tiposMovimiento)"
+					value="@load(vm.dato.nvaFactura.tipoMovimiento.pos1)" 
+					selectedItem="@bind(vm.dato.nvaFactura.tipoMovimiento)" width="200px"
+					instant="true"
+					onChange="@command('setCondicion')">
+					<template name="model">
+						<comboitem label="@load(each.pos1)"/>
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Nro. Factura:" />				
+				<textbox
+					value="@bind(vm.dato.nvaFactura.numero) @converter(vm.cnv.facturaPy)"
+					style="text-align:right"/>
+			</row>
+			<row>
+				<field value="Timbrado:" />				
+				<hlayout>
+				<textbox value="@load(vm.dato.nvaFactura.timbrado.pos1)" 
+					placeholder="Nro. Timbrado.." readonly="true"/>
+				<button iconSclass="z-icon-search" onClick="@command('abrirVentanaTimbrado')"/>
+				</hlayout>
+			</row>
+			<row>				
+				<field value="Condición:" />
+				<textbox value="@load(vm.dato.nvaFactura.condicionPago.pos1)" readonly="true"/>
+			</row>
+			<row>				
+				<field value="Fecha Emisión:" />
+				<datebox value="@bind(vm.dato.nvaFactura.fechaOriginal)" constraint="no future"
+					onChange="@command('calcularVencimiento')"/>
+			</row>
+			<row>				
+				<field value="Fecha Vencimiento:" />
+				<datebox value="@bind(vm.dato.nvaFactura.fechaVencimiento)" constraint="no past"/>
+			</row>			
+			<row>				
+				<field value="Total Importe:" />
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@bind(vm.dato.nvaFactura.totalAsignadoGs)"
+						onChange="@command('dolarizarTotalAsignado')"/>
+					<label value="Gs." style="font-size:11px"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+</div>
+</zk>

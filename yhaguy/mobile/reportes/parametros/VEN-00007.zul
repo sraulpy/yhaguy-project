@@ -1,0 +1,34 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Motivo:" sclass="mobile" />
+			<combobox model="@load(vm.filtro.motivosNotaCredito)"
+				selectedItem="@bind(vm.filtro.motivoNotaCredito)"
+				value="@load(vm.filtro.motivoNotaCredito.descripcion.toUpperCase())"
+				hflex="true">
+				<template name="model">
+					<comboitem
+						label="@load(each.descripcion.toUpperCase())" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+</vlayout>

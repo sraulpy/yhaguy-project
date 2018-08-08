@@ -1,0 +1,72 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.metas.VentaMetaSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="80px" />
+			<column />
+			<column width="80px" />
+			<column />
+			<column width="80px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Vendedor:" />
+				<cell colspan="2">
+					<combobox value="@load(vm.dato.selectedItem.pos15.text)" hflex="true"
+						selectedItem="@bind(vm.dato.selectedItem.pos15)"
+						model="@load(vm.vendedores)"
+						instant="true"
+						visible="@load(vm.dato.selectedItem.esNuevo() ? 'true':'false')">
+						<template name="model">
+							<comboitem label="@load(each.text)"/>
+						</template>
+					</combobox>
+					<textbox value="@load(vm.dato.selectedItem.pos15.text)" readonly="true"
+						visible="@load(vm.dato.selectedItem.esNuevo() ? 'false':'true')"
+						hflex="true"/>
+				</cell>				
+			</row>
+			<row>
+				<field value="Periódo:" />
+				<textbox readonly="true" width="95px"
+					value="@load(vm.dato.selectedItem.pos2)"></textbox>
+			</row>
+			<row>
+				<field value="Enero:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos3)" />
+				<field value="Febrero:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos4)"/>
+				<field value="Marzo:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos5)"/>
+			</row>
+			<row>
+				<field value="Abril:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos6)"/>
+				<field value="Mayo:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos7)"/>
+				<field value="Junio:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos8)"/>
+			</row>
+			<row>
+				<field value="Julio:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos9)"/>
+				<field value="Agosto:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos10)"/>
+				<field value="Setiembre:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos11)"/>
+			</row>
+			<row>
+				<field value="Octubre:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos12)"/>
+				<field value="Noviembre:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos13)"/>
+				<field value="Diciembre:" />
+				<guaranibox value="@bind(vm.dato.selectedItem.pos14)"/>
+			</row>
+		</rows>
+	</grid>
+
+</div>

@@ -1,0 +1,35 @@
+<zk>
+	<listbox sclass="small-list"
+		model="@load(agvm.listaArticulosGastos)"
+		selectedItem="@bind(agvm.selectArticuloGasto)"
+		vflex="true">
+		<listhead>
+			<listheader label="Nombre" style="text-align:center" 
+				sort="auto(pos1)"/>
+			<listheader label="Cta. Contable" style="text-align:center" />
+			<listheader label="Creado por" style="text-align:center" 
+				width="120px"/>
+			<listheader label="Verificar" align="center" 
+				width="80px"/>
+		</listhead>
+		<template name="model" status='s'>
+			<listitem>
+				<listcell label="@load(each.pos1)"/>
+				<listcell label="@load(each.pos5)" />
+				<listcell label="@load(each.pos2)" />
+				<listcell visible="${!vm.operacionHabilitada('VerificarArticuloGasto')}" >
+					<checkbox checked="@load(each.pos6)"
+						disabled="@load(each.pos6)" 
+						onCheck="@command('verificarArticuloGastoON', artGasto=each)" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<hlayout sclass="button-container">
+		<button label="Agregar"
+			onClick="@command('abrirPopupAarticulosGastos', agregar=true, editar=false)" />
+		<button label="Modificar" 
+			onClick="@command('abrirPopupAarticulosGastos', agregar=false, editar=true)" />
+		<button label="Eliminar" disabled="true" />
+	</hlayout>
+</zk>

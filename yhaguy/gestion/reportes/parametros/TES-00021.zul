@@ -1,0 +1,41 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Descuento Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Descuento Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Vto. Cheque Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde2)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Vto. Cheque Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta2)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Banco:" />
+			<combobox
+				placeholder="TODOS.."
+				selectedItem="@bind(vm.dato.filtro.bancoCta)"
+				model="@load(vm.dato.filtro.bancos)"
+				instant="true"
+				hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.banco.descripcion.toUpperCase())" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

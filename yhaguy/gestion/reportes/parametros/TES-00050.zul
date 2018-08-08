@@ -1,0 +1,63 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="50%" />
+		<column/>
+	</columns>
+	<rows>
+		<row>
+			<field value="Desde:" />
+			<hlayout valign="middle">
+				<hlayout id="hl_desde">
+					<datebox value="@load(vm.dato.filtro.fechaInicioOperaciones)"
+						placeholder="Desde.." hflex="true" readonly="true" buttonVisible="false" />
+					<button iconSclass="z-icon-edit" onClick='dtb_desde.setVisible(true); hl_desde.setVisible(false)'></button>
+				</hlayout>				
+				<datebox id="dtb_desde" value="@bind(vm.dato.filtro.fechaDesde)"
+					placeholder="Desde.." hflex="true" visible="false"/>
+			</hlayout>
+		</row>
+		<row>
+			<field value="Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Cliente:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
+				id="bndCli" onOpen="search.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.clientes)"
+						selectedItem="@bind(vm.dato.filtro.cliente)"
+						onSelect="bndCli.close()">
+						<listhead>
+							<listheader>
+								<textbox id="search" hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." sclass="filter"/>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cuenta:" />
+			<textbox hflex="true" readonly="true"
+				value="@load(vm.dato.filtro.monedaGs)"></textbox>
+		</row>
+		<row>
+			<field value="Incluir Cheques Rechazados:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirCHQ_RECH)"></checkbox>
+		</row>
+		<row>
+			<field value="Incluir Prestamos Internos:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirPRE)"></checkbox>
+		</row>
+	</rows>
+</grid>

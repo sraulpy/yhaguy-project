@@ -1,0 +1,41 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Forma de Pago:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.formasPago_)"
+				selectedItem="@bind(vm.dato.filtro.formaPago_)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Recibos:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirREC)"></checkbox>
+		</row>
+		<row>
+			<field value="Ventas Contado:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirVCT)"></checkbox>
+		</row>
+		<row>
+			<field value="Iva Incluído:" />
+			<checkbox checked="@bind(vm.dato.filtro.ivaIncluido)"></checkbox>
+		</row>
+	</rows>
+</grid>

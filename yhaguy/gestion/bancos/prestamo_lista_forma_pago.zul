@@ -1,0 +1,49 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.descuentos.BancoDescuentoSimpleControl')"
+	style="padding:10px" height="100%">
+
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-danger btn-sm" width="120px"
+				iconSclass="z-icon-times-circle"
+				onClick="@command('deleteFormaPago')" label=" Eliminar" />
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm" width="120px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('asignarFormaPago')" label=" Insertar" />
+	</hlayout>
+
+	<listbox sclass="small-list" vflex="true"
+		model="@load(vm.dato.chequeDescuento.formasPago)"
+		emptyMessage="INGRESE LA FORMA DE PAGO.."
+		selectedItem="@bind(vm.selectedFormaPago)">
+		<listhead>
+			<listheader label="Descripción" style="text-align:center" />
+			<listheader label="Monto Gs" align="right"
+				style="text-align:center" width="105px" />
+		</listhead>
+
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.descripcion.toUpperCase())" />
+				<listcell
+					label="@load(each.montoGs) 
+						@converter('formattedNumber', format='###,###,##0')" />
+			</listitem>
+		</template>
+
+		<listfoot>
+			<listfooter span="2" align="left">
+				<hlayout>
+					<field value="@load(vm.dato.chequeDescuento.formasPago.size())" />
+					<field value="ítems" />
+					<space hflex="true" />
+					<field value="Importe:" />
+					<guaranibox readonly="true"
+						value="@load(vm.datosFormasPago[0])"
+						style="background:#dddddd;text-align:right;font-weight:bold" />
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+</div>

@@ -1,0 +1,48 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.VentasMobileViewModel')"
+	vflex="true">
+
+	<window id="win_chart" width="99%" height="98%"
+		apply="com.yhaguy.charts.ventas.ChartVentasMetas" sclass="rounded">
+		<space></space>
+		<charts id="chart" type="column" vflex="true" title="Yhaguy Baterías S.A." style="font-size:24pt" />
+		<vbox hflex="true" pack="center" align="start" height="450px">
+			<label id="lbl_cob_mes" style="font-size: 30pt" class="label label-primary"></label>
+			<space></space><space></space>
+			<label id="lbl_vtas_mes" style="font-size: 30pt; background: #7CB5EC" class="label label-primary"></label>	
+			<space></space><space></space><space></space>	
+			<label id="lbl_dia" style="font-size: 30pt" class="label label-success"></label>	
+			<space></space><space></space>
+			<label id="lbl_dia_" style="font-size: 30pt" class="label label-success"></label>
+			<label id="lbl_mob" visible="false"></label>
+		</vbox>
+		
+	</window>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+		.z-listitem-checkable { height:50px; width:50px }
+		.z-listitem-selected>.z-listcell>.z-listcell-content>.z-listitem-checkable .z-listitem-icon { line-height:50px; }
+		.highcharts-axis-title { color:white ; fill:white ; visibility:
+		hidden;} .highcharts-button-symbol { visibility:hidden }
+		.highcharts-title { font-size: 24pt }
+	</style>
+</div>

@@ -1,0 +1,91 @@
+<zk>
+<hlayout>
+					<listbox width="200px" height="400px"
+						model="@load(tcvm.util.monedas)"
+						selectedItem="@bind(tcvm.selectedMoneda)"
+						onSelect="@command('refreshlistaTipoDeCambio')">
+						<listhead>
+							<listheader label="Monedas" sort="auto" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.text)" />
+							</listitem>
+						</template>
+					</listbox>
+					<space width="20px" />
+					<listbox width="500px" height="400px"
+						model="@load(tcvm.listaTipoDeCambio)">
+						<auxhead>
+							<auxheader />
+							<auxheader label="BCP" colspan="2"
+								style="text-align:center" />
+							<auxheader label="Empresa" colspan="2"
+								style="text-align:center" />
+						</auxhead>
+						<listhead>
+							<listheader label="Fecha" sort="auto"
+								style="text-align:center" />
+							<listheader label="Compra" sort="auto"
+								style="text-align:center" />
+							<listheader label="venta" sort="auto"
+								style="text-align:center" />
+							<listheader label="Compra" sort="auto"
+								style="text-align:center" />
+							<listheader label="venta" sort="auto"
+								style="text-align:center" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.pos5)"
+									style="text-align:center" />
+								<listcell label="@load(each.pos1)"
+									style="text-align:center" />
+								<listcell label="@load(each.pos2)"
+									style="text-align:center" />
+								<listcell label="@load(each.pos3)"
+									style="text-align:center" />
+								<listcell label="@load(each.pos4)"
+									style="text-align:center" />
+							</listitem>
+						</template>
+					</listbox>
+					<space width="20px" />
+					<window title="@load(tcvm.selectedMoneda.text)"
+						border="normal" visible="@load(tcvm.visible)" hflex="true"
+						height="300px">
+						<groupbox title="Cambio BCP">
+							<hlayout>
+								Compra
+								<guaranibox
+									value="@bind(tcvm.tipoDeCambio.pos2)" />
+								Venta
+								<guaranibox
+									value="@bind(tcvm.tipoDeCambio.pos3)" />
+							</hlayout>
+						</groupbox>
+						<space height="10px" />
+						<groupbox title="Cambio Empresa">
+							<hlayout>
+								Compra
+								<guaranibox
+									value="@bind(tcvm.tipoDeCambio.pos4)" />
+								Venta
+								<guaranibox
+									value="@bind(tcvm.tipoDeCambio.pos5)" />
+							</hlayout>
+						</groupbox>
+						<space height="20px" />
+						<hlayout>
+							Fecha
+							<datebox width="100px" format="short"
+								value="@bind(tcvm.tipoDeCambio.pos1)" />
+							<button label="Guardar"
+								onClick="@command('saveTipoDeCambio')" />
+						</hlayout>
+
+					</window>
+
+				</hlayout>
+
+</zk>

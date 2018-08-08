@@ -1,0 +1,245 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.principal.CajaControlBody')">
+	<div vflex="true" style="padding:10px 30px 10px 30px">
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<hlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox value="@load(vm.dto.numero)"
+								readonly="true" hflex="true" style="margin-right:15px" />
+						</vlayout>
+						<vlayout spacing="0" hflex="true"
+							style="margin-right:15px">
+							<field value="Fecha y Hora" />
+							<hlayout>
+								<datebox value="@load(vm.dto.fecha)"
+									readonly="true" hflex="true"/>
+								<timebox value="@load(vm.dto.fecha)"
+									readonly="true" buttonVisible="false" hflex="true"/>
+							</hlayout>
+						</vlayout>
+					</hlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal" />
+						<textbox value="@load(vm.dto.sucursal.text)"
+							readonly="true" hflex="true"
+							style="margin-right:15px"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Estado" />
+						<combobox model="@load(vm.dtoUtil.cajaEstados)"
+							selectedItem="@bind(vm.dto.estado)" instant="true"
+							hflex="true"
+							style="margin-right:15px">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+					</vlayout>
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row>					
+					<vlayout spacing="0">
+						<field value="Tipo" />
+						<combobox value="@load(vm.dto.tipo.text)"
+							model="@load(vm.dtoUtil.cajaTipos)"
+							selectedItem="@bind(vm.dto.tipo)"
+							hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Descripción" />
+						<textbox value="@bind(vm.dto.descripcion)" hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Responsable" />
+						<hlayout style="margin-right:15px">
+							<textbox id="txResponsable"
+								value="@bind(vm.dto.responsable.pos1)"
+								onOK="@command('buscarResponsable')"
+								placeholder="Responsable de Caja.." 
+								hflex="true"/>
+							<button iconSclass="z-icon-search"
+								onClick="@command('buscarResponsable')" />
+						</hlayout>
+					</vlayout>	
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row valign="top">		
+					<vlayout spacing="0">
+						<field value="Supervisores" />
+						<hlayout valign="top">
+							<listbox id="lst"
+								model="@load(vm.dto.supervisores)" hflex="true"
+								rows="3" emptyMessage="Asignar Supervisores.."
+								selectedItem="@bind(vm.selectedSupervisor)"
+								sclass="small-list">
+								<template name="model" var="sup">
+									<listitem label="@load(sup.pos1)" />
+								</template>
+							</listbox>
+						</hlayout>
+						<hlayout>
+							<textbox hflex="true" placeholder="Buscar por Nombre.."
+								value="@bind(vm.filterFuncionario)"
+								onOK="@command('buscarSupervisor')"/>
+							<button label="Agregar"
+								width="70px"
+								onClick="@command('buscarSupervisor')" />
+							<button label="Eliminar"
+								width="70px"
+								onClick="@command('removerSupervisor')"
+								disabled="@load(!not empty vm.selectedSupervisor)" />
+						</hlayout>
+					</vlayout>	
+					<vlayout spacing="0">
+						<field value="Talonario Retenciones" />
+						<hlayout style="margin-right:15px">
+							<textbox placeholder="Talonario de Retenciones.." hflex="true"
+								value="@load(vm.dto.talonarioRetenciones.pos1)"
+								readonly="true"/>
+							<button iconSclass="z-icon-search"
+								onClick="@command('buscarTalonario', tipo=5)"/>
+						</hlayout>
+						<div height="10px"/>
+						<hlayout style="font-style:oblique">
+							<label value="Boca:" />
+							<label value="@load(vm.dto.talonarioRetenciones.pos2)" />
+							<space />
+							<label value="Punto:" />
+							<label value="@load(vm.dto.talonarioRetenciones.pos3)" />
+							<space />
+							<label value="Desde:" />
+							<label value="@load(vm.dto.talonarioRetenciones.pos4)" />
+							<space />
+							<label value="Hasta:" />
+							<label value="@load(vm.dto.talonarioRetenciones.pos5)" />
+						</hlayout>
+					</vlayout>	
+					<vlayout spacing="0">
+						<field value="Talonario Auto-Facturas" />
+						<hlayout style="margin-right:15px">
+							<textbox placeholder="Talonario de Auto-Facturas.." hflex="true"
+								value="@load(vm.dto.talonarioAutoFacturas.pos1)"
+								readonly="true"/>
+							<button iconSclass="z-icon-search"
+								onClick="@command('buscarTalonario', tipo=3)"/>
+						</hlayout>
+						<div height="10px"/>
+						<hlayout style="font-style:oblique">
+							<label value="Boca:" />
+							<label value="@load(vm.dto.talonarioAutoFacturas.pos2)" />
+							<space />
+							<label value="Punto:" />
+							<label value="@load(vm.dto.talonarioAutoFacturas.pos3)" />
+							<space />
+							<label value="Desde:" />
+							<label value="@load(vm.dto.talonarioAutoFacturas.pos4)" />
+							<space />
+							<label value="Hasta:" />
+							<label value="@load(vm.dto.talonarioAutoFacturas.pos5)" />
+						</hlayout>
+					</vlayout>					
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row valign="top">						
+					<vlayout spacing="0">
+						<field value="Talonario Ventas" />
+						<hlayout style="margin-right:15px">
+							<textbox placeholder="Talonario de Ventas.." hflex="true"
+								value="@load(vm.dto.talonarioVentas.pos1)"
+								readonly="true"/>
+							<button iconSclass="z-icon-search"
+								onClick="@command('buscarTalonario', tipo=1)"/>
+						</hlayout>
+						<div height="10px"/>
+						<hlayout style="font-style:oblique">
+							<label value="Boca:" />
+							<label value="@load(vm.dto.talonarioVentas.pos2)" />
+							<space />
+							<label value="Punto:" />
+							<label value="@load(vm.dto.talonarioVentas.pos3)" />
+							<space />
+							<label value="Desde:" />
+							<label value="@load(vm.dto.talonarioVentas.pos4)" />
+							<space />
+							<label value="Hasta:" />
+							<label value="@load(vm.dto.talonarioVentas.pos5)" />
+						</hlayout>
+					</vlayout>	
+					<vlayout spacing="0">
+						<field value="Talonario Notas de Crédito" />
+						<hlayout style="margin-right:15px">
+							<textbox placeholder="Talonario de Notas de Crédito.." hflex="true"
+								value="@load(vm.dto.talonarioNotasCredito.pos1)"
+								readonly="true"/>
+							<button iconSclass="z-icon-search"
+								onClick="@command('buscarTalonario', tipo=2)"/>
+						</hlayout>
+						<div height="10px"/>
+						<hlayout style="font-style:oblique">
+							<label value="Boca:" />
+							<label value="@load(vm.dto.talonarioNotasCredito.pos2)" />
+							<space />
+							<label value="Punto:" />
+							<label value="@load(vm.dto.talonarioNotasCredito.pos3)" />
+							<space />
+							<label value="Desde:" />
+							<label value="@load(vm.dto.talonarioNotasCredito.pos4)" />
+							<space />
+							<label value="Hasta:" />
+							<label value="@load(vm.dto.talonarioNotasCredito.pos5)" />
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						
+					</vlayout>									
+				</row>
+				<row>
+					<div height="10px" />
+				</row>
+				<row>
+					<cell colspan="3">
+						<vlayout style="margin-top:5px">
+							<field value="Acciones Permitidas" />
+							<hlayout style="border-top: solid 1px silver; padding:5px">
+								<checkbox label="Cobro"
+									checked="@bind(vm.dto.cobro)"/>
+								<space hflex="true"/>
+								<checkbox label="Facturación"
+									checked="@bind(vm.dto.facturacion)"/>
+								<space hflex="true"/>
+								<checkbox label="Reposición"
+									checked="@bind(vm.dto.reposicion)"/>
+								<space hflex="true"/>
+								<checkbox label="Pago"
+									checked="@bind(vm.dto.pago)"/>
+								<space hflex="true"/>
+								<checkbox label="Gasto"
+									checked="@bind(vm.dto.gasto)"/>
+								<space hflex="true"/>
+								<checkbox label="Egreso"
+									checked="@bind(vm.dto.egreso)"/>
+								<space hflex="true"/>
+								<checkbox label="Nota de Crédito"
+									checked="@bind(vm.dto.notaCredito)"/>
+								<space hflex="true"/>
+							</hlayout>
+						</vlayout>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+	</div>
+</window>

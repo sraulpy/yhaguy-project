@@ -1,0 +1,18 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.formularios.ReportesViewModel')"
+	height="85%" width="85%" border="normal"
+	onCreate="@command('showReport')"
+	id="win"
+	title="Impresión del Reporte"
+	closable="true">
+
+	<vlayout hflex="true" vflex="true">
+		<jasperreport id="report" hflex="true" vflex="true"
+			src="@load(vm.reportConfig.source, after='showReport')"
+			parameters="@load(vm.reportConfig.parameters, after='showReport')"
+			type="@load(vm.selectedFormato[1], after='showReport')"
+			datasource="@load(vm.reportConfig.dataSource, after='showReport')"
+			onLater="@command('clearProgress')">
+		</jasperreport>
+	</vlayout>
+</window>

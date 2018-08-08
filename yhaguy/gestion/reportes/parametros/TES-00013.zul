@@ -1,0 +1,87 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				format="dd-MM-yyyy"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				format="dd-MM-yyyy"
+				placeholder="Hasta.." hflex="true" />
+		</row>		
+		<row>
+			<field value="Banco:" />
+			<combobox hflex="true" placeholder="TODOS.."
+				value="@load(vm.dato.filtro.bancoTercero.descripcion.toUpperCase())"
+				model="@load(vm.dato.filtro.bancosTerceros)"
+				selectedItem="@bind(vm.dato.filtro.bancoTercero)"
+				instant="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion.toUpperCase())" />
+				</template>				
+			</combobox>
+		</row>
+		<row>
+			<field value="Número:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.chequeTercero.numero)"
+				id="bndCheq">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.chequesTercero)"
+						selectedItem="@bind(vm.dato.filtro.chequeTercero)"
+						onSelect="bndCheq.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true" value="@bind(vm.dato.filtro.numeroChequeTercero)"
+									 	instant="true" 
+									 	placeholder="Buscar.."/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem label="@load(each.numero)"/>
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cliente:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial.toUpperCase())"
+				id="bndCli">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.clientes)"
+						selectedItem="@bind(vm.dato.filtro.cliente)"
+						onSelect="bndCli.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+	</rows>
+</grid>

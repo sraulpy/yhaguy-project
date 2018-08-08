@@ -1,0 +1,115 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.combustible.ControlCombustibleSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="30%" />
+		</columns>
+		<rows>
+			<row>
+				<field value="Orden de Compra:" />
+				<hlayout>
+					<bandbox hflex="true"
+						placeholder="ASIGNAR ORDEN DE COMPRA.." readonly="true"
+						value="@load(vm.dato.nvoCombustible.pos9.numero)" id="bndOC">
+						<bandpopup>
+							<listbox sclass="small-list" width="400px"
+								height="200px" model="@load(vm.dato.ordenesCompra)"
+								selectedItem="@bind(vm.dato.nvoCombustible.pos9)"
+								onSelect="bndOC.close()">
+								<listhead>
+									<listheader>
+										<hlayout>
+											<textbox hflex="true" sclass="filter"
+												value="@bind(vm.dato.filterNroOrden)"
+												instant="true" placeholder="Buscar.." />
+										</hlayout>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem
+										label="@load(each.numero)" />
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Fecha:" />
+				<datebox value="@bind(vm.dato.nvoCombustible.pos1)"></datebox>
+			</row>
+			<row>
+				<field value="Chapa Nro.:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoCombustible.pos6)">
+					</textbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Chofer:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoCombustible.pos7)" hflex="true">
+					</textbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Nro. Factura:" />
+				<hlayout>
+					<textbox
+						value="@bind(vm.dato.nvoCombustible.pos2)">
+					</textbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Kilometraje:" />
+				<hlayout>
+					<guaranibox
+						value="@bind(vm.dato.nvoCombustible.pos3)" />
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Combustible:" />
+				<hlayout>
+					<combobox hflex="true"
+						model="@load(vm.tiposDeCombustible)"
+						selectedItem="@bind(vm.dato.nvoCombustible.pos8)"
+						instant="true">
+						<template name="model">
+							<comboitem
+								label="@load(each.text.toUpperCase())" />
+						</template>
+					</combobox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Cant. Litros" />
+				<hlayout>
+					<guaranibox value="@bind(vm.dato.nvoCombustible.pos4)" />
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Costo Gs.:" />
+				<hlayout>
+					<guaranibox value="@bind(vm.dato.nvoCombustible.pos5)" />
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Importe Gs.:" />
+				<guaranibox readonly="true" value="@load(vm.importeGs)" />
+			</row>
+		</rows>
+	</grid>
+
+</div>

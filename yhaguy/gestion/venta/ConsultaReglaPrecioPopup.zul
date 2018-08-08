@@ -1,0 +1,128 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.reglaPrecio.PopupConsultaRegla')">
+		<vbox></vbox>
+		<grid>
+			<auxhead>
+				<auxheader colspan="2" label="Articulo" />
+			</auxhead>
+			<columns>
+				<column></column>
+				<column></column>
+			</columns>
+			<rows>
+				<row>
+					<label value="Cliente" />
+					<buscadorCliente value="@bind(vm)"
+						campo="razonSocial" readonly="@load(vm.deshabilitado)" />
+				</row>
+				<row>
+					<label value="Articulo" />
+					<buscadorArticulo value="@bind(vm)"
+						campo="descripcion" />
+				</row>
+				<row>
+					<label value="Vendedor" />
+					<buscadorFuncionario value="@bind(vm)"
+						campo="nombre" />
+				</row>
+				<row>
+					<label value="Modo venta" />
+					<combobox width="150px"
+						model="@load(vm.dato.dtoUtil.modosVenta)"
+						placeholder="modo de venta" selectedItem="@bind(vm.modoVenta)">
+						<template name="model">
+							<comboitem label="@load(each )" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<label value="Sucursal" />
+					<combobox width="150px"
+						model="@load(vm.dato.dtoUtil.sucursalesMyPair)"
+						placeholder="sucursal" selectedItem="@bind(vm.sucursal)">
+						<template name="model">
+							<comboitem label="@load(each )" />
+						</template>
+					</combobox>
+				</row>
+			</rows>
+		</grid>
+
+		<grid>
+			<auxhead>
+				<auxheader colspan="2" label="Articulo" />
+			</auxhead>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label value="Familia" />
+					<textbox value="@load(vm.familia)" readonly="true" />
+				</row>
+				<row>
+					<label value="Linea" />
+					<textbox value="@load(vm.linea)" readonly="true" />
+				</row>
+				<row>
+					<label value="Marca" />
+					<textbox value="@load(vm.marca)" readonly="true" />
+				</row>
+				<row>
+					<label value="Parte" />
+					<textbox value="@load(vm.parte)" readonly="true" />
+				</row>
+
+			</rows>
+		</grid>
+
+		<hbox>
+			<button label="Calcular" onClick="@command('calculo')" />
+		</hbox>
+		<div height="5px" />
+		<grid>
+			<auxhead>
+				<auxheader colspan="2" label="Precios" />
+			</auxhead>
+
+			<columns>
+				<column />
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label value="Precio del producto" />
+					<textbox value="@load(vm.precio)" />
+					<label value="Precio sin descuento" />
+				</row>
+				<row>
+					<label value="Precio con margen de negocio" />
+					<textbox value="@load(vm.margenDeNegocio)" />
+					<label value="Descuento aplicado sobre el precio" />
+				</row>
+				<row>
+					<label value="Precio aplicado el coheficiente" />
+					<textbox value="@load(vm.precioConCoeficiente)" />
+					<label
+						value="Descuento aplicado sobre el margen de negocio" />
+				</row>
+				<row>
+					<label value="Nombre de regla aplicada" />
+					<textbox value="@load(vm.nombreRegla)" />
+					<label
+						value="La regla aplicada sera la de mayor prioridad" />
+				</row>
+				<row>
+					<label value="Nombre corto de regla aplicada" />
+					<textbox value="@load(vm.nombreRegla)" />
+					<label />
+				</row>
+
+
+			</rows>
+		</grid>
+	</window>
+</zk>

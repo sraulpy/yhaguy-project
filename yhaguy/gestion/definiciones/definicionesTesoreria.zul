@@ -1,0 +1,152 @@
+<tabbox height="100%">
+	<tabs>
+		<tab label="Monedas / Cotizaciones" />
+		<tab label="Bancos" />
+		<tab label="Cuenta Corriente" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>DEFINICIONES DE MONEDAS..</tabpanel>
+		<tabpanel>
+			<vbox vflex="true" height="30%" width="100%">
+				<hbox sclass="button-container" width="100%"
+					style="margin:5px 0px 1px 0px;text-align:center" align="center">
+					<field value="Bancos"></field>
+				</hbox>
+				<listbox sclass="small-list" model="@load(vm.bancos)"
+					selectedItem="@bind(vm.selectedBanco)" height="100%"
+					vflex="true">
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Descripción"
+							style="text-align:center" sort="auto(pos1)" />
+						<listheader label="Dirección"
+							style="text-align:center" />
+						<listheader label="Teléfono"
+							style="text-align:center" />
+						<listheader label="Correo" align="center" />
+						<listheader label="Contacto" align="center" />
+					</listhead>
+					<template name="model" status='s'>
+						<listitem>
+							<listcell label="@load(each.pos1)" />
+							<listcell label="@load(each.pos2)" />
+							<listcell label="@load(each.pos3)" />
+							<listcell label="@load(each.pos4)" />
+							<listcell label="@load(each.pos5)" />
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar"
+						onClick="@command('addBanco')" />
+					<button label="Modificar"
+						onClick="@command('editBanco')" />
+					<button label="Eliminar"
+						onClick="@command('deleteBanco')" />
+				</hlayout>
+			</vbox>
+			<hbox vflex="true" width="100%">
+				<vbox width="20%" vflex="true">
+					<hbox sclass="button-container" width="100%"
+						style="margin:5px 0px 1px 0px" align="center">
+						<field value="Bancos Tipo"></field>
+					</hbox>
+					<listbox sclass="small-list"
+						model="@load(vm.bancosTipo)"
+						selectedItem="@bind(vm.selectedBancoTercero)" vflex="true"
+						width="100%">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Bancos"
+								style="text-align:center" sort="auto(text)" />
+							<listheader label="Sigla"
+								style="text-align:center" />
+						</listhead>
+						<template name="model" status='s'>
+							<listitem>
+								<listcell label="@load(each.text)" />
+								<listcell label="@load(each.sigla)" />
+							</listitem>
+						</template>
+					</listbox>
+					<hlayout sclass="button-container" width="100%">
+						<button label="Agregar"
+							onClick="@command('addBancoTercero')" />
+						<button label="Modificar"
+							onClick="@command('editBancoTercero')" />
+						<button label="Eliminar"
+							onClick="@command('deleteBancoTerceros')" />
+					</hlayout>
+				</vbox>
+				<vbox width="20%" vflex="true">
+					<hbox sclass="button-container" width="100%"
+						style="margin:5px 0px 1px 0px" align="center">
+						<field value="Tipos de Cuenta"></field>
+					</hbox>
+					<listbox sclass="small-list"
+						model="@load(vm.bancoTiposCuenta)"
+						selectedItem="@bind(vm.selectedTipoCuentaBanco)" vflex="true"
+						width="100%">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Tipo de Cuenta"
+								style="text-align:center" sort="auto(text)" />
+							<listheader label="Sigla"
+								style="text-align:center" />
+						</listhead>
+						<template name="model" status='s'>
+							<listitem>
+								<listcell label="@load(each.text)" />
+								<listcell label="@load(each.sigla)" />
+							</listitem>
+						</template>
+					</listbox>
+					<hlayout sclass="button-container" width="100%">
+						<button label="Agregar"
+							onClick="@command('addTipoCuentaBanco')" />
+						<button label="Modificar"
+							onClick="@command('editTipoCuentaBanco')" />
+						<button label="Eliminar"
+							onClick="@command('deleteTipoCuentaBanco')" />
+
+					</hlayout>
+				</vbox>
+			</hbox>
+		</tabpanel>
+		
+		<tabpanel>
+			<vbox vflex="true" width="25%">
+				<hbox sclass="button-container" width="100%"
+					style="margin:5px 0px 1px 0px;text-align:center" align="center">
+					<field value="Lineas de Crédito"></field>
+				</hbox>
+				<listbox sclass="small-list"
+					model="@load(vm.ctaCteLineasCredito)"
+					selectedItem="@bind(vm.selectedLineaDeCredito)" height="100%"
+					vflex="true">
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Descripción"
+							style="text-align:center" sort="auto(pos1)" />
+						<listheader label="Monto Linea Gs."
+							style="text-align:center" align="right" />
+					</listhead>
+					<template name="model" status='s'>
+						<listitem>
+							<listcell label="@load(each.pos1)" />
+							<listcell>
+								<guaranibox value="@load(each.pos2)"
+									readonly="true" inplace="true">
+								</guaranibox>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout sclass="button-container">
+					<button label="Agregar"
+						onClick="@command('addCtaCteLineaCredito')" />
+					<button label="Modificar"
+						onClick="@command('editCtaCteLineaCredito')" />
+					<button label="Eliminar"
+						onClick="@command('deleteCtaCteLineaCredito')" />
+				</hlayout>
+			</vbox>
+		</tabpanel>
+	</tabpanels>
+</tabbox>

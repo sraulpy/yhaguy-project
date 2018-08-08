@@ -1,0 +1,35 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	<listbox model="@load(vm.dato.itemsImportar)" sclass="small-list"
+		multiple="true" checkmark="true" selectedItems="@bind(vm.dato.selectedItemsImportar)"
+		height="383px">
+		<listhead>
+			<listheader width="50px" align="center"/>
+			<listheader label="Código" width="150px" style="text-align:center"/>
+			<listheader label="Descripción" style="text-align:center" width="370px"/>
+			<listheader label="Cantidad" style="text-align:center" width="80px" align="right"/>
+			<listheader label="Costo Gs." style="text-align:center" align="right"/>
+			<listheader label="Costo U$D" style="text-align:center" align="right"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell/>
+				<listcell>
+					<label value="@load(each.articulo.codigoInterno)" maxlength="15"/>
+				</listcell> 
+				<listcell>
+					<label value="@load(each.articulo.descripcion)" maxlength="40"/>
+				</listcell>
+				<listcell>
+					<label value="@load(each.cantidad)"/>
+				</listcell>
+				<listcell>
+					<label value="@load(each.costoGs) @converter(vm.cnv.monedaLocal)"/>
+				</listcell>
+				<listcell>
+					<label value="@load(each.costoDs) @converter(vm.cnv.monedaExtranjera)"/>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+</window>

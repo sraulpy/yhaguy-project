@@ -1,0 +1,124 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.debitos.BancoDebitoViewModel')"
+	height="100%">
+
+	<vbox width="100%" height="70%" pack="center" align="center"
+		style="padding:50px 300px 50px 300px">
+
+		<hlayout sclass="button-container">
+			<field value="DÉBITOS BANCARIOS" />
+			<div hflex="true"></div>
+			<button mold="bs" sclass="btn-success btn-sm"
+				disabled="@load(vm.confirmarDisabled)"
+				iconSclass="z-icon-check"
+				onClick="@command('confirmar')" 
+				label=" Confirmar"
+				width="120px"/>
+			<div width="5px"></div>
+		</hlayout>
+
+		<grid sclass="vgrid rounded"
+			style="border: solid 1px silver; padding:20px">
+			<rows>
+				<row>
+					<hlayout>
+						<vlayout spacing="0">
+							<field value="Sucursal" />
+							<textbox readonly="true"
+								value="@load(vm.dto.sucursal.text.toUpperCase())"
+								width="150px">
+							</textbox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Estado" />
+							<hlayout>
+								<textbox readonly="true"
+									value="@load(vm.dto.confirmado ? 'CONFIRMADO' : 'PENDIENTE')"
+									width="150px">
+								</textbox>
+								<image
+									src="@load(vm.dto.confirmado ? '/core/images/accept_.png' : '/core/images/delete_.png')">
+								</image>
+							</hlayout>
+						</vlayout>
+					</hlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Cuenta" />
+						<hlayout>
+							<bandbox readonly="true" width="150px"
+								visible="@load(vm.dto.esNuevo)" id="bndCuenta"
+								value="@load(vm.dto.cuenta.banco.pos1.toString().toUpperCase())">
+								<bandpopup>
+									<listbox sclass="small-list"
+										width="400px" height="200px" model="@load(vm.bancos)"
+										onSelect="bndCuenta.close()"
+										selectedItem="@bind(vm.dto.cuenta)">
+										<template name="model">
+											<listitem
+												label="@load(each.banco.pos1.toString().toUpperCase())" />
+										</template>
+									</listbox>
+								</bandpopup>
+							</bandbox>
+							<textbox width="150px"
+								visible="@load(!vm.dto.esNuevo)" readonly="true"
+								value="@load(vm.dto.cuenta.banco.pos1.toString().toUpperCase())">
+							</textbox>
+							<labelConstrain />
+							<div width="10px"></div>
+							<label
+								value="@load(vm.dto.cuenta.nroCuenta)">
+							</label>
+						</hlayout>
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Número Operación" />
+						<hlayout>
+							<textbox width="150px"
+								value="@bind(vm.dto.numero)">
+							</textbox>
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Fecha Operación" />
+						<hlayout>
+							<datebox width="150px"
+								value="@bind(vm.dto.fecha)">
+							</datebox>
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Descripción" />
+						<hlayout>
+							<textbox hflex="true"
+								value="@bind(vm.dto.descripcion)">
+							</textbox>
+							<labelConstrain />
+						</hlayout>
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Importe" />
+						<hlayout>
+							<guaranibox width="150px"
+								value="@bind(vm.dto.importe)" />
+							<field value="Gs." />
+						</hlayout>
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+
+	</vbox>
+</window>

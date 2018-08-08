@@ -1,0 +1,31 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="30%"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				Código Proveedor:
+				<buscadorProveedor value="@bind(vm.dato.nvoGastoImprevisto)" campo="codigo"/>
+			</row>
+			<row>
+				Razón Social:
+				<buscadorProveedor value="@bind(vm.dato.nvoGastoImprevisto)" campo="razonSocial" width="250px"/>
+			</row>
+			<row>
+				Importe:
+				<hlayout valign="middle">
+					<guaranibox value="@bind(vm.dato.nvoGastoImprevisto.importeGs)"
+						onChange="@command('dolarizarGastoImprevisto', comp=self)"/>
+					<label value="Gs" style="font-size:11px"/>
+					<space/>
+					<dolarbox value="@bind(vm.dato.nvoGastoImprevisto.importeDs)"
+						onChange="@command('guaranizarGastoImprevisto', comp=self)"/>
+					<label value="U$D" style="font-size:11px"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>
+</window>

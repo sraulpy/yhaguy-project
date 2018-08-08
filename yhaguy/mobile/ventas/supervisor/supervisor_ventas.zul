@@ -1,0 +1,620 @@
+<div vflex="true">
+	<vlayout id="vl_1" height="100%">
+		
+		<hbox hflex="true" vflex="true" align="center">
+			<image src="images/avatar_1.png" vflex="true"
+				sclass="img"
+				onClick="av_1.setVisible(true);vl_1.setVisible(false)"></image>
+			<vlayout spacing="15px" hflex="35%">
+				<a sclass="lnk">Capitán América</a>
+				<label sclass="lbl">NATALIA CRESPI</label>
+			</vlayout>
+			<space></space>
+			<hbox hflex="65%">
+				<label class="label label-success" style="font-size:28pt">NIVEL: 92%</label>
+				<space></space>
+				<label sclass="pto">1ro.</label>
+			</hbox>									
+		</hbox>
+		
+		<hbox hflex="true" vflex="true" align="center">
+			<image src="images/avatar_2.png" vflex="true"
+				sclass="img"
+				onClick="av_2.setVisible(true);vl_1.setVisible(false)"></image>			
+			<vlayout spacing="15px" hflex="35%">
+				<a sclass="lnk">Iron Man</a>
+				<label sclass="lbl">LUÍS BENITEZ</label>
+			</vlayout>
+			<space></space>
+			<hbox hflex="65%">
+				<label class="label label-success" style="font-size:28pt">NIVEL: 84%</label>
+				<space></space>
+				<label sclass="pto">2do.</label>
+			</hbox>	
+		</hbox>
+		
+		<hbox hflex="true" vflex="true" align="center">
+			<image src="images/avatar_3.png" vflex="true"
+				sclass="img"
+				onClick="av_3.setVisible(true);vl_1.setVisible(false)"></image>			
+			<vlayout spacing="15px" hflex="35%">
+				<a sclass="lnk">Loki</a>
+				<label sclass="lbl">PABLO JARA</label>
+			</vlayout>	
+			<space></space>
+			<hbox hflex="65%">
+				<label class="label label-success" style="font-size:28pt">NIVEL: 78%</label>
+				<space></space>
+				<label sclass="pto">3ro.</label>
+			</hbox>
+		</hbox>
+		
+		<hbox hflex="true" vflex="true" align="center">
+			<image src="images/avatar_4.png" vflex="true"
+				sclass="img"
+				onClick="av_4.setVisible(true);vl_1.setVisible(false)"></image>			
+			<vlayout spacing="15px" hflex="35%">
+				<a sclass="lnk">Hulk</a>
+				<label sclass="lbl">MIGUEL OTAZU</label>
+			</vlayout>	
+			<space></space>
+			<hbox hflex="65%">
+				<label class="label label-danger" style="font-size:28pt">NIVEL: 65%</label>
+				<space></space>
+				<label sclass="pto">4to.</label>
+			</hbox>
+		</hbox>
+		
+		<hbox hflex="true" vflex="true" align="center">
+			<image src="images/avatar_5.png" vflex="true"
+				sclass="img"
+				onClick="av_5.setVisible(true);vl_1.setVisible(false)"></image>			
+			<vlayout spacing="15px" hflex="35%">
+				<a sclass="lnk">Thor</a>
+				<label sclass="lbl">WILFRIDO OVANDO</label>
+			</vlayout>	
+			<space></space>
+			<hbox hflex="65%">
+				<label class="label label-danger" style="font-size:28pt">NIVEL: 60%</label>
+				<space></space>
+				<label sclass="pto">5to.</label>
+			</hbox>
+		</hbox>
+		
+	</vlayout>
+	
+	<vlayout id="av_1" visible="false" height="100%" style="overflow:auto">
+		<vlayout style="text-align:center" height="300px">
+				<image src="images/avatar_1.png" vflex="true" sclass="img"></image>
+				<label sclass="lbl_">NATALIA CRESPI - NIVEL: 92% - PUESTO: 1</label>
+		</vlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">META DEL MES</label>
+				<space></space>
+				<label sclass="pto">300,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS</label>
+				<space></space>
+				<label sclass="pto">270,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="90%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VISITADOS</label>
+				<space></space>
+				<label sclass="pto">220 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="74%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VENDIDOS</label>
+				<space></space>
+				<label sclass="pto">180</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="60%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">500 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">360 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="60%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">170 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="57%"/>
+			</vbox>
+		</hlayout>
+		
+	</vlayout>
+	
+	<!-- VENDEDOR 2  -->
+	
+	<vlayout id="av_2" visible="false" height="100%" style="overflow:auto">
+		<vlayout style="text-align:center" height="300px">
+				<image src="images/avatar_2.png" vflex="true" sclass="img"></image>
+				<label sclass="lbl_">LUIS BENITEZ - NIVEL: 84% - PUESTO: 2</label>
+		</vlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">META DEL MES</label>
+				<space></space>
+				<label sclass="pto">300,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS</label>
+				<space></space>
+				<label sclass="pto">252,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="90%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VISITADOS</label>
+				<space></space>
+				<label sclass="pto">220 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="74%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VENDIDOS</label>
+				<space></space>
+				<label sclass="pto">180</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="60%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">500 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="56%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">170 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="57%"/>
+			</vbox>
+		</hlayout>
+		
+	</vlayout>
+	
+	<!-- VENDEDOR 3  -->
+	
+	<vlayout id="av_3" visible="false" height="100%" style="overflow:auto">
+		<vlayout style="text-align:center" height="300px">
+				<image src="images/avatar_3.png" vflex="true" sclass="img"></image>
+				<label sclass="lbl_">PABLO JARA - NIVEL: 78% - PUESTO: 3</label>
+		</vlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">META DEL MES</label>
+				<space></space>
+				<label sclass="pto">300,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS</label>
+				<space></space>
+				<label sclass="pto">234,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="90%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VISITADOS</label>
+				<space></space>
+				<label sclass="pto">220 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="74%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VENDIDOS</label>
+				<space></space>
+				<label sclass="pto">180</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-success btn-lg" iconSclass="z-icon-thumbs-up" style="font-size:40pt" 
+					label="60%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">500 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="56%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">170 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="57%"/>
+			</vbox>
+		</hlayout>
+		
+	</vlayout>
+	
+	<!-- VENDEDOR 4  -->
+	
+	<vlayout id="av_4" visible="false" height="100%" style="overflow:auto">
+		<vlayout style="text-align:center" height="300px">
+				<image src="images/avatar_4.png" vflex="true" sclass="img"></image>
+				<label sclass="lbl_">MIGUEL OTAZU - NIVEL: 65% - PUESTO: 4</label>
+		</vlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">META DEL MES</label>
+				<space></space>
+				<label sclass="pto">300,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS</label>
+				<space></space>
+				<label sclass="pto">195,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="90%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VISITADOS</label>
+				<space></space>
+				<label sclass="pto">150 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="50%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VENDIDOS</label>
+				<space></space>
+				<label sclass="pto">160</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="55%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">500 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="56%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">170 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="57%"/>
+			</vbox>
+		</hlayout>
+		
+	</vlayout>
+	
+	<!-- VENDEDOR 5  -->
+	
+	<vlayout id="av_5" visible="false" height="100%" style="overflow:auto">
+		<vlayout style="text-align:center" height="300px">
+				<image src="images/avatar_5.png" vflex="true" sclass="img"></image>
+				<label sclass="lbl_">WILFRIDO OVANDO - NIVEL: 60% - PUESTO: 5</label>
+		</vlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">META DEL MES</label>
+				<space></space>
+				<label sclass="pto">300,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS</label>
+				<space></space>
+				<label sclass="pto">180,000,000 Gs.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="90%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VISITADOS</label>
+				<space></space>
+				<label sclass="pto">150 CLIENTES</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="50%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES ASIGNADOS</label>
+				<space></space>
+				<label sclass="pto">300</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">CLIENTES VENDIDOS</label>
+				<space></space>
+				<label sclass="pto">160</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="55%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">500 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS BATEBOL</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="56%"/>
+			</vbox>
+		</hlayout>
+		
+		<hlayout hflex="true" height="400px" sclass="dts_">
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">PROMEDIO VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">300 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<label sclass="pto">TOTAL VENTAS JHONSON CONTROLS</label>
+				<space></space>
+				<label sclass="pto">170 UND.</label>
+			</vbox>
+			<separator orient="vertical" bar="true" vflex="true" style="margin:20px 0px 20px 20px"></separator>
+			<vbox vflex="true" hflex="2" pack="center" align="center">
+				<button mold="bs" sclass="btn-danger btn-lg" iconSclass="z-icon-thumbs-down" style="font-size:40pt" 
+					label="57%"/>
+			</vbox>
+		</hlayout>
+		
+	</vlayout>
+	
+	
+	<style>
+		.lnk { font-weight:bold; font-size:28pt; text-decoration:underline }
+		.lbl { font-size:20pt; font-style:italic }
+		.lbl_ { font-size:20pt; font-style:italic; font-weight:bold }
+		.pto { font-size:32pt; font-weight:bold }
+		.nvl { font-size:32pt; font-weight:bold }
+		.img { margin: 20px  }
+		.dts { border-radius: 25px; border: 7px solid #73AD21; margin: 20px }
+		.dts_ { border-radius: 25px; border: 7px solid #d43f3a; margin: 20px }
+	</style>
+</div>

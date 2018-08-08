@@ -1,0 +1,275 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.ordencompra.OrdenCompraViewModel')"
+	height="100%">	
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-success btn-sm" width="150px"
+				iconSclass="z-icon-plus-circle"
+				label=" Agregar" onClick='pop_add.open(self,"after_start")'/>
+		<space />	
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Imprimir Orden" onClick="@command('imprimirOrden')"
+				disabled="@load(vm.selectedOrdenCompra eq null)" />
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.ordenesCompra)"
+		selectedItem="@bind(vm.selectedOrdenCompra)">
+		<listhead>
+			<listheader label="Fecha" width="150px" />
+			<listheader label="Número" width="150px" />
+			<listheader label="Autorizado Por" width="180px" />
+			<listheader label="Solicitado Por" width="180px" />
+			<listheader label="Proveedor" />
+			<listheader label="Importe Gs" width="120px" align="right" />
+			<listheader align="center" width="30px"></listheader>
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaDD)"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaMM)"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaAA)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Número.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterNumeroOrden)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Autorizado Por.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterAutorizadoPor)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Solicitado Por.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterSolicitadoPor)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Proveedor.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterRazonSocial_)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader/>
+			<auxheader/>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')" />
+				<listcell label="@load(each.numero)" />
+				<listcell label="@load(each.autorizadoPor.toUpperCase())" />
+				<listcell label="@load(each.solicitadoPor.toUpperCase())" />
+				<listcell label="@load(each.proveedor.razonSocial)" />
+				<listcell label="@load(each.totalImporteGs) @converter(vm.cnv.monedaLocal)" />
+				<listcell>
+						<a iconSclass="z-icon-camera" onClick="@command('verImagen', item=each, parent=self)"
+							tooltiptext="Ver Foto..">	
+						</a>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="6">
+				<hlayout hflex="true">
+					<field value="@load(vm.listSize)"/>
+					<field value="ítems" />
+					<space hflex="true"></space>
+					<guaranibox readonly="true" value="@load(vm.totalImporteGs)" 
+								style="text-align:right;background:#EEF7FA;font-weight:bold" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_add" sclass="rounded" style="margin: 0px 30px 0px 0px">
+		<vlayout height="450px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="0">
+							<field value="Fecha" />
+							<datebox hflex="true"
+								value="@bind(vm.nvoOrdenCompra.fecha)"></datebox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Número" />
+							<textbox readonly="true" hflex="true"
+								value="@load(vm.nvoOrdenCompra.numero)"></textbox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Autorizado Por" />
+							<textbox value="@bind(vm.nvoOrdenCompra.autorizadoPor)"
+								hflex="true"></textbox>
+						</vlayout>
+						<vlayout spacing="0">
+							<field value="Solicitado Por" />
+							<textbox value="@bind(vm.nvoOrdenCompra.solicitadoPor)"
+								hflex="true"></textbox>
+						</vlayout>
+					</row>
+					<row>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+								<field value="Proveedor" />
+								<bandbox hflex="true" readonly="true"
+									value="@load(vm.nvoOrdenCompra.proveedor.razonSocial)"
+									id="bndProv">
+									<bandpopup>
+										<listbox sclass="small-list"
+											height="200px" width="600px"
+											model="@load(vm.proveedores)"
+											selectedItem="@bind(vm.nvoOrdenCompra.proveedor)"
+											onSelect="bndProv.close()">
+											<listhead>
+												<listheader width="130px">
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterRuc)"
+															instant="true" placeholder="Ruc.." />
+												</listheader>
+												<listheader>
+													<textbox sclass="filter"
+															hflex="true"
+															value="@bind(vm.filterRazonSocial)"
+															instant="true" placeholder="Razón Social.." />
+												</listheader>
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell label="@load(each.ruc)"></listcell>
+													<listcell label="@load(each.razonSocial)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+							</vlayout>
+						</cell>
+						<cell colspan="2">
+							<vlayout spacing="5px">
+								<field value="Observación" />
+								<textbox value="@bind(vm.nvoOrdenCompra.observacion)"
+									hflex="true"></textbox>
+							</vlayout>
+						</cell>
+					</row>
+				</rows>
+			</grid>
+			<solicitarCabecera visible="@load(!vm.detalleVisible)" />
+			<listbox sclass="small-list" vflex="true"
+				emptyMessage="AGREGUE ÍTEMS AL DETALLE.."
+				model="@load(vm.nvoOrdenCompra.detalles)"
+				visible="@load(vm.detalleVisible)">
+				<listhead style="text-align:center">
+					<listheader label="Descripción"></listheader>
+					<listheader label="Cantidad" width="150px"></listheader>
+					<listheader label="Precio Gs." width="150px" align="right"></listheader>
+					<listheader label="Importe Gs." width="150px" align="right"></listheader>
+					<listheader width="45px" align="center">
+					</listheader>
+				</listhead>
+				<auxhead>
+					<auxheader>
+						<textbox value="@bind(vm.nvoDetalle.descripcion)" hflex="true"></textbox>
+					</auxheader>
+					<auxheader>
+						<intbox value="@bind(vm.nvoDetalle.cantidad)" hflex="true"></intbox>
+					</auxheader>
+					<auxheader>
+						<guaranibox value="@bind(vm.nvoDetalle.precioGs)" hflex="true" />
+					</auxheader>
+					<auxheader>
+						<guaranibox value="@bind(vm.nvoDetalle.importeGs)" hflex="true" readonly="true" />
+					</auxheader>
+					<auxheader>
+						<button iconSclass="z-icon-plus"
+							onClick="@command('addDetalle')"
+							disabled="@load(vm.addDetalleDisabled)"></button>
+					</auxheader>
+				</auxhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.descripcion)" />
+						<listcell label="@load(each.cantidad)" />
+						<listcell label="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" />
+						<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
+						<listcell>
+							<a iconSclass="z-icon-times" onClick="@command('deleteItem', item=each)"></a>
+						</listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="5">
+						<hlayout>
+							<field value="@load(vm.nvoOrdenCompra.detalles.size())" />
+							<field value="ítems" />
+							<space hflex="true"></space>
+							<field value="Total Gs." />
+							<guaranibox readonly="true" value="@load(vm.nvoOrdenCompra.totalImporteGs)" 
+								style="text-align:right;background:#EEF7FA;font-weight:bold" />
+							<button mold="bs"
+								sclass="btn-success btn-sm"
+								iconSclass="z-icon-check"
+								disabled="@load(vm.nvoOrdenCompra.detalles.size() eq 0)"
+								width="100px" onClick="@command('addOrdenCompra', comp = pop_add)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_img" sclass="rounded" height="550px" width="650px">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="FOTO DEL COMPROBANTE" />
+			</hbox>
+			<button onClick="pop_img.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="5px"/>
+		<html><![CDATA[
+        	<img id="foto" style ="height:500px; width:630px;" alt="" 
+        		onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+    	</html>
+	</popup>
+	
+	<script>
+			function setImage(url) {
+				var imagen = document.getElementById("foto");
+				imagen.src = url;
+			}
+	</script>
+	
+	<style>
+		.custom-tbox {margin-right:5px; background:lightyellow}
+	</style>
+</window>

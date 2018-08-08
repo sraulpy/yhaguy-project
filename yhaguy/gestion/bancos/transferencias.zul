@@ -1,0 +1,199 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.transferencias.BancoTransferenciasViewModel')">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick='pop_transferencia.open(self, "after_start")'></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-list" label="Ver Detalle" width="150px"
+			onClick='pop_selected.open(self, "after_start")'
+			disabled="@load(vm.selected_transferencia eq null ? 'true':'false')"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE TRANSFERENCIAS.."
+		model="@load(vm.transferencias)"
+		selectedItem="@bind(vm.selected_transferencia)">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Banco Origen"></listheader>
+			<listheader label="Banco Destino"></listheader>
+			<listheader label="Número Operación"></listheader>
+			<listheader label="Importe" align="right"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" sclass="filter" placeholder="Día.."
+						value="@bind(vm.filterFechaDD)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Mes.."
+						value="@bind(vm.filterFechaMM)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Año.."
+						value="@bind(vm.filterFechaAA)" instant="true"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Banco.."
+					value="@bind(vm.filter_origen)" instant="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Banco.."
+					value="@bind(vm.filter_destino)" instant="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Nro. Operacion.."
+					value="@bind(vm.filter_numero)" instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.origen.banco.descripcion.toUpperCase())"></listcell>
+				<listcell label="@load(each.destino.banco.descripcion.toUpperCase())"></listcell>
+				<listcell label="@load(each.numero)"></listcell>
+				<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_transferencia" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE TRANSFERENCIA" />
+			</hbox>
+			<button onClick="pop_transferencia.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox hflex="true"
+						value="@bind(vm.nva_transferencia.fecha)"></datebox>
+				</row>
+				<row>
+					<field value="Banco Origen:" />
+					<combobox hflex="true"
+						value="@load(vm.nva_transferencia.origen.banco.descripcion.toUpperCase())"
+						model="@load(vm.bancos)"
+						selectedItem="@bind(vm.nva_transferencia.origen)" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.banco.descripcion.toUpperCase())" />
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Banco Destino:" />
+					<combobox hflex="true"
+						value="@load(vm.nva_transferencia.destino.banco.descripcion.toUpperCase())"
+						model="@load(vm.bancos)"
+						selectedItem="@bind(vm.nva_transferencia.destino)" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.banco.descripcion.toUpperCase())" />
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Número Operación:" />
+					<textbox hflex="true"
+						value="@bind(vm.nva_transferencia.numero)"></textbox>
+				</row>
+				<row>
+					<field value="Moneda:" />
+					<combobox hflex="true"
+						value="@load(vm.nva_transferencia.moneda.descripcion.toUpperCase())"
+						model="@load(vm.monedas)"
+						selectedItem="@bind(vm.nva_transferencia.moneda)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Importe:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nva_transferencia.importe)" />
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addTransferencia', comp=pop_transferencia)"></button>
+		</hbox>
+	</popup>
+	
+	<popup id="pop_selected" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="CONSULTA REGISTRO DE TRANSFERENCIA" />
+			</hbox>
+			<button onClick="pop_selected.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_transferencia.fecha) @converter('formattedDate', format='dd-MM-yyyy')"
+						readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Banco Origen:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_transferencia.origen.banco.descripcion.toUpperCase())"
+						readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Banco Destino:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_transferencia.destino.banco.descripcion.toUpperCase())"
+						readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Número Operación:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_transferencia.numero)"
+						readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Moneda:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_transferencia.moneda.descripcion.toUpperCase())"
+						readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Importe:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.selected_transferencia.importe)" 
+						readonly="true"/>
+				</row>
+			</rows>
+		</grid>
+	</popup>
+	
+</window>

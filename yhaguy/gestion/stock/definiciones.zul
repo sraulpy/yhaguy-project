@@ -1,0 +1,121 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.definiciones.StockDefinicionesViewModel')"
+	height="100%">
+
+	<tabbox>
+		<tabs>
+			<tab label="Artículo" width="150px" />
+		</tabs>
+
+		<tabpanels>
+			<tabpanel >
+				<hlayout>
+					<vlayout hflex="true" spacing="0">
+						<listbox height="180px" sclass="small-list"
+							model="@load(vm.util.articuloLinea)"
+							selectedItem="@bind(vm.selectedItem)">
+							<custom-attributes
+								org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Linea"
+									style="text-align:center" sort="auto(text)"
+									onCreate="self.sort(true)" />
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.text)" />
+								</listitem>
+							</template>
+						</listbox>
+						<hlayout sclass="button-container">
+							<button label="Agregar"
+								onClick="@command('abrirPopupDatos', tipo=0, operacion=0)" />
+							<button label="Editar"
+								onClick="@command('abrirPopupDatos', tipo=0, operacion=1)" />
+							<button label="Eliminar" disabled="true" />
+						</hlayout>
+					</vlayout>
+					<vlayout hflex="true" spacing="0">
+						<listbox height="180px" sclass="small-list"
+							model="@load(vm.util.articuloFamilia)"
+							selectedItem="@bind(vm.selectedItem)">
+							<custom-attributes
+								org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Familia"
+									style="text-align:center" sort="auto(text)"
+									onCreate="self.sort(true)" />
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.text)" />
+								</listitem>
+							</template>
+						</listbox>
+						<hlayout sclass="button-container">
+							<button label="Agregar"
+								onClick="@command('abrirPopupDatos', tipo=1, operacion=0)" />
+							<button label="Editar"
+								onClick="@command('abrirPopupDatos', tipo=1, operacion=1)" />
+							<button label="Eliminar" disabled="true" />
+						</hlayout>
+					</vlayout>
+				</hlayout>
+				<hlayout>
+					<vlayout hflex="true" spacing="0">
+						<listbox height="180px" sclass="small-list"
+							model="@load(vm.util.articuloParte)"
+							selectedItem="@bind(vm.selectedItem)">
+							<custom-attributes
+								org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Parte"
+									style="text-align:center" sort="auto(text)"
+									onCreate="self.sort(true)" />
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.text)" />
+								</listitem>
+							</template>
+						</listbox>
+						<hlayout sclass="button-container">
+							<button label="Agregar"
+								onClick="@command('abrirPopupDatos', tipo=2, operacion=0)" />
+							<button label="Editar"
+								onClick="@command('abrirPopupDatos', tipo=2, operacion=1)" />
+							<button label="Eliminar" disabled="true" />
+						</hlayout>
+					</vlayout>
+					<vlayout hflex="true" spacing="0">
+						<listbox height="180px" sclass="small-list"
+							model="@load(vm.util.articuloMarca)"
+							selectedItem="@bind(vm.selectedItem)">
+							<custom-attributes
+								org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Marca"
+									style="text-align:center" sort="auto(text)"
+									onCreate="self.sort(true)" />
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.text)" />
+								</listitem>
+							</template>
+						</listbox>
+						<hlayout sclass="button-container">
+							<button label="Agregar"
+								onClick="@command('abrirPopupDatos', tipo=3, operacion=0)" />
+							<button label="Editar"
+								onClick="@command('abrirPopupDatos', tipo=3, operacion=1)" />
+							<button label="Eliminar" disabled="true" />
+						</hlayout>
+					</vlayout>
+				</hlayout>
+			</tabpanel>
+		</tabpanels>
+
+	</tabbox>
+
+</window>

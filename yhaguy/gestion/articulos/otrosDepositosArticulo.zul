@@ -1,0 +1,44 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.OtrosDepositosControl')">
+
+	<!-- ================================== LISTADO DETALLES ============================== -->
+	<div id="reservasArticulo">
+		<listbox height="500px"
+			model="@load(vm.dato.otrosDepositosArticulo)"
+			emptyMessage="El articulo no existe en otros depósitos...">
+			<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+			<listhead>
+				<listheader style="text-align:center" width="150px">
+					<label value="Depósito" />
+				</listheader>
+				<listheader style="text-align:center" width="100px">
+					<label value="Stock real" />
+				</listheader>
+				<listheader style="text-align:center" width="100px">
+					<label value="Disponible" />
+				</listheader>
+				<listheader style="text-align:center" width="100px">
+					<label value="Reservado" />
+				</listheader>
+				<listheader style="text-align:center" width="150px">
+					<label value="Ver Reservas" />
+				</listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each[0])"
+						style="color:black" />
+					<listcell label="@load(each[1].pos5)"
+						style="color:black" />
+					<listcell label="@load(each[1].pos3)"
+						style="color:black" />
+					<listcell label="@load(each[1].pos4)"
+						style="color:black" />
+					<listcell label="Ver Reservas"
+						image="/core/images/preview.png" style="text-align:center"
+						onClick="@command('mostrarDetalleReservas', articulo=each[1])" />
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</window>

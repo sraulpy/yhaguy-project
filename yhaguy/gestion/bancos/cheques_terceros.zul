@@ -1,0 +1,330 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.cheques.ChequesTercerosViewModel')"
+	height="100%">
+
+	<hlayout sclass="button-container">
+		<navbar mold="bs-pills">
+			<navitem label=" TODOS" selected="true"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=1)" />
+			<navitem label=" DEPOSITADOS"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=2)" />
+			<navitem label=" DESCONTADOS"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=3)" />
+			<navitem label=" RECHAZADOS"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=4)" />
+			<navitem label=" RECHAZOS INTERNOS"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=5)" />
+			<navitem label=" A DEPOSITAR"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter"
+				onClick="@command('selectFilter', filter=6)" />
+		</navbar>
+		<space></space>
+		<checkbox label="Reembolsados" style="color:green" visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')"
+			checked="@bind(vm.reembolsados)"></checkbox>
+		<space></space>
+		<checkbox label="Reembolso parcial" style="color:orange" visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')"
+			checked="@bind(vm.parcial)"></checkbox>
+		<space></space>
+		<checkbox label="Sin reembolso" style="color:red" visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')"
+			checked="@bind(vm.sin_reembolso)"></checkbox>
+		<space hflex="true"/>
+		<button mold="bs" sclass="btn-sm btn-primary"
+			iconSclass="z-icon-list" onClick='pop_btns.open(self, "after_end")'></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.cheques)"
+		selectedItem="@bind(vm.selectedCheque)">
+		<auxhead>
+			<auxheader colspan="7" label="Origen"/>
+			<auxheader colspan="2" label="Cliente"/>
+			<auxheader colspan="5" label="Cheque"/>
+		</auxhead>
+		<listhead menupopup="auto">
+			<listheader label="Caja" width="140px" />
+			<listheader label="Cobro" width="110px" />
+			<listheader label="Venta" width="110px" />
+			<listheader label="Reembolso" width="110px" visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')"/>
+			<listheader label="Depósito" width="75px" />
+			<listheader label="Descuento" width="105px" />
+			<listheader label="Vendedor" width="100px" visible="false"/>
+			<listheader label="Razón Social"  />
+			<listheader label="Ruc" width="80px" visible="false" />
+			<listheader label="Banco" width="100px" />
+			<listheader label="Número" align="right" width="100px" />
+			<listheader label="Fecha" width="150px" align="right"/>
+			<listheader label="Librador" width="140px" visible="false"/>
+			<listheader label="Importe Gs." align="right" width="80px" />
+			<listheader width="30px" align="center" />
+		</listhead>	
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Planilla.."
+						value="@bind(vm.filterPlanilla)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Cobro.."
+						value="@bind(vm.filterRecibo)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Venta.."
+						value="@bind(vm.filterVenta)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Reembolso.."
+						value="@bind(vm.filterReembolso)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Dep.."
+						value="@bind(vm.filterDeposito)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Descuento.."
+						value="@bind(vm.filterDescuento)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						placeholder="Vendedor.."
+						value="@bind(vm.filterVendedor)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Razón Social.."
+						value="@bind(vm.filterRazonSocial)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						placeholder="Ruc.."
+						value="@bind(vm.filterRuc)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						placeholder="Banco.."
+						value="@bind(vm.filterBanco)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						placeholder="Número.."
+						value="@bind(vm.filterNumero)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						value="@bind(vm.filterFechaDD)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						value="@bind(vm.filterFechaMM)"
+						instant="true"
+						sclass="filter"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						value="@bind(vm.filterFechaAA)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						placeholder="Librador.."
+						value="@bind(vm.filterLibrador)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						placeholder="Importe.."
+						value="@bind(vm.filterImporteGs)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
+			<auxheader />
+		</auxhead>
+		<template name="model"> 
+			<listitem>
+				<listcell label="@load(each.pos9)" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos10)" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos11)" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos18)" style="@load(each.pos20)"/>
+				<listcell label="@load(each.pos12)" style="@load(each.pos20)"/>
+				<listcell label="@load(each.pos13)" style="@load(each.pos20)"/>
+				<listcell label="@load(each.pos17.toString().toUpperCase())" style="@load(each.pos20)"
+					tooltiptext="@load(each.pos17)" />
+				<listcell label="@load(each.pos1.toString().toUpperCase())" style="@load(each.pos20)"
+					tooltiptext="@load(each.pos1)" />
+				<listcell label="@load(each.pos2)" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos3.toString().toUpperCase())" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos4)" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos5) @converter('formattedDate', format = 'dd-MM-yyyy')" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos6.toString().toUpperCase())" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" style="@load(each.pos20)" />
+				<listcell>
+						<a iconSclass="z-icon-camera" onClick="@command('verImagen', item=each, parent=self)"
+							tooltiptext="Ver Foto..">	
+						</a>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="19">
+				<hlayout>
+					<field value="@load(vm.cheques.size())" />
+					<field value="ítems" />
+					<hlayout visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')">
+						<space></space>
+						<label style="color:green;font-style:italic">
+							* Reembolsados
+						</label>
+						<space></space>
+						<label style="color:orange;font-style:italic">
+							* Reembolso Parcial
+						</label>
+						<space></space>
+						<label style="color:red;font-style:italic">
+							* Sin reembolso
+						</label>
+					</hlayout>
+					<hlayout visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')">
+						<space></space>
+						<label style="font-style:italic">
+							Motivo Rechazo: 
+						</label>
+						<label style="font-style:italic" value="@load(vm.selectedCheque.pos21)"/>
+					</hlayout>
+					<space hflex="true"></space>
+					<field value="Total Gs." />
+					<guaranibox readonly="true" value="@load(vm.totalImporte)" 
+						style="text-align:right;background:#EEF7FA;font-weight:bold" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_motivo" sclass="rounded">
+		<vlayout>
+			<field value="Motivo Rechazo" />
+			<textbox width="250px" placeholder="Motivo del Rechazo.."
+				value="@bind(vm.selectedCheque.pos21)"></textbox>
+			<div height="5px" />
+			<field value="Fecha Rechazo" />
+			<datebox width="250px" value="@bind(vm.fechaRechazo)"></datebox>
+			<div height="5px" />
+			<hlayout valign="bottom">
+				<field value="Rechazo Interno" />
+				<checkbox checked="@bind(vm.rechazoInterno)"></checkbox>
+			</hlayout>
+			<div height="5px" />
+			<button hflex="true" mold="bs" sclass="btn-danger btn-sm"
+				iconSclass="z-icon-check"
+				onClick="@command('registrarChequeRechazado')" 
+				disabled="@load(vm.selectedCheque.pos21.toString().isEmpty() ? 'true':'false')"></button>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_img" sclass="rounded" height="550px" width="650px">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="FOTO DEL COMPROBANTE" />
+			</hbox>
+			<button onClick="pop_img.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="5px"/>
+		<html><![CDATA[
+        	<img id="foto" style ="height:500px; width:630px;" alt="" 
+        		onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+    	</html>
+	</popup>
+	
+	<popup id="pop_btns" sclass="rounded">
+		<vlayout spacing="10px" style="margin:5px">
+			<button mold="bs" sclass="btn-danger btn-sm" width="170px"
+				iconSclass="z-icon-ban" disabled="@load(vm.selectedCheque eq null)"
+				onClick='pop_motivo.open(self, "start_before")'
+				label=" Cheque Rechazado" />
+			<button mold="bs" sclass="btn-success btn-sm" width="170px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('registrarCheque')">
+				Registrar Cheque
+			</button>
+			<button mold="bs" sclass="btn-primary btn-sm" width="170px"
+				iconSclass="z-icon-print" onClick="@command('listadoCheques')"
+				label=" Imprimir Listado" />
+		</vlayout>
+	</popup>
+
+	<script>
+			function setImage(url) {
+				var imagen = document.getElementById("foto");
+				imagen.src = url;
+			}
+	</script>
+	
+</window>

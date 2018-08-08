@@ -1,0 +1,69 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.ajustes.AjusteStockSimpleVM')"
+	style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="120px" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Código Interno:" />
+				<hlayout>
+					<textbox hflex="true" placeholder="Código Interno.."
+						value="@bind(vm.dato.nvoDetalle.articulo.pos1)"
+						onOK="@command('buscarArticulo', filtro=0)"/>
+					<button iconSclass="z-icon-search" 
+						onClick="@command('buscarArticulo', filtro=0)"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Código Proveedor:" />
+				<hlayout>
+					<textbox hflex="true" placeholder="Código Proveedor.."
+						value="@bind(vm.dato.nvoDetalle.articulo.pos2)"
+						onOK="@command('buscarArticulo', filtro=1)"/>
+					<button iconSclass="z-icon-search" 
+						onClick="@command('buscarArticulo', filtro=1)"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Código Original:" />
+				<hlayout>
+					<textbox hflex="true" placeholder="Código Original.."
+						value="@bind(vm.dato.nvoDetalle.articulo.pos3)"
+						onOK="@command('buscarArticulo', filtro=2)"/>
+					<button iconSclass="z-icon-search" 
+						onClick="@command('buscarArticulo', filtro=2)"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Descripción:" />
+				<hlayout>
+					<textbox hflex="true" placeholder="Descripción.."
+						value="@bind(vm.dato.nvoDetalle.articulo.pos4)"
+						onOK="@command('buscarArticulo', filtro=3)"/>
+					<button iconSclass="z-icon-search" 
+						onClick="@command('buscarArticulo', filtro=3)"/>
+				</hlayout>
+			</row>
+			<row>
+				<field value="Cantidad:" />
+				<intbox value="@bind(vm.dato.nvoDetalle.cantidad)"
+					onChange="@command('asignarSigno', item=vm.dato.nvoDetalle)"/>
+			</row>
+			<row>
+				<field value="Costo Gs." />
+				<guaranibox readonly="true" 
+					value="@bind(vm.dato.nvoDetalle.costoGs)"/>
+			</row>
+			<row>
+				<field value="Costo Total Gs." />
+				<guaranibox readonly="true" 
+					value="@bind(vm.dato.nvoDetalle.totalCostoGs)"/>
+			</row>
+		</rows>
+	</grid>
+
+</div>

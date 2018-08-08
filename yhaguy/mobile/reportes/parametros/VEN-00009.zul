@@ -1,0 +1,45 @@
+<vlayout style="padding:50px">
+	
+	<vlayout>
+		<label value="Fecha Desde:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaDesde)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Fecha Hasta:" sclass="mobile" />
+			<datebox value="@bind(vm.filtro.fechaHasta)"
+				format="dd-MM-yyyy" hflex="true" 
+				readonly="true"/>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Marca:" sclass="mobile" />
+			<combobox model="@load(vm.filtro.marcas)"
+				selectedItem="@bind(vm.filtro.tipo)" hflex="true"
+				readonly="false">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+	<space height="50px"/>
+	
+	<vlayout>
+		<label value="Depósito:" sclass="mobile" />
+			<combobox
+				model="@load(vm.filtro.getDepositos(vm.acceso.sucursalOperativa.id))"
+				selectedItem="@bind(vm.filtro.deposito)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+	</vlayout>
+	
+</vlayout>

@@ -1,0 +1,90 @@
+<zk>
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.CompraLocalSimpleControl')"
+	style="padding:5px">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="130px"/>
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Código Interno:"/>				
+				<hlayout>
+						<textbox hflex="true" 
+							value="@bind(vm.dato.nvoItem.articulo.pos1)"
+							onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=0)"
+							placeholder="Código Interno.."/>
+						<button
+							iconSclass="z-icon-search"
+							onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=0)"/>
+					</hlayout>				
+			</row>
+			<row>
+				<field value="Código Proveedor:"/>				
+				<hlayout>
+						<textbox hflex="true" 
+							value="@bind(vm.dato.nvoItem.articulo.pos2)"
+							onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=1)"
+							placeholder="Código Proveedor.."/>
+						<button
+							iconSclass="z-icon-search"
+							onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=1)"/>
+					</hlayout>				
+			</row>
+			<row>
+				<field value="Código Original:" />
+				<hlayout>
+					<textbox hflex="true"
+						value="@bind(vm.dato.nvoItem.articulo.pos3)"
+						onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=2)"
+						placeholder="Código Original.." />
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=2)" />
+				</hlayout>
+			</row>
+			<row>				
+				<field value="Descripción:"/>
+				<hlayout>
+					<textbox hflex="true" 
+						value="@bind(vm.dato.nvoItem.articulo.pos4)"
+						placeholder="Descripcion.."
+						onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=3)"/>
+					<button iconSclass="z-icon-search"
+						onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=3)" />
+				</hlayout>
+			</row>
+			<row visible="@load(!vm.dato.nvoItem.articulo.esNuevo())">				
+				<field value="Cantidad:"/>
+				<intbox id="cant" value="@bind(vm.dato.nvoItem.cantidad)"
+					onChange="@command('verificarNotaCredito')"/>
+			</row>
+			<row visible="@load(vm.dato.nvoItem.cantidad eq 0? 'false':'true')">				
+				<field value="Precio Iva incluído:"/>
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@bind(vm.dato.nvoItem.costoGs)"/>
+					<label value="Gs." style="font-size:11px"/>
+				</hlayout>
+			</row>
+			<row visible="@load(vm.dato.nvoItem.costoGs eq 0? 'false':'true')">
+				<field value="Iva:"/>
+				<combobox model="@load(vm.dato.tiposDeIva)"
+					selectedItem="@bind(vm.dato.nvoItem.iva)"
+					value="@load(vm.dato.nvoItem.iva.text)"
+					instant="true" hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
+					</template>				
+				</combobox>
+			</row>
+			<row visible="@load(vm.dato.nvoItem.costoGs eq 0? 'false':'true')">				
+				<field value="Importe Iva incluído:"/>
+				<hlayout sclass="z-valign-middle">
+					<guaranibox value="@load(vm.dato.nvoItem.importeGs)" readonly="true"/>
+					<label value="Gs." style="font-size:11px"/>
+				</hlayout>
+			</row>				
+		</rows>
+	</grid>
+</div>
+</zk>

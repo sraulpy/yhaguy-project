@@ -1,0 +1,241 @@
+<zk>
+	<window id="Body"
+		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.reglaPrecio.reglaPrecioFormaPago.ReglaPrecioFormaPagoControlBody')"
+		apply="org.zkoss.bind.BindComposer" width="100%" height="100%">
+		<div height="10px" />
+
+
+		<groupbox>
+			<groupbox>
+				<vbox>
+					<hbox>
+						<checkbox label="Activo"
+							checked="@bind(vm.dto.activa)" />
+						<div width="55px" />
+						Nombre de la regla :
+						<textbox width="100px"
+							value="@bind(vm.dto.nombreReglaPrecioFormaPago)" />
+						<div width="20px" />
+						Nombre corto :
+						<textbox width="100px"
+							value="@bind(vm.dto.nombreCortoReglaPrecioFormaPago)" />
+					</hbox>
+					<div height="5px" />
+					<hbox>
+						<checkbox label="Permanente"
+							checked="@bind(vm.dto.permanente)" />
+						<div width="20px" />
+						Fecha inicio :
+						<div width="30px" />
+						<datebox width="100px"
+							value="@bind(vm.dto.fechaInicio)" />
+						<div width="30px" />
+						Fecha fin :
+						<div width="20px" />
+						<datebox width="100px"
+							value="@bind(vm.dto.fechaFin)" />
+						<div width="100px" />
+						<button label="Probar"
+							onClick="@command('demo')"
+							disabled="@load(!(vm.siempreHabilitado || true))" />
+					</hbox>
+				</vbox>
+			</groupbox>
+			<div height="30px" />
+			<groupbox>
+				<hbox>
+					<label value ="Insertar articulo"/>
+					<toolbarbutton image="/core/images/insertar.png"
+						tooltiptext="Insertar" onClick="@command('insertar')" />
+					<groupbox>
+						<hbox>
+							Marca
+							<div width="5px" />
+							<combobox width="100px"
+								model="@load(vm.dtoUtil.articuloMarca)" placeholder="Marca"
+								selectedItem="@bind(vm.selectedArticuloFabrica)">
+								<template name="model">
+									<comboitem label="@load(each)" />
+								</template>
+							</combobox>
+						</hbox>
+					</groupbox>
+
+					<groupbox>
+						<hbox>
+							Familias
+							<div width="5px" />
+							<combobox width="100px"
+								model="@load(vm.dtoUtil.articuloFamilia)" placeholder="Familia"
+								instant="true"
+								selectedItem="@bind(vm.selectedArticuloFamilia)">
+								<template name="model">
+									<comboitem label="@load(each)" />
+								</template>
+							</combobox>
+						</hbox>
+					</groupbox>
+					<groupbox>
+						<hbox>
+							Partes
+							<div width="5px" />
+							<combobox width="100px"
+								model="@load(vm.dtoUtil.articuloParte)" placeholder="Parte"
+								instant="true" selectedItem="@bind(vm.selectedArticuloParte)">
+								<template name="model">
+									<comboitem label="@load(each)" />
+								</template>
+							</combobox>
+						</hbox>
+					</groupbox>
+					<groupbox>
+						<hbox>
+							Líneas
+							<div width="5px" />
+
+							<combobox width="100px"
+								model="@load(vm.dtoUtil.articuloLinea)"
+								selectedItem="@bind(vm.selectedArticuloRubro)"
+								placeholder="Linea">
+								<template name="model">
+									<comboitem label="@load(each.text)" />
+								</template>
+							</combobox>
+						</hbox>
+					</groupbox>
+					<groupbox>
+						<buscadorArticulo value="@bind(vm)"
+							campo="descripcion" />
+					</groupbox>
+				</hbox>
+				<div height="10px" />
+				<hbox>
+
+
+					Todos los artículos
+					<checkbox checked="@bind(vm.dto.todos)" />
+				</hbox>
+			</groupbox>
+			<div height="30px" />
+
+			<groupbox>
+				<grid>
+					<auxhead>
+						<auxheader colspan="2"
+							label="Elementos seleccionados" />
+					</auxhead>
+					<columns>
+						<column>
+							<vbox>
+								<label value="Articulo" />
+								<textbox readonly="true"
+									value="@load(vm.dto.artNombre)" />
+							</vbox>
+						</column>
+						<column>
+							<vbox>
+								<label value="Marca" />
+								<textbox readonly="true" 
+									value="@load(vm.dto.artFabricaNombre)" />
+							</vbox>
+						</column>
+						<column>
+							<vbox>
+								<label value="Familia" />
+								<textbox readonly="true" 
+									value="@load(vm.dto.artFamiliaNombre)" />
+							</vbox>
+						</column>
+						<column>
+							<vbox>
+								<label value="Rubro" />
+								<textbox readonly="true" 
+									value="@load(vm.dto.artRubroNombre)" />
+							</vbox>
+						</column>
+						<column>
+							<vbox>
+								<label value="Parte" />
+								<textbox readonly="true" 
+									value="@load(vm.dto.artParteNombre)" />
+							</vbox>
+						</column>
+							
+						<column>
+							<hbox>
+								<toolbarbutton image="/core/images/delete.png"
+								tooltiptext="Borrar" onClick="@command('borrar')" />
+								<div width="10px"/>
+								<label value="Borrar"/>
+							</hbox>
+						</column>
+					</columns>
+				</grid>
+			</groupbox>
+
+			<div height="30px" />
+			<groupbox>
+				<hlayout>
+					<groupbox>
+						<hbox>
+							<radiogroup id="rg" orient="vertical"
+								width="100px" selectedItem="@bind(vm.selectedModoPago)"
+								model="@load(vm.uDto.formasDePago)">
+								<vlayout>
+									<template name="model">
+										<radio label="@load(each.text)"
+											value="@load(each)" radiogroup="rg" disabled="true" />
+									</template>
+								</vlayout>
+							</radiogroup>
+							<div width="80px" />
+							<vbox>
+								<combobox width="100px"
+									model="@load(vm.uDto.tarjetas)" placeholder="Tarjetas"
+									selectedItem="@bind(vm.selectedTarjeta)"
+									value="@bind(vm.selectedTarjeta.pos1)">
+									<template name="model">
+										<comboitem label="@load(each.pos1)" />
+									</template>
+								</combobox>
+								
+								<checkbox label="Cheque al dia"
+									checked="@bind(vm.dto.chequeAlDia)" />
+							</vbox>
+							<div width="50px"/>
+							Emisor
+							<combobox width="100px"
+									model="@load(vm.selectedTarjeta.pos2)" placeholder="Emisor"
+									selectedItem="@bind(vm.selectedEmisor)"
+									value="@bind(vm.selectedEmisor.text)">
+									<template name="model">
+										<comboitem label="@load(each.text)" />
+									</template>
+								</combobox>
+							
+							<div width="20px" />
+							<vbox>
+								<hbox>
+									Numero de cuotas
+									<textbox width="70px"
+										value="@bind(vm.dto.nroCuota)" />
+								</hbox>
+							</vbox>
+						</hbox>
+					</groupbox>
+					<div width="10px" />
+					<groupbox>
+						Descuento (%):
+						<textbox width="120px"
+							value="@bind(vm.dto.descuento)" />
+					</groupbox>
+				</hlayout>
+			</groupbox>
+			<div height="30px" />
+
+
+		</groupbox>
+
+
+	</window>
+</zk>

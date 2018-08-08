@@ -1,0 +1,6 @@
+<zk>
+<hlayout>
+	<textbox id="searchText" hflex="1" />
+	<button id="searchBtn" iconSclass="z-icon-search" />
+</hlayout>
+</zk>

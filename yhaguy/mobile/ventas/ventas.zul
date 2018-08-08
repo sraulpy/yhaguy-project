@@ -1,0 +1,283 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.VentasMobileViewModel')"
+	vflex="true">
+
+	<vlayout height="100%">
+		
+		<!-- SELECCION DE CLIENTE -->
+		
+		<listbox 
+			id="lstClientes"
+			emptyMessage="BUSQUE UN CLIENTE.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedEmpresa)">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" id="tbox_codint" 
+							value="@bind(vm.razonSocial)"/>
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.razonSocial)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- SELECCION DE VENDEDOR -->
+		
+		<listbox 
+			id="lstVendedores"
+			emptyMessage="ASIGNE UN VENDEDOR.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.vendedores)" selectedItem="@bind(vm.selectedVendedor)"
+			visible="false">
+			<listhead>
+				<listheader />
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" 
+							value="@bind(vm.razonSocialVendedor)"/>
+					</hlayout>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.empresa.razonSocial)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- SELECCION DE DEPOSITO -->
+		
+		<listbox 
+			id="lstDeposito"
+			emptyMessage="SELECCIONE UN DEPÓSITO.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.depositos)" selectedItem="@bind(vm.selectedDeposito)"
+			visible="false">
+			<listhead>
+				<listheader label="SELECCIONE UN DEPÓSITO" style="font-size:26pt;text-align:center" />
+			</listhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.descripcion)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- SELECCION DE CONDICION -->
+		
+		<listbox 
+			id="lstCondicion"
+			emptyMessage="CONDICIÓN DE VENTA"
+			style="overflow:auto" vflex="1"
+			model="@load(vm.condiciones)" selectedItem="@bind(vm.selectedCondicion)"
+			visible="false">
+			<listhead>
+				<listheader label="CONDICIÓN DE VENTA" style="font-size:26pt;text-align:center" />
+			</listhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.descripcion)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- SELECCION DE ARTICULO -->
+		
+		<listbox 
+			id="lstArticulos"
+			emptyMessage="BUSQUE UN ARTÍCULO.."
+			style="overflow:auto" vflex="1"
+			model="@load(vm.articulos)" selectedItem="@bind(vm.selectedArticulo)"
+			visible="false">
+			<listhead>
+				<listheader />
+				<listheader width="15%" align="right"/>
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<hlayout>
+						<textbox hflex="true" sclass="filter-mobile"
+							instant="true" 
+							value="@bind(vm.codigoInterno)"/>
+					</hlayout>
+				</auxheader>
+				<auxheader label="STOCK" style="font-size:26pt;text-align:center"></auxheader>
+			</auxhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.codigoInterno)" />
+				<listcell label="@load(each.stock)"/>
+			</listitem>
+		</template>
+		</listbox>
+		
+		<vlayout id="vl_articulo" vflex="true" visible="false" style="padding:30px">
+			
+			<div style="border-bottom:solid 1px">
+				<hlayout>
+					<label value="@load(vm.selectedArticulo.codigoInterno)" sclass="mobile" />
+					<space hflex="true"/>
+					<label value="STOCK:" sclass="mobile" />
+					<label value="@load(vm.selectedArticulo.stock)" sclass="mobile" />
+				</hlayout>
+			</div>
+			<space></space>
+			<label value="Cantidad" sclass="mobile" />
+			<longbox hflex="true" value="@bind(vm.selectedDetalle.cantidad)"></longbox>
+			<space></space>
+			<label value="Lista de Precio" sclass="mobile" />
+			<combobox hflex="true"
+				model="@load(vm.listaPrecio)"
+				selectedItem="@bind(vm.selectedDetalle.listaPrecio)"
+				onSelect="@command('selectPrecio')"
+				value="@load(vm.selectedDetalle.listaPrecio.descripcion)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)"/>
+				</template>
+			</combobox>
+			<space></space>
+			<label value="Precio Iva Incluído" sclass="mobile" />
+			<doublebox style="text-align:right;font-weight:bold"
+				format="###,###,###,##0" hflex="true" 
+				readonly="true"
+				value="@load(vm.selectedDetalle.precioGs)"/>
+			<space></space>
+			<label value="Descuento" sclass="mobile" />
+			<doublebox style="text-align:right;font-weight:bold;color:red"
+				format="###,###,###,##0" hflex="true" 
+				value="@bind(vm.selectedDetalle.descuentoUnitarioGs)"
+				readonly="true"/>
+			<space></space>
+			<label value="Importe" sclass="mobile" />
+			<doublebox style="text-align:right;font-weight:bold"
+				format="###,###,###,##0" hflex="true" 
+				readonly="true"
+				value="@load(vm.selectedDetalle.importeGs)"/>
+
+		</vlayout>
+		
+		<vlayout id="vl_observacion" vflex="true" visible="false" style="padding:30px">
+			
+			<div style="border-bottom:solid 1px">
+				<hlayout>
+					<label value="OBSERVACIÓN DEL PEDIDO"
+						sclass="mobile" />
+				</hlayout>
+			</div>
+			<space></space>
+			<label value="Observación" sclass="mobile" />
+			<textbox hflex="true" rows="10"
+				value="@bind(vm.observacion)"></textbox>
+			
+		</vlayout>
+		
+		<vlayout id="vl_generado" vflex="true" visible="false" style="padding:30px">			
+			<div style="border-bottom:solid 1px">
+				<hlayout>
+					<label value="PEDIDO GENERADO"
+						sclass="mobile" />
+				</hlayout>
+			</div>
+			<space></space>
+			<label value="PEDIDO CORRECTAMENTE GENERADO" sclass="mobile" />
+			<label value="@load(vm.numero)" sclass="mobile" />			
+		</vlayout>
+
+		<button id="btn_clientes" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedEmpresa eq null? 'true':'false')"
+			label=" SIGUIENTE PASO" height="150px" style="font-size:30pt"
+			dir="normal"
+			onClick="lstVendedores.setVisible(true); lstClientes.setVisible(false); btn_vendedores.setVisible(true); self.setVisible(false)"/>
+			
+		<button id="btn_vendedores" mold="bs" sclass="btn-info btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedVendedor eq null? 'true':'false')"
+			label=" SIGUIENTE PASO" height="150px" style="font-size:30pt"
+			dir="normal" visible="false" 
+			onClick="lstVendedores.setVisible(false); lstDeposito.setVisible(true); btn_depositos.setVisible(true); self.setVisible(false)"/>
+			
+		<button id="btn_depositos" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedDeposito eq null? 'true':'false')"
+			label=" SIGUIENTE PASO" height="150px" style="font-size:30pt"
+			dir="normal" visible="false" 
+			onClick="lstDeposito.setVisible(false); lstCondicion.setVisible(true); btn_condicion.setVisible(true); self.setVisible(false)"/>
+			
+		<button id="btn_condicion" mold="bs" sclass="btn-info btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedCondicion eq null? 'true':'false')"
+			label=" SIGUIENTE PASO" height="150px" style="font-size:30pt"
+			dir="normal" visible="false" 
+			onClick="lstCondicion.setVisible(false); lstArticulos.setVisible(true); btn_articulos.setVisible(true); self.setVisible(false)"/>
+			
+		<button id="btn_articulos" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedArticulo eq null? 'true':'false')"
+			label=" SIGUIENTE PASO" height="150px" style="font-size:30pt"
+			dir="normal" visible="false" 
+			onClick="@command('crearDetalle', comp1=lstArticulos, comp2=vl_articulo, comp3=hl_gen_venta, comp4=self )"/>
+			
+		<hlayout id="hl_gen_venta" visible="false">
+			<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+				iconSclass="z-icon-plus"
+				label=" Agregar Artículo" height="150px" style="font-size:30pt"
+				dir="normal" 
+				onClick="@command('addDetalle', comp1=vl_articulo, comp2=lstArticulos, comp3=btn_articulos, comp4=hl_gen_venta)"/>
+			<button mold="bs" sclass="btn-success btn-lg" hflex="true"
+				iconSclass="z-icon-check"
+				label=" Generar Pedido" height="150px" style="font-size:30pt"
+				dir="normal" 
+				onClick="@command('addDetalle', comp1=vl_articulo, comp2=vl_observacion, comp3=btn_generarpedido, comp4=hl_gen_venta)" />
+		</hlayout>
+		
+		<button id="btn_generarpedido" mold="bs" sclass="btn-success btn-lg" hflex="true"
+				iconSclass="z-icon-check"
+				label=" Generar Pedido" height="150px" style="font-size:30pt"
+				dir="normal" visible="false"
+				onClick="@command('generarPedidoVenta', comp1=vl_observacion, comp2=vl_generado, comp3=btn_volver, comp4=self)"/>
+				
+		<button id="btn_volver" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+				iconSclass="z-icon-check"
+				label=" Nuevo Pedido" height="150px" style="font-size:30pt"
+				dir="normal" visible="false"
+				onClick="vl_generado.setVisible(false); lstClientes.setVisible(true); btn_clientes.setVisible(true); self.setVisible(false)"/>
+		
+	</vlayout>
+
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+		.z-listitem-checkable { height:50px; width:50px }
+		.z-listitem-selected>.z-listcell>.z-listcell-content>.z-listitem-checkable .z-listitem-icon { line-height:50px; }
+	</style>
+</div>

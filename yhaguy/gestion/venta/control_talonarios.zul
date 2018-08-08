@@ -1,0 +1,109 @@
+<window height="100%" width="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.controltalonario.ControlTalonarioViewModel')">
+
+	<hlayout hflex="true" vflex="true">
+	<vbox hflex="true" vflex="true" spacing="0">
+		<hlayout sclass="button-container">
+			<field value="RECEPCIÓN DE TALONARIOS" />
+			<separator orient="vertical" bar="true" />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-plus-circle"
+				label="Agregar" width="130px"
+				onClick="@command('agregarControlTalonario', comp=pop_add, ref=self)"></button>
+			<space></space>
+			<button mold="bs" sclass="btn-primary btn-sm"
+				iconSclass="z-icon-times-circle"
+				label="Inactivar" width="130px" onClick="@command('inactivar')"
+				disabled="@load(vm.selectedControl eq null? 'true':'false')"></button>
+			<space hflex="true"></space>
+			<field value="CONFIGURACION ALERTA:" />
+			<intbox style="background:#EEF7FA;text-align:right"
+				value="@bind(vm.alerta)"
+				onChange="@command('saveConfiguracion')"></intbox>
+			<label value="unidades"></label>
+		</hlayout>
+		<listbox sclass="small-list" vflex="true" hflex="true"
+			emptyMessage="SIN TALONARIOS.."
+			model="@load(vm.controlTalonarios)"
+			selectedItem="@bind(vm.selectedControl)"
+			onSelect="@command('crearGrafico')">
+			<listhead>
+				<listheader label="Estado" width="80px" align="center"></listheader>
+				<listheader label="Fecha"></listheader>
+				<listheader label="Receptor"></listheader>
+				<listheader label="Cajas" align="right"></listheader>
+				<listheader label="Unidades" align="right"></listheader>
+				<listheader label="Facturadas" align="right"></listheader>
+				<listheader label="Disponible" align="right"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<image src="@load(each.activo? '/core/images/tick.png' : '/core/images/exclamation.png')"></image>
+					</listcell>
+					<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+					<listcell label="@load(each.receptor)"></listcell>
+					<listcell label="@load(each.cajas)"></listcell>
+					<listcell label="@load(each.unidades)"></listcell>
+					<listcell label="@load(each.facturadas)"></listcell>
+					<listcell label="@load(each.disponible)"></listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="7" align="left">
+					<hlayout>
+						<field value="ítems"/>
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</vbox>
+	<div width="500px">
+		<charts id="chart" type="column" title="Control de Talonarios"/>
+	</div>	
+	</hlayout>
+	
+	<popup id="pop_add" sclass="rounded" width="400px">
+		<grid sclass="vgrid">
+			<columns>
+				<column width="35%"></column><column></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:"/>
+					<datebox value="@bind(vm.n_control.fecha)" hflex="true"></datebox>
+				</row>
+				<row>
+					<field value="Receptor:"/>
+					<textbox value="@load(vm.n_control.receptor)" hflex="true" readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Cajas:"/>
+					<intbox hflex="true" value="@bind(vm.n_control.cajas)"></intbox>
+				</row>
+				<row>
+					<field value="Unidades por Caja:"/>
+					<intbox hflex="true" value="@bind(vm.n_control.unidades_caja)"></intbox>
+				</row>
+				<row>
+					<field value="Total Unidades:"/>
+					<intbox value="@load(vm.n_control.unidades)" hflex="true" readonly="true"></intbox>
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-check"
+				label="Guardar" hflex="true" onClick="@command('saveControlTalonario', comp=pop_add)"></button>
+		</hbox>
+	</popup>
+	
+	<style>
+		.highcharts-axis-title { color:white ; fill:white ; visibility:
+		hidden;}
+		.highcharts-button-symbol { visibility:hidden }
+	</style>
+
+</window>

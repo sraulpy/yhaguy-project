@@ -1,0 +1,37 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.gastos.generales.pedidos.OrdenPedidoGastoSimpleControl')"
+	style="padding:5px" height="100%">
+
+	<listbox model="@load(vm.dato.dto.ordenPedidoGastoDetalle)" 
+		sclass="small-list" vflex="true"
+		checkmark="true"
+		multiple="true"
+		selectedItems="@bind(vm.dato.selectedItemsImportar)">
+		<listhead>
+			<listheader width="40px" align="center"/>
+			<listheader label="Código Cuenta" width="120px"/>
+			<listheader label="Descripción Cuenta"/>
+			<listheader label="Descripción Gasto"/>
+			<listheader label="Importe Gs." 
+				width="100px" align="right" style="text-align:center"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell />
+				<listcell label="@load(each.articuloGasto.cuentaContable.pos1)"/>
+				<listcell label="@load(each.articuloGasto.cuentaContable.pos2)"/>
+				<listcell label="@load(each.descripcion)"/>
+				<listcell label="@load(each.importe) @converter('formattedNumber', format='###,###,##0')"/>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="5" align="left">
+				<hlayout>
+					<field value="@load(vm.dato.dto.ordenPedidoGastoDetalle.size())" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+</div>

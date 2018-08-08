@@ -1,0 +1,38 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Marca:" />
+			<combobox model="@load(vm.dato.filtro.marcas)"
+				selectedItem="@bind(vm.dato.filtro.tipo)" hflex="true"
+				readonly="false">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Depósito:" />
+			<combobox
+				model="@load(vm.dato.filtro.getDepositos(vm.dato.acceso.sucursalOperativa.id))"
+				selectedItem="@bind(vm.dato.filtro.deposito)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>

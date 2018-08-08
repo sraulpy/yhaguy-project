@@ -1,0 +1,13 @@
+Cliente,Metal Plus,,
+Fecha,02-07-12,,
+Codigo,1,,
+Tipo de Compra,Credito,,
+,,,
+articulo,codigo,cantidad,valor
+Bateria Toyo 65AMP.,TOY 65AMP,20,1
+Filtro Lans 30M,LANS 30M,10,2
+Filtro Lans 65M.,LANS 65M,6,1
+Filtro Lans 90M.,LANS 90M,1,5
+Filtro Lans 100M,LANS 100M,1,10
+,,,
+totales,8,38,19
