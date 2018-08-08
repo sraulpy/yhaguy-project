@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="612" pageHeight="792" columnWidth="604" leftMargin="4" rightMargin="4" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="ireport.zoom" value="1.239669421487609"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial"/>
+	<style name="Row"/>
+	<style name="Resumen" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#F8F1F1"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#F8F1F1"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#F8F1F1"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#F8F1F1"/>
+		</box>
+	</style>
+	<subDataset name="dataset 1" uuid="8decb2b4-5f98-4927-a198-767d75da3dfe">
+		<field name="fecha" class="java.lang.String"/>
+		<field name="concepto" class="java.lang.String"/>
+		<field name="numero" class="java.lang.String"/>
+		<field name="razonSocial" class="java.lang.String"/>
+		<field name="ruc" class="java.lang.String"/>
+		<field name="gravado10" class="java.lang.Double"/>
+		<field name="iva10" class="java.lang.Double"/>
+		<field name="total" class="java.lang.Double"/>
+		<field name="gravado5" class="java.lang.Double"/>
+		<field name="iva5" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="Generado" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<field name="Fecha" class="java.lang.String"/>
+	<field name="Concepto" class="java.lang.String"/>
+	<field name="Numero" class="java.lang.String"/>
+	<field name="RazonSocial" class="java.lang.String"/>
+	<field name="Ruc" class="java.lang.String"/>
+	<field name="Gravada10" class="java.lang.String"/>
+	<field name="Iva10" class="java.lang.String"/>
+	<field name="Total" class="java.lang.String"/>
+	<field name="Desde" class="java.lang.String"/>
+	<field name="Hasta" class="java.lang.String"/>
+	<field name="Ventas" class="java.util.Collection"/>
+	<field name="RucEmpresa" class="java.lang.String"/>
+	<field name="DireccionEmpresa" class="java.lang.String"/>
+	<field name="Periodo" class="java.lang.String"/>
+	<field name="TotalContado" class="java.lang.String"/>
+	<field name="TotalCredito" class="java.lang.String"/>
+	<field name="TotalNCContado" class="java.lang.String"/>
+	<field name="TotalNCCredito" class="java.lang.String"/>
+	<field name="TotalGravada" class="java.lang.String"/>
+	<field name="TotalImpuesto" class="java.lang.String"/>
+	<field name="TotalImporte" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<componentElement>
+				<reportElement x="1" y="0" width="603" height="13" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset 1" uuid="dfc99092-153a-4a8c-8013-69dcf11d3085">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Ventas})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="13" width="603">
+						<textField>
+							<reportElement x="0" y="1" width="60" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="60" y="1" width="106" height="12" uuid="dc95d3d7-0576-4708-bdb4-a1c17ee0917b"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="166" y="1" width="143" height="12" uuid="4f571979-6a8e-45a4-a569-7daa67773db0"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="309" y="1" width="65" height="12" uuid="7aa8ea60-873b-4a83-bb59-e74472508281"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{ruc}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement x="374" y="1" width="60" height="12" uuid="dd909d89-0bb0-4498-96cc-516a30e6fdcd"/>
+							<textElement textAlignment="Right">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{gravado10}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement x="434" y="1" width="55" height="12" uuid="90e52218-ac76-450b-837b-d3a2479345e5"/>
+							<textElement textAlignment="Right">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{iva10}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement x="528" y="1" width="74" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
+							<textElement textAlignment="Right">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement x="489" y="1" width="39" height="12" uuid="d26a2965-8cc8-4ef6-937b-8513f8f0b62d"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<text><![CDATA[0]]></text>
+						</staticText>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

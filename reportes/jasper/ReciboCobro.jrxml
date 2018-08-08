@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReciboCobro" pageWidth="623" pageHeight="623" whenNoDataType="NoDataSection" columnWidth="603" leftMargin="0" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Detail" fontSize="8" isBold="false" pdfFontName="Helvetica" pdfEncoding="UTF8" isPdfEmbedded="true"/>
+	<subDataset name="dataset1" uuid="f880dc43-439e-4f6d-be86-c0e0f4bcabb6">
+		<field name="fecha" class="java.lang.String"/>
+		<field name="concepto" class="java.lang.String"/>
+		<field name="factura" class="java.lang.String"/>
+		<field name="importe" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset2" uuid="c57e351e-4cfb-4b24-bf24-f60a043fb67f">
+		<field name="numero" class="java.lang.String"/>
+		<field name="banco" class="java.lang.String"/>
+		<field name="vencimiento" class="java.lang.String"/>
+		<field name="librador" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="RazonSocial" class="java.lang.String"/>
+	<parameter name="Direccion" class="java.lang.String"/>
+	<parameter name="Telefono" class="java.lang.String"/>
+	<parameter name="Ruc" class="java.lang.String"/>
+	<parameter name="Vendedor" class="java.lang.String"/>
+	<parameter name="FechaEmision" class="java.lang.String"/>
+	<parameter name="ImporteEnLetras" class="java.lang.String"/>
+	<parameter name="ImporteTotal" class="java.lang.String"/>
+	<parameter name="Numero" class="java.lang.String"/>
+	<parameter name="Iva5" class="java.lang.String"/>
+	<parameter name="Iva10" class="java.lang.String"/>
+	<parameter name="TotalIva" class="java.lang.String"/>
+	<parameter name="PuntoPartida" class="java.lang.String"/>
+	<parameter name="FechaTraslado" class="java.lang.String"/>
+	<parameter name="MarcaVehiculo" class="java.lang.String"/>
+	<parameter name="Repartidor" class="java.lang.String"/>
+	<parameter name="FechaFinTraslado" class="java.lang.String"/>
+	<parameter name="ChapaVehiculo" class="java.lang.String"/>
+	<parameter name="CedulaRepartidor" class="java.lang.String"/>
+	<parameter name="CR" class="java.lang.String"/>
+	<parameter name="CT" class="java.lang.String"/>
+	<parameter name="Vencimiento" class="java.lang.String"/>
+	<field name="Facturas" class="java.util.Collection"/>
+	<field name="Cheques" class="java.util.Collection"/>
+	<field name="Efectivo" class="java.lang.String"/>
+	<field name="Retencion" class="java.lang.String"/>
+	<field name="Fecha" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="104" splitType="Stretch">
+			<textField>
+				<reportElement x="72" y="63" width="367" height="15" uuid="a66d6b9d-cfe8-4cbe-b5ca-9699fdeac4be"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RazonSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="477" y="63" width="107" height="15" uuid="79ae6565-d17a-461e-872a-f01254a686af"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Ruc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="477" y="13" width="100" height="15" uuid="9500b6c1-fc55-49b8-8b61-002a323aadb5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Numero}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="324" y="84" width="249" height="20" uuid="3621c7d6-053e-47b7-8950-954ef508eaa2"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="Proportional" lineSpacingSize="3.5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ImporteEnLetras}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="72" y="87" width="86" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8537a01e-7d20-4754-88dc-e9f4b8411be5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ImporteTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="227" splitType="Stretch">
+			<componentElement>
+				<reportElement x="17" y="36" width="249" height="15" uuid="cff0360a-484e-4404-891f-aa2e699958b9"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="1c0444df-a00b-4db7-b5ca-3aae56d5d194">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Facturas})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="249">
+						<textField>
+							<reportElement x="101" y="1" width="53" height="12" uuid="fe9c6d01-343d-4bf9-a8b7-c5425fce6ed1"/>
+							<textElement textAlignment="Right"/>
+							<textFieldExpression><![CDATA[$F{factura}]]></textFieldExpression>
+						</textField>
+						<textField pattern="" isBlankWhenNull="false">
+							<reportElement mode="Transparent" x="154" y="1" width="76" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="75a5e3c0-eda8-4453-b497-f518faeb2aa9"/>
+							<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+								<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+								<paragraph lineSpacing="Single"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="57" y="1" width="30" height="12" uuid="c5f7634f-103d-4f1f-873b-30c935179b82"/>
+							<textElement textAlignment="Left"/>
+							<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="3" y="1" width="53" height="12" uuid="0a020264-51af-4364-80a8-ac2371c4f12d"/>
+							<textElement textAlignment="Left"/>
+							<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="287" y="79" width="316" height="15" uuid="1f04dde2-65a2-4ee1-a48e-8680856dd9a4"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset2" uuid="0ecfa1f3-be37-427f-909a-a0b726c1fe07">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Cheques})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="316">
+						<textField>
+							<reportElement x="0" y="2" width="68" height="12" uuid="7476d498-1a59-4542-aaf7-30b8be3fe1fa"/>
+							<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="68" y="2" width="68" height="12" uuid="6dc0cee2-fb5d-4c78-ab79-653370e1b191"/>
+							<textFieldExpression><![CDATA[$F{banco}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="150" y="2" width="68" height="12" uuid="1e581471-5cca-4f14-b744-21c1d5695ae1"/>
+							<textFieldExpression><![CDATA[$F{vencimiento}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="221" y="3" width="68" height="12" uuid="064a1d81-8652-4126-aff6-235a145eefab"/>
+							<textFieldExpression><![CDATA[$F{librador}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField>
+				<reportElement x="492" y="19" width="81" height="12" uuid="d7ae6402-daba-4d18-8574-9dad26e6a7cc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{Efectivo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="492" y="35" width="81" height="12" uuid="634958b6-9b0d-4129-a57b-429b745ed7d6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{Retencion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="161" y="189" width="86" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0b5db96d-8553-4f8b-9a49-cdf21b658b4d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ImporteTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="255" y="177" width="86" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dc54d30f-d468-4895-aa78-20807bc81882"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

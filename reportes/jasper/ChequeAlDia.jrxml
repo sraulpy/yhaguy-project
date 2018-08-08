@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chequealdia" pageWidth="581" pageHeight="212" whenNoDataType="NoDataSection" columnWidth="541" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="testArial" fontSize="6" isBold="true"/>
+	<style name="Detail" fontName="testArial" fontSize="6"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E2F0ED"/>
+		</conditionalStyle>
+	</style>
+	<style name="style1" fontName="Arial" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="RazonSocial" class="java.lang.String"/>
+	<parameter name="Ruc" class="java.lang.String"/>
+	<parameter name="MontoIvaIncluido" class="java.lang.String"/>
+	<parameter name="MontoIva" class="java.lang.String"/>
+	<parameter name="Porcentaje" class="java.lang.String"/>
+	<parameter name="MontoRetencion" class="java.lang.String"/>
+	<parameter name="ImporteEnLetras" class="java.lang.String"/>
+	<field name="NroCheque" class="java.lang.String"/>
+	<field name="Importe" class="java.lang.String"/>
+	<field name="Dia" class="java.lang.String"/>
+	<field name="Mes" class="java.lang.String"/>
+	<field name="Anho" class="java.lang.String"/>
+	<field name="Beneficiario" class="java.lang.String"/>
+	<field name="ImporteLetras" class="java.lang.String"/>
+	<field name="Fecha" class="java.lang.String"/>
+	<field name="Proveedor" class="java.lang.String"/>
+	<field name="OrdenPago" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="133" splitType="Stretch">
+			<textField>
+				<reportElement x="463" y="-3" width="78" height="14" uuid="f9ed1196-d2e8-4c9c-88fe-12d8e17cf295"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="333" y="39" width="44" height="12" uuid="b69fa89f-5c2e-46f3-af15-62dfd077741f"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Dia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="39" width="19" height="12" uuid="ced26ca2-ed5f-4942-8592-f4b4c12caebe"/>
+				<textElement>
+					<font pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Mes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="428" y="39" width="19" height="12" uuid="a5b14510-288e-469d-bd07-fb8ce88544f2"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Anho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="203" y="76" width="338" height="12" uuid="c683c41a-237a-448d-87c7-9121e3c5d87a"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Beneficiario}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="195" y="96" width="345" height="19" uuid="ab3b37d7-0a96-49d5-bdeb-318760046bae"/>
+				<textElement>
+					<font size="6" isBold="false" isItalic="true" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ImporteLetras}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="117" width="68" height="14" uuid="9cde2a26-9e59-43fc-bed7-36517bfa2550"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="46" width="68" height="14" uuid="0ecc37d8-abc0-4232-b812-171ccccdfeee"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="62" width="68" height="14" uuid="ac603dd9-289a-4bb2-9e31-b4442eb7df6e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{Proveedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="78" width="68" height="14" uuid="690976fa-a5ba-4722-9937-d20faa7b03ea"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{OrdenPago}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+</jasperReport>

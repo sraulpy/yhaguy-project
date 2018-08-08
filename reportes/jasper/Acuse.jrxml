@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Acuse" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
+	<property name="ireport.zoom" value="1.2396694214876032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E2F0ED"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="TipoDocumento" class="java.lang.String"/>
+	<parameter name="Fecha" class="java.lang.String"/>
+	<parameter name="Motivo" class="java.lang.String"/>
+	<parameter name="Desde" class="java.lang.String"/>
+	<parameter name="NroAcuse" class="java.lang.String"/>
+	<parameter name="Hasta" class="java.lang.String"/>
+	<parameter name="Receptor" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<parameter name="Generado" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select '1' "Cuenta", '1' "Nivel", 'Activo' "Desc Cuenta", null "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
+from plancuenta where id = '1'
+union all
+select '111' "Cuenta", '1' "Nivel", 'Caja' "Desc Cuenta", 1 "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
+from plancuenta where id = '1'
+union all
+select '11111001' "Cuenta", '1' "Nivel", 'Caja M/L' "Desc Cuenta", 111 "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
+from plancuenta where id = '1'
+union all
+select '11111002' "Cuenta", '1' "Nivel", 'Caja M/E' "Desc Cuenta", 111 "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
+from plancuenta where id = '1'
+union all
+select '11111003' "Cuenta", '1' "Nivel", 'Recaudaciones a Depositar' "Desc Cuenta", 111 "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
+from plancuenta where id = '1']]>
+	</queryString>
+	<field name="NroFactura" class="java.lang.String"/>
+	<field name="TipoDetalle" class="java.lang.String"/>
+	<group name="Recibo">
+		<groupExpression><![CDATA[$F{TipoDetalle}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="108" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="0" width="62" height="31" uuid="429de492-610d-438e-ab36-c3bdc07e7cd4"/>
+				<imageExpression><![CDATA[$P{Logo}.toString()]]></imageExpression>
+			</image>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="34" width="555" height="1" uuid="b62d7e20-6f96-4e26-8f77-d0e8db98cc69"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="142" y="86" width="197" height="15" uuid="8e7208d3-13cd-4325-91dc-558fa7a82eba"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{TipoDocumento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="42" y="45" width="51" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="517600f8-ca30-4f22-9851-bba1ac42078d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="42" y="86" width="100" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="f1c81938-5515-4529-bab5-369b760a0231"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Tipo Documento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="42" y="65" width="62" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="552abd79-0ab3-4316-989d-075d3fbd6aec"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Motivo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="339" y="86" width="77" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="6a0297aa-d266-47d3-b3f8-52a20a842b1f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Receptor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="93" y="45" width="68" height="15" uuid="f8c1812e-9cd7-41a0-821a-9401578b2c83"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="65" width="437" height="15" uuid="3d666631-4e49-4147-a94f-31e356547bbe"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Motivo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="86" width="125" height="15" uuid="381e2617-c5d7-4245-bd35-554b38b1269c"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Receptor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="69" y="17" width="214" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="1fd1d0cf-4470-45a1-92c0-0501f8261700"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="1" width="140" height="12" uuid="a406ae7f-3499-49c2-8059-8395587b6224"/>
+				<textFieldExpression><![CDATA[$P{Empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="177" y="45" width="71" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="156a83a4-746e-4589-b656-89dd01200c83"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Nro. Acuse:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="248" y="45" width="116" height="15" uuid="9d82d751-9672-42cb-af58-112e93fa0b97"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{NroAcuse}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="392" y="1" width="163" height="12" uuid="137e8c4d-cfbc-4c67-acc8-27b5a84935ce"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Usuario: " + $P{Usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="392" y="19" width="163" height="12" uuid="8a1acf59-57b1-482b-a426-ba9146a420e0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Generado: " + $P{Generado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement mode="Opaque" x="42" y="3" width="499" height="20" forecolor="#000000" backcolor="#E2F0ED" uuid="09b83fe2-1135-465e-8180-a87f3c4caae6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nros. de Documentos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15">
+			<textField>
+				<reportElement x="42" y="1" width="206" height="12" uuid="371896a8-95f4-4afe-8474-bb5f0ce962f9"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NroFactura}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="22">
+			<staticText>
+				<reportElement mode="Transparent" x="381" y="4" width="90" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="9f3b743b-4bca-4020-9136-c5e74f857155"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Firma Receptor]]></text>
+			</staticText>
+			<line>
+				<reportElement x="374" y="3" width="100" height="1" uuid="03d522ae-2fb9-4e30-b746-fcb066fd236f"/>
+			</line>
+		</band>
+	</summary>
+	<noData>
+		<band height="39">
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="11" width="554" height="20" forecolor="#000000" backcolor="#E2F0ED" uuid="53f4f85d-ee2f-4b27-b8cd-2b7af6a1a506"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NO SE ENCONTRARON DATOS..]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

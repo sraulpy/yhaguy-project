@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Remision" pageWidth="623" pageHeight="623" whenNoDataType="NoDataSection" columnWidth="603" leftMargin="0" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="51"/>
+	<style name="Detail" fontSize="8" isBold="false" pdfFontName="Helvetica" pdfEncoding="UTF8" isPdfEmbedded="true"/>
+	<subDataset name="dataset1" uuid="f880dc43-439e-4f6d-be86-c0e0f4bcabb6">
+		<field name="cantidad" class="java.lang.String"/>
+		<field name="descripcion" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="RazonSocial" class="java.lang.String"/>
+	<parameter name="Direccion" class="java.lang.String"/>
+	<parameter name="Telefono" class="java.lang.String"/>
+	<parameter name="Ruc" class="java.lang.String"/>
+	<parameter name="Vendedor" class="java.lang.String"/>
+	<parameter name="FechaEmision" class="java.lang.String"/>
+	<parameter name="ImporteEnLetras" class="java.lang.String"/>
+	<parameter name="ImporteTotal" class="java.lang.String"/>
+	<parameter name="Numero" class="java.lang.String"/>
+	<parameter name="Iva5" class="java.lang.String"/>
+	<parameter name="Iva10" class="java.lang.String"/>
+	<parameter name="TotalIva" class="java.lang.String"/>
+	<parameter name="PuntoPartida" class="java.lang.String"/>
+	<parameter name="FechaTraslado" class="java.lang.String"/>
+	<parameter name="MarcaVehiculo" class="java.lang.String"/>
+	<parameter name="Repartidor" class="java.lang.String"/>
+	<parameter name="FechaFinTraslado" class="java.lang.String"/>
+	<parameter name="ChapaVehiculo" class="java.lang.String"/>
+	<parameter name="CedulaRepartidor" class="java.lang.String"/>
+	<parameter name="CR" class="java.lang.String"/>
+	<parameter name="CT" class="java.lang.String"/>
+	<parameter name="Vencimiento" class="java.lang.String"/>
+	<field name="Facturas" class="java.util.Collection"/>
+	<field name="Efectivo" class="java.lang.String"/>
+	<field name="Retencion" class="java.lang.String"/>
+	<field name="Fecha" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="195" splitType="Stretch">
+			<textField>
+				<reportElement x="101" y="68" width="277" height="15" uuid="a66d6b9d-cfe8-4cbe-b5ca-9699fdeac4be"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" pdfEncoding="Cp1252"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RazonSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="477" y="68" width="107" height="15" uuid="79ae6565-d17a-461e-872a-f01254a686af"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Ruc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="41" width="100" height="15" uuid="9500b6c1-fc55-49b8-8b61-002a323aadb5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Numero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="47" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="14b7e18c-d998-48cc-95ff-8a11339ff759"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FechaTraslado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="227" splitType="Stretch">
+			<componentElement>
+				<reportElement x="17" y="147" width="567" height="15" uuid="cff0360a-484e-4404-891f-aa2e699958b9"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="1c0444df-a00b-4db7-b5ca-3aae56d5d194">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Facturas})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="567">
+						<textField>
+							<reportElement x="107" y="1" width="453" height="12" uuid="c5f7634f-103d-4f1f-873b-30c935179b82"/>
+							<textElement textAlignment="Left"/>
+							<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="3" y="1" width="33" height="12" uuid="0a020264-51af-4364-80a8-ac2371c4f12d"/>
+							<textElement textAlignment="Right"/>
+							<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>
