@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Articulo" table="articulo">
+
+		&hibernate-domain;
+
+		<property name="descripcion" />
+		<property name="codigoInterno" />
+		<property name="codigoProveedor" />
+		<property name="codigoOriginal" />
+		<property name="codigoBarra" />
+		<property name="observacion" />
+		<property name="peso" />
+		<property name="volumen" />
+		<property name="costoGs" />
+		<property name="fechaAlta" />
+		<property name="prioridad" />
+		<property name="completo" />
+		<property name="urlImagen" />
+		<property name="urlEspecificacion" />
+		<property name="importado" />
+		<property name="servicio" />
+		
+		<many-to-one name="articuloEstado" class="com.coreweb.domain.Tipo"
+			column="idArticuloEstado" lazy="false" />
+		<many-to-one name="articuloFamilia" class="com.coreweb.domain.Tipo"
+			column="idArticuloFamilia" lazy="false" />
+		<many-to-one name="articuloMarca" class="com.coreweb.domain.Tipo"
+			column="idArticuloMarca" lazy="false" />
+		<many-to-one name="articuloParte" class="com.coreweb.domain.Tipo"
+			column="idArticuloParte" lazy="false" />
+		<many-to-one name="articuloLinea" class="com.coreweb.domain.Tipo"
+			column="idArticuloLinea" lazy="false" />
+		<many-to-one name="articuloUnidadMedida" class="com.coreweb.domain.Tipo"
+			column="idArticuloUnidadMedida" lazy="false" />
+
+		<many-to-one name="articuloPresentacion" class="com.yhaguy.domain.ArticuloPresentacion"
+			column="idArticuloPresentacion" lazy="false" />
+
+		<set name="articuloInformacionExtras" table="ArticuloInformacionExtra"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idArticulo" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ArticuloInformacionExtra" />
+		</set>
+
+		<set name="proveedorArticulos" table="proveedorarticulo" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idArticulo" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ProveedorArticulo" />
+		</set>
+		
+		<set name="ubicaciones" table="articulo_ubicacion"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idArticulo" not-null="false" />
+			</key>
+			<many-to-many column="idUbicacion" class="com.yhaguy.domain.ArticuloUbicacion" />
+		</set>
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.NotaCreditoDetalle" table="notacreditodetalle">
+
+		&hibernate-domain; 
+
+		<property name="cantidad" />
+		<property name="montoGs" />
+		<property name="montoDs" />
+		<property name="costoGs" />
+		<property name="importeGs" />
+		<property name="importeDs" />
+		
+		<many-to-one name="tipoIva" class="com.coreweb.domain.Tipo"
+			column="idTipoIva" lazy="false"/>
+		
+		<many-to-one name="tipoDetalle" class="com.coreweb.domain.Tipo"
+			column="tipodetalle" lazy="false"/>
+			
+		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"			
+			column="idarticulo" not-null="false" lazy="false"/>
+			
+		<many-to-one name="venta" class="com.yhaguy.domain.Venta"			
+			column="idventa" not-null="false" lazy="false"/>
+			
+		<many-to-one name="gasto" class="com.yhaguy.domain.Gasto"			
+			column="idgasto" not-null="false" lazy="false"/>
+			
+		<many-to-one name="compra" class="com.yhaguy.domain.CompraLocalFactura"			
+			column="idcompra" not-null="false" lazy="false"/>	
+			
+		<many-to-one name="importacion" class="com.yhaguy.domain.ImportacionFactura"			
+			column="id_importacion" not-null="false" lazy="false"/>
+			
+		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito"			
+			column="iddeposito" not-null="false" lazy="false"/>	
+			
+	</class>
+</hibernate-mapping>

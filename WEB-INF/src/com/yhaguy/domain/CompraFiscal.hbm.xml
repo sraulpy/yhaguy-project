@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CompraFiscal" table="comprafiscal">
+
+		&hibernate-domain;
+
+		<property name="idCompra" />
+		<property name="idProveedor" />
+		<property name="idCondicion" />
+		<property name="idMoneda" />
+		<property name="idSucursal" />		
+		<property name="idTipoMovimiento" />	
+		<property name="numero" />	
+		<property name="razonSocial" />		
+		<property name="ruc"/>
+		<property name="condicion"/>
+		<property name="moneda" />	
+		<property name="sucursal" />
+		<property name="tipoMovimiento" />
+		<property name="timbrado" />
+		<property name="emision" />
+		<property name="vencimiento" />
+		<property name="tipoCambio" />
+		<property name="descuentoDs" />
+		<property name="descuentoGs" />
+		<property name="importeGs" />
+		<property name="importeDs" />	
+		<property name="tipoIva" />
+		<property name="gravada" />
+		<property name="iva" />
+		<property name="exenta" />
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Cliente" table="cliente">
+
+		&hibernate-domain;
+
+		<property name="idPersonaJedi" />
+		<property name="prioridad" />
+		<property name="completo" />
+
+		<property name="observaciones" column="observaciones" type="text" length="1000" />
+
+		<property name="ventaCredito">
+			<column name="ventaCredito" default="false" />
+		</property>
+
+		<property name="limiteCredito">
+			<column name="limiteCredito" default="0" />
+		</property>
+		
+		<many-to-one name="listaPrecio" class="com.yhaguy.domain.ArticuloListaPrecio"
+			column="id_listaprecio" lazy="false" />
+		
+		<many-to-one name="empresa" class="com.yhaguy.domain.Empresa"
+			column="idempresa" lazy="false" />
+
+		<many-to-one name="estadoCliente" class="com.coreweb.domain.Tipo"
+			column="idestado" lazy="false" />
+		<many-to-one name="categoriaCliente" class="com.coreweb.domain.Tipo"
+			column="idcategoria" lazy="false" />
+		<many-to-one name="tipoCliente" class="com.coreweb.domain.Tipo"
+			column="idtipocliente" lazy="false" />
+
+		<many-to-one name="cuentaContable" class="com.yhaguy.domain.CuentaContable"
+			column="idCuentaContable" lazy="false" />
+			
+		<many-to-one name="cobrador" class="com.yhaguy.domain.Funcionario"
+			column="idCobrador" lazy="false" />
+		
+		<set name="contactosInternos" table="contactoInterno" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idcliente" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ContactoInterno"></one-to-many>
+		</set>
+
+	</class>
+</hibernate-mapping>

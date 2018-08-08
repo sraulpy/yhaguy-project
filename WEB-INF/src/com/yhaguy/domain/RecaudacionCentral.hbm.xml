@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+        <class name="com.yhaguy.domain.RecaudacionCentral" table="recaudacioncentral">
+
+		&hibernate-domain; 
+
+                <property name="numeroRecibo"/>
+                <property name="importeGs"/>
+                <property name="saldoGs"/>
+                
+                <property name="numeroCheque"/>
+                <property name="numeroDeposito"/>
+                <property name="razonSocial"/>
+        </class>
+</hibernate-mapping>

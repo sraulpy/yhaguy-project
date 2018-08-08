@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CajaPeriodo" table="cajaperiodo">
+
+		&hibernate-domain; 
+
+		<property name="numero"/>
+		<property name="apertura"/>
+		<property name="cierre" />
+		<property name="tipo" />
+		
+		<many-to-one name="estado" class="com.coreweb.domain.Tipo"
+			column="idEstado" 
+			lazy="false"/>
+
+		<many-to-one name="caja" class="com.yhaguy.domain.Caja"
+			column="idCaja" 
+			lazy="false"/>
+
+		<many-to-one name="verificador" class="com.yhaguy.domain.Funcionario"
+			column="idVerificador" 
+			lazy="false"/>
+			
+		<many-to-one name="responsable" class="com.yhaguy.domain.Funcionario"
+			column="idResponsable" 
+			lazy="false"/>
+			
+		<many-to-one name="arqueo" class="com.yhaguy.domain.CajaPeriodoArqueo"
+			column="idArqueo"
+			lazy="false"/>
+
+		<set name="recibos" table="recibo"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idcaja" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Recibo"></one-to-many>
+		</set>
+		
+		<set name="ventas" table="venta"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idcaja" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Venta"/>
+		</set>
+		
+		<set name="notasCredito" table="notacredito"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idcaja" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.NotaCredito"/>
+		</set>
+
+		<set name="reposiciones" table="cajareposicion" inverse="false"
+			lazy="false" fetch="join">
+			<key>
+				<column name="idcaja" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.CajaReposicion"></one-to-many>
+		</set>
+		
+		<set name="gastos" table="gasto" inverse="false"
+		    lazy="false" fetch="join" cascade="all">
+		    <key>
+		        <column name="idcaja" not-null="false"/>
+		    </key>
+		    <one-to-many entity-name="com.yhaguy.domain.Gasto"/>		    
+		</set>
+				
+	</class>
+</hibernate-mapping>

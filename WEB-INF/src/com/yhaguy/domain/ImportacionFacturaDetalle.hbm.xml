@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.ImportacionFacturaDetalle" table="importacionfacturadetalle">
+
+		&hibernate-domain; 
+
+		<property name="costoGs" />
+		<property name="costoDs" />
+		<property name="costoSinProrrateoGs"/>
+		<property name="costoSinProrrateoDs"/>
+		<property name="textoDescuento" />
+		<property name="descuentoGs"/>
+		<property name="descuentoDs"  />
+		<property name="importeGastoDescuentoGs"/>
+		<property name="importeGastoDescuentoDs"/>
+		<property name="gastoDescuento"/>
+		<property name="valorProrrateo"/>
+		<property name="cantidad"/>
+		<property name="cantidadRecibida"/>
+
+		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo" column="idArticulo"
+			lazy="false"/>
+		
+		<many-to-one name="tipoGastoDescuento" class="com.coreweb.domain.Tipo" column="idTipoGastoDto"
+			lazy="false"/>
+
+	</class>
+</hibernate-mapping>

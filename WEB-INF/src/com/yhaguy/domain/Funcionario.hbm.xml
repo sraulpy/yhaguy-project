@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Funcionario" table="funcionario">
+
+		&hibernate-domain;
+
+
+		<property name="correoFuncionario" />
+		
+		<property name="vendedor">
+			<column name="vendedor" not-null="true" default="false" />
+		</property>
+		
+		<property name="administrador">
+			<column name="administrador" not-null="true" default="false" />
+		</property>
+
+		<property name="deposito">
+			<column name="deposito" not-null="true" default="false" />
+		</property>
+		
+		<property name="cobrador">
+			<column name="cobrador" not-null="true" default="false" />
+		</property>
+		
+		<property name="telecobrador">
+			<column name="telecobrador" not-null="true" default="false" />
+		</property>
+		
+		<property name="tecnico">
+			<column name="tecnico" not-null="true" default="false" />
+		</property>
+
+		<many-to-one name="funcionarioEstado" class="com.coreweb.domain.Tipo"
+			column="idestado" lazy="false" />
+			
+		<many-to-one name="funcionarioCargo" class="com.coreweb.domain.Tipo"
+			column="idcargo" lazy="false" />
+
+		<many-to-one name="empresa" class="com.yhaguy.domain.Empresa"
+			column="idempresa" lazy="false" cascade="all" />
+
+		<set name="accesos" table="accesoApp" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idfuncionario" not-null="false" />
+			</key>
+			<one-to-many class="com.yhaguy.domain.AccesoApp" />
+		</set>
+		
+		<set name="metas" table="ventameta" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idvendedor" not-null="false" />
+			</key>
+			<one-to-many class="com.yhaguy.domain.VentaMeta" />
+		</set>
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.InvArticulo" table="invArticulo">
+
+		&hibernate-domain; 
+
+		<property name="codigoInterno" />
+		<property name="codigoProveedor" />
+		<property name="codigoOriginal" />
+		<property name="descripcion" />
+		<property name="marca" />
+		
+		<property name="linea" />
+		<property name="familia" />
+		<property name="grupo" />
+		<property name="controlStock" />
+		<property name="estado" />
+				
+		<property name="stock" />
+		<property name="costo" />
+		<property name="inventario" />
+		<property name="ajuste" />
+
+		<set name="invUbicacion" table="invUbicacion_invArticulo" inverse="false"
+			lazy="false" fetch="join">
+			<key>
+				<column name="idInvArticulo" not-null="true" />
+			</key>
+			<many-to-many entity-name="com.yhaguy.domain.InvUbicacion"
+				column="idInvUbicacion" />
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.ImportacionResumenGastosDespacho" table="importacionResumenGastosDespacho">
+
+		&hibernate-domain; 
+
+		<property name="nroDespacho" />
+		<property name="nroLiquidacion"/>
+		<property name="fechaFacturaDespacho" />
+		<property name="tipoCambio" />
+		<property name="valorCIFds" />
+		<property name="valorCIFgs" />
+		<property name="valorFOBds" />
+		<property name="valorFOBgs" />
+		<property name="valorFleteDs"/>
+		<property name="valorFleteGs"/>
+		<property name="valorSeguroDs"/>
+		<property name="valorSeguroGs"/>
+		<property name="totalIVAds" />
+		<property name="totalIVAgs" />
+		<property name="totalGastosDs" />
+		<property name="totalGastosGs" />
+		<property name="cambioGastoDespacho"/>
+		<property name="coeficiente" />
+		<property name="coeficienteAsignado" />
+		
+		<many-to-one name="despachante" class="com.yhaguy.domain.Proveedor" column="idDespachante"
+			lazy="false"/>
+		
+	</class>
+</hibernate-mapping>

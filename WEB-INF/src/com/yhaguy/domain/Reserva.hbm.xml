@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Reserva" table="reserva">
+
+		&hibernate-domain; 	
+		
+		<property name="fecha"/>
+		<property name="descripcion"/>
+
+		<many-to-one name="tipoReserva" class="com.coreweb.domain.Tipo"
+			column="idTipoReserva" lazy="false"/>
+			
+		<many-to-one name="estadoReserva" class="com.coreweb.domain.Tipo"
+			column="idEstadoReserva" lazy="false"/>
+			
+		<many-to-one name="funcionarioEmisor" class="com.yhaguy.domain.Funcionario"
+			column="idfuncionarioEmisor" lazy="false"/>
+			
+		<many-to-one name="depositoSalida" class="com.yhaguy.domain.Deposito"
+			column="iddepositoSalida" lazy="false"/>
+			
+		<property name="anulado">
+			<column name="anulado" not-null="true" default="false" />
+		</property>
+		
+				
+		<set name="detalles" table="ReservaDetalle"
+			inverse="false" lazy="false" fetch="select" cascade="all">
+			<key>
+				<column name="idreserva" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ReservaDetalle"></one-to-many>
+		</set>
+
+	</class>
+</hibernate-mapping>

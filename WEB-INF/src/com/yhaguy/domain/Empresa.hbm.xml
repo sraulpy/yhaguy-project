@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Empresa" table="empresa">
+
+		&hibernate-domain; 
+
+		<property name="nombre" />
+		<property name="codigoEmpresa" />
+		<property name="razonSocial" />
+		<property name="ruc" index="inx_ruc"/>
+		<property name="ci" />
+		
+		<property name="direccion_" />
+		<property name="telefono_" />
+		<property name="correo_" />
+		<property name="zona" />
+
+		<property name="fechaIngreso" />
+		<property name="fechaAniversario" />
+		<property name="observacion" />
+		<property name="web" />
+		<property name="sigla" />
+		
+		<property name="latitud" />
+		<property name="longitud" />
+		<property name="userlocation" />
+		
+		<property name="cuentaBloqueada">
+			<column name="cuentaBloqueada" default="false" />
+		</property>
+		<property name="motivoBloqueo" />
+
+		<many-to-one name="vendedor" class="com.yhaguy.domain.Funcionario"
+			column="idvendedor" lazy="false" />
+			
+		<many-to-one name="cobrador" class="com.yhaguy.domain.Funcionario"
+			column="idcobrador" lazy="false" />
+
+		<many-to-one name="empresaGrupoSociedad" class="com.yhaguy.domain.EmpresaGrupoSociedad"
+			column="idEmpresaGrupoSociedad" lazy="false" />
+
+		<many-to-one name="tipoPersona" class="com.coreweb.domain.Tipo"
+			column="idTipoPersona" lazy="false" />
+
+		<many-to-one name="regimenTributario" class="com.coreweb.domain.Tipo"
+			column="idRegimenTributario" lazy="false" />
+
+		<many-to-one name="pais" class="com.coreweb.domain.Tipo"
+			column="idPais" lazy="false" />
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" lazy="false" />
+
+		<many-to-one name="ctaCteEmpresa" class="com.yhaguy.domain.CtaCteEmpresa"
+			column="idCtaCteEmpresa" lazy="false" cascade="none" />
+
+		<set name="sucursales" table="sucursal" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idempresa" not-null="false" />
+			</key>
+			<one-to-many class="com.yhaguy.domain.Sucursal" />
+		</set>
+
+		<set name="contactos" table="contacto" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idempresa" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Contacto"></one-to-many>
+		</set>
+
+		<set name="monedas" table="EmpresaMoneda" inverse="false" lazy="false"
+			fetch="join">
+			<key>
+				<column name="idempresa" not-null="false" />
+			</key>
+			<many-to-many column="idmoneda" class="com.coreweb.domain.Tipo" />
+		</set>
+
+		<set name="rubroEmpresas" table="EmpresaRubroEmpresas" inverse="false" lazy="false"
+			fetch="join">
+			<key>
+				<column name="idempresa" not-null="false" />
+			</key>
+			<many-to-many column="idrubroempresa" class="com.coreweb.domain.Tipo" />
+		</set>
+
+
+	</class>
+</hibernate-mapping>

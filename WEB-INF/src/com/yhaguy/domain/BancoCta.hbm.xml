@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.BancoCta" table="bancocta">
+
+		&hibernate-domain; 
+
+		<property name="nroCuenta"/>
+		<property name="fechaApertura"/>
+
+		<many-to-one name="banco" class="com.yhaguy.domain.Banco"
+			column="idBanco" lazy="false"/>
+		
+		<many-to-one name="tipo" class="com.coreweb.domain.Tipo" 
+			column="idTipo" lazy="false"/>
+			
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo" 
+			column="idMoneda" lazy="false"/>	
+			
+		<many-to-one name="cuentaContable" class="com.yhaguy.domain.CuentaContable" 
+			column="idCuentaContable" lazy="false"/>	
+		
+	</class>
+</hibernate-mapping>

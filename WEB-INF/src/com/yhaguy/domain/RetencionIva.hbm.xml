@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.RetencionIva" table="retencioniva">
+
+		&hibernate-domain; 
+
+		<property name="fecha" />
+		<property name="numero" />
+		<property name="montoIvaIncluido" />
+		<property name="montoIva" />
+		<property name="montoRetencion" />
+		<property name="porcentaje" />
+		<property name="observacion" />
+
+		<many-to-one name="empresa" class="com.yhaguy.domain.Empresa"
+			column="idEmpresa" lazy="false"/>
+
+		<many-to-one name="timbrado" class="com.yhaguy.domain.Timbrado"
+			column="idTimbrado" lazy="false" />
+			
+		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
+			column="idEstadoComprobante" lazy="false" />
+			
+		<set name="detalles" table="retencionivadetalle" inverse="false" lazy="false" fetch="join">
+   		   <key><column name="idRetencion" not-null="false"/></key>	
+   		   <one-to-many entity-name="com.yhaguy.domain.RetencionIvaDetalle"></one-to-many>   				   			
+   		</set>
+
+	</class>
+</hibernate-mapping>

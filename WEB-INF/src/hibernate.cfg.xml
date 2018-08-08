@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-configuration-3.0.dtd"
+        [ <!ENTITY hibernate-core SYSTEM "classpath://com/coreweb/hibernate-core.cfg.xml"> ]>
+<hibernate-configuration>
+<!-- 
+1902
+
+ -->
+	<session-factory>
+
+		<!-- Postgres -->
+		<property name="connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguydb</property>
+
+		<property name="connection.username">postgres</property>
+		<property name="connection.password">postgres</property>
+
+		<!-- Fin Postgres -->
+
+		<!-- ===== Hibernate Core ====================== -->
+		
+		&hibernate-core;
+
+		<!-- ===== Hibernate propio del dominio ======= -->
+
+
+		<mapping resource="com/yhaguy/domain/TestA.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/RucSet.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/TipoCambio.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Talonario.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Localidad.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Zona.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/EstadoCivil.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ContactoSexo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Sucursal.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Empresa.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/EmpresaGrupoSociedad.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Contacto.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Cliente.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ContactoInterno.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/CtaCteEmpresa.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CtaCteEmpresaMovimiento.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CtaCteImputacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CtaCteLineaCredito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CtaCteEmpresaMovimiento_2016.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CtaCteEmpresaMovimiento_2017.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Funcionario.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/FuncionarioCtaCteDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VendedorComision.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RuteoVendedor.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Articulo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloCosto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloMarcaAplicacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloModeloAplicacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloPresentacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloReferencia.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloPrecioReferencia.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloInformacionExtra.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloUbicacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloListaPrecio.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloListaPrecioDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloPrecioMinimo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloPrecioJedisoft.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/ProveedorArticulo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Proveedor.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CondicionPago.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/ImportacionPedidoCompraDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionPedidoCompra.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionFactura.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionFacturaDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionResumenGastosDespacho.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionGastoImprevisto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionAplicacionAnticipo.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Gasto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/GastoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/SubDiario.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/SubDiarioDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CuentaContable.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/PlanDeCuenta.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/PlanCuenta.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/ContableAsiento.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ContableAsientoDetalle.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/OrdenPedidoGasto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/OrdenPedidoGastoDetalle.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/AccesoApp.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/DepartamentoApp.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/SucursalApp.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Timbrado.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Retencion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RetencionIva.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RetencionIvaDetalle.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/CentroCosto.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Deposito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloDeposito.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Transferencia.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/TransferenciaDetalle.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Transporte.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Reserva.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ReservaDetalle.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Recibo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ReciboDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ReciboFormaPago.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Caja.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CajaPeriodo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CajaPeriodoArqueo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CajaReposicion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CajaPlanillaResumen.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Banco.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoCta.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoCheque.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoMovimiento.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoSucursal.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoExtracto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoExtractoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoChequeTercero.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoBoletaDeposito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoTarjeta.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoDescuentoCheque.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoDebito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoPrestamo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoTransferencia.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/CompraFiscal.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CompraLocalOrden.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CompraLocalOrdenDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CompraLocalFactura.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CompraLocalFacturaDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CompraLocalGasto.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/ArticuloStock.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/TipoMovimiento.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/InvPlanilla.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/InvPlanillaDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/InvPersona.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/InvArticulo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/InvUbicacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/InvLoteOK.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Vehiculo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Reparto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RepartoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ControlCombustible.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/Venta.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VentaDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VentaFiscal.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VentaMeta.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VentaPerdida.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VentaPromo1.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/ArticuloGasto.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/NotaCredito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/NotaCreditoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/NotaDebito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/NotaDebitoDetalle.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/CtaCteVisCliente.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CtaCteVisProveedor.hbm.xml" />
+
+		<mapping resource="com/yhaguy/domain/ProcesadoraTarjeta.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/VentaMigracion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoTarjetaExtracto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoTarjetaExtractoDetalle.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/AjusteStock.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/AjusteStockDetalle.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/Reporte.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ReporteFavoritos.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/FacturaVentaMRA.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/LlamadaCobranza.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/TareaProgramada.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/ArticuloHistorialMigracion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RecaudacionCentral.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/AcuseDocumento.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/AcuseDocumentoDetalle.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/ServicioTecnico.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ServicioTecnicoDetalle.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/OrdenCompra.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/OrdenCompraDetalle.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/HistoricoComisiones.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoMovimientos.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoRecalculoStock.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoBloqueoClientes.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoVentaVendedor.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoVentaDiaria.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoCobranzaVendedor.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoCobranzaDiaria.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoLineaCredito.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/Tarea_Programada.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ControlTalonario.hbm.xml" />
+
+		<!-- Maestro de articulos -->
+		<mapping resource="com/yhaguy/util/migracion/maestro/Maestro.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/UsuarioPropiedades.hbm.xml" />
+
+
+		<!-- ********************************************* -->
+		<!-- ********************************************* -->
+		<!-- ********************************************* -->
+
+	</session-factory>
+
+</hibernate-configuration>

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Proveedor" table="proveedor">
+
+		&hibernate-domain;
+
+		<property name="prioridad" />
+		<property name="completo" />
+
+		<property name="emailsLista" />
+
+
+		<many-to-one name="empresa" class="com.yhaguy.domain.Empresa"
+			column="idempresa" lazy="false" cascade="all" />
+
+		<many-to-one name="estadoProveedor" class="com.coreweb.domain.Tipo"
+			column="idestado" lazy="false" />
+
+		<many-to-one name="tipoProveedor" class="com.coreweb.domain.Tipo"
+			column="idtipoproveedor" lazy="false" />
+
+		<!-- <many-to-one name="tipoPago" class="com.yhaguy.domain.ProveedorTipoPago" 
+			column="idTipoPago" lazy="false" /> <many-to-one name="estadoProveedor" class="com.yhaguy.domain.ProveedorEstado" 
+			column="idestado" lazy="false" /> <many-to-one name="tipoProveedor" class="com.yhaguy.domain.ProveedorTipo" 
+			column="idtipoproveedor" lazy="false" /> -->
+
+		<many-to-one name="cuentaContable" class="com.yhaguy.domain.CuentaContable"
+			column="idCuentaContable" lazy="false" />
+			
+		<set name="condicionPagos" table="Proveedor_proveedorcondicionpago"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idproveedor" not-null="false" />
+			</key>
+			<many-to-many column="idProveedorCondicionPago" class="com.yhaguy.domain.CondicionPago" />
+		</set>
+
+		<set name="timbrados" table="timbrado" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idproveedor" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Timbrado"></one-to-many>
+		</set>
+
+	</class>
+</hibernate-mapping>

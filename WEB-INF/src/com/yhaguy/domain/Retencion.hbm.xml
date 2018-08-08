@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Retencion" table="retencion">
+
+		&hibernate-domain;
+
+		<property name="estado"/>
+		<property name="numero"/>
+		<property name="ruc"/>
+		<property name="razonSocial"/>
+		<property name="fecha"/>
+		<property name="numeroFactura"/>
+		<property name="numeroOrdenPago"/>
+		<property name="importeGs"/>
+		<property name="periodo"/>
+		<property name="tipoRetencion"/>
+				
+	</class>
+</hibernate-mapping>

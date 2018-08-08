@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Recibo" table="recibo">
+
+		&hibernate-domain; 
+
+		<property name="numero"/>
+		<property name="nro"/>
+		<property name="idUsuarioCarga"/>
+		<property name="nombreUsuarioCarga"/>
+		<property name="fechaEmision"/>
+		<property name="totalImporteGs"/>
+		<property name="totalImporteDs"/>
+		<property name="tipoCambio"/>
+		<property name="movimientoBancoActualizado"/>
+		<property name="motivoAnulacion"/>
+		<property name="tesaka"/>
+		<property name="cobrador"/>
+		<property name="numeroPlanilla"/>
+		<property name="numeroRecibo"/>
+		<property name="fechaRecibo"/>
+		
+		<property name="cobroExterno">
+			<column name="cobroExterno" default="false" />
+		</property>
+		
+		<property name="entregado">
+			<column name="entregado" default="false" />
+		</property>
+		
+		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
+			column="idEstadoComprobante" lazy="false"/>
+
+		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento"
+			column="idTipoMovimiento" lazy="false"/>
+
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
+			column="idProveedor" lazy="false"/>
+			
+		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
+			column="idCliente" lazy="false"/>
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idSucursal" lazy="false"/>
+			
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" lazy="false"/>
+			
+		<many-to-one name="retencion" class="com.yhaguy.domain.RetencionIva"
+			column="idRetencion" lazy="false"/>
+			
+		<set name="detalles" table="recibodetalle"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idRecibo" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ReciboDetalle"></one-to-many>
+		</set>
+		
+		<set name="formasPago" table="reciboformapago"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idRecibo" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ReciboFormaPago"/>
+		</set>
+					
+	</class>
+</hibernate-mapping>

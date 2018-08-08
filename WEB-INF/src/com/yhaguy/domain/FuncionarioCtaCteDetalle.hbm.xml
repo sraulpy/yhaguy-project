@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.FuncionarioCtaCteDetalle" table="funcionarioctactedetalle">
+
+		&hibernate-domain;
+
+		<property name="fecha" />
+		<property name="nroComprobante" />
+		<property name="descripcion" />
+		<property name="observacion" />
+		<property name="montoGs" />
+		
+		<property name="anulado">
+			<column name="anulado" not-null="true" default="false" />
+		</property>
+		
+		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
+			column="idfuncionario" not-null="true" lazy="false" />
+
+	</class>
+</hibernate-mapping>

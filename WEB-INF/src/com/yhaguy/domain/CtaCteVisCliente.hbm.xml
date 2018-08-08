@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CtaCteVisCliente" table="view_cuenta_cliente"  mutable="false">
+	
+	
+	
+		&hibernate-domain;
+
+		<id name="row" />
+
+		<property name="idEmpresa" column="id_empresa" />
+		<property name="razonSocial" column="razon_social" />
+		<property name="fechaAperturaCuentaCliente" column="fecha_apertura_cuenta_cliente" />
+		<property name="pendiente" column="pendiente" />
+
+		<many-to-one name="estadoComoCliente" class="com.coreweb.domain.Tipo"
+			column="id_estado_como_cliente" lazy="false" />
+
+		<many-to-one name="tipoMoneda" class="com.coreweb.domain.Tipo"
+			column="id_tipo_moneda" lazy="false" />
+
+		<many-to-one name="lineaCredito" class="com.yhaguy.domain.CtaCteLineaCredito"
+			column="id_linea_credito" lazy="false" />
+			
+	</class>
+</hibernate-mapping>

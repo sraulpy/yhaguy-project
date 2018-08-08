@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.ServicioTecnicoDetalle" table="serviciotecnicodetalle">
+
+		&hibernate-domain;
+
+		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
+			column="idarticulo" lazy="false" />			
+		<property name="estado" />
+		<property name="verifica_carga" />
+		<property name="verifica_descarga" />
+		<property name="verifica_borne" />
+		<property name="verifica_celda" />
+		<property name="verifica_conexion" />
+		<property name="verifica_fallaFabrica" />
+		<property name="verifica_reposicion" />
+		<property name="observacion" />	
+		<property name="diagnostico" />	
+		<property name="numeroFactura" />	
+	</class>
+</hibernate-mapping>

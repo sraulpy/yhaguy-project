@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.BancoCheque" table="bancocheque">
+
+		&hibernate-domain;
+
+		<property name="numero" />
+		<property name="fechaEmision" />
+		<property name="fechaVencimiento" />
+		<property name="beneficiario" />
+		<property name="concepto" />
+		<property name="monto" />
+		<property name="numeroCaja" />
+		<property name="numeroOrdenPago" />
+		<property name="fechaCobro" />
+		
+		<property name="anulado">
+			<column name="anulado" not-null="true" default="false" />
+		</property>
+		
+		<property name="cobrado">
+			<column name="cobrado" not-null="true" default="false" />
+		</property>
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" lazy="false" />
+
+		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
+			column="idEstadoComprobante" lazy="false" />
+			
+		<many-to-one name="modoDeCreacion" class="com.coreweb.domain.Tipo"
+			column="idModoDeCreacion" lazy="false" />
+
+		<many-to-one name="movimiento" class="com.yhaguy.domain.BancoMovimiento"
+			column="idMovimiento" lazy="false" />
+			
+		<many-to-one name="banco" class="com.yhaguy.domain.BancoCta"
+			column="idbanco" lazy="false" />
+
+		<many-to-one name="reciboFormaPago" class="com.yhaguy.domain.ReciboFormaPago"
+			column="idReciboFormaPago" lazy="false"/>
+
+	</class>
+</hibernate-mapping>

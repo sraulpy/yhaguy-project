@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.ServicioTecnico" table="serviciotecnico">
+
+		&hibernate-domain;		
+
+		<property name="fecha" />
+		<property name="fechaFin" />
+		<property name="numero" />
+		<property name="receptor" />
+		<property name="tecnico" />
+		<property name="numeroReclamo" />
+		<property name="numeroReparto" />
+		<property name="choferReparto" />
+		<property name="entregado">
+			<column name="entregado" not-null="true" default="false" />
+		</property>
+
+		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
+			column="idcliente" lazy="false" />
+
+		<set name="facturas" table="venta" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idserviciotecnico" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Venta"/>
+		</set>
+
+		<set name="detalles" table="serviciotecnicodetalle" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idserviciotecnico" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ServicioTecnicoDetalle"></one-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

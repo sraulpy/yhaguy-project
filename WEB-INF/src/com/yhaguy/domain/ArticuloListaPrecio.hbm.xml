@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.ArticuloListaPrecio" table="articulolistaprecio">
+
+		&hibernate-domain;
+
+		<property name="descripcion" />
+		<property name="formula" />
+		<property name="margen" />
+		<property name="activo" />
+		<property name="desde" />
+		<property name="hasta" />
+		
+		<set name="detalles" table="articulolistapreciodetalle"
+			inverse="false" lazy="false" fetch="join"
+			cascade="all">
+			<key>
+				<column name="idlistaprecio" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ArticuloListaPrecioDetalle"/>
+		</set>
+
+	</class>
+</hibernate-mapping>

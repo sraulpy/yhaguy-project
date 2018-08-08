@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.BancoTarjetaExtracto" table="bancotarjetaextracto">
+
+		&hibernate-domain;
+
+		<property name="nroEstracto" />
+		<property name="periodoDesde" />
+		<property name="periodoHasta" />
+		<property name="totalTarjeta" />
+		<property name="totalAcreditado" />
+
+		<many-to-one name="sucursalApp" class="com.yhaguy.domain.SucursalApp"
+			column="idSucursalApp" lazy="false" />
+
+		<many-to-one name="procesadora" class="com.yhaguy.domain.ProcesadoraTarjeta"
+			column="idProcesadoraTarjeta" lazy="false" />
+
+
+		<many-to-one name="bancoCta" class="com.yhaguy.domain.BancoCta"
+			column="idBancoCta" lazy="false" />
+
+		<set name="detalles" table="bancotarjetaextractodetalle"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idBancoTarjetaEstracto" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.BancoTarjetaExtractoDetalle"></one-to-many>
+		</set>
+
+	</class>
+</hibernate-mapping>

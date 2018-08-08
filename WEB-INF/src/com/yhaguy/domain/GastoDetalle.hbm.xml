@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.GastoDetalle" table="gastodetalle">
+
+		&hibernate-domain; 
+
+		<property name="observacion"/>
+		<property name="cantidad" />
+		<property name="montoGs" />
+		<property name="montoDs" />
+		<property name="montoIva" />
+
+		<many-to-one name="articuloGasto" class="com.yhaguy.domain.ArticuloGasto" 
+			column="idArticuloGasto" lazy="false"/>
+
+		<many-to-one name="centroCosto" class="com.yhaguy.domain.CentroCosto"
+			column="idCentroCosto" lazy="false"/>
+		
+		<many-to-one name="tipoIva" class="com.coreweb.domain.Tipo"
+			column="idTipoIva" lazy="false"/>
+		
+	</class>
+</hibernate-mapping>

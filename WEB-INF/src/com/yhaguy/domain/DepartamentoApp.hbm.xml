@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.DepartamentoApp" table="departamentoApp">
+
+		&hibernate-domain; 
+
+
+		<property name="nombre"/>
+		<property name="descripcion"/>
+
+
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idsucursal"
+			lazy="false"/>
+			
+		<set name="centroCostos" table="centrocosto" inverse="false" lazy="false" fetch="select" cascade="all">
+   		   <key><column name="idDepartamento" not-null="false"/></key>	
+   		   <one-to-many entity-name="com.yhaguy.domain.CentroCosto"></one-to-many>   				   			
+   		</set>
+   		
+   		<set name="cuentas" table="departamentoapp_cuentas"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idDepartamento" not-null="false" />
+			</key>
+			<many-to-many column="idCuentaContable" class="com.yhaguy.domain.CuentaContable" />
+		</set>    		
+
+	</class>
+</hibernate-mapping>

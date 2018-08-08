@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CompraLocalOrden" table="compralocalorden">
+
+		&hibernate-domain; 
+
+		<property name="numero"/>
+		<property name="fechaCreacion" />
+		<property name="tipoCambio" />
+		<property name="observacion" />
+		<property name="autorizado" />
+		<property name="cerrado" />
+		<property name="subDiarioConfirmado" />
+		<property name="recepcionado"/>
+		<property name="autorizadoPor" />
+		<property name="numeroFactura"/>
+
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"
+			lazy="false"/>
+
+		<many-to-one name="condicionPago" class="com.yhaguy.domain.CondicionPago"
+			column="idCondicionPago" lazy="false"/>
+			
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo" column="idMoneda"
+			lazy="false"/>
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp" column="idSucursal"
+			lazy="false"/>
+			
+		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito" column="idDeposito"
+			lazy="false"/>
+			
+		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento" column="idTipoMovimiento"
+			lazy="false"/>
+			
+		<many-to-one name="factura" class="com.yhaguy.domain.CompraLocalFactura" column="idfactura"
+			lazy="false"/>
+		
+		<set name="detalles" table="compralocalordendetalle" inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idOrdenCompra" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.CompraLocalOrdenDetalle"></one-to-many>
+		</set>	
+		
+		<set name="facturas" table="compralocalfactura" inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idOrdenCompra" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.CompraLocalFactura"></one-to-many>
+		</set>		
+		
+		<set name="resumenGastos" table="compralocalgasto" inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idOrdenCompra" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.CompraLocalGasto"></one-to-many>
+		</set>	
+		
+		<many-to-one name="subDiario" class="com.yhaguy.domain.SubDiario" 
+			lazy="false" cascade="all"/>
+		
+		<set name="gastos" table="gasto" inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idOrdenCompraLocal" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Gasto"></one-to-many>
+		</set>
+		
+	</class>
+</hibernate-mapping>

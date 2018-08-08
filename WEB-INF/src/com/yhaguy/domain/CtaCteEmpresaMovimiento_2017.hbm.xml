@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CtaCteEmpresaMovimiento_2017" table="CtaCteEmpresaMovimiento_2017">
+
+		&hibernate-domain;
+
+		<property name="idEmpresa" index="CtaCteEmpresaMovimiento2017_Index" />
+		<property name="fechaEmision" />
+		<property name="nroComprobante" />
+		<property name="idMovimientoOriginal" />
+		<property name="fechaVencimiento" />
+		<property name="importeOriginal" />
+		<property name="saldo" />
+		
+		<property name="idVendedor">
+			<column name="idVendedor" default="0" />
+		</property>
+		
+		<property name="cerrado" />
+		
+		<property name="anulado">
+			<column name="anulado" not-null="true" default="false" />
+		</property>
+		
+		<property name="tesaka">
+			<column name="tesaka" not-null="true" default="false" />
+		</property>
+
+		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento"
+			column="idTipoMovimiento" lazy="false" />
+
+		<many-to-one name="tipoCaracterMovimiento" class="com.coreweb.domain.Tipo"
+			column="idTipoCaracterMovimiento" lazy="false" />
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idTipoMoneda" lazy="false" />
+
+		<set name="imputaciones" table="ctacteempresamovimiento_ctacteimputaciones"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idCtaCteMovimiento" not-null="true" />
+			</key>
+			<many-to-many entity-name="com.yhaguy.domain.CtaCteImputacion"
+				column="idCtaCteImputacion" />
+		</set>
+
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idSucursal" lazy="false" />
+
+	</class>
+</hibernate-mapping>

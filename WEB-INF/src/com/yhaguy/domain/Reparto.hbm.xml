@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Reparto" table="reparto">
+
+		&hibernate-domain; 
+
+		
+		<property name="numero"/>
+		<property name="fechaCreacion"/>
+		<property name="fechaRecepcion"/>
+		<property name="observaciones"/>
+		<property name="costo"/>
+
+			
+		<many-to-one name="estadoReparto" class="com.coreweb.domain.Tipo"
+			column="idestadoReparto"
+			lazy="false"/>
+		
+		<many-to-one name="tipoReparto" class="com.coreweb.domain.Tipo"
+			column="idtipoReparto"
+			lazy="false"/>
+			
+		<many-to-one name="vehiculo" class="com.yhaguy.domain.Vehiculo"
+			column="idvehiculo"
+			lazy="false"/>
+			
+		<many-to-one name="repartidor" class="com.yhaguy.domain.Funcionario"
+			column="idrepartidor"
+			lazy="false"/>
+			
+		<many-to-one name="creador" class="com.yhaguy.domain.Funcionario"
+			column="idcreador"
+			lazy="false"/>
+			
+		<many-to-one name="receptor" class="com.yhaguy.domain.Funcionario"
+			column="idreceptor"
+			lazy="false"/>
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idsucursal"
+			lazy="false"/>
+			
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
+			column="idproveedor"
+			lazy="false"/>
+		
+		<set name="detalles" table="RepartoDetalle"
+			inverse="false" lazy="false" fetch="select" cascade="all">
+			<key>
+				<column name="idreparto" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.RepartoDetalle"></one-to-many>
+		</set>
+		
+		<set name="serviciosTecnicos" table="serviciotecnico"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idreparto" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ServicioTecnico"/>
+		</set>
+
+	</class>
+</hibernate-mapping>

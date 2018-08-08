@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.BancoChequeTercero" table="bancochequetercero">
+
+		&hibernate-domain;
+
+		<property name="emision" />
+		<property name="fecha" />
+		<property name="numero" />
+		<property name="librado" />
+		<property name="monto" />
+		<property name="depositado" />
+		<property name="observacion" />
+		<property name="descontado" />	
+		<property name="numeroPlanilla" />				
+		<property name="numeroVenta" />		
+		<property name="numeroRecibo" />		
+		<property name="numeroDeposito" />		
+		<property name="numeroDescuento" />
+		<property name="numeroReembolso" />
+		<property name="vendedor" />
+		<property name="fechaDeposito" />
+		<property name="fechaDescuento" />
+		<property name="fechaRechazo" />
+		
+		<property name="anulado">
+			<column name="anulado" not-null="true" default="false" />
+		</property>
+		
+		<property name="rechazado">
+			<column name="rechazado" not-null="true" default="false" />
+		</property>
+		
+		<property name="rechazoInterno">
+			<column name="rechazoInterno" not-null="true" default="false" />
+		</property>
+		
+		<property name="diferido">
+			<column name="diferido" not-null="true" default="false" />
+		</property>
+		
+		<property name="reembolsado">
+			<column name="reembolsado" not-null="true" default="false" />
+		</property>
+		
+		<property name="cancelado">
+			<column name="cancelado" not-null="true" default="false" />
+		</property>
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" lazy="false" />
+
+		<many-to-one name="banco" class="com.coreweb.domain.Tipo"
+			column="idBanco" lazy="false" />
+
+		<many-to-one name="sucursalApp" class="com.yhaguy.domain.SucursalApp"
+			column="idSucursalApp" lazy="false" />
+
+		<many-to-one name="reciboFormaPago" class="com.yhaguy.domain.ReciboFormaPago"
+			column="idReciboFormaPago" lazy="false" />
+			
+		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
+			column="idcliente" lazy="false" />
+			
+		<set name="recaudacionesCentral" table="recaudacioncentral"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idCheque" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.RecaudacionCentral"></one-to-many>
+		</set>
+
+	</class>
+</hibernate-mapping>
+	

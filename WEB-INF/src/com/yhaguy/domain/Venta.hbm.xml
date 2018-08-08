@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Venta" table="venta">
+
+		&hibernate-domain;		
+
+		<property name="fecha" />
+		<property name="vencimiento" />
+		<property name="cuotas" />
+		<property name="numero" />
+		<property name="timbrado" />
+		<property name="denominacion" />
+		<property name="observacion" />	
+		<property name="preparadoPor" />		
+		<property name="numeroPresupuesto" />	
+		<property name="numeroPedido" />	
+		<property name="numeroFactura" />
+		<property name="numeroNotaCredito" />
+		<property name="numeroReciboCobro">
+			<column name="numeroReciboCobro" default="" />
+		</property>
+		<property name="numeroPlanillaCaja" />
+		<property name="idEnlaceSiguiente" />
+		<property name="totalImporteGs"/>
+		<property name="totalImporteDs"/>
+		<property name="tipoCambio" />	
+		
+		<property name="validez">
+			<column name="validez" default="0" />
+		</property>
+		
+		<property name="reparto">
+			<column name="reparto" default="false" />
+		</property>
+		
+		<property name="planillaCajaCerrada">
+			<column name="planillaCajaCerrada" default="false" />
+		</property>
+		
+		<property name="cobrado">
+			<column name="cobrado" default="false" />
+		</property>
+		
+		<property name="puntoPartida"/>
+		<property name="fechaTraslado"/>
+		<property name="fechaFinTraslado"/>
+		<property name="repartidor"/>
+		<property name="cedulaRepartidor"/>
+		<property name="marcaVehiculo"/>
+		<property name="chapaVehiculo"/>
+		
+		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
+			column="idEstadoComprobante" lazy="false" />
+		
+		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento"
+			column="idTipoMovimiento" lazy="false" />
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idSucursal" lazy="false"/>
+
+		<many-to-one name="estado" class="com.coreweb.domain.Tipo"
+			column="idEstado" lazy="false" />		
+
+		<many-to-one name="atendido" class="com.yhaguy.domain.Funcionario"
+			column="idAtendido" lazy="false" />
+		
+		<many-to-one name="vendedor" class="com.yhaguy.domain.Funcionario"
+			column="idVendedor" lazy="false" />
+
+		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
+			column="idcliente" lazy="false" />
+
+		<many-to-one name="condicionPago" class="com.yhaguy.domain.CondicionPago"
+			column="idCondicionPago" lazy="false" />
+
+		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito"
+			column="iddeposito" lazy="false" />
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" lazy="false" />
+			
+		<many-to-one name="modoVenta" class="com.coreweb.domain.Tipo"
+			column="idModoVenta" lazy="false" />		
+
+		<many-to-one name="reserva" class="com.yhaguy.domain.Reserva"
+			column="idreserva" lazy="false" />
+
+		<set name="formasPago" table="reciboformapago" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="venta" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ReciboFormaPago"/>
+		</set>
+
+		<set name="detalles" table="VentaDetalle" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="venta" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.VentaDetalle"></one-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

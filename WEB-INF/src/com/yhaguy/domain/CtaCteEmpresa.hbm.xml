@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CtaCteEmpresa" table="CtaCteEmpresa">
+
+		&hibernate-domain;
+		
+		<property name="fechaAperturaCuentaCliente" />
+		
+		<property name="fechaAperturaCuentaProveedor" />
+			
+		<many-to-one name="lineaCredito" class="com.yhaguy.domain.CtaCteLineaCredito"
+			column="idlineacredito" lazy="false" />
+
+		<many-to-one name="estadoComoCliente" class="com.coreweb.domain.Tipo"
+			column="idestadoComoCliente" lazy="false" />
+
+		<many-to-one name="estadoComoProveedor" class="com.coreweb.domain.Tipo"
+			column="idestadoComoProveedor" lazy="false" />
+		
+		<many-to-one name="condicionPagoCliente" class="com.yhaguy.domain.CondicionPago"
+			column="idCondicionPagoCliente" lazy="false" />
+
+
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CajaPlanillaResumen" table="caja_planilla_resumen">
+
+		&hibernate-domain; 
+
+		<property name="fecha"/>
+		<property name="numero"/>
+		<property name="numeroPlanillas"/>	
+		<property name="sobranteFaltante"/>
+		<property name="efectivoNoDepositado"/>
+		<property name="chequeNoDepositado"/>
+		
+		<property name="obs_efectivo_no_depositado"/>
+		<property name="obs_cheque_no_depositado"/>
+			
+		<set name="depositos_valores_bat" table="bancoboletadeposito"
+			inverse="false" lazy="false" fetch="join"
+			cascade="all">
+			<key>
+				<column name="id_resumen_valores_bat" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.BancoBoletaDeposito"/>
+		</set>		
+			
+		<set name="depositos_diferidos" table="bancoboletadeposito"
+			inverse="false" lazy="false" fetch="join"
+			cascade="all">
+			<key>
+				<column name="id_resumen" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.BancoBoletaDeposito"/>
+		</set>
+		
+		<set name="depositos_generados" table="bancoboletadeposito"
+			inverse="false" lazy="false" fetch="join"
+			cascade="all">
+			<key>
+				<column name="id_resumen_" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.BancoBoletaDeposito"/>
+		</set>
+		
+		<set name="planillas" table="cajaperiodo"
+			inverse="false" lazy="false" fetch="join"
+			cascade="all">
+			<key>
+				<column name="id_resumen" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.CajaPeriodo"/>
+		</set>
+				
+	</class>
+</hibernate-mapping>

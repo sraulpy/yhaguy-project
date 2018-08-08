@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.BancoTransferencia" table="banco_transferencia">
+
+		&hibernate-domain; 
+
+		<property name="fecha"/>
+		<property name="numero"/>
+		<property name="importe"/>
+			
+		<many-to-one name="origen" class="com.yhaguy.domain.BancoCta" 
+			column="id_origen" lazy="false"/>
+			
+		<many-to-one name="destino" class="com.yhaguy.domain.BancoCta" 
+			column="id_destino" lazy="false"/>
+			
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo" 
+			column="id_moneda" lazy="false"/>
+
+	</class>
+</hibernate-mapping>

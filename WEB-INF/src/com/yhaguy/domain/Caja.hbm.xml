@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Caja" table="caja">
+
+		&hibernate-domain; 
+
+
+		<property name="numero"/>
+		<property name="descripcion"/>
+		<property name="fecha" />
+		<property name="fondo" />
+		
+		<property name="cobro" />
+		<property name="reposicion" />
+		<property name="facturacion" />
+		<property name="pago" />
+		<property name="gasto" />
+		<property name="egreso" />
+		<property name="notaCredito" />
+
+		<many-to-one name="clasificacion" class="com.coreweb.domain.Tipo" column="idClasificacion"
+			lazy="false"/>
+			
+		<many-to-one name="tipo" class="com.coreweb.domain.Tipo" column="idTipo"
+			lazy="false" />
+
+		<many-to-one name="estado" class="com.coreweb.domain.Tipo" column="idEstado"
+			lazy="false"/>
+			
+		<many-to-one name="responsable" class="com.yhaguy.domain.Funcionario" 
+			column="idResponsable" lazy="false"/>
+			
+		<many-to-one name="creador" class="com.yhaguy.domain.Funcionario"
+			column="idCreador" lazy="false" />
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp" 
+			column="idSucursal" lazy="false" />
+			
+		<many-to-one name="duracion" class="com.coreweb.domain.Tipo" column="idDuracion"
+			lazy="false"/>
+			
+		<many-to-one name="talonarioVentas" class="com.yhaguy.domain.Talonario" column="idTalonarioVentas"
+			lazy="false"/>
+			
+		<many-to-one name="talonarioNotasCredito" class="com.yhaguy.domain.Talonario" column="idTalonarioNotasCredito"
+			lazy="false"/>
+			
+		<many-to-one name="talonarioAutoFacturas" class="com.yhaguy.domain.Talonario" column="idTalonarioAutoFacturas"
+			lazy="false"/>
+			
+		<many-to-one name="talonarioRecibos" class="com.yhaguy.domain.Talonario" column="idTalonarioRecibos"
+			lazy="false"/>
+			
+		<many-to-one name="talonarioRetenciones" class="com.yhaguy.domain.Talonario" column="idTalonarioRetenciones"
+			lazy="false"/>
+
+		<set name="supervisores" table="funcionario" inverse="false"
+			lazy="false" fetch="join">
+			<key>
+				<column name="idCajaPago" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Funcionario"></one-to-many>
+		</set>	
+	</class>
+</hibernate-mapping>

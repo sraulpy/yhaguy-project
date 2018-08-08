@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.RucSet" table="rucset">
+
+		&hibernate-domain;
+
+		<property name="ruc" index="IDX_RUC" />
+		<property name="razonSocial" />
+		<property name="rucOld" index="IDX_RUC_OLD" />
+
+	</class>
+</hibernate-mapping>

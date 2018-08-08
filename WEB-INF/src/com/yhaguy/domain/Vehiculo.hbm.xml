@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Vehiculo" table="vehiculo">
+
+		&hibernate-domain;
+
+
+		<property name="codigo" />
+		<property name="descripcion" />
+		<property name="marca" />
+		<property name="modelo" />
+		<property name="color" />
+		<property name="chapa" />
+		<property name="consumo" />
+		<property name="peso" />
+		<property name="volumen" />
+		<property name="observaciones" />
+
+
+
+		<many-to-one name="conductor" class="com.yhaguy.domain.Funcionario"
+			column="idconductor" lazy="false" />
+
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idSucursal" lazy="false" />
+
+	</class>
+</hibernate-mapping>

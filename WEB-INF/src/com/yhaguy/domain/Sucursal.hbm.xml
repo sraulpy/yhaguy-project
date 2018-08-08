@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Sucursal" table="sucursal">
+
+		&hibernate-domain;
+
+		<property name="nombre" type="string" column="nombre" />
+		<property name="direccion" type="string" column="direccion" />
+		<property name="telefono" type="string" column="telefono" />
+		<property name="correo" type="string" column="correo" />
+
+		<many-to-one name="localidad" class="com.yhaguy.domain.Localidad"
+			column="idlocalidad" lazy="false" />
+
+		<many-to-one name="zona" class="com.yhaguy.domain.Zona"
+			column="idzona" lazy="false" />
+
+	</class>
+</hibernate-mapping>

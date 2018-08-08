@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.ReciboFormaPago" table="reciboformapago">
+
+		&hibernate-domain;
+
+		<property name="montoGs" />
+		<property name="montoDs" />
+		<property name="montoChequeGs" >
+			<column name="montoChequeGs" default="0"></column>
+		</property>
+		<property name="descripcion" />
+		<property name="tarjetaNumero" />
+		<property name="tarjetaNumeroComprobante" />
+		<property name="chequeFecha" />
+		<property name="chequeNumero" />
+		<property name="chequeLibrador" />
+		<property name="chequeBancoDescripcion" />
+		<property name="tarjetaCuotas" />
+		<property name="depositoNroReferencia" />
+		<property name="retencionNumero" />
+		<property name="retencionTimbrado" />
+		<property name="retencionVencimiento" />
+		<property name="nroComprobanteAsociado" />
+		<property name="reciboDebitoNro" />
+
+		<many-to-one name="tipo" class="com.coreweb.domain.Tipo"
+			column="idTipo" lazy="false" />
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" lazy="false" />
+
+		<many-to-one name="tarjetaTipo" class="com.coreweb.domain.Tipo"
+			column="idTarjetaTipo" lazy="false" />
+
+		<many-to-one name="tarjetaProcesadora" class="com.yhaguy.domain.ProcesadoraTarjeta"
+			column="idTarjetaProcesadora" lazy="false" />
+
+		<many-to-one name="chequeBanco" class="com.coreweb.domain.Tipo"
+			column="idChequeTerceroBanco" lazy="false" />
+
+		<many-to-one name="depositoBancoCta" class="com.yhaguy.domain.BancoCta"
+			column="idDepositoBancoCta" lazy="false" />
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.OrdenPedidoGasto" table="ordenPedidoGasto">
+
+		&hibernate-domain; 
+
+		<property name="numero"/>		
+		<property name="idUsuarioCarga"/>
+		<property name="nombreUsuarioCarga" />
+		<property name="fechaCarga" />
+		<property name="descripcion" />
+		<property name="estado"/>
+		<property name="autorizado"/>
+		<property name="presupuesto"/>
+		<property name="idUsuarioAutoriza"/>
+		<property name="nombreUsuarioAutoriza"/>
+		<property name="fechaAutorizacion"/>
+		<property name="numeroFactura"/>
+		<property name="numeroImportacion"/>
+		
+		<property name="confirmado">
+			<column name="confirmado" default="false" />
+		</property>
+		
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"
+			lazy="false"/>
+
+		<many-to-one name="departamento" class="com.yhaguy.domain.DepartamentoApp" column="idDepartamento"
+			lazy="false"/>
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp" column="idSucursal"
+			lazy="false"/>
+			
+		<many-to-one name="condicionPago" class="com.yhaguy.domain.CondicionPago"
+			column="idCondicionPago" 
+			lazy="false"/>
+
+		<set name="ordenPedidoGastoDetalle" table="ordenPedidoGastoDetalle"
+			inverse="false"
+			lazy="false"
+			fetch="select"
+			cascade="all">
+			<key>
+				<column name="idOrdenPedidoGasto" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.OrdenPedidoGastoDetalle"></one-to-many>
+		</set>
+		
+		<many-to-one name="subDiario" class="com.yhaguy.domain.SubDiario" 
+			lazy="false" cascade="all"/>
+		
+		<set name="gastos" table="gasto" inverse="false" lazy="false" fetch="select">
+			<key>
+				<column name="idOrdenCompra" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Gasto"></one-to-many>
+		</set>
+			
+	</class>
+</hibernate-mapping>

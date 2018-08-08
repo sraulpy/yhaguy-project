@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.OrdenCompra" table="orden_compra">
+
+		&hibernate-domain;		
+
+		<property name="fecha" />
+		<property name="numero" />
+		<property name="observacion" />
+		<property name="autorizadoPor" />
+		<property name="solicitadoPor" />
+		<property name="retiradoPor" />
+
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
+			column="idproveedor" lazy="false" />
+
+		<set name="detalles" table="orden_compra_detalle" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idordencompra" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.OrdenCompraDetalle"></one-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

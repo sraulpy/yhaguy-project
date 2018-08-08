@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Transferencia" table="transferencia">
+
+		&hibernate-domain; 
+
+
+		<property name="numero" />
+		<property name="fechaCreacion" />
+		<property name="fechaEnvio" />
+		<property name="fechaRecepcion" />
+
+		<many-to-one name="transferenciaEstado" class="com.coreweb.domain.Tipo"
+			column="idestado" lazy="false" />
+
+		<many-to-one name="transferenciaTipo" class="com.coreweb.domain.Tipo"
+			column="idtipo" lazy="false" />
+
+		<many-to-one name="funcionarioCreador" class="com.yhaguy.domain.Funcionario"
+			column="idfuncionarioCreador" lazy="false" />
+
+		<many-to-one name="funcionarioEnvio" class="com.yhaguy.domain.Funcionario"
+			column="idfuncionarioEnvio" lazy="false" />
+			
+		<many-to-one name="funcionarioReceptor" class="com.yhaguy.domain.Funcionario"
+			column="idfuncionarioReceptor" lazy="false" />
+
+		<many-to-one name="depositoSalida" class="com.yhaguy.domain.Deposito"
+			column="iddepositoSalida" lazy="false" />
+
+		<many-to-one name="depositoEntrada" class="com.yhaguy.domain.Deposito"
+			column="iddepositoEntrada" lazy="false" />
+
+		<many-to-one name="transporte" class="com.yhaguy.domain.Transporte"
+			column="idtransporte" lazy="false" />
+
+		<set name="detalles" table="TransferenciaDetalle" inverse="false"
+			lazy="false" fetch="select" cascade="all">
+			<key>
+				<column name="idtransferencia" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.TransferenciaDetalle"></one-to-many>
+		</set>
+
+		<many-to-one name="reserva" class="com.yhaguy.domain.Reserva"
+			column="idreserva" unique="true" lazy="false" />
+			
+		<property name="observacion" />
+			
+		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
+			column="idsucursal" lazy="false" />
+			
+		<many-to-one name="sucursalDestino" class="com.yhaguy.domain.SucursalApp"
+			column="idsucursalDestino" lazy="false" />
+
+	</class>
+</hibernate-mapping>

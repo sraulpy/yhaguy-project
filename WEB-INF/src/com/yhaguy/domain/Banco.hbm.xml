@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.Banco" table="banco">
+
+		&hibernate-domain;
+
+		<property name="descripcion" />
+		<property name="direccion" />
+		<property name="telefono" />
+		<property name="correo" />
+		<property name="contacto" />
+
+		<many-to-one name="bancoTipo" class="com.coreweb.domain.Tipo"
+			column="idBancoTipo" lazy="false" />
+
+		<set name="sucursales" table="bancosucursal" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idBanco" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.BancoSucursal" />
+		</set>
+
+	</class>
+</hibernate-mapping>
