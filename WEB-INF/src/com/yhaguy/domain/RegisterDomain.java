@@ -4381,13 +4381,13 @@ public class RegisterDomain extends Register {
 	 * [0]:concepto
 	 * [1]:fecha 
 	 * [2]:numero 
-	 * [3]:totalImporteGs ]
+	 * [3]:totalImporteGs
 	 */
 	public List<Object[]> getRecibosPorCliente(long idCliente, Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select r.tipoMovimiento.descripcion, r.fechaEmision, r.numero, r.totalImporteGs, r.cliente.empresa.razonSocial"
-				+ " from Recibo r where r.dbEstado != 'D'"
+				+ " from Recibo r where r.dbEstado != 'D' and r.cobroExterno = 'FALSE'"
 				+ " and (r.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_RECIBO_COBRO
 				+ "') and r.estadoComprobante.sigla != '"
@@ -8171,6 +8171,20 @@ public class RegisterDomain extends Register {
 				+ " and l.activo = true"
 				+ " and (l.fecha > '" + desde + "' and l.fecha < '" + hasta + "') order by l.fecha asc";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return los articulos..
+	 * [0]:id
+	 * [1]:codigoInterno
+	 * [2]:descripcion
+	 */
+	public List<Object[]> getArticulos(String codigoInterno, String descripcion) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion from Articulo a where "
+				+ "upper(a.codigoInterno) like '%" + codigoInterno.toUpperCase() + "%' and "
+				+ "upper(a.descripcion) like '%" + descripcion.toUpperCase() + "%' "
+				+ "and a.codigoInterno not like '@%'";
+		return this.hqlLimit(query, 300);
 	}
 	
 	public static void main(String[] args) {
