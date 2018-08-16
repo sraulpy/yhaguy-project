@@ -4442,6 +4442,7 @@ public class RegisterDomain extends Register {
 		String query = "select r.tipoMovimiento.descripcion, r.fechaEmision, r.numero, " 
 				+ (gs ? "r.totalImporteGs" : "r.totalImporteDs") + ", r.proveedor.empresa.razonSocial"
 				+ " from Recibo r where r.dbEstado != 'D'"
+				+ " and r.moneda.sigla != '" + Configuracion.SIGLA_MONEDA_GUARANI + "'"
 				+ " and (r.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_RECIBO_PAGO
 				+ "') and r.estadoComprobante.sigla != '"
