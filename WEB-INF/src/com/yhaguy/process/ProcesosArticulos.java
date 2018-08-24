@@ -225,7 +225,7 @@ public class ProcesosArticulos {
 	 * respeta el total de entrada - salida, respeta el stock de cada deposito
 	 * y la diferencia lo transfiere al deposito de control..
 	 */
-	public static void recalcularStock_(long idDeposito, long idSucursal) throws Exception {		
+	public static void recalcularStock_(long idDeposito, long idSucursal, long idArticulo) throws Exception {		
 		
 		String desde="01-01-2016 00:00:00";
 		DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
@@ -234,7 +234,15 @@ public class ProcesosArticulos {
 		long idDepositoControl = 13;
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Articulo> arts = rr.getArticulos();
+		List<Articulo> arts = new ArrayList<Articulo>();
+		
+		if (idArticulo <= 0) {
+			arts = rr.getArticulos();
+		} else {
+			Articulo art = rr.getArticuloById(idArticulo);
+			arts.add(art);
+		}
+		
 		for (Articulo art : arts) {
 			ArticuloDeposito adp = rr.getArticuloDeposito(art.getId(), idDepositoControl);
 			if (adp == null) {
@@ -249,7 +257,14 @@ public class ProcesosArticulos {
 			}
 		}
 		
-		List<ArticuloDeposito> adps = rr.getArticulosPorDeposito(idDepositoControl);
+		List<ArticuloDeposito> adps = new ArrayList<ArticuloDeposito>();
+		
+		if (idArticulo <= 0) {
+			adps = rr.getArticulosPorDeposito(idDepositoControl);
+		} else {
+			ArticuloDeposito adp = rr.getArticuloDeposito(idArticulo, idDepositoControl);
+			adps.add(adp);
+		}
 		
 		for (ArticuloDeposito adp : adps) {
 			
@@ -261,16 +276,19 @@ public class ProcesosArticulos {
 				long salida = 0;
 				long stock = adp.getStock();
 				
-				long idArticulo = adp.getArticulo().getId();
+				long idarticulo = adp.getArticulo().getId();
+				//long iddeposito = adp.getDeposito().getId();
 				
-				List<Object[]> ventas = rr.getVentasPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
-				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+				List<Object[]> ventas = rr.getVentasPorArticulo(idarticulo, desde_, hasta_);
+				List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idarticulo, desde_, hasta_);
+				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idarticulo, desde_, hasta_);
+				List<Object[]> compras = rr.getComprasLocalesPorArticulo(idarticulo, desde_, hasta_);
+				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idarticulo, desde_, hasta_);
+				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idarticulo, desde_, hasta_);
+				//List<Object[]> transfs = rr.getTransferenciasPorArticulo(idarticulo, iddeposito, desde_, hasta_, true);
+				//List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idarticulo, iddeposito, desde_, hasta_, false);
+				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idarticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idarticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				List<Object[]> migracion = rr.getMigracionPorArticulo(adp.getArticulo().getCodigoInterno(), desde_, hasta_, idSucursal);
 				
 				historicoEntrada = new ArrayList<Object[]>();
@@ -316,12 +334,25 @@ public class ProcesosArticulos {
 		
 		for (long i = 2; i <= 12; i++) {
 			if (i != idDepositoControl ) {
-				List<ArticuloDeposito> adps_ = rr.getArticulosPorDeposito(i);
+				List<ArticuloDeposito> adps_ = new ArrayList<ArticuloDeposito>();
+				if (idArticulo <= 0) {
+					adps_ = rr.getArticulosPorDeposito(i);
+				} else {
+					ArticuloDeposito adp = rr.getArticuloDeposito(idArticulo, i);
+					if (adp != null) {
+						adps_.add(adp);
+					}
+				}
 				for (ArticuloDeposito adp_ : adps_) {
 					ArticuloDeposito adp = rr.getArticuloDeposito(adp_.getArticulo().getId(), idDepositoControl);
 					if (adp != null && !adp.getArticulo().getCodigoInterno().startsWith("@")) {
-						adp.setStock(adp.getStock() - adp_.getStock());
-						rr.saveObject(adp, "sys");
+						if (adp_.getStock() < 0) {
+							adp_.setStock(0);
+							rr.saveObject(adp_, "sys");
+						} else {
+							adp.setStock(adp.getStock() - adp_.getStock());
+							rr.saveObject(adp, "sys");
+						}
 						System.out.println(adp.getArticulo().getCodigoInterno() + " deposito recalculado..");
 					}
 				}

@@ -59,5 +59,15 @@
 			<field value="Incluir Prestamos Internos:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirPRE)"></checkbox>
 		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)"
+				hflex="true">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>
+			</combobox>
+		</row>
 	</rows>
 </grid>

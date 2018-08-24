@@ -85,6 +85,7 @@
 					forEach="${vm.menuItem(self,'TransferenciaExterna')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'AjusteStock')}" />
+				<zk forEach="${vm.menuItem(self,'AuditoriaStock')}" />
 				<zk forEach="${vm.menuItem(self,'Inventario')}" />
 				<zk forEach="${vm.menuItem(self,'RecalculoStock')}" />
 				<zk forEach="${vm.menuItem(self,'StockDefiniciones')}" />
@@ -161,6 +162,12 @@
 		.z-menu-content, .z-menuitem-content {color:black;margin-left:5px}
 		.z-menuitem-text {margin-left:5px}
 		.z-menu, .z-menuitem { margin: 5px}
+		.z-textbox:focus, .z-doublebox:focus, .z-spinner-input:focus, .z-combobox-input:focus {
+    		background: #faffbd none;
+		}
+		.z-doublebox, .z-textbox, .z-combobox-input, z-intbox { background: #EEF7FA }
+		.z-textbox[readonly], .z-decimalbox[readonly], .z-intbox[readonly], .z-longbox[readonly], .z-doublebox[readonly] { background: #EEF7FA }
+		.z-combobox-input[readonly], .z-bandbox-input[readonly], .z-datebox-input[readonly] { background: #EEF7FA }
 	</style>
 
 </zk>

@@ -45,8 +45,14 @@
 		</row>
 		<row>
 			<field value="Depósito:" />
-			<textbox hflex="true" placeholder="TODOS.." value="@load(vm.dato.filtro.deposito)"
-				readonly="true"></textbox>
+			<combobox hflex="true" placeholder="TODOS.."
+				model="@load(vm.dato.filtro.getDepositos(vm.dato.acceso.sucursalOperativa.id))"
+				instant="true"
+				selectedItem="@bind(vm.dato.filtro.deposito)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
 		</row>
 	</rows>
 </grid>

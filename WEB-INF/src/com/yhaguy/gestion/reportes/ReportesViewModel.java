@@ -8465,84 +8465,82 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte CON-00011
 		 */
-		@SuppressWarnings("unchecked")
 		private void stockMercaderiaAunaFecha() throws Exception {
 			try {
 				Date desde = filtro.getFechaInicioOperaciones();
 				Date hasta = filtro.getFechaHasta();
-				Articulo articulo = filtro.getArticulo();
 				String tipoCosto = filtro.getTipoCosto();
 				
 				if (hasta == null) hasta = new Date();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Articulo> arts = new ArrayList<Articulo>();
+				List<Object[]> arts = new ArrayList<Object[]>();
 				
-				if (articulo != null) {
-					arts.add(articulo);
-				} else {
-					arts = rr.getArticulos();
-				}
+				arts = rr.getArticulos("", "", false);
 
-				for (Articulo art : arts) {
-					if (!art.getCodigoInterno().startsWith("@")) {
-						List<Object[]> historicoEntrada = new ArrayList<Object[]>();
-						List<Object[]> historicoSalida = new ArrayList<Object[]>();
-						long stockEntrada = 0;
-						long stockSalida = 0;
-						
-						List<Object[]> ventas = rr.getVentasPorArticulo(art.getId(), desde, hasta);
-						List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(art.getId(), desde, hasta);
-						List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(art.getId(), desde, hasta);
-						List<Object[]> compras = rr.getComprasLocalesPorArticulo(art.getId(), desde, hasta);
-						List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(art.getId(), desde, hasta);
-						List<Object[]> transfs = rr.getTransferenciasPorArticulo(art.getId(), desde, hasta);
-						List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(art.getId(), desde, hasta, 2, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
-						List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(art.getId(), desde, hasta, 2, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
-						List<Object[]> migracion = rr.getMigracionPorArticulo(art.getCodigoInterno(), desde, hasta, 2);
-						
-						historicoEntrada = new ArrayList<Object[]>();
-						historicoEntrada.addAll(migracion);
-						historicoEntrada.addAll(ajustStockPost);		
-						historicoEntrada.addAll(ntcsv);
-						historicoEntrada.addAll(compras);
-						historicoEntrada.addAll(importaciones);
-						
-						historicoSalida = new ArrayList<Object[]>();
-						historicoSalida.addAll(ajustStockNeg);
-						historicoSalida.addAll(ventas);
-						historicoSalida.addAll(ntcsc);
-						
-						for (Object[] transf : transfs) {
-							long idsuc = (long) transf[6];
-							if(idsuc == 2) {
-								historicoSalida.add(transf);
-							} else {				
-								historicoEntrada.add(transf);
-							}
+				for (Object[] art : arts) {
+
+					List<Object[]> historicoEntrada = new ArrayList<Object[]>();
+					List<Object[]> historicoSalida = new ArrayList<Object[]>();
+					long stockEntrada = 0;
+					long stockSalida = 0;
+					long idArticulo = (long) art[0];
+					String codigoInterno = (String) art[1];
+					String descripcion = (String) art[2];
+					
+					List<Object[]> ventas = rr.getVentasPorArticulo(idArticulo, desde, hasta);
+					List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, desde, hasta);
+					List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta);
+					List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta);
+					List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, desde, hasta);
+					List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, desde, hasta);
+					List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, 2, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+					List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, 2, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+					List<Object[]> migracion = rr.getMigracionPorArticulo(codigoInterno, desde, hasta, 2);
+					
+					historicoEntrada = new ArrayList<Object[]>();
+					historicoEntrada.addAll(migracion);
+					historicoEntrada.addAll(ajustStockPost);		
+					historicoEntrada.addAll(ntcsv);
+					historicoEntrada.addAll(compras);
+					historicoEntrada.addAll(importaciones);
+					
+					historicoSalida = new ArrayList<Object[]>();
+					historicoSalida.addAll(ajustStockNeg);
+					historicoSalida.addAll(ventas);
+					historicoSalida.addAll(ntcsc);
+					
+					for (Object[] transf : transfs) {
+						long idsuc = (long) transf[6];
+						if(idsuc == 2) {
+							historicoSalida.add(transf);
+						} else {				
+							historicoEntrada.add(transf);
 						}
-						
-						for(Object[] obj : historicoEntrada){
-							stockEntrada += Long.parseLong(String.valueOf(obj[3]));
-						}
-						
-						for(Object[] obj : historicoSalida){
-							long cantidad = Long.parseLong(String.valueOf(obj[3]));
-							if(cantidad < 0)
-								cantidad = cantidad * -1;
-							stockSalida += cantidad;
-						}
-						
-						long stock = stockEntrada - stockSalida;
-						double costo  = tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO) ? 
-								ControlArticuloCosto.getCostoPromedio(art.getId(), hasta) : ControlArticuloCosto.getCostoUltimo(art.getId(), hasta);
-						
-						data.add(new Object[] { art.getCodigoInterno(), art.getDescripcion(), stock, costo, (stock * costo) });
 					}
+					
+					for(Object[] obj : historicoEntrada){
+						stockEntrada += Long.parseLong(String.valueOf(obj[3]));
+					}
+					
+					for(Object[] obj : historicoSalida){
+						long cantidad = Long.parseLong(String.valueOf(obj[3]));
+						if(cantidad < 0)
+							cantidad = cantidad * -1;
+							stockSalida += cantidad;
+					}
+					
+					long stock = stockEntrada - stockSalida;
+					double costo  = tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO) ? 
+							ControlArticuloCosto.getCostoPromedio(idArticulo, hasta) : ControlArticuloCosto.getCostoUltimo(idArticulo, hasta);
+					
+					if (stock != 0 && costo > 0) {
+						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
+					}				
 				}
 				
-				String desc = articulo == null ? "TODOS.." : articulo.getCodigoInterno();
+				String desc = "TODOS..";
 				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto);
 				rep.setApaisada();
 				rep.setDatosReporte(data);

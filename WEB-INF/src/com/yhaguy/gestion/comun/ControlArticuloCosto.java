@@ -57,11 +57,12 @@ public class ControlArticuloCosto {
 	 */
 	public static double getCostoPromedio(long idArticulo, Date fecha) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<ArticuloCosto> costos = rr.getArticuloCostos(idArticulo, fecha);		
+		List<Object[]> costos = rr.getArticuloCostos_(idArticulo, fecha);		
 		double suma = 0; 
 		double cant = 0;		
-		for (ArticuloCosto costo : costos) {
-			suma += costo.getCostoFinalGs();
+		for (Object[] costo : costos) {
+			double costoFinalGs = (double) costo[1];
+			suma += costoFinalGs;
 			cant ++;
 		}
 		return suma == 0 ? 0 : Utiles.getRedondeo(suma / cant);
@@ -72,8 +73,8 @@ public class ControlArticuloCosto {
 	 */
 	public static double getCostoUltimo(long idArticulo, Date fecha) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<ArticuloCosto> costos = rr.getArticuloCostos(idArticulo, fecha);
-		double costo = costos.size() > 0? costos.get(costos.size() - 1).getCostoFinalGs() : 0.0;
+		List<Object[]> costos = rr.getArticuloCostos_(idArticulo, fecha);
+		double costo = costos.size() > 0? (double) costos.get(costos.size() - 1)[1] : 0.0;
 		return Utiles.getRedondeo(costo);
 	}
 	

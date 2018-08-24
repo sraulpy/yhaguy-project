@@ -6954,8 +6954,21 @@ public class RegisterDomain extends Register {
 	public List<ArticuloCosto> getArticuloCostos(long idArticulo, Date fecha) throws Exception {
 		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select a from ArticuloCosto a where a.articulo.id = " + idArticulo
-				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra";
+				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
 		List<ArticuloCosto> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return la lista de costos de la tabla ArticuloCosto..
+	 * [0]:id
+	 * [1]:costo final gs..
+	 */
+	public List<Object[]> getArticuloCostos_(long idArticulo, Date fecha) throws Exception {
+		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a.id, a.costoFinalGs from ArticuloCosto a where a.articulo.id = " + idArticulo
+				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
+		List<Object[]> list = this.hql(query);
 		return list;
 	}
 	
@@ -8188,20 +8201,37 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 300);
 	}
 	
+	/**
+	 * @return los articulos..
+	 * [0]:id
+	 * [1]:codigoInterno
+	 * [2]:descripcion
+	 */
+	public List<Object[]> getArticulos(String codigoInterno, String descripcion, boolean limit) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion from Articulo a where "
+				+ "upper(a.codigoInterno) like '%" + codigoInterno.toUpperCase() + "%' and "
+				+ "upper(a.descripcion) like '%" + descripcion.toUpperCase() + "%' "
+				+ "and a.codigoInterno not like '@%'";
+		return limit ? this.hqlLimit(query, 300) : this.hql(query);
+	}
+	
 	public static void main(String[] args) {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		try {			
-			List<Venta> vtas = rr.getObjects(Venta.class.getName());
-			for (Venta venta : vtas) {
-				if (venta.getTipoMovimiento().getId().longValue() == 18
-						|| venta.getTipoMovimiento().getId().longValue() == 19) {
-					venta.setOrden(venta.getVendedor().getRazonSocial().toUpperCase());
-					rr.saveObject(venta, venta.getUsuarioMod());
-					System.out.println(venta.getVendedor().getRazonSocial());
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<ArticuloHistorialMigracion> migs = rr.getMigracion();
+			for (ArticuloHistorialMigracion mig : migs) {
+				if (mig.getCosto() > 0) {
+					ArticuloCosto costo = new ArticuloCosto();
+					costo.setArticulo(rr.getArticulo(mig.getCodigoInterno()));
+					costo.setCostoFinalGs(mig.getCosto());
+					costo.setFechaCompra(mig.getFechaAlta());
+					costo.setIdMovimiento(mig.getId());
+					costo.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_INVENTARIO_MERCADERIAS));
+					rr.saveObject(costo, "sys");
+					System.out.println(mig.getCodigoInterno());
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		}		
 	}
 }

@@ -16,6 +16,7 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.comun.ReservaDetalleDTO;
@@ -81,6 +82,12 @@ public class TransferenciaSimpleVM extends SoloViewModel {
 	 */
 	@Command
 	public void validarCantidad(@BindingParam("comp") Component comp) {
+		if (dato.getDto().getDepositoEntrada().getId().longValue() == Deposito.ID_DEPOSITO_CONTROL) {
+			return;
+		}	
+		if (dato.getDto().getDepositoSalida().getId().longValue() == Deposito.ID_DEPOSITO_CONTROL) {
+			return;
+		}
 		TransferenciaDetalleDTO item = this.dato.getNvoDetalle();
 		int cantidad = item.getCantidad();
 		long disponible = item.getStockDisponible();
@@ -95,8 +102,7 @@ public class TransferenciaSimpleVM extends SoloViewModel {
 					Clients.NOTIFICATION_TYPE_ERROR, comp, null, 1500);
 			this.dato.getNvoDetalle().setCantidad(0);
 		}
-		BindUtils.postNotifyChange(null, null, this.dato.getNvoDetalle(),
-				"cantidad");
+		BindUtils.postNotifyChange(null, null, this.dato.getNvoDetalle(), "cantidad");
 	}
 	
 	/**

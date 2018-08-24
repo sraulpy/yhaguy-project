@@ -3,11 +3,17 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.recalculo.RecalculoStockViewModel')"
 	id="win">
 	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-primary" 
+				iconSclass="z-icon-refresh" label=" Recalcular Stock" 
+				onClick='pop_recalc.open(self, "after_start")' 
+				id="btnRecalc"/>
+		<separator orient="vertical" bar="true"></separator>
+		<label>HISTORIAL DE RECALCULOS</label>
+	</hlayout>
+	
 	<vbox pack="center" align="center"
-		vflex="true" hflex="true" style="margin:50px 200px 50px 200px">	
-		<div hflex="true" style="border-bottom: solid 1px">
-			<label>HISTORIAL DE RECALCULOS</label>
-		</div>
+		vflex="true" width="100%">	
 		<listbox sclass="small-list" hflex="true" vflex="true"
 			model="@load(vm.recalculos)"
 			id="listRecalc"
@@ -24,25 +30,58 @@
 					<listcell label="@load(each.usuario.toUpperCase())" />
 				</listitem>
 			</template>
+			<listfoot>
+				<listfooter span="3">
+					<field value="ítems" />
+				</listfooter>
+			</listfoot>
 		</listbox>
-		<hlayout>
-			<space hflex="true"/>
-			<button mold="bs" sclass="btn-primary" 
-				iconSclass="z-icon-refresh" label=" Recalcular Stock" 
-				onClick='pop_recalc.open(self, "before_end")' 
-				id="btnRecalc"/>
-		</hlayout>
 	</vbox>
 	
-	<popup id="pop_recalc" sclass="rounded">
+	<popup id="pop_recalc" sclass="rounded" style="padding:20px">
+		<hlayout width="300px">
+			<bandbox hflex="true" placeholder="TODOS.." readonly="true" id="bndArt"
+				value="@load(vm.selectedArticulo[1])"
+				onOpen='tx_cod.focus()'>
+				<bandpopup>
+					<listbox sclass="small-list" width="500px" height="300px"
+						emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+						model="@load(vm.articulos)"
+						selectedItem="@bind(vm.selectedArticulo)"
+						onSelect='bndArt.close()'>
+						<listhead>
+							<listheader width="150px">
+								<textbox placeholder="Código.." sclass="filter" hflex="true"
+									value="@bind(vm.filterCodigo)" instant="true"
+									id="tx_cod"></textbox>
+							</listheader>
+							<listheader>
+								<textbox placeholder="Descripción.." sclass="filter" hflex="true"
+									value="@bind(vm.filterDescripcion)" instant="true"></textbox>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each[1])"></listcell>
+								<listcell label="@load(each[2])"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</hlayout>
+		<space></space>
 		<hlayout width="300px">
 			<textbox rows="2" hflex="true"
 				placeholder="INGRESE UNA OBSERVACIÓN.."
 				value="@bind(vm.observacion)">
 			</textbox>
+		</hlayout>
+		<space></space>
+		<hlayout width="300px">
 			<button mold="bs" sclass="btn-success"
 				iconSclass="z-icon-check"
-				onClick="@command('test', comp=pop_recalc)" vflex="true" />
+				onClick="@command('test', comp=pop_recalc)" hflex="true" />
 		</hlayout>
 	</popup>
 	

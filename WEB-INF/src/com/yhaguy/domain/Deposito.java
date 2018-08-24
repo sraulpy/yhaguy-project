@@ -6,6 +6,7 @@ import com.coreweb.domain.Domain;
 public class Deposito extends Domain {
 
 	public static final long ID_DEPOSITO_PRINCIPAL = 2;
+	public static final long ID_DEPOSITO_CONTROL = 13;
 	
 	private String observacion;
 	private String descripcion;	

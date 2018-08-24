@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.stock.recalculo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.event.Event;
@@ -29,6 +31,11 @@ import com.yhaguy.process.ProcesosArticulos;
 public class RecalculoStockViewModel extends SimpleViewModel {
 	
 	private String observacion = "";
+	
+	private String filterCodigo = "";
+	private String filterDescripcion = "";
+	
+	private Object[] selectedArticulo;
 	
 	@Wire
 	private Listbox listRecalc;
@@ -59,9 +66,10 @@ public class RecalculoStockViewModel extends SimpleViewModel {
 		hist.setUsuario(this.getLoginNombre());
 		rr.saveObject(hist, this.getLoginNombre());
 		this.observacion = "";
+		long idArticulo = this.selectedArticulo != null? (long) this.selectedArticulo[0] : 0;
 		
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-			ProcesosArticulos.recalcularStock_(2, 2);
+			ProcesosArticulos.recalcularStock_(2, 2, idArticulo);
 		} else {
 			ProcesosArticulos.recalcularStock(2, 2);
 		}		
@@ -105,6 +113,15 @@ public class RecalculoStockViewModel extends SimpleViewModel {
 	 * GETS / SETS
 	 */
 	
+	@DependsOn({ "filterCodigo", "filterDescripcion" })
+	public List<Object[]> getArticulos() throws Exception {
+		if (this.filterCodigo.trim().isEmpty() && this.filterDescripcion.trim().isEmpty()) {
+			return new ArrayList<Object[]>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getArticulos(this.filterCodigo, this.filterDescripcion);
+	}
+	
 	public List<HistoricoRecalculoStock> getRecalculos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getHistoricoRecalculos();
@@ -116,5 +133,29 @@ public class RecalculoStockViewModel extends SimpleViewModel {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public String getFilterCodigo() {
+		return filterCodigo;
+	}
+
+	public void setFilterCodigo(String filterCodigo) {
+		this.filterCodigo = filterCodigo;
+	}
+
+	public String getFilterDescripcion() {
+		return filterDescripcion;
+	}
+
+	public void setFilterDescripcion(String filterDescripcion) {
+		this.filterDescripcion = filterDescripcion;
+	}
+
+	public Object[] getSelectedArticulo() {
+		return selectedArticulo;
+	}
+
+	public void setSelectedArticulo(Object[] selectedArticulo) {
+		this.selectedArticulo = selectedArticulo;
 	}
 }

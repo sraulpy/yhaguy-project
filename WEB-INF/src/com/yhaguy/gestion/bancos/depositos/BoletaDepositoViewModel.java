@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
 
+import com.coreweb.Config;
 import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.ViewPdf;
@@ -48,12 +49,11 @@ import com.yhaguy.util.reporte.ReporteYhaguy;
 
 public class BoletaDepositoViewModel extends BodyApp {
 	
-	private final static String[] ATT_CHEQUE = { "fecha", "banco", "numero",
-			"librado", "moneda.descripcion", "monto", "depositado",
-			"sucursalApp.nombre" };
-	
-	private final static String[] COLUMNAS = { "Fecha", "Banco", "Numero",
-			"Librado Por", "Moneda", "Monto", "Depositado", "Sucursal" };
+	private final static String[] ATT_CHEQUE = { "fecha", "banco.descripcion", "numero", "librado", "moneda.sigla", "monto" };
+	private final static String[] COLUMNAS = { "Fecha", "Banco", "Numero", "Librado Por", "Moneda", "Importe" };
+	private final static String[] WIDTHS = { "120px", "100px", "100px", "Librado Por", "100px", "100px" };
+	private final static String[] TIPOS = { Config.TIPO_STRING, Config.TIPO_STRING, Config.TIPO_STRING,
+			Config.TIPO_STRING, Config.TIPO_STRING, Config.TIPO_NUMERICO };
 	
 	static final String ZUL_INSERT_ITEM = "/yhaguy/gestion/bancos/insertarPlanillas.zul";
 	static final String ZUL_INSERT_RCC = "/yhaguy/gestion/bancos/insertarRecaudacionCentral.zul";
@@ -170,7 +170,9 @@ public class BoletaDepositoViewModel extends BodyApp {
 		b.setClase(BancoChequeTercero.class);
 		b.setAtributos(ATT_CHEQUE);
 		b.setNombresColumnas(COLUMNAS);
+		b.setTipos(TIPOS);
 		b.setTitulo("Cheques de Terceros");
+		b.setAnchoColumnas(WIDTHS);
 		//b.addWhere(whereCheque1);
 		b.addWhere(whereCheque2);
 		b.addWhere(whereCheque3);

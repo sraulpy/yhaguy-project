@@ -15,7 +15,7 @@
 		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguydb</property>
 
 		<property name="connection.username">postgres</property>
-		<property name="connection.password">ybsa0985</property>
+		<property name="connection.password">yrsa0985</property>
 
 		<!-- Fin Postgres -->
 
