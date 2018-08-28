@@ -8215,6 +8215,17 @@ public class RegisterDomain extends Register {
 		return limit ? this.hqlLimit(query, 300) : this.hql(query);
 	}
 	
+	/**
+	 * @return la venta segun el nro..
+	 * [0]: id
+	 * [1]: fecha
+	 */
+	public Object[] getVenta_(String numero) throws Exception {
+		String query = "select v.id, v.fecha from Venta v where v.numero = '" + numero + "'";
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

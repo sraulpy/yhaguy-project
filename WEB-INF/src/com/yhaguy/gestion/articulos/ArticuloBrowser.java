@@ -7,7 +7,7 @@ import com.coreweb.extras.browser.Browser;
 import com.coreweb.extras.browser.ColumnaBrowser;
 import com.yhaguy.domain.Articulo;
 
-public class ArticuloBrowser extends Browser{
+public class ArticuloBrowser extends Browser {
 
 	@Override
 	public List<ColumnaBrowser> getColumnasBrowser() {

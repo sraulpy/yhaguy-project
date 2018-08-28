@@ -253,27 +253,15 @@ public class ServicioTecnicoViewModel extends SimpleViewModel {
 
 		public ServicioTecnicoDataSource(ServicioTecnico orden) {
 			this.observacion = orden.getObservaciones();
-			for (Venta fac : orden.getFacturas()) {
-				this.dets.add(new MyArray("FACTURAS", Utiles.getDateToString(
-						fac.getFecha(), Utiles.DD_MM_YYYY)
-						+ " - "
-						+ fac.getTipoMovimiento().getDescripcion()
-						+ " - "
-						+ fac.getNumero()));
-			}
 			for (ServicioTecnicoDetalle item : orden.getDetalles()) {
 				this.dets.add(new MyArray("BATERÍAS", 
-						"(" + item.getNumeroFactura() + ") " +
-						item.getArticulo().getCodigoInterno() + " - " +
-						item.getArticulo().getDescripcion() + item.getObservacion_()));
-			}
-			for (ServicioTecnicoDetalle item : orden.getDetalles()) {
-				this.dets.add(new MyArray("ESTADO A SIMPLE VISTA", 
-						item.getArticulo().getCodigoInterno() + " - ESTADO: " +
-						item.getEstado() + " - CARGA: " + item.getVerifica_carga() 
-						+ " - BORNE: " + item.getVerifica_borne()
-						+ " - CELDA: " + item.getVerifica_celda()
-						+ " - CONEXION: " + item.getVerifica_conexion()));
+						item.getArticulo().getCodigoInterno() 
+						+ " - ("
+						+ item.getNumeroFactura().replace("001-001-", "")	
+						+ " - "
+						+ Utiles.getDateToString(item.getFechaFactura(), "dd/MM/yy")
+						+ ") - "
+						+ item.getObservacion_()));
 			}
 		}
 
@@ -315,10 +303,10 @@ public class ServicioTecnicoViewModel extends SimpleViewModel {
 		public InformeTecnicoDataSource(ServicioTecnico orden) {
 			for (ServicioTecnicoDetalle item : orden.getDetalles()) {
 				if (item.getDiagnostico() != null) {
-					this.dets.add(new MyArray("CÓDIGO - DIAGNÓSTICO", 
-							item.getArticulo().getCodigoInterno() + " - " +
+					this.dets.add(new MyArray("CÓDIGO - FACTURA - DIAGNÓSTICO", 
+							item.getArticulo().getCodigoInterno() + " - " + item.getNumeroFactura().replace("001-001-", "") + " - " +
 							item.getDiagnostico().toUpperCase(), 
-							"CORRESPONDE EL CAMBIO: " + (item.isVerifica_reposicion()? "SI" : "NO")));
+							(item.isVerifica_reposicion()? "SI" : "NO")));
 				}
 			}
 		}

@@ -20,6 +20,8 @@
 	<parameter name="Logo" class="java.lang.String"/>
 	<parameter name="Receptor" class="java.lang.String"/>
 	<parameter name="Cliente" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<parameter name="Generado" class="java.lang.String"/>
 	<field name="Concepto" class="java.lang.String"/>
 	<field name="Descripcion" class="java.lang.String"/>
 	<field name="Importe" class="java.lang.String"/>
@@ -67,9 +69,9 @@
 		<groupHeader>
 			<band height="24">
 				<frame>
-					<reportElement mode="Opaque" x="0" y="0" width="553" height="18" forecolor="#B89F7D" uuid="b4f3c12e-7524-477f-8f15-21420cebda19"/>
+					<reportElement mode="Opaque" x="0" y="0" width="487" height="18" forecolor="#B89F7D" uuid="b4f3c12e-7524-477f-8f15-21420cebda19"/>
 					<textField pattern="" isBlankWhenNull="false">
-						<reportElement style="SubTitle" mode="Transparent" x="4" y="4" width="531" height="14" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="6a3b608e-61ee-4667-bdc7-14574a0ba8ea"/>
+						<reportElement style="SubTitle" mode="Transparent" x="4" y="4" width="467" height="14" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="6a3b608e-61ee-4667-bdc7-14574a0ba8ea"/>
 						<textElement verticalAlignment="Middle" rotation="None" markup="none">
 							<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -80,6 +82,13 @@
 				<line>
 					<reportElement x="4" y="19" width="546" height="1" uuid="b52a880a-78cc-4f97-acbe-a45237d188d7"/>
 				</line>
+				<staticText>
+					<reportElement x="471" y="4" width="79" height="14" uuid="27b1d363-89d4-44d7-a098-9a4b92ee024f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SE CAMBIA]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 	</group>
@@ -87,16 +96,16 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="82" splitType="Stretch">
+		<band height="107" splitType="Stretch">
 			<staticText>
-				<reportElement style="SubTitle" x="4" y="61" width="46" height="15" uuid="cd84fa84-a595-45dd-8ad7-ba968be23ae7"/>
+				<reportElement style="SubTitle" x="4" y="75" width="46" height="15" uuid="cd84fa84-a595-45dd-8ad7-ba968be23ae7"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Title" mode="Transparent" x="139" y="5" width="303" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="89f88eab-4bc7-40d2-8446-d23096c39e1f"/>
+				<reportElement style="Title" mode="Transparent" x="139" y="5" width="240" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="89f88eab-4bc7-40d2-8446-d23096c39e1f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -104,19 +113,19 @@
 				<text><![CDATA[INFORME TÉCNICO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="50" y="61" width="495" height="15" uuid="55a97d11-5936-43be-bfa8-efd4739f08de"/>
+				<reportElement x="50" y="75" width="495" height="15" uuid="55a97d11-5936-43be-bfa8-efd4739f08de"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{Cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="SubTitle" x="4" y="42" width="45" height="15" uuid="2fe29cb1-a081-4a33-a531-3ad5edb67f97"/>
+				<reportElement style="SubTitle" x="4" y="56" width="45" height="15" uuid="2fe29cb1-a081-4a33-a531-3ad5edb67f97"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="50" y="42" width="70" height="15" uuid="b710954d-feb5-4ff5-af8d-68eab717c6a6"/>
+				<reportElement x="50" y="56" width="70" height="15" uuid="b710954d-feb5-4ff5-af8d-68eab717c6a6"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
 			</textField>
@@ -125,16 +134,33 @@
 				<imageExpression><![CDATA[$P{Logo}.toString()]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement style="SubTitle" x="124" y="42" width="86" height="15" uuid="61d87d51-229b-4e14-b108-f22155ec0f22"/>
+				<reportElement style="SubTitle" x="124" y="56" width="86" height="15" uuid="61d87d51-229b-4e14-b108-f22155ec0f22"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Informe Nro.:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="210" y="42" width="102" height="15" uuid="5f84716b-3174-48ed-b560-c7e28303e12c"/>
+				<reportElement x="210" y="56" width="102" height="15" uuid="5f84716b-3174-48ed-b560-c7e28303e12c"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{NroReclamo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="37" width="551" height="1" uuid="7ea7c53c-99fc-4f56-80e4-36097e91e50d"/>
+			</line>
+			<textField>
+				<reportElement x="379" y="23" width="177" height="12" uuid="c6bbe1a6-9dc5-4368-97a8-bb5e7263053b"/>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Generado: " + $P{Generado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="393" y="5" width="163" height="12" uuid="4ccc7c12-c588-493c-8177-6fd53b8257e7"/>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Usuario: " + $P{Usuario}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -146,15 +172,15 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="553" height="15" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="4" y="0" width="387" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
+					<reportElement style="Detail" x="4" y="0" width="467" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
 					<textElement verticalAlignment="Middle">
 						<font size="8" pdfFontName="Courier" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="391" y="0" width="159" height="15" uuid="6a948c96-f8a7-4068-8ee8-fac2fe542cad"/>
-					<textElement verticalAlignment="Middle">
+					<reportElement style="Detail" x="471" y="0" width="79" height="15" uuid="6a948c96-f8a7-4068-8ee8-fac2fe542cad"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" pdfFontName="Courier" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Reposicion}]]></textFieldExpression>
@@ -211,12 +237,12 @@
 				<text><![CDATA[Técnico Responsable]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="209" y="59" width="136" height="14" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="bf957218-a44a-4371-9c26-1ebd6e6904d2"/>
+				<reportElement mode="Transparent" x="198" y="59" width="159" height="14" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="bf957218-a44a-4371-9c26-1ebd6e6904d2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Auxiliar de Reclamos]]></text>
+				<text><![CDATA[Encargado de Depósito]]></text>
 			</staticText>
 			<line>
 				<reportElement x="12" y="54" width="136" height="1" uuid="d50ab33c-59ff-4ba8-8f60-35a327e615f4"/>
@@ -236,7 +262,7 @@
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Encargado de Depósito]]></text>
+				<text><![CDATA[Entregado por]]></text>
 			</staticText>
 			<line>
 				<reportElement x="403" y="53" width="140" height="1" uuid="316a75ab-4efb-4432-9c68-a63ff22caff5"/>

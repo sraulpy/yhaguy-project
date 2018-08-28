@@ -384,14 +384,16 @@
 	
 	<popup id="pop_diag" sclass="rounded" style="margin: 0px 30px 0px 0px">
 		<listbox model="@load(vm.selectedServicio.detalles)"
-			width="550px" height="400px" sclass="rounded">
+			width="550px" height="550px" sclass="rounded">
 			<listhead>
+				<listheader label="Factura Nro." width="130px"></listheader>
 				<listheader label="Artículo" width="150px"></listheader>
 				<listheader label="Diagnóstico"></listheader>
 				<listheader width="90px" label="Reposición" align="center"></listheader>
 			</listhead>
 			<template name="model">
 				<listitem>
+					<listcell label="@load(each.numeroFactura)" />
 					<listcell label="@load(each.articulo.codigoInterno)" />
 					<listcell>
 						<textbox placeholder="INGRESE EL DIAGNÓSTICO.." hflex="true" 
@@ -403,7 +405,7 @@
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter span="3">
+				<listfooter span="4">
 					<hlayout>
 						<space hflex="true"></space>
 						<button mold="bs" sclass="btn-success btn-sm"

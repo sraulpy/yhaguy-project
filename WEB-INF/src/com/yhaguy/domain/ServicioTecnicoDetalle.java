@@ -1,5 +1,7 @@
 package com.yhaguy.domain;
 
+import java.util.Date;
+
 import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
@@ -22,6 +24,20 @@ public class ServicioTecnicoDetalle extends Domain {
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
+	}
+	
+	/**
+	 * @return la fecha de la factura..
+	 */
+	public Date getFechaFactura() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Object[] out = rr.getVenta_(this.numeroFactura);
+			return out != null ? (Date) out[1] : new Date();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public String getEstado() {
@@ -93,7 +109,7 @@ public class ServicioTecnicoDetalle extends Domain {
 	}
 	
 	public String getObservacion_() {
-		return (this.observacion == null || this.observacion.isEmpty()) ? "" : "(" + this.observacion + ")";
+		return (this.observacion == null || this.observacion.isEmpty()) ? "" : this.observacion;
 	}
 
 	public void setObservacion(String observacion) {
