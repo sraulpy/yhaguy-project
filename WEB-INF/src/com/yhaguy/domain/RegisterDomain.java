@@ -8226,6 +8226,19 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
+	/**
+	 * @return las liquidaciones de salarios..
+	 * [0]:id
+	 * [1]:fecha
+	 * [2]:funcionario.razonsocial
+	 * [3]:cargo
+	 * [4]:importeGs
+	 */
+	public List<Object[]> getLiquidaciones() throws Exception {
+		String query = "select l.id, l.fecha, l.funcionario.empresa.razonSocial, l.cargo, l.importeGs from RRHHLiquidacionSalario l";
+		return this.hqlLimit(query, 300);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

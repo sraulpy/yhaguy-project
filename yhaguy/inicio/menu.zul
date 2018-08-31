@@ -112,6 +112,7 @@
 				<zk forEach="${vm.menuItem(self,'PremiosVentas')}" />
 				<menuitem label="EVALUACIÓN DEL PERSONAL" iconSclass="z-icon-caret-right"
 					disabled="true"/>
+				<zk forEach="${vm.menuItem(self,'LiquidacionSalarios')}" />
 			</menupopup>
 		</menu>
 

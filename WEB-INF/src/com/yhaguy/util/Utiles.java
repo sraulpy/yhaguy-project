@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -446,6 +447,15 @@ public class Utiles {
 		cal.setTime(fecha);
 		int mes = cal.get(Calendar.MONTH);
 		return mes + 1;
+	}
+	
+	/**
+	 * @return el nombre del mes..
+	 */
+	public static String getNombreMes(Date fecha) {
+		Format formatter = new SimpleDateFormat("MMMM"); 
+	    String out = formatter.format(fecha);
+	    return out.toUpperCase();
 	}
 	
 	/**

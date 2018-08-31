@@ -1,0 +1,184 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.LiquidacionSalariosViewModel')">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick='pop_liquidacion.open(self, "after_start")'></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-list" label="Ver Detalle" width="150px"
+			disabled="@load(vm.selectedLiquidacion eq null? 'true' : 'false')"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-info" 
+			iconSclass="z-icon-print" label="Imprimir" width="150px"
+			onClick="@command('imprimir')"
+			disabled="@load(vm.selectedLiquidacion eq null? 'true' : 'false')"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE LIQUIDACION DE SALARIOS.."
+		model="@load(vm.liquidaciones)"
+		selectedItem="@bind(vm.selectedLiquidacion)">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Funcionario"></listheader>
+			<listheader label="Cargo"></listheader>
+			<listheader label="Importe" align="right"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" sclass="filter" placeholder="Día.." instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Mes.." instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Año.." instant="true"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Funcionario.." instant="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Cargo.." instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3])"></listcell>
+				<listcell label="@load(each[4]) @converter('formattedNumber', format='###,###,##0')"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_liquidacion" sclass="rounded" width="600px">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE LIQUIDACION DE SALARIOS" />
+			</hbox>
+			<button onClick="pop_liquidacion.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" style="margin:10px">
+			<columns>
+				<column width="30%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox value="@bind(vm.n_liquidacion.fecha)" hflex="true"></datebox>
+				</row>
+				<row>
+					<field value="Funcionario:" />
+					<bandbox hflex="true"
+						onOpen="tx_filter.focus()"
+						id="bnd_fun" value="@load(vm.n_liquidacion.funcionario.razonSocial)"
+						readonly="true" placeholder="Funcionario..">
+						<bandpopup>
+							<listbox sclass="small-list" width="400px" height="300px"
+								model="@load(vm.funcionarios)"
+								emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+								selectedItem="@bind(vm.n_liquidacion.funcionario)"
+								onSelect="bnd_fun.close();tx_cargo.focus()">
+								<listhead>
+									<listheader>
+										<textbox sclass="filter" hflex="true"
+											value="@bind(vm.filterRazonSocial)"
+											instant="true"
+											id="tx_filter"></textbox>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.empresa.razonSocial)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>
+				<row>
+					<field value="Cargo:" />
+					<textbox id="tx_cargo" value="@bind(vm.n_liquidacion.cargo)" hflex="true"></textbox>
+				</row>
+			</rows>
+		</grid>
+		<listbox sclass="small-list" height="300px"
+			model="@load(vm.n_liquidacion.detalles)">
+			<listhead>
+				<listheader label="Concepto"></listheader>
+				<listheader label="Haberes" width="120px" align="right"></listheader>
+				<listheader label="Descuentos" width="120px" align="right"></listheader>
+				<listheader width="50px"></listheader>
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<textbox value="@bind(vm.n_detalle.concepto)" hflex="true"
+						id="tx_concepto"></textbox>
+				</auxheader>
+				<auxheader>
+					<guaranibox value="@bind(vm.n_detalle.haberes)" hflex="true" />
+				</auxheader>
+				<auxheader>
+					<guaranibox value="@bind(vm.n_detalle.descuentos)" hflex="true" />
+				</auxheader>
+				<auxheader>
+					<button iconSclass="z-icon-plus"
+						onClick="@command('addDetalle')"></button>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.concepto)"></listcell>
+					<listcell label="@load(each.haberes) @converter(vm.cnv.monedaLocal)"></listcell>
+					<listcell label="@load(each.descuentos) @converter(vm.cnv.monedaLocal)"></listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter>
+					<field value="ítems" />
+				</listfooter>
+				<listfooter span="2">
+					<field value="Total a cobrar Gs." />
+					<guaranibox value="@load(vm.n_liquidacion.importeGs_)" 
+						style="font-weight:bold;text-align:right"
+						readonly="false" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('guardarLiquidacion', comp=pop_liquidacion)"></button>
+		</hbox>
+	</popup>
+	
+	<popup id="pop_selected" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="CONSULTA REGISTRO DE LIQUIDACION DE SALARIOS" />
+			</hbox>
+			<button onClick="pop_selected.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+			</rows>
+		</grid>
+	</popup>	
+</window>

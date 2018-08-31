@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.RRHHLiquidacionSalario" table="rrhh_liquidacion_salario">
+
+		&hibernate-domain; 
+
+		<property name="fecha"/>
+		<property name="cargo"/>
+		<property name="importeGs"/>
+		
+		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
+			column="id_funcionario" lazy="false" />
+			
+		<set name="detalles" table="rrhh_liquidacion_salario_detalle"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="id_liquidacion" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.RRHHLiquidacionSalarioDetalle"/>
+		</set>
+
+	</class>
+</hibernate-mapping>
