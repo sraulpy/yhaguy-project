@@ -4855,7 +4855,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				hasta = new Date();
 
 			if (tipoRetencion.equals(ReportesFiltros.RETENCION_RECIBIDAS)) {
-				recibos = rr.getCobranzas(desde, hasta, 0);
+				recibos = rr.getCobranzas(desde, hasta, 0, 0);
 				ventas = rr.getVentasContado(desde, hasta, 0);
 			} else if (tipoRetencion.equals(ReportesFiltros.RETENCION_EMITIDAS)) {
 				recibos = rr.getPagos(desde, hasta);
@@ -5225,6 +5225,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Object[] formato = filtro.getFormato();
 				SucursalApp sucursal = filtro.getSelectedSucursal();
 				long idSucursal = sucursal == null ? 0 : sucursal.getId();
+				long idCliente = 0;
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
 				if (desde == null)
@@ -5234,7 +5235,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -5589,10 +5590,13 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void cobranzasFormaPago(boolean mobile) throws Exception {
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			Cliente cliente = filtro.getCliente();
 			String formaPago = filtro.getFormaPago_();
 			boolean ivaInc = filtro.isIvaIncluido();
 			boolean recInc = filtro.isIncluirREC();
 			boolean vtaInc = filtro.isIncluirVCT();
+			long idCliente = cliente != null? cliente.getId().longValue() : 0;
+			long idSucursal = 0;
 			
 			if (desde == null) desde = new Date();
 			if (hasta == null) hasta = new Date();
@@ -5603,7 +5607,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Venta> ventas = new ArrayList<Venta>();
 
 			if (recInc) {
-				cobranzas = rr.getCobranzas(desde, hasta, 0);
+				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente);
 				if (formaPago.isEmpty()) {
 					for (Recibo recibo : cobranzas) {
 						data.add(new Object[] {
@@ -5777,7 +5781,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			// Ventas Contado..
 			if (vtaInc) {
-				List<Venta> ventas_ = rr.getVentasContado(desde, hasta, 0);
+				List<Venta> ventas_ = rr.getVentasContado(desde, hasta, idCliente);
 				for (Venta venta : ventas_) {
 					if (!venta.isAnulado()) {
 						ventas.add(venta);
@@ -6420,10 +6424,11 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				SucursalApp sucursal = filtro.getSelectedSucursal();
 				long idSucursal = sucursal == null ? 0 : sucursal.getId();
+				long idCliente = 0;
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente);
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				for (Recibo cobro : cobranzas) {

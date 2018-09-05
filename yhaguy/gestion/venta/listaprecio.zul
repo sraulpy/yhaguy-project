@@ -80,8 +80,8 @@
 				<listhead style="text-align:center">
 					<listheader label="Código"></listheader>
 					<listheader label="Lista"></listheader>
-					<listheader label="Costo S/iva" align="right"
-						width="110px"/>
+					<listheader label="Costo Promedio S/iva" align="right"
+						width="120px"/>
 					<listheader label="Costo S/iva" align="right"
 						width="110px">
 					</listheader>

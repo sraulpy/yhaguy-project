@@ -4781,7 +4781,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las cobranzas segun fecha
 	 */
-	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal)
+	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal, long idCliente)
 			throws Exception {
 
 		String query = "select r from Recibo r where r.dbEstado != 'D' and (r.tipoMovimiento.sigla = ? or r.tipoMovimiento.sigla = ?)"
@@ -4790,6 +4790,11 @@ public class RegisterDomain extends Register {
 		if (idSucursal != 0) {
 			query += " and r.sucursal.id = ?";
 		}
+		
+		if (idCliente != 0) {
+			query += " and r.cliente.id = " + idCliente;
+		}
+		
 		query += " order by r.fechaEmision, r.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
@@ -4872,7 +4877,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta,
 			long idVendedor, long idSucursal) throws Exception {
-		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal);
+		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0);
 		List<Object[]> out = new ArrayList<Object[]>();
 
 		for (Recibo recibo : cobros) {

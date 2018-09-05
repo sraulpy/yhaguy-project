@@ -98,7 +98,7 @@ public class ProcesosVentas {
 	 */
 	public static void setNumeroRecibosCobros() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Recibo> recibos = rr.getCobranzas(Utiles.getFecha("01-01-2016 00:00:00"), Utiles.getFecha("09-11-2016 00:00:00"), 0);
+		List<Recibo> recibos = rr.getCobranzas(Utiles.getFecha("01-01-2016 00:00:00"), Utiles.getFecha("09-11-2016 00:00:00"), 0, 0);
 		for (Recibo recibo : recibos) {
 			for (ReciboDetalle item : recibo.getDetalles()) {
 				Venta vta = (Venta) rr.getObject(Venta.class.getName(), item.getMovimiento().getIdMovimientoOriginal());
