@@ -3255,7 +3255,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		for (ImportacionAplicacionAnticipoDTO anticipo : this.dto.getAplicacionAnticipos()) {
 			Recibo ant = rr.getOrdenPagoById(anticipo.getMovimiento().getIdMovimientoOriginal());
-			dif += (ant.getTotalImporteGs() - totalFacGs);
+			if (ant != null) {
+				dif += (ant.getTotalImporteGs() - totalFacGs);
+			}
 		}		
 		return dif;
 	}
