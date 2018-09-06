@@ -3157,7 +3157,12 @@ public class ReportesViewModel extends SimpleViewModel {
 					MyArray value = acum.get(key);
 					Articulo art = (Articulo) value.getPos3();
 					long cantv = (long) value.getPos1();
-					long cantn = (long) value.getPos2();
+					long cantn = 0;
+					if (value.getPos2() instanceof Integer) {
+						cantn = ((Integer) value.getPos2()).longValue();
+					} else if (value.getPos2() instanceof Long) {
+						cantn = (long) value.getPos2();
+					}
 					long stock = rr.getStock(art.getId().longValue());
 					double costo = rr.getCostoGs(art.getId().longValue());
 					data.add(new Object[] { key, art.getDescripcion(), cantv, cantn, (cantv - cantn), stock, costo });
