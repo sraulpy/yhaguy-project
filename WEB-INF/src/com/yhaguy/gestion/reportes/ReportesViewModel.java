@@ -3224,11 +3224,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Funcionario vendedor : filtro.getVendedores()) {
 					Double cobrado = values.get(vendedor.getId());
 					if(cobrado != null) 
-						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), cobrado });
+						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), cobrado, (cobrado - Utiles.getIVA(cobrado, 10)) });
 				}
 
-				ReporteTotalCobranzas rep = new ReporteTotalCobranzas(desde,
-						hasta, getAcceso().getSucursalOperativa().getText());
+				ReporteTotalCobranzas rep = new ReporteTotalCobranzas(desde, hasta, getAcceso().getSucursalOperativa().getText());
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 				
@@ -14865,8 +14864,9 @@ class ReporteTotalCobranzas extends ReporteYhaguy {
 	private String sucursal;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col2 = new DatosColumnas("Vendedor", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Total Cobrado Gs.", TIPO_DOUBLE_GS, 40, true);
+	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Total Cobrado Gs.", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col3 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalCobranzas(Date desde, Date hasta, String sucursal) {
 		this.desde = desde;
@@ -14875,8 +14875,9 @@ class ReporteTotalCobranzas extends ReporteYhaguy {
 	}
 
 	static {
+		cols.add(col1);
 		cols.add(col2);
-		cols.add(col5);
+		cols.add(col3);
 	}
 
 	@Override

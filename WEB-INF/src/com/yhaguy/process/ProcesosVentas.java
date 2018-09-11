@@ -107,7 +107,6 @@ public class ProcesosVentas {
 				} else {
 					vta.setNumeroReciboCobro(vta.getNumeroReciboCobro() + ";" + recibo.getNumero());
 				}
-				System.out.println("Venta " + vta.getNumero() + " asignada: " + recibo.getNumero());
 				rr.saveObject(vta, "sys");
 			}
 		}
@@ -197,7 +196,7 @@ public class ProcesosVentas {
 						double importeNcr = 0;
 						
 						NotaCredito nc = rr.getNotaCreditoVenta(venta.getId());
-						if (nc != null) {
+						if (nc != null && nc.isMotivoDescuento()) {
 							int cantidad = venta.getCantidadItemsByProveedor(prov.getId());
 							double monto = (nc.getImporteGs() / venta.getDetalles().size()) * cantidad;
 							importeNcr += (monto - Utiles.getIVA(monto, 10));

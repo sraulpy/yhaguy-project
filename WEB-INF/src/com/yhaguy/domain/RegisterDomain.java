@@ -4875,8 +4875,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las cobranzas por vendedor..
 	 */
-	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta,
-			long idVendedor, long idSucursal) throws Exception {
+	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta, long idVendedor, long idSucursal) throws Exception {
 		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0);
 		List<Object[]> out = new ArrayList<Object[]>();
 
@@ -8247,19 +8246,20 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<ArticuloHistorialMigracion> migs = rr.getMigracion();
-			for (ArticuloHistorialMigracion mig : migs) {
-				if (mig.getCosto() > 0) {
-					ArticuloCosto costo = new ArticuloCosto();
-					costo.setArticulo(rr.getArticulo(mig.getCodigoInterno()));
-					costo.setCostoFinalGs(mig.getCosto());
-					costo.setFechaCompra(mig.getFechaAlta());
-					costo.setIdMovimiento(mig.getId());
-					costo.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_INVENTARIO_MERCADERIAS));
-					rr.saveObject(costo, "sys");
-					System.out.println(mig.getCodigoInterno());
+			double total = 0;
+			List<Object[]> cobs = rr.getCobranzasPorVendedor(Utiles.getFecha("01-08-2018 00:00:00"), Utiles.getFecha("31-08-2018 23:00:00"), 0, 2);
+			for (Object[] cob : cobs) {
+				Recibo rec = (Recibo) cob[0];
+				ReciboDetalle det = (ReciboDetalle) cob[3];
+				Venta v= det.getVenta();
+				double importe = v.getImporteByProveedorSinIva(7593);
+				total += importe;
+				if (importe > 0) {
+					System.out.println(rec.getNumero() + " - " + v.getNumero() + " - " + Utiles.getNumberFormat(importe));
 				}
 			}
+			System.out.println("----------------------");
+			System.out.println("TOTAL PROVEEDOR OPEN DESIGN: " + Utiles.getNumberFormat(total));
 		} catch (Exception e) {
 		}		
 	}

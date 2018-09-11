@@ -21,7 +21,7 @@ public class AutonumeroYhaguy extends AutoNumeroControl{
 	 * @return
 	 * @throws Exception
 	 */
-	synchronized public static String getNumeroSubDiario(IiD sucursal) throws Exception{
+	synchronized public static String getNumeroSubDiario(IiD sucursal) throws Exception {
 		return getNumeroSubDiario(sucursal, new Date());
 	}
 
