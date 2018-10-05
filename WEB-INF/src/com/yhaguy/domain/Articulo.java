@@ -21,6 +21,11 @@ public class Articulo extends Domain {
 	private double peso;
 	private double volumen; 
 	private double costoGs;
+	private double costoDs;
+	private double precioGs; // mayorista gs
+	private double precioDs; // mayorista ds
+	private double precioMinoristaGs; // minorista
+	private double precioListaGs;	// autocentro
 	private Date fechaAlta; 
 	private boolean importado; 
 	private boolean servicio;
@@ -286,5 +291,45 @@ public class Articulo extends Domain {
 
 	public void setStock(long stock) {
 		this.stock = stock;
+	}
+
+	public double getCostoDs() {
+		return costoDs;
+	}
+
+	public void setCostoDs(double costoDs) {
+		this.costoDs = costoDs;
+	}
+
+	public double getPrecioGs() {
+		return precioGs;
+	}
+
+	public void setPrecioGs(double precioGs) {
+		this.precioGs = precioGs;
+	}
+
+	public double getPrecioDs() {
+		return precioDs;
+	}
+
+	public void setPrecioDs(double precioDs) {
+		this.precioDs = precioDs;
+	}
+
+	public double getPrecioMinoristaGs() {
+		return precioMinoristaGs;
+	}
+
+	public void setPrecioMinoristaGs(double precioMinoristaGs) {
+		this.precioMinoristaGs = precioMinoristaGs;
+	}
+
+	public double getPrecioListaGs() {
+		return precioListaGs;
+	}
+
+	public void setPrecioListaGs(double precioListaGs) {
+		this.precioListaGs = precioListaGs;
 	}
 }

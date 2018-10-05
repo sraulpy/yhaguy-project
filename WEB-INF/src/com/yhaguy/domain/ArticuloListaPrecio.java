@@ -9,6 +9,11 @@ import com.coreweb.domain.Domain;
 @SuppressWarnings("serial")
 public class ArticuloListaPrecio extends Domain {
 	
+	public final static long ID_LISTA = 1;
+	public final static long ID_MINORISTA = 2;
+	public final static long ID_MAYORISTA_GS = 3;
+	public final static long ID_MAYORISTA_DS = 4;
+	
 	private String descripcion;
 	private String formula;
 	private int margen;

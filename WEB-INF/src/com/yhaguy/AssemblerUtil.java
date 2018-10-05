@@ -1473,10 +1473,8 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		dto.setBancosTerceros(this.listaTiposToListaMyPair(bancos));
 
 		// Cliente ocasional
-		Cliente _clienteOcasional = rr
-				.getClienteByCodigoMRA(Configuracion.CODIGO_CLIENTE_OCASIONAL);
-		MyPair clienteOcasional = new MyPair(_clienteOcasional.getId(),
-				_clienteOcasional.getRazonSocial());
+		Cliente _clienteOcasional = rr.getClienteById(1);
+		MyPair clienteOcasional = new MyPair(_clienteOcasional.getId(), _clienteOcasional.getRazonSocial());
 		dto.setClienteOcasional(clienteOcasional);
 
 		return dto;

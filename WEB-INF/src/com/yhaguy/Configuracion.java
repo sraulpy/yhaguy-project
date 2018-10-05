@@ -145,7 +145,7 @@ public class Configuracion extends Config {
 	public static String TIPO_ITEM_DESCUENTO_KEY = "1";
 	public static String TIPO_ITEM_GASTO_KEY = "2";
 	public static String CODIGO_CLIENTE_OCASIONAL_CL = "-CL000-";
-	public static String CODIGO_CLIENTE_OCASIONAL = "000";
+	public static String CODIGO_CLIENTE_OCASIONAL = "-CL000-";
 
 	public static final String ESTADO_PENDIENTE_KEY = "PEN";
 	public static final String ESTADO_AUTORIZADO_KEY = "AUT";
@@ -267,7 +267,7 @@ public class Configuracion extends Config {
 	public static final long ID_DEPOSITO_IMPORTACION = 2;
 	public static final long ID_DEPOSITO_PRINCIPAL = 2;
 	public static final long ID_ITEM_RESERVA_LIBERADA = -1000;
-	public static final long ID_PROVEEDOR_YHAGUY_MRA = 353;
+	public static final long ID_PROVEEDOR_YHAGUY_MRA = 1;
 	public static final long ID_SUC_ACCESO_SUR = 6922;
 
 	// Id's condiciones de Pago

@@ -6,6 +6,7 @@ import org.zkoss.chart.Charts;
 import org.zkoss.chart.Color;
 import org.zkoss.chart.model.CategoryModel;
 import org.zkoss.chart.model.DefaultCategoryModel;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
@@ -16,6 +17,7 @@ import com.yhaguy.domain.HistoricoCobranzaVendedor;
 import com.yhaguy.domain.HistoricoVentaDiaria;
 import com.yhaguy.domain.HistoricoVentaVendedor;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 
 
@@ -44,6 +46,9 @@ public class ChartVentasMetas extends SelectorComposer<Window> {
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
         
+        AccesoDTO acc = (AccesoDTO) Sessions.getCurrent().getAttribute("AccesoDTO");
+        long idSuc = acc.getSucursalOperativa().getId();
+        
         Double ventas = new Double(0);
         Double cobranzas = new Double(0);
         Double meta = new Double(0);
@@ -53,7 +58,7 @@ public class ChartVentasMetas extends SelectorComposer<Window> {
         RegisterDomain rr = RegisterDomain.getInstance();
         int anho = Integer.parseInt(Utiles.getAnhoActual());
 		int mes = Integer.parseInt(Utiles.getMesActual());
-        HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0);
+        HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0, idSuc);
         HistoricoVentaDiaria hist_ = rr.getHistoricoVentaDiaria(new Date(), 0);
         HistoricoCobranzaVendedor c_hist = rr.getHistoricoCobranzaVendedor(anho, mes, 0);
         HistoricoCobranzaDiaria c_hist_ = rr.getHistoricoCobranzaDiaria(new Date(), 0);

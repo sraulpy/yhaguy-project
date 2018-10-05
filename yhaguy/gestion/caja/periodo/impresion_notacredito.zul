@@ -1,0 +1,338 @@
+<window height="1135px" width="813px" border="none"
+	sclass="printable" position="center,center"
+	id="win_fac">
+	
+	<timer delay="1500" repeats="false">
+		<attribute name="onTimer">
+			Clients.print();
+		</attribute>
+	</timer>
+	
+	<timer delay="1800" repeats="false">
+		<attribute name="onTimer">
+			win_fac.detach();
+		</attribute>
+	</timer>
+	
+	<div height="33px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="37px"></div>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.cliente.pos2)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos3)" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.cliente.pos5)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.numeroFactura)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos6)" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<div height="25px"></div>
+	
+	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="120px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="110px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="100px">
+					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+				</div>	
+				<div width="225px">
+					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+				</div>	
+				<div width="65px" style="text-align:right">
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>	
+				<div width="95px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="65px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="70px" style="text-align:right">
+					<label value="@load(each.montoGs * each.cantidad) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>
+			</hbox>
+		</template>
+	</vbox>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	<div height="3px"></div>
+	<hlayout>
+		<div width="175px"></div>
+		<label value="guaraníes"></label>
+		<label value="@load(vm.selectedNotaCredito.importeEnLetras)"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="420px"></div>
+		<label value="@load(vm.selectedNotaCredito.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	
+	<!-- PAGINA 2 -->
+	
+	<div height="110px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="37px"></div>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.cliente.pos2)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos3)" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.cliente.pos5)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.numeroFactura)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos6)" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<div height="25px"></div>
+	
+	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="120px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="110px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="100px">
+					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+				</div>	
+				<div width="225px">
+					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+				</div>	
+				<div width="65px" style="text-align:right">
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>	
+				<div width="95px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="65px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="70px" style="text-align:right">
+					<label value="@load(each.montoGs * each.cantidad) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>
+			</hbox>
+		</template>
+	</vbox>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	<div height="3px"></div>
+	<hlayout>
+		<div width="175px"></div>
+		<label value="guaraníes"></label>
+		<label value="@load(vm.selectedNotaCredito.importeEnLetras)"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="420px"></div>
+		<label value="@load(vm.selectedNotaCredito.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	
+	<!-- PAGINA 3 -->
+	
+	<div height="110px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="37px"></div>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.cliente.pos2)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos3)" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.cliente.pos5)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="180px"></div>
+		<div hflex="true">
+			<label value="@load(vm.selectedNotaCredito.numeroFactura)" maxlength="38" sclass="det"></label>
+		</div>	
+		<div>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos6)" sclass="det"></label>
+		</div>	
+		<div width="50px"></div>
+	</hlayout>
+	
+	<div height="25px"></div>
+	
+	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="120px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="110px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="100px">
+					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+				</div>	
+				<div width="225px">
+					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+				</div>	
+				<div width="65px" style="text-align:right">
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>	
+				<div width="95px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="65px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="70px" style="text-align:right">
+					<label value="@load(each.montoGs * each.cantidad) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>
+			</hbox>
+		</template>
+	</vbox>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	<div height="3px"></div>
+	<hlayout>
+		<div width="175px"></div>
+		<label value="guaraníes"></label>
+		<label value="@load(vm.selectedNotaCredito.importeEnLetras)"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.importeGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="420px"></div>
+		<label value="@load(vm.selectedNotaCredito.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedNotaCredito.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="20px"></div>
+	</hlayout>
+	
+	<style media="print">
+    	body > *:not(.printable) {
+        	display: none !important;
+    	}
+    	.printable {
+        	top: 0 !important;
+        	left: 0 !important;
+    	}
+		@page 
+		{
+    		size: auto;  
+    		margin: 0mm; 
+		}
+	</style>
+	
+	<style>
+		.custom { font-size:10pt; font-family:Verdana }
+		.det { font-size:8pt; font-family:Verdana }
+		.z-div { line-height:normal; white-space: nowrap; }
+		.z-hlayout-inner { line-height:normal }
+		.z-vlayout-inner { padding: 0px }
+		.z-hlayout z-valign-middle { line-height:normal; font-size:10px }
+		body *:not([class*="z-icon-"]) {
+    		font-size: 10px;
+		}
+	</style>
+</window>

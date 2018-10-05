@@ -20,6 +20,11 @@
 		<property name="peso" />
 		<property name="volumen" />
 		<property name="costoGs" />
+		<property name="costoDs" />
+		<property name="precioGs" />
+		<property name="precioDs" />
+		<property name="precioMinoristaGs" />
+		<property name="precioListaGs" />
 		<property name="fechaAlta" />
 		<property name="prioridad" />
 		<property name="completo" />

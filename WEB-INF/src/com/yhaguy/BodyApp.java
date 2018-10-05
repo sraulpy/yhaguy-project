@@ -117,10 +117,18 @@ public abstract class BodyApp extends Body {
 	public List<MyPair> getDepositosSucursal() throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Deposito> deps = rr.getDepositosPorSucursal(this.getSucursal().getId());
-		for (Deposito deposito : deps) {
-			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
-			out.add(dep);
+		if (this.isSucursalBaterias()) {
+			List<Deposito> deps = rr.getDepositosPorSucursal(this.getSucursal().getId());
+			for (Deposito deposito : deps) {
+				MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
+				out.add(dep);
+			}
+		} else {
+			List<Deposito> deps = rr.getDepositos();
+			for (Deposito deposito : deps) {
+				MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
+				out.add(dep);
+			}
 		}
 		return out;
 	}
@@ -208,4 +216,11 @@ public abstract class BodyApp extends Body {
 			}
 		}
 	}	
+	
+	/**
+	 * @return true si es baterias..
+	 */
+	public boolean isSucursalBaterias() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+	}
 }

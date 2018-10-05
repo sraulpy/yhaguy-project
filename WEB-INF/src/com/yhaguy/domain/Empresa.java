@@ -47,6 +47,7 @@ public class Empresa extends Domain {
 	private EmpresaGrupoSociedad empresaGrupoSociedad;
 
 	private CtaCteEmpresa ctaCteEmpresa;
+	private EmpresaRubro rubro;
 
 	Set<Tipo> rubroEmpresas = new HashSet<Tipo>();
 
@@ -384,5 +385,13 @@ public class Empresa extends Domain {
 
 	public void setCobrador(Funcionario cobrador) {
 		this.cobrador = cobrador;
+	}
+
+	public EmpresaRubro getRubro() {
+		return rubro;
+	}
+
+	public void setRubro(EmpresaRubro rubro) {
+		this.rubro = rubro;
 	}
 }
