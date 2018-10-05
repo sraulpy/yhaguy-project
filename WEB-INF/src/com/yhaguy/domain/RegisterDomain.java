@@ -2292,8 +2292,8 @@ public class RegisterDomain extends Register {
 	 * @return el Cliente segun el codigo para implementacion MRA..
 	 */
 	public Cliente getClienteByCodigoMRA(String codigo) throws Exception {
-		String query = "Select c from Cliente c where c.empresa.codigoEmpresa like '%-CL"
-				+ codigo + "-%'";
+		String query = "Select c from Cliente c where c.empresa.codigoEmpresa = '"
+				+ codigo + "'";
 		List<Cliente> out = this.hql(query);
 		if (out.size() == 1) {
 			return out.get(0);
@@ -2732,6 +2732,44 @@ public class RegisterDomain extends Register {
 				+ codigoProveedor.toLowerCase()
 				+ "%' and lower(a.descripcion) like '%"
 				+ descripcion.toLowerCase() + "%' order by codigoInterno";
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
+	 * @return los articulos segun sus codigos y descripcion..
+	 * [0]:id
+	 * [1]:codigointerno
+	 * [2]:codigoOriginal
+	 * [3]:codigoProveedor
+	 * [4]:descripcion
+	 */
+	public List<Object[]> getArticulos_(String codigoInterno,
+			String codigoOriginal, String codigoProveedor, String descripcion)
+			throws Exception {
+		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion from Articulo a"
+				+ " where lower(a.codigoInterno) like '%"
+				+ codigoInterno.toLowerCase()
+				+ "%' and lower(a.codigoOriginal) like '%"
+				+ codigoOriginal.toLowerCase()
+				+ "%' and lower(a.codigoProveedor) like'%"
+				+ codigoProveedor.toLowerCase()
+				+ "%' and lower(a.descripcion) like '%"
+				+ descripcion.toLowerCase() + "%' order by a.codigoInterno";
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
+	 * @return los articulos segun sus codigos y descripcion..
+	 * [0]:id
+	 * [1]:codigointerno
+	 * [2]:codigoOriginal
+	 * [3]:codigoProveedor
+	 * [4]:descripcion
+	 */
+	public List<Object[]> getArticulos_(String codigoInterno) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion from Articulo a"
+				+ " where lower(a.codigoInterno) like '%"
+				+ codigoInterno.toLowerCase() + "%' order by a.codigoInterno";
 		return this.hqlLimit(query, 50);
 	}
 
@@ -5900,7 +5938,7 @@ public class RegisterDomain extends Register {
 	 * obtener depositos
 	 */
 	public List<Deposito> getDepositos() throws Exception {
-		String query = "select d from Deposito d where d.dbEstado != 'D'";
+		String query = "select d from Deposito d where d.dbEstado != 'D' order by d.descripcion";
 		return (List<Deposito>) this.hql(query);
 	}
 
@@ -7502,9 +7540,9 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return el historico venta / meta..
 	 */
-	public HistoricoVentaVendedor getHistoricoVentaVendedor(int anho, int mes, long idVendedor) throws Exception {
+	public HistoricoVentaVendedor getHistoricoVentaVendedor(int anho, int mes, long idVendedor, long idSucursal) throws Exception {
 		String query = "select h from HistoricoVentaVendedor h where h.anho = " + anho 
-				+ " and h.mes = " + mes + " and h.id_funcionario = " + idVendedor;
+				+ " and h.mes = " + mes + " and h.id_funcionario = " + idVendedor + " and h.id_sucursal = " + idSucursal;
 		List<HistoricoVentaVendedor> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;	
 	}
@@ -8243,23 +8281,27 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 300);
 	}
 	
+	/**
+	 * @return articulo segun id..
+	 * [0]: id
+	 * [1]: codigoInterno
+	 * [2]: precio autocentro
+	 * [3]: precio minorista
+	 * [4]: precio mayorista gs
+	 * [5]: precio mayorista ds
+	 */
+	public Object[] getArticulo_(long idArticulo) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs from Articulo a where a.id = " + idArticulo + "";
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			double total = 0;
-			List<Object[]> cobs = rr.getCobranzasPorVendedor(Utiles.getFecha("01-08-2018 00:00:00"), Utiles.getFecha("31-08-2018 23:00:00"), 0, 2);
-			for (Object[] cob : cobs) {
-				Recibo rec = (Recibo) cob[0];
-				ReciboDetalle det = (ReciboDetalle) cob[3];
-				Venta v= det.getVenta();
-				double importe = v.getImporteByProveedorSinIva(7593);
-				total += importe;
-				if (importe > 0) {
-					System.out.println(rec.getNumero() + " - " + v.getNumero() + " - " + Utiles.getNumberFormat(importe));
-				}
-			}
-			System.out.println("----------------------");
-			System.out.println("TOTAL PROVEEDOR OPEN DESIGN: " + Utiles.getNumberFormat(total));
+			List<Articulo> arts = rr.getArticulos("Cualquier", "", "", "");
+			System.out.println(arts.size());
+			
 		} catch (Exception e) {
 		}		
 	}

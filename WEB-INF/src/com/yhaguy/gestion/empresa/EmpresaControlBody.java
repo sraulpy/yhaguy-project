@@ -29,6 +29,7 @@ import com.yhaguy.ID;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.EmpresaGrupoSociedad;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Localidad;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlLogicaEmpresa;
@@ -587,6 +588,23 @@ public abstract class EmpresaControlBody extends BodyApp {
 			}
 		}
 		return movs;
+	}
+	
+	/**
+	 * @return los rubros..
+	 */
+	public List<MyArray> getRubros() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		@SuppressWarnings("unchecked")
+		List<EmpresaRubro> list = rr.getObjects(EmpresaRubro.class.getName());
+		for (EmpresaRubro rubro : list) {
+			MyArray my = new MyArray();
+			my.setId(rubro.getId());
+			my.setPos1(rubro.getDescripcion());
+			out.add(my);
+		}
+		return out;
 	}
 
 	public CtaCteEmpresaMovimientoDTO getSelectedMov() {

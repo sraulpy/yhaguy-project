@@ -44,6 +44,7 @@ public class VentaBrowser extends Browser{
 		ColumnaBrowser col8 = new ColumnaBrowser();
 		ColumnaBrowser col9 = new ColumnaBrowser();
 		ColumnaBrowser col10 = new ColumnaBrowser();
+		ColumnaBrowser col11 = new ColumnaBrowser();
 
 		col1.setCampo("numero"); 	
 		col1.setTitulo("Número");
@@ -83,6 +84,10 @@ public class VentaBrowser extends Browser{
 		col10.setComponente("getDoublebox");
 		col10.setWidthColumna("80px");
 		
+		col11.setCampo("sucursal.descripcion"); 	
+		col11.setTitulo("Sucursal");
+		col11.setWidthColumna("110px");
+		
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
 		columnas.add(col2);
@@ -91,6 +96,7 @@ public class VentaBrowser extends Browser{
 		columnas.add(col5);
 		columnas.add(col8);
 		columnas.add(col10);
+		columnas.add(col11);
 		columnas.add(col9);
 		
 		return columnas;

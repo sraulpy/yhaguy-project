@@ -28,9 +28,11 @@ public class CajaPeriodoBrowser extends Browser {
 		ColumnaBrowser col4 = new ColumnaBrowser();
 		ColumnaBrowser col5 = new ColumnaBrowser();
 		ColumnaBrowser col6 = new ColumnaBrowser();
+		ColumnaBrowser col7 = new ColumnaBrowser();
 		
 		col1.setCampo("numero");
 		col1.setTitulo("Número");
+		col1.setWidthColumna("110px");
 		
 		col2.setCampo("apertura");
 		col2.setTitulo("Apertura");
@@ -52,6 +54,9 @@ public class CajaPeriodoBrowser extends Browser {
 		col6.setCampo("tipo");
 		col6.setTitulo("Tipo");
 		
+		col7.setCampo("caja.sucursal.descripcion");
+		col7.setTitulo("Sucursal");
+		
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
 		columnas.add(col2);
@@ -59,6 +64,7 @@ public class CajaPeriodoBrowser extends Browser {
 		columnas.add(col4);
 		columnas.add(col5);
 		columnas.add(col6);
+		columnas.add(col7);
 		
 		return columnas;
 	}

@@ -12,6 +12,7 @@ public class HistoricoVentaVendedor extends Domain {
 	private double total_venta_servicio;
 	private double total_notacredito;
 	private double meta;
+	private long id_sucursal;
 
 	@Override
 	public int compareTo(Object arg0) {
@@ -72,6 +73,14 @@ public class HistoricoVentaVendedor extends Domain {
 
 	public void setTotal_venta_servicio(double total_venta_servicio) {
 		this.total_venta_servicio = total_venta_servicio;
+	}
+
+	public long getId_sucursal() {
+		return id_sucursal;
+	}
+
+	public void setId_sucursal(long id_sucursal) {
+		this.id_sucursal = id_sucursal;
 	}
 
 }

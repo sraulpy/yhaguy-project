@@ -48,6 +48,8 @@ public class EmpresaDTO extends DTO {
 
 	MyPair tipoPagoProveedor;
 	MyPair tipoProveedor;
+	
+	private MyArray rubro;
 
 	private int tipoEmpresa; // 1: Proveedor, 2:Cliente, 3:Cliente/Proveedor
 
@@ -317,5 +319,13 @@ public class EmpresaDTO extends DTO {
 
 	public void setCorreo_(String correo_) {
 		this.correo_ = correo_;
+	}
+
+	public MyArray getRubro() {
+		return rubro;
+	}
+
+	public void setRubro(MyArray rubro) {
+		this.rubro = rubro;
 	}
 }

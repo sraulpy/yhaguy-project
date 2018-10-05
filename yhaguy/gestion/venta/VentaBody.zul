@@ -40,7 +40,8 @@
 						<combobox model="@load(vm.depositosSucursal)"
 							value="@load(vm.dto.deposito.text)"
 							selectedItem="@bind(vm.dto.deposito)"
-							hflex="true">
+							hflex="true" instant="true"
+							onChange="@command('setDeposito')">
 							<template name="model">
 								<comboitem label="@load(each.text)"/>
 							</template>

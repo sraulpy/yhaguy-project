@@ -23,7 +23,6 @@ import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.Cliente;
-import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
 
@@ -100,21 +99,6 @@ public class ClienteControlBody extends EmpresaControlBody {
 	public Browser getBrowser(){
 		return new ClienteBrowser();
 	}
-	
-	@Override
-	public void afterSave() {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Empresa emp = rr.getEmpresaById(this.dto.getIdEmpresa());
-			emp.setDireccion_(emp.getDireccion());
-			emp.setTelefono_(emp.getTelefono());
-			emp.setCorreo_(emp.getCorreo());
-			rr.saveObject(emp, this.getLoginNombre());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	
 	//=============== Contacto interno ================================
 

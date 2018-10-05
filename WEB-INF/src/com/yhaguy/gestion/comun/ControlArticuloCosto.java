@@ -6,6 +6,7 @@ import java.util.List;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloCosto;
+import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.util.Utiles;
@@ -50,6 +51,22 @@ public class ControlArticuloCosto {
 		double ganancia = Utiles.obtenerValorDelPorcentaje(costo + iva, margen);
 		double precio = Utiles.redondeoCuatroDecimales((costo + iva + ganancia));
 		return precio;
+	}
+	
+	/**
+	 * el precio de venta segun su margen..
+	 */
+	public static double getPrecioVenta_(long idArticulo, long idListaPrecio) throws Exception {
+		double out = 0;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Object[] art = rr.getArticulo_(idArticulo);
+		if(art != null) {
+			if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) out = (double) art[2];
+			if (idListaPrecio == ArticuloListaPrecio.ID_MINORISTA) out = (double) art[3];
+			if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) out = (double) art[4];
+			if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) out = (double) art[5];
+		}
+		return out;
 	}
 	
 	/**

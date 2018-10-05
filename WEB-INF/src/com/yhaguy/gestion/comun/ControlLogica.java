@@ -205,6 +205,30 @@ public class ControlLogica extends Control {
 
 		return out;
 	}
+	
+	/**
+	 * @param nombre
+	 * @return MyArray con la informacion del funcionario pos1:nombre
+	 * @throws Exception
+	 */
+	public MyArray buscarVendedor(String nombre) throws Exception {
+		MyArray out = null;
+
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(Funcionario.class);
+		b.setAtributos(FUNCIONARIO_ATRIBUTOS);
+		b.setNombresColumnas(FUNCIONARIO_COLUMNAS);
+		b.setTitulo("Buscar Funcionario");
+		b.setWidth("400px");
+		b.addWhere("vendedor = true");
+		b.show(nombre);
+		if (b.isClickAceptar()) {
+			out = b.getSelectedItem();
+		}
+
+		return out;
+	}
+
 
 	/**
 	 * Retorna un FuncionarioDTO a partir del nombre (equivalente a razonSocial)

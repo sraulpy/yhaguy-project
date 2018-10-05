@@ -1,4 +1,4 @@
-<window height="1153px" width="813px" border="none"
+<window height="1135px" width="813px" border="none"
 	sclass="printable" position="center,center"
 	id="win_fac">
 	
@@ -82,10 +82,10 @@
 				<div width="50px" style="text-align:center">
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
-				<div width="110px">
+				<div width="100px">
 					<label value="@load(each.articulo.pos1)" sclass="det"></label>
 				</div>	
-				<div width="226px">
+				<div width="215px">
 					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
@@ -107,16 +107,16 @@
 	<hlayout>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="10px"></div>
+		<div width="30px"></div>
 	</hlayout>
-	
+	<div height="3px"></div>
 	<hlayout>
 		<div width="175px"></div>
 		<label value="guaraníes"></label>
 		<label value="@load(vm.selectedVenta.importeEnLetras)"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="10px"></div>
+		<div width="30px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -124,7 +124,237 @@
 		<label value="@load(vm.selectedVenta.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="10px"></div>
+		<div width="30px"></div>
+	</hlayout>
+	
+	<!-- PAGINA 2 -->
+	
+	<div height="130px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="37px"></div>
+	
+	<hlayout>
+		<div width="170px"></div>
+		<div width="207px">
+			<label value="${arg.RazonSocial}" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Ruc}" sclass="det"></label>
+		</div>	
+		<div width="90px"></div>
+		<div width="60px" style="text-align:right">
+			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
+		</div>
+		<div width="75px" style="text-align:right">
+			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'false':'true')"></label>
+		</div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="170px"></div>
+		<div width="207px">
+			<label value="${arg.Direccion}" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Vendedor}" sclass="det"></label>
+		</div>	
+		<div width="94px"></div>
+		<div>
+			<label value="${arg.FechaEmision}" sclass="det"></label>
+		</div>
+		<div width="75px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="170px"></div>
+		<div width="207px">
+			<label value="${arg.Telefono}" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+		</div>	
+		<div width="94px"></div>
+		<div>
+			<label value="${arg.Vencimiento}" sclass="det"></label>
+		</div>
+		<div width="75px"></div>
+	</hlayout>
+	
+	<div height="25px"></div>
+	
+	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="105px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="110px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="100px">
+					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+				</div>	
+				<div width="215px">
+					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+				</div>	
+				<div width="65px" style="text-align:right">
+					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>	
+				<div width="95px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="65px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="70px" style="text-align:right">
+					<label value="@load(each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>
+			</hbox>
+		</template>
+	</vbox>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="30px"></div>
+	</hlayout>
+	<div height="3px"></div>
+	<hlayout>
+		<div width="175px"></div>
+		<label value="guaraníes"></label>
+		<label value="@load(vm.selectedVenta.importeEnLetras)"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="30px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="420px"></div>
+		<label value="@load(vm.selectedVenta.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="30px"></div>
+	</hlayout>
+	
+	<!-- PAGINA 3 -->
+	
+	<div height="130px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="37px"></div>
+	
+	<hlayout>
+		<div width="170px"></div>
+		<div width="207px">
+			<label value="${arg.RazonSocial}" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Ruc}" sclass="det"></label>
+		</div>	
+		<div width="90px"></div>
+		<div width="60px" style="text-align:right">
+			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
+		</div>
+		<div width="75px" style="text-align:right">
+			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'false':'true')"></label>
+		</div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="170px"></div>
+		<div width="207px">
+			<label value="${arg.Direccion}" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Vendedor}" sclass="det"></label>
+		</div>	
+		<div width="94px"></div>
+		<div>
+			<label value="${arg.FechaEmision}" sclass="det"></label>
+		</div>
+		<div width="75px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="170px"></div>
+		<div width="207px">
+			<label value="${arg.Telefono}" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+		</div>	
+		<div width="94px"></div>
+		<div>
+			<label value="${arg.Vencimiento}" sclass="det"></label>
+		</div>
+		<div width="75px"></div>
+	</hlayout>
+	
+	<div height="25px"></div>
+	
+	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="105px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="110px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="100px">
+					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+				</div>	
+				<div width="215px">
+					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+				</div>	
+				<div width="65px" style="text-align:right">
+					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>	
+				<div width="95px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="65px" style="text-align:right">
+					<label value="0" sclass="det"></label>
+				</div>
+				<div width="70px" style="text-align:right">
+					<label value="@load(each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+				</div>
+			</hbox>
+		</template>
+	</vbox>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="30px"></div>
+	</hlayout>
+	<div height="3px"></div>
+	<hlayout>
+		<div width="175px"></div>
+		<label value="guaraníes"></label>
+		<label value="@load(vm.selectedVenta.importeEnLetras)"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="30px"></div>
+	</hlayout>
+	
+	<hlayout>
+		<div width="420px"></div>
+		<label value="@load(vm.selectedVenta.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedVenta.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<div width="30px"></div>
 	</hlayout>
 	
 	<style media="print">

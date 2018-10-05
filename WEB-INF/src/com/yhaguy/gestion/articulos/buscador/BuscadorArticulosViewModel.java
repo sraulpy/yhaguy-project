@@ -34,7 +34,6 @@ import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloPrecioJedisoft;
-import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.ImportacionPedidoCompra;
 import com.yhaguy.domain.ImportacionPedidoCompraDetalle;
@@ -211,42 +210,39 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion" })
-	public List<MyArray> getArticulos() {
-		this.setSelectedItem(null);
-		List<MyArray> out = new ArrayList<MyArray>();
+	public List<MyArray> getArticulos() throws Exception {
 		
 		if (this.codInterno.isEmpty() && this.codOriginal.isEmpty()
-				&& this.codProveedor.isEmpty() && this.descripcion.isEmpty())
+				&& this.codProveedor.isEmpty() && this.descripcion.isEmpty()) {
+			this.setSelectedItem(null);
 			return new ArrayList<MyArray>();
-
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Articulo> arts = rr.getArticulos(this.codInterno,
-					this.codOriginal, this.codProveedor, this.descripcion);
-			out = this.articulosToMyArray(arts);
-			
-		} catch (Exception e) {
-			return new ArrayList<MyArray>();
-		}		
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> arts = rr.getArticulos_(this.codInterno,
+				this.codOriginal, this.codProveedor, this.descripcion);
+		
+		List<MyArray> out = this.articulosToMyArray(arts);		
+		if (out.size() > 0) {
+			this.setSelectedItem(null);
+		}
+		
 		return out;
 	}
 	
 	/**
 	 * @return los articulos convertidos a myarray..
 	 */
-	private List<MyArray> articulosToMyArray(List<Articulo> arts) throws Exception {
+	private List<MyArray> articulosToMyArray(List<Object[]> arts) throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
-		for (Articulo art : arts) {
+		for (Object[] art : arts) {
 			MyArray my = new MyArray();
-			my.setId(art.getId());
-			my.setPos1(art.getCodigoInterno());
-			my.setPos2(art.getCodigoOriginal());
-			my.setPos3(art.getCodigoProveedor());
-			my.setPos4(art.getDescripcion());			
+			my.setId((Long) art[0]);
+			my.setPos1(art[1]);
+			my.setPos2(art[2]);
+			my.setPos3(art[3]);
+			my.setPos4(art[4]);			
 			List<MyArray> ubics = new ArrayList<MyArray>();
-			for (ArticuloUbicacion ubic : art.getUbicaciones()) {
-				ubics.add(new MyArray(ubic.getEstante(), ubic.getFila(), ubic.getColumna()));
-			}
 			my.setPos5(ubics);
 			out.add(my);
 		}
@@ -258,11 +254,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	 */
 	private List<MyArray> getPrecios(long idArticulo, long idDeposito) throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
-		Object[] costoInf = this.getCostoArticulo(idArticulo, idDeposito);
-		double costo = (double) costoInf[0];
 		
 		for (MyArray precio : this.getListasDePrecio()) {
-			double precioGs = this.getPrecioVenta(costo, (int) precio.getPos2());
+			double precioGs = this.getPrecioVenta(idArticulo, precio.getId());
 			MyArray my = new MyArray();
 			my.setPos1(precio.getPos1());
 			my.setPos2(precioGs);
@@ -371,6 +365,14 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private double getPrecioVenta(double costo, int margen)
 			throws Exception {
 		return ControlArticuloCosto.getPrecioVenta(costo, margen);
+	}
+	
+	/**
+	 * el precio de venta almacenado en el articulo..
+	 */
+	private double getPrecioVenta(long idArticulo, long idListaPrecio)
+			throws Exception {
+		return ControlArticuloCosto.getPrecioVenta_(idArticulo, idListaPrecio);
 	}
 	
 	/**
@@ -504,10 +506,18 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private List<MyPair> getDepositos() throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Deposito> deps = rr.getDepositosPorSucursal(ID_SUC_PRINCIPAL);
-		for (Deposito dep : deps) {
-			out.add(new MyPair(dep.getId(), dep.getDescripcion()));
-		}
+		
+		if (this.isSucursalBaterias()) {
+			List<Deposito> deps = rr.getDepositosPorSucursal(ID_SUC_PRINCIPAL);
+			for (Deposito dep : deps) {
+				out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+			}
+		} else {
+			List<Deposito> deps = rr.getDepositos();
+			for (Deposito dep : deps) {
+				out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+			}
+		}		
 		return out;
 	}
 

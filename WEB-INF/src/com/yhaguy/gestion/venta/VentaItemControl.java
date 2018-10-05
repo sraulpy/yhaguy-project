@@ -312,18 +312,16 @@ public class VentaItemControl extends SoloViewModel {
 	 * setea el precio de venta..
 	 */
 	private void setPrecioVenta() throws Exception {
-		double costo = this.getCostoArticulo();
-		int margen = (int) this.det.getListaPrecio().getPos2();
-		int margenMin = Configuracion.PORCENTAJE_RENTABILIDAD_MINIMA;
-		double ganancia = this.m.obtenerValorDelPorcentaje(costo, margen);
-		double gananciaMin = this.m.obtenerValorDelPorcentaje(costo, margenMin);
-		double porcIva = 10;
-		double iva = this.m.obtenerValorDelPorcentaje((costo + ganancia),
-				porcIva);
-		double ivaMin = this.m.obtenerValorDelPorcentaje((costo + gananciaMin),
-				porcIva);
-		this.det.setPrecioGs(costo + ganancia + iva);
-		this.det.setPrecioMinimoGs(costo + gananciaMin + ivaMin);
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Object[] art = rr.getArticulo_(this.det.getArticulo().getId());
+		double precioGs = 0;
+		long idListaPrecio = this.det.getListaPrecio().getId();
+		if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) precioGs = (double) art[2];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MINORISTA) precioGs = (double) art[3];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) precioGs = (double) art[4];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precioGs = (double) art[5];
+		this.det.setPrecioGs(precioGs);
+		this.det.setPrecioMinimoGs(precioGs);
 	}
 	
 	/**
@@ -665,7 +663,11 @@ public class VentaItemControl extends SoloViewModel {
 	 */
 	public List<MyArray> getListasDePrecioHabilitadas() throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
-		out.add(this.det.getListaPrecio());
+		if (this.isEmpresaBaterias()) {
+			out.add(this.det.getListaPrecio());
+		} else {
+			out = this.getListasDePrecio();
+		}
 		return out;
 	}
 	

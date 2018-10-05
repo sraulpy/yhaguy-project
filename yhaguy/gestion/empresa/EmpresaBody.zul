@@ -6,7 +6,7 @@
 		<tab label="@load(vm.tabContactoLabel)" closable="false"
 			width="150px" />
 		<tab label="@load(vm.cliente ? 'Datos Cliente' : 'Datos Proveedor')" closable="false" width="150px" />
-		<tab label="Cuenta Corriente" closable="false" width="150px" />
+		<tab label="Cuenta Corriente" closable="false" width="150px" visible="false" />
 	</tabs>
 
 	<tabpanels>
@@ -35,41 +35,23 @@
 							</row>
 							<row>
 								<field value="Rubro:" />
-								<hlayout>
-									<vlayout>
-										<listbox
-											model="@load(vm.dtoEmp.rubroEmpresas)" width="170px"
-											height="77px" rows="1"
-											selectedItem="@bind(vm.selectedRubroEmpresa)">
-										</listbox>
-										<hlayout>
-											<button label="Agregar" onClick="@command('agregarRubro')" />
-											<button label="Eliminar" onClick="@command('eliminarRubro')" />
-										</hlayout>
-									</vlayout>
-									<textbox placeholder="Descripción.."
-										hflex="true" value="@load(vm.selectedRubroEmpresa.text)"
-										readonly="true" />
-								</hlayout>
+								<combobox value="@load(vm.dtoEmp.rubro.pos1)" hflex="true"
+									model="@load(vm.rubros)"
+									selectedItem="@bind(vm.dtoEmp.rubro)">
+									<template name="model">
+										<comboitem label="@load(each.pos1)" />
+									</template>	
+								</combobox>
 							</row>
 							<row>
-								<field value="Moneda:" />
-								<hlayout>
-									<vlayout>
-										<listbox
-											model="@load(vm.dtoEmp.monedas)" width="170px" height="78px"
-											selectedItem="@bind(vm.selectedMoneda)" rows="1">
-											<template name="model"
-												var="mone">
-												<listitem
-													label="@load(mone.text)" />
-											</template>
-										</listbox>
-									</vlayout>
-								</hlayout>
+								<field value="Direccion:" />
+								<textbox value="@bind(vm.dtoEmp.direccion_)" hflex="true" />
 							</row>
-
-							<row height="75px">
+							<row>
+								<field value="Telefono:" />
+								<textbox value="@bind(vm.dtoEmp.telefono_)" hflex="true" />
+							</row>
+							<row>
 								<field value="Observación:" />
 								<textbox rows="1"
 									value="@bind(vm.dtoEmp.observacion)" hflex="true" />

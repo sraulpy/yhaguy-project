@@ -25,6 +25,8 @@ public class AssemblerEmpresa extends Assembler {
 
 	public static String[] attSucursal = { "nombre", "direccion", "telefono",
 			"correo", "zona", "localidad", "auxi" };
+	
+	static String[] attRubro = { "descripcion" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoG) throws Exception {
@@ -38,6 +40,7 @@ public class AssemblerEmpresa extends Assembler {
 		this.myPairToDomain(dto, domain, "tipoPersona");
 		this.myPairToDomain(dto, domain, "regimenTributario");
 		this.myPairToDomain(dto, domain, "moneda");
+		this.myArrayToDomain(dto, domain, "rubro");
 
 		this.listaMyPairToListaDomain(dto, domain, "monedas");
 		this.listaMyPairToListaDomain(dto, domain, "rubroEmpresas");
@@ -67,8 +70,8 @@ public class AssemblerEmpresa extends Assembler {
 		this.copiarValoresAtributos(domain, dto, attIgualesEmpresa);
 
 		this.domainToMyPair(domain, dto, "empresaGrupoSociedad");
-
 		this.domainToMyPair(domain, dto, "regimenTributario");
+		this.domainToMyArray(domain, dto, "rubro", attRubro);
 
 		dto.setTipoPersona(this.tipoToMyPair(domain.getTipoPersona()));
 		dto.setMonedaConSimbolo(this.tipoToMyArray(domain.getMoneda()));

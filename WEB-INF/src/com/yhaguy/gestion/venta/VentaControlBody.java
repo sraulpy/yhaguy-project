@@ -47,6 +47,7 @@ import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -238,7 +239,7 @@ public class VentaControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void buscarVendedor() throws Exception {		
 		String nombre = (String) this.dto.getVendedor().getPos1();
-		MyArray vendedor = this.ctr.buscarFuncionario(nombre);
+		MyArray vendedor = this.ctr.buscarVendedor(nombre);
 		if (vendedor != null) {
 			this.dto.setVendedor(vendedor);
 		} else {
@@ -269,6 +270,16 @@ public class VentaControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void formaDePago() throws Exception {
 		this.asignarFormaPago();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void setDeposito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), this.dto.getDeposito().getId());
+		SucursalApp suc = rr.getSucursalAppById(Long.parseLong(dep.getAuxi()));
+		MyPair suc_ = new MyPair(suc.getId(), suc.getDescripcion());
+		this.dto.setSucursal(suc_);
 	}
 	
 	/***************************************************************/
@@ -424,7 +435,7 @@ public class VentaControlBody extends BodyApp {
 							Configuracion.NRO_VENTA_PEDIDO, 7));
 
 		} else if (crearFacturaContado == true) {
-			out.setDeposito(new MyPair(Deposito.ID_DEPOSITO_PRINCIPAL));
+			out.setDeposito(desde.getDeposito());
 			out.setAtendido(desde.getAtendido());
 			out.setNumeroPresupuesto(desde.getNumeroPresupuesto());
 			out.setNumeroPedido(desde.getNumero());
@@ -433,7 +444,7 @@ public class VentaControlBody extends BodyApp {
 			out.setNumero(desde.getNumerosFacturas().get(desglose - 1));
 
 		} else if (crearFacturaCredito == true) {
-			out.setDeposito(new MyPair(Deposito.ID_DEPOSITO_PRINCIPAL));
+			out.setDeposito(desde.getDeposito());
 			out.setAtendido(desde.getAtendido());
 			out.setNumeroPresupuesto(desde.getNumeroPresupuesto());
 			out.setNumeroPedido(desde.getNumero());
@@ -459,7 +470,7 @@ public class VentaControlBody extends BodyApp {
 			if (crearPedido == false) {
 				for (VentaDetalleDTO item : out.getDetalles()) {
 					RegisterDomain rr = RegisterDomain.getInstance();
-					ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), Configuracion.ID_DEPOSITO_PRINCIPAL);
+					ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), desde.getDeposito().getId());
 					ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad() * -1, this.getLoginNombre());
 					ControlArticuloStock.addMovimientoStock(out.getId(), out
 							.getTipoMovimiento().getId(), item.getCantidad()
@@ -1254,9 +1265,10 @@ public class VentaControlBody extends BodyApp {
 		out.setMoneda(this.utilDto.getMonedaGuaraniConSimbolo());
 		out.setTipoCambio(this.utilDto.getCambioCompraBCP(out.getMoneda()));
 		out.setAtendido(usuarioFuncionario);
-		out.setVendedor(vendedor);
+		out.setVendedor(new MyArray());
 		out.setSucursal(sucursal);
 		out.setDeposito(deposito);
+		out.setReparto(true);
 		out.setModoVenta(this.getUsuarioPropiedad().getModoVenta(utilDto.getModosVenta()));
 		
 		// las ventas de yhaguy baterias se hacen por reparto..
@@ -1701,7 +1713,9 @@ public class VentaControlBody extends BodyApp {
 	 */
 	public List<MyArray> getCondicionesPagos() {
 		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-			return this.getDtoUtil().getCondicionesPago();
+			List<MyArray> out = new ArrayList<MyArray>();
+			out.add(this.getDtoUtil().getCondicionPagoContado());
+			out.add(this.getDtoUtil().getCondicionPagoCredito30());
 		}
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getCondicionPagoContado());

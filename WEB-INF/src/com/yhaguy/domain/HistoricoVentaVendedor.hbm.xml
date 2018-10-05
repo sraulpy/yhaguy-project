@@ -17,6 +17,7 @@
 		<property name="total_venta_servicio"/>
 		<property name="total_notacredito"/>
 		<property name="meta"/>
+		<property name="id_sucursal"/>
 					
 	</class>
 </hibernate-mapping>

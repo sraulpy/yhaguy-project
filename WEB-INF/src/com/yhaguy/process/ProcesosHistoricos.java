@@ -97,7 +97,7 @@ public class ProcesosHistoricos {
 			ncreds += nc.isAnulado()? 0 : nc.getTotalImporteGsSinIva();
 		}
 				
-		HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0);
+		HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0, 2);
 		if (hist == null) hist = new HistoricoVentaVendedor();
 		
 		hist.setAnho(anho);
@@ -118,7 +118,7 @@ public class ProcesosHistoricos {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		int anho = Integer.parseInt(Utiles.getAnhoActual());
 		int mes = Integer.parseInt(Utiles.getMesActual());
-		HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0);
+		HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0, 2);
 		if (hist == null) hist = new HistoricoVentaVendedor();		
 		hist.setAnho(anho);
 		hist.setMes(mes);

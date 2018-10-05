@@ -48,6 +48,11 @@ public class CtaCteEmpresaMovimientoDTO extends DTO {
 		int cmp = hoy.compareTo(this.fechaVencimiento);
 		return cmp >= 0;
 	}
+	
+	public String getNroComprobante_() {
+		String out = this.getNroComprobante().replace("(1/3)", "").replace("(2/3)", "").replace("(3/3)", "");
+		return out.length() > 8? out.substring(out.length() - 8, out.length()) : out;
+	}
 
 	public long getIdEmpresa() {
 		return idEmpresa;

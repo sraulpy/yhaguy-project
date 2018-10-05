@@ -188,6 +188,7 @@ public class ReciboDTO extends DTO {
 			return null;
 		}
 		long idVendedor = this.getDetalles().get(0).getMovimiento().getIdVendedor();
+		if (idVendedor <= 0) return null;
 		return (FuncionarioDTO) new AssemblerFuncionario().getDTObyId(Funcionario.class.getName(), idVendedor);
 	}
 	

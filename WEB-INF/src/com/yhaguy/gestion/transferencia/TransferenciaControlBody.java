@@ -56,6 +56,7 @@ public class TransferenciaControlBody extends BodyApp {
 	static final String NRO_TRFE_KEY = Configuracion.NRO_TRANSFERENCIA_EXTERNA;
 
 	static final String ZUL_PRINT = "/yhaguy/gestion/transferencia/impresion.zul";
+	static final String ZUL_IMPRESION_REMISION = "/yhaguy/gestion/transferencia/impresion_remision.zul";
 
 	private TransferenciaDTO dto = new TransferenciaDTO();
 	private TransferenciaDetalleDTO nvoDetalle;
@@ -247,14 +248,16 @@ public class TransferenciaControlBody extends BodyApp {
 	@Command
 	public void imprimirRemision() {
 		this.selectPrint.detach();
-		String source = ReportesViewModel.SOURCE_REMISION;
+		/*String source = ReportesViewModel.SOURCE_REMISION;
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new RemisionDataSource();
 		params.put("RazonSocial", Configuracion.empresa);
 		params.put("Ruc", "80024884-8");
 		params.put("Numero", this.dto.getObservacion());
 		params.put("FechaTraslado", this.m.dateToString(this.dto.getFechaCreacion(), Misc.DD_MM_YYYY));
-		this.imprimirComprobante(source, params, dataSource);	
+		this.imprimirComprobante(source, params, dataSource);	*/
+		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_REMISION, this.mainComponent, null);
+		this.win.doModal();
 	}
 
 	/**************************************************/
