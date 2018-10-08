@@ -8304,7 +8304,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				double totalSinIva = totalImporte
 						- m.calcularIVA(totalImporte, 10);
-				String sucursal = getAcceso().getSucursalOperativa().getText();
+				String sucursal = suc == null ? "TODOS.." : suc.getDescripcion().toUpperCase();
 
 				ReporteVentasGenerico rep = new ReporteVentasGenerico(
 						totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..");
