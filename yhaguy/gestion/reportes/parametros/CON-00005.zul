@@ -15,6 +15,17 @@
 				format="dd-MM-yyyy" placeholder="dd-MM-aaaa" hflex="true" />
 		</row>
 		<row>
+			<field value="Sucursal:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.sucursales)"
+				selectedItem="@bind(vm.dato.filtro.selectedSucursal)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Cliente:" />
 			<bandbox hflex="true" placeholder="TODOS.."
 				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"

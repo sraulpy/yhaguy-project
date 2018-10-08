@@ -8183,9 +8183,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Cliente cliente = filtro.getCliente();
+				SucursalApp suc = filtro.getSelectedSucursal();
 				String cliente_ = cliente == null ? "TODOS.." : cliente
 						.getRazonSocial();
 				long idCliente = cliente == null ? 0 : cliente.getId();
+				long idSucursal = suc == null ? 0 : suc.getId(); 
 
 				if (desde == null)
 					desde = new Date();
@@ -8198,8 +8200,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalImporte = 0;
 
 				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
-					List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde,
-							hasta, idCliente);
+					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal);
 					for (NotaCredito notacred : ncs) {
 						int length = notacred.getCliente().getRazonSocial()
 								.length();
@@ -8235,7 +8236,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
-					List<Venta> ventas = rr.getVentas(desde, hasta, idCliente);
+					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -8257,8 +8258,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 
 				} else if (filtro.isIncluirVCR()) {
-					List<Venta> ventas = rr.getVentasCredito(desde, hasta,
-							idCliente);
+					List<Venta> ventas = rr.getVentasCredito_(desde, hasta, idCliente, idSucursal);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -8280,8 +8280,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 
 				} else if (filtro.isIncluirVCT()) {
-					List<Venta> ventas = rr.getVentasContado(desde, hasta,
-							idCliente);
+					List<Venta> ventas = rr.getVentasContado_(desde, hasta, idCliente, idSucursal);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),

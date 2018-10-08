@@ -2937,6 +2937,41 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las ventas segun fecha
+	 */
+	public List<Venta> getVentas_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+
+		String query = "select v from Venta v where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
+				+ " and v.fecha between ? and ?";
+		if (idCliente != 0) {
+			query += " and v.cliente.id = ?";
+		}
+		if (idSucursal != 0) {
+			query += " and v.sucursal.id = ?";
+		}
+		query += " order by v.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		if (idSucursal != 0) {
+			listParams.add(idSucursal);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return las ventas segun fecha..
 	 * [0]:id
 	 * [1]:fecha
@@ -3099,6 +3134,40 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las ventas segun fecha
+	 */
+	public List<Venta> getVentasContado_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+
+		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
+				+ " and v.fecha between ? and ?";
+		if (idCliente != 0) {
+			query += " and v.cliente.id = ?";
+		}
+		if (idSucursal != 0) {
+			query += " and v.sucursal.id = ?";
+		}
+		query += " order by v.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		if (idSucursal != 0) {
+			listParams.add(idSucursal);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return las ventas anuladas segun fecha
 	 */
 	public List<Venta> getVentasContadoAnuladas(Date desde, Date hasta) throws Exception {
@@ -3120,12 +3189,11 @@ public class RegisterDomain extends Register {
 
 		return this.hql(query, params);
 	}
-
+	
 	/**
 	 * @return las ventas segun fecha
 	 */
-	public List<Venta> getVentasCredito(Date desde, Date hasta, long idCliente)
-			throws Exception {
+	public List<Venta> getVentasCredito(Date desde, Date hasta, long idCliente) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
 				+ " and v.fecha between ? and ?";
@@ -3140,6 +3208,40 @@ public class RegisterDomain extends Register {
 		listParams.add(hasta);
 		if (idCliente != 0) {
 			listParams.add(idCliente);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+
+		return this.hql(query, params);
+	}
+
+	/**
+	 * @return las ventas segun fecha
+	 */
+	public List<Venta> getVentasCredito_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+
+		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
+				+ " and v.fecha between ? and ?";
+		if (idCliente != 0) {
+			query += " and v.cliente.id = ?";
+		}
+		if (idSucursal != 0) {
+			query += " and v.sucursal.id = ?";
+		}
+		query += " order by v.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		if (idSucursal != 0) {
+			listParams.add(idSucursal);
 		}
 
 		Object[] params = new Object[listParams.size()];
@@ -3189,6 +3291,39 @@ public class RegisterDomain extends Register {
 		listParams.add(hasta);
 		if (idCliente != 0) {
 			listParams.add(idCliente);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return las notas de credito de venta segun fecha
+	 */
+	public List<NotaCredito> getNotasCreditoVenta_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.tipoMovimiento.sigla = ?"
+				+ " and (n.fechaEmision between ? and ?)";
+
+		if (idCliente != 0) {
+			query += " and n.cliente.id = ?";
+		}
+		if (idSucursal != 0) {
+			query += " and n.sucursal.id = ?";
+		}
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		if (idSucursal != 0) {
+			listParams.add(idSucursal);
 		}
 
 		Object[] params = new Object[listParams.size()];
