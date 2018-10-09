@@ -125,7 +125,7 @@ from plancuenta where id = '1']]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<text><![CDATA[La cantidad de Dolares:]]></text>
+				<text><![CDATA[La cantidad de Guaraníes:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="153" y="62" width="417" height="15" uuid="c3e7a643-6e92-4de1-89a2-d41840ce3893"/>
@@ -137,7 +137,7 @@ from plancuenta where id = '1']]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<text><![CDATA[U$D]]></text>
+				<text><![CDATA[Gs.]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="26" y="82" width="111" height="15" uuid="81df9b6f-3166-489d-9a0a-b295e5cbefe1"/>
