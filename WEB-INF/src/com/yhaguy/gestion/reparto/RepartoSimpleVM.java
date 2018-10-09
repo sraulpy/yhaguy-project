@@ -230,7 +230,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 			det.setPos1(item.getArticulo().getCodigoInterno());
 			det.setPos2(item.getArticulo().getDescripcion());
 			det.setPos3(item.getCantidad());
-			det.setPos4(item.getArticulo().getArticuloFamilia().getDescripcion());
+			det.setPos4("");
 			det.setPos5(item.getCantidadEntregada());
 
 			cantArt = cantArt + item.getCantidad();
@@ -258,8 +258,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 			det.setPos1(item.getArticulo().getCodigoInterno());
 			det.setPos2(item.getArticulo().getDescripcion());
 			det.setPos3(item.getCantidad());
-			det.setPos4(item.getArticulo().getArticuloFamilia()
-					.getDescripcion());
+			det.setPos4("");
 			
 			cantArt = cantArt + item.getCantidadEnviada();
 			costoTotal = costoTotal + item.getCosto();
