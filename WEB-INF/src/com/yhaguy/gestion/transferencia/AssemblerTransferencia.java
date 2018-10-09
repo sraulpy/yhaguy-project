@@ -67,7 +67,7 @@ public class AssemblerTransferencia extends Assembler {
 		
 		this.domainToMyPair(dom, dto, "sucursal");
 		this.domainToMyPair(dom, dto, "sucursalDestino");
-		if (dto.getSucursalDestino() != null) {
+		if (dom.getSucursalDestino() != null) {
 			dto.getSucursalDestino().setSigla(dom.getSucursalDestino().getDireccion());
 			dto.getSucursal().setSigla(dom.getSucursal().getDireccion());
 		}
