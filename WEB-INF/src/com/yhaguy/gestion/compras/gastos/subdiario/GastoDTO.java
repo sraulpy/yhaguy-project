@@ -382,7 +382,7 @@ public class GastoDTO extends DTO{
 		return talonarioAutoFactura;
 	}
 
-	public void setTalonarioAutoFacturax(MyArray talonarioAutoFactura) {
+	public void setTalonarioAutoFactura(MyArray talonarioAutoFactura) {
 		this.talonarioAutoFactura = talonarioAutoFactura;
 	}
 
