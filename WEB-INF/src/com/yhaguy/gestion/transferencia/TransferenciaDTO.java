@@ -18,6 +18,7 @@ import com.yhaguy.gestion.comun.ReservaDTO;
 public class TransferenciaDTO extends DTO {
 
 	private String numero = "";
+	private String numeroRemision = "";
 	private Date fechaCreacion;
 	private Date fechaEnvio;
 	private Date fechaRecepcion;
@@ -205,5 +206,13 @@ public class TransferenciaDTO extends DTO {
 
 	public void setSucursalDestino(MyPair sucursalDestino) {
 		this.sucursalDestino = sucursalDestino;
+	}
+
+	public String getNumeroRemision() {
+		return numeroRemision;
+	}
+
+	public void setNumeroRemision(String numeroRemision) {
+		this.numeroRemision = numeroRemision;
 	}
 }

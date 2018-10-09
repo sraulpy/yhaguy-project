@@ -13,6 +13,7 @@
 
 
 		<property name="numero" />
+		<property name="numeroRemision" />
 		<property name="fechaCreacion" />
 		<property name="fechaEnvio" />
 		<property name="fechaRecepcion" />

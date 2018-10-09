@@ -186,6 +186,12 @@
 							value="@bind(vm.dto.observacion)" 
 							hflex="true"/>
 					</vlayout>
+					<vlayout spacing="0">
+						<field value="Observación" />
+						<textbox
+							value="@bind(vm.dto.numeroRemision)" 
+							hflex="true"/>
+					</vlayout>
 				</row>
 			</rows>
 		</grid>

@@ -11,6 +11,7 @@ import com.coreweb.domain.Tipo;
 public class Transferencia extends Domain {
 
 	private String numero;
+	private String numeroRemision;
 	private Date fechaCreacion;
 	private Date fechaEnvio;
 	private Date fechaRecepcion;
@@ -181,6 +182,14 @@ public class Transferencia extends Domain {
 
 	public void setSucursalDestino(SucursalApp sucursalDestino) {
 		this.sucursalDestino = sucursalDestino;
+	}
+
+	public String getNumeroRemision() {
+		return numeroRemision;
+	}
+
+	public void setNumeroRemision(String numeroRemision) {
+		this.numeroRemision = numeroRemision;
 	}
 
 }

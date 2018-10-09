@@ -9,7 +9,7 @@ import com.yhaguy.gestion.comun.AssemblerReserva;
 public class AssemblerTransferencia extends Assembler {
 
 	private static String[] attIgualesTransferencia = { "numero",
-			"fechaCreacion", "fechaEnvio", "fechaRecepcion", "observacion" };
+			"fechaCreacion", "fechaEnvio", "fechaRecepcion", "observacion", "numeroRemision" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoP) throws Exception {
