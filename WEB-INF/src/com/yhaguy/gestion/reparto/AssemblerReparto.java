@@ -94,7 +94,7 @@ public class AssemblerReparto extends Assembler {
 		for (Vehiculo vehiculo : vehiculosDomain) {
 			item = new MyArray();
 			item.setId(vehiculo.getId());
-			item.setPos1(vehiculo.getMarca());
+			item.setPos1(vehiculo.getMarca() + " - " + vehiculo.getChapa());
 			item.setPos2(vehiculo.getModelo());
 			item.setPos3(vehiculo.getChapa());
 			item.setPos5(vehiculo.getPeso());

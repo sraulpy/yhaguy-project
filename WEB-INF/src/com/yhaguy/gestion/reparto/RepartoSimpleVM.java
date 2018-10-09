@@ -11,6 +11,8 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Popup;
 
@@ -25,6 +27,8 @@ import com.yhaguy.domain.Transferencia;
 import com.yhaguy.domain.TransferenciaDetalle;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
+import com.yhaguy.inicio.AccesoDTO;
+import com.yhaguy.inicio.AssemblerAcceso;
 
 @SuppressWarnings("unchecked")
 public class RepartoSimpleVM extends SoloViewModel {
@@ -123,15 +127,14 @@ public class RepartoSimpleVM extends SoloViewModel {
 	 * @return las ventas para reparto..
 	 */
 	public List<MyArray> getVentas(String numero) throws Exception {
-		long idTmPedidoVenta = this.getIdTmPedidoVenta();
-
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Venta> ventas;
+		long idSucursal = this.getAcceso().getSucursalOperativa().getId();
 		
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
 			ventas = rr.getVentasParaRepartoBaterias(numero);
 		} else {
-			ventas = rr.getVentasParaReparto(idTmPedidoVenta);
+			ventas = rr.getVentasParaReparto(numero, idSucursal);
 		}
 
 		return this.getVentasMyArray(ventas);
@@ -280,20 +283,30 @@ public class RepartoSimpleVM extends SoloViewModel {
 		return out;
 	}
 	
+	/**
+	 * @return el acceso..
+	 */
+	public AccesoDTO getAcceso() {
+		Session s = Sessions.getCurrent();
+		AccesoDTO out = (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
+		if (out == null) {
+			try {
+				AssemblerAcceso as = new AssemblerAcceso();
+				out = (AccesoDTO) as.obtenerAccesoDTO(Configuracion.USER_MOBILE);
+				s.setAttribute(Configuracion.ACCESO, out);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}			
+		return out;
+	}
+	
 	private UtilDTO getUtil() {
 		return (UtilDTO) this.getDtoUtil();
 	}
 	
 	private MyArray getTmRemision() {
 		return this.getUtil().getTmNotaRemision();
-	}
-	
-	private MyArray getTmPedidoVenta() {
-		return this.getUtil().getTmPedidoVenta();
-	}
-	
-	private long getIdTmPedidoVenta() {
-		return this.getTmPedidoVenta().getId().longValue();
 	}
 	
 	private long getIdTipoTransfExterna() {

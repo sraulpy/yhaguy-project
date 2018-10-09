@@ -2359,13 +2359,17 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las ventas que fueron marcadas para reparto..
 	 */
-	public List<Venta> getVentasParaReparto(long idTmPedidoVenta)
+	public List<Venta> getVentasParaReparto(String numero, long idSucursal)
 			throws Exception {
 
-		String query = " select v from Venta v where (v.tipoMovimiento.id = "
-				+ idTmPedidoVenta
-				+ ") AND (v.reparto = 'true') AND (v.estado.sigla = '"
-				+ Configuracion.SIGLA_VENTA_ESTADO_CERRADO + "')";
+		String query = " select v from Venta v where v.numero like '%" + numero + "%' "
+				+ "AND v.estadoComprobante IS NULL AND (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
+				+ "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO
+				+ "') AND (v.estado.sigla = '"
+				+ Configuracion.SIGLA_VENTA_ESTADO_FACTURADO + "')"
+				+ " AND v.sucursal.id = " + idSucursal;
 
 		List<Venta> out = this.hql(query);
 		return out;
