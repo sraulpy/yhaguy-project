@@ -26,6 +26,7 @@ import com.coreweb.domain.Register;
 import com.coreweb.domain.Tipo;
 import com.coreweb.domain.TipoTipo;
 import com.coreweb.domain.Usuario;
+import com.coreweb.extras.csv.CSV;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
@@ -8433,9 +8434,21 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
+			String codigo = "MAH E48030 0,25";
+			double mayorista = 151000.0;
+			double minorista = 226500.0;
+			long stock = 6;
+			
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Articulo> arts = rr.getArticulos("Cualquier", "", "", "");
-			System.out.println(arts.size());
+			Articulo art = rr.getArticulo(codigo);
+			art.setPrecioGs(mayorista);
+			art.setPrecioMinoristaGs(minorista);
+			art.setPrecioListaGs(art.getPrecioMinoristaGs());
+			rr.saveObject(art, "sys");
+			
+			ArticuloDeposito ad = rr.getArticuloDeposito(art.getId(), 7);
+			ad.setStock(stock);
+			rr.saveObject(ad, "sys");
 			
 		} catch (Exception e) {
 		}		

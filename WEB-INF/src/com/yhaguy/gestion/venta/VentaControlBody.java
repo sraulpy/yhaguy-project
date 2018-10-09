@@ -1265,10 +1265,9 @@ public class VentaControlBody extends BodyApp {
 		out.setMoneda(this.utilDto.getMonedaGuaraniConSimbolo());
 		out.setTipoCambio(this.utilDto.getCambioCompraBCP(out.getMoneda()));
 		out.setAtendido(usuarioFuncionario);
-		out.setVendedor(new MyArray());
+		out.setVendedor(vendedor);
 		out.setSucursal(sucursal);
 		out.setDeposito(deposito);
-		out.setReparto(true);
 		out.setModoVenta(this.getUsuarioPropiedad().getModoVenta(utilDto.getModosVenta()));
 		
 		// las ventas de yhaguy baterias se hacen por reparto..

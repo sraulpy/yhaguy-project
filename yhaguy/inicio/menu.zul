@@ -30,7 +30,7 @@
 			</menupopup>
 		</menu>
 
-		<menu label="Compras" iconSclass="z-icon-shopping-cart">
+		<menu label="Abastecimiento" iconSclass="z-icon-shopping-cart">
 			<menupopup sclass="rounded">
 				<zk forEach="${vm.menuItem(self,'Proveedor')}" />
 				<menuseparator />

@@ -99,8 +99,7 @@
 				<hlayout>
 					<guaranibox id="dbxPrecio"
 						value="@bind(vm.det.precioGs)" 
-						onChange="@command('validarPrecio', comp=self)"
-						readonly="${!vm.operacionHabilitada('ModificarPrecio')}" />
+						onChange="@command('validarPrecio', comp=self)"/>
 					<label value="@load(vm.utilDto.simboloMonedaLocal)"
 						sclass="label-moneda" />
 				</hlayout>
@@ -117,7 +116,7 @@
 				<hlayout>
 					<guaranibox
 						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
-						readonly="${!vm.operacionHabilitada('ModificarPrecio')}" />
+						/>
 					<label value="@load(vm.utilDto.simboloMonedaLocal)"
 						sclass="label-moneda" />					
 				</hlayout>
@@ -128,8 +127,7 @@
 						width="50px"
 						sclass="label-red"
 						onChange="@command('descontarPorcentaje', cmp=self)"
-						onOK="@command('descontarPorcentaje', cmp=self)" 
-						readonly="${!vm.operacionHabilitada('ModificarPrecio')}" />
+						onOK="@command('descontarPorcentaje', cmp=self)" />
 					<label value="%" sclass="label-moneda" />
 				</hlayout>
 			</row>

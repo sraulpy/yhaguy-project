@@ -38,7 +38,8 @@
 	<hlayout>
 		<div width="150px"></div>
 		<div width="207px">
-			<label value="Yhaguy Repuestos S.A." maxlength="38" sclass="det"></label>
+			<label value="Suc. " maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.sucursalDestino.text)" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
@@ -93,7 +94,8 @@
 	<hlayout>
 		<div width="150px"></div>
 		<div width="207px">
-			<label value="Yhaguy Repuestos S.A." maxlength="38" sclass="det"></label>
+			<label value="Suc. " maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.sucursalDestino.text)" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
@@ -148,7 +150,8 @@
 	<hlayout>
 		<div width="150px"></div>
 		<div width="207px">
-			<label value="Yhaguy Repuestos S.A." maxlength="38" sclass="det"></label>
+			<label value="Suc. " maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.sucursalDestino.text)" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">

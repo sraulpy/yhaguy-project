@@ -22,7 +22,7 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="37px"></div>
+	<div height="31px"></div>
 	
 	<hlayout>
 		<div width="170px"></div>
@@ -109,7 +109,7 @@
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div width="30px"></div>
 	</hlayout>
-	<div height="3px"></div>
+	<div height="1px"></div>
 	<hlayout>
 		<div width="175px"></div>
 		<label value="guaraníes"></label>
@@ -129,7 +129,7 @@
 	
 	<!-- PAGINA 2 -->
 	
-	<div height="130px"></div>
+	<div height="120px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -224,7 +224,7 @@
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div width="30px"></div>
 	</hlayout>
-	<div height="3px"></div>
+	<div height="1px"></div>
 	<hlayout>
 		<div width="175px"></div>
 		<label value="guaraníes"></label>
@@ -244,7 +244,7 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="130px"></div>
+	<div height="120px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -339,7 +339,7 @@
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div width="30px"></div>
 	</hlayout>
-	<div height="3px"></div>
+	<div height="1px"></div>
 	<hlayout>
 		<div width="175px"></div>
 		<label value="guaraníes"></label>
@@ -374,7 +374,7 @@
 	
 	<style>
 		.custom { font-size:10pt; font-family:Verdana }
-		.det { font-size:8pt; font-family:Verdana }
+		.det { font-size:6pt; font-family:Verdana }
 		.z-div { line-height:normal; white-space: nowrap; }
 		.z-hlayout-inner { line-height:normal }
 		.z-vlayout-inner { padding: 0px }

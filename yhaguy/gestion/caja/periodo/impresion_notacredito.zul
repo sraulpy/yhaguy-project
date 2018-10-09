@@ -49,7 +49,7 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.numeroFactura)" maxlength="38" sclass="det"></label>
+			<label value="" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos6)" sclass="det"></label>
@@ -148,7 +148,7 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.numeroFactura)" maxlength="38" sclass="det"></label>
+			<label value="" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos6)" sclass="det"></label>
@@ -247,7 +247,7 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.numeroFactura)" maxlength="38" sclass="det"></label>
+			<label value="" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos6)" sclass="det"></label>
