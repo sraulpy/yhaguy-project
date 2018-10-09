@@ -1507,10 +1507,8 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 			MyArray mpr = new MyArray();
 			mpr.setId(pr.getId());
 			mpr.setPos1(pr.getNombre());
-			mpr.setPos2(new MyPair(pr.getSucursal().getId(), pr.getSucursal()
-					.getDescripcion()));
-			mpr.setPos3(new MyPair(pr.getBanco().getId(), pr.getBanco()
-					.getBancoDescripcion()));
+			mpr.setPos2(new MyPair(pr.getSucursal().getId(), pr.getSucursal().getDescripcion()));
+			mpr.setPos3(new MyPair(pr.getBanco().getId(), pr.getBanco().getBancoDescripcion()));
 
 			MyArray bancoCtaMyArray = new MyArray();
 			bancoCtaMyArray.setId(pr.getBanco().getId());

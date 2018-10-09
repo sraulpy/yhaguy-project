@@ -94,7 +94,7 @@ public class TransferenciaControlBody extends BodyApp {
 
 	@Override
 	public boolean getImprimirDeshabilitado() throws Exception {
-		return this.dto.esNuevo() || this.isTransferido() == false;
+		return this.dto.esNuevo();
 	}
 
 	@Override
