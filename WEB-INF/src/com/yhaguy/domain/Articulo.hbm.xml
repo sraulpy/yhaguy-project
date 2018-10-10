@@ -48,6 +48,9 @@
 
 		<many-to-one name="articuloPresentacion" class="com.yhaguy.domain.ArticuloPresentacion"
 			column="idArticuloPresentacion" lazy="false" />
+			
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
+			column="idProveedor" lazy="false" />
 
 		<set name="articuloInformacionExtras" table="ArticuloInformacionExtra"
 			inverse="false" lazy="false" fetch="join">

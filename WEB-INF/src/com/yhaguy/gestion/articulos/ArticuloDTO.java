@@ -34,6 +34,8 @@ public class ArticuloDTO extends DTO {
 	private MyPair articuloParte = new MyPair();
 	private MyPair articuloLinea = new MyPair();
 	private MyPair articuloUnidadMedida = new MyPair();
+	
+	private MyArray proveedor = new MyArray();
 
 	private List<MyArray> articuloInformacionExtras = new ArrayList<MyArray>();
 	private List<ProveedorArticuloDTO> proveedorArticulos = new ArrayList<ProveedorArticuloDTO>();
@@ -298,6 +300,14 @@ public class ArticuloDTO extends DTO {
 
 	public void setServicio(boolean servicio) {
 		this.servicio = servicio;
+	}
+
+	public MyArray getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(MyArray proveedor) {
+		this.proveedor = proveedor;
 	}
 
 }

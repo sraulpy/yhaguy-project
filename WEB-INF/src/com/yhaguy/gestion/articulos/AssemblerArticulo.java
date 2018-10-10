@@ -27,6 +27,8 @@ public class AssemblerArticulo extends Assembler {
 	static String[] attInformacionExtra = { "descripcion" };
 
 	static String[] attUbicacion = { "estante", "fila", "columna" };
+	
+	static String[] attProveedor = { "razonSocial", "ruc" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoG) throws Exception {
@@ -68,8 +70,9 @@ public class AssemblerArticulo extends Assembler {
 		this.listaDomainToListaDTO(domain, dto, "proveedorArticulos",
 				new AssemblerProveedorArticulo());
 
-		this.domainToMyArray(domain, dto, "articuloPresentacion",
-				attPresentacion);
+		this.domainToMyArray(domain, dto, "articuloPresentacion", attPresentacion);
+		
+		this.domainToMyArray(domain, dto, "proveedor", attProveedor);
 
 		this.listaDomainToListaMyArray(domain, dto,
 				"articuloInformacionExtras", attInformacionExtra);

@@ -201,50 +201,34 @@
 								<!-- ________________ PROVEEDORES ________________ -->
 								
 								<hlayout sclass="button-container">
-									<toolbarbutton label="Eliminar" image="/core/images/borrarItem.png" 
-										onClick="@command('deleteArtProveedor')"
-										disabled="@load(vm.deleteArtProvDisabled)"/>
-									<space/>
-									<toolbarbutton label="Insertar" image="/core/images/insertar.png"
-										onClick="@command('asignarProveedor')"/>									
+									<bandbox id="bnd" width="250px" placeholder="Proveedor.." readonly="true"
+										disabled="@load(vm.dto.esNuevo())">
+										<bandpopup>
+											<listbox height="500px" width="500px" model="@load(vm.proveedores)"
+												selectedItem="@bind(vm.selectedProveedor)"
+												onSelect="@command('asignarProveedor_', comp=bnd)">
+												<listhead>
+													<listheader width="150px">
+														<textbox hflex="true" sclass="filter" placeholder="Ruc.."
+															value="@bind(vm.filterRuc)" instant="true"></textbox>
+													</listheader>
+													<listheader>
+														<textbox hflex="true" sclass="filter" placeholder="Razón Social.."
+															value="@bind(vm.filterRazonSocial)" instant="true"></textbox>
+													</listheader>
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell label="@load(each.empresa.ruc)"></listcell>
+														<listcell label="@load(each.empresa.razonSocial)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</bandpopup>
+									</bandbox>
+									<space></space>
+									<field value="@load(vm.dto.proveedor.pos1)"></field>									
 								</hlayout>
-																
-								<listbox
-									model="@load(vm.dto.proveedorArticulos)" width="100%"
-									sclass="small-list" vflex="true"
-									emptyMessage="ASIGNE PROVEEDORES A ESTE ARTÍCULO.."
-									checkmark="@load(!vm.deshabilitado)" multiple="true"
-									selectedItems="@bind(vm.selectedsArtProveedor)">
-									<listhead
-										style="text-align:center">
-										<listheader width="40px" align="center"/>
-										<listheader label="Proveedor"
-											width="40%" />
-										<listheader
-											label="Código de Fábrica" width="20%" />
-										<listheader label="Descripción"
-											width="35%" />
-									</listhead>
-									<template name="model" var="app">
-										<listitem>
-											<listcell />
-											<listcell
-												label="@load(app.proveedor.razonSocial)" />
-											<listcell
-												label="@load(app.codigoFabrica)" />
-											<listcell
-												label="@load(app.descripcionArticuloProveedor)" />
-										</listitem>
-									</template>
-									<listfoot>
-										<listfooter span="2" align="left">
-											<hlayout>
-												<field value="@load(vm.dto.proveedorArticulos.size())"/>
-												<field value="ítems" />
-											</hlayout>
-										</listfooter>
-									</listfoot>
-								</listbox>
 								
 							</tabpanel>					
 							

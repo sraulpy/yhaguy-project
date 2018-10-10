@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
@@ -13,6 +14,7 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
 
 import com.coreweb.componente.BuscarElemento;
@@ -28,6 +30,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloUbicacion;
+import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.util.Barcode;
 
@@ -46,6 +49,10 @@ public class ArticuloControlBody extends BodyApp {
 	
 	private String mensajeError;
 	private String codigoInterno;
+	
+	private String filterRazonSocial = "";
+	private String filterRuc = "";
+	private Proveedor selectedProveedor;
 	
 	private UtilDTO utilDto = this.getDtoUtil();
 	private ProveedorArticuloDTO nvoProveedorArticulo;	
@@ -187,6 +194,19 @@ public class ArticuloControlBody extends BodyApp {
 	@Command
 	public void verImagen() throws Exception {
 		this.showImage();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void asignarProveedor_(@BindingParam("comp") Bandbox comp) throws Exception {
+		MyArray my = new MyArray(this.selectedProveedor.getRazonSocial());
+		this.dto.setProveedor(my);
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Articulo art = rr.getArticuloById(this.dto.getId());
+		art.setProveedor(selectedProveedor);
+		rr.saveObject(art, this.getLoginNombre());
+		Clients.showNotification("PROVEEDOR ASIGNADO..");
+		comp.close();
 	}
 	
 	@Listen("onUpload=#upImg")
@@ -457,6 +477,12 @@ public class ArticuloControlBody extends BodyApp {
 	
 	/*********************** GET/SET **********************/
 	
+	@DependsOn({ "filterRazonSocial", "filterRuc" })
+	public List<Proveedor> getProveedores() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getProveedores(this.filterRazonSocial, this.filterRuc);
+	}
+	
 	/**
 	 * @return true si ya existe el codigo en la bd..
 	 */
@@ -465,19 +491,19 @@ public class ArticuloControlBody extends BodyApp {
 		return rr.getArticuloByCodigoInterno(codigo) != null;
 	}
 	
-	@DependsOn({"deshabilitado", "selectedsArtProveedor"})
+	@DependsOn({ "deshabilitado", "selectedsArtProveedor" })
 	public boolean isDeleteArtProvDisabled() {
 		return this.isDeshabilitado() || this.selectedsArtProveedor == null
 				|| this.selectedsArtProveedor.size() == 0;
 	}
 	
-	@DependsOn({"deshabilitado", "selectedArtReferencia"})
+	@DependsOn({ "deshabilitado", "selectedArtReferencia" })
 	public boolean isDeleteArtRefDisabled() {
 		return this.isDeshabilitado() || this.selectedArtReferencia == null
 				|| this.selectedArtReferencia.size() == 0;
 	}
 	
-	@DependsOn({"deshabilitado", "selectedUbicaciones"})
+	@DependsOn({ "deshabilitado", "selectedUbicaciones" })
 	public boolean isDeleteUbicacionDisabled() {
 		return this.isDeshabilitado() || this.selectedUbicaciones == null
 				|| this.selectedUbicaciones.size() == 0;
@@ -546,5 +572,29 @@ public class ArticuloControlBody extends BodyApp {
 
 	public void setSelectedUbicaciones(List<MyArray> selectedUbicaciones) {
 		this.selectedUbicaciones = selectedUbicaciones;
+	}
+
+	public String getFilterRazonSocial() {
+		return filterRazonSocial;
+	}
+
+	public void setFilterRazonSocial(String filterRazonSocial) {
+		this.filterRazonSocial = filterRazonSocial;
+	}
+
+	public String getFilterRuc() {
+		return filterRuc;
+	}
+
+	public void setFilterRuc(String filterRuc) {
+		this.filterRuc = filterRuc;
+	}
+
+	public Proveedor getSelectedProveedor() {
+		return selectedProveedor;
+	}
+
+	public void setSelectedProveedor(Proveedor selectedProveedor) {
+		this.selectedProveedor = selectedProveedor;
 	}
 }

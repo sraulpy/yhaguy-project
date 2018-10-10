@@ -39,6 +39,8 @@ public class Articulo extends Domain {
 	private Tipo articuloUnidadMedida; 
 	
 	private long stock = 0;
+	
+	private Proveedor proveedor;
 
 	private Set<ProveedorArticulo> proveedorArticulos = new HashSet<ProveedorArticulo>();
 
@@ -331,5 +333,13 @@ public class Articulo extends Domain {
 
 	public void setPrecioListaGs(double precioListaGs) {
 		this.precioListaGs = precioListaGs;
+	}
+
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
 	}
 }
