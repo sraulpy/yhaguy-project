@@ -41,6 +41,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.OrdenPedidoGasto;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.gestion.bancos.debitos.BancoDebitoDTO;
 import com.yhaguy.gestion.bancos.libro.AssemblerBancoCtaCte;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
@@ -324,12 +325,13 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		item.setDepartamento(this.getDepartamento());
 		item.setCentroCosto(this.getCentroCosto());
 		item.setIva(this.getIva10());
+		item.setSucursal(this.dto.getSucursal().getText().toUpperCase());
 
 		WindowPopup w = new WindowPopup();
 		w.setModo(modo);
 		w.setDato(this);
 		w.setWidth("470px");
-		w.setHigth("310px");
+		w.setHigth("370px");
 		w.setTitulo("Detalle del Pedido de Gasto");
 		w.show(Configuracion.ORDEN_PEDIDO_GASTO_DETALLE_ZUL);
 
@@ -837,6 +839,21 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		for (BancoCta banco : bancos) {
 			MyArray my = new MyArray(banco.getBanco().getDescripcion().toUpperCase());
 			my.setId(banco.getId());
+			out.add(my);
+		}
+		return out;
+	}
+	
+	/**
+	 * @return las sucursales..
+	 */
+	public List<MyPair> getSucursales() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		@SuppressWarnings("unchecked")
+		List<SucursalApp> sucs = rr.getObjects(SucursalApp.class.getName());
+		List<MyPair> out = new ArrayList<MyPair>();
+		for (SucursalApp suc : sucs) {
+			MyPair my = new MyPair(suc.getId(), suc.getDescripcion().toUpperCase());
 			out.add(my);
 		}
 		return out;

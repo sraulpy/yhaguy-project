@@ -39,9 +39,15 @@
 								</vlayout>
 								<vlayout spacing="0">
 									<field value="Sucursal" />
-									<textbox
+									<combobox
 										value="@load(vm.dto.sucursal.text)" readonly="true" 
-										hflex="true"/>
+										selectedItem="@bind(vm.dto.sucursal)" instant="true"
+										hflex="true"
+										model="@load(vm.sucursales)">
+										<template name="model">
+											<comboitem label="@load(each.text)"></comboitem>
+										</template>
+									</combobox>
 								</vlayout>
 								<vlayout spacing="0">
 									<field value="Estado" />

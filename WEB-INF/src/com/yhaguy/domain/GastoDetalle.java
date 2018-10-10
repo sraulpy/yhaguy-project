@@ -11,6 +11,7 @@ public class GastoDetalle extends Domain{
 	private double montoGs;
 	private double montoDs;
 	private double montoIva;
+	private String sucursal;
 	
 	private ArticuloGasto articuloGasto;
 	private CentroCosto centroCosto;
@@ -94,4 +95,11 @@ public class GastoDetalle extends Domain{
 		}		
 	}
 
+	public String getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(String sucursal) {
+		this.sucursal = sucursal;
+	}
 }

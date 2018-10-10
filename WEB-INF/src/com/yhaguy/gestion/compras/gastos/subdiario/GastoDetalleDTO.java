@@ -14,6 +14,7 @@ public class GastoDetalleDTO extends DTO{
 	private double montoGs = 0;
 	private double montoDs = 0;
 	private double montoIva = 0;
+	private String sucursal = "";
 	
 	private ArticuloGastoDTO articuloGasto = new ArticuloGastoDTO();
 	private MyArray centroCosto = new MyArray();
@@ -123,5 +124,13 @@ public class GastoDetalleDTO extends DTO{
 
 	public void setMontoIva(double montoIva) {
 		this.montoIva = getMisc().redondeo(montoIva);
+	}
+
+	public String getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(String sucursal) {
+		this.sucursal = sucursal;
 	}	
 }

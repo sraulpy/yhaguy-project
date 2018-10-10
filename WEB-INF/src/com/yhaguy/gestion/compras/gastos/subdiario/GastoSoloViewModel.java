@@ -1,5 +1,8 @@
 package com.yhaguy.gestion.compras.gastos.subdiario;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -17,6 +20,8 @@ import com.coreweb.control.SoloViewModel;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.ArticuloGasto;
+import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 
 public class GastoSoloViewModel extends SoloViewModel implements VerificaAceptarCancelar{
 	
@@ -156,6 +161,20 @@ public class GastoSoloViewModel extends SoloViewModel implements VerificaAceptar
 	/**
 	 * GET / SET
 	 */
+	
+	/**
+	 * @return las sucursales..
+	 */
+	public List<String> getSucursales() throws Exception {
+		List<String> out = new ArrayList<String>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		@SuppressWarnings("unchecked")
+		List<SucursalApp> sucs = rr.getObjects(SucursalApp.class.getName());
+		for (SucursalApp suc : sucs) {
+			out.add(suc.getDescripcion());
+		}
+		return out;
+	}
 	
 	public GastoSimpleControl getDato() {
 		return dato;

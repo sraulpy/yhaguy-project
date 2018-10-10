@@ -12,6 +12,8 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Doublebox;
@@ -34,6 +36,7 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.contabilidad.subdiario.SubDiarioDTO;
+import com.yhaguy.inicio.AccesoDTO;
 
 public class GastoSimpleControl extends SoloViewModel implements VerificaAceptarCancelar {
 	
@@ -218,6 +221,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		this.nvoItem = new GastoDetalleDTO();
 		this.nvoItem.setCentroCosto(this.getCentroCosto());
 		this.nvoItem.setTipoIva(this.getUtilDto().getTipoIva10());
+		this.nvoItem.setSucursal(this.getAcceso().getSucursalOperativa().getText().toUpperCase());
 
 		if (this.dto.isAutoFactura() || this.dto.isBoletaVenta())
 			this.nvoItem.setTipoIva(this.getUtilDto().getTipoIvaExento());
@@ -230,7 +234,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		w.setModo(WindowPopup.NUEVO);
 		w.setTitulo("Insertar ítem de Gasto");
 		w.setWidth("470px");
-		w.setHigth("330px");
+		w.setHigth("370px");
 		w.show(Configuracion.INSERTAR_ITEM_GASTO);
 		if (w.isClickAceptar()) {
 			this.dto.getDetalles().add(this.nvoItem);
@@ -533,6 +537,15 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		double totalIva = this.dto.getImporteIva10();
 		return this.m.obtenerValorDelPorcentaje(totalIva,
 				Configuracion.PORCENTAJE_RETENCION);
+	}
+	
+	/**
+	 * @return el acceso
+	 */
+	public AccesoDTO getAcceso() {
+		Session s = Sessions.getCurrent();
+		AccesoDTO acc = (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
+		return acc;
 	}
 	
 	@Override

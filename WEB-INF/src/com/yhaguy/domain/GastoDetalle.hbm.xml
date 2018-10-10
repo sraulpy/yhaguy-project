@@ -16,6 +16,7 @@
 		<property name="montoGs" />
 		<property name="montoDs" />
 		<property name="montoIva" />
+		<property name="sucursal" />
 
 		<many-to-one name="articuloGasto" class="com.yhaguy.domain.ArticuloGasto" 
 			column="idArticuloGasto" lazy="false"/>

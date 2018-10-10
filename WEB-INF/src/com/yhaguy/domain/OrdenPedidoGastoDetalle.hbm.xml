@@ -13,6 +13,7 @@
 
 		<property name="importe"/>
 		<property name="descripcion"/>
+		<property name="sucursal"/>
 			
 		<many-to-one name="departamento" class="com.yhaguy.domain.DepartamentoApp" column="idDepartamento"
 			lazy="false"/>			

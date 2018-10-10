@@ -12,6 +12,7 @@ public class OrdenPedidoGastoDetalle extends Domain {
 	private CentroCosto centroCosto;	
 	private ArticuloGasto articuloGasto;
 	private Tipo iva;
+	private String sucursal;
 	
 	@Override
 	public int compareTo(Object o) {
@@ -64,5 +65,13 @@ public class OrdenPedidoGastoDetalle extends Domain {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}	
+	}
+
+	public String getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(String sucursal) {
+		this.sucursal = sucursal;
+	}
 }

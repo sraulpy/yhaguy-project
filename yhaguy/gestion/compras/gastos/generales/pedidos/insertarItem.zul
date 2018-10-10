@@ -8,6 +8,16 @@
 			</columns>
 			<rows>
 				<row>
+					<field value="Sucursal:" />
+					<combobox value="@load(vm.dato.gastoDetalle.sucursal)"
+						selectedItem="@bind(vm.dato.gastoDetalle.sucursal)"
+						model="@load(vm.sucursales)" hflex="true">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>	
+					</combobox>
+				</row>
+				<row>
 					<field value="Código Cuenta:" />
 					<hlayout>
 						<textbox

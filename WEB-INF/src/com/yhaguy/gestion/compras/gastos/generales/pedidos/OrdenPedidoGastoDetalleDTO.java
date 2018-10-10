@@ -13,6 +13,7 @@ public class OrdenPedidoGastoDetalleDTO extends DTO {
 	
 	private double importe;
 	private String descripcion = "SIN DESC..";
+	private String sucursal = "";
 	private MyArray departamento;
 	private MyArray centroCosto;	
 	private MyPair iva;
@@ -82,5 +83,13 @@ public class OrdenPedidoGastoDetalleDTO extends DTO {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion.toUpperCase();
+	}
+
+	public String getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(String sucursal) {
+		this.sucursal = sucursal;
 	}
 }
