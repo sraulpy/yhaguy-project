@@ -244,6 +244,12 @@
 							width="150px" iconSclass="z-icon-plus-circle"
 							onClick="@command('insertarItem')" label=" Insertar" />
 						<space/>
+						<button mold="bs" upload="true, accept=.csv"
+							onUpload="@command('uploadFile_', file=event.media)" width="150px"
+							height="30px" iconSclass="z-icon-upload"
+							label=" Importar Archivo" 
+							disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"/>
+						<space />
 						<button mold="bs" sclass="btn-info btn-sm"
 							width="150px" iconSclass="z-icon-share" 
 							label=" Importar" onClick='pop_importar.open(self, "after_start")'/>
@@ -286,9 +292,6 @@
 							<listheader label="Fecha Ult.Costo"
 								width="123px" sort="auto(fechaUltimoCosto)"
 								style="text-align: center" align="right" visible="false" />
-							<listheader label="Costo Gs." width="110px"
-								sort="auto(costoProformaGs)" style="text-align: center"
-								align="right" />
 							<listheader
 								label="@load(vm.concatenar('Costo', vm.dto.moneda.pos2))"
 								width="100px" sort="auto(costoProformaDs)"
@@ -301,9 +304,6 @@
 								sort="auto(porcentajeVariacion)" style="text-align: center"
 								align="right" visible="@load(vm.comparativo)"
 								tooltiptext="mayor a 10% - Rojo &#13;entre 0 y 10% - Naranja &#13; igual a 0% - nada  &#13; menor a 0% - Verde " />
-							<listheader label="Importe Gs."
-								width="120px" sort="auto(importeProformaGs)"
-								style="text-align: center" align="right" />
 							<listheader
 								label="@load(vm.concatenar('Importe', vm.dto.moneda.pos2))"
 								width="110px" sort="auto(importeProformaDs)"
@@ -353,19 +353,6 @@
 									sclass="label-list" />
 								<listcell>
 									<div>
-										<guaranibox inplace="true"
-											value="@bind(each.costoProformaGs)" width="80px"
-											onChange="@command('actualizarCostoProformaDs', detalle=each)"
-											onFocus='detalle.setSelectedIndex(s.index)'
-											readonly="@load(vm.dto.pedidoConfirmado)"
-											visible="@load(!vm.deshabilitado)" />
-										<label
-											value="@load(each.costoProformaGs) @converter(vm.cnv.monedaLocal)"
-											visible="@load(vm.deshabilitado)" sclass="label-list" />
-									</div>
-								</listcell>
-								<listcell>
-									<div>
 										<dolarbox inplace="true"
 											value="@bind(each.costoProformaDs)" width="60px"
 											onChange="@command('actualizarCostoProformaGs', detalle=each)"
@@ -388,11 +375,6 @@
 										readonly="true" value="@load(each.porcentajeVariacion)"
 										format="#,##0.00" style="@load(each.colorVariacion)"
 										width="75px" />
-								</listcell>
-								<listcell>
-									<label
-										value="@load(each.importeProformaGs) @converter(vm.cnv.monedaLocal)"
-										sclass="label-list" />
 								</listcell>
 								<listcell>
 									<label
@@ -420,14 +402,6 @@
 							<listfooter />
 							<listfooter />
 							<listfooter />
-							<listfooter />
-							<listfooter>
-								<guaranibox
-									value="@load(vm.totalProformaGs)"
-									style="background:#EEF7FA;text-align:right;font-weight:bold"
-									readonly="true" />
-
-							</listfooter>
 							<listfooter>
 								<dolarbox
 									value="@load(vm.totalProformaDs)"
@@ -540,9 +514,6 @@
 									width="110px" style="text-align:center" align="right"
 									visible="@load(vm.comparativoPrr)"
 									tooltiptext="Costo Sin Prorrateo" />
-								<listheader label="Costo Gs."
-									width="120px" sort="auto(costoGs)" style="text-align: center"
-									align="right" />
 								<listheader
 									label="@load(vm.concatenar('Costo S/P', vm.dto.moneda.pos2))"
 									width="100px" style="text-align: center" align="right"
@@ -560,9 +531,6 @@
 									style="text-align: center" align="right"
 									sort="auto(costoSinProrrateoGs)"
 									tooltiptext="Costo Sin Prorrateo" />
-								<listheader label="Importe Gs."
-									width="120px" sort="auto(importeGsCalculado)"
-									style="text-align: center" align="right" />
 								<listheader
 									label="@load(vm.concatenar('Importe S/P', vm.dto.moneda.pos2))"
 									width="105px" style="text-align: center" align="right"
@@ -619,19 +587,6 @@
 											value="@load(each.costoSinProrrateoGs) @converter(vm.cnv.monedaLocal)"
 											sclass="label-list" />
 									</listcell>
-									<listcell>
-										<div>
-											<guaranibox
-												value="@bind(each.costoGs)" inplace="true"
-												onChange="@command('notificarCostoDs', item=each, comp=self)"
-												onFocus='detFactura.setSelectedIndex(s.index)'
-												readonly="@load(each.gastoDescuento)"
-												visible="@load(!vm.deshabilitado)" />
-											<label
-												value="@load(each.costoGs) @converter(vm.cnv.monedaLocal)"
-												visible="@load(vm.deshabilitado)" sclass="label-list" />
-										</div>
-									</listcell>
 									<listcell
 										style="@load(each.costoSinProrrateoDs gt 0? 'background:#ffff99':'')">
 										<label
@@ -666,11 +621,6 @@
 											value="@load(each.importeSinProrrateoGs) @converter(vm.cnv.monedaLocal)"
 											sclass="label-list" />
 									</listcell>
-									<listcell>
-										<label
-											value="@load(each.importeGsCalculado) @converter(vm.cnv.monedaLocal)"
-											sclass="label-list" />
-									</listcell>
 									<listcell
 										style="@load(each.importeSinProrrateoDs gt 0? 'background:#ffff99':'')">
 										<label
@@ -700,7 +650,6 @@
 								<listfooter />
 								<listfooter />
 								<listfooter />
-								<listfooter />
 								<listfooter>
 									<guaranibox
 										value="@load(vm.totalImporteFactura[2])"
@@ -710,11 +659,6 @@
 								<listfooter>
 									<guaranibox
 										value="@load(vm.totalImporteFactura[0])"
-										style="background:#EEF7FA;text-align:right;font-weight:bold" />
-								</listfooter>
-								<listfooter>
-									<dolarbox
-										value="@load(vm.totalImporteFactura[3])"
 										style="background:#EEF7FA;text-align:right;font-weight:bold" />
 								</listfooter>
 								<listfooter>

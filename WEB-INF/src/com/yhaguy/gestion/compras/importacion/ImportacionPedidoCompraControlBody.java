@@ -71,6 +71,13 @@ import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 
 @SuppressWarnings("static-access")
 public class ImportacionPedidoCompraControlBody extends BodyApp {
+	
+	static final String PATH = Configuracion.pathPedidoCompra;
+	static final String PATH_GENERICO = Configuracion.pathPedidoCompraGenerico;
+	
+	static final String[][] CAB = { { "Empresa", CSV.STRING } };
+	static final String[][] DET = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING } };
+	static final String[][] DET_PROFORMA = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING } };
 
 	private ImportacionPedidoCompraDTO dto = new ImportacionPedidoCompraDTO();	
 	
@@ -289,6 +296,24 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		misc.uploadFile(path, name, ".csv", file);
 		this.csvProforma();
 		BindUtils.postNotifyChange(null, null, this, "*");
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void uploadFile_(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = "proforma_" + this.dto.getNumeroPedidoCompra();
+			boolean isText = "text/csv".equals(file.getContentType());
+			InputStream file_ = new ByteArrayInputStream(isText ? file.getStringData().getBytes() : file.getByteData());
+			misc.uploadFile(PATH, name, ".csv", file_);
+			this.csvProforma();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
 	}
 	
 	/******************************************************************************************/	
@@ -530,65 +555,41 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
  	 */
 	
 	public void csvProforma() {
-		// Se declaran los parametros para pasar a la clase CSV
-		String[][] cab = { { "Cliente", CSV.STRING }, { "Fecha", CSV.DATE },
-				{ "Codigo", CSV.STRING }, { "Tipo de Compra", CSV.STRING } };
-
-		String[][] cabDet = { { "codigo", CSV.STRING },
-				{ "cantidad", CSV.NUMERICO }, { "articulo", CSV.STRING },
-				{ "valor", CSV.NUMERICO }, { "total", CSV.NUMERICO } };
-
-		RegisterDomain rr = RegisterDomain.getInstance();
-
 		try {
-
-			CSV csv = new CSV(cab, cabDet, this.getPathCsvPedidoCompra());
-			List<ImportacionPedidoCompraDetalleDTO> detalles = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
-			if (this.verificarCabeceraCSV(csv.getCabecera("Codigo")) == false) {
-				this.mensajeError("El Proveedor seleccionado es distinto al ingresado en el archivo csv.. "
-						+ "\n Favor verifique..");
-				return;
-			}
-			Articulo art = null;
+			this.dto.getImportacionPedidoCompraDetalle().clear();
+			List<ImportacionPedidoCompraDetalleDTO> list = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			AssemblerArticulo ass = new AssemblerArticulo();
+			
+			CSV csv = new CSV(CAB, DET_PROFORMA, PATH + "proforma_" + this.dto.getNumeroPedidoCompra() + ".csv", ';');
+			String noEncontrado = "Códigos no encontrados: \n";
 			csv.start();
 			while (csv.hashNext()) {
-				this.verificarCSVProforma(csv.getDetalleString("codigo"));
-				art = rr.getArticuloByCodigoInterno(csv.getDetalleString("codigo"));
-				ArticuloDTO articulo = (ArticuloDTO) new AssemblerArticulo().domainToDto(art);				
-				ImportacionPedidoCompraDetalleDTO d = this.nvoItemOrden(articulo, 
-						csv.getDetalleDouble("cantidad"), csv.getDetalleDouble("valor"));
-				detalles.add(d);
+				String codigo = csv.getDetalleString("CODIGO"); 
+				String cantidad = csv.getDetalleString("CANTIDAD");
+				String costoDs = csv.getDetalleString("COSTO");
+				
+				ImportacionPedidoCompraDetalleDTO item = new ImportacionPedidoCompraDetalleDTO();
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					ArticuloDTO ar = (ArticuloDTO) ass.domainToDto(art);
+					item.setArticulo(ar);
+					item.setCantidad(Integer.parseInt(cantidad));
+					item.setCostoProformaDs(Double.parseDouble(costoDs.replace(".", "").replace(",", ".")));
+					list.add(item);
+				} else {
+					noEncontrado += codigo + "\n";
+				}				
 			}
-
-			//if (this.diferenciasCSVProforma(detalles) == true) { VERIFICAR!!!!
-				csv.start();
-				while (csv.hashNext()) {
-					art = rr.getArticuloByCodigoInterno(csv.getDetalleString("codigo"));
-					boolean encontro = false;
-						for (ImportacionPedidoCompraDetalleDTO d : this.dto
-								.getImportacionPedidoCompraDetalle()) {							
-							if (art.getId().compareTo(d.getArticulo().getId()) == 0) {
-								encontro = true;
-								d.setCostoProformaDs(csv.getDetalleDouble("valor"));
-								d.setCostoProformaGs(d.getCostoProformaDs()	* this.dto.getCambio());
-							}
-						}
-						if (encontro == false) {
-							
-							ArticuloDTO articulo = (ArticuloDTO) new AssemblerArticulo().domainToDto(art);				
-							ImportacionPedidoCompraDetalleDTO d = this.nvoItemOrden(articulo,
-											csv.getDetalleDouble("cantidad"), csv.getDetalleDouble("valor"));
-							this.dto.getImportacionPedidoCompraDetalle().add(d);
-						}
-				}
-
-				this.addEventoAgendaLink( Configuracion.TEXTO_PROFORMA_CSV_IMPORTADO + this.nombreArchivoCSV, this.linkCsvImportado);
-
-				this.actualizarEtapaActual(this.getDtoUtil().getImportacionEstadoProformaRecibida());
-			//}
-
+			this.dto.getImportacionPedidoCompraDetalle().addAll(list);
+			this.dto.setConfirmadoImportacion(true);
+			this.mensajePopupTemporal("SE IMPORTARON " + list.size() + " ÍTEMS");
+			Clients.showNotification(noEncontrado);
 		} catch (Exception e) {
-			mensajeError(e.getMessage());
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al leer el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 		}
 	}
 
@@ -1097,31 +1098,16 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			}
 		}
 		
-		if (operacion == UPLOAD_PROFORMA) {
-			if (this.dto.getImportacionPedidoCompraDetalle().size() == 0) {
-				mensaje += "\n - Debe ingresar al menos un ítem.";
-				out = false;
-			}			
-		}
-		
 		if (operacion == ENVIAR_CORREO) {
 			if (this.dto.esNuevo()) {
 				mensaje += "\n - Debe Guardar los Datos antes de enviar el Correo.";
 				out = false;
-			}
-			if (this.dto.getImportacionPedidoCompraDetalle().size() == 0) {
-				mensaje = "\n - Debe ingresar al menos un item.";
-				out = false;
-			}			
+			}		
 		}
 		
 		if (operacion == DERIVAR_PEDIDO) {
 			if (this.comprobarGrupo() == false) {
 				mensaje += "\n - el Propietario actual es: " + this.dto.getPropietario();
-				out = false;
-			}
-			if (this.dto.getImportacionPedidoCompraDetalle().size() == 0) {
-				mensaje += "\n - Debe ingresar al menos un ítem.";
 				out = false;
 			}
 		}
@@ -3069,11 +3055,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public boolean validarFormulario(){
 		boolean out = true;		
 		this.mensajeErrorVerificar = "No se puede realizar la operación debido a: \n";
-		
-			if ((this.dto.esNuevo() == true) && (this.dto.getImportacionPedidoCompraDetalle().size() == 0)) {
-				this.mensajeErrorVerificar += "\n - Debe ingresar al menos un ítem al Pedido..";
-				out = false;
-			}
 			
 			if (this.dto.getProveedor().esNuevo() == true) {
 				this.mensajeErrorVerificar += "\n - Debe seleccionar un Proveedor..";

@@ -27,6 +27,7 @@ public class Configuracion extends Config {
 	public static String pathOrdenCompra = PATH_SESSION + ("/yhaguy/archivos/ordenCompras/") + "/";
 	public static String pathOrdenCompraGenerico = "/yhaguy/archivos/ordenCompras/";
 	public static String pathPedidoCompra = PATH_SESSION + ("/yhaguy/archivos/pedidoCompra/") + "/";
+	public static String pathPedidoCompraGenerico = "/yhaguy/archivos/pedidoCompra/";
 	public static String pathPedidoCompraAdjunto = "/reportes/compras/importacion/correos/";
 	public static String pathReportesImportacion = "/reportes/compras/importacion/";
 	public static String pathPedidoCompraAdjuntoDir = PATH_SESSION + ("/reportes/compras/importacion/correos/") + "/";
