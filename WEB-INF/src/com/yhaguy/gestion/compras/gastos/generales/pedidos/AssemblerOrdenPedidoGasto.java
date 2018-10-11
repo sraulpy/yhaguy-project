@@ -34,6 +34,7 @@ public class AssemblerOrdenPedidoGasto extends Assembler {
 		this.listaDomainToListaDTO(domain, dto, "gastos", new AssemblerGasto());
 		this.domainToMyArray(domain, dto, "departamento", attDepartamento);
 		this.domainToMyPair(domain, dto, "sucursal");
+		this.domainToMyPair(domain, dto, "moneda");
 
 		return dto;
 	}
@@ -49,6 +50,7 @@ public class AssemblerOrdenPedidoGasto extends Assembler {
 		this.myArrayToDomain(dto, domain, "condicionPago");
 		this.myArrayToDomain(dto, domain, "departamento");
 		this.myPairToDomain(dto, domain, "sucursal");
+		this.myPairToDomain(dto, domain, "moneda");
 		this.listaDTOToListaDomain(dto, domain, "ordenPedidoGastoDetalle",
 				true, true, new AssemblerOrdenPedidoGastoDetalle());
 		this.listaDTOToListaDomain(dto, domain, "gastos", false, false,

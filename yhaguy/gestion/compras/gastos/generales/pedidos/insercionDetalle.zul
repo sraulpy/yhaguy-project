@@ -54,15 +54,14 @@
 					</combobox>
 				</row>
 				<row>
-					<field value="Importe Gs." />
+					<field value="Importe" />
 					<hlayout>
 						<guaranibox
 							value="@bind(vm.dato.nvoDetalle.importe)" />
-						<label value="Iva incluído" />
 					</hlayout>
 				</row>
 				<row>
-					<field value="Impuesto Gs." />
+					<field value="Impuesto" />
 					<hlayout>
 						<guaranibox
 							value="@bind(vm.dato.nvoDetalle.impuesto)" 

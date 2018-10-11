@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.coreweb.domain.Domain;
+import com.coreweb.domain.Tipo;
 
 @SuppressWarnings("serial")
 public class OrdenPedidoGasto extends Domain{  
@@ -30,6 +31,7 @@ public class OrdenPedidoGasto extends Domain{
 	
 	private DepartamentoApp departamento;
 	private SucursalApp sucursal;
+	private Tipo moneda;
 	
 	private SubDiario subDiario;
 	private Set<Gasto> gastos = new HashSet<Gasto>();	
@@ -215,5 +217,13 @@ public class OrdenPedidoGasto extends Domain{
 
 	public void setConfirmado(boolean confirmado) {
 		this.confirmado = confirmado;
+	}
+
+	public Tipo getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(Tipo moneda) {
+		this.moneda = moneda;
 	}
 }

@@ -34,6 +34,7 @@ public class OrdenPedidoGastoDTO extends DTO{
 	
 	private MyArray departamento = new MyArray();
 	private MyPair sucursal = new MyPair();
+	private MyPair moneda;
 	
 	private SubDiarioDTO subDiario = new SubDiarioDTO();
 	private List<GastoDTO> gastos = new ArrayList<GastoDTO>();
@@ -213,5 +214,13 @@ public class OrdenPedidoGastoDTO extends DTO{
 
 	public void setConfirmado(boolean confirmado) {
 		this.confirmado = confirmado;
+	}
+
+	public MyPair getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(MyPair moneda) {
+		this.moneda = moneda;
 	}
 }

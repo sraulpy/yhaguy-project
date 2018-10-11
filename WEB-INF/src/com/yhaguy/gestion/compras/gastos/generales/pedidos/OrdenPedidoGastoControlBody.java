@@ -268,6 +268,7 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		gasto.setCondicionPago(this.sugerirCondicion());
 		gasto.setDepartamento(this.getAcceso().getDepartamento());
 		gasto.setSucursal(this.getAcceso().getSucursalOperativa());
+		gasto.setMoneda(this.getDtoUtil().getMonedaGuarani());
 	}
 	
 	/**
@@ -281,6 +282,9 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 			this.dto.setNombreUsuarioAutoriza(this.getUs().getNombre());
 			this.dto.setFechaAutorizacion(new Date());
 			this.dto = (OrdenPedidoGastoDTO) this.saveDTO(this.dto);
+			MyArray my = new MyArray(this.dto.getMoneda().getText());
+			my.setId(this.dto.getMoneda().getId());
+			this.dtoGasto.setMoneda(my);
 			this.setEstadoABMConsulta();
 			mensajePopupTemporal("Orden de Compra autorizada..");
 			this.addEventoAgenda("Se autorizó la Orden de Compra..");
@@ -483,7 +487,11 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 			det.setArticuloGasto(item.getArticuloGasto());
 			det.setCantidad(1);
 			det.setCentroCosto(item.getCentroCosto());
-			det.setMontoGs(item.getImporte());
+			if (this.dtoGasto.isMonedaLocal()) {
+				det.setMontoGs(item.getImporte());
+			} else {
+				det.setMontoDs(item.getImporte());
+			}
 			det.setObservacion(item.getDescripcion());
 			det.setTipoIva(this.getIva(item.getIva()));
 			det.getIvaCalculado();
@@ -650,8 +658,10 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 			if ((this.dto.isAutorizado())
 					&& (this.dtoGasto.getDetalles().size() > 0)
 					&& (duplicado == false)) {
-				this.dtoGasto = (GastoDTO) this.saveDTO(this.dtoGasto,
-						new AssemblerGasto());
+				MyArray my = new MyArray();
+				my.setId(this.dto.getMoneda().getId());
+				this.dtoGasto.setMoneda(my);
+				this.dtoGasto = (GastoDTO) this.saveDTO(this.dtoGasto, new AssemblerGasto());
 				this.dto.getGastos().add(this.dtoGasto);
 			}
 
@@ -858,6 +868,8 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		}
 		return out;
 	}
+	
+	
 	
 	public double getTotalImporte() {
 		double out = 0;

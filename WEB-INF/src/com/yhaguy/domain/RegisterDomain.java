@@ -8437,9 +8437,9 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			String codigo = "MAH M48135 0,25";
-			double mayorista = 334600.0;
-			double minorista = 501900.0;
+			String codigo = "DIE 1794906";
+			double mayorista = 1050000.0;
+			double minorista = 1575000.0;
 			long stock = 12;
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
@@ -8451,7 +8451,7 @@ public class RegisterDomain extends Register {
 			
 			ArticuloDeposito ad = rr.getArticuloDeposito(art.getId(), 7);
 			ad.setStock(stock);
-			rr.saveObject(ad, "sys");
+			//rr.saveObject(ad, "sys");
 			
 		} catch (Exception e) {
 		}		

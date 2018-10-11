@@ -54,15 +54,18 @@
 					</combobox>
 				</row>
 				<row>
-					<field value="Importe Gs." />
+					<field value="Importe" />
 					<hlayout>
 						<guaranibox
-							value="@bind(vm.dato.gastoDetalle.montoGs)" />
-						<label value="Iva incluído" />
+							value="@bind(vm.dato.gastoDetalle.montoGs)" 
+							visible="@load(vm.dato.dtoGasto.monedaLocal)"/>
+						<dolarbox
+							value="@bind(vm.dato.gastoDetalle.montoDs)" 
+							visible="@load(!vm.dato.dtoGasto.monedaLocal)"/>
 					</hlayout>
 				</row>
 				<row>
-					<field value="Impuesto Gs." />
+					<field value="Impuesto" />
 					<hlayout>
 						<guaranibox
 							value="@bind(vm.dato.gastoDetalle.ivaCalculado)" 

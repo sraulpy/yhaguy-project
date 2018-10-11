@@ -50,6 +50,18 @@
 									</combobox>
 								</vlayout>
 								<vlayout spacing="0">
+									<field value="Moneda" />
+									<combobox
+										value="@load(vm.dto.moneda.text)" readonly="true" 
+										selectedItem="@bind(vm.dto.moneda)" instant="true"
+										hflex="true"
+										model="@load(vm.dtoUtil.monedas)">
+										<template name="model">
+											<comboitem label="@load(each.text)"></comboitem>
+										</template>
+									</combobox>
+								</vlayout>
+								<vlayout spacing="0">
 									<field value="Estado" />
 									<textbox
 										value="@load(vm.estado.toUpperCase())" readonly="true" 
@@ -240,6 +252,18 @@
 										hflex="true"/>
 								</vlayout>
 								<vlayout spacing="0">
+									<field value="Moneda" />
+									<combobox
+										value="@load(vm.dtoGasto.moneda.pos1)" readonly="true" 
+										selectedItem="@bind(vm.dtoGasto.moneda)" instant="true"
+										hflex="true"
+										model="@load(vm.dtoUtil.monedasConSimbolo)">
+										<template name="model">
+											<comboitem label="@load(each.pos1)"></comboitem>
+										</template>
+									</combobox>
+								</vlayout>
+								<vlayout spacing="0">
 									<field value="Estado"/>
 									<textbox value="@load(vm.dtoGasto.estadoComprobante.text)"
 										readonly="true"
@@ -393,7 +417,7 @@
 								<listcell
 									label="@load(each.observacion)" />
 								<listcell
-									label="@load(each.importeGs) @converter('formattedNumber', format='###,###,##0')" />
+									label="@load(vm.dtoGasto.monedaLocal? each.importeGs : each.importeDs) @converter('formattedNumber', format='###,###,##0')" />
 								<listcell
 									label="@load(each.tipoIva.pos1)" />
 							</listitem>
@@ -415,10 +439,15 @@
 										style="background:#EEF7FA;text-align:right;font-weight:bold"
 										value="@load(vm.dtoGasto.totalIva10)" />
 									<space />
-									<field value="Importe Gs." />
+									<field value="Importe" />
 									<guaranibox readonly="true"
 										style="background:#EEF7FA;text-align:right;font-weight:bold"
-										value="@load(vm.dtoGasto.totalImporteGs)" />
+										value="@load(vm.dtoGasto.totalImporteGs)" 
+										visible="@load(vm.dtoGasto.monedaLocal)"/>
+									<dolarbox readonly="true"
+										style="background:#EEF7FA;text-align:right;font-weight:bold"
+										value="@load(vm.dtoGasto.totalImporteDs)" 
+										visible="@load(!vm.dtoGasto.monedaLocal)"/>
 								</hlayout>
 							</listfooter>
 						</listfoot>
