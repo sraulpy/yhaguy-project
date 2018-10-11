@@ -57,7 +57,12 @@
 					<field value="Importe" />
 					<hlayout>
 						<guaranibox
-							value="@bind(vm.dato.nvoDetalle.importe)" />
+							value="@bind(vm.dato.nvoDetalle.importe)" 
+							visible="@load(vm.dato.dto.moneda.id eq 31? 'true':'false')"/>
+						<dolarbox
+							value="@bind(vm.dato.nvoDetalle.importe)" 
+							readonly="true"
+							visible="@load(vm.dato.dto.moneda.id eq 32? 'true':'false')" />
 					</hlayout>
 				</row>
 				<row>
@@ -65,7 +70,11 @@
 					<hlayout>
 						<guaranibox
 							value="@bind(vm.dato.nvoDetalle.impuesto)" 
-							readonly="true"/>
+							visible="@load(vm.dato.dto.moneda.id eq 31? 'true':'false')"/>
+						<dolarbox
+							value="@bind(vm.dato.nvoDetalle.impuesto)" 
+							readonly="true"
+							visible="@load(vm.dato.dto.moneda.id eq 32? 'true':'false')" />
 					</hlayout>
 				</row>				
 			</rows>
