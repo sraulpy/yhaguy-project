@@ -1288,7 +1288,6 @@
 								</listcell>
 								<listcell label="@load(each.getMargen(vm.dto.resumenGastosDespacho.tipoCambio, vm.dto.resumenGastosDespacho.coeficiente)) 
 									@converter('formatedNumber', format='###,##0.00')" />
-								<listcell label="@load(each.minoristaGs) @converter(vm.cnv.monedaLocal)" />
 								<listcell>
 									<guaranibox value="@bind(each.minoristaGs)" hflex="true" vflex="true" />
 								</listcell>
