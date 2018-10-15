@@ -417,7 +417,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		// List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 		List<Object[]> migracion = rr.getMigracionPorArticulo((String) this.selectedItem.getPos1(), this.desde, this.hasta, ID_SUC_PRINCIPAL);
@@ -433,11 +433,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoSalida.addAll(ajustStockNeg);
 		this.historicoSalida.addAll(ventas);
 		this.historicoSalida.addAll(ntcsc);
+		this.historicoSalida.addAll(transfs);
 		
 		/** for (Object[] transf : transfs) {
 			long idsuc = (long) transf[6];
 			if(idsuc == ID_SUC_PRINCIPAL) {
-				this.historicoSalida.add(transf);
+				
 			} else {				
 				this.historicoEntrada.add(transf);
 			}

@@ -4203,7 +4203,7 @@ public class RegisterDomain extends Register {
 				+ desde_
 				+ "' and t.fechaCreacion <= '"
 				+ hasta_
-				+ "')"
+				+ "') and t.sucursalDestino.id = " + SucursalApp.ID_MRA
 				+ " order by t.fechaCreacion desc";
 		return this.hql(query);
 	}

@@ -7,6 +7,11 @@ import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
 public class SucursalApp extends Domain {
+	
+	public static final long ID_MRA = 1;
+	public static final long ID_CENTRAL = 2;
+	public static final long ID_MCAL = 3;
+	public static final long ID_GAM = 4;
 
 	private String nombre;
 	private String descripcion;
