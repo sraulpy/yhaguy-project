@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumenCajaPlanilla" pageWidth="937" pageHeight="595" orientation="Landscape" columnWidth="897" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumenCajaPlanilla" pageWidth="937" pageHeight="595" orientation="Landscape" columnWidth="897" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.4641000000000035"/>
-	<property name="ireport.x" value="181"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -50,7 +50,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="23">
+			<band height="21">
 				<line>
 					<reportElement x="2" y="4" width="895" height="1" uuid="d2d84e8e-d80a-45a3-a8f1-a69f7939b569"/>
 				</line>
@@ -272,7 +272,7 @@
 	<columnFooter>
 		<band height="6" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1" uuid="39add47e-4330-428e-ad28-29fe385516cc"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="893" height="1" uuid="39add47e-4330-428e-ad28-29fe385516cc"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
@@ -307,4 +307,34 @@
 			</frame>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="70">
+			<staticText>
+				<reportElement style="SubTitle" x="14" y="54" width="299" height="15" uuid="dd78aef2-6a3c-480e-a3cb-fb55159fd6e8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ingresado Por]]></text>
+			</staticText>
+			<line>
+				<reportElement x="13" y="48" width="300" height="1" uuid="ee96c3bb-1b57-4fa4-904f-94ef8fcc0903"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="SubTitle" x="488" y="54" width="299" height="15" uuid="7893665f-2cce-4d69-b72d-fddbb97b5b7b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Verificado Por]]></text>
+			</staticText>
+			<line>
+				<reportElement x="488" y="49" width="300" height="1" uuid="82bb276c-26ff-4c7d-a811-5b9df871edbf"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
 </jasperReport>
