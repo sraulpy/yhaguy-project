@@ -600,8 +600,13 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.imprimirResumen_();
 	}
 	
+	@Command
+	public void imprimirResumenImportacion() throws Exception {
+		this.imprimirResumenImportacion_();
+	}
+	
 	/**
-	 * Despliega el Reporte de Pago..
+	 * Despliega el Reporte de detalle..
 	 */
 	private void imprimirResumen_() throws Exception {		
 		String source = ReportesViewModel.SOURCE_RESUMEN_IMPORTACION;
@@ -609,9 +614,23 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			source = ReportesViewModel.SOURCE_RESUMEN_IMPORTACION_SIN_CAB;
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
-		JRDataSource dataSource = new ResumenDataSource();
+		JRDataSource dataSource = new ResumenImportacionDataSource();
 		params.put("Titulo", "DETALLE DE IMPORTACION NRO. " + this.dto.getNumeroPedidoCompra() + " - PROVEEDOR: " + this.dto.getProveedor().getRazonSocial());
 		params.put("Usuario", this.getUs().getNombre());
+		this.imprimirComprobante(source, params, dataSource, this.selectedFormato);
+	}
+	
+	/**
+	 * Despliega el Reporte de resumen..
+	 */
+	private void imprimirResumenImportacion_() throws Exception {		
+		String source = ReportesViewModel.SOURCE_RESUMEN_IMPORTACION_;
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new ResumenDataSource();
+		params.put("Usuario", this.getUs().getNombre());
+		params.put("Numero", this.dto.getNumeroPedidoCompra());
+		params.put("Proveedor", this.dto.getProveedor().getRazonSocial());
+		params.put("TipoCambio", Utiles.getNumberFormatDs(this.dto.getResumenGastosDespacho().getTipoCambio()));
 		this.imprimirComprobante(source, params, dataSource, this.selectedFormato);
 	}
 	
@@ -620,9 +639,96 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	 */
 	class ResumenDataSource implements JRDataSource {
 
-		List<MyArray> detalle = new ArrayList<MyArray>();
+		List<Object[]> detalle = new ArrayList<Object[]>();
+		Map<String, Double> totales = new HashMap<String, Double>();
+		Map<String, Double> totalesDs = new HashMap<String, Double>();
+		Map<String, Double> totalesIva = new HashMap<String, Double>();
+		Map<String, Double> totalesNeto = new HashMap<String, Double>();
 
 		public ResumenDataSource() {
+			try {
+				this.detalle = dto.getGastosDetallado();
+				for (Object[] det : this.detalle) {
+					String key = (String) det[5];
+					Double acum = totales.get(key);
+					Double acumDs = totalesDs.get(key);
+					Double acumNeto = totalesNeto.get(key);
+					Double acumIva = totalesIva.get(key);
+					if(acum != null) {
+						acum += (double) det[3];
+						acumDs += (double) det[4];
+						acumNeto += ((double) det[3] - (double) det[6]);
+						acumIva += (double) det[6];
+						totales.put(key, acum);
+						totalesDs.put(key, acumDs);
+						totalesNeto.put(key, acumNeto);
+						totalesIva.put(key, acumIva);
+					} else {
+						totales.put(key, (double) det[3]);
+						totalesDs.put(key, (double) det[4]);
+						totalesNeto.put(key, (((double) det[3]) - (double) det[6]));
+						totalesIva.put(key, (double) det[6]);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		private int index = -1;
+
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+			Object value = null;
+			String fieldName = field.getName();
+			Object[] item = this.detalle.get(index);
+
+			if ("TituloDetalle".equals(fieldName)) {
+				value = item[5];
+			} else if ("Descripcion".equals(fieldName)) {
+				value = item[2];
+			} else if ("NroFactura".equals(fieldName)) {
+				value = item[1];
+			} else if ("Importe".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[3]);
+			} else if ("Iva".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[6]);
+			} else if ("Neto".equals(fieldName)) {
+				value = Utiles.getNumberFormat(((double) item[3]) - ((double) item[6]));
+			} else if ("ImporteDs".equals(fieldName)) {
+				value = Utiles.getNumberFormatDs((double) item[4]);
+			} else if ("TotalImporte".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totales.get(item[5]));
+			} else if ("TotalImporteDs".equals(fieldName)) {
+				value = Utiles.getNumberFormatDs(totalesDs.get(item[5]));
+			} else if ("TotalIva".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva.get(item[5]));
+			} else if ("TotalNeto".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesNeto.get(item[5]));
+			} else if ("TipoCambio_".equals(fieldName)) {
+				value = Utiles.getNumberFormatDs(((double) item[3]) / ((double) item[4]));
+			}
+			return value;
+		}
+
+		@Override
+		public boolean next() throws JRException {
+			if (index < detalle.size() - 1) {
+				index++;
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * DataSource del resumen importacion..
+	 */
+	class ResumenImportacionDataSource implements JRDataSource {
+
+		List<MyArray> detalle = new ArrayList<MyArray>();
+
+		public ResumenImportacionDataSource() {
 			this.detalle = getItemsCostoFinal_();
 		}
 

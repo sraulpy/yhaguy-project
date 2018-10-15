@@ -88,6 +88,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_LIQUIDACION_SALARIO = "/reportes/jasper/ReciboLiquidacionSalario.jasper";
 	public static final String SOURCE_RESUMEN_IMPORTACION = "/reportes/jasper/ResumenImportacion.jasper";
 	public static final String SOURCE_RESUMEN_IMPORTACION_SIN_CAB = "/reportes/jasper/ResumenImportacion_sin_cab.jasper";
+	public static final String SOURCE_RESUMEN_IMPORTACION_ = "/reportes/jasper/ResumenImportacion_.jasper";
 	
 	static final String CONTEXT = Sessions.getCurrent().getWebApp().getRealPath("/");
 	static final String LOGO = CONTEXT + "/logo.png";

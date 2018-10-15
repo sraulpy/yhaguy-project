@@ -1155,8 +1155,13 @@
 						<div hflex="true"></div>
 						<button mold="bs" sclass="btn-primary btn-sm"
 							width="150px" iconSclass="z-icon-print"
-							label=" Imprimir" disabled="@load(!vm.siempreHabilitado)" 
+							label=" Detalle" disabled="@load(!vm.siempreHabilitado)" 
 							onClick='popFormato.open(self)'/>
+						<space></space>
+						<button mold="bs" sclass="btn-warning btn-sm"
+							width="150px" iconSclass="z-icon-print"
+							label=" Resumen" disabled="@load(!vm.siempreHabilitado)" 
+							onClick='popFormato_.open(self)'/>
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
 						model="@load(vm.itemsCostoFinal_)">
@@ -1620,6 +1625,26 @@
 				label=" Imprimir" hflex="true"
 				disabled="@load(!vm.siempreHabilitado)"
 				onClick="@command('imprimirResumen')" />
+		</vlayout>
+	</popup>
+	
+	<popup id="popFormato_" width="250px" sclass="rounded">
+		<vlayout>
+			<field value="Formato:" />
+			<combobox hflex="true" placeholder="Seleccione un Formato.."
+				model="@load(vm.formatos)"
+				selectedItem="@bind(vm.selectedFormato)"
+				buttonVisible="@load(vm.siempreHabilitado)">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>	
+			</combobox>
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-print" 
+				label=" Imprimir" hflex="true"
+				disabled="@load(!vm.siempreHabilitado)"
+				onClick="@command('imprimirResumenImportacion')" />
 		</vlayout>
 	</popup>
 	</div>	

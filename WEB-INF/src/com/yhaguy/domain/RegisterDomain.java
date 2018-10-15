@@ -8333,14 +8333,16 @@ public class RegisterDomain extends Register {
 	 * [2]:d.cuenta 
 	 * [3]:d.montoGs
 	 * [4]:d.montoDs
+	 * [5]:d.cuenta.grupo
+	 * [6]:d.iva
 	 */
 	public List<Object[]> getGastosDeImportacionDetallado(long idImportacion) throws Exception {
 		if (idImportacion < 0) {
 			return new ArrayList<Object[]>();
 		}
-		String query = "select g.id, g.numeroFactura, d.articuloGasto.cuentaContable.descripcion, d.montoGs, d.montoDs"
+		String query = "select g.id, g.numeroFactura, d.articuloGasto.cuentaContable.descripcion, d.montoGs, d.montoDs, d.articuloGasto.auxi, d.montoIva"
 				+ " from Gasto g join g.detalles d where g.idImportacion = " + idImportacion
-				+ " order by d.articuloGasto.cuentaContable.descripcion desc";
+				+ " order by d.articuloGasto.auxi desc";
 		return this.hql(query);
 	}
 	
