@@ -4183,13 +4183,13 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las transferencias donde esta contenida el articulo..
 	 *         [0]:concepto [1]:fecha [2]:numero [3]:cantidad [4]:costo
-	 *         [5]:origen [6]:idsuc [7]:id salida [8]:id entrada
+	 *         [5]:destino [6]:idsuc [7]:id salida [8]:id entrada
 	 */
 	public List<Object[]> getTransferenciasPorArticulo(long idArticulo,
 			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursal.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
