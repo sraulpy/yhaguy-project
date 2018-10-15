@@ -3797,7 +3797,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial,"
 				+ " v.deposito.descripcion, d.articulo.codigoInterno, d.articulo.descripcion, '- - -',"
-				+ " d.articulo.proveedor.empresa.razonSocial,"
+				+ " '- - -',"
 				+ " d.articulo.id"
 				+ " from Venta v join v.detalles d where d.articulo.id = "
 				+ idArticulo
