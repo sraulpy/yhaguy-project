@@ -5,7 +5,6 @@ import java.util.Date;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
-import com.yhaguy.Configuracion;
 import com.yhaguy.gestion.articulos.ArticuloDTO;
 
 @SuppressWarnings("serial")
@@ -51,21 +50,6 @@ public class ImportacionPedidoCompraDetalleDTO extends DTO{
 	@DependsOn({"ultimoCostoDs", "costoProformaDs"})
 	public String getColorVariacion(){
 		return this.getMisc().colorVariacion(this.ultimoCostoDs, this.costoProformaDs);		
-	}
-	
-	@DependsOn("motivo")
-	public String getTextoMotivo(){
-		String out = "";
-		if (this.motivo == ImportacionPedidoCompraControlBody.MOTIVO_NUEVO) {
-			out = Configuracion.TEXTO_NUEVO_ITEM;
-		}
-		if (this.motivo == ImportacionPedidoCompraControlBody.MOTIVO_CANTIDAD) {
-			out = Configuracion.TEXTO_DIFERENCIA_POR_CANTIDAD;
-		}
-		if (this.motivo == ImportacionPedidoCompraControlBody.MOTIVO_NO_ENCONTRADO) {
-			out = Configuracion.TEXTO_ITEM_NO_ENCONTRADO_CSV;
-		}
-		return out;
 	}
 	
 	public int getCantidad() {

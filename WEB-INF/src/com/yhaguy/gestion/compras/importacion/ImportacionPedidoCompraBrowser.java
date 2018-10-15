@@ -135,7 +135,8 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 		col13.setTitulo("Importe Gs.");
 		col13.setComponente(Browser.LABEL_NUMERICO);
 		col13.setTipo(Config.TIPO_NUMERICO);
-		col13.setWidthColumna("120px");	
+		col13.setWidthColumna("120px");
+		col13.setVisible(false);
 		
 		col14.setCampo("totalImporteDs"); 	
 		col14.setTitulo("Importe U$D.");

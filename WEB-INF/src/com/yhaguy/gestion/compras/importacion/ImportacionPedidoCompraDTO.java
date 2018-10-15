@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ProveedorDTO;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class ImportacionPedidoCompraDTO extends DTO {
@@ -19,6 +22,7 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private Date fechaCreacion = new Date();
 	private Date fechaCierre;
 	private String observacion = "SIN OBS..";
+	private String via = "";
 	private double cambio = 0;
 	private double totalImporteGs = 0;
 	private double totalImporteDs = 0;
@@ -38,6 +42,7 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private MyArray tipoMovimiento = new MyArray();
 	private MyPair deposito;
 	
+	private List<ImportacionPedidoCompraDetalleDTO> solicitudCotizaciones = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
 	private List<ImportacionPedidoCompraDetalleDTO> importacionPedidoCompraDetalle = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
 	private List<ImportacionFacturaDTO> importacionFactura = new ArrayList<ImportacionFacturaDTO>();
 	private ProveedorDTO proveedor = new ProveedorDTO();
@@ -45,6 +50,44 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private MyArray subDiario;
 	private List<ImportacionGastoImprevistoDTO> gastosImprevistos = new ArrayList<ImportacionGastoImprevistoDTO>();
 	private List<ImportacionAplicacionAnticipoDTO> aplicacionAnticipos = new ArrayList<ImportacionAplicacionAnticipoDTO>();
+	private List<MyArray> trazabilidad = new ArrayList<MyArray>();
+	
+	private double totalGastos = 0;
+	private double totalGastosDs = 0;
+	
+	/**
+	 * @return true si es una compra en moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		String sigla = (String) this.moneda.getPos2();
+		return sigla.equals(Configuracion.SIGLA_MONEDA_GUARANI);
+	}
+	
+	/**
+	 * @return los gastos de importacion..
+	 */
+	public List<Object[]> getGastos() throws Exception {
+		this.totalGastos = 0;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> out = rr.getGastosDeImportacion(this.getId());
+		for (Object[] gasto : out) {
+			double importe = (double) gasto[6];
+			double importeDs = (double) gasto[7];
+			this.totalGastos += importe;
+			this.totalGastosDs += importeDs;
+		}
+		BindUtils.postNotifyChange(null, null, this, "totalGastos");
+		return out;
+	}
+	
+	/**
+	 * @return los gastos de importacion..
+	 */
+	public List<Object[]> getGastosDetallado() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> out = rr.getGastosDeImportacionDetallado(this.getId());
+		return out;
+	}
 	
 	/**
 	 * @return el total de anticipo aplicado..
@@ -55,6 +98,13 @@ public class ImportacionPedidoCompraDTO extends DTO {
 			out += anticipo.getImporteDs();
 		}
 		return out;
+	}
+	
+	/**
+	 * @return nro y fecha..
+	 */
+	public String getNumeroFecha() {
+		return this.numeroPedidoCompra + " - " + Utiles.getDateToString(this.fechaCreacion, Utiles.DD_MM_YYYY);
 	}
 	
 	@DependsOn("subDiario")
@@ -340,5 +390,45 @@ public class ImportacionPedidoCompraDTO extends DTO {
 
 	public void setAplicacionAnticipos(List<ImportacionAplicacionAnticipoDTO> aplicacionAnticipos) {
 		this.aplicacionAnticipos = aplicacionAnticipos;
+	}
+
+	public List<ImportacionPedidoCompraDetalleDTO> getSolicitudCotizaciones() {
+		return solicitudCotizaciones;
+	}
+
+	public void setSolicitudCotizaciones(List<ImportacionPedidoCompraDetalleDTO> solicitudCotizaciones) {
+		this.solicitudCotizaciones = solicitudCotizaciones;
+	}
+
+	public List<MyArray> getTrazabilidad() {
+		return trazabilidad;
+	}
+
+	public void setTrazabilidad(List<MyArray> trazabilidad) {
+		this.trazabilidad = trazabilidad;
+	}
+
+	public double getTotalGastos() {
+		return totalGastos;
+	}
+
+	public void setTotalGastos(double totalGastos) {
+		this.totalGastos = totalGastos;
+	}
+
+	public String getVia() {
+		return via;
+	}
+
+	public void setVia(String via) {
+		this.via = via;
+	}
+
+	public double getTotalGastosDs() {
+		return totalGastosDs;
+	}
+
+	public void setTotalGastosDs(double totalGastosDs) {
+		this.totalGastosDs = totalGastosDs;
 	}
 }

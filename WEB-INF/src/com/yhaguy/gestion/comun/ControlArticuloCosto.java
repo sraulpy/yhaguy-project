@@ -95,6 +95,21 @@ public class ControlArticuloCosto {
 		return Utiles.getRedondeo(costo);
 	}
 	
+	/**
+	 * actualiza el precio del articulo..
+	 */
+	public static void actualizarPrecio(long idArticulo, double mayoristaGs, double minoristaGs, double listaGs,
+			String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Articulo art = rr.getArticuloById(idArticulo);
+		if (art != null) {
+			art.setPrecioGs(mayoristaGs);
+			art.setPrecioMinoristaGs(minoristaGs);
+			art.setPrecioListaGs(listaGs);
+			rr.saveObject(art, user);
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(ControlArticuloCosto.getPrecioVenta(158518, 10));

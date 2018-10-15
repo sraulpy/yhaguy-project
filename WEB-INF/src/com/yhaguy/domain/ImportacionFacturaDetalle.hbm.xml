@@ -24,6 +24,9 @@
 		<property name="valorProrrateo"/>
 		<property name="cantidad"/>
 		<property name="cantidadRecibida"/>
+		<property name="precioFinalGs"/>
+		<property name="minoristaGs"/>
+		<property name="listaGs"/>
 
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo" column="idArticulo"
 			lazy="false"/>

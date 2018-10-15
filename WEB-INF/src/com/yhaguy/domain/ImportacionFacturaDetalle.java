@@ -22,6 +22,10 @@ public class ImportacionFacturaDetalle extends Domain {
 	private int cantidad;
 	private int cantidadRecibida;
 	
+	private double precioFinalGs;
+	private double minoristaGs;
+	private double listaGs;
+	
 	private Articulo articulo;
 	
 	/**
@@ -185,5 +189,29 @@ public class ImportacionFacturaDetalle extends Domain {
 		} else {
 			return -1;	
 		}		
+	}
+
+	public double getPrecioFinalGs() {
+		return precioFinalGs;
+	}
+
+	public void setPrecioFinalGs(double precioFinalGs) {
+		this.precioFinalGs = precioFinalGs;
+	}
+
+	public double getMinoristaGs() {
+		return minoristaGs;
+	}
+
+	public void setMinoristaGs(double minoristaGs) {
+		this.minoristaGs = minoristaGs;
+	}
+
+	public double getListaGs() {
+		return listaGs;
+	}
+
+	public void setListaGs(double listaGs) {
+		this.listaGs = listaGs;
 	}
 }

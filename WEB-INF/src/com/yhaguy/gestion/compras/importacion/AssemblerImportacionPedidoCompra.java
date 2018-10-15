@@ -16,12 +16,13 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 	private static String[] attIgualesImportacionPedidoCompra = { "numeroPedidoCompra", "fechaCreacion", "fechaCierre",
 			"observacion", "cambio", "confirmadoImportacion", "confirmadoVentas", "confirmadoAdministracion",
 			"propietarioActual", "pedidoConfirmado", "importacionConfirmada", "cifProrrateado", "totalImporteGs",
-			"totalImporteDs" };
+			"totalImporteDs", "via" };
 
-	private static String[] attMoneda = { "descripcion", "sigla" };	
-	private static String[] attCondicion = { "descripcion", "plazo" };	
-	private static String[] attTipoMovimiento = { "descripcion" };
-	private static String[] attSubDiario = { "numero", "fecha", "descripcion", "confirmado"};
+	private static final String[] ATT_MONEDA = { "descripcion", "sigla" };	
+	private static final String[] ATT_CONDICION = { "descripcion", "plazo" };	
+	private static final String[] ATT_TIPOMOVIMIENTO = { "descripcion" };
+	private static final String[] ATT_SUBDIARIO = { "numero", "fecha", "descripcion", "confirmado"};
+	private static final String[] ATT_TRAZABILIDAD = { "fecha", "descripcion", "urlDocumento" };
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {
@@ -36,12 +37,14 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 		this.myPairToDomain(dto, domain, "tipo");
 		this.myPairToDomain(dto, domain, "deposito");
 		
+		this.listaDTOToListaDomain(dto, domain, "solicitudCotizaciones", true, true, new AssemblerImportacionPedidoCompraDetalle());
 		this.listaDTOToListaDomain(dto, domain, "importacionPedidoCompraDetalle", true, true, new AssemblerImportacionPedidoCompraDetalle());
 		this.listaDTOToListaDomain(dto, domain, "importacionFactura", true, true, new AssemblerImportacionFactura());
 		this.listaDTOToListaDomain(dto, domain, "gastosImprevistos", true, true, new AssemblerImportacionGastoImprevisto());
 		this.listaDTOToListaDomain(dto, domain, "aplicacionAnticipos", true, true, new AssemblerImportacionAplicacionAnticipo());
 		this.hijoDtoToHijoDomain(dto, domain, "proveedor", new AssemblerProveedor(), false);
 		this.hijoDtoToHijoDomain(dto, domain, "resumenGastosDespacho", new AssemblerGastosDespacho(), true);
+		this.listaMyArrayToListaDomain(dto_, domain, "trazabilidad", ATT_TRAZABILIDAD, true, true);
 		
 		if (dto_.getImportacionFactura().size() > 0) {
 			domain.setFechaFactura(dto_.getImportacionFactura().get(0).getFechaOriginal());
@@ -57,20 +60,22 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 		ImportacionPedidoCompraDTO dto = (ImportacionPedidoCompraDTO) getDTO(domain, ImportacionPedidoCompraDTO.class);
 
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionPedidoCompra);
-		this.domainToMyArray(domain, dto, "proveedorCondicionPago", attCondicion);
+		this.domainToMyArray(domain, dto, "proveedorCondicionPago", ATT_CONDICION);
 		this.domainToMyPair(domain, dto, "estado", "descripcion");
-		this.domainToMyArray(domain, dto, "moneda", attMoneda);
-		this.domainToMyArray(domain, dto, "tipoMovimiento", attTipoMovimiento);
+		this.domainToMyArray(domain, dto, "moneda", ATT_MONEDA);
+		this.domainToMyArray(domain, dto, "tipoMovimiento", ATT_TIPOMOVIMIENTO);
 		this.domainToMyPair(domain, dto, "tipo", "descripcion");
 		this.domainToMyPair(domain, dto, "deposito");
-		this.domainToMyArray(domain, dto, "subDiario", attSubDiario);
+		this.domainToMyArray(domain, dto, "subDiario", ATT_SUBDIARIO);
 		
+		this.listaDomainToListaDTO(domain, dto, "solicitudCotizaciones", new AssemblerImportacionPedidoCompraDetalle());
 		this.listaDomainToListaDTO(domain, dto, "importacionPedidoCompraDetalle", new AssemblerImportacionPedidoCompraDetalle());
 		this.listaDomainToListaDTO(domain, dto, "importacionFactura", new AssemblerImportacionFactura());		
 		this.listaDomainToListaDTO(domain, dto, "gastosImprevistos", new AssemblerImportacionGastoImprevisto());
 		this.listaDomainToListaDTO(domain, dto, "aplicacionAnticipos", new AssemblerImportacionAplicacionAnticipo());
 		this.hijoDomainToHijoDTO(domain, dto, "proveedor", new AssemblerProveedor());
 		this.hijoDomainToHijoDTO(domain, dto, "resumenGastosDespacho", new AssemblerGastosDespacho());
+		this.listaDomainToListaMyArray(domain, dto, "trazabilidad", ATT_TRAZABILIDAD);
 
 		return dto;
 	}

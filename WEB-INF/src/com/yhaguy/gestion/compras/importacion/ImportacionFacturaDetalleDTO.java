@@ -6,6 +6,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.gestion.articulos.ArticuloDTO;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class ImportacionFacturaDetalleDTO extends DTO{
@@ -24,6 +25,10 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	private MyPair tipoGastoDescuento = new MyPair();
 	private int cantidad = 0;
 	private int cantidadRecibida = 0;
+	
+	private double precioFinalGs = 0;
+	private double minoristaGs = 0;
+	private double listaGs = 0;
 	
 	private ArticuloDTO articulo = new ArticuloDTO();		
 	
@@ -99,6 +104,16 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	@DependsOn("articulo")
 	public boolean isReferencia(){
 		return this.getArticulo().getCodigoInterno().trim().startsWith("@");
+	}
+	
+	/**
+	 * @return el margen..
+	 */
+	public double getMargen(double tipoCambio, double coeficiente) {
+		double costoGs = this.costoDs * tipoCambio;
+		double incrementoGs = costoGs * coeficiente;
+		double costoFinalGs = costoGs + incrementoGs;
+		return Utiles.obtenerPorcentajeDelValor((this.precioFinalGs - costoFinalGs), costoFinalGs);
 	}
 	
 	public double getCostoGs() {
@@ -219,5 +234,29 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 
 	public void setCostoSinProrrateoDs(double costoSinProrrateoDs) {
 		this.costoSinProrrateoDs = costoSinProrrateoDs;
+	}
+
+	public double getPrecioFinalGs() {
+		return precioFinalGs;
+	}
+
+	public void setPrecioFinalGs(double precioFinalGs) {
+		this.precioFinalGs = precioFinalGs;
+	}
+
+	public double getMinoristaGs() {
+		return minoristaGs;
+	}
+
+	public void setMinoristaGs(double minoristaGs) {
+		this.minoristaGs = minoristaGs;
+	}
+
+	public double getListaGs() {
+		return listaGs;
+	}
+
+	public void setListaGs(double listaGs) {
+		this.listaGs = listaGs;
 	}
 }

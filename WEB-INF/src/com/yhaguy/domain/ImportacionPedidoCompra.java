@@ -10,7 +10,10 @@ import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 
 @SuppressWarnings("serial")
-public class ImportacionPedidoCompra extends Domain{
+public class ImportacionPedidoCompra extends Domain {
+	
+	public static final String VIA_MARITIMA = "MARITIMO";
+	public static final String VIA_TERRESTRE = "TERRESTRE";
 	
 	private String numeroPedidoCompra;
 	private Date fechaCreacion;
@@ -18,6 +21,7 @@ public class ImportacionPedidoCompra extends Domain{
 	private Date fechaFactura;
 	private String numeroFactura;
 	private String observacion;
+	private String via;
 	private double cambio;
 	private double totalImporteGs;
 	private double totalImporteDs;
@@ -38,10 +42,12 @@ public class ImportacionPedidoCompra extends Domain{
 	private TipoMovimiento tipoMovimiento;
 	private Deposito deposito;
 	
+	private Set<ImportacionPedidoCompraDetalle> solicitudCotizaciones = new HashSet<ImportacionPedidoCompraDetalle>();
 	private Set<ImportacionPedidoCompraDetalle> importacionPedidoCompraDetalle = new HashSet<ImportacionPedidoCompraDetalle>();
 	private Set<ImportacionFactura> importacionFactura = new HashSet<ImportacionFactura>();
 	private Set<ImportacionGastoImprevisto> gastosImprevistos = new HashSet<ImportacionGastoImprevisto>();
 	private Set<ImportacionAplicacionAnticipo> aplicacionAnticipos = new HashSet<ImportacionAplicacionAnticipo>();
+	private Set<ImportacionTrazabilidad> trazabilidad = new HashSet<ImportacionTrazabilidad>();
 	private Proveedor proveedor;
 	private ImportacionResumenGastosDespacho resumenGastosDespacho;
 	
@@ -300,5 +306,29 @@ public class ImportacionPedidoCompra extends Domain{
 
 	public void setAplicacionAnticipos(Set<ImportacionAplicacionAnticipo> aplicacionAnticipos) {
 		this.aplicacionAnticipos = aplicacionAnticipos;
+	}
+
+	public Set<ImportacionPedidoCompraDetalle> getSolicitudCotizaciones() {
+		return solicitudCotizaciones;
+	}
+
+	public void setSolicitudCotizaciones(Set<ImportacionPedidoCompraDetalle> solicitudCotizaciones) {
+		this.solicitudCotizaciones = solicitudCotizaciones;
+	}
+
+	public Set<ImportacionTrazabilidad> getTrazabilidad() {
+		return trazabilidad;
+	}
+
+	public void setTrazabilidad(Set<ImportacionTrazabilidad> trazabilidad) {
+		this.trazabilidad = trazabilidad;
+	}
+
+	public String getVia() {
+		return via;
+	}
+
+	public void setVia(String via) {
+		this.via = via;
 	}
 }

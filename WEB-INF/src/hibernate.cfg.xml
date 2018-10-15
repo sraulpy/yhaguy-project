@@ -86,6 +86,7 @@
 		<mapping resource="com/yhaguy/domain/ImportacionResumenGastosDespacho.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ImportacionGastoImprevisto.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ImportacionAplicacionAnticipo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ImportacionTrazabilidad.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Gasto.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/GastoDetalle.hbm.xml" />

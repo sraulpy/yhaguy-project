@@ -3778,7 +3778,8 @@ public class RegisterDomain extends Register {
 	}
 
 	/**
-	 * @return las ventas donde esta contenida el articulo.. [0]:concepto
+	 * @return las ventas donde esta contenida el articulo.. 
+	 * [0]:concepto
 	 * [1]:fecha 
 	 * [2]:numero 
 	 * [3]:cantidad 
@@ -3795,8 +3796,8 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial,"
-				+ " v.deposito.descripcion, d.articulo.codigoInterno, d.articulo.descripcion, d.articulo.articuloMarca.descripcion,"
-				+ " (select p.proveedor.empresa.razonSocial from Articulo a join a.proveedorArticulos p where a.id = d.articulo.id ),"
+				+ " v.deposito.descripcion, d.articulo.codigoInterno, d.articulo.descripcion, '- - -',"
+				+ " d.articulo.proveedor.empresa.razonSocial,"
 				+ " d.articulo.id"
 				+ " from Venta v join v.detalles d where d.articulo.id = "
 				+ idArticulo
@@ -8312,13 +8313,14 @@ public class RegisterDomain extends Register {
 	 * [3]:numeroFactura 
 	 * [4]:concepto 
 	 * [5]:proveedor
-	 * [6]:importe
+	 * [6]:importeGs
+	 * [7]:importeDs
 	 */
 	public List<Object[]> getGastosDeImportacion(long idImportacion) throws Exception {
 		if (idImportacion < 0) {
 			return new ArrayList<Object[]>();
 		}
-		String query = "select g.id, g.fecha, g.vencimiento, g.numeroFactura, g.tipoMovimiento.descripcion, g.proveedor.empresa.razonSocial, g.importeGs"
+		String query = "select g.id, g.fecha, g.vencimiento, g.numeroFactura, g.tipoMovimiento.descripcion, g.proveedor.empresa.razonSocial, g.importeGs, g.importeDs"
 				+ " from Gasto g where g.idImportacion = " + idImportacion
 				+ " order by g.fecha desc";
 		return this.hql(query);
@@ -8330,12 +8332,13 @@ public class RegisterDomain extends Register {
 	 * [1]:numeroFactura 
 	 * [2]:d.cuenta 
 	 * [3]:d.montoGs
+	 * [4]:d.montoDs
 	 */
 	public List<Object[]> getGastosDeImportacionDetallado(long idImportacion) throws Exception {
 		if (idImportacion < 0) {
 			return new ArrayList<Object[]>();
 		}
-		String query = "select g.id, g.numeroFactura, d.articuloGasto.cuentaContable.descripcion, d.montoGs"
+		String query = "select g.id, g.numeroFactura, d.articuloGasto.cuentaContable.descripcion, d.montoGs, d.montoDs"
 				+ " from Gasto g join g.detalles d where g.idImportacion = " + idImportacion
 				+ " order by d.articuloGasto.cuentaContable.descripcion desc";
 		return this.hql(query);
@@ -8432,6 +8435,43 @@ public class RegisterDomain extends Register {
 	public Object[] getArticulo_(long idArticulo) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs from Articulo a where a.id = " + idArticulo + "";
 		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return los datos de articulo.. 
+	 * [0]:id
+	 * [1]:codigoInterno
+	 * [2]:descripcion
+	 * [3]:costoGs
+	 * [4]:costoDs
+	 * [5]:precioGs
+	 */
+	public Object[] getArticulo(long idArticulo) throws Exception {
+		if (idArticulo < 0) {
+			return null;
+		}
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs, a.costoDs, a.precioGs"
+				+ " from Articulo a where a.id = " + idArticulo;
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return la ultima cotizacion..
+	 */
+	public double getTipoCambioVenta() throws Exception {
+		String query = "select t.id, t.venta from TipoCambio t where t.id = (select max(id) from TipoCambio)";
+		List<Object[]> list = this.hql(query);
+		return (double) list.get(0)[1];
+	}
+	
+	/**
+	 * @return el articulo historial migracion..
+	 */
+	public ArticuloHistorialMigracion getMigracion(String codigo) throws Exception {
+		String query = "select a from ArticuloHistorialMigracion a where a.codigoInterno = '" + codigo + "'";
+		List<ArticuloHistorialMigracion> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	

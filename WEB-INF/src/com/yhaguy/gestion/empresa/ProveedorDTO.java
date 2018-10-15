@@ -2,10 +2,12 @@ package com.yhaguy.gestion.empresa;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 
+@SuppressWarnings("serial")
 public class ProveedorDTO extends DTO {
 
 	EmpresaDTO empresa = new EmpresaDTO();
@@ -14,6 +16,7 @@ public class ProveedorDTO extends DTO {
 	List<MyArray> condicionPagos = new ArrayList<MyArray>();
 	private List<MyArray> emails = new ArrayList<MyArray>();
 	
+	private MyArray condicionPago = new MyArray();
 	private MyArray cuentaContable = new MyArray();
 
 	private long prioridad = 0;
@@ -137,6 +140,14 @@ public class ProveedorDTO extends DTO {
 			out += " sin empresa " + "(" + this.getId() + ")";
 		}
 		return out;
+	}
+
+	public MyArray getCondicionPago() {
+		return condicionPago;
+	}
+
+	public void setCondicionPago(MyArray condicionPago) {
+		this.condicionPago = condicionPago;
 	}
 
 }

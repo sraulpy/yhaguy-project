@@ -17,6 +17,7 @@
 		<property name="fechaFactura" />
 		<property name="numeroFactura"/>
 		<property name="observacion" />
+		<property name="via" />
 		<property name="cambio" />
 		<property name="totalImporteGs" />
 		<property name="totalImporteDs" />
@@ -48,6 +49,14 @@
 			
 		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito" column="idDeposito"
 			lazy="false"/>
+			
+		<set name="solicitudCotizaciones" table="importacionpedidocompradetalle"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="id_importacion" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ImportacionPedidoCompraDetalle"></one-to-many>
+		</set>
 
 		<set name="importacionPedidoCompraDetalle" table="ImportacionPedidoCompraDetalle"
 			inverse="false" lazy="false" fetch="join" cascade="all">
@@ -81,6 +90,14 @@
 				<column name="id_importacion" not-null="false"/>
 			</key>
 			<one-to-many entity-name="com.yhaguy.domain.ImportacionAplicacionAnticipo"></one-to-many>
+		</set>
+		
+		<set name="trazabilidad" table="importacion_trazabilidad" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="id_importacion" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.ImportacionTrazabilidad"></one-to-many>
 		</set>
 		
 		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"

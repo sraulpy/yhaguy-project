@@ -1,69 +1,168 @@
 <zk>
 	<div
 		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionPedidoCompraControlBody')"
-		width="100%" height="100%"
-		style="padding:5px"
+		width="100%" height="100%" style="padding:5px"
 		apply="org.zkoss.bind.BindComposer">
 
 		<tabbox id="tbx" width="100%" vflex="1">
 			<tabs>
 				<tab id="tab1" label="Datos Generales" width="170px" />
-				<tab id="tab2" label="Orden de Compra" width="170px" />
-				<tab id="tab3" label="Factura Importación" width="170px" />
-				<tab id="tab5" label="Resumen de Despacho" width="170px" />
-				<tab id="tab6" label="Costo Final" width="170px" />
+				<tab id="tab2" label="Solicitud Cotización" width="170px" />
+				<tab id="tab3" label="Proforma" width="170px" />
+				<tab id="tab4" label="Factura Importación" width="170px" />
+				<tab id="tab5" label="Recepción Mercaderías" width="170px" />
+				<tab id="tab6" label="Resumen de Despacho" width="170px" />
+				<tab id="tab7" label="Costo Final" width="170px" />
+				<tab id="tab8" label="Precios" width="170px" />
 			</tabs>
 			<tabpanels>
 
 				<!-- __________________________ TAB 1 - DATOS GENERALES __________________________  -->
 
 				<tabpanel>
-					<div height="30px" />
-					<hbox pack="center" width="100%" style="padding:20px">
+					<div height="5px" />
+					<hbox pack="center" width="100%"
+						style="padding:20px">
 						<vlayout hflex="true" spacing="0">
 							<grid hflex="true" sclass="vgrid">
 								<columns>
-									<column width="25%" />
+									<column />
 									<column />
 								</columns>
 								<rows>
 									<row>
-										<field value="Número:"/>
-										<label
-											value="@load(vm.dto.numeroPedidoCompra)" />
+										<vlayout spacing="0">
+											<field value="Número / Fecha" />
+											<textbox readonly="true" value="@load(vm.dto.numeroFecha)" hflex="true" />
+										</vlayout>
+										<vlayout spacing="0">
+										<field value="Tipo Importación" />
+										<combobox hflex="true"
+											model="@load(vm.dtoUtil.tiposImportacion)"
+											value="@load(vm.dto.tipo)"
+											selectedItem="@bind(vm.tipoSelected)" instant="true"
+											onSelect="@command('asignarTipoImportacion')">
+											<template name="model">
+												<comboitem
+													label="@load(each.text)" />
+											</template>
+										</combobox>
+										</vlayout>
+										<vlayout spacing="0">
+										<field value="Vía" />
+										<combobox hflex="true"
+											model="@load(vm.vias)"
+											value="@load(vm.dto.via)"
+											selectedItem="@bind(vm.dto.via)" instant="true">
+											<template name="model">
+												<comboitem label="@load(each)" />
+											</template>
+										</combobox>
+										</vlayout>
 									</row>
 									<row>
-										<field value="Tipo Movimiento:" />										
-										<label
-											value="@load(vm.dto.tipoMovimiento.pos1)" />
+										<cell colspan="2">
+											<vlayout spacing="0">
+												<div height="3px"></div>
+												<field value="Proveedor" />
+												<div height="3px"></div>
+												<buscadorProveedor
+													value="@bind(vm.dto)" campo="razonSocial" hflex="true" />
+											</vlayout>
+										</cell>
+										<vlayout spacing="0">
+											<field value="Observación" />
+											<textbox value="@bind(vm.dto.observacion)" hflex="true" />
+										</vlayout>
 									</row>
 									<row>
-										<field value="Código Proveedor:" />
-										<buscadorProveedor
-											value="@bind(vm.dto)" campo="codigo" hflex="true" />
-									</row>
-									<row>
-										<field value="Descripción Proveedor:" />
-										<buscadorProveedor
-											value="@bind(vm.dto)" campo="razonSocial" hflex="true" />
-									</row>
-									<row>
-										<field value="Ruc:" />
-										<buscadorProveedor
-											value="@bind(vm.dto)" campo="ruc" hflex="true"/>
+									<vlayout spacing="0">
+										<field value="Condición" />
+										<combobox hflex="true"
+											model="@load(vm.dtoUtil.condicionesPago)"
+											value="@load(vm.dto.proveedorCondicionPago.pos1)"
+											selectedItem="@bind(vm.dto.proveedorCondicionPago)"
+											instant="true">
+											<template name="model">
+												<comboitem
+													label="@load(each.pos1)" />
+											</template>
+										</combobox>
+									</vlayout>
+									<vlayout spacing="0">
+										<field value="Moneda" />
+										<combobox id="moneda"
+											hflex="true" model="@load(vm.dtoUtil.monedasConSimbolo)"
+											value="@load(vm.dto.moneda.pos1)"
+											selectedItem="@bind(vm.dto.moneda)" instant="true"
+											onChange="@command('refreshTipoCambio')">
+											<template name="model">
+												<comboitem
+													label="@load(each.pos1)" />
+											</template>
+										</combobox>
+									</vlayout>
+									<vlayout spacing="0">
+										<field value="Tipo de Cambio" />
+										<guaranibox value="@bind(vm.dto.cambio)" hflex="true"
+												onChange="@command('updateTipoCambio')" />
+									</vlayout>
 									</row>
 								</rows>
 							</grid>
-							<space></space>
-							<space></space>
-							<hlayout sclass="button-container">
-								<button iconSclass="z-icon-plus"
-									onClick='pop_anticipos.open(self, "after_start")'></button>
-								<space />
-								<field value="APLICACIÓN DE PAGOS ANTICIPADOS" />
+							<hlayout sclass="button-container" style="background:#EEF7FA">
+								<field
+									value="ESTADO DE CUENTA" />
 							</hlayout>
-							<listbox hflex="true" sclass="small-list" height="200px"
-								model="@load(vm.dto.aplicacionAnticipos)" emptyMessage="SIN APLICACIÓN DE ANTICIPOS..">
+							<listbox hflex="true" sclass="small-list"
+								height="205px" model="@load(vm.saldosPendientes)"
+								emptyMessage="SIN FACTURAS PENDIENTES..">
+								<listhead>
+									<listheader label="Emisión" width="110px"></listheader>
+									<listheader label="Vencimiento" width="110px"></listheader>
+									<listheader label="Concepto"></listheader>
+									<listheader label="Número" width="120px"></listheader>
+									<listheader label="Saldo USD" align="right" width="120px"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')">
+										</listcell>
+										<listcell
+											label="@load(each.fechaVencimiento) @converter('formattedDate', format='dd-MM-yyyy')">
+										</listcell>
+										<listcell
+											label="@load(each.tipoMovimiento.descripcion)">
+										</listcell>
+										<listcell
+											label="@load(each.nroComprobante)">
+										</listcell>
+										<listcell
+											label="@load(each.saldo) @converter(vm.cnv.monedaLocal)">
+										</listcell>
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="4"></listfooter>
+									<listfooter>
+										<guaranibox
+												style="background:#EEF7FA;text-align:right" hflex="true"
+												value="@load(vm.totalSaldosPendientes)" />
+									</listfooter>
+								</listfoot>
+							</listbox>
+							<hlayout sclass="button-container" style="background:#EEF7FA">
+								<button iconSclass="z-icon-plus"
+									onClick='pop_anticipos.open(self, "after_start")'>
+								</button>
+								<space />
+								<field
+									value="APLICACIÓN DE PAGOS ANTICIPADOS" />
+							</hlayout>
+							<listbox hflex="true" sclass="small-list"
+								height="200px" model="@load(vm.dto.aplicacionAnticipos)"
+								emptyMessage="SIN APLICACIÓN DE ANTICIPOS..">
 								<listhead>
 									<listheader label="Emisión"></listheader>
 									<listheader label="Concepto"></listheader>
@@ -73,19 +172,31 @@
 								</listhead>
 								<template name="model">
 									<listitem>
-										<listcell label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
-										<listcell label="@load(each.movimiento.tipoMovimiento.pos1)"></listcell>
-										<listcell label="@load(each.movimiento.nroComprobante)"></listcell>
-										<listcell label="@load(each.movimiento.importeOriginal) @converter(vm.cnv.monedaLocal)"></listcell>
-										<listcell label="@load(each.importeDs) @converter(vm.cnv.monedaLocal)"></listcell>
+										<listcell
+											label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')">
+										</listcell>
+										<listcell
+											label="@load(each.movimiento.tipoMovimiento.pos1)">
+										</listcell>
+										<listcell
+											label="@load(each.movimiento.nroComprobante)">
+										</listcell>
+										<listcell
+											label="@load(each.movimiento.importeOriginal) @converter(vm.cnv.monedaLocal)">
+										</listcell>
+										<listcell
+											label="@load(each.importeDs) @converter(vm.cnv.monedaLocal)">
+										</listcell>
 									</listitem>
 								</template>
 								<listfoot>
 									<listfooter span="5">
 										<hlayout>
 											<space hflex="true"></space>
-											<field value="Dif. Tipo Cambio:" />
-											<guaranibox style="background:#EEF7FA;text-align:right" 
+											<field
+												value="Dif. Tipo Cambio:" />
+											<guaranibox
+												style="background:#EEF7FA;text-align:right"
 												value="@load(vm.diferenciaTipoCambio)" />
 											<label value="Gs."></label>
 										</hlayout>
@@ -94,176 +205,293 @@
 							</listbox>
 						</vlayout>
 						<space />
+						<vlayout>
 						<grid hflex="true" sclass="vgrid">
 							<columns>
-								<column width="25%" />
+								<column />
 								<column />
 							</columns>
 							<rows>
 								<row>
-									<field value="Estado:" />
-									<textbox
-										value="@load(vm.estadoGeneralPedidoCompra)" readonly="true" hflex="true" />
-								</row>
-								<row>
-									<field value="Etapa actual:" />
-									<combobox width="154px"
-										model="@load(vm.dtoUtil.importacionEstados)"
-										value="@load(vm.dto.estado.text)"
-										selectedItem="@load(vm.dto.estado)" readonly="true"
-										buttonVisible="false" hflex="true">
-										<template name="model">
-											<comboitem
-												label="@load(each.text)" />
-										</template>
-									</combobox>
-								</row>
-								<row>
-									<field value="Fecha de Creación:" />
-									<hlayout>
-										<datebox
-											value="@load(vm.dto.fechaCreacion)" readonly="true" hflex="true" />
-										<timebox
-											value="@load(vm.dto.fechaCreacion)" readonly="true"
-											buttonVisible="false" width="60px" format="short" />
-									</hlayout>
-								</row>
-								<row>	
-									<field value="Fecha de Cierre:" />
-									<hlayout>
-										<datebox
-											value="@load(vm.dto.fechaCierre)" readonly="true" hflex="true" />
-										<timebox
-											value="@load(vm.dto.fechaCierre)" readonly="true"
-											buttonVisible="false" width="60px" format="short" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Tipo Importación:" />
-									<combobox hflex="true"
-										model="@load(vm.dtoUtil.tiposImportacion)"
-										value="@load(vm.dto.tipo)"
-										selectedItem="@bind(vm.tipoSelected)" instant="true"
-										onSelect="@command('asignarTipoImportacion')">
-										<template name="model">
-											<comboitem
-												label="@load(each.text)" />
-										</template>
-									</combobox>
-								</row>
-								<row>
-									<field value="Condición:" />
-									<combobox hflex="true"
-										model="@load(vm.dtoUtil.condicionesPago)"
-										value="@load(vm.dto.proveedorCondicionPago.pos1)"
-										selectedItem="@bind(vm.dto.proveedorCondicionPago)"
-										instant="true">
-										<template name="model">
-											<comboitem
-												label="@load(each.pos1)" />
-										</template>
-									</combobox>
-								</row>
-								<row>
-									<field value="Moneda:" />
-									<hlayout sclass="z-valign-middle">
-										<combobox id="moneda"
-											hflex="true" model="@load(vm.dtoUtil.monedasConSimbolo)"
-											value="@load(vm.dto.moneda.pos1)"
-											selectedItem="@bind(vm.dto.moneda)"
-											instant="true">
+									<vlayout spacing="0">
+										<field value="Etapa actual" />
+										<combobox
+											model="@load(vm.dtoUtil.importacionEstados)"
+											value="@load(vm.dto.estado.text)"
+											selectedItem="@bind(vm.dto.estado)"
+											hflex="true">
 											<template name="model">
 												<comboitem
-													label="@load(each.pos1)" />
+													label="@load(each.text)" />
 											</template>
 										</combobox>
-										<space width="8px" />
-										<field value="T.Cambio:" />
-										<dolarbox
-											value="@bind(vm.dto.cambio)" width="100px"
-											onChange="@command('updateTipoCambio')" />
-										<label value="Gs."
-											style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Observación:" />
-									<textbox rows="2"
-										value="@bind(vm.dto.observacion)" hflex="true" />
-								</row>
+									</vlayout>
+									<vlayout spacing="0">
+										<field value="Estado" />
+										<textbox value="@load(vm.estadoGeneralPedidoCompra)" readonly="true"
+											hflex="true" />
+									</vlayout>
+								</row>								
 							</rows>
 						</grid>
+							<hlayout sclass="button-container" style="background:#EEF7FA">
+								<button iconSclass="z-icon-plus"
+									onClick="@command('openTrazabilidad', comp=pop_trazabilidad, parent=self)">
+								</button>
+								<space />
+								<field
+									value="TRAZABILIDAD DE LA IMPORTACIÓN" />
+							</hlayout>
+							<listbox hflex="true" sclass="small-list"
+								height="560px" model="@load(vm.dto.trazabilidad)"
+								emptyMessage="SIN REGISTROS..">
+								<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+								<listhead style="text-align:center">
+									<listheader label="Descripción"></listheader>
+									<listheader label="Fecha" width="120px" align="right" sort="auto(pos1)" onCreate="self.sort(true)"></listheader>
+									<listheader label="Documento" width="120px" align="center"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.pos2)"></listcell>
+										<listcell label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+										<listcell>
+											<a iconSclass="z-icon-paperclip" label=" adjunto"
+												href="@load(each.pos3)" target="_blank" visible="@load(!each.pos3.toString().isEmpty())"></a>
+										</listcell>
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="3">
+										<hlayout>
+											<field value="ítems" />
+											<space></space>
+										</hlayout>
+									</listfooter>
+								</listfoot>
+							</listbox>
+						</vlayout>
 					</hbox>
 					<div height="15px" />
-					
+
 					<popup id="pop_anticipos" sclass="rounded">
-						<hbox width="100%" style="border-bottom:solid 1px silver">
+						<hbox width="100%"
+							style="border-bottom:solid 1px silver">
 							<label value="ANTICIPOS PENDIENTES" />
 						</hbox>
-						<div height="5px"/>
-						<listbox sclass="rounded" width="700px" height="230px" model="@load(vm.anticiposPendientes)"
+						<div height="5px" />
+						<listbox sclass="rounded" width="700px"
+							height="230px" model="@load(vm.anticiposPendientes)"
 							selectedItem="@bind(vm.selectedAnticipo)">
 							<listhead>
-								<listheader label="Emisión" width="100px"></listheader>
+								<listheader label="Emisión"
+									width="100px">
+								</listheader>
 								<listheader label="Concepto"></listheader>
-								<listheader label="Número" width="120px"></listheader>
-								<listheader label="Saldo USD" width="130px" align="right"></listheader>
-								<listheader label="Aplicación USD" width="130px" align="right"></listheader>
+								<listheader label="Número"
+									width="120px">
+								</listheader>
+								<listheader label="Saldo USD"
+									width="130px" align="right">
+								</listheader>
+								<listheader label="Aplicación USD"
+									width="130px" align="right">
+								</listheader>
 							</listhead>
 							<template name="model">
 								<listitem>
-									<listcell label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
-									<listcell label="@load(each.movimiento.tipoMovimiento.pos1)"></listcell>
-									<listcell label="@load(each.movimiento.nroComprobante)"></listcell>
-									<listcell label="@load(each.movimiento.saldo * -1) @converter(vm.cnv.monedaLocal)"></listcell>
-									<listcell>
-										<guaranibox value="@bind(each.importeDs)" vflex="true" inplace="true" />
+									<listcell
+										label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')">
 									</listcell>
-									</listitem>
+									<listcell
+										label="@load(each.movimiento.tipoMovimiento.pos1)">
+									</listcell>
+									<listcell
+										label="@load(each.movimiento.nroComprobante)">
+									</listcell>
+									<listcell
+										label="@load(each.movimiento.saldo * -1) @converter(vm.cnv.monedaLocal)">
+									</listcell>
+									<listcell>
+										<guaranibox
+											value="@bind(each.importeDs)" vflex="true" inplace="true" />
+									</listcell>
+								</listitem>
 							</template>
 						</listbox>
 						<div height="5px"></div>
 						<hlayout>
 							<div hflex="true"></div>
-							<button iconSclass="z-icon-check" width="80px"
-								onClick="@command('aplicarAnticipo', comp=pop_anticipos)"></button>
+							<button iconSclass="z-icon-check"
+								width="80px"
+								onClick="@command('aplicarAnticipo', comp=pop_anticipos)">
+							</button>
 						</hlayout>
+					</popup>
+					
+					<popup id="pop_trazabilidad" sclass="rounded">
+						<div style="padding:10px;border:solid 1px silver" sclass="rounded">
+						<grid sclass="vgrid" width="400px">
+							<rows>
+								<row>
+									<textbox hflex="true" placeholder="Descripción.."
+										value="@bind(vm.nvaTrazabilidad.pos2)"></textbox>
+								</row>
+								<row>
+									<datebox value="@bind(vm.nvaTrazabilidad.pos1)" hflex="true" placeholder="Fecha.."></datebox>
+								</row>
+								<row visible="@load(vm.dto.estado.text eq 'EN TRANSITO')">
+									<textbox placeholder="Vía.." hflex="true"
+										value="@bind(vm.nvaTrazabilidad.pos4)"></textbox>
+								</row>
+								<row visible="@load(vm.dto.estado.text eq 'EN TRANSITO')">
+									<textbox placeholder="Transporte.." hflex="true"
+										value="@bind(vm.nvaTrazabilidad.pos5)"></textbox>
+								</row>
+								<row visible="@load(vm.dto.estado.text eq 'EN TRANSITO')">
+									<spinner placeholder="Cantidad.." hflex="true"
+										value="@bind(vm.nvaTrazabilidad.pos6)"></spinner>
+								</row>
+								<row visible="@load(vm.dto.estado.text eq 'EN TRANSITO')">
+									<textbox placeholder="Compañía.." hflex="true"
+										value="@bind(vm.nvaTrazabilidad.pos7)"></textbox>
+								</row>
+								<row visible="@load(vm.dto.estado.text eq 'EN TRANSITO')">
+									<guaranibox placeholder="Importe.." hflex="true"
+										value="@bind(vm.nvaTrazabilidad.pos8)"></guaranibox>
+								</row>
+								<row>
+									<button mold="bs" upload="true" iconSclass="z-icon-paperclip" 
+										label=" adjuntar documento" hflex="true" height="30px"
+										onUpload="@command('uploadFileTrazabilidad', file=event.media)"></button>
+								</row>
+							</rows>
+							</grid>
+						</div>
+						<div height="5px"></div>
+							<hlayout>
+								<div hflex="true"></div>
+								<button iconSclass="z-icon-check"
+									width="80px" mold="bs" sclass="btn-xs btn-success"
+									onClick="@command('addTrazabilidad', comp=pop_trazabilidad)">
+								</button>
+							</hlayout>
 					</popup>
 				</tabpanel>
 
 
-				<!-- ______________________________ TAB 2 - ORDEN COMPRA _______________________________ -->
-				
+				<!-- ______________________________ TAB 2 - COTIZACION _______________________________ -->
+
+				<tabpanel height="100%">
+					<hlayout sclass="button-container">
+						<button mold="bs" sclass="btn-danger btn-sm"
+							width="150px" iconSclass="z-icon-minus-circle"
+							onClick="@command('eliminarItem_')" label=" Eliminar" />
+						<space />
+						<button mold="bs" sclass="btn-success btn-sm"
+							width="150px" iconSclass="z-icon-plus-circle"
+							onClick="@command('insertarItem_')" label=" Insertar" />
+						<space />
+						<button mold="bs" sclass="btn-info btn-sm"
+							width="150px" iconSclass="z-icon-share" label=" Importar"
+							onClick='pop_importar.open(self, "after_start")' />
+						<space />
+						<button mold="bs" upload="true, accept=.csv"
+							onUpload="@command('uploadFile', file=event.media)" width="150px"
+							height="30px" iconSclass="z-icon-upload"
+							label=" Importar Archivo" 
+							disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"/>
+						<space></space>
+						<a iconSclass="z-icon-paperclip"
+							label=" ver archivo Importado" href="@load(vm.cotizacionCsv)"
+							target="_blank" visible="@load(vm.dto.confirmadoAdministracion)" 
+							style="font-size:10pt" />
+					</hlayout>
+
+					<listbox id="detalle" sclass="small-list"
+						model="@load(vm.dto.solicitudCotizaciones)" vflex="true"
+						multiple="true" checkmark="@load(vm.checkmarkOrdenCompra)"
+						selectedItems="@bind(vm.selectedOrdenItems)"
+						emptyMessage="AGREGUE ITEMS AL PEDIDO (CTRL+I)..">
+						<custom-attributes
+							org.zkoss.zul.listbox.autoSort="true" />
+						<listhead menupopup="auto" sizable="true">
+							<listheader width="50px" align="center" />
+							<listheader label="Código" width="150px" style="text-align: center" sort="auto(articulo.codigoInterno)"
+								onCreate="self.sort(true);" />
+							<listheader label="Descripción" style="text-align: center" sort="auto(articulo.descripcion)" />
+							<listheader label="Cantidad" width="150px" style="text-align: center" align="right" />
+							<listheader label="Ult. costo U$D" width="150px" style="text-align: center" align="right" />
+						</listhead>
+						<template name="model" status='s'>
+							<listitem>
+								<listcell />
+								<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+								<listcell label="@load(each.articulo.descripcion)"></listcell>								
+								<listcell label="@load(each.cantidad)"></listcell>
+								<listcell label="@load(each.ultimoCostoDs)"></listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter align="left" span="4">
+								<hlayout>
+									<field value="@load(vm.dto.solicitudCotizaciones.size())" />
+									<field value="ítems" />
+								</hlayout>
+							</listfooter>
+							<listfooter>
+								<dolarbox
+									value="@load(vm.totalProformaDs)" hflex="true"
+									style="background:#EEF7FA;text-align:right;font-weight:bold"
+									readonly="true" />
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
+
+				<!-- ______________________________ TAB 3 - PROFORMA _______________________________ -->
+
 				<tabpanel height="100%">
 					<hlayout sclass="button-container">
 						<button mold="bs" sclass="btn-danger btn-sm"
 							width="150px" iconSclass="z-icon-minus-circle"
 							onClick="@command('eliminarItem')" label=" Eliminar" />
-						<space/>
+						<space />
 						<button mold="bs" sclass="btn-success btn-sm"
 							width="150px" iconSclass="z-icon-plus-circle"
 							onClick="@command('insertarItem')" label=" Insertar" />
-						<space/>
+						<space />
+						<button mold="bs" sclass="btn-info btn-sm"
+							width="150px" iconSclass="z-icon-share" label=" Importar"
+							onClick='pop_importar_.open(self, "after_start")' />
+						<space />
 						<button mold="bs" upload="true, accept=.csv"
 							onUpload="@command('uploadFile_', file=event.media)" width="150px"
 							height="30px" iconSclass="z-icon-upload"
 							label=" Importar Archivo" 
 							disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"/>
 						<space />
-						<button mold="bs" sclass="btn-info btn-sm"
-							width="150px" iconSclass="z-icon-share" 
-							label=" Importar" onClick='pop_importar.open(self, "after_start")'/>
-						<space/>
+						<space />
+						<button mold="bs" sclass="btn-warning btn-sm"
+							width="150px" iconSclass="z-icon-plus-circle"
+							label=" Gastos/Descuentos" />
 						<button mold="bs" sclass="btn-warning btn-sm"
 							width="150px" iconSclass="z-icon-bar-chart-o"
-							onClick="@command('verComparativo')" label="@load(vm.comparativo? 'Ocultar Comparativo':'Ver Comparativo')" />
-						<space/>
+							onClick="@command('verComparativo')"
+							label="@load(vm.comparativo? 'Ocultar Comparativo':'Ver Comparativo')" />
+						<space />
+						
 						<button mold="bs" sclass="btn-primary btn-sm"
 							width="150px" iconSclass="z-icon-check"
 							onClick="@command('confirmarPedidoCompra')" label=" Aprobar" />
+						<space></space>
+						<a iconSclass="z-icon-paperclip"
+							label=" ver archivo Importado" href="@load(vm.proformaCsv)"
+							target="_blank" visible="@load(vm.dto.confirmadoImportacion)" 
+							style="font-size:10pt" />
 					</hlayout>
 
-					<listbox id="detalle" sclass="small-list"
+					<listbox id="detalle_" sclass="small-list"
 						model="@load(vm.dto.importacionPedidoCompraDetalle)" vflex="true"
 						multiple="true" checkmark="@load(vm.checkmarkOrdenCompra)"
 						selectedItems="@bind(vm.selectedOrdenItems)"
@@ -277,24 +505,16 @@
 								onCreate="self.sort(true);" />
 							<listheader label="Descripción"
 								style="text-align: center" sort="auto(articulo.descripcion)" />
-							<listheader label="U.Med." width="50px"
-								style="text-align: center" align="center" visible="false" />
-							<listheader label="Presentacion"
-								width="110px" style="text-align: center" align="right"
-								visible="false" />
-							<listheader label="Cantidad" width="65px"
+							<listheader label="Cantidad" width="100px"
 								sort="auto(cantidad)" style="text-align: center" align="right" />
 							<listheader
 								label="@load(vm.concatenar(Ult.Costo, vm.dto.moneda.pos2))"
 								width="100px" sort="auto(ultimoCostoDs)"
 								style="text-align: center" align="right"
 								visible="@load(vm.comparativo)" />
-							<listheader label="Fecha Ult.Costo"
-								width="123px" sort="auto(fechaUltimoCosto)"
-								style="text-align: center" align="right" visible="false" />
 							<listheader
-								label="@load(vm.concatenar('Costo', vm.dto.moneda.pos2))"
-								width="100px" sort="auto(costoProformaDs)"
+								label="@load(vm.concatenar('Precio', vm.dto.moneda.pos2))"
+								width="130px" sort="auto(costoProformaDs)"
 								style="text-align: center" align="right" />
 							<listheader label="Variación" width="95px"
 								sort="auto(variacion)" style="text-align: center" align="right"
@@ -306,85 +526,20 @@
 								tooltiptext="mayor a 10% - Rojo &#13;entre 0 y 10% - Naranja &#13; igual a 0% - nada  &#13; menor a 0% - Verde " />
 							<listheader
 								label="@load(vm.concatenar('Importe', vm.dto.moneda.pos2))"
-								width="110px" sort="auto(importeProformaDs)"
+								width="130px" sort="auto(importeProformaDs)"
 								style="text-align: center" align="right" />
-							<listheader label="Observación"
-								width="200px" sort="auto(observacion)" style="text-align:center"
-								align="center" visible="false" />
 						</listhead>
 						<template name="model" status='s'>
 							<listitem>
 								<listcell />
-								<listcell>
-									<label
-										value="@load(each.articulo.codigoInterno)"
-										tooltiptext="@load(each.articulo.codigoInterno)"
-										sclass="label-list" />
-								</listcell>
-								<listcell>
-									<label
-										value="@load(each.articulo.descripcion)"
-										multiline="false"
-										tooltiptext="@load(each.articulo.descripcion)"
-										sclass="label-list" />
-								</listcell>
-								<listcell
-									label="@load(each.articulo.articuloUnidadMedida.text)"
-									sclass="label-list" />
-								<listcell
-									label="@load(each.articulo.articuloPresentacion.pos1)"
-									sclass="label-list" />
-								<listcell>
-									<guaranibox inplace="true"
-										value="@bind(each.cantidad)" width="45px"
-										onChange="@command('notificarCambios')"
-										onFocus='detalle.setSelectedIndex(s.index)'
-										visible="@load(!vm.deshabilitado)">
-									</guaranibox>
-									<label value="@load(each.cantidad)"
-										visible="@load(vm.deshabilitado)" sclass="label-list" />
-								</listcell>
-								<listcell>
-									<dolarbox inplace="true"
-										value="@load(each.ultimoCostoDs)" readonly="true" />
-								</listcell>
-								<listcell
-									label="@load(each.fechaUltimoCosto) @converter('formatedDate', format='dd-MM-yy')"
-									sclass="label-list" />
-								<listcell>
-									<div>
-										<dolarbox inplace="true"
-											value="@bind(each.costoProformaDs)" width="60px"
-											onChange="@command('actualizarCostoProformaGs', detalle=each)"
-											onFocus='detalle.setSelectedIndex(s.index)'
-											readonly="@load(vm.dto.pedidoConfirmado)"
-											visible="@load(!vm.deshabilitado)" />
-										<label
-											value="@load(each.costoProformaDs) @converter(vm.cnv.monedaExtranjera)"
-											visible="@load(vm.deshabilitado)" sclass="label-list" />
-									</div>
-								</listcell>
-								<listcell>
-									<doublebox inplace="true"
-										readonly="true" value="@load(each.variacion)"
-										format="#,##0.00" style="@load(each.colorVariacion)"
-										width="75px" />
-								</listcell>
-								<listcell>
-									<doublebox inplace="true"
-										readonly="true" value="@load(each.porcentajeVariacion)"
-										format="#,##0.00" style="@load(each.colorVariacion)"
-										width="75px" />
-								</listcell>
-								<listcell>
-									<label
-										value="@load(each.importeProformaDs) @converter(vm.cnv.monedaExtranjera)"
-										sclass="label-list" />
-								</listcell>
-								<listcell>
-									<textbox
-										value="@bind(each.observacion)" inplace="true" width="180px" />
-								</listcell>
+								<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+								<listcell label="@load(each.articulo.descripcion)"></listcell>
+								<listcell label="@load(each.cantidad)"></listcell>
+								<listcell label="@load(each.ultimoCostoDs)"></listcell>
+								<listcell label="@load(each.costoProformaDs) @converter(vm.cnv.monedaExtranjera)"></listcell>
+								<listcell label="@load(each.variacion) @converter(vm.cnv.monedaExtranjera)" style="@load(each.colorVariacion)"></listcell>
+								<listcell label="@load(each.porcentajeVariacion) @converter(vm.cnv.monedaExtranjera)" style="@load(each.colorVariacion)"></listcell>
+								<listcell label="@load(each.importeProformaDs) @converter(vm.cnv.monedaExtranjera)"></listcell>
 							</listitem>
 						</template>
 						<listfoot>
@@ -399,602 +554,819 @@
 							<listfooter />
 							<listfooter />
 							<listfooter />
+							<listfooter>
+								<dolarbox
+									value="@load(vm.totalProformaDs)"
+									style="background:#EEF7FA;text-align:right;font-weight:bold"
+									readonly="true" hflex="true" />
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
+
+				<!-- __________________________ TAB 3 - FACTURA IMPORTACION __________________________ -->
+				<tabpanel>
+					<hlayout sclass="button-container">
+						<button iconSclass="z-icon-plus"
+							onClick="@command('nuevaFactura')"
+							tooltiptext="Agregar Factura.." />
+						<field value="Facturas:" />
+						<combobox
+							model="@load(vm.dto.importacionFactura)" hflex="true"
+							onSelect="@command('notificarCambios')"
+							selectedItem="@bind(vm.selectedImportacionFactura)">
+							<custom-attributes
+								org.zkoss.zul.listbox.autoSort="true" />
+							<template name="model" var="fac">
+								<comboitem label="@load(fac.numero)" />
+							</template>
+						</combobox>
+						<space />
+						<field value="Fecha:" />
+						<textbox
+							value="@load(vm.selectedImportacionFactura.fechaOriginal) @converter('formatedDate', format='dd-MM-yyyy')"
+							readonly="true" hflex="true" />
+
+						<!--
+							Descuento:
+							<guaranibox value="@bind(vm.selectedImportacionFactura.descuentoGs)" width="80px"
+							onChange="@command('dolarizarDescuento')"/>
+							<label value="Gs." style="font-size:11px" />
+							<dolarbox value="@bind(vm.selectedImportacionFactura.descuentoDs)" width="70px"
+							onChange="@command('guaranizarDescuento')"/>
+							<label value="U$D" style="font-size:11px" />	
+						-->
+
+					</hlayout>
+					<hlayout valign="middle"
+						sclass="button-container">
+						<button mold="bs" sclass="btn-danger btn-sm"
+							width="150px" iconSclass="z-icon-minus-circle"
+							onClick="@command('eliminarItemFactura')" label=" Eliminar" />
+						<space />
+						<button mold="bs" sclass="btn-success btn-sm"
+							width="150px" iconSclass="z-icon-plus-circle"
+							onClick="@command('insertarItemFactura')" label=" Insertar" />
+						<space />
+						<button mold="bs" sclass="btn-info btn-sm"
+							width="150px" iconSclass="z-icon-share"
+							onClick="@command('importarItems')" label=" Importar" />
+						<space />
+						<button mold="bs" sclass="btn-warning btn-sm"
+							width="150px" iconSclass="z-icon-plus-circle"
+							onClick="@command('agregarGastosDescuentos')"
+							label=" Gastos/Descuentos" />
+						<space />
+						<button mold="bs" upload="true, accept=.csv"
+							onUpload="@command('uploadFilefactura', file=event.media)" width="150px"
+							height="30px" iconSclass="z-icon-upload"
+							label=" Importar Archivo" 
+							disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"/>
+						<space />
+						<a iconSclass="z-icon-paperclip"
+							label=" ver archivo Importado" href="@load(vm.facturaCsv)"
+							target="_blank" visible="@load(vm.dto.confirmadoImportacion)" 
+							style="font-size:10pt" />
+					</hlayout>
+
+					<listbox id="detFactura" sclass="small-list"
+						model="@load(vm.selectedImportacionFactura.detalles)" vflex="true"
+						multiple="true" checkmark="@load(vm.checkmarkFactura)"
+						emptyMessage="@load(vm.emptyMsgFactura)"
+						selectedItems="@bind(vm.selectedFacturaItems)">
+						<custom-attributes
+							org.zkoss.zul.listbox.autoSort="true" />
+						<listhead menupopup="auto" sizable="true">
+							<listheader width="50px" align="center"
+								visible="@load(!vm.comparativoPrr)" />
+							<listheader label="Código" width="120px"
+								style="text-align: center" sort="auto(articulo.codigoInterno)"
+								onCreate="self.sort(true);" />
+							<listheader label="Descripción"
+								style="text-align: center" sort="auto(articulo.descripcion)" />
+							<listheader label="Tipo Gasto-Descuento"
+								style="text-align:center" visible="false" width="180px" />
+							<listheader label="U.Med." width="50px"
+								style="text-align: center" align="center" visible="false" />
+							<listheader label="Presentacion"
+								width="95px" style="text-align: center" align="right"
+								visible="false" />
+							<listheader label="Cantidad" width="80px"
+								visible="@load(!vm.comparativoPrr)" style="text-align: center"
+								align="right" sort="auto(cantidad)" />
+							<listheader
+								label="@load(vm.concatenar('Costo', vm.dto.moneda.pos2))"
+								width="120px" sort="auto(costoDs)" style="text-align: center"
+								align="right" />
+							<listheader label="Descuento" width="85px"
+								align="right" sort="auto(textoDescuento)"
+								style="text-align: center" visible="false" />
+							<listheader
+								label="@load(vm.concatenar('Importe', vm.dto.moneda.pos2))"
+								width="120px" style="text-align: center" align="right"
+								sort="auto(importeDsCalculado)" />
+						</listhead>
+						<template name="model" var="each" status="s">
+							<listitem style="@load(each.styleItem)">
+								<listcell />
+								<listcell>
+									<label
+										value="@load(each.articulo.codigoInterno)" multiline="false"
+										tooltiptext="@load(each.articulo.codigoInterno)"
+										sclass="label-list" />
+								</listcell>
+								<listcell>
+									<label
+										value="@load(each.descripcion)" multiline="false"
+										tooltiptext="@load(each.articulo.descripcion)"
+										sclass="label-list" />
+								</listcell>
+								<listcell
+									label="@load(each.tipoGastoDescuento.text)"
+									sclass="label-list" />
+								<listcell
+									label="@load(each.articulo.articuloUnidadMedida.text)"
+									sclass="label-list" />
+								<listcell
+									label="@load(each.articulo.articuloPresentacion.pos1)"
+									sclass="label-list" />
+								<listcell>
+									<div>
+										<intbox inplace="true"
+											value="@bind(each.cantidad)" width="45px"
+											onChange="@command('validarCantidad', item=each, comp=self)"
+											readonly="@load(each.gastoDescuento)"
+											visible="@load(!vm.deshabilitado)" />
+										<label
+											value="@load(each.cantidad)"
+											visible="@load(vm.deshabilitado)" sclass="label-list" />
+									</div>
+								</listcell>
+								<listcell>
+									<div>
+										<dolarbox
+											value="@bind(each.costoDs)" inplace="true"
+											onChange="@command('notificarCostoGs', item=each, comp=self)"
+											onFocus='detFactura.setSelectedIndex(s.index)'
+											readonly="@load(each.gastoDescuento)"
+											visible="@load(!vm.deshabilitado)" />
+										<label
+											value="@load(each.costoDs)" visible="@load(vm.deshabilitado)"
+											sclass="label-list" />
+									</div>
+								</listcell>
+								<listcell>
+									<textbox
+										value="@bind(each.textoDescuento)" width="50px"
+										style="text-align:right;color:red;font-weight:bold"
+										inplace="true"
+										onChange="@command('descuentoPorItem', item=each, comp=self)"
+										onFocus='detFactura.setSelectedIndex(s.index)'
+										readonly="@load(each.gastoDescuento)" />
+								</listcell>
+								<listcell>
+									<label
+										value="@load(each.importeDsCalculado) @converter(vm.cnv.monedaExtranjera)"
+										sclass="label-list" />
+								</listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter />
+							<listfooter>
+								<label
+									value="@load(vm.selectedImportacionFactura.detalleSize)"
+									style="font-weight:bold" />
+							</listfooter>
+							<listfooter />
+							<listfooter />
+							<listfooter />
+							<listfooter />
 							<listfooter />
 							<listfooter />
 							<listfooter />
 							<listfooter>
 								<dolarbox
-									value="@load(vm.totalProformaDs)"
-									style="background:#EEF7FA;text-align:right;font-weight:bold"
-									readonly="true" />
+									value="@load(vm.totalImporteFactura[1])"
+									style="background:#EEF7FA;text-align:right;font-weight:bold" />
 							</listfooter>
 						</listfoot>
 					</listbox>
-
 				</tabpanel>
 
-				<!-- __________________________ TAB 3 - FACTURA IMPORTACION __________________________ -->
-				<tabpanel>
-						<hlayout sclass="button-container">
-							<button
-								iconSclass="z-icon-plus"
-								onClick="@command('nuevaFactura')"
-								tooltiptext="Agregar Factura.."/>
-							<field value="Facturas:" />
-							<combobox 
-								model="@load(vm.dto.importacionFactura)" hflex="true"
-								onSelect="@command('notificarCambios')"
-								selectedItem="@bind(vm.selectedImportacionFactura)">
-								<custom-attributes
-									org.zkoss.zul.listbox.autoSort="true" />
-								<template name="model" var="fac">
-									<comboitem label="@load(fac.numero)" />
-								</template>
-							</combobox>
-							<space />
-							<field value="Fecha:" />							
-							<textbox
-								value="@load(vm.selectedImportacionFactura.fechaOriginal) @converter('formatedDate', format='dd-MM-yyyy')"
-								readonly="true" hflex="true" />
-							<space />
-							<field value="Condición:" />
-							<textbox
-								value="@load(vm.selectedImportacionFactura.condicionPago.pos1)"
-								readonly="true" hflex="true" />
-							<space />
-							<field value="Total:" />							
-							<guaranibox
-								value="@load(vm.selectedImportacionFactura.totalAsignadoGs)"
-								readonly="true" hflex="true" />
-							<label value="Gs" style="font-size:11px" />
-							<space />
-							<dolarbox
-								value="@load(vm.selectedImportacionFactura.totalAsignadoDs)"
-								readonly="true" hflex="true" />
-							<label value="@load(vm.dto.moneda.pos2)"
-								style="font-size:11px" />
-
-							<!--
-								Descuento:
-								<guaranibox value="@bind(vm.selectedImportacionFactura.descuentoGs)" width="80px"
-								onChange="@command('dolarizarDescuento')"/>
-								<label value="Gs." style="font-size:11px" />
-								<dolarbox value="@bind(vm.selectedImportacionFactura.descuentoDs)" width="70px"
-								onChange="@command('guaranizarDescuento')"/>
-								<label value="U$D" style="font-size:11px" />	
-							-->
-
-						</hlayout>
-						<hlayout valign="middle"
-							sclass="button-container">
-							<button mold="bs" sclass="btn-danger btn-sm"
-								width="150px" iconSclass="z-icon-minus-circle"
-								onClick="@command('eliminarItemFactura')" label=" Eliminar" />
-							<space />
-							<button mold="bs" sclass="btn-success btn-sm"
-								width="150px" iconSclass="z-icon-plus-circle"
-								onClick="@command('insertarItemFactura')" label=" Insertar" />
-							<space />
-							<button mold="bs" sclass="btn-info btn-sm"
-								width="150px" iconSclass="z-icon-share"
-								onClick="@command('importarItems')" label=" Importar" />
-							<space />
-							<button mold="bs" sclass="btn-warning btn-sm"
-								width="150px" iconSclass="z-icon-plus-circle"
-								onClick="@command('agregarGastosDescuentos')" label=" Gastos/Descuentos" />
-						</hlayout>
-
-						<listbox id="detFactura" sclass="small-list"
-							model="@load(vm.selectedImportacionFactura.detalles)"
-							vflex="true" multiple="true"
-							checkmark="@load(vm.checkmarkFactura)"
-							emptyMessage="@load(vm.emptyMsgFactura)"
-							selectedItems="@bind(vm.selectedFacturaItems)">
-							<custom-attributes
-								org.zkoss.zul.listbox.autoSort="true" />
-							<listhead menupopup="auto" sizable="true">
-								<listheader width="50px" align="center"
-									visible="@load(!vm.comparativoPrr)" />
-								<listheader label="Código" width="120px"
-									style="text-align: center" sort="auto(articulo.codigoInterno)"
-									onCreate="self.sort(true);" />
-								<listheader label="Descripción"
-									style="text-align: center" sort="auto(articulo.descripcion)" />
-								<listheader label="Tipo Gasto-Descuento"
-									style="text-align:center" visible="false" width="180px" />
-								<listheader label="U.Med." width="50px"
-									style="text-align: center" align="center" visible="false" />
-								<listheader label="Presentacion"
-									width="95px" style="text-align: center" align="right"
-									visible="false" />
-								<listheader label="Cantidad"
-									width="65px" visible="@load(!vm.comparativoPrr)"
-									style="text-align: center" align="right" sort="auto(cantidad)" />
-								<listheader label="Costo S/P Gs."
-									width="110px" style="text-align:center" align="right"
-									visible="@load(vm.comparativoPrr)"
-									tooltiptext="Costo Sin Prorrateo" />
-								<listheader
-									label="@load(vm.concatenar('Costo S/P', vm.dto.moneda.pos2))"
-									width="100px" style="text-align: center" align="right"
-									visible="@load(vm.comparativoPrr)"
-									tooltiptext="Costo Sin Prorrateo" />
-								<listheader
-									label="@load(vm.concatenar('Costo', vm.dto.moneda.pos2))"
-									width="120px" sort="auto(costoDs)" style="text-align: center"
-									align="right" />
-								<listheader label="Descuento"
-									width="85px" align="right" sort="auto(textoDescuento)"
-									style="text-align: center" visible="false" />
-								<listheader label="Importe S/P Gs."
-									width="115px" visible="@load(vm.comparativoPrr)"
-									style="text-align: center" align="right"
-									sort="auto(costoSinProrrateoGs)"
-									tooltiptext="Costo Sin Prorrateo" />
-								<listheader
-									label="@load(vm.concatenar('Importe S/P', vm.dto.moneda.pos2))"
-									width="105px" style="text-align: center" align="right"
-									visible="@load(vm.comparativoPrr)"
-									tooltiptext="Costo Sin Prorrateo" />
-								<listheader
-									label="@load(vm.concatenar('Importe', vm.dto.moneda.pos2))"
-									width="120px" style="text-align: center" align="right"
-									sort="auto(importeDsCalculado)" />
-							</listhead>
-							<template name="model" var="each"
-								status="s">
-								<listitem
-									style="@load(each.styleItem)">
-									<listcell />
-									<listcell>
-										<label
-											value="@load(each.articulo.codigoInterno)"
-											multiline="false"
-											tooltiptext="@load(each.articulo.codigoInterno)"
-											sclass="label-list" />
-									</listcell>
-									<listcell>
-										<label
-											value="@load(each.descripcion)"
-											multiline="false"
-											tooltiptext="@load(each.articulo.descripcion)"
-											sclass="label-list" />
-									</listcell>
-									<listcell
-										label="@load(each.tipoGastoDescuento.text)"
-										sclass="label-list" />
-									<listcell
-										label="@load(each.articulo.articuloUnidadMedida.text)"
-										sclass="label-list" />
-									<listcell
-										label="@load(each.articulo.articuloPresentacion.pos1)"
-										sclass="label-list" />
-									<listcell>
-										<div>
-											<intbox inplace="true"
-												value="@bind(each.cantidad)" width="45px"
-												onChange="@command('validarCantidad', item=each, comp=self)"
-												readonly="@load(each.gastoDescuento)"
-												visible="@load(!vm.deshabilitado)" />
-											<label
-												value="@load(each.cantidad)"
-												visible="@load(vm.deshabilitado)" sclass="label-list" />
-										</div>
-									</listcell>
-									<listcell
-										style="@load(each.costoSinProrrateoGs gt 0? 'background:#ffff99':'')">
-										<label
-											value="@load(each.costoSinProrrateoGs) @converter(vm.cnv.monedaLocal)"
-											sclass="label-list" />
-									</listcell>
-									<listcell
-										style="@load(each.costoSinProrrateoDs gt 0? 'background:#ffff99':'')">
-										<label
-											value="@load(each.costoSinProrrateoDs) @converter(vm.cnv.monedaExtranjera)"
-											sclass="label-list" />
-									</listcell>
-									<listcell>
-										<div>
-											<dolarbox
-												value="@bind(each.costoDs)" inplace="true"
-												onChange="@command('notificarCostoGs', item=each, comp=self)"
-												onFocus='detFactura.setSelectedIndex(s.index)'
-												readonly="@load(each.gastoDescuento)"
-												visible="@load(!vm.deshabilitado)" />
-											<label
-												value="@load(each.costoDs)"
-												visible="@load(vm.deshabilitado)" sclass="label-list" />
-										</div>
-									</listcell>
-									<listcell>
-										<textbox
-											value="@bind(each.textoDescuento)" width="50px"
-											style="text-align:right;color:red;font-weight:bold"
-											inplace="true"
-											onChange="@command('descuentoPorItem', item=each, comp=self)"
-											onFocus='detFactura.setSelectedIndex(s.index)'
-											readonly="@load(each.gastoDescuento)" />
-									</listcell>
-									<listcell
-										style="@load(each.importeSinProrrateoGs gt 0? 'background:#ffff99':'')">
-										<label
-											value="@load(each.importeSinProrrateoGs) @converter(vm.cnv.monedaLocal)"
-											sclass="label-list" />
-									</listcell>
-									<listcell
-										style="@load(each.importeSinProrrateoDs gt 0? 'background:#ffff99':'')">
-										<label
-											value="@load(each.importeSinProrrateoDs) @converter(vm.cnv.monedaExtranjera)"
-											sclass="label-list" />
-									</listcell>
-									<listcell>
-										<label
-											value="@load(each.importeDsCalculado) @converter(vm.cnv.monedaExtranjera)"
-											sclass="label-list" />
-									</listcell>
-								</listitem>
-							</template>
-							<listfoot>
-								<listfooter />
-								<listfooter>
-									<label
-										value="@load(vm.selectedImportacionFactura.detalleSize)"
-										style="font-weight:bold" />
-								</listfooter>
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter />
-								<listfooter>
-									<guaranibox
-										value="@load(vm.totalImporteFactura[2])"
-										style="background:#EEF7FA;text-align:right;font-weight:bold"
-										readonly="true" />
-								</listfooter>
-								<listfooter>
-									<guaranibox
-										value="@load(vm.totalImporteFactura[0])"
-										style="background:#EEF7FA;text-align:right;font-weight:bold" />
-								</listfooter>
-								<listfooter>
-									<dolarbox
-										value="@load(vm.totalImporteFactura[1])"
-										style="background:#EEF7FA;text-align:right;font-weight:bold" />
-								</listfooter>
-							</listfoot>
-						</listbox>
-				</tabpanel>				
+				<!-- __________________________ RECEPCION DE MERCADERIAS __________________________ -->
+				<tabpanel vflex="true">
+					<tabbox vflex="1">
+						<tabs>
+							<tab label="Control de Carga" width="170px"></tab>
+							<tab label="Control Físico" width="170px"></tab>
+						</tabs>
+						<tabpanels vflex="true">
+							<tabpanel vflex="true">
+								<vbox vflex="true">
+									<hlayout sclass="button-container">
+										<button mold="bs" sclass="btn-sm btn-success" label="Confirmar"
+											iconSclass="z-icon-check" width="150px"></button>
+										<separator orient="vertical" bar="true"></separator>
+										<field value="Estado:" />
+										<textbox readonly="true" value="PENDIENTE"></textbox>
+										<space></space>
+										<field value="Confirmado por:" />
+										<textbox readonly="true" value=""></textbox>
+									</hlayout>
+									<listbox vflex="true" sclass="small-list"
+										model="@load(vm.selectedImportacionFactura.detalles)">
+										<listhead>
+											<listheader width="40px" align="center"></listheader>
+											<listheader label="Código" width="150px"></listheader>
+											<listheader label="Descripción"></listheader>
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<checkbox></checkbox>
+												</listcell>
+												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+												<listcell label="@load(each.articulo.descripcion)"></listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</vbox>
+							</tabpanel>
+							<tabpanel vflex="true">
+								<vbox vflex="true">
+									<hlayout sclass="button-container">
+										<button id="btn_fin" mold="bs" sclass="btn-sm btn-info" label="Finalizar Conteo"
+											iconSclass="z-icon-clock-o" width="150px"
+											visible="false"></button>
+										<button mold="bs" sclass="btn-sm btn-success" label="Confirmar"
+											iconSclass="z-icon-check" width="150px"></button>
+										<separator orient="vertical" bar="true"></separator>
+										<field value="Estado:" />
+										<textbox readonly="true"></textbox>
+										<space></space>
+										<field value="Confirmado por:" />
+										<textbox readonly="true" value="..."></textbox>
+										<space></space>
+										<field value="Contado por:" />
+										<textbox readonly="true" value="..."></textbox>
+									</hlayout>
+									<listbox vflex="true" sclass="small-list"
+										model="@load(vm.selectedImportacionFactura.detalles)">
+										<listhead>
+											<listheader label="Código" width="120px"></listheader>
+											<listheader label="Descripción"></listheader>
+											<listheader label="1er Conteo" width="120px"></listheader>
+											<listheader label="Dif." width="120px"></listheader>
+											<listheader label="2do Conteo" width="120px"></listheader>
+											<listheader label="Dif." width="120px"></listheader>
+											<listheader label="3er Conteo" width="120px"></listheader>
+											<listheader label="Dif." width="120px"></listheader>
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+												<listcell label="@load(each.articulo.descripcion)"></listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true"></intbox>
+												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" readonly="true"
+														format="#,###,###0"></intbox>
+												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" 
+														format="#,###,###0"></intbox>
+												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" readonly="true"
+														format="#,###,###0"></intbox>
+												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" 
+														format="#,###,###0"></intbox>
+												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" readonly="true"
+														format="#,###,###0"></intbox>
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</vbox>
+								<style>
+									.z-intbox { min-height: 18px; text-align:right }
+								</style>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>		
+				</tabpanel>
 
 				<!-- __________________________ TAB 4 - GASTOS DESPACHO __________________________ -->
 				<tabpanel>
-						<hlayout sclass="button-container">
-							<button mold="bs" sclass="btn-primary btn-sm"
-								width="210px" iconSclass="z-icon-check"
-								label=" Volcar a Importación en Curso" 
-								onClick="@command('setImportacionEnCurso')"
-								disabled="@load(vm.dto.resumenGastosDespacho.esNuevo() or vm.deshabilitado)" />
-						</hlayout>
-						<hbox width="100%" vflex="true">
-						<grid sclass="vgrid" style="margin:30px" hflex="true">
-							<columns>
-								<column width="150px"/>
-								<column />
-							</columns>
-							<rows>
-								<row>
-									<field value="Despachante:" />
-									<buscadorProveedor
-											value="@bind(vm.dto.resumenGastosDespacho)"
-											campo="razonSocial" hflex="true" />
-								</row>
-								<row>
-									<field value="Número Despacho:" />									
-									<hlayout sclass="z-valign-middle">
-										<textbox
-											value="@bind(vm.dto.resumenGastosDespacho.nroDespacho)"
-											hflex="true" />
-										<space hflex="true" />										
+					<hbox>				
+						<tabbox hflex="3" vflex="true">	
+						<tabs hflex="true">
+							<tab label="Carátula Despacho" width="100%"></tab>
+						</tabs>	
+						<tabpanels>
+							<tabpanel>
+								<hlayout sclass="button-container"
+									style="background:#EEF7FA">
+									<button mold="bs"
+										sclass="btn-primary btn-sm" width="210px"
+										iconSclass="z-icon-check"
+										label=" Volcar a Importación en Curso"
+										onClick="@command('setImportacionEnCurso')"
+										disabled="@load(vm.dto.resumenGastosDespacho.esNuevo() or vm.deshabilitado)" />
+								</hlayout>
+								<grid sclass="vgrid" style="margin:10px" height="490px">
+									<columns>
+										<column width="150px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<field value="Despachante:" />
+											<buscadorProveedor
+												value="@bind(vm.dto.resumenGastosDespacho)"
+												campo="razonSocial" hflex="true" />
+										</row>
+										<row>
+											<field
+												value="Número Despacho:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<textbox
+													value="@bind(vm.dto.resumenGastosDespacho.nroDespacho)"
+													hflex="true" />
+												<space hflex="true" />
+											</hlayout>
+										</row>
+										<row>
+											<field value="Moneda:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<textbox
+													value="@load(vm.dto.moneda.pos1)" hflex="true"
+													readonly="true" />
+												<space hflex="true" />
+											</hlayout>
+										</row>
+										<row>
+											<field value="T.Cambio:" />
+											<hlayout>
+												<dolarbox
+													value="@bind(vm.dto.resumenGastosDespacho.tipoCambio)"
+													onChange="@command('notificarValores')"
+													readonly="@load(!vm.tipoCambioEditable)" hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<space hflex="true"></space>
+											</hlayout>
+										</row>
+										<row>
+											<field value="Valor FOB:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<guaranibox
+													value="@bind(vm.valorFOBgs)" readonly="true" hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.valorFOBds)" readonly="true" hflex="true" />
+												<label
+													value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
+											</hlayout>
+										</row>
+										<row>
+											<field value="Valor Flete:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<guaranibox
+													value="@bind(vm.valorFleteGs)"
+													onChange="@command('dolarizarFlete', comp=self)"
+													readonly="@load(!vm.valorFleteEditable)" hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.valorFleteDs)"
+													onChange="@command('guaranizarFlete', comp=self)"
+													readonly="@load(!vm.valorFleteEditable)" hflex="true" />
+												<label
+													value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
+											</hlayout>
+										</row>
+										<row>
+											<field
+												value="Valor Seguro:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<guaranibox
+													value="@bind(vm.valorSeguroGs)"
+													onChange="@command('dolarizarSeguro', comp=self)"
+													readonly="@load(!vm.valorSeguroEditable)" hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.valorSeguroDs)"
+													onChange="@command('guaranizarSeguro', comp=self)"
+													readonly="@load(!vm.valorSeguroEditable)" hflex="true" />
+												<label
+													value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
+											</hlayout>
+										</row>
+										<row>
+											<field value="Valor CIF:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<guaranibox
+													value="@bind(vm.valorCIFgs)" readonly="true" hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.valorCIFds)" readonly="true" hflex="true" />
+												<label
+													value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
+											</hlayout>
+										</row>
+										<row>
+											<field value="Total IVA:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<guaranibox
+													value="@bind(vm.dto.resumenGastosDespacho.totalIVAgs)"
+													onChange="@command('dolarizarIVA', comp=self)"
+													hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.dto.resumenGastosDespacho.totalIVAds)"
+													onChange="@command('guaranizarIVA', comp=self)"
+													hflex="true" />
+												<label
+													value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
+											</hlayout>
+										</row>
+										<row>
+											<field
+												value="Total Gastos:" />
+											<hlayout
+												sclass="z-valign-middle">
+												<guaranibox
+													value="@bind(vm.dto.resumenGastosDespacho.totalGastosGs)"
+													onChange="@command('dolarizarGasto', comp=self)"
+													hflex="true" />
+												<label value="Gs."
+													style="font-size:11px" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.dto.resumenGastosDespacho.totalGastosDs)"
+													onChange="@command('guaranizarGasto', comp=self)"
+													hflex="true" />
+												<label
+													value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
+											</hlayout>
+										</row>
+										<row>
+											<field
+												value="Coeficiente Gastos:"
+												tooltiptext="(Valor Flete + Valor Seguro + Total Gastos) / Valor FOB" />
+											<hlayout
+												sclass="z-valign-middle">
+												<dolarbox
+													value="@load(vm.coeficienteGasto)" readonly="true"
+													style="background:#EEF7FA;text-align:right" hflex="true" />
+												<label value="auto"
+													style="font-style:italic" />
+												<space width="30px" />
+												<dolarbox
+													value="@bind(vm.dto.resumenGastosDespacho.coeficienteAsignado)"
+													onChange="@command('notificarCambios')" hflex="true" />
+												<label value="manual"
+													style="font-style:italic" />
+											</hlayout>
+										</row>
+									</rows>
+								</grid>
+							</tabpanel>
+						</tabpanels>
+						</tabbox>
+						<tabbox hflex="5" vflex="1">
+							<tabs>
+								<tab label="Gastos" width="170px"></tab>
+								<tab label="Desglose por Cuentas" width="170px"></tab>
+							</tabs>
+							<tabpanels>
+								<tabpanel vflex="true">
+									<hlayout sclass="button-container" style="background:#EEF7FA">
+										<button mold="bs" sclass="btn-primary btn-sm"
+											width="150px" iconSclass="z-icon-check"
+											label=" Agregar" onClick="@command('openGasto', comp=pop_gastos, parent=self)" />
 									</hlayout>
-								</row>
-								<row>
-									<field value="Fecha:" />
-									<hlayout>
-										<datebox
-										value="@bind(vm.dto.resumenGastosDespacho.fechaFacturaDespacho)" hflex="true" />
-										<space hflex="true" />
-									</hlayout>										
-								</row>
-								<row>
-									<field value="Moneda:" />									
-									<hlayout sclass="z-valign-middle">
-										<textbox
-											value="@load(vm.dto.moneda.pos1)" hflex="true"
-											readonly="true" />
-										<space hflex="true" />										
-									</hlayout>
-								</row>
-								<row>
-									<field value="T.Cambio:" />		
-									<hlayout>
-										<dolarbox
-											value="@bind(vm.dto.resumenGastosDespacho.tipoCambio)"
-											onChange="@command('notificarValores')"
-											readonly="@load(!vm.tipoCambioEditable)" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<space hflex="true"></space>
-									</hlayout>								
-								</row>
-								<row>
-									<field value="Valor FOB:" />									
-									<hlayout sclass="z-valign-middle">
-										<guaranibox
-											value="@bind(vm.valorFOBgs)" readonly="true" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.valorFOBds)" readonly="true" hflex="true" />
-										<label
-											value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Valor Flete:" />									
-									<hlayout sclass="z-valign-middle">
-										<guaranibox
-											value="@bind(vm.valorFleteGs)"
-											onChange="@command('dolarizarFlete', comp=self)"
-											readonly="@load(!vm.valorFleteEditable)" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.valorFleteDs)"
-											onChange="@command('guaranizarFlete', comp=self)"
-											readonly="@load(!vm.valorFleteEditable)" hflex="true" />
-										<label
-											value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Valor Seguro:" />									
-									<hlayout sclass="z-valign-middle">
-										<guaranibox
-											value="@bind(vm.valorSeguroGs)"
-											onChange="@command('dolarizarSeguro', comp=self)"
-											readonly="@load(!vm.valorSeguroEditable)" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.valorSeguroDs)"
-											onChange="@command('guaranizarSeguro', comp=self)"
-											readonly="@load(!vm.valorSeguroEditable)" hflex="true" />
-										<label
-											value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Valor CIF:" />									
-									<hlayout sclass="z-valign-middle">
-										<guaranibox
-											value="@bind(vm.valorCIFgs)" readonly="true" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.valorCIFds)" readonly="true" hflex="true" />
-										<label
-											value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Total IVA:" />									
-									<hlayout sclass="z-valign-middle">
-										<guaranibox
-											value="@bind(vm.dto.resumenGastosDespacho.totalIVAgs)"
-											onChange="@command('dolarizarIVA', comp=self)" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.dto.resumenGastosDespacho.totalIVAds)"
-											onChange="@command('guaranizarIVA', comp=self)" hflex="true" />
-										<label
-											value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Total Gastos:" />									
-									<hlayout sclass="z-valign-middle">
-										<guaranibox
-											value="@bind(vm.dto.resumenGastosDespacho.totalGastosGs)"
-											onChange="@command('dolarizarGasto', comp=self)" hflex="true" />
-										<label value="Gs."
-											style="font-size:11px" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.dto.resumenGastosDespacho.totalGastosDs)"
-											onChange="@command('guaranizarGasto', comp=self)" hflex="true" />
-										<label
-											value="@load(vm.dto.moneda.pos2)" style="font-size:11px" />
-									</hlayout>
-								</row>
-								<row>
-									<field value="Coeficiente Gastos:" 
-										tooltiptext="(Valor Flete + Valor Seguro + Total Gastos) / Valor FOB"/>									
-									<hlayout sclass="z-valign-middle">
-										<dolarbox
-											value="@load(vm.coeficienteGasto)" readonly="true"
-											style="background:#EEF7FA;text-align:right" hflex="true" />
-										<label value="auto"
-											style="font-style:italic" />
-										<space width="30px" />
-										<dolarbox
-											value="@bind(vm.dto.resumenGastosDespacho.coeficienteAsignado)"
-											onChange="@command('notificarCambios')" hflex="true" />
-										<label value="manual"
-											style="font-style:italic" />
-									</hlayout>
-								</row>
-							</rows>
-						</grid>
-						<div hflex="true"></div>
-						</hbox>
+									<listbox sclass="small-list" vflex="true" emptyMessage="SIN REGISTROS.."
+										model="@load(vm.dto.gastos)">
+										<listhead>
+											<listheader label="Fecha" width="100px"></listheader>
+											<listheader label="Vencimiento" width="100px"></listheader>
+											<listheader label="Número" width="170px"></listheader>
+											<listheader label="Concepto" width="170px"></listheader>
+											<listheader label="Proveedor"></listheader>
+											<listheader label="Importe Gs." width="120px" align="right"></listheader>
+											<listheader label="Importe U$D" width="120px" align="right"></listheader>
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+												<listcell label="@load(each[2]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+												<listcell label="@load(each[3])"></listcell>
+												<listcell label="@load(each[4])"></listcell>
+												<listcell label="@load(each[5])"></listcell>
+												<listcell label="@load(each[6]) @converter(vm.cnv.monedaLocal)"></listcell>
+												<listcell label="@load(each[7]) @converter(vm.cnv.monedaExtranjera)"></listcell>
+											</listitem>
+										</template>
+										<listfoot>
+											<listfooter></listfooter>
+											<listfooter></listfooter>
+											<listfooter></listfooter>
+											<listfooter></listfooter>
+											<listfooter></listfooter>
+											<listfooter>
+												<guaranibox
+													readonly="true"
+													style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+													value="@load(vm.dto.totalGastos)" />
+											</listfooter>
+											<listfooter>
+												<dolarbox
+													readonly="true"
+													style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+													value="@load(vm.dto.totalGastosDs)" />
+											</listfooter>
+										</listfoot>
+									</listbox>	
+								</tabpanel>
+								<tabpanel vflex="true">
+									<listbox sclass="small-list" vflex="true" emptyMessage="SIN REGISTROS.."
+										id="listbox" style="margin:5px">
+										<listhead>
+											<listheader></listheader>
+											<listheader></listheader>
+											<listheader align="right"></listheader>
+											<listheader align="right"></listheader>
+										</listhead>
+										<listfoot>
+											<listfooter></listfooter>
+											<listfooter></listfooter>
+											<listfooter>
+												<guaranibox
+													readonly="true"
+													style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+													value="@load(vm.dto.totalGastos)" />
+											</listfooter>
+											<listfooter>
+												<dolarbox
+													readonly="true"
+													style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+													value="@load(vm.dto.totalGastosDs)" />
+											</listfooter>
+										</listfoot>
+									</listbox>	
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+					</hbox>
 				</tabpanel>
 
-				<!-- ________________________________________________________________________________________________________ -->
+				<!-- _____________________________________________ COSTO FINAL _____________________________________________ -->
 
 				<tabpanel>
 					<hlayout sclass="button-container">
+						<field value="Tipo de Cambio:" />
+						<guaranibox style="background:#EEF7FA;text-align:right" value="@load(vm.dto.resumenGastosDespacho.tipoCambio)"/>
+						<label>Gs.</label>
+						<div hflex="true"></div>
 						<button mold="bs" sclass="btn-primary btn-sm"
-								width="150px" iconSclass="z-icon-check"
-								onClick="@command('confirmarImportacion')" label=" Cerrar Importación" 
-								disabled="@load(vm.cerrarImportacionDisabled)"/>
-						<space />
-						<field value="Depósito a descargar:" />
-						<combobox model="@load(vm.depositosSucursal)"
-							value="@load(vm.dto.deposito.text)"
-							instant="true"
-							width="200px"
-							selectedItem="@bind(vm.dto.deposito)">
-							<template name="model">
-								<comboitem label="@load(each.text)"/>
-							</template>
-						</combobox>
+							width="150px" iconSclass="z-icon-print"
+							label=" Imprimir" disabled="@load(!vm.siempreHabilitado)" 
+							onClick='popFormato.open(self)'/>
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
-						model="@load(vm.itemsCostoFinal)">
-						<custom-attributes
-							org.zkoss.zul.listbox.autoSort="true" />
-						<auxhead>
-							<auxheader label="Artículo" colspan="2"
-								style="text-align:center" />
-							<auxheader label="Costo Unitario"
-								style="text-align:center" colspan="2" />
-							<auxheader label="Costo Total"
-								style="text-align:center" colspan="2" />
-						</auxhead>
+						model="@load(vm.itemsCostoFinal_)">
+						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 						<listhead>
-							<listheader label="Código"
-								style="text-align:center" width="150px" sort="auto(pos1)"
-								onCreate='self.sort(true)' />
-							<listheader label="Descripción"
-								style="text-align:center" sort="auto(pos2)" />
-							<listheader label="Local"
-								style="text-align:center" align="right" sort="auto(pos3)"
-								width="120px" />
-							<listheader label="Extranjera"
-								style="text-align:center" align="right" sort="auto(pos4)"
-								width="120px" />
-							<listheader label="Local"
-								style="text-align:center" align="right" 
-								width="120px" />
-							<listheader label="Extranjera"
-								style="text-align:center" align="right" 
-								width="120px" />
+							<listheader label="Código" style="text-align:center" width="150px" sort="auto(pos1)" onCreate='self.sort(true)' />
+							<listheader label="Descripción" style="text-align:center" sort="auto(pos2)" />
+							<listheader label="Cant." style="text-align:center" align="right" sort="auto(pos3)" width="80px" />
+							<listheader label="Costo FOB U$D" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Costo FOB Gs." style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Total U$D" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Total Gs." style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Incidencia %" style="text-align:center" align="right" sort="auto(pos3)" width="100px" />
+							<listheader label="Flete/Seguro" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="CIF" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Gastos" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Costo Final" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Costo Unitario" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
+							<listheader label="Costo Unitario*" style="text-align:center" align="right" sort="auto(pos3)" width="120px" />
 						</listhead>
 						<template name="model">
 							<listitem>
 								<listcell label="@load(each.pos1)" />
 								<listcell label="@load(each.pos2)" />
-								<listcell>
-									<label
-										value="@load(each.pos3) @converter(vm.cnv.monedaLocal)" />
-								</listcell>
-								<listcell>
-									<label
-										value="@load(each.pos4) @converter(vm.cnv.monedaExtranjera)" />
-								</listcell>
-								<listcell>
-									<label
-										value="@load(each.pos8) @converter(vm.cnv.monedaLocal)" />
-								</listcell>
-								<listcell>
-									<label
-										value="@load(each.pos9) @converter(vm.cnv.monedaExtranjera)" />
-								</listcell>
+								<listcell label="@load(each.pos3)" />
+								<listcell label="@load(each.pos4) @converter(vm.cnv.monedaExtranjera)" />
+								<listcell label="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos6) @converter(vm.cnv.monedaExtranjera)" />
+								<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos8) @converter(vm.cnv.monedaExtranjera)" />
+								<listcell label="@load(each.pos9) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos10) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos11) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos12) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos13) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.pos14) @converter(vm.cnv.monedaLocal)" />
 							</listitem>
 						</template>
 						<listfoot>
-							<listfooter span="4">
-								<label
-									value="@load(vm.itemsCostoFinalSize)" style="font-weight:bold" />
-								<space/>	
-								<label value="Coeficiente utilizado:" style="font-style:italic; color:red"/>
-								<label value="@load(vm.coeficienteUtilizado)" style="font-style:italic; color:red"/>
+							<listfooter>
+								<hlayout>
+									<label value="@load(vm.itemsCostoFinalSize)" style="font-weight:bold" />
+								</hlayout>
 							</listfooter>
-							<listfooter align="right">
-								<guaranibox
-									value="@load(vm.totalCostoFinal[0])"
-									style="background:#EEF7FA;text-align:right;font-weight:bold"
-									width="100px" />
+							<listfooter>
 							</listfooter>
-							<listfooter align="right">
-								<dolarbox
-									value="@load(vm.totalCostoFinal[1])"
-									style="background:#EEF7FA;text-align:right;font-weight:bold"
-									width="100px" />
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true"
+									value="@load(vm.totalesCostoFinal.pos1)" />
+							</listfooter>
+							<listfooter></listfooter>
+							<listfooter></listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos2)" />
+							</listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos3)" />
+							</listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos4)" />
+							</listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos5)" />
+							</listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos6)" />
+							</listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos7)" />
+							</listfooter>
+							<listfooter>
+								<guaranibox style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
+									value="@load(vm.totalesCostoFinal.pos8)" />
+							</listfooter>
+							<listfooter></listfooter>
+							<listfooter align="center">
+								<hlayout>
+									<label value="Coef.:" style="font-style:italic" />
+									<label value="@load(vm.coeficienteUtilizado)" style="font-style:italic" />
+								</hlayout>
 							</listfooter>
 						</listfoot>
 					</listbox>
 				</tabpanel>
+				
+				<!-- _____________________________________________ PRECIOS _____________________________________________ -->
+
+				<tabpanel>
+					<hlayout sclass="button-container">
+						<button mold="bs" sclass="btn-primary btn-sm"
+							width="150px" iconSclass="z-icon-check"
+							onClick="@command('confirmarImportacion')"
+							label=" Cerrar Importación"
+							disabled="@load(vm.cerrarImportacionDisabled)" />
+						<space />
+						<field value="Depósito a descargar:" />
+						<combobox model="@load(vm.depositosSucursal)"
+							value="@load(vm.dto.deposito.text)" instant="true" width="200px"
+							selectedItem="@bind(vm.dto.deposito)">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+					</hlayout>
+					<listbox vflex="true" sclass="small-list"
+						model="@load(vm.selectedImportacionFactura.detalles)">
+						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+						<listhead>
+							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.codigoInterno)" onCreate='self.sort(true)' />
+							<listheader label="Descripción" style="text-align:center" />
+							<listheader label="Mayorista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />
+							<listheader label="Minorista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Lista Gs." style="text-align:center" align="right" width="200px" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.articulo.codigoInterno)" />
+								<listcell label="@load(each.descripcion)" />
+								<listcell>
+									<guaranibox value="@bind(each.precioFinalGs)" hflex="true" vflex="true" 
+										onChange="@command('refresh', item=each)"/>
+								</listcell>
+								<listcell label="@load(each.getMargen(vm.dto.resumenGastosDespacho.tipoCambio, vm.dto.resumenGastosDespacho.coeficiente)) 
+									@converter('formatedNumber', format='###,##0.00')" />
+								<listcell label="@load(each.minoristaGs) @converter(vm.cnv.monedaLocal)" />
+								<listcell>
+									<guaranibox value="@bind(each.minoristaGs)" hflex="true" vflex="true" />
+								</listcell>
+								<listcell>
+									<guaranibox value="@bind(each.listaGs)" hflex="true" vflex="true" />
+								</listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter>
+								<hlayout>
+									<label value="@load(vm.itemsCostoFinalSize)" style="font-weight:bold" />
+								</hlayout>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>				
 			</tabpanels>
 		</tabbox>
-		
+
 		<popup id="pop_importar" sclass="rounded">
 			<vlayout>
 				<hlayout>
-				<bandbox placeholder="Seleccione una Importación.."
-					width="200px" id="bndImp" onOpen="tx_num.focus()"
-					readonly="true">
-					<bandpopup>
-						<listbox sclass="small-list" height="200px"
-							width="400px" model="@load(vm.importaciones)"
-							onSelect="bndImp.close()"
-							selectedItem="@bind(vm.selectedImportacion)">
-							<listhead>
-								<listheader>
-									<textbox id="tx_num" sclass="filter"
-										hflex="true" value="@bind(vm.filterNumero)" instant="true"
-										placeholder="Número.." />
-								</listheader>
-							</listhead>
-							<template name="model">
-								<listitem>
-									<listcell label="@load(each.numeroPedidoCompra)"></listcell>
-								</listitem>
-							</template>
-						</listbox>
-					</bandpopup>
-				</bandbox>
-				<label value="@load(vm.selectedImportacion.numeroPedidoCompra)"></label>
-				<space />
-				<label value="@load(vm.selectedImportacion.proveedor.razonSocial)"></label>
+					<bandbox placeholder="Seleccione una Importación.."
+						width="200px" id="bndImp" onOpen="tx_num.focus()"
+						readonly="true">
+						<bandpopup>
+							<listbox sclass="small-list" height="200px"
+								width="400px" model="@load(vm.importaciones)"
+								onSelect="bndImp.close()"
+								selectedItem="@bind(vm.selectedImportacion)">
+								<listhead>
+									<listheader>
+										<textbox id="tx_num"
+											sclass="filter" hflex="true" value="@bind(vm.filterNumero)"
+											instant="true" placeholder="Número.." />
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.numeroPedidoCompra)">
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<label
+						value="@load(vm.selectedImportacion.numeroPedidoCompra)">
+					</label>
+					<space />
+					<label
+						value="@load(vm.selectedImportacion.proveedor.razonSocial)">
+					</label>
 				</hlayout>
-				<listbox sclass="small-list" width="600px" height="400px"
+				<listbox sclass="small-list" width="600px"
+					height="400px"
 					model="@load(vm.selectedImportacion.importacionPedidoCompraDetalle)">
 					<listhead>
 						<listheader label="Artículo"></listheader>
-						<listheader label="Cantidad" width="100px" align="right"></listheader>
+						<listheader label="Cantidad" width="100px"
+							align="right">
+						</listheader>
 					</listhead>
 					<template name="model">
 						<listitem>
-							<listcell label="@load(each.articulo.codigoInterno)"></listcell>
-							<listcell label="@load(each.cantidad)"/>
+							<listcell
+								label="@load(each.articulo.codigoInterno)">
+							</listcell>
+							<listcell label="@load(each.cantidad)" />
 						</listitem>
 					</template>
 					<listfoot>
 						<listfooter span="3" align="left">
 							<hlayout>
-								<field value="@load(vm.selectedImportacion.importacionPedidoCompraDetalle.size())" />
+								<field
+									value="@load(vm.selectedImportacion.importacionPedidoCompraDetalle.size())" />
 								<field value="ítems" />
 							</hlayout>
 						</listfooter>
@@ -1003,10 +1375,256 @@
 				<hlayout>
 					<space hflex="true"></space>
 					<button mold="bs" sclass="btn-info btn-sm"
-							width="150px" iconSclass="z-icon-share" 
-							label=" Importar" onClick="@command('importarDetalles', comp=pop_importar)"/>
+						width="150px" iconSclass="z-icon-share" label=" Importar"
+						onClick="@command('importarDetalles_', comp=pop_importar)" />
 				</hlayout>
 			</vlayout>
-		</popup>		
-	</div>
+		</popup>
+		
+		<popup id="pop_importar_" sclass="rounded">
+			<vlayout>
+				<hlayout>
+					<bandbox placeholder="Seleccione una Importación.."
+						width="200px" id="bndImp_" onOpen="tx_num_.focus()"
+						readonly="true">
+						<bandpopup>
+							<listbox sclass="small-list" height="200px"
+								width="400px" model="@load(vm.importaciones)"
+								onSelect="bndImp_.close()"
+								selectedItem="@bind(vm.selectedImportacion)">
+								<listhead>
+									<listheader>
+										<textbox id="tx_num_"
+											sclass="filter" hflex="true" value="@bind(vm.filterNumero)"
+											instant="true" placeholder="Número.." />
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.numeroPedidoCompra)">
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<label
+						value="@load(vm.selectedImportacion.numeroPedidoCompra)">
+					</label>
+					<space />
+					<label
+						value="@load(vm.selectedImportacion.proveedor.razonSocial)">
+					</label>
+				</hlayout>
+				<listbox sclass="small-list" width="600px"
+					height="400px"
+					model="@load(vm.selectedImportacion.importacionPedidoCompraDetalle)">
+					<listhead>
+						<listheader label="Artículo"></listheader>
+						<listheader label="Cantidad" width="100px"
+							align="right">
+						</listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell
+								label="@load(each.articulo.codigoInterno)">
+							</listcell>
+							<listcell label="@load(each.cantidad)" />
+						</listitem>
+					</template>
+					<listfoot>
+						<listfooter span="3" align="left">
+							<hlayout>
+								<field
+									value="@load(vm.selectedImportacion.importacionPedidoCompraDetalle.size())" />
+								<field value="ítems" />
+							</hlayout>
+						</listfooter>
+					</listfoot>
+				</listbox>
+				<hlayout>
+					<space hflex="true"></space>
+					<button mold="bs" sclass="btn-info btn-sm"
+						width="150px" iconSclass="z-icon-share" label=" Importar"
+						onClick="@command('importarDetalles', comp=pop_importar_)" />
+				</hlayout>
+			</vlayout>
+		</popup>
+		<popup id="pop_gastos" sclass="rounded" width="900px">
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Tipo Movimiento" />
+						<combobox placeholder="Tipo Movimiento.." hflex="true"
+							model="@load(vm.tiposMovimientoGastos)"
+							selectedItem="@bind(vm.nvoGasto.tipoMovimiento)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion.toUpperCase())" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Fecha" />
+						<datebox hflex="true"
+							value="@bind(vm.nvoGasto.fecha)"></datebox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Vencimiento" />
+						<datebox hflex="true"
+							value="@bind(vm.nvoGasto.vencimiento)"></datebox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Moneda" />
+						<combobox model="@load(vm.monedas)" hflex="true"
+							selectedItem="@bind(vm.nvoGasto.moneda)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion.toUpperCase())"/>
+							</template>
+						</combobox>
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Condición" />
+						<combobox model="@load(vm.condicionesPago)" hflex="true"
+							selectedItem="@bind(vm.nvoGasto.condicionPago)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox hflex="true" value="@bind(vm.nvoGasto.numeroFactura) @converter(vm.cnv.facturaPy)"></textbox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Timbrado" />
+						<hlayout>
+						<textbox hflex="true"
+							style="text-align:right"
+							placeholder="Nro. Timbrado.." 
+							value="@bind(vm.nvoGasto.timbrado.numero)"/>
+					</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Proveedor" />
+						<bandbox id="bdx_prov" hflex="true"
+							value="@load(vm.nvoGasto.proveedor.razonSocial)">
+							<bandpopup>
+								<listbox sclass="small-list" width="350px" height="350px"
+									model="@load(vm.proveedores)"
+									selectedItem="@bind(vm.nvoGasto.proveedor)"
+									onSelect='bdx_prov.close()'>
+									<listhead>
+										<listheader>
+											<textbox hflex="true" placeholder="Razón Social.."
+												value="@bind(vm.filterRazonSocial)" instant="true"></textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.razonSocial)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+		<div height="5px"></div>
+		<listbox sclass="small-list" height="350px"
+			model="@load(vm.nvoGasto.detalles)">
+			<listhead>
+				<listheader label="Cuenta"></listheader>
+				<listheader label="Importe Gs." width="110px" align="right"></listheader>
+				<listheader label="Importe U$D" width="110px" align="right" visible="@load(vm.nvoGasto.moneda.sigla ne 'Gs.')"></listheader>
+				<listheader label="Iva" width="100px"></listheader>
+				<listheader width="50px" align="center"></listheader>
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<combobox placeholder="Cuenta.." hflex="true"
+						model="@load(vm.cuentasGastos)"
+						selectedItem="@bind(vm.nvoGastoDetalle.articuloGasto)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+				</auxheader>
+				<auxheader>
+					<guaranibox value="@bind(vm.nvoGastoDetalle.montoGs)" hflex="true" 
+						onChange="@command('dolarizarGastoDetalle')" />
+				</auxheader>
+				<auxheader>
+					<dolarbox value="@bind(vm.nvoGastoDetalle.montoDs)" hflex="true" 
+						onChange="@command('guaranizarGastoDetalle')" />
+				</auxheader>
+				<auxheader>
+					<combobox placeholder="Iva.." hflex="true"
+						model="@load(vm.tiposIva)"
+						selectedItem="@bind(vm.nvoGastoDetalle.tipoIva)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>	
+					</combobox>
+				</auxheader>
+				<auxheader>
+					<button iconSclass="z-icon-plus" onClick="@command('addGastoDetalle')"></button>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articuloGasto.descripcion)"></listcell>
+					<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"></listcell>
+					<listcell label="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)"></listcell>
+					<listcell label="@load(each.tipoIva.descripcion)"></listcell>
+					<listcell>
+						<a iconSclass="z-icon-times" />
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter>
+					<field value="ítems" />
+				</listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+			</listfoot>
+		</listbox>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addGasto')"></button>
+		</hbox>
+	</popup>
+	
+	<popup id="popFormato" width="250px" sclass="rounded">
+		<vlayout>
+			<field value="Formato:" />
+			<combobox hflex="true" placeholder="Seleccione un Formato.."
+				model="@load(vm.formatos)"
+				selectedItem="@bind(vm.selectedFormato)"
+				buttonVisible="@load(vm.siempreHabilitado)">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>	
+			</combobox>
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-print" 
+				label=" Imprimir" hflex="true"
+				disabled="@load(!vm.siempreHabilitado)"
+				onClick="@command('imprimirResumen')" />
+		</vlayout>
+	</popup>
+	</div>	
+	<style>
+		.z-doublebox { min-height:20px }
+	</style>
 </zk>

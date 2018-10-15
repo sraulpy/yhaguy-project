@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -17,13 +19,16 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Intbox;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listgroup;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
@@ -35,6 +40,7 @@ import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.domain.IiD;
+import com.coreweb.domain.Tipo;
 import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
@@ -51,11 +57,18 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloGasto;
+import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
+import com.yhaguy.domain.Gasto;
+import com.yhaguy.domain.GastoDetalle;
 import com.yhaguy.domain.ImportacionPedidoCompra;
+import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Timbrado;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.articulos.ArticuloDTO;
 import com.yhaguy.gestion.articulos.AssemblerArticulo;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
@@ -63,13 +76,16 @@ import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.empresa.ctacte.AssemblerCtaCteEmpresaMovimiento;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoDTO;
+import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
-@SuppressWarnings("static-access")
 public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	static final String PATH = Configuracion.pathPedidoCompra;
@@ -82,12 +98,21 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private ImportacionPedidoCompraDTO dto = new ImportacionPedidoCompraDTO();	
 	
 	private String filterNumero = "";
+	private String filterRazonSocial = "";
 	private ImportacionPedidoCompra selectedImportacion;
+	private Proveedor selectedProveedor;
+	private Gasto nvoGasto = new Gasto();
+	private GastoDetalle nvoGastoDetalle = new GastoDetalle();
 	
 	private ImportacionAplicacionAnticipoDTO selectedAnticipo;
+	private Object[] selectedFormato;
+	
+	private MyArray nvaTrazabilidad = new MyArray(new Date(), "", "", "", "", 1, "", 0.0);
+	
+	public MyArray totalesCostoFinal = new MyArray(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
 	@Init(superclass = true)
-	public void init() {		
+	public void init() {
 	}
 
 	@AfterCompose(superclass = true)
@@ -124,6 +149,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.selectedRecepcion = new ImportacionFacturaDTO();
 		}
 		this.setearValoresDespacho();
+		this.renderizarDesgloseCuentas();
 		this.desEnmascarar();
 	}
 
@@ -132,6 +158,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		ImportacionPedidoCompraDTO out = new ImportacionPedidoCompraDTO();			
 		tab1.setSelected(true);
 		this.sugerirValores(out);
+		this.renderizarDesgloseCuentas();
 		return out;
 	}
 
@@ -170,6 +197,99 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.selectedImportacion = null;
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void importarDetalles_(@BindingParam("comp") Popup comp) throws Exception {
+		AssemblerImportacionPedidoCompra ass = new AssemblerImportacionPedidoCompra();
+		ImportacionPedidoCompraDTO imp = (ImportacionPedidoCompraDTO) ass.domainToDto(this.selectedImportacion);
+		for (ImportacionPedidoCompraDetalleDTO item : imp.getImportacionPedidoCompraDetalle()) {
+			item.setId((long) -1);
+		}
+		this.dto.getSolicitudCotizaciones().addAll(imp.getImportacionPedidoCompraDetalle());
+		Clients.showNotification("TOTAL ÍTEMS IMPORTADOS: " + imp.getImportacionPedidoCompraDetalle().size());
+		comp.close();
+		this.selectedImportacion = null;
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addTrazabilidad(@BindingParam("comp") Popup comp) {
+		String text = (String) this.nvaTrazabilidad.getPos2();
+		if (this.dto.getEstado().getText().equals("EN TRANSITO")) {
+			text += " - " + this.nvaTrazabilidad.getPos4();
+			text += " - " + this.nvaTrazabilidad.getPos5();
+		}
+		this.nvaTrazabilidad.setPos2(text.toUpperCase());
+		this.dto.getTrazabilidad().add(this.nvaTrazabilidad);
+		this.nvaTrazabilidad = new MyArray(new Date(), "", "", "", "", 1, "", 0.0);
+		comp.close();
+	}
+	
+	@Command
+	@NotifyChange("nvaTrazabilidad")
+	public void openTrazabilidad(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
+		if (this.dto.getEstado().getText().equals("EN TRANSITO")) {
+			this.nvaTrazabilidad.setPos2("EN TRANSITO");
+			this.nvaTrazabilidad.setPos4(this.dto.getVia());
+		}
+		comp.open(parent, "after_start");
+	}
+	
+	@Command @NotifyChange("*")
+	public void refreshTipoCambio() {
+		double tipoCambio = 1;
+		if (!this.dto.isMonedaLocal()) {
+			try {
+	            tipoCambio = this.getTipoCambio();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		this.dto.setCambio(tipoCambio);
+	}
+	
+	@Command 
+	@NotifyChange("nvoGasto")
+	public void addGastoDetalle() {
+		this.nvoGasto.getDetalles().add(this.nvoGastoDetalle);
+		this.nvoGastoDetalle = new GastoDetalle();
+	}
+	
+	@Command 
+	@NotifyChange("nvoGasto")
+	public void openGasto(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
+		Timbrado timbrado = new Timbrado();
+		timbrado.setVencimiento(Utiles.getFechaFinMes());
+		this.nvoGasto = new Gasto();
+		this.nvoGasto.setTimbrado(timbrado);
+		comp.open(parent, "after_start");
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void addGasto() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Timbrado t = new Timbrado();
+		t.setNumero(this.nvoGasto.getTimbrado().getNumero());
+		t.setVencimiento(this.nvoGasto.getTimbrado().getVencimiento());
+		rr.saveObject(t, this.getLoginNombre());
+		this.nvoGasto.setIdImportacion(this.dto.getId());
+		this.nvoGasto.setTimbrado(t);
+		for (GastoDetalle item : this.nvoGasto.getDetalles()) {
+			this.nvoGasto.setImporteGs(this.nvoGasto.getImporteGs() + item.getMontoGs());
+			this.nvoGasto.setImporteIva10(this.nvoGasto.getImporteIva10() + item.getMontoIva());
+		}
+		rr.saveObject(this.nvoGasto, this.getLoginNombre());
+		this.nvoGasto = new Gasto();
+		// add cta cte..
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	public void refresh(@BindingParam("item") ImportacionFacturaDetalleDTO item) {
+		BindUtils.postNotifyChange(null, null, item, "*");
+	}
+	
 	/************************** ELIMINAR ITEM DETALLE ORDEN COMPRA ****************************/
 	
 	private List<ImportacionPedidoCompraDetalleDTO> selectedOrdenItems = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
@@ -188,6 +308,15 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.selectedOrdenItems = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
 		}
 	}	
+	
+	@Command
+	@NotifyChange("*")
+	public void eliminarItem_() {
+		for (ImportacionPedidoCompraDetalleDTO d : this.selectedOrdenItems) {
+			this.dto.getSolicitudCotizaciones().remove(d);
+		}
+		this.selectedOrdenItems = null;
+	}
 	
 	private boolean confirmarEliminarItemOrden(){
 		this.ordenItemsEliminar = "Esta seguro de eliminar los sgts ítems: \n";		
@@ -229,6 +358,27 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 	}	
 	
+	@Command @NotifyChange("*")
+	public void insertarItem_() throws Exception {		
+		try {
+			this.newDetalle = new ImportacionPedidoCompraDetalleDTO();
+			WindowPopup w = new WindowPopup();
+			w.setModo(WindowPopup.NUEVO);
+			w.setTitulo("Insertar Item");
+			w.setWidth("450px");
+			w.setHigth("310px");
+			w.setDato(this);
+			w.setCheckAC(new ValidadorInsertarItemOrdenCompra(this));
+			w.show(Configuracion.INSERTAR_ITEM_PEDIDO_COMPRA_ZUL);
+			if (w.isClickAceptar()) {
+				this.newDetalle.setUltimoCostoDs(this.getUltimoCosto(this.newDetalle.getArticulo().getId()));
+				this.dto.getSolicitudCotizaciones().add(this.newDetalle);
+			}			
+		} catch (Exception e) {
+			mensajeError(e.getMessage());
+		}
+	}
+	
 	private double getUltimoCosto(long idArticulo){		
 		double out = 0;
 		try {
@@ -239,63 +389,23 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 		return out;
 	}
-
-	/******************************************************************************************/	
 	
-	
-	/********************************** UPLOAD DE ARCHIVOS CSV ********************************/
-	
-	private String nombreArchivoCSV;
-	
-	//Upload Pedido CSV
-	@Listen("onUpload=#pedidoCompraUpload")
-	public void uploadPedidoCompra(UploadEvent event){
-		
-		if (this.operacionValidaPedido(UPLOAD_PEDIDO_COMPRA) == false) {
-			return;
+	@Command 
+	@NotifyChange("*")
+	public void uploadFile(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = this.dto.getNumeroPedidoCompra();
+			boolean isText = "text/csv".equals(file.getContentType());
+			InputStream file_ = new ByteArrayInputStream(isText ? file.getStringData().getBytes() : file.getByteData());
+			misc.uploadFile(PATH, name, ".csv", file_);
+			this.csvCotizacion();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 		}
-		
-		String name = Configuracion.NRO_IMPORTACION_PEDIDO + "_" + misc.getIdUnique();
-		String path = Configuracion.pathOrdenCompra;
-		this.setPathCsvPedidoCompra(path + name + ".csv");
-		this.setLinkCsvImportado(Configuracion.pathOrdenCompraGenerico + name + ".csv");
-		this.nombreArchivoCSV = name;
-		
-		Media media = event.getMedia();
-		boolean isText = "text/csv".equals(media.getContentType());
-		
-		InputStream file = new ByteArrayInputStream(isText? media.getStringData().getBytes() : media.getByteData());
-		misc.uploadFile(path, name, ".csv", file);
-		
-		this.csvPedidoCompra();
-		BindUtils.postNotifyChange(null, null, this, "*");
-	}
-	
-	//Upload Proforma CSV
-	@Listen("onUpload=#proformaUpload")
-	public void uploadProforma(UploadEvent event) {
-
-		if (this.operacionValidaPedido(UPLOAD_PROFORMA) == false) {
-			return;
-		}
-
-		String name = Configuracion.NRO_IMPORTACION_PEDIDO + "_"
-				+ misc.getIdUnique();
-		String path = Configuracion.pathProforma;
-		this.setPathCsvPedidoCompra(path + name + ".csv");
-		this.setLinkCsvImportado(Configuracion.pathProformaGenerico + name
-				+ ".csv");
-		this.nombreArchivoCSV = name;
-
-		Media media = event.getMedia();
-		boolean isText = "text/csv".equals(media.getContentType());
-		
-		InputStream file = isText ? new ByteArrayInputStream(media.getStringData()
-				.getBytes()) : new ByteArrayInputStream(media.getByteData());
-
-		misc.uploadFile(path, name, ".csv", file);
-		this.csvProforma();
-		BindUtils.postNotifyChange(null, null, this, "*");
 	}
 	
 	@Command 
@@ -316,245 +426,91 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 	}
 	
-	/******************************************************************************************/	
+	@Command 
+	@NotifyChange("*")
+	public void uploadFilefactura(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = "factura_" + this.dto.getNumeroPedidoCompra();
+			boolean isText = "text/csv".equals(file.getContentType());
+			InputStream file_ = new ByteArrayInputStream(isText ? file.getStringData().getBytes() : file.getByteData());
+			misc.uploadFile(PATH, name, ".csv", file_);
+			this.csvFactura();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
 	
-
-	/********************************* CSV PEDIDO COMPRA **************************************/
+	@Command 
+	@NotifyChange("*")
+	public void uploadFileTrazabilidad(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = this.dto.getNumeroPedidoCompra() + "_" + Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY_HH_MM_SS);
+			boolean isText = "text/csv".equals(file.getContentType());
+			InputStream file_ = new ByteArrayInputStream(isText ? file.getStringData().getBytes() : file.getByteData());
+			String ext = file.getName().substring(file.getName().lastIndexOf("."));
+			misc.uploadFile(PATH, name, ext, file_);
+			this.nvaTrazabilidad.setPos3(Configuracion.pathPedidoCompraGenerico + name + ext);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
 	
 	/**
-	 * En el evento onUpload() se guarda en el 'pathCsvPedidoCompra' la ruta completa donde
-	 * se guardo el archivo y en 'linkCsvImportado' el link para acceder al mismo desde el browser.
-	 * Se ejecuta la funcion csvPedidoCompra() que invoca al metodo start() de la clase CSV
-	 * pasandole la ruta completa del archivo 'pathCsvPedidoCompra'. Si el formato del archivo es
-	 * el correcto recorre el mismo y por cada fila genera un detalle en el Pedido Compra.
-	 * Si encuentra articulos nuevos Solicita confirmacion para continuar, en caso que se confirme 
-	 * crea un nuevo articulo en la BD con el estado 'Temporal' mediante la funcion nuevoArticulo().
-	 * Si se importo mas de una vez verifica las diferencias..
- 	 */
-
-	private String pathCsvPedidoCompra = "";
-	private String linkCsvImportado = "";	
-	
-	public void csvPedidoCompra() {	
-		
-		// Se declaran los parametros para pasar a la clase CSV
-		String[][] cab = { { "Cliente", CSV.STRING }, { "Fecha", CSV.DATE },
-				{ "Codigo", CSV.STRING }, { "Tipo de Compra", CSV.STRING } };
-
-		String[][] cabDet = { { "codigo", CSV.STRING },
-				{ "cantidad", CSV.NUMERICO }, { "articulo", CSV.STRING },
-				{ "valor", CSV.NUMERICO }, { "total", CSV.NUMERICO } };
-
-		RegisterDomain rr = RegisterDomain.getInstance();
+	 * csv de cotizacion..
+	 */
+	private void csvCotizacion() {
 		try {
-
-			CSV csv = new CSV(cab, cabDet, this.getPathCsvPedidoCompra());
-			List<ImportacionPedidoCompraDetalleDTO> detalles = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
-			if (this.verificarCabeceraCSV(csv.getCabecera("Codigo")) == false) {
-				this.mensajeError("El Proveedor seleccionado es distinto al ingresado en el archivo csv.. "
-						+ "\n Favor verifique..");
-				return;
-			}
-
+			this.dto.getSolicitudCotizaciones().clear();
+			List<ImportacionPedidoCompraDetalleDTO> list = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			AssemblerArticulo ass = new AssemblerArticulo();
+			
+			CSV csv = new CSV(CAB, DET, PATH + this.dto.getNumeroPedidoCompra() + ".csv", ';');
+			String noEncontrado = "Códigos no encontrados: \n";
 			csv.start();
 			while (csv.hashNext()) {
-
-				Articulo art = rr.getArticulo(csv.getDetalleString("codigo"));	
-				ArticuloDTO articulo = null;
-
-				if (art == null) {
-										
-					/*if (mensajeAgregar(Configuracion.TEXTO_ARTICULO_INEXISTENTE
-							+ csv.getDetalleString("codigo") + "\n"	+ Configuracion.TEXTO_PREGUNTA_CONTINUAR) == true) {
-						articulo = nuevoArticulo(csv.getDetalleString("codigo"), csv.getDetalleString("articulo"));
-					} else {
-						return;
-					}*/
-					this.mensajeError(Configuracion.TEXTO_ARTICULO_INEXISTENTE 
-							+ csv.getDetalleString("codigo"));
-					return;
-					
-				} else {									
-					articulo = (ArticuloDTO) new AssemblerArticulo().domainToDto(art);
-				}				
+				String codigo = csv.getDetalleString("CODIGO"); 
+				String cantidad = csv.getDetalleString("CANTIDAD");
 				
-				ImportacionPedidoCompraDetalleDTO d = this.nvoItemOrden(
-						articulo, csv.getDetalleDouble("cantidad"), (double) 0);
-				detalles.add(d);				
-			}
-			this.diferenciasCSV = this.buscarDiferenciasCSV(detalles);
-			if (diferenciasCSV.size() > 0) {
-				this.showDiferenciasCSVPedidoCompra();
-			} else {
-				this.dto.setImportacionPedidoCompraDetalle(detalles);
-			}
-			this.addEventoAgendaLink( Configuracion.TEXTO_PEDIDO_COMPRA_CSV_IMPORTADO + this.nombreArchivoCSV, this.linkCsvImportado);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			mensajeError(e.getMessage());
-		}
-	}
-
-	private ImportacionPedidoCompraDetalleDTO nvoItemOrden(ArticuloDTO articulo, Double cantidad, double costoProformaDs) {
-
-		ImportacionPedidoCompraDetalleDTO item = new ImportacionPedidoCompraDetalleDTO();
-		item.setArticulo(articulo);
-		item.setCantidad(cantidad.intValue());
-		item.setCostoProformaDs(costoProformaDs);
-		item.setCostoProformaGs(costoProformaDs * this.dto.getCambio());
-		item.setUltimoCostoDs(this.getUltimoCosto(articulo.getId()));
-		
-		return item;
-	}
-
-	//Crea un nuevo articulo y lo setea como temporal..
-	private ArticuloDTO nuevoArticulo(String codigoInterno, String descripcion)
-			throws Exception {
-		
-		MyArray m = new MyArray();
-		m.setId(new Long(1));
-		MyPair mp = new MyPair();
-		mp.setId(new Long(1));
-		MyPair me = new MyPair();
-		me.setId(Configuracion.ID_ESTADO_ARTICULO_TEMPORAL);
-
-		ArticuloDTO out = new ArticuloDTO();
-		out.setCodigoInterno(codigoInterno);
-		out.setDescripcion(Configuracion.TEXTO_NUEVO_ARTICULO + descripcion);
-		out.setArticuloPresentacion(m);
-		out.setArticuloUnidadMedida(mp);
-		out.setArticuloEstado(me);
-		out.setArticuloFamilia(mp);
-		out.setArticuloMarca(mp);
-		out.setArticuloParte(mp);
-		out.setArticuloLinea(mp);
-		out.setArticuloUnidadMedida(mp);
-		
-		return out;
-	}
-
-	/******************************************************************************************/	
-	
-
-	/****************************** DIFERENCIAS CSV PEDIDO COMPRA *****************************/
-
-	/**
-	 * 1- Se importa el Pedido Compra CSV mas de una vez: 1.1- Si es un nuevo
-	 * Pedido Pisa los datos anteriores. 1.2- Si no es un nuevo Pedido despliega
-	 * las diferencias encontradas. 1.2.1- Las diferencias que despliega pueden
-	 * ser: - Item que esta en el csv y no en el detalle del pedido. - Item que
-	 * esta en el detalle del Pedido y no en el csv. - Item con cantidad
-	 * diferente.
-	 **/
-
-	public static int MOTIVO_NUEVO = 1;
-	public static int MOTIVO_CANTIDAD = 2;
-	public static int MOTIVO_NO_ENCONTRADO = 3;
-	
-	private List<ImportacionPedidoCompraDetalleDTO> diferenciasCSV = new ArrayList<ImportacionPedidoCompraDetalleDTO>();	
-
-	public List<ImportacionPedidoCompraDetalleDTO> buscarDiferenciasCSV(
-			List<ImportacionPedidoCompraDetalleDTO> detalles) throws Exception {
-		List<ImportacionPedidoCompraDetalleDTO> out = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
-		if (this.dto.esNuevo() == false) {
-			for (ImportacionPedidoCompraDetalleDTO csv : detalles) {
-				boolean encontro = false;
-				for (ImportacionPedidoCompraDetalleDTO dto : this.dto
-						.getImportacionPedidoCompraDetalle()) {
-					if (csv.getArticulo().getId() == dto.getArticulo().getId()) {
-						encontro = true;
-						if (misc.esIgual(csv.getCantidad(), dto.getCantidad()) == false) {
-							csv.setMotivo(MOTIVO_CANTIDAD);
-							csv.setCantidadSistema(dto.getCantidad());
-							out.add(csv);
-						}
-						if (csv.getCostoProformaDs() > 0.001) {
-							throw new Exception(Configuracion.TEXTO_ERROR_IMPORTAR_PEDIDO_COMPRA);
-						}
-					}
-				}
-
-				if (encontro == false) {
-					csv.setMotivo(MOTIVO_NUEVO);
-					csv.setCantidadSistema(csv.getCantidad());
-					out.add(csv);
+				ImportacionPedidoCompraDetalleDTO item = new ImportacionPedidoCompraDetalleDTO();
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					ArticuloDTO ar = (ArticuloDTO) ass.domainToDto(art);
+					item.setArticulo(ar);
+					item.setCantidad(Integer.parseInt(cantidad));
+					list.add(item);
+				} else {
+					noEncontrado += codigo + "\n";
 				}
 			}
-
-			for (ImportacionPedidoCompraDetalleDTO dto : this.dto
-					.getImportacionPedidoCompraDetalle()) {
-				boolean encontro = false;
-				for (ImportacionPedidoCompraDetalleDTO csv : detalles) {
-					if (csv.getArticulo().getId() == dto.getArticulo().getId()) {
-						encontro = true;
-					}
-				}
-
-				if (encontro == false) {
-					dto.setMotivo(MOTIVO_NO_ENCONTRADO);
-					dto.setCantidadSistema(dto.getCantidad());
-					out.add(dto);
-				}
-			}
-		}
-		return out;
-	}
-
-	public void showDiferenciasCSVPedidoCompra(){
-		try {
-			WindowPopup w = new WindowPopup();
-			w.setModo(WindowPopup.NUEVO);
-			w.setTitulo("Diferencias encontradas al Importar el Archivo csv");
-			w.setWidth("1200px");
-			w.setDato(this);
-			w.setCheckAC(new ValidadorDiferenciasCSV(this));
-			w.show(Configuracion.DIFERENCIAS_CSV_ZUL);
-			if (w.isClickAceptar()) {
-				for (ImportacionPedidoCompraDetalleDTO dif : this.diferenciasCSV) {
-					if (dif.isChecked()) {						
-						this.modificarDetalle(dif, dif.getMotivo());
-					}
-				}
-			}
+			this.dto.getSolicitudCotizaciones().addAll(list);
+			this.dto.setConfirmadoAdministracion(true);
+			this.mensajePopupTemporal("SE IMPORTARON " + list.size() + " ÍTEMS");
+			Clients.showNotification(noEncontrado);
 			
+			MyArray trazabilidad = new MyArray(new Date(), "SOLICITANDO COTIZACION", PATH_GENERICO + this.dto.getNumeroPedidoCompra() + ".csv", "", "", 1, "", 0.0);
+			this.dto.getTrazabilidad().add(trazabilidad);
+		
 		} catch (Exception e) {
 			e.printStackTrace();
-			mensajeError(e.getMessage());
-		}		
-	}
-	
-	public void modificarDetalle(ImportacionPedidoCompraDetalleDTO item, int motivo){
-		if (motivo == MOTIVO_NUEVO) {
-			item.setCantidad(item.getCantidadSistema());
-			this.dto.getImportacionPedidoCompraDetalle().add(item);
-		}
-		if (motivo == MOTIVO_CANTIDAD || motivo == MOTIVO_NO_ENCONTRADO) {
-			for (ImportacionPedidoCompraDetalleDTO detDTO : this.dto.getImportacionPedidoCompraDetalle()) {				
-				if (detDTO.getArticulo().getId() == item.getArticulo().getId()) {
-					detDTO.setCantidad(item.getCantidadSistema());	
-					detDTO.setChecked(true);
-				}
-			}
+			Clients.showNotification(
+					"Hubo un problema al leer el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 		}
 	}
-
-	/******************************************************************************************/	
-	
-
-	/*************************************** CSV PROFORMA *************************************/
 	
 	/**
-	 * En el evento OnUpload() se guarda en el 'pathCsvPedidoCompra' la ruta completa donde
-	 * se guardo el archivo y en 'linkCsvImportado' el link para acceder al mismo desde el browser.
-	 * Se ejecuta la funcion csvProforma() que invoca al metodo start() de la clase CSV
-	 * pasandole la ruta completa del archivo 'pathCsvPedidoCompra'. Si el formato del archivo es
-	 * el correcto recorre el mismo y por cada fila genera un detalle en el Pedido Compra.
-	 * Si encuentra articulos nuevos Solicita confirmacion para continuar, en caso que se confirme 
-	 * agrega el mismo al detalle. Si se importo mas de una vez verifica las diferencias..
- 	 */
-	
-	public void csvProforma() {
+	 * csv proforma..
+	 */
+	private void csvProforma() {
 		try {
 			this.dto.getImportacionPedidoCompraDetalle().clear();
 			List<ImportacionPedidoCompraDetalleDTO> list = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
@@ -585,6 +541,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.dto.setConfirmadoImportacion(true);
 			this.mensajePopupTemporal("SE IMPORTARON " + list.size() + " ÍTEMS");
 			Clients.showNotification(noEncontrado);
+			MyArray trazabilidad = new MyArray(new Date(), "PROFORMA CARGADA", PATH_GENERICO + "proforma_" + this.dto.getNumeroPedidoCompra() + ".csv", "", "", 1, "", 0.0);
+			this.dto.getTrazabilidad().add(trazabilidad);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Clients.showNotification(
@@ -592,101 +550,162 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 		}
 	}
-
-	// Verifica los datos de cabecera al importar el Pedido Compra CSV
-	public boolean verificarCabeceraCSV(String codigoProveedor) throws Exception {
-		boolean out = true;
-		if (this.dto.getProveedor().getCodigoEmpresa()
-				.compareTo(codigoProveedor) != 0) {
-			out = false;
-		}
-		return out;
-	}
-
-	// Verifica los datos al importar el archivo Proforma CSV
-	public void verificarCSVProforma(String codigoInterno) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		if (rr.getArticuloByCodigoInterno(codigoInterno) == null) {
-			throw new Exception(
-					Configuracion.TEXTO_ERROR_IMPORTAR_CSV_PROFORMA_ITEM_BD
-							+ codigoInterno);
-		}
-	}
-
-	/******************************************************************************************/	
 	
-
-	/******************************* DIFERENCIAS CSV PROFORMA *********************************/
-
 	/**
-	 * Se importa el Csv Proforma mas de una vez: 1- Si es un nuevo Pedido pisa
-	 * los datos anteriores. 2- Si no es un nuevo Pedido lanza una alerta
-	 * solicitando continuar o no; -Si el item del csv no se encuentra en el
-	 * Detalle del Pedido. -Si el item del Detalle Pedido no se encuentra en el
-	 * csv.. -Si el costo Proforma del item no coincide.. -Si encuentra un item
-	 * que no esta en la Base de Datos lanza una excepcion.
-	 * */
-
-	public boolean diferenciasCSVProforma(List<ImportacionPedidoCompraDetalleDTO> detalle) {
-		String mensaje = "";
-		if (this.dto.esNuevo() == false) {
-
-			for (ImportacionPedidoCompraDetalleDTO csv : detalle) {
-				boolean encontro = false;
-				for (ImportacionPedidoCompraDetalleDTO dto : this.dto
-						.getImportacionPedidoCompraDetalle()) {
-					if (csv.getArticulo().getId() == dto.getArticulo().getId()) {
-						encontro = true;
-						if ((misc.esIgual(csv.getCostoProformaDs(),
-								dto.getCostoProformaDs()) == false)
-								&& (dto.getCostoProformaDs() != 0)) {
-							// el costo Proforma del item no coincide..
-							mensaje = mensaje
-									+ Configuracion.TEXTO_NO_COINCIDE_COSTO_PROFORMA
-									+ dto.getArticulo().getCodigoInterno()
-									+ "\n";
-						}
-					}
-				}
-
-				if (encontro == false) {
-					// item del csv no se encuentra en el Detalle Pedido..
-					mensaje = mensaje + "- "
-							+ Configuracion.TEXTO_ITEM_NO_ENCONTRADO_EN_DETALLE
-							+ ": " + csv.getArticulo().getCodigoInterno()
-							+ "\n";
+	 * csv factura..
+	 */
+	private void csvFactura() {
+		try {
+			this.dto.getImportacionFactura().get(0).getDetalles().clear();
+			List<ImportacionFacturaDetalleDTO> list = new ArrayList<ImportacionFacturaDetalleDTO>();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			AssemblerArticulo ass = new AssemblerArticulo();
+			
+			CSV csv = new CSV(CAB, DET_PROFORMA, PATH + "factura_" + this.dto.getNumeroPedidoCompra() + ".csv", ';');
+			String noEncontrado = "Códigos no encontrados: \n";
+			csv.start();
+			while (csv.hashNext()) {
+				String codigo = csv.getDetalleString("CODIGO"); 
+				String cantidad = csv.getDetalleString("CANTIDAD");
+				String costoDs = csv.getDetalleString("COSTO");
+				
+				ImportacionFacturaDetalleDTO item = new ImportacionFacturaDetalleDTO();
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					ArticuloDTO ar = (ArticuloDTO) ass.domainToDto(art);
+					item.setArticulo(ar);
+					item.setCantidad(Integer.parseInt(cantidad));
+					item.setCostoDs(Double.parseDouble(costoDs.replace(".", "").replace(",", ".")));
+					list.add(item);
+				} else {
+					noEncontrado += codigo + "\n";
 				}
 			}
+			this.dto.getImportacionFactura().get(0).getDetalles().addAll(list);
+			this.dto.setConfirmadoImportacion(true);
+			this.mensajePopupTemporal("SE IMPORTARON " + list.size() + " ÍTEMS");
+			Clients.showNotification(noEncontrado);
+			MyArray trazabilidad = new MyArray(new Date(), "FACTURA CARGADA", PATH_GENERICO + "factura_" + this.dto.getNumeroPedidoCompra() + ".csv", "", "", 1, "", 0.0);
+			this.dto.getTrazabilidad().add(trazabilidad);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al leer el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
+	
+	@Command
+	public void imprimirResumen() throws Exception {
+		this.imprimirResumen_();
+	}
+	
+	/**
+	 * Despliega el Reporte de Pago..
+	 */
+	private void imprimirResumen_() throws Exception {		
+		String source = ReportesViewModel.SOURCE_RESUMEN_IMPORTACION;
+		if (!this.selectedFormato[0].equals("PDF")) {
+			source = ReportesViewModel.SOURCE_RESUMEN_IMPORTACION_SIN_CAB;
+		}
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new ResumenDataSource();
+		params.put("Titulo", "DETALLE DE IMPORTACION NRO. " + this.dto.getNumeroPedidoCompra() + " - PROVEEDOR: " + this.dto.getProveedor().getRazonSocial());
+		params.put("Usuario", this.getUs().getNombre());
+		this.imprimirComprobante(source, params, dataSource, this.selectedFormato);
+	}
+	
+	/**
+	 * DataSource del resumen..
+	 */
+	class ResumenDataSource implements JRDataSource {
 
-			for (ImportacionPedidoCompraDetalleDTO dto : this.dto
-					.getImportacionPedidoCompraDetalle()) {
-				boolean encontro = false;
-				for (ImportacionPedidoCompraDetalleDTO csv : detalle) {
-					if (dto.getArticulo().getId() == csv.getArticulo().getId()) {
-						encontro = true;
-					}
-				}
+		List<MyArray> detalle = new ArrayList<MyArray>();
 
-				if (encontro == false) {
-					// item del Detalle Pedido no se encuentra en el csv..
-					mensaje = mensaje + "- "
-							+ Configuracion.TEXTO_ITEM_NO_ENCONTRADO_CSV
-							+ " : " + dto.getArticulo().getCodigoInterno()
-							+ "\n";
-				}
+		public ResumenDataSource() {
+			this.detalle = getItemsCostoFinal_();
+		}
+
+		private int index = -1;
+
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+			Object value = null;
+			String fieldName = field.getName();
+			MyArray item = this.detalle.get(index);
+
+			if ("Codigo".equals(fieldName)) {
+				value = item.getPos1();
+			} else if ("Descripcion".equals(fieldName)) {
+				value = item.getPos2();
+			} else if ("Cantidad".equals(fieldName)) {				
+				value = item.getPos3() + "";
+			} else if ("CostoFobDs".equals(fieldName)) {
+				value = Utiles.getNumberFormatDs_((double) item.getPos4());
+			} else if ("CostoFobGs".equals(fieldName)) {	
+				value = Utiles.getNumberFormat((double) item.getPos5());
+			} else if ("TotalDs".equals(fieldName)) {
+				value = Utiles.getNumberFormatDs_((double) item.getPos6());
+			} else if ("TotalGs".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos7());
+			} else if ("Incidencia".equals(fieldName)) {
+				value = Utiles.getNumberFormatDs_((double) item.getPos8());
+			} else if ("FleteSeguro".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos9());
+			} else if ("CIF".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item.getPos10());
+			} else if ("Gastos".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos11());
+			} else if ("CostoFinal".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item.getPos12());
+			} else if ("CostoUnitario".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos13());
+			} else if ("CostoUnitario_".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos14());
+			} else if ("Tot_1".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos1());
+			} else if ("Tot_2".equals(fieldName)) {				
+				value = Utiles.getNumberFormatDs_((double) getTotalesCostoFinal().getPos2());
+			} else if ("Tot_3".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos3());
+			} else if ("Tot_4".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos4());
+			} else if ("Tot_5".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos5());
+			} else if ("Tot_6".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos6());
+			} else if ("Tot_7".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos7());
+			} else if ("Tot_8".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos8());
 			}
-		}
-		boolean out = true;
-
-		if (mensaje.length() > 0) {
-			out = mensajeAgregar(Configuracion.TEXTO_ALERTA_IMPORTAR_CSV_PROFORMA
-					+ "\n"
-					+ mensaje
-					+ Configuracion.TEXTO_CSV_PROFORMA_PISAR_DATOS
-					+ Configuracion.TEXTO_DESEA_CONTINUAR);
+			return value;
 		}
 
-		return out;
+		@Override
+		public boolean next() throws JRException {
+			if (index < detalle.size() - 1) {
+				index++;
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * Despliega el comprobante en un pdf para su impresion..
+	 */
+	public void imprimirComprobante(String source,
+			Map<String, Object> parametros, JRDataSource dataSource, Object[] format) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("source", source);
+		params.put("parametros", parametros);
+		params.put("dataSource", dataSource);
+		params.put("format", format);
+
+		this.win = (Window) Executions.createComponents(
+				ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
+		this.win.doModal();
 	}
 
 	/******************************************************************************************/	
@@ -1098,16 +1117,31 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			}
 		}
 		
+		if (operacion == UPLOAD_PROFORMA) {
+			if (this.dto.getImportacionPedidoCompraDetalle().size() == 0) {
+				mensaje += "\n - Debe ingresar al menos un ítem.";
+				out = false;
+			}			
+		}
+		
 		if (operacion == ENVIAR_CORREO) {
 			if (this.dto.esNuevo()) {
 				mensaje += "\n - Debe Guardar los Datos antes de enviar el Correo.";
 				out = false;
-			}		
+			}
+			if (this.dto.getImportacionPedidoCompraDetalle().size() == 0) {
+				mensaje = "\n - Debe ingresar al menos un item.";
+				out = false;
+			}			
 		}
 		
 		if (operacion == DERIVAR_PEDIDO) {
 			if (this.comprobarGrupo() == false) {
 				mensaje += "\n - el Propietario actual es: " + this.dto.getPropietario();
+				out = false;
+			}
+			if (this.dto.getImportacionPedidoCompraDetalle().size() == 0) {
+				mensaje += "\n - Debe ingresar al menos un ítem.";
 				out = false;
 			}
 		}
@@ -1404,7 +1438,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		dto.setEstado(this.getDtoUtil().getImportacionEstadoConfirmado());
 		dto.setTipoMovimiento(ordenCompraImportacion);
 		dto.setMoneda(this.getDtoUtil().getMonedaDolaresConSimbolo());
+		dto.setCambio(this.getTipoCambio());
 		this.prorrateado = false;
+		this.refreshTipoCambio();
 	}
 	
 	@Command
@@ -1463,6 +1499,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	/******************************** INSERTAR ITEM FACTURA ***********************************/
 
 	private ImportacionFacturaDetalleDTO nvoItem = new ImportacionFacturaDetalleDTO();		
+	private ImportacionPedidoCompraDetalleDTO nvoItemProforma = new ImportacionPedidoCompraDetalleDTO();
 
 	@Command
 	@NotifyChange("*")
@@ -1519,11 +1556,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 
 	@Command
 	@NotifyChange("*")
-	public void nuevaFactura(){
-		
-		if (this.operacionValidaFactura(AGREGAR_FACTURA) == false) {
-			return;
-		}
+	public void nuevaFactura() {
 		
 		try {
 			this.nvaFactura = new ImportacionFacturaDTO();
@@ -1536,7 +1569,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			WindowPopup w = new WindowPopup();
 			w.setModo(WindowPopup.NUEVO);
 			w.setTitulo(Configuracion.TEXTO_AGREGAR_NUEVA_FACTURA);
-			w.setCheckAC(new ValidadorNuevaFactura(this));
 			w.setWidth("400px");
 			w.setHigth("340px");
 			w.setDato(this);
@@ -1552,118 +1584,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			mensajeError(e.getMessage());
 		}		
 	}	
-	
-	/******************************************************************************************/
-	
-	
-	
-	
-	
-	/****************************** UPLOAD DE ARCHIVO FACTURA CSV *****************************/
-	
-	//Upload Factura CSV
-	@Listen("onUpload=#facturaImportacionUpload")
-	public void uploadFactura(UploadEvent event){
-		
-		if (this.operacionValidaFactura(UPLOAD_FACTURA) == false) {
-			return;
-		}
-		
-		String name = Configuracion.NRO_IMPORTACION_FACTURA + "_" + misc.getIdUnique();
-		String path = Configuracion.pathFacturaImportacion;
-		this.setPathCsvFactura(path + name + ".csv");
-		this.setLinkCsvFactura(Configuracion.pathFacturaImportacionGenerico + name + ".csv");
-		this.nombreArchivoCSV = name;
-		
-		misc.uploadFile(path, name, "csv", event.getMedia().getStreamData());
-		this.csvFactura();
-		BindUtils.postNotifyChange(null, null, this, "*");
-	}
-	
-	/******************************************************************************************/	
-	
-	
-	/************************************ FACTURA CSV *****************************************/
-	
-	private String pathCsvFactura = "";
-	private String linkCsvFactura = "";	
-	
-	public void csvFactura(){		
-		
-		// Se declaran los parametros para pasar a la clase CSV
-		String[][] cab = { { "Cliente", CSV.STRING }, { "Fecha", CSV.DATE },
-						{ "Codigo", CSV.STRING }, { "Tipo de Compra", CSV.STRING },
-						{"NroFactura", CSV.STRING}};
-
-		String[][] cabDet = { { "codigo", CSV.STRING },
-						{ "cantidad", CSV.NUMERICO }, { "articulo", CSV.STRING },
-						{ "valor", CSV.NUMERICO }, { "total", CSV.NUMERICO } };
-
-		RegisterDomain rr = RegisterDomain.getInstance();
-		
-		if (this.selectedImportacionFactura.getDetalles().size() > 0) {
-			if (!this.mensajeSiNo("Esta Factura ya tiene ítems en el detalle, "
-					+ "si continúa se eliminarán.. \n \n Desea continuar?")) {
-				return;
-			}
-		}
-				
-		try {
-			
-			CSV csv = new CSV(cab, cabDet, this.getPathCsvFactura());
-			if (this.verificarCabeceraCSV(csv.getCabecera("Codigo")) == false) {
-				this.mensajeError("El Proveedor seleccionado es distinto al ingresado en el archivo csv.. "
-						+ "\n Favor verifique..");
-				return;
-			}
-			List<ImportacionFacturaDetalleDTO> detalle = new ArrayList<ImportacionFacturaDetalleDTO>();
-			double total = 0;
-			
-			csv.start();
-			while(csv.hashNext()){
-				
-				Articulo articulo = rr.getArticuloByCodigoInterno(csv.getDetalleString("codigo"));
-				ArticuloDTO articuloDTO = null;
-				
-				if (articulo == null) {
-					boolean continuar = mensajeAgregar(Configuracion.TEXTO_ARTICULO_INEXISTENTE
-							+ csv.getDetalleString("codigo")
-							+ "\n"
-							+ Configuracion.TEXTO_PREGUNTA_CONTINUAR);
-					if (continuar) {
-						articuloDTO = this.nuevoArticulo(csv.getDetalleString("codigo"), 
-								csv.getDetalleString("articulo"));
-					} else {
-						return;
-					}
-				} else {
-					articuloDTO = (ArticuloDTO) new AssemblerArticulo().domainToDto(articulo);
-				}
-				ImportacionFacturaDetalleDTO d = setearImportacionFacturaDetalleDTO(articuloDTO, 
-						csv.getDetalleDouble("cantidad"), csv.getDetalleDouble("valor"));
-				total = total + d.getCostoDs();
-				detalle.add(d);								
-			}
-			if (this.verificarTotalImportacionFactura(total)) {
-				this.selectedImportacionFactura.setDetalles(detalle);
-				this.addEventoAgendaLink(Configuracion.TEXTO_FACTURA_CSV + this.nombreArchivoCSV, linkCsvFactura);
-			} 		
-		} catch (Exception e) {
-			e.printStackTrace();
-			mensajeError(e.getMessage());
-		}
-	}
-	
-	public boolean verificarTotalImportacionFactura(double total){
-		
-		if (misc.esIgual(total, this.selectedImportacionFactura.getTotalAsignadoDs()) == false) {
-			return mensajeSiNo(Configuracion.TEXTO_TOTALES_NO_COINCIDEN + Configuracion.TEXTO_DESEA_CONTINUAR);
-		} else {
-			return true;
-		}		
-	}
-	
-	/******************************************************************************************/	
 	
 	
 	/******************************* DETALLE IMPORTACION FACTURA ******************************/
@@ -1784,18 +1704,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	/*********************** IMPORTACION FACTURA [GASTOS - DESCUENTOS] ************************/
 	
 	@Command @NotifyChange("*")
-	public void agregarGastosDescuentos() throws Exception {
-		
-		if (this.operacionValidaFactura(ADD_GASTOS_DESCUENTOS) == false) {
-			return;
-		}
-				
+	public void agregarGastosDescuentos() throws Exception {				
 		this.nvoItem = new ImportacionFacturaDetalleDTO();
 		this.nvoItem.setGastoDescuento(true);			
 		WindowPopup w = new WindowPopup();
 		w.setModo(WindowPopup.NUEVO);
 		w.setDato(this);
-		w.setCheckAC(new ValidadorInsertarGastosDescuentos(this));
 		w.setTitulo("Agregar Gastos/Descuentos");
 		w.setWidth("400px");
 		w.setHigth("280px");
@@ -2744,7 +2658,230 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	/***********************************************************************************************/	
 	
 
-	/****************************************** COSTO FINAL ****************************************/
+	/**
+	 *  COSTO FINAL 
+	 */
+	
+	public List<MyArray> getItemsCostoFinal_() {
+		List<MyArray> out = new ArrayList<MyArray>();	
+		double despachoTipoCambio = this.dto.getResumenGastosDespacho().getTipoCambio();
+		double despachoFleteSeguro = this.dto.getResumenGastosDespacho().getValorFleteGs();
+		double despachoGastos = this.dto.getResumenGastosDespacho().getTotalGastosGs();
+		double totalCant = 0;
+		double totalCostoDs = 0;
+		double totalCostoGs = 0;
+		double totalPorcentaje = 0;
+		double totalFleteSeguro = 0;
+		double totalCIF = 0;
+		double totalGastos = 0;
+		double totalCostoFinal = 0;
+		
+		for (ImportacionFacturaDTO f : this.dto.getImportacionFactura()) {
+			
+			double coefAutomatico = this.getCoeficienteGasto();
+			double coefManual = this.dto.getResumenGastosDespacho().getCoeficienteAsignado();
+			double coefGasto = 0;
+			
+			if (coefManual > 0) {
+				coefGasto = coefManual;
+			} else {
+				coefGasto = coefAutomatico;
+			}			
+			
+			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {				
+				
+				double costoDs = d.getCostoDs();
+				double costoGs = costoDs * despachoTipoCambio;
+				
+				long idArt = d.getArticulo().getId();
+				int cant = d.getCantidad();				
+				double valorGasto = coefGasto * costoGs;
+				
+				double costoFinalGs = this.getCostoFinal(costoGs, valorGasto, 0);
+				
+				if (d.isGastoDescuento() == false) {
+					MyArray mr = new MyArray();
+					mr.setId(idArt);
+					mr.setPos1(d.getArticulo().getCodigoInterno());
+					mr.setPos2(d.getArticulo().getDescripcion());
+					mr.setPos3(new Integer(cant));
+					mr.setPos4(costoDs);
+					mr.setPos5(costoGs);
+					mr.setPos6(costoDs * cant);
+					mr.setPos7(costoGs * cant);
+					mr.setPos8(0.0);						
+					mr.setPos9(0.0);
+					mr.setPos10(0.0);
+					mr.setPos11(0.0);
+					mr.setPos12(0.0);
+					mr.setPos13(0.0);
+					mr.setPos14(costoFinalGs);
+					out.add(mr);
+					totalCant += cant;
+					totalCostoDs += (costoDs * cant);
+					totalCostoGs += (costoGs * cant);
+				}			
+			}
+		}	
+		for (MyArray mr : out) {
+			int cantidad = (int) mr.getPos3();
+			double importeGs = (double) mr.getPos7();
+			double porcentaje = (importeGs * 100) / totalCostoGs;
+			double fleteSeguro = (despachoFleteSeguro * porcentaje) / 100;
+			double costoCIF = importeGs + fleteSeguro;
+			double gastos = (despachoGastos * porcentaje) / 100;
+			double costoFinal = costoCIF + gastos;
+			double costoFinalUnd = costoFinal / cantidad;
+			mr.setPos8(porcentaje);
+			mr.setPos9(fleteSeguro);
+			mr.setPos10(costoCIF);
+			mr.setPos11(gastos);
+			mr.setPos12(costoFinal);
+			mr.setPos13(costoFinalUnd);
+			totalPorcentaje += porcentaje;
+			totalFleteSeguro += fleteSeguro;
+			totalGastos += gastos;
+			totalCIF += costoCIF;
+			totalCostoFinal += costoFinal;
+		}
+		this.totalesCostoFinal = new MyArray(totalCant, totalCostoDs, totalCostoGs, totalPorcentaje, totalFleteSeguro, totalCIF, totalGastos, totalCostoFinal);
+		BindUtils.postNotifyChange(null, null, this, "totalesCostoFinal");
+		return out;
+	}
+	
+	/**
+	 * PRECIO FINAL
+	 */	
+	public List<MyArray> getItemsPrecioFinal() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		if (this.dto.getResumenGastosDespacho().getTipoCambio() <= 100	) {
+			return out;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double despachoTipoCambio = this.dto.getResumenGastosDespacho().getTipoCambio();
+		double despachoFleteSeguro = this.dto.getResumenGastosDespacho().getValorFleteGs();
+		double despachoGastos = this.dto.getResumenGastosDespacho().getTotalGastosGs();
+		double totalCostoGs = 0;
+		
+		for (ImportacionFacturaDTO f : this.dto.getImportacionFactura()) {
+			
+			double coefAutomatico = this.getCoeficienteGasto();
+			double coefManual = this.dto.getResumenGastosDespacho().getCoeficienteAsignado();
+			double coefGasto = 0;
+			
+			if (coefManual > 0) {
+				coefGasto = coefManual;
+			} else {
+				coefGasto = coefAutomatico;
+			}			
+			
+			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {				
+				
+				double costoDs = d.getCostoDs();
+				double costoGs = costoDs * despachoTipoCambio;
+				
+				long idArt = d.getArticulo().getId();
+				int cant = d.getCantidad();				
+				double valorGasto = coefGasto * costoGs;
+				
+				double costoFinalGs = this.getCostoFinal(costoGs, valorGasto, 0);
+				
+				if (d.isGastoDescuento() == false) {
+					Object[] art = rr.getArticulo(idArt);
+					MyArray mr = new MyArray();
+					mr.setId(idArt);
+					mr.setPos1(d.getArticulo().getCodigoInterno());
+					mr.setPos2(d.getArticulo().getDescripcion());
+					mr.setPos3(new Integer(cant));
+					mr.setPos4(costoGs * cant);
+					mr.setPos5(0.0);						
+					mr.setPos6(0.0);
+					mr.setPos7(art[3]); //costoActualGs
+					mr.setPos8(art[5]); //precioActualGs
+					mr.setPos9(0.0);
+					mr.setPos10(0.0);
+					mr.setPos11(0.0);
+					mr.setPos12(0.0);
+					mr.setPos14(costoFinalGs);
+					out.add(mr);
+					totalCostoGs += (costoGs * cant);
+				}			
+			}
+		}	
+		for (MyArray mr : out) {
+			int cantidad = (int) mr.getPos3();
+			double importeGs = (double) mr.getPos4();
+			double porcentaje = (importeGs * 100) / totalCostoGs;
+			double fleteSeguro = (despachoFleteSeguro * porcentaje) / 100;
+			double costoCIF = importeGs + fleteSeguro;
+			double gastos = (despachoGastos * porcentaje) / 100;
+			double costoFinal = costoCIF + gastos;
+			double costoFinalUnd = costoFinal / cantidad;
+			double costoFinalUndDs = costoFinalUnd / despachoTipoCambio;
+			double costoFinalUndIvaInc = costoFinalUnd * 1.1;
+			double precioMayorista = costoFinalUndIvaInc * 1.25;
+			double margenGs = precioMayorista - costoFinalUndIvaInc;
+			mr.setPos5(costoFinalUnd);
+			mr.setPos6(costoFinalUndDs);
+			mr.setPos9(precioMayorista);
+			mr.setPos10(costoFinalUndIvaInc);
+			mr.setPos11(margenGs);
+			mr.setPos12(Utiles.obtenerPorcentajeDelValor(margenGs, costoFinalUndIvaInc));
+		}
+		return out;
+	}
+	
+	/**
+	 * test group..
+	 */
+	@Wire
+	private Listbox listbox;
+	private void renderizarDesgloseCuentas() {
+		try {
+			Map<String, List<Object[]>> data = new HashMap<String, List<Object[]>>();
+			Map<String, Double> totales = new HashMap<String, Double>();
+			Map<String, Double> totalesDs = new HashMap<String, Double>();
+			for (Object[] det : this.dto.getGastosDetallado()) {
+				String key = (String) det[2];
+				List<Object[]> items = data.get(key);
+				Double importe = totales.get(key);
+				Double importeDs = totalesDs.get(key);
+				if (items == null) {
+					items = new ArrayList<>();
+					importe = (Double) det[3];
+					importeDs = (Double) det[4];
+				} else {
+					importe += (double) det[3];
+					importeDs += (double) det[4];
+				}
+				items.add(det);
+				data.put(key, items);
+				totales.put(key, importe);
+				totalesDs.put(key, importeDs);
+			}
+			for (String key : data.keySet()) {
+				List<Object[]> items = data.get(key);
+				double importe = totales.get(key);
+				double importeDs = totalesDs.get(key);
+				Listgroup listgroup = new Listgroup(key + " - Gs. " + Utiles.getNumberFormat(importe) + " - U$D. " + Utiles.getNumberFormatDs(importeDs));
+				listgroup.setOpen(false);
+				listgroup.setStyle("font-weight:bold");
+				listgroup.setParent(listbox);
+				for (Object[] det : items) {
+					Listitem listitem = new Listitem();
+					for (int j = 1; j < 5; j++) {
+						if(j == 3) det[j] = Utiles.getNumberFormat((double) det[j]);
+						if(j == 4) det[j] = Utiles.getNumberFormatDs((double) det[j]);
+						Listcell listcell = new Listcell(det[j].toString());
+						listcell.setParent(listitem);
+					}
+					listitem.setParent(listbox);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public List<MyArray> getItemsCostoFinal(){
 		List<MyArray> out = new ArrayList<MyArray>();	
@@ -2894,6 +3031,15 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 							this.dto.getTipoMovimiento().getId(),
 							this.getLoginNombre());
 		}	
+		
+		for (ImportacionFacturaDetalleDTO item : this.dto.getImportacionFactura().get(0).getDetalles()) {
+			long idArticulo = item.getArticulo().getId();
+			double mayoristaGs = item.getPrecioFinalGs();
+			double minoristaGs = item.getMinoristaGs();
+			double listaGs = item.getListaGs();
+			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, this.getLoginNombre());
+		}
+		
 		this.actualizarCtaCte();
 	}	
 	
@@ -3106,12 +3252,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	@Command
 	@NotifyChange("*")
-	public void sugerirValoresProveedor() throws Exception{
-		
-		if (this.dto.getProveedor().getCondicionPagos().size() > 0) {
-			MyArray mc = this.dto.getProveedor().getCondicionPagos().get(0);
-			this.dto.setProveedorCondicionPago(mc);
-		}			
+	public void sugerirValoresProveedor() throws Exception {		
+		this.dto.setProveedorCondicionPago(this.dto.getProveedor().getCondicionPago());			
 		this.dto.setMoneda(this.dto.getProveedor().getMonedaConSimbolo());				
 	}	
 	
@@ -3195,6 +3337,22 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		comp.close();
 	}
 	
+	@Command
+	public void guaranizarGastoDetalle() {
+		double tc = this.dto.getResumenGastosDespacho().getTipoCambio();
+		double ds = this.nvoGastoDetalle.getMontoDs();
+		this.nvoGastoDetalle.setMontoGs(ds * tc);
+		BindUtils.postNotifyChange(null, null, this.nvoGastoDetalle, "montoGs");
+	}
+	
+	@Command
+	public void dolarizarGastoDetalle() {
+		double tc = this.dto.getResumenGastosDespacho().getTipoCambio();
+		double gs = this.nvoGastoDetalle.getMontoGs();
+		this.nvoGastoDetalle.setMontoDs(gs / tc);
+		BindUtils.postNotifyChange(null, null, this.nvoGastoDetalle, "montoDs");
+	}
+	
 	/**
 	 * GETS / SETS
 	 */
@@ -3236,11 +3394,126 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		for (ImportacionAplicacionAnticipoDTO anticipo : this.dto.getAplicacionAnticipos()) {
 			Recibo ant = rr.getOrdenPagoById(anticipo.getMovimiento().getIdMovimientoOriginal());
-			if (ant != null) {
-				dif += (ant.getTotalImporteGs() - totalFacGs);
-			}
+			dif += (ant.getTotalImporteGs() - totalFacGs);
 		}		
 		return dif;
+	}
+	
+	@DependsOn({ "dto.proveedor" })
+	public List<CtaCteEmpresaMovimiento> getSaldosPendientes() throws Exception {
+		if(this.dto.getProveedor().esNuevo()) return new ArrayList<CtaCteEmpresaMovimiento>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getSaldosCtaCte(this.dto.getProveedor().getEmpresa().getId(), Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR);
+	}
+	
+	@DependsOn({ "dto.proveedor" })
+	public double getTotalSaldosPendientes() throws Exception {
+		double out = 0;
+		for (CtaCteEmpresaMovimiento movim : this.getSaldosPendientes()) {
+			out += movim.getSaldo();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return los formatos de reporte..
+	 */
+	public List<Object[]> getFormatos() {
+		List<Object[]> out = new ArrayList<Object[]>();
+		out.add(ReportesViewModel.FORMAT_PDF);
+		out.add(ReportesViewModel.FORMAT_XLS);
+		out.add(ReportesViewModel.FORMAT_CSV);
+		return out;
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<Tipo> getMonedas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_MONEDA);
+	}
+	
+	/**
+	 * @return las condiciones..
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CondicionPago> getCondicionesPago() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(CondicionPago.class.getName());
+	}
+	
+	/**
+	 * @return la ultima cotizacion..
+	 */
+	public double getTipoCambio() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipoCambioVenta();
+	}
+	
+	/**
+	 * @return las vias de importacion..
+	 */
+	public List<String> getVias() {
+		List<String> out = new ArrayList<String>();
+		out.add(ImportacionPedidoCompra.VIA_MARITIMA);
+		out.add(ImportacionPedidoCompra.VIA_TERRESTRE);
+		return out;
+	}
+	
+	/**
+	 * @return el link del archivo importado..
+	 */
+	public String getCotizacionCsv() {
+		return Configuracion.pathPedidoCompraGenerico + this.dto.getNumeroPedidoCompra() + ".csv";
+	}
+	
+	/**
+	 * @return el link del archivo importado..
+	 */
+	public String getProformaCsv() {
+		return Configuracion.pathPedidoCompraGenerico + "proforma_" + this.dto.getNumeroPedidoCompra() + ".csv";
+	}
+	
+	/**
+	 * @return el link del archivo importado..
+	 */
+	public String getFacturaCsv() {
+		return Configuracion.pathPedidoCompraGenerico + "factura_" + this.dto.getNumeroPedidoCompra() + ".csv";
+	}
+	
+	/**
+	 * @return los tipos de movimiento gastos..
+	 */
+	public List<TipoMovimiento> getTiposMovimientoGastos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		TipoMovimiento t1 = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO);
+		TipoMovimiento t2 = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO);
+		List<TipoMovimiento> out = new ArrayList<TipoMovimiento>();
+		out.add(t1); out.add(t2);
+		return out;
+	}
+	
+	@DependsOn("filterRazonSocial")
+	public List<Proveedor> getProveedores() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getProveedores(this.filterRazonSocial);
+	}
+	
+	/**
+	 * @return las cuentas de gasto importacion..
+	 */
+	public List<ArticuloGasto> getCuentasGastos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getArticulosGastos("IMPORTACION", 100);
+	}
+	
+	/**
+	 * @return los tipos de iva..
+	 */
+	public List<Tipo> getTiposIva() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_IVA);
 	}
 	
 	public ImportacionPedidoCompraDTO getDto() {
@@ -3274,30 +3547,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 
 	public void setNewDetalle(ImportacionPedidoCompraDetalleDTO newDetalle) {
 		this.newDetalle = newDetalle;
-	}
-
-	public String getPathCsvPedidoCompra() {
-		return pathCsvPedidoCompra;
-	}
-
-	public void setPathCsvPedidoCompra(String pathCsvPedidoCompra) {
-		this.pathCsvPedidoCompra = pathCsvPedidoCompra;
-	}
-
-	public String getLinkCsvImportado() {
-		return linkCsvImportado;
-	}
-
-	public void setLinkCsvImportado(String linkCsvImportado) {
-		this.linkCsvImportado = linkCsvImportado;
-	}
-	
-	public List<ImportacionPedidoCompraDetalleDTO> getDiferenciasCSV() {
-		return diferenciasCSV;
-	}
-
-	public void setDiferenciasCSV(List<ImportacionPedidoCompraDetalleDTO> diferenciasCSV) {
-		this.diferenciasCSV = diferenciasCSV;
 	}
 	
 	public CuerpoCorreo getCorreo() {
@@ -3397,22 +3646,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 
 	public void setNvaFactura(ImportacionFacturaDTO nvaFactura) {
 		this.nvaFactura = nvaFactura;
-	}
-	
-	public String getPathCsvFactura() {
-		return pathCsvFactura;
-	}
-
-	public void setPathCsvFactura(String pathCsvFactura) {
-		this.pathCsvFactura = pathCsvFactura;
-	}
-
-	public String getLinkCsvFactura() {
-		return linkCsvFactura;
-	}
-
-	public void setLinkCsvFactura(String linkCsvFactura) {
-		this.linkCsvFactura = linkCsvFactura;
 	}
 	
 	public List<ImportacionFacturaDetalleDTO> getItemsImportar() {
@@ -3538,6 +3771,70 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public void setSelectedAnticipo(ImportacionAplicacionAnticipoDTO selectedAnticipo) {
 		this.selectedAnticipo = selectedAnticipo;
 	}
+
+	public MyArray getNvaTrazabilidad() {
+		return nvaTrazabilidad;
+	}
+
+	public void setNvaTrazabilidad(MyArray nvaTrazabilidad) {
+		this.nvaTrazabilidad = nvaTrazabilidad;
+	}
+
+	public MyArray getTotalesCostoFinal() {
+		return totalesCostoFinal;
+	}
+
+	public void setTotalesCostoFinal(MyArray totalesCostoFinal) {
+		this.totalesCostoFinal = totalesCostoFinal;
+	}
+
+	public String getFilterRazonSocial() {
+		return filterRazonSocial;
+	}
+
+	public void setFilterRazonSocial(String filterRazonSocial) {
+		this.filterRazonSocial = filterRazonSocial;
+	}
+
+	public Proveedor getSelectedProveedor() {
+		return selectedProveedor;
+	}
+
+	public void setSelectedProveedor(Proveedor selectedProveedor) {
+		this.selectedProveedor = selectedProveedor;
+	}
+
+	public Gasto getNvoGasto() {
+		return nvoGasto;
+	}
+
+	public void setNvoGasto(Gasto nvoGasto) {
+		this.nvoGasto = nvoGasto;
+	}
+
+	public GastoDetalle getNvoGastoDetalle() {
+		return nvoGastoDetalle;
+	}
+
+	public void setNvoGastoDetalle(GastoDetalle nvoGastoDetalle) {
+		this.nvoGastoDetalle = nvoGastoDetalle;
+	}
+
+	public ImportacionPedidoCompraDetalleDTO getNvoItemProforma() {
+		return nvoItemProforma;
+	}
+
+	public void setNvoItemProforma(ImportacionPedidoCompraDetalleDTO nvoItemProforma) {
+		this.nvoItemProforma = nvoItemProforma;
+	}
+
+	public Object[] getSelectedFormato() {
+		return selectedFormato;
+	}
+
+	public void setSelectedFormato(Object[] selectedFormato) {
+		this.selectedFormato = selectedFormato;
+	}
 	
 	/***********************************************************************************************/
 	
@@ -3587,49 +3884,6 @@ class ValidadorInsertarItemOrdenCompra implements VerificaAceptarCancelar{
 	public String textoVerificarCancelar() {
 		return "Error de validación al Cancelar..";
 	}	
-}
-
-
-
-//Validador Diferencias CSV
-class ValidadorDiferenciasCSV implements VerificaAceptarCancelar{
-
-	private List<ImportacionPedidoCompraDetalleDTO> diferenciasCSV = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
-	private String mensajeError = "";	
-
-	public ValidadorDiferenciasCSV(ImportacionPedidoCompraControlBody ctr){
-		this.diferenciasCSV = ctr.getDiferenciasCSV();
-	}
-
-	@Override
-	public boolean verificarAceptar() {
-		boolean out = true;
-		this.mensajeError = "No se puede realizar la operación debido a: \n";
-		
-		for (ImportacionPedidoCompraDetalleDTO d : this.diferenciasCSV) {
-			if (d.isChecked() && d.getCantidadSistema() <= 0.001) {
-				this.mensajeError = this.mensajeError + "\n - " + Configuracion.TEXTO_ERROR_ITEM_CANTIDAD;
-				out = false;
-			}
-		}
-		
-		return out;
-	}
-
-	@Override
-	public String textoVerificarAceptar() {
-		return this.mensajeError;
-	}
-
-	@Override
-	public boolean verificarCancelar() {
-		return true;
-	}
-
-	@Override
-	public String textoVerificarCancelar() {
-		return "Error de validación al Cancelar..";
-	}
 }
 
 
