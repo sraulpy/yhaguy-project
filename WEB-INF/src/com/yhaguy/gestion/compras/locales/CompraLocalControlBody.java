@@ -8,9 +8,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -58,6 +55,9 @@ import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
+
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 
 public class CompraLocalControlBody extends BodyApp {
 	
@@ -346,6 +346,11 @@ public class CompraLocalControlBody extends BodyApp {
 		} else {
 			this.dto.getFactura().setTimbrado(new MyArray("", null));
 		}
+	}
+	
+	@Command
+	public void refresh_(@BindingParam("item") CompraLocalFacturaDetalleDTO item) {
+		BindUtils.postNotifyChange(null, null, item, "*");
 	}
 	
 	/*********************************************************/
@@ -784,6 +789,14 @@ public class CompraLocalControlBody extends BodyApp {
 			ControlArticuloCosto.addMovimientoCosto(art.getId(), costoFinalGs, 
 					this.dto.getFactura().getFechaOriginal(), this.dto.getFactura().getId(),
 					this.dto.getFactura().getTipoMovimiento().getId(), this.getLoginNombre());
+		}
+		
+		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
+			long idArticulo = item.getArticulo().getId();
+			double mayoristaGs = item.getPrecioFinalGs();
+			double minoristaGs = item.getMinoristaGs();
+			double listaGs = item.getListaGs();
+			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, this.getLoginNombre());
 		}
 	}
 	

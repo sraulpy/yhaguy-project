@@ -17,6 +17,9 @@
 				<tab id="tab6" label="Costo Final"
 					width="170px" 
 					visible="@load(vm.facturaVisible)"/>
+				<tab label="Precios"
+					width="170px" 
+					visible="@load(vm.facturaVisible)"/>
 			</tabs>
 			<tabpanels>
 
@@ -577,20 +580,6 @@
 
 				<tabpanel>
 					<hlayout sclass="button-container">
-						<button width="140px" mold="bs" sclass="btn-success btn-sm" 
-							label="Cerrar Compra" iconSclass="z-icon-check"
-							onClick="@command('closeCompra')"
-							disabled="@load(vm.cerrarCompraDisabled)"/>
-						<space />
-						<field value="Depósito a descargar:" />
-						<combobox model="@load(vm.depositosSucursal)"
-							value="@load(vm.dto.deposito.text)"
-							instant="true"
-							selectedItem="@bind(vm.dto.deposito)" width="200px">
-							<template name="model">
-								<comboitem label="@load(each.text)"/>
-							</template>
-						</combobox>
 					</hlayout>
 					<listbox sclass="small-list" vflex="true"
 						model="@load(vm.itemsCostoFinal)">
@@ -636,7 +625,68 @@
 						</listfoot>
 					</listbox>
 				</tabpanel>
+				
+				<!-- ___________________ PRECIOS ___________________  -->
+				
+				<tabpanel>
+					<hlayout sclass="button-container">
+						<button width="140px" mold="bs" sclass="btn-success btn-sm" 
+							label="Cerrar Compra" iconSclass="z-icon-check"
+							onClick="@command('closeCompra')"
+							disabled="@load(vm.cerrarCompraDisabled)"/>
+						<space />
+						<field value="Depósito a descargar:" />
+						<combobox model="@load(vm.depositosSucursal)"
+							value="@load(vm.dto.deposito.text)"
+							instant="true"
+							selectedItem="@bind(vm.dto.deposito)" width="200px">
+							<template name="model">
+								<comboitem label="@load(each.text)"/>
+							</template>
+						</combobox>
+					</hlayout>
+					<listbox vflex="true" sclass="small-list"
+						model="@load(vm.dto.factura.detalles)">
+						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+						<listhead>
+							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.pos1)" onCreate='self.sort(true)' />
+							<listheader label="Descripción" style="text-align:center" />
+							<listheader label="Mayorista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />
+							<listheader label="Minorista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Lista Gs." style="text-align:center" align="right" width="200px" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.articulo.pos1)" />
+								<listcell label="@load(each.articulo.pos4)" />
+								<listcell>
+									<guaranibox value="@bind(each.precioFinalGs)" hflex="true" vflex="true" 
+										onChange="@command('refresh_', item=each)"/>
+								</listcell>
+								<listcell label="@load(each.getMargen()) 
+									@converter('formatedNumber', format='###,##0.00')" />
+								<listcell>
+									<guaranibox value="@bind(each.minoristaGs)" hflex="true" vflex="true" />
+								</listcell>
+								<listcell>
+									<guaranibox value="@bind(each.listaGs)" hflex="true" vflex="true" />
+								</listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter>
+								<hlayout>
+									<label value="ítems" style="font-weight:bold" />
+								</hlayout>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
 			</tabpanels>
 		</tabbox>
 	</div>
+	<style>
+		.z-doublebox { min-height:20px }
+	</style>
 </zk>

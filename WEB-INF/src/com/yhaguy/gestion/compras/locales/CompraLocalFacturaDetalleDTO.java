@@ -6,6 +6,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class CompraLocalFacturaDetalleDTO extends DTO {
@@ -25,6 +26,10 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 	private MyPair tipoDescuento;
 	private int cantidad = 0;
 	private int cantidadRecibida = 0;
+	
+	private double precioFinalGs = 0;
+	private double minoristaGs = 0;
+	private double listaGs = 0;
 	
 	private MyArray articulo = new MyArray();	
 	private MyPair iva;
@@ -59,6 +64,14 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 		} else {
 			return this.getMisc().TEXTO_NORMAL;
 		}
+	}
+	
+	/**
+	 * @return el margen..
+	 */
+	public double getMargen() {
+		double costoGs = this.costoGs;
+		return Utiles.obtenerPorcentajeDelValor((this.precioFinalGs - costoGs), costoGs);
 	}
 	
 	@DependsOn("iva")
@@ -210,6 +223,30 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 
 	public void setIva(MyPair iva) {
 		this.iva = iva;
+	}
+
+	public double getPrecioFinalGs() {
+		return precioFinalGs;
+	}
+
+	public void setPrecioFinalGs(double precioFinalGs) {
+		this.precioFinalGs = precioFinalGs;
+	}
+
+	public double getMinoristaGs() {
+		return minoristaGs;
+	}
+
+	public void setMinoristaGs(double minoristaGs) {
+		this.minoristaGs = minoristaGs;
+	}
+
+	public double getListaGs() {
+		return listaGs;
+	}
+
+	public void setListaGs(double listaGs) {
+		this.listaGs = listaGs;
 	}
 	
 }

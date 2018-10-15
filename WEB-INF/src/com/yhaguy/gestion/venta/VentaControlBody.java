@@ -1698,7 +1698,10 @@ public class VentaControlBody extends BodyApp {
 			out.setPos2(cli.getListaPrecio().getMargen());
 			out.setPos3(cli.getListaPrecio().getFormula());
 		} else {
-			ArticuloListaPrecio lp = rr.getListaDePrecio(2);
+			long idListaPrecio = ArticuloListaPrecio.ID_MINORISTA;
+			long idSucursal = this.dto.getSucursal().getId().longValue();
+			if (idSucursal == SucursalApp.ID_GAM) idListaPrecio = ArticuloListaPrecio.ID_MAYORISTA_GS;
+			ArticuloListaPrecio lp = rr.getListaDePrecio(idListaPrecio);
 			if (lp != null) {
 				out = new MyArray(lp.getDescripcion(), lp.getMargen(), lp.getFormula());
 				out.setId(lp.getId());
