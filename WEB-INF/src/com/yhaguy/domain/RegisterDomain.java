@@ -4189,7 +4189,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.observacion, d.cantidad, d.costo, t.sucursal.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursal.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
