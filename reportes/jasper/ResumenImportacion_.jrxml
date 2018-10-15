@@ -310,14 +310,14 @@
 	<summary>
 		<band height="70">
 			<staticText>
-				<reportElement style="SubTitle" x="14" y="54" width="299" height="15" uuid="dd78aef2-6a3c-480e-a3cb-fb55159fd6e8"/>
+				<reportElement style="SubTitle" x="107" y="54" width="299" height="15" uuid="dd78aef2-6a3c-480e-a3cb-fb55159fd6e8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ingresado Por]]></text>
 			</staticText>
 			<line>
-				<reportElement x="13" y="48" width="300" height="1" uuid="ee96c3bb-1b57-4fa4-904f-94ef8fcc0903"/>
+				<reportElement x="106" y="48" width="300" height="1" uuid="ee96c3bb-1b57-4fa4-904f-94ef8fcc0903"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
