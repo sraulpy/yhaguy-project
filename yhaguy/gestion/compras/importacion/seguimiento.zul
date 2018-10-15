@@ -1,0 +1,124 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSeguimientoVM')">
+	
+	<hlayout style="margin:10px" valign="top">
+		
+		<vlayout children="@load(vm.imps1)" hflex="true">
+			<template name="children">
+				<vlayout spacing="0">
+					<hlayout sclass="button-container" style="background:#46b8da">
+						<label value="@load(each.numeroPedidoCompra)" style="font-weight:bold;color:white"/>
+						<space></space>
+						<label value="@load(each.fechaCreacion) @converter('formattedDate', format='dd-MM-yyyy')"
+							style="font-weight:bold;color:white" />
+						<space></space>
+						<label value="@load(each.proveedor.razonSocial)"
+							style="font-weight:bold;color:white" />
+					</hlayout>
+					<listbox sclass="small-list"
+						model="@load(each.trazabilidad)" height="200px">
+						<listhead>
+							<listheader></listheader>
+							<listheader align="right" width="90px"></listheader>
+							<listheader align="center" width="40px"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.descripcion)"></listcell>
+								<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+								<listcell>
+									<a href="@load(each.urlDocumento)" target="_blank"
+										iconSclass="z-icon-paperclip" visible="@load(!each.urlDocumento.isEmpty())"></a>
+								</listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter>
+								<field value="@load(each.estado.descripcion)" />
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</vlayout>
+			</template>
+		</vlayout>
+		<div width="10px"></div>
+		<vlayout children="@load(vm.imps2)" hflex="true">
+			<template name="children">
+				<vlayout spacing="0">
+					<hlayout sclass="button-container" style="background:#4cae4c">
+						<label value="@load(each.numeroPedidoCompra)" style="font-weight:bold;color:white"/>
+						<space></space>
+						<label value="@load(each.fechaCreacion) @converter('formattedDate', format='dd-MM-yyyy')"
+							style="font-weight:bold;color:white" />
+						<space></space>
+						<label value="@load(each.proveedor.razonSocial)"
+							style="font-weight:bold;color:white" />
+					</hlayout>
+					<listbox sclass="small-list"
+						model="@load(each.trazabilidad)" height="200px">
+						<listhead>
+							<listheader></listheader>
+							<listheader align="right" width="90px"></listheader>
+							<listheader align="center" width="40px"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.descripcion)"></listcell>
+								<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+								<listcell>
+									<a href="@load(each.urlDocumento)" target="_blank"
+										iconSclass="z-icon-paperclip" visible="@load(!each.urlDocumento.isEmpty())"></a>
+								</listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter>
+								<field value="@load(each.estado.descripcion)" />
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</vlayout>
+			</template>
+		</vlayout>
+		<div width="10px"></div>
+		<vlayout children="@load(vm.imps3)" hflex="true">
+			<template name="children">
+				<vlayout spacing="0">
+					<hlayout sclass="button-container" style="background:#eea236">
+						<label value="@load(each.numeroPedidoCompra)" style="font-weight:bold;color:white"/>
+						<space></space>
+						<label value="@load(each.fechaCreacion) @converter('formattedDate', format='dd-MM-yyyy')"
+							style="font-weight:bold;color:white" />
+						<space></space>
+						<label value="@load(each.proveedor.razonSocial)"
+							style="font-weight:bold;color:white" />
+					</hlayout>
+					<listbox sclass="small-list"
+						model="@load(each.trazabilidad)" height="200px">
+						<listhead>
+							<listheader></listheader>
+							<listheader align="right" width="90px"></listheader>
+							<listheader align="center" width="40px"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.descripcion)"></listcell>
+								<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+								<listcell>
+									<a href="@load(each.urlDocumento)" target="_blank"
+										iconSclass="z-icon-paperclip" visible="@load(!each.urlDocumento.isEmpty())"></a>
+								</listcell>
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter>
+								<field value="@load(each.estado.descripcion)" />
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</vlayout>
+			</template>
+		</vlayout>
+	</hlayout>
+</window>
