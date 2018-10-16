@@ -200,23 +200,11 @@
 				<field value="Monto:"/>
 				<hlayout>
 					<guaranibox id="dbxGs" value="@bind(vm.dato.nvoFormaPago.montoGs)"
-						onChange="@command('dolarizarFormaPago')"/>
-					<label value="@load(vm.dtoUtil.simboloMonedaLocal)" 
-						sclass="label-moneda"/>
-				</hlayout>
-			</row>
-			
-			<row>
-				<label value="Monto:" visible="@load(!vm.dato.selectedVenta.monedaLocal)"/>
-				<hlayout visible="@load(!vm.dato.selectedVenta.monedaLocal)" sclass="z-valign-middle">
+						onChange="@command('dolarizarFormaPago')" visible="@load(vm.dato.selectedVenta.monedaLocal)" />
 					<dolarbox id="dbxUS" value="@bind(vm.dato.nvoFormaPago.montoDs)"
-						onChange="@command('guaranizarFormaPago')"/>
-					<label value="@load(vm.dato.selectedVenta.moneda.pos2)"
+						onChange="@command('guaranizarFormaPago')" visible="@load(!vm.dato.selectedVenta.monedaLocal)" />
+					<label value="@load(vm.dato.selectedVenta.moneda.pos2)" 
 						sclass="label-moneda"/>
-					<space/>
-					<label value="Tipo de Cambio:"/>
-					<label value="@load(vm.dato.selectedVenta.tipoCambio) 
-						@converter('formatedNumber', format='#,##0')"/>
 				</hlayout>
 			</row>
 		</rows>

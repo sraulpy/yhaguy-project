@@ -56,7 +56,6 @@ public class VentaDetalle extends Domain {
 	 * precioVentaFinal = precioVentaFinalUnitario * cantidad
 	 */
 	private double precioVentaFinalGs;
-	private double precioVentaFinalDs;
 	
 	/** el monto del IVA u otro impuesto 
 	 * impuestoFinal = precioVentaFinal / 11 = impuestoUnitario * cantidad
@@ -69,6 +68,7 @@ public class VentaDetalle extends Domain {
 	private boolean reservado;
 	
 	private double precioGs;
+	private double precioVentaFinalDs;
 	private ArticuloListaPrecio listaPrecio;
 	private Tipo tipoIVA;
 	

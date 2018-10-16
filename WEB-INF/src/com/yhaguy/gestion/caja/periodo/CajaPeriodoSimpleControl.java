@@ -136,12 +136,6 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		
 		inicializarFormaPago();
 		
-		if (dato.getNvoFormaPago().getMontoGs() <= 0.001) {
-			this.mensajeError("El Total de Formas de Pago no "
-					+ "debe superar al monto de la Venta..");
-			return;
-		}
-		
 		w = (Window) Executions.createComponents(Configuracion.VENTA_ADD_FORMA_PAGO_ZUL, 
 				this.mainComponent, null);
 		Selectors.wireComponents(w, this, false);

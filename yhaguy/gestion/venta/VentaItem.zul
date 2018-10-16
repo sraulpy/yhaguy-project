@@ -84,8 +84,10 @@
 				<field value="Precio Mínimo:" />
 				<hlayout>
 					<guaranibox readonly="true" sclass="red"
-						value="@load(vm.det.precioMinimoGs)" />
-					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						value="@load(vm.det.precioMinimoGs)" visible="@load(vm.dto.monedaLocal)" />
+					<dolarbox readonly="true" sclass="red"
+						value="@load(vm.det.precioMinimoGs)" visible="@load(!vm.dto.monedaLocal)" />
+					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />
 				</hlayout>
 				<field value="Tipo de IVA:" sclass="cell-margen"/>
@@ -97,17 +99,28 @@
 				visible="@load(vm.det.cantidad eq 0? 'false':'true')">
 				<field value="Precio IVA incluído:" />
 				<hlayout>
+				<hlayout visible="@load(vm.dto.monedaLocal)">
 					<guaranibox id="dbxPrecio"
 						value="@bind(vm.det.precioGs)" 
 						onChange="@command('validarPrecio', comp=self)"/>
-					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />
+				</hlayout>
+				<hlayout visible="@load(!vm.dto.monedaLocal)">
+					<dolarbox
+						value="@bind(vm.det.precioVentaFinalDs)" 
+						onChange="@command('guaranizarPrecio', comp=self)"/>
+					<label value="@load(vm.dto.moneda.pos2)"
+						sclass="label-moneda" />
+				</hlayout>
 				</hlayout>
 				<field value="IVA:" sclass="cell-margen"/>
 				<hlayout>
 					<guaranibox value="@load(vm.det.iva)"
-						readonly="true" />
-					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						readonly="true" visible="@load(vm.dto.monedaLocal)" />
+					<dolarbox value="@load(vm.det.ivaDs)"
+						readonly="true" visible="@load(!vm.dto.monedaLocal)" />
+					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />
 				</hlayout>
 			</row>
@@ -115,13 +128,12 @@
 				<field value="Descuento:" />
 				<hlayout>
 					<guaranibox
-						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
-						/>
-					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" />
+					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />					
 				</hlayout>
 				<field value="Porcentaje:" sclass="cell-margen"/>
-				<hlayout>
+				<hlayout visible="@load(vm.dto.monedaLocal)">
 					<dolarbox
 						value="@bind(vm.det.descuentoPorcentaje) @converter(vm.convert)"
 						width="50px"
@@ -135,8 +147,10 @@
 				<field value="Importe:" />
 				<hlayout>
 					<guaranibox value="@load(vm.det.importeGs)"
-						readonly="true" />
-					<label value="@load(vm.utilDto.simboloMonedaLocal)"
+						readonly="true" visible="@load(vm.dto.monedaLocal)" />
+					<dolarbox value="@load(vm.det.importeDs)"
+						readonly="true" visible="@load(!vm.dto.monedaLocal)" />
+					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda"/>					
 				</hlayout>
 			</row>

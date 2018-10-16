@@ -66,7 +66,7 @@
 					</vlayout>
 				</row>
 				<row>
-					<cell colspan="5">
+					<cell colspan="4">
 						<vlayout>
 							<div />
 							<field value="Cliente" />
@@ -91,6 +91,21 @@
 							</hlayout>
 						</vlayout>
 					</cell>
+					<vlayout spacing="0">
+						<field value="Moneda / T.Cambio" />
+						<hlayout valign="top">
+							<combobox value="@load(vm.dto.moneda.pos1)"
+								selectedItem="@bind(vm.dto.moneda)" model="@load(vm.monedas)"
+								instant="true" hflex="true"
+								onChange="@command('obtenerCotizacion')">
+								<template name="model">
+									<comboitem label="@load(each.pos1)" />
+								</template>
+							</combobox>
+							<guaranibox value="@load(vm.dto.tipoCambio)" 
+								readonly="true"/>
+						</hlayout>
+					</vlayout>
 					<vlayout spacing="0">
 						<field value="Condición" />
 						<combobox
@@ -296,6 +311,7 @@
 							value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)"
 							visible="@load(vm.ventaMonedaLocal)" />
 						<label
+							value="@load(each.precioVentaFinalDs) @converter(vm.cnv.monedaExtranjera)"
 							visible="@load(!vm.ventaMonedaLocal)" />
 					</listcell>
 					<listcell>
@@ -305,9 +321,9 @@
 							style="@load(each.descuentoUnitarioGs gt 0? 
 								'text-align:right; color:red':'text-align:right')" />
 						<label
-							value="@load(each.descuentoUnitarioDs) @converter(vm.cnv.monedaExtranjera)"
+							value="@load(each.descuentoUnitarioGs) @converter(vm.cnv.monedaExtranjera)"
 							visible="@load(!vm.ventaMonedaLocal)"
-							style="@load(each.descuentoUnitarioDs gt 0? 
+							style="@load(each.descuentoUnitarioGs gt 0? 
 								'text-align:right; color:red':'text-align:right')" />
 					</listcell>
 					<listcell>
@@ -315,6 +331,7 @@
 							value="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"
 							visible="@load(vm.ventaMonedaLocal)" />
 						<label
+							value="@load(each.importeDs) @converter(vm.cnv.monedaExtranjera)"
 							visible="@load(!vm.ventaMonedaLocal)" />
 					</listcell>
 					<listcell label="@load(each.tipoIVA.sigla)" />
@@ -331,9 +348,13 @@
 						<guaranibox readonly="true"
 							style="background:#EEF7FA;text-align:right;font-weight:bold"
 							value="@load(vm.dto.totalIva10)"
-							format="###,###,##0"/>
+							format="###,###,##0" visible="@load(vm.dto.monedaLocal)" />
+						<guaranibox readonly="true"
+							style="background:#EEF7FA;text-align:right;font-weight:bold"
+							value="@load(vm.dto.totalIva10Ds)"
+							format="###,###,##0.00" visible="@load(!vm.dto.monedaLocal)" />
 						<label
-							value="@load(vm.dtoUtil.simboloMonedaLocal)"
+							value="@load(vm.dto.moneda.pos2)"
 							sclass="small-font" />
 						<space />
 						<label value="@load(vm.labelIva5)"
@@ -343,7 +364,7 @@
 							value="@load(vm.dto.totalIva5)"
 							format="###,###,##0"/>
 						<label
-							value="@load(vm.dtoUtil.simboloMonedaLocal)"
+							value="@load(vm.dto.moneda.pos2)"
 							sclass="small-font" />
 						<space />
 						<field value="Cant. Total:" />
@@ -365,7 +386,11 @@
 						<guaranibox
 							readonly="true" value="@load(vm.dto.totalImporteGs)" width="105px" 
 							style="background:#EEF7FA;text-align:right;font-weight:bold"
-							format="###,###,##0" />
+							format="###,###,##0" visible="@load(vm.dto.monedaLocal)" />
+						<guaranibox
+							readonly="true" value="@load(vm.dto.totalImporteDs)" width="105px" 
+							style="background:#EEF7FA;text-align:right;font-weight:bold"
+							format="###,###,##0.00" visible="@load(!vm.dto.monedaLocal)" />
 						<label value="@load(vm.dto.moneda.pos2)" sclass="small-font" />
 						<div width="10px"/>
 					</hlayout>

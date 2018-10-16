@@ -54,7 +54,6 @@ public class VentaDTO extends DTO {
 	/** para la impresion de la factura **/
 	private String denominacion = "";
 	
-	private double totalImporteDs = 0;
 	private double tipoCambio;
 	private int validez = 3;
 	
@@ -126,6 +125,17 @@ public class VentaDTO extends DTO {
 		return out;
 	}
 	
+	@DependsOn("detalles")
+	public double getTotalImporteDs() {
+		double out = 0;		
+		for (VentaDetalleDTO item : this.detalles) {
+			if (!item.isImpresionDescuento()) {
+				out += item.getImporteDs();
+			}
+		}		
+		return out;
+	}
+	
 	/**
 	 * @return el importe total sin iva..
 	 */
@@ -149,6 +159,16 @@ public class VentaDTO extends DTO {
 		for (VentaDetalleDTO item : this.detalles) {
 			if(item.isIva10())
 				out += item.getTotalIva();
+		}		
+		return out;
+	}
+	
+	@DependsOn("detalles")
+	public double getTotalIva10Ds() {
+		double out = 0;		
+		for (VentaDetalleDTO item : this.detalles) {
+			if(item.isIva10())
+				out += item.getTotalIvaDs();
 		}		
 		return out;
 	}
@@ -343,7 +363,11 @@ public class VentaDTO extends DTO {
 			VentaDetalleDTO item = new VentaDetalleDTO();
 			item.setArticulo(art);
 			item.setCantidad(1);
-			item.setPrecioGs(this.getTotalDescuentoGs() * -1);
+			if (this.isMonedaLocal()) {
+				item.setPrecioGs(this.getTotalDescuentoGs() * -1);
+			} else {
+				item.setPrecioVentaFinalDs(this.getTotalDescuentoGs() * -1);
+			}			
 			item.setTipoIVA(new MyPair());
 			item.setImpresionDescuento(true);				
 			out.add(item);
@@ -664,12 +688,7 @@ public class VentaDTO extends DTO {
 	public void setTotalImporteGs(double totalImporteGs) {
 	}
 
-	public double getTotalImporteDs() {
-		return totalImporteDs;
-	}
-
 	public void setTotalImporteDs(double totalImporteDs) {
-		this.totalImporteDs = totalImporteDs;
 	}	
 
 	public List<ReciboFormaPagoDTO> getFormasPago() {

@@ -177,7 +177,7 @@ public class ReciboFormaPagoDTO extends DTO {
 		if(this.isRetencionIVA())
 			return "RETENCIÓN IVA" + " - " + this.retencionNumero;		
 		if(this.isEfectivo())
-			return "EFECTIVO GS.";
+			return "EFECTIVO";
 		return descripcion;
 	}
 

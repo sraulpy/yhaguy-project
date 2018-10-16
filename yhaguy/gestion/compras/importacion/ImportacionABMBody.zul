@@ -900,7 +900,9 @@
 												<textbox
 													value="@bind(vm.dto.resumenGastosDespacho.nroDespacho)"
 													hflex="true" />
-												<space hflex="true" />
+												<space></space>
+												<field value="Fecha:" />
+												<datebox value="@bind(vm.dto.resumenGastosDespacho.fechaDespacho)" hflex="true"></datebox>
 											</hlayout>
 										</row>
 										<row>

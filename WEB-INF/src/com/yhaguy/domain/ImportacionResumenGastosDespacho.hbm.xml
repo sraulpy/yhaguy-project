@@ -14,6 +14,7 @@
 		<property name="nroDespacho" />
 		<property name="nroLiquidacion"/>
 		<property name="fechaFacturaDespacho" />
+		<property name="fechaDespacho" />
 		<property name="tipoCambio" />
 		<property name="valorCIFds" />
 		<property name="valorCIFgs" />

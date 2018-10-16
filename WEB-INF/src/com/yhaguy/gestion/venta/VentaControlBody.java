@@ -282,6 +282,18 @@ public class VentaControlBody extends BodyApp {
 		this.dto.setSucursal(suc_);
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void obtenerCotizacion() throws Exception {
+		if(this.dto.getMoneda().getPos2().equals(Configuracion.SIGLA_MONEDA_GUARANI)) {
+			this.dto.setTipoCambio(0.0);
+			return;
+		}		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta();
+		this.dto.setTipoCambio(tc);
+	}
+	
 	/***************************************************************/
 	
 	
@@ -1686,6 +1698,16 @@ public class VentaControlBody extends BodyApp {
 	private MyArray getListaPrecio() throws Exception {
 		MyArray out = new MyArray();
 		RegisterDomain rr = RegisterDomain.getInstance();
+		if (!this.dto.isMonedaLocal()) {
+			long idListaPrecio = ArticuloListaPrecio.ID_MAYORISTA_DS;
+			ArticuloListaPrecio lp = rr.getListaDePrecio(idListaPrecio);
+			if (lp != null) {
+				out = new MyArray(lp.getDescripcion(), lp.getMargen(), lp.getFormula());
+				out.setId(lp.getId());
+			}
+			return out;
+		}
+		
 		Cliente cli = rr.getClienteById(this.dto.getCliente().getId());
 		if (cli.getListaPrecio() != null) {
 			out.setId(cli.getListaPrecio().getId());
@@ -1717,6 +1739,16 @@ public class VentaControlBody extends BodyApp {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getCondicionPagoContado());
 		out.add(this.getDtoUtil().getCondicionPagoCredito90());
+		return out;
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<MyArray> getMonedas() {
+		List<MyArray> out = new ArrayList<MyArray>();
+		out.add(this.getDtoUtil().getMonedaGuaraniConSimbolo());
+		out.add(this.getDtoUtil().getMonedaDolaresConSimbolo());
 		return out;
 	}
 	

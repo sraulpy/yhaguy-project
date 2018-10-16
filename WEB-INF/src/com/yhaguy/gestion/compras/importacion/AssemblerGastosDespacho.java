@@ -12,7 +12,7 @@ public class AssemblerGastosDespacho extends Assembler{
 		"nroDespacho", "nroLiquidacion", "fechaFacturaDespacho", "tipoCambio", 
 		"valorCIFds", "valorCIFgs", "valorFOBds", "valorFOBgs", "valorFleteDs",
 		"valorFleteGs", "valorSeguroDs", "valorSeguroGs", "totalIVAds", "totalIVAgs", 
-		"totalGastosDs", "totalGastosGs", "coeficiente", "coeficienteAsignado"};		
+		"totalGastosDs", "totalGastosGs", "coeficiente", "coeficienteAsignado", "fechaDespacho" };		
 	
 	@Override
 	public Domain dtoToDomain(DTO dtoGD) throws Exception {

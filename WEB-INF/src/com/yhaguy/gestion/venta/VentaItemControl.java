@@ -308,20 +308,31 @@ public class VentaItemControl extends SoloViewModel {
 		this.dbxPrecio.focus();
 	}
 	
+	@Command
+	@NotifyChange("det")
+	public void guaranizarPrecio() throws Exception {
+		this.det.setPrecioGs(this.det.getPrecioVentaFinalDs() * this.dto.getTipoCambio());
+	}
+	
 	/**
 	 * setea el precio de venta..
 	 */
 	private void setPrecioVenta() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Object[] art = rr.getArticulo_(this.det.getArticulo().getId());
-		double precioGs = 0;
+		double precio = 0;
 		long idListaPrecio = this.det.getListaPrecio().getId();
-		if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) precioGs = (double) art[2];
-		if (idListaPrecio == ArticuloListaPrecio.ID_MINORISTA) precioGs = (double) art[3];
-		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) precioGs = (double) art[4];
-		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precioGs = (double) art[5];
-		this.det.setPrecioGs(precioGs);
-		this.det.setPrecioMinimoGs(precioGs);
+		if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) precio = (double) art[2];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MINORISTA) precio = (double) art[3];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) precio = (double) art[4];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precio = (double) art[5];
+		this.det.setPrecioGs(precio);
+		this.det.setPrecioMinimoGs(precio);
+		if (!this.dto.isMonedaLocal()) {
+			this.det.setPrecioVentaFinalDs(precio);
+			this.det.setPrecioGs(precio * this.dto.getTipoCambio());
+			this.det.setPrecioMinimoGs(precio);
+		}
 	}
 	
 	/**
@@ -466,7 +477,7 @@ public class VentaItemControl extends SoloViewModel {
 	/**
 	 * descuento..
 	 */
-	public void descontar(double descuento, double porcDescuento, Component cmp){
+	public void descontar(double descuento, double porcDescuento, Component cmp) {
 		this.reCalcularPrecio();
 	}
 	
@@ -490,7 +501,7 @@ public class VentaItemControl extends SoloViewModel {
 	
 	@Command @NotifyChange("*") 
 	public void descontarPorcentaje(@BindingParam("cmp") Component cmp){
-		double precio = this.det.getPrecioGs();
+		double precio = this.dto.isMonedaLocal() ? this.det.getPrecioGs() : this.det.getPrecioVentaFinalDs();
 		double porcDescuento = this.det.getDescuentoPorcentaje();
 		this.det.setDescuentoUnitarioGs(precio * this.det.getCantidad() * porcDescuento);
 		this.descontar(this.det.getDescuentoUnitarioGs(), porcDescuento, cmp);

@@ -11,6 +11,7 @@ public class ImportacionResumenGastosDespacho extends Domain{
 	private String nroDespacho;
 	private String nroLiquidacion;
 	private Date fechaFacturaDespacho;
+	private Date fechaDespacho;
 	private double tipoCambio;
 	private double valorCIFds;
 	private double valorCIFgs;
@@ -196,5 +197,13 @@ public class ImportacionResumenGastosDespacho extends Domain{
 	public int compareTo(Object arg0) {
 		
 		return 0;
+	}
+
+	public Date getFechaDespacho() {
+		return fechaDespacho;
+	}
+
+	public void setFechaDespacho(Date fechaDespacho) {
+		this.fechaDespacho = fechaDespacho;
 	}	
 }

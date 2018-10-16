@@ -26,7 +26,6 @@ public class VentaDetalleDTO extends DTO {
 	private double 	precioVentaFinalUnitarioDs = 0;
 	private double 	impuestoUnitario = 0;
 	private double 	precioVentaFinalGs = 0;
-	private double 	precioVentaFinalDs = 0;
 	private double 	impuestoFinal = 0;
 	private boolean reservado = false;
 	private boolean costoIvaIncluido = false;
@@ -35,6 +34,7 @@ public class VentaDetalleDTO extends DTO {
 	
 	private double precioMinimoGs = 0;
 	private double precioGs = 0;
+	private double 	precioVentaFinalDs = 0;
 	private MyArray listaPrecio;
 	private MyPair tipoIVA;
 	
@@ -54,9 +54,19 @@ public class VentaDetalleDTO extends DTO {
 		return (this.precioGs * this.cantidad) - this.descuentoUnitarioGs;
 	}
 	
+	@DependsOn({ "precioVentaFinalDs", "cantidad", "descuentoUnitarioGs" })
+	public double getImporteDs() {
+		return (this.precioVentaFinalDs * this.cantidad) - this.descuentoUnitarioGs;
+	}
+	
 	@DependsOn({ "precioGs", "cantidad" })
 	public double getImporteGsSinDescuento() {
 		return this.precioGs * this.cantidad;
+	}
+	
+	@DependsOn({ "precioVentaFinalDs", "cantidad" })
+	public double getImporteDsSinDescuento() {
+		return this.precioVentaFinalDs * this.cantidad;
 	}
 	
 	@DependsOn("tipoIVA")
@@ -84,6 +94,15 @@ public class VentaDetalleDTO extends DTO {
 		return 0;
 	}
 	
+	@DependsOn({ "precioVentaFinalDs", "cantidad" })
+	public double getTotalIvaDs() {
+		if (this.isIva10())
+			return (this.getIva10Ds());
+		if (this.isIva5())
+			return (this.getIva5Ds());
+		return 0;
+	}
+	
 	@DependsOn("precioGs")
 	public double getIva() {
 		if(this.isIva10())
@@ -93,11 +112,27 @@ public class VentaDetalleDTO extends DTO {
 		return 0;
 	}
 	
+	@DependsOn("precioVentaFinalDs")
+	public double getIvaDs() {
+		if(this.isIva10())
+			return this.getIva10Ds();
+		if(this.isIva5())
+			return this.getIva5Ds();
+		return 0;
+	}
+	
 	@DependsOn("precioGs")
 	public double getIva10() {
 		if (this.isIva10() == false)
 			return 0;
 		return this.getMisc().calcularIVA((this.getImporteGs()), 10);
+	}
+	
+	@DependsOn("precioVentaFinalDs")
+	public double getIva10Ds() {
+		if (this.isIva10() == false)
+			return 0;
+		return this.getMisc().calcularIVA((this.getImporteDs()), 10);
 	}
 
 	@DependsOn("precioGs")
@@ -105,6 +140,13 @@ public class VentaDetalleDTO extends DTO {
 		if (this.isIva5() == false)
 			return 0;
 		return this.getMisc().calcularIVA((this.getImporteGs()), 5);
+	}
+	
+	@DependsOn("precioVentaFinalDs")
+	public double getIva5Ds() {
+		if (this.isIva5() == false)
+			return 0;
+		return this.getMisc().calcularIVA((this.getImporteDs()), 5);
 	}
 	
 	/**

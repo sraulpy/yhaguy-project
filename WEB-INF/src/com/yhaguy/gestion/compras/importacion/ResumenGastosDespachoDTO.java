@@ -11,6 +11,7 @@ public class ResumenGastosDespachoDTO extends DTO{
 	private String nroDespacho = "";
 	private String nroLiquidacion = "";
 	private Date fechaFacturaDespacho = new Date();
+	private Date fechaDespacho;
 	private double tipoCambio = 0;
 	private double valorCIFds = 0;
 	private double valorCIFgs = 0;
@@ -196,5 +197,13 @@ public class ResumenGastosDespachoDTO extends DTO{
 	
 	public void setProveedor(ProveedorDTO proveedor){
 		this.despachante = proveedor;
+	}
+
+	public Date getFechaDespacho() {
+		return fechaDespacho;
+	}
+
+	public void setFechaDespacho(Date fechaDespacho) {
+		this.fechaDespacho = fechaDespacho;
 	}
 }
