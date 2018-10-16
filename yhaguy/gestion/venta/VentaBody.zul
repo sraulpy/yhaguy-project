@@ -112,13 +112,11 @@
 						<field value="Vendedor" />
 						<hlayout>
 							<textbox value="@bind(vm.dto.vendedor.pos1)"
-								onOK="@command('buscarVendedor')" placeholder="Nombre.."
-								readonly="@load(!vm.clienteEditable)" 
+								onOK="@command('buscarVendedor')" placeholder="Nombre.." 
 								hflex="true"/>
 							<button								
 								iconSclass="z-icon-search"
-								onClick="@command('buscarVendedor')"
-								disabled="@load(!vm.clienteEditable)" />
+								onClick="@command('buscarVendedor')" />
 						</hlayout>
 					</vlayout>
 				</row>

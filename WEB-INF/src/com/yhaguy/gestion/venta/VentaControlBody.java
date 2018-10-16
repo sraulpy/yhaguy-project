@@ -1614,11 +1614,6 @@ public class VentaControlBody extends BodyApp {
 				out = false;
 			}
 			
-			if (nvoItem.getPrecioGs() <= 0) {
-				this.mensaje += "\n - El precio debe ser mayor a cero..";
-				out = false;
-			}
-			
 			return out;
 		}
 
