@@ -434,7 +434,8 @@ public class VentaDTO extends DTO {
 	 * @return el importe en letras..
 	 */
 	public String getImporteEnLetras() {
-		return getMisc().numberToLetter(this.getTotalImporteGs()).toLowerCase();
+		double importe = this.isMonedaLocal() ? this.getTotalImporteGs() : this.getTotalImporteDs();
+		return getMisc().numberToLetter(importe).toLowerCase();
 	}
 	
 	/**

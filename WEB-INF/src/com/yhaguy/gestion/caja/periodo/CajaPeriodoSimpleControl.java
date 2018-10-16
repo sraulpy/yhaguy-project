@@ -20,12 +20,14 @@ import org.zkoss.zul.Window;
 import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.cheques.WindowCheque;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -71,6 +73,17 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			this.dato.getReposicion().setPos2(true);
 			this.dato.getReposicion().setPos13(
 					new MyPair(selected.getId().longValue()));
+		}
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void setTipoCambio() throws Exception {
+		if (!this.dato.getNvoFormaPago().isMonedaLocal()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			double tc = rr.getTipoCambioVenta();
+			this.dato.getSelectedVenta().setTipoCambio(tc);
+			this.dato.getNvoFormaPago().setMontoDs(this.dato.getNvoFormaPago().getMontoGs() / this.dato.getSelectedVenta().getTipoCambio());
 		}
 	}
 	
@@ -132,7 +145,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 	 */
 	@Command 
 	@NotifyChange("*")
-	public void asignarFormaPago() {
+	public void asignarFormaPago() throws Exception {
 		
 		inicializarFormaPago();
 		
@@ -417,7 +430,10 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 	/**
 	 * Inicializa el Objeto ReciboFormaPago
 	 */
-	private void inicializarFormaPago() {
+	private void inicializarFormaPago() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Tipo moneda = rr.getTipoById(dato.getSelectedVenta().getMoneda().getId());
+		this.setTipoCambio();
 		
 		double montoGs = dato.getSelectedVenta().getTotalImporteGs();
 		double montoDs = dato.getSelectedVenta().getTotalImporteDs();
@@ -426,9 +442,12 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		
 		dato.setNvoFormaPago(new ReciboFormaPagoDTO());
 		dato.getNvoFormaPago().setTipo(formaPagoEfectivo);
-		dato.getNvoFormaPago().setMoneda(this.monedaSelectedVenta());
+		dato.getNvoFormaPago().setMoneda(new MyPair(moneda.getId(), moneda.getDescripcion(), moneda.getSigla()));
 		dato.getNvoFormaPago().setMontoGs(montoGs - totalGs);
 		dato.getNvoFormaPago().setMontoDs(montoDs - totalDs);
+		if (!dato.getNvoFormaPago().isMonedaLocal()) {
+			dato.getNvoFormaPago().setMontoDs(dato.getNvoFormaPago().getMontoGs() / dato.getSelectedVenta().getTipoCambio());
+		}
 	}
 	
 	/**
@@ -673,11 +692,6 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		out.add(this.getUtilDto().getFormaPagoEfectivo());
 		out.add(this.getUtilDto().getFormaPagoChequePropio());
 		return out;
-	}
-	
-	private MyPair monedaSelectedVenta() {
-		MyArray moneda = this.dato.getSelectedVenta().getMoneda();
-		return new MyPair(moneda.getId());
 	}
 	
 	public UtilDTO getUtilDto() {

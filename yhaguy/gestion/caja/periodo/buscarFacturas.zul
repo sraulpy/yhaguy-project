@@ -23,6 +23,7 @@
 			<listheader label="Cliente" />
 			<listheader label="Vendedor" width="130px" />
 			<listheader label="Condición" width="120px" />
+			<listheader label="Moneda" width="120px" />
 		</listhead>
 		<template name="model">
 			<listitem>
@@ -61,6 +62,16 @@
 							</template>
 						</listbox> -->						
 					</hlayout>
+				</listcell>
+				<listcell>
+					<listbox mold="select" model="@load(vm.monedas)"
+						selectedItem="@bind(each.moneda)"
+						onSelect="@command('guaranizarVenta')"
+						hflex="true" disabled="@load(each.id eq vm.selectedVenta.id? 'false' : 'true')">
+						<template name="model">
+							<listitem label="@load(each.pos1)" />
+						</template>
+					</listbox>
 				</listcell>
 			</listitem>
 		</template>

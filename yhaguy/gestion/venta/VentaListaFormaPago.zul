@@ -3,13 +3,9 @@
 	style="padding:10px" height="100%">
 
 	<hlayout sclass="button-container">
-		<toolbarbutton label="Eliminar"
-			image="/core/images/borrarItem.png" 
-			disabled="@load(vm.deleteFormaPagoDisabled)"/>
-		<space />
-		<toolbarbutton label="Insertar"
-			image="/core/images/insertar.png"
-			onClick="@command('asignarFormaPago')" />
+		<button mold="bs" sclass="btn-success btn-sm" width="120px"
+				iconSclass="z-icon-plus-circle"
+				onClick="@command('asignarFormaPago')" label=" Insertar" />
 	</hlayout>
 
 	<listbox sclass="small-list" vflex="true"
@@ -23,8 +19,7 @@
 			<listheader label="Monto Gs" align="right"
 				style="text-align:center" width="105px" />
 			<listheader label="Monto U$" align="right"
-				style="text-align:center" width="105px"
-				visible="@load(!vm.dato.selectedVenta.monedaLocal)" />
+				style="text-align:center" width="105px" />
 		</listhead>
 
 		<template name="model">
@@ -41,17 +36,19 @@
 		</template>
 
 		<listfoot>
-			<listfooter span="3" align="left">
+			<listfooter align="left" span="2">
 				<hlayout>
 					<field value="@load(vm.dato.selectedVenta.formasPago.size())" />
-					<field value="ítems" />
-					<space hflex="true" />
-					<field value="Importe:" />
-					<guaranibox readonly="true"
-						value="@load(vm.datosFormasPago[0])"
-						style="background:#dddddd;text-align:right;font-weight:bold" />
-					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+					<field value="ítems" />					
 				</hlayout>
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+					value="@load(vm.datosFormasPago[0])" />
+			</listfooter>
+			<listfooter>
+				<dolarbox readonly="true"
+					value="@load(vm.datosFormasPago[1])" />
 			</listfooter>
 		</listfoot>
 	</listbox>

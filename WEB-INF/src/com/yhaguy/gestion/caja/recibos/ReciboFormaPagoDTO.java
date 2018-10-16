@@ -64,6 +64,14 @@ public class ReciboFormaPagoDTO extends DTO {
 	private MyArray ctaCteSaldoFavor;	
 	
 	/**
+	 * @return true si la venta es en moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		String sigla = (String) this.moneda.getSigla();
+		return (sigla.compareTo(Configuracion.SIGLA_MONEDA_GUARANI) == 0);
+	}
+	
+	/**
 	 * @return true si la forma de pago es cheque propio..
 	 */
 	public boolean isChequePropio() {
