@@ -62,6 +62,7 @@ import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDetalleDTO;
 import com.yhaguy.gestion.notacredito.NotaCreditoAssembler;
 import com.yhaguy.gestion.notacredito.NotaCreditoControlBody;
 import com.yhaguy.gestion.notacredito.NotaCreditoDTO;
+import com.yhaguy.gestion.notacredito.NotaCreditoDetalleDTO;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.gestion.venta.AssemblerVenta;
 import com.yhaguy.gestion.venta.VentaControlBody;
@@ -1763,6 +1764,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("Vendedor", nc.getVendedor().getPos2());
 		params.put("Motivo", nc.getMotivo().getText().toUpperCase());
 		
+		if (nc.isMotivoDescuento()) {
+			nc.getDetalles().add(this.getItemDescuento(nc));
+		}
+		
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
 			this.imprimirComprobante(source, params, dataSource);
 		} else {
@@ -1771,6 +1776,21 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 	}
 
+	/**
+	 * @return el item descuento concedido..
+	 */
+	private NotaCreditoDetalleDTO getItemDescuento(NotaCreditoDTO nc) {
+		double importeGs = (double) nc.getImportesFacturas()[0];
+
+		MyArray art = new MyArray("DESCUENTO CONCEDIDO", "@DESCUENTO");
+		NotaCreditoDetalleDTO out = new NotaCreditoDetalleDTO(this.getIva10());
+		out.setArticulo(art);
+		out.setCantidad(1);
+		out.setMontoGs(importeGs);
+		out.setImporteGs(importeGs);
+		return out;
+	}
+	
 	/**
 	 * Despliega el Reporte del Resumen de la Planilla de Caja..
 	 */
@@ -2285,7 +2305,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		int punto = (int) talonario.getPos3();
 		String nro = AutoNumeroControl.getAutoNumero(
 				(String) talonario.getPos1(), 7);
-		return "00" + boca + "-00" + punto + "-" + nro;
+		String pref = "00"; if(boca > 9) pref = "0";
+		return pref + boca + "-00" + punto + "-" + nro;
 	}
 	
 	/**
@@ -2297,7 +2318,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		int punto = (int) talonario.getPos3();
 		String nro = AutoNumeroControl.getAutoNumero(
 				(String) talonario.getPos1(), 7, true);
-		return "00" + boca + "-00" + punto + "-" + nro;
+		String pref = "00"; if(boca > 9) pref = "0";
+		return pref + boca + "-00" + punto + "-" + nro;
 	}
 	
 
