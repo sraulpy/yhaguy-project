@@ -79,6 +79,19 @@ public class VentaDTO extends DTO {
 	private List<ReciboFormaPagoDTO> formasPago = new ArrayList<ReciboFormaPagoDTO>();	
 	
 	/**
+	 * @return el descuento mayorista..
+	 */
+	public double getDescuentoMayorista() throws Exception {
+		if (this.cliente.getId() <= 0) {
+			return 0;
+		}
+		double out = 0;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		out = rr.getDescuentoMayoristaCliente(this.cliente.getId());
+		return out;
+	}
+	
+	/**
 	 * valida la cuenta..
 	 */
 	private void validarCuenta() {

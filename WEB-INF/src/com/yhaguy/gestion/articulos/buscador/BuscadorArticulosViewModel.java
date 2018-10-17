@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -21,6 +22,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Popup;
 
@@ -53,6 +55,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private String codProveedor = "";
 	private String descripcion = "";
 	
+	private String filter_razonsocial = "";
+	private String filter_ruc = "";
+	
 	private MyArray selectedItem;	
 	private MyArray selectedPrecio;
 	private List<MyArray> precios;
@@ -67,6 +72,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private long stockSalida = 0;
 	private long stockEntrada = 0;
 	private long stock = 0;
+	
+	private Object[] selectedCliente;
+	private double precioDescontado = 0;
 	
 	private Date desde;
 	private Date hasta = new Date();
@@ -154,6 +162,18 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	@Command
 	public void verBarcode() {
 		this.pop_barcode.open(200, 100);
+	}
+	
+	@Command
+	@NotifyChange("precioDescontado")
+	public void setPrecioDescontadoMayorista(@BindingParam("comp") Bandbox comp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Object[] art = rr.getArticulo_(this.selectedItem.getId());
+		double mayorista = (double) art[4];
+		double descuento = (double) this.selectedCliente[3];
+		double descuento_ = Utiles.obtenerValorDelPorcentaje(mayorista, descuento);
+		this.precioDescontado = mayorista - descuento_;
+		comp.close();
 	}
 	
 	/**
@@ -399,9 +419,13 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.precios = null;
 		this.existencia = null;
 		this.importaciones = new ArrayList<MyArray>();
+		this.precioDescontado = 0;
+		this.selectedCliente = null;
 		BindUtils.postNotifyChange(null, null, this, "precios");
 		BindUtils.postNotifyChange(null, null, this, "existencia");
 		BindUtils.postNotifyChange(null, null, this, "importaciones");
+		BindUtils.postNotifyChange(null, null, this, "precioDescontado");
+		BindUtils.postNotifyChange(null, null, this, "selectedCliente");
 	}
 	
 	/**
@@ -569,6 +593,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		if (this.selectedItem == null) return "";
 		String codigo = (String) this.selectedItem.getPos1();
 		return "/yhaguy/archivos/barcodes/" + codigo.replace("/", "-") + ".pdf";
+	}
+	
+	@DependsOn({ "filter_razonsocial", "filter_ruc" })
+	public List<Object[]> getClientes() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getClientesConDescuento(this.filter_razonsocial, this.filter_ruc);
 	}
 	
 	/**
@@ -744,5 +774,37 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setStock(long stock) {
 		this.stock = stock;
+	}
+
+	public String getFilter_ruc() {
+		return filter_ruc;
+	}
+
+	public void setFilter_ruc(String filter_ruc) {
+		this.filter_ruc = filter_ruc;
+	}
+
+	public String getFilter_razonsocial() {
+		return filter_razonsocial;
+	}
+
+	public void setFilter_razonsocial(String filter_razonsocial) {
+		this.filter_razonsocial = filter_razonsocial;
+	}
+
+	public double getPrecioDescontado() {
+		return precioDescontado;
+	}
+
+	public void setPrecioDescontado(double precioDescontado) {
+		this.precioDescontado = precioDescontado;
+	}
+
+	public Object[] getSelectedCliente() {
+		return selectedCliente;
+	}
+
+	public void setSelectedCliente(Object[] selectedCliente) {
+		this.selectedCliente = selectedCliente;
 	}	
 }

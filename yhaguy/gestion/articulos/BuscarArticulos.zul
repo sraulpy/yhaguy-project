@@ -166,11 +166,45 @@
 					</listcell>
 				</listitem>
 			</template>
+			<listfoot>
+				<listfooter>
+					<hlayout>
+						<bandbox id="pop_desc" hflex="true" readonly="true" placeholder="DESCUENTOS ESPECIALES.."
+							onOpen="tx_filter.focus()"
+							value="@load(vm.selectedCliente[1])">
+							<bandpopup>
+								<listbox sclass="small-list" width="400px" height="300px"
+									model="@load(vm.clientes)"
+									selectedItem="@bind(vm.selectedCliente)"
+									onSelect="@command('setPrecioDescontadoMayorista', comp=pop_desc)">
+									<listhead>
+										<listheader>
+											<textbox placeholder="BUSCAR CLIENTE.." hflex="true" sclass="filter"
+												value="@bind(vm.filter_razonsocial)" instant="true"
+												id="tx_filter"></textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each[1])"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</hlayout>
+				</listfooter>
+				<listfooter align="right">
+					<hlayout>
+						<label value="@load(vm.precioDescontado) @converter(vm.cnv.monedaLocal)"></label>
+					</hlayout>					
+				</listfooter>
+			</listfoot>
 		</listbox>
 	</hlayout>
 	
 	<popup id="calc" sclass="rounded" onOpen="@command('reloadCalc')">
-		<grid sclass="vgrid" width="200px">
+		<grid sclass="vgrid" width="400px">
 			<columns>
 				<column/>
 				<column align="right"/>

@@ -298,8 +298,6 @@ public class VentaItemControl extends SoloViewModel {
 		} else {
 			this.setPrecioVenta();
 		}
-		this.det.setDescuentoPorcentaje(0);
-		this.det.setDescuentoUnitarioGs(0);
 		
 		// verifica si se habilito el precio minimo..
 		double precioMinimo = this.getPrecioMinimo();
@@ -332,6 +330,13 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setPrecioVentaFinalDs(precio);
 			this.det.setPrecioGs(precio * this.dto.getTipoCambio());
 			this.det.setPrecioMinimoGs(precio);
+		}
+		double dto_mayorista = this.dto.getDescuentoMayorista();
+		this.det.setDescuentoPorcentaje(0);
+		this.det.setDescuentoUnitarioGs(0);
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) {
+			this.det.setDescuentoPorcentaje(dto_mayorista);
+			this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje(this.det.getPrecioGs(), dto_mayorista));
 		}
 	}
 	

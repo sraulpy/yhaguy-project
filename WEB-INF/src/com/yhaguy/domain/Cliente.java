@@ -20,6 +20,7 @@ public class Cliente extends Domain {
 	
 	private boolean ventaCredito;
 	private double limiteCredito;
+	private double descuentoMayorista;
 	
 	private Empresa empresa;
 	private Tipo estadoCliente;
@@ -322,5 +323,13 @@ public class Cliente extends Domain {
 
 	public void setListaPrecio(ArticuloListaPrecio listaPrecio) {
 		this.listaPrecio = listaPrecio;
+	}
+
+	public double getDescuentoMayorista() {
+		return descuentoMayorista;
+	}
+
+	public void setDescuentoMayorista(double descuentoMayorista) {
+		this.descuentoMayorista = descuentoMayorista;
 	}
 }

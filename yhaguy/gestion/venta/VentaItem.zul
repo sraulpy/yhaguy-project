@@ -135,8 +135,8 @@
 				<field value="Porcentaje:" sclass="cell-margen"/>
 				<hlayout visible="@load(vm.dto.monedaLocal)">
 					<dolarbox
-						value="@bind(vm.det.descuentoPorcentaje) @converter(vm.convert)"
-						width="50px"
+						value="@bind(vm.det.descuentoPorcentaje)"
+						width="50px" format="###,##0.00"
 						sclass="label-red"
 						onChange="@command('descontarPorcentaje', cmp=self)"
 						onOK="@command('descontarPorcentaje', cmp=self)" />

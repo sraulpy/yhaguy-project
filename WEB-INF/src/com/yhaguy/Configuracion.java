@@ -138,6 +138,8 @@ public class Configuracion extends Config {
 
 	public static final double IMPORTE_LIMITE_GASTO_FONDO_FIJO = 500000;
 	public static final double IMPORTE_MINIMO_RETENCION = 700000;
+	
+	public static final String KEY_DESCUENTO_MAYORISTA = "DTO_MAYORISTA:";
 
 	public static String CODIGO_ITEM_DESCUENTO_KEY = "@DESCUENTO";
 	public static String CODIGO_ITEM_GASTO_KEY = "@GASTOS";

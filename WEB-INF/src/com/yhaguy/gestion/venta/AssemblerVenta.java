@@ -32,7 +32,7 @@ public class AssemblerVenta extends Assembler {
 
 	private static String[] attCliente = { "codigoEmpresa", "razonSocial",
 			"ruc", "idEmpresa", "tipoCliente", "direccion", "telefono",
-			"nombreFantasia", "cuentaBloqueada", "nombre", "ventaCredito", "limiteCredito" };
+			"nombreFantasia", "cuentaBloqueada", "nombre", "ventaCredito", "limiteCredito", "descuentoMayorista" };
 
 	private static String[] attTipo = { "descripcion", "sigla" };
 

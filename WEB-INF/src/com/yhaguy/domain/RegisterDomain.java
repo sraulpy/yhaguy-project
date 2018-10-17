@@ -8477,25 +8477,27 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
-	public static void main(String[] args) {
-		try {
-			String codigo = "DIE 1794906";
-			double mayorista = 1050000.0;
-			double minorista = 1575000.0;
-			long stock = 12;
-			
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Articulo art = rr.getArticulo(codigo);
-			art.setPrecioGs(mayorista);
-			art.setPrecioMinoristaGs(minorista);
-			art.setPrecioListaGs(art.getPrecioMinoristaGs());
-			rr.saveObject(art, "sys");
-			
-			ArticuloDeposito ad = rr.getArticuloDeposito(art.getId(), 7);
-			ad.setStock(stock);
-			//rr.saveObject(ad, "sys");
-			
-		} catch (Exception e) {
-		}		
+	/**
+	 * @return el descuento mayorista..
+	 */
+	public double getDescuentoMayoristaCliente(long idCliente) throws Exception {
+		String query = "select c.id, c.descuentoMayorista from Cliente c where c.id = " + idCliente;
+		List<Object[]> list = this.hql(query);
+		return (double) list.get(0)[1];
+	}
+	
+	/**
+	 * @return la lista de clientes segun razonsocial y ruc..
+	 * [0]:id
+	 * [1]:razonsocial
+	 * [2]:ruc
+	 * [3]:descuentoMayorista
+	 */
+	public List<Object[]> getClientesConDescuento(String razonSocial, String ruc) throws Exception {
+		String query = "select c.id, c.empresa.razonSocial, c.empresa.ruc, c.descuentoMayorista from Cliente c where lower(c.empresa.razonSocial) like '%"
+				+ razonSocial.toLowerCase() + "%' "
+				+ " and lower(c.empresa.ruc) like '%" + ruc.toLowerCase() + "%' and c.descuentoMayorista > 0"
+				+ " order by c.empresa.razonSocial";
+		return this.hqlLimit(query, 100);
 	}
 }

@@ -2362,7 +2362,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	 * [3]:valorSeguroDs [4]:valorFOBgs [5]:valorFOBds
 	 * [6]:valorCIFgs [7]:valorCIFds
 	 */
-	private Double[] getValoresFromFacturas(){
+	private Double[] getValoresFromFacturas() {
 		
 		double valorFleteGs = 0;
 		double valorFleteDs = 0;
