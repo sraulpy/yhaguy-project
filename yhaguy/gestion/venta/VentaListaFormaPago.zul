@@ -3,6 +3,9 @@
 	style="padding:10px" height="100%">
 
 	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-danger btn-sm" width="120px"
+				iconSclass="z-icon-times-circle" label=" Eliminar" />
+		<space></space>
 		<button mold="bs" sclass="btn-success btn-sm" width="120px"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('asignarFormaPago')" label=" Insertar" />
@@ -16,9 +19,10 @@
 		<listhead>
 			<listheader width="40px" align="center" />
 			<listheader label="Descripción" style="text-align:center" />
+			<listheader width="50px" align="center"></listheader>
 			<listheader label="Monto Gs" align="right"
 				style="text-align:center" width="105px" />
-			<listheader label="Monto U$" align="right"
+			<listheader label="Monto U$D" align="right"
 				style="text-align:center" width="105px" />
 		</listhead>
 
@@ -26,6 +30,7 @@
 			<listitem>
 				<listcell />
 				<listcell label="@load(each.descripcion)" />
+				<listcell label="@load(each.moneda.sigla.toUpperCase())" />
 				<listcell
 					label="@load(each.montoGs) 
 						@converter('formattedNumber', format='###,###,##0')" />
@@ -36,7 +41,7 @@
 		</template>
 
 		<listfoot>
-			<listfooter align="left" span="2">
+			<listfooter align="left" span="3">
 				<hlayout>
 					<field value="@load(vm.dato.selectedVenta.formasPago.size())" />
 					<field value="ítems" />					
@@ -48,7 +53,8 @@
 			</listfooter>
 			<listfooter>
 				<dolarbox readonly="true"
-					value="@load(vm.datosFormasPago[1])" />
+					value="@load(vm.datosFormasPago[1])" 
+					format='#,##0.00' />
 			</listfooter>
 		</listfoot>
 	</listbox>

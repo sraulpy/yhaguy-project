@@ -335,6 +335,11 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		}
 		
 		dato.getNvoFormaPago().setDescripcion(this.getDescripcion());
+		if (dato.getNvoFormaPago().isMonedaLocal()) {
+			this.dolarizarFormaPago();
+		} else {
+			this.guaranizarFormaPago();
+		}
 		dato.getSelectedVenta().getFormasPago().add(dato.getNvoFormaPago());
 		w.detach();
 	}
@@ -562,13 +567,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			if (formaPago.getDepositoNroReferencia().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número de referencia..";
-			}
-			
-		}
-
-		if (dato.getNvoFormaPago().getMontoGs() <= 0) {
-			valido = false;
-			mensaje += "\n - El monto debe ser mayor a cero..";
+			}	
 		}
 
 		return new Object[] { valido, mensaje };

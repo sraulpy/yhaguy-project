@@ -28,6 +28,7 @@ import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.domain.IiD;
+import com.coreweb.domain.Tipo;
 import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
@@ -738,7 +739,7 @@ public class VentaControlBody extends BodyApp {
 		wp.setModo(WindowPopup.NUEVO);
 		wp.setTitulo("Asignar Formas de Pago");
 		wp.setHigth("400px");
-		wp.setWidth("580px");
+		wp.setWidth("600px");
 		wp.setDato(this);
 		wp.setCheckAC(new ValidadorFormaPagoVenta(this));
 		wp.show(Configuracion.VENTA_LISTA_FORMA_PAGO_ZUL_);
@@ -1264,6 +1265,9 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	private void sugerirValores(VentaDTO out) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta();
+		
 		MyPair deposito = this.getUsuarioPropiedad().getDepositoHabFacturar(this.utilDto);
 		MyPair sucursal = this.getAcceso().getSucursalOperativa();
 		MyArray usuarioFuncionario = this.getAcceso().getFuncionario();
@@ -1275,6 +1279,7 @@ public class VentaControlBody extends BodyApp {
 		out.setEstado(this.estado);	
 		out.setCondicionPago(utilDto.getCondicionPagoContado());
 		out.setMoneda(this.utilDto.getMonedaGuaraniConSimbolo());
+		out.setTipoCambio(tc);
 		out.setTipoCambio(this.utilDto.getCambioCompraBCP(out.getMoneda()));
 		out.setAtendido(usuarioFuncionario);
 		out.setVendedor(vendedor);
@@ -1749,6 +1754,19 @@ public class VentaControlBody extends BodyApp {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getMonedaGuaraniConSimbolo());
 		out.add(this.getDtoUtil().getMonedaDolaresConSimbolo());
+		return out;
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<MyPair> getMonedas_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Tipo gs = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+		Tipo ds = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_DOLAR);
+		List<MyPair> out = new ArrayList<MyPair>();
+		out.add(new MyPair(gs.getId(), gs.getDescripcion(), gs.getSigla()));
+		out.add(new MyPair(ds.getId(), ds.getDescripcion(), ds.getSigla()));
 		return out;
 	}
 	

@@ -241,13 +241,12 @@
 					sclass="small-list">
 					<listhead>
 						<listheader width="35px" align="center" />
-						<listheader label="Descripción"
-							style="text-align:center" />
-						<listheader label="@load(vm.headerMonto[0])"
+						<listheader label="Descripción" style="text-align:center" />
+						<listheader width="50px" align="center"></listheader>
+						<listheader label="Importe Gs."
 							style="text-align:center" align="right" width="105px" />
-						<listheader label="@load(vm.headerMonto[1])"
-							style="text-align:center" align="right" width="100px"
-							visible="@load(!vm.pagoEnMonedaLocal)" />
+						<listheader label="Importe U$D"
+							style="text-align:center" align="right" width="100px" />
 					</listhead>
 					<template name="model">
 						<listitem>
@@ -258,23 +257,25 @@
 									style="font-size:11px;color:black" 
 									tooltiptext="@load(each.descripcion)" />
 							</listcell>
+							<listcell label="@load(each.moneda.sigla.toUpperCase())"></listcell>
 							<listcell
 								label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"
 								style="font-size:11px;color:black" />
 							<listcell
-								label="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)"
+								label="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')"
 								style="font-size:11px;color:black" />
 						</listitem>
 					</template>
 					<listfoot>
-						<listfooter span="3"> 
+						<listfooter span="5"> 
 							<hlayout>
 								<space hflex="true" />
 								<label value="Totales:"
 									sclass="label-moneda-footer" />
 								<guaranibox
-									value="@load(vm.datosMovimientosApagar[2])" readonly="true"
-									style="text-align:right;background:#EEF7FA;font-weight:bold" />
+									value="@load(vm.datosMovimientosApagar[2])" readonly="true" />
+								<dolarbox
+									value="@load(vm.datosMovimientosApagar[3])" readonly="true" format='#,##0.00' />
 							</hlayout>
 						</listfooter>
 					</listfoot>

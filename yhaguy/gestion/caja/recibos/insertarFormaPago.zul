@@ -1,8 +1,8 @@
-<window border="normal" title="Forma de Pago" width="500px"
-	top="25%" left="35%">
+<window border="normal" title="Forma de Pago" width="600px"
+	position="center, center">
 	<div width="500px">
 	
-	<grid width="470px" sclass="vgrid">
+	<grid hflex="true" sclass="vgrid">
 		<columns>
 			<column width="180px"/>
 			<column/>
@@ -16,6 +16,19 @@
 					<template name="model">
 						<comboitem
 							label="@load(each.text.toUpperCase())" />
+					</template>
+				</combobox>
+			</row>
+			
+			<row>
+				<field value="Moneda:"/>
+				<combobox model="@load(vm.dato.monedas_)" width="180px"
+					selectedItem="@bind(vm.nvoFormaPago.moneda)" 
+					onSelect="@command('setTipoCambio')"
+					value="@load(vm.nvoFormaPago.moneda.text.toUpperCase())"
+					instant="true" hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.text)"/>
 					</template>
 				</combobox>
 			</row>
@@ -315,18 +328,12 @@
 			<row id="rwMontoAplicado">
 				<field value="Importe:"/>
 				<hlayout>
-				<hlayout visible="@load(vm.dato.reciboDTO.monedaLocal ? 'true' : 'false')">
 					<guaranibox id="dbxGs" value="@bind(vm.nvoFormaPago.montoGs)"
-						onChange="@command('dolarizarFormaPago')"/>
-					<label value="@load(vm.dtoUtil.simboloMonedaLocal)" 
+						onChange="@command('dolarizarFormaPago')" hflex="true" visible="@load(vm.nvoFormaPago.monedaLocal)" />
+					<dolarbox id="dbxUS" value="@bind(vm.nvoFormaPago.montoDs)"
+						onChange="@command('guaranizarFormaPago')" format='#,##0.00' hflex="true" visible="@load(!vm.nvoFormaPago.monedaLocal)" />
+					<label value="@load(vm.nvoFormaPago.moneda.sigla)" 
 						sclass="label-moneda"/>
-				</hlayout>
-				<hlayout visible="@load(vm.dato.reciboDTO.monedaLocal ? 'false' : 'true')">
-					<guaranibox id="dbxUS" value="@bind(vm.nvoFormaPago.montoDs)"
-						onChange="@command('guaranizarFormaPago')"/>
-					<label value="@load(vm.dato.reciboDTO.moneda.pos2)" 
-						sclass="label-moneda"/>
-				</hlayout>
 				</hlayout>
 			</row>
 			

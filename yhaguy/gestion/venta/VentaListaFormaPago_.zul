@@ -18,16 +18,17 @@
 		selectedItem="@bind(vm.selectedFormaPago)">
 		<listhead>
 			<listheader label="Descripción" style="text-align:center" />
+			<listheader width="50px" align="center"></listheader>
 			<listheader label="Monto Gs" align="right"
-				style="text-align:center" width="105px" />
-			<listheader label="Monto U$" align="right"
-				style="text-align:center" width="105px"
-				visible="@load(!vm.dato.dto.monedaLocal)" />
+				style="text-align:center" width="110px" />
+			<listheader label="Monto U$D" align="right"
+				style="text-align:center" width="110px" />
 		</listhead>
 
 		<template name="model">
 			<listitem>
 				<listcell label="@load(each.descripcion.toUpperCase())" />
+				<listcell label="@load(each.moneda.sigla.toUpperCase())" />
 				<listcell
 					label="@load(each.montoGs) 
 						@converter('formattedNumber', format='###,###,##0')" />
@@ -36,19 +37,20 @@
 						@converter('formattedNumber', format='#,##0.00')" />
 			</listitem>
 		</template>
-
 		<listfoot>
-			<listfooter span="2" align="left">
+			<listfooter align="left" span="2">
 				<hlayout>
 					<field value="@load(vm.dato.dto.formasPago.size())" />
-					<field value="ítems" />
-					<space hflex="true" />
-					<field value="Importe:" />
-					<guaranibox readonly="true"
-						value="@load(vm.datosFormasPago[0])"
-						style="background:#dddddd;text-align:right;font-weight:bold" />
-					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+					<field value="ítems" />					
 				</hlayout>
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+					value="@load(vm.datosFormasPago[0])" />
+			</listfooter>
+			<listfooter>
+				<dolarbox readonly="true"
+					value="@load(vm.datosFormasPago[1])" format='#,##0.00'/>
 			</listfooter>
 		</listfoot>
 	</listbox>

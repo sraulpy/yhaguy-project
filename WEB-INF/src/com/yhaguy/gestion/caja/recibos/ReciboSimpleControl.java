@@ -442,6 +442,14 @@ public class ReciboSimpleControl extends SoloViewModel {
 	
 	/************** COMPORTAMIENTO MONEDA **************/
 	
+	@Command
+	@NotifyChange("*")
+	public void setTipoCambio() throws Exception {
+		if (!this.nvoFormaPago.isMonedaLocal()) {
+			this.nvoFormaPago.setMontoDs(this.nvoFormaPago.getMontoGs() / this.dato.getReciboDTO().getTipoCambio());
+		}
+	}
+	
 	@Command @NotifyChange("*")
 	public void guaranizarTotalDs(@BindingParam("comp") Doublebox comp) throws Exception{
 		double totalPagoDs = this.dato.getReciboDTO().getTotalImporteDs();
@@ -526,6 +534,11 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.nvoFormaPago.setMontoGs(totalGs - totalGs_);
 		this.nvoFormaPago.setMontoDs(totalDs - totalDs_);
 		this.setearMoneda();
+		if (this.nvoFormaPago.isMonedaLocal()) {
+			this.dolarizarFormaPago();
+		} else {
+			this.guaranizarFormaPago();
+		}
 		
 		w = (Window) Executions.createComponents(Configuracion.RECIBO_ADD_FORMA_PAGO_ZUL, 
 				this.mainComponent, null);
@@ -588,8 +601,8 @@ public class ReciboSimpleControl extends SoloViewModel {
 	 * setea la moneda a la forma de pago..
 	 */
 	private void setearMoneda() {
-		long id = this.dato.getReciboDTO().getMoneda().getId();
-		this.nvoFormaPago.setMoneda(new MyPair(id));
+		MyArray moneda = this.dato.getReciboDTO().getMoneda();
+		this.nvoFormaPago.setMoneda(new MyPair(moneda.getId(), (String) moneda.getPos1(), (String) moneda.getPos2()));
 	}
 	
 	/**

@@ -12,18 +12,18 @@
 				<vlayout sclass="vgrid" spacing="0">
 					<field value="Órden de Pago" />
 					<hlayout>
+						<datebox placeholder="Desde.."></datebox>
+						<datebox placeholder="Hasta.."></datebox>
+						<space></space>
 						<textbox placeholder="Número.."
-							style="background:lightyellow"
 							value="@bind(vm.selectedPago.numero)"
 							onOK="@command('buscarPagos', posFiltro=0)" 
 							width="140px" />
 						<textbox placeholder="Ruc.."
-							style="background:lightyellow"
 							value="@bind(vm.selectedPago.proveedor.pos3)"
 							onOK="@command('buscarPagos', posFiltro=1)" 
 							width="140px" />
 						<textbox hflex="true" placeholder="Razón Social.."
-							style="background:lightyellow"
 							value="@bind(vm.selectedPago.proveedor.pos2)" 
 							onOK="@command('buscarPagos', posFiltro=2)" />
 						<button iconSclass="z-icon-search"

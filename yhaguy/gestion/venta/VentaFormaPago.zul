@@ -16,7 +16,7 @@
 					onChange="@command('seleccionarFormaPago')"
 					instant="true" hflex="true">
 					<template name="model">
-						<comboitem label="@load(each.text)"/>
+						<comboitem label="@load(each.text.toUpperCase())"/>
 					</template>
 				</combobox>
 			</row>
@@ -213,10 +213,10 @@
 				<hlayout>
 					<guaranibox id="dbxGs" value="@bind(vm.dato.nvoFormaPago.montoGs)"
 						onChange="@command('dolarizarFormaPago')" visible="@load(vm.dato.nvoFormaPago.monedaLocal)" 
-						 />
+						hflex="true" />
 					<dolarbox id="dbxUS" value="@bind(vm.dato.nvoFormaPago.montoDs)"
 						onChange="@command('guaranizarFormaPago')" visible="@load(!vm.dato.nvoFormaPago.monedaLocal)" 
-						 />
+						hflex="true" format='#,##0.00' />
 					<label value="@load(vm.dato.nvoFormaPago.moneda.sigla)" 
 						sclass="label-moneda"/>
 				</hlayout>

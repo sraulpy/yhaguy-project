@@ -1,5 +1,5 @@
 <window border="normal" title="Forma de Pago" width="420px"
-	top="25%" left="35%">
+	position="center, center">
 	<div width="400px" style="padding:10px">
 	
 	<grid sclass="vgrid" hflex="true">
@@ -15,6 +15,18 @@
 					selectedItem="@bind(vm.dato.nvoFormaPago.tipo)" 
 					onChange="@command('seleccionarFormaPago')"
 					instant="true">
+					<template name="model">
+						<comboitem label="@load(each.text.toUpperCase())"/>
+					</template>
+				</combobox>
+			</row>
+			
+			<row>
+				<field value="Moneda:"/>
+				<combobox model="@load(vm.dato.monedas_)"
+					selectedItem="@bind(vm.dato.nvoFormaPago.moneda)" 
+					onSelect="@command('setTipoCambio')"
+					instant="true" hflex="true">
 					<template name="model">
 						<comboitem label="@load(each.text)"/>
 					</template>
@@ -207,23 +219,13 @@
 			<row>
 				<field value="Monto:"/>
 				<hlayout>
-					<guaranibox id="dbxGs" value="@bind(vm.dato.nvoFormaPago.montoGs)" />
-					<label value="@load(vm.dtoUtil.simboloMonedaLocal)" 
-						sclass="label-moneda"/>
-				</hlayout>
-			</row>
-			
-			<row>
-				<label value="Monto:" visible="@load(!vm.dato.dto.monedaLocal)"/>
-				<hlayout visible="@load(!vm.dato.dto.monedaLocal)" sclass="z-valign-middle">
+					<guaranibox id="dbxGs" value="@bind(vm.dato.nvoFormaPago.montoGs)" 
+						visible="@load(vm.dato.nvoFormaPago.monedaLocal)" 
+						onChange="@command('dolarizarFormaPago')" />
 					<dolarbox id="dbxUS" value="@bind(vm.dato.nvoFormaPago.montoDs)"
-						onChange="@command('guaranizarFormaPago')"/>
-					<label value="@load(vm.dato.dto.moneda.pos2)"
-						sclass="label-moneda"/>
-					<space/>
-					<label value="Tipo de Cambio:"/>
-					<label value="@load(vm.dato.dto.tipoCambio) 
-						@converter('formatedNumber', format='#,##0')"/>
+						onChange="@command('guaranizarFormaPago')" format='#,##0.00'
+						visible="@load(!vm.dato.nvoFormaPago.monedaLocal)" />
+					<label value="@load(vm.dato.nvoFormaPago.moneda.sigla)" sclass="label-moneda"/>
 				</hlayout>
 			</row>
 		</rows>

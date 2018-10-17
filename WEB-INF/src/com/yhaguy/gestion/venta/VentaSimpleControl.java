@@ -116,6 +116,28 @@ public class VentaSimpleControl extends SoloViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void setTipoCambio() throws Exception {
+		if (!this.dato.getNvoFormaPago().isMonedaLocal()) {
+			this.dato.getNvoFormaPago().setMontoDs(this.dato.getNvoFormaPago().getMontoGs() / this.dato.getDto().getTipoCambio());
+		}
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void dolarizarFormaPago(){
+		double montoGs = dato.getNvoFormaPago().getMontoGs();
+		dato.getNvoFormaPago().setMontoDs(montoGs / dato.getDto().getTipoCambio());
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void guaranizarFormaPago(){
+		double montoDs = dato.getNvoFormaPago().getMontoDs();
+		dato.getNvoFormaPago().setMontoGs(montoDs * dato.getDto().getTipoCambio());
+	}
+	
 	/**
 	 * Segun se seleccione el tipo de pago despliega los campos en la ventana 
 	 * de forma de pago..
@@ -281,9 +303,10 @@ public class VentaSimpleControl extends SoloViewModel {
 		double totalGs = (double) this.getDatosFormasPago()[0];
 		double totalDs = (double) this.getDatosFormasPago()[1];
 		
+		MyArray moneda = this.dato.getDto().getMoneda();
 		dato.setNvoFormaPago(new ReciboFormaPagoDTO());
 		dato.getNvoFormaPago().setTipo(this.getUtilDto().getFormaPagoEfectivo());
-		dato.getNvoFormaPago().setMoneda(this.monedaSelectedVenta());
+		dato.getNvoFormaPago().setMoneda(new MyPair(moneda.getId(), (String) moneda.getPos1(), (String) moneda.getPos2()));
 		dato.getNvoFormaPago().setMontoGs(montoGs - totalGs);
 		dato.getNvoFormaPago().setMontoDs(montoDs - totalDs);
 	}
@@ -453,11 +476,6 @@ public class VentaSimpleControl extends SoloViewModel {
 	
 	public UtilDTO getUtilDto() {
 		return (UtilDTO) this.getDtoUtil();
-	}
-	
-	private MyPair monedaSelectedVenta() {
-		MyArray moneda = this.dato.getDto().getMoneda();
-		return new MyPair(moneda.getId());
 	}
 	
 	/**

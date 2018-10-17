@@ -425,6 +425,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 
 		if (modo.equals(WindowPopup.NUEVO)) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			double tc = rr.getTipoCambioVenta();
 
 			this.reciboDTO = new ReciboDTO();
 			this.reciboDTO.setIdUsuarioCarga(this.getIdUsuario());
@@ -432,6 +434,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.reciboDTO.setSucursal(this.dto.getCaja().getSucursal());
 			this.reciboDTO.setTipoMovimiento(tipoMovto);
 			this.reciboDTO.setMoneda(this.monedaLocal);
+			this.reciboDTO.setTipoCambio(tc);
 			this.reciboDTO.setImputar(true);
 			this.reciboDTO.setEstadoComprobante(this.estadoComprobanteConfeccionado);
 			this.reciboDTO.setEstadosComprobantes(this.utilDto.getEstadosComprobantes());
@@ -720,7 +723,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		wp.setModo(WindowPopup.NUEVO);
 		wp.setTitulo("Asignar Formas de Pago");
 		wp.setHigth("400px");
-		wp.setWidth("580px");
+		wp.setWidth("600px");
 		wp.setDato(this);
 		wp.setCheckAC(new ValidadorFormaPagoVenta(this));
 		wp.show(Configuracion.VENTA_LISTA_FORMA_PAGO_ZUL);
@@ -1700,7 +1703,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.win.doModal();
 			//this.imprimirComprobante(source, params, dataSource);
 		} else {
-			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_FACTURA, this.mainComponent, params);
+			String src = venta.isMonedaLocal() ? ZUL_IMPRESION_FACTURA : ZUL_IMPRESION_FACTURA_DS;
+			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
 			this.win.doModal();
 			//this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_HTML);
 		}
