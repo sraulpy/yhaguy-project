@@ -1280,7 +1280,6 @@ public class VentaControlBody extends BodyApp {
 		out.setCondicionPago(utilDto.getCondicionPagoContado());
 		out.setMoneda(this.utilDto.getMonedaGuaraniConSimbolo());
 		out.setTipoCambio(tc);
-		out.setTipoCambio(this.utilDto.getCambioCompraBCP(out.getMoneda()));
 		out.setAtendido(usuarioFuncionario);
 		out.setVendedor(vendedor);
 		out.setSucursal(sucursal);
