@@ -187,7 +187,7 @@
 							hflex="true"/>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Observación" />
+						<field value="Nro. Remision" />
 						<textbox
 							value="@bind(vm.dto.numeroRemision)" 
 							hflex="true"/>
