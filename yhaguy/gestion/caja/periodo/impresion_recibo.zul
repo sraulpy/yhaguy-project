@@ -16,7 +16,7 @@
 	
 	<!-- PAGINA 1 -->
 	
-	<div height="75px"></div>
+	<div height="70px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -30,8 +30,8 @@
 		<div width="90px"></div>
 		<label value="@load(vm.reciboDTO.cliente.pos2)" sclass="custom"></label>
 		<div hflex="true"></div>
-		<label value="@load(vm.reciboDTO.cliente.pos1)" sclass="custom"></label>
-		<div width="75px"></div>
+		<label value="@load(vm.reciboDTO.cliente.pos3)" sclass="custom"></label>
+		<div width="120px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -40,10 +40,10 @@
 		<div width="75px"></div>
 	</hlayout>
 	
-	<div height="30px"></div>
+	<div height="25px"></div>
 	
 	<hlayout>
-	<vbox children="@load(vm.reciboDTO.detalles)" spacing="0px" height="160px" >
+	<vbox children="@load(vm.reciboDTO.detalles)" spacing="0px" height="150px" >
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="35px"></div>
@@ -60,7 +60,7 @@
 		</template>
 	</vbox>
 	<div width="30px"></div>
-	<vbox children="@load(vm.reciboDTO.formasPago)" spacing="0px" height="160px" >
+	<vbox children="@load(vm.reciboDTO.formasPago)" spacing="0px" height="150px" >
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="100px">
@@ -76,12 +76,21 @@
 			</hbox>
 		</template>
 	</vbox>
+	</hlayout>
+	<hlayout>
+		<div width="220px"></div>
+		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+	</hlayout>
+	<div height="5px"></div>
+	<hlayout>
+		<div width="350px"></div>
+		<label value="@load(vm.reciboDTO.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
 	</hlayout>
 		
 	<!-- PAGINA 2 -->
 	
+	<div height="50px"></div>
 	<div height="70px"></div>
-	<div height="75px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -95,8 +104,8 @@
 		<div width="90px"></div>
 		<label value="@load(vm.reciboDTO.cliente.pos2)" sclass="custom"></label>
 		<div hflex="true"></div>
-		<label value="@load(vm.reciboDTO.cliente.pos1)" sclass="custom"></label>
-		<div width="75px"></div>
+		<label value="@load(vm.reciboDTO.cliente.pos3)" sclass="custom"></label>
+		<div width="120px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -108,7 +117,7 @@
 	<div height="30px"></div>
 	
 	<hlayout>
-	<vbox children="@load(vm.reciboDTO.detalles)" spacing="0px" height="160px" >
+	<vbox children="@load(vm.reciboDTO.detalles)" spacing="0px" height="150px" >
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="35px"></div>
@@ -125,7 +134,7 @@
 		</template>
 	</vbox>
 	<div width="30px"></div>
-	<vbox children="@load(vm.reciboDTO.formasPago)" spacing="0px" height="160px" >
+	<vbox children="@load(vm.reciboDTO.formasPago)" spacing="0px" height="150px" >
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="100px">
@@ -141,12 +150,21 @@
 			</hbox>
 		</template>
 	</vbox>
+	</hlayout>
+	<hlayout>
+		<div width="220px"></div>
+		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+	</hlayout>
+	<div height="5px"></div>
+	<hlayout>
+		<div width="350px"></div>
+		<label value="@load(vm.reciboDTO.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
 	</hlayout>
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="65px"></div>
-	<div height="75px"></div>
+	<div height="30px"></div>
+	<div height="70px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -160,8 +178,8 @@
 		<div width="90px"></div>
 		<label value="@load(vm.reciboDTO.cliente.pos2)" sclass="custom"></label>
 		<div hflex="true"></div>
-		<label value="@load(vm.reciboDTO.cliente.pos1)" sclass="custom"></label>
-		<div width="75px"></div>
+		<label value="@load(vm.reciboDTO.cliente.pos3)" sclass="custom"></label>
+		<div width="120px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -173,7 +191,7 @@
 	<div height="30px"></div>
 	
 	<hlayout>
-	<vbox children="@load(vm.reciboDTO.detalles)" spacing="0px" height="160px" >
+	<vbox children="@load(vm.reciboDTO.detalles)" spacing="0px" height="150px" >
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="35px"></div>
@@ -190,7 +208,7 @@
 		</template>
 	</vbox>
 	<div width="30px"></div>
-	<vbox children="@load(vm.reciboDTO.formasPago)" spacing="0px" height="160px" >
+	<vbox children="@load(vm.reciboDTO.formasPago)" spacing="0px" height="150px" >
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="100px">
@@ -206,6 +224,15 @@
 			</hbox>
 		</template>
 	</vbox>
+	</hlayout>
+	<hlayout>
+		<div width="220px"></div>
+		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+	</hlayout>
+	<div height="5px"></div>
+	<hlayout>
+		<div width="350px"></div>
+		<label value="@load(vm.reciboDTO.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
 	</hlayout>
 	
 	<style media="print">

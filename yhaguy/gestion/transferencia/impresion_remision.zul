@@ -20,7 +20,7 @@
 	
 	<hlayout>
 		<div hflex="true"></div>
-		<label value="@load(vm.dto.observacion)" sclass="det"></label>
+		<label value="@load(vm.dto.numeroRemision)" sclass="det"></label>
 		<div width="246px"></div>
 	</hlayout>
 	
@@ -49,13 +49,14 @@
 	</hlayout>
 	
 	<vbox height="110px">
+		<div height="30px"></div>
 		<hlayout>
 			<div width="170px"></div>
-			<label value="@load(vm.dto.sucursal.sigla)" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.sucursal.sigla.toLowerCase())" maxlength="40" sclass="det"></label>
 		</hlayout>
 		<hlayout>
 			<div width="170px"></div>
-			<label value="@load(vm.dto.sucursalDestino.sigla)" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.sucursalDestino.sigla.toLowerCase())" maxlength="38" sclass="det"></label>
 		</hlayout>
 	</vbox>
 	
@@ -85,7 +86,7 @@
 	
 	<hlayout>
 		<div hflex="true"></div>
-		<label value="@load(vm.dto.observacion)" sclass="det"></label>
+		<label value="@load(vm.dto.numeroRemision)" sclass="det"></label>
 		<div width="246px"></div>
 	</hlayout>
 	
@@ -113,7 +114,17 @@
 		<div width="90px"></div>
 	</hlayout>
 	
-	<div height="110px"></div>
+	<vbox height="110px">
+		<div height="30px"></div>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.dto.sucursal.sigla.toLowerCase())" maxlength="40" sclass="det"></label>
+		</hlayout>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.dto.sucursalDestino.sigla.toLowerCase())" maxlength="38" sclass="det"></label>
+		</hlayout>
+	</vbox>
 	
 	<vbox children="@load(vm.dto.detalles)" spacing="0px" height="105px">
 		<template name="children">
@@ -141,7 +152,7 @@
 	
 	<hlayout>
 		<div hflex="true"></div>
-		<label value="@load(vm.dto.observacion)" sclass="det"></label>
+		<label value="@load(vm.dto.numeroRemision)" sclass="det"></label>
 		<div width="246px"></div>
 	</hlayout>
 	
@@ -169,7 +180,17 @@
 		<div width="90px"></div>
 	</hlayout>
 	
-	<div height="110px"></div>
+	<vbox height="110px">
+		<div height="30px"></div>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.dto.sucursal.sigla.toLowerCase())" maxlength="40" sclass="det"></label>
+		</hlayout>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.dto.sucursalDestino.sigla.toLowerCase())" maxlength="38" sclass="det"></label>
+		</hlayout>
+	</vbox>
 	
 	<vbox children="@load(vm.dto.detalles)" spacing="0px" height="105px">
 		<template name="children">
