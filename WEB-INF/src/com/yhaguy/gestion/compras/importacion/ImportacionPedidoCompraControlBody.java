@@ -2373,45 +2373,15 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		double valorCIFgs = 0;
 		double valorCIFds = 0;
 		
-		MyPair tipoFlete = utilDto.getTipoCompraGastoFlete();
-		MyPair tipoSeguro = utilDto.getTipoCompraGastoSeguro();
-		MyPair tipoProrrFlete = utilDto.getTipoCompraProrrateoFlete();
-		MyPair tipoProrrSeguro = utilDto.getTipoCompraProrrateoSeguro();
-		
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
-				MyPair tipo = item.getTipoGastoDescuento();
 				
 				valorCIFgs += item.getImporteGsCalculado();
 				valorCIFds += item.getImporteDsCalculado();
 				
-				if (item.isGastoDescuento() == true) {					
-					
-					if ((tipo.compareTo(tipoFlete) == 0)) {
-						valorFleteGs += item.getImporteGastoDescuentoGs();
-						valorFleteDs += item.getImporteGastoDescuentoDs();
-					}
-					
-					if (tipo.compareTo(tipoSeguro) == 0) {
-						valorSeguroGs += item.getImporteGastoDescuentoGs();
-						valorSeguroDs += item.getImporteGastoDescuentoDs();
-					}
-					
-					if (tipo.compareTo(tipoProrrFlete) == 0) {
-						valorFleteGs += item.getImporteGsCalculado();
-						valorFleteDs += item.getImporteDsCalculado();
-					}
-					
-					if (tipo.compareTo(tipoProrrSeguro) == 0) {
-						valorSeguroGs += item.getImporteGsCalculado();
-						valorSeguroDs += item.getImporteDsCalculado();
-					}
-					
-				} else {					
-					valorFOBgs += item.getImporteGsCalculado();
-					valorFOBds += item.getImporteDsCalculado();					
-				}
+				valorFOBgs += item.getImporteGsCalculado();
+				valorFOBds += item.getImporteDsCalculado();
 			}
 		}
 		Double[] out = {valorFleteGs, valorFleteDs, valorSeguroGs, valorSeguroDs,

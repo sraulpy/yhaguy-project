@@ -276,10 +276,10 @@ public class VentaItemControl extends SoloViewModel {
 		double precioFinalUndGs = precioUnitario - descuentoGs;
 		double precioFinalGs = precioFinalUndGs * this.det.getCantidad();
 		
-		double descuentoDs = descuentoGs / this.tipoCambio;
-		double precioUnitarioDs = precioUnitario / this.tipoCambio;
-		double precioFinalUndDs = precioFinalUndGs / this.tipoCambio;
-		double precioFinalDs = precioFinalGs / this.tipoCambio;
+		double descuentoDs = descuentoGs / this.dto.getTipoCambio();
+		double precioUnitarioDs = precioUnitario / this.dto.getTipoCambio();
+		double precioFinalUndDs = precioFinalUndGs / this.dto.getTipoCambio();
+		double precioFinalDs = precioFinalGs / this.dto.getTipoCambio();
 		
 		this.det.setPrecioVentaUnitarioGs(precioUnitario);
 		this.det.setPrecioVentaFinalUnitarioGs(precioFinalUndGs);
@@ -508,7 +508,7 @@ public class VentaItemControl extends SoloViewModel {
 	public void descontarPorcentaje(@BindingParam("cmp") Component cmp){
 		double precio = this.dto.isMonedaLocal() ? this.det.getPrecioGs() : this.det.getPrecioVentaFinalDs();
 		double porcDescuento = this.det.getDescuentoPorcentaje();
-		this.det.setDescuentoUnitarioGs(precio * this.det.getCantidad() * porcDescuento);
+		this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((precio * this.det.getCantidad()), porcDescuento));
 		this.descontar(this.det.getDescuentoUnitarioGs(), porcDescuento, cmp);
 	}
 	
