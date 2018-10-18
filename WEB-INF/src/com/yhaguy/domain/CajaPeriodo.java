@@ -864,6 +864,45 @@ public class CajaPeriodo extends Domain {
 	}
 	
 	/**
+	 * @return las formas de pago con moneda extranjera..
+	 */
+	public List<ReciboFormaPago> getRecaudacionDolares() {
+		List<ReciboFormaPago> out = new ArrayList<ReciboFormaPago>();
+		for (Venta venta : this.getVentasOrdenado()) {
+			if (!venta.isAnulado()) {
+				for (ReciboFormaPago fp : venta.getFormasPago()) {
+					if (!fp.isMonedaLocal()) {
+						String desc = "VTA. "
+								+ venta.getNumero().substring(8, venta.getNumero().length())
+								+ " - "
+								+ fp.getDescripcion();
+						fp.setDescripcion(desc);
+						out.add(fp);						
+					}
+				}
+			}
+		}
+		for (Recibo recibo : this.getRecibosOrdenado()) {
+			if (!recibo.isAnulado() && !recibo.isReembolsoPrestamo()) {
+				for (ReciboFormaPago fp : recibo.getFormasPago()) {
+					if (!fp.isMonedaLocal()) {
+						String desc = "COB. "
+								+ recibo.getNumero().substring(8,
+										recibo.getNumero().length())
+								+ " - "
+								+ fp.getTipo().getDescripcion().toUpperCase()
+								+ " - "
+								+ fp.getDescripcion();
+						fp.setDescripcion(desc);
+						out.add(fp);
+					}
+				}
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return los reembolsos de cheques rechazados..
 	 */
 	public List<Recibo> getReembolsosChequesRechazados() {
@@ -921,7 +960,6 @@ public class CajaPeriodo extends Domain {
 			}
 		});
 		return out;
-
 	}
 
 	public String getNumero() {

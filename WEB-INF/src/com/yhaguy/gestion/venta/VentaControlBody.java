@@ -710,8 +710,7 @@ public class VentaControlBody extends BodyApp {
 		for (VentaDetalleDTO item : this.dto.getDetalles()) {
 			long stock = rr.getStockDisponible(item.getArticulo().getId(), 2);
 			Object[] obj1 = new Object[] {
-					item.getArticulo().getPos1(),
-					this.getMaxLength((String) item.getArticulo().getPos4(), 28),
+					item.getArticulo().getPos1(), item.getArticulo().getPos4(),
 					item.getCantidad(), stock, item.getPrecioGs(), item.getImporteGs() };
 			Object[] obj2 = new Object[] { item.getArticulo().getPos1(),
 					item.getArticulo().getPos4(), item.getCantidad(), stock };
