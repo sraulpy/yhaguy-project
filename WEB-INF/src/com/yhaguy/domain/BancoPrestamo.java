@@ -30,6 +30,7 @@ public class BancoPrestamo extends Domain {
 	private double seguro;
 	private String tipoVencimiento;
 	private String tipoCuotas;
+	private boolean acreditacionImpuesto;
 	
 	private BancoCta banco;
 	private Empresa ctacte;
@@ -45,6 +46,14 @@ public class BancoPrestamo extends Domain {
 		return this.capital + this.interes;
 	}
 	
+	@DependsOn({ "capital", "impuestos", "gastosAdministrativos", "acreditacionImpuesto" })
+	public double getAcreditacionTotal() {
+		if(this.isAcreditacionImpuesto()) {
+			return this.capital - this.impuestos - this.gastosAdministrativos;
+		} else {
+			return this.capital - this.gastosAdministrativos;
+		}
+	}
 	/**
 	 * @return los tipos de cuotas..
 	 */
@@ -181,5 +190,13 @@ public class BancoPrestamo extends Domain {
 
 	public void setTipoCuotas(String tipoCuotas) {
 		this.tipoCuotas = tipoCuotas;
+	}
+
+	public boolean isAcreditacionImpuesto() {
+		return acreditacionImpuesto;
+	}
+
+	public void setAcreditacionImpuesto(boolean acreditacionImpuesto) {
+		this.acreditacionImpuesto = acreditacionImpuesto;
 	}
 }

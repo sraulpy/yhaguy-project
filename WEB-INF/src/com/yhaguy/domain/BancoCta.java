@@ -16,6 +16,10 @@ public class BancoCta extends Domain{
 	private Tipo moneda;	
 	private CuentaContable cuentaContable;	
 	
+	public String getDescripcion() {
+		return this.banco.getDescripcion().toUpperCase() + " - " + this.moneda.getSigla().toUpperCase() + " - (" + this.nroCuenta + ")";
+	}
+	
 	public String getBancoDescripcion(){
 		return this.banco.getDescripcion().toUpperCase();
 	}

@@ -1,5 +1,8 @@
 package com.yhaguy.gestion.comun;
 
+import java.util.Date;
+import java.util.List;
+
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
@@ -299,6 +302,32 @@ public class ControlCuentaCorriente {
 			ctm.setNroComprobante(prestamo.getNumero() + " (" + (i > 9? ("" + i) : ("0" + i)) + "/" + cuotas + ")");
 			ctm.setSucursal(rr.getSucursalAppById(2));
 			ctm.setSaldo(prestamo.getDeudaTotal() / cuotas);
+			rr.saveObject(ctm, user);
+		}		
+	}
+	
+	/**
+	 * agregar movimiento prestamo bancario..
+	 */
+	public static void addPrestamoBancario(BancoPrestamo prestamo, List<Object[]> cuotas, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		int cuotas_ = prestamo.getCuotas();
+		
+		for (Object[] cuota : cuotas) {
+			int nroCuota = (int) cuota[0];
+			CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+			ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PRESTAMO_BANCARIO));
+			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+			ctm.setFechaEmision(prestamo.getFecha());
+			ctm.setFechaVencimiento((Date) cuota[1]);
+			ctm.setIdEmpresa(prestamo.getCtacte().getId());
+			ctm.setIdMovimientoOriginal(prestamo.getId());
+			ctm.setIdVendedor(0);
+			ctm.setImporteOriginal(prestamo.getDeudaTotal());
+			ctm.setMoneda(prestamo.getMoneda());
+			ctm.setNroComprobante(prestamo.getNumero() + " (" + (nroCuota > 9? ("" + nroCuota) : ("0" + nroCuota)) + "/" + cuotas_ + ")");
+			ctm.setSucursal(rr.getSucursalAppById(2));
+			ctm.setSaldo((double) cuota[2]);
 			rr.saveObject(ctm, user);
 		}		
 	}

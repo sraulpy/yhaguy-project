@@ -82,12 +82,12 @@
 				<row>
 					<field value="Banco:" />
 					<combobox hflex="true"
-						value="@load(vm.nvo_prestamo.banco.banco.descripcion.toUpperCase())"
+						value="@load(vm.nvo_prestamo.banco.bancoDescripcion)"
 						model="@load(vm.bancos)"
 						selectedItem="@bind(vm.nvo_prestamo.banco)"
 						onSelect="@command('addFilter')" instant="true">
 						<template name="model">
-							<comboitem label="@load(each.banco.descripcion.toUpperCase())" />
+							<comboitem label="@load(each.descripcion)" />
 						</template>	
 					</combobox>
 				</row>
@@ -178,8 +178,12 @@
 				</row>
 				<row>
 					<field value="Impuestos:" />
-					<guaranibox hflex="true" 
-						value="@bind(vm.nvo_prestamo.impuestos)" />
+					<hlayout>
+						<label value="Incluir en acreditacion?"></label>
+						<checkbox checked="@bind(vm.nvo_prestamo.acreditacionImpuesto)"></checkbox>
+						<guaranibox hflex="true" 
+							value="@bind(vm.nvo_prestamo.impuestos)" />
+					</hlayout>
 				</row>
 				<row>
 					<field value="Gastos administrativos:" />
@@ -197,26 +201,36 @@
 						style="background:#EEF7FA;text-align:right;font-weight:bold"
 						readonly="true" value="@load(vm.nvo_prestamo.deudaTotal)"/>
 				</row>
+				<row>
+					<field value="Importe a acreditar:" />
+					<guaranibox hflex="true"  
+						style="background:#EEF7FA;text-align:right;font-weight:bold"
+						readonly="true" value="@load(vm.nvo_prestamo.acreditacionTotal)"/>
+				</row>
 			</rows>
 		</grid>
 		<vlayout vflex="true">
 			<button label="Calcular cuotas" hflex="true" iconSclass="z-icon-refresh"
 				onClick="@command('calcularCuotas')"></button>
-			<listbox width="350px" sclass="small-list" vflex="true"
+			<listbox width="500px" vflex="true"
 				model="@load(vm.cuotas)" emptyMessage="VISTA PREVIA DE CUOTAS..">
 				<listhead>
 					<listheader label="Nro." align="center" width="70px"></listheader>
 					<listheader label="Vencimiento"></listheader>
+					<listheader label="Interes" align="right"></listheader>
 					<listheader label="Importe" align="right"></listheader>
 				</listhead>
 				<template name="model">
 					<listitem>
 						<listcell label="@load(each[0])"></listcell>
-						<listcell
-							label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
+						<listcell>
+							<datebox hflex="true" value="@bind(each[1])"></datebox>
 						</listcell>
-						<listcell
-							label="@load(each[2]) @converter(vm.cnv.monedaLocal)">
+						<listcell>
+							<guaranibox hflex="true" value="@bind(each[3])" />
+						</listcell>
+						<listcell>
+							<guaranibox hflex="true" value="@bind(each[2])" />
 						</listcell>
 					</listitem>
 				</template>

@@ -20,6 +20,7 @@
 		<property name="seguro"/>
 		<property name="tipoVencimiento"/>
 		<property name="tipoCuotas"/>
+		<property name="acreditacionImpuesto"/>
 			
 		<many-to-one name="banco" class="com.yhaguy.domain.BancoCta" 
 			column="id_banco" lazy="false"/>

@@ -8034,8 +8034,9 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getPrestamosBancariosPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select ('PRESTAMO BANCARIO'), "
-				+ " b.fecha, b.numero, (b.capital - b.impuestos - b.gastosAdministrativos), b.banco.banco.descripcion, concat('PRESTAMO BANCARIO ', b.tipoVencimiento, ' ',  b.tipoCuotas)"
+		String query = "select ('PRESTAMO BANCARIO')," 
+				+ " b.fecha, b.numero, (case when b.acreditacionImpuesto = true then (b.capital - b.impuestos - b.gastosAdministrativos) else (b.capital - b.gastosAdministrativos) end),"
+				+ " b.banco.banco.descripcion, concat('PRESTAMO BANCARIO ', b.tipoVencimiento, ' ',  b.tipoCuotas)"
 				+ " from BancoPrestamo b where"
 				+ " b.banco.id = " + idBanco
 				+ " and (b.fecha >= '"
