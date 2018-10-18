@@ -61,6 +61,7 @@
 	<field name="TotalVtaContadoEfectivo" class="java.lang.String"/>
 	<field name="TotalReembolsoEfe" class="java.lang.String"/>
 	<field name="TotalReembolsoCheq" class="java.lang.String"/>
+	<field name="ImporteDs" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<group name="totalizadora" keepTogether="true">
 		<groupExpression><![CDATA[$F{TituloDetalle}]]></groupExpression>
@@ -185,14 +186,19 @@
 				<text><![CDATA[Concepto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="131" y="2" width="313" height="15" forecolor="#736343" uuid="79e3d705-07bc-425d-84fd-60b12152b9e1"/>
+				<reportElement style="Column header" x="131" y="2" width="266" height="15" forecolor="#736343" uuid="79e3d705-07bc-425d-84fd-60b12152b9e1"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="444" y="1" width="109" height="15" forecolor="#736343" uuid="f27786c8-f520-4895-a63a-cf75d1ab73f8"/>
+				<reportElement style="Column header" x="396" y="2" width="78" height="15" forecolor="#736343" uuid="f27786c8-f520-4895-a63a-cf75d1ab73f8"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Importe Gs.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="473" y="2" width="77" height="15" forecolor="#736343" uuid="eff0e198-ab4f-45e2-ad3e-f8381a3e8be8"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Importe U$D]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -201,7 +207,7 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="444" height="15" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="0" y="0" width="444" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
+					<reportElement style="Detail" x="0" y="0" width="397" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
 					<textElement verticalAlignment="Middle">
 						<font size="8" pdfFontName="Courier" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
 					</textElement>
@@ -209,11 +215,18 @@
 				</textField>
 			</frame>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="444" y="0" width="109" height="15" uuid="0af8299d-1020-41a2-bf3b-959ab8ef1c87"/>
+				<reportElement style="Detail" x="396" y="0" width="78" height="15" uuid="0af8299d-1020-41a2-bf3b-959ab8ef1c87"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="474" y="0" width="78" height="15" uuid="6172cb99-67a8-4081-80fc-7ba6de21d593"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ImporteDs}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
