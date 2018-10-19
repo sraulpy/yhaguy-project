@@ -9,6 +9,8 @@ import org.zkoss.bind.annotation.DependsOn;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.domain.DepartamentoApp;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.contabilidad.subdiario.SubDiarioDTO;
 
@@ -55,6 +57,19 @@ public class OrdenPedidoGastoDTO extends DTO{
 		for (OrdenPedidoGastoDetalleDTO item : this.ordenPedidoGastoDetalle) {
 			if (item.isIva10() == false)
 				out += item.getImpuesto();
+		}
+		return out;
+	}
+	
+	@DependsOn("sucursal")
+	public List<MyArray> getDepartamentos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<DepartamentoApp> deps = rr.getDepartamentos(this.sucursal.getId());
+		List<MyArray> out = new ArrayList<MyArray>();
+		for (DepartamentoApp dep : deps) {
+			MyArray my = new MyArray(dep.getDescripcion());
+			my.setId(dep.getId());
+			out.add(my);
 		}
 		return out;
 	}

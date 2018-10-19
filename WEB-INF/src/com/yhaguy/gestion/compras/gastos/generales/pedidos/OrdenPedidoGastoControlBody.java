@@ -254,6 +254,12 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		this.confirmar();
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void selectSucursal() {
+		this.dto.setDepartamento(null);
+	}
+	
 	/*********************************************************/
 	
 	

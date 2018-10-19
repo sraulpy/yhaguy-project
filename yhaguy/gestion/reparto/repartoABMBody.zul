@@ -82,7 +82,7 @@
 									hflex="true">
 									<template name="model" var="each">
 										<comboitem
-											label="@load(each.pos1)" />
+											label="@load(each.pos1)" image="/core/images/car.png" description="@load(each.pos3)"/>
 									</template>
 								</combobox>
 								<labelConstrain />
@@ -312,5 +312,6 @@
 	<style>
 		.custom-tbox {margin-right:5px; background:lightyellow}
 		.z-longbox {min-height:20px}
+		.z-comboitem-image { margin-right:5px; }
 	</style>
 </zk>

@@ -5511,7 +5511,9 @@ public class RegisterDomain extends Register {
 
 		for (Object[] item : movs) {
 			Object[] emp = this.getEmpresa((long) item[1]);
-			emps.put((long) item[1], emp);
+			if (emp != null) {
+				emps.put((long) item[1], emp);
+			}
 		}
 		for (Long idEmp : emps.keySet()) {
 			out.add(emps.get(idEmp));
@@ -8509,5 +8511,13 @@ public class RegisterDomain extends Register {
 		String query = "select e from Empresa e where e.razonSocial = '" + razonsocial + "'";
 		List<Empresa> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return los departamentos..
+	 */
+	public List<DepartamentoApp> getDepartamentos(long idSucursal) throws Exception {
+		String query = "select d from DepartamentoApp d where d.sucursal.id = " + idSucursal;
+		return this.hql(query);
 	}
 }

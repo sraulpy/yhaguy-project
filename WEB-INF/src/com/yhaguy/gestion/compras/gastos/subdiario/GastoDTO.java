@@ -146,7 +146,7 @@ public class GastoDTO extends DTO{
 	@DependsOn("moneda")
 	public boolean isMonedaLocal() {
 		String sigla = (String) this.moneda.getPos2();
-		return sigla.compareTo(Configuracion.SIGLA_MONEDA_GUARANI) == 0;
+		return this.moneda.getId().longValue() == Configuracion.ID_MONEDA_GUARANIES;
 	}
 	
 	@DependsOn("tipoMovimiento")

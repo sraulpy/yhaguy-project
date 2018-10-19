@@ -34,15 +34,15 @@ public class TransferenciaExternaBrowser extends Browser{
 		col3.setTitulo("Depósito Entrada");
 		
 		col4.setCampo("fechaCreacion");
-		col4.setTitulo("Creacion Pedido");
+		col4.setTitulo("Fecha");
 		col4.setTipo(Config.TIPO_DATE);
 		col4.setComponente(LABEL_DATE);
 		
 		col5.setCampo("transferenciaEstado.descripcion");
 		col5.setTitulo("Estado");
 		
-		col6.setCampo("observacion");
-		col6.setTitulo("Observación");
+		col6.setCampo("numeroRemision");
+		col6.setTitulo("Nro. Remision");
 		
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
@@ -63,8 +63,8 @@ public class TransferenciaExternaBrowser extends Browser{
 
 	@Override
 	public void setingInicial() {
-		this.setWidthWindows("850px");
-		this.setHigthWindows("75%");
+		this.setWidthWindows("1100px");
+		this.setHigthWindows("80%");
 		this.addOrden("fechaCreacion");
 	}
 

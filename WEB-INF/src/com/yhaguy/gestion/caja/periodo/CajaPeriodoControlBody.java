@@ -856,6 +856,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			nc.setCajaNro(this.dto.getCaja().getNumero());
 			nc.setPlanillaCajaNro(this.dto.getNumero());
 			nc.setCajero((String) this.dto.getResponsable().getPos1());
+			this.selectedNotaCredito.setNumeroNotaCredito(nc.getNumeroNotaCredito());
+			this.selectedNotaCredito.setNumero(nc.getNumeroNotaCredito());
 
 			NotaCreditoControlBody ctr = new NotaCreditoControlBody();
 			NotaCreditoDTO notaCred = ctr.crearNotaCreditoVentaDesde(nc, getDtoUtil().getEstadoComprobanteCerrado());
