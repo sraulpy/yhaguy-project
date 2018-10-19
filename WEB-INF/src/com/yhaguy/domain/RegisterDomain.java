@@ -8501,4 +8501,13 @@ public class RegisterDomain extends Register {
 				+ " order by c.empresa.razonSocial";
 		return this.hqlLimit(query, 100);
 	}
+	
+	/**
+	 * @return la empresa..
+	 */
+	public Empresa getEmpresa(String razonsocial) throws Exception {
+		String query = "select e from Empresa e where e.razonSocial = '" + razonsocial + "'";
+		List<Empresa> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
 }

@@ -1687,15 +1687,6 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	/**
-	 * @return longitud maxima de un string..
-	 */
-	private String getMaxLength(String string, int max) {
-		if (string.length() > max)
-			return string.substring(0, max) + "...";
-		return string;
-	}
-	
-	/**
 	 * @return la lista de precio definida al cliente..
 	 */
 	private MyArray getListaPrecio() throws Exception {
