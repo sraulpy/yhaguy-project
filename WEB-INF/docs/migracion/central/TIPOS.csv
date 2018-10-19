@@ -1,0 +1,469 @@
+Empresa,Yhaguy,
+,,
+DESCRIPCION,SIGLA,TIPOTIPO
+sin referencia,sin-referencia,sin referencia
+TRANSF. INTERNA,TRF-INT,Tipo Transferencia
+TRANSF. EXTERNA,TRF-EXT,Tipo Transferencia
+ELABORACION,TRF-ELAB,Estado Transferencia
+PENDIENTE,TRF-PEND,Estado Transferencia
+PREPARACION,TRF-PREP,Estado Transferencia
+CONFIRMADO,TRF-CONF,Estado Transferencia
+RECIBIDO,TRF-RECI,Estado Transferencia
+FINALIZADA,TRF-FINA,Estado Transferencia
+CANCELADA,TRF-CANC,Estado Transferencia
+GASTOS FLETE,GTS-FLE,Gastos Compras Locales
+OTROS GASTOS,GTS-OTR,Gastos Compras Locales
+TERMINAL,REP-TER,Tipos de Reparto
+COLECTIVO,REP-COL,Tipos de Reparto
+ENCOMIENDA,REP-ENC,Tipos de Reparto
+YHAGUY,REP-YHA,Tipos de Reparto
+EN PREPARACION,REP-ENPRE,Estado Reparto
+PREPARADO,REP-PREP,Estado Reparto
+EN TRANSITO,REP-TRAN,Estado Reparto
+ENTREGADO,REP-ENTR,Estado Reparto
+FINALIZADO CON OBSERVACIONES,REP-FINO,Estado Reparto
+CANCELADO,REP-CANC,Estado Reparto
+MOSTRADOR,VTA-MOS,Tipo Venta
+VENDEDOR,VTA-VEN,Tipo Venta
+TERMINAL,VTA-TER,Tipo Venta
+ENCOMIENDA,VTA-ENC,Tipo Venta
+COLECTIVO,VTA-COL,Tipo Venta
+REPARTO,VTA-REP,Tipo Venta
+N.C. COMPRA,NCR-COM,Tipos de Nota de Credito
+N.C. VENTA,NCR-VEN,Tipos de Nota de Credito
+Peso,$,Moneda
+Euro,E,Moneda
+CambioAPP,YG,Tipo Cambio
+CambioBCP,BCP,Tipo Cambio
+Compra,E-COM,Mails Empresa
+Venta,E-VEN,Mails Empresa
+Único,E-UNI,Mails Empresa
+Promoción,E-PRO,Mails Empresa
+Paraguay,PRY,Pais Empresa
+sin definir,SIN-PAIS,Pais Empresa
+Argentina,ARG,Pais Empresa
+Brasil,BRA,Pais Empresa
+Bolivia,BOL,Pais Empresa
+Uruguay,URY,Pais Empresa
+Estados Unidos,USA,Pais Empresa
+Japón,JPN,Pais Empresa
+China,CHN,Pais Empresa
+Turquía,TUR,Pais Empresa
+Física,PF,Tipo Persona
+Jurídica,PJ,Tipo Persona
+Cuenta Corriente,BCO-CTA-CTE,Cuenta Bancaria
+Caja de Ahorro,BCO-CAJ-AHORRO,Cuenta Bancaria
+Ingreso de Caja,CAJ-INGRESO,Reposicion Caja
+Egreso de Caja,CAJ-EGRESO,Reposicion Caja
+Egreso por Vale,CAJ-EGRESO-VALE,Reposicion Caja - Tipo de Egreso
+Egreso por Prestamo,CAJ-EGRESO-PRESTAMO,Reposicion Caja - Tipo de Egreso
+Egreso por Gratificacion,CAJ-EGRESO-GRATIFICACION,Reposicion Caja - Tipo de Egreso
+Proveedores Locales,CAJ-PROV-LOC,Clasificacion Caja
+Proveedores Internacionales,CAJ-PROV-INT,Clasificacion Caja
+Caja Pagos a Proveedores,CAJ-PRV,Tipo de Caja
+Caja Chica,CAJ-CH,Tipo de Caja
+Caja de Movimientos Varios,CAJ-VAR,Tipo de Caja
+Activo,CAJ-ACT,Estado de Caja
+Inactivo,CAJ-INACT,Estado de Caja
+Abierta,CAJ-PER-ABI,Estado de Planilla de Caja
+Cerrada,CAJ-PER-CER,Estado de Planilla de Caja
+Procesada,CAJ-PER-PRO,Estado de Planilla de Caja
+Cierre Diario,CAJ-CI-DIA,Duracion de Caja
+Cierre Semanal,CAJ-CI-SEM,Duracion de Caja
+Cierre Mensual,CAJ-CI-MEN,Duracion de Caja
+Guardado,REC-EST-GUAR,Estado de Recibo
+Dolares,U$D,Moneda
+Anulado,REC-EST-ANUL,Estado de Recibo
+EN PUERTO TRASBORDO,IMP-EST-PRO,Estado de Importacion
+EN PUERTO PRIVADO,IMP-EST-PEN,Estado de Importacion
+EN NEGOCIACION,IMP-EST-CERR,Estado de Importacion
+EN DESCARGA,IMP-EST-ENV,Estado de Importacion
+EN TRANSITO,IMP-EST-SOL,Estado de Importacion
+Efectivo,OP-TIP-EF,Forma de Pago del Recibo
+Cheque Propio,OP-TIP-CH-PROP,Forma de Pago del Recibo
+Cheque Tercero,OP-TIP-CH-TERC,Forma de Pago del Recibo
+Activo,CC-PRV-ACT,Estado CtaCte Proveedor
+Inactivo,CC-PRV-INAC,Estado CtaCte Proveedor
+Parcial,CC-IM-PAR,Tipo de Imputacion
+Completa,CC-IM-COM,Tipo de Imputacion
+Activo,CC-EMP-ACT,Estado CtaCte Empresa
+Inactivo,CC-EMP-INAC,Estado CtaCte Empresa
+Bloqueado,CC-EMP-BLOQ,Estado CtaCte Empresa
+Sin Cta. Cte.,CC-EM-SC,Estado CtaCte Empresa
+Cliente,CC-EMP-CARMOV-CLI,Caracter del Movimiento de CtaCte Empresa
+Proveedor,CC-EMP-CARMOV-PROV,Caracter del Movimiento de CtaCte Empresa
+Todos,CC-EMP-TOD,Estado de Saldo CtaCte 
+Pendientes,CC-EMP-PEND,Estado de Saldo CtaCte 
+Vencidos,CC-EMP-VENC,Estado de Saldo CtaCte 
+PENDIENTE,MOV-REP-PEN,Estado Reparto Movimiento
+PREPARACION,MOV-REP-ENPRE,Estado Reparto Movimiento
+PREPARADO,MOV-REP-PREP,Estado Reparto Movimiento
+EN TRANSITO,MOV-REP-TRAN,Estado Reparto Movimiento
+FINALIZADO,MOV-REP-FINA,Estado Reparto Movimiento
+PUBLICIDAD,COMP-DESC-PUB,Tipo de Descuento en Compras
+FACTURACIÓN ANTERIOR,COMP-DESC-FAC-ANT,Tipo de Descuento en Compras
+OTROS,COMP-DESC-OTROS,Tipo de Descuento en Compras
+FLETE,COMP-GAST-FL,Tipo de Gasto en Compras
+SEGURO,COMP-GAST-SEG,Tipo de Gasto en Compras
+OTROS,COMP-GAST-OTR,Tipo de Gasto en Compras
+PRORRATEO FLETE,COMP-PROR-FLE,Tipo de Prorrateo en Compras
+PRORRATEO SEGURO,COMP-PROR-SEG,Tipo de Prorrateo en Compras
+Solo Presupuesto,VTA-SOLO-PRES,Estados de Venta
+Pasado a Pedido,VTA-PAS-PED,Estados de Venta
+Solo Pedido,VTA-SOLO-PED,Estados de Venta
+Pedido Cerrado,VTA-PED-CERR,Estados de Venta
+Pedido Facturado,VTA-PED-FACT,Estados de Venta
+IVA 10%,10,Tipos de Iva
+IVA 5%,5,Tipos de Iva
+EXENTA,0,Tipos de Iva
+"Muchos destinos, muchos canceladores",DESTINO-MUCHOS,Tipo Alerta
+"Un destino, un cancelador",DESTINO-UNO,Tipo Alerta
+"Muchos destinos, algun cancelador",DESTINO-COMUN,Tipo Alerta
+Alerta informativa,ALER-INFO,Nivel Alerta
+Alerta error,ALER-ERROR,Nivel Alerta
+EXENTA,REG-EXENTA,Regimen Tributario
+NO EXENTA,REG-NO-EXENTA,Regimen Tributario
+Local,PROV-TIPO-LOCAL,Tipo Proveedor
+Internacional,PROV-TIPO-EXT,Tipo Proveedor
+Activo,PROV-EST-ACT,Estado Proveedor
+Inactivo,PROV-EST-INAC,Estado Proveedor
+No Definido,CLI-TIP-NO-DEF,Tipo Cliente
+Mayorista,CLI-TIP-MAY,Tipo Cliente
+Minorista,CLI-TIP-MIN,Tipo Cliente
+Distribuidor,CLI-TIP-DIST,Tipo Cliente
+Ocasional,CLI-TIP-OCAS,Tipo Cliente
+Activo,ART-EST-ACT,Articulo Estado
+Inactivo,ART-EST-INAC,Articulo Estado
+Temporal,ART-EST-TMP,Articulo Estado
+UND.,ART-UM-UND,Articulo Unidad de Medida
+MTS.,ART-UM-MTS,Articulo Unidad de Medida
+LTS.,ART-UM-LTS,Articulo Unidad de Medida
+FOB,IMP-FOB,Tipos de Importacion
+CIF,IMP-CIF,Tipos de Importacion
+C&F,IMP-C&F,Tipos de Importacion
+Retencion IVA,FP-TIP-RET,Forma de Pago del Recibo
+Deposito Bancario,FP-TIP-DEP-BAN,Forma de Pago del Recibo
+Tarjeta de Credito,OP-TIP-TCR,Forma de Pago del Recibo
+Tarjeta de Debito,OP-TIP-TDB,Forma de Pago del Recibo
+Comprobante Legal,CBT-LEG,Tipos de Comprobantes
+Comprobante Interno,CBT-INT,Tipos de Comprobantes
+Compras,OPE-COM,Tipos de Operaciones en los Movimientos
+Gastos,OPE-GTO,Tipos de Operaciones en los Movimientos
+Pagos,OPE-PAG,Tipos de Operaciones en los Movimientos
+Ventas,OPE-VEN,Tipos de Operaciones en los Movimientos
+Cobros,OPE-COB,Tipos de Operaciones en los Movimientos
+Remisiones,OPE-REM,Tipos de Operaciones en los Movimientos
+Operacion Bancaria,OPE-BAN,Tipos de Operaciones en los Movimientos
+Operacion Ajuste Stock,OPE-AJU,Tipos de Operaciones en los Movimientos
+Cliente,EMP-CLI,Tipos de Empresa
+Venta Externa,MOD-VTA-EXT,Modos de Venta
+Proveedor,EMP-PRV,Tipos de Empresa
+Funcionario,EMP-FUN,Tipos de Empresa
+Yhaguy Repuestos S.A.,EMP-YHA,Tipos de Empresa
+Banco,EMP-BAN,Tipos de Empresa
+Mayor,ESTA-MAYOR,Estado de las reglas
+Menor,ESTA-MENOR,Estado de las reglas
+Igual,ESTA-IGUAL,Estado de las reglas
+Diferente,ESTA-DIFER,Estado de las reglas
+Ninguno,ESTA-NING,Estado de las reglas
+Itau - Visa,Visa,Tarjeta
+Itau - Mastercard,Mastercard,Tarjeta
+Itau - American Express,American Express,Tarjeta
+Continental - Visa,Visa,Tarjeta
+Continental - Mastercard,Mastercard,Tarjeta
+Continental - American Express,American Express,Tarjeta
+Otros - Visa,Visa,Tarjeta
+Otros - Mastercard,Mastercard,Tarjeta
+Otros - American Express,American Express,Tarjeta
+Procard,TAR-PRC-PRO,Procesadoras de Tarjetas
+Panal,TAR-PRC-PAN,Procesadoras de Tarjetas
+Bancard,TAR-PRC-BAN,Procesadoras de Tarjetas
+Cabal,TAR-PRC-CAB,Procesadoras de Tarjetas
+Conciliado,EST-CON-CON,Estados de Conciliacion
+Pendiente,EST-CON-PEN,Estados de Conciliacion
+Diferencia,EST-CON-DIF,Estados de Conciliacion
+Auxiliar Administrativo,FUN-CRG-AUX-ADM,Funcionario Cargo
+Gerente RR. HH.,FUN-CRG-GTE-RH,Funcionario Cargo
+Jefe Ventas Mostrador,FUN-CRG-JEF-VTA-MOS,Funcionario Cargo
+Soporte Técnico,FUN-CRG-SOP-TEC,Funcionario Cargo
+Vendedor Mostrador,FUN-CRG-VTA-MOS,Funcionario Cargo
+Gerente Administrativo,FUN-CRG-GTE-ADM,Funcionario Cargo
+Encargado/a Compras,FUN-CRG-ENC-COM,Funcionario Cargo
+Encargado/a Depósito,FUN-CRG-ENC-DEP,Funcionario Cargo
+Vendedor/a Externo,FUN-CRG-VTA-EXT,Funcionario Cargo
+Activo,FUN-EST-ACT,Estados de Funcionarios
+Inactivo,FUN-EST-INA,Estados de Funcionarios
+Descuento,NCR-MOT-DES,Motivos de Notas de Créditos
+Devolución,NCR-MOT-DEV,Motivos de Notas de Créditos
+Diferencia de Precio,NCR-MOT-DIF-PRE,Motivos de Notas de Créditos
+Item Factura,NCR-DET-FAC,Tipo de Detalle de Notas de Credito
+Item Articulo,NCR-DET-ART,Tipo de Detalle de Notas de Credito
+Pendiente,EST-CBT-PEN,Estados de Comprobantes
+Aprobado,EST-CBT-APR,Estados de Comprobantes
+Cerrado,EST-CBT-CER,Estados de Comprobantes
+Anulado,EST-CBT-ANU,Estados de Comprobantes
+Confeccionado,EST-CBT-CON,Estados de Comprobantes
+Activo,CTA-CBL-ACT,Tipos de Cuentas Contables
+Pasivo,CTA-CBL-PAS,Tipos de Cuentas Contables
+Patrimonio Neto,CTA-CBL-PAT-NET,Tipos de Cuentas Contables
+Ingreso,CTA-CBL-ING,Tipos de Cuentas Contables
+Egreso,CTA-CBL-EGR,Tipos de Cuentas Contables
+Factura Contado,DOC-FAC-CON,Tipo de Documento
+Factura Credito,DOC-FAC-CRE,Tipo de Documento
+Nota de Credito,DOC-NOT-CRE,Tipo de Documento
+Nota de Debito,DOC-NOT-DEB,Tipo de Documento
+Recibo de Dinero,DOC-REC-DIN,Tipo de Documento
+Autofactura,DOC-AUT-FAC,Tipo de Documento
+Pagare,DOC-PAGARE,Tipo de Documento
+Nota de Remision,DOC-NOTA-REMISION,Tipo de Documento
+Otros,DOC-OTROS,Tipo de Documento
+Reserva Interna,RES-INT,Tipos de Reserva
+Reserva por Reparto,RES-REP,Tipos de Reserva
+Reserva por Venta,RES-VTA,Tipos de Reserva
+Reserva por boleta devolucion,RES-DEV,Tipos de Reserva
+Reserva Activa,EST-RES-ACT,Estados de Reserva
+Reserva Cancelada,EST-RES-CAN,Estados de Reserva
+Reserva Finalizada,EST-RES-FIN,Estados de Reserva
+Devolucion al dia siguiente,MOT-DEV-SIG,Motivos de Devolucion
+Devolucion entrega parcial,MOT-DEV-PAR,Motivos de Devolucion
+Devolucion estado defectuoso,MOT-DEV-DEF,Motivos de Devolucion
+SI,SI / NO,SI / NO
+NO,SI / NO,SI / NO
+Efectivo,BAN-DEP-EFE,Tipo de Banco Deposito
+Cheques del banco,BAN-DEP-CPRO,Tipo de Banco Deposito
+Cheques de otros bancos,BAN-DEP-COTR,Tipo de Banco Deposito
+Todos,BAN-DEP-TOD,Tipo de Banco Deposito
+Automatico,CH-AUT,Modo de creación
+Manual,CH-MAN,Modo de creación
+Lloyds TSB,BCO-TER-TSB,Bancos para Cheques de Tercero
+Integración,BCO-TER-INTE,Bancos para Cheques de Tercero
+Continental,BCO-TER-CONTI,Bancos para Cheques de Tercero
+Atlas,BCO-TER-ATLAS,Bancos para Cheques de Tercero
+Regional,BCO-TER-REGIO,Bancos para Cheques de Tercero
+Sudameris,BCO-TER-SUDA,Bancos para Cheques de Tercero
+ABN-AMRO,BCO-TER-ABN,Bancos para Cheques de Tercero
+HSBC,BCO-TER-HSBC,Bancos para Cheques de Tercero
+BBVA,BCO-TER-BBVA,Bancos para Cheques de Tercero
+Itau,BCO-TER-ITAU,Bancos para Cheques de Tercero
+Citibank,BCO-TER-CITI,Bancos para Cheques de Tercero
+Bancop,BCO-TER-BCOP,Bancos para Cheques de Tercero
+GNB,BCO-TER-GNB,Bancos para Cheques de Tercero
+Do Brasil,BCO-TER-DBRA,Bancos para Cheques de Tercero
+Banco Tarjeta Extracto,BAN-TAR-DET-TARJ,Tipo de Detalle Banco Tarjeta Extracto
+Acreditacion - Banco Movimiento,BAN-TAR-DET-BANM,Tipo de Detalle Banco Tarjeta Extracto
+Activo,EST-CLI,Estado Cliente
+Inactivo,EST-CLI,Estado Cliente
+Temporal,EST-CLI,Estado Cliente
+No definida,CAT-CLI,Categoria Cliente
+Al dia,CAT-CLI,Categoria Cliente
+Incobrable,CAT-CLI,Categoria Cliente
+Judiciales,CAT-CLI,Categoria Cliente
+Chapista,PROFE,Profesiones
+Mecanico,PROFE,Profesiones
+Electricista,PROFE,Profesiones
+Vendedor,TIPO-CONT-INT,Tipo Contacto Interno
+Tecnico,TIPO-CONT-INT,Tipo Contacto Interno
+Cobrador,TIPO-CONT-INT,Tipo Contacto Interno
+Contado,TIPO-OPE,Tipo Operacion
+Credito,TIPO-OPE,Tipo Operacion
+Cheque,TIPO-OPE,Tipo Operacion
+Activo,CTA-CTE-EST,Cuenta Corriente Estado
+Inactivo,CTA-CTE-EST,Cuenta Corriente Estado
+Rubros Empresas,Regla Precio,Regla Precio
+Tipo Cliente,Regla Precio,Regla Precio
+Regla Vendedor,Regla Precio,Regla Precio
+Regla Venta,Regla Precio,Regla Precio
+Regla Articulo,Regla Precio,Regla Precio
+Regla Cliente,Regla Precio,Regla Precio
+Articulo Marca,Regla Precio,Regla Precio
+Articulo Familia,Regla Precio,Regla Precio
+Articulo Linea,Regla Precio,Regla Precio
+Artículo Parte,Regla Precio,Regla Precio
+Modo Venta,Regla Precio,Regla Precio
+Sucursal,Regla Precio,Regla Precio
+Vendedor Rubro,Regla Precio,Regla Precio
+Sin Marca,ART-MAR-DEF,Articulo Marca
+Debito por Cobranza Central,FP-TIP-DE-CO-CE,Forma de Pago del Recibo
+Nacion Argentina,BCO-TER-DBNA,Bancos para Cheques de Tercero
+Interfisa,BCO-TER-ITERF,Bancos para Cheques de Tercero
+Recaudacion Casa Central,FP-TIP-RCC,Forma de Pago del Recibo
+Transferencia Casa Central,FP-TIP-TCC,Forma de Pago del Recibo
+CHAMPION ESPAÑA,ART-MAR-DEF-CHA-ESP,Articulo Marca
+ABOGADO,RUB-EMP,Rubros Empresas
+ACCIONISTAS,RUB-EMP,Rubros Empresas
+FUNCIONARIOS,RUB-EMP,Rubros Empresas
+TRANSPORTE DE PASAJEROS,RUB-EMP,Rubros Empresas
+TRANSPORTE DE CARGAS,RUB-EMP,Rubros Empresas
+CASA DE REPUESTOS,RUB-EMP,Rubros Empresas
+ASEGURADORAS,RUB-EMP-ASE,Rubros Empresas
+Banco BASA,BCO-TER-AMAM,Bancos para Cheques de Tercero
+CENTRO DE LUBRICACION,RUB-EMP,Rubros Empresas
+CASA DE FILTROS,RUB-EMP,Rubros Empresas
+VENTA DE CUBIERTAS,RUB-EMP,Rubros Empresas
+RECTIFICADORA,RUB-EMP,Rubros Empresas
+DISTRIBUIDOR DE YHAGUY,RUB-EMP,Rubros Empresas
+TALLER MECANICO,RUB-EMP,Rubros Empresas
+NAVIERA,RUB-EMP,Rubros Empresas
+CONSTRUCTORA,RUB-EMP,Rubros Empresas
+PUERTOS,RUB-EMP,Rubros Empresas
+COOP. DE AHORRO Y PRESTAMO,RUB-EMP,Rubros Empresas
+CLIENTES EMPRESARIALES,RUB-EMP,Rubros Empresas
+SUCURSALES DE YHAGUY,RUB-EMP,Rubros Empresas
+ESTACION DE SERVICIO,RUB-EMP,Rubros Empresas
+CONSUMIDOR FINAL,RUB-EMP,Rubros Empresas
+FABRICA,RUB-EMP,Rubros Empresas
+ABOGADO/A DAYNE,RUB-EMP,Rubros Empresas
+LUBRICANTES Y CUBIERTAS,RUB-EMP,Rubros Empresas
+TALLER Y VENTA DE REPUESTOS,RUB-EMP,Rubros Empresas
+"LUBRICANTES, ACCESORIOS Y REPUESTOS",RUB-EMP,Rubros Empresas
+CASA DE BATERIAS,RUB-EMP,Rubros Empresas
+VENDEDOR EXTERNO,RUB-EMP,Rubros Empresas
+VENDEDOR MOSTRADOR,RUB-EMP,Rubros Empresas
+SOCIO LIBERTAD,RUB-EMP,Rubros Empresas
+PLAYA DE AUTOS,RUB-EMP,Rubros Empresas
+GOMERIA,RUB-EMP,Rubros Empresas
+COOPERATIVAS,RUB-EMP,Rubros Empresas
+METALURGICAS,RUB-EMP,Rubros Empresas
+RAMOS GENERALES,RUB-EMP,Rubros Empresas
+CONSECIONARIAS,RUB-EMP,Rubros Empresas
+SECTOR PUBLICO,RUB-EMP,Rubros Empresas
+DESPACHANTE,RUB-EMP,Rubros Empresas
+DISTRIBUIDORA YPANE S.A.,RUB-EMP,Rubros Empresas
+DELIA GOMEZ SER. PERSONALES,RUB-EMP,Rubros Empresas
+PUERTA DE VIDRIO CON SENSOR,RUB-EMP,Rubros Empresas
+HERRERO,RUB-EMP,Rubros Empresas
+ENVASES EN GENERAL,RUB-EMP,Rubros Empresas
+PROVEEDOR,RUB-EMP,Rubros Empresas
+PRODUCTOS AGROPECUARIOS,RUB-EMP,Rubros Empresas
+COMBUSTIBLES,RUB-EMP,Rubros Empresas
+SERIGRAFIA-REGALOS EMPRESARIALES,RUB-EMP,Rubros Empresas
+VIDRIOS-CRISTALES-ESPEJOS,RUB-EMP,Rubros Empresas
+AGROGANADERA DOS EME S.A.,RUB-EMP,Rubros Empresas
+LABORATORIO Y HERBORISTERIA,RUB-EMP,Rubros Empresas
+IMPORTADORA DE CAFE,RUB-EMP,Rubros Empresas
+TECNICO DE LINEAS TELEFONICAS,RUB-EMP,Rubros Empresas
+TECNICO DE CAFETERA,RUB-EMP,Rubros Empresas
+SALON DE BELLEZA,RUB-EMP,Rubros Empresas
+AUTOMOTORES Y MAQUINARIAS,RUB-EMP,Rubros Empresas
+MECANICA AUTOMOTRIZ,RUB-EMP,Rubros Empresas
+COPETIN EUSEBIA GOMEZ,RUB-EMP,Rubros Empresas
+FERRETERIA,RUB-EMP,Rubros Empresas
+PUBLICIDAD,RUB-EMP,Rubros Empresas
+Saldo a Favor Generado,FP-TIP-SFC,Forma de Pago del Recibo
+Saldo a Favor Cobrado,FP-TIP-SFC-COB,Forma de Pago del Recibo
+SUPRA,CMB-SPA,Tipos de Combustible
+GAS,CMB-GAS,Tipos de Combustible
+DIESEL,CMB-DSL,Tipos de Combustible
+Debito en Cuenta Bancaria,FP-TIP-DB-CT-BC,Forma de Pago del Recibo
+ZONA 1,,Zonas
+ZONA 2,,Zonas
+ZONA 3,,Zonas
+ZONA 4,,Zonas
+ZONA 5,,Zonas
+ZONA 6,,Zonas
+Guaranies,Gs.,Moneda
+ZONA 7 INTERIOR,,Zonas
+TOYO,ART-MAR-DEF,Articulo Marca
+HELIAR,ART-MAR-DEF,Articulo Marca
+RAIDEN,ART-MAR-DEF,Articulo Marca
+CHAMPION,ART-MAR-DEF,Articulo Marca
+YUECA,ART-MAR-DEF,Articulo Marca
+Sin linea,ART-LIN-DEF,Articulo Linea
+PESADA,ART-LIN-DEF,Articulo Linea
+NAVIERA,ART-LIN-DEF,Articulo Linea
+PROMO,ART-LIN-DEF,Articulo Linea
+CONSTRUCTORA,ART-LIN-DEF,Articulo Linea
+LIVIANA,ART-LIN-DEF,Articulo Linea
+AGRICOLA,ART-LIN-DEF,Articulo Linea
+OTROS,ART-LIN-DEF,Articulo Linea
+PESADA,ART-LIN-DEF,Articulo Linea
+Sin Grupo,ART-PAR-DEF,Artículo Parte
+MOTOR,ART-PAR-DEF,Artículo Parte
+CAJA,ART-PAR-DEF,Artículo Parte
+DIFERENCIAL,ART-PAR-DEF,Artículo Parte
+ACCESORIOS,ART-PAR-DEF,Artículo Parte
+BI,ART-PAR-DEF,Artículo Parte
+CA,ART-PAR-DEF,Artículo Parte
+CAJA ZF,ART-PAR-DEF,Artículo Parte
+NEUMATICOS,ART-FAM-NEU,Articulo Familia
+BATERIAS,ART-FAM-BAT,Articulo Familia
+LUBRICANTES,ART-FAM-LUB,Articulo Familia
+CARDAN,ART-PAR-DEF,Artículo Parte
+CATR,ART-PAR-DEF,Artículo Parte
+CA¥O,ART-PAR-DEF,Artículo Parte
+CHASIS,ART-PAR-DEF,Artículo Parte
+CHAyPIN,ART-PAR-DEF,Artículo Parte
+CRR,ART-PAR-DEF,Artículo Parte
+CUBAUTO,ART-PAR-DEF,Artículo Parte
+CUBCAM,ART-PAR-DEF,Artículo Parte
+CUBCTA,ART-PAR-DEF,Artículo Parte
+CUBLIV,ART-PAR-DEF,Artículo Parte
+CYD,ART-PAR-DEF,Artículo Parte
+CYE,ART-PAR-DEF,Artículo Parte
+DIF,ART-PAR-DEF,Artículo Parte
+DIRECCION,ART-PAR-DEF,Artículo Parte
+DISPLA,ART-PAR-DEF,Artículo Parte
+EJE,ART-PAR-DEF,Artículo Parte
+ELE,ART-PAR-DEF,Artículo Parte
+EMBRAGUES,ART-PAR-DEF,Artículo Parte
+ESC,ART-PAR-DEF,Artículo Parte
+FARO,ART-PAR-DEF,Artículo Parte
+FERRETERIA,ART-PAR-DEF,Artículo Parte
+FIL,ART-PAR-DEF,Artículo Parte
+FILT,ART-PAR-DEF,Artículo Parte
+FRENOS,ART-PAR-DEF,Artículo Parte
+GOMERIA,ART-PAR-DEF,Artículo Parte
+H,ART-PAR-DEF,Artículo Parte
+INTE,ART-PAR-DEF,Artículo Parte
+INYEC,ART-PAR-DEF,Artículo Parte
+JUNTAS,ART-PAR-DEF,Artículo Parte
+LUBRI,ART-PAR-DEF,Artículo Parte
+LYA,ART-PAR-DEF,Artículo Parte
+LYO,ART-PAR-DEF,Artículo Parte
+MB,ART-PAR-DEF,Artículo Parte
+MO,ART-PAR-DEF,Artículo Parte
+MOT,ART-PAR-DEF,Artículo Parte
+MOTOR,ART-PAR-DEF,Artículo Parte
+MYF,ART-PAR-DEF,Artículo Parte
+OTROS,ART-PAR-DEF,Artículo Parte
+PE,ART-PAR-DEF,Artículo Parte
+PULI,ART-PAR-DEF,Artículo Parte
+RUEDA,ART-PAR-DEF,Artículo Parte
+SE,ART-PAR-DEF,Artículo Parte
+SUSPENSION,ART-PAR-DEF,Artículo Parte
+SYD,ART-PAR-DEF,Artículo Parte
+TAPA,ART-PAR-DEF,Artículo Parte
+TC,ART-PAR-DEF,Artículo Parte
+TORN,ART-PAR-DEF,Artículo Parte
+TUER,ART-PAR-DEF,Artículo Parte
+VALV,ART-PAR-DEF,Artículo Parte
+VAR,ART-PAR-DEF,Artículo Parte
+VYF,ART-PAR-DEF,Artículo Parte
+WYNNPROF,ART-PAR-DEF,Artículo Parte
+WYNNSCONS,ART-PAR-DEF,Artículo Parte
+Z,ART-PAR-DEF,Artículo Parte
+Automovil,ART-PAR-DEF,Artículo Parte
+Camioneta,ART-PAR-DEF,Artículo Parte
+Camiones,ART-PAR-DEF,Artículo Parte
+SERVICIOS,ART-PAR-DEF,Artículo Parte
+COMBUSTIBLE,ART-PAR-DEF,Artículo Parte
+MASA,ART-PAR-DEF,Artículo Parte
+VARIOS,ART-PAR-DEF,Artículo Parte
+CABINA,ART-PAR-DEF,Artículo Parte
+Itapua,BCO-TER-ITAP,Bancos para Cheques de Tercero
+Familiar,BCO-TER-FAM,Bancos para Cheques de Tercero
+acelerador,AC,Artículo Parte
+Egreso de Caja,CAJ-EGRESO-SIN-COMPROBANTE,Reposicion Caja - Tipo de Egreso
+UsuarioDepositoHabFacturar,User-Prop,Propiedad de Usuario
+UsuarioModoVenta,User-Prop,Propiedad de Usuario
+BNF,BCO-TER-BNF,Bancos para Cheques de Tercero
+UsuarioDesarrollador,USU-DES,Propiedades de Sistemas
+Venta Mostrador,MOD-VTA-MOS,Modos de Venta
+Venta Telefónica,MOD-VTA-TEL,Modos de Venta
+INFORMCONF,CAT-CLI,Categoria Cliente
+Reclamo,NCR-MOT-REC,Motivos de Notas de Créditos
+Cheque Tercero Autocobranza,FP-TIP-CH-AUT,Forma de Pago del Recibo
+Vision Banco,BCO-TER-VIS,Bancos para Cheques de Tercero
+REPUESTOS,ART-FAM-REP,Articulo Familia
+FILTROS,ART-FAM-FIL,Articulo Familia
+EN FABRICA,IMP-EST-CONF,Estado de Importacion

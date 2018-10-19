@@ -1,0 +1,1044 @@
+Empresa, Yhaguy Repuestos,,,,,
+,,,,,,
+IDPLANCUENTA,NOMBRE,IDTIPOCUENTA,IMPUTABLE,IMPOSITIVO,CCOSTO,NIVEL
+1.00.00.00.000,ACTIVO,1,SI,SI,SI,1
+1.01.00.00.000,   ACTIVO CORRIENTE,1,NO,SI,SI,2
+1.01.01.00.000,      DISPONIBILIDADES,1,NO,NO,SI,3
+1.01.01.01.000,         CAJA,1,SI,SI,SI,4
+1.01.01.01.001,            Caja Moneda Extranjera,1,SI,SI,SI,5
+1.01.01.02.000,         Recaudaciones a Depositar,1,SI,SI,SI,4
+1.01.01.03.000,         BANCOS,1,SI,SI,SI,4
+1.01.01.03.001,            Banco Lloyds TSB,1,SI,SI,SI,5
+1.01.01.03.002,            Banco Integracion,1,SI,SI,SI,5
+1.01.01.03.003,            Banco Continental Cta. Cte.,1,SI,SI,SI,5
+1.01.01.03.005,            Banco Atlas Cta. U$D,1,SI,SI,SI,5
+1.01.01.03.006,            Banco Regional Cta Cte,1,SI,SI,SI,5
+1.01.01.03.007,            Banco Continental Cta Cte USD,1,SI,SI,SI,5
+1.01.01.03.008,            Banco Sudameris Cta Cte USD,1,SI,SI,SI,5
+1.01.01.03.009,            Banco ABN- AMRO Cta. Cte,1,SI,SI,SI,5
+1.01.01.03.010,            Banco Sudameris Cta Cte,1,SI,SI,SI,5
+1.01.01.03.011,            Banco HSBC Cta Cte,1,SI,SI,SI,5
+1.01.01.03.012,            Banco BBVA Cta Cte,1,SI,SI,SI,5
+1.01.01.03.013,            Banco Itau CTA CTE,1,SI,SI,SI,5
+1.01.01.03.014,            Banco Amambay S.A. Cta Cte,1,SI,SI,SI,5
+1.01.01.03.015,            Banco Regional Cta U$D,1,SI,SI,SI,5
+1.01.01.03.016,            Banco HSBC Cta Cte U$D,1,SI,SI,SI,5
+1.01.01.03.017,            Banco Itau Cta Cte U$D,1,SI,SI,SI,5
+1.01.01.03.018,            Banco Atlas CTA CTE,1,SI,SI,SI,5
+1.01.01.03.019,            Banco Citibank Cta Cte Gs.,1,SI,SI,SI,5
+1.01.01.03.020,            Banco Regional Cta Cte - SUC 4,1,SI,SI,SI,5
+1.01.01.03.021,            Banco Citibank Cta Cte USD,1,SI,SI,SI,5
+1.01.01.03.022,            Banco Bancop Cta Cte,1,SI,SI,SI,5
+1.01.01.03.023,            Banco GNB PY CTA CTE,1,SI,SI,SI,5
+1.01.01.03.024,            Banco Do Brasil Cta Cte,1,SI,SI,SI,5
+1.01.01.04.000,         Otros Valores,1,SI,SI,SI,4
+1.01.02.00.000,      INVERSIONES TEMPORARIAS,1,NO,NO,SI,3
+1.01.02.01.000,         Valores,1,SI,SI,SI,4
+1.01.02.02.000,         Inversiones varias,1,SI,SI,SI,4
+1.01.02.03.000,         Acciones,1,SI,SI,SI,4
+1.01.02.03.001,            Arandu Repuestos S.A.,1,SI,SI,SI,5
+1.01.02.03.002,            Mega Pixel S.A.,1,SI,SI,SI,5
+1.01.02.03.003,            Groupauto Py S.A.,1,SI,SI,SI,5
+1.01.03.00.000,      CREDITOS,1,NO,NO,SI,3
+1.01.03.01.000,         CLIENTE,1,SI,SI,SI,4
+1.01.03.02.000,         Clientes en Dolares,1,SI,SI,SI,4
+1.01.03.03.000,         Cheques de Pagos Diferidos,1,SI,SI,SI,4
+1.01.03.04.000,         Cheques Diferidos de Terceros en Garantia,1,SI,SI,SI,4
+1.01.03.05.000,         Documentos Descontados,1,SI,SI,SI,4
+1.01.03.06.000,         Cheques Rechazados,1,SI,SI,SI,4
+1.01.03.10.000,         MENOS: Prevision para incobrales,1,SI,SI,SI,4
+1.01.03.10.001,            Previs. incobrables clientes,1,SI,SI,SI,5
+1.01.03.11.000,         Deudores Varios-Garantia s/ Alquiler,1,SI,SI,SI,4
+1.01.03.12.000,         Documentos cuentas / Anticipos,1,SI,SI,SI,4
+1.01.03.13.000,         Anticipos y Prestamos a Empleados,1,SI,SI,SI,4
+1.01.03.14.000,         Tarjetas de Creditos,1,SI,SI,SI,4
+1.01.03.15.000,         Sucursal N 1,1,SI,SI,SI,4
+1.01.03.16.000,         Sucursal N 2,1,SI,SI,SI,4
+1.01.03.17.000,         sucursal  N 3,1,SI,SI,SI,4
+1.01.03.18.000,         Deudores Varios-Munic.Asuncion,1,SI,SI,SI,4
+1.01.03.20.000,         MENOS: Prevision para Incobrables,1,SI,SI,SI,4
+1.01.03.21.000,         IVA Impuesto al Valor Agregado,1,SI,SI,SI,4
+1.01.03.22.000,         IVA Credito  5%,1,SI,SI,SI,4
+1.01.03.23.000,         Retenciones de IVA,1,SI,SI,SI,4
+1.01.03.24.000,         Retenciones Renta,1,SI,SI,SI,4
+1.01.03.25.000,         Anticipo de Imp. Renta,1,SI,SI,SI,4
+1.01.10.00.000,      INVENTARIOS,1,NO,NO,SI,3
+1.01.10.01.000,         Mercaderias Gravadas,1,SI,SI,SI,4
+1.01.10.02.000,         Mercaderia Exentas,1,SI,SI,SI,4
+1.01.10.03.000,         Insumos,1,SI,SI,SI,4
+1.01.10.04.000,         Menos: Prevision por Obsolencia,1,SI,SI,SI,4
+1.01.15.00.000,      ANTICIPOS,1,NO,NO,SI,3
+1.01.15.01.000,         Importaciones en Curso,1,SI,SI,SI,4
+1.01.15.02.000,         Anticipo A Provedores,1,SI,SI,SI,4
+1.01.15.02.001,            Anticipo a Acreedores,1,SI,SI,SI,5
+1.01.15.02.002,            Valvoline Argentina SA (P/A),1,SI,SI,SI,5
+1.01.15.02.003,            Itochu (P/A),1,SI,SI,SI,5
+1.01.15.02.004,            Schaeffler (P/A),1,SI,SI,SI,5
+1.01.15.02.005,            Batebol (P/A),1,SI,SI,SI,5
+1.01.15.02.006,            Cheng Chin Rubber Ind. Co Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.007,            Rings and Forks Internacional Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.008,            Wynn`s (P/A),1,SI,SI,SI,5
+1.01.15.02.009,            Starpoint USA Pentius (P/A),1,SI,SI,SI,5
+1.01.15.02.010,            Coopers Tire (P/A),1,SI,SI,SI,5
+1.01.15.02.011,            Diesa P/A,1,SI,SI,SI,5
+1.01.15.02.012,            Maxxis P/A,1,SI,SI,SI,5
+1.01.15.02.013,            Otros Proveedores del Exterior,1,SI,SI,SI,5
+1.01.15.02.014,            ZF Do Brasil Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.016,            MaxGear Ind. e Com de Autopecas Ltda P/A,1,SI,SI,SI,5
+1.01.15.02.017,            Fervi Air SA (P/A),1,SI,SI,SI,5
+1.01.15.02.018,            Ind. e Com de Pecas MRS Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.019,            Wabco Do Brasil Ind Com de Freios Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.020,            Affinia (P/A),1,SI,SI,SI,5
+1.01.15.02.021,            ZF Sachs Argentina SA P/A,1,SI,SI,SI,5
+1.01.15.02.022,            Rodaros Industria de Rodas (P/A),1,SI,SI,SI,5
+1.01.15.02.023,            Cheng Shin-Toyo Tire & Rubber (P/A),1,SI,SI,SI,5
+1.01.15.02.024,            Priority Ind Busines (P/A),1,SI,SI,SI,5
+1.01.15.02.025,            Magneti Marelli Cofap (P/A),1,SI,SI,SI,5
+1.01.15.02.026,            Fabrica Boechat P/A,1,SI,SI,SI,5
+1.01.15.02.027,            Daewo Internacional Cmp. (P/A),1,SI,SI,SI,5
+1.01.15.02.028,            Incodiesel (P/A),1,SI,SI,SI,5
+1.01.15.02.029,            Unionrebit Ind.Com. Art Metais Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.030,            Sofape P/A,1,SI,SI,SI,5
+1.01.15.02.031,            HDS Mecpar Ind. e Com. Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.032,            Industrias Miguens P/A,1,SI,SI,SI,5
+1.01.15.02.033,            GitiTire GlobalTrading Pte.Ltd (P/A),1,SI,SI,SI,5
+1.01.15.02.034,            Industria Metalurgica Frum P/A,1,SI,SI,SI,5
+1.01.15.02.035,            Continental Ind. e Com. Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.036,            Turbodina P/A,1,SI,SI,SI,5
+1.01.15.02.037,            Esperanza Ind. e Com. de Forjados - Rodafuso(PA),1,SI,SI,SI,5
+1.01.15.02.038,            Rolamentos Mar Metalurgica (P/A),1,SI,SI,SI,5
+1.01.15.02.039,            Vetore P/A,1,SI,SI,SI,5
+1.01.15.02.040,            Knorr (P/A),1,SI,SI,SI,5
+1.01.15.02.041,            Qingdao Free (Roadshine)   P/A,1,SI,SI,SI,5
+1.01.15.02.042,            Irmaos Amalcaburio (P/A),1,SI,SI,SI,5
+1.01.15.02.043,            ZF SERVICES GMBH (Alemania),1,SI,SI,SI,5
+1.01.15.02.044,            Amp. IND. e Comercio de Pecas ( Urba Brosol) P/A,1,SI,SI,SI,5
+1.01.15.02.045,            Hong Kong Wood (P/A),1,SI,SI,SI,5
+1.01.15.02.046,            Platinum Ltda. (P/A),1,SI,SI,SI,5
+1.01.15.02.047,            Aktas do Brasil ind. e .com. (AIRTECH) P/A,1,SI,SI,SI,5
+1.01.15.02.048,            Polo Comercio Internacional Ltda. (P/A),1,SI,SI,SI,5
+1.01.15.02.049,            Doyang Filters CO LTD  (P/A),1,SI,SI,SI,5
+1.01.15.02.050,            Sparco PE (P/A),1,SI,SI,SI,5
+1.01.15.02.051,            Cinpal (P/A),1,SI,SI,SI,5
+1.01.15.02.052,            Dayco Argentina SA (P/A,1,SI,SI,SI,5
+1.01.15.02.053,            R & G Automotives PVT (P/A),1,SI,SI,SI,5
+1.01.15.02.054,            Imesa SRL (P/A),1,SI,SI,SI,5
+1.01.15.02.055,            Batista Ind. y Com. (P/A),1,SI,SI,SI,5
+1.01.15.02.056,            Metalurgica Riosulense P/A,1,SI,SI,SI,5
+1.01.15.02.057,            Johnson  Controls (P/A),1,SI,SI,SI,5
+1.01.15.02.058,            Nikomoto (P/A),1,SI,SI,SI,5
+1.01.15.02.059,            Yigit Aku Malz Nak (P/A),1,SI,SI,SI,5
+1.01.15.02.060,            Fanacif SA (P/A),1,SI,SI,SI,5
+1.01.15.02.061,            Febi blisten (P/A),1,SI,SI,SI,5
+1.01.15.02.062,            Dana Industrias Ltda (P/A),1,SI,SI,SI,5
+1.01.15.02.063,            Birkson Internacional LTDA (P/A),1,SI,SI,SI,5
+1.01.15.02.064,            RAN Sinai LTDA. -ROTA- (P/A),1,SI,SI,SI,5
+1.01.15.02.065,            GENMOT Genel Motor (P.A),1,SI,SI,SI,5
+1.01.15.02.066,            LKB Tecnic -Yumak Otom (P/A),1,SI,SI,SI,5
+1.01.15.02.067,            KACMAZLAR IC VE DIS TIC LTDA (P.A),1,SI,SI,SI,5
+1.01.15.02.068,            Rolamentos Fag (P.A),1,SI,SI,SI,5
+1.01.15.02.069,            Mahle Metal Leve Alemania(P.A),1,SI,SI,SI,5
+1.01.15.02.070,            Mahle Argentina (PA),1,SI,SI,SI,5
+1.01.15.02.071,            BUYUKDEMIR (PA),1,SI,SI,SI,5
+1.01.15.02.072,            Duroline Trading Company (PA),1,SI,SI,SI,5
+1.01.15.02.073,            Mahle Brasil (P.A),1,SI,SI,SI,5
+1.01.15.02.074,            Relemix Electronca LTDA (P.A),1,SI,SI,SI,5
+1.01.15.02.075,            Champion KOLIMA P.A,1,SI,SI,SI,5
+1.01.15.02.076,            Anticipos Varios,1,SI,SI,SI,5
+1.01.15.02.077,            Valeo Service Brasil (P.A.),1,SI,SI,SI,5
+1.01.15.02.079,            JCBL India PVT LTD P.A,1,SI,SI,SI,5
+1.01.15.02.080,            AVL Ditest,1,SI,SI,SI,5
+1.01.15.02.081,            FTE Autom. P.A.,1,SI,SI,SI,5
+1.01.15.02.082,            Instaladora Sao Marcos. P.A,1,SI,SI,SI,5
+1.01.15.02.083,"            DIYIZU Internacional Company Ltd P.A,",1,SI,SI,SI,5
+1.01.15.02.084,            Atlantic Internacional Tires  P.A,1,SI,SI,SI,5
+1.01.15.04.000,         RETENCIONES,1,SI,SI,SI,4
+1.01.20.00.000,      OTROS ACTIVOS,1,NO,NO,SI,3
+1.01.20.01.000,         INTERESES A DEVENGAR,1,NO,SI,SI,4
+1.01.20.01.001,            Intereses a Dev. Citi $,1,SI,SI,SI,5
+1.01.20.01.002,            Intereses a Devengar,1,SI,SI,SI,5
+1.01.20.01.003,            Interess a Dev. Itau $,1,SI,SI,SI,5
+1.01.20.01.004,            Intereses a Dev. Continental Gs,1,SI,SI,SI,5
+1.01.20.01.005,            Intereses a Dev. Citi Gs,1,SI,SI,SI,5
+1.01.20.01.006,            Intereses a Dev. Continental $,1,SI,SI,SI,5
+1.01.20.01.007,            Intereses a Dev. Regional Gs,1,SI,SI,SI,5
+1.01.20.01.008,            Intereses a Dev. Amambay Gs,1,SI,SI,SI,5
+1.01.20.01.009,            Intereses a Dev. Atlas Gs,1,SI,SI,SI,5
+1.01.20.01.010,            Intereses a Dev. GNB Gs,1,SI,SI,SI,5
+1.01.20.01.011,            Intereses a Dev. Bancop,1,SI,SI,SI,5
+1.01.20.01.012,            Intereses a Dev. Itau Gs,1,SI,SI,SI,5
+1.01.20.01.013,            Intereses a Dev. Sudameris $,1,SI,SI,SI,5
+1.01.20.01.014,            Intereses a Dev. Sudameris Gs,1,SI,SI,SI,5
+1.01.20.01.015,            Intereses a Dev. BBVA Gs,1,SI,SI,SI,5
+1.01.20.01.016,            Intereses a Dev. Do Brasil Gs,1,SI,SI,SI,5
+1.01.20.01.017,            Intereses a Dev. Financiera Rio $,1,SI,SI,SI,5
+1.01.20.01.018,            Intereses a Dev. Finexpar,1,SI,SI,SI,5
+1.01.20.01.019,            Intereses a Dev. Solar,1,SI,SI,SI,5
+1.01.20.01.020,            Intereses a Dev. Financiera Rio Gs.,1,SI,SI,SI,5
+1.01.20.02.000,         GASTOS A DEVENGAR,1,SI,SI,SI,4
+1.01.20.02.003,            Gastos Bancarios a Devengar,1,SI,SI,SI,5
+1.01.20.02.004,            Gastos Pagados por Adelantado Apertura Suc 4,1,SI,SI,SI,5
+1.01.20.02.006,            Gastos Pre-Operativos - SUC 5,1,SI,SI,SI,5
+1.01.20.02.007,            Gastos Pre-Operativos - Groupauto S.A.,1,SI,SI,SI,5
+1.01.20.02.008,            Gastos Pre-Operativos - MEGAPIXEL,1,SI,SI,SI,5
+1.01.20.02.009,            Gastos Pre-Operativos - SUC 4,1,SI,SI,SI,5
+1.01.20.02.010,            Gastos Pre-Operativos Grupo Elite S.A.,1,SI,SI,SI,5
+1.01.20.02.011,            Publicidad y Propaganda a Devengar,1,SI,SI,SI,5
+1.01.20.02.012,            Intereses Pagados por Adelantado,1,SI,SI,SI,5
+1.01.20.02.013,            Gastos Pre-Operativos SUC- 2,1,SI,SI,SI,5
+1.01.20.02.014,            Seguros a Devengar,1,SI,SI,SI,5
+1.01.20.02.015,            Gastos Pre-Operativos Gran Almacen,1,SI,SI,SI,5
+1.02.00.00.000,   ACTIVO NO CORRIENTE,1,NO,NO,SI,2
+1.02.01.00.000,      CREDITOS,1,NO,NO,SI,3
+1.02.01.01.000,         Fondos con destino especial,1,SI,SI,SI,4
+1.02.01.02.000,         Documentos cuentas a cobrar Directores,1,NO,NO,SI,4
+1.02.01.03.000,         Documentos por Cobrar,1,NO,NO,SI,4
+1.02.01.04.000,         Deudores Varios,1,NO,NO,SI,4
+1.02.01.04.001,            Deudores Varios - GROUPAUTO PY S.A.,1,SI,SI,SI,5
+1.02.01.04.002,"            Mega Pixel S,A,",1,SI,SI,SI,5
+1.02.01.04.003,"            Grupo Elite S,A.",1,SI,SI,SI,5
+1.02.01.05.000,         Creditos en Gestin de cobro,1,SI,SI,SI,4
+1.02.01.05.001,            Anio 2009,1,SI,SI,SI,5
+1.02.01.05.002,            Anio 2010,1,SI,SI,SI,5
+1.02.01.05.003,            Anio 2011,1,SI,SI,SI,5
+1.02.01.05.004,            Anio 2012,1,SI,SI,SI,5
+1.02.01.05.005,            Anio 2013,1,SI,SI,SI,5
+1.02.01.06.000,         MENOS: previsiones para incobrables,1,SI,SI,SI,4
+1.02.01.06.001,            Prev. anio 2009,1,SI,SI,SI,5
+1.02.01.06.002,            Prev. anio 2010,1,SI,SI,SI,5
+1.02.01.06.003,            Prev. Anio 2011,1,SI,SI,SI,5
+1.02.10.00.000,"      PROPIEDAD, PLANTA Y EQUIPO",1,NO,NO,SI,3
+1.02.10.01.000,         Bienes de operacion,1,SI,NO,SI,4
+1.02.10.01.001,            Muebles y utiles,1,SI,SI,SI,5
+1.02.10.01.002,            Herramientas y Equipos,1,SI,SI,SI,5
+1.02.10.01.003,            Rodados,1,SI,SI,SI,5
+1.02.10.01.004,            Maquinarias,1,SI,SI,SI,5
+1.02.10.01.005,            Equipos de informatica,1,SI,SI,SI,5
+1.02.10.01.006,            Equipos de comunicacion,1,SI,SI,SI,5
+1.02.10.01.007,            Sistemas de Alarmas,1,SI,SI,SI,5
+1.02.10.01.008,            Utiles y Enseres,1,SI,SI,SI,5
+1.02.10.01.009,            Mejoras en Predio  Ajeno,1,SI,SI,SI,5
+1.02.10.01.010,            Sistemas Informaticos,1,SI,SI,SI,5
+1.02.10.01.011,            Instalaciones,1,SI,NO,SI,5
+1.02.10.01.012,            Inmuebles,1,SI,SI,SI,5
+1.02.10.02.000,         Depreciacion Acumulada,1,SI,SI,SI,4
+1.02.10.02.001,            Depreciacion Acumulada Muebles y Utiles,1,SI,SI,SI,5
+1.02.10.02.002,            Depreciacion Acumulada Utiles y Enseres,1,SI,SI,SI,5
+1.02.10.02.003,            Depreciacion Acumulada Sistema de Alarmas,1,SI,SI,SI,5
+1.02.10.02.004,            Depreciacion Acumulada Herramientas y Equipos,1,SI,SI,SI,5
+1.02.10.02.005,            Depreciacion Acumulda Equipos de Informatica,1,SI,SI,SI,5
+1.02.10.02.006,            Depreciacion Acumulada Rodados,1,SI,SI,SI,5
+1.02.10.02.007,            Depreciacion Acumulada Maquinaria,1,SI,SI,SI,5
+1.02.10.02.008,            Depreciacion Acumulada Equipos de Comunicacion,1,SI,SI,SI,5
+1.02.10.02.009,            Depreciacion Acumulada Mejoras en Predia Ajeno,1,SI,SI,SI,5
+1.02.10.02.010,            Depreciacion Acumulada Sistemas Informaticos,1,SI,SI,SI,5
+1.02.10.02.011,            Depreciacion Acumulada Instalaciones,1,SI,SI,SI,5
+1.02.10.02.012,            Dep. Acumuladas anteriores al Ejercicio 2012,1,SI,SI,SI,5
+1.02.10.02.013,            Dep. Acumulada Anteriores al Ejercicio 2012,1,SI,SI,SI,5
+1.02.10.03.000,         Bienes fuera de operacion,1,SI,SI,SI,4
+1.02.20.00.000,      ACTIVOS INTANGIBLES,1,NO,NO,SI,3
+1.02.20.01.000,         Licencia de manufactura,1,NO,NO,SI,4
+1.02.20.02.000,         Marcas,1,NO,NO,SI,4
+1.02.20.03.000,         Gastos en desarrollo,1,NO,NO,SI,4
+1.02.20.04.000,         Amortizacion Acumulada,1,NO,NO,SI,4
+1.02.20.05.000,         Garantia de Alquiler,1,SI,SI,SI,4
+1.02.20.06.000,         Garantia de Bienes de Cambio,1,SI,SI,SI,4
+2.00.00.00.000,PASIVO,2,NO,NO,SI,1
+2.01.00.00.000,   PASIVO CORRIENTE,2,NO,NO,SI,2
+2.01.01.00.000,      DEUDAS,2,NO,NO,SI,3
+2.01.01.01.000,         Proveedores Locales,2,SI,SI,SI,4
+2.01.01.01.001,            Santa Elena,2,SI,NO,SI,5
+2.01.01.01.002,            Ybapyta S.A.,2,SI,NO,SI,5
+2.01.01.01.003,            Rios Repuestos S.A.,2,SI,NO,SI,5
+2.01.01.01.004,            Luber Fil S.A.,2,SI,NO,SI,5
+2.01.01.01.005,            Solo Camiones,2,SI,NO,SI,5
+2.01.01.01.006,            Dieselmar S.A PL,2,SI,NO,SI,5
+2.01.01.01.007,            Automovil Supply,2,SI,NO,SI,5
+2.01.01.01.008,            Repar Repuestos,2,SI,NO,SI,5
+2.01.01.01.009,            Centro Import S.A.,2,SI,NO,SI,5
+2.01.01.01.010,            Fortaleza S.R.L.,2,SI,NO,SI,5
+2.01.01.01.011,            Mercepar Repuestos,2,SI,NO,SI,5
+2.01.01.01.012,            Ferpar S.A. PL,2,SI,NO,SI,5
+2.01.01.01.013,            Arasy S.R.L.,2,SI,NO,SI,5
+2.01.01.01.014,            Mercedes Benz,2,SI,NO,SI,5
+2.01.01.01.015,            Distrimotor,2,SI,NO,SI,5
+2.01.01.01.016,            Importadora Parana,2,SI,NO,SI,5
+2.01.01.01.017,            PROVEEDORES LOCALES,2,SI,NO,SI,5
+2.01.01.01.018,            Lincoln S.A.,2,SI,NO,SI,5
+2.01.01.01.019,            El Freno,2,SI,NO,SI,5
+2.01.01.01.020,            Toyo Benz,2,SI,NO,SI,5
+2.01.01.01.021,            Motorar Ortega,2,SI,NO,SI,5
+2.01.01.01.022,            Provent S.A.,2,SI,NO,SI,5
+2.01.01.01.023,            La Rueda,2,SI,NO,SI,5
+2.01.01.01.024,            Km 0,2,SI,NO,SI,5
+2.01.01.01.025,            Todo Repuestos,2,SI,NO,SI,5
+2.01.01.01.026,            Electro Diesel,2,SI,NO,SI,5
+2.01.01.01.027,            Lubrico Distribuidora,2,SI,NO,SI,5
+2.01.01.01.028,            San Miguel Import-Export,2,SI,NO,SI,5
+2.01.01.01.029,            Pluscar S.A.,2,SI,NO,SI,5
+2.01.01.01.030,            Rufino Repuestos,2,SI,NO,SI,5
+2.01.01.01.031,            Chacomer S.A.E.C.A.,2,SI,NO,SI,5
+2.01.01.01.032,            La Estrella S.R.L.,2,SI,NO,SI,5
+2.01.01.01.033,            Distribuidora Guaira,2,SI,NO,SI,5
+2.01.01.01.034,            Dieselelectrix,2,SI,NO,SI,5
+2.01.01.01.035,            Agropar,2,SI,NO,SI,5
+2.01.01.01.036,            Se Hum Corporation,2,SI,NO,SI,5
+2.01.01.01.037,            Pampeiro,2,SI,NO,SI,5
+2.01.01.01.038,            Unipar,2,SI,NO,SI,5
+2.01.01.01.039,            Carlao Autorrepuestos,2,SI,NO,SI,5
+2.01.01.01.040,            Chispa S.A.,2,SI,NO,SI,5
+2.01.01.01.041,            Autorrepuestos Nuevo Lider PL,2,SI,NO,SI,5
+2.01.01.01.042,            Centro Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.043,            MB Import- Export,2,SI,NO,SI,5
+2.01.01.01.044,            Radiadores Dure,2,SI,NO,SI,5
+2.01.01.01.045,            Maria Auxiliadora,2,SI,NO,SI,5
+2.01.01.01.046,            DC Importaciones,2,SI,NO,SI,5
+2.01.01.01.047,            Tascavol S.R.L.,2,SI,NO,SI,5
+2.01.01.01.048,            Rema S.A.,2,SI,NO,SI,5
+2.01.01.01.049,            Repuestos Jovimar,2,SI,NO,SI,5
+2.01.01.01.050,            Autorepuestos Dieselectric,2,SI,NO,SI,5
+2.01.01.01.051,            Semar S.R.L.,2,SI,NO,SI,5
+2.01.01.01.052,            Casa de los Compresores,2,SI,NO,SI,5
+2.01.01.01.053,            Refri Auto PL,2,SI,NO,SI,5
+2.01.01.01.054,            La Casa de los Cabos S.R.L.,2,SI,NO,SI,5
+2.01.01.01.055,            Diex Car,2,SI,NO,SI,5
+2.01.01.01.056,            La Casa de las Mangueras,2,SI,NO,SI,5
+2.01.01.01.057,            Herimarc,2,SI,NO,SI,5
+2.01.01.01.058,            Ka`aguy Rory S.A.,2,SI,NO,SI,5
+2.01.01.01.059,            Visconde SRL,2,SI,SI,SI,5
+2.01.01.01.060,            Sistema Neumatico,2,SI,SI,SI,5
+2.01.01.01.061,            BC Tech,2,SI,SI,SI,5
+2.01.01.01.062,            A & A Importaciones,2,SI,NO,SI,5
+2.01.01.01.063,"            Apex S,A,",2,SI,NO,SI,5
+2.01.01.01.064,            Tracto Repuestos,2,SI,NO,SI,5
+2.01.01.01.065,            Internacional Repuestos,2,SI,NO,SI,5
+2.01.01.01.066,            Nora,2,SI,NO,SI,5
+2.01.01.01.067,            Autorrepuestos Heri S.R.L.,2,SI,NO,SI,5
+2.01.01.01.068,            Autorrepuestos Ypacarai,2,SI,NO,SI,5
+2.01.01.01.069,            Embragues Arce,2,SI,SI,SI,5
+2.01.01.01.070,            Metalden S.R.L.,2,SI,NO,SI,5
+2.01.01.01.071,            De La Sobera Hnos.,2,SI,NO,SI,5
+2.01.01.01.072,            AR Repuestos S.R.L.,2,SI,NO,SI,5
+2.01.01.01.073,            Lubricantes Paraguayos S.A.E.C.A.(Puma Energy),2,SI,NO,SI,5
+2.01.01.01.074,            CR. Repuestos,2,SI,NO,SI,5
+2.01.01.01.075,            Todo Scania Car S.R.L.,2,SI,NO,SI,5
+2.01.01.01.076,            Inter American S.R.L.,2,SI,NO,SI,5
+2.01.01.01.077,            Guga S.A.,2,SI,NO,SI,5
+2.01.01.01.078,            NF Repuestos,2,SI,NO,SI,5
+2.01.01.01.079,            Resortes Paraguay PL,2,SI,NO,SI,5
+2.01.01.01.080,            Atlantic SAECA PL,2,SI,NO,SI,5
+2.01.01.01.081,            Sprint S.R.L.,2,SI,NO,SI,5
+2.01.01.01.082,            Petersen Ind. y Hogar S.A.,2,SI,NO,SI,5
+2.01.01.01.083,            Taller Lucho,2,SI,NO,SI,5
+2.01.01.01.084,            Emporio S.A.,2,SI,NO,SI,5
+2.01.01.01.085,            Industria Metalurgica Lascar,2,SI,NO,SI,5
+2.01.01.01.086,            Tractorfoz,2,SI,NO,SI,5
+2.01.01.01.087,            Dispicar S.R.L.,2,SI,NO,SI,5
+2.01.01.01.088,            Fusion S.A.,2,SI,NO,SI,5
+2.01.01.01.089,            EDV Import,2,SI,NO,SI,5
+2.01.01.01.090,            Importadora Avenida PL,2,SI,NO,SI,5
+2.01.01.01.091,            Scamer Repuestos,2,SI,NO,SI,5
+2.01.01.01.092,            Rember S.A. C.I.,2,SI,NO,SI,5
+2.01.01.01.093,            Chevropar S.R.L.,2,SI,NO,SI,5
+2.01.01.01.094,            E&D Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.095,            Lesteoeste PL,2,SI,NO,SI,5
+2.01.01.01.096,            AR Electricidad Pl,2,SI,NO,SI,5
+2.01.01.01.097,            Casa J. Gomez S.R.L PL,2,SI,NO,SI,5
+2.01.01.01.098,            Achar Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.099,            Distribuidora JVD PL,2,SI,NO,SI,5
+2.01.01.01.100,            Phoenix PL,2,SI,NO,SI,5
+2.01.01.01.101,            Rescavol,2,SI,NO,SI,5
+2.01.01.01.102,            Copave Pl,2,SI,NO,SI,5
+2.01.01.01.103,            FR Repuestos Pl,2,SI,NO,SI,5
+2.01.01.01.104,            Lubrico Import- Export Pl,2,SI,NO,SI,5
+2.01.01.01.105,            Balones Deportivos Medina Pl,2,SI,NO,SI,5
+2.01.01.01.106,            Bahia Importaciones Pl,2,SI,NO,SI,5
+2.01.01.01.107,            Sol Tintas S.A PL,2,SI,NO,SI,5
+2.01.01.01.108,            Regimiento 8 Pl,2,SI,NO,SI,5
+2.01.01.01.109,            Brianza S.A.,2,SI,NO,SI,5
+2.01.01.01.110,            Black Colors PL,2,SI,NO,SI,5
+2.01.01.01.111,            Plasticos S.A PL,2,SI,NO,SI,5
+2.01.01.01.112,            Tress sss Srl Pl,2,SI,NO,SI,5
+2.01.01.01.113,            Farres S.A.C.I. PL,2,SI,NO,SI,5
+2.01.01.01.114,            Importadora Sca-Benz PL,2,SI,NO,SI,5
+2.01.01.01.115,            Hogar Feliz PL,2,SI,NO,SI,5
+2.01.01.01.116,            Corporacion Mercantil PL,2,SI,NO,SI,5
+2.01.01.01.117,            Autorrepuestos Mendez S.A.C.I.,2,SI,NO,SI,5
+2.01.01.01.118,            Todoscania Repuestos S.A.,2,SI,NO,SI,5
+2.01.01.01.119,            Autopiezas S.A.,2,SI,NO,SI,5
+2.01.01.01.120,            Filtros HS PL,2,SI,NO,SI,5
+2.01.01.01.121,            Autorrepuestos Internacional S.A.,2,SI,NO,SI,5
+2.01.01.01.122,            Suspen Car Repuestos S.R.L.,2,SI,NO,SI,5
+2.01.01.01.123,            Nacional Repuestos,2,SI,SI,SI,5
+2.01.01.01.124,            AEP Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.125,            Pampa Import Pl,2,SI,NO,SI,5
+2.01.01.01.126,            Oceania S.a PL,2,SI,NO,SI,5
+2.01.01.01.127,            Systems Devices Depot PL,2,SI,NO,SI,5
+2.01.01.01.128,            Diesa S.A (PL),2,SI,NO,SI,5
+2.01.01.01.129,            Lu-Ga Compra Vta de Mercaderias PL,2,SI,NO,SI,5
+2.01.01.01.130,            Filtros A&s PL,2,SI,NO,SI,5
+2.01.01.01.131,            Repsol YPF PL,2,SI,NO,SI,5
+2.01.01.01.132,            Centro Agricola PL,2,SI,NO,SI,5
+2.01.01.01.133,            Fercap PL,2,SI,NO,SI,5
+2.01.01.01.134,            Original Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.136,            Scania Center Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.137,            Proserco SRL PL,2,SI,NO,SI,5
+2.01.01.01.138,            Distribuidora NB PL,2,SI,NO,SI,5
+2.01.01.01.139,            Extintores Parana PL,2,SI,NO,SI,5
+2.01.01.01.140,            Automotive PL,2,SI,NO,SI,5
+2.01.01.01.141,            Scavol PL,2,SI,NO,SI,5
+2.01.01.01.142,            Diez Electrica PL,2,SI,NO,SI,5
+2.01.01.01.143,            NF Autorrepuestos PL,2,SI,NO,SI,5
+2.01.01.01.144,            Nool PL,2,SI,NO,SI,5
+2.01.01.01.145,            Mati Milo PL,2,SI,NO,SI,5
+2.01.01.01.146,            Real Autorrepuestos SRL PL,2,SI,NO,SI,5
+2.01.01.01.147,            Motores Bombas y Turbinas PL,2,SI,NO,SI,5
+2.01.01.01.148,            G&S Cubiertas PL,2,SI,NO,SI,5
+2.01.01.01.149,            America Neumaticos PL,2,SI,NO,SI,5
+2.01.01.01.150,            Agricola Alto Parana sa PL,2,SI,SI,SI,5
+2.01.01.01.151,            Toyotoshi PL,2,SI,NO,SI,5
+2.01.01.01.152,            Bici Moto PL,2,SI,NO,SI,5
+2.01.01.01.153,            El Piston Repuestos PL,2,SI,NO,SI,5
+2.01.01.01.154,            Tass Auto Parts PL,2,SI,NO,SI,5
+2.01.01.01.155,            Asupel S.A PL,2,SI,NO,SI,5
+2.01.01.01.156,            Autorrepuestos San Blas (PL),2,SI,NO,SI,5
+2.01.01.01.157,            Mariam Lubricantes PL,2,SI,NO,SI,5
+2.01.01.01.158,            Euroimport PL,2,SI,NO,SI,5
+2.01.01.01.159,            Time Import SA PL,2,SI,NO,SI,5
+2.01.01.01.160,            Filpy S.A PL,2,SI,NO,SI,5
+2.01.01.01.161,            Integral repuestos Sa,2,SI,SI,SI,5
+2.01.01.01.162,            Nery Baez representaciones PL,2,SI,SI,SI,5
+2.01.01.01.163,            PC import PL,2,SI,SI,SI,5
+2.01.01.01.165,            Yhaguy  Repuestos Central x Transferencias,2,SI,SI,SI,5
+2.01.01.01.166,            Nacional cubiertas PL,2,SI,SI,SI,5
+2.01.01.01.167,            Ñande Reta gomeria PL,2,SI,SI,SI,5
+2.01.01.01.168,            Gol Neumaticos Pl,2,SI,SI,SI,5
+2.01.01.01.169,            Horeb SA,2,SI,SI,SI,5
+2.01.01.01.170,            Arevalos Repuestos (PL),2,SI,SI,SI,5
+2.01.01.01.172,            MM Vta de Autorrepuestos PL,2,SI,SI,SI,5
+2.01.01.01.173,            RS Instrumaq (PL),2,SI,NO,SI,5
+2.01.01.01.174,            Carsuplay PL,2,SI,NO,SI,5
+2.01.01.01.175,            Central Repuestos S.A PL,2,SI,NO,SI,5
+2.01.01.01.176,            Automundo PL,2,SI,NO,SI,5
+2.01.01.01.177,            Importadora Roma PL,2,SI,NO,SI,5
+2.01.01.01.178,            Inimbope Srl PL,2,SI,NO,SI,5
+2.01.01.01.179,            JB Importaciones PL,2,SI,NO,SI,5
+2.01.01.01.180,            Tebicuary Repuestos (PL),2,SI,SI,SI,5
+2.01.01.01.181,            Kurosu & CIA SA (PL),2,SI,SI,SI,5
+2.01.01.01.182,            Instrumaq SA PL,2,SI,SI,SI,5
+2.01.01.01.183,            Empresa de Transporte Ñanduti SRL (PL),2,SI,SI,SI,5
+2.01.01.01.184,            Full Equipo (PL),2,SI,SI,SI,5
+2.01.01.01.185,            Importpiezas (PL),2,SI,SI,SI,5
+2.01.01.01.186,            Internacional Cubiertas (PL),2,SI,SI,SI,5
+2.01.01.01.187,            Distribuidora Zarza (PL,2,SI,SI,SI,5
+2.01.01.01.188,            Repar Autopiezas,2,SI,SI,SI,5
+2.01.01.01.189,            Auto Repuestos Estrella,2,SI,SI,SI,5
+2.01.01.01.190,            Rescavolcar de Crescencio Oheler,2,SI,SI,SI,5
+2.01.01.01.191,            Rescavol-de Arisa Altemburguer,2,SI,SI,SI,5
+2.01.01.01.192,            IMPAR-Sunset,2,SI,SI,SI,5
+2.01.01.01.193,            JAFRA S.A. PL,2,SI,SI,SI,5
+2.01.01.01.194,            GRUPO ELITE S.A.,2,SI,SI,SI,5
+2.01.01.02.000,         Proveedores del exterior,2,SI,SI,SI,4
+2.01.01.02.001,            Trans America,2,SI,NO,SI,5
+2.01.01.02.002,            Rolmar,2,SI,NO,SI,5
+2.01.01.02.003,            Albarus,2,SI,NO,SI,5
+2.01.01.02.004,            Cinpal,2,SI,NO,SI,5
+2.01.01.02.005,            Lampauto,2,SI,NO,SI,5
+2.01.01.02.006,            Vetore,2,SI,NO,SI,5
+2.01.01.02.007,            Pacaembu,2,SI,NO,SI,5
+2.01.01.02.008,            Irmaos Amalcaburio,2,SI,NO,SI,5
+2.01.01.02.009,            Multi Trade Internacional,2,SI,NO,SI,5
+2.01.01.02.010,            Industria Metalurgica Frum Ltda,2,SI,NO,SI,5
+2.01.01.02.011,            Metalurgica Rio Sulense SA,2,SI,NO,SI,5
+2.01.01.02.012,            Ring and Forks Internat Ltda PE,2,SI,NO,SI,5
+2.01.01.02.013,            Eaton Ltda,2,SI,NO,SI,5
+2.01.01.02.014,            Friccion SRL,2,SI,NO,SI,5
+2.01.01.02.015,            Tecnica Industrial Tiph S.A.,2,SI,NO,SI,5
+2.01.01.02.016,            Udo Heuer S.A. Industrial s Comerc.,2,SI,NO,SI,5
+2.01.01.02.017,            ZM S.A.,2,SI,NO,SI,5
+2.01.01.02.018,            Siemens Vdo Automotive,2,SI,NO,SI,5
+2.01.01.02.019,            Ind. e Com. de Autopecas Rei Ltda,2,SI,NO,SI,5
+2.01.01.02.020,            Hubner Ind. Mecanica Ltda,2,SI,NO,SI,5
+2.01.01.02.021,            Batebol Ltda,2,SI,NO,SI,5
+2.01.01.02.022,            Magnetti Marelli Cofap Autopec.,2,SI,NO,SI,5
+2.01.01.02.023,            HDS Mecpar Ind. e Com. Ltda,2,SI,NO,SI,5
+2.01.01.02.024,            Rodaros Industria de Rodas,2,SI,NO,SI,5
+2.01.01.02.025,            Volmer Parts Comercial Export,2,SI,NO,SI,5
+2.01.01.02.027,            Planet Export Corporation,2,SI,NO,SI,5
+2.01.01.02.028,            R.F.I.,2,SI,NO,SI,5
+2.01.01.02.029,            ZF Do Brasil Ltda,2,SI,NO,SI,5
+2.01.01.02.030,            Motorparts Com. Intern. Ltda,2,SI,NO,SI,5
+2.01.01.02.031,            AAG Brasil Ind. e Com. de Autop.,2,SI,NO,SI,5
+2.01.01.02.032,            Irmaos Assuncao,2,SI,NO,SI,5
+2.01.01.02.033,            KS Productos Automotivos,2,SI,NO,SI,5
+2.01.01.02.034,            Qingdao Free (Roadshine),2,SI,NO,SI,5
+2.01.01.02.035,            Biagio del Agli,2,SI,NO,SI,5
+2.01.01.02.036,            Dana Argentina,2,SI,NO,SI,5
+2.01.01.02.038,            Affinia,2,SI,NO,SI,5
+2.01.01.02.039,            Expocarlo Exp.de Pecas,2,SI,NO,SI,5
+2.01.01.02.040,            Mercocamt Com. Int. Ltda,2,SI,NO,SI,5
+2.01.01.02.041,            Fabrica Boechat Ltda,2,SI,NO,SI,5
+2.01.01.02.042,            Mecanica Industrial Colar Ltda,2,SI,NO,SI,5
+2.01.01.02.043,            Industrias Jaceru Durex,2,SI,SI,SI,5
+2.01.01.02.044,            Fania Lta.,2,SI,SI,SI,5
+2.01.01.02.045,            Fort Lauderdale Tractor co,2,SI,NO,SI,5
+2.01.01.02.046,            Desordi Com.,2,SI,NO,SI,5
+2.01.01.02.047,            Well Ind. e Com. de Pecas Ltda,2,SI,NO,SI,5
+2.01.01.02.048,            Rolamentos Fag Ltda,2,SI,NO,SI,5
+2.01.01.02.049,            Instaladora Sao Marcos,2,SI,NO,SI,5
+2.01.01.02.050,            KB Brasil,2,SI,NO,SI,5
+2.01.01.02.051,            Sabo Ind. e Comerc. de Pecas,2,SI,NO,SI,5
+2.01.01.02.052,            Ideal Standard Wabco,2,SI,NO,SI,5
+2.01.01.02.053,            Knor Brense Sistemas p/ Vehiculos,2,SI,NO,SI,5
+2.01.01.02.054,            Ind. e Com. de Pecas MRS Ltda.,2,SI,NO,SI,5
+2.01.01.02.055,            Cipec Autopiezas Ltda.,2,SI,NO,SI,5
+2.01.01.02.056,            Mar Rolamentos do Brasil,2,SI,SI,SI,5
+2.01.01.02.057,            Schaeffler Brasil Ltda.,2,SI,NO,SI,5
+2.01.01.02.058,            Falsi & Falsi,2,SI,NO,SI,5
+2.01.01.02.059,            Mahle S.A. de Argentina,2,SI,NO,SI,5
+2.01.01.02.060,            Fervi Air S.A.,2,SI,NO,SI,5
+2.01.01.02.061,            Wabco do Brazil Ind. Com. de Freios Ltda.,2,SI,NO,SI,5
+2.01.01.02.062,            Sofape S.A.,2,SI,NO,SI,5
+2.01.01.02.063,            Industrias Miguens Hnos. S.R.L.,2,SI,NO,SI,5
+2.01.01.02.064,            Itochu Corporation,2,SI,SI,SI,5
+2.01.01.02.065,            Itw Chemical Ltda.,2,SI,SI,SI,5
+2.01.01.02.066,            Cummins Filtros Ltda.,2,SI,SI,SI,5
+2.01.01.02.067,            Tecneco Filters Internacional Ltda.,2,SI,SI,SI,5
+2.01.01.02.068,            Cheng Shin Rubber Ind co Ltd,2,SI,NO,SI,5
+2.01.01.02.069,            Sociedade Fabricante de Pecas PE,2,SI,NO,SI,5
+2.01.01.02.070,            Parker Hannifin PE,2,SI,NO,SI,5
+2.01.01.02.071,            Rolamentos Mar Metalurgica Ltda PE,2,SI,NO,SI,5
+2.01.01.02.072,            Maxxis Intl Thailand Co Ltd PE,2,SI,NO,SI,5
+2.01.01.02.073,            Cooper Tire Rubber Company PE,2,SI,NO,SI,5
+2.01.01.02.074,            Valvoline Argentina SA PE,2,SI,NO,SI,5
+2.01.01.02.076,            Continental Ind e Com Ltda PE,2,SI,NO,SI,5
+2.01.01.02.077,            Champion Laboraotories Inc PE,2,SI,NO,SI,5
+2.01.01.02.078,            Winns PE,2,SI,NO,SI,5
+2.01.01.02.079,            Cummins Filtration PE,2,SI,NO,SI,5
+2.01.01.02.080,            Cheng Shin - Toyo Tire & Rubber PE,2,SI,NO,SI,5
+2.01.01.02.081,            Cheng Shin - Petrel Tire PE,2,SI,NO,SI,5
+2.01.01.02.082,            Unionrebit Ind Com Art de Metais Ltda (PE),2,SI,NO,SI,5
+2.01.01.02.083,            Branil Juntas Industria e Comercio Ltda PE,2,SI,NO,SI,5
+2.01.01.02.084,            Priority Int Busines PE,2,SI,NO,SI,5
+2.01.01.02.085,            Starpoint Usa Inc PE,2,SI,NO,SI,5
+2.01.01.02.086,            Maxxis International Co Ltd PE,2,SI,NO,SI,5
+2.01.01.02.087,            Maxgear Ind e Com de Autopecas Ltda PE,2,SI,NO,SI,5
+2.01.01.02.088,            Peko Incorporation PE,2,SI,NO,SI,5
+2.01.01.02.089,            ZF Sachs Argentina SA. PE,2,SI,NO,SI,5
+2.01.01.02.090,            Incodiesel Ind. Com. Pecas (PE),2,SI,SI,SI,5
+2.01.01.02.091,            Peco Incorporation (PE),2,SI,SI,SI,5
+2.01.01.02.092,            KSPG Automotive Brasil Ltda (PE),2,SI,SI,SI,5
+2.01.01.02.093,            Daewoo International Corp. (PE),2,SI,SI,SI,5
+2.01.01.02.094,            Industria de Artefactos de Borracha Ltda. BINS,2,SI,SI,SI,5
+2.01.01.02.095,            Universal Industria Metalurgica Ltda. (PE),2,SI,SI,SI,5
+2.01.01.02.096,            Esperança Ind e Com de Forjados Ltda. (PE),2,SI,SI,SI,5
+2.01.01.02.097,            Turbodina SAIC (PE),2,SI,SI,SI,5
+2.01.01.02.098,            TANCLICK Distribuidora de Autopecas (PE),2,SI,SI,SI,5
+2.01.01.02.099,            Sabo Argentinas SA (PE),2,SI,SI,SI,5
+2.01.01.02.100,            Nikomoto SA,2,SI,SI,SI,5
+2.01.01.02.101,            Febi blistein,2,SI,SI,SI,5
+2.01.01.02.102,            Batista Ind. y Com. (PE),2,SI,SI,SI,5
+2.01.01.02.103,            Imesa SRL (PE),2,SI,SI,SI,5
+2.01.01.02.104,            ZF services GMBH HB Alemania (PE),2,SI,SI,SI,5
+2.01.01.02.105,            Doyang Filters Co Ltda (P/E),2,SI,SI,SI,5
+2.01.01.02.106,            Genmont Genel Motor (PE),2,SI,SI,SI,5
+2.01.01.02.107,            GitiFire GlobalTrading LTD(P/E),2,SI,SI,SI,5
+2.01.01.02.108,            Dayco Argentina S.A. (P.E),2,SI,SI,SI,5
+2.01.01.02.109,            R & G Automotives PVT (P/E),2,SI,SI,SI,5
+2.01.01.02.110,            Sparco (P.E),2,SI,SI,SI,5
+2.01.01.02.111,            Johnson Controls (P.E),2,SI,SI,SI,5
+2.01.01.02.112,            AMP Industria e Comercio de Pecas Ltda,2,SI,SI,SI,5
+2.01.01.02.113,            Yigitaku (P/E),2,SI,SI,SI,5
+2.01.01.02.114,            Dana Industrias Ltda (P/E),2,SI,SI,SI,5
+2.01.01.02.115,            Birkson Internacional LTDA (P/E),2,SI,SI,SI,5
+2.01.01.02.116,            RAN Sinai LTDA (P/E),2,SI,SI,SI,5
+2.01.01.02.117,            BUYUKDMIR (P/E),2,SI,SI,SI,5
+2.01.01.02.118,            Aktas do Brasil ind e com (AIRTECH),2,SI,SI,SI,5
+2.01.01.02.119,            Hong Kong Wood (P.E),2,SI,SI,SI,5
+2.01.01.02.120,            LKB - Tecnic-Yumak Otom (P.E),2,SI,SI,SI,5
+2.01.01.02.121,            Duroline Trading Company LTDA (P.E),2,SI,SI,SI,5
+2.01.01.02.122,            Kahveci Otomotiv Sanayi Ve,2,SI,SI,SI,5
+2.01.01.02.123,            KACMAZLAR IC VE DIS TIC LTDA (P.E),2,SI,SI,SI,5
+2.01.01.02.124,            Mahle Alemania,2,SI,SI,SI,5
+2.01.01.02.125,            Mahle Brasil,2,SI,SI,SI,5
+2.01.01.02.126,            Valvoline USA (P.E),2,SI,SI,SI,5
+2.01.01.02.127,            Mahle Singapore,2,SI,SI,SI,5
+2.01.01.02.128,            Relemix (P.E),2,SI,SI,SI,5
+2.01.01.02.129,            Valeo Service Brasil (P.E),2,SI,SI,SI,5
+2.01.01.02.130,            Fanacif P.E.,2,SI,SI,SI,5
+2.01.01.02.131,            JCBL INDIA PTV LTDA,2,SI,SI,SI,5
+2.01.01.02.132,            FTE AUTOMOTIVE,2,SI,SI,SI,5
+2.01.01.02.133,            DIYIZU (P.E),2,SI,SI,SI,5
+2.01.01.03.000,         Acreedores Despachos,2,SI,SI,SI,4
+2.01.01.04.000,         Acreedores Varios,2,SI,SI,SI,4
+2.01.01.04.001,            La Rueda Ctas,2,SI,NO,SI,5
+2.01.01.04.002,            Censu S.A.,2,SI,NO,SI,5
+2.01.01.04.003,            Almar S.R.L.,2,SI,NO,SI,5
+2.01.01.04.004,            Global Market,2,SI,NO,SI,5
+2.01.01.04.005,            Yhaguy Repuestos S.A. Ctas,2,SI,NO,SI,5
+2.01.01.04.006,            Centro Repuestos Ctas,2,SI,NO,SI,5
+2.01.01.04.007,            Bartolo Representaciones,2,SI,NO,SI,5
+2.01.01.04.008,            ACREEDORES,2,SI,NO,SI,5
+2.01.01.04.009,            Autopar Comercial,2,SI,NO,SI,5
+2.01.01.04.011,            Electro Diesel Ctas,2,SI,NO,SI,5
+2.01.01.04.012,            Luber fil Ctas,2,SI,NO,SI,5
+2.01.01.04.013,            La Paloma S.R.L.,2,SI,NO,SI,5
+2.01.01.04.014,            Informconf,2,SI,NO,SI,5
+2.01.01.04.015,            Activenet S.A.,2,SI,NO,SI,5
+2.01.01.04.016,            Cencar S.A.,2,SI,NO,SI,5
+2.01.01.04.017,            Radar Omni,2,SI,NO,SI,5
+2.01.01.04.018,            Ka`aguy Rory,2,SI,NO,SI,5
+2.01.01.04.019,            Aeromar S.R.L.,2,SI,NO,SI,5
+2.01.01.04.020,            Cencar Gtos,2,SI,NO,SI,5
+2.01.01.04.021,            Serfin Cargo S.A.,2,SI,NO,SI,5
+2.01.01.04.022,            Barrero Grande,2,SI,NO,SI,5
+2.01.01.04.023,            Nuestra Seniora de la Auncion,2,SI,NO,SI,5
+2.01.01.04.024,            CTI Movil,2,SI,NO,SI,5
+2.01.01.04.025,            Dimension,2,SI,NO,SI,5
+2.01.01.04.026,            RV Insumos,2,SI,NO,SI,5
+2.01.01.04.027,            JC Comunicaciones,2,SI,NO,SI,5
+2.01.01.04.028,            Arturo Rubin,2,SI,NO,SI,5
+2.01.01.04.029,            Automovil Suply Ctas,2,SI,NO,SI,5
+2.01.01.04.030,            Planet,2,SI,SI,SI,5
+2.01.01.04.031,            Ybapyta Ctas,2,SI,NO,SI,5
+2.01.01.04.032,            Zeta S.A ctas,2,SI,SI,SI,5
+2.01.01.04.033,            Tape Ruvicha S.A.E.C.A,2,SI,NO,SI,5
+2.01.01.04.034,            Kaefe S.R.L.,2,SI,NO,SI,5
+2.01.01.04.035,            Repuestos Jovimar Ctas.,2,SI,NO,SI,5
+2.01.01.04.036,            Motores Bombas y Turbinas Ctas,2,SI,NO,SI,5
+2.01.01.04.037,            Refriauto Cobrasa Ctas,2,SI,NO,SI,5
+2.01.01.04.038,            Artemac,2,SI,NO,SI,5
+2.01.01.04.039,            Chacomer S.A.E.C.A Ctas,2,SI,NO,SI,5
+2.01.01.04.040,            Sistema Siete ctas,2,SI,NO,SI,5
+2.01.01.04.041,            Alcides Gonzales S.A.,2,SI,NO,SI,5
+2.01.01.04.042,            Todo Ford S.R.L.,2,SI,NO,SI,5
+2.01.01.04.043,            Comdetur S.R.L.,2,SI,NO,SI,5
+2.01.01.04.044,            Formugrafica S.A.,2,SI,NO,SI,5
+2.01.01.04.045,            Film Press S.R.L.,2,SI,NO,SI,5
+2.01.01.04.046,            Procard S.A.,2,SI,NO,SI,5
+2.01.01.04.047,            Importadora Avenida Ctas,2,SI,NO,SI,5
+2.01.01.04.048,            Banco Continental Cta Gtos,2,SI,NO,SI,5
+2.01.01.04.049,            Garden Automotores S.A.,2,SI,NO,SI,5
+2.01.01.04.050,            Banco Integracion Cta Gtos,2,SI,NO,SI,5
+2.01.01.04.051,            Arasy S.R.L. Ctas.,2,SI,NO,SI,5
+2.01.01.04.052,            Servitec Informatica,2,SI,NO,SI,5
+2.01.01.04.053,            Juan Fernando Dure Gonzalez,2,SI,NO,SI,5
+2.01.01.04.054,            Paraguay Film S.R.L.,2,SI,NO,SI,5
+2.01.01.04.055,            Finexpar S.A. Ctas,2,SI,NO,SI,5
+2.01.01.04.056,            Datasystems,2,SI,NO,SI,5
+2.01.01.04.057,            Lic. Jose M. Godoy Lopez,2,SI,NO,SI,5
+2.01.01.04.058,            Sedalife,2,SI,NO,SI,5
+2.01.01.04.059,            Multimpresos,2,SI,NO,SI,5
+2.01.01.04.060,            H.D. Hidalgo Ctas,2,SI,NO,SI,5
+2.01.01.04.061,            Centro de Importaciones del Paraguay - C.I.P.,2,SI,NO,SI,5
+2.01.01.04.062,            Adela Talavera,2,SI,NO,SI,5
+2.01.01.04.063,            Bco regional Cta Gtos,2,SI,NO,SI,5
+2.01.01.04.064,            Shopping Luz S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.065,            Fiat Eurocar S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.066,            Palma Travel Ctas,2,SI,NO,SI,5
+2.01.01.04.067,            Chacore S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.068,            Ulises Tonianez Ctas,2,SI,NO,SI,5
+2.01.01.04.069,            Desarrollo Humano Internacional S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.070,            Carimbos Ctas,2,SI,NO,SI,5
+2.01.01.04.071,            Distribuidora JVD Ctas,2,SI,NO,SI,5
+2.01.01.04.072,            GM Articulos Promocionales Ctas,2,SI,NO,SI,5
+2.01.01.04.073,            M&B importaciones Ctas,2,SI,NO,SI,5
+2.01.01.04.074,            Farres Ctas,2,SI,NO,SI,5
+2.01.01.04.075,            Nobel S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.076,            Bancard S.A.,2,SI,NO,SI,5
+2.01.01.04.077,            Cabal,2,SI,NO,SI,5
+2.01.01.04.078,            Makondo Ctas,2,SI,NO,SI,5
+2.01.01.04.079,            Nuevo Lider Ctas,2,SI,NO,SI,5
+2.01.01.04.080,            Nacional Cubiertas Ctas,2,SI,NO,SI,5
+2.01.01.04.081,            Editorial Azeta S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.082,            Km O Ctas,2,SI,NO,SI,5
+2.01.01.04.083,            Se Hun S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.084,            Servi Travel Ctas,2,SI,NO,SI,5
+2.01.01.04.085,            Guias Latinas S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.086,            Transportes El Dorado S.R.L.,2,SI,NO,SI,5
+2.01.01.04.087,            Mundo Motor Ctas,2,SI,NO,SI,5
+2.01.01.04.088,            Comtel Ctas,2,SI,NO,SI,5
+2.01.01.04.089,            Dieselectrix Ctas,2,SI,NO,SI,5
+2.01.01.04.090,            Arquitectura & Metal Ctas,2,SI,NO,SI,5
+2.01.01.04.091,            Indalco Ctas,2,SI,NO,SI,5
+2.01.01.04.092,            Heraldo Amarilla C. Ctas,2,SI,NO,SI,5
+2.01.01.04.093,            Multienvase Ctas,2,SI,NO,SI,5
+2.01.01.04.094,            Editorial El Pais S.A.,2,SI,NO,SI,5
+2.01.01.04.095,            Dervish Editorial Ctas,2,SI,NO,SI,5
+2.01.01.04.096,            Transporte Tunici,2,SI,NO,SI,5
+2.01.01.04.097,            Grafica Imperio Ctas,2,SI,NO,SI,5
+2.01.01.04.098,            Empresas Mhetro Ctas,2,SI,NO,SI,5
+2.01.01.04.099,            Centro del Neumatico Ctas,2,SI,NO,SI,5
+2.01.01.04.100,            Olam Srl Ctas,2,SI,NO,SI,5
+2.01.01.04.101,            Tupa Transporte (Ctas),2,SI,NO,SI,5
+2.01.01.04.102,            Mas & Vic Construcciones Ctas,2,SI,NO,SI,5
+2.01.01.04.103,            Filtros HS Ctas,2,SI,NO,SI,5
+2.01.01.04.104,            Manpower Ctas,2,SI,NO,SI,5
+2.01.01.04.105,            NILSA FELIU BURGOS,2,SI,NO,SI,5
+2.01.01.04.106,            Morimex - Dario Moran,2,SI,SI,SI,5
+2.01.01.04.107,            Comercial Aeca,2,SI,SI,SI,5
+2.01.01.04.108,            Estudio Chaparro Paredes,2,SI,SI,SI,5
+2.01.01.04.109,            Despacho Aduanero Gonzalez Ramirez,2,SI,SI,SI,5
+2.01.01.04.110,            Salemma Ctas,2,SI,NO,SI,5
+2.01.01.04.111,            Editora Zeta Ctas,2,SI,NO,SI,5
+2.01.01.04.112,            Thermo- Stop Ctas,2,SI,NO,SI,5
+2.01.01.04.113,            Britam Ctas,2,SI,NO,SI,5
+2.01.01.04.114,            Concorde Ctas,2,SI,NO,SI,5
+2.01.01.04.115,            Motores S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.116,            M&B Representaciones (Ctas),2,SI,NO,SI,5
+2.01.01.04.117,            Fluoder S.S Ctas,2,SI,SI,SI,5
+2.01.01.04.118,            Oceania S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.119,            Interocean Srl Ctas,2,SI,NO,SI,5
+2.01.01.04.120,            Alfa Trading Ctas,2,SI,NO,SI,5
+2.01.01.04.121,            Migone Ctas,2,SI,NO,SI,5
+2.01.01.04.122,            KC Impresiones Ctas,2,SI,NO,SI,5
+2.01.01.04.123,            Arte Media Ctas,2,SI,NO,SI,5
+2.01.01.04.124,            Editora del Este S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.125,            Centro Paraguayo de Volantes Ctas,2,SI,NO,SI,5
+2.01.01.04.126,            Filtros A&S Ctas,2,SI,NO,SI,5
+2.01.01.04.127,            Medship Paraguay S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.128,            Radio Montecarlo S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.129,            Multimedia S.A Editorial Ctas,2,SI,NO,SI,5
+2.01.01.04.130,            Guide SRL Ctas,2,SI,NO,SI,5
+2.01.01.04.131,            Milagros Comercial,2,SI,SI,SI,5
+2.01.01.04.132,            Comercial Don Luis Ctas,2,SI,NO,SI,5
+2.01.01.04.133,            Real autorrepuestos Srl Ctas,2,SI,NO,SI,5
+2.01.01.04.134,            Radio Encarnacion Ctas,2,SI,NO,SI,5
+2.01.01.04.135,            Autorrepuestos Nuevo Lider Ctas,2,SI,NO,SI,5
+2.01.01.04.136,            Hospicenter Ctas,2,SI,NO,SI,5
+2.01.01.04.137,            C.C.P Ctas,2,SI,NO,SI,5
+2.01.01.04.138,            Mar del Plata Ctas,2,SI,NO,SI,5
+2.01.01.04.139,            Autopiezas Ctas,2,SI,NO,SI,5
+2.01.01.04.140,            Don Vito Ctas,2,SI,NO,SI,5
+2.01.01.04.141,            Telexpar Ctas,2,SI,NO,SI,5
+2.01.01.04.142,            Maxel Informatica Ctas,2,SI,NO,SI,5
+2.01.01.04.143,            Silvia Ramos Ctas,2,SI,NO,SI,5
+2.01.01.04.144,            Corporacion Deportiva Fenix Ctas,2,SI,NO,SI,5
+2.01.01.04.145,            Paramanta Hotel Ctas,2,SI,NO,SI,5
+2.01.01.04.146,            Eduardo Amilcar Lopez Junior Ctas,2,SI,NO,SI,5
+2.01.01.04.147,            JME Systems Ctas,2,SI,NO,SI,5
+2.01.01.04.148,            Punto Penal Ctas,2,SI,NO,SI,5
+2.01.01.04.149,            Diex Car Ctas,2,SI,NO,SI,5
+2.01.01.04.150,            Financiera El Comercio Cta. Gastos,2,SI,SI,SI,5
+2.01.01.04.151,            Santa Elena Ctas,2,SI,NO,SI,5
+2.01.01.04.152,            Auto mecanica Ctas,2,SI,NO,SI,5
+2.01.01.04.153,            Gorostiaga Automoviles S.A Ctas,2,SI,NO,SI,5
+2.01.01.04.154,            Tupasy Producciones Ctas,2,SI,NO,SI,5
+2.01.01.04.155,            Mediagroup Ctas,2,SI,NO,SI,5
+2.01.01.04.156,            Ceregral Ctas,2,SI,NO,SI,5
+2.01.01.04.157,            MM Venta de Autorrep Ctas,2,SI,NO,SI,5
+2.01.01.04.158,            Nahum Producciones Ctas,2,SI,NO,SI,5
+2.01.01.04.159,            Casino Cerro Cora Ctas,2,SI,NO,SI,5
+2.01.01.04.160,            Lincoln Ctas,2,SI,NO,SI,5
+2.01.01.04.161,            Protek Srl Ctas,2,SI,NO,SI,5
+2.01.01.04.162,            Talents Ctas,2,SI,NO,SI,5
+2.01.01.04.163,            Monital Ctas,2,SI,NO,SI,5
+2.01.01.04.164,            Mariam Lubricantes Ctas,2,SI,NO,SI,5
+2.01.01.04.165,            Panorama Cargo Ctas,2,SI,NO,SI,5
+2.01.01.04.166,            SP Vidrios Ctas,2,SI,NO,SI,5
+2.01.01.04.167,            Sol Tintas (CTAS),2,SI,SI,SI,5
+2.01.01.04.170,            Group Worldwide Paraguay SRL Ctas,2,SI,NO,SI,5
+2.01.01.04.171,            Tipograf Ctas,2,SI,NO,SI,5
+2.01.01.04.172,            Gladys Gaete Disenios (Ctas),2,SI,NO,SI,5
+2.01.01.04.173,            ServiGraf de Hoja Verde SA Ctas.,2,SI,NO,SI,5
+2.01.01.04.174,            Air Systems Internac  Ctas,2,SI,NO,SI,5
+2.01.01.04.175,            Diario La Nacion  Ctas,2,SI,NO,SI,5
+2.01.01.04.176,            Perfecta Automotores (Ctas),2,SI,NO,SI,5
+2.01.01.04.177,            Sistemas N Ctas,2,SI,NO,SI,5
+2.01.01.04.178,            Productos California Ctas,2,SI,NO,SI,5
+2.01.01.04.179,            Sprint Ctas,2,SI,NO,SI,5
+2.01.01.04.180,            Pluscar Ctas,2,SI,NO,SI,5
+2.01.01.04.181,            Tecno Diesel Ctas,2,SI,NO,SI,5
+2.01.01.04.182,            Imprenta Arte Nuevo Ctas,2,SI,NO,SI,5
+2.01.01.04.183,            Sanicab Srl Ctas,2,SI,NO,SI,5
+2.01.01.04.184,            Hsbc Ctas,2,SI,NO,SI,5
+2.01.01.04.185,            ABN Cta Gtos,2,SI,NO,SI,5
+2.01.01.04.186,            Bristol Electrodomesticos Ctas,2,SI,NO,SI,5
+2.01.01.04.187,            Cesar Mostafa Ctas,2,SI,NO,SI,5
+2.01.01.04.188,            CINEMAK (CTAS),2,SI,SI,SI,5
+2.01.01.04.189,            BBVA BANCO CTA GASTOS,2,SI,SI,SI,5
+2.01.01.04.190,            Grafica Cicero SRL (CTAS),2,SI,SI,SI,5
+2.01.01.04.191,            Estudio Benitez SRL (CTAS),2,SI,SI,SI,5
+2.01.01.04.192,            Transred SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.193,            Audiencia SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.194,            Meneken (CTAS),2,SI,SI,SI,5
+2.01.01.04.195,            Euphoria SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.196,            AGR Servicios Graficos SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.197,            Printing(CTAS),2,SI,SI,SI,5
+2.01.01.04.198,            Casa J. Gomez (CTAS),2,SI,SI,SI,5
+2.01.01.04.199,            Tecnoimport SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.200,            Eduardo Elizache Benitez (CTAS),2,SI,SI,SI,5
+2.01.01.04.201,            Casa de los Compresores (CTAS),2,SI,SI,SI,5
+2.01.01.04.202,            PI SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.203,            Repuestos Internacionales (CTAS),2,SI,SI,SI,5
+2.01.01.04.204,            Radio Amambay SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.205,            Estacion de Serv. Futurista (CTAS),2,SI,SI,SI,5
+2.01.01.04.206,            Cerealista Yambue (CTAS),2,SI,SI,SI,5
+2.01.01.04.207,            Editora Ricor Grafic SA (CTAS),2,SI,SI,SI,5
+2.01.01.04.208,            Sudameris Banco Cta Gtos,2,SI,SI,SI,5
+2.01.01.04.209,            Pro Expo SA (CTAS,2,SI,SI,SI,5
+2.01.01.04.210,            Marketingroup (CTAS,2,SI,SI,SI,5
+2.01.01.04.211,            De Tres S.A (Talents Ctas),2,SI,SI,SI,5
+2.01.01.04.212,            Prestigio Automoviles S.A.,2,SI,SI,SI,5
+2.01.01.04.213,            Extintores Parana Ctas,2,SI,SI,SI,5
+2.01.01.04.214,            INK NDM,2,SI,SI,SI,5
+2.01.01.04.215,            Cafe Corner Ctas,2,SI,SI,SI,5
+2.01.01.04.216,            BC Productos Quimicos Ctas,2,SI,SI,SI,5
+2.01.01.04.217,            Radio Mburucuya Ctas,2,SI,SI,SI,5
+2.01.01.04.218,            Megapixel S.A.,2,SI,SI,SI,5
+2.01.01.04.219,            Sambarie S.R.L.,2,SI,SI,SI,5
+2.01.01.05.000,         SEGUROS X PAGAR,2,NO,SI,SI,4
+2.01.01.05.001,            Aseguradora del Este,2,SI,NO,SI,5
+2.01.01.05.002,            Seguros Yacyreta,2,SI,NO,SI,5
+2.01.01.05.003,            Seguros La Consolidada,2,SI,NO,SI,5
+2.01.01.05.004,            Mapfre Py - Seguros,2,SI,SI,SI,5
+2.01.05.00.000,      PRESTAMOS FINANCIEROS,2,NO,NO,SI,3
+2.01.05.01.000,         Sobregiros en cuenta corriente,2,SI,SI,SI,4
+2.01.05.02.000,         Documentos a Pagar,2,SI,SI,SI,4
+2.01.05.02.001,            Finexpar Cta Prestamo Gs,2,SI,SI,SI,5
+2.01.05.02.002,            Banco Continental Cta. Prestamo,2,SI,SI,SI,5
+2.01.05.02.003,            Bco Lloyds Cta. Prestamo,2,SI,SI,SI,5
+2.01.05.02.004,            Desc. Cheq. Adel -Cta. Preestamo,2,SI,SI,SI,5
+2.01.05.02.005,            Bco. Integracion  Cta. Prestamo,2,SI,SI,SI,5
+2.01.05.02.006,            Banco Regional Cta. Prestamo,2,SI,SI,SI,5
+2.01.05.02.007,            Finlatina Cta Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.008,            Banco Sudameris Cta Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.009,            Financiera El Comercio Cta Prestamo USD.,2,SI,SI,SI,5
+2.01.05.02.010,            Finlatina Cta Prestamo Gs).,2,SI,SI,SI,5
+2.01.05.02.011,            Banco ABN Cta Prestamo Gs.),2,SI,SI,SI,5
+2.01.05.02.012,            Finexpar Cta Prestamo USD.,2,SI,SI,SI,5
+2.01.05.02.013,            Interfisa de Finanzas Cta Pmo,2,SI,SI,SI,5
+2.01.05.02.014,            Banco BBVA Cta Prestamo Gs.,2,SI,SI,SI,5
+2.01.05.02.015,            Banco Sudameris CtaPrestamo  Gs.,2,SI,SI,SI,5
+2.01.05.02.016,            Banco HSBC Cta Prestamo Gs.,2,SI,SI,SI,5
+2.01.05.02.017,            Banco Continental Cta Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.018,            Banco Regional Cta Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.019,            Banco Integracion Cta Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.020,            Financiera Rio SA CTA Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.021,            Banco Amambay CTA Prestamo Gs,2,SI,SI,SI,5
+2.01.05.02.022,            Banco HSBC Cta Prestamo U$D,2,SI,SI,SI,5
+2.01.05.02.023,            Banco Itau Cta Pmo Gs.,2,SI,SI,SI,5
+2.01.05.02.024,            Banco Itau CTA PMO $,2,SI,SI,SI,5
+2.01.05.02.025,            Banco Atlas SA CTA PMO Gs.,2,SI,SI,SI,5
+2.01.05.02.026,            Financiera Rio SA Cta Pmo Gs.,2,SI,SI,SI,5
+2.01.05.02.027,            Doc. a Pagar Financiero Saldo 2011,2,SI,SI,SI,5
+2.01.05.02.028,            Banco Regional Cta Prestamo - SUC 4,2,SI,SI,SI,5
+2.01.05.02.029,            Banco Citibank Prestamo USD,2,SI,SI,SI,5
+2.01.05.02.030,            Banco Bancop Cta Pmo,2,SI,SI,SI,5
+2.01.05.02.031,            Banco Citibank Cta Prestamo - Gs,2,SI,SI,SI,5
+2.01.05.02.032,            CEFISA Pmo Gs.,2,SI,SI,SI,5
+2.01.05.02.033,            Banco GNB Cta Prestamo Gs.,2,SI,SI,SI,5
+2.01.05.02.034,            Banco Do Brasil Cta Prestamo Gs.,2,SI,SI,SI,5
+2.01.05.02.035,            Solar Ahorro y Finanzas,2,SI,SI,SI,5
+2.01.05.03.000,         Porcion circulante de prestamos a largo,2,SI,SI,SI,4
+2.01.05.04.000,         Intereses a reconocer,2,SI,SI,SI,4
+2.01.05.05.000,         Cheques emitidos pendientes de cobro .,2,NO,SI,SI,4
+2.01.05.05.001,            Cheques Gs.,2,SI,SI,SI,5
+2.01.05.05.002,            Cheques Dolares,2,SI,SI,SI,5
+2.01.10.00.000,      PROVISIONES,2,NO,NO,SI,3
+2.01.10.01.000,         Impuesto a la Renta a Pagar,2,SI,SI,SI,4
+2.01.10.01.002,            Retenc. Varias,2,SI,SI,SI,5
+2.01.10.02.000,         IVA a pagar,2,SI,SI,SI,4
+2.01.10.03.000,         Retenciones de Impuestos,2,SI,SI,SI,4
+2.01.10.03.001,            Retenc. de IVA a pagar,2,SI,SI,SI,5
+2.01.10.03.002,            Retenc. Imp Renta a pagar,2,SI,SI,SI,5
+2.01.10.04.000,         Para pago de planes de beneficios de emp,2,SI,SI,SI,4
+2.01.10.05.000,         Aportes y Retenciones a pagar,2,SI,SI,SI,4
+2.01.10.06.000,         Gastos acumulados a Pagar,2,SI,SI,SI,4
+2.01.20.00.000,      OTROS PASIVOS,2,NO,NO,SI,3
+2.01.20.01.000,         Prestamos de terceros,2,SI,SI,SI,4
+2.01.20.02.000,         Anticipo de clientes,2,SI,SI,SI,4
+2.01.20.03.000,         Dividendos a Pagar,2,SI,SI,SI,4
+2.01.20.05.000,         Banco Continental Cta. Garantia,2,SI,SI,SI,4
+2.01.20.06.000,         Anticipos de Companiias Relacionadas,2,NO,SI,SI,4
+2.01.20.06.001,            Arandu Rep. S.A.,2,SI,SI,SI,5
+2.01.20.06.002,            Groupauto S.A.,2,SI,SI,SI,5
+2.01.20.06.003,            Mega Pixel S.A.,2,SI,SI,SI,5
+2.01.40.00.000,      GANANCIAS DIFERIDAS,2,NO,NO,SI,3
+2.01.40.01.000,         Ingresos no realizados (Renta percibida por Adelantado),2,SI,SI,SI,4
+2.01.40.02.000,         Costos y gastos aplicables a los ingreso,2,SI,SI,SI,4
+2.02.00.00.000,   PASIVO NO CORRIENTE,2,NO,NO,SI,2
+2.02.01.00.000,      PRESTAMOS FINANCIEROS,2,NO,NO,SI,3
+2.02.01.01.000,         Prestamos en bancos,2,SI,SI,SI,4
+2.02.01.01.001,            Banco Itau Pmo No Corriente Gs,2,SI,SI,SI,5
+2.02.01.01.002,            Banco Itau Pmo No Corriente $,2,SI,SI,SI,5
+2.02.05.00.000,      PREVISIONES,2,NO,NO,SI,3
+2.02.05.01.000,         Prevision para Indemnizacion,2,SI,SI,SI,4
+2.02.05.02.000,         Otras contingencias,2,SI,SI,SI,4
+2.03.00.00.000,   PATRIMONIO NETO,2,NO,NO,SI,2
+2.03.01.00.000,      CAPITAL,2,NO,NO,SI,3
+2.03.01.01.000,         Capital Suscripto,2,SI,SI,SI,4
+2.03.01.02.000,         Capital a Integrar,2,SI,SI,SI,4
+2.03.01.03.000,         Capital realizado,2,SI,SI,SI,4
+2.03.01.04.000,         Capital Social,2,SI,SI,SI,4
+2.03.01.05.000,         Capital-Aporte de Socios,2,SI,SI,SI,4
+2.03.02.00.000,      RESERVAS,2,NO,NO,SI,3
+2.03.02.01.000,         Reserva Legal,2,SI,SI,SI,4
+2.03.02.02.000,         Reservas Facultativas,2,SI,SI,SI,4
+2.03.02.03.000,         Reservas de Revaluo,2,SI,SI,SI,4
+2.03.03.00.000,      RESULTADO,2,NO,NO,SI,3
+2.03.03.01.000,         Resultado Acumulado,2,SI,SI,SI,4
+2.03.03.02.000,         Resultados del Ejercicio,2,SI,SI,SI,4
+3.00.00.00.000,INGRESOS,3,NO,NO,SI,1
+3.01.00.00.000,   VENTAS NETAS SECTOR PRIVADO,3,NO,NO,SI,2
+3.01.01.01.000,         Ventas de Mercaderias Gravadas,3,SI,SI,SI,4
+3.01.01.02.000,         Ventas Mercaderias Exentas iva,3,SI,SI,SI,4
+3.01.01.03.000,         Ventas p/serv. flete/contenedor/camion,3,SI,SI,SI,4
+3.01.01.04.000,         Ventas de Materiales,3,SI,SI,SI,4
+3.01.01.05.000,         Ventas Serv. de alquiler de maquinarias,3,SI,SI,SI,4
+3.01.01.06.000,         Ventas Servicios de Intereses Cobrados,3,SI,SI,SI,4
+3.01.01.07.000,         Ventas al Exterior,3,SI,SI,SI,4
+3.01.01.08.000,         Venta de Activo Fijo,3,SI,SI,SI,4
+3.01.01.09.000,         Ventas p/ Servicio,3,SI,SI,SI,4
+3.01.01.10.000,         Ventas por Cobros de Alquileres,3,SI,SI,SI,4
+3.02.01.00.000,      Ventas p/servicio exentas,3,SI,SI,SI,3
+3.10.00.00.000,   OTROS INGRESOS,3,NO,NO,SI,2
+3.10.01.00.000,      Intereses Obtenidos,3,SI,SI,SI,3
+3.10.02.00.000,      Diferencia de cambio,3,SI,SI,SI,3
+3.10.03.00.000,      Ingresos varios,3,SI,SI,SI,3
+3.10.04.00.000,      Descuentos obtenidos,3,SI,SI,SI,3
+3.10.05.00.000,      Diferencia de provision,3,SI,SI,SI,3
+3.10.06.00.000,      Utilidades Retiradas otras empresas,3,SI,SI,SI,3
+4.00.00.00.000,EGRESOS,4,NO,NO,SI,1
+4.01.00.00.000,   COSTOS,4,NO,NO,SI,2
+4.01.01.01.000,         Costo de ventas de mercaderias,4,SI,SI,SI,4
+4.01.01.02.000,         Costo de Ventas de materiales,4,SI,SI,SI,4
+4.01.01.03.000,         Costo de venta de servicio de cosntrucci,4,SI,SI,SI,4
+4.01.01.04.000,         Costo de ventas p/serv flete/contenedor,4,SI,SI,SI,4
+4.01.01.05.000,         Costo de ventas p/servicio exentas,4,SI,SI,SI,4
+4.01.01.06.000,         Costo de vent serv. de alquiler de maqui,4,SI,SI,SI,4
+4.01.01.07.000,         Costo de Ventas de Activo Fijo,4,SI,SI,SI,4
+4.01.01.08.000,         Costo de Insumo,4,SI,SI,SI,4
+4.10.00.00.000,   Menos:,4,NO,NO,SI,2
+4.11.00.00.000,   Gastos Operativos,4,NO,NO,SI,2
+4.11.01.01.000,         Seguros,4,SI,SI,SI,4
+4.11.01.02.000,         Gastos de comunicacion,4,SI,SI,SI,4
+4.11.01.03.000,         Gastos no deducibles,4,SI,SI,SI,4
+4.11.01.04.000,         Depreciacion del ejercicio,4,SI,SI,SI,4
+4.11.01.05.000,         Gastos varios,4,SI,SI,SI,4
+4.11.01.06.000,         Patentes e impuestos de rodados,4,SI,SI,SI,4
+4.11.01.10.000,         Gastos de Embarque,4,SI,SI,SI,4
+4.11.01.11.000,         Gastos de Importaciòn G.N.D.,4,SI,SI,SI,4
+4.11.01.12.000,         Gastos de importacion,4,SI,SI,SI,4
+4.11.01.17.000,         IVA no computable,4,SI,SI,SI,4
+4.11.01.18.000,         Mantenimiento de Bienes de Uso,4,SI,SI,SI,4
+4.11.01.19.000,         Gastos de Insumos,4,SI,SI,SI,4
+4.11.01.20.000,         Baja de Inventario,4,SI,SI,SI,4
+4.11.01.21.000,         Sueldos y Jornales (Logistica),4,SI,SI,SI,4
+4.11.01.22.000,         Aporte Patronal ( logistica),4,SI,SI,SI,4
+4.11.01.23.000,         Gratificaciones Logistica,4,SI,SI,SI,4
+4.11.01.24.000,         Aguinaldos (logistica),4,SI,SI,SI,4
+4.11.01.25.000,         Beneficios adicionales Ley 285 (logistica),4,SI,SI,SI,4
+4.11.01.26.000,         Honorarios Profes.( Logistica ),4,SI,SI,SI,4
+4.11.01.27.000,         Uniformes y accesorios Persobal Logistica,4,SI,SI,SI,4
+4.11.01.28.000,         Cargas sociales (logistica),4,NO,SI,SI,4
+4.11.01.28.001,            Preavisos e indemnizaciones Logistica,4,SI,SI,SI,5
+4.11.01.28.002,            Bonificacion Familiar (logistica),4,SI,SI,SI,5
+4.11.01.29.000,         Herramientas menores,4,SI,SI,SI,4
+4.11.01.30.000,         Gastos de desestiba,4,SI,SI,SI,4
+4.11.01.31.000,         Gastos de Exportacion,4,SI,SI,SI,4
+4.11.01.32.000,         Gastos de Capacitacion (logistica),4,SI,SI,SI,4
+4.11.01.33.000,         Mant y Rep. vehiculos ( logistica),4,SI,SI,SI,4
+4.11.01.34.000,         Reparacion y mantenimiento de maquinarias,4,SI,SI,SI,4
+4.11.01.35.000,         Combustibles (Logistica),4,SI,SI,SI,4
+4.11.01.36.000,         Comisiones Pagadas (logistica),4,SI,SI,SI,4
+4.12.00.00.000,   GASTOS DE VENTAS,4,NO,NO,SI,2
+4.12.01.01.000,         Publicidad y Propaganda,4,SI,SI,SI,4
+4.12.01.02.000,         sueldos y Jornales  (ventas),4,SI,SI,SI,4
+4.12.01.03.000,         Comisiones Pagadas sobre Ventas,4,SI,SI,SI,4
+4.12.01.04.000,         Aguinaldos Vtas,4,SI,SI,SI,4
+4.12.01.05.000,         Aporte Patronal (ventas),4,SI,SI,SI,4
+4.12.01.06.000,         Honorarios profesionales ( ventas),4,SI,SI,SI,4
+4.12.01.07.000,         Beneficios adicionales Ley 285 (Ventas),4,SI,SI,SI,4
+4.12.01.08.000,         Gratificaciones ( Ventas),4,SI,SI,SI,4
+4.12.01.09.000,         Descuentos concedidos,4,SI,SI,SI,4
+4.12.01.10.000,         Gastos Varios de Ventas,4,SI,SI,SI,4
+4.12.01.11.000,"         Pasajes, Viaticos y Estacionamientos",4,SI,SI,SI,4
+4.12.01.12.000,         Combustibles y lubricantes ( ventas),4,SI,SI,SI,4
+4.12.01.13.000,         Flete y Movilidad Pagados,4,SI,SI,SI,4
+4.12.01.14.000,         Uniformes y accesorios Personal Ventas,4,SI,SI,SI,4
+4.12.01.15.000,         Gastos de capacitacion Ventas,4,SI,SI,SI,4
+4.12.01.16.000,         Comisiones Pagadas a terceros,4,SI,SI,SI,4
+4.12.01.17.000,         Gastos de Celulares p/ ventas,4,SI,SI,SI,4
+4.12.01.18.000,         Gastos de Hospedaje y Consumision,4,SI,SI,SI,4
+4.12.01.19.000,         Gastos por Peajes,4,SI,SI,SI,4
+4.12.01.20.000,         Gastos de Consumicion,4,SI,SI,SI,4
+4.12.01.21.000,         Cargas sociales (ventas),4,NO,SI,SI,4
+4.12.01.21.001,            Preavisos e indemnizaciones Vtas,4,SI,SI,SI,5
+4.12.01.21.002,            bonificacion Familiar  Vtas,4,SI,SI,SI,5
+4.12.01.22.000,         Mantenimiento y Reparac. de vehiculos ( ventas),4,SI,SI,SI,4
+4.12.01.23.000,         Comisiones Pagadas  (ventas),4,SI,SI,SI,4
+4.12.02.00.000,      GASTOS DE MARKETING,4,NO,SI,SI,3
+4.12.02.01.000,         Sueldos y jornales Marketing,4,SI,SI,SI,4
+4.12.02.02.000,         Aporte Patronal marketing,4,SI,SI,SI,4
+4.12.02.03.000,         Aguinaldos Marketing,4,SI,SI,SI,4
+4.12.02.04.000,         Honorarios Profesionales Marketing,4,SI,SI,SI,4
+4.12.02.05.000,         Gratificaciones Marketing,4,SI,SI,SI,4
+4.12.02.06.000,         Beneficios Adicionales ley 285  Marketing,4,SI,SI,SI,4
+4.12.02.07.000,         Gastos de Promocion,4,SI,SI,SI,4
+4.12.02.08.000,         Publicidad y Propaganda Marketing,4,SI,SI,SI,4
+4.12.02.09.000,         Gastos de Capacitacion marketing,4,SI,SI,SI,4
+4.12.02.10.000,         Uniformes y accesorios personal Marketing,4,SI,SI,SI,4
+4.12.02.11.000,         Cargas Sociales marketing,4,NO,SI,SI,4
+4.12.02.11.001,            Preavisos e indemnizaciones Marketing,4,SI,SI,SI,5
+4.12.02.11.002,            Bonificacion Familiar (Marketing),4,SI,SI,SI,5
+4.12.02.12.000,         Gasto Comuni Marketing(cel Internet),4,SI,SI,SI,4
+4.12.02.13.000,         Comisiones Pagadas (Marketing),4,SI,SI,SI,4
+4.13.00.00.000,   GASTOS ADMINISTRATIVOS,4,NO,NO,SI,2
+4.13.01.00.000,"      Agua, Luz y telefono",4,SI,SI,SI,3
+4.13.02.00.000,      Sueldos y jornales,4,SI,SI,SI,3
+4.13.03.00.000,      Aporte Patronal,4,SI,SI,SI,3
+4.13.04.00.000,      Aguinaldos,4,SI,SI,SI,3
+4.13.05.00.000,      Vacaciones,4,SI,SI,SI,3
+4.13.06.00.000,      Multas y recargos G.ND.,4,SI,SI,SI,3
+4.13.07.00.000,      Intereses Pagados,4,SI,SI,SI,3
+4.13.08.00.000,      Remuneracion personal Superior,4,SI,SI,SI,3
+4.13.09.00.000,      Honorarios profesionales,4,NO,SI,SI,3
+4.13.09.01.000,         Honorarios Profesionales Admin,4,SI,SI,SI,4
+4.13.09.02.000,         Honorarios Profes. Otros sectores,4,SI,SI,SI,4
+4.13.09.03.000,         Honorarios profes. de Terceros,4,SI,SI,SI,4
+4.13.10.00.000,      Impuesto a la Renta GND,4,SI,SI,SI,3
+4.13.11.00.000,      Impresos y Utiles,4,SI,SI,SI,3
+4.13.12.00.000,      Gastos de Computaciòn,4,SI,SI,SI,3
+4.13.13.00.000,      Donaciòn y Contribuciòn,4,SI,SI,SI,3
+4.13.14.00.000,"      Patentes, Impuestos y Tasas",4,SI,SI,SI,3
+4.13.15.00.000,      Alquileres Pagados,4,SI,SI,SI,3
+4.13.16.00.000,      Mantenimiento de edificios,4,SI,SI,SI,3
+4.13.17.00.000,      Seguridad y vigilancia,4,SI,SI,SI,3
+4.13.18.00.000,      Gastos de Promociòn,4,SI,SI,SI,3
+4.13.20.00.000,      Gastos e Impuestos s/ Prestamos,4,SI,SI,SI,3
+4.13.21.00.000,      Reserva Legal G.N.D.,4,SI,SI,SI,3
+4.13.22.00.000,      Honorarios Servicios Contables,4,SI,SI,SI,3
+4.13.24.00.000,      Gratificaciones,4,SI,SI,SI,3
+4.13.25.00.000,      Gastos de RepresentacionExterior Admin,4,SI,SI,SI,3
+4.13.26.00.000,      Gastos de Capacitacion,4,SI,SI,SI,3
+4.13.27.00.000,      Gastos de Representacion Local,4,SI,SI,SI,3
+4.13.28.00.000,      Beneficios Adicionales a Empleados,4,SI,NO,SI,3
+4.13.29.00.000,      Gastos de Instalacion,4,SI,NO,SI,3
+4.13.30.00.000,      Gastos de Limpieza,4,SI,SI,SI,3
+4.13.31.00.000,      Cuotas y Suscripciones,4,SI,SI,SI,3
+4.13.32.00.000,      Gastos de Almacenamiento,4,SI,SI,SI,3
+4.13.34.00.000,      Uniforme y Accesorios del Personal,4,SI,SI,SI,3
+4.13.35.00.000,      Cargas  Sociales,4,NO,SI,SI,3
+4.13.35.01.000,         Bonificacion Familiar,4,SI,SI,SI,4
+4.13.35.02.000,         Preaviso e Infemnizaciones,4,SI,SI,SI,4
+4.13.35.03.000,         Sueldos s/ aporte,4,SI,SI,SI,4
+4.13.37.00.000,      Reparaciones Varias,4,SI,SI,SI,3
+4.13.39.00.000,      Imp. a la Renta Adicional GND,4,SI,SI,SI,3
+4.13.40.00.000,      Retenc. Renta s/ Flete GND,4,SI,SI,SI,3
+4.13.41.00.000,      Retenc. IVA s/ flete GND,4,SI,SI,SI,3
+4.13.42.00.000,      Combustibles  ( administ),4,SI,SI,SI,3
+4.13.43.00.000,      Manteni. y reparc. Vehiculos ( adminst),4,SI,SI,SI,3
+4.13.44.00.000,      Alquiler de Equipos y Herramientas,4,SI,SI,SI,3
+4.13.45.00.000,      Gastos de Licitaciones,4,SI,SI,SI,3
+4.13.46.00.000,      Comisiones Pagadas (administracion),4,SI,SI,SI,3
+4.13.47.00.000,      Gastos de Internet,4,SI,SI,SI,3
+4.13.48.00.000,      Retencion Ley 2051/03 Contrataciones Publicas,4,SI,SI,SI,3
+4.13.49.00.000,      Gastos de Escribania,4,SI,SI,SI,3
+4.13.50.00.000,      Deudores Incobrables,4,SI,SI,SI,3
+4.14.00.00.000,   GASTOS FINANCIEROS,4,NO,NO,SI,2
+4.14.01.00.000,      Comisiones y Gtos Bancarios,4,SI,SI,SI,3
+4.14.02.00.000,      Diferencia de Cambio,4,SI,SI,SI,3
+4.14.03.00.000,      Intereses s/ Prestamos,4,SI,SI,SI,3
+4.14.04.00.000,      Intereses s/ Descuentos de Cheques,4,SI,SI,SI,3
+4.14.05.00.000,      Comisiones por Tarjetas,4,SI,SI,SI,3

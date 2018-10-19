@@ -1,0 +1,33 @@
+   SELECT   a.idmovimiento,
+            a.nromovimiento as Nro_factura,
+            a.IdPersona,
+            a.idcuenta,
+            Persona,
+            c.Ruc,
+            a.Estado,
+            a.idmoneda,
+             sum(((mc.Debe + mc.NDebito)- (mc.Haber + mc.NCredito))) as Saldo_Factura
+
+    FROM Movimientos a
+            inner join movim_cuenta_OL mc on (mc.idmovimiento = a.idmovimiento)
+            INNER JOIN TipoMovimiento b ON (a.IdTipoMovimiento = b.IdTipoMovimiento)
+            INNER JOIN Persona c ON (a.IdPersona = c.IdPersona)
+            INNER JOIN CUENTAS CS ON Cs.IDcuenta = a.IDcuenta
+            INNER JOIN VENDEDOR VX ON VX.IDVENDEDOR = A.IDVENDEDOR
+    WHERE b.Tipo = 2
+        and b.contado = 0
+        AND a.fecha BETWEEN :Desde AND :Hasta
+        AND a.Estado = "F"
+        AND a.idmoneda = "GS"
+        AND ((mc.Debe + mc.NDebito)- (mc.Haber + mc.NCredito)) > 0.99
+
+    group by   a.idmovimiento,
+               a.nromovimiento,
+                a.IdPersona,
+                a.idcuenta,
+                Persona,
+                c.Ruc,
+                a.Estado,
+                a.idmoneda
+
+    ORDER BY c.persona

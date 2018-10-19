@@ -1,0 +1,88 @@
+Empresa,Yhaguy
+,
+CODIGO,DESCRIPCION
+sin referencia,sin referencia
+Tipo Transferencia,Tipo Transferencia
+Estado Transferencia,Estado Transferencia
+Gastos Compras Locales,Gastos Compras Locales
+Tipos de Reparto,Tipos de Reparto
+Estado Reparto,Estado Reparto
+Tipo Venta,Tipo Venta
+Tipos de Nota de Credito,Tipos de Nota de Credito
+Moneda,Moneda
+Tipo Cambio,Tipo Cambio
+Mails Empresa,Mails Empresa
+Pais Empresa,Pais Empresa
+Tipo Persona,Tipo Persona
+Cuenta Bancaria,Cuenta Bancaria
+Reposicion Caja,Reposicion Caja
+Reposicion Caja - Tipo de Egreso,Reposicion Caja - Tipo de Egreso
+Clasificacion Caja,Clasificacion Caja
+Tipo de Caja,Tipo de Caja
+Estado de Caja,Estado de Caja
+Estado de Planilla de Caja,Estado de Planilla de Caja
+Duracion de Caja,Duracion de Caja
+Estado de Importacion,Estado de Importacion
+Estado de Recibo,Estado de Recibo
+Forma de Pago del Recibo,Forma de Pago del Recibo
+Estado CtaCte Proveedor,Estado CtaCte Proveedor
+Tipo de Imputacion,Tipo de Imputacion
+Estado CtaCte Empresa,Estado CtaCte Empresa
+Caracter del Movimiento de CtaCte Empresa,Caracter del Movimiento de CtaCte Empresa
+Estado de Saldo CtaCte ,Estado de Saldo CtaCte 
+Estado Reparto Movimiento,Estado Reparto Movimiento
+Tipo de Descuento en Compras,Tipo de Descuento en Compras
+Tipo de Gasto en Compras,Tipo de Gasto en Compras
+Tipo de Prorrateo en Compras,Tipo de Prorrateo en Compras
+Estados de Venta,Estados de Venta
+Modos de Venta,Modos de Venta
+Tipos de Iva,Tipos de Iva
+Tipo Alerta,Tipo Alerta
+Nivel Alerta,Nivel Alerta
+Rubros Empresas,Rubros Empresas
+Regimen Tributario,Regimen Tributario
+Tipo Proveedor,Tipo Proveedor
+Estado Proveedor,Estado Proveedor
+Tipo Cliente,Tipo Cliente
+Articulo Estado,Articulo Estado
+Articulo Unidad de Medida,Articulo Unidad de Medida
+Tipos de Importacion,Tipos de Importacion
+Tipos de Comprobantes,Tipos de Comprobantes
+Tipos de Operaciones en los Movimientos,Tipos de Operaciones en los Movimientos
+Tipos de Empresa,Tipos de Empresa
+Estado de las reglas,Estado de las reglas
+Tarjeta,Tarjeta
+Procesadoras de Tarjetas,Procesadoras de Tarjetas
+Estados de Conciliacion,Estados de Conciliacion
+Funcionario Cargo,Funcionario Cargo
+Estados de Funcionarios,Estados de Funcionarios
+Motivos de Notas de Créditos,Motivos de Notas de Créditos
+Tipo de Detalle de Notas de Credito,Tipo de Detalle de Notas de Credito
+Estados de Comprobantes,Estados de Comprobantes
+Tipos de Cuentas Contables,Tipos de Cuentas Contables
+Tipo de Documento,Tipo de Documento
+Tipos de Reserva,Tipos de Reserva
+Estados de Reserva,Estados de Reserva
+Motivos de Devolucion,Motivos de Devolucion
+SI / NO,SI / NO
+Tipo de Banco Deposito,Tipo de Banco Deposito
+Modo de creación,Modo de creación
+Bancos para Cheques de Tercero,Bancos para Cheques de Tercero
+Tipo de Detalle Banco Tarjeta Extracto,Tipo de Detalle Banco Tarjeta Extracto
+Estado Cliente,Estado Cliente
+Categoria Cliente,Categoria Cliente
+Profesiones,Profesiones
+Tipo Contacto Interno,Tipo Contacto Interno
+Tipo Operacion,Tipo Operacion
+Cuenta Corriente Estado,Cuenta Corriente Estado
+Regla Precio,Regla Precio
+Articulo Marca,Articulo Marca
+Articulo Linea,Articulo Linea
+Articulo Familia,Articulo Familia
+Artículo Parte,Artículo Parte
+Propiedad de Usuario,Propiedad de Usuario
+Propiedades de Ventas,Propiedades de Ventas
+Propiedades de Sistemas,Propiedades de Sistemas
+Tipos de Combustible,Tipos de Combustible
+Zonas,Zonas
+ALERTA_TALONARIOS,ALERTA_TALONARIOS
