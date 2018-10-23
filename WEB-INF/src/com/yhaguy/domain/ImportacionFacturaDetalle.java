@@ -22,9 +22,15 @@ public class ImportacionFacturaDetalle extends Domain {
 	private int cantidad;
 	private int cantidadRecibida;
 	
+	private int conteo1;
+	private int conteo2;
+	private int conteo3;
+	
 	private double precioFinalGs;
 	private double minoristaGs;
 	private double listaGs;
+	
+	private boolean verificado;
 	
 	private Articulo articulo;
 	
@@ -213,5 +219,37 @@ public class ImportacionFacturaDetalle extends Domain {
 
 	public void setListaGs(double listaGs) {
 		this.listaGs = listaGs;
+	}
+
+	public boolean isVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(boolean verificado) {
+		this.verificado = verificado;
+	}
+
+	public int getConteo1() {
+		return conteo1;
+	}
+
+	public void setConteo1(int conteo1) {
+		this.conteo1 = conteo1;
+	}
+
+	public int getConteo2() {
+		return conteo2;
+	}
+
+	public void setConteo2(int conteo2) {
+		this.conteo2 = conteo2;
+	}
+
+	public int getConteo3() {
+		return conteo3;
+	}
+
+	public void setConteo3(int conteo3) {
+		this.conteo3 = conteo3;
 	}
 }

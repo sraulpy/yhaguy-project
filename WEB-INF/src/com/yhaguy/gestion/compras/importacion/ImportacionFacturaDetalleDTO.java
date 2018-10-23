@@ -26,9 +26,15 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	private int cantidad = 0;
 	private int cantidadRecibida = 0;
 	
+	private int conteo1 = 0;
+	private int conteo2 = 0;
+	private int conteo3 = 0;
+	
 	private double precioFinalGs = 0;
 	private double minoristaGs = 0;
 	private double listaGs = 0;
+	
+	private boolean verificado = false;
 	
 	private ArticuloDTO articulo = new ArticuloDTO();		
 	
@@ -258,5 +264,37 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 
 	public void setListaGs(double listaGs) {
 		this.listaGs = listaGs;
+	}
+
+	public boolean isVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(boolean verificado) {
+		this.verificado = verificado;
+	}
+
+	public int getConteo1() {
+		return conteo1;
+	}
+
+	public void setConteo1(int conteo1) {
+		this.conteo1 = conteo1;
+	}
+
+	public int getConteo2() {
+		return conteo2;
+	}
+
+	public void setConteo2(int conteo2) {
+		this.conteo2 = conteo2;
+	}
+
+	public int getConteo3() {
+		return conteo3;
+	}
+
+	public void setConteo3(int conteo3) {
+		this.conteo3 = conteo3;
 	}
 }

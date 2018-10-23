@@ -298,6 +298,13 @@ public class ReciboDTO extends DTO {
 	public String getImporteEnLetras() {
 		return getMisc().numberToLetter(this.getTotalImporteGs());
 	}
+	
+	/**
+	 * @return el importe en letras ds..
+	 */
+	public String getImporteEnLetrasDs() {
+		return getMisc().numberToLetter(this.getTotalImporteDs());
+	}
 
 	public String getNumero() {
 		return numero;

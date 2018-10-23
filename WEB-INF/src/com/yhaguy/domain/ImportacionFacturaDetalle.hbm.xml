@@ -13,20 +13,27 @@
 
 		<property name="costoGs" />
 		<property name="costoDs" />
-		<property name="costoSinProrrateoGs"/>
-		<property name="costoSinProrrateoDs"/>
+		<property name="costoSinProrrateoGs" />
+		<property name="costoSinProrrateoDs" />
 		<property name="textoDescuento" />
-		<property name="descuentoGs"/>
-		<property name="descuentoDs"  />
-		<property name="importeGastoDescuentoGs"/>
-		<property name="importeGastoDescuentoDs"/>
-		<property name="gastoDescuento"/>
-		<property name="valorProrrateo"/>
-		<property name="cantidad"/>
-		<property name="cantidadRecibida"/>
-		<property name="precioFinalGs"/>
-		<property name="minoristaGs"/>
-		<property name="listaGs"/>
+		<property name="descuentoGs" />
+		<property name="descuentoDs" />
+		<property name="importeGastoDescuentoGs" />
+		<property name="importeGastoDescuentoDs" />
+		<property name="gastoDescuento" />
+		<property name="valorProrrateo" />
+		<property name="cantidad" />
+		<property name="cantidadRecibida" />
+		<property name="precioFinalGs" />
+		<property name="minoristaGs" />
+		<property name="listaGs" />
+		<property name="conteo1" />
+		<property name="conteo2" />
+		<property name="conteo3" />
+		
+		<property name="verificado">
+			<column name="verificado" default="false"></column>
+		</property>
 
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo" column="idArticulo"
 			lazy="false"/>

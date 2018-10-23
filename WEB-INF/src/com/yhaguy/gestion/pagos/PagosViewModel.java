@@ -268,13 +268,16 @@ public class PagosViewModel extends SimpleViewModel {
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new ReciboDataSource();
 		params.put("title", this.pagoDto.getTipoMovimiento().getPos1());
-		params.put("fieldRazonSocial", this.pagoDto.isCobro() ? "Recibí de:"
-				: "A la Orden de:");
+		params.put("fieldRazonSocial", this.pagoDto.isCobro() ? "Recibí de:" : "A la Orden de:");
 		params.put("RazonSocial", this.pagoDto.getRazonSocial());
 		params.put("Ruc", this.pagoDto.getRuc());
 		params.put("NroRecibo", this.pagoDto.getNumero());
-		params.put("ImporteEnLetra", this.pagoDto.getImporteEnLetras());
-		params.put("TotalImporteGs", Utiles.getNumberFormat(this.pagoDto.getTotalImporteGs()));
+		params.put("Moneda", this.pagoDto.isMonedaLocal() ? "Guaraníes:" : "Dólares:");
+		params.put("Moneda_", this.pagoDto.isMonedaLocal() ? "Gs." : "U$D");
+		params.put("ImporteEnLetra", this.pagoDto.isMonedaLocal() ? this.pagoDto.getImporteEnLetras() : this.pagoDto.getImporteEnLetrasDs());
+		params.put("TotalImporteGs",
+				this.pagoDto.isMonedaLocal() ? Utiles.getNumberFormat(this.pagoDto.getTotalImporteGs())
+						: Utiles.getNumberFormatDs(this.pagoDto.getTotalImporteDs()));
 		params.put("Usuario", this.getUs().getNombre());
 		this.imprimirComprobante(source, params, dataSource, this.selectedFormato);
 	}
@@ -307,7 +310,7 @@ public class PagosViewModel extends SimpleViewModel {
 				MyArray m = new MyArray();
 				m.setPos1(item.getFecha());
 				m.setPos2(item.getDescripcion());
-				m.setPos3(item.getMontoGs());
+				m.setPos3(pagoDto.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs());
 				m.setPos4("Facturas");
 				this.detalle.add(m);
 			}
@@ -315,7 +318,7 @@ public class PagosViewModel extends SimpleViewModel {
 				MyArray my = new MyArray();
 				my.setPos1(m.dateToString(item.getModificado(), Misc.DD_MM_YYYY));
 				my.setPos2(item.getDescripcion());
-				my.setPos3(item.getMontoGs());
+				my.setPos3(pagoDto.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs());
 				my.setPos4("Formas de Pago");
 				this.detalle.add(my);
 			}
@@ -335,10 +338,10 @@ public class PagosViewModel extends SimpleViewModel {
 				value = item.getPos2();
 			} else if ("Importe".equals(fieldName)) {
 				double importe = (double) item.getPos3();
-				value = Utiles.getNumberFormat(importe);
+				value = pagoDto.isMonedaLocal() ? Utiles.getNumberFormat(importe) : Utiles.getNumberFormatDs(importe);
 			} else if ("TotalImporte".equals(fieldName)) {
-				double importe = pagoDto.getTotalImporteGs();
-				value = Utiles.getNumberFormat(importe);
+				double importe = pagoDto.isMonedaLocal() ? pagoDto.getTotalImporteGs() : pagoDto.getTotalImporteDs();
+				value = pagoDto.isMonedaLocal() ? Utiles.getNumberFormat(importe) : Utiles.getNumberFormatDs(importe);
 			} else if ("TipoDetalle".equals(fieldName)) {
 				value = item.getPos4();
 			}

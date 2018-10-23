@@ -290,6 +290,56 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		BindUtils.postNotifyChange(null, null, item, "*");
 	}
 	
+	@Command
+	public void imprimirVerificacion() {		
+		List<Object[]> data = new ArrayList<Object[]>();
+		
+		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
+			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
+				Object[] obj1 = new Object[] {
+						item.getArticulo().getCodigoInterno(),
+						item.getArticulo().getDescripcion(),
+						item.isVerificado() ? "SI" : "NO"
+				};
+				data.add(obj1);			
+			}
+		}
+
+		ReporteYhaguy rep = new ReporteVerificacionImportacion(this.dto);
+		rep.setDatosReporte(data);
+
+		ViewPdf vp = new ViewPdf();
+		vp.setBotonImprimir(false);
+		vp.setBotonCancelar(false);
+		vp.showReporte(rep, this);	
+	
+	}
+	
+	@Command
+	public void imprimirConteo() {		
+		List<Object[]> data = new ArrayList<Object[]>();
+		
+		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
+			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
+				Object[] obj1 = new Object[] {
+						item.getArticulo().getCodigoInterno(),
+						item.getArticulo().getDescripcion(),
+						""
+				};
+				data.add(obj1);			
+			}
+		}
+
+		ReporteYhaguy rep = new ReporteConteoImportacion(this.dto);
+		rep.setDatosReporte(data);
+
+		ViewPdf vp = new ViewPdf();
+		vp.setBotonImprimir(false);
+		vp.setBotonCancelar(false);
+		vp.showReporte(rep, this);	
+	
+	}
+	
 	/************************** ELIMINAR ITEM DETALLE ORDEN COMPRA ****************************/
 	
 	private List<ImportacionPedidoCompraDetalleDTO> selectedOrdenItems = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
@@ -4443,6 +4493,106 @@ class ReporteImportacion extends ReporteYhaguy {
 				.add(this.textoParValor("Tipo Cambio Gs.", tipoCambio))
 				.add(this.textoParValor("Coeficiente", coeficiente)));
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", proveedor)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de verificacion de importacion..
+ */
+class ReporteVerificacionImportacion extends ReporteYhaguy {
+	
+	private ImportacionPedidoCompraDTO importacion;	
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Verificado", TIPO_STRING, 30);
+	
+	public ReporteVerificacionImportacion(ImportacionPedidoCompraDTO importacion) {
+		this.importacion = importacion;
+	}
+	
+	static {
+		col3.setAlineacionColuman(COLUMNA_ALINEADA_CENTRADA);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Verificación de Códigos");
+		this.setDirectorio("compras");
+		this.setNombreArchivo("Importacion-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		String numero = this.importacion.getNumeroPedidoCompra();
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Nro. Importación", numero))
+				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial())));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de conteo de importacion..
+ */
+class ReporteConteoImportacion extends ReporteYhaguy {
+	
+	private ImportacionPedidoCompraDTO importacion;	
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_STRING, 30);
+	
+	public ReporteConteoImportacion(ImportacionPedidoCompraDTO importacion) {
+		this.importacion = importacion;
+	}
+	
+	static {
+		col3.setAlineacionColuman(COLUMNA_ALINEADA_CENTRADA);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Recepción de Mercaderías");
+		this.setDirectorio("compras");
+		this.setNombreArchivo("Importacion-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		String numero = this.importacion.getNumeroPedidoCompra();
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Nro. Importación", numero))
+				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial())));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

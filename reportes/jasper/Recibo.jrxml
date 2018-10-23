@@ -24,6 +24,8 @@
 	<parameter name="fieldRazonSocial" class="java.lang.String"/>
 	<parameter name="Usuario" class="java.lang.String"/>
 	<parameter name="Generado" class="java.lang.String"/>
+	<parameter name="Moneda" class="java.lang.String"/>
+	<parameter name="Moneda_" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '1' "Cuenta", '1' "Nivel", 'Activo' "Desc Cuenta", null "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
 from plancuenta where id = '1'
@@ -121,24 +123,17 @@ from plancuenta where id = '1']]>
 				<textFieldExpression><![CDATA[$P{Ruc}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="1" y="62" width="152" height="15" forecolor="#736343" uuid="979ef6ed-84d6-4fb9-8300-b2b1a2aef386"/>
+				<reportElement style="Column header" x="1" y="62" width="85" height="15" forecolor="#736343" uuid="979ef6ed-84d6-4fb9-8300-b2b1a2aef386"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
-				<text><![CDATA[La cantidad de Guaraníes:]]></text>
+				<text><![CDATA[La cantidad de ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="153" y="62" width="417" height="15" uuid="c3e7a643-6e92-4de1-89a2-d41840ce3893"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{ImporteEnLetra}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement style="Column header" x="1" y="82" width="25" height="15" forecolor="#736343" uuid="e915e7b9-bcb3-4fb7-9292-17607e1990b3"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10"/>
-				</textElement>
-				<text><![CDATA[Gs.]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="26" y="82" width="111" height="15" uuid="81df9b6f-3166-489d-9a0a-b295e5cbefe1"/>
 				<textElement verticalAlignment="Middle"/>
@@ -167,6 +162,22 @@ from plancuenta where id = '1']]>
 				<reportElement x="406" y="0" width="163" height="12" uuid="911760eb-a418-47ac-8619-18e74df56112"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Usuario: " + $P{Usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="84" y="62" width="66" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="26a62e47-6a3c-4fbc-bb24-995fe5c90228"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Moneda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="1" y="82" width="25" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="a48fabdf-af99-4e44-9733-7b893cd8b4e6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Moneda_}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

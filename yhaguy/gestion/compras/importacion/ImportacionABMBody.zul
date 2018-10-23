@@ -765,26 +765,25 @@
 							<tabpanel vflex="true">
 								<vbox vflex="true">
 									<hlayout sclass="button-container">
-										<button mold="bs" sclass="btn-sm btn-success" label="Confirmar"
-											iconSclass="z-icon-check" width="150px"></button>
-										<separator orient="vertical" bar="true"></separator>
-										<field value="Estado:" />
-										<textbox readonly="true" value="PENDIENTE"></textbox>
-										<space></space>
-										<field value="Confirmado por:" />
-										<textbox readonly="true" value=""></textbox>
+										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir"
+											iconSclass="z-icon-print" width="150px"
+											onClick="@command('imprimirVerificacion')"
+											disabled="@load(!vm.siempreHabilitado)"></button>
 									</hlayout>
 									<listbox vflex="true" sclass="small-list"
 										model="@load(vm.selectedImportacionFactura.detalles)">
+										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 										<listhead>
 											<listheader width="40px" align="center"></listheader>
-											<listheader label="Código" width="150px"></listheader>
+											<listheader label="Código" width="150px"
+												sort="auto(articulo.codigoInterno)"
+												onCreate="self.sort(true)"></listheader>
 											<listheader label="Descripción"></listheader>
 										</listhead>
 										<template name="model">
 											<listitem>
 												<listcell>
-													<checkbox></checkbox>
+													<checkbox checked="@bind(each.verificado)"></checkbox>
 												</listcell>
 												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
 												<listcell label="@load(each.articulo.descripcion)"></listcell>
@@ -796,31 +795,22 @@
 							<tabpanel vflex="true">
 								<vbox vflex="true">
 									<hlayout sclass="button-container">
-										<button id="btn_fin" mold="bs" sclass="btn-sm btn-info" label="Finalizar Conteo"
-											iconSclass="z-icon-clock-o" width="150px"
-											visible="false"></button>
-										<button mold="bs" sclass="btn-sm btn-success" label="Confirmar"
-											iconSclass="z-icon-check" width="150px"></button>
-										<separator orient="vertical" bar="true"></separator>
-										<field value="Estado:" />
-										<textbox readonly="true"></textbox>
-										<space></space>
-										<field value="Confirmado por:" />
-										<textbox readonly="true" value="..."></textbox>
-										<space></space>
-										<field value="Contado por:" />
-										<textbox readonly="true" value="..."></textbox>
+										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir"
+											iconSclass="z-icon-print" width="150px"
+											onClick="@command('imprimirConteo')"
+											disabled="@load(!vm.siempreHabilitado)"></button>
 									</hlayout>
 									<listbox vflex="true" sclass="small-list"
 										model="@load(vm.selectedImportacionFactura.detalles)">
+										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 										<listhead>
-											<listheader label="Código" width="120px"></listheader>
+											<listheader label="Código" width="120px"
+												sort="auto(articulo.codigoInterno)"
+												onCreate="self.sort(true)"></listheader>
 											<listheader label="Descripción"></listheader>
 											<listheader label="1er Conteo" width="120px"></listheader>
 											<listheader label="Dif." width="120px"></listheader>
 											<listheader label="2do Conteo" width="120px"></listheader>
-											<listheader label="Dif." width="120px"></listheader>
-											<listheader label="3er Conteo" width="120px"></listheader>
 											<listheader label="Dif." width="120px"></listheader>
 										</listhead>
 										<template name="model">
@@ -828,27 +818,23 @@
 												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
 												<listcell label="@load(each.articulo.descripcion)"></listcell>
 												<listcell>
-													<intbox vflex="true" hflex="true"></intbox>
+													<intbox vflex="true" hflex="true"
+														value="@bind(each.conteo1)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
-														format="#,###,###0"></intbox>
+														format="#,###,###0"
+														value="@load(each.conteo1 - each.cantidad)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
-														format="#,###,###0"></intbox>
+														format="#,###,###0"
+														value="@bind(each.conteo2)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
-														format="#,###,###0"></intbox>
-												</listcell>
-												<listcell>
-													<intbox vflex="true" hflex="true" 
-														format="#,###,###0"></intbox>
-												</listcell>
-												<listcell>
-													<intbox vflex="true" hflex="true" readonly="true"
-														format="#,###,###0"></intbox>
+														format="#,###,###0"
+														value="@load(each.conteo2 - each.cantidad)"></intbox>
 												</listcell>
 											</listitem>
 										</template>

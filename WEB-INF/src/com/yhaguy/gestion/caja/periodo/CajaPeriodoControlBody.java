@@ -1584,9 +1584,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("RazonSocial", this.reciboDTO.getRazonSocial());
 		params.put("Ruc", this.reciboDTO.getRuc());
 		params.put("NroRecibo", this.reciboDTO.getNumero());
-		params.put("ImporteEnLetra", this.reciboDTO.getImporteEnLetras());
+		params.put("Moneda", this.reciboDTO.isMonedaLocal() ? "Guaraníes:" : "Dólares:");
+		params.put("Moneda_", this.reciboDTO.isMonedaLocal() ? "Gs." : "U$D");
+		params.put("ImporteEnLetra", this.reciboDTO.isMonedaLocal() ? this.reciboDTO.getImporteEnLetras() : this.reciboDTO.getImporteEnLetrasDs());
 		params.put("TotalImporteGs",
-				FORMATTER.format(this.reciboDTO.getTotalImporteGs()));
+				this.reciboDTO.isMonedaLocal() ? Utiles.getNumberFormat(this.reciboDTO.getTotalImporteGs())
+						: Utiles.getNumberFormatDs(this.reciboDTO.getTotalImporteDs()));
 		params.put("Usuario", this.getUs().getNombre());
 		this.imprimirComprobante(source, params, dataSource);
 	}
@@ -2133,7 +2136,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 				MyArray m = new MyArray();
 				m.setPos1(item.getFecha());
 				m.setPos2(item.getDescripcion());
-				m.setPos3(item.getMontoGs());
+				m.setPos3(reciboDTO.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs());
 				m.setPos4("Facturas");
 				this.detalle.add(m);
 			}
@@ -2141,7 +2144,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 				MyArray my = new MyArray();
 				my.setPos1(m.dateToString(item.getModificado(), Misc.DD_MM_YYYY));
 				my.setPos2(item.getDescripcion());
-				my.setPos3(item.getMontoGs());
+				my.setPos3(reciboDTO.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs());
 				my.setPos4("Formas de Pago");
 				this.detalle.add(my);
 			}
@@ -2161,10 +2164,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 				value = item.getPos2();
 			} else if ("Importe".equals(fieldName)) {
 				double importe = (double) item.getPos3();
-				value = FORMATTER.format(importe);
+				value = reciboDTO.isMonedaLocal() ? Utiles.getNumberFormat(importe) : Utiles.getNumberFormatDs(importe);
 			} else if ("TotalImporte".equals(fieldName)) {
-				double importe = reciboDTO.getTotalImporteGs();
-				value = FORMATTER.format(importe);
+				double importe = reciboDTO.isMonedaLocal() ? reciboDTO.getTotalImporteGs() : reciboDTO.getTotalImporteDs();
+				value = reciboDTO.isMonedaLocal() ? Utiles.getNumberFormat(importe) : Utiles.getNumberFormatDs(importe);
 			} else if ("TipoDetalle".equals(fieldName)) {
 				value = item.getPos4();
 			}
