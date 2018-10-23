@@ -782,9 +782,9 @@
 												onCreate="self.sort(true)"></listheader>
 											<listheader label="Descripción"></listheader>
 											<listheader label="1er Conteo" width="120px"></listheader>
-											<listheader label="Dif." width="120px"></listheader>
+											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}" ></listheader>
 											<listheader label="2do Conteo" width="120px"></listheader>
-											<listheader label="Dif." width="120px"></listheader>
+											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
 										</listhead>
 										<template name="model">
 											<listitem>
@@ -845,8 +845,8 @@
 								</vbox>
 							</tabpanel>
 							<style>
-									.z-intbox { min-height: 18px; text-align:right }
-								</style>
+								.z-intbox { min-height: 18px; text-align:right }
+							</style>
 						</tabpanels>
 					</tabbox>		
 				</tabpanel>
