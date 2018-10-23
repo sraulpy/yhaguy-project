@@ -34,6 +34,7 @@ public class ImportacionPedidoCompra extends Domain {
 	private boolean importacionConfirmada;
 	private boolean subDiarioConfirmado;
 	private boolean cifProrrateado;	
+	private boolean recepcionHabilitada;
 
 	private CondicionPago proveedorCondicionPago;
 	private Tipo estado;
@@ -330,5 +331,13 @@ public class ImportacionPedidoCompra extends Domain {
 
 	public void setVia(String via) {
 		this.via = via;
+	}
+
+	public boolean isRecepcionHabilitada() {
+		return recepcionHabilitada;
+	}
+
+	public void setRecepcionHabilitada(boolean recepcionHabilitada) {
+		this.recepcionHabilitada = recepcionHabilitada;
 	}
 }

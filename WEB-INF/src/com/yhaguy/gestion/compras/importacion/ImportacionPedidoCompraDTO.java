@@ -34,6 +34,7 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private boolean pedidoConfirmado = false;
 	private boolean importacionConfirmada = false;
 	private boolean cifProrrateado = false;
+	private boolean recepcionHabilitada = false;
 
 	private MyArray proveedorCondicionPago = new MyArray();
 	private MyPair estado = new MyPair();
@@ -430,5 +431,13 @@ public class ImportacionPedidoCompraDTO extends DTO {
 
 	public void setTotalGastosDs(double totalGastosDs) {
 		this.totalGastosDs = totalGastosDs;
+	}
+
+	public boolean isRecepcionHabilitada() {
+		return recepcionHabilitada;
+	}
+
+	public void setRecepcionHabilitada(boolean recepcionHabilitada) {
+		this.recepcionHabilitada = recepcionHabilitada;
 	}
 }

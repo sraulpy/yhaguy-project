@@ -10,7 +10,7 @@
 				<tab id="tab2" label="Solicitud Cotización" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
 				<tab id="tab3" label="Proforma" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
 				<tab id="tab4" label="Factura Importación" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab5" label="Recepción Mercaderías" width="170px" />
+				<tab id="tab5" label="Recepción Mercaderías" width="170px" visible="@load(vm.dto.recepcionHabilitada)" />
 				<tab id="tab6" label="Resumen de Despacho" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
 				<tab id="tab7" label="Costo Final" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
 				<tab id="tab8" label="Precios" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
@@ -627,6 +627,9 @@
 							label=" ver archivo Importado" href="@load(vm.facturaCsv)"
 							target="_blank" visible="@load(vm.dto.confirmadoImportacion)" 
 							style="font-size:10pt" />
+						<space hflex="true"></space>
+						<button mold="bs" sclass="btn-primary btn-sm" width="150px" label="Habilitar recepción"
+							iconSclass="z-icon-check" onClick="@command('habilitarRecepcion')"></button>
 					</hlayout>
 
 					<listbox id="detFactura" sclass="small-list"
@@ -758,40 +761,10 @@
 				<tabpanel vflex="true">
 					<tabbox vflex="1">
 						<tabs>
-							<tab label="Control de Carga" width="170px"></tab>
 							<tab label="Control Físico" width="170px"></tab>
+							<tab label="Control de Carga" width="170px"></tab>
 						</tabs>
 						<tabpanels vflex="true">
-							<tabpanel vflex="true">
-								<vbox vflex="true">
-									<hlayout sclass="button-container">
-										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir"
-											iconSclass="z-icon-print" width="150px"
-											onClick="@command('imprimirVerificacion')"
-											disabled="@load(!vm.siempreHabilitado)"></button>
-									</hlayout>
-									<listbox vflex="true" sclass="small-list"
-										model="@load(vm.selectedImportacionFactura.detalles)">
-										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
-										<listhead>
-											<listheader width="40px" align="center"></listheader>
-											<listheader label="Código" width="150px"
-												sort="auto(articulo.codigoInterno)"
-												onCreate="self.sort(true)"></listheader>
-											<listheader label="Descripción"></listheader>
-										</listhead>
-										<template name="model">
-											<listitem>
-												<listcell>
-													<checkbox checked="@bind(each.verificado)"></checkbox>
-												</listcell>
-												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
-												<listcell label="@load(each.articulo.descripcion)"></listcell>
-											</listitem>
-										</template>
-									</listbox>
-								</vbox>
-							</tabpanel>
 							<tabpanel vflex="true">
 								<vbox vflex="true">
 									<hlayout sclass="button-container">
@@ -840,10 +813,40 @@
 										</template>
 									</listbox>
 								</vbox>
-								<style>
+							</tabpanel>
+							<tabpanel vflex="true">
+								<vbox vflex="true">
+									<hlayout sclass="button-container">
+										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir"
+											iconSclass="z-icon-print" width="150px"
+											onClick="@command('imprimirVerificacion')"
+											disabled="@load(!vm.siempreHabilitado)"></button>
+									</hlayout>
+									<listbox vflex="true" sclass="small-list"
+										model="@load(vm.selectedImportacionFactura.detalles)">
+										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+										<listhead>
+											<listheader width="40px" align="center"></listheader>
+											<listheader label="Código" width="150px"
+												sort="auto(articulo.codigoInterno)"
+												onCreate="self.sort(true)"></listheader>
+											<listheader label="Descripción"></listheader>
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<checkbox checked="@bind(each.verificado)"></checkbox>
+												</listcell>
+												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+												<listcell label="@load(each.articulo.descripcion)"></listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</vbox>
+							</tabpanel>
+							<style>
 									.z-intbox { min-height: 18px; text-align:right }
 								</style>
-							</tabpanel>
 						</tabpanels>
 					</tabbox>		
 				</tabpanel>

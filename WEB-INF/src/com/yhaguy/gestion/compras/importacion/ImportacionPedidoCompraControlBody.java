@@ -291,6 +291,13 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	}
 	
 	@Command
+	@NotifyChange("*")
+	public void habilitarRecepcion() {
+		this.dto.setRecepcionHabilitada(true);
+		Clients.showNotification("GUARDAR LOS CAMBIOS PARA HABILITAR RECEPCION DE MERCADERIAS..");
+	}
+	
+	@Command
 	public void imprimirVerificacion() {		
 		List<Object[]> data = new ArrayList<Object[]>();
 		

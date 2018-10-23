@@ -30,6 +30,7 @@
 		<property name="importacionConfirmada"/>
 		<property name="subDiarioConfirmado"/>
 		<property name="cifProrrateado"/>
+		<property name="recepcionHabilitada"/>
 
 		<many-to-one name="proveedorCondicionPago" class="com.yhaguy.domain.CondicionPago"
 			column="idProveedorCondicionPago" 
