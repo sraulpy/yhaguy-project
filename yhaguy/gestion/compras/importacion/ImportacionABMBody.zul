@@ -785,6 +785,8 @@
 											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}" ></listheader>
 											<listheader label="2do Conteo" width="120px"></listheader>
 											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
+											<listheader label="3er Conteo" width="120px"></listheader>
+											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
 										</listhead>
 										<template name="model">
 											<listitem>
@@ -792,6 +794,7 @@
 												<listcell label="@load(each.articulo.descripcion)"></listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true"
+														format="#,###,###0"
 														value="@bind(each.conteo1)"></intbox>
 												</listcell>
 												<listcell>
@@ -809,9 +812,22 @@
 														format="#,###,###0"
 														value="@load(each.conteo2 - each.cantidad)"></intbox>
 												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" 
+														format="#,###,###0"
+														value="@bind(each.conteo3)"></intbox>
+												</listcell>
+												<listcell>
+													<intbox vflex="true" hflex="true" readonly="true"
+														format="#,###,###0"
+														value="@load(each.conteo3 - each.cantidad)"></intbox>
+												</listcell>
 											</listitem>
 										</template>
 									</listbox>
+									<style>
+										.z-intbox { min-height: 18px; text-align:right }
+									</style>
 								</vbox>
 							</tabpanel>
 							<tabpanel vflex="true">
@@ -844,9 +860,6 @@
 									</listbox>
 								</vbox>
 							</tabpanel>
-							<style>
-								.z-intbox { min-height: 18px; text-align:right }
-							</style>
 						</tabpanels>
 					</tabbox>		
 				</tabpanel>
