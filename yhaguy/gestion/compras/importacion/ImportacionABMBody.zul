@@ -6,14 +6,14 @@
 
 		<tabbox id="tbx" width="100%" vflex="1">
 			<tabs>
-				<tab id="tab1" label="Datos Generales" width="170px" />
-				<tab id="tab2" label="Solicitud Cotización" width="170px" />
-				<tab id="tab3" label="Proforma" width="170px" />
-				<tab id="tab4" label="Factura Importación" width="170px" />
+				<tab id="tab1" label="Datos Generales" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
+				<tab id="tab2" label="Solicitud Cotización" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
+				<tab id="tab3" label="Proforma" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
+				<tab id="tab4" label="Factura Importación" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
 				<tab id="tab5" label="Recepción Mercaderías" width="170px" />
-				<tab id="tab6" label="Resumen de Despacho" width="170px" />
-				<tab id="tab7" label="Costo Final" width="170px" />
-				<tab id="tab8" label="Precios" width="170px" />
+				<tab id="tab6" label="Resumen de Despacho" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
+				<tab id="tab7" label="Costo Final" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
+				<tab id="tab8" label="Precios" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
 			</tabs>
 			<tabpanels>
 
