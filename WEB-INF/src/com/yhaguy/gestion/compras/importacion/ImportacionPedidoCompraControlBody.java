@@ -57,6 +57,7 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
@@ -2355,17 +2356,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.valorSeguroDs = valorSeguroDs;
 	}
 	
-	@DependsOn("dto.tipo")
-	public double getValorFOBds(){
-		
-		MyPair tipo = this.dto.getTipo();
-		MyPair tipoCIF = utilDto.getTipoImportacionCIF();
-		
-		if (tipo.compareTo(tipoCIF) == 0) {
-			return this.getValorFOBdsCalculado();
-		} else {
-			return this.getValoresFromFacturas()[5];
-		}		
+	public double getValorFOBds() {		
+		return this.getValoresFromFacturas()[5];		
 	}
 	
 	@DependsOn("valorFOBds")	
@@ -2433,27 +2425,29 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
-				
-				valorCIFgs += item.getImporteGsCalculado();
-				valorCIFds += item.getImporteDsCalculado();
-				
-				valorFOBgs += item.getImporteGsCalculado();
-				valorFOBds += item.getImporteDsCalculado();
+				if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CIF)) {
+					if (item.getArticulo().getFamilia() == null || !item.getArticulo().getFamilia().getPos1().equals(ArticuloFamilia.CONTABILIDAD)) {					
+						valorFOBgs += item.getImporteGsCalculado();
+						valorFOBds += item.getImporteDsCalculado();
+					}
+					if (item.getArticulo().getFamilia() != null && item.getArticulo().getFamilia().getPos1().equals(ArticuloFamilia.CONTABILIDAD)) {
+						valorFleteGs += item.getImporteGsCalculado();
+						valorFleteDs += item.getImporteDsCalculado();
+					}
+					valorCIFgs += item.getImporteGsCalculado();
+					valorCIFds += item.getImporteDsCalculado();
+					
+				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)) {
+					valorFOBgs += item.getImporteGsCalculado();
+					valorFOBds += item.getImporteDsCalculado();
+					valorCIFgs += item.getImporteGsCalculado();
+					valorCIFds += item.getImporteDsCalculado();
+				}
 			}
 		}
 		Double[] out = {valorFleteGs, valorFleteDs, valorSeguroGs, valorSeguroDs,
 						valorFOBgs, valorFOBds, valorCIFgs, valorCIFds};
 		return out;
-	}
-	
-	//calcula el valor FOB en ds
-	private double getValorFOBdsCalculado(){
-		
-		double valCIF = this.getValorCIFds();
-		double valFlete = this.getValorFleteDs();
-		double valSeguro = this.getValorSeguroDs();
-		
-		return valCIF - (valFlete + valSeguro);
 	}
 	
 	//calcula el valor CIF en ds

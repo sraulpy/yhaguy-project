@@ -7951,7 +7951,49 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> ventas = rr.getVentas(desde, hasta);
 				List<Object[]> values = new ArrayList<Object[]>();
+				Map<Long, Long> arts = new HashMap<Long, Long>();
 				Map<String, Integer> cants = new HashMap<String, Integer>();
+				Map<Long, Object[]> stock1 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock2 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock3 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock4 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock5 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock6 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock7 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock8 = new HashMap<Long, Object[]>();
+				
+				for (Object[] venta : ventas) {
+					int mes = Utiles.getNumeroMes((Date) venta[19]);
+					String cod = (String) venta[1];
+					String key = cod + "-" + mes;
+					Integer acum = cants.get(key);
+					if (acum != null) {
+						acum += ((Long) venta[18]).intValue();
+						cants.put(key, acum);
+					} else {
+						cants.put(key, ((Long) venta[18]).intValue());
+					}
+					arts.put((long) venta[0], (long) venta[0]);
+				}
+				
+				for (Long idArticulo : arts.keySet()) {
+					Object[] st1 = rr.getStockArticulo(idArticulo, Deposito.ID_MINORISTA);
+					Object[] st2 = rr.getStockArticulo(idArticulo, Deposito.ID_CENTRAL_TEMPORAL);
+					Object[] st3 = rr.getStockArticulo(idArticulo, Deposito.ID_CENTRAL_RECLAMOS);
+					Object[] st4 = rr.getStockArticulo(idArticulo, Deposito.ID_CENTRAL_REPOSICION);
+					Object[] st5 = rr.getStockArticulo(idArticulo, Deposito.ID_MCAL_LOPEZ);
+					Object[] st6 = rr.getStockArticulo(idArticulo, Deposito.ID_MCAL_TEMPORAL);
+					Object[] st7 = rr.getStockArticulo(idArticulo, Deposito.ID_MAYORISTA);
+					Object[] st8 = rr.getStockArticulo(idArticulo, Deposito.ID_MAYORISTA_TEMPORAL);
+					stock1.put(idArticulo, st1);
+					stock2.put(idArticulo, st2);
+					stock3.put(idArticulo, st3);
+					stock4.put(idArticulo, st4);
+					stock5.put(idArticulo, st5);
+					stock6.put(idArticulo, st6);
+					stock7.put(idArticulo, st7);
+					stock8.put(idArticulo, st8);
+				}
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[19]);
@@ -7969,6 +8011,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] venta : ventas) {
 					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
 					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
+					
 					venta = Arrays.copyOf(venta, venta.length + 3);
 					Date fcl = (Date) compraLocal[1];
 					Date fcI = (Date) compraImpor[1];
@@ -7987,7 +8030,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_ABASTECIMIENTO_MOVIM_ARTICULOS;
 				
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new MovimientoArticulos(values, cants);
+				JRDataSource dataSource = new MovimientoArticulos(values, cants, stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8);
 				imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV);
 				
 			} catch (Exception e) {
@@ -17696,10 +17739,29 @@ class MovimientoArticulos implements JRDataSource {
 
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Integer> cantidades = new HashMap<String, Integer>();
+	Map<Long, Object[]> stock1 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock2 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock3 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock4 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock5 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock6 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock7 = new HashMap<Long, Object[]>();
+	Map<Long, Object[]> stock8 = new HashMap<Long, Object[]>();
 	
-	public MovimientoArticulos(List<Object[]> values, Map<String, Integer> cantidades) {
+	public MovimientoArticulos(List<Object[]> values, Map<String, Integer> cantidades, Map<Long, Object[]> stock1,
+			Map<Long, Object[]> stock2, Map<Long, Object[]> stock3, Map<Long, Object[]> stock4,
+			Map<Long, Object[]> stock5, Map<Long, Object[]> stock6, Map<Long, Object[]> stock7,
+			Map<Long, Object[]> stock8) {
 		this.values = values;
 		this.cantidades = cantidades;
+		this.stock1 = stock1;
+		this.stock2 = stock2;
+		this.stock3 = stock3;
+		this.stock4 = stock4;
+		this.stock5 = stock5;
+		this.stock6 = stock6;
+		this.stock7 = stock7;
+		this.stock8 = stock8;
 	}
 
 	private int index = -1;
@@ -17751,7 +17813,58 @@ class MovimientoArticulos implements JRDataSource {
 		} else if ("FechaLocal".equals(fieldName)) {
 			value = det[21] + "";
 		} else if ("ProvLocal".equals(fieldName)) {
-			value = det[22];
+			value = det[22];			
+		} else if ("Dep_1".equals(fieldName)) {
+			Object[] st = stock1.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_2".equals(fieldName)) {
+			Object[] st = stock2.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_3".equals(fieldName)) {
+			Object[] st = stock3.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_4".equals(fieldName)) {
+			Object[] st = stock4.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_5".equals(fieldName)) {
+			Object[] st = stock5.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_6".equals(fieldName)) {
+			Object[] st = stock6.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_7".equals(fieldName)) {
+			Object[] st = stock7.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_8".equals(fieldName)) {
+			Object[] st = stock8.get(det[0]);
+			value = st != null ? st[1] + "" : "0";			
+		} else if ("Dep_gral".equals(fieldName)) {
+			Object[] st1 = stock1.get(det[0]);
+			Object[] st2 = stock2.get(det[0]);
+			Object[] st3 = stock3.get(det[0]);
+			Object[] st4 = stock4.get(det[0]);
+			Object[] st5 = stock5.get(det[0]);
+			Object[] st6 = stock6.get(det[0]);
+			Object[] st7 = stock7.get(det[0]);
+			Object[] st8 = stock8.get(det[0]);
+			long total = (st1 != null ? (long) st1[1] : 0) + (st2 != null ? (long) st2[1] : 0) + (st3 != null ? (long) st3[1] : 0) + (st4 != null ? (long) st4[1] : 0)
+					+ (st5 != null ? (long) st5[1] : 0) + (st6 != null ? (long) st6[1] : 0) + (st7 != null ? (long) st7[1] : 0) + (st8 != null ? (long) st8[1] : 0);
+			value = total + "";			
+		} else if ("Enero".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-1");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Febrero".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-2");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Marzo".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-3");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Abril".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-4");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Mayo".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-5");
+			value = cant != null ? cant + "" : "0";
 		} else if ("Junio".equals(fieldName)) {
 			Integer cant = this.cantidades.get(cod + "-6");
 			value = cant != null ? cant + "" : "0";

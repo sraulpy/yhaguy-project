@@ -35,6 +35,8 @@ public class ArticuloDTO extends DTO {
 	private MyPair articuloLinea = new MyPair();
 	private MyPair articuloUnidadMedida = new MyPair();
 	
+	private MyArray familia;
+	
 	private MyArray proveedor = new MyArray();
 
 	private List<MyArray> articuloInformacionExtras = new ArrayList<MyArray>();
@@ -308,6 +310,14 @@ public class ArticuloDTO extends DTO {
 
 	public void setProveedor(MyArray proveedor) {
 		this.proveedor = proveedor;
+	}
+
+	public MyArray getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(MyArray familia) {
+		this.familia = familia;
 	}
 
 }

@@ -8551,11 +8551,16 @@ public class RegisterDomain extends Register {
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
 				+ " d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion, "
 				+ " d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen,"
-				+ " d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha"
+				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
-				+ " and (v.fecha >= '" + desde_ + "' or v.fecha <= '" + hasta_ + "')";
+				+ " and (v.fecha >= '" + desde_ + "' or v.fecha <= '" + hasta_ + "')"
+				+ " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
+				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
+				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
+				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
+				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha";
 		return this.hql(query);
 	}
 	
@@ -8585,5 +8590,18 @@ public class RegisterDomain extends Register {
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
 		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
+	}
+	
+	/**
+	 * @return el stock por deposito..
+	 * [0]:articulo.id
+	 * [1]:stock
+	 * [2]:deposito.id
+	 */
+	public Object[] getStockArticulo(long idArticulo, long idDeposito) throws Exception {
+		String query = "select d.articulo.id, d.stock, d.deposito.descripcion from ArticuloDeposito d"
+				+ " where d.articulo.id = " + idArticulo + " and d.deposito.id = " + idDeposito;
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : new Object[] { 0, 0, "" };
 	}
 }

@@ -15,6 +15,9 @@ public class ImportacionPedidoCompra extends Domain {
 	public static final String VIA_MARITIMA = "MARITIMO";
 	public static final String VIA_TERRESTRE = "TERRESTRE";
 	
+	public static final String TIPO_CIF = "CIF";
+	public static final String TIPO_FOB = "FOB";
+	
 	private String numeroPedidoCompra;
 	private Date fechaCreacion;
 	private Date fechaCierre;

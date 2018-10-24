@@ -25,6 +25,8 @@ public class AssemblerArticulo extends Assembler {
 			"peso", "unidadMedida" };
 
 	static String[] attInformacionExtra = { "descripcion" };
+	
+	static String[] attFamilia = { "descripcion" };
 
 	static String[] attUbicacion = { "estante", "fila", "columna" };
 	
@@ -67,10 +69,11 @@ public class AssemblerArticulo extends Assembler {
 		this.domainToMyPair(domain, dto, "articuloLinea");
 		this.domainToMyPair(domain, dto, "articuloUnidadMedida");
 
-		this.listaDomainToListaDTO(domain, dto, "proveedorArticulos",
-				new AssemblerProveedorArticulo());
+		this.listaDomainToListaDTO(domain, dto, "proveedorArticulos", new AssemblerProveedorArticulo());
 
 		this.domainToMyArray(domain, dto, "articuloPresentacion", attPresentacion);
+		
+		this.domainToMyArray(domain, dto, "familia", attFamilia);
 		
 		this.domainToMyArray(domain, dto, "proveedor", attProveedor);
 
