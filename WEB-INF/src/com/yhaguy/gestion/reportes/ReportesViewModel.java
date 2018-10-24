@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -142,7 +143,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	static final int ID_FAVORITOS = 9;
 
 	static final MyArray TESORERIA = new MyArray("Tesorería", ID_TESORERIA, "z-icon-briefcase");
-	static final MyArray COMPRAS = new MyArray("Compras", ID_COMPRAS, "z-icon-shopping-cart");
+	static final MyArray COMPRAS = new MyArray("Abastecimiento", ID_COMPRAS, "z-icon-shopping-cart");
 	static final MyArray VENTAS = new MyArray("Ventas", ID_VENTAS, "z-icon-tags");
 	static final MyArray STOCK = new MyArray("Stock", ID_STOCK, "z-icon-archive");
 	static final MyArray LOGISTICA = new MyArray("Logística", ID_LOGISTICA, "z-icon-truck");
@@ -158,7 +159,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	static final String GRUPO_TESORERIA_PAGOS = " PAGOS";
 	static final String GRUPO_TESORERIA_RECIBOS = " RECIBOS";
 	
-	static final String GRUPO_COMPRAS_COMPRAS = " COMPRAS";
+	static final String GRUPO_COMPRAS_COMPRAS = " ABASTECIMIENTO";
 	
 	static final String GRUPO_VENTAS_UTILIDAD = " UTILIDAD";
 	static final String GRUPO_VENTAS_VENDEDOR = " VENDEDORES";
@@ -7437,6 +7438,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String ULTIMO_COSTO_ARTICULOS = "COM-00004";
 		static final String MATRIZ_IMPORTACIONES = "COM-00005";
 		static final String LISTADO_IMPORTACIONES = "COM-00006";
+		static final String MOVIMIENTOS_ARTICULOS = "COM-00007";
 
 		/**
 		 * procesamiento del reporte..
@@ -7466,6 +7468,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case LISTADO_IMPORTACIONES:
 				this.listadoImportaciones();
+				break;
+				
+			case MOVIMIENTOS_ARTICULOS:
+				this.movimientosArticulos();
 				break;
 			}
 		}
@@ -7929,6 +7935,61 @@ public class ReportesViewModel extends SimpleViewModel {
 				vp.setBotonCancelar(false);
 				vp.showReporte(rep, ReportesViewModel.this);
 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * movimientos por articulo..
+		 */
+		private void movimientosArticulos() {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> ventas = rr.getVentas(desde, hasta);
+				List<Object[]> values = new ArrayList<Object[]>();
+				Map<String, Integer> cants = new HashMap<String, Integer>();
+				
+				for (Object[] venta : ventas) {
+					int mes = Utiles.getNumeroMes((Date) venta[19]);
+					String cod = (String) venta[1];
+					String key = cod + "-" + mes;
+					Integer acum = cants.get(key);
+					if (acum != null) {
+						acum += ((Long) venta[18]).intValue();
+						cants.put(key, acum);
+					} else {
+						cants.put(key, ((Long) venta[18]).intValue());
+					}
+				}
+				
+				for (Object[] venta : ventas) {
+					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
+					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
+					venta = Arrays.copyOf(venta, venta.length + 3);
+					Date fcl = (Date) compraLocal[1];
+					Date fcI = (Date) compraImpor[1];
+					if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
+						venta[20] = compraLocal[0];
+						venta[21] = compraLocal[1];
+						venta[22] = compraLocal[2];
+					} else {
+						venta[20] = compraImpor[0];
+						venta[21] = compraImpor[1];
+						venta[22] = compraImpor[2];
+					}
+					values.add(venta);
+				}
+				
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_ABASTECIMIENTO_MOVIM_ARTICULOS;
+				
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new MovimientoArticulos(values, cants);
+				imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -17622,5 +17683,106 @@ class ReporteVentasUtilidadResumido extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
+	}
+}
+
+
+/**
+ * DataSource de Movimientos de articulos..
+ */
+class MovimientoArticulos implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, Integer> cantidades = new HashMap<String, Integer>();
+	
+	public MovimientoArticulos(List<Object[]> values, Map<String, Integer> cantidades) {
+		this.values = values;
+		this.cantidades = cantidades;
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		String cod = (String) det[1];
+
+		if ("Codigo".equals(fieldName)) {
+			value = det[1];
+		} else if ("CodigoProveedor".equals(fieldName)) {
+			value = det[2];
+		}  else if ("Referencia".equals(fieldName)) {
+			value = det[3];
+		} else if ("NroParte".equals(fieldName)) {
+			value = det[4];
+		} else if ("Estado".equals(fieldName)) {
+			boolean estado = (boolean) det[5];
+			value = estado ? "ACTIVO" : "INACTIVO";
+		} else if ("Descripcion".equals(fieldName)) {
+			value = det[6];
+		} else if ("OchentaVeinte".equals(fieldName)) {
+			value = det[7];
+		} else if ("Abc".equals(fieldName)) {
+			value = det[8];
+		} else if ("Familia".equals(fieldName)) {
+			value = det[9];
+		} else if ("Marca".equals(fieldName)) {
+			value = det[10];
+		} else if ("Linea".equals(fieldName)) {
+			value = det[11];
+		} else if ("Grupo".equals(fieldName)) {
+			value = det[12];
+		} else if ("Aplicacion".equals(fieldName)) {
+			value = det[13];
+		} else if ("Modelo".equals(fieldName)) {
+			value = det[14];
+		} else if ("Peso".equals(fieldName)) {
+			value = Utiles.getNumberFormat((double) det[15]);
+		} else if ("Volumen".equals(fieldName)) {
+			value = Utiles.getNumberFormat((double) det[16]);
+		} else if ("Proveedor".equals(fieldName)) {
+			value = det[17];
+		} else if ("CantLocal".equals(fieldName)) {
+			value = det[20] + "";
+		} else if ("FechaLocal".equals(fieldName)) {
+			value = det[21] + "";
+		} else if ("ProvLocal".equals(fieldName)) {
+			value = det[22];
+		} else if ("Junio".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-6");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Julio".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-7");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Agosto".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-8");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Setiembre".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-9");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Octubre".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-10");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Noviembre".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-11");
+			value = cant != null ? cant + "" : "0";
+		} else if ("Diciembre".equals(fieldName)) {
+			Integer cant = this.cantidades.get(cod + "-12");
+			value = cant != null ? cant + "" : "0";
+		} 
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
 	}
 }

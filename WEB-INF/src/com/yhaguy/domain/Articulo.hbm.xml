@@ -17,6 +17,8 @@
 		<property name="codigoOriginal" />
 		<property name="codigoBarra" />
 		<property name="observacion" />
+		<property name="referencia" />
+		<property name="numeroParte" />
 		<property name="peso" />
 		<property name="volumen" />
 		<property name="costoGs" />
@@ -32,6 +34,30 @@
 		<property name="urlEspecificacion" />
 		<property name="importado" />
 		<property name="servicio" />
+		<property name="ochentaVeinte" />
+		<property name="abc" />
+		
+		<property name="estado">
+			<column name="anulado" not-null="true" default="false" />
+		</property>
+		
+		<many-to-one name="familia" class="com.yhaguy.domain.ArticuloFamilia"
+			column="id_familia" lazy="false" />
+			
+		<many-to-one name="marca" class="com.yhaguy.domain.ArticuloMarca"
+			column="id_marca" lazy="false" />
+			
+		<many-to-one name="grupo" class="com.yhaguy.domain.ArticuloGrupo"
+			column="id_grupo" lazy="false" />
+			
+		<many-to-one name="linea" class="com.yhaguy.domain.ArticuloLinea"
+			column="id_linea" lazy="false" />
+			
+		<many-to-one name="aplicacion" class="com.yhaguy.domain.ArticuloAplicacion"
+			column="id_aplicacion" lazy="false" />
+			
+		<many-to-one name="modelo" class="com.yhaguy.domain.ArticuloModelo"
+			column="id_modelo" lazy="false" />
 		
 		<many-to-one name="articuloEstado" class="com.coreweb.domain.Tipo"
 			column="idArticuloEstado" lazy="false" />

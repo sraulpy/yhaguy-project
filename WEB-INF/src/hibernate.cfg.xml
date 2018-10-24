@@ -74,6 +74,13 @@
 		<mapping resource="com/yhaguy/domain/ArticuloListaPrecioDetalle.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloPrecioMinimo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloPrecioJedisoft.hbm.xml" />
+		
+		<mapping resource="com/yhaguy/domain/ArticuloFamilia.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloMarca.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloLinea.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloGrupo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloModelo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloAplicacion.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/ProveedorArticulo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/Proveedor.hbm.xml" />

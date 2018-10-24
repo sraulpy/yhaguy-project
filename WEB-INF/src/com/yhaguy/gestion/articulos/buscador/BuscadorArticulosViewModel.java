@@ -88,7 +88,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	@Init
 	public void init() {
 		try {
-			String desde="01-01-2016 00:00:00";
+			String desde="05-10-2018 00:00:00";
 			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 			this.desde = formatter.parse(desde);
 		} catch (ParseException e) {

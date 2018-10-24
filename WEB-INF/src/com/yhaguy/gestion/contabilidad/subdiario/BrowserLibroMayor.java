@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
 import com.coreweb.Config;
 import com.coreweb.extras.browser.Browser2;
 import com.coreweb.extras.browser.ColumnaBrowser;
-import com.coreweb.util.MyArray;
 import com.yhaguy.domain.RegisterDomain;
 
 public class BrowserLibroMayor extends Browser2 {
@@ -134,6 +132,7 @@ public class BrowserLibroMayor extends Browser2 {
 		String query = " Select sd.numero, sdd.descripcion, sdd.importe, c.codigo, pc.codigo"
 				+ " from SubDiario as sd inner join sd.detalles as sdd  inner join sdd.cuenta c inner join c.planCuenta pc ";
 		
+		@SuppressWarnings("unchecked")
 		List<Object[]> obj = rr.hql(query);
 		for(Object oj[] : obj){
 			System.out.println("numero: "+oj[0]+" codigo: "+oj[3]+" codigo: "+oj[4]+" importe: "+oj[2]+"\n");

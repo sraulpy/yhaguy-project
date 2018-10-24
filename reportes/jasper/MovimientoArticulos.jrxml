@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MovimientoArticulos" pageWidth="2916" pageHeight="595" orientation="Landscape" columnWidth="2876" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="ireport.zoom" value="1.9487171000000116"/>
+	<property name="ireport.x" value="4372"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial"/>
+	<style name="Row"/>
+	<style name="Resumen" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="Generado" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<parameter name="Vendedor" class="java.lang.String"/>
+	<parameter name="Titulo" class="java.lang.String"/>
+	<parameter name="Proveedor" class="java.lang.String"/>
+	<parameter name="Desde" class="java.lang.String"/>
+	<parameter name="Hasta" class="java.lang.String"/>
+	<parameter name="Promedio" class="java.lang.String"/>
+	<parameter name="IVA_INC" class="java.lang.String"/>
+	<parameter name="VCR_INC" class="java.lang.String"/>
+	<parameter name="VCT_INC" class="java.lang.String"/>
+	<parameter name="NCR_CRE" class="java.lang.String"/>
+	<parameter name="TOT_VTA_NETA" class="java.lang.String"/>
+	<parameter name="TOT_COSTO" class="java.lang.String"/>
+	<parameter name="TOT_UTILIDAD" class="java.lang.String"/>
+	<parameter name="TOT_MARGEN_VTA" class="java.lang.String"/>
+	<parameter name="TOT_MARGEN_COSTO" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select '10010001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta", 150000 "Saldo Anterior",  3351450 "Debitos Periodo", 100000 "Creditos Periodo",
+150000 "Saldo Periodo" from plancuenta where id = '1'
+union all
+select '10010002' "Cuenta", 'Mercaderias Gravadas 5%' "Desc Cuenta", 70000 "Saldo Anterior",  68432130 "Debitos Periodo", 100000 "Creditos Periodo",
+500000 "Saldo Periodo" from plancuenta where id = '1'
+union all
+select '10000001' "Cuenta", 'IVA 10%' "Desc Cuenta", 1000 "Saldo Anterior",  2125510 "Debitos Periodo", 100000 "Creditos Periodo",
+180000 "Saldo Periodo" from plancuenta where id = '1'
+union all
+select '10000003' "Cuenta", 'IVA 5%' "Desc Cuenta", 102500 "Saldo Anterior",  1545100 "Debitos Periodo", 100000 "Creditos Periodo",
+101000 "Saldo Periodo" from plancuenta where id = '1'
+union all
+select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterior",  4568770 "Debitos Periodo", 100000 "Creditos Periodo",
+950000 "Saldo Periodo" from plancuenta where id = '1']]>
+	</queryString>
+	<field name="Referencia" class="java.lang.String"/>
+	<field name="CodigoProveedor" class="java.lang.String"/>
+	<field name="Estado" class="java.lang.String"/>
+	<field name="OchentaVeinte" class="java.lang.String"/>
+	<field name="NroParte" class="java.lang.String"/>
+	<field name="Abc" class="java.lang.String"/>
+	<field name="Codigo" class="java.lang.String"/>
+	<field name="Marca" class="java.lang.String"/>
+	<field name="Familia" class="java.lang.String"/>
+	<field name="Linea" class="java.lang.String"/>
+	<field name="Grupo" class="java.lang.String"/>
+	<field name="Aplicacion" class="java.lang.String"/>
+	<field name="Modelo" class="java.lang.String"/>
+	<field name="Peso" class="java.lang.String"/>
+	<field name="Volumen" class="java.lang.String"/>
+	<field name="Descripcion" class="java.lang.String"/>
+	<field name="Proveedor" class="java.lang.String"/>
+	<field name="CantLocal" class="java.lang.String"/>
+	<field name="FechaLocal" class="java.lang.String"/>
+	<field name="CantImp" class="java.lang.String"/>
+	<field name="FechaImp" class="java.lang.String"/>
+	<field name="ProvLocal" class="java.lang.String"/>
+	<field name="ProvImp" class="java.lang.String"/>
+	<field name="Junio" class="java.lang.String"/>
+	<field name="Julio" class="java.lang.String"/>
+	<field name="Agosto" class="java.lang.String"/>
+	<field name="Setiembre" class="java.lang.String"/>
+	<field name="Octubre" class="java.lang.String"/>
+	<field name="Noviembre" class="java.lang.String"/>
+	<field name="Diciembre" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15">
+			<staticText>
+				<reportElement x="0" y="0" width="130" height="15" uuid="832c033f-83c9-4857-b3ed-2e636e981b47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="0" width="123" height="15" uuid="b4d81d44-5252-45e0-a37a-dcd956c24976"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[CodigoProveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="0" width="98" height="15" uuid="f951dcbb-f18a-4faa-bdea-260d476905f2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Referencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="0" width="98" height="15" uuid="c379d273-92ba-4501-b9cc-73e8883bae7c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NroParte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="449" y="0" width="98" height="15" uuid="eb0c8f9f-2d7f-413b-abd4-b09d28b4ebb2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="547" y="0" width="190" height="15" uuid="dffcd9c0-7dde-45d0-9181-c237ce73d57f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="737" y="0" width="94" height="15" uuid="37d557da-cf27-4270-a35b-e56f0f0ae55a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[80/20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="831" y="0" width="70" height="15" uuid="d8cdc780-9eec-4089-8c9c-940bb200d744"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ABC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="901" y="0" width="99" height="15" uuid="db772f71-f1ba-4117-a64f-2276b4ae8502"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Familia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1000" y="0" width="99" height="15" uuid="354628a6-01f2-4327-9afa-2577b67a6373"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1099" y="0" width="99" height="15" uuid="408a7695-8c20-4ba3-920f-bcac76152a00"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Linea]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1198" y="0" width="99" height="15" uuid="9159c216-85c9-45b7-be21-9455fd28bab8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Grupo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1297" y="0" width="99" height="15" uuid="b06ceccf-025c-48c4-9f26-a8499a21cd58"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Aplicacion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1396" y="0" width="99" height="15" uuid="9a4f2039-1f89-4dcc-abf8-2a013e4845e6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1495" y="0" width="99" height="15" uuid="47979c71-aaf4-4cdf-8271-f95d0f007e66"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Peso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1594" y="0" width="99" height="15" uuid="dc0aa149-a47c-4150-b437-7cca03a33122"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Volumen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1693" y="0" width="99" height="15" uuid="1e2f774e-08f2-41f8-b4e4-fe76bb273ebc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1792" y="0" width="99" height="15" uuid="3b39b0e0-57f2-4c2b-9496-6ad0e643c0b3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cant_Ult_Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1891" y="0" width="99" height="15" uuid="c20e91c3-9bbd-42e9-9755-11db5e4d6690"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Fecha_Ult_Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1990" y="0" width="99" height="15" uuid="d4fa6e92-ed04-46de-b444-3e570dc1b3e2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Prov_Ult_Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2089" y="0" width="99" height="15" uuid="cae58a33-b1ea-41a2-adff-5ffeedc2ff6c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Junio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2188" y="0" width="99" height="15" uuid="542742fc-66ec-440a-bf61-193750228b0b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Julio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2287" y="0" width="99" height="15" uuid="d2e4ace0-d07a-4c02-a16f-96f59532acce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Agosto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2386" y="0" width="99" height="15" uuid="a87183a6-b574-424a-b8b0-2402e19ce8c0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Setiembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2485" y="0" width="99" height="15" uuid="52ed7371-77cb-4e36-a1e7-ec2305ac9cd2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Octubre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2584" y="0" width="99" height="15" uuid="1add3758-cb75-40be-9132-f5e5c3c5bded"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Noviembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2683" y="0" width="99" height="15" uuid="e23f2877-13a7-4b9a-8850-f30d740409a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Diciembre]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="0" y="0" width="130" height="15" uuid="70419276-bb7f-4952-8ff6-7eda7f4060b6"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="130" y="0" width="123" height="15" uuid="66da2dd0-2ac6-4858-b4d6-2d715d499bd1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CodigoProveedor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="253" y="0" width="98" height="15" uuid="cc5b2ffd-14e9-4bde-b621-d5df2b7e8946"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Referencia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="351" y="0" width="98" height="15" uuid="2aea022f-87d1-45b9-b493-8931ffe677d6"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NroParte}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="449" y="0" width="98" height="15" uuid="1079ef89-68bd-49a5-8c05-47d30b8efbb0"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="547" y="0" width="190" height="15" uuid="f02743e8-89ec-4e59-965c-11b85c7b4cbc"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="737" y="0" width="94" height="15" uuid="d33b916a-6266-4655-b5ff-5e5f0d3fb84e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{OchentaVeinte}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="831" y="0" width="70" height="15" uuid="4075be80-40bb-4d21-91f5-3f3dd7ad18f8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Abc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="901" y="0" width="99" height="15" uuid="3c81ccd3-9dd9-435b-8829-e81ae1c93029"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Familia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1000" y="0" width="99" height="15" uuid="35d30ca4-6dcf-4eeb-a080-5c63433128de"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Marca}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1099" y="0" width="99" height="15" uuid="08cb0cfb-bea5-4776-9699-cac8fadcc38a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Linea}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1198" y="0" width="99" height="15" uuid="b2191dec-eee2-4d4a-9ede-1df31b82b0fa"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Grupo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1297" y="0" width="99" height="15" uuid="f1ce3ea9-4412-495b-b9c6-137d9f444f56"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Aplicacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1396" y="0" width="99" height="15" uuid="12c11b11-104c-4a3d-ad49-2900024e8c24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Modelo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1495" y="0" width="99" height="15" uuid="ce23c83f-2d2d-479c-b495-3338af3d4c69"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Peso}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1594" y="0" width="99" height="15" uuid="7edca978-4dc8-4fc6-afbf-de3e8feee28a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Volumen}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1693" y="0" width="99" height="15" uuid="e8de5b7e-7efb-401d-b636-4c1f4c5f0e1e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Proveedor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1792" y="0" width="99" height="15" uuid="136ab552-5f3a-4499-b121-efd92f51227f"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CantLocal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1891" y="0" width="99" height="15" uuid="2ce3221c-3d2b-4d17-a47a-8704f4df09c8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{FechaLocal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1990" y="0" width="99" height="15" uuid="b7f3874f-08d4-46ff-b4b1-f8d0015b5305"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ProvLocal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2089" y="0" width="99" height="15" uuid="702ba615-5d81-46a0-bccc-25dc899133ce"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Junio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2188" y="0" width="99" height="15" uuid="ceb92c3e-9f81-4aed-af7e-982f36e647c4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Julio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2287" y="0" width="99" height="15" uuid="6cc05907-f51e-4a5c-924b-c05cd4dd3fcd"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Agosto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2386" y="0" width="99" height="15" uuid="2a608bbf-497a-470d-b653-80ec61066358"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Setiembre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2485" y="0" width="99" height="15" uuid="d66e81e3-53d3-40ba-9afa-aaf7bbc09fa5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Octubre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2584" y="0" width="99" height="15" uuid="edfe581e-869a-41b8-a1b5-bfb4823d5fa3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Noviembre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2683" y="0" width="99" height="15" uuid="336e7829-2882-47bd-8fa9-953962811588"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Diciembre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

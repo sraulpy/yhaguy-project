@@ -772,6 +772,12 @@
 											iconSclass="z-icon-print" width="150px"
 											onClick="@command('imprimirConteo')"
 											disabled="@load(!vm.siempreHabilitado)"></button>
+										<space></space>
+										<checkbox label="Conteo 1"></checkbox>
+										<space></space>
+										<checkbox label="Conteo 2"></checkbox>
+										<space></space>
+										<checkbox label="Conteo 3"></checkbox>
 									</hlayout>
 									<listbox vflex="true" sclass="small-list"
 										model="@load(vm.selectedImportacionFactura.detalles)">

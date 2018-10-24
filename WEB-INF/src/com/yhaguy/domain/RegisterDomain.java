@@ -8520,4 +8520,70 @@ public class RegisterDomain extends Register {
 		String query = "select d from DepartamentoApp d where d.sucursal.id = " + idSucursal;
 		return this.hql(query);
 	}
+	
+	/**
+	 * @return el detalle de movimientos de ventas..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.codigoProveedor
+	 * [3]:articulo.referencia
+	 * [4]:articulo.numeroParte
+	 * [5]:articulo.estado
+	 * [6]:articulo.descripcion
+	 * [7]:articulo.ochentaVeinte
+	 * [8]:articulo.abc
+	 * [9]:articulo.familia
+	 * [10]:articulo.marca
+	 * [11]:articulo.linea
+	 * [12]:articulo.grupo
+	 * [13]:articulo.aplicacion
+	 * [14]:articulo.modelo
+	 * [15]:articulo.peso
+	 * [16]:articulo.volumen
+	 * [17]:articulo.proveedor
+	 * [18]:cantidad
+	 * [19]:fecha
+	 */
+	public List<Object[]> getVentas(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte,"
+				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
+				+ " d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion, "
+				+ " d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen,"
+				+ " d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha"
+				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
+				+ " and (v.fecha >= '" + desde_ + "' or v.fecha <= '" + hasta_ + "')";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return datos de ultima compra local..
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:proveedor
+	 */
+	public Object[] getUltimaCompraLocal(long idArticulo) throws Exception {
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial"
+				+ " from CompraLocalFactura c join c.detalles d where d.articulo.id = " + idArticulo
+				+ " order by c.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
+	}
+	
+	/**
+	 * @return datos de ultima compra importacion..
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:proveedor
+	 */
+	public Object[] getUltimaCompraImportacion(long idArticulo) throws Exception {
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial"
+				+ " from ImportacionFactura c join c.detalles d where d.articulo.id = " + idArticulo
+				+ " order by c.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
+	}
 }

@@ -16,6 +16,10 @@ public class Articulo extends Domain {
 	private String codigoOriginal = ""; 
 	private String codigoBarra = ""; 
 	private String observacion = ""; 
+	private String referencia = "";
+	private String numeroParte = "";
+	private String ochentaVeinte = "";
+	private String abc = "";
 	private String urlImagen = "";
 	private String urlEspecificacion = "";
 	private double peso;
@@ -31,12 +35,21 @@ public class Articulo extends Domain {
 	private boolean servicio;
 	long prioridad = 0; 
 	boolean completo = false;
+	private boolean estado;
+	
 	private Tipo articuloEstado; 
 	private Tipo articuloFamilia; 
 	private Tipo articuloMarca; 
 	private Tipo articuloParte; 						
 	private Tipo articuloLinea; 
 	private Tipo articuloUnidadMedida; 
+	
+	private ArticuloFamilia familia;
+	private ArticuloMarca marca;
+	private ArticuloGrupo grupo;
+	private ArticuloLinea linea;
+	private ArticuloAplicacion aplicacion;
+	private ArticuloModelo modelo;
 	
 	private long stock = 0;
 	
@@ -341,5 +354,93 @@ public class Articulo extends Domain {
 
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
+	}
+
+	public String getReferencia() {
+		return referencia;
+	}
+
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
+	}
+
+	public String getNumeroParte() {
+		return numeroParte;
+	}
+
+	public void setNumeroParte(String numeroParte) {
+		this.numeroParte = numeroParte;
+	}
+
+	public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
+	public String getOchentaVeinte() {
+		return ochentaVeinte;
+	}
+
+	public void setOchentaVeinte(String ochentaVeinte) {
+		this.ochentaVeinte = ochentaVeinte;
+	}
+
+	public String getAbc() {
+		return abc;
+	}
+
+	public void setAbc(String abc) {
+		this.abc = abc;
+	}
+
+	public ArticuloFamilia getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(ArticuloFamilia familia) {
+		this.familia = familia;
+	}
+
+	public ArticuloMarca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(ArticuloMarca marca) {
+		this.marca = marca;
+	}
+
+	public ArticuloGrupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(ArticuloGrupo grupo) {
+		this.grupo = grupo;
+	}
+
+	public ArticuloLinea getLinea() {
+		return linea;
+	}
+
+	public void setLinea(ArticuloLinea linea) {
+		this.linea = linea;
+	}
+
+	public ArticuloAplicacion getAplicacion() {
+		return aplicacion;
+	}
+
+	public void setAplicacion(ArticuloAplicacion aplicacion) {
+		this.aplicacion = aplicacion;
+	}
+
+	public ArticuloModelo getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(ArticuloModelo modelo) {
+		this.modelo = modelo;
 	}
 }
