@@ -8522,7 +8522,7 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
-	 * @return el detalle de movimientos de ventas..
+	 * @return el detalle de movimientos de ventas segun fecha..
 	 * [0]:articulo.id
 	 * [1]:articulo.codigoInterno
 	 * [2]:articulo.codigoProveedor
