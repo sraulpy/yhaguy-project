@@ -34,7 +34,7 @@ public class ReportesViewModel {
 	public static final String ZUL_REPORTES_NC = "/yhaguy/gestion/reportes/formularios_nc.zul";
 	public static final String ZUL_REPORTES_CH = "/yhaguy/gestion/reportes/formularios_ch.zul";
 	
-	public static final String SOURCE_REPOSICION = "/reportes/jasper/CajaReposicion.jasper";
+	public static final String SOURCE_REPOSICION = "/reportes/jasper/CajaReposicion_.jasper";
 	public static final String SOURCE_RECIBO = "/reportes/jasper/Recibo.jasper";
 	public static final String SOURCE_RECIBO_COBRO = "/reportes/jasper/ReciboCobro.jasper";
 	public static final String SOURCE_RETENCION = "/reportes/jasper/Retencion.jasper";

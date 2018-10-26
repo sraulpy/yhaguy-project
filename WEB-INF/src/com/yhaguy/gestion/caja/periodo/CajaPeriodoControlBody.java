@@ -38,6 +38,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Caja;
 import com.yhaguy.domain.CajaPeriodo;
+import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
@@ -1546,8 +1547,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 		String source = ReportesViewModel.SOURCE_REPOSICION;
 		MyPair tipoEgreso = (MyPair) this.reposicion.getPos10();
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("title", tipoEgreso.esNuevo() ? "Reposición de Caja"
-				: tipoEgreso.getText());
+		params.put("title", tipoEgreso.esNuevo() ? "Reposición de Caja" : tipoEgreso.getText());
+		params.put("ImporteEnLetra", this.m.numberToLetter(this.reposicion.getPos15()));
+		params.put("Usuario", this.getUs().getNombre());
+		params.put("NroRecibo", this.reposicion.getPos1());
 		JRDataSource dataSource = new CajaReposicionDataSource();
 		this.imprimirComprobante(source, params, dataSource);
 	}
@@ -2079,44 +2082,46 @@ public class CajaPeriodoControlBody extends BodyApp {
 	class CajaReposicionDataSource implements JRDataSource {
 
 		List<MyArray> detalle = new ArrayList<MyArray>();
+		CajaReposicion rep;
 
 		public CajaReposicionDataSource() {
-			this.detalle.add(reposicion);
+			try {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				long idReposicion = reposicion.getId();
+				this.rep = (CajaReposicion) rr.getObject(CajaReposicion.class.getName(), idReposicion);
+				this.detalle.add(new MyArray());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		private int index = -1;
 
 		@Override
 		public Object getFieldValue(JRField field) throws JRException {
+
 			Object value = null;
 			String fieldName = field.getName();
-			MyArray reposicion = this.detalle.get(index);
+			CajaReposicion item = this.rep;
 
-			if ("Caja".equals(fieldName)) {
-				value = dto.getCaja().getNumero();
-			} else if ("Planilla".equals(fieldName)) {
-				value = dto.getNumero();
-			} else if ("Cajero".equals(fieldName)) {
-				value = dto.getResponsable().getPos1();
-			} else if ("Beneficiario".equals(fieldName)) {
-				String benef = (String) reposicion.getPos1();
-				value = benef.replace('-', ' ');
-			} else if ("TipoPago".equals(fieldName)) {
-				ReciboFormaPagoDTO tipoPago = (ReciboFormaPagoDTO) reposicion
-						.getPos14();
-				value = tipoPago.getTipo().getText();
+			if ("FechaFactura".equals(fieldName)) {
+				value = Utiles.getDateToString(item.getFormaPago().getChequeFecha(), Utiles.DD_MM_YYYY);
+			} else if ("DescFactura".equals(fieldName)) {
+				value = item.getFormaPago().getDescripcion();
 			} else if ("Importe".equals(fieldName)) {
-				double importe = (double) reposicion.getPos5();
-				value = FORMATTER.format(importe);
+				double importe = item.getFormaPago().getMontoGs();
+				value = Utiles.getNumberFormat(importe);
+			} else if ("TipoDetalle".equals(fieldName)) {
+				value = "DATOS DEL CHEQUE";
 			} else if ("observacion".equals(fieldName)) {
-				value = reposicion.getPos7();
+				value = this.rep.getObservacion();
 			}
 			return value;
 		}
 
 		@Override
 		public boolean next() throws JRException {
-			if (index < detalle.size() - 1) {
+			if (index < this.detalle.size() - 1) {
 				index++;
 				return true;
 			}
