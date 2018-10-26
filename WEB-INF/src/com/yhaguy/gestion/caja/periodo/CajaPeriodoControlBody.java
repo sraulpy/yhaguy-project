@@ -1548,7 +1548,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		MyPair tipoEgreso = (MyPair) this.reposicion.getPos10();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("title", tipoEgreso.esNuevo() ? "Reposición de Caja" : tipoEgreso.getText());
-		params.put("ImporteEnLetra", this.m.numberToLetter(this.reposicion.getPos15()));
+		params.put("ImporteEnLetra", this.m.numberToLetter(this.dto.getNumero()));
 		params.put("Usuario", this.getUs().getNombre());
 		params.put("NroRecibo", this.reposicion.getPos1());
 		JRDataSource dataSource = new CajaReposicionDataSource();
