@@ -17847,8 +17847,8 @@ class MovimientoArticulos implements JRDataSource {
 			Object[] st6 = stock6.get(det[0]);
 			Object[] st7 = stock7.get(det[0]);
 			Object[] st8 = stock8.get(det[0]);
-			long total = (st1 != null ? (long) st1[1] : 0) + (st2 != null ? (long) st2[1] : 0) + (st3 != null ? (long) st3[1] : 0) + (st4 != null ? (long) st4[1] : 0)
-					+ (st5 != null ? (long) st5[1] : 0) + (st6 != null ? (long) st6[1] : 0) + (st7 != null ? (long) st7[1] : 0) + (st8 != null ? (long) st8[1] : 0);
+			long total = (st1 != null ? (long) st1[1] : (long) 0) + (st2 != null ? (long) st2[1] : (long) 0) + (st3 != null ? (long) st3[1] : (long) 0) + (st4 != null ? (long) st4[1] : (long) 0)
+					+ (st5 != null ? (long) st5[1] : (long) 0) + (st6 != null ? (long) st6[1] : (long) 0) + (st7 != null ? (long) st7[1] : (long) 0) + (st8 != null ? (long) st8[1] : (long) 0);
 			value = total + "";			
 		} else if ("Enero".equals(fieldName)) {
 			Integer cant = this.cantidades.get(cod + "-1");
