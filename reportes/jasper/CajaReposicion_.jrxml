@@ -110,13 +110,6 @@ from plancuenta where id = '1']]>
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="170" y="16" width="202" height="14" uuid="77fd9c48-5f12-4609-a770-17a9a857bb9b"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{NroRecibo}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="406" y="18" width="163" height="12" uuid="1640e2e2-9cb8-44de-b2f5-5a6541783f95"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Generado: " + $P{Generado}]]></textFieldExpression>
