@@ -165,7 +165,7 @@
 					<row>
 						<field value="Concepto:" />						
 						<textbox width="200px"
-							value="@bind(vm.chequeDTO.concepto)" readonly="true" 
+							value="@bind(vm.chequeDTO.concepto)" 
 							hflex="true"/>
 					</row>
 				</rows>
