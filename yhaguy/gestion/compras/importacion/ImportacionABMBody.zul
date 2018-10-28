@@ -762,7 +762,7 @@
 					<tabbox vflex="1">
 						<tabs>
 							<tab label="Control Físico" width="170px"></tab>
-							<tab label="Control de Carga" width="170px"></tab>
+							<tab label="Control de Carga" width="170px" visible="false"></tab>
 						</tabs>
 						<tabpanels vflex="true">
 							<tabpanel vflex="true">

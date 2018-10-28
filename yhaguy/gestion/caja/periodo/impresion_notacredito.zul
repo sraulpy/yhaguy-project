@@ -67,10 +67,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos2)" sclass="det"></label>
 				</div>	
 				<div width="225px">
-					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos1)" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
@@ -166,10 +166,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos2)" sclass="det"></label>
 				</div>	
 				<div width="225px">
-					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos1)" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
@@ -265,10 +265,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos2)" sclass="det"></label>
 				</div>	
 				<div width="225px">
-					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos1)" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>

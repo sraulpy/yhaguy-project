@@ -49,7 +49,7 @@
 		<div height="50px"></div>
 		<hlayout>
 			<div width="50px"></div>
-			<label value="@load(vm.selectedItem.pos7) @converter(vm.cnv.monedaLocal)" style="font-size:8pt; font-family:Verdana"></label>
+			<label value="@load(vm.selectedItem.pos7) @converter('formattedNumber', format='###,###,##0')" style="font-size:8pt; font-family:Verdana"></label>
 		</hlayout>
 	
 	</vlayout>
@@ -60,20 +60,19 @@
 	<vlayout hflex="true" spacing="0">
 	
 		<!-- IMPORTE -->
-		<div height="14px"></div>
+		<div height="5px"></div>
 		<hlayout>
 			<div width="500px"></div>
-			<label value="@load(vm.selectedItem.pos7) @converter(vm.cnv.monedaLocal)" style="font-size:8pt; font-family:Verdana"></label>
+			<label value="@load(vm.selectedItem.pos7) @converter('formattedNumber', format='###,###,##0')" style="font-size:8pt; font-family:Verdana"></label>
 			<space width="75px"></space>
 		</hlayout>
 		
 		
 		<!-- FECHA DEL CHEQUE -->
 		<div height="15px"></div>		
-		<hlayout>
-			<space hflex="true"></space>
+		<hlayout style="margin-left:310px">
 			<label value="@load(vm.selectedItem.pos4) @converter('formattedDate', format='dd')" style="font-size:8pt; font-family:Verdana"></label>
-			<space width="15px"></space>
+			<space width="25px"></space>
 			<label value="@load(vm.selectedItem.pos4) @converter('formattedDate', format='MM')" style="font-size:8pt; font-family:Verdana"></label>
 			<space width="40px"></space>
 			<label value="@load(vm.selectedItem.pos4) @converter('formattedDate', format='yy')" style="font-size:8pt; font-family:Verdana"></label>
@@ -81,20 +80,20 @@
 			<label value="@load(vm.selectedItem.pos5) @converter('formattedDate', format='dd')" style="font-size:8pt; font-family:Verdana"></label>
 			<space width="15px"></space>
 			<label value="@load(vm.selectedItem.pos5) @converter('formattedDate', format='MM')" style="font-size:8pt; font-family:Verdana"></label>
-			<space width="48px"></space>
+			<space width="55px"></space>
 			<label value="@load(vm.selectedItem.pos5) @converter('formattedDate', format='yy')" style="font-size:8pt; font-family:Verdana"></label>
 			<div width="2px"></div>
 		</hlayout>
 		
 		<!-- BENEFICIARIO -->
 		<div height="14px"></div>
-		<div hflex="true" height="15px" style="margin-left:110px">
+		<div hflex="true" height="15px" style="margin-left:130px">
 			<label value="@load(vm.selectedItem.pos6.toString().toUpperCase())" style="font-size:8pt; font-family:Verdana"></label>
 		</div>
 		
 		<!-- IMPORTE EN LETRAS -->
 		<div height="7px"></div>
-		<div hflex="true" style="margin-left:140px">
+		<div hflex="true" style="margin-left:170px">
 			<div width="40px"></div>
 			<label value="@load(vm.importeEnLetras)" style="font-size:8pt; font-family:Verdana"></label>
 		</div>
