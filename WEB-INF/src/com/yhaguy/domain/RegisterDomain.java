@@ -8592,6 +8592,29 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
 	}
 	
+	public static void main(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Recibo> recs = rr.getObjects(Recibo.class.getName());
+			for (Recibo rec : recs) {
+				if (rec.isCobro()) {
+					for (ReciboDetalle det : rec.getDetalles()) {
+						CtaCteEmpresaMovimiento mv = det.getMovimiento();
+						if (mv!=null && mv.getSaldo() > 1000) {
+							if (mv.getImporteOriginal() - det.getMontoGs() < 5000) {
+								mv.setSaldo(mv.getImporteOriginal() - det.getMontoGs());
+								//rr.saveObject(mv, mv.getUsuarioMod());
+								System.out.println(mv.getNroComprobante() + " - " + rec.getCliente().getRazonSocial());
+							}							
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @return el stock por deposito..
 	 * [0]:articulo.id

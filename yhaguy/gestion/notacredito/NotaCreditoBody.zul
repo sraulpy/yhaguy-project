@@ -25,9 +25,9 @@
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Fecha" />
-					<textbox
-						value="@load(vm.dto.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')"
-						readonly="true" hflex="true" />
+					<datebox
+						value="@bind(vm.dto.fechaEmision)"
+						hflex="true" />
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Moneda" />
@@ -162,9 +162,9 @@
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Fecha" />
-					<textbox
-						value="@load(vm.dto.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')"
-						readonly="true" hflex="true" />
+					<datebox
+						hflex="true" 
+						value="@bind(vm.dto.fechaEmision)" />
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Sucursal" />
