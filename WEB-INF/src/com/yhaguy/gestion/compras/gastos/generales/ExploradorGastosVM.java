@@ -117,6 +117,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 				this.filterNumero, this.filterRazonSocial, this.filterRuc, 
 				this.filterCaja, this.filterPago, this.filterImportacion, this.filterDescripcion);
 		for (Gasto gasto : out) {
+			System.out.println(gasto.getNumeroFactura());
 			if (this.selectedFiltro.equals(FILTRO_TODOS)) {
 				aux.add(gasto);
 				this.totalImporteGs += gasto.getImporteGs();

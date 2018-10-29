@@ -41,7 +41,7 @@
 			<listheader label="Cuenta Contable" />
 			<listheader label="Caja" width="80px" />
 			<listheader label="Pago Nro." width="110px" />
-			<listheader label="Import. Nro." width="100px" visible="false"/>
+			<listheader label="Import. Nro." width="100px" visible="@load(vm.selectedFiltro eq 'GASTOS_IMPORTACION')"/>
 			<listheader label="Importe Gs." align="right" width="100px" />
 			<listheader label="" align="center" width="50px"/>
 			<listheader label="" align="center" width="30px"/>
@@ -171,7 +171,7 @@
 		</listfoot>
 	</listbox>
 	
-	<popup id="pop_det" width="800px" sclass="rounded">
+	<popup id="pop_det" width="900px" sclass="rounded">
 		<hbox align="end" pack="end" width="100%">		
 			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
 				<field value="@load(vm.selectedGasto.tipoMovimiento.descripcion)" />
@@ -192,21 +192,23 @@
 		<listbox height="300px" sclass="small-list"
 			model="@load(vm.selectedGasto.detalles)" hflex="3">
 			<auxhead>
-				<auxheader label="Cuentas Contables" colspan="2"/>
+				<auxheader label="Cuentas Contables" colspan="3"/>
 			</auxhead>
 			<listhead style="text-align:center">
+				<listheader label="Código" width="110px" />
 				<listheader label="Descripción" />
 				<listheader label="Importe Gs." width="100px" align="right"
 					style="text-align:center" />
 			</listhead>
 			<template name="model">
 				<listitem>
+					<listcell label="@load(each.articuloGasto.cuentaContable.codigo)" />
 					<listcell label="@load(each.articuloGasto.descripcion)" />
 					<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter span="2">
+				<listfooter span="3">
 					<hlayout>
 						<field value="@load(vm.selectedGasto.detalles.size())" />
 						<field value="ítems" />

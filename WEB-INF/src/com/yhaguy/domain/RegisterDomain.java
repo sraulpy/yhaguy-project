@@ -7449,7 +7449,7 @@ public class RegisterDomain extends Register {
 				+ " and upper(g.numeroOrdenPago) like '%" + pago.toUpperCase() + "%'"
 				+ " and upper(g.observacion) like '%" + descripcion.toUpperCase() + "%'"
 				+ " order by g.fecha";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 1000);
 	}
 	
 	/**
@@ -8597,7 +8597,17 @@ public class RegisterDomain extends Register {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Recibo> recs = rr.getObjects(Recibo.class.getName());
 			for (Recibo rec : recs) {
-				if (rec.isCobro()) {
+				if (rec.isPago()) {
+					for (ReciboFormaPago fp : rec.getFormasPago()) {
+						if (fp.isRetencion()) {
+							rec.setAuxi("RETENCION");
+							rr.saveObject(rec, rec.getUsuarioMod());
+							System.out.println(rec.getNumero());
+						}
+					}
+				}
+				
+				/** if (rec.isCobro()) {
 					for (ReciboDetalle det : rec.getDetalles()) {
 						CtaCteEmpresaMovimiento mv = det.getMovimiento();
 						if (mv!=null && mv.getSaldo() > 1000) {
@@ -8608,7 +8618,7 @@ public class RegisterDomain extends Register {
 							}							
 						}
 					}
-				}
+				} **/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -14,6 +14,8 @@ import com.yhaguy.util.Utiles;
 @SuppressWarnings("serial")
 public class Recibo extends Domain {
 	
+	public static final String CON_RETENCION = "RETENCION"; 
+	
 	private String numero;
 	private long nro;
 	private long idUsuarioCarga;	

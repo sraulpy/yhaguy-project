@@ -121,7 +121,7 @@ public class Gasto extends Domain {
 	 * @return true si es gasto importacion..
 	 */
 	public boolean isGastoImportacion() {
-		return !this.getNumeroImportacion().equals("- - -");
+		return this.getNumeroImportacion().contains("IMP");
 	}
 	
 	public String getDescripcionTipoMovimiento(){
