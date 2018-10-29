@@ -441,11 +441,10 @@ public class ControlBancoMovimiento extends Control {
 			MyArray maMoneda = new MyArray();
 			maMoneda.setId(rfpDto.getMoneda().getId());
 			bchPro.setMoneda(maMoneda);
-			bchPro.setMonto(rfpDto.getMontoGs());
+			bchPro.setMonto(rfpDto.isMonedaLocal() ? rfpDto.getMontoGs() : rfpDto.getMontoDs());
 			bchPro.setEstadoComprobante(this.getUtilDto().getEstadoComprobantePendiente());
 			bchPro.setModoDeCreacion(this.getUtilDto().getChequeAutomatico());
-			bchPro.setBanco((BancoCtaDTO) getDTOById(BancoCta.class.getName(), rfpDto
-					.getDepositoBancoCta().getId(), new AssemblerBancoCtaCte()));
+			bchPro.setBanco((BancoCtaDTO) getDTOById(BancoCta.class.getName(), rfpDto.getDepositoBancoCta().getId(), new AssemblerBancoCtaCte()));
 			bchPro.setNumeroCaja(planilla);
 			bchPro.setNumeroOrdenPago(recibo);
 

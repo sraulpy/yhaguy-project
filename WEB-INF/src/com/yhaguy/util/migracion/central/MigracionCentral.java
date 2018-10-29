@@ -27,7 +27,7 @@ public class MigracionCentral {
 
 		RegisterDomain rr = RegisterDomain.getInstance();
 		String src = DIR_MIGRACION + "PROVEEDORES.csv";
-		String src_ = DIR_MIGRACION + "PROVEEDORES_SALDOS_2.csv";
+		String src_ = DIR_MIGRACION + "BATERIAS_SALDOS.csv";
 
 		String[][] cab = { { "Empresa", CSV.STRING } };
 		String[][] det = { { "IDCUENTA", CSV.STRING }, { "RAZONSOCIAL", CSV.STRING }, { "RUC", CSV.STRING },
@@ -90,8 +90,8 @@ public class MigracionCentral {
 				CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
 				movim.setAnulado(false);
 				movim.setCerrado(false);
-				movim.setFechaEmision(Utiles.getFecha(emision, "MM/dd/yyyy"));
-				movim.setFechaVencimiento(Utiles.getFecha(vencimiento, "MM/dd/yyyy"));
+				movim.setFechaEmision(Utiles.getFecha(emision, "dd/MM/yyyy"));
+				movim.setFechaVencimiento(Utiles.getFecha(vencimiento, "dd/MM/yyyy"));
 				movim.setIdEmpresa(emp.getId());
 				movim.setIdMovimientoOriginal(0);
 				movim.setIdVendedor(0);

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class BancoCheque extends Domain {
@@ -49,6 +50,13 @@ public class BancoCheque extends Domain {
 		Date hoy = new Date();
 		int cmp = hoy.compareTo(this.fechaVencimiento);
 		return cmp < 0;
+	}
+	
+	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
 	}
 
 	public long getNumero() {

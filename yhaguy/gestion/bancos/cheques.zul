@@ -55,7 +55,7 @@
 		selectedItem="@bind(vm.selectedItem)">
 		<auxhead>
 			<auxheader colspan="2" label="Origen"/>
-			<auxheader colspan="9" label="Cheque"/>
+			<auxheader colspan="10" label="Cheque"/>
 		</auxhead>
 		<listhead>
 			<listheader label="Caja" width="110px" />
@@ -67,7 +67,8 @@
 			<listheader label="Fecha Cobro" width="110px" />
 			<listheader label="Tipo" width="80px" />
 			<listheader label="Beneficiario" />
-			<listheader label="Importe Gs." align="right" width="140px" />
+			<listheader label="Importe" align="right" width="140px" />
+			<listheader label="Moneda" align="center" width="65px" />
 			<listheader label="Cobrado" align="center" width="65px"
 				tooltiptext="Cheque Cobrado.."/>
 		</listhead>	
@@ -148,6 +149,7 @@
 			<auxheader>
 			</auxheader>
 			<auxheader />
+			<auxheader />
 		</auxhead>
 		<template name="model">
 			<listitem style="@load(each.pos12? 'text-decoration:line-through; color:red' : '')">
@@ -161,6 +163,7 @@
 				<listcell label="@load(each.pos8 ? 'AL DÍA' : 'DIFERIDO')" />
 				<listcell label="@load(each.pos6.toString().toUpperCase())" />
 				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" />
+				<listcell label="@load(each.pos14)" />
 				<listcell>
 					<div onClick="@command('openChequeCobrado', popup=popCob, cheque=each, comp=self)">
 						<label value="SI" class="label label-success" visible="@load(each.pos11)" />
@@ -170,12 +173,12 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="10">
+			<listfooter span="11">
 				<hlayout>
 					<field value="@load(vm.cheques.size())" />
 					<field value="ítems" />
 					<space hflex="true"></space>
-					<field value="Total Gs.:" />
+					<field value="Total:" />
 					<guaranibox readonly="true" value="@load(vm.totalImporteGs)" 
 						style="text-align:right;background:#EEF7FA;font-weight:bold" />
 				</hlayout>

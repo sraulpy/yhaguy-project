@@ -52,6 +52,7 @@ public class ChequesViewModel extends SimpleViewModel {
 	
 	static final String SOURCE_ALDIA = "/yhaguy/gestion/bancos/impresion_cheque_al_dia.zul";
 	static final String SOURCE_DIFERIDO = "/yhaguy/gestion/bancos/impresion_cheque_diferido.zul";
+	static final String SOURCE_DIFERIDO_DS = "/yhaguy/gestion/bancos/impresion_cheque_diferido_ds.zul";
 	
 	private Date fechaCobro;
 	
@@ -150,7 +151,7 @@ public class ChequesViewModel extends SimpleViewModel {
 		boolean alDia = (boolean) cheque.getPos8();
 		String source = SOURCE_ALDIA;
 		if (!alDia) {
-			source = SOURCE_DIFERIDO;
+			source = (boolean) cheque.getPos15() ? SOURCE_DIFERIDO : SOURCE_DIFERIDO_DS;
 		}
 		this.win = (Window) Executions.createComponents(source, this.mainComponent, null);
 		this.win.doModal();
@@ -193,12 +194,14 @@ public class ChequesViewModel extends SimpleViewModel {
 			my.setPos5(cheque.getFechaVencimiento());
 			my.setPos6(cheque.getBeneficiario());
 			my.setPos7(cheque.getMonto());
-			my.setPos8(cheque.isChequeAlDia());
+			my.setPos8(false);
 			my.setPos9(cheque.getNumeroCaja());
 			my.setPos10(cheque.getNumeroOrdenPago());
 			my.setPos11(cheque.isCobrado());
 			my.setPos12(cheque.isAnulado());
 			my.setPos13(cheque.getFechaCobro());
+			my.setPos14(cheque.getMoneda().getSigla());
+			my.setPos15(cheque.isMonedaLocal());
 			if (this.selectedFiltro.equals(FILTRO_AL_DIA) && cheque.isChequeAlDia()) {
 				out.add(my);
 				this.totalImporteGs += cheque.getMonto();
