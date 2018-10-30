@@ -44,6 +44,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloListaPrecio;
+import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
@@ -709,11 +710,16 @@ public class VentaControlBody extends BodyApp {
 
 		for (VentaDetalleDTO item : this.dto.getDetalles()) {
 			long stock = rr.getStockDisponible(item.getArticulo().getId(), 2);
+			List<ArticuloUbicacion> ubicacion = rr.getUbicacion(item.getArticulo().getId());
+			String ubicacion_ = "";
+			for (ArticuloUbicacion ubic : ubicacion) {
+				ubicacion_ += ubic.getEstante().substring(0, 2) + " - " + ubic.getFila() + " ";
+			}
 			Object[] obj1 = new Object[] {
-					item.getArticulo().getPos1(), item.getArticulo().getPos4(),
+					item.getArticulo().getPos1(), item.getArticulo().getPos4(), ubicacion_,
 					item.getCantidad(), stock, item.getPrecioGs(), item.getImporteGs() };
 			Object[] obj2 = new Object[] { item.getArticulo().getPos1(),
-					item.getArticulo().getPos4(), item.getCantidad(), stock };
+					item.getArticulo().getPos4(), ubicacion_, item.getCantidad(), stock };
 			data.add(imprimirPrecio ? obj1 : obj2);
 		}
 
@@ -1837,10 +1843,11 @@ class ReporteVenta extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 50);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 30, false);
-	static DatosColumnas col3_ = new DatosColumnas("Stock", TIPO_LONG, 30, false);
-	static DatosColumnas col4 = new DatosColumnas("Precio", TIPO_DOUBLE, 30, false);
-	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
+	static DatosColumnas col3 = new DatosColumnas("Ubic.", TIPO_STRING, 30);
+	static DatosColumnas col4 = new DatosColumnas("Cantidad", TIPO_LONG, 30, false);
+	static DatosColumnas col5 = new DatosColumnas("Stock", TIPO_LONG, 30, false);
+	static DatosColumnas col6 = new DatosColumnas("Precio", TIPO_DOUBLE, 30, false);
+	static DatosColumnas col7 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
 	
 	public ReporteVenta(VentaDTO venta) {
 		this.venta = venta;
@@ -1850,9 +1857,10 @@ class ReporteVenta extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
-		cols.add(col3_);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override
@@ -1912,8 +1920,9 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 50);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 30, false);
-	static DatosColumnas col4 = new DatosColumnas("Stock", TIPO_LONG, 30, false);
+	static DatosColumnas col3 = new DatosColumnas("Ubicación", TIPO_STRING, 50);
+	static DatosColumnas col4 = new DatosColumnas("Cantidad", TIPO_LONG, 30, false);
+	static DatosColumnas col5 = new DatosColumnas("Stock", TIPO_LONG, 30, false);
 	
 	public ReporteVentaSinPrecio(VentaDTO venta) {
 		this.venta = venta;
@@ -1924,6 +1933,7 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
 	}
 
 	@Override

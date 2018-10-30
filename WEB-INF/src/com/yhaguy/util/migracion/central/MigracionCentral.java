@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Proveedor;
@@ -115,6 +117,35 @@ public class MigracionCentral {
 		}
 	}
 	
+	/**
+	 * ubicaciones..
+	 */
+	public static void migrarUbicaciones() throws Exception {
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "UBICACIONES.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "UBICACION", CSV.STRING }, { "DEPOSITO", CSV.STRING } };		
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("CODIGO");
+			String ubicacion = csv.getDetalleString("UBICACION");
+			String deposito = csv.getDetalleString("DEPOSITO");
+			
+			Articulo art = rr.getArticulo(codigo);
+			if (art != null) {
+				ArticuloUbicacion ubic = new ArticuloUbicacion();
+				ubic.setEstante(deposito.equals("1") ? "MINORISTA" : "MAYORISTA");
+				ubic.setFila(ubicacion);
+				art.getUbicaciones().add(ubic);
+				rr.saveObject(art, art.getUsuarioMod());
+				System.out.println(art.getCodigoInterno() + " - " + ubic.getFila() + " - " + ubic.getEstante());
+			}
+		}
+	}
 	
 	
 	public static void main(String[] args) {
@@ -153,9 +184,11 @@ public class MigracionCentral {
 		//	MigracionCentral.migrarClientes();
 		//	MigracionCentral.machearClientesVendedores();
 		//	MigracionCentral.machearClientesSaldos();
-			MigracionCentral.migrarProveedores();
+		//	MigracionCentral.migrarProveedores();
 		//	MigracionCentral.migrarFuncionarios();
 		//	MigracionCentral.migrarChequesRechazados();
+			
+			MigracionCentral.migrarUbicaciones();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

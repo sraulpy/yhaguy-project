@@ -104,6 +104,13 @@ public class Gasto extends Domain {
 	}
 	
 	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
+	}
+	
+	/**
 	 * @return true si es pagado..
 	 */
 	public boolean isPagado() {

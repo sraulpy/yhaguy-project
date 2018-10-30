@@ -121,20 +121,18 @@
 			<listbox rows="5" hflex="true" vflex="true"
 				sclass="small-list custom-listheader"
 				emptyMessage="SIN UBICACIÓN.."
-				model="@load(vm.selectedItem.pos5)">
+				model="@load(vm.ubicaciones)">
 				<auxhead>
-					<auxheader label="Ubicación" colspan="3"></auxheader>
+					<auxheader label="Ubicación" colspan="2"></auxheader>
 				</auxhead>
 				<listhead style="text-align:center">
-					<listheader label="Estante" align="right" />
-					<listheader label="Fila" align="right" />
-					<listheader label="Columna" align="right" />
+					<listheader label="Depósito" />
+					<listheader label="Ubicación" />
 				</listhead>
 				<template name="model">
 					<listitem>
-						<listcell label="@load(each.pos1)"></listcell>
-						<listcell label="@load(each.pos2)"></listcell>
-						<listcell label="@load(each.pos3)"></listcell>
+						<listcell label="@load(each.estante)"></listcell>
+						<listcell label="@load(each.fila)"></listcell>
 					</listitem>
 				</template>
 			</listbox>

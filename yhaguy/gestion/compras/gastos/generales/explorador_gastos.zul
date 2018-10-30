@@ -42,7 +42,8 @@
 			<listheader label="Caja" width="80px" />
 			<listheader label="Pago Nro." width="110px" />
 			<listheader label="Import. Nro." width="100px" visible="@load(vm.selectedFiltro eq 'GASTOS_IMPORTACION')"/>
-			<listheader label="Importe Gs." align="right" width="100px" />
+			<listheader label="Importe" align="right" width="100px" />
+			<listheader label="Moneda" align="center" width="70px" />
 			<listheader label="" align="center" width="50px"/>
 			<listheader label="" align="center" width="30px"/>
 		</listhead>	
@@ -133,6 +134,7 @@
 			<auxheader />
 			<auxheader />
 			<auxheader />
+			<auxheader />
 		</auxhead>
 		<template name="model">
 			<listitem style="@load(each.anulado? 'text-decoration:line-through; color:red' : '')">
@@ -145,7 +147,8 @@
 				<listcell label="@load(each.cajaPagoNumero)"/>
 				<listcell label="@load(each.numeroOrdenPago)"/>
 				<listcell label="@load(each.numeroImportacion)"/>
-				<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
+				<listcell label="@load(each.monedaLocal? each.importeGs : each.importeDs) @converter(each.monedaLocal ? vm.cnv.monedaLocal : 'formattedNumber', format='###,###,##0.00')" />
+				<listcell label="@load(each.moneda.sigla)"></listcell>
 				<listcell>
 						<a label="ítems" onClick="@command('verItems', item=each, parent=self)" />
 				</listcell>
@@ -157,7 +160,7 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="8">
+			<listfooter span="9">
 				<hlayout hflex="true">
 					<field value="@load(vm.listSize)" />
 					<field value="ítems" />
@@ -187,6 +190,9 @@
 			<space />
 			<field value="Proveedor:" />
 			<label value="@load(vm.selectedGasto.proveedor.razonSocial)" />		
+			<space />
+			<field value="Moneda:" />
+			<label value="@load(vm.selectedGasto.moneda.descripcion)" />	
 		</hbox>
 		<hlayout>
 		<listbox height="300px" sclass="small-list"
@@ -197,14 +203,16 @@
 			<listhead style="text-align:center">
 				<listheader label="Código" width="110px" />
 				<listheader label="Descripción" />
-				<listheader label="Importe Gs." width="100px" align="right"
+				<listheader label="Importe" width="100px" align="right"
 					style="text-align:center" />
 			</listhead>
 			<template name="model">
 				<listitem>
 					<listcell label="@load(each.articuloGasto.cuentaContable.codigo)" />
 					<listcell label="@load(each.articuloGasto.descripcion)" />
-					<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
+					<listcell
+						label="@load(vm.selectedGasto.monedaLocal ? each.montoGs : each.montoDs) 
+						@converter(vm.selectedGasto.monedaLocal ? vm.cnv.monedaLocal : 'formattedNumber', format='###,###,##0.00')" />
 				</listitem>
 			</template>
 			<listfoot>

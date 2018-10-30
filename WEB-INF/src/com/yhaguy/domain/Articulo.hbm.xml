@@ -95,11 +95,11 @@
 		</set>
 		
 		<set name="ubicaciones" table="articulo_ubicacion"
-			inverse="false" lazy="false" fetch="join">
+			inverse="false" lazy="false" fetch="join" cascade="all">
 			<key>
 				<column name="idArticulo" not-null="false" />
 			</key>
-			<many-to-many column="idUbicacion" class="com.yhaguy.domain.ArticuloUbicacion" />
+			<one-to-many class="com.yhaguy.domain.ArticuloUbicacion" />
 		</set>
 
 	</class>

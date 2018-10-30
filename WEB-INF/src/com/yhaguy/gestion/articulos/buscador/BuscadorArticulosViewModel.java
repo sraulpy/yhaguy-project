@@ -36,6 +36,7 @@ import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloPrecioJedisoft;
+import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.ImportacionPedidoCompra;
 import com.yhaguy.domain.ImportacionPedidoCompraDetalle;
@@ -57,6 +58,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	
 	private String filter_razonsocial = "";
 	private String filter_ruc = "";
+	
+	private List<ArticuloUbicacion> ubicaciones = new ArrayList<ArticuloUbicacion>();
 	
 	private MyArray selectedItem;	
 	private MyArray selectedPrecio;
@@ -107,11 +110,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private Listbox listArt;
 	
 	@Command
-	@NotifyChange({"precios", "existencia", "importaciones", "stock"})
+	@NotifyChange({"precios", "existencia", "importaciones", "stock", "ubicaciones"})
 	public void obtenerValores() throws Exception {
 		this.obtenerPrecio();
 		this.obtenerExistencia();
 		this.obtenerImportacionesEnCurso();
+		this.obtenerUbicaciones();
 	}
 	
 	@Command
@@ -227,6 +231,16 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * obtiene las ubicaciones..
+	 */
+	private void obtenerUbicaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		long idArticulo = this.selectedItem.getId();
+		List<ArticuloUbicacion> list = rr.getUbicacion(idArticulo);
+		this.ubicaciones = list;
 	}
 	
 	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion" })
@@ -806,5 +820,13 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setSelectedCliente(Object[] selectedCliente) {
 		this.selectedCliente = selectedCliente;
-	}	
+	}
+
+	public List<ArticuloUbicacion> getUbicaciones() {
+		return ubicaciones;
+	}
+
+	public void setUbicaciones(List<ArticuloUbicacion> ubicaciones) {
+		this.ubicaciones = ubicaciones;
+	}
 }
