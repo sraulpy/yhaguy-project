@@ -418,6 +418,30 @@
 								iconSclass="z-icon-minus-circle"
 								onClick="@command('insertarDescuento')" label=" Descuento" />
 							<space />	
+							<space hflex="true"></space>
+						<field>Caja:</field>
+						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="200px" disabled="@load(!vm.siempreHabilitado)"
+							readonly="true" value="@load(vm.dto.factura.cajaPagoNumero)"
+							onOpen="tx_filter.focus()">
+							<bandpopup>
+								<listbox width="200px" height="200px" sclass="small-list"
+									model="@load(vm.cajas)"
+									onSelect="@command('imputarEnCaja', comp=bnd_caja)"
+									selectedItem="@bind(vm.selectedCaja)">
+									<listhead>
+										<listheader>
+											<textbox value="@bind(vm.filterCaja)" instant="true" hflex="true" sclass="filter"
+												readonly="@load(!vm.siempreHabilitado)"
+												placeholder="Nro. Planilla.."
+												id="tx_filter"></textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem label="@load(each.numero)"></listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
 						</hlayout>
 						<listbox sclass="small-list"
 							model="@load(vm.dto.factura.detalles)" multiple="true"

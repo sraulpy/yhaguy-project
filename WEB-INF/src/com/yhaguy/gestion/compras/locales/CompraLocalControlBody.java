@@ -19,6 +19,7 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
@@ -44,7 +45,10 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.CajaPeriodo;
+import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CompraLocalOrden;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
@@ -92,6 +96,9 @@ public class CompraLocalControlBody extends BodyApp {
 	private String facturaItemsEliminar;
 	private String itemsToDelete;
 	private String mensajeError;
+	
+	private String filterCaja = "";
+	private CajaPeriodo selectedCaja;
 	
 	private int totalCompras = 0;
 	private long totalVentas = 0;
@@ -212,6 +219,25 @@ public class CompraLocalControlBody extends BodyApp {
 	/**
 	 * COMANDOS..
 	 */
+	
+	@Command
+	@NotifyChange("*")
+	public void imputarEnCaja(@BindingParam("comp") Bandbox comp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CompraLocalFactura fac = rr.getCompraLocalFactura(this.dto.getFactura().getId());
+		fac.setCajaPagoNumero(this.selectedCaja.getNumero());
+		this.dto.getFactura().setCajaPagoNumero(this.selectedCaja.getNumero());
+		this.selectedCaja.getCompras().add(fac);
+		rr.saveObject(this.selectedCaja, this.getLoginNombre());
+		
+		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(fac.getId(), fac.getTipoMovimiento().getSigla());
+		if (movim != null) {
+			movim.setSaldo(0);
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		comp.close();
+		Clients.showNotification("FACTURA APLICADA A PLANILLA DE CAJA NRO. " + this.selectedCaja.getNumero());
+	}
 	
 	@Command 
 	@NotifyChange("*")
@@ -1408,6 +1434,15 @@ public class CompraLocalControlBody extends BodyApp {
 	 * GETS / SETS
 	 */
 	
+	/**
+	 * @return las planillas de caja..
+	 */
+	@DependsOn("filterCaja")
+	public List<CajaPeriodo> getCajas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCajaPlanillas(this.filterCaja);
+	}
+	
 	@DependsOn({ "totalVentas", "totalCompras" })
 	public String getSrcRiesgo() {
 		return this.totalVentas - this.totalCompras >= 0? "/core/images/tick.png" : "/core/images/exclamation.png";
@@ -1917,6 +1952,22 @@ public class CompraLocalControlBody extends BodyApp {
 
 	public void setTotalStock(long totalStock) {
 		this.totalStock = totalStock;
+	}
+
+	public String getFilterCaja() {
+		return filterCaja;
+	}
+
+	public void setFilterCaja(String filterCaja) {
+		this.filterCaja = filterCaja;
+	}
+
+	public CajaPeriodo getSelectedCaja() {
+		return selectedCaja;
+	}
+
+	public void setSelectedCaja(CajaPeriodo selectedCaja) {
+		this.selectedCaja = selectedCaja;
 	}
 }
 

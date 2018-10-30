@@ -59,6 +59,9 @@ public class CajaPeriodo extends Domain {
 	/** egresos por gastos contado **/
 	private Set<Gasto> gastos = new HashSet<Gasto>();
 	
+	/** egresos por compras **/
+	private Set<CompraLocalFactura> compras = new HashSet<CompraLocalFactura>();
+	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
@@ -1072,5 +1075,13 @@ public class CajaPeriodo extends Domain {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public Set<CompraLocalFactura> getCompras() {
+		return compras;
+	}
+
+	public void setCompras(Set<CompraLocalFactura> compras) {
+		this.compras = compras;
 	}
 }

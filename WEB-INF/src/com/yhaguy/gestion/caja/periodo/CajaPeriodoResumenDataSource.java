@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.JRField;
 import com.coreweb.util.MyArray;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
+import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.Recibo;
@@ -62,6 +63,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalReposiciones = 0;
 	double totalPagos = 0;
 	double totalGastos = 0;
+	double totalCompras = 0;
 	double totalRepEgresos = 0;
 	double totalNotaCreditoContado = 0;
 	double totalNotaCreditoCredito = 0;
@@ -543,6 +545,17 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 						"GASTOS DE CAJA CHICA", this.totalGastos);
 				this.values.add(my);
 			}
+			
+			// compras..
+			for (CompraLocalFactura compra : planilla.getCompras()) {
+				double importe = compra.getImporteGs();
+				this.totalEgresos += importe;
+				this.totalCompras += importe;
+				MyArray my = new MyArray(compra.getTipoMovimiento().getDescripcion(),
+						compra.getNumero() + " - " + compra.getProveedor().getRazonSocial(), importe,
+						"COMPRAS CAJA CHICA", this.totalCompras);
+				this.values.add(my);
+			}
 
 			// egresos..
 			for (CajaReposicion rep : planilla.getReposiciones()) {
@@ -829,7 +842,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 		} else if ("SaldoCajaChica".equals(fieldName)) {
 			value = FORMATTER
 					.format((this.totalReposiciones + this.totalRetencionProveedor)
-							- (this.totalPagos + this.totalGastos + this.totalRepEgresos));
+							- (this.totalPagos + this.totalGastos + this.totalCompras + this.totalRepEgresos));
 		}
 		return value;
 	}

@@ -26,6 +26,7 @@
 		<property name="importeDs"/>
 		<property name="importeIva10"/>
 		<property name="importeIva5"/>
+		<property name="cajaPagoNumero"/>
 		
 		<property name="ivaRetenido">
 			<column name="ivaRetenido" not-null="true" default="false" />

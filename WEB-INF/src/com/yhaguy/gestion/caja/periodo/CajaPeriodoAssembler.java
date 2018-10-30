@@ -17,6 +17,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaPeriodoArqueo;
 import com.yhaguy.domain.CajaReposicion;
+import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
@@ -31,6 +32,7 @@ import com.yhaguy.gestion.caja.recibos.AssemblerReciboFormaPago;
 import com.yhaguy.gestion.caja.recibos.ReciboDTO;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.AssemblerGasto;
+import com.yhaguy.gestion.compras.locales.AssemblerCompraLocalFactura;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.gestion.notacredito.NotaCreditoDTO;
@@ -63,6 +65,7 @@ public class CajaPeriodoAssembler extends Assembler {
 	final static String ITEM_DE_NOTA_CREDITO_VENTA = "NOTA-CRÉDITO-VENTA";
 	final static String ITEM_DE_NOTA_CREDITO_COMPRA = "NOTA-CRÉDITO-COMPRA";
 	final static String ITEM_DE_GASTO = "GASTO";
+	final static String ITEM_DE_COMPRA = "COMPRA";
 
 	final static int ES_VENTA_CONTADO = CajaPeriodoControlBody.ES_VENTA_CONTADO;
 	final static int ES_VENTA_CREDITO = CajaPeriodoControlBody.ES_VENTA_CREDITO;
@@ -84,6 +87,7 @@ public class CajaPeriodoAssembler extends Assembler {
 		this.listaMyArrayToListaDomain(dto, domain, "notasCredito");
 		this.listaMyArrayToListaDomain(dto, domain, "reposiciones", ATT_REPOSICION, true, true);
 		this.listaDTOToListaDomain(dto, domain, "gastos", true, true, new AssemblerGasto());
+		this.listaDTOToListaDomain(dto, domain, "compras", true, true, new AssemblerCompraLocalFactura());
 		
 		MyArray arqueo = dtoC.getArqueo();
 		if (arqueo.esNuevo() == true) {
@@ -115,8 +119,9 @@ public class CajaPeriodoAssembler extends Assembler {
 		this.listaDomainToListaMyArray(domain, dto, "notasCredito", ATT_NC);
 		this.listaDomainToListaMyArray(domain, dto, "reposiciones", ATT_REPOSICION);
 		this.listaDomainToListaDTO(domain, dto, "gastos", new AssemblerGasto());
+		this.listaDomainToListaDTO(domain, dto, "compras", new AssemblerCompraLocalFactura());
 		dto.setDetalles(this.getDetalles(dom.getRecibos(), dom.getVentas(),
-				dom.getNotasCredito(), dom.getReposiciones(), dom.getGastos()));
+				dom.getNotasCredito(), dom.getReposiciones(), dom.getGastos(), dom.getCompras()));
 		
 		this.addSiglaMoneda(dto.getReposiciones());	
 		this.convertFormaPago(dto.getReposiciones());
@@ -149,9 +154,10 @@ public class CajaPeriodoAssembler extends Assembler {
 	 */
 	private List<MyArray> getDetalles(Set<Recibo> recibos, Set<Venta> ventas,
 			Set<NotaCredito> notasCredito, Set<CajaReposicion> reposiciones,
-			Set<Gasto> gastos) {
+			Set<Gasto> gastos, Set<CompraLocalFactura> compras) throws Exception {
 
 		List<MyArray> out = new ArrayList<MyArray>();
+		RegisterDomain rr = RegisterDomain.getInstance();
 
 		// Convierte los recibos a MyArray
 		for (Recibo rec : recibos) {
@@ -318,6 +324,26 @@ public class CajaPeriodoAssembler extends Assembler {
 			MyArray m = this.getMyArray(gasto.getId(), tipo, gasto.getFecha(),
 					razonSocial, importeDs, importeGs, signo, tipo_,
 					s_monedaExt, estadoComprobante, numero);
+
+			out.add(m);
+		}
+		
+		// Convierte las compras a MyArray
+		for (CompraLocalFactura compra : compras) {
+
+			int signo = -1;
+			int tipo = CajaPeriodoControlBody.ES_COMPRA;
+			MyPair estadoComprobante = this.tipoToMyPair(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO));
+			String tipo_ = ITEM_DE_COMPRA;
+			String s_monedaExt = compra.getMoneda().getSigla();
+			String razonSocial = compra.getProveedor().getRazonSocial();
+			String numero = compra.getNumero();
+
+			double importeGs = compra.getImporteGs();
+			double importeDs = compra.getImporteDs();
+
+			MyArray m = this.getMyArray(compra.getId(), tipo, compra.getFechaOriginal(), razonSocial, importeDs, importeGs, signo,
+					tipo_, s_monedaExt, estadoComprobante, numero);
 
 			out.add(m);
 		}

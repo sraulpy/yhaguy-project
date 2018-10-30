@@ -11,6 +11,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.gestion.caja.principal.CajaDTO;
 import com.yhaguy.gestion.caja.recibos.ReciboDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
+import com.yhaguy.gestion.compras.locales.CompraLocalFacturaDTO;
 import com.yhaguy.gestion.notacredito.NotaCreditoDTO;
 import com.yhaguy.gestion.venta.VentaDTO;
 
@@ -59,6 +60,9 @@ public class CajaPeriodoDTO extends DTO {
 
 	/** Los gastos de Fondo Fijo **/
 	private List<GastoDTO> gastos = new ArrayList<GastoDTO>();
+	
+	/** Las compras de Fondo Fijo **/
+	private List<CompraLocalFacturaDTO> compras = new ArrayList<CompraLocalFacturaDTO>();
 
 	public String getStringResumen() {
 		String out = "";
@@ -219,6 +223,14 @@ public class CajaPeriodoDTO extends DTO {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public List<CompraLocalFacturaDTO> getCompras() {
+		return compras;
+	}
+
+	public void setCompras(List<CompraLocalFacturaDTO> compras) {
+		this.compras = compras;
 	}
 }
 

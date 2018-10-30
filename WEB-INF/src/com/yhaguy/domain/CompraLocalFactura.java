@@ -23,6 +23,7 @@ public class CompraLocalFactura extends Domain {
 	private double totalAsignadoDs;	
 	private boolean recepcionConfirmada;
 	private boolean ivaRetenido;
+	private String cajaPagoNumero;
 	
 	private double importeGs;
 	private double importeDs;
@@ -239,5 +240,13 @@ public class CompraLocalFactura extends Domain {
 
 	public void setImporteIva5(double importeIva5) {
 		this.importeIva5 = importeIva5;
+	}
+
+	public String getCajaPagoNumero() {
+		return cajaPagoNumero;
+	}
+
+	public void setCajaPagoNumero(String cajaPagoNumero) {
+		this.cajaPagoNumero = cajaPagoNumero;
 	}	
 }

@@ -74,6 +74,14 @@
 		    </key>
 		    <one-to-many entity-name="com.yhaguy.domain.Gasto"/>		    
 		</set>
+		
+		<set name="compras" table="compralocalfactura" inverse="false"
+		    lazy="false" fetch="join" cascade="all">
+		    <key>
+		        <column name="idcaja" not-null="false"/>
+		    </key>
+		    <one-to-many entity-name="com.yhaguy.domain.CompraLocalFactura"/>		    
+		</set>
 				
 	</class>
 </hibernate-mapping>

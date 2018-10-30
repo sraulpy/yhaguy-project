@@ -238,6 +238,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	public static final int ES_CANC_CHQ_RECHAZADO = 9;
 	public static final int ES_REEMBOLSO_PRESTAMO = 10;
 	public static final int ES_NOTA_CREDITO_COMPRA = 11;
+	public static final int ES_COMPRA = 12;
 
 	public static String getStrTipo(int tipo) {
 		String out = "	-- error tipo (" + tipo + ")--";
@@ -257,6 +258,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			out = "NOTA DE CREDIDO";
 		} else if (tipo == ES_GASTO) {
 			out = "GASTO";
+		} else if (tipo == ES_COMPRA) {
+			out = "COMPRA";
 		}
 		return out;
 	}

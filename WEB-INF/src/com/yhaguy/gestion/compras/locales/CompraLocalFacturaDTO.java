@@ -27,6 +27,7 @@ public class CompraLocalFacturaDTO extends DTO{
 	private double totalAsignadoGs = 0;
 	private double totalAsignadoDs = 0;
 	private boolean recepcionConfirmada = false;
+	private String cajaPagoNumero = "";
 	
 	private ProveedorDTO proveedor = new ProveedorDTO();
 	private MyArray condicionPago = new MyArray();
@@ -286,5 +287,13 @@ public class CompraLocalFacturaDTO extends DTO{
 	}
 
 	public void setImporteIva5(double importeIva5) {
+	}
+
+	public String getCajaPagoNumero() {
+		return cajaPagoNumero;
+	}
+
+	public void setCajaPagoNumero(String cajaPagoNumero) {
+		this.cajaPagoNumero = cajaPagoNumero;
 	}
 }
