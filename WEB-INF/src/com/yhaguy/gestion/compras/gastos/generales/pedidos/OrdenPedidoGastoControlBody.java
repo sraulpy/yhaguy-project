@@ -19,6 +19,7 @@ import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Tab;
 
 import com.coreweb.componente.ViewPdf;
@@ -35,9 +36,11 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CentroCosto;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
+import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.OrdenPedidoGasto;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
@@ -81,6 +84,9 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	private String filterNumeroImportacion = "";
 	private String filterNumeroFactura = "";
 	private String filterRazonSocial = "";
+	private String filterCaja = "";
+	
+	private CajaPeriodo selectedCaja;
 	
 	@Wire
 	private Tab tabOrdenCompra;
@@ -258,6 +264,25 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void selectSucursal() {
 		this.dto.setDepartamento(null);
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void imputarEnCaja(@BindingParam("comp") Bandbox comp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Gasto gasto = rr.getGastoById(this.dtoGasto.getId());
+		gasto.setCajaPagoNumero(this.selectedCaja.getNumero());
+		this.dtoGasto.setCajaPagoNumero(this.selectedCaja.getNumero());
+		this.selectedCaja.getGastos().add(gasto);
+		rr.saveObject(this.selectedCaja, this.getLoginNombre());
+		
+		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(gasto.getId(), gasto.getTipoMovimiento().getSigla());
+		if (movim != null) {
+			movim.setSaldo(0);
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		comp.close();
+		Clients.showNotification("FACTURA APLICADA A PLANILLA DE CAJA NRO. " + this.selectedCaja.getNumero());
 	}
 	
 	/*********************************************************/
@@ -612,6 +637,15 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 			}
 		}
 		return out;
+	}
+	
+	/**
+	 * @return las planillas de caja..
+	 */
+	@DependsOn("filterCaja")
+	public List<CajaPeriodo> getCajas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCajaPlanillas(this.filterCaja);
 	}
 	
 	/**
@@ -1034,6 +1068,22 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 
 	public void setSelectedAplicacionDebitoBancario(MyArray selectedFactura) {
 		this.selectedAplicacionDebitoBancario = selectedFactura;
+	}
+
+	public String getFilterCaja() {
+		return filterCaja;
+	}
+
+	public void setFilterCaja(String filterCaja) {
+		this.filterCaja = filterCaja;
+	}
+
+	public CajaPeriodo getSelectedCaja() {
+		return selectedCaja;
+	}
+
+	public void setSelectedCaja(CajaPeriodo selectedCaja) {
+		this.selectedCaja = selectedCaja;
 	}
 }
 

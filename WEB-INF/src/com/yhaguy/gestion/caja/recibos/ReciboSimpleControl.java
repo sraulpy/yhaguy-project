@@ -660,7 +660,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 		long idFormaPagoTarjetaCred = this.formaPagoTarjetaCredito.getId().longValue();
 		long idFormaPagoTarjetaDeb = this.formaPagoTarjetaDebito.getId().longValue();
 		long idFormaPagoChequeTercero = this.formaPagoChequeTercero.getId().longValue();
-		long idFormaPagoRetencion = this.formaPagoRetencion.getId().longValue();
 		long idFormaPagoDepositoBanco = this.formaPagoDepositoBancario.getId().longValue();
 		long idFormaPagoSaldoCobrado = this.formaPagoSaldoFavorCobrado.getId().longValue();
 		
@@ -750,26 +749,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 				valido = false;
 				mensaje += "\n - Debe ingresar la fecha del cheque..";
 			}
-		
-		// Forma de Pago con Retencion..	
-		} else if (idFormaPago == idFormaPagoRetencion) {
 			
-			if (this.nvoFormaPago.getRetencionNumero().isEmpty()) {
-				valido = false;
-				mensaje += "\n - Debe ingresar el número..";
-			}
-			
-			if (this.nvoFormaPago.getRetencionTimbrado().isEmpty()) {
-				valido = false;
-				mensaje += "\n - Debe ingresar el timbrado..";
-			}
-			
-			if (this.nvoFormaPago.getRetencionVencimiento() == null) {
-				valido = false;
-				mensaje += "\n - Debe ingresar el vencimiento del timbrado..";
-			}
-		
-		// Forma de Pago con Deposito bancario..	
 		} else if (idFormaPago == idFormaPagoDepositoBanco) {
 			
 			if (this.nvoFormaPago.getDepositoBancoCta().esNuevo() == true) {
@@ -1044,6 +1024,11 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
+			if (this.dato.getReciboDTO().isOrdenPago()) {
+				rwNroRetencion.setVisible(false);
+				rwTimbradoVencimiento.setVisible(false); 
+				rwTimbradoRetencion.setVisible(false);
+			}
 			this.calcularRetencion();
 				
 		} else if (siglaFP.equals(siglaFPCA)) {
@@ -1377,7 +1362,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private MyPair formaPagoTarjetaCredito = dtoUtil.getFormaPagoTarjetaCredito();
 	private MyPair formaPagoTarjetaDebito = dtoUtil.getFormaPagoTarjetaDebito();
 	private MyPair formaPagoDepositoBancario = dtoUtil.getFormaPagoDepositoBancario();
-	private MyPair formaPagoRetencion = dtoUtil.getFormaPagoRetencion();
 	private MyPair formaPagoChequeAutoCobranza = dtoUtil.getFormaPagoChequeAutoCobranza();
 	private MyPair formaPagoRecaudacionCentral = dtoUtil.getFormaPagoRecaudacionCentral();
 	private MyPair formaPagoTransferenciaCentral = dtoUtil.getFormaPagoTransferenciaCentral();

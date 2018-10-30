@@ -397,6 +397,30 @@
 							<label value="@load(vm.dtoGasto.despachante)"></label>
 						</hlayout>
 						</hbox>
+						<space hflex="true"></space>
+						<field>Caja:</field>
+						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="200px" disabled="@load(!vm.siempreHabilitado)"
+							value="@load(vm.dtoGasto.cajaPagoNumero)" readonly="true"
+							onOpen="tx_filter.focus()">
+							<bandpopup>
+								<listbox width="200px" height="200px" sclass="small-list"
+									model="@load(vm.cajas)"
+									onSelect="@command('imputarEnCaja', comp=bnd_caja)"
+									selectedItem="@bind(vm.selectedCaja)">
+									<listhead>
+										<listheader>
+											<textbox value="@bind(vm.filterCaja)" instant="true" hflex="true" sclass="filter"
+												readonly="@load(!vm.siempreHabilitado)"
+												placeholder="Nro. Planilla.."
+												id="tx_filter"></textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem label="@load(each.numero)"></listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
 					</hlayout>
 					<listbox emptyMessage="AGREGUE ÍTEMS A LA FACTURA.."
 						sclass="small-list" vflex="true"
