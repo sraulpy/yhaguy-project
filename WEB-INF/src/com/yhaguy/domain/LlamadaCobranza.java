@@ -13,6 +13,7 @@ public class LlamadaCobranza extends Domain {
 	public static final String VOLVER_A_LLAMAR = "VOLVER A LLAMAR";
 	public static final String PASAR_A_COBRAR = "PASAR A COBRAR";
 	public static final String PASA_A_PAGAR = "PASA A PAGAR";
+	public static final String COMENTARIOS = "COMENTARIOS";
 	
 	private Date fecha;
 	private String usuario;
@@ -35,6 +36,7 @@ public class LlamadaCobranza extends Domain {
 		out.add(VOLVER_A_LLAMAR);
 		out.add(PASAR_A_COBRAR);
 		out.add(PASA_A_PAGAR);
+		out.add(COMENTARIOS);
 		return out;
 	}
 

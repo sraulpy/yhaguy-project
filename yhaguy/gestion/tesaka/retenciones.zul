@@ -12,9 +12,6 @@
 				<vlayout sclass="vgrid" spacing="0">
 					<field value="Órden de Pago" />
 					<hlayout>
-						<datebox placeholder="Desde.."></datebox>
-						<datebox placeholder="Hasta.."></datebox>
-						<space></space>
 						<textbox placeholder="Número.."
 							value="@bind(vm.selectedPago.numero)"
 							onOK="@command('buscarPagos', posFiltro=0)" 

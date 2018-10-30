@@ -115,7 +115,8 @@ public class TesakaViewModel extends SimpleViewModel {
 		b.setWidth("800px");
 		b.setNombresColumnas(new String[] { "Número", "Ruc", "Razón Social" });
 		b.setTitulo("Órdenes de Pago");
-		b.addWhere("c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_PAGO + "'");
+		b.addWhere("c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_PAGO + "' and c.auxi = '"
+				+ Recibo.CON_RETENCION + "' and c.tesaka NOT LIKE '%Generado%'");
 		b.show(filtro, posFiltro);
 		if (b.isClickAceptar()) {
 			this.selectedPago = (ReciboDTO) b.getSelectedItemDTO();

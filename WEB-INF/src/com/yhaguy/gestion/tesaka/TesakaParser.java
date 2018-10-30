@@ -54,8 +54,7 @@ public class TesakaParser {
 			
 			if (sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO)
 					|| sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO)) {
-				Gasto gasto = rr.getGastoById(item
-						.getIdMovimientoOriginal());
+				Gasto gasto = rr.getGastoById(item.getIdMovimientoOriginal());
 				jsonCompras.add(gastoToJsonString(gasto));
 			}
 		}
