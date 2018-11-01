@@ -157,7 +157,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	@Override
 	public DTO nuevoDTO() throws Exception {
 		ImportacionPedidoCompraDTO out = new ImportacionPedidoCompraDTO();			
-		tab1.setSelected(true);
 		this.sugerirValores(out);
 		this.renderizarDesgloseCuentas();
 		return out;

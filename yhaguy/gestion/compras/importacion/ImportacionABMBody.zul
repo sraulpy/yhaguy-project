@@ -1,27 +1,58 @@
 <zk>
+		
 	<div
 		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionPedidoCompraControlBody')"
-		width="100%" height="100%" style="padding:5px"
+		width="100%" height="100%" style="padding:10px"
 		apply="org.zkoss.bind.BindComposer">
+		
+		<navbar mold="bs-tabs" class="nav-justified">
+			<navitem label="General " selected="true"
+				onClick="dv_1.setVisible(true);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">1</span>
+				</attribute>
+			</navitem>
+			<navitem label="Cotizacion " onClick="dv_2.setVisible(true);dv_1.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">2</span>
+				</attribute>
+			</navitem>
+			<navitem label="Proforma " onClick="dv_3.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">3</span>
+				</attribute>
+			</navitem>
+			<navitem label="Factura " onClick="dv_4.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">4</span>
+				</attribute>
+			</navitem>
+			<navitem label="Recepción " onClick="dv_5.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">5</span>
+				</attribute>
+			</navitem>
+			<navitem label="Despacho " onClick="dv_6.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">6</span>
+				</attribute>
+			</navitem>
+			<navitem label="Costo Final " onClick="dv_7.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_8.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">7</span>
+				</attribute>
+			</navitem>
+			<navitem label="Precios " onClick="dv_8.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false)">
+				<attribute name="content">
+					<span class="badge">8</span>
+				</attribute>
+			</navitem>
+		</navbar>
 
-		<tabbox id="tbx" width="100%" vflex="1">
-			<tabs>
-				<tab id="tab1" label="Datos Generales" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab2" label="Solicitud Cotización" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab3" label="Proforma" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab4" label="Factura Importación" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab5" label="Recepción Mercaderías" width="170px" visible="@load(vm.dto.recepcionHabilitada)" />
-				<tab id="tab6" label="Resumen de Despacho" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab7" label="Costo Final" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-				<tab id="tab8" label="Precios" width="170px" disabled="${!vm.operacionHabilitada('VerImportacion')}" />
-			</tabs>
-			<tabpanels>
+		<!-- DATOS GENERALES -->
 
-				<!-- __________________________ TAB 1 - DATOS GENERALES __________________________  -->
-
-				<tabpanel>
-					<div height="5px" />
-					<hbox pack="center" width="100%"
+		<div id="dv_1" width="100%" vflex="true" style="padding:5px">
+			<hbox pack="center" width="100%"
 						style="padding:20px">
 						<vlayout hflex="true" spacing="0">
 							<grid hflex="true" sclass="vgrid">
@@ -377,13 +408,12 @@
 								</button>
 							</hlayout>
 					</popup>
-				</tabpanel>
-
-
-				<!-- ______________________________ TAB 2 - COTIZACION _______________________________ -->
-
-				<tabpanel height="100%">
-					<hlayout sclass="button-container">
+		</div>
+		
+		<!-- SOLICITUD DE COTIZACION -->
+		
+		<div id="dv_2" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hlayout sclass="button-container">
 						<button mold="bs" sclass="btn-danger btn-sm"
 							width="150px" iconSclass="z-icon-minus-circle"
 							onClick="@command('eliminarItem_')" label=" Eliminar" />
@@ -446,13 +476,13 @@
 									readonly="true" />
 							</listfooter>
 						</listfoot>
-					</listbox>
-				</tabpanel>
-
-				<!-- ______________________________ TAB 3 - PROFORMA _______________________________ -->
-
-				<tabpanel height="100%">
-					<hlayout sclass="button-container">
+					</listbox>	
+		</div>
+		
+		<!-- PROFORMA -->
+		
+		<div id="dv_3" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hlayout sclass="button-container">
 						<button mold="bs" sclass="btn-danger btn-sm"
 							width="150px" iconSclass="z-icon-minus-circle"
 							onClick="@command('eliminarItem')" label=" Eliminar" />
@@ -562,11 +592,12 @@
 							</listfooter>
 						</listfoot>
 					</listbox>
-				</tabpanel>
-
-				<!-- __________________________ TAB 3 - FACTURA IMPORTACION __________________________ -->
-				<tabpanel>
-					<hlayout sclass="button-container">
+		</div>
+		
+		<!-- FACTURA IMPORTACION -->
+		
+		<div id="dv_4" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hlayout sclass="button-container">
 						<button iconSclass="z-icon-plus"
 							onClick="@command('nuevaFactura')"
 							tooltiptext="Agregar Factura.." />
@@ -755,19 +786,12 @@
 							</listfooter>
 						</listfoot>
 					</listbox>
-				</tabpanel>
-
-				<!-- __________________________ RECEPCION DE MERCADERIAS __________________________ -->
-				<tabpanel vflex="true">
-					<tabbox vflex="1">
-						<tabs>
-							<tab label="Control Físico" width="170px"></tab>
-							<tab label="Control de Carga" width="170px" visible="false"></tab>
-						</tabs>
-						<tabpanels vflex="true">
-							<tabpanel vflex="true">
-								<vbox vflex="true">
-									<hlayout sclass="button-container">
+		</div>
+		
+		<!-- RECEPCION DE MERCADERIAS -->
+		
+		<div id="dv_5" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hlayout sclass="button-container">
 										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir"
 											iconSclass="z-icon-print" width="150px"
 											onClick="@command('imprimirConteo')"
@@ -834,45 +858,12 @@
 									<style>
 										.z-intbox { min-height: 18px; text-align:right }
 									</style>
-								</vbox>
-							</tabpanel>
-							<tabpanel vflex="true">
-								<vbox vflex="true">
-									<hlayout sclass="button-container">
-										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir"
-											iconSclass="z-icon-print" width="150px"
-											onClick="@command('imprimirVerificacion')"
-											disabled="@load(!vm.siempreHabilitado)"></button>
-									</hlayout>
-									<listbox vflex="true" sclass="small-list"
-										model="@load(vm.selectedImportacionFactura.detalles)">
-										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
-										<listhead>
-											<listheader width="40px" align="center"></listheader>
-											<listheader label="Código" width="150px"
-												sort="auto(articulo.codigoInterno)"
-												onCreate="self.sort(true)"></listheader>
-											<listheader label="Descripción"></listheader>
-										</listhead>
-										<template name="model">
-											<listitem>
-												<listcell>
-													<checkbox checked="@bind(each.verificado)"></checkbox>
-												</listcell>
-												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
-												<listcell label="@load(each.articulo.descripcion)"></listcell>
-											</listitem>
-										</template>
-									</listbox>
-								</vbox>
-							</tabpanel>
-						</tabpanels>
-					</tabbox>		
-				</tabpanel>
-
-				<!-- __________________________ TAB 4 - GASTOS DESPACHO __________________________ -->
-				<tabpanel>
-					<hbox>				
+		</div>
+		
+		<!-- DESPACHO -->
+		
+		<div id="dv_6" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hbox>				
 						<tabbox hflex="3" vflex="true">	
 						<tabs hflex="true">
 							<tab label="Carátula Despacho" width="100%"></tab>
@@ -1153,12 +1144,12 @@
 							</tabpanels>
 						</tabbox>
 					</hbox>
-				</tabpanel>
-
-				<!-- _____________________________________________ COSTO FINAL _____________________________________________ -->
-
-				<tabpanel>
-					<hlayout sclass="button-container">
+		</div>
+		
+		<!-- COSTO FINAL -->
+		
+		<div id="dv_7" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hlayout sclass="button-container">
 						<field value="Tipo de Cambio:" />
 						<guaranibox style="background:#EEF7FA;text-align:right" value="@load(vm.dto.resumenGastosDespacho.tipoCambio)"/>
 						<label>Gs.</label>
@@ -1261,12 +1252,12 @@
 							</listfooter>
 						</listfoot>
 					</listbox>
-				</tabpanel>
-				
-				<!-- _____________________________________________ PRECIOS _____________________________________________ -->
-
-				<tabpanel>
-					<hlayout sclass="button-container">
+		</div>
+		
+		<!-- PRECIOS -->
+		
+		<div id="dv_8" width="100%" vflex="true" style="padding:5px" visible="false">
+			<hlayout sclass="button-container">
 						<button mold="bs" sclass="btn-primary btn-sm"
 							width="150px" iconSclass="z-icon-check"
 							onClick="@command('confirmarImportacion')"
@@ -1319,9 +1310,7 @@
 							</listfooter>
 						</listfoot>
 					</listbox>
-				</tabpanel>				
-			</tabpanels>
-		</tabbox>
+		</div>
 
 		<popup id="pop_importar" sclass="rounded">
 			<vlayout>
