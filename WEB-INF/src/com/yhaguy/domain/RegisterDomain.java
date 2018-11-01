@@ -2871,9 +2871,11 @@ public class RegisterDomain extends Register {
 		String query = "select t from Transferencia t where t.dbEstado != 'D'"
 				+ " and (t.transferenciaTipo.sigla = ? and t.transferenciaEstado.sigla = ?)"
 				+ " and t.fechaCreacion between ? and ?"
-				+ " and t.sucursal.id = " + idOrigen
-				+ " and t.sucursalDestino.id = " + idDestino
-				+ " order by t.fechaCreacion";
+				+ " and t.sucursal.id = " + idOrigen;
+				if (idDestino > 0) {
+					query += " and t.sucursalDestino.id = " + idDestino;
+				}
+				query += " order by t.numeroRemision";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_TRANSF_EXTERNA);
@@ -7438,7 +7440,7 @@ public class RegisterDomain extends Register {
 	 * @return los gastos segun parametros..
 	 */
 	public List<Gasto> getGastos(String fecha, String numero, String razonSocial, 
-			String ruc, String caja, String pago, String importacion, String descripcion) throws Exception {
+			String ruc, String caja, String pago, String importacion, String descripcion, String sucursal) throws Exception {
 		String query = "select g from Gasto g where "
 				+ " cast (g.fecha as string) like '%" + fecha + "%'"
 				+ " and g.numeroFactura like '%" + numero + "%'"
@@ -7447,8 +7449,11 @@ public class RegisterDomain extends Register {
 				+ " and g.cajaPagoNumero like '%" + caja + "%'"
 				+ " and upper(g.numeroImportacion) like '%" + importacion.toUpperCase() + "%'"
 				+ " and upper(g.numeroOrdenPago) like '%" + pago.toUpperCase() + "%'"
-				+ " and upper(g.observacion) like '%" + descripcion.toUpperCase() + "%'"
-				+ " order by g.fecha";
+				+ " and upper(g.observacion) like '%" + descripcion.toUpperCase() + "%'";
+				if (!sucursal.trim().isEmpty()) {
+					query += " and upper(g.sucursal.descripcion) like '%" + sucursal.toUpperCase() + "%'";
+				}				
+				query += " order by g.fecha";
 		return this.hqlLimit(query, 1000);
 	}
 	

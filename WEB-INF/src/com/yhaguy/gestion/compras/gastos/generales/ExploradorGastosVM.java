@@ -42,6 +42,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	private String filterPago = "";
 	private String filterImportacion = "";
 	private String filterDescripcion = "";
+	private String filterSucursal = "";
 	
 	private int listSize = 0;
 	private double totalImporteGs = 0;
@@ -108,14 +109,14 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA",
 		"filterNumero", "filterRazonSocial", "filterRuc", "filterCaja", 
-		"filterPago", "filterImportacion", "selectedFiltro", "filterDescripcion" })
+		"filterPago", "filterImportacion", "selectedFiltro", "filterDescripcion", "filterSucursal" })
 	public List<Gasto> getGastos() throws Exception {
 		this.totalImporteGs = 0;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Gasto> aux = new ArrayList<Gasto>();
 		List<Gasto> out = rr.getGastos(this.getFilterFecha(),
 				this.filterNumero, this.filterRazonSocial, this.filterRuc, 
-				this.filterCaja, this.filterPago, this.filterImportacion, this.filterDescripcion);
+				this.filterCaja, this.filterPago, this.filterImportacion, this.filterDescripcion, this.filterSucursal);
 		for (Gasto gasto : out) {
 			System.out.println(gasto.getNumeroFactura());
 			if (this.selectedFiltro.equals(FILTRO_TODOS)) {
@@ -279,5 +280,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 
 	public void setFilterDescripcion(String filterDescripcion) {
 		this.filterDescripcion = filterDescripcion;
+	}
+
+	public String getFilterSucursal() {
+		return filterSucursal;
+	}
+
+	public void setFilterSucursal(String filterSucursal) {
+		this.filterSucursal = filterSucursal;
 	}
 }

@@ -33,6 +33,7 @@
 		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
 		model="@load(vm.gastos)">
 		<listhead menupopup="auto">
+			<listheader label="Sucursal" width="110px" />
 			<listheader label="Fecha" width="150px" />
 			<listheader label="Número" width="110px" />
 			<listheader label="Proveedor" />
@@ -48,6 +49,15 @@
 			<listheader label="" align="center" width="30px"/>
 		</listhead>	
 		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Sucursal.."
+						value="@bind(vm.filterSucursal)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true"  
@@ -138,6 +148,7 @@
 		</auxhead>
 		<template name="model">
 			<listitem style="@load(each.anulado? 'text-decoration:line-through; color:red' : '')">
+				<listcell label="@load(each.sucursal.descripcion)" />
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
 				<listcell label="@load(each.numeroFactura)" />
 				<listcell label="@load(each.proveedor.empresa.razonSocial)" />
@@ -160,7 +171,7 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="9">
+			<listfooter span="10">
 				<hlayout hflex="true">
 					<field value="@load(vm.listSize)" />
 					<field value="ítems" />

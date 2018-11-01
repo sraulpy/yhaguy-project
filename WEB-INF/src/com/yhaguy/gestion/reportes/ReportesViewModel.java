@@ -857,10 +857,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-
-				List<Transferencia> transferencias = rr
-						.getTransferenciasExternas(desde, hasta,
-								origen.getId(), destino.getId());
+				
+				long idDestino = destino != null ? destino.getId() : 0;
+				List<Transferencia> transferencias = rr.getTransferenciasExternas(desde, hasta, origen.getId(), idDestino);
 
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_TRANSFERENCIAS;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -12260,7 +12259,7 @@ class ListadoTransferenciasDataSource implements JRDataSource {
 				String numero = transf.getNumero();
 				String origen = transf.getSucursal().getDescripcion();
 				String destino = transf.getSucursalDestino().getDescripcion();
-				String nroremision = transf.getObservacion();
+				String nroremision = transf.getNumeroRemision();
 				String importe = FORMATTER.format(transf.getImporteGs());
 				temp.add(transf);
 				values.add(new BeanTransferencia(fecha, numero, origen,

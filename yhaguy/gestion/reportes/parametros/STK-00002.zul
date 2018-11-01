@@ -28,7 +28,8 @@
 			<field value="Sucursal Destino:" />
 			<combobox hflex="true"
 				model="@load(vm.dato.filtro.sucursales)"
-				selectedItem="@bind(vm.dato.filtro.sucursalDestino)">
+				selectedItem="@bind(vm.dato.filtro.sucursalDestino)"
+				placeholder="TODOS..">
 				<template name="model">
 					<comboitem label="@load(each.descripcion)" />
 				</template>
