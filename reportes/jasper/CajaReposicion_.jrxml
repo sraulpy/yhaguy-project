@@ -127,11 +127,6 @@ from plancuenta where id = '1']]>
 				<text><![CDATA[A la orden de:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="87" y="63" width="363" height="15" uuid="ec161660-7a36-4af6-9efc-9f650244179f"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Yhaguy Repuestos S.A.]]></text>
-			</staticText>
-			<staticText>
 				<reportElement style="Column header" x="2" y="105" width="24" height="15" forecolor="#736343" uuid="19904f1a-eaa7-44fc-b6d9-df02dc42fa13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10"/>
