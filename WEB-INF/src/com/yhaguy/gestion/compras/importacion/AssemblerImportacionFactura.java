@@ -57,7 +57,7 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 			"textoDescuento", "descuentoGs", "descuentoDs", 
 			 "importeGastoDescuentoGs", "importeGastoDescuentoDs", "gastoDescuento", 
 			 "valorProrrateo", "cantidad", "cantidadRecibida", "precioFinalGs", "minoristaGs", "listaGs",
-			 "verificado", "conteo1", "conteo2", "conteo3" };
+			 "verificado", "conteo1", "conteo2", "conteo3", "cantidad_acum" };
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {

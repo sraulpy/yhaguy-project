@@ -142,8 +142,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 
 		if (this.dto.getImportacionFactura().size() > 0) {
-			this.setSelectedImportacionFactura(this.dto.getImportacionFactura()
-					.get(0));
+			this.setSelectedImportacionFactura(this.dto.getImportacionFactura().get(0));
 			this.setSelectedRecepcion(this.dto.getImportacionFactura().get(0));
 		} else {
 			this.selectedImportacionFactura = new ImportacionFacturaDTO();
@@ -151,6 +150,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 		this.setearValoresDespacho();
 		this.renderizarDesgloseCuentas();
+		this.agruparCantidades();
 		this.desEnmascarar();
 	}
 
@@ -3007,6 +3007,47 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * agrupa las cantidades de items repetidos..
+	 */
+	private void agruparCantidades() {
+		Map<String, ImportacionFacturaDetalleDTO> map = new HashMap<String, ImportacionFacturaDetalleDTO>();
+		Map<String, Integer> cants = new HashMap<String, Integer>();
+		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
+			for (ImportacionFacturaDetalleDTO det : fac.getDetalles()) {	
+				det.setDuplicado(false);
+				ImportacionFacturaDetalleDTO item = map.get(det.getArticulo().getCodigoInterno());
+				if ((!det.getAuxi().equals("DUPLICADO")) && item != null) {
+					det.setAuxi("DUPLICADO");
+				} else if (!det.getAuxi().equals("DUPLICADO")) {
+					map.put(det.getArticulo().getCodigoInterno(), det);
+				}
+				
+				Integer acum = cants.get(det.getArticulo().getCodigoInterno());
+				if (acum != null) {
+					acum += det.getCantidad();
+				} else {
+					acum = det.getCantidad();					
+				}
+				cants.put(det.getArticulo().getCodigoInterno(), acum);
+			}
+		}
+		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
+			for (ImportacionFacturaDetalleDTO det : fac.getDetalles()) {
+				det.setCantidad_acum(cants.get(det.getArticulo().getCodigoInterno()));
+			}
+		}
+	}
+	
+	/**
+	 * after save..
+	 */
+	public void afterSave() {
+		this.agruparCantidades();
+		BindUtils.postNotifyChange(null, null, this, "*");
+		Clients.showNotification("save");
 	}
 	
 	public List<MyArray> getItemsCostoFinal(){

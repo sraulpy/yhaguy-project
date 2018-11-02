@@ -7942,7 +7942,11 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * movimientos por articulo..
 		 */
+		@SuppressWarnings("unused")
 		private void movimientosArticulos() {
+			if (true) {
+				return;
+			}
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();

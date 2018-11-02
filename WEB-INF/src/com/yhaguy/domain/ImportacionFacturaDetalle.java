@@ -20,6 +20,7 @@ public class ImportacionFacturaDetalle extends Domain {
 	private boolean valorProrrateo;
 	private Tipo tipoGastoDescuento;
 	private int cantidad;
+	private int cantidad_acum;
 	private int cantidadRecibida;
 	
 	private int conteo1;
@@ -251,5 +252,13 @@ public class ImportacionFacturaDetalle extends Domain {
 
 	public void setConteo3(int conteo3) {
 		this.conteo3 = conteo3;
+	}
+
+	public int getCantidad_acum() {
+		return cantidad_acum;
+	}
+
+	public void setCantidad_acum(int cantidad_acum) {
+		this.cantidad_acum = cantidad_acum;
 	}
 }

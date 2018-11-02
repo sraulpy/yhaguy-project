@@ -819,7 +819,7 @@
 											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
 										</listhead>
 										<template name="model">
-											<listitem>
+											<listitem visible="@load(each.auxi eq 'DUPLICADO' ? 'false':'true')">
 												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
 												<listcell label="@load(each.articulo.descripcion)"></listcell>
 												<listcell>
@@ -830,7 +830,7 @@
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo1 - each.cantidad)"></intbox>
+														value="@load(each.conteo1 - each.cantidad_acum)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
@@ -840,7 +840,7 @@
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo2 - each.cantidad)"></intbox>
+														value="@load(each.conteo2 - each.cantidad_acum)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
@@ -850,7 +850,7 @@
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo3 - each.cantidad)"></intbox>
+														value="@load(each.conteo3 - each.cantidad_acum)"></intbox>
 												</listcell>
 											</listitem>
 										</template>

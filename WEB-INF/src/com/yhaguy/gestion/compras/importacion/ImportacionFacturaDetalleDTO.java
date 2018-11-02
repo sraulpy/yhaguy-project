@@ -26,6 +26,9 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	private int cantidad = 0;
 	private int cantidadRecibida = 0;
 	
+	private int cantidad_acum = 0;
+	private boolean duplicado = false;
+	
 	private int conteo1 = 0;
 	private int conteo2 = 0;
 	private int conteo3 = 0;
@@ -296,5 +299,21 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 
 	public void setConteo3(int conteo3) {
 		this.conteo3 = conteo3;
+	}
+
+	public boolean isDuplicado() {
+		return duplicado;
+	}
+
+	public void setDuplicado(boolean duplicado) {
+		this.duplicado = duplicado;
+	}
+
+	public int getCantidad_acum() {
+		return cantidad_acum;
+	}
+
+	public void setCantidad_acum(int cantidad_acum) {
+		this.cantidad_acum = cantidad_acum;
 	}
 }

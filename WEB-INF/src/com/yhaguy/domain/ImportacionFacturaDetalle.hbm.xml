@@ -23,6 +23,7 @@
 		<property name="gastoDescuento" />
 		<property name="valorProrrateo" />
 		<property name="cantidad" />
+		<property name="cantidad_acum" />
 		<property name="cantidadRecibida" />
 		<property name="precioFinalGs" />
 		<property name="minoristaGs" />
