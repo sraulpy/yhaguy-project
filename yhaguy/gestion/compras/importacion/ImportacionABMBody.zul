@@ -7,22 +7,26 @@
 		
 		<navbar mold="bs-tabs" class="nav-justified">
 			<navitem label="General " selected="true"
-				onClick="dv_1.setVisible(true);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+				onClick="dv_1.setVisible(true);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">1</span>
 				</attribute>
 			</navitem>
-			<navitem label="Cotizacion " onClick="dv_2.setVisible(true);dv_1.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+			<navitem label="Cotizacion " onClick="dv_2.setVisible(true);dv_1.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">2</span>
 				</attribute>
 			</navitem>
-			<navitem label="Proforma " onClick="dv_3.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+			<navitem label="Proforma " onClick="dv_3.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">3</span>
 				</attribute>
 			</navitem>
-			<navitem label="Factura " onClick="dv_4.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+			<navitem label="Factura " onClick="dv_4.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">4</span>
 				</attribute>
@@ -32,17 +36,20 @@
 					<span class="badge">5</span>
 				</attribute>
 			</navitem>
-			<navitem label="Despacho " onClick="dv_6.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)">
+			<navitem label="Despacho " onClick="dv_6.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_7.setVisible(false);dv_8.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">6</span>
 				</attribute>
 			</navitem>
-			<navitem label="Costo Final " onClick="dv_7.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_8.setVisible(false)">
+			<navitem label="Costo Final " onClick="dv_7.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_8.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">7</span>
 				</attribute>
 			</navitem>
-			<navitem label="Precios " onClick="dv_8.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false)">
+			<navitem label="Precios " onClick="dv_8.setVisible(true);dv_1.setVisible(false);dv_2.setVisible(false);dv_3.setVisible(false);dv_4.setVisible(false);dv_5.setVisible(false);dv_6.setVisible(false);dv_7.setVisible(false)"
+				disabled="${!vm.operacionHabilitada('VerImportacion')}">
 				<attribute name="content">
 					<span class="badge">8</span>
 				</attribute>
