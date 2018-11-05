@@ -1,7 +1,9 @@
 package com.yhaguy.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.coreweb.domain.Domain;
@@ -57,6 +59,106 @@ public class Gasto extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	/**
+	 * @return true si es autofactura..
+	 */
+	public boolean isAutoFactura() {
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_AUTO_FACTURA);
+	}
+	
+	/**
+	 * @return true si es boleta de venta..
+	 */
+	public boolean isBoletaVenta() {
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_BOLETA_VENTA);
+	}
+	
+	/**
+	 * @return true si es gasto contado..
+	 */
+	public boolean isGastoContado() {
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO);
+	}
+	
+	/**
+	 * @return true si es gasto credito..
+	 */
+	public boolean isGastoCredito() {
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO);
+	}
+	
+	/**
+	 * @return true si es otros comprobantes..
+	 */
+	public boolean isOtrosComprobantes() {
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_OTROS_COMPROBANTES);
+	}
+	
+	/**
+	 * @return gravada 10%
+	 */
+	public double getGravada10() {
+		double out = 0;
+		for (GastoDetalle det : detalles) {
+			if (det.isIva10()) {
+				out += det.getMontoGs() - det.getMontoIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return gravada 5%
+	 */
+	public double getGravada5() {
+		double out = 0;
+		for (GastoDetalle det : detalles) {
+			if (det.isIva5()) {
+				out += det.getMontoGs() - det.getMontoIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return iva 10%
+	 */
+	public double getIva10() {
+		double out = 0;
+		for (GastoDetalle det : detalles) {
+			if (det.isIva10()) {
+				out += det.getMontoIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return iva 5%
+	 */
+	public double getIva5() {
+		double out = 0;
+		for (GastoDetalle det : detalles) {
+			if (det.isIva5()) {
+				out += det.getMontoIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return exenta
+	 */
+	public double getExenta() {
+		double out = 0;
+		for (GastoDetalle det : detalles) {
+			if (det.isExenta()) {
+				out += det.getMontoGs();
+			}
+		}
+		return out;
 	}
 	
 	/**
@@ -140,6 +242,24 @@ public class Gasto extends Domain {
 			return det.getArticuloGasto().getDescripcion().toUpperCase();
 		}
 		return this.tipoMovimiento.getDescripcion().toUpperCase();
+	}
+	
+	public String getDescripcionCuenta1() {
+		if (this.detalles.size() > 0) {
+			List<GastoDetalle> list = new ArrayList<GastoDetalle>();
+			list.addAll(detalles);
+			return list.get(0).getArticuloGasto().getDescripcion();
+		}
+		return "- - -";
+	}
+	
+	public String getDescripcionCuenta2() {
+		if (this.detalles.size() > 1) {
+			List<GastoDetalle> list = new ArrayList<GastoDetalle>();
+			list.addAll(detalles);
+			return list.get(1).getArticuloGasto().getDescripcion();
+		}
+		return "- - -";
 	}
 	
 	public void setDescripcionTipoMovimiento(String descripcion){

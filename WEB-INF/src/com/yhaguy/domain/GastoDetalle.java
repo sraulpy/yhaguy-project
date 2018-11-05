@@ -2,6 +2,7 @@ package com.yhaguy.domain;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class GastoDetalle extends Domain{
@@ -16,6 +17,18 @@ public class GastoDetalle extends Domain{
 	private ArticuloGasto articuloGasto;
 	private CentroCosto centroCosto;
 	private Tipo tipoIva;
+	
+	public boolean isIva10() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_10);
+	}
+	
+	public boolean isIva5() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_5);
+	}
+	
+	public boolean isExenta() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_EXENTO);
+	}
 	
 	public String getObservacion() {
 		return observacion;

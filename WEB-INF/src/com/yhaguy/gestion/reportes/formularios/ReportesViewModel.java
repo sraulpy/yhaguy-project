@@ -90,6 +90,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_RESUMEN_IMPORTACION_SIN_CAB = "/reportes/jasper/ResumenImportacion_sin_cab.jasper";
 	public static final String SOURCE_RESUMEN_IMPORTACION_ = "/reportes/jasper/ResumenImportacion_.jasper";
 	public static final String SOURCE_ABASTECIMIENTO_MOVIM_ARTICULOS = "/reportes/jasper/MovimientoArticulos.jasper";
+	public static final String SOURCE_LIBRO_COMPRAS_INDISTINTO = "/reportes/jasper/LibroComprasIndistinto.jasper";
 	
 	static final String CONTEXT = Sessions.getCurrent().getWebApp().getRealPath("/");
 	static final String LOGO = CONTEXT + "/logo.png";
