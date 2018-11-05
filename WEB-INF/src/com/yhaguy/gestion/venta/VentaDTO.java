@@ -15,6 +15,7 @@ import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.HistoricoLineaCredito;
@@ -245,9 +246,27 @@ public class VentaDTO extends DTO {
 	public double getSaldoCtaCte() throws Exception {
 		if (!this.cliente.esNuevo()) {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			return rr.getSaldoCtaCte((long) this.cliente.getPos4());
+			return rr.getSaldoCtaCte((long) this.cliente.getPos4()) + this.getChequesPendientes();
 		}
 		return 0;
+	}
+	
+	/**
+	 * @return los cheques pendientes..
+	 */
+	private double getChequesPendientes() throws Exception{
+		double out = 0;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<BancoChequeTercero> cheques = rr.getChequesTercero("",
+				"", "", "", "", "",
+				(String) this.cliente.getPos2(), "", "", "", "",
+				"", "FALSE", null, "FALSE", "FALSE", null, null, null, null, "", "", true);
+		for (BancoChequeTercero cheque : cheques) {
+			if (cheque.getFecha().compareTo(new Date()) > 0) {				
+				out += cheque.getMonto();
+			}				
+		}
+		return out;
 	}
 	
 	@DependsOn("cliente")

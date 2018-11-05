@@ -229,6 +229,7 @@
 		<mapping resource="com/yhaguy/domain/HistoricoCobranzaVendedor.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/HistoricoCobranzaDiaria.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/HistoricoLineaCredito.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/HistoricoMovimientoArticulo.hbm.xml" />
 		
 		<mapping resource="com/yhaguy/domain/Tarea_Programada.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ControlTalonario.hbm.xml" />

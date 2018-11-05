@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.HistoricoMovimientoArticulo" table="historico_movimiento_articulo">
+
+		&hibernate-domain; 
+		
+		<property name="fecha" />
+		<property name="codigo" />
+		<property name="codigoProveedor" />
+		<property name="descripcion" />
+		<property name="referencia" />
+		<property name="nroParte" />
+		<property name="estado" />
+		<property name="articulo" />
+		<property name="familia" />
+		<property name="marca" />
+		<property name="linea" />
+		<property name="grupo" />
+		<property name="ochentaVeinte" />
+		<property name="abc" />
+		<property name="aplicacion" />
+		<property name="modelo" />
+		<property name="peso" />
+		<property name="volumen" />
+		<property name="proveedor" />
+		<property name="cantidad" />
+		<property name="stock1" />
+		<property name="stock2" />
+		<property name="stock3" />
+		<property name="stock4" />
+		<property name="stock5" />
+		<property name="stock6" />
+		<property name="stock7" />
+		<property name="stock8" />
+		<property name="stockGral" />
+		<property name="stockMinimo" />
+		<property name="stockMaximo" />
+		<property name="fechaUltimaCompra" />
+		<property name="fechaUltimaVenta" />
+		<property name="proveedorUltimaCompra" />
+		<property name="costoFob" />
+		<property name="coeficiente" />
+		<property name="tipoCambio" />
+		<property name="costoGs" />
+		<property name="mayoristaGs" />
+		<property name="clienteGral" />
+		<property name="clienteMesVigente" />
+		<property name="enero" />
+		<property name="febrero" />
+		<property name="marzo" />
+		<property name="abril" />
+		<property name="mayo" />
+		<property name="junio" />
+		<property name="julio" />
+		<property name="agosto" />
+		<property name="setiembre" />
+		<property name="octubre" />
+		<property name="noviembre" />
+		<property name="diciembre" />
+		<property name="total" />
+					
+	</class>
+</hibernate-mapping>

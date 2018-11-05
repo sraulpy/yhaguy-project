@@ -11,10 +11,10 @@ import com.yhaguy.util.Utiles;
 
 public class TareaBloqueoClientes {
 
-	static final String MOTIVO = "Bloqueo automatico - Atraso mayor a 90 días";
+	static final String MOTIVO = "Bloqueo automatico - Atraso mayor a 60 días";
 	
 	/**
-	 * Bloquea clientes con facturas vencidas 120 dias..
+	 * Bloquea clientes con facturas vencidas 60 dias..
 	 */
 	
 	private static void bloquearClientes() {
@@ -24,7 +24,7 @@ public class TareaBloqueoClientes {
 			for (CtaCteEmpresaMovimiento movim : vencidos) {
 				Date vto = movim.getFechaVencimiento();
 				long dias = Utiles.diasEntreFechas(vto, new Date());
-				if (dias >= 90) {
+				if (dias >= 60) {
 					ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
 					HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
 					bloqueo.setFecha(new Date());

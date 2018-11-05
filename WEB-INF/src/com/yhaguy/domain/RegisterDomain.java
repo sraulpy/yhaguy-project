@@ -8597,6 +8597,11 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
 	}
 	
+	public List<HistoricoMovimientoArticulo> getHistoricoMovimientoArticulo() throws Exception {
+		String query = "select h from HistoricoMovimientoArticulo h order by h.codigo";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
