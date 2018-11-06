@@ -7,8 +7,10 @@ import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloUbicacion;
+import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.util.Utiles;
@@ -147,6 +149,43 @@ public class MigracionCentral {
 		}
 	}
 	
+	/**
+	 * ubicaciones..
+	 */
+	public static void migrarTelecobradores() throws Exception {
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "CLIENTES_TELECOBRADORES.csv";
+		
+		Map<String, Funcionario> telecob = new HashMap<String, Funcionario>();
+		Funcionario vivi = rr.getFuncionario((long) 14);
+		Funcionario claudia = rr.getFuncionario((long) 13);
+		Funcionario laura = rr.getFuncionario((long) 44);
+		telecob.put("0", null);
+		telecob.put("1", laura);
+		telecob.put("2", claudia);
+		telecob.put("3", vivi);
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "RAZONSOCIAL", CSV.STRING }, { "IDCOBRADOR", CSV.STRING }, { "COBRADOR", CSV.STRING } };		
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String razonSocial = csv.getDetalleString("RAZONSOCIAL");
+			String idcobrador = csv.getDetalleString("IDCOBRADOR");
+			String cobrador = csv.getDetalleString("COBRADOR");			
+			
+			Cliente cli = rr.getClienteByRazonSocial(razonSocial);
+			if (cli != null) {
+				Funcionario cob = telecob.get(idcobrador);
+				cli.setCobrador(cob);
+				rr.saveObject(cli, cli.getUsuarioMod());
+				System.out.println(cob == null? "SIN" : cob.getRazonSocial() + " " + cli.getRazonSocial());
+			}
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		try {
@@ -188,7 +227,8 @@ public class MigracionCentral {
 		//	MigracionCentral.migrarFuncionarios();
 		//	MigracionCentral.migrarChequesRechazados();
 			
-			MigracionCentral.migrarUbicaciones();
+		//	MigracionCentral.migrarUbicaciones();
+			MigracionCentral.migrarTelecobradores();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
