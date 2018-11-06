@@ -837,7 +837,8 @@
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo1 - each.cantidad_acum)"></intbox>
+														value="@load(each.conteo1 - each.cantidad_acum)"
+														style="@load((each.conteo1 - each.cantidad_acum) lt 0? 'background:#e74c3c' : '')"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
@@ -847,7 +848,8 @@
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo2 - each.cantidad_acum)"></intbox>
+														value="@load(each.conteo2 - each.cantidad_acum)"
+														style="@load((each.conteo2 - each.cantidad_acum) lt 0? 'background:#e74c3c' : '')"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
@@ -857,7 +859,8 @@
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo3 - each.cantidad_acum)"></intbox>
+														value="@load(each.conteo3 - each.cantidad_acum)"
+														style="@load((each.conteo3 - each.cantidad_acum) lt 0? 'background:#e74c3c' : '')"></intbox>
 												</listcell>
 											</listitem>
 										</template>
