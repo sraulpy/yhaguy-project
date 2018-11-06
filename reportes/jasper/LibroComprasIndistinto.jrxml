@@ -280,7 +280,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Cta. Contable 1]]></text>
+				<text><![CDATA[Cta. Contable]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" mode="Transparent" x="302" y="46" width="67" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="00a66cab-87c4-4dcf-84b0-f23bd90360d1"/>

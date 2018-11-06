@@ -46,6 +46,7 @@
 	<parameter name="Logo" class="java.lang.String"/>
 	<parameter name="Generado" class="java.lang.String"/>
 	<parameter name="Usuario" class="java.lang.String"/>
+	<parameter name="Sucursal" class="java.lang.String"/>
 	<field name="Fecha" class="java.lang.String"/>
 	<field name="Concepto" class="java.lang.String"/>
 	<field name="Numero" class="java.lang.String"/>
@@ -114,9 +115,22 @@
 				<textFieldExpression><![CDATA[$F{Desde}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="189" y="43" width="84" height="20" uuid="8231a0e9-a1b0-4531-89b8-df91e85bb734"/>
+				<reportElement x="189" y="44" width="84" height="20" uuid="8231a0e9-a1b0-4531-89b8-df91e85bb734"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Hasta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="304" y="44" width="63" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="049a36fb-b244-4184-aa8b-3963c1ba3475"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Sucursal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="367" y="44" width="281" height="20" uuid="03a56c1b-6811-4ded-9e29-01fa1648080d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Sucursal}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

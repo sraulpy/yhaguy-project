@@ -8189,10 +8189,13 @@ public class ReportesViewModel extends SimpleViewModel {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			SucursalApp suc = filtro.getSelectedSucursal();
+			long idSuc = suc != null ? suc.getId() : 0;
+			String suc_ = suc != null ? suc.getDescripcion() : "TODOS..";
 			Object[] formato = filtro.getFormato();
 			boolean formularioContinuo = filtro.isFormularioContinuo();
-			List<Venta> ventas = rr.getVentas(desde, hasta, 0);
-			List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,	hasta, 0);
+			List<Venta> ventas = rr.getVentas(desde, hasta, 0, idSuc);
+			List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,	hasta, 0, idSuc);
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS;
 			if (formularioContinuo)
 				source = formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS)? 
@@ -8201,6 +8204,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new LibroVentasDataSource(ventas, notasCredito, desde, hasta);
 			params.put("Usuario", getUs().getNombre());
+			params.put("Sucursal", suc_);
 			imprimirJasper(source, params, dataSource, formato);
 		}
 		
