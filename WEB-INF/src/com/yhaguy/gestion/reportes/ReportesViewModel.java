@@ -1407,7 +1407,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_UTILIDAD_RESUMIDO = "VEN-00034";
 		static final String VENTAS_COBRANZAS_VENDEDOR = "VEN-00035";
 		static final String VENTAS_COBRANZAS_VENDEDOR_DET = "VEN-00036";
-
+		
 		/**
 		 * procesamiento del reporte..
 		 */
@@ -4755,6 +4755,8 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String HISTORIAL_SALDOS_PROVEEDOR_EXT_RESUMIDO = "TES-00049";
 		static final String HISTORIAL_SALDOS_CLIENTES_DETALLADO = "TES-00050";
 		static final String HISTORIAL_SALDOS_CLIENTES_RESUMIDO = "TES-00051";
+		static final String COBRANZAS_COBRADOR = "TES-00052";
+		static final String COBRANZAS_COBRADOR_DET = "TES-00053";
 
 		/**
 		 * procesamiento del reporte..
@@ -4969,6 +4971,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case HISTORIAL_SALDOS_CLIENTES_RESUMIDO:
 				this.historialMovimientosClientes(mobile, true);
+				break;
+				
+			case COBRANZAS_COBRADOR:
+				this.cobranzasVentasCobrador(mobile);
+				break;
+				
+			case COBRANZAS_COBRADOR_DET:
+				this.cobranzasVentasCobradorDetallado(mobile);
 				break;
 			}
 		}
@@ -7595,7 +7605,187 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}		
+		}
+		
+		/**
+		 * reporte TES-00052
+		 */
+		private void cobranzasVentasCobrador(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Funcionario> cobradores = filtro.getTeleCobradores();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, 0, 0);
+				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0);
+				Map<Long, Double> values = new HashMap<Long, Double>();
+				Map<Long, Double> values_ = new HashMap<Long, Double>();
+
+				for (Object[] cobro : cobros) {
+					Recibo rec = (Recibo) cobro[0];
+					Funcionario cobrador = rec.getCliente().getCobrador();
+					long idCobrador = cobrador != null ? cobrador.getId() : 0;
+					Double total = values.get(idCobrador);
+					if(total != null) {
+						total += (double) cobro[2];
+					} else {
+						total = (double) cobro[2];
+					}
+					values.put(idCobrador, total);
+				}
+				
+				for (Venta venta : ventas) {
+					Funcionario cobrador = venta.getCliente().getCobrador();
+					long idCobrador = cobrador != null ? cobrador.getId() : 0;
+					Double total = values_.get(idCobrador);
+					if(total != null) {
+						total += (double) venta.getTotalImporteGsSinIva();
+					} else {
+						total = (double) venta.getTotalImporteGsSinIva();
+					}
+					values_.put(idCobrador, total);
+				}
+				
+				Funcionario sin = new Funcionario();
+				sin.setId((long) 0);
+				cobradores.add(sin);
+				for (Funcionario cobrador : cobradores) {
+					Double cobrado = values.get(cobrador.getId());
+					Double contado = values_.get(cobrador.getId());
+					
+					double cobrado_ = cobrado != null? cobrado : 0;
+					double contado_ = contado != null? contado : 0;
+					
+					String razonsocial = cobrador.esNuevo() ? "SIN COBRADOR" : cobrador.getRazonSocial().toUpperCase();
+					if (cobrado != null || contado != null) {
+						data.add(new Object[] { razonsocial, (cobrado_ - Utiles.getIVA(cobrado_, 10)), contado_ });
+					}						
+				}
+
+				ReporteTotalCobranzasVentasCobrador rep = new ReporteTotalCobranzasVentasCobrador(desde, hasta, "TODOS..");
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte TES-00053
+		 */
+		private void cobranzasVentasCobradorDetallado(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Funcionario cobrador = filtro.getCobrador();
+				
+				if (cobrador == null) {
+					Clients.showNotification("DEBE SELECCIONAR UN COBRADOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0);
+				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0);
+				Map<Long, Double> values = new HashMap<Long, Double>();
+				Map<Long, Double> values_ = new HashMap<Long, Double>();
+				Map<Long, String> clientes = new HashMap<Long, String>();
+				long idCobrador = cobrador.getId().longValue();
+
+				for (Recibo cobro : cobros) {
+					Funcionario _cobrador = cobro.getCliente().getCobrador();
+					long _idCobrador = _cobrador != null ? _cobrador.getId().longValue() : 0;
+					System.out.println("_IDCOBRADOR: " + _idCobrador + " - IDCOBRADOR:" + idCobrador);
+					if (_idCobrador == idCobrador) {
+						System.out.println("PASO...");
+						long idCliente = cobro.getCliente().getId();
+						Double total = values.get(idCliente);
+						if(total != null) {
+							total += cobro.getTotalImporteGsSinIva();
+						} else {
+							total = cobro.getTotalImporteGsSinIva();
+						}
+						values.put(idCliente, total);
+						clientes.put(idCliente, cobro.getCliente().getRazonSocial());
+					}
+				}
+				
+				for (Venta venta : ventas) {
+					Funcionario _cobrador = venta.getCliente().getCobrador();
+					long _idCobrador = _cobrador != null ? _cobrador.getId().longValue() : 0;
+					
+					if (_idCobrador == idCobrador) {
+						long idCliente = venta.getCliente().getId();
+						Double total = values_.get(idCliente);
+						if(total != null) {
+							total += (double) venta.getTotalImporteGsSinIva();
+						} else {
+							total = (double) venta.getTotalImporteGsSinIva();
+						}
+						values_.put(idCliente, total);
+						clientes.put(idCliente, venta.getCliente().getRazonSocial());
+					}
+				}				
+
+				for (Long idCliente : clientes.keySet()) {
+					Double cobrado = values.get(idCliente);
+					Double contado = values_.get(idCliente);
+					
+					double cobrado_ = cobrado != null? cobrado : 0;
+					double contado_ = contado != null? contado : 0;
+					
+					if (cobrado != null || contado != null) {
+						data.add(new Object[]{ clientes.get(idCliente),
+								(cobrado_ - Utiles.getIVA(cobrado_, 10)), contado_ });
+					}
+				}				
+
+				ReporteTotalCobranzasVentasCobrador rep = new ReporteTotalCobranzasVentasCobrador(desde, hasta, cobrador.getRazonSocial());
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -15484,6 +15674,61 @@ class ReporteVentasVendedorAgrupado extends ReporteYhaguy {
 				.add(this.textoParValor("Vendedor", this.vendedor))
 				.add(this.texto(""))
 				.add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de total cobranzas ventas por cobrador TES-00052..
+ */
+class ReporteTotalCobranzasVentasCobrador extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private Date desde;
+	private Date hasta;
+	private String cobrador;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Cobrador", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+
+	public ReporteTotalCobranzasVentasCobrador(Date desde, Date hasta, String cobrador) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.cobrador = cobrador;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Total cobranzas / ventas contado por cobrador");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Cobro-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Cobrador", this.cobrador)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

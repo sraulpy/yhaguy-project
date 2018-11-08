@@ -13,6 +13,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 import com.coreweb.util.MyArray;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.CompraLocalFactura;
@@ -65,6 +66,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalGastos = 0;
 	double totalCompras = 0;
 	double totalRepEgresos = 0;
+	double totalRepEgresosDtoViatico = 0;
 	double totalNotaCreditoContado = 0;
 	double totalNotaCreditoCredito = 0;
 	double totalNotaCreditoCompra = 0;
@@ -563,6 +565,9 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 					double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
 					this.totalEgresos += rep.getMontoGs();
 					this.totalRepEgresos += rep.getMontoGs();
+					if (rep.getTipoEgreso().getSigla().equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_DTO_VIATICO)) {
+						this.totalRepEgresosDtoViatico += rep.getMontoGs();
+					}
 					MyArray my = new MyArray(rep.getTipoEgreso()
 							.getDescripcion(),
 							(rep.getNumero() + " - " + rep.getResponsable()	+ " - " + rep.getObservacion()),
@@ -753,12 +758,12 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			
 			// resumen caja chica..
 			if (planilla.isCajaChica()) {
-				double saldo = this.totalReposiciones - (this.totalCompras + this.totalGastos + this.totalRepEgresos);
-				MyArray rep = new MyArray("INGRESO", "INGRESO - REPOSICION DE CAJA", this.totalReposiciones, "RESUMEN", saldo);
+				double saldo = this.totalReposiciones - ((this.totalCompras + this.totalGastos - this.totalRepEgresosDtoViatico) + (this.totalRepEgresos - this.totalRepEgresosDtoViatico));
+				MyArray rep = new MyArray("INGRESO", "INGRESO POR REPOSICION DE CAJA", this.totalReposiciones, "RESUMEN", saldo);
 				this.values.add(rep);
-				MyArray facs = new MyArray("EGRESO", "EGRESOS - FACTURAS DE GASTO", this.totalCompras + this.totalGastos, "RESUMEN", saldo);
+				MyArray facs = new MyArray("EGRESO", "EGRESOS POR FACTURAS DE GASTO - DESCUENTOS", ((this.totalCompras + this.totalGastos) - this.totalRepEgresosDtoViatico), "RESUMEN", saldo);
 				this.values.add(facs);
-				MyArray vuelto = new MyArray("EGRESO", "EGRESOS - VUELTOS Y DESCUENTOS", this.totalRepEgresos, "RESUMEN", saldo);
+				MyArray vuelto = new MyArray("EGRESO", "EGRESOS POR VUELTOS", this.totalRepEgresos - this.totalRepEgresosDtoViatico, "RESUMEN", saldo);
 				this.values.add(vuelto);
 				MyArray saldo_ = new MyArray("SALDO", "SALDO EN CAJA", saldo, "RESUMEN", saldo);
 				this.values.add(saldo_);
