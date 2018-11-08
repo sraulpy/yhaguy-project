@@ -750,6 +750,19 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 						"RECAUDACION EN DÓLARES", this.totalDolares);
 				this.values.add(my);
 			}
+			
+			// resumen caja chica..
+			if (planilla.isCajaChica()) {
+				double saldo = this.totalReposiciones - (this.totalCompras + this.totalGastos + this.totalRepEgresos);
+				MyArray rep = new MyArray("INGRESO", "INGRESO - REPOSICION DE CAJA", this.totalReposiciones, "RESUMEN", saldo);
+				this.values.add(rep);
+				MyArray facs = new MyArray("EGRESO", "EGRESOS - FACTURAS DE GASTO", this.totalCompras + this.totalGastos, "RESUMEN", saldo);
+				this.values.add(facs);
+				MyArray vuelto = new MyArray("EGRESO", "EGRESOS - VUELTOS Y DESCUENTOS", this.totalRepEgresos, "RESUMEN", saldo);
+				this.values.add(vuelto);
+				MyArray saldo_ = new MyArray("SALDO", "SALDO EN CAJA", saldo, "RESUMEN", saldo);
+				this.values.add(saldo_);
+			}
 
 			// total efectivo..
 			this.totalEfectivo = planilla.getTotalEfectivoIngreso()

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
@@ -231,6 +232,25 @@ public class Gasto extends Domain {
 	 */
 	public boolean isGastoImportacion() {
 		return this.getNumeroImportacion().contains("IMP");
+	}
+	
+	/**
+	 * @return el importe en letras..
+	 */
+	public String getImporteEnLetras() {
+		return getMisc().numberToLetter(this.getImporteGs());
+	}
+	
+	/**
+	 * @return el importe en letras ds..
+	 */
+	public String getImporteEnLetrasDs() {
+		return getMisc().numberToLetter(this.getImporteDs());
+	}
+	
+	private Misc getMisc() {
+		Misc out = new Misc();
+		return out;
 	}
 	
 	public String getDescripcionTipoMovimiento(){

@@ -27,11 +27,17 @@
 				iconSclass="z-icon-filter" 
 				onClick="@command('selectFilter', filter=5)"/>
 		</navbar>
+		<space hflex="true" />
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Imprimir" onClick="@command('imprimir')"
+				disabled="@load(vm.selectedGasto eq null)"/>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
-		model="@load(vm.gastos)">
+		model="@load(vm.gastos)"
+		selectedItem="@bind(vm.selectedGasto)">
 		<listhead menupopup="auto">
 			<listheader label="Sucursal" width="110px" />
 			<listheader label="Fecha" width="150px" />

@@ -3148,7 +3148,7 @@ public class RegisterDomain extends Register {
 			throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
-				+ " and v.fecha between ? and ?";
+				+ " and v.fecha between ? and ? and v.estadoComprobante is null";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
@@ -3319,6 +3319,35 @@ public class RegisterDomain extends Register {
 
 		if (idCliente != 0) {
 			query += " and n.cliente.id = ?";
+		}
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return las notas de credito de venta segun fecha
+	 */
+	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idSucursal, String sucursal) throws Exception {
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.tipoMovimiento.sigla = ?"
+				+ " and (n.fechaEmision between ? and ?)";
+		if (idCliente != 0) {
+			query += " and n.cliente.id = ?";
+		}
+		if (idSucursal != 0) {
+			query += " and n.sucursal.id = " + idSucursal;
 		}
 		query += " order by n.numero";
 
@@ -3658,7 +3687,7 @@ public class RegisterDomain extends Register {
 	public List<Venta> getVentasContadoPorVendedor(Date desde, Date hasta,
 			long idVendedor) throws Exception {
 
-		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ? and v.vendedor.id = ?"
+		String query = "select v from Venta v where v.dbEstado != 'D' and v.estadoComprobante is null and v.tipoMovimiento.sigla = ? and v.vendedor.id = ?"
 				+ " and v.fecha between ? and ?" + " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
@@ -8666,8 +8695,11 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
 	}
 	
-	public List<HistoricoMovimientoArticulo> getHistoricoMovimientoArticulo() throws Exception {
-		String query = "select h from HistoricoMovimientoArticulo h order by h.codigo";
+	/**
+	 * @return historico movimiento articulo..
+	 */
+	public List<HistoricoMovimientoArticulo> getHistoricoMovimientoArticulo(String proveedor) throws Exception {
+		String query = "select h from HistoricoMovimientoArticulo h where upper(h.proveedor) like '%"+ proveedor.toUpperCase() +"%' order by h.codigo";
 		return this.hql(query);
 	}
 	

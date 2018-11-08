@@ -350,7 +350,12 @@
 						<space />
 						<hbox align="center">
 							<checkbox checked="@bind(vm.dtoGasto.debitoBancario)"></checkbox>
-							<label value="Débito Bancario"></label>
+							<label value="Débito Bancario s/Factura"
+								tooltiptext="Debita el importe total de la factura.."></label>
+							<space></space>
+							<checkbox></checkbox>
+							<label value="Débito Bancario s/Iva"
+								tooltiptext="Debita el iva de la factura.."></label>
 							<space></space>
 							<checkbox checked="@bind(vm.dtoGasto.gastoImportacion)"></checkbox>
 							<label value="Gasto Importación"></label>

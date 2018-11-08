@@ -1,7 +1,9 @@
 package com.yhaguy.gestion.compras.gastos.generales;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -11,14 +13,22 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.util.MyArray;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.util.Utiles;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 public class ExploradorGastosVM extends SimpleViewModel {
 	
@@ -46,6 +56,8 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	
 	private int listSize = 0;
 	private double totalImporteGs = 0;
+	
+	private Window win;
 	
 	@Wire
 	private Popup pop_det;
@@ -101,6 +113,99 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		this.selectedGasto = item;
 		this.pop_img.open(200, 100);
 		Clients.evalJavaScript("setImage('" + this.selectedGasto.getUrlImagen() + "')");
+	}
+	
+	@Command
+	public void imprimir() throws Exception {
+		this.imprimir_();
+	}
+	
+	/**
+	 * Despliega el Reporte de Pago..
+	 */
+	private void imprimir_() throws Exception {		
+		String source = ReportesViewModel.SOURCE_RECIBO;
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new ReciboDataSource();
+		params.put("title", this.selectedGasto.getTipoMovimiento().getDescripcion());
+		params.put("fieldRazonSocial", "Proveedor:");
+		params.put("RazonSocial", this.selectedGasto.getProveedor().getRazonSocial());
+		params.put("Ruc", this.selectedGasto.getProveedor().getRuc());
+		params.put("NroRecibo", this.selectedGasto.getNumeroFactura());
+		params.put("Moneda", this.selectedGasto.isMonedaLocal() ? "Guaraníes:" : "Dólares:");
+		params.put("Moneda_", this.selectedGasto.isMonedaLocal() ? "Gs." : "U$D");
+		params.put("ImporteEnLetra", this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteEnLetras() : this.selectedGasto.getImporteEnLetrasDs());
+		params.put("TotalImporteGs",
+				this.selectedGasto.isMonedaLocal() ? Utiles.getNumberFormat(this.selectedGasto.getImporteGs())
+						: Utiles.getNumberFormatDs(this.selectedGasto.getImporteDs()));
+		params.put("Usuario", this.getUs().getNombre());
+		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+	}
+	
+	/**
+	 * Despliega el comprobante en un pdf para su impresion..
+	 */
+	public void imprimirComprobante(String source,
+			Map<String, Object> parametros, JRDataSource dataSource, Object[] format) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("source", source);
+		params.put("parametros", parametros);
+		params.put("dataSource", dataSource);
+		params.put("format", format);
+
+		this.win = (Window) Executions.createComponents(
+				ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
+		this.win.doModal();
+	}
+	
+	/**
+	 * DataSource del Recibo..
+	 */
+	class ReciboDataSource implements JRDataSource {
+
+		List<MyArray> detalle = new ArrayList<MyArray>();
+
+		public ReciboDataSource() {
+			MyArray m = new MyArray();
+			m.setPos1(Utiles.getDateToString(selectedGasto.getFecha(), Utiles.DD_MM_YYYY));
+			m.setPos2(selectedGasto.getDescripcionCuenta1());
+			m.setPos3(selectedGasto.isMonedaLocal() ? selectedGasto.getImporteGs() : selectedGasto.getImporteDs());
+			m.setPos4("Detalle");
+			this.detalle.add(m);
+		}
+
+		private int index = -1;
+
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+			Object value = null;
+			String fieldName = field.getName();
+			MyArray item = this.detalle.get(index);
+
+			if ("FechaFactura".equals(fieldName)) {
+				value = item.getPos1();
+			} else if ("DescFactura".equals(fieldName)) {
+				value = item.getPos2();
+			} else if ("Importe".equals(fieldName)) {
+				double importe = (double) item.getPos3();
+				value = selectedGasto.isMonedaLocal() ? Utiles.getNumberFormat(importe) : Utiles.getNumberFormatDs(importe);
+			} else if ("TotalImporte".equals(fieldName)) {
+				double importe = selectedGasto.isMonedaLocal() ? selectedGasto.getImporteGs() : selectedGasto.getImporteDs();
+				value = selectedGasto.isMonedaLocal() ? Utiles.getNumberFormat(importe) : Utiles.getNumberFormatDs(importe);
+			} else if ("TipoDetalle".equals(fieldName)) {
+				value = item.getPos4();
+			}
+			return value;
+		}
+
+		@Override
+		public boolean next() throws JRException {
+			if (index < detalle.size() - 1) {
+				index++;
+				return true;
+			}
+			return false;
+		}
 	}
 	
 	/**
