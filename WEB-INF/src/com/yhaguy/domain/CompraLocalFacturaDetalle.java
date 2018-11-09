@@ -2,6 +2,7 @@ package com.yhaguy.domain;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class CompraLocalFacturaDetalle extends Domain {
@@ -28,6 +29,18 @@ public class CompraLocalFacturaDetalle extends Domain {
 	
 	private Articulo articulo;	
 	private Tipo iva;
+	
+	public boolean isIva10() {
+		return this.iva.getSigla().equals(Configuracion.SIGLA_IVA_10);
+	}
+	
+	public boolean isIva5() {
+		return this.iva.getSigla().equals(Configuracion.SIGLA_IVA_5);
+	}
+	
+	public boolean isExenta() {
+		return this.iva.getSigla().equals(Configuracion.SIGLA_IVA_EXENTO);
+	}
 
 	public double getCostoGs() {
 		return costoGs;
