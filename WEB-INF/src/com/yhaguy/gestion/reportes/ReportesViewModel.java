@@ -4760,30 +4760,32 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] cobro : cobros) {
 					Recibo rec = (Recibo) cobro[0];
 					for (ReciboDetalle item : rec.getDetalles()) {
-						if (item.getVenta() != null) {
-							for (VentaDetalle det : item.getVenta().getDetalles()) {
+						Venta vta = item.getVenta();
+						if (vta != null) {
+							for (VentaDetalle det : vta.getDetalles()) {
 								Proveedor prov = det.getArticulo().getProveedor();
 								long idProveedor = prov != null ? prov.getId() : 0;
 								Double total = values.get(idProveedor);
 								if(total != null) {
-									total += item.getMontoGs() / item.getVenta().getDetalles().size();
+									total += (item.getMontoGs() / vta.getDetalles().size());
 								} else {
-									total = item.getMontoGs() / item.getVenta().getDetalles().size();
+									total = (item.getMontoGs() / vta.getDetalles().size());
 								}
 								values.put(idProveedor, total);
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
 							}
 						} else {
-							for (String det : item.getDetalleVentaMigracion()) {
+							List<String> dets = item.getDetalleVentaMigracion();
+							for (String det : dets) {
 								Articulo art = rr.getArticulo(det);
 								if (art != null) {
 									Proveedor prov = art.getProveedor();
 									long idProveedor = prov != null ? prov.getId() : 0;
 									Double total = values.get(idProveedor);
 									if(total != null) {
-										total += item.getMontoGs() / item.getDetalleVentaMigracion().size();
+										total += (item.getMontoGs() / dets.size());
 									} else {
-										total = item.getMontoGs() / item.getDetalleVentaMigracion().size();
+										total = (item.getMontoGs() / dets.size());
 									}
 									values.put(idProveedor, total);
 									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
