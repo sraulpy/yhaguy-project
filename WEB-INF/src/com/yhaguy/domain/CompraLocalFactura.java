@@ -44,6 +44,71 @@ public class CompraLocalFactura extends Domain {
 	}
 	
 	/**
+	 * @return gravada 10%
+	 */
+	public double getGravada10() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : detalles) {
+			if (det.isIva10()) {
+				out += det.getImporteGs() - det.getIva10();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return gravada 5%
+	 */
+	public double getGravada5() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : detalles) {
+			if (det.isIva5()) {
+				out += det.getImporteGs() - det.getIva5();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return iva 10%
+	 */
+	public double getIva10() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : detalles) {
+			if (det.isIva10()) {
+				out += det.getIva10();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return iva 5%
+	 */
+	public double getIva5() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : detalles) {
+			if (det.isIva5()) {
+				out += det.getIva5();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return exenta
+	 */
+	public double getExenta() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : detalles) {
+			if (det.isExenta()) {
+				out += det.getImporteGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es compra contado..
 	 */
 	public boolean isContado() {

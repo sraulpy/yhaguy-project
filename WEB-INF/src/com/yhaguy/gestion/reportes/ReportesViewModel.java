@@ -1408,6 +1408,8 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_COBRANZAS_VENDEDOR = "VEN-00035";
 		static final String VENTAS_COBRANZAS_VENDEDOR_DET = "VEN-00036";
 		static final String VENTAS_CONTADO_CREDITO_VENDEDOR = "VEN-00037";
+		static final String VENTAS_CONTADO_CREDITO_VENDEDOR_DET = "VEN-00038";
+		static final String VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_DET = "VEN-00039";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1565,6 +1567,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_CONTADO_CREDITO_VENDEDOR:
 				this.ventasContadoCreditoVendedor(mobile);
+				break;
+				
+			case VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_DET:
+				this.cobranzasVentasVendedorProveedorDetallado(mobile);
 				break;
 			}
 		}
@@ -4704,6 +4710,102 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				ReporteTotalVentas rep = new ReporteTotalVentas(desde, hasta, "TODOS..");
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte VEN-00039
+		 */
+		private void cobranzasVentasVendedorProveedorDetallado(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Funcionario vendedor = filtro.getVendedor();
+				
+				if (vendedor == null) {
+					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId(), 0);
+				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
+				Map<Long, Double> values = new HashMap<Long, Double>();
+				Map<Long, Double> values_ = new HashMap<Long, Double>();
+				Map<Long, String> proveedores = new HashMap<Long, String>();
+
+				for (Object[] cobro : cobros) {
+					Recibo rec = (Recibo) cobro[0];
+					for (ReciboDetalle item : rec.getDetalles()) {
+						if (item.getVenta() != null) {
+							for (VentaDetalle det : item.getVenta().getDetalles()) {
+								Proveedor prov = det.getArticulo().getProveedor();
+								long idProveedor = prov != null ? prov.getId() : 0;
+								Double total = values.get(idProveedor);
+								if(total != null) {
+									total += (double) det.getImporteGsSinIva();
+								} else {
+									total = (double) det.getImporteGsSinIva();
+								}
+								values.put(idProveedor, total);
+								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+							}
+						}
+					}
+				}
+				
+				for (Venta venta : ventas) {
+					for (VentaDetalle det : venta.getDetalles()) {
+						Proveedor prov = det.getArticulo().getProveedor();
+						long idProveedor = prov != null ? prov.getId() : 0;
+						Double total = values_.get(idProveedor);
+						if(total != null) {
+							total += (double) det.getImporteGsSinIva();
+						} else {
+							total = (double) det.getImporteGsSinIva();
+						}
+						values_.put(idProveedor, total);
+						proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+					}
+				}				
+
+				for (Long idProveedor : proveedores.keySet()) {
+					Double cobrado = values.get(idProveedor);
+					Double contado = values_.get(idProveedor);
+					
+					double cobrado_ = cobrado != null? cobrado : 0;
+					double contado_ = contado != null? contado : 0;
+					
+					if (cobrado != null || contado != null) {
+						data.add(new Object[]{ proveedores.get(idProveedor),
+								(cobrado_ - Utiles.getIVA(cobrado_, 10)), contado_ });
+					}
+				}				
+
+				ReporteTotalCobranzasVentas rep = new ReporteTotalCobranzasVentas(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 				
@@ -8616,7 +8718,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case LIBRO_COMPRAS_MERCADERIA:
-				this.libroComprasDespacho();
+				this.libroComprasLocales();
 				break;
 				
 			case LIBRO_MAYOR:
@@ -8669,7 +8771,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			if (formularioContinuo)
 				source = formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS)? 
 						com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_FC_XLS : 
-							com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_FC;
+						com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_FC;
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new LibroVentasDataSource(ventas, notasCredito, desde, hasta);
 			params.put("Usuario", getUs().getNombre());
@@ -8686,8 +8788,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Cliente cliente = filtro.getCliente();
 				SucursalApp suc = filtro.getSelectedSucursal();
-				String cliente_ = cliente == null ? "TODOS.." : cliente
-						.getRazonSocial();
+				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
 				long idCliente = cliente == null ? 0 : cliente.getId();
 				long idSucursal = suc == null ? 0 : suc.getId(); 
 
@@ -9907,6 +10008,36 @@ public class ReportesViewModel extends SimpleViewModel {
 				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", "LIBRO DE COMPRAS S/DESPACHO - LEY 125/91 MODIF. POR LEY 2421/04");
+				params.put("Sucursal", sucursal);
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("periodo", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY) + " a " + Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				imprimirJasper(source, params, dataSource, formato);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * Libro compras locales.
+		 */
+		private void libroComprasLocales() {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				Object[] formato = filtro.getFormato();
+				
+				RegisterDomain rr = RegisterDomain.getInstance();
+				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
+				long idSucursal = suc != null ? suc.getId() : 0;
+				List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, idSucursal);
+				
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new LibroComprasLocalesDataSource(compras);
+				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", "LIBRO DE COMPRAS IVA DIRECTO LEY 125/91 MODIF. POR LEY 2421/04");
 				params.put("Sucursal", sucursal);
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
@@ -12797,6 +12928,154 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
         	value = Utiles.getNumberFormat(this.otros_iva5);
         } else if ("otros_total".equals(fieldName)) {
         	value = Utiles.getNumberFormat(this.otros_grav10 + this.otros_grav5 + this.otros_exenta + this.otros_iva10 + this.otros_iva5);
+        } else if ("Total_Gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_gravada10);
+        } else if ("Total_Gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_gravada5);
+        } else if ("Total_Iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_iva5);
+        } else if ("Total_Iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_iva10);
+        } else if ("Total_Exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_exenta);
+        } else if ("Total_".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_gravada10 + this.total_gravada5 + this.total_iva10 + this.total_iva5 + this.total_exenta);
+        }
+        return value;
+    }
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < values.size() - 1) {
+			index ++;
+			return true;
+		}
+		return false;
+	}		
+}
+
+/**
+ * DataSource del Libro compras locales..
+ */
+class LibroComprasLocalesDataSource implements JRDataSource {
+	
+	List<CompraLocalFactura> values = new ArrayList<CompraLocalFactura>();
+	
+	double total_gravada10 = 0;
+	double total_gravada5 = 0;
+	double total_exenta = 0;
+	double total_iva10 = 0;
+	double total_iva5 = 0;
+	
+	public LibroComprasLocalesDataSource(List<CompraLocalFactura> values) {
+		this.values = values;
+		for (CompraLocalFactura compra : values) {
+			total_gravada10 += compra.getGravada10();
+			total_gravada5 += compra.getGravada5();
+			total_exenta += compra.getExenta();
+			total_iva10 += compra.getIva10();
+			total_iva5 += compra.getIva5();
+		}
+    }
+	
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+        Object value = null;
+        String fieldName = field.getName();
+        CompraLocalFactura compra = this.values.get(index);
+         
+        if ("Fecha".equals(fieldName)) {
+        	value = Utiles.getDateToString(compra.getFechaOriginal(), Utiles.DD_MM_YYYY);
+        } else if ("FechaCarga".equals(fieldName)) {
+        	value = Utiles.getDateToString(compra.getFechaCreacion(), Utiles.DD_MM_YYYY);
+        } else if ("Numero".equals(fieldName)) {
+        	value = compra.getNumero();
+        } else if ("Concepto".equals(fieldName)) {
+        	value = compra.getTipoMovimiento().getDescripcion();
+        } else if ("Timbrado".equals(fieldName)) {
+        	value = compra.getTimbrado().getNumero();
+        } else if ("Proveedor".equals(fieldName)) {
+        	value = compra.getProveedor().getRazonSocial();
+        } else if ("Ruc".equals(fieldName)) {
+        	value = compra.getProveedor().getRuc();
+        } else if ("Gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.getGravada10());
+        } else if ("Gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.getGravada5());
+        } else if ("Exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.getExenta());
+        } else if ("Iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.getIva10());
+        } else if ("Iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.getIva5());
+        } else if ("Total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.getIva5() + compra.getIva10() + compra.getExenta() + compra.getGravada10() + compra.getGravada5());
+        } else if ("Cuenta1".equals(fieldName)) {
+        	value = "";
+        } else if ("Cuenta2".equals(fieldName)) {
+        	value = "";
+        } else if ("autofact_gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("autofact_gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("autofact_exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("autofact_iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("autofact_iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("autofact_total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("boleta_gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("boleta_gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("boleta_exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("boleta_iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("boleta_iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("boleta_total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cont_gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cont_gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cont_exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cont_iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cont_iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cont_total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cred_gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cred_gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cred_exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cred_iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cred_iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("cred_total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("otros_gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("otros_gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("otros_exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("otros_iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("otros_iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
+        } else if ("otros_total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0);
         } else if ("Total_Gravada10".equals(fieldName)) {
         	value = Utiles.getNumberFormat(this.total_gravada10);
         } else if ("Total_Gravada5".equals(fieldName)) {

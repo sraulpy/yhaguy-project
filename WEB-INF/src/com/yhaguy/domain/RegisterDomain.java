@@ -8800,7 +8800,6 @@ public class RegisterDomain extends Register {
 	 */
 	public List<CompraLocalFactura> getLibroComprasLocales(Date desde, Date hasta, long idSucursal) throws Exception {
 		String query = "select c from CompraLocalFactura c where c.dbEstado != 'D'"
-				+ " and c.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and c.fechaOriginal between ? and ?";
 				if (idSucursal > 0) {
 					query += " and c.sucursal.id = " + idSucursal;
