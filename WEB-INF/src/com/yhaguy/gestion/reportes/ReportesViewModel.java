@@ -4766,12 +4766,28 @@ public class ReportesViewModel extends SimpleViewModel {
 								long idProveedor = prov != null ? prov.getId() : 0;
 								Double total = values.get(idProveedor);
 								if(total != null) {
-									total += (double) det.getImporteGsSinIva();
+									total += item.getMontoGs() / item.getVenta().getDetalles().size();
 								} else {
-									total = (double) det.getImporteGsSinIva();
+									total = item.getMontoGs() / item.getVenta().getDetalles().size();
 								}
 								values.put(idProveedor, total);
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+							}
+						} else {
+							for (String det : item.getDetalleVentaMigracion()) {
+								Articulo art = rr.getArticulo(det);
+								if (art != null) {
+									Proveedor prov = art.getProveedor();
+									long idProveedor = prov != null ? prov.getId() : 0;
+									Double total = values.get(idProveedor);
+									if(total != null) {
+										total += item.getMontoGs() / item.getDetalleVentaMigracion().size();
+									} else {
+										total = item.getMontoGs() / item.getDetalleVentaMigracion().size();
+									}
+									values.put(idProveedor, total);
+									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+								}								
 							}
 						}
 					}

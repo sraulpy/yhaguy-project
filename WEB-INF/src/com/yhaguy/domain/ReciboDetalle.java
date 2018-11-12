@@ -1,6 +1,11 @@
 package com.yhaguy.domain;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.coreweb.domain.Domain;
+import com.yhaguy.util.ConnectDB;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
@@ -39,6 +44,27 @@ public class ReciboDetalle extends Domain {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Venta out = (Venta) rr.getObject(Venta.class.getName(), this.movimiento.getIdMovimientoOriginal());
 		this.venta = out;
+		return out;
+	}
+	
+	/**
+	 * @return los codigos de items de venta migrada.. 
+	 */
+	public List<String> getDetalleVentaMigracion() throws Exception {
+		List<String> out = new ArrayList<String>();
+		if (this.getVenta() != null) {
+			return out;
+		}
+		if (this.movimiento != null) {
+			ConnectDB conn = ConnectDB.getInstance();
+			ResultSet result = conn.getDetalleMovimiento(this.movimiento.getIdMovimientoOriginal() + "");
+			if (result != null) {
+				while (result.next()) {
+					String cod = (String) result.getObject(1);
+					out.add(cod);
+				}
+			}
+		}		
 		return out;
 	}
 	
