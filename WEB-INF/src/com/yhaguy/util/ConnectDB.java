@@ -80,7 +80,7 @@ public class ConnectDB {
 	 * detalle de movimientos..
 	 */
 	public ResultSet getDetalleMovimiento(String idMovimiento) {
-		String sql = "select m.idarticulo from detallemovimiento m where m.idmovimiento = " + idMovimiento;	                   	
+		String sql = "select m.idarticulo, (m.cantidad * m.precio) from detallemovimiento m where m.idmovimiento = " + idMovimiento;	                   	
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);

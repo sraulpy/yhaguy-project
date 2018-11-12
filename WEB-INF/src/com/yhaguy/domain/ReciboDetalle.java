@@ -50,8 +50,8 @@ public class ReciboDetalle extends Domain {
 	/**
 	 * @return los codigos de items de venta migrada.. 
 	 */
-	public List<String> getDetalleVentaMigracion() throws Exception {
-		List<String> out = new ArrayList<String>();
+	public List<Object[]> getDetalleVentaMigracion() throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
 		if (this.getVenta() != null) {
 			return out;
 		}
@@ -61,7 +61,8 @@ public class ReciboDetalle extends Domain {
 			if (result != null) {
 				while (result.next()) {
 					String cod = (String) result.getObject(1);
-					out.add(cod);
+					double importe = (double) result.getObject(2);
+					out.add(new Object[]{ cod, importe });
 				}
 			}
 		}		

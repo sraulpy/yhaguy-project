@@ -4767,25 +4767,25 @@ public class ReportesViewModel extends SimpleViewModel {
 								long idProveedor = prov != null ? prov.getId() : 0;
 								Double total = values.get(idProveedor);
 								if(total != null) {
-									total += (item.getMontoGs() / vta.getDetalles().size());
+									total += det.getImporteGs();
 								} else {
-									total = (item.getMontoGs() / vta.getDetalles().size());
+									total = det.getImporteGs();
 								}
 								values.put(idProveedor, total);
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
 							}
 						} else {
-							List<String> dets = item.getDetalleVentaMigracion();
-							for (String det : dets) {
-								Articulo art = rr.getArticulo(det);
+							List<Object[]> dets = item.getDetalleVentaMigracion();
+							for (Object[] det : dets) {
+								Articulo art = rr.getArticulo((String) det[0]);
 								if (art != null) {
 									Proveedor prov = art.getProveedor();
 									long idProveedor = prov != null ? prov.getId() : 0;
 									Double total = values.get(idProveedor);
 									if(total != null) {
-										total += (item.getMontoGs() / dets.size());
+										total += (double) det[1];
 									} else {
-										total = (item.getMontoGs() / dets.size());
+										total = (double) det[1];
 									}
 									values.put(idProveedor, total);
 									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
