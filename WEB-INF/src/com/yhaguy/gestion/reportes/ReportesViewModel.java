@@ -4753,46 +4753,58 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
+				double totalCobrado = 0;
+				double totalCobradoItems = 0;
+				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, String> proveedores = new HashMap<Long, String>();
 
 				for (Object[] cobro : cobros) {
 					Recibo rec = (Recibo) cobro[0];
+					totalCobrado += rec.getTotalImporteGsSinIva();
 					for (ReciboDetalle item : rec.getDetalles()) {
 						Venta vta = item.getVenta();
 						if (vta != null) {
 							for (VentaDetalle det : vta.getDetalles()) {
 								Proveedor prov = det.getArticulo().getProveedor();
 								long idProveedor = prov != null ? prov.getId() : 0;
-								Double total = values.get(idProveedor);
+								Integer total = prov_acum.get(idProveedor);
 								if (total != null) {
-									total += (item.getMontoGs() / vta.getDetalles().size());
+									total ++;
 								} else {
-									total = (item.getMontoGs() / vta.getDetalles().size());
+									total = 1;
 								}
-								values.put(idProveedor, total);
+								totalCobradoItems ++;
+								prov_acum.put(idProveedor, total);
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
 							}
 						} else {
-							/** List<Object[]> dets = item.getDetalleVentaMigracion();
+							List<Object[]> dets = item.getDetalleVentaMigracion();
 							for (Object[] det : dets) {
 								Articulo art = rr.getArticulo((String) det[0]);
 								if (art != null) {
 									Proveedor prov = art.getProveedor();
 									long idProveedor = prov != null ? prov.getId() : 0;
-									Double total = values.get(idProveedor);
+									Integer total = prov_acum.get(idProveedor);
 									if (total != null) {
-										total += (item.getMontoGs() / dets.size());
+										total ++;
 									} else {
-										total = (item.getMontoGs() / dets.size());
+										total = 1;
 									}
-									values.put(idProveedor, total);
+									totalCobradoItems ++;
+									prov_acum.put(idProveedor, total);
 									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
 								}								
-							} **/
+							}
 						} 
 					}
+				}	
+				
+				for (Long idProveedor : proveedores.keySet()) {
+					int total = prov_acum.get(idProveedor);
+					double porcentaje = Utiles.obtenerPorcentajeDelValor(totalCobradoItems, total);
+					values.put(idProveedor, Utiles.obtenerValorDelPorcentaje(totalCobrado, porcentaje));
 				}
 				
 				for (Venta venta : ventas) {
