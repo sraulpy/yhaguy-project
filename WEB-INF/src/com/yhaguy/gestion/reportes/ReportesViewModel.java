@@ -4803,8 +4803,13 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (Long idProveedor : proveedores.keySet()) {
 					int total = prov_acum.get(idProveedor);
-					double porcentaje = Utiles.obtenerPorcentajeDelValor(totalCobradoItems, total);
-					values.put(idProveedor, Utiles.obtenerValorDelPorcentaje(totalCobrado, porcentaje));
+					double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
+					double importe = Utiles.obtenerValorDelPorcentaje(totalCobrado, porcentaje);
+					System.out.println("------------------------------");
+					System.out.println("TOTAL COBRADO: " + totalCobrado);
+					System.out.println("PORCENTAJE: " + porcentaje);
+					System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
+					values.put(idProveedor, importe);
 				}
 				
 				for (Venta venta : ventas) {
@@ -4855,6 +4860,8 @@ public class ReportesViewModel extends SimpleViewModel {
 			}
 		}
 	}
+	
+	
 	
 	/**
 	 * Limpia los atributos e inicializa los valores por defecto..
@@ -10175,15 +10182,6 @@ public class ReportesViewModel extends SimpleViewModel {
 		if (string.length() > max)
 			return string.substring(0, max) + "..";
 		return string;
-	}
-
-	public static void main(String[] args) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Usuario> usuarios = rr.getUsuarios("", "");
-
-		ReporteUsuarios rp = new ReporteUsuarios(true, true);
-		rp.setDatosUsuarios(usuarios);
-		rp.ejecutar(true);
 	}
 
 	public String getSelectedGrupo() {
