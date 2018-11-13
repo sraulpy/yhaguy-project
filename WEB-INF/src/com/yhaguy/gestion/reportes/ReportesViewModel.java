@@ -4822,21 +4822,25 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (Long idProveedor : proveedores.keySet()) {
-					int total = prov_acum.get(idProveedor);
-					double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
-					double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
-					double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
-					System.out.println("------------------------------");
-					System.out.println("TOTAL COBRADO: " + Utiles.getNumberFormat(totalCobradoSinIva));
-					System.out.println("PORCENTAJE: " + porcentaje);
-					System.out.println("IMPORTE: " + Utiles.getNumberFormat(importe));
-					System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
-					values.put(idProveedor, importe);
+					Integer total = prov_acum.get(idProveedor);
+					if (total != null) {
+						double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
+						double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
+						double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
+						System.out.println("------------------------------");
+						System.out.println("TOTAL COBRADO: " + Utiles.getNumberFormat(totalCobradoSinIva));
+						System.out.println("PORCENTAJE: " + porcentaje);
+						System.out.println("IMPORTE: " + Utiles.getNumberFormat(importe));
+						System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
+						values.put(idProveedor, importe);
+					}					
 					
-					int total_ = prov_acum_.get(idProveedor);
-					double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
-					double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
-					values_.put(idProveedor, importe_);
+					Integer total_ = prov_acum_.get(idProveedor);
+					if (total_ != null) {
+						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
+						double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
+						values_.put(idProveedor, importe_);
+					}					
 				}
 
 				for (Long idProveedor : proveedores.keySet()) {
