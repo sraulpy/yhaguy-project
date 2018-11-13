@@ -4762,7 +4762,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] cobro : cobros) {
 					Recibo rec = (Recibo) cobro[0];
-					totalCobrado += rec.getTotalImporteGsSinIva();
+					totalCobrado += (double) cobro[2];
 					for (ReciboDetalle item : rec.getDetalles()) {
 						Venta vta = item.getVenta();
 						if (vta != null) {
