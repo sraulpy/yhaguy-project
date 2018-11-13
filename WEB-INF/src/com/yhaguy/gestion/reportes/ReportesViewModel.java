@@ -4755,7 +4755,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
 				double totalCobrado = 0;
 				double totalCobradoItems = 0;
+				double totalContado = 0;
+				double totalContadoItems = 0;
 				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
+				Map<Long, Integer> prov_acum_ = new HashMap<Long, Integer>();
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, String> proveedores = new HashMap<Long, String>();
@@ -4801,32 +4804,42 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}	
 				
+				for (Venta venta : ventas) {
+					totalContado += venta.getTotalImporteGsSinIva();
+					for (VentaDetalle det : venta.getDetalles()) {
+						Proveedor prov = det.getArticulo().getProveedor();
+						long idProveedor = prov != null ? prov.getId() : 0;
+						Integer total = prov_acum_.get(idProveedor);
+						if (total != null) {
+							total ++;
+						} else {
+							total = 1;
+						}
+						totalContadoItems ++;
+						prov_acum_.put(idProveedor, total);
+						proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+					}
+				}
+				
 				for (Long idProveedor : proveedores.keySet()) {
 					int total = prov_acum.get(idProveedor);
+					double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
 					double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
-					double importe = Utiles.obtenerValorDelPorcentaje(totalCobrado, porcentaje);
+					double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
 					System.out.println("------------------------------");
-					System.out.println("TOTAL COBRADO: " + Utiles.getNumberFormat(totalCobrado));
+					System.out.println("TOTAL COBRADO: " + Utiles.getNumberFormat(totalCobradoSinIva));
 					System.out.println("PORCENTAJE: " + porcentaje);
 					System.out.println("IMPORTE: " + Utiles.getNumberFormat(importe));
 					System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
 					values.put(idProveedor, importe);
 				}
 				
-				for (Venta venta : ventas) {
-					for (VentaDetalle det : venta.getDetalles()) {
-						Proveedor prov = det.getArticulo().getProveedor();
-						long idProveedor = prov != null ? prov.getId() : 0;
-						Double total = values_.get(idProveedor);
-						if(total != null) {
-							total += (double) det.getImporteGsSinIva();
-						} else {
-							total = (double) det.getImporteGsSinIva();
-						}
-						values_.put(idProveedor, total);
-						proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
-					}
-				}				
+				for (Long idProveedor : proveedores.keySet()) {
+					int total = prov_acum_.get(idProveedor);
+					double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalContadoItems);
+					double importe = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje);
+					values.put(idProveedor, importe);
+				}
 
 				for (Long idProveedor : proveedores.keySet()) {
 					Double cobrado = values.get(idProveedor);
@@ -4836,8 +4849,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					double contado_ = contado != null? contado : 0;
 					
 					if (cobrado != null || contado != null) {
-						data.add(new Object[]{ proveedores.get(idProveedor),
-								(cobrado_ - Utiles.getIVA(cobrado_, 10)), contado_ });
+						data.add(new Object[] { proveedores.get(idProveedor), cobrado_, contado_ });
 					}
 				}				
 
