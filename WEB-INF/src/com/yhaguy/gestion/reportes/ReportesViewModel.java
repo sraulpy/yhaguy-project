@@ -4775,7 +4775,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
 							}
 						} else {
-							List<Object[]> dets = item.getDetalleVentaMigracion();
+							/** List<Object[]> dets = item.getDetalleVentaMigracion();
 							for (Object[] det : dets) {
 								Articulo art = rr.getArticulo((String) det[0]);
 								if (art != null) {
@@ -4790,8 +4790,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									values.put(idProveedor, total);
 									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
 								}								
-							}
-						}
+							} **/
+						} 
 					}
 				}
 				
