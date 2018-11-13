@@ -4832,13 +4832,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					System.out.println("IMPORTE: " + Utiles.getNumberFormat(importe));
 					System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
 					values.put(idProveedor, importe);
-				}
-				
-				for (Long idProveedor : proveedores.keySet()) {
-					int total = prov_acum_.get(idProveedor);
-					double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalContadoItems);
-					double importe = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje);
-					values.put(idProveedor, importe);
+					
+					int total_ = prov_acum_.get(idProveedor);
+					double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
+					double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
+					values_.put(idProveedor, importe_);
 				}
 
 				for (Long idProveedor : proveedores.keySet()) {
