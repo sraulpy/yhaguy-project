@@ -4806,8 +4806,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
 					double importe = Utiles.obtenerValorDelPorcentaje(totalCobrado, porcentaje);
 					System.out.println("------------------------------");
-					System.out.println("TOTAL COBRADO: " + totalCobrado);
+					System.out.println("TOTAL COBRADO: " + Utiles.getNumberFormat(totalCobrado));
 					System.out.println("PORCENTAJE: " + porcentaje);
+					System.out.println("IMPORTE: " + Utiles.getNumberFormat(importe));
 					System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
 					values.put(idProveedor, importe);
 				}
