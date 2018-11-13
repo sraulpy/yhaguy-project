@@ -4827,11 +4827,6 @@ public class ReportesViewModel extends SimpleViewModel {
 						double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
 						double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
 						double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
-						System.out.println("------------------------------");
-						System.out.println("TOTAL COBRADO: " + Utiles.getNumberFormat(totalCobradoSinIva));
-						System.out.println("PORCENTAJE: " + porcentaje);
-						System.out.println("IMPORTE: " + Utiles.getNumberFormat(importe));
-						System.out.println("PROVEEDOR: " + proveedores.get(idProveedor));
 						values.put(idProveedor, importe);
 					}					
 					
@@ -4855,7 +4850,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}				
 
-				ReporteTotalCobranzasVentas rep = new ReporteTotalCobranzasVentas(desde, hasta, vendedor.getRazonSocial());
+				ReporteTotalCobranzasVentasProveedor rep = new ReporteTotalCobranzasVentasProveedor(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 				
@@ -16046,6 +16041,61 @@ class ReporteTotalCobranzasVentas extends ReporteYhaguy {
 	@Override
 	public void informacionReporte() {
 		this.setTitulo("Total cobranzas / ventas contado por vendedor");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Cobro-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Vendedor", this.vendedor)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de total cobranzas ventas por vendedor VEN-00039..
+ */
+class ReporteTotalCobranzasVentasProveedor extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private Date desde;
+	private Date hasta;
+	private String vendedor;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Proveedor", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+
+	public ReporteTotalCobranzasVentasProveedor(Date desde, Date hasta, String vendedor) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.vendedor = vendedor;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Total cobranzas / ventas contado por vendedor / proveedor");
 		this.setDirectorio("ventas");
 		this.setNombreArchivo("Cobro-");
 		this.setTitulosColumnas(cols);
