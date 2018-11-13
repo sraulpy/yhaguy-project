@@ -4751,7 +4751,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId(), 0);
+				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
@@ -4766,10 +4766,10 @@ public class ReportesViewModel extends SimpleViewModel {
 								Proveedor prov = det.getArticulo().getProveedor();
 								long idProveedor = prov != null ? prov.getId() : 0;
 								Double total = values.get(idProveedor);
-								if(total != null) {
-									total += det.getImporteGs();
+								if (total != null) {
+									total += (item.getMontoGs() / vta.getDetalles().size());
 								} else {
-									total = det.getImporteGs();
+									total = (item.getMontoGs() / vta.getDetalles().size());
 								}
 								values.put(idProveedor, total);
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
@@ -4782,10 +4782,10 @@ public class ReportesViewModel extends SimpleViewModel {
 									Proveedor prov = art.getProveedor();
 									long idProveedor = prov != null ? prov.getId() : 0;
 									Double total = values.get(idProveedor);
-									if(total != null) {
-										total += (double) det[1];
+									if (total != null) {
+										total += (item.getMontoGs() / dets.size());
 									} else {
-										total = (double) det[1];
+										total = (item.getMontoGs() / dets.size());
 									}
 									values.put(idProveedor, total);
 									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
