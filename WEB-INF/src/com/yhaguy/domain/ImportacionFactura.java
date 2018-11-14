@@ -55,6 +55,45 @@ public class ImportacionFactura extends Domain{
 		return out;
 	}
 	
+	/**
+	 * @return gravada 10%
+	 */
+	public double getGravada10() {
+		return 0;
+	}
+	
+	/**
+	 * @return gravada 5%
+	 */
+	public double getGravada5() {
+		return 0;
+	}
+	
+	/**
+	 * @return iva 10%
+	 */
+	public double getIva10() {
+		return 0;
+	}
+	
+	/**
+	 * @return iva 5%
+	 */
+	public double getIva5() {
+		return 0;
+	}
+	
+	/**
+	 * @return exenta
+	 */
+	public double getExenta() {
+		double out = 0;
+		for (ImportacionFacturaDetalle det : this.detalles) {
+			out += det.getImporteGs();
+		}
+		return out;
+	}
+	
 	public String getDescripcionTipoMovimiento(){
 		return tipoMovimiento.getDescripcion();
 	}

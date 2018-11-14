@@ -5,6 +5,7 @@ import org.zkoss.bind.annotation.DependsOn;
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 import com.coreweb.util.Misc;
+import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
 /**
@@ -76,6 +77,18 @@ public class VentaDetalle extends Domain {
 	public int compareTo(Object o) {
 		return -1;
 	}	
+	
+	public boolean isIva10() {
+		return this.tipoIVA.getSigla().equals(Configuracion.SIGLA_IVA_10);
+	}
+	
+	public boolean isIva5() {
+		return this.tipoIVA.getSigla().equals(Configuracion.SIGLA_IVA_5);
+	}
+	
+	public boolean isExenta() {
+		return this.tipoIVA.getSigla().equals(Configuracion.SIGLA_IVA_EXENTO);
+	}
 	
 	/**
 	 * @return la rentabilidad del articulo..

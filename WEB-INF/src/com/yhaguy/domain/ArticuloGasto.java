@@ -3,7 +3,9 @@ package com.yhaguy.domain;
 import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
-public class ArticuloGasto extends Domain{
+public class ArticuloGasto extends Domain {
+	
+	public static final String IVA_IMPORTACION = "IVA - IMPORTACION";
 
 	private String descripcion;
 	private String creadoPor;

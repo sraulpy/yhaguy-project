@@ -18,6 +18,10 @@ public class GastoDetalle extends Domain{
 	private CentroCosto centroCosto;
 	private Tipo tipoIva;
 	
+	public boolean isBaseImponible() {
+		return this.articuloGasto.getDescripcion().equals(ArticuloGasto.IVA_IMPORTACION);
+	}
+	
 	public boolean isIva10() {
 		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_10);
 	}

@@ -14,7 +14,6 @@ import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
-import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
@@ -167,16 +166,39 @@ public class Venta extends Domain {
 	 * @return el total iva 10..
 	 */
 	public double getTotalIva10() {
-		Misc misc = new Misc();	
-		return Math.rint(misc.calcularIVA(this.getTotalImporteGs(), 10) * 1) / 1;
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			if (item.isIva10()) {
+				out += Utiles.getIVA(item.getImporteGs(), 10);
+			}
+		}
+		return out;
 	}
 	
 	/**
 	 * @return el total gravado 10..
 	 */
 	public double getTotalGravado10() {
-		Misc misc = new Misc();	
-		return misc.calcularGravado(this.getTotalImporteGs(), 10);
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			if (item.isIva10()) {
+				out += item.getImporteGs();
+			}
+		}
+		return out - Utiles.getIVA(out, 10);
+	}
+	
+	/**
+	 * @return el total exenta..
+	 */
+	public double getTotalExenta() {
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			if (item.isExenta()) {
+				out += item.getImporteGs();
+			}
+		}
+		return out;
 	}
 	
 	/**

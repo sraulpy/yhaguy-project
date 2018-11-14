@@ -32,18 +32,24 @@
 				onClick="@command('selectFilter', filter=6)" />			
 		</navbar>
 		<space hflex="true"></space>
-		<button mold="bs" sclass="btn-success btn-sm"
+		<button mold="bs" sclass="btn-primary btn-sm"
 			width="170px"
 			iconSclass="z-icon-plus-circle"
 			onClick="@command('registrarCheque')">Registrar Cheque</button>
 		<space />
-		<button mold="bs" sclass="btn-warning btn-sm"
+		<button mold="bs" sclass="btn-success btn-sm"
+			width="170px"
+			iconSclass="z-icon-times-circle"
+			disabled="@load(vm.selectedItem eq null? 'true':'false')"
+			onClick="@command('anularCheque')">Anular Cheque</button>
+		<space />
+		<button mold="bs" sclass="btn-info btn-sm"
 			width="170px" iconSclass="z-icon-print"
 			onClick="@command('imprimirCheque')"
 			disabled="@load(vm.selectedItem eq null? 'true':'false')"
 			label=" Imprimir Cheque" />
 		<space />		
-		<button mold="bs" sclass="btn-info btn-sm"
+		<button mold="bs" sclass="btn-warning btn-sm"
 			width="170px" iconSclass="z-icon-print"
 			onClick="@command('listadoCheques')"
 			label=" Imprimir Listado" />

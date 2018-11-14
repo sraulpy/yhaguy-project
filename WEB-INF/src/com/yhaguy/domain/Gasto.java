@@ -100,10 +100,23 @@ public class Gasto extends Domain {
 	/**
 	 * @return gravada 10%
 	 */
+	public double getBaseImponible() {
+		double out = 0;
+		for (GastoDetalle det : detalles) {
+			if (det.isBaseImponible()) {
+				out += (det.getMontoIva() * 100) / 10;
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return gravada 10%
+	 */
 	public double getGravada10() {
 		double out = 0;
 		for (GastoDetalle det : detalles) {
-			if (det.isIva10()) {
+			if (det.isIva10() && (!det.isBaseImponible())) {
 				out += det.getMontoGs() - det.getMontoIva();
 			}
 		}

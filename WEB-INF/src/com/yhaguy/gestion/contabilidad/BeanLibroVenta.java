@@ -12,10 +12,11 @@ public class BeanLibroVenta {
 	private Double iva5;
 	private Double iva10;
 	private Double total;
+	private Double exenta;
 
 	public BeanLibroVenta(String fecha, String concepto, String numero,
 			String razonSocial, String ruc, double gravado10, double iva10,
-			double gravado5, double iva5, double total) {
+			double gravado5, double iva5, double total, double exenta) {
 		this.fecha = fecha;
 		this.concepto = concepto;
 		this.numero = numero;
@@ -26,6 +27,7 @@ public class BeanLibroVenta {
 		this.gravado5 = gravado5;
 		this.iva5 = iva5;
 		this.total = total;
+		this.exenta = exenta;
 	}
 
 	public String getFecha() {
@@ -106,5 +108,13 @@ public class BeanLibroVenta {
 
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+
+	public Double getExenta() {
+		return exenta;
+	}
+
+	public void setExenta(Double exenta) {
+		this.exenta = exenta;
 	}
 }

@@ -139,6 +139,21 @@ public class ChequesViewModel extends SimpleViewModel {
 		popup.open(comp, "start_before");
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void anularCheque() throws Exception {
+		if (!this.mensajeSiNo("DESEA ANULAR EL CHEQUE..?")) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		BancoCheque cheque = rr.getChequeById(this.selectedItem.getId());
+		cheque.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO));
+		cheque.setAnulado(true);
+		cheque.setMonto(0.0);
+		rr.saveObject(cheque, this.getLoginNombre());
+		Clients.showNotification("CHEQUE ANULADO..");
+	}
+	
 	/***************************************************/
 	
 	

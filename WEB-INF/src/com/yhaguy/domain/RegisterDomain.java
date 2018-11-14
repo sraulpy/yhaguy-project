@@ -8816,4 +8816,38 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return libro compras importacion indistinto segun fecha..
+	 */
+	public List<ImportacionFactura> getLibroComprasImportacion(Date desde, Date hasta) throws Exception {
+		String query = "select c from ImportacionFactura c where c.dbEstado != 'D'"
+				+ " and c.fechaOriginal between ? and ?";
+				query += " order by c.fechaOriginal";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return ventas segun numero o cliente..
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:cliente.razonSocial
+	 */
+	public List<Object[]> getVentas(String numero, String cliente) throws Exception {
+		String query = "select v.id, v.numero, v.cliente.empresa.razonSocial from Venta v where v.numero like '%" + numero + "%'"
+				+ " and upper(v.cliente.empresa.razonSocial) like '%" + cliente.toUpperCase() + "%'"
+				+ " and v.estadoComprobante is null"
+				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "'"
+				+ " or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')";
+		return this.hqlLimit(query, 100);
+	}
 }
