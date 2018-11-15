@@ -3734,7 +3734,7 @@ public class RegisterDomain extends Register {
 			long idVendedor) throws Exception {
 
 		String query = "select n from NotaCredito n where n.tipoMovimiento.sigla = ? and n.vendedor.id = ?"
-				+ " and n.fecha between ? and ?" + " order by n.numero";
+				+ " and n.fechaEmision between ? and ?" + " order by n.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);

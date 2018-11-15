@@ -1570,6 +1570,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				this.ventasContadoCreditoVendedor(mobile);
 				break;
 				
+			case VENTAS_CONTADO_CREDITO_VENDEDOR_DET:
+				this.ventasContadoCreditoVendedorDetallado(mobile);
+				break;
+				
 			case VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_DET:
 				this.cobranzasVentasVendedorProveedorDetallado(mobile);
 				break;
@@ -4711,6 +4715,108 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				ReporteTotalVentas rep = new ReporteTotalVentas(desde, hasta, "TODOS..");
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte VEN-00038
+		 */
+		private void ventasContadoCreditoVendedorDetallado(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Funcionario vendedor = filtro.getVendedor();
+				
+				if (vendedor == null) {
+					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Venta> ventas_contado = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
+				List<Venta> ventas_credito = rr.getVentasCreditoPorVendedor(desde, hasta, vendedor.getId());
+				List<NotaCredito> notas_credito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId());
+				Map<Long, Double> values_cont = new HashMap<Long, Double>();
+				Map<Long, Double> values_cred = new HashMap<Long, Double>();
+				Map<Long, Double> values_ncre = new HashMap<Long, Double>();
+				Map<Long, String> clientes = new HashMap<Long, String>();
+				
+				for (Venta venta : ventas_contado) {
+					long idCliente = venta.getCliente().getId();
+					Double total = values_cont.get(idCliente);
+					if(total != null) {
+						total += (double) venta.getTotalImporteGsSinIva();
+					} else {
+						total = (double) venta.getTotalImporteGsSinIva();
+					}
+					values_cont.put(idCliente, total);
+					clientes.put(venta.getCliente().getId(), venta.getCliente().getRazonSocial());
+				}
+				
+				for (Venta venta : ventas_credito) {
+					long idCliente = venta.getCliente().getId();
+					Double total = values_cred.get(idCliente);
+					if(total != null) {
+						total += (double) venta.getTotalImporteGsSinIva();
+					} else {
+						total = (double) venta.getTotalImporteGsSinIva();
+					}
+					values_cred.put(idCliente, total);
+					clientes.put(venta.getCliente().getId(), venta.getCliente().getRazonSocial());
+				}
+				
+				for (NotaCredito ncred : notas_credito) {
+					if (!ncred.isAnulado()) {
+						long idCliente = ncred.getCliente().getId();
+						Double total = values_ncre.get(idCliente);
+						if(total != null) {
+							total += (double) ncred.getTotalImporteGsSinIva();
+						} else {
+							total = (double) ncred.getTotalImporteGsSinIva();
+						}
+						values_ncre.put(idCliente, total);
+						clientes.put(ncred.getCliente().getId(), ncred.getCliente().getRazonSocial());
+					}
+				}
+				
+				for (Long idCliente : clientes.keySet()) {
+					Double contado = values_cont.get(idCliente);
+					Double credito = values_cred.get(idCliente);
+					Double ncredit = values_ncre.get(idCliente);
+					
+					double contado_ = contado != null? contado : 0;
+					double credito_ = credito != null? credito : 0;
+					double ncredit_ = ncredit != null? ncredit : 0;
+					
+					if (contado != null || credito != null) {
+						data.add(new Object[]{ clientes.get(idCliente), contado_, credito_, ncredit_, (contado_ + credito_) - ncredit_ });	
+					}
+				}
+
+				ReporteTotalVentas rep = new ReporteTotalVentas(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 				
