@@ -10013,13 +10013,15 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				Date desde_ = filtro.getFechaDesde2();
+				Date hasta_ = filtro.getFechaHasta2();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Object[] formato = filtro.getFormato();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
-				List<Gasto> gastos = rr.getLibroComprasIndistinto(desde, hasta, idSucursal);
+				List<Gasto> gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -10043,14 +10045,16 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				Date desde_ = filtro.getFechaDesde2();
+				Date hasta_ = filtro.getFechaHasta2();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Object[] formato = filtro.getFormato();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
-				List<Gasto> gastos = rr.getLibroComprasDespacho(desde, hasta, idSucursal);
-				List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta);
+				List<Gasto> gastos = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal);
+				List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde_, hasta_);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -12881,8 +12885,8 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 			BeanLibroCompra value = new BeanLibroCompra(
 					Utiles.getDateToString(fac.getFechaOriginal(), Utiles.DD_MM_YYYY),
 					Utiles.getDateToString(fac.getModificado(), Utiles.DD_MM_YYYY), fac.getNumero(),
-					fac.getTipoMovimiento().getDescripcion(), "", fac.getProveedor().getRazonSocial(),
-					fac.getProveedor().getRuc(), 0.0, 0.0, 0.0, 0.0, (fac.getTotalImporteDs() * fac.getPorcProrrateo()),
+					fac.getTipoMovimiento().getDescripcion(), "", "PROVEEDOR DEL EXTERIOR",
+					Configuracion.RUC_EMPRESA_EXTERIOR, 0.0, 0.0, 0.0, 0.0, (fac.getTotalImporteDs() * fac.getPorcProrrateo()),
 					(fac.getTotalImporteDs() * fac.getPorcProrrateo()), 0.0, "IMPORTACIONES EN CURSO", fac.getFechaOriginal());
 			values.add(value);
 		}

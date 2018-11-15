@@ -193,8 +193,8 @@ public class Configuracion extends Config {
 	public static String CUENTA_DEBE = "DEBE";
 	public static String CUENTA_HABER = "HABER";
 
-	public static String RUC_EMPRESA_LOCAL = "44444401-7";
-	public static String RUC_EMPRESA_EXTERIOR = "99999901-0";
+	public static final String RUC_EMPRESA_LOCAL = "44444401-7";
+	public static final String RUC_EMPRESA_EXTERIOR = "99999901-0";
 	
 	public static final String RUC_PY_AUTOPARTES = "80087516-8";
 	public static final String RUC_ICATURBO = "80001949-0";

@@ -8752,10 +8752,10 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras indistinto segun fecha..
 	 */
-	public List<Gasto> getLibroComprasIndistinto(Date desde, Date hasta, long idSucursal) throws Exception {
+	public List<Gasto> getLibroComprasIndistinto(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
-				+ " and g.fecha between ? and ?";
+				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?)";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}
@@ -8764,6 +8764,8 @@ public class RegisterDomain extends Register {
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
 		listParams.add(hasta);
+		listParams.add(creacionDesde);
+		listParams.add(creacionHasta);
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
@@ -8775,10 +8777,10 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras indistinto segun fecha..
 	 */
-	public List<Gasto> getLibroComprasDespacho(Date desde, Date hasta, long idSucursal) throws Exception {
+	public List<Gasto> getLibroComprasDespacho(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
-				+ " and g.fecha between ? and ?";
+				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?) ";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}
@@ -8787,6 +8789,8 @@ public class RegisterDomain extends Register {
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
 		listParams.add(hasta);
+		listParams.add(creacionDesde);
+		listParams.add(creacionHasta);
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
@@ -8820,14 +8824,16 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras importacion indistinto segun fecha..
 	 */
-	public List<ImportacionFactura> getLibroComprasImportacion(Date desde, Date hasta) throws Exception {
+	public List<ImportacionFactura> getLibroComprasImportacion(Date desde, Date hasta, Date creacionDesde, Date creacionHasta) throws Exception {
 		String query = "select c from ImportacionFactura c where c.dbEstado != 'D'"
-				+ " and c.fechaOriginal between ? and ?";
+				+ " and (c.fechaOriginal between ? and ?) and (c.modificado between ? and ?)";
 				query += " order by c.fechaOriginal";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
 		listParams.add(hasta);
+		listParams.add(creacionDesde);
+		listParams.add(creacionHasta);
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
