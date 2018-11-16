@@ -1359,12 +1359,9 @@ public class CompraLocalControlBody extends BodyApp {
 			this.mensajeError += "\n - Debe ingresar al menos un ítem..";
 		}
 		
-		for (CompraLocalFacturaDTO fac : this.dto.getFacturas()) {
-			if(fac.getDetalles().size() == 0){
-				out = false;
-				this.mensajeError += "\n - Cada factura debe tener al menos un ítem..";
-			}
-		}	
+		if (!this.dto.getFactura().getNumero().isEmpty()) {
+			this.setTimbrado();
+		}
 		
 		try {
 			if ((this.dto.esNuevo()) && (out == true)) {
