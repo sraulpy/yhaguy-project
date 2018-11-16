@@ -1340,7 +1340,7 @@ public class CompraLocalControlBody extends BodyApp {
 	/**
 	 * @return validacion del formulario..
 	 */
-	private boolean validarFormulario(){	
+	private boolean validarFormulario() {	
 		boolean out = true;	
 		this.mensajeError = "No se puede grabar la información debido a: \n";
 		
@@ -1359,7 +1359,7 @@ public class CompraLocalControlBody extends BodyApp {
 			this.mensajeError += "\n - Debe ingresar al menos un ítem..";
 		}
 		
-		if (!this.dto.getFactura().getNumero().isEmpty()) {
+		if ((!this.dto.esNuevo()) && (!this.dto.getFactura().getNumero().isEmpty())) {
 			this.setTimbrado();
 		}
 		
