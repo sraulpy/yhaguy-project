@@ -10192,7 +10192,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idSucursal = suc != null ? suc.getId() : 0;
 				List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, idSucursal);
 				
-				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_IVA_DIRECTO;
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new LibroComprasLocalesDataSource(compras);
 				params.put("Usuario", getUs().getNombre());

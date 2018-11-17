@@ -5187,6 +5187,18 @@ public class RegisterDomain extends Register {
 				+ siglaRubro + "'";
 		return this.hql(query);
 	}
+	
+	/**
+	 * @return las empresas segun parametros..
+	 * [0]:id
+	 * [1]:razonsocial
+	 * [2]:ruc
+	 */
+	public List<Object[]> getEmpresas(String ruc, String razonSocial) throws Exception {
+		String query = "select e.id, e.razonSocial, e.ruc from Empresa e where lower(e.ruc) like '%" + ruc.toLowerCase()
+				+ "%'" + " and lower(e.razonSocial) like '%" + razonSocial.toLowerCase() + "%' order by e.razonSocial";
+		return this.hqlLimit(query, 100);
+	}
 
 	/**
 	 * @return los movimientos de cta cte. de una empresa
