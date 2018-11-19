@@ -30,6 +30,9 @@
 		
 		<many-to-one name="banco" class="com.yhaguy.domain.BancoCta"
 			column="id_banco" lazy="false" />
+			
+		<many-to-one name="acreedor" class="com.yhaguy.domain.Empresa"
+			column="id_acreedor" lazy="false" />
 
 		<set name="cheques" table="bancochequetercero" inverse="false"
 			lazy="false" fetch="join" cascade="all">

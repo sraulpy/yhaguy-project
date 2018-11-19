@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -42,6 +43,9 @@ public class DescuentoChequesVM extends BodyApp {
 	final static String ABM_ENVIO = "envio";
 	
 	private String tipo = "";
+	
+	private String filterRazonSocial = "";
+	private String filterRuc = "";
 
 	private String mensajeError = "";
 	private BancoDescuentoChequeDTO chequeDescuento = new BancoDescuentoChequeDTO();
@@ -238,18 +242,18 @@ public class DescuentoChequesVM extends BodyApp {
 			this.chequeDescuento.setConfirmado(true);
 			this.saveDTO(chequeDescuento);
 
-			List<IiD> cheques = new ArrayList<IiD>();
-			cheques.addAll(this.chequeDescuento.getCheques());
-			rr.updateChequesDescontados(cheques, 
-					(this.tipo.equals(ABM_ANTICIPO)? "ANTICIPO " : 
-						(this.tipo.equals(ABM_PRESTAMO)? "PRESTAMO " : 
-							(this.tipo.equals(ABM_ENVIO)? "ENVIO C.C. " : ""))) 
-							+ this.chequeDescuento.getId() + "",
-							this.chequeDescuento.getFecha(),
-								this.tipo.equals(ABM_PRESTAMO) ? true : false);
+			if (!this.tipo.equals(ABM_PRESTAMO)) {
+				List<IiD> cheques = new ArrayList<IiD>();
+				cheques.addAll(this.chequeDescuento.getCheques());
+				rr.updateChequesDescontados(cheques, 
+						(this.tipo.equals(ABM_ANTICIPO)? "ANTICIPO " :  
+								(this.tipo.equals(ABM_ENVIO)? "ENVIO C.C. " : ""))
+								+ this.chequeDescuento.getId() + "",
+								this.chequeDescuento.getFecha(), false);
+			}		
 			
 			if (this.tipo.equals(ABM_PRESTAMO)) {
-				ControlCuentaCorriente.addPrestamoCentral(this.chequeDescuento.getId(), this.getLoginNombre());
+				ControlCuentaCorriente.addPrestamoInterno(this.chequeDescuento.getId(), this.getLoginNombre());
 			}
 			
 			this.setEstadoABMConsulta();
@@ -368,6 +372,21 @@ public class DescuentoChequesVM extends BodyApp {
 		return out;
 	}
 	
+	@DependsOn({ "filterRuc", "filterRazonSocial" })
+	public List<MyArray> getEmpresas() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		if(this.filterRuc.trim().isEmpty() && this.filterRazonSocial.trim().isEmpty())
+			return out;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> list = rr.getEmpresas(this.filterRuc, this.filterRazonSocial);
+		for (Object[] emp : list) {
+			MyArray my = new MyArray(emp[2], emp[1]);
+			my.setId((Long) emp[0]);
+			out.add(my);
+		}
+		return out;
+	}
+	
 	public String getMensajeError() {
 		return mensajeError;
 	}
@@ -406,5 +425,21 @@ public class DescuentoChequesVM extends BodyApp {
 
 	public void setNvoFormaPago(ReciboFormaPagoDTO nvoFormaPago) {
 		this.nvoFormaPago = nvoFormaPago;
+	}
+
+	public String getFilterRazonSocial() {
+		return filterRazonSocial;
+	}
+
+	public void setFilterRazonSocial(String filterRazonSocial) {
+		this.filterRazonSocial = filterRazonSocial;
+	}
+
+	public String getFilterRuc() {
+		return filterRuc;
+	}
+
+	public void setFilterRuc(String filterRuc) {
+		this.filterRuc = filterRuc;
 	}
 }

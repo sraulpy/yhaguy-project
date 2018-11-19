@@ -249,6 +249,30 @@ public class ControlCuentaCorriente {
 	}
 	
 	/**
+	 * agregar movimiento prestamos internos..
+	 */
+	public static void addPrestamoInterno(long idPrestamo, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		BancoDescuentoCheque prestamo = (BancoDescuentoCheque) rr.getObject(BancoDescuentoCheque.class.getName(), idPrestamo);
+		for (BancoChequeTercero cheque : prestamo.getCheques()) {
+			CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+			ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL));
+			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+			ctm.setFechaEmision(prestamo.getFecha());
+			ctm.setFechaVencimiento(cheque.getFecha());
+			ctm.setIdEmpresa(prestamo.getAcreedor().getId());
+			ctm.setIdMovimientoOriginal(prestamo.getId());
+			ctm.setIdVendedor(0);
+			ctm.setImporteOriginal(cheque.getMonto());
+			ctm.setMoneda(prestamo.getMoneda());
+			ctm.setNroComprobante("NRO. " + prestamo.getId() + " / CHEQUE NRO. " + cheque.getNumero() );
+			ctm.setSucursal(prestamo.getSucursalApp());
+			ctm.setSaldo(cheque.getMonto());
+			rr.saveObject(ctm, user);
+		}
+	}
+	
+	/**
 	 * agregar movimiento nota credito compra..
 	 */
 	public static void addNotaDebitoVenta(NotaDebitoDTO dto, String user) 

@@ -30,6 +30,7 @@ public class BancoDescuentoCheque extends Domain {
 	
 	private Tipo moneda;
 	private BancoCta banco;
+	private Empresa acreedor;
 	
 	private Set<BancoChequeTercero> cheques = new HashSet<BancoChequeTercero>();
 	private Set<BancoCheque> chequesPropios = new HashSet<BancoCheque>();
@@ -195,6 +196,14 @@ public class BancoDescuentoCheque extends Domain {
 
 	public void setConfirmado(boolean confirmado) {
 		this.confirmado = confirmado;
+	}
+
+	public Empresa getAcreedor() {
+		return acreedor;
+	}
+
+	public void setAcreedor(Empresa acreedor) {
+		this.acreedor = acreedor;
 	}
 
 }

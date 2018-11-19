@@ -8834,6 +8834,26 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return notas de credito compra segun fecha..
+	 */
+	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta) throws Exception {
+		String query = "select nc from NotaCredito nc where nc.dbEstado != 'D'"
+				+ " and nc.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA + "'"
+				+ " and nc.fechaEmision between ? and ?";
+				query += " order by nc.fechaEmision";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return libro compras importacion indistinto segun fecha..
 	 */
 	public List<ImportacionFactura> getLibroComprasImportacion(Date desde, Date hasta, Date creacionDesde, Date creacionHasta) throws Exception {
@@ -8867,5 +8887,22 @@ public class RegisterDomain extends Register {
 				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "'"
 				+ " or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')";
 		return this.hqlLimit(query, 100);
+	}
+	
+	/**
+	 * @return remision segun numero, factura o cliente..
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:venta.numero
+	 * [3]:cliente
+	 * [4]:fecha
+	 */
+	public List<Object[]> getRemisiones(String numeroRemision, String numeroFactura, String cliente, String fecha) throws Exception {
+		String query = "select r.id, r.numero, r.venta.numero, r.venta.cliente.empresa.razonSocial, r.fecha from Remision r where r.numero like '%" + numeroRemision + "%'"
+				+ " and upper(r.venta.numero) like '%" + numeroFactura.toUpperCase() + "%'"
+				+ " and upper(r.venta.cliente.empresa.razonSocial) like '%" + cliente.toUpperCase() + "%'"
+				+ " and cast (r.fecha as string) like '%" + fecha + "%'"
+				+ " order by r.fecha";
+		return this.hqlLimit(query, 200);
 	}
 }

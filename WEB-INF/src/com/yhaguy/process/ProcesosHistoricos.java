@@ -28,7 +28,7 @@ public class ProcesosHistoricos {
 	 */
 	public static void addHistoricoMovimientos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Date desde = Utiles.getFecha("01-01-2016 00:00:00");
+		Date desde = Utiles.getFecha("01-10-2018 00:00:00");
 		
 		rr.deleteAllObjects(HistoricoMovimientos.class.getName());
 		
@@ -416,8 +416,8 @@ public class ProcesosHistoricos {
 	
 	public static void main(String[] args) {
 		try {
-			ProcesosHistoricos.addHistoricoMovimientoArticulo(Utiles.getFecha("01-10-2018 00:00:00"), Utiles.getFecha("10-10-2018 00:00:00"), "sys");
-			//ProcesosHistoricos.addHistoricoMovimientos();
+			//ProcesosHistoricos.addHistoricoMovimientoArticulo(Utiles.getFecha("01-10-2018 00:00:00"), Utiles.getFecha("10-10-2018 00:00:00"), "sys");
+			ProcesosHistoricos.addHistoricoMovimientos();
 			//ProcesosHistoricos.addHistoricoVentaMetaSucursal(new Double(2700000000L));
 			//ProcesosHistoricos.updateHistoricoVentaDiaria(new Date(), 120000, 0);
 			//ProcesosHistoricos.updateHistoricoSaldoCtaCte(1, "2017");

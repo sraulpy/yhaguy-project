@@ -34,6 +34,8 @@ public class BancoDescuentoChequeDTO extends DTO {
 	private boolean confirmado = false;
 	
 	private MyArray banco;
+	private MyArray acreedor;
+	
 	private List<MyArray> cheques = new ArrayList<MyArray>();
 	private List<BancoChequeDTO> chequesPropios = new ArrayList<BancoChequeDTO>();
 	private List<ReciboFormaPagoDTO> formasPago = new ArrayList<ReciboFormaPagoDTO>();
@@ -226,5 +228,13 @@ public class BancoDescuentoChequeDTO extends DTO {
 
 	public void setConfirmado(boolean confirmado) {
 		this.confirmado = confirmado;
+	}
+
+	public MyArray getAcreedor() {
+		return acreedor;
+	}
+
+	public void setAcreedor(MyArray acreedor) {
+		this.acreedor = acreedor;
 	}
 }

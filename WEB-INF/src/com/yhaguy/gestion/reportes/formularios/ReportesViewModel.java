@@ -91,6 +91,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_RESUMEN_IMPORTACION_ = "/reportes/jasper/ResumenImportacion_.jasper";
 	public static final String SOURCE_ABASTECIMIENTO_MOVIM_ARTICULOS = "/reportes/jasper/MovimientoArticulos.jasper";
 	public static final String SOURCE_LIBRO_COMPRAS_INDISTINTO = "/reportes/jasper/LibroComprasIndistinto.jasper";
+	public static final String SOURCE_LIBRO_COMPRAS_INDISTINTO_ = "/reportes/jasper/LibroComprasIndistinto_.jasper";
 	public static final String SOURCE_LIBRO_COMPRAS_IVA_DIRECTO = "/reportes/jasper/LibroComprasIvaDirecto.jasper";
 	
 	static final String CONTEXT = Sessions.getCurrent().getWebApp().getRealPath("/");
@@ -189,7 +190,7 @@ public class ReportesViewModel {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
 			return "Avda. Mcal. Estigarribia e/ Blas Garay y Curupayty";
 		}
-		return "Ruta Transchaco km 14.5 nro 2457 e/ Juan de Ayolas";
+		return "Av Mariscal José Félix Estigarribia, Fernando De La Mora";
 	}
 
 	public ReportConfig getReportConfig() {

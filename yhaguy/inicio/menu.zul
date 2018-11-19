@@ -60,6 +60,7 @@
 				<zk forEach="${vm.menuItem(self,'VentaPresupuesto', 'tipo=presupuesto')}" />
 				<zk forEach="${vm.menuItem(self,'VentaPedido', 'tipo=pedido')}" />
 				<zk forEach="${vm.menuItem(self,'VentaFactura', 'tipo=factura')}" />
+				<zk forEach="${vm.menuItem(self,'VentaRemision')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self, 'SolicitudNotaCreditoVenta', 'tipo=solicitudNCVenta')}" />
 				<zk forEach="${vm.menuItem(self, 'NotaCreditoVenta', 'tipo=venta')}" />
@@ -163,10 +164,10 @@
 		.z-menu-content, .z-menuitem-content {color:black;margin-left:5px}
 		.z-menuitem-text {margin-left:5px}
 		.z-menu, .z-menuitem { margin: 5px}
-		.z-textbox:focus, .z-doublebox:focus, .z-spinner-input:focus, .z-combobox-input:focus {
+		.z-textbox:focus, .z-doublebox:focus, .z-intbox:focus, .z-longbox:focus, .z-spinner-input:focus, .z-combobox-input:focus {
     		background: #faffbd none;
 		}
-		.z-doublebox, .z-textbox, .z-combobox-input, z-intbox { background: #EEF7FA }
+		.z-doublebox, .z-textbox, .z-combobox-input, .z-intbox { background: #EEF7FA }
 		.z-textbox[readonly], .z-decimalbox[readonly], .z-intbox[readonly], .z-longbox[readonly], .z-doublebox[readonly] { background: #EEF7FA }
 		.z-combobox-input[readonly], .z-bandbox-input[readonly], .z-datebox-input[readonly] { background: #EEF7FA }
 	</style>

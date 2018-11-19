@@ -115,6 +115,13 @@ public class CompraLocalFactura extends Domain {
 		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO);
 	}
 	
+	/**
+	 * @return true si es compra credito..
+	 */
+	public boolean isCredito() {
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO);
+	}
+	
 	public String getDescripcionTipoMovimiento(){
 		return tipoMovimiento.getDescripcion();
 	}

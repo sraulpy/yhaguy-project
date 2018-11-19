@@ -73,6 +73,30 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return true si es nc de compra mercaderia..
+	 */
+	public boolean isNotaCreditoCompraProveedor() {
+		for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
+			if (item.getCompra() != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return true si es nc de compra gastos..
+	 */
+	public boolean isNotaCreditoCompraAcreedor() {
+		for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
+			if (item.getGasto() != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * @return el total iva 10..
 	 */
 	public double getTotalIva10() {

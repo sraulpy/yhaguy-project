@@ -4,13 +4,14 @@
 
 	<grid sclass="vgrid" width="100%">
 		<columns>
-			<column width="150px" />
-			<column width="150px" />
-			<column width="150px" />
-			<column width="150px" />
-			<column width="150px" />
+			<column width="150px"></column>
+			<column width="150px"></column>
+			<column width="150px"></column>
+			<column visible="@load(vm.tipo eq 'prestamo')"></column>
+			<column width="150px"></column>
+			<column width="150px"></column>
 			<column></column>
-			<column width="150px" />
+			<column width="150px"></column>
 		</columns>
 		<rows>
 			<row>
@@ -37,6 +38,39 @@
 							<comboitem label="@load(each.pos1.text)"></comboitem>
 						</template>
 					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Acreedor" />
+					<bandbox hflex="true" value="@load(vm.chequeDescuento.acreedor.pos2)"
+						onOpen="tx_filter.focus()" readonly="true"
+						placeholder="Acreedor.."
+						id="bnd_emp">
+						<bandpopup>
+							<listbox sclass="small-list" width="500px" height="300px"
+								model="@load(vm.empresas)"
+								selectedItem="@bind(vm.chequeDescuento.acreedor)"
+								emptyMessage="INGRESE UN CRITERIO DE BUSQUEDA.."
+								onSelect="bnd_emp.close()">
+								<listhead>
+									<listheader>
+										<textbox sclass="filter" hflex="true" placeholder="Razon Social.."
+											value="@bind(vm.filterRazonSocial)" instant="true"
+											id="tx_filter"></textbox>
+									</listheader>
+									<listheader width="150px">
+										<textbox sclass="filter" hflex="true" placeholder="Ruc.."
+											value="@bind(vm.filterRuc)" instant="true"></textbox>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.pos2)"></listcell>
+										<listcell label="@load(each.pos1)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Moneda" />
@@ -176,7 +210,7 @@
 							<field value=""/>
 							<field value="ítems" />
 							<space />
-							<label value="*Genera saldo en cuenta Casa Central para su posterior reembolso.."
+							<label value="*Genera saldo en cuenta acreedora para su posterior reembolso.."
 								style="color:red;font-style:italic"
 								visible="@load(vm.tipo eq 'prestamo')"></label>
 							<space hflex="true" />
