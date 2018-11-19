@@ -1,0 +1,155 @@
+<window hflex="true" height="100%"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.remision.VentaRemisionViewModel')"
+	apply="org.zkoss.bind.BindComposer">
+	
+	<style>.z-intbox { min-height: 18px; text-align:right }</style>
+
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick="@command('nuevaRemision', comp=pop_remision, parent=self)"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-info" 
+			iconSclass="z-icon-print" label="Imprimir" width="150px"
+			onClick="@command('imprimir')"
+			disabled="@load(vm.selectedRemision_ eq null)"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS.."
+		model="@load(vm.remisiones)"
+		selectedItem="@bind(vm.selectedRemision_)"
+		onSelect="@command('selectRemision')"> 
+		<listhead>
+			<listheader label="Fecha"></listheader>	
+			<listheader label="Remision Nro."></listheader>
+			<listheader label="Factura Nro."></listheader>	
+			<listheader label="Cliente"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaDD)"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaMM)"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaAA)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox sclass="filter" placeholder="Remision Nro." hflex="true"
+					value="@bind(vm.filterNroRemision)" instant="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox sclass="filter" placeholder="Factura Nro." hflex="true"
+					value="@bind(vm.filterNroVenta)" instant="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox sclass="filter" placeholder="Cliente.." hflex="true"
+					value="@bind(vm.filterCliente_)" instant="true"></textbox>
+			</auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[4]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3])"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="ítems"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_remision" sclass="rounded" width="600px">
+		<vlayout hflex="true">
+		<div height="5px"></div>
+		<grid hflex="true" sclass="vgrid"> 
+			<columns>
+				<column width="30%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox value="@bind(vm.nvaRemision.fecha)" hflex="true"></datebox>					
+				</row>
+				<row>
+					<field value="Número:" />
+					<textbox value="@bind(vm.nvaRemision.numero) @converter(vm.cnv.facturaPy)" hflex="true" placeholder="Número de Remisión.."></textbox>					
+				</row>
+				<row>
+					<field value="Factura:" />
+					<bandbox hflex="true" placeholder="Factura de Venta.." readonly="true"
+						id="bnd_fac" value="@load(vm.nvaRemision.venta.numero)">
+						<bandpopup>
+							<listbox sclass="small-list" model="@load(vm.ventas)" width="500px" height="300px"
+								selectedItem="@bind(vm.selectedVenta)"
+								onSelect="@command('selectVenta', comp=bnd_fac)">
+								<listhead>
+									<listheader width="150px">
+										<textbox sclass="filter" hflex="true"
+											value="@bind(vm.filterNumero)"
+											instant="true" placeholder="Número Factura.."></textbox>
+									</listheader>
+									<listheader>
+										<textbox sclass="filter" hflex="true"
+											value="@bind(vm.filterCliente)"
+											instant="true" placeholder="Cliente.."></textbox>
+									</listheader>
+								</listhead>
+								<template name="model">
+										<listitem>
+											<listcell label="@load(each[1])"></listcell>
+											<listcell label="@load(each[2])"></listcell>
+										</listitem>
+									</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>
+				<row>
+					<field value="Cliente:" />
+					<textbox value="@load(vm.nvaRemision.venta.cliente.razonSocial)" hflex="true" readonly="true"></textbox>					
+				</row>
+			</rows>
+		</grid>
+		<div height="5px"></div>
+		<listbox sclass="small-list" hflex="true" height="250px"
+			emptyMessage="SELECCIONE UNA FACTURA.."
+			model="@load(vm.nvaRemision.detalles)">
+			<listhead>
+				<listheader label="Código" width="110px"></listheader>
+				<listheader label="Descripción"></listheader>
+				<listheader label="Cantidad" width="100px"></listheader>
+				<listheader width="40px" align="center"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+					<listcell label="@load(each.articulo.descripcion)"></listcell>
+					<listcell>
+						<intbox hflex="true" vflex="true" value="@bind(each.cantidad)"></intbox>
+					</listcell>
+					<listcell>
+						<a iconSclass="z-icon-times" onClick="@command('deleteItem', item=each)"></a>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<hlayout>
+			<div hflex="true"></div>
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" label="Agregar" width="150px"
+				onClick="@command('addRemision', comp=pop_remision)"></button>
+		</hlayout>
+		</vlayout>
+	</popup>
+</window>

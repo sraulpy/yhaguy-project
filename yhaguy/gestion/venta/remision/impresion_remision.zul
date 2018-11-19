@@ -1,0 +1,236 @@
+<window height="1150px" width="813px" border="none"
+	sclass="printable" position="center,center"
+	id="win_fac">
+	
+	<timer delay="1500" repeats="false">
+		<attribute name="onTimer">
+			Clients.print();
+		</attribute>
+	</timer>
+	
+	<timer delay="1800" repeats="false">
+		<attribute name="onTimer">
+			win_fac.detach();
+		</attribute>
+	</timer>
+	
+	<!-- PAGINA 1 -->
+	
+	<div height="33px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedRemision.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="27px"></div>
+	
+	<hlayout>
+		<div width="150px"></div>
+		<div width="207px">
+			<label value="@load(vm.selectedRemision.fecha) @converter('formattedDate', format='dd-MM-yyyy')" maxlength="38" sclass="det"></label>
+		</div>
+	</hlayout>
+	
+	<div height="10px"></div>
+	
+	<hlayout>
+		<div width="150px"></div>
+		<div width="207px">
+			<label value="@load(vm.selectedRemision.venta.cliente.razonSocial)" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Ruc}" sclass="det"></label>
+		</div>	
+		<div width="90px"></div>
+	</hlayout>
+	
+	<vbox height="110px">
+		<div height="30px"></div>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.sucursal.descripcion.toLowerCase())" maxlength="40" sclass="det"></label>
+		</hlayout>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.cliente.razonSocial.toLowerCase())" maxlength="38" sclass="det"></label>
+		</hlayout>
+	</vbox>
+	
+	<vbox children="@load(vm.selectedRemision.detalles)" spacing="0px" height="105px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="30px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="80px"></div>
+				<div width="100px">
+					<label value="@load(each.articulo.codigoInterno)" sclass="det"></label>
+				</div>	
+				<div width="215px">
+					<label value="@load(each.articulo.descripcion)" sclass="det" maxlength="36"></label>
+				</div>	
+			</hbox>
+		</template>
+	</vbox>
+	
+	<!-- PAGINA 2 -->
+	
+	<div height="60px"></div>
+	
+	<div height="33px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedRemision.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="27px"></div>
+	
+	<hlayout>
+		<div width="150px"></div>
+		<div width="207px">
+			<label value="@load(vm.selectedRemision.fecha) @converter('formattedDate', format='dd-MM-yyyy')" maxlength="38" sclass="det"></label>
+		</div>
+	</hlayout>
+	
+	<div height="10px"></div>
+	
+	<hlayout>
+		<div width="150px"></div>
+		<div width="207px">
+			<label value="@load(vm.selectedRemision.venta.cliente.razonSocial)" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Ruc}" sclass="det"></label>
+		</div>	
+		<div width="90px"></div>
+	</hlayout>
+	
+	<vbox height="110px">
+		<div height="30px"></div>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.sucursal.descripcion.toLowerCase())" maxlength="40" sclass="det"></label>
+		</hlayout>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.cliente.razonSocial.toLowerCase())" maxlength="38" sclass="det"></label>
+		</hlayout>
+	</vbox>
+	
+	<vbox children="@load(vm.selectedRemision.detalles)" spacing="0px" height="105px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="30px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="80px"></div>
+				<div width="100px">
+					<label value="@load(each.articulo.codigoInterno)" sclass="det"></label>
+				</div>	
+				<div width="215px">
+					<label value="@load(each.articulo.descripcion)" sclass="det" maxlength="36"></label>
+				</div>	
+			</hbox>
+		</template>
+	</vbox>
+	
+	<!-- PAGINA 3 -->
+	
+	<div height="55px"></div>
+	
+	<div height="33px"></div>
+	
+	<hlayout>
+		<div hflex="true"></div>
+		<label value="@load(vm.selectedRemision.numero)" sclass="det"></label>
+		<div width="246px"></div>
+	</hlayout>
+	
+	<div height="27px"></div>
+	
+	<hlayout>
+		<div width="150px"></div>
+		<div width="207px">
+			<label value="@load(vm.selectedRemision.fecha) @converter('formattedDate', format='dd-MM-yyyy')" maxlength="38" sclass="det"></label>
+		</div>
+	</hlayout>
+	
+	<div height="10px"></div>
+	
+	<hlayout>
+		<div width="150px"></div>
+		<div width="207px">
+			<label value="@load(vm.selectedRemision.venta.cliente.razonSocial)" maxlength="38" sclass="det"></label>
+		</div>
+		<div width="58px"></div>	
+		<div width="94px">
+			<label value="${arg.Ruc}" sclass="det"></label>
+		</div>	
+		<div width="90px"></div>
+	</hlayout>
+	
+	<vbox height="110px">
+		<div height="30px"></div>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.sucursal.descripcion.toLowerCase())" maxlength="40" sclass="det"></label>
+		</hlayout>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.cliente.razonSocial.toLowerCase())" maxlength="38" sclass="det"></label>
+		</hlayout>
+	</vbox>
+	
+	<vbox children="@load(vm.selectedRemision.detalles)" spacing="0px" height="105px">
+		<template name="children">
+			<hbox spacing="0px">
+				<div width="30px"></div>
+				<div width="50px" style="text-align:center">
+					<label value="@load(each.cantidad)" sclass="det"></label>
+				</div>	
+				<div width="80px"></div>
+				<div width="100px">
+					<label value="@load(each.articulo.codigoInterno)" sclass="det"></label>
+				</div>	
+				<div width="215px">
+					<label value="@load(each.articulo.descripcion)" sclass="det" maxlength="36"></label>
+				</div>	
+			</hbox>
+		</template>
+	</vbox>
+	
+	<style media="print">
+    	body > *:not(.printable) {
+        	display: none !important;
+    	}
+    	.printable {
+        	top: 0 !important;
+        	left: 0 !important;
+    	}
+		@page 
+		{
+    		size: auto;  
+    		margin: 0mm; 
+		}
+	</style>
+	
+	<style>
+		.custom { font-size:10pt; font-family:Verdana }
+		.det { font-size:8pt; font-family:Verdana }
+		.z-div { line-height:normal; white-space: nowrap; }
+		.z-hlayout-inner { line-height:normal }
+		.z-vlayout-inner { padding: 0px }
+		.z-hlayout z-valign-middle { line-height:normal; font-size:10px }
+		body *:not([class*="z-icon-"]) {
+    		font-size: 10px;
+		}
+	</style>
+</window>
