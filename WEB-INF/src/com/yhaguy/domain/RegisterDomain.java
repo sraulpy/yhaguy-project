@@ -8836,10 +8836,13 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return notas de credito compra segun fecha..
 	 */
-	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta) throws Exception {
+	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta, long idSucursal) throws Exception {
 		String query = "select nc from NotaCredito nc where nc.dbEstado != 'D'"
 				+ " and nc.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA + "'"
 				+ " and nc.fechaEmision between ? and ?";
+				if (idSucursal > 0) {
+					query += " and nc.sucursal.id = " + idSucursal;
+				}
 				query += " order by nc.fechaEmision";
 
 		List<Object> listParams = new ArrayList<Object>();

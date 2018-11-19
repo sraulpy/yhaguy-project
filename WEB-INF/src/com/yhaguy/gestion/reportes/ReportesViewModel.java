@@ -10128,7 +10128,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
 				List<Gasto> gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
-				List<NotaCredito> notascredito = rr.getNotasCreditoCompra(desde, hasta);
+				List<NotaCredito> notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -10192,7 +10192,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
 				List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, idSucursal);
-				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta);
+				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_IVA_DIRECTO;
 				Map<String, Object> params = new HashMap<String, Object>();
