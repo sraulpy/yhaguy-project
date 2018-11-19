@@ -2,6 +2,7 @@ package com.yhaguy.domain;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class NotaDebitoDetalle extends Domain {
@@ -10,6 +11,18 @@ public class NotaDebitoDetalle extends Domain {
 	private double importeGs;
 
 	private Tipo tipoIva;
+	
+	public boolean isIva10() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_10);
+	}
+	
+	public boolean isIva5() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_5);
+	}
+
+	public boolean isExenta() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_EXENTO);
+	}
 	
 	@Override
 	public int compareTo(Object arg0) {

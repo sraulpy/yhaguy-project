@@ -163,6 +163,17 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return el total importe gs..
+	 */
+	public double getTotalImporteGs_() {
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			out += item.getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total iva 10..
 	 */
 	public double getTotalIva10() {

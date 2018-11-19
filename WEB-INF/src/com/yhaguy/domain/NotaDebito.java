@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class NotaDebito extends Domain {
@@ -24,6 +25,56 @@ public class NotaDebito extends Domain {
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
+	}
+	
+	/**
+	 * @return el total importe gs..
+	 */
+	public double getTotalImporteGs() {
+		double out = 0;
+		for (NotaDebitoDetalle item : this.detalles) {
+			out += item.getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total iva 10..
+	 */
+	public double getTotalIva10() {
+		double out = 0;
+		for (NotaDebitoDetalle item : this.detalles) {
+			if (item.isIva10()) {
+				out += Utiles.getIVA(item.getImporteGs(), 10);
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total gravado 10..
+	 */
+	public double getTotalGravado10() {
+		double out = 0;
+		for (NotaDebitoDetalle item : this.detalles) {
+			if (item.isIva10()) {
+				out += item.getImporteGs();
+			}
+		}
+		return out - Utiles.getIVA(out, 10);
+	}
+	
+	/**
+	 * @return el total exenta..
+	 */
+	public double getTotalExenta() {
+		double out = 0;
+		for (NotaDebitoDetalle item : this.detalles) {
+			if (item.isExenta()) {
+				out += item.getImporteGs();
+			}
+		}
+		return out;
 	}
 
 	public String getNumero() {

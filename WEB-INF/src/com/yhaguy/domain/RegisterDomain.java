@@ -3367,6 +3367,28 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las notas de debito segun fecha
+	 */
+	public List<NotaDebito> getNotasDebito(Date desde, Date hasta, long idSucursal) throws Exception {
+		String query = "select n from NotaDebito n where n.dbEstado != 'D'"
+				+ " and (n.fecha between ? and ?)";
+		if (idSucursal != 0) {
+			query += " and n.sucursal.id = " + idSucursal;
+		}
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return las notas de credito de venta segun fecha
 	 */
 	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idSucursal, boolean venta) throws Exception {
