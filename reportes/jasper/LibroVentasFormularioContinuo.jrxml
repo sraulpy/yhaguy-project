@@ -361,17 +361,17 @@
 				<text><![CDATA[RESUMEN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="511" y="6" width="80" height="20" uuid="f7a31ee9-2568-4a3d-92ba-9a26baf2ccee"/>
+				<reportElement x="421" y="6" width="80" height="20" uuid="f7a31ee9-2568-4a3d-92ba-9a26baf2ccee"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TotalGravada}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="591" y="6" width="66" height="20" uuid="d5283d76-4db7-4451-a577-c656f1fbe10e"/>
+				<reportElement x="557" y="6" width="66" height="20" uuid="d5283d76-4db7-4451-a577-c656f1fbe10e"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TotalImpuesto}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="666" y="6" width="28" height="20" uuid="676e1f46-ba11-471b-9766-0c3b97fd0afa"/>
+				<reportElement x="623" y="6" width="71" height="20" uuid="676e1f46-ba11-471b-9766-0c3b97fd0afa"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[0]]></text>
 			</staticText>
