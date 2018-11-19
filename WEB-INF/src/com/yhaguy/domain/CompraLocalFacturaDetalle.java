@@ -44,7 +44,7 @@ public class CompraLocalFacturaDetalle extends Domain {
 	}
 	
 	public double getImporteGs() {
-		return this.costoGs * this.cantidad;
+		return this.costoGs * (this.cantidad * (this.isDescuento() ? -1 : 1));
 	}
 	
 	public double getIva10() {
