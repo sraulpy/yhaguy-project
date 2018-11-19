@@ -12508,6 +12508,7 @@ class LibroVentasDataSource implements JRDataSource {
 	double totalGravada = 0;
 	double totalImpuesto = 0;
 	double totalImporte = 0;
+	double totalExenta = 0;
 
 	public LibroVentasDataSource(List<Venta> ventas,
 			List<NotaCredito> notasCredito, Date desde, Date hasta) {
@@ -12552,6 +12553,8 @@ class LibroVentasDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalImpuesto);
 		} else if ("TotalImporte".equals(fieldName)) {
 			value = FORMATTER.format(this.totalImporte);
+		} else if ("TotalExenta".equals(fieldName)) {
+			value = FORMATTER.format(this.totalExenta);
 		}
 		return value;
 	}
@@ -12570,16 +12573,12 @@ class LibroVentasDataSource implements JRDataSource {
 	 */
 	private void loadDatos() {
 		for (NotaCredito ncred : this.notasCredito) {
-			String fecha = misc.dateToString(ncred.getFechaEmision(),
-					"dd-MM-yy");
-			String concepto = TipoMovimiento.getAbreviatura(ncred
-					.getTipoMovimiento().getSigla());
+			String fecha = misc.dateToString(ncred.getFechaEmision(), "dd-MM-yy");
+			String concepto = TipoMovimiento.getAbreviatura(ncred.getTipoMovimiento().getSigla());
 			String numero = ncred.getNumero();
-			String razonSocial = ncred.isAnulado() ? "ANULADO" : ncred
-					.getCliente().getRazonSocial();
+			String razonSocial = ncred.isAnulado() ? "ANULADO" : ncred.getCliente().getRazonSocial();
 			String ruc = ncred.getCliente().getRuc();
-			if (ruc.isEmpty())
-				ruc = Configuracion.RUC_EMPRESA_LOCAL;
+			if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
 			double grav5 = 0.0;
 			double grav10 = ncred.isAnulado() ? 0.0 : (ncred.getTotalGravado10() * -1);
 			double iva5 = 0.0;
@@ -12622,6 +12621,7 @@ class LibroVentasDataSource implements JRDataSource {
 				this.totalGravada += (vta.getTotalGravado10());
 				this.totalImpuesto += (vta.getTotalIva10());
 				this.totalImporte += (vta.getTotalImporteGs());
+				this.totalExenta += vta.getTotalExenta();
 				if (vta.isVentaContado()) {
 					this.totalContado += (vta.getTotalImporteGs());
 				} else {
@@ -12977,7 +12977,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				double iva5 = 0.0;
 				double total = gravada10 + gravada5 + iva10 + iva5 + exenta;
 				double baseImponible = 0.0;
-				String cuenta1 = "";
+				String cuenta1 = "DESCUENTOS OBTENIDOS";
 				
 				BeanLibroCompra value = new BeanLibroCompra(fechaCarga, fecha, numero, concepto, timbrado, proveedor, ruc,
 						gravada10, gravada5, exenta, iva10, iva5, total, baseImponible, cuenta1, fecha_);

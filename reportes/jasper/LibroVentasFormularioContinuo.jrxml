@@ -68,6 +68,7 @@
 	<field name="TotalGravada" class="java.lang.String"/>
 	<field name="TotalImpuesto" class="java.lang.String"/>
 	<field name="TotalImporte" class="java.lang.String"/>
+	<field name="TotalExenta" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -370,15 +371,15 @@
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TotalImpuesto}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="613" y="6" width="81" height="20" uuid="676e1f46-ba11-471b-9766-0c3b97fd0afa"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[0]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="694" y="6" width="72" height="20" uuid="14cac7d2-734d-483e-aa07-df1ccec27046"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TotalImporte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="612" y="6" width="82" height="20" uuid="e68bf917-c971-49d4-92d3-36288f6b70fc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalExenta}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
