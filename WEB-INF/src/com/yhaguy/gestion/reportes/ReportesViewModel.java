@@ -6684,8 +6684,8 @@ public class ReportesViewModel extends SimpleViewModel {
 			for (BancoCheque cheque : cheques) {
 				if (!cheque.isAnulado()) {
 					data.add(new Object[]{ 
-							Utiles.getDateToString(cheque.getFechaEmision(), Utiles.DD_MM_YYYY),
 							Utiles.getDateToString(cheque.getFechaVencimiento(), Utiles.DD_MM_YYYY),
+							Utiles.getDateToString(cheque.getFechaEmision(), Utiles.DD_MM_YYYY),
 							cheque.getNumero() + "", cheque.getBanco().getBanco().getDescripcion().toUpperCase(),
 							cheque.getBeneficiario(),
 							cheque.getMonto()});
@@ -13006,7 +13006,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				String cuenta1 = "DESCUENTOS OBTENIDOS";
 				
 				BeanLibroCompra value = new BeanLibroCompra(fechaCarga, fecha, numero, concepto, timbrado, proveedor, ruc,
-						gravada10, gravada5, exenta, iva10, iva5, total, baseImponible, cuenta1, fecha_);
+						gravada10, gravada5, iva10, iva5, exenta, total, baseImponible, cuenta1, fecha_);
 				this.values.add(value);
 
 				total_gravada10 += gravada10;

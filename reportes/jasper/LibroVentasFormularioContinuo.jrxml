@@ -397,7 +397,7 @@
 				<text><![CDATA[Total N.Debito:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="479" y="34" width="85" height="20" uuid="61df3355-f448-4a30-b424-eac34fa6bed8"/>
+				<reportElement x="479" y="34" width="79" height="20" uuid="61df3355-f448-4a30-b424-eac34fa6bed8"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TotalNDebito}]]></textFieldExpression>
 			</textField>

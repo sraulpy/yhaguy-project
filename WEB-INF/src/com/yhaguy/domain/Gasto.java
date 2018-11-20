@@ -278,6 +278,9 @@ public class Gasto extends Domain {
 	}
 	
 	public String getDescripcionCuenta1() {
+		if (this.isOtrosComprobantes()) {
+			return "GASTOS NO DEDUCIBLES";
+		}
 		if (this.detalles.size() > 0) {
 			List<GastoDetalle> list = new ArrayList<GastoDetalle>();
 			list.addAll(detalles);
