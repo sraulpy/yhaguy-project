@@ -6685,6 +6685,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (!cheque.isAnulado()) {
 					data.add(new Object[]{ 
 							Utiles.getDateToString(cheque.getFechaEmision(), Utiles.DD_MM_YYYY),
+							Utiles.getDateToString(cheque.getFechaVencimiento(), Utiles.DD_MM_YYYY),
 							cheque.getNumero() + "", cheque.getBanco().getBanco().getDescripcion().toUpperCase(),
 							cheque.getBeneficiario(),
 							cheque.getMonto()});
@@ -15888,11 +15889,12 @@ class ReporteChequesPropios extends ReporteYhaguy {
 	private String sucursal;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING,30);
-	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 30);
-	static DatosColumnas col2 = new DatosColumnas("Banco", TIPO_STRING, 40);
-	static DatosColumnas col3 = new DatosColumnas("Beneficiario", TIPO_STRING);
-	static DatosColumnas col4 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col1 = new DatosColumnas("Vencimiento", TIPO_STRING,30);
+	static DatosColumnas col2 = new DatosColumnas("Emision", TIPO_STRING,30);
+	static DatosColumnas col3 = new DatosColumnas("Número", TIPO_STRING, 30);
+	static DatosColumnas col4 = new DatosColumnas("Banco", TIPO_STRING, 40);
+	static DatosColumnas col5 = new DatosColumnas("Beneficiario", TIPO_STRING);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
 
 	public ReporteChequesPropios(Date desde, Date hasta, String banco, String sucursal) {
 		this.desde = desde;
@@ -15902,11 +15904,12 @@ class ReporteChequesPropios extends ReporteYhaguy {
 	}
 
 	static {
-		cols.add(col0);
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override
