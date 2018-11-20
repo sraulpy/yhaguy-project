@@ -73,6 +73,11 @@
    		   <one-to-many entity-name="com.yhaguy.domain.GastoDetalle"></one-to-many>   				   			
    		</set>
    		
+   		<set name="debitoDesglosado" table="bancodebito" inverse="false" lazy="false" fetch="join" cascade="all">
+   		   <key><column name="idGasto" not-null="false"/></key>	
+   		   <one-to-many entity-name="com.yhaguy.domain.BancoDebito"></one-to-many>   				   			
+   		</set>
+   		
    		<set name="formasPago" table="reciboformapago" inverse="false"
 			lazy="false" fetch="join" cascade="all">
 			<key>

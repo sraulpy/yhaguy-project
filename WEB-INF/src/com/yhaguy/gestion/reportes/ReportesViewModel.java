@@ -12992,7 +12992,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				String fechaCarga = Utiles.getDateToString(nc.getModificado(), Utiles.DD_MM_YYYY);
 				String fecha = Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YYYY);
 				String numero = nc.getNumero();
-				String concepto = nc.getTipoMovimiento().getDescripcion();
+				String concepto = "NOTA CRÉDITO-GASTO";
 				String timbrado = nc.getTimbrado().getNumero();
 				String proveedor = nc.getProveedor().getRazonSocial();
 				String ruc = nc.getProveedor().getRuc();

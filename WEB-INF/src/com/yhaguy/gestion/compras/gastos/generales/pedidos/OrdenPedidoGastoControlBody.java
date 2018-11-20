@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.Tab;
 
 import com.coreweb.componente.ViewPdf;
@@ -36,6 +37,7 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.BancoDebito;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CentroCosto;
 import com.yhaguy.domain.CondicionPago;
@@ -87,6 +89,9 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	private String filterCaja = "";
 	
 	private CajaPeriodo selectedCaja;
+	
+	private List<BancoDebito> debitoDesglosado = new ArrayList<BancoDebito>();
+	private BancoDebito nvoDebito = new BancoDebito();
 	
 	@Wire
 	private Tab tabOrdenCompra;
@@ -264,6 +269,28 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void selectSucursal() {
 		this.dto.setDepartamento(null);
+	}
+	
+	@Command
+	@NotifyChange({ "nvoDebito", "debitoDesglosado" })
+	public void addItemDebito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nvoDebito.setConfirmado(true);
+		this.nvoDebito.setFecha(this.dtoGasto.getFecha());
+		this.nvoDebito.setSucursal(rr.getSucursalAppById(this.dtoGasto.getSucursal().getId()));
+		this.debitoDesglosado.add(this.nvoDebito);
+		this.nvoDebito = new BancoDebito();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addDebitoDesglosado(@BindingParam("comp") Popup comp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Gasto gasto = rr.getGastoById(this.dtoGasto.getId());
+		gasto.getDebitoDesglosado().addAll(this.debitoDesglosado);
+		rr.saveObject(gasto, this.getLoginNombre());
+		comp.close();
+		Clients.showNotification("DEBITO REGISTRADO..");
 	}
 	
 	@Command
@@ -895,6 +922,14 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return los bancos..
+	 */
+	public List<BancoCta> getBancos_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getBancosCta();
+	}
+	
+	/**
 	 * @return las sucursales..
 	 */
 	public List<MyPair> getSucursales() throws Exception {
@@ -1084,6 +1119,22 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 
 	public void setSelectedCaja(CajaPeriodo selectedCaja) {
 		this.selectedCaja = selectedCaja;
+	}
+
+	public List<BancoDebito> getDebitoDesglosado() {
+		return debitoDesglosado;
+	}
+
+	public void setDebitoDesglosado(List<BancoDebito> debitoDesglosado) {
+		this.debitoDesglosado = debitoDesglosado;
+	}
+
+	public BancoDebito getNvoDebito() {
+		return nvoDebito;
+	}
+
+	public void setNvoDebito(BancoDebito nvoDebito) {
+		this.nvoDebito = nvoDebito;
 	}
 }
 

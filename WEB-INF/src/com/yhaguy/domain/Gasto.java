@@ -56,6 +56,7 @@ public class Gasto extends Domain {
 	
 	private Set<GastoDetalle> detalles = new HashSet<GastoDetalle>();
 	private Set<ReciboFormaPago> formasPago = new HashSet<ReciboFormaPago>();
+	private Set<BancoDebito> debitoDesglosado = new HashSet<BancoDebito>();
 	
 	@Override
 	public int compareTo(Object o) {
@@ -576,5 +577,13 @@ public class Gasto extends Domain {
 
 	public void setBanco(BancoCta banco) {
 		this.banco = banco;
+	}
+
+	public Set<BancoDebito> getDebitoDesglosado() {
+		return debitoDesglosado;
+	}
+
+	public void setDebitoDesglosado(Set<BancoDebito> debitoDesglosado) {
+		this.debitoDesglosado = debitoDesglosado;
 	}
 }

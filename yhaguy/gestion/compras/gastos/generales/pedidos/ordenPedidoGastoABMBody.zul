@@ -350,12 +350,16 @@
 						<space />
 						<hbox align="center">
 							<checkbox checked="@bind(vm.dtoGasto.debitoBancario)"></checkbox>
-							<label value="Débito Bancario s/Factura"
+							<label value="Déb.Bancario s/Factura"
 								tooltiptext="Debita el importe total de la factura.."></label>
 							<space></space>
 							<checkbox></checkbox>
-							<label value="Débito Bancario s/Iva"
+							<label value="Déb.Bancario s/Iva"
 								tooltiptext="Debita el iva de la factura.."></label>
+							<space></space>
+							<a label="Déb.Bancario desglosado"
+								tooltiptext="Debito desglosado.."
+								onClick='pop_debito.open(self, "after_start")'></a>
 							<space></space>
 							<checkbox checked="@bind(vm.dtoGasto.gastoImportacion)"></checkbox>
 							<label value="Gasto Importación"></label>
@@ -488,6 +492,56 @@
 							</listfooter>
 						</listfoot>
 					</listbox>
+					
+					<popup id="pop_debito" sclass="rounded">
+						<listbox width="500px" height="300px" sclass="rounded"
+							emptyMessage="DEBITO BANCARIO DESGLOSADO.."
+							model="@load(vm.debitoDesglosado)">
+							<listhead>
+								<listheader>
+									<combobox hflex="true" placeholder="Banco.."
+										model="@load(vm.bancos_)"
+										selectedItem="@bind(vm.nvoDebito.cuenta)"
+										buttonVisible="@load(vm.siempreHabilitado)">
+										<template name="model">
+											<comboitem label="@load(each.descripcion)" iconSclass="z-icon-building" />
+										</template>
+									</combobox>
+								</listheader>
+								<listheader>
+									<textbox value="@bind(vm.nvoDebito.descripcion)" hflex="true" placeholder="Descripción.."
+										readonly="@load(!vm.siempreHabilitado)"></textbox>
+								</listheader>
+								<listheader align="right">
+									<doublebox value="@bind(vm.nvoDebito.importe)" placeholder="Importe.." hflex="true"
+										readonly="@load(!vm.siempreHabilitado)"></doublebox>
+								</listheader>
+								<listheader width="50px" align="center">
+									<button iconSclass="z-icon-plus"
+										onClick="@command('addItemDebito')"
+										disabled="@load(!vm.siempreHabilitado)"></button>
+								</listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.cuenta.banco.descripcion)"></listcell>
+									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
+									<listcell></listcell>
+								</listitem>
+							</template>
+						</listbox>
+						<div height="5px"></div>
+						<hlayout>
+							<div hflex="true"></div>
+							<button mold="bs"
+								sclass="btn-sm btn-success" iconSclass="z-icon-check"
+								label="Confirmar" width="150px"
+								disabled="@load(vm.debitoDesglosado.size() eq 0)"
+								onClick="@command('addDebitoDesglosado', comp=pop_debito)">
+							</button>
+						</hlayout>
+					</popup>
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
