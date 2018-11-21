@@ -2923,7 +2923,7 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -2954,7 +2954,7 @@ public class RegisterDomain extends Register {
 		if (idSucursal != 0) {
 			query += " and v.sucursal.id = " + idSucursal;
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -2986,7 +2986,7 @@ public class RegisterDomain extends Register {
 		if (idSucursal != 0) {
 			query += " and v.sucursal.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3026,7 +3026,7 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3066,7 +3066,7 @@ public class RegisterDomain extends Register {
 		if (idVendedor != 0) {
 			query += " and v.vendedor.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3097,7 +3097,7 @@ public class RegisterDomain extends Register {
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.vendedor.id = "
 				+ idVendedor
 				+ " and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
-				+ " and v.fecha between ? and ?" + " order by v.fecha";
+				+ " and v.fecha between ? and ?" + " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3125,7 +3125,7 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			query += " and v.cliente.id = " + idCliente;
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3152,7 +3152,7 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3183,7 +3183,7 @@ public class RegisterDomain extends Register {
 		if (idSucursal != 0) {
 			query += " and v.sucursal.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3212,7 +3212,7 @@ public class RegisterDomain extends Register {
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
 				+ " and v.estadoComprobante.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and v.fecha between ? and ?";
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3237,7 +3237,7 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
@@ -3268,7 +3268,7 @@ public class RegisterDomain extends Register {
 		if (idSucursal != 0) {
 			query += " and v.sucursal.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
@@ -3296,7 +3296,7 @@ public class RegisterDomain extends Register {
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
 				+ " and v.estadoComprobante.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and v.fecha between ? and ?";
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
@@ -3611,7 +3611,7 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3710,7 +3710,7 @@ public class RegisterDomain extends Register {
 			long idVendedor) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.estadoComprobante is null and v.tipoMovimiento.sigla = ? and v.vendedor.id = ?"
-				+ " and v.fecha between ? and ?" + " order by v.fecha";
+				+ " and v.fecha between ? and ?" + " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -3733,7 +3733,7 @@ public class RegisterDomain extends Register {
 			long idVendedor) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ? and v.vendedor.id = ?"
-				+ " and v.fecha between ? and ?" + " order by v.fecha";
+				+ " and v.fecha between ? and ?" + " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
@@ -3823,7 +3823,7 @@ public class RegisterDomain extends Register {
 	public List<Venta> getPedidosPendientesAprobacion(Date desde, Date hasta) throws Exception {
 		String query = "select v from Venta v where (v.fecha between ? and ?)"
 				+ " and (v.estado.sigla = ? or v.estado.sigla = ?)"
-				+ " and v.tipoMovimiento.sigla = ?" + " order by v.fecha";
+				+ " and v.tipoMovimiento.sigla = ?" + " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
@@ -3924,7 +3924,7 @@ public class RegisterDomain extends Register {
 				+ desde_
 				+ "' and v.fecha <= '"
 				+ hasta_
-				+ "')" + " order by v.fecha desc";
+				+ "')" + " order by v.numero desc";
 		return this.hql(query);
 	}
 	
@@ -3951,7 +3951,7 @@ public class RegisterDomain extends Register {
 				+ desde_
 				+ "' and v.fecha <= '"
 				+ hasta_
-				+ "')" + " order by v.fecha desc";
+				+ "')" + " order by v.numero desc";
 		return this.hql(query);
 	}
 	
@@ -3978,7 +3978,7 @@ public class RegisterDomain extends Register {
 				+ desde_
 				+ "' and v.fecha <= '"
 				+ hasta_
-				+ "')" + " order by v.fecha desc";
+				+ "')" + " order by v.numero desc";
 		return this.hql(query);
 	}
 	
@@ -5471,7 +5471,7 @@ public class RegisterDomain extends Register {
 				+ "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
 				+ "' )"
-				+ " order by v.fecha desc";
+				+ " order by v.numero desc";
 		return this.hqlLimit(query, 50);
 	}
 
@@ -6477,7 +6477,7 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO
 				+ "'"
 				+ " and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
-				+ " and v.fecha between ? and ?" + " order by v.fecha";
+				+ " and v.fecha between ? and ?" + " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
@@ -7423,7 +7423,7 @@ public class RegisterDomain extends Register {
 				+ " and v.cliente.id = " + idCliente
 				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "'"
 				+ " or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
-				+ " order by v.fecha";
+				+ " order by v.numero";
 		return this.hqlLimit(query, 200);
 	}
 	
@@ -7438,7 +7438,7 @@ public class RegisterDomain extends Register {
 				+ " and v.cliente.id = " + idCliente
 				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "'"
 				+ " or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
-				+ " order by v.fecha";
+				+ " order by v.numero";
 		return this.hqlLimit(query, 200);
 	}
 	
@@ -7644,7 +7644,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<VentaPerdida> getVentasPerdidas(Date desde, Date hasta) throws Exception {
 		String query = "select v from VentaPerdida v where v.fecha between ? and ?";		
-		query += " order by v.fecha";
+		query += " order by v.numero";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
@@ -7913,7 +7913,7 @@ public class RegisterDomain extends Register {
 				if (idCliente != 0) {
 					query += " and v.cliente.id = " + idCliente;
 				}
-				query += " order by v.fecha desc";
+				query += " order by v.numero desc";
 		return this.hql(query);
 	}
 	
@@ -8266,7 +8266,7 @@ public class RegisterDomain extends Register {
 				+ desde_
 				+ "' and v.fecha <= '"
 				+ hasta_
-				+ "')" + " order by v.fecha desc";
+				+ "')" + " order by v.numero desc";
 		return this.hql(query);
 	}
 	
