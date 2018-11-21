@@ -353,10 +353,6 @@
 							<label value="Déb.Bancario s/Factura"
 								tooltiptext="Debita el importe total de la factura.."></label>
 							<space></space>
-							<checkbox></checkbox>
-							<label value="Déb.Bancario s/Iva"
-								tooltiptext="Debita el iva de la factura.."></label>
-							<space></space>
 							<a label="Déb.Bancario desglosado"
 								tooltiptext="Debito desglosado.."
 								onClick='pop_debito.open(self, "after_start")'></a>
