@@ -6688,6 +6688,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							Utiles.getDateToString(cheque.getFechaEmision(), Utiles.DD_MM_YYYY),
 							cheque.getNumero() + "", cheque.getBanco().getBanco().getDescripcion().toUpperCase(),
 							cheque.getBeneficiario(),
+							cheque.getMoneda().getSigla(),
 							cheque.getMonto()});
 				}
 			}
@@ -13005,7 +13006,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				double baseImponible = 0.0;
 				String cuenta1 = "DESCUENTOS OBTENIDOS";
 				
-				BeanLibroCompra value = new BeanLibroCompra(fechaCarga, fecha, numero, concepto, timbrado, proveedor, ruc,
+				BeanLibroCompra value = new BeanLibroCompra(fecha, fechaCarga, numero, concepto, timbrado, proveedor, ruc,
 						gravada10, gravada5, iva10, iva5, exenta, total, baseImponible, cuenta1, fecha_);
 				this.values.add(value);
 
@@ -15894,7 +15895,8 @@ class ReporteChequesPropios extends ReporteYhaguy {
 	static DatosColumnas col3 = new DatosColumnas("Número", TIPO_STRING, 30);
 	static DatosColumnas col4 = new DatosColumnas("Banco", TIPO_STRING, 40);
 	static DatosColumnas col5 = new DatosColumnas("Beneficiario", TIPO_STRING);
-	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col6 = new DatosColumnas("Moneda", TIPO_STRING, 30);
+	static DatosColumnas col7 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
 
 	public ReporteChequesPropios(Date desde, Date hasta, String banco, String sucursal) {
 		this.desde = desde;
@@ -15910,6 +15912,7 @@ class ReporteChequesPropios extends ReporteYhaguy {
 		cols.add(col4);
 		cols.add(col5);
 		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override

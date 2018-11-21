@@ -5444,7 +5444,7 @@ public class RegisterDomain extends Register {
 		if (idBancoCta != 0) {
 			query += " and c.banco.id = " + idBancoCta;
 		}
-		query += " order by c.fechaVencimiento";
+		query += " order by c.fechaVencimiento, c.numero";
 		return this.hql(query);
 	}
 
