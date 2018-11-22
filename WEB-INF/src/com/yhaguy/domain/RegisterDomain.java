@@ -8681,7 +8681,7 @@ public class RegisterDomain extends Register {
 	 * [18]:cantidad
 	 * [19]:fecha
 	 */
-	public List<Object[]> getVentas(Date desde, Date hasta) throws Exception {
+	public List<Object[]> getVentasDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte,"
@@ -8692,8 +8692,11 @@ public class RegisterDomain extends Register {
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
-				+ " and (v.fecha >= '" + desde_ + "' or v.fecha <= '" + hasta_ + "')"
-				+ " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
+				+ " and (v.fecha >= '" + desde_ + "' or v.fecha <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
 				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
 				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
 				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
