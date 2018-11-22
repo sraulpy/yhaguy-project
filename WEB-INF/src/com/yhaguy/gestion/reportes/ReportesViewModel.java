@@ -202,6 +202,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 				this.setUs(uDto);
 				this.setAliasFormularioCorriente(Config.ALIAS_HABILITADO_SI_O_SI);
+				this.setTextoFormularioCorriente("Reportes");
 			}
 			
 			this.filtro.setFilterFechaMM("" + Utiles.getNumeroMesCorriente());
