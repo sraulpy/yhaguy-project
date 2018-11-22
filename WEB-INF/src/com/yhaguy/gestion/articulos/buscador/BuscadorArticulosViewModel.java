@@ -55,6 +55,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private String codOriginal = "";
 	private String codProveedor = "";
 	private String descripcion = "";
+	private String marca = "";
 	
 	private String filter_razonsocial = "";
 	private String filter_ruc = "";
@@ -243,18 +244,18 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.ubicaciones = list;
 	}
 	
-	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion" })
+	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca" })
 	public List<MyArray> getArticulos() throws Exception {
 		
 		if (this.codInterno.isEmpty() && this.codOriginal.isEmpty()
-				&& this.codProveedor.isEmpty() && this.descripcion.isEmpty()) {
+				&& this.codProveedor.isEmpty() && this.descripcion.isEmpty() && this.marca.isEmpty()) {
 			this.setSelectedItem(null);
 			return new ArrayList<MyArray>();
 		}
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
-				this.codOriginal, this.codProveedor, this.descripcion);
+				this.codOriginal, this.codProveedor, this.descripcion, this.marca);
 		
 		List<MyArray> out = this.articulosToMyArray(arts);		
 		if (out.size() > 0) {
@@ -275,7 +276,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			my.setPos1(art[1]);
 			my.setPos2(art[2]);
 			my.setPos3(art[3]);
-			my.setPos4(art[4]);			
+			my.setPos4(art[4]);	
+			my.setPos6(art[5]);
 			List<MyArray> ubics = new ArrayList<MyArray>();
 			my.setPos5(ubics);
 			out.add(my);
@@ -828,5 +830,13 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setUbicaciones(List<ArticuloUbicacion> ubicaciones) {
 		this.ubicaciones = ubicaciones;
+	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
 	}
 }

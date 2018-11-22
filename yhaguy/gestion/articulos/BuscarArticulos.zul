@@ -17,6 +17,7 @@
 			<listheader label="Código Original" width="180px"/>
 			<listheader label="Código Proveedor" width="180px"/>
 			<listheader label="Descripción"/>
+			<listheader label="Marca" width="180px"/>
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -48,6 +49,13 @@
 						value="@bind(vm.descripcion)" instant="true" />
 				</hlayout>				
 			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						sclass="filter"
+						value="@bind(vm.marca)" instant="true" />
+				</hlayout>				
+			</auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem onDoubleClick="@command('obtenerValores')"
@@ -56,6 +64,7 @@
 				<listcell label="@load(each.pos2)" />
 				<listcell label="@load(each.pos3)" />
 				<listcell label="@load(each.pos4)" />
+				<listcell label="@load(each.pos6)" />
 			</listitem>
 		</template>
 		<listfoot>
@@ -66,7 +75,7 @@
 					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:100px"/>
 				</hlayout>
 			</listfooter>
-			<listfooter>
+			<listfooter span="2">
 			<hbox hflex="true" align="center">
 				<hbox tooltiptext="@load(vm.ultimaCompra)"
 					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">

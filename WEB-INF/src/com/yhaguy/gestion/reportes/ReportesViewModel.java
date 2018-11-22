@@ -194,18 +194,8 @@ public class ReportesViewModel extends SimpleViewModel {
 	private String pass = "";
 
 	@Init(superclass = true)
-	public void init(@BindingParam("user") String user) {
-		try {
-			if (user != null) {
-				LoginUsuario login = new LoginUsuario();
-				LoginUsuarioDTO uDto = login.log("user", "123");
-			
-				this.setUs(uDto);
-				this.setAliasFormularioCorriente(Config.ALIAS_HABILITADO_SI_O_SI);
-				this.setTextoFormularioCorriente("Reportes");
-				super.setTextoFormularioCorriente("Reportes");
-			}
-			
+	public void init() {
+		try {			
 			this.filtro.setFilterFechaMM("" + Utiles.getNumeroMesCorriente());
 			this.filtro.setFilterFechaAA(Utiles.getAnhoActual());
 			if (this.filtro.getFilterFechaMM().length() == 1) {

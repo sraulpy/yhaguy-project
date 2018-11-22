@@ -2746,11 +2746,12 @@ public class RegisterDomain extends Register {
 	 * [2]:codigoOriginal
 	 * [3]:codigoProveedor
 	 * [4]:descripcion
+	 * [5]:marca.descripcion
 	 */
 	public List<Object[]> getArticulos_(String codigoInterno,
-			String codigoOriginal, String codigoProveedor, String descripcion)
+			String codigoOriginal, String codigoProveedor, String descripcion, String marca)
 			throws Exception {
-		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion from Articulo a"
+		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion, a.marca.descripcion from Articulo a"
 				+ " where lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
@@ -2758,7 +2759,8 @@ public class RegisterDomain extends Register {
 				+ "%' and lower(a.codigoProveedor) like'%"
 				+ codigoProveedor.toLowerCase()
 				+ "%' and lower(a.descripcion) like '%"
-				+ descripcion.toLowerCase() + "%' order by a.codigoInterno";
+				+ descripcion.toLowerCase() + "%'"
+				+ " and lower(a.marca.descripcion) like '%" + marca.toLowerCase() + "%'  order by a.codigoInterno";
 		return this.hqlLimit(query, 50);
 	}
 	

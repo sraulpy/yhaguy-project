@@ -1,5 +1,5 @@
 <window apply="org.zkoss.bind.BindComposer"
-	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.ReportesViewModel', user='sergio')"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.ReportesViewModel')"
 	height="100%">
 	
 	<hlayout vflex="true" valign="top">
