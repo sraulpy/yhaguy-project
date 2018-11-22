@@ -203,6 +203,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				this.setUs(uDto);
 				this.setAliasFormularioCorriente(Config.ALIAS_HABILITADO_SI_O_SI);
 				this.setTextoFormularioCorriente("Reportes");
+				super.setTextoFormularioCorriente("Reportes");
 			}
 			
 			this.filtro.setFilterFechaMM("" + Utiles.getNumeroMesCorriente());
@@ -2672,7 +2673,7 @@ public class ReportesViewModel extends SimpleViewModel {
 											venta.getNumero(),
 											venta.getCliente().getRazonSocial(),
 											item.getArticulo().getCodigoInterno(),
-											item.getArticulo().getArticuloMarca().getDescripcion().toUpperCase(),
+											"TODOS..",
 											item.getCantidad(),
 											(item.getCantidad() * item.getPrecioGs()) });
 								}
