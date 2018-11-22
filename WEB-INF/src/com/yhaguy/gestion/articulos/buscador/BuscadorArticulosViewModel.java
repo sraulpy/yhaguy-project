@@ -182,7 +182,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	/**
-	 * @return la url de la foto..
+	 * @return la url de la foto.
 	 */
 	private String getUrlImagen() {
 		if (this.selectedItem == null)
