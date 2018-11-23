@@ -21,6 +21,7 @@ import com.yhaguy.util.Utiles;
 public class Venta extends Domain {
 	
 	public static final double MARGEN_LINEA_CREDITO = 30;
+	public static final double MAXIMO_DESCUENTO = 5;
 
 	/** Presupuesto o Pedido */
 	private TipoMovimiento tipoMovimiento;

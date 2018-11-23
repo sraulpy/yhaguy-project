@@ -7885,9 +7885,10 @@ public class RegisterDomain extends Register {
 	 * [1]:razonSocial
 	 * [2]:limiteCredito
 	 * [3]:ventaCredito
+	 * [4]:descuentoMayorista
 	 */
 	public Object[] getCliente(long idCliente) throws Exception {
-		String query = "select c.id, c.empresa.razonSocial, c.limiteCredito, c.ventaCredito from Cliente c where c.id = " + idCliente;
+		String query = "select c.id, c.empresa.razonSocial, c.limiteCredito, c.ventaCredito, c.descuentoMayorista from Cliente c where c.id = " + idCliente;
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;	
 	}

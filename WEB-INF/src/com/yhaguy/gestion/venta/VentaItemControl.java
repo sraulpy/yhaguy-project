@@ -505,11 +505,37 @@ public class VentaItemControl extends SoloViewModel {
 	}
 	
 	@Command @NotifyChange("*") 
-	public void descontarPorcentaje(@BindingParam("cmp") Component cmp){
+	public void descontarPorcentaje(@BindingParam("cmp") Component cmp) throws Exception {
 		double precio = this.dto.isMonedaLocal() ? this.det.getPrecioGs() : this.det.getPrecioVentaFinalDs();
 		double porcDescuento = this.det.getDescuentoPorcentaje();
 		this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((precio * this.det.getCantidad()), porcDescuento));
 		this.descontar(this.det.getDescuentoUnitarioGs(), porcDescuento, cmp);
+		this.validarDescuento(cmp);
+	}
+	
+	@Command @NotifyChange("*") 
+	public void validarDescuento(@BindingParam("cmp") Component cmp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Object[] cliente = rr.getCliente(this.dto.getCliente().getId());
+		double desctoCliente = cliente != null ? (double) cliente[4] : 0;
+		double precio = this.dto.isMonedaLocal() ? this.det.getPrecioGs() : this.det.getPrecioVentaFinalDs();
+		double descuentoGs = this.det.getDescuentoUnitarioGs();
+		double porc = Utiles.obtenerPorcentajeDelValor(descuentoGs, precio);
+		if (!(desctoCliente > 0)) {
+			if (porc > Venta.MAXIMO_DESCUENTO) {
+				this.det.setDescuentoUnitarioGs(0);
+				this.det.setDescuentoPorcentaje(0);
+				this.reCalcularPrecio();
+				Clients.showNotification("Descuento mayor al permitido",
+						Clients.NOTIFICATION_TYPE_ERROR, cmp, null, 2000);				
+			}
+		} else if (porc > desctoCliente) {
+			this.det.setDescuentoUnitarioGs(0);
+			this.det.setDescuentoPorcentaje(0);
+			this.reCalcularPrecio();
+			Clients.showNotification("Descuento mayor al permitido",
+					Clients.NOTIFICATION_TYPE_ERROR, cmp, null, 2000);
+		}
 	}
 	
 	/****************************************************************************/

@@ -128,7 +128,8 @@
 				<field value="Descuento:" />
 				<hlayout>
 					<guaranibox
-						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" />
+						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
+						onChange="@command('validarDescuento', cmp=self)" />
 					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />					
 				</hlayout>
