@@ -29,6 +29,8 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
@@ -507,6 +509,20 @@ public class ArticuloControlBody extends BodyApp {
 	public boolean isDeleteUbicacionDisabled() {
 		return this.isDeshabilitado() || this.selectedUbicaciones == null
 				|| this.selectedUbicaciones.size() == 0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ArticuloMarca> getMarcas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<ArticuloMarca> list = rr.getObjects(ArticuloMarca.class.getName());		
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ArticuloFamilia> getFamilias() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<ArticuloFamilia> list = rr.getObjects(ArticuloFamilia.class.getName());		
+		return list;
 	}
 	
 	public String getTipoFamilia() {

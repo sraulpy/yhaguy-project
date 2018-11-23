@@ -8,6 +8,8 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.ArticuloMarca;
 
 @SuppressWarnings("serial")
 public class ArticuloDTO extends DTO {
@@ -45,6 +47,9 @@ public class ArticuloDTO extends DTO {
 	private List<MyArray> referencias = new ArrayList<MyArray>();
 	private List<MyArray> ubicaciones = new ArrayList<MyArray>();
 	private List<MyArray> precios = new ArrayList<MyArray>();
+	
+	private ArticuloMarca marca;
+	private ArticuloFamilia familia_;
 	
 	@Override
 	public String toString() {
@@ -318,6 +323,22 @@ public class ArticuloDTO extends DTO {
 
 	public void setFamilia(MyArray familia) {
 		this.familia = familia;
+	}
+
+	public ArticuloMarca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(ArticuloMarca marca) {
+		this.marca = marca;
+	}
+
+	public ArticuloFamilia getFamilia_() {
+		return familia_;
+	}
+
+	public void setFamilia_(ArticuloFamilia familia_) {
+		this.familia_ = familia_;
 	}
 
 }

@@ -128,14 +128,14 @@
 											
 											<field value="Marca Producto:" />
 											<combobox
-												model="@load(vm.dtoUtil.articuloMarca)"
-												value="@load(vm.dto.articuloMarca)"
-												selectedItem="@bind(vm.dto.articuloMarca)"
+												model="@load(vm.marcas)"
+												value="@load(vm.dto.marca.descripcion)"
+												selectedItem="@bind(vm.dto.marca)"
 												hflex="true">
 												<template
 													name="model">
 													<comboitem
-														label="@load(each)" />
+														label="@load(each.descripcion)" />
 												</template>
 											</combobox>
 										</row>
@@ -160,14 +160,14 @@
 										<row>
 											<field value="Familia:" />
 											<combobox
-												model="@load(vm.dtoUtil.articuloFamilia)" 
-												value="@load(vm.dto.articuloFamilia)"
-												selectedItem="@bind(vm.dto.articuloFamilia)"
+												model="@load(vm.familias)" 
+												value="@load(vm.dto.familia_.descripcion)"
+												selectedItem="@bind(vm.dto.familia_)"
 												hflex="true" style="margin-right:20px">
 												<template
 													name="model">
 													<comboitem
-														label="@load(each)" />
+														label="@load(each.descripcion)" />
 												</template>
 											</combobox>
 											<field value="Fecha alta:" />

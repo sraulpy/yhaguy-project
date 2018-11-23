@@ -53,13 +53,15 @@ public class AssemblerArticulo extends Assembler {
 		this.listaMyArrayToListaDomain(dto, domain, "ubicaciones");
 		
 		this.addReferencia(dto.getReferenciasDeleted(), dto.getReferencias(), dto.getId());
+		domain.setMarca(dto.getMarca());
+		domain.setFamilia(dto.getFamilia_());
 
 		return domain;
 	}
 
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
-
+		Articulo domain_ = (Articulo) domain;
 		ArticuloDTO dto = (ArticuloDTO) getDTO(domain, ArticuloDTO.class);
 		this.copiarValoresAtributos(domain, dto, attIguales);
 		this.domainToMyPair(domain, dto, "articuloEstado");
@@ -85,6 +87,8 @@ public class AssemblerArticulo extends Assembler {
 		
 		dto.setReferencias(this.getReferencias(dto.getId()));
 		dto.setPrecios(this.getPrecios((Articulo) domain));
+		dto.setMarca(domain_.getMarca());
+		dto.setFamilia_(domain_.getFamilia());
 		
 		return dto;
 	}
