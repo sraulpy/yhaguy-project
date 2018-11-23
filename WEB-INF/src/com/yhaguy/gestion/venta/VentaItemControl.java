@@ -15,6 +15,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Combobox;
@@ -39,11 +41,13 @@ import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ReservaDTO;
+import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 
 public class VentaItemControl extends SoloViewModel {
@@ -514,7 +518,10 @@ public class VentaItemControl extends SoloViewModel {
 	}
 	
 	@Command @NotifyChange("*") 
-	public void validarDescuento(@BindingParam("cmp") Component cmp) throws Exception {
+	public void validarDescuento(@BindingParam("cmp") Component cmp) throws Exception {		
+		if (this.getAcceso().getSucursalOperativa().getId().equals(SucursalApp.ID_MCAL)) {
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Object[] cliente = rr.getCliente(this.dto.getCliente().getId());
 		double desctoCliente = cliente != null ? (double) cliente[4] : 0;
@@ -711,6 +718,14 @@ public class VentaItemControl extends SoloViewModel {
 			out = this.getListasDePrecio();
 		}
 		return out;
+	}
+	
+	/**
+	 * @return el acceso..
+	 */
+	public AccesoDTO getAcceso() {
+		Session s = Sessions.getCurrent();
+		return (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
 	}
 	
 	public boolean isEmpresaBaterias() {
