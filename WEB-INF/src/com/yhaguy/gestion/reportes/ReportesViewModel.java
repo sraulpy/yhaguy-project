@@ -3933,7 +3933,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalImporte = 0;
 
 				// Notas de Credito..
-				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0, idVendedor);
+				List<NotaCredito> ncs = rr.getNotasCreditoVentaVendedor(desde, hasta, idVendedor);
 				for (NotaCredito notacred : ncs) {
 					int length = notacred.getCliente().getRazonSocial().length();
 					int maxlength = length > 25 ? 25 : length;
@@ -4671,9 +4671,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					long idVend = venta.getVendedor().getId();
 					Double total = values_cont.get(idVend);
 					if(total != null) {
-						total += (double) venta.getTotalImporteGsSinIva();
+						total += (double) venta.getTotalImporteGs();
 					} else {
-						total = (double) venta.getTotalImporteGsSinIva();
+						total = (double) venta.getTotalImporteGs();
 					}
 					values_cont.put(idVend, total);
 				}
@@ -4682,9 +4682,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					long idVend = venta.getVendedor().getId();
 					Double total = values_cred.get(idVend);
 					if(total != null) {
-						total += (double) venta.getTotalImporteGsSinIva();
+						total += (double) venta.getTotalImporteGs();
 					} else {
-						total = (double) venta.getTotalImporteGsSinIva();
+						total = (double) venta.getTotalImporteGs();
 					}
 					values_cred.put(idVend, total);
 				}
@@ -4694,9 +4694,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						long idVend = ncred.getVendedor().getId();
 						Double total = values_ncre.get(idVend);
 						if(total != null) {
-							total += (double) ncred.getTotalImporteGsSinIva();
+							total += (double) ncred.getImporteGs();
 						} else {
-							total = (double) ncred.getTotalImporteGsSinIva();
+							total = (double) ncred.getImporteGs();
 						}
 						values_ncre.put(idVend, total);
 					}
@@ -4711,8 +4711,12 @@ public class ReportesViewModel extends SimpleViewModel {
 					double credito_ = credito != null? credito : 0;
 					double ncredit_ = ncredit != null? ncredit : 0;
 					
+					double contadoSiva = contado_ - m.calcularIVA(contado_, 10);
+					double creditoSiva = credito_ - m.calcularIVA(credito_, 10);
+					double notacreSiva = ncredit_ - m.calcularIVA(ncredit_, 10);
+					
 					if (contado != null || credito != null) {
-						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), contado_, credito_, ncredit_, (contado_ + credito_) - ncredit_ });	
+						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), contadoSiva, creditoSiva, notacreSiva, (contadoSiva + creditoSiva) - notacreSiva });	
 					}					
 				}
 
@@ -16739,8 +16743,8 @@ class ReporteTotalVentas extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING);
-	static DatosColumnas col2 = new DatosColumnas("Credito S/iva", TIPO_DOUBLE_GS, 35, true);
-	static DatosColumnas col3 = new DatosColumnas("Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col2 = new DatosColumnas("Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col3 = new DatosColumnas("Crédito S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col4 = new DatosColumnas("N.Credito S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col5 = new DatosColumnas("Total S/iva", TIPO_DOUBLE_GS, 35, true);
 

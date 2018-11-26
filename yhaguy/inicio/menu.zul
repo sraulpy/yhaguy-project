@@ -136,7 +136,7 @@
 		<menu id="menuSistemaItems" label="Sistema" iconSclass="z-icon-cog">
 			<menupopup sclass="rounded">
 				<menuitem label="ACCESO A REPORTES" iconSclass="z-icon-caret-right" href="http://10.25.1.251:8080/yhaguy/sistema.zul" target="_blank" />
-				<!-- <zk forEach="${vm.menuItem(self,'Reportes')}" />  -->
+				<zk forEach="${vm.menuItem(self,'Reportes')}" />
 				<zk forEach="${vm.menuItem(self,'Definiciones')}" />
 				<zk forEach="${vm.menuItem(self,'ConfiguracionUsuariosModulos')}" />
 				<zk forEach="${vm.menuItem(self,'Anulaciones')}" />

@@ -3096,7 +3096,7 @@ public class RegisterDomain extends Register {
 	public List<Venta> getVentasPorVendedor(long idVendedor, Date desde,
 			Date hasta) throws Exception {
 
-		String query = "select v from Venta v where v.dbEstado != 'D' and v.vendedor.id = "
+		String query = "select v from Venta v where v.dbEstado != 'D' and v.estadoComprobante is null and v.vendedor.id = "
 				+ idVendedor
 				+ " and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
 				+ " and v.fecha between ? and ?" + " order by v.numero, v.fecha";
@@ -3148,7 +3148,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Venta> getVentasContado(Date desde, Date hasta, long idCliente)
 			throws Exception {
-
+		
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
 				+ " and v.fecha between ? and ? and v.estadoComprobante is null";
 		if (idCliente != 0) {
@@ -3235,7 +3235,7 @@ public class RegisterDomain extends Register {
 	public List<Venta> getVentasCredito(Date desde, Date hasta, long idCliente) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
-				+ " and v.fecha between ? and ?";
+				+ " and v.fecha between ? and ? and v.estadoComprobante is null";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
@@ -3316,9 +3316,9 @@ public class RegisterDomain extends Register {
 	 * @return las notas de credito de venta segun fecha
 	 */
 	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente) throws Exception {
-		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.tipoMovimiento.sigla = ?"
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
+				+ Configuracion.SIGLA_IMPORTACION_ESTADO_ANULADO + "' and n.tipoMovimiento.sigla = ?"
 				+ " and (n.fechaEmision between ? and ?)";
-
 		if (idCliente != 0) {
 			query += " and n.cliente.id = ?";
 		}
@@ -3331,6 +3331,30 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			listParams.add(idCliente);
 		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return las notas de credito de venta segun fecha y vendedor
+ 	 */
+	public List<NotaCredito> getNotasCreditoVentaVendedor(Date desde, Date hasta, long idVendedor) throws Exception {
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
+				+ Configuracion.SIGLA_IMPORTACION_ESTADO_ANULADO + "' and n.tipoMovimiento.sigla = ?"
+				+ " and (n.fechaEmision between ? and ?)";
+		if (idVendedor != 0) {
+			query += " and n.vendedor.id = " + idVendedor;
+		}
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
