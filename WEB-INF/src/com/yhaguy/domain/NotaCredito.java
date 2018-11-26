@@ -287,7 +287,6 @@ public class NotaCredito extends Domain {
 	 */
 	public List<NotaCreditoDetalle> getDetallesArticulos() {
 		List<NotaCreditoDetalle> out = new ArrayList<NotaCreditoDetalle>();
-		
 		for (NotaCreditoDetalle item : this.detalles) {
 			if (item.isDetalleFactura() == false) {
 				out.add(item);
