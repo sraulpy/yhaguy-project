@@ -595,14 +595,14 @@ public class ControlCtaCteEmpresa extends Control {
 		if (entregaInicial > 0) {
 
 			nuevoMovimientoDTO.setImporteOriginal(entregaInicial);
-			nuevoMovimientoDTO.setNroComprobante(nroComprobante + " (" + 1 + "/" + (cuotasVencimiento + 1) + ")");
+			nuevoMovimientoDTO.setNroComprobante(nroComprobante + "");
 			nuevoMovimientoDTO.setSaldo(0);
 			this.addMovimiento(nuevoMovimientoDTO);
 
 			for (int i = 1; i <= cuotasVencimiento; i++) {
 
 				nuevoMovimientoDTO.setFechaVencimiento(this.m.agregarDias(fechaEmision, diasEntreVencimientos * i));
-				nuevoMovimientoDTO.setNroComprobante(nroComprobante + " (" + (i + 1) + "/" + (cuotasVencimiento + 1) + ")");
+				nuevoMovimientoDTO.setNroComprobante(nroComprobante + "");
 				nuevoMovimientoDTO.setImporteOriginal(importeOriginal);
 				nuevoMovimientoDTO.setSaldo(importeOriginal / cuotasVencimiento);
 				this.addMovimiento(nuevoMovimientoDTO);
@@ -613,7 +613,7 @@ public class ControlCtaCteEmpresa extends Control {
 			for (int i = 1; i <= cuotasVencimiento; i++) {
 
 				nuevoMovimientoDTO.setFechaVencimiento(this.m.agregarDias(fechaEmision, diasEntreVencimientos * i));
-				nuevoMovimientoDTO.setNroComprobante(nroComprobante + " (" + i + "/" + (cuotasVencimiento) + ")");
+				nuevoMovimientoDTO.setNroComprobante(nroComprobante + "");
 				nuevoMovimientoDTO.setImporteOriginal(importeOriginal);
 				nuevoMovimientoDTO.setSaldo(saldo / cuotasVencimiento);
 				this.addMovimiento(nuevoMovimientoDTO);
