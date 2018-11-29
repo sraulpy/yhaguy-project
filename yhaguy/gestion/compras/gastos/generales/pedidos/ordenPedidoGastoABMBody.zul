@@ -350,10 +350,10 @@
 						<space />
 						<hbox align="center">
 							<checkbox checked="@bind(vm.dtoGasto.debitoBancario)"></checkbox>
-							<label value="Déb.Bancario s/Factura"
+							<label value="Déb.Banco s/Fac."
 								tooltiptext="Debita el importe total de la factura.."></label>
 							<space></space>
-							<a label="Déb.Bancario desglosado"
+							<a label="Déb.Banco desglosado"
 								tooltiptext="Debito desglosado.."
 								onClick='pop_debito.open(self, "after_start")'></a>
 							<space></space>
