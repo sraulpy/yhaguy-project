@@ -5198,16 +5198,18 @@ public class RegisterDomain extends Register {
 
 		for (Recibo recibo : cobros) {
 			for (ReciboDetalle det : recibo.getDetalles()) {
-				long idVendedor_ = det.getMovimiento().getIdVendedor();
-				if (idVendedor != 0) {
-					if (idVendedor == idVendedor_)
+				if (det.getMovimiento() != null) {
+					long idVendedor_ = det.getMovimiento().getIdVendedor();
+					if (idVendedor != 0) {
+						if (idVendedor == idVendedor_)
+							out.add(new Object[] { recibo,
+									det.getMovimiento().getNroComprobante(),
+									det.getMontoGs(), det, idVendedor_ });
+					} else {
 						out.add(new Object[] { recibo,
 								det.getMovimiento().getNroComprobante(),
 								det.getMontoGs(), det, idVendedor_ });
-				} else {
-					out.add(new Object[] { recibo,
-							det.getMovimiento().getNroComprobante(),
-							det.getMontoGs(), det, idVendedor_ });
+					}
 				}				
 			}
 		}
@@ -7951,9 +7953,10 @@ public class RegisterDomain extends Register {
 	 * [2]:razonsocial
 	 * [3]:telefono
 	 * [4]:cuentabloqueada
+	 * [5]:rubro.id
 	 */
 	public Object[] getEmpresa(long idEmpresa) throws Exception {
-		String query = "select e.id, e.ruc, e.razonSocial, e.telefono_, e.cuentaBloqueada from Empresa e where e.id = " + idEmpresa;
+		String query = "select e.id, e.ruc, e.razonSocial, e.telefono_, e.cuentaBloqueada, e.rubro.id from Empresa e where e.id = " + idEmpresa;
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;	
 	} 
