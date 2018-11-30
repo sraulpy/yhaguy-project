@@ -44,6 +44,17 @@
 				<textbox value="@bind(vm.nvoFormaPago.chequeBancoDescripcion)" hflex="true" />
 			</row>
 			
+			<!-- ___________________________ Datos prestamos __________________________ -->
+			
+			<row visible="@load(vm.nvoFormaPago.tipo.sigla eq 'OP-TIP-PRESTAMOS')">
+				<field value="Concepto:"/>
+				<textbox value="@bind(vm.nvoFormaPago.auxi)" hflex="true" />
+			</row>
+			<row visible="@load(vm.nvoFormaPago.tipo.sigla eq 'OP-TIP-PRESTAMOS')">
+				<field value="Descripción:"/>
+				<textbox value="@bind(vm.nvoFormaPago.chequeBancoDescripcion)" hflex="true" />
+			</row>
+			
 			<!-- ___________________________ Datos de la Tarjeta __________________________ -->
 			
 			<row id="rwTarjeta" visible="false">
