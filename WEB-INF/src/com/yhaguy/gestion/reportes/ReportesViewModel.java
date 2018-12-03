@@ -8998,6 +8998,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LIBRO_COMPRAS_INDISTINTO = "CON-00035";
 		static final String LIBRO_COMPRAS_DESPACHO = "CON-00036";
 		static final String LIBRO_COMPRAS_MERCADERIA = "CON-00037";
+		static final String VENTAS_GENERICO_COSTOS = "CON-00038";
 		
 		/**
 		 * procesamiento del reporte..
@@ -9131,6 +9132,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case LIBRO_COMPRAS_MERCADERIA:
 				this.libroComprasLocales();
+				break;
+				
+			case VENTAS_GENERICO_COSTOS:
+				this.ventasGenericoCosto(mobile);
 				break;
 				
 			case LIBRO_MAYOR:
@@ -10471,6 +10476,181 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				params.put("periodo", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY) + " a " + Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				imprimirJasper(source, params, dataSource, formato);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte CON-00038
+		 */
+		private void ventasGenericoCosto(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				List<ArticuloFamilia> familias = filtro.getSelectedFamilias();
+				Cliente cliente = filtro.getCliente();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
+				long idCliente = cliente == null ? 0 : cliente.getId();
+				long idSucursal = suc == null ? 0 : suc.getId(); 
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				double totalImporte = 0;
+				double totalCosto = 0;
+
+				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
+					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal);
+					for (NotaCredito notacred : ncs) {
+						int length = notacred.getCliente().getRazonSocial()
+								.length();
+						int maxlength = length > 25 ? 25 : length;
+						String motivo = notacred.getMotivo().getDescripcion()
+								.substring(0, 3).toUpperCase()
+								+ ".";
+						Object[] nc = new Object[] {
+								m.dateToString(notacred.getFechaEmision(),
+										"dd-MM-yy"),
+								notacred.getNumero(),
+								notacred.getCliente().getRazonSocial()
+										.substring(0, maxlength)
+										+ "..",
+								notacred.getCliente().getRuc(),
+								notacred.isNotaCreditoVentaContado() ? "NC-CO "
+										+ motivo : "NC-CR " + motivo,
+								notacred.isAnulado() ? 0.0 : notacred
+										.getImporteGs(familias) * -1,
+								notacred.isAnulado() ? 0.0 : notacred
+												.getCostoGs(familias) * -1};
+
+						if (filtro.isIncluirNCR()
+								&& notacred.isNotaCreditoVentaContado()) {
+							data.add(nc);
+							totalImporte += (notacred.isAnulado() ? 0.0
+									: notacred.getImporteGs(familias) * -1);
+							totalCosto += (notacred.isAnulado() ? 0.0
+									: notacred.getCostoGs(familias) * -1);
+						} else if (filtro.isIncluirNCR_CRED()
+								&& !notacred.isNotaCreditoVentaContado()) {
+							data.add(nc);
+							totalImporte += (notacred.isAnulado() ? 0.0
+									: notacred.getImporteGs(familias) * -1);
+							totalCosto += (notacred.isAnulado() ? 0.0
+									: notacred.getCostoGs(familias) * -1);
+						}
+					}
+				}
+
+				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
+					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal);
+					for (Venta venta : ventas) {
+						Object[] vta = new Object[] {
+								m.dateToString(venta.getFecha(), "dd-MM-yy"),
+								venta.getNumero(),
+								getMaxLength(
+										venta.getDenominacion() == null ? venta
+												.getCliente().getRazonSocial()
+												: venta.getDenominacion(), 25),
+								venta.getCliente().getRuc(),
+								"FAC. "
+										+ venta.getCondicionPago()
+												.getDescripcion()
+												.substring(0, 3).toUpperCase(),
+								venta.isAnulado() ? 0.0 : venta
+										.getTotalImporteGs(familias),
+								venta.isAnulado() ? 0.0 : venta
+										.getTotalCostoGs(familias)};
+						data.add(vta);
+						totalImporte += (venta.isAnulado() ? 0.0 : venta
+								.getTotalImporteGs(familias));
+						totalCosto += (venta.isAnulado() ? 0.0 : venta
+								.getTotalCostoGs(familias));
+					}
+
+				} else if (filtro.isIncluirVCR()) {
+					List<Venta> ventas = rr.getVentasCredito_(desde, hasta, idCliente, idSucursal);
+					for (Venta venta : ventas) {
+						Object[] vta = new Object[] {
+								m.dateToString(venta.getFecha(), "dd-MM-yy"),
+								venta.getNumero(),
+								getMaxLength(
+										venta.getDenominacion() == null ? venta
+												.getCliente().getRazonSocial()
+												: venta.getDenominacion(), 25),
+								venta.getCliente().getRuc(),
+								"FAC. "
+										+ venta.getCondicionPago()
+												.getDescripcion()
+												.substring(0, 3).toUpperCase(),
+								venta.isAnulado() ? 0.0 : venta
+										.getTotalImporteGs(familias),
+								venta.isAnulado() ? 0.0 : venta
+										.getTotalCostoGs(familias)};
+						data.add(vta);
+						totalImporte += (venta.isAnulado() ? 0.0 : venta
+								.getTotalImporteGs(familias));
+						totalCosto += (venta.isAnulado() ? 0.0 : venta
+								.getTotalCostoGs(familias));
+					}
+
+				} else if (filtro.isIncluirVCT()) {
+					List<Venta> ventas = rr.getVentasContado_(desde, hasta, idCliente, idSucursal);
+					for (Venta venta : ventas) {
+						Object[] vta = new Object[] {
+								m.dateToString(venta.getFecha(), "dd-MM-yy"),
+								venta.getNumero(),
+								getMaxLength(
+										venta.getDenominacion() == null ? venta
+												.getCliente().getRazonSocial()
+												: venta.getDenominacion(), 25),
+								venta.getCliente().getRuc(),
+								"FAC. "
+										+ venta.getCondicionPago()
+												.getDescripcion()
+												.substring(0, 3).toUpperCase(),
+								venta.isAnulado() ? 0.0 : venta
+										.getTotalImporteGs(familias),
+								venta.isAnulado() ? 0.0 : venta
+										.getTotalCostoGs(familias)};
+						data.add(vta);
+						totalImporte += (venta.isAnulado() ? 0.0 : venta
+								.getTotalImporteGs(familias));
+						totalCosto += (venta.isAnulado() ? 0.0 : venta
+								.getTotalCostoGs(familias));
+					}
+				}
+
+				double totalSinIva = totalImporte - m.calcularIVA(totalImporte, 10);
+				String sucursal = suc == null ? "TODOS.." : suc.getDescripcion().toUpperCase();
+				String familias_ = "TODOS..";
+				if (familias.size() > 0) {
+					familias_ = "";
+					for (ArticuloFamilia flia : familias) {
+						familias_ += "/" + flia.getDescripcion() + " ";
+					}
+				}
+
+				VentaGenericoCosto rep = new VentaGenericoCosto(totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..", familias_, totalCosto);
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+				
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -19726,5 +19906,87 @@ class MovimientoArticulos implements JRDataSource {
 			return true;
 		}
 		return false;
+	}
+}
+
+/**
+ *	CON-00038
+ */
+class VentaGenericoCosto extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private double totalSinIva;
+	private double totalCostoSinIva;
+	private Date desde;
+	private Date hasta;
+	private String vendedor;
+	private String cliente;
+	private String proveedor;
+	private String sucursal;
+	private String familias;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 30);
+	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 50);
+	static DatosColumnas col2 = new DatosColumnas("Razón Social", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Ruc", TIPO_STRING, 35);
+	static DatosColumnas col5 = new DatosColumnas("Tipo", TIPO_STRING, 35);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 35, true);
+	static DatosColumnas col7 = new DatosColumnas("Costo", TIPO_DOUBLE, 35, true);
+
+	public VentaGenericoCosto(double totalSinIva, Date desde, Date hasta,
+			String vendedor, String cliente, String sucursal, String proveedor, String familias, double totalCostoSinIva) {
+		this.totalSinIva = totalSinIva;
+		this.desde = desde;
+		this.hasta = hasta;
+		this.vendedor = vendedor;
+		this.cliente = cliente;
+		this.sucursal = sucursal;
+		this.proveedor = proveedor;
+		this.familias = familias;
+		this.totalCostoSinIva = totalCostoSinIva;
+	}
+
+	static {
+		cols.add(col0);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Listado de Ventas / Notas de Credito");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Venta-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Sucursal", this.sucursal)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Total Sin IVA", FORMATTER.format(this.totalSinIva)))
+				.add(this.textoParValor("Vendedor", this.vendedor)).add(this.textoParValor("Cliente", this.cliente)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Total Costo S/IVA", FORMATTER.format(this.totalCostoSinIva)))
+				.add(this.textoParValor("Proveedor", this.proveedor))
+				.add(this.textoParValor("Familia", this.familias)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
 	}
 }

@@ -34,8 +34,7 @@ public class ReporteVentasGenerico extends ReporteYhaguy {
 	static DatosColumnas col2 = new DatosColumnas("Razón Social", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Ruc", TIPO_STRING, 35);
 	static DatosColumnas col5 = new DatosColumnas("Tipo", TIPO_STRING, 35);
-	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 35,
-			true);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 35, true);
 
 	public ReporteVentasGenerico(double totalSinIva, Date desde, Date hasta,
 			String vendedor, String cliente, String sucursal, String proveedor, String familias) {

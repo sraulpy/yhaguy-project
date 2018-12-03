@@ -100,6 +100,33 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return el costo segun familias..
+	 */
+	public double getCostoGs(List<ArticuloFamilia> familias) {
+		double out = 0;
+		if (familias.size() == 0) {
+			return this.getTotalCostoGsSinIva();
+		}
+		for (ArticuloFamilia familia : familias) {
+			out += this.getCostoGsByFamilia(familia.getId());
+		}
+		return out;
+	}
+	
+	/**
+	 * @return costo segun familia..
+	 */
+	public double getCostoGsByFamilia(long idFamilia) {
+		double out = 0;
+		for (NotaCreditoDetalle det : this.getDetallesArticulos()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getCostoTotalGsSinIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es nc de compra mercaderia..
 	 */
 	public boolean isNotaCreditoCompraProveedor() {
