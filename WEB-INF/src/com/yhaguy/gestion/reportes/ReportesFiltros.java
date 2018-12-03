@@ -20,6 +20,7 @@ import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
@@ -33,6 +34,7 @@ import com.yhaguy.util.Utiles;
 public class ReportesFiltros {
 	
 	public static final String TODOS = "TODOS..";
+
 	public static final String SALDO_MIG_POSITIVO = "SALDO POSITIVO";
 	public static final String SALDO_MIG_NEGATIVO = "SALDO NEGATIVO";
 	public static final String RENTABILIDAD_POS = "RENTABILIDAD POSITIVA..";
@@ -143,6 +145,7 @@ public class ReportesFiltros {
 	private Tipo marca = new Tipo();
 	private Tipo parte = new Tipo();
 	private Tipo rubro = new Tipo();
+	private EmpresaRubro rubro_;
 	
 	private ArticuloFamilia familia_;
 	private List<ArticuloFamilia> selectedFamilias = new ArrayList<ArticuloFamilia>();
@@ -442,6 +445,14 @@ public class ReportesFiltros {
 			e.printStackTrace();
 		}		
 		return out;
+	}
+	
+	/**
+	 * @return los rubros..
+	 */
+	public List<EmpresaRubro> getRubros_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		return rr.getObjects(EmpresaRubro.class.getName());
 	}
 	
 	/**
@@ -1387,6 +1398,14 @@ public class ReportesFiltros {
 
 	public void setIncluirPRE(boolean incluirPRE) {
 		this.incluirPRE = incluirPRE;
+	}
+
+	public EmpresaRubro getRubro_() {
+		return rubro_;
+	}
+
+	public void setRubro_(EmpresaRubro rubro_) {
+		this.rubro_ = rubro_;
 	}
 
 	public ArticuloFamilia getFamilia_() {

@@ -8822,7 +8822,8 @@ public class RegisterDomain extends Register {
 	public List<Gasto> getLibroComprasIndistinto(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
-				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?)";
+				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?)"
+				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_PAGOS + "'";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}

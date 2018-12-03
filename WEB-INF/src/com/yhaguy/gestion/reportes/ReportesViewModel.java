@@ -76,6 +76,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento_2016;
 import com.yhaguy.domain.CtaCteLineaCredito;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.GastoDetalle;
@@ -1414,6 +1415,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_CONTADO_CREDITO_VENDEDOR = "VEN-00037";
 		static final String VENTAS_CONTADO_CREDITO_VENDEDOR_DET = "VEN-00038";
 		static final String VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_DET = "VEN-00039";
+		static final String VENTAS_VENDEDOR_CLIENTE_ARTICULO_VOLUMEN = "VEN-00040";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1579,6 +1581,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_DET:
 				this.cobranzasVentasVendedorProveedorDetallado(mobile);
+				break;
+				
+			case VENTAS_VENDEDOR_CLIENTE_ARTICULO_VOLUMEN:
+				this.ventasPorVendedorClienteArticuloPorMes(mobile);
 				break;
 			}
 		}
@@ -4983,6 +4989,22 @@ public class ReportesViewModel extends SimpleViewModel {
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * ventas por vendedor / clientes / articulos por mes..
+		 */
+		private void ventasPorVendedorClienteArticuloPorMes(boolean mobile) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE PARA VERSION MOVIL..");
+				return;
+			}
+			
+			try {
+				// PENDIENTE..
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
@@ -5581,7 +5603,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			boolean incluirPrestamos = filtro.isIncluirPRE();
 			Funcionario vendedor = filtro.getVendedor();
 			Cliente cliente_ = filtro.getCliente();
-			Tipo rubro = filtro.getRubro();
+			EmpresaRubro rubro = filtro.getRubro_();
 			Tipo moneda = filtro.getMoneda();
 			
 			if (moneda.esNuevo()) {
@@ -5606,8 +5628,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			if (!fraccionado) {
 				movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(), incluirChequesRechazados, incluirPrestamos);	
 				for (Object[] movim : movims) {
-					List<Tipo> rubros = rr.getRubroEmpresas((long) movim[14]);
-					if ((rubro != null && this.isRubro(rubro.getId(), rubros)) || rubro == null) {
+					if ((rubro != null && this.isRubro(rubro.getId(), idEmpresa)) || rubro == null) {
 						long id_mov = (long) movim[0];
 						long id_tmv = (long) movim[1];
 						data.put(id_mov + "-" + id_tmv, movim);
@@ -5652,9 +5673,13 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * @return true si es del rubro segun sigla..
 		 */
-		private boolean isRubro(long idRubro, List<Tipo> rubroEmpresas) {
-			for (Tipo rubro : rubroEmpresas) {
-				if (rubro.getId().longValue() == idRubro) {
+		private boolean isRubro(long idRubro, long idEmpresa) throws Exception {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Object[] emp = rr.getEmpresa(idEmpresa);
+			if (emp != null && emp[5] != null) {
+				long idrubro = (long) emp[5];
+				System.out.println("---IDRUBRO: " + idRubro + " --IDRUBROFUNCIONARIO: " + idrubro);
+				if (idRubro == idrubro) {
 					return true;
 				}
 			}		
@@ -7362,7 +7387,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			Date hasta_ = new Date();
 			Funcionario vendedor = filtro.getVendedor();
 			Cliente cliente_ = filtro.getCliente();
-			Tipo rubro = filtro.getRubro();
+			EmpresaRubro rubro = filtro.getRubro_();
 			Tipo moneda = filtro.getMoneda();
 			
 			if (moneda.esNuevo()) {
@@ -7387,8 +7412,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			if (!fraccionado) {
 				movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId());	
 				for (Object[] movim : movims) {
-					List<Tipo> rubros = rr.getRubroEmpresas((long) movim[14]);
-					if ((rubro != null && this.isRubro(rubro.getId(), rubros)) || rubro == null) {
+					if ((rubro != null && this.isRubro(rubro.getId(), idEmpresa)) || rubro == null) {
 						long id_mov = (long) movim[0];
 						long id_tmv = (long) movim[1];
 						data.put(id_mov + "-" + id_tmv, movim);
