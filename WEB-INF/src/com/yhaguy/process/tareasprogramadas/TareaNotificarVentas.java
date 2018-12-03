@@ -83,7 +83,7 @@ public class TareaNotificarVentas {
 			Config.DIRECTORIO_REAL_REPORTES = directorioReportes;
 			Config.DIRECTORIO_BASE_REAL = directorioBase;
 			
-			ReporteVentasGenerico rep = new ReporteVentasGenerico(totalSinIva, desde, hasta, "TODOS..", "TODOS..", empresa, "TODOS..");
+			ReporteVentasGenerico rep = new ReporteVentasGenerico(totalSinIva, desde, hasta, "TODOS..", "TODOS..", empresa, "TODOS..", "");
 			rep.setDatosReporte(data);
 			rep.setApaisada();
 			rep.ejecutar(false);
