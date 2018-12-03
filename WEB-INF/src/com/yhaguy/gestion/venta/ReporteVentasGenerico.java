@@ -26,6 +26,7 @@ public class ReporteVentasGenerico extends ReporteYhaguy {
 	private String cliente;
 	private String proveedor;
 	private String sucursal;
+	private String familias;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 30);
@@ -37,7 +38,7 @@ public class ReporteVentasGenerico extends ReporteYhaguy {
 			true);
 
 	public ReporteVentasGenerico(double totalSinIva, Date desde, Date hasta,
-			String vendedor, String cliente, String sucursal, String proveedor) {
+			String vendedor, String cliente, String sucursal, String proveedor, String familias) {
 		this.totalSinIva = totalSinIva;
 		this.desde = desde;
 		this.hasta = hasta;
@@ -45,6 +46,7 @@ public class ReporteVentasGenerico extends ReporteYhaguy {
 		this.cliente = cliente;
 		this.sucursal = sucursal;
 		this.proveedor = proveedor;
+		this.familias = familias;
 	}
 
 	static {
@@ -89,7 +91,7 @@ public class ReporteVentasGenerico extends ReporteYhaguy {
 				.add(this.textoParValor("Cliente", this.cliente)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor))
-				.add(this.texto("")).add(this.texto("")));
+				.add(this.textoParValor("Familia", this.familias)).add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

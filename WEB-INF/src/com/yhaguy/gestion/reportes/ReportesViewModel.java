@@ -3973,9 +3973,10 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				double totalSinIva = totalImporte - m.calcularIVA(totalImporte, 10);
 				String sucursal = getAcceso().getSucursalOperativa().getText();
+				String familias_ = "";
 
 				ReporteVentasGenerico rep = new ReporteVentasGenerico(
-						totalSinIva, desde, hasta, vendedor_, "TODOS..", sucursal, "TODOS..");
+						totalSinIva, desde, hasta, vendedor_, "TODOS..", sucursal, "TODOS..", familias_);
 				rep.setDatosReporte(data);
 				
 				if (!mobile) {
@@ -4166,9 +4167,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalSinIva = totalImporte
 						- m.calcularIVA(totalImporte, 10);
 				String sucursal = getAcceso().getSucursalOperativa().getText();
+				String familias_ = "";
 
 				ReporteVentasGenerico rep = new ReporteVentasGenerico(
-						totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..");
+						totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..", familias_);
 				rep.setDatosReporte(data);
 				
 				if (!mobile) {
@@ -9320,9 +9322,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalSinIva = totalImporte
 						- m.calcularIVA(totalImporte, 10);
 				String sucursal = suc == null ? "TODOS.." : suc.getDescripcion().toUpperCase();
+				String familias_ = "TODOS..";
+				if (familias.size() > 0) {
+					familias_ = "";
+					for (ArticuloFamilia flia : familias) {
+						familias_ += "/" + flia.getDescripcion() + " ";
+					}
+				}
 
 				ReporteVentasGenerico rep = new ReporteVentasGenerico(
-						totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..");
+						totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..", familias_);
 				rep.setDatosReporte(data);
 				
 				if (!mobile) {

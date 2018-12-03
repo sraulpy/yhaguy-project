@@ -1417,6 +1417,9 @@ public class ReportesFiltros {
 	}
 
 	public List<ArticuloFamilia> getSelectedFamilias() {
+		if (this.selectedFamilias == null) {
+			return new ArrayList<ArticuloFamilia>();
+		}
 		return selectedFamilias;
 	}
 

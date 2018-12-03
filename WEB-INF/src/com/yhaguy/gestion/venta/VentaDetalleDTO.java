@@ -79,6 +79,11 @@ public class VentaDetalleDTO extends DTO {
 		return this.tipoIVA.getSigla().equals(Configuracion.SIGLA_IVA_5);
 	}
 	
+	@DependsOn("tipoIVA")
+	public boolean isExenta() {
+		return this.tipoIVA.getSigla().equals(Configuracion.SIGLA_IVA_EXENTO);
+	}
+	
 	@DependsOn("articulo")
 	public boolean isServicio() {
 		boolean out = (boolean) this.articulo.getPos5();
