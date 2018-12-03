@@ -76,7 +76,18 @@ public class VentaDetalle extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
-	}	
+	}
+	
+	/**
+	 * @return true si corresponde a flia articulo..
+	 */
+	public boolean isFamilia(long idFamilia) {
+		ArticuloFamilia flia = this.articulo.getFamilia();
+		if (flia != null) {
+			return flia.getId().longValue() == idFamilia;
+		}
+		return false;
+	}
 	
 	public boolean isIva10() {
 		return this.tipoIVA.getSigla().equals(Configuracion.SIGLA_IVA_10);

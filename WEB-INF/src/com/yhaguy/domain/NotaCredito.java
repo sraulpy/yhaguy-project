@@ -73,6 +73,33 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return el importe segun familias..
+	 */
+	public double getImporteGs(List<ArticuloFamilia> familias) {
+		double out = 0;
+		if (familias.size() == 0) {
+			return this.getImporteGs();
+		}
+		for (ArticuloFamilia familia : familias) {
+			out += this.getImporteGsByFamilia(familia.getId());
+		}
+		return out;
+	}
+	
+	/**
+	 * @return importe segun familia..
+	 */
+	public double getImporteGsByFamilia(long idFamilia) {
+		double out = 0;
+		for (NotaCreditoDetalle det : this.getDetallesArticulos()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getImporteGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es nc de compra mercaderia..
 	 */
 	public boolean isNotaCreditoCompraProveedor() {

@@ -55,6 +55,17 @@
 			</bandbox>
 		</row>
 		<row>
+			<field value="Familia:" />
+			<chosenbox hflex="true" sclass="rounded" style="margin-top:5px"
+				model="@load(vm.dato.filtro.familias_)"
+				emptyMessage="Seleccione una o más familias.."
+				selectedObjects="@bind(vm.dato.filtro.selectedFamilias)">
+				<template name="model">
+					<label value="@load(each.descripcion)"></label>
+				</template>
+			</chosenbox>
+		</row>
+		<row>
 			<field value="Notas Créd./Cont.:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)" />
 		</row>

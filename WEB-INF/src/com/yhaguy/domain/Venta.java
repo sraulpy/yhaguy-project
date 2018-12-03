@@ -121,6 +121,33 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return el importe segun familias..
+	 */
+	public double getTotalImporteGs(List<ArticuloFamilia> familias) {
+		double out = 0;
+		if (familias.size() == 0) {
+			return this.getTotalImporteGs();
+		}
+		for (ArticuloFamilia familia : familias) {
+			out += this.getImporteGsByFamilia(familia.getId());
+		}
+		return out;
+	}
+	
+	/**
+	 * @return importe segun familia..
+	 */
+	public double getImporteGsByFamilia(long idFamilia) {
+		double out = 0;
+		for (VentaDetalle det : this.getDetalles()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getImporteGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es anulado..
 	 */
 	public boolean isAnulado() {

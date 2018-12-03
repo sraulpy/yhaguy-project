@@ -51,6 +51,7 @@ import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.AjusteStockDetalle;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.ArticuloHistorialMigracion;
 import com.yhaguy.domain.ArticuloListaPrecio;
@@ -5055,6 +5056,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setArticuloGasto(null);
 		this.filtro.setDescripcionArticuloGasto("");
 		this.filtro.setReembolso("");
+		this.filtro.setSelectedFamilias(new ArrayList<ArticuloFamilia>());
 	}
 
 	/**
@@ -9171,6 +9173,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				List<ArticuloFamilia> familias = filtro.getSelectedFamilias();
 				Cliente cliente = filtro.getCliente();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
@@ -9207,18 +9210,18 @@ public class ReportesViewModel extends SimpleViewModel {
 								notacred.isNotaCreditoVentaContado() ? "NC-CO "
 										+ motivo : "NC-CR " + motivo,
 								notacred.isAnulado() ? 0.0 : notacred
-										.getImporteGs() * -1 };
+										.getImporteGs(familias) * -1 };
 
 						if (filtro.isIncluirNCR()
 								&& notacred.isNotaCreditoVentaContado()) {
 							data.add(nc);
 							totalImporte += (notacred.isAnulado() ? 0.0
-									: notacred.getImporteGs() * -1);
+									: notacred.getImporteGs(familias) * -1);
 						} else if (filtro.isIncluirNCR_CRED()
 								&& !notacred.isNotaCreditoVentaContado()) {
 							data.add(nc);
 							totalImporte += (notacred.isAnulado() ? 0.0
-									: notacred.getImporteGs() * -1);
+									: notacred.getImporteGs(familias) * -1);
 						}
 					}
 				}
@@ -9239,10 +9242,10 @@ public class ReportesViewModel extends SimpleViewModel {
 												.getDescripcion()
 												.substring(0, 3).toUpperCase(),
 								venta.isAnulado() ? 0.0 : venta
-										.getTotalImporteGs() };
+										.getTotalImporteGs(familias) };
 						data.add(vta);
 						totalImporte += (venta.isAnulado() ? 0.0 : venta
-								.getTotalImporteGs());
+								.getTotalImporteGs(familias));
 					}
 
 				} else if (filtro.isIncluirVCR()) {
@@ -9261,10 +9264,10 @@ public class ReportesViewModel extends SimpleViewModel {
 												.getDescripcion()
 												.substring(0, 3).toUpperCase(),
 								venta.isAnulado() ? 0.0 : venta
-										.getTotalImporteGs() };
+										.getTotalImporteGs(familias) };
 						data.add(vta);
 						totalImporte += (venta.isAnulado() ? 0.0 : venta
-								.getTotalImporteGs());
+								.getTotalImporteGs(familias));
 					}
 
 				} else if (filtro.isIncluirVCT()) {
@@ -9283,10 +9286,10 @@ public class ReportesViewModel extends SimpleViewModel {
 												.getDescripcion()
 												.substring(0, 3).toUpperCase(),
 								venta.isAnulado() ? 0.0 : venta
-										.getTotalImporteGs() };
+										.getTotalImporteGs(familias) };
 						data.add(vta);
 						totalImporte += (venta.isAnulado() ? 0.0 : venta
-								.getTotalImporteGs());
+								.getTotalImporteGs(familias));
 					}
 				}
 

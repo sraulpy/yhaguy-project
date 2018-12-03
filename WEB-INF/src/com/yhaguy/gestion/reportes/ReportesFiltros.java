@@ -11,6 +11,7 @@ import com.coreweb.domain.Usuario;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.BancoChequeTercero;
@@ -143,6 +144,9 @@ public class ReportesFiltros {
 	private Tipo parte = new Tipo();
 	private Tipo rubro = new Tipo();
 	
+	private ArticuloFamilia familia_;
+	private List<ArticuloFamilia> selectedFamilias = new ArrayList<ArticuloFamilia>();
+
 	private Tipo moneda = new Tipo();
 	
 	private SucursalApp sucursalOrigen;
@@ -388,6 +392,14 @@ public class ReportesFiltros {
 			e.printStackTrace();
 		}		
 		return out;
+	}
+	
+	/**
+	 * @return las familias..
+	 */
+	public List<ArticuloFamilia> getFamilias_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(ArticuloFamilia.class.getName());
 	}
 	
 	/**
@@ -1375,5 +1387,21 @@ public class ReportesFiltros {
 
 	public void setIncluirPRE(boolean incluirPRE) {
 		this.incluirPRE = incluirPRE;
+	}
+
+	public ArticuloFamilia getFamilia_() {
+		return familia_;
+	}
+
+	public void setFamilia_(ArticuloFamilia familia_) {
+		this.familia_ = familia_;
+	}
+
+	public List<ArticuloFamilia> getSelectedFamilias() {
+		return selectedFamilias;
+	}
+
+	public void setSelectedFamilias(List<ArticuloFamilia> selectedFamilias) {
+		this.selectedFamilias = selectedFamilias;
 	}
 }

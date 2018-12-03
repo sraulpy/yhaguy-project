@@ -40,6 +40,19 @@ public class NotaCreditoDetalle extends Domain{
 	}
 	
 	/**
+	 * @return true si corresponde a flia articulo..
+	 */
+	public boolean isFamilia(long idFamilia) {
+		if (!this.isDetalleFactura()) {
+			ArticuloFamilia flia = this.articulo.getFamilia();
+			if (flia != null) {
+				return flia.getId().longValue() == idFamilia;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * @return la rentabilidad del articulo..
 	 */
 	public double getRentabilidad() {
