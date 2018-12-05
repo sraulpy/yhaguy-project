@@ -154,6 +154,7 @@ public class NotaCredito extends Domain {
 	 * @return el total iva 10..
 	 */
 	public double getTotalIva10() {
+		if (this.isExenta()) return 0.0;
 		Misc misc = new Misc();	
 		return Math.rint(misc.calcularIVA(this.getImporteGs(), 10) * 1) / 1;
 	}
@@ -162,14 +163,24 @@ public class NotaCredito extends Domain {
 	 * @return el total gravado 10..
 	 */
 	public double getTotalGravado10() {
+		if (this.isExenta()) return 0.0;
 		Misc misc = new Misc();	
 		return misc.calcularGravado(this.getImporteGs(), 10);
+	}
+	
+	/**
+	 * @return el total exenta..
+	 */
+	public double getTotalExenta() {
+		if (this.isExenta()) return this.getImporteGs();
+		return 0.0;
 	}
 	
 	/**
 	 * @return el importe total sin iva..
 	 */
 	public double getTotalImporteGsSinIva() {
+		if (this.isExenta()) return this.getImporteGs();
 		return this.getImporteGs() - this.getTotalIva10();
 	}
 	
@@ -187,6 +198,18 @@ public class NotaCredito extends Domain {
 			}
 		}
 		return Math.rint(out * 1) / 1;
+	}
+	
+	/**
+	 * @return true si es exenta..
+	 */
+	public boolean isExenta() {
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.getTipoIva().getSigla().equals(Configuracion.SIGLA_IVA_EXENTO)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
