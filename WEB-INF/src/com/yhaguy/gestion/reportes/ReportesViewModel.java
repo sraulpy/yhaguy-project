@@ -13442,7 +13442,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				String ruc = nc.getProveedor().getRuc();
 				double gravada10 = nc.getTotalGravado10() * -1;
 				double gravada5 = 0.0;
-				double exenta = 0.0;
+				double exenta = nc.getTotalExenta();
 				double iva10 = nc.getTotalIva10() * -1;
 				double iva5 = 0.0;
 				double total = gravada10 + gravada5 + iva10 + iva5 + exenta;
