@@ -1424,6 +1424,9 @@ public class ReportesFiltros {
 	}
 
 	public void setSelectedFamilias(List<ArticuloFamilia> selectedFamilias) {
+		if (selectedFamilias == null || selectedFamilias.size() == 0) {
+			this.selectedFamilias = new ArrayList<ArticuloFamilia>();
+		}
 		this.selectedFamilias = selectedFamilias;
 	}
 }
