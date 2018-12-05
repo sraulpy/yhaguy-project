@@ -13447,7 +13447,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				double iva5 = 0.0;
 				double total = gravada10 + gravada5 + iva10 + iva5 + exenta;
 				double baseImponible = 0.0;
-				String cuenta1 = "DESCUENTOS OBTENIDOS";
+				String cuenta1 = nc.getObservacion().contains("COMISIONES") ? nc.getObservacion() : "DESCUENTOS OBTENIDOS";
 				
 				BeanLibroCompra value = new BeanLibroCompra(fecha, fechaCarga, numero, concepto, timbrado, proveedor, ruc,
 						gravada10, gravada5, iva10, iva5, exenta, total, baseImponible, cuenta1, fecha_);
