@@ -64,6 +64,28 @@ public class Gasto extends Domain {
 	}
 	
 	/**
+	 * @return el importe total gs..
+	 */
+	public double getImporteGs_() {
+		double out = 0;
+		for (GastoDetalle det : this.detalles) {
+			out += det.getMontoGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el importe total ds..
+	 */
+	public double getImporteDs_() {
+		double out = 0;
+		for (GastoDetalle det : this.detalles) {
+			out += det.getMontoDs();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es autofactura..
 	 */
 	public boolean isAutoFactura() {

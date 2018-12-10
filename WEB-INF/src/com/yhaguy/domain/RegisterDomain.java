@@ -8489,6 +8489,18 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los gastos segun importacion.. 
+	 */
+	public List<Gasto> getGastosDeImportacion_(long idImportacion) throws Exception {
+		if (idImportacion < 0) {
+			return new ArrayList<Gasto>();
+		}
+		String query = "select g from Gasto g where g.idImportacion = " + idImportacion
+				+ " order by g.fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los gastos segun importacion.. 
 	 * [0]:id
 	 * [1]:numeroFactura 
 	 * [2]:d.cuenta 
@@ -8773,7 +8785,7 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Recibo> recs = rr.getObjects(Recibo.class.getName());
+			/** List<Recibo> recs = rr.getObjects(Recibo.class.getName());
 			for (Recibo rec : recs) {
 				if (rec.isPago()) {
 					for (ReciboFormaPago fp : rec.getFormasPago()) {
@@ -8796,8 +8808,137 @@ public class RegisterDomain extends Register {
 							}							
 						}
 					}
-				}  **/
+				} 
+			}**/
+			
+			long idempresaGodoy = 13263;
+			SucursalApp suc = rr.getSucursalAppById(2);
+			Tipo caracter = rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR);
+			List<Gasto> gastos16 = rr.getGastosDeImportacion_(16);
+			for (Gasto gasto : gastos16) {
+				if (gasto.getProveedor().getIdEmpresa() == idempresaGodoy) {
+					CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
+					movim.setAnulado(false);
+					movim.setCerrado(false);
+					movim.setFechaEmision(gasto.getFecha());
+					movim.setFechaVencimiento(gasto.getVencimiento());
+					movim.setIdEmpresa(idempresaGodoy);
+					movim.setIdMovimientoOriginal(gasto.getId());
+					movim.setIdVendedor(0);
+					movim.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+					movim.setMoneda(gasto.getMoneda());
+					movim.setNroComprobante(gasto.getNumeroFactura());
+					movim.setNumeroImportacion("IMP-" + gasto.getIdImportacion());
+					movim.setSaldo(movim.getImporteOriginal());
+					movim.setSucursal(suc);
+					movim.setTipoCambio(gasto.getTipoCambio());
+					movim.setTipoCaracterMovimiento(caracter);
+					movim.setTipoMovimiento(gasto.getTipoMovimiento());
+					rr.saveObject(movim, gasto.getUsuarioMod());
+					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
+				}				
 			}
+			
+			List<Gasto> gastos12 = rr.getGastosDeImportacion_(12);
+			for (Gasto gasto : gastos12) {
+				if (gasto.getProveedor().getIdEmpresa() == idempresaGodoy) {
+					CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
+					movim.setAnulado(false);
+					movim.setCerrado(false);
+					movim.setFechaEmision(gasto.getFecha());
+					movim.setFechaVencimiento(gasto.getVencimiento());
+					movim.setIdEmpresa(idempresaGodoy);
+					movim.setIdMovimientoOriginal(gasto.getId());
+					movim.setIdVendedor(0);
+					movim.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+					movim.setMoneda(gasto.getMoneda());
+					movim.setNroComprobante(gasto.getNumeroFactura());
+					movim.setNumeroImportacion("IMP-" + gasto.getIdImportacion());
+					movim.setSaldo(movim.getImporteOriginal());
+					movim.setSucursal(suc);
+					movim.setTipoCambio(gasto.getTipoCambio());
+					movim.setTipoCaracterMovimiento(caracter);
+					movim.setTipoMovimiento(gasto.getTipoMovimiento());
+					rr.saveObject(movim, gasto.getUsuarioMod());
+					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
+				}				
+			}
+			
+			List<Gasto> gastos11 = rr.getGastosDeImportacion_(11);
+			for (Gasto gasto : gastos11) {
+				if (gasto.getProveedor().getIdEmpresa() == idempresaGodoy) {
+					CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
+					movim.setAnulado(false);
+					movim.setCerrado(false);
+					movim.setFechaEmision(gasto.getFecha());
+					movim.setFechaVencimiento(gasto.getVencimiento());
+					movim.setIdEmpresa(idempresaGodoy);
+					movim.setIdMovimientoOriginal(gasto.getId());
+					movim.setIdVendedor(0);
+					movim.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+					movim.setMoneda(gasto.getMoneda());
+					movim.setNroComprobante(gasto.getNumeroFactura());
+					movim.setNumeroImportacion("IMP-" + gasto.getIdImportacion());
+					movim.setSaldo(movim.getImporteOriginal());
+					movim.setSucursal(suc);
+					movim.setTipoCambio(gasto.getTipoCambio());
+					movim.setTipoCaracterMovimiento(caracter);
+					movim.setTipoMovimiento(gasto.getTipoMovimiento());
+					rr.saveObject(movim, gasto.getUsuarioMod());
+					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
+				}				
+			}
+			
+			List<Gasto> gastos7 = rr.getGastosDeImportacion_(7);
+			for (Gasto gasto : gastos7) {
+				if (gasto.getProveedor().getIdEmpresa() == idempresaGodoy) {
+					CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
+					movim.setAnulado(false);
+					movim.setCerrado(false);
+					movim.setFechaEmision(gasto.getFecha());
+					movim.setFechaVencimiento(gasto.getVencimiento());
+					movim.setIdEmpresa(idempresaGodoy);
+					movim.setIdMovimientoOriginal(gasto.getId());
+					movim.setIdVendedor(0);
+					movim.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+					movim.setMoneda(gasto.getMoneda());
+					movim.setNroComprobante(gasto.getNumeroFactura());
+					movim.setNumeroImportacion("IMP-" + gasto.getIdImportacion());
+					movim.setSaldo(movim.getImporteOriginal());
+					movim.setSucursal(suc);
+					movim.setTipoCambio(gasto.getTipoCambio());
+					movim.setTipoCaracterMovimiento(caracter);
+					movim.setTipoMovimiento(gasto.getTipoMovimiento());
+					rr.saveObject(movim, gasto.getUsuarioMod());
+					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
+				}				
+			}
+			
+			List<Gasto> gastos8 = rr.getGastosDeImportacion_(8);
+			for (Gasto gasto : gastos8) {
+				if (gasto.getProveedor().getIdEmpresa() == idempresaGodoy) {
+					CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
+					movim.setAnulado(false);
+					movim.setCerrado(false);
+					movim.setFechaEmision(gasto.getFecha());
+					movim.setFechaVencimiento(gasto.getVencimiento());
+					movim.setIdEmpresa(idempresaGodoy);
+					movim.setIdMovimientoOriginal(gasto.getId());
+					movim.setIdVendedor(0);
+					movim.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+					movim.setMoneda(gasto.getMoneda());
+					movim.setNroComprobante(gasto.getNumeroFactura());
+					movim.setNumeroImportacion("IMP-" + gasto.getIdImportacion());
+					movim.setSaldo(movim.getImporteOriginal());
+					movim.setSucursal(suc);
+					movim.setTipoCambio(gasto.getTipoCambio());
+					movim.setTipoCaracterMovimiento(caracter);
+					movim.setTipoMovimiento(gasto.getTipoMovimiento());
+					rr.saveObject(movim, gasto.getUsuarioMod());
+					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
+				}				
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -8827,7 +8968,7 @@ public class RegisterDomain extends Register {
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}
-				query += " and g.idImportacion <= 0" + " order by g.fecha";
+				query += " and g.idImportacion < 0" + " order by g.fecha";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
