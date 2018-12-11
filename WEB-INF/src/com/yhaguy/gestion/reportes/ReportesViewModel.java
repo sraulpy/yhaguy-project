@@ -5113,13 +5113,15 @@ public class ReportesViewModel extends SimpleViewModel {
 				});
 				
 				for (String key : keys_) {
-					long cant = acum.get(key);
-					String[] dato = key.split(";");
-					String cod = dato[2];
-					Object[] coef = codigos.get(cod);
-					int duenho = (int) coef[0];
-					int empleado = (int) coef[1];
-					data.add(new Object[] { dato[0], dato[1], cod, cant, (cant * duenho), (cant * empleado) });
+					Long cant = acum.get(key);
+					if (cant != null) {
+						String[] dato = key.split(";");
+						String cod = dato[2];
+						Object[] coef = codigos.get(cod);
+						int duenho = (int) coef[0];
+						int empleado = (int) coef[1];
+						data.add(new Object[] { dato[0], dato[1], cod, cant, (cant * duenho), (cant * empleado) });
+					}					
 				}
 				
 				ReportePromoValvoline rep = new ReportePromoValvoline(desde, hasta);
