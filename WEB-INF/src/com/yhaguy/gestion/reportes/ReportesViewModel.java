@@ -20137,7 +20137,7 @@ class ReportePromoValvoline extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col0 = new DatosColumnas("Cliente", TIPO_STRING);
-	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING);
+	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING, 60);
 	static DatosColumnas col2 = new DatosColumnas("Codigo", TIPO_STRING, 40);
 	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 25, true);
 	static DatosColumnas col4 = new DatosColumnas("Dueño", TIPO_LONG, 25, true);

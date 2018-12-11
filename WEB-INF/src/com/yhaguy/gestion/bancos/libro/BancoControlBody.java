@@ -223,6 +223,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> historicoHABER;
 
 		long idBanco = this.dto.getId();
+		boolean guaranies = (this.dto.getMoneda().getId() == Configuracion.ID_MONEDA_GUARANIES);
 
 		List<Object[]> saldosIniciales = rr.getSaldosInicialesPorBanco(idBanco, desde, hasta);
 		List<Object[]> depositos = rr.getDepositosPorBanco(idBanco, desde, hasta);
@@ -234,7 +235,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> cheques = rr.getChequesPropiosPorBanco(idBanco, desde, hasta);
 		List<Object[]> chequesRechazados = rr.getChequesRechazadosPorBancoPorDeposito(idBanco, desde, hasta);
 		List<Object[]> chequesRechazados_ = rr.getChequesRechazadosPorBancoPorDescuento(idBanco, desde, hasta);
-		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta);
+		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta);

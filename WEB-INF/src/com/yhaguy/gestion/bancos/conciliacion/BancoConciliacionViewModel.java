@@ -475,7 +475,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> cheques = rr.getChequesPropiosPorBanco(idBanco, desde, hasta);
 		List<Object[]> chequesRechazados = rr.getChequesRechazadosPorBancoPorDeposito(idBanco, desde, hasta);
 		List<Object[]> chequesRechazados_ = rr.getChequesRechazadosPorBancoPorDescuento(idBanco, desde, hasta);
-		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta);
+		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta, true);
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta);

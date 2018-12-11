@@ -2305,8 +2305,7 @@ public class RegisterDomain extends Register {
 	 * @return el Cliente segun el ruc..
 	 */
 	public Cliente getClienteByRuc(String ruc) throws Exception {
-		String query = "Select c from Cliente c where c.empresa.ruc = '"
-				+ ruc + "'";
+		String query = "Select c from Cliente c where c.empresa.ruc = '" + ruc + "'";
 		List<Cliente> out = this.hql(query);
 		if (out.size() > 0) {
 			return out.get(0);
@@ -2871,7 +2870,7 @@ public class RegisterDomain extends Register {
 			Date hasta, long idOrigen, long idDestino) throws Exception {
 
 		String query = "select t from Transferencia t where t.dbEstado != 'D'"
-				+ " and (t.transferenciaTipo.sigla = ? and t.transferenciaEstado.sigla = ?)"
+				+ " and (t.transferenciaTipo.sigla = ?)"
 				+ " and t.fechaCreacion between ? and ?"
 				+ " and t.sucursal.id = " + idOrigen;
 				if (idDestino > 0) {
@@ -2881,7 +2880,6 @@ public class RegisterDomain extends Register {
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_TRANSF_EXTERNA);
-		listParams.add(Configuracion.SIGLA_ESTADO_TRANSF_CONFIRMADA);
 		listParams.add(desde);
 		listParams.add(hasta);
 
@@ -8214,12 +8212,13 @@ public class RegisterDomain extends Register {
 	 * [2]:numero 
 	 * [3]:totalImporteGs 
 	 * [4]:banco 
+	 * [5]:totalImporteDs 
 	 */
-	public List<Object[]> getGastosBancariosPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getGastosBancariosPorBanco(long idBanco, Date desde, Date hasta, boolean gs) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('DEBITO BANCARIO'), "
-				+ " g.fecha, g.numeroFactura, g.importeGs, g.banco.banco.descripcion, g.observacion"
+				+ " g.fecha, g.numeroFactura, " + ( gs ? "g.importeGs" : "g.importeDs") + ", g.banco.banco.descripcion, g.observacion"
 				+ " from Gasto g where g.debitoBancario = 'TRUE'"
 				+ " and g.banco.id = " + idBanco
 				+ " and (g.fecha >= '"
