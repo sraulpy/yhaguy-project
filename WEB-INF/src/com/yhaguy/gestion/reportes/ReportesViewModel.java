@@ -1416,6 +1416,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_CONTADO_CREDITO_VENDEDOR_DET = "VEN-00038";
 		static final String VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_DET = "VEN-00039";
 		static final String VENTAS_VENDEDOR_CLIENTE_ARTICULO_VOLUMEN = "VEN-00040";
+		static final String VENTAS_PROMO_COMPRA_VALVOLINE = "VEN-00041";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1585,6 +1586,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_VENDEDOR_CLIENTE_ARTICULO_VOLUMEN:
 				this.ventasPorVendedorClienteArticuloPorMes(mobile);
+				break;
+				
+			case VENTAS_PROMO_COMPRA_VALVOLINE:
+				this.promoCompraValvoline(mobile);
 				break;
 			}
 		}
@@ -5003,6 +5008,134 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			try {
 				// PENDIENTE..
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00041
+		 */
+		private void promoCompraValvoline(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+				
+				Map<String, Object[]> codigos = new HashMap<String, Object[]>();
+				codigos.put("VAL 774038", new Object[] { 2200, 4400 });
+				codigos.put("VAL VV388", new Object[] { 600, 900 });
+				codigos.put("VAL 773634", new Object[] { 1100, 2200 });
+				codigos.put("VAL 874241", new Object[] { 600, 900 });
+				codigos.put("VAL 859865", new Object[] { 1100, 2200 });
+				codigos.put("VAL 818474", new Object[] { 55000, 110000 });
+				codigos.put("VAL 710994", new Object[] { 600, 900 });
+				codigos.put("VAL 847651", new Object[] { 600, 900 });
+				codigos.put("VAL 847654", new Object[] { 55000, 110000 });
+				codigos.put("VAL VV955", new Object[] { 900, 1700 });
+				codigos.put("VAL VV966", new Object[] { 900, 1700 });
+				codigos.put("VAL VV296", new Object[] { 900, 1700 });
+				codigos.put("VAL VV150", new Object[] { 900, 1700 });
+				codigos.put("VAL VV301", new Object[] { 900, 1700 });
+				codigos.put("VAL 880953", new Object[] { 900, 1700 });
+				codigos.put("VAL VV150", new Object[] { 900, 1700 });
+				codigos.put("VAL VV301", new Object[] { 900, 1700 });
+				codigos.put("VAL 773779", new Object[] { 2200, 4400 });
+				codigos.put("VAL 877311", new Object[] { 600, 900 });
+				codigos.put("VAL VV161", new Object[] { 900, 1700 });
+				codigos.put("VAL 875391", new Object[] { 600, 900 });
+				codigos.put("VAL 875290", new Object[] { 1100, 2200 });
+				codigos.put("VAL 875392", new Object[] { 55000, 110000 });
+				codigos.put("VAL 884577", new Object[] { 900, 1700 });
+				codigos.put("VAL 884569", new Object[] { 900, 1700 });
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Venta> ventas = rr.getVentas(desde, hasta, 0);
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
+				Map<String, Long> acum = new HashMap<String, Long>();
+
+				for (Venta venta : ventas) {
+					if (!venta.isAnulado()) {
+						for (VentaDetalle item : venta.getDetalles()) {
+							String cod = item.getArticulo().getCodigoInterno();
+							if (codigos.get(cod) != null) {
+								String cliente = venta.getCliente().getRazonSocial();
+								String vendedor = venta.getVendedor().getRazonSocial();
+								String key = cliente + ";" + vendedor + ";" + cod;
+								Long cant = acum.get(key);
+								if (cant != null) {
+									cant += item.getCantidad();
+								} else {
+									cant = item.getCantidad();
+								}
+								acum.put(key, cant);
+							}
+						}
+					}
+				}
+				
+				for (NotaCredito nc : ncs) {
+					if (!nc.isAnulado()) {
+						for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
+							String cod = item.getArticulo().getCodigoInterno();
+							if (codigos.get(cod) != null) {
+								String cliente = nc.getCliente().getRazonSocial();
+								String vendedor = nc.getVentaAplicada().getVendedor().getRazonSocial();
+								String key = cliente + ";" + vendedor + ";" + cod;
+								Long cant = acum.get(key);
+								if (cant != null) {
+									cant -= item.getCantidad();
+								}
+								acum.put(key, cant);
+							}
+						}
+					}
+				}
+				
+				Set<String> keys = acum.keySet();
+				List<String> keys_ = new ArrayList<String>();
+				keys_.addAll(keys);
+				
+				Collections.sort(keys_, new Comparator<String>() {
+					@Override
+					public int compare(String o1, String o2) {
+						String val1 = o1;
+						String val2 = o2;
+						int compare = val1.compareTo(val2);				
+						return compare;
+					}
+				});
+				
+				for (String key : keys_) {
+					long cant = acum.get(key);
+					String[] dato = key.split(";");
+					String cod = dato[2];
+					Object[] coef = codigos.get(cod);
+					int duenho = (int) coef[0];
+					int empleado = (int) coef[1];
+					data.add(new Object[] { dato[0], dato[1], cod, cant, (cant * duenho), (cant * empleado) });
+				}
+				
+				ReportePromoValvoline rep = new ReportePromoValvoline(desde, hasta);
+				rep.setDatosReporte(data);
+				rep.setApaisada();				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -19985,6 +20118,66 @@ class VentaGenericoCosto extends ReporteYhaguy {
 				.add(this.textoParValor("Total Costo S/IVA", FORMATTER.format(this.totalCostoSinIva)))
 				.add(this.textoParValor("Proveedor", this.proveedor))
 				.add(this.textoParValor("Familia", this.familias)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de Pedidos Pendientes VEN-00041..
+ */
+class ReportePromoValvoline extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private Date desde;
+	private Date hasta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col0 = new DatosColumnas("Cliente", TIPO_STRING);
+	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Codigo", TIPO_STRING, 40);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 25, true);
+	static DatosColumnas col4 = new DatosColumnas("Dueño", TIPO_LONG, 25, true);
+	static DatosColumnas col5 = new DatosColumnas("Empleado", TIPO_LONG, 25, true);
+
+	public ReportePromoValvoline(Date desde, Date hasta) {
+		this.desde = desde;
+		this.hasta = hasta;
+	}
+
+	static {
+		cols.add(col0);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("PROMO COMPRA VALVOLINE");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Venta-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp
+				.horizontalFlowList()
+				.add(this.textoParValor("Desde",
+						m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta",
+						m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
