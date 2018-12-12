@@ -236,6 +236,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> chequesRechazados = rr.getChequesRechazadosPorBancoPorDeposito(idBanco, desde, hasta);
 		List<Object[]> chequesRechazados_ = rr.getChequesRechazadosPorBancoPorDescuento(idBanco, desde, hasta);
 		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta, guaranies);
+		List<Object[]> debitosDesglosados = rr.getGastosBancariosDebitoDesglosadoPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta);
@@ -257,6 +258,7 @@ public class BancoControlBody extends BodyApp {
 		historicoHABER.addAll(transferenciasEnviadas);
 		historicoHABER.addAll(prestamosInternos);
 		historicoHABER.addAll(gastos);
+		historicoHABER.addAll(debitosDesglosados);
 		historicoHABER.addAll(formasPagoDebito);
 
 		for (Object[] movim : historicoDEBE) {

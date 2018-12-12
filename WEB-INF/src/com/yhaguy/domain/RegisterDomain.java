@@ -8230,6 +8230,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los gastos bancarios segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:importe 
+	 * [4]:banco  
+	 */
+	public List<Object[]> getGastosBancariosDebitoDesglosadoPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select ('DEBITO BANCARIO'), "
+				+ " g.fecha, g.numeroFactura, d.importe, d.cuenta.banco.descripcion, d.descripcion"
+				+ " from Gasto g join g.debitoDesglosado d where"
+				+ " d.cuenta.id = " + idBanco
+				+ " and (g.fecha >= '"
+				+ desde_
+				+ "' and g.fecha <= '"
+				+ hasta_
+				+ "')" + " order by g.fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las formas de pago debito en cta. segun banco.. 
 	 * [0]:concepto
 	 * [1]:fecha 
