@@ -451,6 +451,10 @@ public class VentaControlBody extends BodyApp {
 		out.setPreparadoPor(desde.getPreparadoPor());
 		out.setObservacion(desde.getObservacion());
 		out.setTimbrado(timbrado);
+		out.setVehiculoTipo(desde.getVehiculoTipo());
+		out.setVehiculoMarca(desde.getVehiculoMarca());
+		out.setVehiculoModelo(desde.getVehiculoModelo());
+		out.setFormaEntrega(desde.getFormaEntrega());
 
 		if (crearPedido == true) {
 			out.setAtendido(this.getAcceso().getFuncionario());
@@ -543,6 +547,9 @@ public class VentaControlBody extends BodyApp {
 			nvo.setPrecioGs(item.getPrecioGs());
 			nvo.setTipoIVA(item.getTipoIVA());
 			nvo.setListaPrecio(item.getListaPrecio());
+			nvo.setVehiculoTipo(item.getVehiculoTipo());
+			nvo.setVehiculoMarca(item.getVehiculoMarca());
+			nvo.setVehiculoModelo(item.getVehiculoModelo());
 			
 			out.add(nvo);
 		}
