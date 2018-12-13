@@ -38,5 +38,14 @@
 			
 		<many-to-one name="tipoIVA" class="com.coreweb.domain.Tipo"
 			column="idtipoiva" lazy="false" />		
+			
+		<many-to-one name="vehiculoTipo" class="com.yhaguy.domain.VehiculoTipo"
+			column="id_vehiculo_tipo" lazy="false" />
+		
+		<many-to-one name="vehiculoMarca" class="com.yhaguy.domain.VehiculoMarca"
+			column="id_vehiculo_marca" lazy="false" />
+			
+		<many-to-one name="vehiculoModelo" class="com.yhaguy.domain.VehiculoModelo"
+			column="id_vehiculo_modelo" lazy="false" />
 	</class>
 </hibernate-mapping>

@@ -18,6 +18,8 @@ public class NotaCreditoDetalle extends Domain{
 	private double importeGs;
 	private double importeDs;
 	
+	private double descuentoUnitarioGs;
+	
 	private Tipo tipoIva;
 	
 	/** El detalle puede hacer referencia a un articulo ó una factura segun el tipo **/
@@ -203,5 +205,13 @@ public class NotaCreditoDetalle extends Domain{
 
 	public void setImportacion(ImportacionFactura importacion) {
 		this.importacion = importacion;
+	}
+
+	public double getDescuentoUnitarioGs() {
+		return descuentoUnitarioGs;
+	}
+
+	public void setDescuentoUnitarioGs(double descuentoUnitarioGs) {
+		this.descuentoUnitarioGs = descuentoUnitarioGs;
 	}
 }

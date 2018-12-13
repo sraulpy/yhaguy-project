@@ -73,6 +73,10 @@ public class VentaDetalle extends Domain {
 	private ArticuloListaPrecio listaPrecio;
 	private Tipo tipoIVA;
 	
+	private VehiculoTipo vehiculoTipo;
+	private VehiculoMarca vehiculoMarca;
+	private VehiculoModelo vehiculoModelo;
+	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
@@ -328,5 +332,29 @@ public class VentaDetalle extends Domain {
 
 	public void setCantidadEntregada(long cantidadEntregada) {
 		this.cantidadEntregada = cantidadEntregada;
+	}
+
+	public VehiculoTipo getVehiculoTipo() {
+		return vehiculoTipo;
+	}
+
+	public void setVehiculoTipo(VehiculoTipo vehiculoTipo) {
+		this.vehiculoTipo = vehiculoTipo;
+	}
+
+	public VehiculoMarca getVehiculoMarca() {
+		return vehiculoMarca;
+	}
+
+	public void setVehiculoMarca(VehiculoMarca vehiculoMarca) {
+		this.vehiculoMarca = vehiculoMarca;
+	}
+
+	public VehiculoModelo getVehiculoModelo() {
+		return vehiculoModelo;
+	}
+
+	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
+		this.vehiculoModelo = vehiculoModelo;
 	}
 }

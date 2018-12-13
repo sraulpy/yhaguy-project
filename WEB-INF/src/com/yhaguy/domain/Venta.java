@@ -22,6 +22,12 @@ public class Venta extends Domain {
 	
 	public static final double MARGEN_LINEA_CREDITO = 30;
 	public static final double MAXIMO_DESCUENTO = 5;
+	
+	public static final String FORMA_ENTREGA_SERVICIO = "SERVICIO";
+	public static final String FORMA_ENTREGA_EMPAQUE = "EMPAQUE";
+	public static final String FORMA_ENTREGA_REPARTO = "REPARTO";
+	public static final String FORMA_ENTREGA_TRANSPORTADORA = "TRANSPORTADORA";
+	public static final String FORMA_ENTREGA_COLECTIVO = "COLECTIVO";
 
 	/** Presupuesto o Pedido */
 	private TipoMovimiento tipoMovimiento;
@@ -108,6 +114,11 @@ public class Venta extends Domain {
 	private Set<ReciboFormaPago> formasPago = new HashSet<ReciboFormaPago>();
 	
 	private Reserva reserva;	
+	
+	private String formaEntrega;
+	private VehiculoTipo vehiculoTipo;
+	private VehiculoMarca vehiculoMarca;
+	private VehiculoModelo vehiculoModelo;
 
 	private Set<VentaDetalle> detalles = new HashSet<VentaDetalle>();
 	
@@ -464,6 +475,19 @@ public class Venta extends Domain {
 	 */
 	public String getDescripcionCondicion() {
 		return this.condicionPago.getDescripcion();
+	}
+	
+	/**
+	 * @return las formas de entrega de la venta..
+	 */
+	public static List<String> getFormasEntrega() {
+		List<String> out = new ArrayList<String>();
+		out.add(FORMA_ENTREGA_SERVICIO);
+		out.add(FORMA_ENTREGA_EMPAQUE);
+		out.add(FORMA_ENTREGA_REPARTO);
+		out.add(FORMA_ENTREGA_TRANSPORTADORA);
+		out.add(FORMA_ENTREGA_COLECTIVO);
+		return out;
 	}
 	
 	public void setDescripcionTipoMovimiento(String descripcion) {
@@ -838,5 +862,37 @@ public class Venta extends Domain {
 
 	public void setTimbrado(String timbrado) {
 		this.timbrado = timbrado;
+	}
+
+	public String getFormaEntrega() {
+		return formaEntrega;
+	}
+
+	public void setFormaEntrega(String formaEntrega) {
+		this.formaEntrega = formaEntrega;
+	}
+
+	public VehiculoTipo getVehiculoTipo() {
+		return vehiculoTipo;
+	}
+
+	public void setVehiculoTipo(VehiculoTipo vehiculoTipo) {
+		this.vehiculoTipo = vehiculoTipo;
+	}
+
+	public VehiculoMarca getVehiculoMarca() {
+		return vehiculoMarca;
+	}
+
+	public void setVehiculoMarca(VehiculoMarca vehiculoMarca) {
+		this.vehiculoMarca = vehiculoMarca;
+	}
+
+	public VehiculoModelo getVehiculoModelo() {
+		return vehiculoModelo;
+	}
+
+	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
+		this.vehiculoModelo = vehiculoModelo;
 	}
 }

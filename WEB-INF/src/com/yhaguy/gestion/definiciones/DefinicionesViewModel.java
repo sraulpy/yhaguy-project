@@ -40,6 +40,9 @@ import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Talonario;
 import com.yhaguy.domain.Timbrado;
 import com.yhaguy.domain.TipoMovimiento;
+import com.yhaguy.domain.VehiculoMarca;
+import com.yhaguy.domain.VehiculoModelo;
+import com.yhaguy.domain.VehiculoTipo;
 import com.yhaguy.domain.VendedorComision;
 import com.yhaguy.inicio.AccesoDTO;
 
@@ -96,6 +99,15 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	 */
 	private Tipo selectedZona;
 	private Tipo nuevaZona = new Tipo();
+	
+	private VehiculoTipo selectedVehiculoTipo;
+	private VehiculoTipo nuevoVehiculoTipo = new VehiculoTipo();
+	
+	private VehiculoMarca selectedVehiculoMarca;
+	private VehiculoMarca nuevoVehiculoMarca = new VehiculoMarca();
+	
+	private VehiculoModelo selectedVehiculoModelo;
+	private VehiculoModelo nuevoVehiculoModelo = new VehiculoModelo();
 	
 	private Proveedor selectedProveedor;
 	private Tipo selectedFamilia;
@@ -178,6 +190,93 @@ public class DefinicionesViewModel extends SimpleViewModel {
 		rr.deleteObject(this.selectedZona);
 		this.selectedZona = null;
 		Clients.showNotification("REGISTRO ELIMINADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "tiposVehiculos", "nuevoVehiculoTipo", "selectedVehiculoTipo" })
+	public void addVehiculoTipo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevoVehiculoTipo.getDescripcion() == null || this.nuevoVehiculoTipo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevoVehiculoTipo.setDescripcion(this.nuevoVehiculoTipo.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevoVehiculoTipo, this.getLoginNombre());
+		this.nuevoVehiculoTipo = new VehiculoTipo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "tiposVehiculos", "nuevoVehiculoTipo", "selectedVehiculoTipo" })
+	public void saveVehiculoTipo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedVehiculoTipo.getDescripcion() == null || this.selectedVehiculoTipo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedVehiculoTipo.setDescripcion(this.selectedVehiculoTipo.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedVehiculoTipo, this.getLoginNombre());
+		this.nuevoVehiculoTipo = new VehiculoTipo();
+		this.selectedVehiculoTipo = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "marcasVehiculos", "nuevoVehiculoMarca", "selectedVehiculoMarca" })
+	public void addVehiculoMarca(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevoVehiculoMarca.getDescripcion() == null || this.nuevoVehiculoMarca.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevoVehiculoMarca.setDescripcion(this.nuevoVehiculoMarca.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevoVehiculoMarca, this.getLoginNombre());
+		this.nuevoVehiculoMarca = new VehiculoMarca();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "marcasVehiculos", "nuevoVehiculoMarca", "selectedVehiculoMarca" })
+	public void saveVehiculoMarca(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedVehiculoMarca.getDescripcion() == null || this.selectedVehiculoMarca.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedVehiculoMarca.setDescripcion(this.selectedVehiculoMarca.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedVehiculoMarca, this.getLoginNombre());
+		this.nuevoVehiculoMarca = new VehiculoMarca();
+		this.selectedVehiculoMarca = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "modelosVehiculos", "nuevoVehiculoModelo", "selectedVehiculoModelo" })
+	public void addVehiculoModelo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevoVehiculoModelo.getDescripcion() == null || this.nuevoVehiculoModelo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevoVehiculoModelo.setDescripcion(this.nuevoVehiculoModelo.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevoVehiculoModelo, this.getLoginNombre());
+		this.nuevoVehiculoModelo = new VehiculoModelo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "modelosVehiculos", "nuevoVehiculoModelo", "selectedVehiculoModelo" })
+	public void saveVehiculoModelo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedVehiculoModelo.getDescripcion() == null || this.selectedVehiculoModelo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedVehiculoModelo.setDescripcion(this.selectedVehiculoModelo.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedVehiculoModelo, this.getLoginNombre());
+		this.nuevoVehiculoModelo = new VehiculoModelo();
+		this.selectedVehiculoModelo = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
 	}
 
 	/**
@@ -1264,6 +1363,30 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return los tipos de vehiculos..
+	 */
+	public List<VehiculoTipo> getTiposVehiculos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoTipo.class.getName());
+	}
+	
+	/**
+	 * @return las marcas de vehiculos..
+	 */
+	public List<VehiculoMarca> getMarcasVehiculos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoMarca.class.getName());
+	}
+	
+	/**
+	 * @return los modelos de vehiculos..
+	 */
+	public List<VehiculoModelo> getModelosVehiculos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoModelo.class.getName());
+	}
+	
+	/**
 	 * @return los vendedores y definicion de comision..
 	 */
 	@DependsOn({ "selectedProveedor", "selectedFamilia" })
@@ -1638,5 +1761,53 @@ public class DefinicionesViewModel extends SimpleViewModel {
 
 	public void setSelectedFamilia(Tipo selectedFamilia) {
 		this.selectedFamilia = selectedFamilia;
+	}
+
+	public VehiculoTipo getSelectedVehiculoTipo() {
+		return selectedVehiculoTipo;
+	}
+
+	public void setSelectedVehiculoTipo(VehiculoTipo selectedVehiculoTipo) {
+		this.selectedVehiculoTipo = selectedVehiculoTipo;
+	}
+
+	public VehiculoTipo getNuevoVehiculoTipo() {
+		return nuevoVehiculoTipo;
+	}
+
+	public void setNuevoVehiculoTipo(VehiculoTipo nuevoVehiculoTipo) {
+		this.nuevoVehiculoTipo = nuevoVehiculoTipo;
+	}
+
+	public VehiculoMarca getSelectedVehiculoMarca() {
+		return selectedVehiculoMarca;
+	}
+
+	public void setSelectedVehiculoMarca(VehiculoMarca selectedVehiculoMarca) {
+		this.selectedVehiculoMarca = selectedVehiculoMarca;
+	}
+
+	public VehiculoMarca getNuevoVehiculoMarca() {
+		return nuevoVehiculoMarca;
+	}
+
+	public void setNuevoVehiculoMarca(VehiculoMarca nuevoVehiculoMarca) {
+		this.nuevoVehiculoMarca = nuevoVehiculoMarca;
+	}
+
+	public VehiculoModelo getSelectedVehiculoModelo() {
+		return selectedVehiculoModelo;
+	}
+
+	public void setSelectedVehiculoModelo(VehiculoModelo selectedVehiculoModelo) {
+		this.selectedVehiculoModelo = selectedVehiculoModelo;
+	}
+
+	public VehiculoModelo getNuevoVehiculoModelo() {
+		return nuevoVehiculoModelo;
+	}
+
+	public void setNuevoVehiculoModelo(VehiculoModelo nuevoVehiculoModelo) {
+		this.nuevoVehiculoModelo = nuevoVehiculoModelo;
 	}
 }

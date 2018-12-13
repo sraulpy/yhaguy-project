@@ -30,6 +30,7 @@
 		<property name="totalImporteGs"/>
 		<property name="totalImporteDs"/>
 		<property name="tipoCambio" />	
+		<property name="formaEntrega" />
 		
 		<property name="validez">
 			<column name="validez" default="0" />
@@ -90,6 +91,15 @@
 
 		<many-to-one name="reserva" class="com.yhaguy.domain.Reserva"
 			column="idreserva" lazy="false" />
+			
+		<many-to-one name="vehiculoTipo" class="com.yhaguy.domain.VehiculoTipo"
+			column="id_vehiculo_tipo" lazy="false" />
+		
+		<many-to-one name="vehiculoMarca" class="com.yhaguy.domain.VehiculoMarca"
+			column="id_vehiculo_marca" lazy="false" />
+			
+		<many-to-one name="vehiculoModelo" class="com.yhaguy.domain.VehiculoModelo"
+			column="id_vehiculo_modelo" lazy="false" />
 
 		<set name="formasPago" table="reciboformapago" inverse="false"
 			lazy="false" fetch="join" cascade="all">

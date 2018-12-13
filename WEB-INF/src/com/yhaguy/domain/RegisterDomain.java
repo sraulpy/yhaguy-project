@@ -9127,4 +9127,12 @@ public class RegisterDomain extends Register {
 				+ " order by r.fecha";
 		return this.hqlLimit(query, 200);
 	}
+	
+	/**
+	 * @return los modelos segun marca..
+	 */
+	public List<VehiculoModelo> getVehiculoModelos(long idMarca) throws Exception {
+		String query = "select v from VehiculoModelo v where v.marca.id = " + idMarca;
+		return this.hql(query);
+	}
 }

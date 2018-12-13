@@ -2,6 +2,9 @@
 <tabbox height="100%">
 	<tabs>
 		<tab label="Zonas" />
+		<tab label="Tipos de Vehículos" />
+		<tab label="Marcas de Vehículos" />
+		<tab label="Modelos de Vehículos" />
 	</tabs>
 	<tabpanels>
 		<tabpanel>
@@ -42,6 +45,129 @@
 				</listfoot>
 			</listbox>
 		</tabpanel>
+		
+		<!-- TIPOS DE VEHICULOS -->
+		
+		<tabpanel>
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="130px" iconSclass="z-icon-plus" label=" Agregar" 
+					onClick='pop_add_tipo_vehiculo.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-warning btn-sm"
+					width="130px" iconSclass="z-icon-edit" label=" Editar" 
+					disabled="@load(vm.selectedVehiculoTipo eq null? 'true':'false')"
+					onClick='pop_edit_tipo_vehiculo.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-info btn-sm"
+					width="130px" iconSclass="z-icon-times" label=" Eliminar" 
+					disabled="true" />
+				<space></space>
+			</hlayout>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="SIN TIPOS DE VEHICULOS.."
+				model="@load(vm.tiposVehiculos)"
+				selectedItem="@bind(vm.selectedVehiculoTipo)">
+				<listhead>
+					<listheader label="Descripción" sort="auto(descripcion)" />							
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.descripcion)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</tabpanel>
+		
+		<!-- MARCAS DE VEHICULOS -->
+		
+		<tabpanel>
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="130px" iconSclass="z-icon-plus" label=" Agregar" 
+					onClick='pop_add_marca_vehiculo.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-warning btn-sm"
+					width="130px" iconSclass="z-icon-edit" label=" Editar" 
+					disabled="@load(vm.selectedVehiculoMarca eq null? 'true':'false')"
+					onClick='pop_edit_marca_vehiculo.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-info btn-sm"
+					width="130px" iconSclass="z-icon-times" label=" Eliminar" 
+					disabled="true" />
+				<space></space>
+			</hlayout>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="SIN MARCAS DE VEHICULOS.."
+				model="@load(vm.marcasVehiculos)"
+				selectedItem="@bind(vm.selectedVehiculoMarca)">
+				<listhead>
+					<listheader label="Descripción" sort="auto(descripcion)"/>							
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.descripcion)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</tabpanel>
+		
+		<!-- MODELOS DE VEHICULOS -->
+		
+		<tabpanel>
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="130px" iconSclass="z-icon-plus" label=" Agregar" 
+					onClick='pop_add_modelo_vehiculo.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-warning btn-sm"
+					width="130px" iconSclass="z-icon-edit" label=" Editar" 
+					disabled="@load(vm.selectedVehiculoModelo eq null? 'true':'false')"
+					onClick='pop_edit_modelo_vehiculo.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-info btn-sm"
+					width="130px" iconSclass="z-icon-times" label=" Eliminar" 
+					disabled="true" />
+				<space></space>
+			</hlayout>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="SIN MODELOS DE VEHICULOS.."
+				model="@load(vm.modelosVehiculos)"
+				selectedItem="@bind(vm.selectedVehiculoModelo)">
+				<listhead>
+					<listheader label="Descripción" sort="auto(descripcion)"/>		
+					<listheader label="Marca" sort="auto(marca.descripcion)"/>					
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.descripcion)"></listcell>
+						<listcell label="@load(each.marca.descripcion)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</tabpanel>
+		
 	</tabpanels>
 </tabbox>
 <popup id="pop_add_zona" width="400px" sclass="rounded">
@@ -60,6 +186,76 @@
 		<button mold="bs" sclass="btn-success btn-xs"
 					width="50px" iconSclass="z-icon-check" vflex="true"
 					onClick="@command('saveZona', comp=pop_edit_zona)" />
+	</hlayout>
+</popup>
+<popup id="pop_add_tipo_vehiculo" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.nuevoVehiculoTipo.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('addVehiculoTipo', comp=pop_add_tipo_vehiculo)" />
+	</hlayout>
+</popup>
+<popup id="pop_edit_tipo_vehiculo" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.selectedVehiculoTipo.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true" 
+					onClick="@command('saveVehiculoTipo', comp=pop_edit_tipo_vehiculo)" />
+	</hlayout>
+</popup>
+<popup id="pop_add_marca_vehiculo" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.nuevoVehiculoMarca.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('addVehiculoMarca', comp=pop_add_marca_vehiculo)" />
+	</hlayout>
+</popup>
+<popup id="pop_edit_marca_vehiculo" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.selectedVehiculoMarca.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true" 
+					onClick="@command('saveVehiculoMarca', comp=pop_edit_marca_vehiculo)" />
+	</hlayout>
+</popup>
+<popup id="pop_add_modelo_vehiculo" width="600px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.nuevoVehiculoModelo.descripcion)"></textbox>
+		<combobox hflex="true" placeholder="Marca.."
+			model="@load(vm.marcasVehiculos)"
+			selectedItem="@bind(vm.nuevoVehiculoModelo.marca)"
+			instant="true">
+			<template name="model">
+				<comboitem label="@load(each.descripcion)"></comboitem>
+			</template>
+		</combobox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('addVehiculoModelo', comp=pop_add_modelo_vehiculo)" />
+	</hlayout>
+</popup>
+<popup id="pop_edit_modelo_vehiculo" width="600px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.selectedVehiculoModelo.descripcion)"></textbox>
+		<combobox hflex="true" placeholder="Marca.."
+			model="@load(vm.marcasVehiculos)"
+			selectedItem="@bind(vm.selectedVehiculoModelo.marca)"
+			instant="true">
+			<template name="model">
+				<comboitem label="@load(each.descripcion)"></comboitem>
+			</template>
+		</combobox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true" 
+					onClick="@command('saveVehiculoModelo', comp=pop_edit_modelo_vehiculo)" />
 	</hlayout>
 </popup>
 </zk>
