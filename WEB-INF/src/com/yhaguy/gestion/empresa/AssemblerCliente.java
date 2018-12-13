@@ -38,6 +38,8 @@ public class AssemblerCliente extends Assembler {
 		this.hijoDtoToHijoDomain(dto, domain, "empresa", new AssemblerEmpresa(), true);
 		this.listaDTOToListaDomain(dto, domain, "contactosInternos", true,
 				true, new AssemblerContactoInterno());
+		
+		domain.setNombreEmpresa(domain.getEmpresa().getRazonSocial());
 
 		return domain;
 	}

@@ -1,13 +1,11 @@
 package com.yhaguy.gestion.empresa;
 
 import java.util.ArrayList;
-
 import java.util.Iterator;
 import java.util.List;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Register;
-
 import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
@@ -40,10 +38,13 @@ public class AssemblerFuncionario extends Assembler {
 		this.myPairToDomain(dto, domain, "funcionarioCargo");
 		this.hijoDtoToHijoDomain(dto, domain, "empresa", new AssemblerEmpresa(), true);
 		this.listaDTOToListaDomain(dtoFun, domain, "accesos", true, true, new AssemblerAcceso());
+		
+		domain.setNombreEmpresa(domain.getEmpresa().getRazonSocial());
 
 		return domain;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
 		FuncionarioDTO dto = (FuncionarioDTO) getDTO(domain, FuncionarioDTO.class);

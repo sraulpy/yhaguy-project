@@ -18,6 +18,7 @@ public class AssemblerProveedor extends Assembler {
 	
 	private static String[] attIgualesProveedor = { "prioridad", "completo" };
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Domain dtoToDomain(DTO dtog) throws Exception {
 
@@ -42,6 +43,7 @@ public class AssemblerProveedor extends Assembler {
 			emailLista += mp.getId()+":"+eml+"|";
 		}
 		domain.setEmailsLista(emailLista);
+		domain.setNombreEmpresa(domain.getEmpresa().getRazonSocial());
 		
 		return domain;
 	}
