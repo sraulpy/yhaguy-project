@@ -1,4 +1,5 @@
 <zk>
+	
 	<window
 		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaControlBody')"
 		apply="org.zkoss.bind.BindComposer"
@@ -137,31 +138,13 @@
 				</row>
 				<row>
 					<vlayout spacing="0">
-						<field value="Línea de Crédito" />
+						<field value="Línea Crédito / Disponible" />
 						<hlayout>
 							<guaranibox hflex="true"
 								value="@load(vm.dto.limiteCredito)" readonly="true" />
 							<label
 								value="@load(vm.dtoUtil.simboloMonedaLocal)"
 								sclass="label-moneda" />
-						</hlayout>
-					</vlayout>
-					<vlayout spacing="0">
-						<field value="Saldo Pendiente" />
-						<hlayout>
-							<guaranibox hflex="true"
-								value="@load(vm.dto.saldoCtaCte)" readonly="true" />
-							<label
-								value="@load(vm.dtoUtil.simboloMonedaLocal)"
-								sclass="label-moneda" />
-						</hlayout>
-					</vlayout>
-					<vlayout spacing="0">
-						<hlayout>
-							<field value="Disponible" />
-							<label style="font-style:italic" value="(Línea + 30%) - Saldo"></label>
-						</hlayout>
-						<hlayout>
 							<guaranibox readonly="true" hflex="true"
 								value="@load(vm.dto.creditoDisponible)"/>
 							<label
@@ -170,9 +153,50 @@
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Envío por Reparto?" />
-						<checkbox checked="@bind(vm.dto.reparto)" />
+						<field value="Forma de entrega" />
+						<combobox hflex="true" model="@load(vm.formasEntrega)"
+							selectedItem="@bind(vm.dto.formaEntrega)"
+							value="@load(vm.dto.formaEntrega)">
+							<template name="model">
+								<comboitem label="@load(each)"></comboitem>
+							</template>
+						</combobox>
 					</vlayout>
+					<cell colspan="2">				
+					<vlayout>
+						<div />
+						<field value="Datos del Vehículo" />
+						<hlayout hflex="true">
+							<combobox hflex="true"
+								value="@load(vm.dto.vehiculoTipo.descripcion)"
+								model="@load(vm.vehiculoTipos)" placeholder="Tipo.."
+								selectedItem="@bind(vm.dto.vehiculoTipo)"
+								instant="true">
+								<template name="model">
+									<comboitem label="@load(each.descripcion)"></comboitem>
+								</template>
+							</combobox>
+							<combobox hflex="true"
+								value="@load(vm.dto.vehiculoMarca.descripcion)"
+								model="@load(vm.vehiculoMarcas)" placeholder="Marca.."
+								selectedItem="@bind(vm.dto.vehiculoMarca)"
+								instant="true">
+								<template name="model">
+									<comboitem label="@load(each.descripcion)"></comboitem>
+								</template>
+							</combobox>
+							<combobox hflex="true"
+								value="@load(vm.dto.vehiculoModelo.descripcion)"
+								model="@load(vm.vehiculoModelos)" placeholder="Modelo.."
+								selectedItem="@bind(vm.dto.vehiculoModelo)"
+								instant="true">
+								<template name="model">
+									<comboitem label="@load(each.descripcion)"></comboitem>
+								</template>
+							</combobox>
+						</hlayout>
+					</vlayout>
+					</cell>
 					<cell colspan="2">
 						<vlayout>
 							<div />
@@ -275,6 +299,7 @@
 				<listheader label="@load(vm.labelImporte)" width="120px"
 					style="text-align:center" align="right" />
 				<listheader label="IVA" width="50px" align="center" />
+				<listheader label="" width="50px" align="center" />
 			</listhead>
 			<template name="model">
 				<listitem
@@ -335,6 +360,13 @@
 							visible="@load(!vm.ventaMonedaLocal)" />
 					</listcell>
 					<listcell label="@load(each.tipoIVA.sigla)" />
+					<listcell>
+						<a onClick="@command('informacionVehiculo', parent=self, comp=pop_vehiculo, item=each)">
+						<html>
+							<i class="fas fa-car fa-lg"></i>
+						</html>
+						</a>
+					</listcell>
 				</listitem>
 			</template>
 			<listfoot>
@@ -422,6 +454,25 @@
         		<img id="foto" style ="height:470px; width:600px;" alt="" 
         			onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
     		</html>
+		</popup>
+		
+		<popup id="pop_vehiculo" width="250px" sclass="rounded">
+			<grid sclass="vgrid" hflex="true" vflex="true">
+				<rows>
+					<row>
+						<field value="Tipo:" />
+						<label value="@load(vm.selectedItem.vehiculoTipo.descripcion)"></label>
+					</row>
+					<row>
+						<field value="Marca:" />
+						<label value="@load(vm.selectedItem.vehiculoMarca.descripcion)"></label>
+					</row>
+					<row>
+						<field value="Modelo:" />
+						<label value="@load(vm.selectedItem.vehiculoModelo.descripcion)"></label>
+					</row>
+				</rows>
+			</grid>
 		</popup>
 		
 		<script>

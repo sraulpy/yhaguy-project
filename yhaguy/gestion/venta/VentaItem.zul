@@ -155,6 +155,46 @@
 						sclass="label-moneda"/>					
 				</hlayout>
 			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<div></div>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<div></div>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<field value="Datos del Vehículo:" />
+				<cell colspan="3">
+				<hlayout>
+					<combobox hflex="true" placeholder="Tipo.."
+						value="@load(vm.det.vehiculoTipo.descripcion)"
+						model="@load(vm.vehiculoTipos)"
+						selectedItem="@bind(vm.det.vehiculoTipo)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+					<combobox hflex="true" placeholder="Marca.."
+						value="@load(vm.det.vehiculoMarca.descripcion)"
+						model="@load(vm.vehiculoMarcas)"
+						selectedItem="@bind(vm.det.vehiculoMarca)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>	
+					</combobox>
+					<combobox hflex="true" placeholder="Modelo.."
+						value="@load(vm.det.vehiculoModelo.descripcion)"
+						model="@load(vm.vehiculoModelos)"
+						selectedItem="@bind(vm.det.vehiculoModelo)"
+						instant="true">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>				
+				</hlayout>
+				</cell>
+			</row>
 		</rows>
 	</grid>
 	<style>
