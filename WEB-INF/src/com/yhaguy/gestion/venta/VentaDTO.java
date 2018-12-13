@@ -20,6 +20,9 @@ import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.HistoricoLineaCredito;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.VehiculoMarca;
+import com.yhaguy.domain.VehiculoModelo;
+import com.yhaguy.domain.VehiculoTipo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.comun.ReservaDTO;
@@ -75,6 +78,11 @@ public class VentaDTO extends DTO {
 	private String chapaVehiculo = "";
 
 	private ReservaDTO reserva;
+	
+	private VehiculoTipo vehiculoTipo;
+	private VehiculoMarca vehiculoMarca;
+	private VehiculoModelo vehiculoModelo;
+	private String formaEntrega = "";
 
 	private List<VentaDetalleDTO> detalles = new ArrayList<VentaDetalleDTO>();	
 	private List<ReciboFormaPagoDTO> formasPago = new ArrayList<ReciboFormaPagoDTO>();	
@@ -871,5 +879,37 @@ public class VentaDTO extends DTO {
 
 	public List<VentaDetalleDTO> getDetalles() {
 		return detalles;
+	}
+
+	public VehiculoTipo getVehiculoTipo() {
+		return vehiculoTipo;
+	}
+
+	public void setVehiculoTipo(VehiculoTipo vehiculoTipo) {
+		this.vehiculoTipo = vehiculoTipo;
+	}
+
+	public VehiculoMarca getVehiculoMarca() {
+		return vehiculoMarca;
+	}
+
+	public void setVehiculoMarca(VehiculoMarca vehiculoMarca) {
+		this.vehiculoMarca = vehiculoMarca;
+	}
+
+	public VehiculoModelo getVehiculoModelo() {
+		return vehiculoModelo;
+	}
+
+	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
+		this.vehiculoModelo = vehiculoModelo;
+	}
+
+	public String getFormaEntrega() {
+		return formaEntrega;
+	}
+
+	public void setFormaEntrega(String formaEntrega) {
+		this.formaEntrega = formaEntrega;
 	}
 }

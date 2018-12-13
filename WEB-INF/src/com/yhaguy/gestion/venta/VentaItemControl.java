@@ -43,6 +43,9 @@ import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
+import com.yhaguy.domain.VehiculoMarca;
+import com.yhaguy.domain.VehiculoModelo;
+import com.yhaguy.domain.VehiculoTipo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
@@ -734,6 +737,27 @@ public class VentaItemControl extends SoloViewModel {
 	
 	public UtilDTO getUtilDto(){
 		return (UtilDTO) this.getDtoUtil();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<VehiculoTipo> getVehiculoTipos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoTipo.class.getName());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<VehiculoMarca> getVehiculoMarcas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoMarca.class.getName());
+	}
+	
+	@DependsOn("det.vehiculoMarca")
+	public List<VehiculoModelo> getVehiculoModelos() throws Exception {
+		if (dto.getVehiculoMarca() == null) {
+			return new ArrayList<VehiculoModelo>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getVehiculoModelos(this.det.getVehiculoMarca().getId());
 	}
 	
 	public MyArray getMoneda(){

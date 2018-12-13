@@ -7,6 +7,9 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.VehiculoMarca;
+import com.yhaguy.domain.VehiculoModelo;
+import com.yhaguy.domain.VehiculoTipo;
 
 @SuppressWarnings("serial")
 public class VentaDetalleDTO extends DTO {
@@ -41,6 +44,10 @@ public class VentaDetalleDTO extends DTO {
 	private boolean impresionDescuento = false;
 	
 	private String ubicacion = "SIN UBICACIÓN..";
+	
+	private VehiculoTipo vehiculoTipo;
+	private VehiculoMarca vehiculoMarca;
+	private VehiculoModelo vehiculoModelo;
 	
 	/**
 	 * Determina hasta que porcentaje de descuento 
@@ -398,5 +405,29 @@ public class VentaDetalleDTO extends DTO {
 
 	public void setCantidadEntregada(long cantidadEntregada) {
 		this.cantidadEntregada = cantidadEntregada;
+	}
+
+	public VehiculoTipo getVehiculoTipo() {
+		return vehiculoTipo;
+	}
+
+	public void setVehiculoTipo(VehiculoTipo vehiculoTipo) {
+		this.vehiculoTipo = vehiculoTipo;
+	}
+
+	public VehiculoMarca getVehiculoMarca() {
+		return vehiculoMarca;
+	}
+
+	public void setVehiculoMarca(VehiculoMarca vehiculoMarca) {
+		this.vehiculoMarca = vehiculoMarca;
+	}
+
+	public VehiculoModelo getVehiculoModelo() {
+		return vehiculoModelo;
+	}
+
+	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
+		this.vehiculoModelo = vehiculoModelo;
 	}
 }

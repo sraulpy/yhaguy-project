@@ -28,7 +28,7 @@ public class AssemblerVenta extends Assembler {
 			"numeroPresupuesto", "numeroPedido", "numeroFactura", "numeroPlanillaCaja",
 			"totalImporteGs", "totalImporteDs", "reparto",
 			"puntoPartida", "fechaTraslado", "fechaFinTraslado", "repartidor",
-			"cedulaRepartidor", "marcaVehiculo", "chapaVehiculo", "denominacion", "validez" };
+			"cedulaRepartidor", "marcaVehiculo", "chapaVehiculo", "denominacion", "validez", "formaEntrega" };
 
 	private static String[] attCliente = { "codigoEmpresa", "razonSocial",
 			"ruc", "idEmpresa", "tipoCliente", "direccion", "telefono",
@@ -38,8 +38,7 @@ public class AssemblerVenta extends Assembler {
 
 	private static String[] attCondicionPago = { "descripcion", "plazo", "cuotas", "diasEntreCuotas" };
 
-	private static String[] attTipoMovimiento = { "descripcion", "sigla",
-			"clase", "tipoIva" };
+	private static String[] attTipoMovimiento = { "descripcion", "sigla", "clase", "tipoIva" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoP) throws Exception {
@@ -71,6 +70,10 @@ public class AssemblerVenta extends Assembler {
 
 		this.listaDTOToListaDomain(dto, domain, "detalles", true, true,
 				new AssemblerVentaPedidoDetalle());
+		
+		domain.setVehiculoTipo(dto.getVehiculoTipo());
+		domain.setVehiculoMarca(dto.getVehiculoMarca());
+		domain.setVehiculoModelo(dto.getVehiculoModelo());
 
 		// genera la venta fiscal..
 		if ((dto.esNuevo() == true)
@@ -109,6 +112,10 @@ public class AssemblerVenta extends Assembler {
 				new AssemblerReciboFormaPago(dto.getNumero()));
 		this.listaDomainToListaDTO(dom, dto, "detalles",
 				new AssemblerVentaPedidoDetalle());
+		
+		dto.setVehiculoTipo(dom.getVehiculoTipo());
+		dto.setVehiculoMarca(dom.getVehiculoMarca());
+		dto.setVehiculoModelo(dom.getVehiculoModelo());
 
 		return dto;
 	}
@@ -194,6 +201,10 @@ class AssemblerVentaPedidoDetalle extends Assembler {
 		this.myArrayToDomain(dto, domain, "articulo");
 		this.myArrayToDomain(dto, domain, "listaPrecio");
 		this.myPairToDomain(dto, domain, "tipoIVA");
+		
+		domain.setVehiculoTipo(dto.getVehiculoTipo());
+		domain.setVehiculoMarca(dto.getVehiculoMarca());
+		domain.setVehiculoModelo(dto.getVehiculoModelo());
 
 		return domain;
 	}
@@ -202,6 +213,7 @@ class AssemblerVentaPedidoDetalle extends Assembler {
 	public DTO domainToDto(Domain domain) throws Exception {
 		VentaDetalleDTO dto = (VentaDetalleDTO) getDTO(domain,
 				VentaDetalleDTO.class);
+		VentaDetalle dom = (VentaDetalle) domain;
 
 		this.copiarValoresAtributos(domain, dto, ATT_IGUALES);
 		this.domainToMyArray(domain, dto, "articulo", ATT_ARTICULO);
@@ -209,6 +221,10 @@ class AssemblerVentaPedidoDetalle extends Assembler {
 		this.domainToMyPair(domain, dto, "tipoIVA");
 		
 		dto.setUbicacion(this.getUbicacion(dto.getArticulo().getId()));
+		
+		dto.setVehiculoTipo(dom.getVehiculoTipo());
+		dto.setVehiculoMarca(dom.getVehiculoMarca());
+		dto.setVehiculoModelo(dom.getVehiculoModelo());
 		
 		return dto;
 	}

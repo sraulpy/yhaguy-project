@@ -50,6 +50,9 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.VehiculoMarca;
+import com.yhaguy.domain.VehiculoModelo;
+import com.yhaguy.domain.VehiculoTipo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -96,6 +99,8 @@ public class VentaControlBody extends BodyApp {
 	private List<VentaDetalleDTO> selectedItems;
 	private VentaDetalleDTO nvoItem;
 	private ReciboFormaPagoDTO nvoFormaPago = new ReciboFormaPagoDTO();
+	
+	private VentaDetalleDTO selectedItem;
 	
 	@Wire
 	private Textbox txNro;
@@ -294,6 +299,13 @@ public class VentaControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		double tc = rr.getTipoCambioVenta();
 		this.dto.setTipoCambio(tc);
+	}
+	
+	@Command
+	@NotifyChange("selectedItem")
+	public void informacionVehiculo(@BindingParam("parent") Component parent, @BindingParam("comp") Popup comp, @BindingParam("item") VentaDetalleDTO item) {
+		this.selectedItem = item;
+		comp.open(parent, "after_end");
 	}
 	
 	/***************************************************************/
@@ -848,6 +860,9 @@ public class VentaControlBody extends BodyApp {
 		det.setTipoIVA(this.getIva10());
 		det.setListaPrecio(this.getListaPrecio());
 		det.getArticulo().setPos5(false);
+		det.setVehiculoTipo(this.dto.getVehiculoTipo());
+		det.setVehiculoMarca(this.dto.getVehiculoMarca());
+		det.setVehiculoModelo(this.dto.getVehiculoModelo());
 		boolean ok = this.abrirVentanaInsertarDetalle(det, true);
 		if (ok == true){
 			this.dto.getDetalles().add(det);
@@ -1291,6 +1306,14 @@ public class VentaControlBody extends BodyApp {
 		out.setDeposito(deposito);
 		out.setModoVenta(this.getUsuarioPropiedad().getModoVenta(utilDto.getModosVenta()));
 		
+		if (this.getAcceso().getSucursalOperativa().getId().longValue() == SucursalApp.ID_MCAL) {
+			out.setFormaEntrega(Venta.FORMA_ENTREGA_SERVICIO);
+		}
+		
+		if (this.getLoginNombre().equals("cayala")) {
+			out.setFormaEntrega(Venta.FORMA_ENTREGA_SERVICIO);
+		}
+		
 		// las ventas de yhaguy baterias se hacen por reparto..
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
 			out.setReparto(true);
@@ -1659,12 +1682,13 @@ public class VentaControlBody extends BodyApp {
 	
 	/************************ GETTER/SETTER ************************/
 	
-	@DependsOn({ "dto.cliente", "dto.vendedor", "dto.deposito" })
+	@DependsOn({ "dto.cliente", "dto.vendedor", "dto.deposito", "dto.formaEntrega", "dto.vehiculoTipo", "dto.vehiculoMarca", "dto.vehiculoModelo" })
 	public boolean isDetalleVisible() {
 		return (this.dto.getCliente().esNuevo() == false
 				|| this.dto.getClienteOcasional() != null)
 					&& (!this.dto.getVendedor().esNuevo())
-					&& (this.dto.getDeposito().esNuevo() == false);
+					&& (this.dto.getDeposito().esNuevo() == false)
+					&& this.isDatosVehiculosOK();
 	}
 	
 	@DependsOn({ "deshabilitado", "selectedItems" })
@@ -1682,6 +1706,43 @@ public class VentaControlBody extends BodyApp {
 	@DependsOn({ "deshabilitado", "dto" })
 	public boolean isCerrarDisabled() throws Exception {
 		return this.isDeshabilitado() || this.dto.esNuevo() || Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+	}
+	
+	
+	private boolean isDatosVehiculosOK() {
+		if (this.dto.getFormaEntrega().equals(Venta.FORMA_ENTREGA_SERVICIO)) {
+			return this.dto.getVehiculoTipo() != null && this.dto.getVehiculoMarca() != null && this.dto.getVehiculoModelo() != null;
+		} else {
+			return !this.dto.getFormaEntrega().trim().isEmpty();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<VehiculoTipo> getVehiculoTipos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoTipo.class.getName());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<VehiculoMarca> getVehiculoMarcas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(VehiculoMarca.class.getName());
+	}
+	
+	@DependsOn("dto.vehiculoMarca")
+	public List<VehiculoModelo> getVehiculoModelos() throws Exception {
+		if (dto.getVehiculoMarca() == null) {
+			return new ArrayList<VehiculoModelo>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getVehiculoModelos(this.dto.getVehiculoMarca().getId());
+	}
+	
+	/**
+	 * @return las formas de entrega..
+	 */
+	public List<String> getFormasEntrega() {
+		return Venta.getFormasEntrega();
 	}
 	
 	/**
@@ -1830,6 +1891,14 @@ public class VentaControlBody extends BodyApp {
 	
 	public MyArray getSelectedChequera() {
 		return new MyArray();
+	}
+
+	public VentaDetalleDTO getSelectedItem() {
+		return selectedItem;
+	}
+
+	public void setSelectedItem(VentaDetalleDTO selectedItem) {
+		this.selectedItem = selectedItem;
 	}
 }
 
