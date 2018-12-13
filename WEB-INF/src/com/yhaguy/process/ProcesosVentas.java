@@ -2,14 +2,17 @@ package com.yhaguy.process;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.coreweb.domain.Tipo;
 import com.coreweb.domain.TipoTipo;
 import com.coreweb.extras.csv.CSV;
 import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.Funcionario;
@@ -20,6 +23,8 @@ import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
@@ -29,6 +34,7 @@ public class ProcesosVentas {
 	
 	static final String SRC_RUBROS = "./WEB-INF/docs/procesos/RUBROS.csv";
 	static final String SRC_EMPRESAS_RUBROS = "./WEB-INF/docs/procesos/EMPRESAS_RUBROS.csv";
+	static final String SRC_MIGRACION_VTAS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -274,6 +280,67 @@ public class ProcesosVentas {
 		}
 	}
 	
+	/**
+	 * asigna rubros a clientes..
+	 */
+	public static void migrarVentas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "FECHA", CSV.STRING }, { "NROMOVIMIENTO", CSV.STRING }, { "RUC", CSV.STRING }, { "PERSONA", CSV.STRING },
+				{ "IDTIPOMOVIMIENTO", CSV.STRING }, { "IDSUCURSAL", CSV.STRING }, { "IDMONEDA", CSV.STRING },
+				{ "TOTALGRAVADA", CSV.STRING }, { "TOTALGRAVADAUSD", CSV.STRING }, { "TOTALIVA", CSV.STRING }};
+		
+		Map<String, String> rucs = new HashMap<String, String>();
+		Tipo gs = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+		
+		SucursalApp central = rr.getSucursalAppById(2);
+		SucursalApp gam = rr.getSucursalAppById(4);
+		SucursalApp mcal = rr.getSucursalAppById(3);
+		TipoMovimiento contado = rr.getTipoMovimientoById(18);
+		TipoMovimiento credito = rr.getTipoMovimientoById(19);
+		Tipo iva10 = rr.getTipoById(124);
+		Articulo articulo = rr.getArticulo("@MIGRACION");
+		
+		CSV csv = new CSV(cab, det, SRC_MIGRACION_VTAS);
+		csv.start();
+		while (csv.hashNext()) {
+			String fecha = csv.getDetalleString("FECHA");	
+			String nro = csv.getDetalleString("NROMOVIMIENTO");	
+			String ruc = csv.getDetalleString("RUC");	
+			String razonsocial = csv.getDetalleString("PERSONA");
+			String suc = csv.getDetalleString("IDSUCURSAL");	
+			String idTm = csv.getDetalleString("IDTIPOMOVIMIENTO"); 
+			String gravada = csv.getDetalleString("TOTALGRAVADA");
+			String iva = csv.getDetalleString("TOTALIVA");
+			Cliente cliente = rr.getClienteByRuc(ruc);
+			double gravada_ = Double.parseDouble(gravada.replace(",", "."));
+			double iva_ = Double.parseDouble(iva.replace(",", "."));
+			
+			Set<VentaDetalle> dets = new HashSet<VentaDetalle>();
+			VentaDetalle item = new VentaDetalle();
+			item.setArticulo(articulo);
+			item.setCantidad(1);
+			item.setPrecioGs(gravada_ + iva_);
+			item.setTipoIVA(iva10);
+			dets.add(item);
+			
+			Venta vta = new Venta();
+			vta.setCliente(cliente);
+			vta.setDenominacion(razonsocial);
+			vta.setFecha(Utiles.getFecha(fecha, "MM/dd/yyyy hh:mm:ss"));
+			vta.setMoneda(gs);
+			vta.setNumero("001-001-" + nro);
+			vta.setObservacion("MIGRACION");
+			vta.setSucursal(suc.equals("1") ? central : (suc.equals("2") ? mcal : gam));
+			vta.setTipoMovimiento(idTm.equals("43") ? contado : credito);
+			vta.setTotalImporteGs(gravada_ + iva_);
+			vta.setDetalles(dets);
+			rr.saveObject(vta, "migracion");
+			System.out.println(vta.getTotalImporteGs());
+		}
+	}
+	
 	public static void addHistoricoVentaVendedor() {
 		
 	}
@@ -286,7 +353,8 @@ public class ProcesosVentas {
 			//ProcesosVentas.setNumeroRecibosCobros();
 			//ProcesosVentas.addRubros(SRC_RUBROS);
 			//ProcesosVentas.setRubros(SRC_EMPRESAS_RUBROS);
-			ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
+			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
+			ProcesosVentas.migrarVentas();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
