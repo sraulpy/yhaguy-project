@@ -15,6 +15,7 @@
 		<property name="prioridad" />
 		<property name="completo" />
 		<property name="descuentoMayorista" />
+		<property name="nombreEmpresa" />
 
 		<property name="observaciones" column="observaciones" type="text" length="1000" />
 

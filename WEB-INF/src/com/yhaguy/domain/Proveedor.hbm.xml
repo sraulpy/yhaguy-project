@@ -15,6 +15,7 @@
 		<property name="completo" />
 
 		<property name="emailsLista" />
+		<property name="nombreEmpresa" />
 
 
 		<many-to-one name="empresa" class="com.yhaguy.domain.Empresa"

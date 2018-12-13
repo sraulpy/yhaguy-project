@@ -13,6 +13,7 @@
 
 
 		<property name="correoFuncionario" />
+		<property name="nombreEmpresa" />
 		
 		<property name="vendedor">
 			<column name="vendedor" not-null="true" default="false" />

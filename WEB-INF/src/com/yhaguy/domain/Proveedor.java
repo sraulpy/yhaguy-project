@@ -22,6 +22,7 @@ public class Proveedor extends Domain {
 	long prioridad = 0;
 	boolean completo = false;
 	
+	private String nombreEmpresa;
 	private String descripcion;
 	
 	@Override
@@ -184,5 +185,13 @@ public class Proveedor extends Domain {
 	public String getDescripcion() {
 		this.descripcion = this.empresa.getRazonSocial();
 		return this.descripcion;
+	}
+
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
 	}
 }

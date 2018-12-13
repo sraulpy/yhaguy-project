@@ -22,6 +22,8 @@ public class Cliente extends Domain {
 	private double limiteCredito;
 	private double descuentoMayorista;
 	
+	private String nombreEmpresa;
+	
 	private Empresa empresa;
 	private Tipo estadoCliente;
 	private Tipo categoriaCliente;
@@ -331,5 +333,13 @@ public class Cliente extends Domain {
 
 	public void setDescuentoMayorista(double descuentoMayorista) {
 		this.descuentoMayorista = descuentoMayorista;
+	}
+
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
 	}
 }
