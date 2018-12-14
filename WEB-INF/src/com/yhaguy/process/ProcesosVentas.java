@@ -289,9 +289,8 @@ public class ProcesosVentas {
 		String[][] cab = { { "Empresa", CSV.STRING } };
 		String[][] det = { { "FECHA", CSV.STRING }, { "NROMOVIMIENTO", CSV.STRING }, { "RUC", CSV.STRING }, { "PERSONA", CSV.STRING },
 				{ "IDTIPOMOVIMIENTO", CSV.STRING }, { "IDSUCURSAL", CSV.STRING }, { "IDMONEDA", CSV.STRING },
-				{ "TOTALGRAVADA", CSV.STRING }, { "TOTALGRAVADAUSD", CSV.STRING }, { "TOTALIVA", CSV.STRING }};
+				{ "TOTALGRAVADA", CSV.STRING }, { "TOTALGRAVADAUSD", CSV.STRING }, { "TOTALIVA", CSV.STRING }, { "TOTALGRAVADA_", CSV.STRING }};
 		
-		Map<String, String> rucs = new HashMap<String, String>();
 		Tipo gs = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
 		
 		SucursalApp central = rr.getSucursalAppById(2);
@@ -311,7 +310,7 @@ public class ProcesosVentas {
 			String razonsocial = csv.getDetalleString("PERSONA");
 			String suc = csv.getDetalleString("IDSUCURSAL");	
 			String idTm = csv.getDetalleString("IDTIPOMOVIMIENTO"); 
-			String gravada = csv.getDetalleString("TOTALGRAVADA");
+			String gravada = csv.getDetalleString("TOTALGRAVADA_");
 			String iva = csv.getDetalleString("TOTALIVA");
 			Cliente cliente = rr.getClienteByRuc(ruc);
 			double gravada_ = Double.parseDouble(gravada.replace(",", "."));
