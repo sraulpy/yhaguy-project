@@ -35,6 +35,7 @@ public class ProcesosVentas {
 	static final String SRC_RUBROS = "./WEB-INF/docs/procesos/RUBROS.csv";
 	static final String SRC_EMPRESAS_RUBROS = "./WEB-INF/docs/procesos/EMPRESAS_RUBROS.csv";
 	static final String SRC_MIGRACION_VTAS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS.csv";
+	static final String SRC_MIGRACION_VTAS_ANULADOS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS_ANULADOS.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -301,7 +302,7 @@ public class ProcesosVentas {
 		Tipo iva10 = rr.getTipoById(124);
 		Articulo articulo = rr.getArticulo("@MIGRACION");
 		
-		CSV csv = new CSV(cab, det, SRC_MIGRACION_VTAS);
+		CSV csv = new CSV(cab, det, SRC_MIGRACION_VTAS_ANULADOS);
 		csv.start();
 		while (csv.hashNext()) {
 			String fecha = csv.getDetalleString("FECHA");	
@@ -335,6 +336,7 @@ public class ProcesosVentas {
 			vta.setTipoMovimiento(idTm.equals("43") ? contado : credito);
 			vta.setTotalImporteGs(gravada_ + iva_);
 			vta.setDetalles(dets);
+			vta.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO));
 			rr.saveObject(vta, "migracion");
 			System.out.println(vta.getTotalImporteGs());
 		}
