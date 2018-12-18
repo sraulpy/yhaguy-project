@@ -9288,7 +9288,8 @@ public class ReportesViewModel extends SimpleViewModel {
 			Date hasta = filtro.getFechaHasta();
 
 			List<Venta> ventas = rr.getVentas(desde, hasta, 0);
-			InformeHechauka.generarInformeHechauka(ventas);
+			List<NotaCredito> notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0);
+			InformeHechauka.generarInformeHechauka(ventas, notasCredito);
 			Clients.showNotification("Informe Hechauka generado..");
 		}
 
@@ -13545,9 +13546,10 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 		this.gastos = gastos;
 		this.importaciones = importaciones;
 		for (Gasto gasto : gastos) {
+			String timbrado = gasto.getTimbrado() != null ? gasto.getTimbrado().getNumero() : "";
 			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY),
 					Utiles.getDateToString(gasto.getModificado(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
-					gasto.getTipoMovimiento().getDescripcion(), gasto.getTimbrado().getNumero(),
+					gasto.getTipoMovimiento().getDescripcion(), timbrado,
 					gasto.getProveedor().getRazonSocial(), gasto.getProveedor().getRuc(), gasto.getGravada10(),
 					gasto.getGravada5(), gasto.getIva10(), gasto.getIva5(), gasto.getExenta(),
 					gasto.getIva5() + gasto.getIva10() + gasto.getExenta() + gasto.getGravada10() + gasto.getGravada5(),
