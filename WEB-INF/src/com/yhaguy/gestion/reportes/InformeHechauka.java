@@ -210,9 +210,7 @@ public class InformeHechauka {
 			String ruc = gasto.getProveedor().getRuc();		
 			
 			if (ruc.equals("80029222-7")) {				
-				if (ruc.isEmpty()) {
-					ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
-				}
+				ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
 
 				String col1 = "2";
 				String col2 = ruc.substring(0, ruc.length() - 2);
@@ -221,8 +219,8 @@ public class InformeHechauka {
 				String col5 = "4";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
-				double iva10 = redondear(gasto.getBaseImponible());
-				double gravada = redondear(gasto.getGravada10());
+				double iva10 = redondear(gasto.getIva10());
+				double gravada = redondear(gasto.getBaseImponible());
 				double importe = redondear(gravada + iva10);
 				long col10 = 0;
 				long col11 = 0;
