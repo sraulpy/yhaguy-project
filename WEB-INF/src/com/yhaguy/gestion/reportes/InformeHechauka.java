@@ -11,6 +11,9 @@ import org.zkoss.zul.Filedownload;
 
 import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.Gasto;
+import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.util.Utiles;
@@ -125,16 +128,17 @@ public class InformeHechauka {
 	/**
 	 * Generar informe Hechauka..
 	 */
-	public static synchronized void generarInformeHechaukaNotaCred(List<NotaCredito> ncs) throws Exception {
+	public static synchronized void generarInformeHechaukaCompras(List<NotaCredito> ncs,
+			List<CompraLocalFactura> compras, List<Gasto> gastos, List<ImportacionFactura> importaciones) throws Exception {
 		Misc misc = new Misc();
 		List<String> objects = new ArrayList<String>();
 
 		int registros = 0;
 		double montoTotal = 0;
-
-		for (NotaCredito nc : ncs) {
-
-			String ruc = nc.getCliente().getRuc();
+		
+		for (CompraLocalFactura compra : compras) {
+			
+			String ruc = compra.getProveedor().getRuc();			
 			if (ruc.isEmpty()) {
 				ruc = Configuracion.RUC_EMPRESA_LOCAL;
 			}
@@ -142,36 +146,137 @@ public class InformeHechauka {
 			String col1 = "2";
 			String col2 = ruc.substring(0, ruc.length() - 2);
 			String dv = ruc.substring(ruc.length() - 1);
-			String rSocial = nc.getCliente().getRazonSocial();
+			String rSocial = compra.getProveedor().getRazonSocial();
 			String col5 = "1";
-			String nro = nc.getNumero();
-			String fecha = misc.dateToString(nc.getFechaEmision(), Misc.DD_MM_YYYY).replace("-", "/");
-			double importe = nc.isAnulado() ? 0 : redondear(nc.getImporteGs());
-			double iva10 = nc.isAnulado() ? 0 : redondear(misc.calcularIVA(importe, 10));
-			double gravada = importe - iva10;
+			String nro = compra.getNumero();
+			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
+			double importe = redondear(compra.getImporteGs());
+			double iva10 = redondear(misc.calcularIVA(importe, 10));
+			double gravada = redondear(importe - iva10);
 			long col10 = 0;
 			long col11 = 0;
 			long col12 = 0;
-			long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
+			long col14 = compra.isContado() ? 1 : 2;
 			long col15 = 0;
 			long col16 = 0;
-			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
-					+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
-					+ FORMATTER.format(gravada) + "" + " \t"
-					+ FORMATTER.format(iva10) + "" + "\t"
-					+ FORMATTER.format(col10) + "" + "\t"
-					+ FORMATTER.format(col11) + "" + "\t"
-					+ FORMATTER.format(col12) + "" + "\t"
-					+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
+					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
 					+ col15 + "" + "\t" + col16 + "" + "\r\n";
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
 		}
+		
+		for (Gasto gasto : gastos) {
+			
+			String ruc = gasto.getProveedor().getRuc();			
+			if (ruc.isEmpty()) {
+				ruc = Configuracion.RUC_EMPRESA_LOCAL;
+			}
+
+			String col1 = "2";
+			String col2 = ruc.substring(0, ruc.length() - 2);
+			String dv = ruc.substring(ruc.length() - 1);
+			String rSocial = gasto.getProveedor().getRazonSocial();
+			String col5 = "2";
+			String nro = gasto.getNumeroFactura();
+			String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
+			double importe = redondear(gasto.getImporteGs());
+			double iva10 = redondear(gasto.getIva10());
+			double gravada = redondear(gasto.getGravada10());
+			long col10 = 0;
+			long col11 = 0;
+			long col12 = 0;
+			long col14 = gasto.isContado() ? 1 : 2;
+			long col15 = 0;
+			long col16 = 0;
+			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
+					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+					+ col15 + "" + "\t" + col16 + "" + "\r\n";
+			objects.add(object);
+			registros++;
+			montoTotal += importe;
+		}
+		
+		for (ImportacionFactura compra : importaciones) {
+			
+			String ruc = Configuracion.RUC_EMPRESA_EXTERIOR;			
+			if (ruc.isEmpty()) {
+				ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
+			}
+
+			String col1 = "2";
+			String col2 = ruc.substring(0, ruc.length() - 2);
+			String dv = ruc.substring(ruc.length() - 1);
+			String rSocial = compra.getProveedor().getRazonSocial();
+			String col5 = "3s";
+			String nro = compra.getNumero();
+			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
+			double importe = redondear(compra.getTotalImporteDs() * compra.getPorcProrrateo());
+			double iva10 = 0.0;
+			double gravada = 0.0;
+			long col10 = 0;
+			long col11 = 0;
+			long col12 = 0;
+			long col14 = 1;
+			long col15 = 0;
+			long col16 = 0;
+			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
+					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+					+ col15 + "" + "\t" + col16 + "" + "\r\n";
+			objects.add(object);
+			registros++;
+			montoTotal += importe;
+		}
+
+		for (NotaCredito nc : ncs) {
+			
+			if (!nc.isAnulado()) {
+				String ruc = nc.getCliente().getRuc();
+				if (ruc.isEmpty()) {
+					ruc = Configuracion.RUC_EMPRESA_LOCAL;
+				}
+
+				String col1 = "2";
+				String col2 = ruc.substring(0, ruc.length() - 2);
+				String dv = ruc.substring(ruc.length() - 1);
+				String rSocial = nc.getCliente().getRazonSocial();
+				String col5 = "3";
+				String nro = nc.getNumero();
+				String fecha = misc.dateToString(nc.getFechaEmision(), Misc.DD_MM_YYYY).replace("-", "/");
+				double importe = redondear(nc.getImporteGs());
+				double iva10 = redondear(nc.getTotalIva10());
+				double gravada = redondear(nc.getTotalGravado10());
+				long col10 = 0;
+				long col11 = 0;
+				long col12 = 0;
+				long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
+				long col15 = 0;
+				long col16 = 0;
+				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
+						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
+						+ FORMATTER.format(gravada) + "" + " \t"
+						+ FORMATTER.format(iva10) + "" + "\t"
+						+ FORMATTER.format(col10) + "" + "\t"
+						+ FORMATTER.format(col11) + "" + "\t"
+						+ FORMATTER.format(col12) + "" + "\t"
+						+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+						+ col15 + "" + "\t" + col16 + "" + "\r\n";
+				objects.add(object);
+				registros++;
+				montoTotal += importe;
+			}			
+		}
 		saveArchivo(
 				objects,
 				getCabeceraNotaCred(registros, montoTotal),
-				"HechaukaNotasCredito-"
+				"HechaukaCompras-"
 						+ misc.dateToString(new Date(), Misc.DD_MM_YYYY));
 	}
 	
