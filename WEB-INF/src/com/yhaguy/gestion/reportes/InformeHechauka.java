@@ -259,7 +259,7 @@ public class InformeHechauka {
 			long col10 = 0;
 			long col11 = 0;
 			long col12 = 0;
-			long col14 = 1;
+			long col14 = 2;
 			long col15 = 0;
 			long col16 = 0;
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
