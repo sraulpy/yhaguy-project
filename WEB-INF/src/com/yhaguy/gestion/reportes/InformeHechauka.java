@@ -59,7 +59,7 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = venta.isVentaContado() ? 1 : 2;
 				long col15 = 0;
-				long col16 = 0;
+				String col16 = venta.getTimbrado();
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 						+ FORMATTER.format(gravada) + "" + " \t"
@@ -99,7 +99,7 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = 2;
 				long col15 = 0;
-				long col16 = 0;
+				String col16 = nc.getTimbrado_();
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 						+ FORMATTER.format(gravada) + "" + " \t"
@@ -158,7 +158,7 @@ public class InformeHechauka {
 			long col12 = 0;
 			long col14 = compra.isContado() ? 1 : 2;
 			long col15 = 0;
-			long col16 = 0;
+			String col16 = compra.getTimbrado() != null? compra.getTimbrado().getNumero() : "";
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
@@ -193,7 +193,7 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = gasto.isContado() ? 1 : 2;
 				long col15 = 0;
-				long col16 = 0;
+				String col16 = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
@@ -227,7 +227,7 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = gasto.isContado() ? 1 : 2;
 				long col15 = 0;
-				long col16 = 0;
+				String col16 = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
@@ -295,7 +295,7 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
 				long col15 = 0;
-				long col16 = 0;
+				String col16 = nc.getTimbrado_();
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 						+ FORMATTER.format(gravada) + "" + " \t"
