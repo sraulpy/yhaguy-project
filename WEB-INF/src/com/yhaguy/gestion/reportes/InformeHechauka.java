@@ -37,7 +37,7 @@ public class InformeHechauka {
 			if (!venta.isAnulado()) {
 				String rSocial = venta.getDenominacion() == null ? venta.getCliente().getRazonSocial() : venta.getDenominacion();
 				String ruc = venta.getCliente().getRuc();
-				if (ruc.isEmpty() || ruc == null || ruc.length() < 3) {
+				if (ruc.isEmpty() || ruc == null || ruc.length() < 3 || ruc.equals(Configuracion.RUC_EMPRESA_LOCAL)) {
 					ruc = Configuracion.RUC_EMPRESA_LOCAL;
 					rSocial = "IMPORTE CONSOLIDADO";
 				}
