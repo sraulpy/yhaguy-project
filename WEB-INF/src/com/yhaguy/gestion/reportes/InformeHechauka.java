@@ -35,7 +35,7 @@ public class InformeHechauka {
 		for (Venta venta : ventas) {
 
 			String ruc = venta.getCliente().getRuc();
-			if (ruc.isEmpty()) {
+			if (ruc.isEmpty() || ruc == null || ruc.length() < 3) {
 				ruc = Configuracion.RUC_EMPRESA_LOCAL;
 			}
 
