@@ -163,7 +163,7 @@ public class InformeHechauka {
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+					+ FORMATTER.format(col12) + "" + "\t" + col14 + "" + "\t"
 					+ col15 + "" + "\t" + col16 + "" + "\r\n";
 			objects.add(object);
 			registros++;
@@ -199,7 +199,7 @@ public class InformeHechauka {
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-						+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+						+ FORMATTER.format(col12) + "" + "\t" + col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
 				objects.add(object);
 				registros++;
@@ -234,7 +234,7 @@ public class InformeHechauka {
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-						+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+						+ FORMATTER.format(col12) + "" + "\t" + col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
 				objects.add(object);
 				registros++;
@@ -269,7 +269,7 @@ public class InformeHechauka {
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+					+ FORMATTER.format(col12) + "" + "\t" + col14 + "" + "\t"
 					+ col15 + "" + "\t" + col16 + "" + "\r\n";
 			objects.add(object);
 			registros++;
@@ -308,7 +308,7 @@ public class InformeHechauka {
 						+ FORMATTER.format(col10) + "" + "\t"
 						+ FORMATTER.format(col11) + "" + "\t"
 						+ FORMATTER.format(col12) + "" + "\t"
-						+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+						+ col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
 				objects.add(object);
 				registros++;
