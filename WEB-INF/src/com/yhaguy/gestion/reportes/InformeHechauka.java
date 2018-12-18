@@ -221,9 +221,9 @@ public class InformeHechauka {
 				String col5 = "4";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
-				double importe = redondear(gasto.getImporteGs());
-				double iva10 = redondear(gasto.getIva10());
+				double iva10 = redondear(gasto.getBaseImponible());
 				double gravada = redondear(gasto.getGravada10());
+				double importe = redondear(gravada + iva10);
 				long col10 = 0;
 				long col11 = 0;
 				long col12 = 0;

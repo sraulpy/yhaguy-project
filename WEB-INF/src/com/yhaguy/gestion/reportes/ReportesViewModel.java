@@ -10572,7 +10572,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
 				List<Gasto> gastos = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal);
-				List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde_, hasta_);
+				List<ImportacionFactura> importaciones = new ArrayList<ImportacionFactura>();
+				
+				if (suc.getId().longValue() == SucursalApp.ID_CENTRAL) {
+					importaciones = rr.getLibroComprasImportacion(desde, hasta, desde_, hasta_);
+				}
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO_;
 				Map<String, Object> params = new HashMap<String, Object>();
