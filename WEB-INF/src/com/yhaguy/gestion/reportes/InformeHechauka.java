@@ -147,6 +147,7 @@ public class InformeHechauka {
 			String col2 = ruc.substring(0, ruc.length() - 2);
 			String dv = ruc.substring(ruc.length() - 1);
 			String rSocial = compra.getProveedor().getRazonSocial();
+			String timbrado = compra.getTimbrado() != null? compra.getTimbrado().getNumero() : "";
 			String col5 = "1";
 			String nro = compra.getNumero();
 			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -158,8 +159,8 @@ public class InformeHechauka {
 			long col12 = 0;
 			long col14 = compra.isContado() ? 1 : 2;
 			long col15 = 0;
-			String col16 = compra.getTimbrado() != null? compra.getTimbrado().getNumero() : "";
-			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+			long col16 = 0;
+			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
 					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
@@ -182,6 +183,7 @@ public class InformeHechauka {
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
 				String rSocial = gasto.getProveedor().getRazonSocial();
+				String timbrado = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
 				String col5 = "1";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -193,8 +195,8 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = gasto.isContado() ? 1 : 2;
 				long col15 = 0;
-				String col16 = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
-				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+				long col16 = 0;
+				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
 						+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
@@ -216,6 +218,7 @@ public class InformeHechauka {
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
 				String rSocial = "PROVEEDORES DEL EXTERIOR";
+				String timbrado = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
 				String col5 = "4";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -227,8 +230,8 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = gasto.isContado() ? 1 : 2;
 				long col15 = 0;
-				String col16 = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
-				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+				long col16 = 0;
+				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
 						+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
@@ -250,6 +253,7 @@ public class InformeHechauka {
 			String col2 = ruc.substring(0, ruc.length() - 2);
 			String dv = ruc.substring(ruc.length() - 1);
 			String rSocial = compra.getProveedor().getRazonSocial();
+			String timbrado = " ";
 			String col5 = "4";
 			String nro = compra.getNumero();
 			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -262,7 +266,7 @@ public class InformeHechauka {
 			long col14 = 2;
 			long col15 = 0;
 			long col16 = 0;
-			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + col5 + " \t" + nro + " \t"
+			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
 					+ FORMATTER.format(col12) + "" + "\t" + FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
@@ -284,6 +288,7 @@ public class InformeHechauka {
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
 				String rSocial = nc.getCliente().getRazonSocial();
+				String timbrado = nc.getTimbrado_();
 				String col5 = "3";
 				String nro = nc.getNumero();
 				String fecha = misc.dateToString(nc.getFechaEmision(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -295,8 +300,8 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
 				long col15 = 0;
-				String col16 = nc.getTimbrado_();
-				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
+				long col16 = 0;
+				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 						+ FORMATTER.format(gravada) + "" + " \t"
 						+ FORMATTER.format(iva10) + "" + "\t"
