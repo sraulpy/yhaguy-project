@@ -99,7 +99,7 @@ public class InformeHechauka {
 				long col12 = 0;
 				long col14 = 2;
 				long col15 = 0;
-				String col16 = nc.getTimbrado_();
+				String col16 = nc.getTimbrado() != null? nc.getTimbrado().getNumero() : "";
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 						+ FORMATTER.format(gravada) + "" + " \t"
