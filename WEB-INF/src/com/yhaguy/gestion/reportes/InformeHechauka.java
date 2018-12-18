@@ -33,41 +33,43 @@ public class InformeHechauka {
 		String periodo = "";
 
 		for (Venta venta : ventas) {
-
-			String ruc = venta.getCliente().getRuc();
-			if (ruc.isEmpty() || ruc == null || ruc.length() < 3) {
-				ruc = Configuracion.RUC_EMPRESA_LOCAL;
-			}
-
-			String col1 = "2";
-			String col2 = ruc.substring(0, ruc.length() - 2);
-			String dv = ruc.substring(ruc.length() - 1);
-			String rSocial = venta.getDenominacion() == null ? venta.getCliente().getRazonSocial() : venta.getDenominacion();
-			String col5 = "1";
-			String nro = venta.getNumero();
-			String fecha = misc.dateToString(venta.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
-			periodo = Utiles.getDateToString(venta.getFecha(), "yyyyMM");
-			double importe = venta.isAnulado() ? 0 : redondear(venta.getTotalImporteGs());
-			double iva10 = venta.isAnulado() ? 0 : redondear(misc.calcularIVA(importe, 10));
-			double gravada = importe - iva10;
-			long col10 = 0;
-			long col11 = 0;
-			long col12 = 0;
-			long col14 = venta.isVentaContado() ? 1 : 2;
-			long col15 = 0;
-			long col16 = 0;
-			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
-					+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
-					+ FORMATTER.format(gravada) + "" + " \t"
-					+ FORMATTER.format(iva10) + "" + "\t"
-					+ FORMATTER.format(col10) + "" + "\t"
-					+ FORMATTER.format(col11) + "" + "\t"
-					+ FORMATTER.format(col12) + "" + "\t"
-					+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
-					+ col15 + "" + "\t" + col16 + "" + "\r\n";
-			objects.add(object);
-			registros++;
-			montoTotal += importe;
+			
+			if (!venta.isAnulado()) {
+				String rSocial = venta.getDenominacion() == null ? venta.getCliente().getRazonSocial() : venta.getDenominacion();
+				String ruc = venta.getCliente().getRuc();
+				if (ruc.isEmpty() || ruc == null || ruc.length() < 3) {
+					ruc = Configuracion.RUC_EMPRESA_LOCAL;
+					rSocial = "IMPORTE CONSOLIDADO";
+				}
+				String col1 = "2";
+				String col2 = ruc.substring(0, ruc.length() - 2);
+				String dv = ruc.substring(ruc.length() - 1);
+				String col5 = "1";
+				String nro = venta.getNumero();
+				String fecha = misc.dateToString(venta.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
+				periodo = Utiles.getDateToString(venta.getFecha(), "yyyyMM");
+				double importe = venta.isAnulado() ? 0 : redondear(venta.getTotalImporteGs());
+				double iva10 = venta.isAnulado() ? 0 : redondear(misc.calcularIVA(importe, 10));
+				double gravada = importe - iva10;
+				long col10 = 0;
+				long col11 = 0;
+				long col12 = 0;
+				long col14 = venta.isVentaContado() ? 1 : 2;
+				long col15 = 0;
+				long col16 = 0;
+				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
+						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
+						+ FORMATTER.format(gravada) + "" + " \t"
+						+ FORMATTER.format(iva10) + "" + "\t"
+						+ FORMATTER.format(col10) + "" + "\t"
+						+ FORMATTER.format(col11) + "" + "\t"
+						+ FORMATTER.format(col12) + "" + "\t"
+						+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+						+ col15 + "" + "\t" + col16 + "" + "\r\n";
+				objects.add(object);
+				registros++;
+				montoTotal += importe;
+			}			
 		}
 		
 		String cabecera = Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? 
