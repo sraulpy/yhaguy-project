@@ -194,7 +194,7 @@ public class ControlBancoMovimiento extends Control {
 	/**
 	 * registra el cheque de tercero manual..
 	 */
-	public static void registrarChequeTerceroManual(MyArray cheque, String user) throws Exception {
+	public static void registrarChequeTerceroManual(MyArray cheque, String user, long idMoneda) throws Exception {
 		MyPair banco = (MyPair) cheque.getPos1();
 		String numero = (String) cheque.getPos2();
 		Date fecha = (Date) cheque.getPos3();
@@ -210,7 +210,7 @@ public class ControlBancoMovimiento extends Control {
 		ncheque.setFecha(fecha);
 		ncheque.setDiferido(!ncheque.isChequeAlDia(new Date()));
 		ncheque.setLibrado(cliente.getText().toUpperCase());
-		ncheque.setMoneda(rr.getMonedas().get(0));
+		ncheque.setMoneda(rr.getTipoById(idMoneda));
 		ncheque.setMonto(importe);
 		ncheque.setNumero(numero);
 		ncheque.setNumeroDeposito("");

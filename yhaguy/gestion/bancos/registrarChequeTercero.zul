@@ -58,8 +58,18 @@
 				</bandpopup>
 			</bandbox>
 		</row>
+		<row>
+			<field value="Moneda:" />
+			<combobox model="@load(vm.dato.monedas)" hflex="true"
+				selectedItem="@bind(vm.dato.selectedMoneda)"
+				instant="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
+				</template>
+			</combobox>
+		</row>
 			<row>
-				<field value="Importe Gs." />
+				<field value="Importe" />
 				<guaranibox value="@bind(vm.dato.nvoCheque.pos5)" />
 			</row>
 		</rows>

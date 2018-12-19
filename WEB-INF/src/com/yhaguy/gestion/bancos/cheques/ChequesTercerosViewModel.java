@@ -22,6 +22,7 @@ import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -73,6 +74,7 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 	private MyArray selectedCheque;
 	private String selectedFiltro = FILTRO_TODOS;
 	private MyArray nvoCheque;
+	private Tipo selectedMoneda;
 	
 	private double totalImporte = 0;
 	private Date fechaRechazo = new Date();
@@ -153,17 +155,21 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 	 * registra un nuevo cheque manual..
 	 */
 	private void registrarChequeTercero() throws Exception {	
+		long idMoneda = Configuracion.ID_MONEDA_GUARANIES;
+		if (this.selectedMoneda != null) {
+			idMoneda = this.selectedMoneda.getId();
+		}
 		this.inicializarCheque();
 		WindowPopup wp = new WindowPopup();
 		wp.setDato(this);
 		wp.setModo(WindowPopup.NUEVO);
-		wp.setHigth("300px");
+		wp.setHigth("370px");
 		wp.setWidth("400px");
 		wp.setCheckAC(new ValidadorRegistroCheque());
 		wp.setTitulo("Registrar Cheque de Tercero");
 		wp.show(ZUL_REGISTRAR_CHEQUE);
 		if (wp.isClickAceptar()) {
-			ControlBancoMovimiento.registrarChequeTerceroManual(this.nvoCheque, this.getLoginNombre());
+			ControlBancoMovimiento.registrarChequeTerceroManual(this.nvoCheque, this.getLoginNombre(), idMoneda);
 			this.mensajePopupTemporal("Cheque Registrado..", 5000);
 		}
 	}
@@ -243,7 +249,7 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 			my.setPos14(cheque.isDiferido() ? "DIFERIDO" : "AL DIA");
 			my.setPos15(cheque.isDepositado());
 			my.setPos16(cheque.isDescontado());
-			my.setPos17(cheque.getVendedor());
+			my.setPos17(cheque.getMoneda().getSigla().toUpperCase());
 			my.setPos18(cheque.getNumeroReembolso().isEmpty() ? "- - -" : cheque.getNumeroReembolso());
 			my.setPos19(cheque.isReembolsado());
 			my.setPos20(cheque.isRechazado() || cheque.isRechazoInterno() ? (cheque.isReembolsado()? (cheque.isCancelado()? "color:green" : "color:orange") : "color:red") : "");
@@ -386,6 +392,14 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 		out.add(FILTRO_RECHAZADOS);
 		out.add(FILTRO_A_DEPOSITAR);
 		return out;
+	}
+	
+	/**
+	 * @return las monedasz..
+	 */
+	public List<Tipo> getMonedas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_MONEDA);
 	}
 	
 	/**
@@ -641,6 +655,14 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 
 	public void setRechazoInterno(boolean rechazoInterno) {
 		this.rechazoInterno = rechazoInterno;
+	}
+
+	public Tipo getSelectedMoneda() {
+		return selectedMoneda;
+	}
+
+	public void setSelectedMoneda(Tipo selectedMoneda) {
+		this.selectedMoneda = selectedMoneda;
 	}
 }
 

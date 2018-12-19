@@ -59,14 +59,14 @@
 			<listheader label="Reembolso" width="110px" visible="@load(vm.selectedFiltro eq 'RECHAZADOS' or vm.selectedFiltro eq 'RECHAZOS INTERNOS' ? 'true':'false')"/>
 			<listheader label="Depósito" width="75px" />
 			<listheader label="Descuento" width="105px" />
-			<listheader label="Vendedor" width="100px" visible="false"/>
 			<listheader label="Razón Social"  />
 			<listheader label="Ruc" width="80px" visible="false" />
 			<listheader label="Banco" width="100px" />
 			<listheader label="Número" align="right" width="100px" />
 			<listheader label="Fecha" width="150px" align="right"/>
 			<listheader label="Librador" width="140px" visible="false"/>
-			<listheader label="Importe Gs." align="right" width="80px" />
+			<listheader label="Importe" align="right" width="80px" />
+			<listheader label="Mon." align="center" width="50px" />
 			<listheader width="30px" align="center" />
 		</listhead>	
 		<auxhead>
@@ -120,15 +120,6 @@
 					<textbox hflex="true" 
 						placeholder="Descuento.."
 						value="@bind(vm.filterDescuento)"
-						instant="true"
-						sclass="filter"/>
-				</hlayout>
-			</auxheader>
-			<auxheader>
-				<hlayout>
-					<textbox hflex="true"
-						placeholder="Vendedor.."
-						value="@bind(vm.filterVendedor)"
 						instant="true"
 						sclass="filter"/>
 				</hlayout>
@@ -207,6 +198,7 @@
 				</hlayout>
 			</auxheader>
 			<auxheader />
+			<auxheader />
 		</auxhead>
 		<template name="model"> 
 			<listitem>
@@ -216,8 +208,6 @@
 				<listcell label="@load(each.pos18)" style="@load(each.pos20)"/>
 				<listcell label="@load(each.pos12)" style="@load(each.pos20)"/>
 				<listcell label="@load(each.pos13)" style="@load(each.pos20)"/>
-				<listcell label="@load(each.pos17.toString().toUpperCase())" style="@load(each.pos20)"
-					tooltiptext="@load(each.pos17)" />
 				<listcell label="@load(each.pos1.toString().toUpperCase())" style="@load(each.pos20)"
 					tooltiptext="@load(each.pos1)" />
 				<listcell label="@load(each.pos2)" style="@load(each.pos20)" />
@@ -226,6 +216,7 @@
 				<listcell label="@load(each.pos5) @converter('formattedDate', format = 'dd-MM-yyyy')" style="@load(each.pos20)" />
 				<listcell label="@load(each.pos6.toString().toUpperCase())" style="@load(each.pos20)" />
 				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" style="@load(each.pos20)" />
+				<listcell label="@load(each.pos17)" style="@load(each.pos20)" />
 				<listcell>
 						<a iconSclass="z-icon-camera" onClick="@command('verImagen', item=each, parent=self)"
 							tooltiptext="Ver Foto..">	
