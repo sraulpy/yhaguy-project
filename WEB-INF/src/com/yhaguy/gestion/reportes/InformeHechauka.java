@@ -190,16 +190,16 @@ public class InformeHechauka {
 				double importe = redondear(gasto.getImporteGs());
 				double iva10 = redondear(gasto.getIva10());
 				double gravada = redondear(gasto.getGravada10());
-				long col10 = 0;
-				long col11 = 0;
-				long col12 = 0;
+				double exenta = redondear(gasto.getExenta());
+				double gravada5 = redondear(gasto.getGravada5());
+				double iva5 = redondear(gasto.getIva5());
 				long col14 = gasto.isContado() ? 1 : 2;
 				long col15 = 0;
 				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
-						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-						+ FORMATTER.format(col12) + "" + "\t" + col14 + "" + "\t"
+						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
+						+ FORMATTER.format(exenta) + "" + "\t" + col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
 				objects.add(object);
 				registros++;
@@ -295,9 +295,9 @@ public class InformeHechauka {
 				double importe = redondear(nc.getImporteGs());
 				double iva10 = redondear(nc.getTotalIva10());
 				double gravada = redondear(nc.getTotalGravado10());
+				double exenta = redondear(nc.getTotalExenta()); 
 				long col10 = 0;
 				long col11 = 0;
-				long col12 = 0;
 				long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
 				long col15 = 0;
 				long col16 = 0;
@@ -307,7 +307,7 @@ public class InformeHechauka {
 						+ FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(col10) + "" + "\t"
 						+ FORMATTER.format(col11) + "" + "\t"
-						+ FORMATTER.format(col12) + "" + "\t"
+						+ FORMATTER.format(exenta) + "" + "\t"
 						+ col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
 				objects.add(object);
