@@ -1,10 +1,25 @@
 <window title="Buscador de Artículos" border="normal" closable="true"
-	width="90%" height="90%"
+	width="95%" height="95%"
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel')"
 	onCreate="tbox_codint.focus()"
 	id="findArt">
 	<caption image="/core/images/searching2_.png"></caption>
+	<hlayout sclass="button-container">
+		<navbar mold="bs-pills">
+			<navitem label=" TODOS" selected="true"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter" onClick="@command('filtrarStockTodos', comp=int_box)" />
+			<navitem label=" CON STOCK"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter" onClick="@command('filtrarStock', comp1=hl_stock, comp2=int_box)" />
+		</navbar>
+		<space></space>
+		<hlayout id="hl_stock" visible="false">
+			<field value=">=" />
+			<spinner id="int_box" value="@bind(vm.filterStock)" instant="true" width="70px"></spinner>
+		</hlayout>
+	</hlayout>
 	<listbox sclass="small-list"
 		vflex="4"
 		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
@@ -305,7 +320,7 @@
 				<label value="Entrada a Stock : " style="margin-left:5px;font-style:italic;color:green"/>
 				<label value="@load(vm.stockEntrada)" style="margin-left:5px;font-style:italic;color:green"/>
 			</div>
-			<listbox sclass="small-list" width="930px" height="215px"
+			<listbox sclass="small-list" width="1000px" height="250px"
 				model="@load(vm.historicoEntrada)"
 				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
 				<listhead>
@@ -313,6 +328,7 @@
 					<listheader label="Empresa" />
 					<listheader label="Fecha" width="100px" />
 					<listheader label="Número" width="120px" />
+					<listheader label="Sucursal" width="120px" />
 					<listheader label="Cant." width="60px"
 						align="right" />
 					<listheader label="Precio Gs." width="120px"
@@ -325,6 +341,7 @@
 						<listcell
 							label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')" />
 						<listcell label="@load(each[2])" />
+						<listcell label="@load(each[12])" />
 						<listcell label="@load(each[3])" />
 						<listcell
 							label="@load(each[4]) @converter(vm.cnv.monedaLocal)" />
@@ -335,7 +352,7 @@
 				<label value="Salida de Stock : " style="margin-left:5px;font-style:italic;color:red"/>
 				<label value="@load(vm.stockSalida)" style="margin-left:5px;font-style:italic;color:red"/>
 			</div>
-			<listbox sclass="small-list" width="930px" height="220px"
+			<listbox sclass="small-list" width="1000px" height="220px"
 				model="@load(vm.historicoSalida)"
 				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
 			<listhead>
@@ -343,6 +360,7 @@
 				<listheader label="Empresa" />
 				<listheader label="Fecha" width="100px" />
 				<listheader label="Número" width="120px" />
+				<listheader label="Sucursal" width="120px" />
 				<listheader label="Cant." width="60px" align="right" />
 				<listheader label="Precio Gs." width="120px"
 					align="right" />
@@ -354,6 +372,7 @@
 					<listcell
 						label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')" />
 					<listcell label="@load(each[2])" />
+					<listcell label="@load(each[12])" />
 					<listcell label="@load(each[3])" />
 					<listcell
 						label="@load(each[4]) @converter(vm.cnv.monedaLocal)" />

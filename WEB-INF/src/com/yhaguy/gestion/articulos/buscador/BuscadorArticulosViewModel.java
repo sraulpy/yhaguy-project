@@ -23,8 +23,11 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Hlayout;
+import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Spinner;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.util.Misc;
@@ -82,6 +85,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	
 	private Date desde;
 	private Date hasta = new Date();
+	
+	private int filterStock = 0;
 	
 	@Wire
 	private Popup pop_img;
@@ -170,6 +175,21 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	@NotifyChange("filterStock")
+	public void filtrarStock(@BindingParam("comp1") Hlayout comp1, @BindingParam("comp2") Spinner comp2) {
+		this.filterStock = 1;
+		comp1.setVisible(true);
+		comp2.focus();
+	}
+	
+	@Command
+	@NotifyChange("filterStock")
+	public void filtrarStockTodos(@BindingParam("comp") Spinner comp) {
+		this.filterStock = 0;
+		comp.setVisible(false);
+	}
+	
+	@Command
 	@NotifyChange("precioDescontado")
 	public void setPrecioDescontadoMayorista(@BindingParam("comp") Bandbox comp) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -244,7 +264,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.ubicaciones = list;
 	}
 	
-	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca" })
+	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock" })
 	public List<MyArray> getArticulos() throws Exception {
 		
 		if (this.codInterno.isEmpty() && this.codOriginal.isEmpty()
@@ -257,7 +277,20 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
 				this.codOriginal, this.codProveedor, this.descripcion, this.marca);
 		
-		List<MyArray> out = this.articulosToMyArray(arts);		
+		List<Object[]> arts_ = new ArrayList<>();
+		
+		if (this.filterStock > 0) {
+			for (Object[] art : arts) {
+				long stock = rr.getStockArticulo((long) art[0]);
+				if (stock >= this.filterStock) {
+					arts_.add(art);
+				}
+			}
+		} else {
+			arts_.addAll(arts);
+		}
+		
+		List<MyArray> out = this.articulosToMyArray(arts_);		
 		if (out.size() > 0) {
 			this.setSelectedItem(null);
 		}
@@ -838,5 +871,13 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setMarca(String marca) {
 		this.marca = marca;
+	}
+
+	public int getFilterStock() {
+		return filterStock;
+	}
+
+	public void setFilterStock(int filterStock) {
+		this.filterStock = filterStock;
 	}
 }
