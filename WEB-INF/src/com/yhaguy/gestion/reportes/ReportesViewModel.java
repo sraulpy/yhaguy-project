@@ -4422,8 +4422,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				long idSucursal = suc != null? suc.getId() : 0;
 				
 				Map<String, Double> acum = new HashMap<String, Double>();
+				Map<String, Double> acum_costo = new HashMap<String, Double>();
 				List<Object[]> data = new ArrayList<Object[]>();
 				
 				if (desde == null)
@@ -4434,38 +4437,46 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				
-				List<Venta> ventas = rr.getVentas(desde, hasta, 0);
+				List<Venta> ventas = rr.getVentas(desde, hasta, 0, idSucursal);
 				for (Venta venta : ventas) {
 					if (!venta.isAnulado()) {
 						for (VentaDetalle item : venta.getDetalles()) {
-							Tipo flia = item.getArticulo().getArticuloFamilia();
+							ArticuloFamilia flia = item.getArticulo().getFamilia();
 							if (flia != null) {
 								String desc = flia.getDescripcion();
 								Double total = acum.get(desc);
+								Double total_costo = acum_costo.get(desc);
 								if (total != null) {
 									total += Utiles.getRedondeo(item.getImporteGs());
+									total_costo += Utiles.getRedondeo(item.getCostoTotalGs());
 									acum.put(desc, total);
+									acum_costo.put(desc, total_costo);
 								} else {
 									acum.put(desc, Utiles.getRedondeo(item.getImporteGs()));
+									acum_costo.put(desc, Utiles.getRedondeo(item.getCostoTotalGs()));
 								}
 							}
 						}
 					}
 				}
 				
-				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0, idSucursal, "");
 				for (NotaCredito nc : ncs) {
 					if (!nc.isAnulado()) {
 						for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
-							Tipo flia = item.getArticulo().getArticuloFamilia();
+							ArticuloFamilia flia = item.getArticulo().getFamilia();
 							if (flia != null) {
 								String desc = flia.getDescripcion();
 								Double total = acum.get(desc);
+								Double total_costo = acum_costo.get(desc);
 								if (total != null) {
 									total -= Utiles.getRedondeo(item.getImporteGs());
+									total_costo -= Utiles.getRedondeo(item.getCostoTotalGsSinIva());
 									acum.put(desc, total);
+									acum_costo.put(desc, total_costo);
 								} else {
 									acum.put(desc, Utiles.getRedondeo(item.getImporteGs()) * -1);
+									acum_costo.put(desc, Utiles.getRedondeo(item.getCostoTotalGsSinIva()) * -1);
 								}
 							}
 						}
@@ -4474,10 +4485,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (String key : acum.keySet()) {
 					double total = acum.get(key);
-					data.add(new Object[] { key, total });
+					double total_costo = acum_costo.get(key);
+					data.add(new Object[] { key, total, total_costo, (total - total_costo),
+							Utiles.obtenerPorcentajeDelValor((total - total_costo), total),
+							Utiles.obtenerPorcentajeDelValor((total - total_costo), total_costo) });
 				}
 
-				ReporteVentasPorFamilia rep = new ReporteVentasPorFamilia(desde, hasta, getSucursal());
+				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
+				ReporteVentasPorFamilia rep = new ReporteVentasPorFamilia(desde, hasta, sucursal);
 				rep.setApaisada();
 				rep.setDatosReporte(data);
 				
@@ -19823,8 +19838,11 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Familia", TIPO_STRING);	
-	static DatosColumnas col2 = new DatosColumnas("Importe Gs.", TIPO_DOUBLE, true);
-	
+	static DatosColumnas col2 = new DatosColumnas("Importe S/iva", TIPO_DOUBLE, true);
+	static DatosColumnas col3 = new DatosColumnas("Costo", TIPO_DOUBLE, true);
+	static DatosColumnas col4 = new DatosColumnas("Utilidad", TIPO_DOUBLE, true);
+	static DatosColumnas col5 = new DatosColumnas("% S/Venta", TIPO_DOUBLE_DS);
+	static DatosColumnas col6 = new DatosColumnas("% S/Costo", TIPO_DOUBLE_DS);
 
 	public ReporteVentasPorFamilia(Date desde, Date hasta, String sucursal) {
 		this.desde = desde;
@@ -19835,6 +19853,10 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 	static {
 		cols.add(col1);
 		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override
