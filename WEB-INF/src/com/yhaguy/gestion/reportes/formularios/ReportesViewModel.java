@@ -93,6 +93,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_LIBRO_COMPRAS_INDISTINTO = "/reportes/jasper/LibroComprasIndistinto.jasper";
 	public static final String SOURCE_LIBRO_COMPRAS_INDISTINTO_ = "/reportes/jasper/LibroComprasIndistinto_.jasper";
 	public static final String SOURCE_LIBRO_COMPRAS_IVA_DIRECTO = "/reportes/jasper/LibroComprasIvaDirecto.jasper";
+	public static final String SOURCE_VENTAS_LITRAJE = "/reportes/jasper/LitrajeVentas.jasper";
 	
 	static final String CONTEXT = Sessions.getCurrent().getWebApp().getRealPath("/");
 	static final String LOGO = CONTEXT + "/logo.png";

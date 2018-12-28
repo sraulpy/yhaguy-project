@@ -62,6 +62,36 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private long noviembre;
 	private long diciembre;
 	private long total;
+	
+	private double enero_;
+	private double febrero_;
+	private double marzo_;
+	private double abril_;
+	private double mayo_;
+	private double junio_;
+	private double julio_;
+	private double agosto_;
+	private double setiembre_;
+	private double octubre_;
+	private double noviembre_;
+	private double diciembre_;
+	
+	private double _enero;
+	private double _febrero;
+	private double _marzo;
+	private double _abril;
+	private double _mayo;
+	private double _junio;
+	private double _julio;
+	private double _agosto;
+	private double _setiembre;
+	private double _octubre;
+	private double _noviembre;
+	private double _diciembre;
+	
+	private double total_;
+	
+	private double litraje;
 
 	@Override
 	public int compareTo(Object o) {
@@ -498,5 +528,213 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public long getTotal() {
 		return total;
+	}
+
+	public double getLitraje() {
+		return litraje;
+	}
+
+	public void setLitraje(double litraje) {
+		this.litraje = litraje;
+	}
+
+	public double getEnero_() {
+		return enero_;
+	}
+
+	public void setEnero_(double enero_) {
+		this.enero_ = enero_;
+	}
+
+	public double getFebrero_() {
+		return febrero_;
+	}
+
+	public void setFebrero_(double febrero_) {
+		this.febrero_ = febrero_;
+	}
+
+	public double getMarzo_() {
+		return marzo_;
+	}
+
+	public void setMarzo_(double marzo_) {
+		this.marzo_ = marzo_;
+	}
+
+	public double getAbril_() {
+		return abril_;
+	}
+
+	public void setAbril_(double abril_) {
+		this.abril_ = abril_;
+	}
+
+	public double getMayo_() {
+		return mayo_;
+	}
+
+	public void setMayo_(double mayo_) {
+		this.mayo_ = mayo_;
+	}
+
+	public double getJunio_() {
+		return junio_;
+	}
+
+	public void setJunio_(double junio_) {
+		this.junio_ = junio_;
+	}
+
+	public double getJulio_() {
+		return julio_;
+	}
+
+	public void setJulio_(double julio_) {
+		this.julio_ = julio_;
+	}
+
+	public double getAgosto_() {
+		return agosto_;
+	}
+
+	public void setAgosto_(double agosto_) {
+		this.agosto_ = agosto_;
+	}
+
+	public double getSetiembre_() {
+		return setiembre_;
+	}
+
+	public void setSetiembre_(double setiembre_) {
+		this.setiembre_ = setiembre_;
+	}
+
+	public double getOctubre_() {
+		return octubre_;
+	}
+
+	public void setOctubre_(double octubre_) {
+		this.octubre_ = octubre_;
+	}
+
+	public double getNoviembre_() {
+		return noviembre_;
+	}
+
+	public void setNoviembre_(double noviembre_) {
+		this.noviembre_ = noviembre_;
+	}
+
+	public double getDiciembre_() {
+		return diciembre_;
+	}
+
+	public void setDiciembre_(double diciembre_) {
+		this.diciembre_ = diciembre_;
+	}
+
+	public double getTotal_() {
+		return total_;
+	}
+
+	public void setTotal_(double total_) {
+		this.total_ = total_;
+	}
+
+	public double get_enero() {
+		return _enero;
+	}
+
+	public void set_enero(double _enero) {
+		this._enero = _enero;
+	}
+
+	public double get_febrero() {
+		return _febrero;
+	}
+
+	public void set_febrero(double _febrero) {
+		this._febrero = _febrero;
+	}
+
+	public double get_marzo() {
+		return _marzo;
+	}
+
+	public void set_marzo(double _marzo) {
+		this._marzo = _marzo;
+	}
+
+	public double get_abril() {
+		return _abril;
+	}
+
+	public void set_abril(double _abril) {
+		this._abril = _abril;
+	}
+
+	public double get_mayo() {
+		return _mayo;
+	}
+
+	public void set_mayo(double _mayo) {
+		this._mayo = _mayo;
+	}
+
+	public double get_junio() {
+		return _junio;
+	}
+
+	public void set_junio(double _junio) {
+		this._junio = _junio;
+	}
+
+	public double get_julio() {
+		return _julio;
+	}
+
+	public void set_julio(double _julio) {
+		this._julio = _julio;
+	}
+
+	public double get_agosto() {
+		return _agosto;
+	}
+
+	public void set_agosto(double _agosto) {
+		this._agosto = _agosto;
+	}
+
+	public double get_setiembre() {
+		return _setiembre;
+	}
+
+	public void set_setiembre(double _setiembre) {
+		this._setiembre = _setiembre;
+	}
+
+	public double get_octubre() {
+		return _octubre;
+	}
+
+	public void set_octubre(double _octubre) {
+		this._octubre = _octubre;
+	}
+
+	public double get_noviembre() {
+		return _noviembre;
+	}
+
+	public void set_noviembre(double _noviembre) {
+		this._noviembre = _noviembre;
+	}
+
+	public double get_diciembre() {
+		return _diciembre;
+	}
+
+	public void set_diciembre(double _diciembre) {
+		this._diciembre = _diciembre;
 	}
 }

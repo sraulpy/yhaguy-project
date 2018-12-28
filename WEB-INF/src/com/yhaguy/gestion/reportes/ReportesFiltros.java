@@ -14,6 +14,7 @@ import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.ArticuloListaPrecio;
+import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CajaPeriodo;
@@ -149,6 +150,8 @@ public class ReportesFiltros {
 	
 	private ArticuloFamilia familia_;
 	private List<ArticuloFamilia> selectedFamilias = new ArrayList<ArticuloFamilia>();
+	
+	private ArticuloMarca marca_;
 
 	private Tipo moneda = new Tipo();
 	
@@ -381,6 +384,14 @@ public class ReportesFiltros {
 			e.printStackTrace();
 		}		
 		return out;
+	}
+	
+	/**
+	 * @return las marcas segun familia..
+	 */
+	public List<ArticuloMarca> getMarcasLubricantes() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getMarcasPorFamilia(ArticuloFamilia.LUBRICANTES);
 	}
 	
 	/**
@@ -1428,5 +1439,13 @@ public class ReportesFiltros {
 			this.selectedFamilias = new ArrayList<ArticuloFamilia>();
 		}
 		this.selectedFamilias = selectedFamilias;
+	}
+
+	public ArticuloMarca getMarca_() {
+		return marca_;
+	}
+
+	public void setMarca_(ArticuloMarca marca_) {
+		this.marca_ = marca_;
 	}
 }

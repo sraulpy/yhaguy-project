@@ -8755,6 +8755,7 @@ public class RegisterDomain extends Register {
 	 * [17]:articulo.proveedor
 	 * [18]:cantidad
 	 * [19]:fecha
+	 * [20]:cliente.empresa.razonSocial
 	 */
 	public List<Object[]> getVentasDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -8763,7 +8764,7 @@ public class RegisterDomain extends Register {
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
 				+ " d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion, "
 				+ " d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen,"
-				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha"
+				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha, v.cliente.empresa.razonSocial"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -8775,8 +8776,43 @@ public class RegisterDomain extends Register {
 				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
 				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
 				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
-				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha";
+				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha, v.cliente.empresa.razonSocial";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.volumen
+	 * [3]:cantidad
+	 * [4]:fecha
+	 * [5]:cliente.empresa.razonSocial
+	 */
+	public List<Object[]> getVentasDetalladoLitraje(Date desde, Date hasta, long idMarca) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * d.articulo.volumen), v.fecha, v.cliente.empresa.razonSocial"
+				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')";
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
+				}
+		return this.hql(query);
+	}
+	
+	public static void main(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Object[]> list = rr.getVentasDetalladoLitraje(Utiles.getFecha("01-10-2018 00:00:00"), new Date(), 82);
+			for (Object[] item : list) {
+				System.out.println(item[1] + " - " + item[2] + " - " + item[3]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -8815,7 +8851,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void main(String[] args) {
+	public static void mainx(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			/** List<Recibo> recs = rr.getObjects(Recibo.class.getName());
@@ -9153,5 +9189,13 @@ public class RegisterDomain extends Register {
 	public long getStockArticulo(long idArticulo) throws Exception {
 		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.id = " + idArticulo;
 		return (long) this.hql(query).get(0);
+	}
+	
+	/**
+	 * @return las marcas segun familia..
+	 */
+	public List<ArticuloMarca> getMarcasPorFamilia(String familia) throws Exception {
+		String query = "select a from ArticuloMarca a where a.familia = '" + familia + "' order by a.descripcion";
+		return this.hql(query);
 	}
 }
