@@ -4423,7 +4423,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				SucursalApp suc = filtro.getSelectedSucursal();
+				Cliente cliente = filtro.getCliente();
 				long idSucursal = suc != null? suc.getId() : 0;
+				long idCliente = cliente != null? cliente.getId() : 0;
 				
 				Map<String, Double> acum = new HashMap<String, Double>();
 				Map<String, Double> acum_costo = new HashMap<String, Double>();
@@ -4437,7 +4439,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				
-				List<Venta> ventas = rr.getVentas(desde, hasta, 0, idSucursal);
+				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente, idSucursal);
 				for (Venta venta : ventas) {
 					if (!venta.isAnulado()) {
 						for (VentaDetalle item : venta.getDetalles()) {
@@ -4460,7 +4462,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 				
-				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0, idSucursal, "");
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idSucursal, "");
 				for (NotaCredito nc : ncs) {
 					if (!nc.isAnulado()) {
 						for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
@@ -4492,7 +4494,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
-				ReporteVentasPorFamilia rep = new ReporteVentasPorFamilia(desde, hasta, sucursal);
+				String cliente_ = cliente != null ? cliente.getRazonSocial() : "TODOS..";
+				ReporteVentasPorFamilia rep = new ReporteVentasPorFamilia(desde, hasta, sucursal, cliente_);
 				rep.setApaisada();
 				rep.setDatosReporte(data);
 				
@@ -19835,6 +19838,7 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 	Date desde;
 	Date hasta;
 	String sucursal = "";
+	String cliente = "";
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Familia", TIPO_STRING);	
@@ -19844,10 +19848,11 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 	static DatosColumnas col5 = new DatosColumnas("% S/Venta", TIPO_DOUBLE_DS);
 	static DatosColumnas col6 = new DatosColumnas("% S/Costo", TIPO_DOUBLE_DS);
 
-	public ReporteVentasPorFamilia(Date desde, Date hasta, String sucursal) {
+	public ReporteVentasPorFamilia(Date desde, Date hasta, String sucursal, String cliente) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.sucursal = sucursal;
+		this.cliente = cliente;
 	}
 
 	static {
@@ -19879,7 +19884,8 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY)))
-				.add(this.textoParValor("Sucursal", this.sucursal)));
+				.add(this.textoParValor("Sucursal", this.sucursal))
+				.add(this.textoParValor("Cliente", this.cliente)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
