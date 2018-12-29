@@ -3693,6 +3693,27 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return los gastos segun fecha..
+	 */
+	public List<Gasto> getGastosParaHechauka(Date desde, Date hasta) throws Exception {
+		String query = "select g from Gasto g where g.dbEstado != 'D'"
+				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_COMPROBANTES + "'"
+				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_PAGOS + "'"
+				+ " and g.fecha between ? and ?" + " order by g.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
 
 	/**
 	 * Agrega un registro de ArticuloPrecioMinimo..
@@ -8788,11 +8809,12 @@ public class RegisterDomain extends Register {
 	 * [3]:cantidad
 	 * [4]:fecha
 	 * [5]:cliente.empresa.razonSocial
+	 * [6]:preciogs
 	 */
 	public List<Object[]> getVentasDetalladoLitraje(Date desde, Date hasta, long idMarca) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * d.articulo.volumen), v.fecha, v.cliente.empresa.razonSocial"
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * d.articulo.volumen), v.fecha, v.cliente.empresa.razonSocial, (d.cantidad * d.preciogs)"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"

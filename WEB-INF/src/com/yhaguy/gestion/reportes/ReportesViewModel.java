@@ -4424,8 +4424,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		 * reporte VEN-00033
 		 */
 		private void ventasPorFamilia(boolean mobile) {
-			try {
-				
+			try {				
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				SucursalApp suc = filtro.getSelectedSucursal();
@@ -5188,6 +5187,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
+				Map<String, Double> importes = new HashMap<String, Double>();
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[4]);
@@ -9447,7 +9447,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 			List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
 			List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta);
-			List<Gasto> gastos = rr.getGastos(desde, hasta);
+			List<Gasto> gastos = rr.getGastosParaHechauka(desde, hasta);
 			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde, new Date());
 			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones);
 			Clients.showNotification("Informe Hechauka generado..");
