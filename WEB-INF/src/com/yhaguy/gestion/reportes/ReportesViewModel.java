@@ -9446,9 +9446,13 @@ public class ReportesViewModel extends SimpleViewModel {
 			Date hasta = filtro.getFechaHasta();
 
 			List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
-			List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta);
-			List<Gasto> gastos = rr.getGastosParaHechauka(desde, hasta);
+			List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, 0);
 			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde, new Date());
+			List<Gasto> gastos = new ArrayList<Gasto>();
+			List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, desde, new Date(), 0);
+			List<Gasto> gastosDespacho = rr.getLibroComprasDespacho(desde, hasta, desde, new Date(), 0);
+			gastos.addAll(gastosIndistinto);
+			gastos.addAll(gastosDespacho);			
 			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones);
 			Clients.showNotification("Informe Hechauka generado..");
 		}
