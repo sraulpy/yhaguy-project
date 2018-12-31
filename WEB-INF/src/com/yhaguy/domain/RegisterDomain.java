@@ -8809,16 +8809,45 @@ public class RegisterDomain extends Register {
 	 * [3]:cantidad
 	 * [4]:fecha
 	 * [5]:cliente.empresa.razonSocial
-	 * [6]:preciogs
+	 * [6]:importegs
+	 * [7]:vendedor
 	 */
 	public List<Object[]> getVentasDetalladoLitraje(Date desde, Date hasta, long idMarca) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * d.articulo.volumen), v.fecha, v.cliente.empresa.razonSocial, (d.cantidad * d.preciogs)"
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * d.articulo.volumen), v.fecha, v.cliente.empresa.razonSocial,"
+				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), v.vendedor.empresa.razonSocial"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
-				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')";
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')"
+				+ " and d.articulo.volumen > 0";
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
+				}
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de notas de credito segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.volumen
+	 * [3]:cantidad
+	 * [4]:fecha
+	 * [5]:cliente.empresa.razonSocial
+	 * [6]:importegs
+	 * [7]:vendedor
+	 */
+	public List<Object[]> getNotasCreditoDetalladoLitraje(Date desde, Date hasta, long idMarca) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * d.articulo.volumen), n.fechaEmision, n.cliente.empresa.razonSocial,"
+				+ " d.importeGs, n.vendedor.empresa.razonSocial"
+				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')"
+				+ " and d.articulo.volumen > 0";
 				if (idMarca > 0) {
 					query += " and d.articulo.marca.id = " + idMarca;
 				}

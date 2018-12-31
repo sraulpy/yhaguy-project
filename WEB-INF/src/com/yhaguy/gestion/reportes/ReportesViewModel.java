@@ -5174,7 +5174,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Object[] formato = filtro.getFormato();
 				ArticuloMarca marca = filtro.getMarca_();
 				Date desde = filtro.getFechaDesde();
-				Date hasta = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
 				
 				if (marca == null) {
 					Clients.showNotification("Debe seleccionar una marca..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -5184,6 +5184,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetalladoLitraje(desde, hasta, idMarca);
+				List<Object[]> ncs = rr.getNotasCreditoDetalladoLitraje(desde, hasta, idMarca);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -5192,7 +5193,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[4]);
 					String cli = (String) venta[5];
-					String key = cli + "-" + mes;
+					String vnd = (String) venta[7];
+					String key = cli + ";" + vnd + ";" + mes;
 					Double acum = cants.get(key);
 					if (acum != null) {
 						acum += ((Double) venta[3]);
@@ -5200,50 +5202,117 @@ public class ReportesViewModel extends SimpleViewModel {
 					} else {
 						cants.put(key, ((Double) (venta[3])));
 					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ += ((Double) venta[6]);
+						importes.put(key, acum_);
+					} else {
+						importes.put(key, ((Double) (venta[6])));
+					}
+				}
+				
+				for (Object[] nc : ncs) {
+					int mes = Utiles.getNumeroMes((Date) nc[4]);
+					String cli = (String) nc[5];
+					String vnd = (String) nc[7];
+					String key = cli + ";" + vnd + ";" + mes;
+					Double acum = cants.get(key);
+					if (acum != null) {
+						acum -= ((Double) nc[3]);
+						cants.put(key, acum);
+					} else {
+						cants.put(key, ((Double) (nc[3])));
+					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ -= ((Double) nc[6]);
+						importes.put(key, acum_);
+					} else {
+						importes.put(key, ((Double) (nc[6])));
+					}
 				}
 				
 				for (String key : cants.keySet()) {
-					String cliente = key.split("-")[0];
+					String cliente = key.split(";")[0];
+					String vendedor = key.split(";")[1];
+					String key_ = cliente + ";" + vendedor;
 					Double cantidad = cants.get(key);
 					
-					Double cantEnero = cants.get(cliente + "-1");
+					Double cantEnero = cants.get(key_ + ";1");
 					String enero = cantEnero != null ? Utiles.getNumberFormatDs(cantEnero) + "" : "0";
 					
-					Double cantFebrero = cants.get(cliente + "-2");
+					Double cantFebrero = cants.get(key_ + ";2");
 					String febrero = cantFebrero != null ? Utiles.getNumberFormatDs(cantFebrero) + "" : "0";
 					
-					Double cantMarzo = cants.get(cliente + "-3");
+					Double cantMarzo = cants.get(key_ + ";3");
 					String marzo = cantMarzo != null ? Utiles.getNumberFormatDs(cantMarzo) + "" : "0";
 					
-					Double cantAbril = cants.get(cliente + "-4");
+					Double cantAbril = cants.get(key_ + ";4");
 					String abril = cantAbril != null ? Utiles.getNumberFormatDs(cantAbril) + "" : "0";
 					
-					Double cantMayo = cants.get(cliente + "-5");
+					Double cantMayo = cants.get(key_ + ";5");
 					String mayo = cantMayo != null ? Utiles.getNumberFormatDs(cantMayo) + "" : "0";	
 					
-					Double cantJunio = cants.get(cliente + "-6");
+					Double cantJunio = cants.get(key_ + ";6");
 					String junio = cantJunio != null ? Utiles.getNumberFormatDs(cantJunio) + "" : "0";
 					
-					Double cantJulio = cants.get(cliente + "-7");
+					Double cantJulio = cants.get(key_ + ";7");
 					String julio = cantJulio != null ? Utiles.getNumberFormatDs(cantJulio) + "" : "0";
 					
-					Double cantAgosto = cants.get(cliente + "-8");
+					Double cantAgosto = cants.get(key_ + ";8");
 					String agosto = cantAgosto != null ? Utiles.getNumberFormatDs(cantAgosto) + "" : "0";
 					
-					Double cantSetiembre = cants.get(cliente + "-9");
+					Double cantSetiembre = cants.get(key_ + ";9");
 					String setiembre = cantSetiembre != null ? Utiles.getNumberFormatDs(cantSetiembre) + "" : "0";
 					
-					Double cantOctubre = cants.get(cliente + "-10");
+					Double cantOctubre = cants.get(key_ + ";10");
 					String octubre = cantOctubre != null ? Utiles.getNumberFormatDs(cantOctubre) + "" : "0";
 					
-					Double cantNoviembre = cants.get(cliente + "-11");
+					Double cantNoviembre = cants.get(key_ + ";11");
 					String noviembre = cantNoviembre != null ? Utiles.getNumberFormatDs(cantNoviembre) + "" : "0";
 					
-					Double cantDiciembre = cants.get(cliente + "-12");
+					Double cantDiciembre = cants.get(key_ + ";12");
 					String diciembre = cantDiciembre != null ? Utiles.getNumberFormatDs(cantDiciembre) + "" : "0";
+					
+					Double impEnero = importes.get(key_ + ";1");
+					String _enero = impEnero != null ? Utiles.getNumberFormat(impEnero) + "" : "0";
+					
+					Double impFebrero = importes.get(key_ + ";2");
+					String _febrero = impFebrero != null ? Utiles.getNumberFormat(impFebrero) + "" : "0";
+					
+					Double impMarzo = importes.get(key_ + ";3");
+					String _marzo = impMarzo != null ? Utiles.getNumberFormat(impMarzo) + "" : "0";
+					
+					Double impAbril = importes.get(key_ + ";4");
+					String _abril = impAbril != null ? Utiles.getNumberFormat(impAbril) + "" : "0";
+					
+					Double impMayo = importes.get(key_ + ";5");
+					String _mayo = impMayo != null ? Utiles.getNumberFormat(impMayo) + "" : "0";
+					
+					Double impJunio = importes.get(key_ + ";6");
+					String _junio = impJunio != null ? Utiles.getNumberFormat(impJunio) + "" : "0";
+					
+					Double impJulio = importes.get(key_ + ";7");
+					String _julio = impJulio != null ? Utiles.getNumberFormat(impJulio) + "" : "0";
+					
+					Double impAgosto = importes.get(key_ + ";8");
+					String _agosto = impAgosto != null ? Utiles.getNumberFormat(impAgosto) + "" : "0";
+					
+					Double impSetiembre = importes.get(key_ + ";9");
+					String _setiembre = impSetiembre != null ? Utiles.getNumberFormat(impSetiembre) + "" : "0";
+					
+					Double impOctubre = importes.get(key_ + ";10");
+					String _octubre = impOctubre != null ? Utiles.getNumberFormat(impOctubre) + "" : "0";
+					
+					Double impNoviembre = importes.get(key_ + ";11");
+					String _noviembre = impNoviembre != null ? Utiles.getNumberFormat(impNoviembre) + "" : "0";
+					
+					Double impDiciembre = importes.get(key_ + ";12");
+					String _diciembre = impDiciembre != null ? Utiles.getNumberFormat(impDiciembre) + "" : "0";
 					
 					HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 					hist.setDescripcion(cliente);
+					hist.setReferencia(vendedor);
 					hist.setLitraje(cantidad);
 					hist.setEnero_(Double.parseDouble(enero.replace(",", "")));
 					hist.setFebrero_(Double.parseDouble(febrero.replace(",", "")));
@@ -5257,18 +5326,18 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setOctubre_(Double.parseDouble(octubre.replace(",", "")));
 					hist.setNoviembre_(Double.parseDouble(noviembre.replace(",", "")));
 					hist.setDiciembre_(Double.parseDouble(diciembre.replace(",", "")));
-					hist.set_enero(Double.parseDouble(enero.replace(",", "")));
-					hist.set_febrero(Double.parseDouble(febrero.replace(",", "")));
-					hist.set_marzo(Double.parseDouble(marzo.replace(",", "")));
-					hist.set_abril(Double.parseDouble(abril.replace(",", "")));
-					hist.set_mayo(Double.parseDouble(mayo.replace(",", "")));
-					hist.set_junio(Double.parseDouble(junio.replace(",", "")));
-					hist.set_julio(Double.parseDouble(julio.replace(",", "")));
-					hist.set_agosto(Double.parseDouble(agosto.replace(",", "")));
-					hist.set_setiembre(Double.parseDouble(setiembre.replace(",", "")));
-					hist.set_octubre(Double.parseDouble(octubre.replace(",", "")));
-					hist.set_noviembre(Double.parseDouble(noviembre.replace(",", "")));
-					hist.set_diciembre(Double.parseDouble(diciembre.replace(",", "")));
+					hist.set_enero(Double.parseDouble(_enero.replace(".", "")));
+					hist.set_febrero(Double.parseDouble(_febrero.replace(".", "")));
+					hist.set_marzo(Double.parseDouble(_marzo.replace(".", "")));
+					hist.set_abril(Double.parseDouble(_abril.replace(".", "")));
+					hist.set_mayo(Double.parseDouble(_mayo.replace(".", "")));
+					hist.set_junio(Double.parseDouble(_junio.replace(".", "")));
+					hist.set_julio(Double.parseDouble(_julio.replace(".", "")));
+					hist.set_agosto(Double.parseDouble(_agosto.replace(".", "")));
+					hist.set_setiembre(Double.parseDouble(_setiembre.replace(".", "")));
+					hist.set_octubre(Double.parseDouble(_octubre.replace(".", "")));
+					hist.set_noviembre(Double.parseDouble(_noviembre.replace(".", "")));
+					hist.set_diciembre(Double.parseDouble(_diciembre.replace(".", "")));
 					hist.setTotal_(hist.getEnero() + hist.getFebrero() + hist.getMarzo() + hist.getAbril() + hist.getMayo() + hist.getJunio()
 							+ hist.getJulio() + hist.getAgosto() + hist.getSetiembre() + hist.getOctubre() + hist.getNoviembre() + hist.getDiciembre());
 					
@@ -5279,6 +5348,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE;
 				
 				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				JRDataSource dataSource = new LitrajeArticulos(list);
 				imprimirJasper(source, params, dataSource, formato);
 				
@@ -20223,6 +20294,15 @@ class LitrajeArticulos implements JRDataSource {
 	
 	public LitrajeArticulos(List<HistoricoMovimientoArticulo> values) {
 		this.values = values;
+		Collections.sort(this.values, new Comparator<HistoricoMovimientoArticulo>() {
+			@Override
+			public int compare(HistoricoMovimientoArticulo o1, HistoricoMovimientoArticulo o2) {
+				String val1 = o1.getReferencia();
+				String val2 = o2.getReferencia();
+				int compare = val1.compareTo(val2);				
+				return compare;
+			}
+		});
 	}
 
 	private int index = -1;
@@ -20316,7 +20396,31 @@ class LitrajeArticulos implements JRDataSource {
 			value = det.getNoviembre_() + "";
 		} else if ("Diciembre".equals(fieldName)) {
 			value = det.getDiciembre_() + "";
-		} 
+		}  else if ("_Enero".equals(fieldName)) {
+			value =  Utiles.getNumberFormat(det.get_enero());
+		} else if ("_Febrero".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_febrero());
+		} else if ("_Marzo".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_marzo());
+		} else if ("_Abril".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_abril());
+		} else if ("_Mayo".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_mayo());
+		} else if ("_Junio".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_junio());
+		} else if ("_Julio".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_julio());
+		} else if ("_Agosto".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_agosto());
+		} else if ("_Setiembre".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_setiembre());
+		} else if ("_Octubre".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_octubre());
+		} else if ("_Noviembre".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_noviembre());
+		} else if ("_Diciembre".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.get_diciembre());
+		}
 		return value;
 	}
 
