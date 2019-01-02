@@ -511,10 +511,12 @@ public class ArticuloControlBody extends BodyApp {
 				|| this.selectedUbicaciones.size() == 0;
 	}
 	
-	@SuppressWarnings("unchecked")
+	/**
+	 * @return las marcas..
+	 */
 	public List<ArticuloMarca> getMarcas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<ArticuloMarca> list = rr.getObjects(ArticuloMarca.class.getName());		
+		List<ArticuloMarca> list = rr.getMarcas();
 		return list;
 	}
 	
