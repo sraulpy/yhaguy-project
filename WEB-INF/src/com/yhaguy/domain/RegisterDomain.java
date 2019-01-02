@@ -6385,6 +6385,29 @@ public class RegisterDomain extends Register {
 		query += " order by a.codigoInterno";
 		return this.hql(query);
 	}
+	
+	/**
+	 * @return los articulos segun familia..
+	 * [0]:id
+	 * [1]:codigoInterno
+	 * [2]:descripcion
+	 * [3]:costoGs
+	 * [4]:familia
+	 */
+	public List<Object[]> getArticulos_(long idFamilia, long idMarca, long idArticulo) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs, a.familia.descripcion from Articulo a where a.dbEstado != 'D' and a.codigoInterno not like '@%'";
+		if (idFamilia != 0) {
+			query += " and a.familia.id = " + idFamilia;
+		}
+		if (idMarca != 0) {
+			query += " and a.marca.id = " + idMarca;
+		}
+		if (idArticulo != 0) {
+			query += " and a.id = " + idArticulo;
+		}
+		query += " order by a.codigoInterno";
+		return this.hql(query);
+	}
 
 	/**
 	 * @return la lista de planillas de caja segun numero..
@@ -9247,6 +9270,14 @@ public class RegisterDomain extends Register {
 	 */
 	public List<ArticuloMarca> getMarcasPorFamilia(String familia) throws Exception {
 		String query = "select a from ArticuloMarca a where a.familia = '" + familia + "' order by a.descripcion";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las marcas..
+	 */
+	public List<ArticuloMarca> getMarcas() throws Exception {
+		String query = "select a from ArticuloMarca a order by a.descripcion";
 		return this.hql(query);
 	}
 }
