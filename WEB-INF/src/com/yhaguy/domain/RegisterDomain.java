@@ -5615,8 +5615,9 @@ public class RegisterDomain extends Register {
 	public List<Proveedor> getProveedoresExterior(String razonSocial) throws Exception {
 		String query = "select p from Proveedor p where lower(p.empresa.razonSocial) like '%"
 				+ razonSocial.toLowerCase() + "%'"
-				+ " and p.tipoProveedor.sigla = '"+ Configuracion.SIGLA_PROVEEDOR_TIPO_EXTERIOR +"'";
-		return this.hqlLimit(query, 30);
+				+ " and p.tipoProveedor.sigla = '"+ Configuracion.SIGLA_PROVEEDOR_TIPO_EXTERIOR +"'"
+				+ " order by p.empresa.razonSocial";
+		return this.hqlLimit(query, 200);
 	}
 
 	/**
@@ -6394,7 +6395,7 @@ public class RegisterDomain extends Register {
 	 * [3]:costoGs
 	 * [4]:familia
 	 */
-	public List<Object[]> getArticulos_(long idFamilia, long idMarca, long idArticulo) throws Exception {
+	public List<Object[]> getArticulos_(long idFamilia, long idMarca, long idArticulo, String idProveedores) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs, a.familia.descripcion from Articulo a where a.dbEstado != 'D' and a.codigoInterno not like '@%'";
 		if (idFamilia != 0) {
 			query += " and a.familia.id = " + idFamilia;
@@ -6404,6 +6405,9 @@ public class RegisterDomain extends Register {
 		}
 		if (idArticulo != 0) {
 			query += " and a.id = " + idArticulo;
+		}
+		if (!idProveedores.equals("0")) {
+			query += " and a.proveedor.id IN (" + idProveedores + ")";
 		}
 		query += " order by a.codigoInterno";
 		return this.hql(query);

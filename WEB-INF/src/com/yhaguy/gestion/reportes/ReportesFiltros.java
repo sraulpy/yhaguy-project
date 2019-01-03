@@ -184,6 +184,7 @@ public class ReportesFiltros {
 	
 	private Proveedor proveedor;
 	private String razonSocialProveedor = "";
+	private List<Proveedor> selectedProveedores = new ArrayList<Proveedor>();
 	
 	private Proveedor proveedorExterior;
 	private String razonSocialProveedorExterior = "";
@@ -391,8 +392,12 @@ public class ReportesFiltros {
 	/**
 	 * @return las marcas..
 	 */
+	@DependsOn("familia_")
 	public List<ArticuloMarca> getMarcas_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
+		if (this.familia_ != null) {
+			return rr.getMarcasPorFamilia(this.familia_.getDescripcion());
+		}
 		return rr.getMarcas();
 	}
 	
@@ -1485,5 +1490,19 @@ public class ReportesFiltros {
 
 	public void setStockMayorIgual(int stockMayorIgual) {
 		this.stockMayorIgual = stockMayorIgual;
+	}
+
+	public List<Proveedor> getSelectedProveedores() {
+		if (this.selectedProveedores == null) {
+			return new ArrayList<Proveedor>();
+		}
+		return selectedProveedores;
+	}
+
+	public void setSelectedProveedores(List<Proveedor> selectedProveedores) {
+		if (selectedProveedores == null || selectedProveedores.size() == 0) {
+			this.selectedProveedores = new ArrayList<Proveedor>();
+		}
+		this.selectedProveedores = selectedProveedores;
 	}
 }

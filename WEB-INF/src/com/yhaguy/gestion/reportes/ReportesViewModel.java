@@ -1180,6 +1180,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloMarca marca = filtro.getMarca_();
 				Articulo articulo = filtro.getArticulo();
 				List<Deposito> depositos = filtro.getSelectedDepositos();
+				List<Proveedor> proveedores = filtro.getSelectedProveedores();
 				int stockMayorIgual = filtro.getStockMayorIgual();
 				
 				if (depositos.isEmpty()) {
@@ -1191,12 +1192,18 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idFamilia = familia == null? 0 : familia.getId();
 				long idMarca = marca == null? 0 : marca.getId();
 				long idArticulo = articulo == null? 0 : articulo.getId();
+				String idProveedores = "0";
+				String proveedores_ = proveedores.size() > 0 ? "" : "TODOS..";
+				for (Proveedor prov : proveedores) {
+					idProveedores += ", " + prov.getId();
+					proveedores_ += prov.getRazonSocial() + " / ";
+				}
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				
-				List<Object[]> articulos = rr.getArticulos_(idFamilia, idMarca, idArticulo);
+				List<Object[]> articulos = rr.getArticulos_(idFamilia, idMarca, idArticulo, idProveedores);
 				
 				for (Object[] art : articulos) {
 					long idArt = (long) art[0];
@@ -1245,7 +1252,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String marca_ = marca == null ? "TODOS.." : marca.getDescripcion();
 				String articulo_ = articulo == null ? "TODOS.." : articulo.getDescripcion();
 				
-				ReporteExistenciaArticulos rep = new ReporteExistenciaArticulos(familia_, articulo_, deposito_, marca_);
+				ReporteExistenciaArticulos rep = new ReporteExistenciaArticulos(familia_, articulo_, deposito_, marca_, proveedores_);
 				rep.setDatosReporte(data);
 				rep.setApaisada();				
 
@@ -5416,6 +5423,10 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setDescripcionArticuloGasto("");
 		this.filtro.setReembolso("");
 		this.filtro.setSelectedFamilias(new ArrayList<ArticuloFamilia>());
+		this.filtro.setSelectedDepositos(new ArrayList<Deposito>());
+		this.filtro.setSelectedProveedores(new ArrayList<Proveedor>());
+		this.filtro.setMarca_(null);
+		this.filtro.setFamilia_(null);
 	}
 
 	/**
@@ -16428,6 +16439,7 @@ class ReporteExistenciaArticulos extends ReporteYhaguy {
 	private String marca;
 	private String articulo;
 	private String deposito;
+	private String proveedor;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
@@ -16435,11 +16447,12 @@ class ReporteExistenciaArticulos extends ReporteYhaguy {
 	static DatosColumnas col3 = new DatosColumnas("Stock", TIPO_LONG, 20, true);
 	
 
-	public ReporteExistenciaArticulos(String familia, String articulo, String deposito, String marca) {
+	public ReporteExistenciaArticulos(String familia, String articulo, String deposito, String marca, String proveedor) {
 		this.familia = familia;
 		this.articulo = articulo;
 		this.deposito = deposito;
 		this.marca = marca;
+		this.proveedor = proveedor;
 	}
 
 	static {
@@ -16467,6 +16480,8 @@ class ReporteExistenciaArticulos extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Familia", this.familia)).add(this.textoParValor("Articulo", this.articulo)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Depósito", this.deposito)).add(this.textoParValor("Marca", this.marca)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor)).add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}
