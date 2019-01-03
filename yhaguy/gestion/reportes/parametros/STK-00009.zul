@@ -15,6 +15,16 @@
 			</combobox>
 		</row>
 		<row>
+			<field value="Marca:" />
+			<combobox model="@load(vm.dato.filtro.marcas_)"
+				selectedItem="@bind(vm.dato.filtro.marca_)" hflex="true"
+				readonly="false" placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Artículo:" />
 			<bandbox hflex="true" placeholder="TODOS.." readonly="true"
 				value="@load(vm.dato.filtro.articulo.codigoInterno)" id="bndArti">

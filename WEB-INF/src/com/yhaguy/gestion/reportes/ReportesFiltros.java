@@ -389,6 +389,14 @@ public class ReportesFiltros {
 	}
 	
 	/**
+	 * @return las marcas..
+	 */
+	public List<ArticuloMarca> getMarcas_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getMarcas();
+	}
+	
+	/**
 	 * @return las marcas segun familia..
 	 */
 	public List<ArticuloMarca> getMarcasLubricantes() throws Exception {
