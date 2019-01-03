@@ -6,52 +6,13 @@
 	<rows>
 		<row>
 			<field value="Familia:" />
-			<combobox model="@load(vm.dato.filtro.familias)"
-				selectedItem="@bind(vm.dato.filtro.familia)" hflex="true"
+			<combobox model="@load(vm.dato.filtro.familias_)"
+				selectedItem="@bind(vm.dato.filtro.familia_)" hflex="true"
 				readonly="false" placeholder="TODOS..">
 				<template name="model">
 					<comboitem label="@load(each.descripcion)" />
 				</template>
 			</combobox>
-		</row>
-		<row>
-			<field value="Marca:" />
-			<combobox model="@load(vm.dato.filtro.marcas)"
-				selectedItem="@bind(vm.dato.filtro.marca)" hflex="true"
-				readonly="false" placeholder="TODOS..">
-				<template name="model">
-					<comboitem label="@load(each.descripcion)" />
-				</template>
-			</combobox>
-		</row>
-		<row>
-			<field value="Proveedor:" />
-			<bandbox hflex="true" placeholder="TODOS.." readonly="true"
-				value="@load(vm.dato.filtro.proveedorExterior.razonSocial)"
-				id="bndProv">
-				<bandpopup>
-					<listbox sclass="small-list" width="400px"
-						height="200px" model="@load(vm.dato.filtro.proveedoresExterior)"
-						selectedItem="@bind(vm.dato.filtro.proveedorExterior)"
-						onSelect="bndProv.close()">
-						<listhead>
-							<listheader>
-								<hlayout>
-									<toolbarbutton
-										iconSclass="z-icon-filter" disabled="true" />
-									<textbox hflex="true"
-										value="@bind(vm.dato.filtro.razonSocialProveedorExterior)"
-										instant="true" placeholder="Buscar.." />
-								</hlayout>
-							</listheader>
-						</listhead>
-						<template name="model">
-							<listitem
-								label="@load(each.razonSocial.toUpperCase())" />
-						</template>
-					</listbox>
-				</bandpopup>
-			</bandbox>
 		</row>
 		<row>
 			<field value="Artículo:" />
@@ -84,13 +45,17 @@
 		<row>
 			<field value="Depósito:" />
 			<chosenbox hflex="true" sclass="rounded" style="margin-top:5px"
-				model="@load(vm.dato.filtro.getDepositos(vm.dato.acceso.sucursalOperativa.id))"
+				model="@load(vm.dato.filtro.depositos_)"
 				emptyMessage="Seleccione uno o más depósitos.."
-				selectedObjects="@bind(vm.dato.filtro.depositos)">
+				selectedObjects="@bind(vm.dato.filtro.selectedDepositos)">
 				<template name="model">
 					<label value="@load(each.descripcion)"></label>
 				</template>
 			</chosenbox>
+		</row>
+		<row>
+			<field value="Stock >=" />
+			<spinner value="@bind(vm.dato.filtro.stockMayorIgual)"></spinner>
 		</row>
 	</rows>
 </grid>
