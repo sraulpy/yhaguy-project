@@ -1179,6 +1179,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Articulo articulo = filtro.getArticulo();
 				List<Deposito> depositos = filtro.getSelectedDepositos();
+				int stockMayorIgual = filtro.getStockMayorIgual();
 				
 				if (depositos.isEmpty()) {
 					Clients.showNotification("Debe seleccionar al menos un depósito..", 
@@ -1223,7 +1224,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (String key : values.keySet()) {
 					Object[] value = values.get(key);
 					long stock = (long) value[0];
-					data.add(new Object[] { key, deposito_, stock } );
+					if (stock >= stockMayorIgual) {
+						data.add(new Object[] { key, deposito_, stock } );
+					}
 				}
 				
 				// ordena la lista segun codigo..

@@ -199,6 +199,8 @@ public class ReportesFiltros {
 	private boolean usuariosInactivos = true;
 	private Usuario usuario;
 	private String nombreUsuario = "";
+	
+	private int stockMayorIgual = 1;
 
 	/**
 	 * GET / SET
@@ -1467,5 +1469,13 @@ public class ReportesFiltros {
 
 	public void setMarca_(ArticuloMarca marca_) {
 		this.marca_ = marca_;
+	}
+
+	public int getStockMayorIgual() {
+		return stockMayorIgual;
+	}
+
+	public void setStockMayorIgual(int stockMayorIgual) {
+		this.stockMayorIgual = stockMayorIgual;
 	}
 }
