@@ -59,6 +59,9 @@ public class BancoDescuentoCheque extends Domain {
 		for (BancoCheque cheque : this.chequesPropios) {
 			out += cheque.getMonto();
 		}
+		for (ReciboFormaPago fp : this.formasPago) {
+			out += fp.getMontoGs();
+		}
 		return out;
 	}
 	
@@ -182,14 +185,6 @@ public class BancoDescuentoCheque extends Domain {
 		this.banco = banco;
 	}
 
-	public double getTotalImporte_gs() {
-		return totalImporte_gs;
-	}
-
-	public void setTotalImporte_gs(double totalImporte_gs) {
-		this.totalImporte_gs = totalImporte_gs;
-	}
-
 	public boolean isConfirmado() {
 		return confirmado;
 	}
@@ -204,6 +199,14 @@ public class BancoDescuentoCheque extends Domain {
 
 	public void setAcreedor(Empresa acreedor) {
 		this.acreedor = acreedor;
+	}
+
+	public double getTotalImporte_gs() {
+		return totalImporte_gs;
+	}
+
+	public void setTotalImporte_gs(double totalImporte_gs) {
+		this.totalImporte_gs = totalImporte_gs;
 	}
 
 }

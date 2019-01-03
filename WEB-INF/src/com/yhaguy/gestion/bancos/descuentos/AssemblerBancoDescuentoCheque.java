@@ -37,6 +37,8 @@ public class AssemblerBancoDescuentoCheque extends Assembler {
 		this.listaMyArrayToListaDomain(dto, domain, "cheques");
 		this.listaDTOToListaDomain(dto, domain, "chequesPropios", false, false, new AssemblerBancoCheque());
 		this.listaDTOToListaDomain(dto, domain, "formasPago", true, true, new AssemblerReciboFormaPago(""));
+		
+		domain.setTotalImporte_gs(dto.getTotalImporte());
 
 		return domain;
 	}

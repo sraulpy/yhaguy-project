@@ -36,6 +36,7 @@ public class BancoDescuentoChequeBrowser extends Browser {
 		ColumnaBrowser col5 = new ColumnaBrowser();
 		ColumnaBrowser col6 = new ColumnaBrowser();
 		ColumnaBrowser col7 = new ColumnaBrowser();
+		ColumnaBrowser col8 = new ColumnaBrowser();
 
 		col1.setCampo("id");
 		col1.setTitulo("ID");
@@ -54,16 +55,22 @@ public class BancoDescuentoChequeBrowser extends Browser {
 		col5.setCampo("observacion");
 		col5.setTitulo("Detalles");
 		
-		col6.setCampo("auxi");
-		col6.setWhere(this.where);
-		col6.setWidthColumna("0px");
+		col6.setCampo("totalImporte_gs");
+		col6.setTitulo("Importe");
+		col6.setWidthColumna("150px");
+		col6.setComponente(Browser.LABEL_NUMERICO);
+		col6.setTipo(Browser.LABEL_NUMERICO);
 		
-		col7.setCampo("confirmado"); 	
-		col7.setTitulo("Est.");
-		col7.setComponente("getCerradoComp");
-		col7.setTipo(Config.TIPO_BOOL);
-		col7.setWidthColumna("40px");	
-		col7.setEstilo("text-align:center");
+		col7.setCampo("auxi");
+		col7.setWhere(this.where);
+		col7.setWidthColumna("0px");
+		
+		col8.setCampo("confirmado"); 	
+		col8.setTitulo("Est.");
+		col8.setComponente("getCerradoComp");
+		col8.setTipo(Config.TIPO_BOOL);
+		col8.setWidthColumna("40px");	
+		col8.setEstilo("text-align:center");
 		
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col2);
@@ -71,6 +78,7 @@ public class BancoDescuentoChequeBrowser extends Browser {
 		columnas.add(col5);
 		columnas.add(col6);
 		columnas.add(col7);
+		columnas.add(col8);
 		return columnas;
 	}
 	
