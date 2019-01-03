@@ -106,7 +106,7 @@ public class ReportesFiltros {
 	private Tipo bancoTercero;
 	private BancoCta bancoCta;
 	private Deposito deposito;
-	private List<Deposito> depositos = new ArrayList<Deposito>();
+	private List<Deposito> selectedDepositos = new ArrayList<Deposito>();
 	private ArticuloGasto articuloGasto;
 	private String descripcionArticuloGasto = "";
 	
@@ -524,6 +524,20 @@ public class ReportesFiltros {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		try {
 			out = rr.getDepositosPorSucursal(idSucursal);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return los depositos..
+	 */
+	public List<Deposito> getDepositos_() {
+		List<Deposito> out = new ArrayList<Deposito>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		try {
+			out = rr.getDepositos();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1171,12 +1185,18 @@ public class ReportesFiltros {
 		this.numeroRecibo = numeroRecibo;
 	}
 
-	public List<Deposito> getDepositos() {
-		return depositos;
+	public List<Deposito> getSelectedDepositos() {
+		if (this.selectedDepositos == null) {
+			return new ArrayList<Deposito>();
+		}
+		return selectedDepositos;
 	}
 
-	public void setDepositos(List<Deposito> depositos) {
-		this.depositos = depositos;
+	public void setSelectedDepositos(List<Deposito> depositos) {
+		if (depositos == null || depositos.size() == 0) {
+			this.selectedDepositos = new ArrayList<Deposito>();
+		}
+		this.selectedDepositos = depositos;
 	}
 
 	public boolean isIvaIncluido() {

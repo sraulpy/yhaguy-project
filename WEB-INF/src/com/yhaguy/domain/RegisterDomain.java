@@ -9097,7 +9097,7 @@ public class RegisterDomain extends Register {
 		String query = "select d.articulo.id, d.stock, d.deposito.descripcion from ArticuloDeposito d"
 				+ " where d.articulo.id = " + idArticulo + " and d.deposito.id = " + idDeposito;
 		List<Object[]> list = this.hql(query);
-		return list.size() > 0 ? list.get(0) : new Object[] { 0, 0, "" };
+		return list.size() > 0 ? list.get(0) : new Object[] { 0, (long) 0, "" };
 	}
 	
 	/**

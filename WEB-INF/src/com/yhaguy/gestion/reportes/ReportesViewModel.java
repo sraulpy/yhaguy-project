@@ -92,7 +92,6 @@ import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.Proveedor;
-import com.yhaguy.domain.ProveedorArticulo;
 import com.yhaguy.domain.RecaudacionCentral;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
@@ -1177,11 +1176,9 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void existenciaArticulos() {
 			try {
-				Tipo familia = filtro.getFamilia();
-				Tipo marca = filtro.getMarca();
-				Proveedor proveedor = filtro.getProveedorExterior();
+				ArticuloFamilia familia = filtro.getFamilia_();
 				Articulo articulo = filtro.getArticulo();
-				List<Deposito> depositos = filtro.getDepositos();
+				List<Deposito> depositos = filtro.getSelectedDepositos();
 				
 				if (depositos.isEmpty()) {
 					Clients.showNotification("Debe seleccionar al menos un depósito..", 
@@ -1190,80 +1187,61 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				long idFamilia = familia == null? 0 : familia.getId();
-				long idMarca = marca == null? 0 : marca.getId();
 				long idArticulo = articulo == null? 0 : articulo.getId();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				
-				List<Articulo> articulos = rr.getArticulos(idFamilia, idMarca, idArticulo);
+				List<Object[]> articulos = rr.getArticulos_(idFamilia, 0, idArticulo);
 				
-				for (Articulo art : articulos) {
-
-					if (proveedor != null) {
-						for (ProveedorArticulo provArt : art.getProveedorArticulos()) {
-							if (provArt.getProveedor().getId().longValue() == proveedor.getId().longValue()) {
-								for (Deposito deposito : depositos) {
-									ArticuloDeposito adp = rr.getArticuloDeposito(art.getId(), deposito.getId());
-									long stock = adp == null ? 0 : adp.getStock();
-									Object[] value = values.get(art.getCodigoInterno());
-									if (value != null) {
-										long cant = (long) value[0];
-										cant += stock;
-										values.put(art.getCodigoInterno(), 
-												new Object[] { cant, art.getDescripcion(), art.getCostoGs(), 
-											art.getArticuloFamilia().getDescripcion().toUpperCase() });
-									} else {
-										values.put(art.getCodigoInterno(),
-												new Object[] { stock, art.getDescripcion(), art.getCostoGs(),
-											art.getArticuloFamilia().getDescripcion().toUpperCase()});
-									}
-								}
-							}
+				for (Object[] art : articulos) {
+					long idArt = (long) art[0];
+					String cod = (String) art[1];
+					String des = (String) art[2];
+					double costoGs = (double) art[3];
+					String flia = (String) art[4];
+					for (Deposito deposito : depositos) {
+						Object[] stock_ = rr.getStockArticulo(idArt, deposito.getId());
+						long stock = (long) stock_[1];
+						Object[] value = values.get(cod);
+						if (value != null) {
+							long cant = (long) value[0];
+							cant += stock;
+							values.put(cod, new Object[] { cant, des, costoGs, flia });
+						} else {
+							values.put(cod, new Object[] { stock, des, costoGs, flia });
 						}
-					} else {
-						for (Deposito deposito : depositos) {
-							ArticuloDeposito adp = rr.getArticuloDeposito(art.getId(), deposito.getId());
-							long stock = adp == null ? 0 : adp.getStock();
-							Object[] value = values.get(art.getCodigoInterno());
-							if (value != null) {
-								long cant = (long) value[0];
-								cant += stock;
-								values.put(art.getCodigoInterno(), new Object[] { cant, art.getDescripcion(), art.getCostoGs(), 
-									art.getArticuloFamilia().getDescripcion().toUpperCase() });
-							} else {
-								values.put(art.getCodigoInterno(),
-										new Object[] { stock, art.getDescripcion(), art.getCostoGs(), 
-									art.getArticuloFamilia().getDescripcion().toUpperCase() });
-							}
-						}
-					}
+					}					
 				}	
 				
-				for (String key : values.keySet()) {
-					Object[] value = values.get(key);
-					long stock = (long) value[0];
-					double costo = (double) value[2];
-					data.add(new Object[] { key, value[1] , value[3], stock, Utiles.getRedondeo(costo), Utiles.getRedondeo(costo * stock) });
-				}
-
-				String suc = getAcceso().getSucursalOperativa().getText();		
-				String familia_ = familia == null ? "TODOS.." : familia.getDescripcion();
-				String marca_ = marca == null ? "TODOS.." : marca.getDescripcion();
-				String proveedor_ = proveedor == null ? "TODOS.." : proveedor.getRazonSocial(); 
-				String articulo_ = articulo == null ? "TODOS.." : articulo.getDescripcion();
-				String deposito_ = "";
-				
+				String deposito_ = "";				
 				for (Deposito deposito : depositos) {
 					deposito_ += deposito.getDescripcion() + " / ";
 				}
 				
-				ReporteExistenciaArticulos rep = new ReporteExistenciaArticulos(
-						suc, familia_, marca_, proveedor_, articulo_, deposito_);
-				rep.setDatosReporte(data);
-				rep.setApaisada();
+				for (String key : values.keySet()) {
+					Object[] value = values.get(key);
+					long stock = (long) value[0];
+					data.add(new Object[] { key, deposito_, stock } );
+				}
 				
+				// ordena la lista segun codigo..
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						String id1 = (String) o1[0];
+						String id2 = (String) o2[0];
+						return id1.compareTo(id2);
+					}
+				});
+
+				String familia_ = familia == null ? "TODOS.." : familia.getDescripcion();
+				String articulo_ = articulo == null ? "TODOS.." : articulo.getDescripcion();
+				
+				ReporteExistenciaArticulos rep = new ReporteExistenciaArticulos(familia_, articulo_, deposito_);
+				rep.setDatosReporte(data);
+				rep.setApaisada();				
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
@@ -5348,6 +5326,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE;
 				
 				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				JRDataSource dataSource = new LitrajeArticulos(list);
@@ -5419,7 +5398,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setNumeroRecibo("");
 		this.filtro.setCobrador(null);
 		this.filtro.setRazonSocialCobrador("");
-		this.filtro.setDepositos(new ArrayList<Deposito>());
+		this.filtro.setSelectedDepositos(new ArrayList<Deposito>());
 		this.filtro.setIvaIncluido(true);
 		this.filtro.setListaPrecio(null);
 		this.filtro.setCantidadDesde(0);
@@ -7198,7 +7177,8 @@ public class ReportesViewModel extends SimpleViewModel {
 							Utiles.getDateToString(cheque.getFechaVencimiento(), Utiles.DD_MM_YYYY),
 							cheque.getNumero() + "", cheque.getBanco().getBanco().getDescripcion().toUpperCase(),
 							cheque.getBeneficiario(),
-							cheque.getMonto()});
+							cheque.isMonedaLocal() ? 0.0 : cheque.getMonto(),
+							cheque.isMonedaLocal() ? cheque.getMonto() : 0.0});
 				}
 			}
 			String sucursal = getAcceso().getSucursalOperativa().getText();
@@ -7547,7 +7527,8 @@ public class ReportesViewModel extends SimpleViewModel {
 							Utiles.getDateToString(cheque.getFechaVencimiento(), Utiles.DD_MM_YYYY),
 							cheque.getNumero() + "", cheque.getBanco().getBanco().getDescripcion().toUpperCase(),
 							cheque.getBeneficiario(),
-							cheque.getMonto()});
+							cheque.isMonedaLocal() ? 0.0 : cheque.getMonto(),
+							cheque.isMonedaLocal() ? cheque.getMonto() : 0.0 });
 				}
 			}
 			String sucursal = getAcceso().getSucursalOperativa().getText();
@@ -16437,38 +16418,26 @@ class ReporteChequesDepositados extends ReporteYhaguy {
  */
 class ReporteExistenciaArticulos extends ReporteYhaguy {
 
-	private String sucursal;
 	private String familia;
-	private String marca;
-	private String proveedor;
 	private String articulo;
 	private String deposito;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col0 = new DatosColumnas("Código", TIPO_STRING, 40);
-	static DatosColumnas col1 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col2 = new DatosColumnas("Familia", TIPO_STRING, 25);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
+	static DatosColumnas col2 = new DatosColumnas("Depósito", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Stock", TIPO_LONG, 20, true);
-	static DatosColumnas col4 = new DatosColumnas("Costo Gs.", TIPO_DOUBLE_GS, 40, true);
-	static DatosColumnas col5 = new DatosColumnas("Total Gs.", TIPO_DOUBLE_GS, 40, true);
+	
 
-	public ReporteExistenciaArticulos(String sucursal, String familia,
-			String marca, String proveedor, String articulo, String deposito) {
-		this.sucursal = sucursal;
+	public ReporteExistenciaArticulos(String familia, String articulo, String deposito) {
 		this.familia = familia;
-		this.marca = marca;
-		this.proveedor = proveedor;
 		this.articulo = articulo;
 		this.deposito = deposito;
 	}
 
 	static {
-		cols.add(col0);
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
-		cols.add(col4);
-		cols.add(col5);
 	}
 
 	@Override
@@ -16487,17 +16456,11 @@ class ReporteExistenciaArticulos extends ReporteYhaguy {
 	private ComponentBuilder getCuerpo() {
 		VerticalListBuilder out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
-		out.add(cmp.horizontalFlowList()
-				.add(this.textoParValor("Familia", this.familia))
-				.add(this.textoParValor("Marca", this.marca)));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Familia", this.familia)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
-		out.add(cmp.horizontalFlowList()
-				.add(this.textoParValor("Proveedor", this.proveedor))
-				.add(this.textoParValor("Articulo", this.articulo)));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Articulo", this.articulo)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
-		out.add(cmp.horizontalFlowList()	
-				.add(this.textoParValor("Depósito", this.deposito))
-				.add(this.textoParValor("Sucursal", this.sucursal)));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Depósito", this.deposito)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}
@@ -16819,7 +16782,8 @@ class ReporteChequesPropiosAvencer extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Banco", TIPO_STRING, 40);
 	static DatosColumnas col3 = new DatosColumnas("Beneficiario", TIPO_STRING);
-	static DatosColumnas col4 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col4 = new DatosColumnas("Importe USD", TIPO_DOUBLE_DS, 30, true);
+	static DatosColumnas col5 = new DatosColumnas("Importe Gs", TIPO_DOUBLE_GS, 30, true);
 
 	public ReporteChequesPropiosAvencer(String sucursal) {
 		this.sucursal = sucursal;
@@ -16832,6 +16796,7 @@ class ReporteChequesPropiosAvencer extends ReporteYhaguy {
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
 	}
 
 	@Override
