@@ -1,10 +1,9 @@
-<window title="Buscador de Artículos" border="normal" closable="true"
-	width="95%" height="95%"
+<window border="normal"
+	width="98%" height="98%"
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel')"
 	onCreate="tbox_codint.focus()"
 	id="findArt">
-	<caption image="/core/images/searching2_.png"></caption>
 	<hlayout sclass="button-container">
 		<navbar mold="bs-pills">
 			<navitem label=" TODOS" selected="true"
@@ -19,6 +18,8 @@
 			<field value=">=" />
 			<spinner id="int_box" value="@bind(vm.filterStock)" instant="true" width="70px"></spinner>
 		</hlayout>
+		<div hflex="true"></div>
+		<button iconSclass="z-icon-times" onClick="findArt.detach()"></button>
 	</hlayout>
 	<listbox sclass="small-list"
 		vflex="4"
