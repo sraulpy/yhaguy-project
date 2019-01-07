@@ -20319,11 +20319,11 @@ class LitrajeArticulos implements JRDataSource {
 	public LitrajeArticulos(List<HistoricoMovimientoArticulo> values) {
 		this.values = values;
 		for (HistoricoMovimientoArticulo item : values) {
-			totalOctubre += item.getOctubre();
+			totalOctubre += item.getOctubre_();
 			totalOctubre_ += item.get_octubre();
-			totalNoviembre += item.getNoviembre();
+			totalNoviembre += item.getNoviembre_();
 			totalNoviembre_ += item.get_noviembre();
-			totalDiciembre += item.getDiciembre();
+			totalDiciembre += item.getDiciembre_();
 			totalDiciembre_ += item.get_diciembre();
 		}
 		Collections.sort(this.values, new Comparator<HistoricoMovimientoArticulo>() {
