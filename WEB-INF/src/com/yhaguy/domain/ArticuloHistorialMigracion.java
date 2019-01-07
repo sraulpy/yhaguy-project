@@ -19,6 +19,7 @@ public class ArticuloHistorialMigracion extends Domain {
 	private double costo;
 	private Date fechaAlta;
 	private SucursalApp sucursal;
+	private Deposito deposito;
 
 	@Override
 	public int compareTo(Object o) {
@@ -107,5 +108,13 @@ public class ArticuloHistorialMigracion extends Domain {
 
 	public void setFechaAlta(Date fechaAlta) {
 		this.fechaAlta = fechaAlta;
+	}
+
+	public Deposito getDeposito() {
+		return deposito;
+	}
+
+	public void setDeposito(Deposito deposito) {
+		this.deposito = deposito;
 	}
 }

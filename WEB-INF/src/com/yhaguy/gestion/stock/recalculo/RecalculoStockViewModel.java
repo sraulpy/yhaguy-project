@@ -23,7 +23,6 @@ import org.zkoss.zul.Timer;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
-import com.yhaguy.Configuracion;
 import com.yhaguy.domain.HistoricoRecalculoStock;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.process.ProcesosArticulos;
@@ -66,13 +65,8 @@ public class RecalculoStockViewModel extends SimpleViewModel {
 		hist.setUsuario(this.getLoginNombre());
 		rr.saveObject(hist, this.getLoginNombre());
 		this.observacion = "";
-		long idArticulo = this.selectedArticulo != null? (long) this.selectedArticulo[0] : 0;
-		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-			ProcesosArticulos.recalcularStock_(2, 2, idArticulo);
-		} else {
-			ProcesosArticulos.recalcularStock(2, 2);
-		}		
+		long idArticulo = this.selectedArticulo != null? (long) this.selectedArticulo[0] : 0;		
+		ProcesosArticulos.recalcularStock_(2, 2, idArticulo);		
 		Clients.showNotification("STOCK RECALCULADO");
 		this.btnRecalc.setDisabled(false);
 		BindUtils.postNotifyChange(null, null, this, "*");

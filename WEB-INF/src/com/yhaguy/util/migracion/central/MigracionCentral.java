@@ -174,7 +174,7 @@ public class MigracionCentral {
 		while (csv.hashNext()) {
 			String razonSocial = csv.getDetalleString("RAZONSOCIAL");
 			String idcobrador = csv.getDetalleString("IDCOBRADOR");
-			String cobrador = csv.getDetalleString("COBRADOR");			
+			//String cobrador = csv.getDetalleString("COBRADOR");			
 			
 			Cliente cli = rr.getClienteByRazonSocial(razonSocial);
 			if (cli != null) {

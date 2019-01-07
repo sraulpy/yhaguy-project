@@ -22,6 +22,9 @@
 		
 		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
 			column="idsucursal" lazy="false"/>
+		
+		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito"
+			column="idDeposito" lazy="false"/>
 				
 	</class>
 </hibernate-mapping>

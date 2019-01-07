@@ -2,6 +2,14 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.ReportesViewModel')"
 	height="100%">
 	
+	<style>
+		.z-chosenbox-option {
+    		white-space: nowrap;
+    		text-overflow: ellipsis;
+    		overflow: hidden;
+		}
+	</style>
+	
 	<hlayout vflex="true" valign="top">
 		<listbox vflex="true" width="250px"
 			sclass="rounded"

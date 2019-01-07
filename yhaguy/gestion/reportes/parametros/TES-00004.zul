@@ -78,10 +78,10 @@
 		</row>
 		<row>
 			<field value="Rubro:" />
-			<combobox value="@load(vm.dato.filtro.rubro.descripcion.toUpperCase())"
-				selectedItem="@bind(vm.dato.filtro.rubro)"
+			<combobox value="@load(vm.dato.filtro.rubro_.descripcion.toUpperCase())"
+				selectedItem="@bind(vm.dato.filtro.rubro_)"
 				instant="true"
-				model="@load(vm.dato.filtro.rubros)"
+				model="@load(vm.dato.filtro.rubros_)"
 				hflex="true"
 				placeholder="TODOS..">
 				<template name="model">

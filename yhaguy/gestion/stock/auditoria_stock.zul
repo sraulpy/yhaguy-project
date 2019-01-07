@@ -43,7 +43,7 @@
 	
 	<listbox sclass="small-list"
 		emptyMessage="SELECCIONE UN ARTICULO.."
-		model="@load(vm.existencia)" height="310px"
+		model="@load(vm.existencia)" height="330px"
 		selectedItem="@bind(vm.selectedDeposito)">
 		<listhead>
 			<listheader label="Depósito"></listheader>

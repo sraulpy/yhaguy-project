@@ -49,20 +49,13 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("*")
 	public void recalcularStock(@BindingParam("item") MyArray item) throws Exception {
-		long stockActual = (long) item.getPos2();
 		long stockHistorial = Long.parseLong((String) item.getPos3());
-		long dif = stockActual - stockHistorial;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		ArticuloDeposito adp = rr.getArticuloDeposito((long) this.selectedArticulo[0], item.getId());
 		adp.setStock(stockHistorial);
 		rr.saveObject(adp, this.getLoginNombre());
-		
-		ArticuloDeposito adp_ = rr.getArticuloDeposito((long) this.selectedArticulo[0], Deposito.ID_DEPOSITO_CONTROL);
-		if (adp_ != null) {
-			adp_.setStock(adp_.getStock() + dif);
-			rr.saveObject(adp_, this.getLoginNombre());
-		}
+	
 		Clients.showNotification("ITEM RECALCULADO..");
 	}
 	
@@ -146,7 +139,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 	private List<MyPair> getDepositos() throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Deposito> deps = rr.getDepositosPorSucursal(ID_SUC_PRINCIPAL);
+		List<Deposito> deps = rr.getDepositos();
 		for (Deposito dep : deps) {
 			out.add(new MyPair(dep.getId(), dep.getDescripcion()));
 		}
