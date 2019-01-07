@@ -20319,11 +20319,11 @@ class LitrajeArticulos implements JRDataSource {
 	public LitrajeArticulos(List<HistoricoMovimientoArticulo> values) {
 		this.values = values;
 		for (HistoricoMovimientoArticulo item : values) {
-			totalOctubre += item.getOctubre_();
+			totalOctubre += item.getOctubre();
 			totalOctubre_ += item.get_octubre();
-			totalNoviembre += item.getNoviembre_();
+			totalNoviembre += item.getNoviembre();
 			totalNoviembre_ += item.get_noviembre();
-			totalDiciembre += item.getDiciembre_();
+			totalDiciembre += item.getDiciembre();
 			totalDiciembre_ += item.get_diciembre();
 		}
 		Collections.sort(this.values, new Comparator<HistoricoMovimientoArticulo>() {
@@ -20453,15 +20453,15 @@ class LitrajeArticulos implements JRDataSource {
 		} else if ("_Diciembre".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.get_diciembre());
 		} else if ("tot_oct".equals(fieldName)) {
-			value = Utiles.getNumberFormat(this.totalOctubre);
+			value = Utiles.getNumberFormatDs(this.totalOctubre);
 		} else if ("tot_oct_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalOctubre_);
 		} else if ("tot_nov".equals(fieldName)) {
-			value = Utiles.getNumberFormat(this.totalNoviembre);
+			value = Utiles.getNumberFormatDs(this.totalNoviembre);
 		} else if ("tot_nov_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalNoviembre_);
 		} else if ("tot_dic".equals(fieldName)) {
-			value = Utiles.getNumberFormat(this.totalDiciembre);
+			value = Utiles.getNumberFormatDs(this.totalDiciembre);
 		} else if ("tot_dic_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalDiciembre_);
 		}
