@@ -4658,12 +4658,15 @@ public class RegisterDomain extends Register {
 	 * migracion del articulo
 	 */
 	public List<Object[]> getMigracionPorArticulo(String codigoArticulo,
-			Date desde, Date hasta, long idSucursal) throws Exception {
+			Date desde, Date hasta, long idDeposito) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select a.fechaAlta, a.stock, a.sucursal.descripcion, a.costo"
-				+ " from ArticuloHistorialMigracion a where a.dbEstado != 'D' and a.codigoInterno like '"
-				+ codigoArticulo + "' and a.sucursal.id = " + idSucursal;
+				+ " from ArticuloHistorialMigracion a where a.dbEstado != 'D' and a.codigoInterno = '"
+				+ codigoArticulo + "'";
+		if (idDeposito > 0) {
+			query += " and a.deposito.id = " + idDeposito;
+		}
 		if (desde != null) {
 			query += " and (a.fechaAlta >= '" + desde_
 					+ "' and a.fechaAlta <= '" + hasta_ + "')";
@@ -8884,9 +8887,11 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Object[]> list = rr.getVentasDetalladoLitraje(Utiles.getFecha("01-10-2018 00:00:00"), new Date(), 82);
-			for (Object[] item : list) {
-				System.out.println(item[1] + " - " + item[2] + " - " + item[3]);
+			List<BancoDescuentoCheque> dtos = rr.getObjects(BancoDescuentoCheque.class.getName());
+			for (BancoDescuentoCheque dto : dtos) {
+				dto.setTotalImporte_gs(dto.getTotalImporteGs());
+				rr.saveObject(dto, dto.getUsuarioMod());
+				System.out.println(dto.getTotalImporte_gs());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

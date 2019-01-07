@@ -18,6 +18,61 @@ public class GastoDetalle extends Domain{
 	private CentroCosto centroCosto;
 	private Tipo tipoIva;
 	
+	/**
+	 * @return gravada 10%
+	 */
+	public double getGravada10() {
+		double out = 0;
+		if (this.isIva10()) {
+			out += this.getMontoGs() - this.getMontoIva();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return gravada 5%
+	 */
+	public double getGravada5() {
+		double out = 0;
+		if (this.isIva5()) {
+			out += this.getMontoGs() - this.getMontoIva();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return iva 10%
+	 */
+	public double getIva10() {
+		double out = 0;
+		if (this.isIva10()) {
+			out += this.getMontoIva();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return iva 5%
+	 */
+	public double getIva5() {
+		double out = 0;
+		if (this.isIva5()) {
+			out += this.getMontoIva();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return exenta
+	 */
+	public double getExenta() {
+		double out = 0;
+		if (this.isExenta()) {
+			out += this.getMontoGs();
+		}
+		return out;
+	}
+	
 	public boolean isBaseImponible() {
 		return this.articuloGasto.getDescripcion().equals(ArticuloGasto.IVA_IMPORTACION);
 	}
