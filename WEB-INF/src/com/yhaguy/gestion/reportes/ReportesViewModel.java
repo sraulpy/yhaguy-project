@@ -5230,7 +5230,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String vendedor = key.split(";")[1];
 					String key_ = cliente + ";" + vendedor;
 					
-					if (keys.get(key) == null) {
+					if (keys.get(key_) == null) {
 						Double cantidad = cants.get(key);
 						
 						Double cantEnero = cants.get(key_ + ";1");
