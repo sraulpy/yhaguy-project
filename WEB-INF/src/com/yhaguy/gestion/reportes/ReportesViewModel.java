@@ -5223,141 +5223,146 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 				
-				for (String key : cants.keySet()) {
+				Map<String, String> keys = new HashMap<String, String>();
+				
+				for (String key : cants.keySet()) {					
 					String cliente = key.split(";")[0];
 					String vendedor = key.split(";")[1];
 					String key_ = cliente + ";" + vendedor;
-					Double cantidad = cants.get(key);
 					
-					Double cantEnero = cants.get(key_ + ";1");
-					if (cantEnero == null) cantEnero = 0.0; 
-					String enero = cantEnero != null ? Utiles.getNumberFormatDs(cantEnero) + "" : "0";
-					
-					Double cantFebrero = cants.get(key_ + ";2");
-					if (cantFebrero == null) cantFebrero = 0.0;
-					String febrero = cantFebrero != null ? Utiles.getNumberFormatDs(cantFebrero) + "" : "0";
-					
-					Double cantMarzo = cants.get(key_ + ";3");
-					if (cantMarzo == null) cantMarzo = 0.0;
-					String marzo = cantMarzo != null ? Utiles.getNumberFormatDs(cantMarzo) + "" : "0";
-					
-					Double cantAbril = cants.get(key_ + ";4");
-					if (cantAbril == null) cantAbril = 0.0;
-					String abril = cantAbril != null ? Utiles.getNumberFormatDs(cantAbril) + "" : "0";
-					
-					Double cantMayo = cants.get(key_ + ";5");
-					if (cantMayo == null) cantMayo = 0.0;
-					String mayo = cantMayo != null ? Utiles.getNumberFormatDs(cantMayo) + "" : "0";	
-					
-					Double cantJunio = cants.get(key_ + ";6");
-					if (cantJunio == null) cantJunio = 0.0;
-					String junio = cantJunio != null ? Utiles.getNumberFormatDs(cantJunio) + "" : "0";
-					
-					Double cantJulio = cants.get(key_ + ";7");
-					if (cantJulio == null) cantJulio = 0.0;
-					String julio = cantJulio != null ? Utiles.getNumberFormatDs(cantJulio) + "" : "0";
-					
-					Double cantAgosto = cants.get(key_ + ";8");
-					if (cantAgosto == null) cantAgosto = 0.0;
-					String agosto = cantAgosto != null ? Utiles.getNumberFormatDs(cantAgosto) + "" : "0";
-					
-					Double cantSetiembre = cants.get(key_ + ";9");
-					if (cantSetiembre == null) cantSetiembre = 0.0;
-					String setiembre = cantSetiembre != null ? Utiles.getNumberFormatDs(cantSetiembre) + "" : "0";
-					
-					Double cantOctubre = cants.get(key_ + ";10");
-					if (cantOctubre == null) cantOctubre = 0.0;
-					String octubre = cantOctubre != null ? Utiles.getNumberFormatDs(cantOctubre) + "" : "0";
-					
-					Double cantNoviembre = cants.get(key_ + ";11");
-					if (cantNoviembre == null) cantNoviembre = 0.0;
-					String noviembre = cantNoviembre != null ? Utiles.getNumberFormatDs(cantNoviembre) + "" : "0";
-					
-					Double cantDiciembre = cants.get(key_ + ";12");
-					if (cantDiciembre == null) cantDiciembre = 0.0;
-					String diciembre = cantDiciembre != null ? Utiles.getNumberFormatDs(cantDiciembre) + "" : "0";
-					
-					Double impEnero = importes.get(key_ + ";1");
-					if (impEnero == null) impEnero = 0.0;
-					String _enero = impEnero != null ? Utiles.getNumberFormat(impEnero) + "" : "0";
-					
-					Double impFebrero = importes.get(key_ + ";2");
-					if (impFebrero == null) impFebrero = 0.0;
-					String _febrero = impFebrero != null ? Utiles.getNumberFormat(impFebrero) + "" : "0";
-					
-					Double impMarzo = importes.get(key_ + ";3");
-					if (impMarzo == null) impMarzo = 0.0;
-					String _marzo = impMarzo != null ? Utiles.getNumberFormat(impMarzo) + "" : "0";
-					
-					Double impAbril = importes.get(key_ + ";4");
-					if (impAbril == null) impAbril = 0.0;
-					String _abril = impAbril != null ? Utiles.getNumberFormat(impAbril) + "" : "0";
-					
-					Double impMayo = importes.get(key_ + ";5");
-					if (impMayo == null) impMayo = 0.0;
-					String _mayo = impMayo != null ? Utiles.getNumberFormat(impMayo) + "" : "0";
-					
-					Double impJunio = importes.get(key_ + ";6");
-					if (impJunio == null) impJunio = 0.0;
-					String _junio = impJunio != null ? Utiles.getNumberFormat(impJunio) + "" : "0";
-					
-					Double impJulio = importes.get(key_ + ";7");
-					if (impJulio == null) impJulio = 0.0;
-					String _julio = impJulio != null ? Utiles.getNumberFormat(impJulio) + "" : "0";
-					
-					Double impAgosto = importes.get(key_ + ";8");
-					if (impAgosto == null) impAgosto = 0.0;
-					String _agosto = impAgosto != null ? Utiles.getNumberFormat(impAgosto) + "" : "0";
-					
-					Double impSetiembre = importes.get(key_ + ";9");
-					if (impSetiembre == null) impSetiembre = 0.0;
-					String _setiembre = impSetiembre != null ? Utiles.getNumberFormat(impSetiembre) + "" : "0";
-					
-					Double impOctubre = importes.get(key_ + ";10");
-					if (impOctubre == null) impOctubre = 0.0;
-					String _octubre = impOctubre != null ? Utiles.getNumberFormat(impOctubre) + "" : "0";
-					
-					Double impNoviembre = importes.get(key_ + ";11");
-					if (impNoviembre == null) impNoviembre = 0.0;
-					String _noviembre = impNoviembre != null ? Utiles.getNumberFormat(impNoviembre) + "" : "0";
-					
-					Double impDiciembre = importes.get(key_ + ";12");
-					if (impDiciembre == null) impDiciembre = 0.0;
-					String _diciembre = impDiciembre != null ? Utiles.getNumberFormat(impDiciembre) + "" : "0";
-					
-					HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
-					hist.setDescripcion(cliente);
-					hist.setReferencia(vendedor);
-					hist.setLitraje(cantidad);
-					hist.setEnero_(cantEnero);
-					hist.setFebrero_(cantFebrero);
-					hist.setMarzo_(cantMarzo);
-					hist.setAbril_(cantAbril);
-					hist.setMayo_(cantMayo);
-					hist.setJunio_(cantJunio);
-					hist.setJulio_(cantJulio);
-					hist.setAgosto_(cantAgosto);
-					hist.setSetiembre_(cantSetiembre);
-					hist.setOctubre_(cantOctubre);
-					hist.setNoviembre_(cantNoviembre);
-					hist.setDiciembre_(cantDiciembre);
-					hist.set_enero(impEnero);
-					hist.set_febrero(impFebrero);
-					hist.set_marzo(impMarzo);
-					hist.set_abril(impAbril);
-					hist.set_mayo(impMayo);
-					hist.set_junio(impJunio);
-					hist.set_julio(impJulio);
-					hist.set_agosto(impAgosto);
-					hist.set_setiembre(impSetiembre);
-					hist.set_octubre(impOctubre);
-					hist.set_noviembre(impNoviembre);
-					hist.set_diciembre(impDiciembre);
-					hist.setTotal_(hist.getEnero() + hist.getFebrero() + hist.getMarzo() + hist.getAbril() + hist.getMayo() + hist.getJunio()
-							+ hist.getJulio() + hist.getAgosto() + hist.getSetiembre() + hist.getOctubre() + hist.getNoviembre() + hist.getDiciembre());
-					
-					list.add(hist);			
-				
+					if (keys.get(key) == null) {
+						Double cantidad = cants.get(key);
+						
+						Double cantEnero = cants.get(key_ + ";1");
+						if (cantEnero == null) cantEnero = 0.0; 
+						String enero = cantEnero != null ? Utiles.getNumberFormatDs(cantEnero) + "" : "0";
+						
+						Double cantFebrero = cants.get(key_ + ";2");
+						if (cantFebrero == null) cantFebrero = 0.0;
+						String febrero = cantFebrero != null ? Utiles.getNumberFormatDs(cantFebrero) + "" : "0";
+						
+						Double cantMarzo = cants.get(key_ + ";3");
+						if (cantMarzo == null) cantMarzo = 0.0;
+						String marzo = cantMarzo != null ? Utiles.getNumberFormatDs(cantMarzo) + "" : "0";
+						
+						Double cantAbril = cants.get(key_ + ";4");
+						if (cantAbril == null) cantAbril = 0.0;
+						String abril = cantAbril != null ? Utiles.getNumberFormatDs(cantAbril) + "" : "0";
+						
+						Double cantMayo = cants.get(key_ + ";5");
+						if (cantMayo == null) cantMayo = 0.0;
+						String mayo = cantMayo != null ? Utiles.getNumberFormatDs(cantMayo) + "" : "0";	
+						
+						Double cantJunio = cants.get(key_ + ";6");
+						if (cantJunio == null) cantJunio = 0.0;
+						String junio = cantJunio != null ? Utiles.getNumberFormatDs(cantJunio) + "" : "0";
+						
+						Double cantJulio = cants.get(key_ + ";7");
+						if (cantJulio == null) cantJulio = 0.0;
+						String julio = cantJulio != null ? Utiles.getNumberFormatDs(cantJulio) + "" : "0";
+						
+						Double cantAgosto = cants.get(key_ + ";8");
+						if (cantAgosto == null) cantAgosto = 0.0;
+						String agosto = cantAgosto != null ? Utiles.getNumberFormatDs(cantAgosto) + "" : "0";
+						
+						Double cantSetiembre = cants.get(key_ + ";9");
+						if (cantSetiembre == null) cantSetiembre = 0.0;
+						String setiembre = cantSetiembre != null ? Utiles.getNumberFormatDs(cantSetiembre) + "" : "0";
+						
+						Double cantOctubre = cants.get(key_ + ";10");
+						if (cantOctubre == null) cantOctubre = 0.0;
+						String octubre = cantOctubre != null ? Utiles.getNumberFormatDs(cantOctubre) + "" : "0";
+						
+						Double cantNoviembre = cants.get(key_ + ";11");
+						if (cantNoviembre == null) cantNoviembre = 0.0;
+						String noviembre = cantNoviembre != null ? Utiles.getNumberFormatDs(cantNoviembre) + "" : "0";
+						
+						Double cantDiciembre = cants.get(key_ + ";12");
+						if (cantDiciembre == null) cantDiciembre = 0.0;
+						String diciembre = cantDiciembre != null ? Utiles.getNumberFormatDs(cantDiciembre) + "" : "0";
+						
+						Double impEnero = importes.get(key_ + ";1");
+						if (impEnero == null) impEnero = 0.0;
+						String _enero = impEnero != null ? Utiles.getNumberFormat(impEnero) + "" : "0";
+						
+						Double impFebrero = importes.get(key_ + ";2");
+						if (impFebrero == null) impFebrero = 0.0;
+						String _febrero = impFebrero != null ? Utiles.getNumberFormat(impFebrero) + "" : "0";
+						
+						Double impMarzo = importes.get(key_ + ";3");
+						if (impMarzo == null) impMarzo = 0.0;
+						String _marzo = impMarzo != null ? Utiles.getNumberFormat(impMarzo) + "" : "0";
+						
+						Double impAbril = importes.get(key_ + ";4");
+						if (impAbril == null) impAbril = 0.0;
+						String _abril = impAbril != null ? Utiles.getNumberFormat(impAbril) + "" : "0";
+						
+						Double impMayo = importes.get(key_ + ";5");
+						if (impMayo == null) impMayo = 0.0;
+						String _mayo = impMayo != null ? Utiles.getNumberFormat(impMayo) + "" : "0";
+						
+						Double impJunio = importes.get(key_ + ";6");
+						if (impJunio == null) impJunio = 0.0;
+						String _junio = impJunio != null ? Utiles.getNumberFormat(impJunio) + "" : "0";
+						
+						Double impJulio = importes.get(key_ + ";7");
+						if (impJulio == null) impJulio = 0.0;
+						String _julio = impJulio != null ? Utiles.getNumberFormat(impJulio) + "" : "0";
+						
+						Double impAgosto = importes.get(key_ + ";8");
+						if (impAgosto == null) impAgosto = 0.0;
+						String _agosto = impAgosto != null ? Utiles.getNumberFormat(impAgosto) + "" : "0";
+						
+						Double impSetiembre = importes.get(key_ + ";9");
+						if (impSetiembre == null) impSetiembre = 0.0;
+						String _setiembre = impSetiembre != null ? Utiles.getNumberFormat(impSetiembre) + "" : "0";
+						
+						Double impOctubre = importes.get(key_ + ";10");
+						if (impOctubre == null) impOctubre = 0.0;
+						String _octubre = impOctubre != null ? Utiles.getNumberFormat(impOctubre) + "" : "0";
+						
+						Double impNoviembre = importes.get(key_ + ";11");
+						if (impNoviembre == null) impNoviembre = 0.0;
+						String _noviembre = impNoviembre != null ? Utiles.getNumberFormat(impNoviembre) + "" : "0";
+						
+						Double impDiciembre = importes.get(key_ + ";12");
+						if (impDiciembre == null) impDiciembre = 0.0;
+						String _diciembre = impDiciembre != null ? Utiles.getNumberFormat(impDiciembre) + "" : "0";
+						
+						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
+						hist.setDescripcion(cliente);
+						hist.setReferencia(vendedor);
+						hist.setLitraje(cantidad);
+						hist.setEnero_(cantEnero);
+						hist.setFebrero_(cantFebrero);
+						hist.setMarzo_(cantMarzo);
+						hist.setAbril_(cantAbril);
+						hist.setMayo_(cantMayo);
+						hist.setJunio_(cantJunio);
+						hist.setJulio_(cantJulio);
+						hist.setAgosto_(cantAgosto);
+						hist.setSetiembre_(cantSetiembre);
+						hist.setOctubre_(cantOctubre);
+						hist.setNoviembre_(cantNoviembre);
+						hist.setDiciembre_(cantDiciembre);
+						hist.set_enero(impEnero);
+						hist.set_febrero(impFebrero);
+						hist.set_marzo(impMarzo);
+						hist.set_abril(impAbril);
+						hist.set_mayo(impMayo);
+						hist.set_junio(impJunio);
+						hist.set_julio(impJulio);
+						hist.set_agosto(impAgosto);
+						hist.set_setiembre(impSetiembre);
+						hist.set_octubre(impOctubre);
+						hist.set_noviembre(impNoviembre);
+						hist.set_diciembre(impDiciembre);
+						hist.setTotal_(hist.getEnero() + hist.getFebrero() + hist.getMarzo() + hist.getAbril() + hist.getMayo() + hist.getJunio()
+								+ hist.getJulio() + hist.getAgosto() + hist.getSetiembre() + hist.getOctubre() + hist.getNoviembre() + hist.getDiciembre());
+						
+						list.add(hist);			
+						keys.put(key_, key_);
+					}					
 				}				
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE;
