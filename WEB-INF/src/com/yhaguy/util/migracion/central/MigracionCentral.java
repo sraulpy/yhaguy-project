@@ -1,18 +1,30 @@
 package com.yhaguy.util.migracion.central;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
 
+import com.coreweb.domain.Tipo;
+import com.coreweb.domain.Usuario;
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
-import com.yhaguy.domain.Articulo;
-import com.yhaguy.domain.ArticuloUbicacion;
-import com.yhaguy.domain.Cliente;
-import com.yhaguy.domain.CtaCteEmpresaMovimiento;
+import com.yhaguy.domain.AccesoApp;
+import com.yhaguy.domain.ArticuloAplicacion;
+import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.ArticuloGasto;
+import com.yhaguy.domain.ArticuloGrupo;
+import com.yhaguy.domain.ArticuloHistorialMigracion;
+import com.yhaguy.domain.ArticuloMarca;
+import com.yhaguy.domain.ArticuloModelo;
+import com.yhaguy.domain.CuentaContable;
+import com.yhaguy.domain.DepartamentoApp;
+import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
-import com.yhaguy.domain.Proveedor;
+import com.yhaguy.domain.PlanDeCuenta;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.util.Utiles;
 
 public class MigracionCentral {
@@ -25,167 +37,569 @@ public class MigracionCentral {
 	static final String SUC_GAM = "GRAN ALMACEN";
 	
 	/**
-	 * proveedores..
+	 * SISTEMA
 	 */
-	public static void migrarProveedores() throws Exception {
-
+	
+	/**
+	 * sucursales departamentos depositos
+	 */
+	public static void migrarSucursales() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		String src = DIR_MIGRACION + "PROVEEDORES.csv";
-		String src_ = DIR_MIGRACION + "BATERIAS_SALDOS.csv";
+
+		String[] sucs = new String[] { SUC_MRA, SUC_CENTRAL, SUC_MCAL, SUC_GAM };
+		String[] dirs = new String[] { "", "", "", "" };
+		String[] estbc = new String[] { "2", "1", "3", "4" };
+		String[] tels = new String[] { "", "", "", "" };
+		
+		String[][] departamentos = new String[][] { { "ADMINISTRACION", "VENTAS" },
+				{ "ADMINISTRACION", "RR.HH", "INFORMATICA", "COBRANZAS", "ABASTECIMIENTO", "VENTAS", "MARKETING",
+						"AUDITORIA", "LOGISTICA", "DIRECTORIO" },
+				{ "ADMINISTRACION", "VENTAS" }, { "ADMINISTRACION", "VENTAS" } };
+
+		for (int i = 0; i < sucs.length; i++) {
+			SucursalApp suc = new SucursalApp();
+			suc.setDescripcion(sucs[i]);
+			suc.setDireccion(dirs[i]);
+			suc.setEstablecimiento(estbc[i]);
+			suc.setNombre(sucs[i]);
+			suc.setTelefono(tels[i]);
+			rr.saveObject(suc, "sys");
+			
+			String[] depmts = departamentos[i];
+			for (int j = 0; j < depmts.length; j++) {
+				DepartamentoApp dep = new DepartamentoApp();
+				dep.setDescripcion(depmts[j]);
+				dep.setNombre(depmts[j]);
+				dep.setSucursal(suc);
+				rr.saveObject(dep, "sys");
+			}
+			
+			System.out.println(suc.getDescripcion());
+		}	
+	}
+	
+	
+	/**
+	 * funcionarios..
+	 */
+	public static void migrarFuncionarios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "FUNCIONARIOS.csv";
 
 		String[][] cab = { { "Empresa", CSV.STRING } };
-		String[][] det = { { "IDCUENTA", CSV.STRING }, { "RAZONSOCIAL", CSV.STRING }, { "RUC", CSV.STRING },
-				{ "TELEFONO", CSV.STRING }, { "DIRECCION", CSV.STRING } };		  	  
+		String[][] det = { { "RAZONSOCIAL", CSV.STRING }, { "RUC", CSV.STRING }, { "DIRECCION", CSV.STRING }, { "TELEFONO", CSV.STRING } };
 
-		String[][] det_ = { { "RAZONSOCIAL", CSV.STRING }, { "NRODOCUMENTO", CSV.STRING }, { "CONCEPTO", CSV.STRING },
-				{ "EMISION", CSV.STRING }, { "VENCIMIENTO", CSV.STRING }, { "IMPORTE", CSV.STRING }, { "SALDO", CSV.STRING }, { "IDCUENTA", CSV.STRING } };
-
-		Map<String, Object[]> map = new HashMap<String, Object[]>();
-		
 		CSV csv = new CSV(cab, det, src);
 		csv.start();
 		while (csv.hashNext()) {
-			String idcuenta = csv.getDetalleString("IDCUENTA");
 			String rs = csv.getDetalleString("RAZONSOCIAL");
 			String ruc = csv.getDetalleString("RUC");
-			String direccion = csv.getDetalleString("DIRECCION");
-			String telefono = csv.getDetalleString("TELEFONO");
-			
-			Object[] datos = { rs, ruc, direccion, telefono };
-			map.put(idcuenta, datos);
-		}
-		
-		CSV csv_ = new CSV(cab, det_, src_);
-		csv_.start();
-		while (csv_.hashNext()) {
-			String razonsocial = csv_.getDetalleString("RAZONSOCIAL");
-			String concepto = csv_.getDetalleString("CONCEPTO");
-			String nrodocumento = csv_.getDetalleString("NRODOCUMENTO");
-			String emision = csv_.getDetalleString("EMISION");
-			String vencimiento = csv_.getDetalleString("VENCIMIENTO");
-			String importe = csv_.getDetalleString("IMPORTE");
-			String saldo = csv_.getDetalleString("SALDO");			
-			String idcuenta = csv_.getDetalleString("IDCUENTA");
-			Object[] datos = map.get(idcuenta);
-			
-			if (datos != null) {
-				Empresa emp = rr.getEmpresa(((String) datos[0]).replace("'", ""));
-				if (emp == null) {
-					emp = new Empresa();
-					emp.setRazonSocial((String) datos[0]);
-					emp.setNombre((String) datos[0]);
-					emp.setRuc((String) datos[1]);
-					emp.setDireccion_((String) datos[2]);
-					emp.setTelefono_((String) datos[3]);
-					rr.saveObject(emp, "sys");
+			String dir = csv.getDetalleString("DIRECCION");
+			String tel = csv.getDetalleString("TELEFONO");
 
-					Proveedor pr = new Proveedor();
-					pr.setEmpresa(emp);
-					rr.saveObject(pr, "sys");
-				} else {
-					Proveedor prov = rr.getProveedorByEmpresa(emp.getId());
-					if (prov == null) {
-						prov = new Proveedor();
-						prov.setEmpresa(emp);
-						rr.saveObject(prov, "sys");
-					}
-				}
-				
-				CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
-				movim.setAnulado(false);
-				movim.setCerrado(false);
-				movim.setFechaEmision(Utiles.getFecha(emision, "dd/MM/yyyy"));
-				movim.setFechaVencimiento(Utiles.getFecha(vencimiento, "dd/MM/yyyy"));
-				movim.setIdEmpresa(emp.getId());
-				movim.setIdMovimientoOriginal(0);
-				movim.setIdVendedor(0);
-				movim.setImporteOriginal(Double.parseDouble(importe.replace(",", ".")));
-				movim.setMoneda(concepto.equals("Proveedores Ext.") ? rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_DOLAR) : rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-				movim.setNroComprobante(nrodocumento);
-				movim.setNumeroImportacion("");
-				movim.setSaldo(Double.parseDouble(saldo.replace(",", ".")));
-				movim.setSucursal(rr.getSucursalAppById(2));
-				movim.setTipoCambio(1);
-				movim.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
-				movim.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO));
-				
-				rr.saveObject(movim, "sys");
-				
-				System.out.println(movim.getNroComprobante());
+			Empresa emp = new Empresa();
+			emp.setRazonSocial(rs);
+			emp.setRuc(ruc);
+			emp.setCi(ruc);
+			emp.setDireccion_(dir);
+			emp.setTelefono_(tel);
+			rr.saveObject(emp, "sys");
 			
-			} else {
-				System.err.println(razonsocial);
-			}
+			Funcionario fun = new Funcionario();
+			fun.setEmpresa(emp);
+			rr.saveObject(fun, "sys");
+
+			System.out.println(emp.getRazonSocial());
+
 		}
 	}
 	
 	/**
-	 * ubicaciones..
+	 * usuarios..
 	 */
-	public static void migrarUbicaciones() throws Exception {
-
+	public static void migrarUsuariosCentral() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		String src = DIR_MIGRACION + "UBICACIONES.csv";
+		String src = DIR_MIGRACION + "USUARIOS_CENTRAL.csv";
+		SucursalApp central = rr.getSucursalAppByNombre(SUC_CENTRAL);
+		Set<SucursalApp> sucs = new HashSet<SucursalApp>();
+		sucs.add(central);
+		DepartamentoApp dep = (DepartamentoApp) rr.getObject(DepartamentoApp.class.getName(), 1);
 
 		String[][] cab = { { "Empresa", CSV.STRING } };
-		String[][] det = { { "CODIGO", CSV.STRING }, { "UBICACION", CSV.STRING }, { "DEPOSITO", CSV.STRING } };		
+		String[][] det = { { "NOMBRE", CSV.STRING }, { "LOGIN", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String nombre = csv.getDetalleString("NOMBRE");
+			String login = csv.getDetalleString("LOGIN");
+
+			Usuario user = new Usuario();
+			user.setNombre(nombre);
+			user.setLogin(login);
+			user.setClave(Utiles.encriptar("123", true));
+			rr.saveObject(user, "sys");
+			
+			AccesoApp acceso = new AccesoApp();
+			acceso.setDescripcion("");
+			acceso.setSucursales(sucs);
+			acceso.setUsuario(user);
+			acceso.setDepartamento(dep);
+			rr.saveObject(acceso, "sys");
+			
+			Set<AccesoApp> accs = new HashSet<AccesoApp>();
+			accs.add(acceso);
+			
+			Funcionario fun = rr.getFuncionario(nombre);
+			fun.setAccesos(accs);
+			rr.saveObject(fun, "sys");
+			
+			System.out.println(user.getLogin());
+
+		}
+	}
+	
+	/**
+	 * usuarios mcal..
+	 */
+	public static void migrarUsuariosMCAL() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "USUARIOS_MCAL.csv";
+		SucursalApp mcal = rr.getSucursalAppByNombre(SUC_MCAL);
+		Set<SucursalApp> sucs = new HashSet<SucursalApp>();
+		sucs.add(mcal);
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "NOMBRE", CSV.STRING }, { "LOGIN", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String nombre = csv.getDetalleString("NOMBRE");
+			String login = csv.getDetalleString("LOGIN");
+
+			Usuario user = new Usuario();
+			user.setNombre(nombre);
+			user.setLogin(login);
+			user.setClave(Utiles.encriptar("123", true));
+			rr.saveObject(user, "sys");
+			
+			AccesoApp acceso = new AccesoApp();
+			acceso.setDescripcion("");
+			acceso.setSucursales(sucs);
+			acceso.setUsuario(user);
+			rr.saveObject(acceso, "sys");
+			
+			Set<AccesoApp> accs = new HashSet<AccesoApp>();
+			accs.add(acceso);
+			
+			Funcionario fun = rr.getFuncionario(nombre);
+			fun.setAccesos(accs);
+			rr.saveObject(fun, "sys");
+			
+			System.out.println(user.getLogin());
+
+		}
+	}
+	
+	/**
+	 * usuarios gran almacen..
+	 */
+	public static void migrarUsuariosGAM() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "USUARIOS_GAM.csv";
+		SucursalApp gam = rr.getSucursalAppByNombre(SUC_GAM);
+		Set<SucursalApp> sucs = new HashSet<SucursalApp>();
+		sucs.add(gam);
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "NOMBRE", CSV.STRING }, { "LOGIN", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String nombre = csv.getDetalleString("NOMBRE");
+			String login = csv.getDetalleString("LOGIN");
+
+			Usuario user = new Usuario();
+			user.setNombre(nombre);
+			user.setLogin(login);
+			user.setClave(Utiles.encriptar("123", true));
+			rr.saveObject(user, "sys");
+			
+			AccesoApp acceso = new AccesoApp();
+			acceso.setDescripcion("");
+			acceso.setSucursales(sucs);
+			acceso.setUsuario(user);
+			rr.saveObject(acceso, "sys");
+			
+			Set<AccesoApp> accs = new HashSet<AccesoApp>();
+			accs.add(acceso);
+			
+			Funcionario fun = rr.getFuncionario(nombre);
+			fun.setAccesos(accs);
+			rr.saveObject(fun, "sys");
+			
+			System.out.println(user.getLogin());
+
+		}
+	}
+	
+	/**
+	 * plan de cuentas..
+	 */
+	public static void migrarPlanDeCuenta() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		Hashtable<String, Tipo> tipos = new Hashtable<String, Tipo>();
+		Tipo activo = rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_CTA_CONTABLE_ACTIVO);
+		Tipo pasivo = rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_CTA_CONTABLE_PASIVO);
+		Tipo ingreso = rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_CTA_CONTABLE_INGRESO);
+		Tipo egreso = rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_CTA_CONTABLE_EGRESO);
+
+		tipos.put("1", activo);
+		tipos.put("2", pasivo);
+		tipos.put("3", ingreso);
+		tipos.put("4", egreso);
+		
+		String src = DIR_MIGRACION + "PLAN_CUENTA.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "IDPLANCUENTA", CSV.STRING },
+				{ "NOMBRE", CSV.STRING }, { "IDTIPOCUENTA", CSV.STRING },
+				{ "IMPUTABLE", CSV.STRING }, { "IMPOSITIVO", CSV.STRING },
+				{ "CCOSTO", CSV.STRING }, { "NIVEL", CSV.NUMERICO }, };
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("IDPLANCUENTA");
+			String descripcion = csv.getDetalleString("NOMBRE");
+			String tipoCta = csv.getDetalleString("IDTIPOCUENTA");
+
+			String imputable = csv.getDetalleString("IMPUTABLE");
+			String impositivo = csv.getDetalleString("IMPOSITIVO");
+			String ccosto = csv.getDetalleString("CCOSTO");
+			int nivel = ((Float)csv.getDetalle("NIVEL")).intValue();
+						
+			PlanDeCuenta pct = new PlanDeCuenta();
+			pct.setCodigo(codigo);
+			pct.setDescripcion(descripcion);
+			pct.setTipoCuenta(tipos.get(tipoCta));
+			pct.setImputable(imputable);
+			pct.setImpositivo(impositivo);
+			pct.setCcosto(ccosto);
+			pct.setNivel(nivel);
+			rr.saveObject(pct, "sys");
+			
+			System.out.println(pct.getDescripcion());
+		}
+	}
+	
+	/**
+	 * cuentas contables..
+	 */
+	public static void migrarCuentasContables() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "CUENTAS_CONTABLES.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING }, { "ALIAS", CSV.STRING } };
+
+		PlanDeCuenta pc = (PlanDeCuenta) rr.getObject(PlanDeCuenta.class.getName(), 1);
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String cod = csv.getDetalleString("CODIGO");
+			String desc = csv.getDetalleString("DESCRIPCION");
+			String alias = csv.getDetalleString("ALIAS");
+			
+			CuentaContable cta = new CuentaContable();
+			cta.setAlias(alias);
+			cta.setCodigo(cod);
+			cta.setDescripcion(desc);
+			cta.setPlanCuenta(pc);			
+			rr.saveObject(cta, "sys");
+			
+			ArticuloGasto ag = new ArticuloGasto();
+			ag.setCuentaContable(cta);
+			ag.setDescripcion(desc);
+			rr.saveObject(cta, "sys");
+
+			System.out.println(desc);
+		}
+	}
+	
+	
+	/**
+	 * ARTICULOS - DEPOSITOS
+	 */
+	
+	/**
+	 * familias de articulos..
+	 */
+	public static void migrarArticuloFamilias() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+
+		String[] familias = new String[] { "FILTROS", "LUBRICANTES", "CUBIERTAS", "REPUESTOS", "BATERIAS", "MARKETING", "RETAIL SHOP", "SERVICIOS" };
+
+		for (int i = 0; i < familias.length; i++) {
+			ArticuloFamilia flia = new ArticuloFamilia();
+			flia.setDescripcion(familias[i]);
+			rr.saveObject(flia, "sys");
+			System.out.println(flia.getDescripcion());
+		}
+	}
+	
+	/**
+	 * grupos de articulos..
+	 */
+	public static void migrarArticuloGrupo() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "ARTICULO_GRUPO.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String desc = csv.getDetalleString("DESCRIPCION");
+
+			ArticuloGrupo grupo = new ArticuloGrupo();
+			grupo.setDescripcion(desc.toUpperCase());
+			rr.saveObject(grupo, "sys");
+
+			System.out.println(desc);
+
+		}
+	}
+	
+	/**
+	 * marcas de articulos..
+	 */
+	public static void migrarArticuloMarca() throws Exception {
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "ARTICULO_MARCA.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String desc = csv.getDetalleString("DESCRIPCION");
+
+			ArticuloMarca marca = new ArticuloMarca();
+			marca.setDescripcion(desc.toUpperCase());
+			rr.saveObject(marca, "sys");
+
+			System.out.println(desc);
+
+		}
+	}
+	
+	/**
+	 * aplicaciones de articulos..
+	 */
+	public static void migrarArticuloAplicacion() throws Exception {
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "ARTICULO_APLICACION.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String desc = csv.getDetalleString("DESCRIPCION");
+
+			ArticuloAplicacion aplicacion = new ArticuloAplicacion();
+			aplicacion.setDescripcion(desc.toUpperCase());
+			rr.saveObject(aplicacion, "sys");
+
+			System.out.println(desc);
+
+		}
+	}
+	
+	/**
+	 * modelos de articulos..
+	 */
+	public static void migrarArticuloModelo() throws Exception {
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "ARTICULO_MODELO.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String desc = csv.getDetalleString("DESCRIPCION");
+
+			ArticuloModelo modelo = new ArticuloModelo();
+			modelo.setDescripcion(desc.toUpperCase());
+			rr.saveObject(modelo, "sys");
+
+			System.out.println(desc);
+		}
+	}
+	
+	/**
+	 * machear articulos / stock / costos / precios..
+	 */
+	public static void machearArticulosSaldos(String archivo, long idDeposito) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + archivo + ".csv";
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };			
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING }, { "FAMILIA", CSV.STRING },
+				{ "MARCA", CSV.STRING }, { "ESTADO", CSV.STRING }, { "SALDO", CSV.STRING },
+				{ "COSTO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "DOLARES", CSV.STRING }, { "MINORISTA", CSV.STRING },
+				{ "AUTOCENTRO", CSV.STRING } };
+		
+		Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), idDeposito);
 		
 		CSV csv = new CSV(cab, det, src);
 		csv.start();
 		while (csv.hashNext()) {
 			String codigo = csv.getDetalleString("CODIGO");
-			String ubicacion = csv.getDetalleString("UBICACION");
-			String deposito = csv.getDetalleString("DEPOSITO");
+			String descripcion = csv.getDetalleString("DESCRIPCION");
+			String stock = csv.getDetalleString("SALDO");
+			String costo = csv.getDetalleString("COSTO");
 			
-			Articulo art = rr.getArticulo(codigo);
-			if (art != null) {
-				ArticuloUbicacion ubic = new ArticuloUbicacion();
-				ubic.setEstante(deposito.equals("1") ? "MINORISTA" : "MAYORISTA");
-				ubic.setFila(ubicacion);
-				art.getUbicaciones().add(ubic);
-				rr.saveObject(art, art.getUsuarioMod());
-				System.out.println(art.getCodigoInterno() + " - " + ubic.getFila() + " - " + ubic.getEstante());
+			long stock_ = 0;
+			if (stock.contains(",")) {
+				Double stck = Double.parseDouble(stock.replace(",", "."));
+				stock_ = stck.longValue();
+			} else {
+				stock_ = Long.parseLong(stock);
 			}
+			
+			//Articulo art = rr.getArticulo(codigo);
+			
+			if (stock_ > 0) {
+				ArticuloHistorialMigracion mig = new ArticuloHistorialMigracion();
+				mig.setCodigoBarra("");
+				mig.setCodigoInterno(codigo);
+				mig.setCodigoOriginal("");
+				mig.setCodigoProveedor("");
+				mig.setCosto(Double.parseDouble(costo.replace(",", ".")));
+				mig.setDescripcion(descripcion);
+				mig.setFechaAlta(Utiles.getFecha("05-10-2018 00:00:00"));
+				mig.setStock(stock_);
+				mig.setSucursal(rr.getSucursalAppById(2));
+				mig.setAuxi("ID_DEPOSITO:" + idDeposito);
+				mig.setDeposito(dep);
+				rr.saveObject(mig, "sys");
+				
+				System.out.println(codigo);
+			}
+			
+			/*if (art != null) {
+				art.setCostoGs(Double.parseDouble(costo.replace(",", ".")));
+				art.setPrecioGs(Double.parseDouble(mayorista.replace(",", ".")));
+				art.setPrecioDs(Double.parseDouble(dolares.replace(",", ".")));
+				art.setPrecioListaGs(Double.parseDouble(autocentro.replace(",", ".")));
+				art.setPrecioMinoristaGs(Double.parseDouble(minorista.replace(",", ".")));
+				
+				ArticuloDeposito ad = new ArticuloDeposito();
+				ad.setArticulo(art);
+				ad.setDeposito(dep);
+				ad.setStock(Long.parseLong(stock));
+				
+				rr.saveObject(art, "sys");
+				rr.saveObject(ad, "sys");
+				System.out.println(codigo + " - " + dep.getDescripcion());
+			} else {
+				
+				ArticuloFamilia artFlia = rr.getArticuloFamilia(flia);
+				ArticuloGrupo artGrupo = (ArticuloGrupo) rr.getObject(ArticuloGrupo.class.getName(), 1);
+				ArticuloMarca artMarca = rr.getArticuloMarca(marca);
+				ArticuloAplicacion artAplicacion = (ArticuloAplicacion) rr.getObject(ArticuloAplicacion.class.getName(), 1);
+				ArticuloModelo artModelo = (ArticuloModelo) rr.getObject(ArticuloModelo.class.getName(), 1);
+				ArticuloLinea artLinea = (ArticuloLinea) rr.getObject(ArticuloLinea.class.getName(), 1);
+				ArticuloSubLinea artSubLinea = rr.getArticuloSubLinea("SIN SUBLINEA");
+				ArticuloSubGrupo artSubGrupo = rr.getArticuloSubGrupo("SIN SUBGRUPO");
+				ArticuloProcedencia artProcedencia = rr.getArticuloProcedencia("SIN PROCEDENCIA");
+				ArticuloAPI artAPI = rr.getArticuloAPI("SIN API");
+				
+				art = new Articulo();
+				art.setCodigoInterno(codigo);
+				art.setDescripcion(descripcion);
+				art.setPeso_("");
+				art.setVolumen_("");
+				
+				art.setFamilia(artFlia);
+				art.setMarca(artMarca);
+				art.setGrupo(artGrupo);
+				art.setAplicacion(artAplicacion);
+				art.setModelo(artModelo);
+				art.setLinea(artLinea);
+				art.setSublinea(artSubLinea);
+				art.setSubgrupo(artSubGrupo);
+				art.setProcedencia(artProcedencia);
+				art.setAPI(artAPI);
+				art.setArticuloEstado(rr.getTipoPorSigla(Configuracion.SIGLA_ARTICULO_ESTADO_ACTIVO));
+				
+				art.setCostoGs(Double.parseDouble(costo.replace(",", ".")));
+				art.setPrecioGs(Double.parseDouble(mayorista.replace(",", ".")));
+				art.setPrecioDs(Double.parseDouble(dolares.replace(",", ".")));
+				art.setPrecioListaGs(Double.parseDouble(autocentro.replace(",", ".")));
+				art.setPrecioMinoristaGs(Double.parseDouble(minorista.replace(",", ".")));
+				
+				ArticuloDeposito ad = new ArticuloDeposito();
+				ad.setArticulo(art);
+				ad.setDeposito(dep);
+				ad.setStock(Long.parseLong(stock));
+				
+				rr.saveObject(art, "sys");
+				rr.saveObject(ad, "sys");
+				System.err.println(codigo + " -- AGREGADO..");
+			}*/
 		}
 	}
+
+	
 	
 	/**
-	 * ubicaciones..
+	 * EMPRESAS - CLIENTES - PROVEEDORES
 	 */
-	public static void migrarTelecobradores() throws Exception {
-
-		RegisterDomain rr = RegisterDomain.getInstance();
-		String src = DIR_MIGRACION + "CLIENTES_TELECOBRADORES.csv";
-		
-		Map<String, Funcionario> telecob = new HashMap<String, Funcionario>();
-		Funcionario vivi = rr.getFuncionario((long) 14);
-		Funcionario claudia = rr.getFuncionario((long) 13);
-		Funcionario laura = rr.getFuncionario((long) 44);
-		telecob.put("0", null);
-		telecob.put("1", laura);
-		telecob.put("2", claudia);
-		telecob.put("3", vivi);
-
-		String[][] cab = { { "Empresa", CSV.STRING } };
-		String[][] det = { { "RAZONSOCIAL", CSV.STRING }, { "IDCOBRADOR", CSV.STRING }, { "COBRADOR", CSV.STRING } };		
-		
-		CSV csv = new CSV(cab, det, src);
-		csv.start();
-		while (csv.hashNext()) {
-			String razonSocial = csv.getDetalleString("RAZONSOCIAL");
-			String idcobrador = csv.getDetalleString("IDCOBRADOR");
-			//String cobrador = csv.getDetalleString("COBRADOR");			
-			
-			Cliente cli = rr.getClienteByRazonSocial(razonSocial);
-			if (cli != null) {
-				Funcionario cob = telecob.get(idcobrador);
-				cli.setCobrador(cob);
-				rr.saveObject(cli, cli.getUsuarioMod());
-				System.out.println(cob == null? "SIN" : cob.getRazonSocial() + " " + cli.getRazonSocial());
-			}
-		}
-	}
 	
+	
+	/**
+	 * rubros de empresas..
+	 */
+	public static void migrarRubrosClientes() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+
+		String[] rubros = new String[] { "VENTA DE CUBIERTAS", "TRANSPORTE DE PASAJEROS", "TRANSPORTE DE CARGAS",
+				"TALLER MECANICO", "PUERTOS", "NAVIERA", "GOMERIA", "ESTACION DE SERVICIO", "DISTRIBUIDOR DE YHAGUY",
+				"COOPERATIVAS", "CONSTRUCTORA", "CONSECIONARIAS", "CENTRO DE LUBRICACION", "CASA DE REPUESTOS",
+				"CASA DE FILTROS", "CASA DE BATERIAS", "CONSUMIDOR FINAL" };
+		
+		String[] subrubros = new String[] { "CUBIERTERO", "TRANSPORTE", "TRANSPORTE", "TALLERES", "PUERTOS", "NAVIERA",
+				"GOMERIA", "SURTIDORES", "DISTRIBUIDORES", "COOPERATIVAS", "CONSTRUCTORA", "CONSECIONARIAS",
+				"LUBRICENTRISTAS", "REPUESTERO", "FILTRERO", "BATERISTAS", "FINALES" };
+		
+		Double[] descuentos = new Double[] { 10.0, 25.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0,
+				10.0, 25.0, 10.0, 10.0, 10.0 };
+
+		for (int i = 0; i < rubros.length; i++) {
+			EmpresaRubro rubro = new EmpresaRubro();
+			rubro.setDescripcion(rubros[i]);
+			rubro.setSubrubro(subrubros[i]);
+			rubro.setDescuentoRepuestos(descuentos[i]);
+			rr.saveObject(rubro, "sys");
+			System.out.println(rubro.getDescripcion());
+		}
+	}	
 	
 	public static void main(String[] args) {
 		try {
@@ -215,8 +629,8 @@ public class MigracionCentral {
 			MigracionCentral.machearArticulosSaldos("5_STOCK_MCAL", 5); 
 			MigracionCentral.machearArticulosSaldos("5_STOCK_MCAL_", 5);
 			MigracionCentral.machearArticulosSaldos("6_STOCK_MCAL_TEMPORAL", 6);
-			MigracionCentral.machearArticulosSaldos("7_STOCK_MAYORISTA", 7); 
-			MigracionCentral.machearArticulosSaldos("8_STOCK_MAYORISTA_TEMPORAL", 8); **/
+			MigracionCentral.machearArticulosSaldos("7_STOCK_MAYORISTA", 7); **/
+			MigracionCentral.machearArticulosSaldos("8_STOCK_MAYORISTA_TEMPORAL", 8); 
 			
 		//	MigracionCentral.migrarVendedores();
 		//	MigracionCentral.migrarRubrosClientes();
@@ -226,9 +640,7 @@ public class MigracionCentral {
 		//	MigracionCentral.migrarProveedores();
 		//	MigracionCentral.migrarFuncionarios();
 		//	MigracionCentral.migrarChequesRechazados();
-			
-		//	MigracionCentral.migrarUbicaciones();
-			MigracionCentral.migrarTelecobradores();
+		//	MigracionCentral.machearSaldosVendedor();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
