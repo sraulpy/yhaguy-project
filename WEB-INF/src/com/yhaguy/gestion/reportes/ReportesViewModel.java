@@ -5286,7 +5286,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String _febrero = impFebrero != null ? Utiles.getNumberFormat(impFebrero) + "" : "0";
 					
 					Double impMarzo = importes.get(key_ + ";3");
-					if (impFebrero == null) impFebrero = 0.0;
+					if (impMarzo == null) impMarzo = 0.0;
 					String _marzo = impMarzo != null ? Utiles.getNumberFormat(impMarzo) + "" : "0";
 					
 					Double impAbril = importes.get(key_ + ";4");
