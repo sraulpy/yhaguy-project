@@ -8867,7 +8867,7 @@ public class RegisterDomain extends Register {
 	 * [4]:fecha
 	 * [5]:cliente.empresa.razonSocial
 	 * [6]:importegs
-	 * [7]:vendedor
+	 * [7]:vendedor..
 	 */
 	public List<Object[]> getNotasCreditoDetalladoLitraje(Date desde, Date hasta, long idMarca) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
