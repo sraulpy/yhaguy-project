@@ -2,7 +2,9 @@ package com.yhaguy.gestion.reportes;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.zkoss.bind.annotation.DependsOn;
 
@@ -149,7 +151,7 @@ public class ReportesFiltros {
 	private EmpresaRubro rubro_;
 	
 	private ArticuloFamilia familia_;
-	private List<ArticuloFamilia> selectedFamilias = new ArrayList<ArticuloFamilia>();
+	private Set<ArticuloFamilia> selectedFamilias = new HashSet<ArticuloFamilia>();
 	
 	private ArticuloMarca marca_;
 
@@ -1462,16 +1464,16 @@ public class ReportesFiltros {
 		this.familia_ = familia_;
 	}
 
-	public List<ArticuloFamilia> getSelectedFamilias() {
+	public Set<ArticuloFamilia> getSelectedFamilias() {
 		if (this.selectedFamilias == null) {
-			return new ArrayList<ArticuloFamilia>();
+			return new HashSet<ArticuloFamilia>();
 		}
 		return selectedFamilias;
 	}
 
-	public void setSelectedFamilias(List<ArticuloFamilia> selectedFamilias) {
+	public void setSelectedFamilias(Set<ArticuloFamilia> selectedFamilias) {
 		if (selectedFamilias == null || selectedFamilias.size() == 0) {
-			this.selectedFamilias = new ArrayList<ArticuloFamilia>();
+			this.selectedFamilias = new HashSet<ArticuloFamilia>();
 		}
 		this.selectedFamilias = selectedFamilias;
 	}

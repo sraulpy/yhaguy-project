@@ -5422,11 +5422,12 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setArticuloGasto(null);
 		this.filtro.setDescripcionArticuloGasto("");
 		this.filtro.setReembolso("");
-		this.filtro.setSelectedFamilias(new ArrayList<ArticuloFamilia>());
+		this.filtro.setSelectedFamilias(new HashSet<ArticuloFamilia>());
 		this.filtro.setSelectedDepositos(new ArrayList<Deposito>());
 		this.filtro.setSelectedProveedores(new ArrayList<Proveedor>());
 		this.filtro.setMarca_(null);
 		this.filtro.setFamilia_(null);
+		this.filtro.setStockMayorIgual(1);
 	}
 
 	/**
@@ -9560,12 +9561,15 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
-				List<ArticuloFamilia> familias = filtro.getSelectedFamilias();
+				Set<ArticuloFamilia> _familias = filtro.getSelectedFamilias();
 				Cliente cliente = filtro.getCliente();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
 				long idCliente = cliente == null ? 0 : cliente.getId();
 				long idSucursal = suc == null ? 0 : suc.getId(); 
+				
+				List<ArticuloFamilia> familias = new ArrayList<ArticuloFamilia>();
+				familias.addAll(_familias);
 
 				if (desde == null)
 					desde = new Date();
@@ -10101,22 +10105,35 @@ public class ReportesViewModel extends SimpleViewModel {
 				GastoDetalle det = (GastoDetalle) value[0];
 				Object[] val = values.get(det.getArticuloGasto().getDescripcion());
 				if (val != null) {
-					double total = (double) val[1];
-					total += det.getMontoGs();
-					values.put(det.getArticuloGasto().getDescripcion(), new Object[]{ det, total });
+					double totalGrav10 = (double) val[1];
+					double totalGrav5 = (double) val[2];
+					double totalIva10 = (double) val[3];
+					double totalIva5 = (double) val[4];
+					double totalExenta = (double) val[5];
+					totalGrav10 += det.getGravada10();
+					totalGrav5 += det.getGravada5();
+					totalIva10 += det.getIva10();
+					totalIva5 += det.getIva5();
+					values.put(det.getArticuloGasto().getDescripcion(), new Object[]{ det, totalGrav10, totalGrav5, totalIva10, totalIva5 });
 				} else {
-					double monto = det.getMontoGs();
-					values.put(det.getArticuloGasto().getDescripcion(), new Object[]{ det, monto});
+					double totalGrav10 = det.getGravada10();
+					double totalGrav5 = det.getGravada5();
+					double totalIva10 = det.getIva10();
+					double totalIva5 = det.getIva5();
+					values.put(det.getArticuloGasto().getDescripcion(), new Object[]{ det, totalGrav10, totalGrav5, totalIva10, totalIva5 });
 				}
 			}
 			
 			for (String key : values.keySet()) {
 				Object[] value = values.get(key);
 				GastoDetalle det = (GastoDetalle) value[0];
-				double importe = (double) value[1];
-				String cod = det.getArticuloGasto().getCuentaContable().getCodigo();
-				String desc = det.getArticuloGasto().getDescripcion();
-				data.add(new Object[]{ cod, desc, importe });
+				double totalGrav10 = (double) value[1];
+				double totalGrav5 = (double) value[2];
+				double totalIva10 = (double) value[3];
+				double totalIva5 = (double) value[4];
+				String cod = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getCuentaContable().getCodigo() : "";
+				String desc = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getDescripcion() : "";
+				data.add(new Object[]{ cod, desc, totalGrav10, totalGrav5, totalIva10, totalIva5 });
 			}
 			
 			Collections.sort(data, new Comparator<Object[]>() {
@@ -10848,12 +10865,15 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
-				List<ArticuloFamilia> familias = filtro.getSelectedFamilias();
+				Set<ArticuloFamilia> _familias = filtro.getSelectedFamilias();
 				Cliente cliente = filtro.getCliente();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
 				long idCliente = cliente == null ? 0 : cliente.getId();
 				long idSucursal = suc == null ? 0 : suc.getId(); 
+				
+				List<ArticuloFamilia> familias = new ArrayList<ArticuloFamilia>();
+				familias.addAll(_familias);
 
 				if (desde == null)
 					desde = new Date();
@@ -19428,9 +19448,14 @@ class ReporteGastosPorCuentas extends ReporteYhaguy {
 	private String sucursal;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col0 = new DatosColumnas("Código", TIPO_STRING, 45);
-	static DatosColumnas col1 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col2 = new DatosColumnas("Importe Gs.", TIPO_DOUBLE_GS, 40, true);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 25);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Gravada 10%", TIPO_DOUBLE_GS, 25, true);
+	static DatosColumnas col4 = new DatosColumnas("Gravada 5%", TIPO_DOUBLE_GS, 25, true);
+	static DatosColumnas col5 = new DatosColumnas("Iva 10%", TIPO_DOUBLE_GS, 25, true);
+	static DatosColumnas col6 = new DatosColumnas("Iva 5%", TIPO_DOUBLE_GS, 25, true);
+	static DatosColumnas col7 = new DatosColumnas("Exenta", TIPO_DOUBLE_GS, 25, true);
+	static DatosColumnas col8 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 25, true);
 
 	public ReporteGastosPorCuentas(Date desde, Date hasta, String sucursal) {
 		this.desde = desde;
@@ -19439,9 +19464,14 @@ class ReporteGastosPorCuentas extends ReporteYhaguy {
 	}
 
 	static {
-		cols.add(col0);
 		cols.add(col1);
 		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override
@@ -20278,8 +20308,24 @@ class LitrajeArticulos implements JRDataSource {
 
 	List<HistoricoMovimientoArticulo> values = new ArrayList<HistoricoMovimientoArticulo>();
 	
+	double totalOctubre = 0;
+	double totalNoviembre = 0;
+	double totalDiciembre = 0;
+	
+	double totalOctubre_ = 0;
+	double totalNoviembre_ = 0;
+	double totalDiciembre_ = 0;
+	
 	public LitrajeArticulos(List<HistoricoMovimientoArticulo> values) {
 		this.values = values;
+		for (HistoricoMovimientoArticulo item : values) {
+			totalOctubre += item.getOctubre_();
+			totalOctubre_ += item.get_octubre();
+			totalNoviembre += item.getNoviembre_();
+			totalNoviembre_ += item.get_noviembre();
+			totalDiciembre += item.getDiciembre_();
+			totalDiciembre_ += item.get_diciembre();
+		}
 		Collections.sort(this.values, new Comparator<HistoricoMovimientoArticulo>() {
 			@Override
 			public int compare(HistoricoMovimientoArticulo o1, HistoricoMovimientoArticulo o2) {
@@ -20406,6 +20452,18 @@ class LitrajeArticulos implements JRDataSource {
 			value = Utiles.getNumberFormat(det.get_noviembre());
 		} else if ("_Diciembre".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.get_diciembre());
+		} else if ("tot_oct".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalOctubre);
+		} else if ("tot_oct_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalOctubre_);
+		} else if ("tot_nov".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNoviembre);
+		} else if ("tot_nov_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNoviembre_);
+		} else if ("tot_dic".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalDiciembre);
+		} else if ("tot_dic_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalDiciembre_);
 		}
 		return value;
 	}
