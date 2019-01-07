@@ -20409,29 +20409,29 @@ class LitrajeArticulos implements JRDataSource {
 		} else if ("Dep_gral".equals(fieldName)) {
 			value = det.getTotal() + "";			
 		} else if ("Enero".equals(fieldName)) {
-			value = det.getEnero_() + "";
+			value = Utiles.getRedondeo(det.getEnero_()) + "";
 		} else if ("Febrero".equals(fieldName)) {
-			value = det.getFebrero_() + "";
+			value = Utiles.getRedondeo(det.getFebrero_()) + "";
 		} else if ("Marzo".equals(fieldName)) {
-			value = det.getMarzo_() + "";
+			value = Utiles.getRedondeo(det.getMarzo_()) + "";
 		} else if ("Abril".equals(fieldName)) {
-			value = det.getAbril_() + "";
+			value = Utiles.getRedondeo(det.getAbril_()) + "";
 		} else if ("Mayo".equals(fieldName)) {
-			value = det.getMayo_() + "";
+			value = Utiles.getRedondeo(det.getMayo_()) + "";
 		} else if ("Junio".equals(fieldName)) {
-			value = det.getJunio_() + "";
+			value = Utiles.getRedondeo(det.getJunio_()) + "";
 		} else if ("Julio".equals(fieldName)) {
-			value = Utiles.getNumberFormatDs(det.getJulio_());
+			value = Utiles.getRedondeo(det.getJulio_()) + "";
 		} else if ("Agosto".equals(fieldName)) {
-			value = det.getAgosto_() + "";
+			value = Utiles.getRedondeo(det.getAgosto_()) + "";
 		} else if ("Setiembre".equals(fieldName)) {
-			value = det.getSetiembre_() + "";
+			value = Utiles.getRedondeo(det.getSetiembre_()) + "";
 		} else if ("Octubre".equals(fieldName)) {
-			value = det.getOctubre_() + "";
+			value = Utiles.getRedondeo(det.getOctubre_()) + "";
 		} else if ("Noviembre".equals(fieldName)) {
-			value = det.getNoviembre_() + "";
+			value = Utiles.getRedondeo(det.getNoviembre_()) + "";
 		} else if ("Diciembre".equals(fieldName)) {
-			value = det.getDiciembre_() + "";
+			value = Utiles.getRedondeo(det.getDiciembre_()) + "";
 		}  else if ("_Enero".equals(fieldName)) {
 			value =  Utiles.getNumberFormat(det.get_enero());
 		} else if ("_Febrero".equals(fieldName)) {
