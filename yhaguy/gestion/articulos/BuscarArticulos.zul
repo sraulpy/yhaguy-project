@@ -19,7 +19,7 @@
 			<spinner id="int_box" value="@bind(vm.filterStock)" instant="true" width="70px"></spinner>
 		</hlayout>
 		<div hflex="true"></div>
-		<button iconSclass="z-icon-times" onClick="findArt.detach()"></button>
+		<button mold="bs" sclass="btn-danger" iconSclass="z-icon-times" onClick="findArt.detach()"></button>
 	</hlayout>
 	<listbox sclass="small-list"
 		vflex="4"
