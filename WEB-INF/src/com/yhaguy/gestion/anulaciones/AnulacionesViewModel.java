@@ -22,6 +22,7 @@ import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
+import com.yhaguy.domain.Transferencia;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.gestion.comun.ControlAnulacionMovimientos;
 import com.yhaguy.gestion.stock.ajustes.AjusteStockAssembler;
@@ -76,6 +77,10 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		
 		if (this.isNotaCreditoVenta()) {
 			this.buscarNotasCredito(filtro, posFiltro);
+		}
+		
+		if (this.isNotaRemision()) {
+			this.buscarTransferencias(filtro, posFiltro);
 		}
 		
 		this.selectedMovimiento.setPos6(false);
@@ -143,6 +148,26 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * busqueda de las transferencias..
+	 */
+	private void buscarTransferencias(String filtro, int posFiltro) throws Exception {
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(Transferencia.class);
+		b.setAnchoColumnas(new String[] { "140px", "140px", "", "140px", "140px" });
+		b.setAtributos(new String[] { "numeroRemision", "depositoSalida.descripcion", "depositoEntrada.descripcion",
+				"numero", "fechaCreacion" });
+		b.setHeight("400px");
+		b.setWidth("900px");
+		b.setNombresColumnas(new String[] { "Nro. Remisión", "Origen", "Destino", "Nro. Transferencia", "Fecha" });
+		b.setTitulo("Transferencias Remisión");
+		b.addWhere("c.transferenciaEstado.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'");
+		b.show(filtro, posFiltro);
+		if (b.isClickAceptar()) {
+			this.selectedMovimiento = b.getSelectedItem();
+		}
+	}
+	
+	/**
 	 * busqueda de los ajustes..
 	 */
 	private void buscarAjustes(String filtro, int posFiltro) throws Exception {
@@ -185,6 +210,8 @@ public class AnulacionesViewModel extends SimpleViewModel {
 				this.anularAjusteStock(motivo);
 			} else if (this.isNotaCreditoVenta()) {
 				this.anularNotaCredito(motivo);
+			} else if (this.isNotaRemision()) {
+				this.anularTransferencia(motivo);
 			}
 			this.selectedMovimiento.setPos6(true);
 			Clients.showNotification("Movimiento anulado..");
@@ -226,6 +253,14 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	 */
 	private void anularNotaCredito(String motivo) throws Exception {
 		ControlAnulacionMovimientos.anularNotaCreditoVenta(
+				this.selectedMovimiento.getId(), motivo, this.getLoginNombre());
+	}
+	
+	/**
+	 * anulacion de transferencia remision..
+	 */
+	private void anularTransferencia(String motivo) throws Exception {
+		ControlAnulacionMovimientos.anularTransferenciaRemision(
 				this.selectedMovimiento.getId(), motivo, this.getLoginNombre());
 	}
 	
@@ -321,6 +356,15 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	private boolean isNotaCreditoVenta() {
 		return this.selectedItem.getSigla().equals(
 				Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+	}
+	
+	/**
+	 * @return true si es nota de remision..
+	 */
+	public boolean isNotaRemision() {
+		if(this.selectedItem == null) return false;
+		return this.selectedItem.getSigla().equals(
+				Configuracion.SIGLA_TM_NOTA_REMISION);
 	}
 	
 	private UtilDTO getUtilDto() {

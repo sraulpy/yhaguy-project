@@ -115,6 +115,11 @@ public class TransferenciaControlBody extends BodyApp {
 	@Override
 	public void setDTOCorriente(DTO dto) {
 		this.dto = (TransferenciaDTO) dto;
+		if (this.dto.getTransferenciaEstado().getSigla().equals(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO)) {			
+			this.enmascararAnulados(true);
+		} else {
+			this.enmascararAnulados(false);		
+		}
 	}
 
 	@Override

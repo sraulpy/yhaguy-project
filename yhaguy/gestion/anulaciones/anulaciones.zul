@@ -112,12 +112,12 @@
 								value="@bind(vm.selectedMovimiento.pos1)" />
 						</row>
 						<row>
-							<field value="Razón Social:" />
+							<field value="@load(vm.notaRemision ? 'Origen:':'Razón Social:')" />
 							<textbox readonly="true" hflex="true"
 								value="@bind(vm.selectedMovimiento.pos3)" />
 						</row>
 						<row>
-							<field value="Ruc:" />
+							<field value="@load(vm.notaRemision ? 'Destino:':'Ruc:')" />
 							<textbox readonly="true" hflex="true"
 								value="@bind(vm.selectedMovimiento.pos2)" />
 						</row>

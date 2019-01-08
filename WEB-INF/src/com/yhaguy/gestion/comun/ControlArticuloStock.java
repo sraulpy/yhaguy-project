@@ -103,6 +103,20 @@ public class ControlArticuloStock {
 	}
 	
 	/**
+	 * recalcula el stock segun deposito..
+	 */
+	public static void recalcularStock(long idArticulo, long idDeposito, String user) throws Exception {
+		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0);
+		String stockHistorial_ = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
+		long stockHistorial = Long.parseLong(stockHistorial_);
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		ArticuloDeposito adp = rr.getArticuloDeposito(idArticulo, idDeposito);
+		adp.setStock(stockHistorial);
+		rr.saveObject(adp, user);
+	}
+	
+	/**
 	 * @return historial de movimientos del articulo..
 	 * [0]: fecha
 	 * [1]: hora
@@ -116,6 +130,22 @@ public class ControlArticuloStock {
 	 */
 	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal) throws Exception {
 		Date desde = Utiles.getFecha("01-01-2016 00:00:00");
+		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde);
+	}
+	
+	/**
+	 * @return historial de movimientos del articulo..
+	 * [0]: fecha
+	 * [1]: hora
+	 * [2]: numero
+	 * [3]: concepto
+	 * [4]: dep
+	 * [5]: entrada
+	 * [6]: salida
+	 * [7]: saldo
+	 * [8]: importe 
+	 */
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde) throws Exception {
 		Date hasta = new Date();
 		
 		RegisterDomain rr = RegisterDomain.getInstance();

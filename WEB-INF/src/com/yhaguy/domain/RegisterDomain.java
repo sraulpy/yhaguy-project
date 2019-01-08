@@ -4381,8 +4381,10 @@ public class RegisterDomain extends Register {
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursal.descripcion, " + deposito
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
-				+ " and t.transferenciaEstado.sigla = '"
-				+ Configuracion.SIGLA_ESTADO_TRANSF_CONFIRMADA
+				+ " and t.transferenciaEstado.sigla != '"
+				+ Configuracion.SIGLA_ESTADO_TRANSF_PENDIENTE
+				+ "' and t.transferenciaEstado.sigla != '"
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO
 				+ "'";
 		if (idDeposito != 0) {
 			query += " and " + (entrada ? "t.depositoEntrada.id" : "t.depositoSalida.id") + " = " + idDeposito;
@@ -4606,9 +4608,7 @@ public class RegisterDomain extends Register {
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
 					+ tipo
-					+ "' and a.sucursal.id = "
-					+ idSucursal
-					+ " and a.estadoComprobante.sigla = '"
+					+ "' and a.estadoComprobante.sigla = '"
 					+ Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO
 					+ "'";
 			if (idDeposito != 0) {
@@ -4624,9 +4624,7 @@ public class RegisterDomain extends Register {
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
 					+ tipo
-					+ "' and a.sucursal.id = "
-					+ idSucursal
-					+ " and a.estadoComprobante.sigla = '"
+					+ "' and a.estadoComprobante.sigla = '"
 					+ Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO
 					+ "'";
 			if (idDeposito != 0) {

@@ -22,6 +22,8 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.RetencionIva;
+import com.yhaguy.domain.Transferencia;
+import com.yhaguy.domain.TransferenciaDetalle;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.process.ProcesosHistoricos;
@@ -359,6 +361,23 @@ public class ControlAnulacionMovimientos {
 		double tot_nc = nc.getTotalImporteGsSinIva();
 		ProcesosHistoricos.updateHistoricoVentaMeta((tot_nc), 0, nc.getVendedor().getRazonSocial().equals("SERVICIO"));
 		ProcesosHistoricos.updateHistoricoVentaDiaria(nc.getFechaEmision(), (tot_nc), 0);
+	}
+	
+	/**
+	 * anulacion de una transferencia externa..
+	 */
+	public static void anularTransferenciaRemision(long idTransferencia, String motivo, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		Transferencia transf = (Transferencia) rr.getObject(Transferencia.class.getName(), idTransferencia);
+		transf.setTransferenciaEstado(getEstadoComprobanteAnulado());
+		transf.setObservacion(motivo);		
+		rr.saveObject(transf, user);
+		
+		for (TransferenciaDetalle item : transf.getDetalles()) {
+			ControlArticuloStock.recalcularStock(item.getArticulo().getId(), transf.getDepositoSalida().getId(), user);
+			ControlArticuloStock.recalcularStock(item.getArticulo().getId(), transf.getDepositoEntrada().getId(), user);
+		}
 	}
 	
 	/**
