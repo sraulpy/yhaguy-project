@@ -5340,8 +5340,13 @@ public class ReportesViewModel extends SimpleViewModel {
 						keys.put(key_, key_);
 					}					
 				}				
-				
+				String format = (String) formato[0];
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE;
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE_;
+				}
 				
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("Usuario", getUs().getNombre());
@@ -20409,53 +20414,53 @@ class LitrajeArticulos implements JRDataSource {
 		} else if ("Dep_gral".equals(fieldName)) {
 			value = det.getTotal() + "";			
 		} else if ("Enero".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getEnero_()) + "";
+			value = Utiles.getRedondeo(det.getEnero_());
 		} else if ("Febrero".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getFebrero_()) + "";
+			value = Utiles.getRedondeo(det.getFebrero_());
 		} else if ("Marzo".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getMarzo_()) + "";
+			value = Utiles.getRedondeo(det.getMarzo_());
 		} else if ("Abril".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getAbril_()) + "";
+			value = Utiles.getRedondeo(det.getAbril_());
 		} else if ("Mayo".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getMayo_()) + "";
+			value = Utiles.getRedondeo(det.getMayo_());
 		} else if ("Junio".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getJunio_()) + "";
+			value = Utiles.getRedondeo(det.getJunio_());
 		} else if ("Julio".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getJulio_()) + "";
+			value = Utiles.getRedondeo(det.getJulio_());
 		} else if ("Agosto".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getAgosto_()) + "";
+			value = Utiles.getRedondeo(det.getAgosto_());
 		} else if ("Setiembre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getSetiembre_()) + "";
+			value = Utiles.getRedondeo(det.getSetiembre_());
 		} else if ("Octubre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getOctubre_()) + "";
+			value = Utiles.getRedondeo(det.getOctubre_());
 		} else if ("Noviembre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getNoviembre_()) + "";
+			value = Utiles.getRedondeo(det.getNoviembre_());
 		} else if ("Diciembre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getDiciembre_()) + "";
+			value = Utiles.getRedondeo(det.getDiciembre_());
 		}  else if ("_Enero".equals(fieldName)) {
-			value =  Utiles.getNumberFormat(det.get_enero());
+			value =  Utiles.getRedondeo(det.get_enero());
 		} else if ("_Febrero".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_febrero());
+			value = Utiles.getRedondeo(det.get_febrero());
 		} else if ("_Marzo".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_marzo());
+			value = Utiles.getRedondeo(det.get_marzo());
 		} else if ("_Abril".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_abril());
+			value = Utiles.getRedondeo(det.get_abril());
 		} else if ("_Mayo".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_mayo());
+			value = Utiles.getRedondeo(det.get_mayo());
 		} else if ("_Junio".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_junio());
+			value = Utiles.getRedondeo(det.get_junio());
 		} else if ("_Julio".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_julio());
+			value = Utiles.getRedondeo(det.get_julio());
 		} else if ("_Agosto".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_agosto());
+			value = Utiles.getRedondeo(det.get_agosto());
 		} else if ("_Setiembre".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_setiembre());
+			value = Utiles.getRedondeo(det.get_setiembre());
 		} else if ("_Octubre".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_octubre());
+			value = Utiles.getRedondeo(det.get_octubre());
 		} else if ("_Noviembre".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_noviembre());
+			value = Utiles.getRedondeo(det.get_noviembre());
 		} else if ("_Diciembre".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.get_diciembre());
+			value = Utiles.getRedondeo(det.get_diciembre());
 		} else if ("tot_oct".equals(fieldName)) {
 			value = Utiles.getNumberFormatDs(this.totalOctubre);
 		} else if ("tot_oct_".equals(fieldName)) {
