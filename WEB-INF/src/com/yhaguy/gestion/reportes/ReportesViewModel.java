@@ -20414,29 +20414,29 @@ class LitrajeArticulos implements JRDataSource {
 		} else if ("Dep_gral".equals(fieldName)) {
 			value = det.getTotal() + "";			
 		} else if ("Enero".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getEnero_());
+			value = det.getEnero_();
 		} else if ("Febrero".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getFebrero_());
+			value = det.getFebrero_();
 		} else if ("Marzo".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getMarzo_());
+			value = det.getMarzo_();
 		} else if ("Abril".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getAbril_());
+			value = det.getAbril_();
 		} else if ("Mayo".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getMayo_());
+			value = det.getMayo_();
 		} else if ("Junio".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getJunio_());
+			value = det.getJunio_();
 		} else if ("Julio".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getJulio_());
+			value = det.getJulio_();
 		} else if ("Agosto".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getAgosto_());
+			value = det.getAgosto_();
 		} else if ("Setiembre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getSetiembre_());
+			value = det.getSetiembre_();
 		} else if ("Octubre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getOctubre_());
+			value = det.getOctubre_();
 		} else if ("Noviembre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getNoviembre_());
+			value = det.getNoviembre_();
 		} else if ("Diciembre".equals(fieldName)) {
-			value = Utiles.getRedondeo(det.getDiciembre_());
+			value = det.getDiciembre_();
 		}  else if ("_Enero".equals(fieldName)) {
 			value =  Utiles.getRedondeo(det.get_enero());
 		} else if ("_Febrero".equals(fieldName)) {

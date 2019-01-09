@@ -67,13 +67,13 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="FechaImp" class="java.lang.String"/>
 	<field name="ProvLocal" class="java.lang.String"/>
 	<field name="ProvImp" class="java.lang.String"/>
-	<field name="Junio" class="java.lang.String"/>
-	<field name="Julio" class="java.lang.String"/>
-	<field name="Agosto" class="java.lang.String"/>
-	<field name="Setiembre" class="java.lang.String"/>
-	<field name="Octubre" class="java.lang.String"/>
-	<field name="Noviembre" class="java.lang.String"/>
-	<field name="Diciembre" class="java.lang.String"/>
+	<field name="Junio" class="java.lang.Double"/>
+	<field name="Julio" class="java.lang.Double"/>
+	<field name="Agosto" class="java.lang.Double"/>
+	<field name="Setiembre" class="java.lang.Double"/>
+	<field name="Octubre" class="java.lang.Double"/>
+	<field name="Noviembre" class="java.lang.Double"/>
+	<field name="Diciembre" class="java.lang.Double"/>
 	<field name="Dep_1" class="java.lang.String"/>
 	<field name="Dep_2" class="java.lang.String"/>
 	<field name="Dep_3" class="java.lang.String"/>
@@ -83,23 +83,23 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="Dep_7" class="java.lang.String"/>
 	<field name="Dep_8" class="java.lang.String"/>
 	<field name="Dep_gral" class="java.lang.String"/>
-	<field name="Enero" class="java.lang.String"/>
-	<field name="Febrero" class="java.lang.String"/>
-	<field name="Marzo" class="java.lang.String"/>
-	<field name="Abril" class="java.lang.String"/>
-	<field name="Mayo" class="java.lang.String"/>
-	<field name="_Enero" class="java.lang.String"/>
-	<field name="_Febrero" class="java.lang.String"/>
-	<field name="_Marzo" class="java.lang.String"/>
-	<field name="_Abril" class="java.lang.String"/>
-	<field name="_Mayo" class="java.lang.String"/>
-	<field name="_Junio" class="java.lang.String"/>
-	<field name="_Julio" class="java.lang.String"/>
-	<field name="_Agosto" class="java.lang.String"/>
-	<field name="_Setiembre" class="java.lang.String"/>
-	<field name="_Octubre" class="java.lang.String"/>
-	<field name="_Noviembre" class="java.lang.String"/>
-	<field name="_Diciembre" class="java.lang.String"/>
+	<field name="Enero" class="java.lang.Double"/>
+	<field name="Febrero" class="java.lang.Double"/>
+	<field name="Marzo" class="java.lang.Double"/>
+	<field name="Abril" class="java.lang.Double"/>
+	<field name="Mayo" class="java.lang.Double"/>
+	<field name="_Enero" class="java.lang.Double"/>
+	<field name="_Febrero" class="java.lang.Double"/>
+	<field name="_Marzo" class="java.lang.Double"/>
+	<field name="_Abril" class="java.lang.Double"/>
+	<field name="_Mayo" class="java.lang.Double"/>
+	<field name="_Junio" class="java.lang.Double"/>
+	<field name="_Julio" class="java.lang.Double"/>
+	<field name="_Agosto" class="java.lang.Double"/>
+	<field name="_Setiembre" class="java.lang.Double"/>
+	<field name="_Octubre" class="java.lang.Double"/>
+	<field name="_Noviembre" class="java.lang.Double"/>
+	<field name="_Diciembre" class="java.lang.Double"/>
 	<field name="tot_dic" class="java.lang.String"/>
 	<field name="tot_dic_" class="java.lang.String"/>
 	<field name="tot_nov" class="java.lang.String"/>
@@ -290,122 +290,122 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1173" y="0" width="55" height="15" uuid="702ba615-5d81-46a0-bccc-25dc899133ce"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Junio}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1288" y="0" width="55" height="15" uuid="ceb92c3e-9f81-4aed-af7e-982f36e647c4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Julio}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1403" y="0" width="55" height="15" uuid="6cc05907-f51e-4a5c-924b-c05cd4dd3fcd"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Agosto}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1521" y="0" width="55" height="15" uuid="2a608bbf-497a-470d-b653-80ec61066358"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Setiembre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1636" y="0" width="55" height="15" uuid="d66e81e3-53d3-40ba-9afa-aaf7bbc09fa5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Octubre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1751" y="0" width="55" height="15" uuid="edfe581e-869a-41b8-a1b5-bfb4823d5fa3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Noviembre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1868" y="0" width="55" height="15" uuid="336e7829-2882-47bd-8fa9-953962811588"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Diciembre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="598" y="0" width="55" height="15" uuid="59e0e5c6-cdaf-4676-9af3-91123f5b5340"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Enero}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="713" y="0" width="55" height="15" uuid="3965c971-104a-444d-aa7d-c3a35a2dd8eb"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Febrero}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="828" y="0" width="55" height="15" uuid="84991694-8fc8-403a-96a7-9b30bd7c60ce"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Marzo}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="943" y="0" width="55" height="15" uuid="241e136b-3faf-4f4f-9207-202644140f68"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Abril}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0">
 				<reportElement style="Detail" x="1058" y="0" width="55" height="15" uuid="984078b1-5772-45ad-b001-9e6a21783b02"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{_Mayo}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1806" y="0" width="62" height="15" uuid="e7ca981f-3a4b-41a9-b204-34e6de2d6be5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Diciembre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="538" y="0" width="60" height="15" uuid="76d36f16-3de6-4817-b38e-0a6294d95fca"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Enero}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="653" y="0" width="60" height="15" uuid="1a925197-3d5f-4e3c-8c65-2f26a1e4220b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Febrero}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="768" y="0" width="60" height="15" uuid="167aa66b-d11f-4398-88fc-f3005f897ecc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Marzo}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="883" y="0" width="60" height="15" uuid="a80ae081-4f38-4e12-a46e-eb738cb2421a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Abril}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="998" y="0" width="60" height="15" uuid="b96fd651-e7dc-43af-9874-7cf72eaafcf9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Mayo}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1113" y="0" width="60" height="15" uuid="5a2c74f9-d73a-4d75-864d-2ec03df64cd4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Junio}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1228" y="0" width="60" height="15" uuid="569734ed-5162-4ef1-9f0f-563a8bd8d178"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Julio}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1343" y="0" width="60" height="15" uuid="11a7c052-7d79-42c9-a731-ed68ed081a06"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Agosto}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1458" y="0" width="63" height="15" uuid="5728c635-bc98-4d3f-9b55-802ad5ef30e8"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Setiembre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1576" y="0" width="60" height="15" uuid="3cc087dd-f3a4-49d8-8182-8939225b7c66"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Octubre}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
 				<reportElement style="Detail" x="1691" y="0" width="60" height="15" uuid="b1ba998a-92a6-4719-9203-45ba140f83b4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Noviembre}]]></textFieldExpression>
