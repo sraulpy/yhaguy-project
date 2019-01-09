@@ -809,6 +809,12 @@
 										<checkbox label="Conteo 2"></checkbox>
 										<space></space>
 										<checkbox label="Conteo 3"></checkbox>
+										<div hflex="true"></div>
+										<button mold="bs" sclass="btn-sm btn-info" label="Imprimir Conteo"
+											iconSclass="z-icon-print" width="150px"
+											onClick="@command('imprimirConteo_')"
+											disabled="@load(!vm.siempreHabilitado)"
+											visible="${vm.operacionHabilitada('VerImportacion')}"></button> 
 									</hlayout>
 									<listbox vflex="true" sclass="small-list"
 										model="@load(vm.selectedImportacionFactura.detalles)">

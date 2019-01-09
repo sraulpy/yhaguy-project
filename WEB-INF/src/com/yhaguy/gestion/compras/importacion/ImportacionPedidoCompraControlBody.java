@@ -347,6 +347,30 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	}
 	
+	@Command
+	public void imprimirConteo_() {		
+		List<Object[]> data = new ArrayList<Object[]>();
+		
+		for (ImportacionFacturaDetalleDTO item : this.selectedImportacionFactura.getDetalles()) {
+			Object[] obj1 = new Object[] {
+					item.getArticulo().getCodigoInterno(),
+					item.getConteo1(), (item.getConteo1() - item.getCantidad_acum()),
+					item.getConteo2(), (item.getConteo2() - item.getCantidad_acum()),
+					item.getConteo3(), (item.getConteo3() - item.getCantidad_acum())
+			};
+			data.add(obj1);
+		}
+
+		ReporteYhaguy rep = new ReporteConteoImportacion_(this.dto);
+		rep.setDatosReporte(data);
+
+		ViewPdf vp = new ViewPdf();
+		vp.setBotonImprimir(false);
+		vp.setBotonCancelar(false);
+		vp.showReporte(rep, this);	
+	
+	}
+	
 	/************************** ELIMINAR ITEM DETALLE ORDEN COMPRA ****************************/
 	
 	private List<ImportacionPedidoCompraDetalleDTO> selectedOrdenItems = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
@@ -4611,6 +4635,63 @@ class ReporteConteoImportacion extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Recepción de Mercaderías");
+		this.setDirectorio("compras");
+		this.setNombreArchivo("Importacion-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		String numero = this.importacion.getNumeroPedidoCompra();
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Nro. Importación", numero))
+				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial())));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de conteo de importacion..
+ */
+class ReporteConteoImportacion_ extends ReporteYhaguy {
+	
+	private ImportacionPedidoCompraDTO importacion;	
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Conteo 1", TIPO_INTEGER, 30);
+	static DatosColumnas col4 = new DatosColumnas("Dif. 1", TIPO_INTEGER, 30);
+	static DatosColumnas col5 = new DatosColumnas("Conteo 2", TIPO_INTEGER, 30);
+	static DatosColumnas col6 = new DatosColumnas("Dif. 2", TIPO_INTEGER, 30);
+	static DatosColumnas col7 = new DatosColumnas("Conteo 3", TIPO_INTEGER, 30);
+	static DatosColumnas col8 = new DatosColumnas("Dif. 3", TIPO_INTEGER, 30);
+	
+	public ReporteConteoImportacion_(ImportacionPedidoCompraDTO importacion) {
+		this.importacion = importacion;
+	}
+	
+	static {
+		cols.add(col1);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override
