@@ -6,7 +6,7 @@
 	id="findArt">
 	<hlayout sclass="button-container">
 		<navbar mold="bs-pills">
-			<navitem label=" TODOS" selected="true"
+			<navitem label=" TODOS" selected="true" id="nv_1"
 				style="text-align:center; font-size:12px"
 				iconSclass="z-icon-filter" onClick="@command('filtrarStockTodos', comp=int_box)" />
 			<navitem label=" CON STOCK"
@@ -14,9 +14,19 @@
 				iconSclass="z-icon-filter" onClick="@command('filtrarStock', comp1=hl_stock, comp2=int_box)" />
 		</navbar>
 		<space></space>
-		<hlayout id="hl_stock" visible="false">
+		<hlayout id="hl_stock" visible="@load(vm.filterStock gt 0? 'true':'false')" valign="middle">
 			<field value=">=" />
 			<spinner id="int_box" value="@bind(vm.filterStock)" instant="true" width="70px"></spinner>
+			<space></space>
+			<a onClick="@command('filtrarStockTodos', comp=int_box)"
+				tooltiptext="Limpiar Filtro..">
+			<attribute name="onClick">
+				nv_1.setSelected(true);
+			</attribute>
+				<html>
+					<i class="fas fa-broom fa-lg"></i>
+				</html>
+			</a>
 		</hlayout>
 		<div hflex="true"></div>
 		<button mold="bs" sclass="btn-danger" iconSclass="z-icon-times" onClick="findArt.detach()"></button>
