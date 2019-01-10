@@ -10119,17 +10119,28 @@ public class ReportesViewModel extends SimpleViewModel {
 					double totalIva10 = (double) val[3];
 					double totalIva5 = (double) val[4];
 					double totalExenta = (double) val[5];
+					double totalImporte = (double) val[6]; 
 					totalGrav10 += det.getGravada10();
 					totalGrav5 += det.getGravada5();
 					totalIva10 += det.getIva10();
 					totalIva5 += det.getIva5();
-					values.put(det.getArticuloGasto().getDescripcion(), new Object[]{ det, totalGrav10, totalGrav5, totalIva10, totalIva5 });
+					totalExenta += det.getExenta();
+					totalImporte += (det.getGravada10() + det.getGravada5() + det.getIva10() + det.getIva5() + det.getExenta());
+					values.put(det.getArticuloGasto().getDescripcion(),
+							new Object[] { det, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+									Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
+									Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
 				} else {
 					double totalGrav10 = det.getGravada10();
 					double totalGrav5 = det.getGravada5();
 					double totalIva10 = det.getIva10();
 					double totalIva5 = det.getIva5();
-					values.put(det.getArticuloGasto().getDescripcion(), new Object[]{ det, totalGrav10, totalGrav5, totalIva10, totalIva5 });
+					double totalExenta = det.getExenta();
+					double totalImporte = (det.getGravada10() + det.getGravada5() + det.getIva10() + det.getIva5() + det.getExenta());
+					values.put(det.getArticuloGasto().getDescripcion(),
+							new Object[] { det, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+									Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
+									Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
 				}
 			}
 			
@@ -10140,9 +10151,13 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalGrav5 = (double) value[2];
 				double totalIva10 = (double) value[3];
 				double totalIva5 = (double) value[4];
+				double totalExenta = (double) value[5];
+				double totalImporte = (double) value[6];
 				String cod = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getCuentaContable().getCodigo() : "";
 				String desc = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getDescripcion() : "";
-				data.add(new Object[]{ cod, desc, totalGrav10, totalGrav5, totalIva10, totalIva5 });
+				data.add(new Object[] { cod, desc, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+						Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5), Utiles.getRedondeo(totalExenta),
+						Utiles.getRedondeo(totalImporte) });
 			}
 			
 			Collections.sort(data, new Comparator<Object[]>() {
@@ -19457,14 +19472,14 @@ class ReporteGastosPorCuentas extends ReporteYhaguy {
 	private String sucursal;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 25);
+	static DatosColumnas col1 = new DatosColumnas("Cód.", TIPO_STRING, 18);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Gravada 10%", TIPO_DOUBLE_GS, 25, true);
-	static DatosColumnas col4 = new DatosColumnas("Gravada 5%", TIPO_DOUBLE_GS, 25, true);
-	static DatosColumnas col5 = new DatosColumnas("Iva 10%", TIPO_DOUBLE_GS, 25, true);
-	static DatosColumnas col6 = new DatosColumnas("Iva 5%", TIPO_DOUBLE_GS, 25, true);
-	static DatosColumnas col7 = new DatosColumnas("Exenta", TIPO_DOUBLE_GS, 25, true);
-	static DatosColumnas col8 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 25, true);
+	static DatosColumnas col3 = new DatosColumnas("Grav. 10%", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col4 = new DatosColumnas("Grav. 5%", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col5 = new DatosColumnas("Iva 10%", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col6 = new DatosColumnas("Iva 5%", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col7 = new DatosColumnas("Exenta", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col8 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
 
 	public ReporteGastosPorCuentas(Date desde, Date hasta, String sucursal) {
 		this.desde = desde;
