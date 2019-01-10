@@ -7647,10 +7647,14 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los gastos segun parametros..
+	 * [0]:gasto
+	 * [1]:cuenta
+	 * [2]:montoGs
+	 * [3]:montoDs
 	 */
-	public List<Gasto> getGastos(String fecha, String numero, String razonSocial, 
-			String ruc, String caja, String pago, String importacion, String descripcion, String sucursal) throws Exception {
-		String query = "select g from Gasto g where "
+	public List<Object[]> getGastos(String fecha, String numero, String razonSocial, 
+			String ruc, String caja, String pago, String importacion, String descripcion, String sucursal, String cuenta) throws Exception {
+		String query = "select g, d.articuloGasto.descripcion, d.montoGs, d.montoDs from Gasto g join g.detalles d where "
 				+ " cast (g.fecha as string) like '%" + fecha + "%'"
 				+ " and g.numeroFactura like '%" + numero + "%'"
 				+ " and upper(g.proveedor.empresa.razonSocial) like '%" + razonSocial.toUpperCase() + "%'"
@@ -7658,7 +7662,8 @@ public class RegisterDomain extends Register {
 				+ " and g.cajaPagoNumero like '%" + caja + "%'"
 				+ " and upper(g.numeroImportacion) like '%" + importacion.toUpperCase() + "%'"
 				+ " and upper(g.numeroOrdenPago) like '%" + pago.toUpperCase() + "%'"
-				+ " and upper(g.observacion) like '%" + descripcion.toUpperCase() + "%'";
+				+ " and upper(g.observacion) like '%" + descripcion.toUpperCase() + "%'"
+				+ " and upper(d.articuloGasto.descripcion) like '%" + cuenta.toUpperCase() + "%'";
 				if (!sucursal.trim().isEmpty()) {
 					query += " and upper(g.sucursal.descripcion) like '%" + sucursal.toUpperCase() + "%'";
 				}				

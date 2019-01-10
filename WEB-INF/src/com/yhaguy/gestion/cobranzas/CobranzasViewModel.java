@@ -464,7 +464,7 @@ public class CobranzasViewModel extends SimpleViewModel {
 	public boolean isFieldTareasVisible() {
 		if(this.selectedResultado == null)
 			return false;
-		return !this.selectedResultado.equals(LlamadaCobranza.NO_RESPONDE);
+		return !this.selectedResultado.equals(LlamadaCobranza.NO_RESPONDE) && !this.selectedResultado.equals(LlamadaCobranza.COMENTARIOS);
 	}
 	
 	@DependsOn("selectedCalendario")

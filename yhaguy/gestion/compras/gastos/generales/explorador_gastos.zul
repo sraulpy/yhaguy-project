@@ -37,7 +37,7 @@
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
 		model="@load(vm.gastos)"
-		selectedItem="@bind(vm.selectedGasto)">
+		selectedItem="@bind(vm.selectedGasto_)">
 		<listhead menupopup="auto">
 			<listheader label="Sucursal" width="110px" />
 			<listheader label="Fecha" width="150px" />
@@ -119,7 +119,15 @@
 						sclass="filter"/>
 				</hlayout>
 			</auxheader>
-			<auxheader />
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Cuenta.."
+						value="@bind(vm.filterCuenta)"
+						instant="true"
+						sclass="filter"/>
+				</hlayout>
+			</auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
@@ -153,24 +161,24 @@
 			<auxheader />
 		</auxhead>
 		<template name="model">
-			<listitem style="@load(each.anulado? 'text-decoration:line-through; color:red' : '')">
-				<listcell label="@load(each.sucursal.descripcion)" />
-				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
-				<listcell label="@load(each.numeroFactura)" />
-				<listcell label="@load(each.proveedor.empresa.razonSocial)" />
-				<listcell label="@load(each.proveedor.empresa.ruc)" />
-				<listcell label="@load(each.observacion.toUpperCase())" />
-				<listcell label="@load(each.descripcionCuenta)" />
-				<listcell label="@load(each.cajaPagoNumero)"/>
-				<listcell label="@load(each.numeroOrdenPago)"/>
-				<listcell label="@load(each.numeroImportacion)"/>
-				<listcell label="@load(each.monedaLocal? each.importeGs : each.importeDs) @converter(each.monedaLocal ? vm.cnv.monedaLocal : 'formattedNumber', format='###,###,##0.00')" />
-				<listcell label="@load(each.moneda.sigla)"></listcell>
+			<listitem style="@load(each[0].anulado? 'text-decoration:line-through; color:red' : '')">
+				<listcell label="@load(each[0].sucursal.descripcion)" />
+				<listcell label="@load(each[0].fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
+				<listcell label="@load(each[0].numeroFactura)" />
+				<listcell label="@load(each[0].proveedor.empresa.razonSocial)" />
+				<listcell label="@load(each[0].proveedor.empresa.ruc)" />
+				<listcell label="@load(each[0].observacion.toUpperCase())" />
+				<listcell label="@load(each[1])" />
+				<listcell label="@load(each[0].cajaPagoNumero)"/>
+				<listcell label="@load(each[0].numeroOrdenPago)"/>
+				<listcell label="@load(each[0].numeroImportacion)"/>
+				<listcell label="@load(each[0].monedaLocal? each[2] : each[3]) @converter(each[0].monedaLocal ? vm.cnv.monedaLocal : 'formattedNumber', format='###,###,##0.00')" />
+				<listcell label="@load(each[0].moneda.sigla)"></listcell>
 				<listcell>
-						<a label="ítems" onClick="@command('verItems', item=each, parent=self)" />
+						<a label="ítems" onClick="@command('verItems', item=each[0], parent=self)" />
 				</listcell>
 				<listcell>
-						<a iconSclass="z-icon-camera" onClick="@command('verImagen', item=each, parent=self)"
+						<a iconSclass="z-icon-camera" onClick="@command('verImagen', item=each[0], parent=self)"
 							tooltiptext="Ver Foto..">	
 						</a>
 				</listcell>

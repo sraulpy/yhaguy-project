@@ -40,6 +40,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	
 	private String selectedFiltro = FILTRO_TODOS;
 	
+	private Object[] selectedGasto_;
 	private Gasto selectedGasto;
 	
 	private String filterFechaDD = "";
@@ -53,6 +54,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	private String filterImportacion = "";
 	private String filterDescripcion = "";
 	private String filterSucursal = "";
+	private String filterCuenta = "";
 	
 	private int listSize = 0;
 	private double totalImporteGs = 0;
@@ -214,42 +216,43 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA",
 		"filterNumero", "filterRazonSocial", "filterRuc", "filterCaja", 
-		"filterPago", "filterImportacion", "selectedFiltro", "filterDescripcion", "filterSucursal" })
-	public List<Gasto> getGastos() throws Exception {
+		"filterPago", "filterImportacion", "selectedFiltro", "filterDescripcion", "filterSucursal", "filterCuenta" })
+	public List<Object[]> getGastos() throws Exception {
 		this.totalImporteGs = 0;
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Gasto> aux = new ArrayList<Gasto>();
-		List<Gasto> out = rr.getGastos(this.getFilterFecha(),
+		List<Object[]> aux = new ArrayList<Object[]>();
+		List<Object[]> out = rr.getGastos(this.getFilterFecha(),
 				this.filterNumero, this.filterRazonSocial, this.filterRuc, 
-				this.filterCaja, this.filterPago, this.filterImportacion, this.filterDescripcion, this.filterSucursal);
-		for (Gasto gasto : out) {
-			System.out.println(gasto.getNumeroFactura());
+				this.filterCaja, this.filterPago, this.filterImportacion, this.filterDescripcion, this.filterSucursal, this.filterCuenta);
+		for (Object[] gasto_ : out) {
+			Gasto gasto = (Gasto) gasto_[0];
+			double montoGs = (double) gasto_[2];
 			if (this.selectedFiltro.equals(FILTRO_TODOS)) {
-				aux.add(gasto);
-				this.totalImporteGs += gasto.getImporteGs();
+				aux.add(gasto_);
+				this.totalImporteGs += montoGs;
 			}
 			if (this.selectedFiltro.equals(FILTRO_GASTOS_CAJA_CHICA)) {
 				if (gasto.isFondoFijo()) {
-					aux.add(gasto);
-					this.totalImporteGs += gasto.getImporteGs();
+					aux.add(gasto_);
+					this.totalImporteGs += montoGs;
 				}
 			} 
 			if (this.selectedFiltro.equals(FILTRO_GASTOS_IMPORTACION)) {
 				if (gasto.isGastoImportacion()) {
-					aux.add(gasto);
-					this.totalImporteGs += gasto.getImporteGs();
+					aux.add(gasto_);
+					this.totalImporteGs += montoGs;
 				}
 			}
 			if (this.selectedFiltro.equals(FILTRO_PAGADOS)) {
 				if (gasto.isPagado()) {
-					aux.add(gasto);
-					this.totalImporteGs += gasto.getImporteGs();
+					aux.add(gasto_);
+					this.totalImporteGs += montoGs;
 				}
 			}
 			if (this.selectedFiltro.equals(FILTRO_PENDIENTES_PAGO)) {
 				if (gasto.isPendientePago()) {
-					aux.add(gasto);
-					this.totalImporteGs += gasto.getImporteGs();
+					aux.add(gasto_);
+					this.totalImporteGs += montoGs;
 				}
 			}
 		}
@@ -393,5 +396,22 @@ public class ExploradorGastosVM extends SimpleViewModel {
 
 	public void setFilterSucursal(String filterSucursal) {
 		this.filterSucursal = filterSucursal;
+	}
+
+	public String getFilterCuenta() {
+		return filterCuenta;
+	}
+
+	public void setFilterCuenta(String filterCuenta) {
+		this.filterCuenta = filterCuenta;
+	}
+
+	public Object[] getSelectedGasto_() {
+		return selectedGasto_;
+	}
+
+	public void setSelectedGasto_(Object[] selectedGasto_) {
+		this.selectedGasto_ = selectedGasto_;
+		this.selectedGasto = (Gasto) selectedGasto_[0];
 	}
 }

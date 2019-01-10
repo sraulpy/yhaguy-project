@@ -17,9 +17,10 @@
 		<hlayout visible="@load(vm.filterStock gt 0? 'true':'false')" valign="middle">
 			<field value=">=" />
 			<spinner value="@bind(vm.filterStock)" instant="true" width="70px"></spinner>
-			<space></space>
-			<a onClick="@command('filtrarStockTodos', comp=int_box)"
-				tooltiptext="Limpiar Filtro..">
+			<space></space>			
+		</hlayout>
+		<a onClick="@command('cleanFiltros')"
+				tooltiptext="Limpiar Filtros..">
 			<attribute name="onClick">
 				nv_1.setSelected(true);
 			</attribute>
@@ -27,7 +28,6 @@
 					<i class="fas fa-broom fa-lg"></i>
 				</html>
 			</a>
-		</hlayout>
 		<hlayout visible="false">
 			<hlayout id="hl_stock" visible="false"></hlayout>
 			<spinner id="int_box" visible="false"></spinner>
@@ -43,47 +43,62 @@
 		id="listArt">	
 		
 		<listhead>
-			<listheader label="Código Interno" width="180px"/>
-			<listheader label="Código Original" width="180px"/>
-			<listheader label="Código Proveedor" width="180px"/>
-			<listheader label="Descripción"/>
-			<listheader label="Marca" width="180px"/>
+			<listheader width="180px"/>
+			<listheader width="180px"/>
+			<listheader width="180px"/>
+			<listheader />
+			<listheader width="180px"/>
 		</listhead>	
 		<auxhead>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						sclass="filter_"
 						value="@bind(vm.codInterno)" instant="true"
-						id="tbox_codint"/>
+						id="tbox_codint"
+						placeholder="Código Interno.." 
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"/>
 				</hlayout>				
 			</auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
 						sclass="filter"
-						value="@bind(vm.codOriginal)" instant="true"/>
+						value="@bind(vm.codOriginal)" instant="true"
+						placeholder="Código Original.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"/>
 				</hlayout>				
 			</auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
 						sclass="filter"
-						value="@bind(vm.codProveedor)" instant="true"/>
+						value="@bind(vm.codProveedor)" instant="true"
+						placeholder="Código Proveedor.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"/>
 				</hlayout>				
 			</auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true"
 						sclass="filter"
-						value="@bind(vm.descripcion)" instant="true" />
+						value="@bind(vm.descripcion)" instant="true" 
+						placeholder="Descripción.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"/>
 				</hlayout>				
 			</auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true"
 						sclass="filter"
-						value="@bind(vm.marca)" instant="true" />
+						value="@bind(vm.marca)" instant="true" 
+						placeholder="Marca.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"/>
 				</hlayout>				
 			</auxheader>
 		</auxhead>
@@ -451,13 +466,12 @@
 	</script>
 	
 	<style>
-		.custom-tbutton {cursor:default; background:transparent; border:0px}
-		.custom-tbutton:hover {cursor:default; background:transparent; border:0px}
-		.custom-tbox {margin-right:5px; background:lightyellow}
-		.custom-listheader .z-listheader-content { line-height: 15px; font-weight:normal}	
-		.z-html {
-			display:block;
-		}	
+		.custom-tbutton {cursor:default; background:transparent;
+		border:0px} .custom-tbutton:hover {cursor:default;
+		background:transparent; border:0px} .custom-tbox
+		{margin-right:5px; background:lightyellow} .custom-listheader
+		.z-listheader-content { line-height: 15px; font-weight:normal}
+		.z-html { display:block; }
 	</style>
 	
 </window>

@@ -189,6 +189,19 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	@NotifyChange("*")
+	public void cleanFiltros() {
+		this.filterStock = 0;
+		this.filter_razonsocial = "";
+		this.filter_ruc = "";
+		this.codInterno = "";
+		this.codOriginal = "";
+		this.codProveedor = "";
+		this.descripcion = "";
+		this.marca = "";
+	}
+	
+	@Command
 	@NotifyChange("precioDescontado")
 	public void setPrecioDescontadoMayorista(@BindingParam("comp") Bandbox comp) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();

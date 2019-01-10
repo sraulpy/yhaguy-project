@@ -254,7 +254,7 @@ public class ClienteControlBody extends EmpresaControlBody {
 	public List<MyArray> getCobradores() throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		for (Funcionario func : rr.getFuncionarios()) {
+		for (Funcionario func : rr.getTeleCobradores()) {
 			MyArray my = new MyArray(func.getRazonSocial());
 			my.setId(func.getId());
 			out.add(my);
