@@ -542,9 +542,10 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				double importe = gasto.isAnulado() ? 0.0 : gasto.getImporteGs();
 				this.totalEgresos += importe;
 				this.totalGastos += importe;
-				MyArray my = new MyArray(gasto.getTipoMovimiento()
-						.getDescripcion(), gasto.getNumeroFactura() + " - " + gasto.getDescripcionCuenta(), importe,
-						"GASTOS DE CAJA CHICA", this.totalGastos);
+				MyArray my = new MyArray(
+						gasto.getTipoMovimiento().getDescripcion(), gasto.getNumeroFactura() + " - "
+								+ gasto.getProveedor().getRazonSocial() + " - " + gasto.getDescripcionCuenta(),
+						importe, "GASTOS DE CAJA CHICA", this.totalGastos);
 				this.values.add(my);
 			}
 			
