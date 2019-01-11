@@ -64,6 +64,14 @@ public class Gasto extends Domain {
 	}
 	
 	/**
+	 * @return el numero abreviado..
+	 */
+	public String getNumero_() {
+		int index = this.numeroFactura.length() > 8 ? this.numeroFactura.length() - 7 : this.numeroFactura.length(); 
+		return this.numeroFactura.substring(index, this.numeroFactura.length());
+	}
+	
+	/**
 	 * @return el importe total gs..
 	 */
 	public double getImporteGs_() {
