@@ -258,6 +258,14 @@
 						<field value="Tipo Cambio" />
 						<guaranibox value="@bind(vm.selectedGasto.tipoCambio)" hflex="true" />
 					</vlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal" />
+						<combobox value="@load(vm.selectedGasto.sucursal.descripcion)" hflex="true"
+							selectedItem="@bind(vm.selectedGasto.sucursal)">
+							<template name="model">
+							</template>
+						</combobox>
+					</vlayout>
 				</row>
 			</rows>
 		</grid>
