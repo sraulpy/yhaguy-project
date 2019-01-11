@@ -345,8 +345,7 @@
 		<hlayout>
 			<div hflex="true"></div> 
 			<button mold="bs" sclass="btn-success btn-sm" label="Guardar Cambios" iconSclass="z-icon-check" width="150px"
-				onClick="@command('guardarCambios')"
-				disabled="${!vm.operacionHabilitada('ModificarGastos')}"></button>
+				onClick="@command('guardarCambios')"></button>
 		</hlayout>
 	</popup>
 	
