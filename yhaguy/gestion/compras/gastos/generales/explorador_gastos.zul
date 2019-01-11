@@ -280,7 +280,7 @@
 				<listitem>
 					<listcell label="@load(each.articuloGasto.cuentaContable.codigo)" />
 					<listcell>
-						<bandbox id="bnd_list" value="@load(each.articuloGasto.descripcion)" hflex="true">
+						<bandbox value="@load(each.articuloGasto.descripcion)" hflex="true">
 							<bandpopup>
 								<listbox sclass="small-list" width="700px"
 									model="@load(vm.articulosGastos)"
