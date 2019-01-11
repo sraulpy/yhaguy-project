@@ -199,98 +199,154 @@
 		</listfoot>
 	</listbox>
 	
-	<popup id="pop_det" width="900px" sclass="rounded">
+	<popup id="pop_det" width="1000px" sclass="rounded">
 		<hbox align="end" pack="end" width="100%">		
 			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
-				<field value="@load(vm.selectedGasto.tipoMovimiento.descripcion)" />
+				<field value="PROVEEDOR:" />
+				<space></space>
+				<label value="@load(vm.selectedGasto.proveedor.razonSocial)" />
 			</hbox>
 			<button onClick="pop_det.close()" iconSclass="z-icon-times"></button>
 		</hbox>
-		<hbox pack="start" align="start" sclass="button-container" width="100%">
-			<field value="Fecha:" />
-			<label value="@load(vm.selectedGasto.fecha) @converter('formattedDate', format='dd-MM-yyyy')" />
-			<space />
-			<field value="Número:" />
-			<label value="@load(vm.selectedGasto.numeroFactura)" />			
-			<space />
-			<field value="Proveedor:" />
-			<label value="@load(vm.selectedGasto.proveedor.razonSocial)" />		
-			<space />
-			<field value="Moneda:" />
-			<label value="@load(vm.selectedGasto.moneda.descripcion)" />	
-		</hbox>
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Concepto" />
+						<combobox hflex="true" value="@load(vm.selectedGasto.tipoMovimiento.descripcion)"
+							selectedItem="@bind(vm.selectedGasto.tipoMovimiento)"
+							instant="true" model="@load(vm.tiposMovimientos)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>					
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Fecha" />
+						<datebox value="@bind(vm.selectedGasto.fecha)" hflex="true"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox value="@bind(vm.selectedGasto.numeroFactura)" hflex="true" />
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Timbrado" />
+						<textbox value="@bind(vm.selectedGasto.timbrado.numero)" hflex="true" />	
+					</vlayout>
+				</row>
+				<row>
+					<vlayout spacing="0">
+						<field value="Condición" />
+						<combobox value="@load(vm.selectedGasto.condicionPago.descripcion)" hflex="true"
+							model="@load(vm.condiciones)"
+							selectedItem="@bind(vm.selectedGasto.condicionPago)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Moneda" />
+						<combobox model="@load(vm.monedas)" value="@load(vm.selectedGasto.moneda.descripcion)" hflex="true"
+							selectedItem="@bind(vm.selectedGasto.moneda)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Tipo Cambio" />
+						<guaranibox value="@bind(vm.selectedGasto.tipoCambio)" hflex="true" />
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+		<div height="5px"></div>
 		<hlayout>
-		<listbox height="300px" sclass="small-list"
-			model="@load(vm.selectedGasto.detalles)" hflex="3">
-			<auxhead>
-				<auxheader label="Cuentas Contables" colspan="3"/>
-			</auxhead>
+		<listbox height="300px"
+			model="@load(vm.selectedGasto.detalles)" hflex="true">
 			<listhead style="text-align:center">
 				<listheader label="Código" width="110px" />
 				<listheader label="Descripción" />
-				<listheader label="Importe" width="100px" align="right"
+				<listheader label="Tipo IVA" width="110px" />
+				<listheader label="Importe Gs." width="110px" align="right"
+					style="text-align:center" />
+				<listheader label="Importe U$D" width="110px" align="right"
+					style="text-align:center" />
+				<listheader label="Importe IVA" width="110px" align="right"
 					style="text-align:center" />
 			</listhead>
 			<template name="model">
 				<listitem>
 					<listcell label="@load(each.articuloGasto.cuentaContable.codigo)" />
-					<listcell label="@load(each.articuloGasto.descripcion)" />
-					<listcell
-						label="@load(vm.selectedGasto.monedaLocal ? each.montoGs : each.montoDs) 
-						@converter(vm.selectedGasto.monedaLocal ? vm.cnv.monedaLocal : 'formattedNumber', format='###,###,##0.00')" />
+					<listcell>
+						<bandbox id="bnd_list" value="@load(each.articuloGasto.descripcion)" hflex="true">
+							<bandpopup>
+								<listbox sclass="small-list" width="700px"
+									model="@load(vm.articulosGastos)"
+									selectedItem="@bind(each.articuloGasto)"
+									onSelect="bnd_list.close()">
+									<listhead>
+										<listheader>
+											<textbox hflex="true" placeholder="Buscar Cuenta.."
+												value="@bind(vm.filterArticuloGasto)"
+												instant="true">
+											</textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.descripcion)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</listcell>
+					<listcell>
+						<combobox hflex="true" value="@load(each.tipoIva.descripcion)"
+							model="@load(vm.tiposIva)"
+							selectedItem="@bind(each.tipoIva)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>
+						</combobox>
+					</listcell>
+					<listcell>
+						<guaranibox value="@bind(each.montoGs)" hflex="true" />	
+					</listcell>
+					<listcell>
+						<doublebox value="@bind(each.montoDs)" hflex="true" format="#,###,###.00" />	
+					</listcell>
+					<listcell>
+						<guaranibox value="@bind(each.montoIva)" hflex="true" />	
+					</listcell>
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter span="3">
-					<hlayout>
-						<field value="@load(vm.selectedGasto.detalles.size())" />
-						<field value="ítems" />
-						<hbox hflex="true" align="end" pack="end">
-							<field value="Total Gs.:" />
-							<div width="5px"/>
-							<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter>
+					<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
 									value="@load(vm.selectedGasto.importeGs)"/>
-							<div width="5px"/>
-						</hbox>
-					</hlayout>
 				</listfooter>
+				<listfooter>
+					<doublebox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" format="#,###,###.00"
+									value="@load(vm.selectedGasto.importeDs)"/>
+				</listfooter>
+				<listfooter></listfooter>
 			</listfoot>
 		</listbox>
-		
-		<listbox height="300px" sclass="small-list"
-			model="@load(vm.selectedGasto.formasPago)" hflex="2">
-			<auxhead>
-				<auxheader label="Formas de Pago" colspan="2"/>
-			</auxhead>
-			<listhead style="text-align:center">
-				<listheader label="Descripción" />
-				<listheader label="Importe Gs." width="100px" align="right"
-					style="text-align:center" />
-			</listhead>
-			<template name="model">
-				<listitem>
-					<listcell label="@load(each.descripcion.toUpperCase())" />
-					<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
-				</listitem>
-			</template>
-			<listfoot>
-				<listfooter span="2">
-					<hlayout hflex="true">
-						<field value="@load(vm.selectedGasto.formasPago.size())" />
-						<field value="ítems" />
-						<hbox hflex="true" align="end" pack="end">
-							<field value="Total Gs.:" />
-							<div width="5px"/>
-							<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
-									readonly="true" 
-									value="@load(vm.selectedGasto.importeGs)"/>
-							<div width="5px"/>
-						</hbox>						
-					</hlayout>
-				</listfooter>
-			</listfoot>
-		</listbox>
+		</hlayout>
+		<div height="10px"></div>
+		<hlayout>
+			<div hflex="true"></div> 
+			<button mold="bs" sclass="btn-success btn-sm" label="Guardar Cambios" iconSclass="z-icon-check" width="150px"
+				onClick="@command('guardarCambios')"
+				disabled="${!vm.operacionHabilitada('ModificarGastos')}"></button>
 		</hlayout>
 	</popup>
 	

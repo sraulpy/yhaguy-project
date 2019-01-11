@@ -20,9 +20,14 @@ import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.util.MyArray;
+import com.yhaguy.Configuracion;
+import com.yhaguy.domain.ArticuloGasto;
+import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.util.Utiles;
 
@@ -55,6 +60,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	private String filterDescripcion = "";
 	private String filterSucursal = "";
 	private String filterCuenta = "";
+	private String filterArticuloGasto = "";
 	
 	private int listSize = 0;
 	private double totalImporteGs = 0;
@@ -120,6 +126,14 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	@Command
 	public void imprimir() throws Exception {
 		this.imprimir_();
+	}
+	
+	@Command
+	public void guardarCambios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		rr.saveObject(this.selectedGasto.getTimbrado(), this.getLoginNombre());
+		rr.saveObject(this.selectedGasto, this.getLoginNombre());
+		Clients.showNotification("REGISTRO GUARDADO..");
 	}
 	
 	/**
@@ -262,6 +276,12 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		return aux;
 	}
 	
+	@DependsOn("filterArticuloGasto")
+	public List<ArticuloGasto> getArticulosGastos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getArticulosGastos(this.filterArticuloGasto, 100);
+	}
+	
 	/**
 	 * @return el filtro de fecha..
 	 */
@@ -277,6 +297,40 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		return this.filterFechaAA + "-" + this.filterFechaMM + "-" + this.filterFechaDD;
 	}
 
+	/**
+	 * @return tipos de movimientos..
+	 */
+	public List<TipoMovimiento> getTiposMovimientos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTiposDeMovimientos("Gasto");
+	}
+	
+	/**
+	 * @return tipos de movimientos..
+	 */
+	public List<CondicionPago> getCondiciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<CondicionPago> out = new ArrayList<CondicionPago>();
+		out.add(rr.getCondicionPagoById(1));
+		out.add(rr.getCondicionPagoById(2));
+		return out;
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<Tipo> getMonedas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_MONEDA);
+	}
+	
+	/**
+	 * @return los tipos de iva..
+	 */
+	public List<Tipo> getTiposIva() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_IVA);
+	}
 
 	public String getFilterFechaDD() {
 		return filterFechaDD;
@@ -413,5 +467,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	public void setSelectedGasto_(Object[] selectedGasto_) {
 		this.selectedGasto_ = selectedGasto_;
 		this.selectedGasto = (Gasto) selectedGasto_[0];
+	}
+
+	public String getFilterArticuloGasto() {
+		return filterArticuloGasto;
+	}
+
+	public void setFilterArticuloGasto(String filterArticuloGasto) {
+		this.filterArticuloGasto = filterArticuloGasto;
 	}
 }

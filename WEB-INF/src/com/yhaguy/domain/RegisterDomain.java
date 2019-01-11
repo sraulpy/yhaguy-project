@@ -7459,6 +7459,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los tipos de movimientos..
+	 */
+	public List<TipoMovimiento> getTiposDeMovimientos(String clase) throws Exception {
+		String query = "select t from TipoMovimiento t where t.clase = '" + clase + "' order by t.descripcion";
+		List<TipoMovimiento> list = this.hql(query);
+		return list;
+	}
+	
+	/**
 	 * @return el tipo por descripcion..
 	 */
 	public Tipo getTipoPorDescripcion(String descripcion) throws Exception {
