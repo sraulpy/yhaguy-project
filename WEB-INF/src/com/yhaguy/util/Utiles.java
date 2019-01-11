@@ -207,7 +207,7 @@ public class Utiles {
 	 */
 	public static String getMaxLength(String string, int max) {
 		if (string.length() > max)
-			return string.substring(0, max) + "...";
+			return string.substring(0, max) + "..";
 		return string;
 	}
 	
