@@ -27,6 +27,7 @@ import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.util.Utiles;
@@ -131,6 +132,8 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	@Command
 	public void guardarCambios() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedGasto.setImporteGs(this.selectedGasto.getImporteGs_());
+		this.selectedGasto.setImporteDs(this.selectedGasto.getImporteDs_());
 		rr.saveObject(this.selectedGasto.getTimbrado(), this.getLoginNombre());
 		rr.saveObject(this.selectedGasto, this.getLoginNombre());
 		Clients.showNotification("REGISTRO GUARDADO..");
@@ -330,6 +333,15 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	public List<Tipo> getTiposIva() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getTipos(Configuracion.ID_TIPO_IVA);
+	}
+	
+	/**
+	 * @return las sucursales..
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SucursalApp> getSucursales() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(SucursalApp.class.getName());
 	}
 
 	public String getFilterFechaDD() {

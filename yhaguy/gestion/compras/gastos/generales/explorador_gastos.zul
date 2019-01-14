@@ -261,8 +261,10 @@
 					<vlayout spacing="0">
 						<field value="Sucursal" />
 						<combobox value="@load(vm.selectedGasto.sucursal.descripcion)" hflex="true"
-							selectedItem="@bind(vm.selectedGasto.sucursal)">
+							selectedItem="@bind(vm.selectedGasto.sucursal)"
+							model="@load(vm.sucursales)">
 							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
 							</template>
 						</combobox>
 					</vlayout>
@@ -292,8 +294,7 @@
 							<bandpopup>
 								<listbox sclass="small-list" width="700px"
 									model="@load(vm.articulosGastos)"
-									selectedItem="@bind(each.articuloGasto)"
-									onSelect="bnd_list.close()">
+									selectedItem="@bind(each.articuloGasto)">
 									<listhead>
 										<listheader>
 											<textbox hflex="true" placeholder="Buscar Cuenta.."

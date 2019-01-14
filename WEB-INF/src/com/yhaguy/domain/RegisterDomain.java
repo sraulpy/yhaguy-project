@@ -8831,7 +8831,7 @@ public class RegisterDomain extends Register {
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
-				+ " and (v.fecha >= '" + desde_ + "' or v.fecha <= '" + hasta_ + "')";
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')";
 				if (idProveedor > 0) {
 					query += " and d.articulo.proveedor.id = " + idProveedor;
 				}
@@ -8840,6 +8840,52 @@ public class RegisterDomain extends Register {
 				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
 				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
 				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha, v.cliente.empresa.razonSocial";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de notas credito segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.codigoProveedor
+	 * [3]:articulo.referencia
+	 * [4]:articulo.numeroParte
+	 * [5]:articulo.estado
+	 * [6]:articulo.descripcion
+	 * [7]:articulo.ochentaVeinte
+	 * [8]:articulo.abc
+	 * [9]:articulo.familia
+	 * [10]:articulo.marca
+	 * [11]:articulo.linea
+	 * [12]:articulo.grupo
+	 * [13]:articulo.aplicacion
+	 * [14]:articulo.modelo
+	 * [15]:articulo.peso
+	 * [16]:articulo.volumen
+	 * [17]:articulo.proveedor
+	 * [18]:cantidad
+	 * [19]:fecha
+	 * [20]:cliente.empresa.razonSocial
+	 */
+	public List<Object[]> getNotasCreditoDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte,"
+				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
+				+ " d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion, "
+				+ " d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen,"
+				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial"
+				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
+				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
+				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
+				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
+				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, n.fechaEmision, n.cliente.empresa.razonSocial";
 		return this.hql(query);
 	}
 	
@@ -9299,6 +9345,36 @@ public class RegisterDomain extends Register {
 	 */
 	public List<ArticuloMarca> getMarcas() throws Exception {
 		String query = "select a from ArticuloMarca a order by a.descripcion";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los articulos..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.codigoProveedor
+	 * [3]:articulo.referencia
+	 * [4]:articulo.numeroParte
+	 * [5]:articulo.estado
+	 * [6]:articulo.descripcion
+	 * [7]:articulo.ochentaVeinte
+	 * [8]:articulo.abc
+	 * [9]:articulo.familia
+	 * [10]:articulo.marca
+	 * [11]:articulo.linea
+	 * [12]:articulo.grupo
+	 * [13]:articulo.aplicacion
+	 * [14]:articulo.modelo
+	 * [15]:articulo.peso
+	 * [16]:articulo.volumen
+	 * [17]:articulo.proveedor
+	 */
+	public List<Object[]> getArticulos(long idProveedor) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.codigoProveedor, a.referencia, a.numeroParte,"
+				+ "	a.estado, a.descripcion, a.ochentaVeinte, a.abc, a.familia.descripcion,"
+				+ " a.marca.descripcion, a.linea.descripcion, a.grupo.descripcion,"
+				+ " a.aplicacion.descripcion, a.modelo.descripcion, a.peso, a.volumen, a.proveedor.empresa.razonSocial"
+				+ " from Articulo a where a.proveedor.id = " + idProveedor + " order by a.descripcion";
 		return this.hql(query);
 	}
 }

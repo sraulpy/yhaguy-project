@@ -47,5 +47,9 @@
 			<field value="Formato:" />
 			<textbox readonly="true" hflex="true" value="CSV"></textbox>
 		</row>
+		<row>
+			<field value="Ítems s/movimiento:" />
+			<checkbox checked="@bind(vm.dato.filtro.todos)"></checkbox>
+		</row>
 	</rows>
 </grid>
