@@ -1058,7 +1058,7 @@ public class Configuracion extends Config {
 	public static String SIGLA_MOTIVO_DEVOLUCION_DEFECTUOSO = "MOT-DEV-DEF";
 
 	// Grupo de Usuarios para Grupo Elite
-	public static String GRUPO_GRUPO_ELITE = "Grupo Elite";
+	public static String GRUPO_GRUPO_ELITE = "Grupo elite";
 
 	/***********************************
 	 * BOLETA DE DOPOSITO
