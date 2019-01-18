@@ -4292,8 +4292,14 @@ public class RegisterDomain extends Register {
 	}
 
 	/**
-	 * @return las notasCredito donde esta contenida el articulo.. [0]:concepto
-	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:proveedor [6]:deposito
+	 * @return las notasCredito donde esta contenida el articulo.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:precio 
+	 * [5]:proveedor 
+	 * [6]:deposito
 	 */
 	public List<Object[]> getNotasCreditoCompraPorArticulo(long idArticulo, long idDeposito,
 			Date desde, Date hasta) throws Exception {
