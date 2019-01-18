@@ -61,6 +61,8 @@ public class NotaCredito extends Domain {
 	
 	private Funcionario vendedor;
 	
+	private Deposito deposito;
+	
 	/** Los detalles de las N.C pueden hacer referencia a facturas ó articulos segun el tipo **/
 	private Set<NotaCreditoDetalle> detalles = new HashSet<NotaCreditoDetalle>();
 	
@@ -554,5 +556,13 @@ public class NotaCredito extends Domain {
 
 	public void setVendedor(Funcionario vendedor) {
 		this.vendedor = vendedor;
+	}
+
+	public Deposito getDeposito() {
+		return deposito;
+	}
+
+	public void setDeposito(Deposito deposito) {
+		this.deposito = deposito;
 	}
 }

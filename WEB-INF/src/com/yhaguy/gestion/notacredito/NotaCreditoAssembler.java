@@ -41,6 +41,8 @@ public class NotaCreditoAssembler extends Assembler {
 		this.listaDTOToListaDomain(dto, domain, "detalles", true, true,
 				new NotaCreditoDetalleAssembler());
 		
+		domain.setDeposito(_dto.getDeposito());
+		
 		// asignacion del timbrado..
 		if((_dto.getTimbrado().esNuevo()) && (!_dto.isNotaCreditoVenta()))
 			this.saveTimbrado(_dto);
@@ -72,6 +74,7 @@ public class NotaCreditoAssembler extends Assembler {
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
 		NotaCreditoDTO dto = (NotaCreditoDTO) getDTO(domain, NotaCreditoDTO.class);
+		NotaCredito domain_ = (NotaCredito) domain;
 
 		this.copiarValoresAtributos(domain, dto, attIguales);
 		this.domainToMyPair(domain, dto, "motivo");
@@ -85,6 +88,8 @@ public class NotaCreditoAssembler extends Assembler {
 		this.domainToMyArray(domain, dto, "timbrado", attTimbrado);
 		this.listaDomainToListaMyArray(domain, dto, "serviciosTecnicos", attServicioTecnico);
 		this.listaDomainToListaDTO(domain, dto, "detalles", new NotaCreditoDetalleAssembler());
+		
+		dto.setDeposito(domain_.getDeposito());
 
 		return dto;
 	}

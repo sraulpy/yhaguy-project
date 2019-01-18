@@ -11,6 +11,7 @@ import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Deposito;
 
 @SuppressWarnings("serial")
 public class NotaCreditoDTO extends DTO {
@@ -40,6 +41,8 @@ public class NotaCreditoDTO extends DTO {
 	private MyArray proveedor = new MyArray();
 	private MyArray vendedor = new MyArray();
 	private MyArray timbrado = new MyArray();
+	
+	private Deposito deposito;
 
 	private List<NotaCreditoDetalleDTO> detalles = new ArrayList<NotaCreditoDetalleDTO>();
 	private List<MyArray> serviciosTecnicos = new ArrayList<MyArray>();
@@ -536,5 +539,13 @@ public class NotaCreditoDTO extends DTO {
 
 	public void setServiciosTecnicos(List<MyArray> serviciosTecnicos) {
 		this.serviciosTecnicos = serviciosTecnicos;
+	}
+
+	public Deposito getDeposito() {
+		return deposito;
+	}
+
+	public void setDeposito(Deposito deposito) {
+		this.deposito = deposito;
 	}
 }

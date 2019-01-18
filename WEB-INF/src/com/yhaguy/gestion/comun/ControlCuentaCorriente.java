@@ -66,7 +66,45 @@ public class ControlCuentaCorriente {
 		
 		rr.saveObject(ctmCompra, user);
 		rr.saveObject(ctm, user);
-	}	
+	}
+	
+	/**
+	 * agregar movimiento nota credito venta..
+	 */
+	public static void addNotaCreditoVenta(NotaCreditoDTO dto, String user) 
+			throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		MyArray factura = dto.getFacturas().get(0);
+		TipoMovimiento tm = rr.getTipoMovimientoById(((MyPair) factura.getPos4()).getId());
+		
+		CtaCteEmpresaMovimiento ctmVenta = rr.getCtaCteMovimientoByIdMovimiento(factura.getId(), tm.getSigla());
+		
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+		ctm.setFechaEmision(dto.getFechaEmision());
+		ctm.setFechaVencimiento(dto.getFechaEmision());
+		ctm.setIdEmpresa((long) dto.getCliente().getPos4());
+		ctm.setIdMovimientoOriginal(dto.getId());
+		ctm.setIdVendedor(dto.getVendedor().getId());
+		ctm.setImporteOriginal(dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());
+		ctm.setMoneda(rr.getTipoPorSigla(dto.getMoneda().getSigla()));
+		ctm.setNroComprobante(dto.getNumero());
+		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
+		
+		double saldo = ctmVenta.getSaldo() - (dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());
+		
+		if (saldo <= 0) {
+			ctmVenta.setSaldo(0);
+			ctm.setSaldo(saldo);
+		} else {
+			ctmVenta.setSaldo(saldo);
+			ctm.setSaldo(0);
+		}
+		
+		rr.saveObject(ctmVenta, user);
+		rr.saveObject(ctm, user);
+	}
 	
 	/**
 	 * agregar movimiento recibo de pago..

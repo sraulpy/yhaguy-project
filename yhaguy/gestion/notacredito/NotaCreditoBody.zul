@@ -68,6 +68,16 @@
 					<textbox value="@load(vm.dto.sucursal.text)"
 						readonly="true" hflex="true" />
 				</vlayout>
+				<vlayout spacing="0">
+					<field value="Depósito" />
+					<combobox model="@load(vm.depositos)" hflex="true"
+						selectedItem="@bind(vm.dto.deposito)"
+						value="@load(vm.dto.deposito.descripcion)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+				</vlayout>
 			</row>
 			<row>
 				<cell colspan="2">
@@ -118,7 +128,7 @@
 							onClick='pop_serv_tec.open(self, "after_start"); tx_servtec.focus()' />
 					</hlayout>					
 				</vlayout>
-				<cell colspan="2">
+				<cell colspan="3">
 					<vlayout style="margin-top:6px">
 						<field value="Observación" />
 						<textbox value="@bind(vm.dto.observacion)"

@@ -721,6 +721,13 @@ public class NotaCreditoControlBody extends BodyApp {
 			this.msgError += "\n - Debe ingresar las Facturas..";
 		}
 		
+		if ((this.dto.isNotaCreditoVenta())
+				&& (this.dto.isMotivoDevolucion())
+				&& (this.dto.getDeposito() == null)) {
+			out = false;
+			this.msgError += "\n - Debe seleccionar un depósito..";
+		}
+		
 		if ((this.dto.isNotaCreditoVenta() == false)
 				&& (this.dto.getNumero().isEmpty())) {
 			out = false;
@@ -1044,6 +1051,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		String sigla = (String) tipoMovimiento.getPos2();
 
 		NotaCreditoDTO out = new NotaCreditoDTO();
+		out.setDeposito(desde.getDeposito());
 		out.setCliente(desde.getCliente());
 		out.setEstadoComprobante(estadoCbte);
 		out.setFechaEmision(new Date());
@@ -1083,7 +1091,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		// asigna el nro de nc a la venta..
 		if (sigla.equals(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA)) {				
 			for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
-				ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), Deposito.ID_DEPOSITO_PRINCIPAL);
+				ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
 				ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), this.getLoginNombre());
 				ControlArticuloStock.addMovimientoStock(out.getId(), out
 						.getTipoMovimiento().getId(), item.getCantidad(), adp
@@ -1383,6 +1391,14 @@ public class NotaCreditoControlBody extends BodyApp {
 				|| this.dto.esNuevo()
 				|| (this.dto.isMotivoDescuento() && this.dto
 						.getDetallesFacturas().size() == 0);
+	}
+	
+	/**
+	 * @return los depositos
+	 */
+	public List<Deposito> getDepositos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getDepositos();
 	}
 	
 	/**

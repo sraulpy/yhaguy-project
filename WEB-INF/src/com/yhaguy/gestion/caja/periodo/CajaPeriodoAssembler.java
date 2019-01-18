@@ -507,31 +507,7 @@ public class CajaPeriodoAssembler extends Assembler {
 	 */
 	private void actualizarCtaCteNotaCredito(NotaCreditoDTO nc)
 			throws Exception {
-
-		ControlCtaCteEmpresa ctr = new ControlCtaCteEmpresa(null);
-		String siglaCaracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE;
-		MyPair caracterMovimiento = this.getCaracterMovimiento(siglaCaracter);
-
-		MyArray sucursal = new MyArray();
-		sucursal.setId(nc.getSucursal().getId());
-
-		long idEmpresa = (long) nc.getCliente().getPos4();
-		MyPair empresa = new MyPair(idEmpresa, "");
-		List<NotaCreditoDetalleDTO> items = nc.isMotivoDescuento() ? nc
-				.getDetallesFacturas() : nc.getDetallesArticulos();
-
-		boolean monedaLocal = this.isOperacionEnMonedaLocal(nc.getMoneda());
-		double importe = 0;
-
-		if (monedaLocal == true) {
-			importe = nc.getImporteGs();
-		} else {
-			importe = nc.getImporteDs();
-		}
-
-		ctr.addMovimientoNotaCredito(empresa, nc.getId(), nc.getNumero(),
-				nc.getFechaEmision(), importe, nc.getMoneda(),
-				nc.getTipoMovimiento(), caracterMovimiento, sucursal, items);
+		ControlCuentaCorriente.addNotaCreditoVenta(nc, this.getLogin());
 	}
 	
 	/**

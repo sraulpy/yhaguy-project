@@ -4215,21 +4215,21 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Object[]> getNotasCreditoVtaPorArticulo(long idArticulo, long idDeposito,
 			Date desde, Date hasta) throws Exception {
-		if (idDeposito != 0 && idDeposito != Deposito.ID_DEPOSITO_PRINCIPAL) {
-			return new ArrayList<Object[]>();
-		}
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, d.cantidad, d.montoGs, n.cliente.empresa.razonSocial,"
-				+ " (select descripcion from Deposito where id = " + Deposito.ID_DEPOSITO_PRINCIPAL + ")"
+				+ " (select descripcion from Deposito where id = " + idDeposito + ")"
 				+ " from NotaCredito n join n.detalles d where n.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA
 				+ "') and n.estadoComprobante.sigla != '"
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO
-				+ "'"
-				+ " and (n.fechaEmision >= '"
+				+ "'";
+				if (idDeposito != 0) {
+					query += " and n.deposito.id = " + idDeposito;
+				}				
+				query += " and (n.fechaEmision >= '"
 				+ desde_
 				+ "' and n.fechaEmision <= '" + hasta_ + "')"
 				+ " and n.motivo.sigla = '" + Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION + "'";
@@ -8942,7 +8942,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void main(String[] args) {
+	public static void mainx(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<BancoDescuentoCheque> dtos = rr.getObjects(BancoDescuentoCheque.class.getName());
@@ -8992,7 +8992,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void mainx(String[] args) {
+	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			/** List<Recibo> recs = rr.getObjects(Recibo.class.getName());
@@ -9021,7 +9021,7 @@ public class RegisterDomain extends Register {
 				} 
 			}**/
 			
-			long idempresaGodoy = 13263;
+			/** long idempresaGodoy = 13263;
 			SucursalApp suc = rr.getSucursalAppById(2);
 			Tipo caracter = rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR);
 			List<Gasto> gastos16 = rr.getGastosDeImportacion_(16);
@@ -9147,6 +9147,13 @@ public class RegisterDomain extends Register {
 					rr.saveObject(movim, gasto.getUsuarioMod());
 					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
 				}				
+			} **/
+			
+			List<NotaCredito> ncs = rr.getNotasCreditoVenta(Utiles.getFecha("05-10-2018 00:00:00"), new Date(), 0);
+			for (NotaCredito nc : ncs) {
+				nc.setDeposito(nc.getVentaAplicada().getDeposito());
+				rr.saveObject(nc, nc.getUsuarioMod());
+				System.out.println(nc.getNumero() + " - " + nc.getVentaAplicada().getDeposito().getDescripcion());
 			}
 			
 		} catch (Exception e) {

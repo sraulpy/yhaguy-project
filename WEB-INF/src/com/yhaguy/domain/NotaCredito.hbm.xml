@@ -48,7 +48,10 @@
 			column="idvendedor" lazy="false"/>
 			
 		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
-			column="idsucursal" lazy="false"/>	
+			column="idsucursal" lazy="false"/>
+			
+		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito"
+			column="iddeposito" lazy="false"/>		
 		
 		<set name="detalles" table="notacreditodetalle"
 			inverse="false" lazy="false" fetch="join">
