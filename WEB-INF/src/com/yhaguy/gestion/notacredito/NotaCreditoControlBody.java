@@ -740,6 +740,13 @@ public class NotaCreditoControlBody extends BodyApp {
 			this.msgError += "\n - Debe ingresar al menos un ítem..";
 		}
 		
+		if ((this.dto.isNotaCreditoCompra())
+				&& (this.dto.isMotivoDevolucion())
+				&& (this.dto.getDeposito() == null)) {
+			out = false;
+			this.msgError += "\n - Debe seleccionar un depósito..";
+		}
+		
 		if (this.dto.isNotaCreditoCompra() && this.isNotaCreditoDuplicado()) {
 			out = false;
 			this.msgError += "\n - Ya existe una Nota de Crédito con el mismo número..";

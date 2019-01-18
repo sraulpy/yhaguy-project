@@ -182,14 +182,14 @@
 						readonly="true" hflex="true" />
 				</vlayout>
 				<vlayout spacing="0">
-					<field value="Estado" />
-					<hlayout>
-						<textbox
-							value="@load(vm.dto.estadoComprobante.text)" readonly="true" hflex="true" />
-						<image src="@load(vm.srcEstadoComprobante)"
-							tooltiptext="@load(vm.dto.estadoComprobante.text)"
-							visible="@load(!vm.dto.estadoComprobante.esNuevo())" />
-					</hlayout>
+					<field value="Depósito" />
+					<combobox model="@load(vm.depositos)" hflex="true"
+						selectedItem="@bind(vm.dto.deposito)"
+						value="@load(vm.dto.deposito.descripcion)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
 				</vlayout>
 			</row>
 			<row>

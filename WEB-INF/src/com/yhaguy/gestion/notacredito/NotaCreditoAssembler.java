@@ -113,7 +113,7 @@ public class NotaCreditoAssembler extends Assembler {
 		for (NotaCreditoDetalleDTO item : nc.getDetallesArticulos()) {
 			MyArray articulo = item.getArticulo();
 			long cantidad = item.getCantidad();
-			ControlArticuloStock.actualizarStock(articulo.getId(), item.getDeposito().getId(), cantidad * -1, this.getLogin());
+			ControlArticuloStock.actualizarStock(articulo.getId(), nc.getDeposito().getId(), cantidad * -1, this.getLogin());
 		}		
 	}
 	

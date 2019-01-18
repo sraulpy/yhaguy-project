@@ -4297,21 +4297,21 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Object[]> getNotasCreditoCompraPorArticulo(long idArticulo, long idDeposito,
 			Date desde, Date hasta) throws Exception {
-		if (idDeposito != 0 && idDeposito != Deposito.ID_DEPOSITO_PRINCIPAL) {
-			return new ArrayList<Object[]>();
-		}
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, d.cantidad, d.montoGs, n.proveedor.empresa.razonSocial,"
-				+ " (select descripcion from Deposito where id = " + Deposito.ID_DEPOSITO_PRINCIPAL + ")"
+				+ " (select descripcion from Deposito where id = " + idDeposito + ")"
 				+ " from NotaCredito n join n.detalles d where d.articulo.id = "
 				+ idArticulo
 				+ " and (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA
 				+ "') and n.estadoComprobante.sigla != '"
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO
-				+ "'"
-				+ " and (n.fechaEmision >= '"
+				+ "'";
+				if (idDeposito != 0) {
+					query += " and n.deposito.id = " + idDeposito;
+				}
+				query += " and (n.fechaEmision >= '"
 				+ desde_
 				+ "' and n.fechaEmision <= '" + hasta_ + "')";
 		return this.hql(query);
