@@ -16,6 +16,7 @@ public class Deposito extends Domain {
 	public static final long ID_MCAL_TEMPORAL = 6;
 	public static final long ID_MAYORISTA = 7;
 	public static final long ID_MAYORISTA_TEMPORAL = 8;
+	public static final long ID_MRA = 9;
 	
 	private String observacion;
 	private String descripcion;	

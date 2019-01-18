@@ -601,7 +601,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		} else {
 			List<Deposito> deps = rr.getDepositos();
 			for (Deposito dep : deps) {
-				out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+				if (dep.getId().longValue() != Deposito.ID_MRA) {
+					out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+				}
 			}
 		}		
 		return out;

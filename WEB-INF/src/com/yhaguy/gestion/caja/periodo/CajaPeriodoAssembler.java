@@ -36,7 +36,6 @@ import com.yhaguy.gestion.compras.locales.AssemblerCompraLocalFactura;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.gestion.notacredito.NotaCreditoDTO;
-import com.yhaguy.gestion.notacredito.NotaCreditoDetalleDTO;
 import com.yhaguy.gestion.venta.VentaDTO;
 
 public class CajaPeriodoAssembler extends Assembler {

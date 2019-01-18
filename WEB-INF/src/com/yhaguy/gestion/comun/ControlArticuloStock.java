@@ -129,7 +129,10 @@ public class ControlArticuloStock {
 	 * [8]: importe 
 	 */
 	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal) throws Exception {
-		Date desde = Utiles.getFecha("01-01-2016 00:00:00");
+		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			desde = Utiles.getFecha("01-01-2016 00:00:00");
+		}
 		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde);
 	}
 	

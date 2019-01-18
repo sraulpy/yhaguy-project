@@ -141,7 +141,9 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Deposito> deps = rr.getDepositos();
 		for (Deposito dep : deps) {
-			out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+			if (dep.getId().longValue() != Deposito.ID_MRA) {
+				out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+			}
 		}
 		return out;
 	}
