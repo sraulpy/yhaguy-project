@@ -9,6 +9,7 @@ import com.coreweb.domain.Usuario;
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AccesoApp;
+import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloAplicacion;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
@@ -452,6 +453,30 @@ public class MigracionCentral {
 	}
 	
 	/**
+	 * modelos de articulos..
+	 */
+	public static void migrarArticuloCodigoBarras() throws Exception {
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String src = DIR_MIGRACION + "BARCODE.csv";
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "ID", CSV.STRING }, { "BARCODE", CSV.STRING } };
+
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String id = csv.getDetalleString("ID");
+			String cod = csv.getDetalleString("BARCODE");
+
+			Articulo art = rr.getArticuloById(Long.parseLong(id));
+			art.setCodigoBarra(cod);
+			rr.saveObject(art, art.getUsuarioMod());
+			System.out.println(art.getCodigoInterno() + " - " + cod);
+		}
+	}
+	
+	/**
 	 * machear articulos / stock / costos / precios..
 	 */
 	public static void machearArticulosSaldos(String archivo, long idDeposito) throws Exception {
@@ -629,8 +654,9 @@ public class MigracionCentral {
 			MigracionCentral.machearArticulosSaldos("5_STOCK_MCAL", 5); 
 			MigracionCentral.machearArticulosSaldos("5_STOCK_MCAL_", 5);
 			MigracionCentral.machearArticulosSaldos("6_STOCK_MCAL_TEMPORAL", 6);
-			MigracionCentral.machearArticulosSaldos("7_STOCK_MAYORISTA", 7); **/
-			MigracionCentral.machearArticulosSaldos("8_STOCK_MAYORISTA_TEMPORAL", 8); 
+			MigracionCentral.machearArticulosSaldos("7_STOCK_MAYORISTA", 7); 
+			MigracionCentral.machearArticulosSaldos("8_STOCK_MAYORISTA_TEMPORAL", 8); **/
+			MigracionCentral.migrarArticuloCodigoBarras();
 			
 		//	MigracionCentral.migrarVendedores();
 		//	MigracionCentral.migrarRubrosClientes();
