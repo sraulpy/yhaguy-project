@@ -8744,6 +8744,18 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return la ultima cotizacion segun fecha..
+	 */
+	public double getTipoCambioVenta(Date fecha) throws Exception {
+		String desde = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select t.id, t.venta from TipoCambio t where t.id = (select max(id) from TipoCambio)"
+				+ " and (t.fecha > '" + desde + "' and t.fecha < '" + hasta + "')";
+		List<Object[]> list = this.hql(query);
+		return (double) list.get(0)[1];
+	}
+	
+	/**
 	 * @return la ultima cotizacion..
 	 */
 	public double getTipoCambioCompra() throws Exception {
@@ -9187,7 +9199,8 @@ public class RegisterDomain extends Register {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?)"
-				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_PAGOS + "'";
+				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_PAGOS + "'"
+				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_COMPROBANTES + "'";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}
