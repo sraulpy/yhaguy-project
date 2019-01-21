@@ -9245,6 +9245,32 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return libro compras indistinto segun fecha..(excluye min rel exteriores)
+	 */
+	public List<Gasto> getLibroComprasDespacho_(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
+		String query = "select g from Gasto g where g.dbEstado != 'D'"
+				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?) "
+				+ " and g.proveedor.empresa.ruc != '"+ Proveedor.RUC_MIN_REL_EXTERIORES +"'";
+				if (idSucursal > 0) {
+					query += " and g.sucursal.id = " + idSucursal;
+				}
+				query += " and g.idImportacion >= 0" + " order by g.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+		listParams.add(creacionDesde);
+		listParams.add(creacionHasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return libro compras indistinto segun fecha..
 	 */
 	public List<CompraLocalFactura> getLibroComprasLocales(Date desde, Date hasta, long idSucursal) throws Exception {

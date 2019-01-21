@@ -763,7 +763,8 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String HISTORIAL_MOVIMIENTOS_ARTICULO = "STK-00007";
 		static final String ARTICULOS_SIN_MOVIMIENTO = "STK-00008";
 		static final String EXISTENCIA_ARTICULOS = "STK-00009";
-		static final String STOCK_VALORIZADO = "STK-00010";
+		static final String EXISTENCIA_ARTICULOS_DEPOSITO = "STK-00010";
+		static final String STOCK_VALORIZADO = "STK-00011";
 
 		/**
 		 * procesamiento del reporte..
@@ -804,6 +805,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case EXISTENCIA_ARTICULOS:
+				this.existenciaArticulos();
+				break;
+				
+			case EXISTENCIA_ARTICULOS_DEPOSITO:
 				this.existenciaArticulos();
 				break;
 				
@@ -1179,15 +1184,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloFamilia familia = filtro.getFamilia_();
 				ArticuloMarca marca = filtro.getMarca_();
 				Articulo articulo = filtro.getArticulo();
-				List<Deposito> depositos = filtro.getSelectedDepositos();
 				List<Proveedor> proveedores = filtro.getSelectedProveedores();
-				int stockMayorIgual = filtro.getStockMayorIgual();
-				
-				if (depositos.isEmpty()) {
-					Clients.showNotification("Debe seleccionar al menos un depósito..", 
-							Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-					return;
-				}
 				
 				long idFamilia = familia == null? 0 : familia.getId();
 				long idMarca = marca == null? 0 : marca.getId();
@@ -1200,43 +1197,42 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
+				
+				List<Deposito> deps = new ArrayList<Deposito>();
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MINORISTA));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_CENTRAL_TEMPORAL));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_CENTRAL_REPOSICION));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_CENTRAL_RECLAMOS));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MAYORISTA));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MAYORISTA_TEMPORAL));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MCAL_LOPEZ));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MCAL_TEMPORAL));
+				
 				List<Object[]> data = new ArrayList<Object[]>();
-				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				
 				List<Object[]> articulos = rr.getArticulos_(idFamilia, idMarca, idArticulo, idProveedores);
 				
 				for (Object[] art : articulos) {
 					long idArt = (long) art[0];
 					String cod = (String) art[1];
-					String des = (String) art[2];
-					double costoGs = (double) art[3];
-					String flia = (String) art[4];
-					for (Deposito deposito : depositos) {
-						Object[] stock_ = rr.getStockArticulo(idArt, deposito.getId());
-						long stock = (long) stock_[1];
-						Object[] value = values.get(cod);
-						if (value != null) {
-							long cant = (long) value[0];
-							cant += stock;
-							values.put(cod, new Object[] { cant, des, costoGs, flia });
-						} else {
-							values.put(cod, new Object[] { stock, des, costoGs, flia });
-						}
-					}					
+					Object[] stock1 = rr.getStockArticulo(idArt, Deposito.ID_MINORISTA);
+					Object[] stock2 = rr.getStockArticulo(idArt, Deposito.ID_CENTRAL_TEMPORAL);
+					Object[] stock3 = rr.getStockArticulo(idArt, Deposito.ID_CENTRAL_REPOSICION);
+					Object[] stock4 = rr.getStockArticulo(idArt, Deposito.ID_CENTRAL_RECLAMOS);
+					Object[] stock5 = rr.getStockArticulo(idArt, Deposito.ID_MAYORISTA);
+					Object[] stock6 = rr.getStockArticulo(idArt, Deposito.ID_MAYORISTA_TEMPORAL);
+					Object[] stock7 = rr.getStockArticulo(idArt, Deposito.ID_MCAL_LOPEZ);
+					Object[] stock8 = rr.getStockArticulo(idArt, Deposito.ID_MCAL_TEMPORAL);
+					long stock1_ = (long) stock1[1];
+					long stock2_ = (long) stock2[1];
+					long stock3_ = (long) stock3[1];
+					long stock4_ = (long) stock4[1];
+					long stock5_ = (long) stock5[1];
+					long stock6_ = (long) stock6[1];
+					long stock7_ = (long) stock7[1];
+					long stock8_ = (long) stock8[1];
+					data.add(new Object[]{ cod, stock1_, stock2_, stock3_, stock4_, stock5_, stock6_, stock7_, stock8_ });				
 				}	
-				
-				String deposito_ = "";				
-				for (Deposito deposito : depositos) {
-					deposito_ += deposito.getDescripcion() + " / ";
-				}
-				
-				for (String key : values.keySet()) {
-					Object[] value = values.get(key);
-					long stock = (long) value[0];
-					if (stock >= stockMayorIgual) {
-						data.add(new Object[] { key, deposito_, stock } );
-					}
-				}
 				
 				// ordena la lista segun codigo..
 				Collections.sort(data, new Comparator<Object[]>() {
@@ -1252,7 +1248,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String marca_ = marca == null ? "TODOS.." : marca.getDescripcion();
 				String articulo_ = articulo == null ? "TODOS.." : articulo.getDescripcion();
 				
-				ReporteExistenciaArticulos rep = new ReporteExistenciaArticulos(familia_, articulo_, deposito_, marca_, proveedores_);
+				ReporteExistenciaArticulosDeposito rep = new ReporteExistenciaArticulosDeposito(familia_, articulo_, marca_, proveedores_);
 				rep.setDatosReporte(data);
 				rep.setApaisada();				
 
@@ -9555,7 +9551,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde, new Date());
 			List<Gasto> gastos = new ArrayList<Gasto>();
 			List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, desde, new Date(), 0);
-			List<Gasto> gastosDespacho = rr.getLibroComprasDespacho(desde, hasta, desde, new Date(), 0);
+			List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, desde, new Date(), 0);
 			gastos.addAll(gastosIndistinto);
 			gastos.addAll(gastosDespacho);			
 			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones);
@@ -16552,6 +16548,70 @@ class ReporteExistenciaArticulos extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Depósito", this.deposito)).add(this.textoParValor("Marca", this.marca)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor)).add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte de existencia de Articulos STK-00010..
+ */
+class ReporteExistenciaArticulosDeposito extends ReporteYhaguy {
+
+	private String familia;
+	private String marca;
+	private String articulo;
+	private String proveedor;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
+	static DatosColumnas col2 = new DatosColumnas("Minorista", TIPO_LONG, 20, true);
+	static DatosColumnas col3 = new DatosColumnas("Temporal Central", TIPO_LONG, 20, true);
+	static DatosColumnas col4 = new DatosColumnas("Reclamos Central", TIPO_LONG, 20, true);
+	static DatosColumnas col5 = new DatosColumnas("Reposición Central", TIPO_LONG, 20, true);
+	static DatosColumnas col6 = new DatosColumnas("Mayorista", TIPO_LONG, 20, true);
+	static DatosColumnas col7 = new DatosColumnas("Temporal Mayorista", TIPO_LONG, 20, true);
+	static DatosColumnas col8 = new DatosColumnas("Mcal López", TIPO_LONG, 20, true);
+	static DatosColumnas col9 = new DatosColumnas("Temporal Mcal López", TIPO_LONG, 20, true);
+
+	public ReporteExistenciaArticulosDeposito(String familia, String articulo, String marca, String proveedor) {
+		this.familia = familia;
+		this.articulo = articulo;
+		this.marca = marca;
+		this.proveedor = proveedor;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
+		cols.add(col9);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Listado de Existencia de Artículos por Depósito");
+		this.setDirectorio("Articulos");
+		this.setNombreArchivo("Stock-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Familia", this.familia)).add(this.textoParValor("Articulo", this.articulo)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor)).add(this.textoParValor("Marca", this.marca)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}
