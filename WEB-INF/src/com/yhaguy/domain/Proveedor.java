@@ -10,6 +10,8 @@ import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class Proveedor extends Domain {
+	
+	public static final String RUC_MIN_REL_EXTERIORES = "80001464-2";
 
 	Empresa empresa;
 	Tipo estadoProveedor;
