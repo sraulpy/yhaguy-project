@@ -168,7 +168,7 @@ public class InformeHechauka {
 		
 		if ((dip_exenta + dip_gravada + dip_iva10) > 0) {
 			String _ruc = Configuracion.RUC_DIPLOMATICOS;
-			String _rSocial = "IMPORTE CONSOLIDADO";
+			String _rSocial = "AGENTES DIPLOMATICOS";
 			String _col1 = "2";
 			String _col2 = _ruc.substring(0, ruc.length() - 2);
 			String _dv = _ruc.substring(ruc.length() - 1);
