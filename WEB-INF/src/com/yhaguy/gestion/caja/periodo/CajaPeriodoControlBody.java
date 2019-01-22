@@ -1081,6 +1081,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Agrega y guarda el gasto..
 	 */
 	private void addGasto() throws Exception {
+		this.dtoGasto.setSucursal(this.getAcceso().getSucursalOperativa());
 		this.dto.getGastos().add(this.dtoGasto);
 		if (this.dtoGasto.isAutoFactura())
 			this.dtoGasto.setNumeroFactura(this.getNumeroAutoFactura());
@@ -2815,11 +2816,10 @@ class ValidadorGasto implements VerificaAceptarCancelar {
 		double totalFP = this.gasto.getImporteFormaPagoGs();
 
 		String nroFactura = this.gasto.getNumeroFactura();
-		String idTimbrado = this.gasto.getTimbrado().getId() + "";
-		String nroTimbrado = (String) this.gasto.getTimbrado().getPos1();
+		String nroTimbrado = this.gasto.getTimbrado();
 		String[] tipos = { Config.TIPO_STRING, Config.TIPO_NUMERICO };
 		String[] campos = { "numeroFactura", "timbrado.id" };
-		String[] values = { nroFactura, idTimbrado };
+		String[] values = { nroFactura, nroTimbrado };
 
 		RegisterDomain rr = RegisterDomain.getInstance();
 
@@ -2859,26 +2859,11 @@ class ValidadorGasto implements VerificaAceptarCancelar {
 				mensaje += "- Mal formato del número de Factura.. \n";
 			}
 
-			// Valida el nro de timbrado..
-			if ((nroTimbrado.trim().length() == 0)
-					|| (nroTimbrado.compareTo("0") == 0)) {
-				out = false;
-				mensaje += "- El timbrado no puede quedar vacío.. \n";
-			}
-
 			// Valida si la factura ya existe..
 			if (rr.existe(Gasto.class, campos, tipos, values, this.gasto) == true) {
 				out = false;
 				mensaje += "\n - Ya existe en la Base de Datos una Factura "
 						+ "con el mismo número y el mismo timbrado..";
-			}
-
-			// Valida el vencimiento..
-			if (this.gasto.getFecha().compareTo(
-					(Date) this.gasto.getTimbrado().getPos2()) > 0) {
-				mensaje += "\n - La fecha de la factura no puede ser mayor o "
-						+ "igual a la fecha de vencimiento del timbrado";
-				out = false;
 			}
 
 			// Valida el campo existe cmpbte fisico..

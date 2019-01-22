@@ -34,7 +34,6 @@ import com.yhaguy.gestion.compras.gastos.generales.pedidos.OrdenPedidoGastoDetal
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDetalleDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoSubDiarioControlBody;
-import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.contabilidad.subdiario.SubDiarioDetalleDTO;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 
@@ -236,8 +235,7 @@ public class GastoGeneralControlBody extends GastoSubDiarioControlBody {
 			for (GastoDTO gasto : this.dto.getGastos()) {
 
 				String desc = Configuracion.CAMPO_NRO_FACTURA
-						+ gasto.getNumeroFactura() + " - ("
-						+ gasto.getTimbrado().getPos1() + ")";
+						+ gasto.getNumeroFactura();
 
 				if (descripcion.trim().toLowerCase()
 						.compareTo(desc.trim().toLowerCase()) == 0) {
@@ -339,8 +337,7 @@ public class GastoGeneralControlBody extends GastoSubDiarioControlBody {
 			SubDiarioDetalleDTO sd = new SubDiarioDetalleDTO();
 			sd.setTipo(Configuracion.CUENTA_DEBE_KEY);
 			sd.setDescripcion(Configuracion.CAMPO_NRO_FACTURA 
-					+ this.dtoGasto.getNumeroFactura() + " - ("
-					+ this.dtoGasto.getTimbrado().getPos1() + ")");
+					+ this.dtoGasto.getNumeroFactura());
 			sd.setCuenta(det.getArticuloGasto().getCuentaContable());
 			sd.setImporte(det.getImporteGs() - det.getIvaCalculado());
 			//sd.setGasto(this.dtoGasto);
@@ -365,8 +362,7 @@ public class GastoGeneralControlBody extends GastoSubDiarioControlBody {
 				iva.setTipo(Configuracion.CUENTA_DEBE_KEY);
 				iva.setDescripcion(PREFIJO_IVA
 						+ Configuracion.CAMPO_NRO_FACTURA
-						+ this.dtoGasto.getNumeroFactura() + " - ("
-						+ this.dtoGasto.getTimbrado().getPos1() + ")");
+						+ this.dtoGasto.getNumeroFactura());
 				iva.setCuenta(ctaIva);
 				iva.setImporte(det.getIvaCalculado());
 				// iva.setGasto(this.dtoGasto);
@@ -703,17 +699,6 @@ public class GastoGeneralControlBody extends GastoSubDiarioControlBody {
 			this.mensajeVerificarGrabar += Configuracion.TEXTO_ERROR_CAMPOS_REQUERIDOS;
 			out = false;
 		}
-
-		if (out == true) {
-			for (GastoDTO gasto : this.dto.getGastos()) {
-				if (gasto.getTimbrado().esNuevo()) {
-					WindowTimbrado w = new WindowTimbrado();
-					w.agregarTimbrado(gasto.getTimbrado(), gasto.getProveedor()
-							.getId());
-				}
-			}
-		}
-
 		return out;
 	}
 		
@@ -838,15 +823,13 @@ class ValidadorFacturaGasto implements VerificaAceptarCancelar {
 		
 		double totalAsignado = 0;
 		String nroFactura = this.dtoGasto.getNumeroFactura();
-		String idTimbrado = this.dtoGasto.getTimbrado().getId() + "";
-		String nroTimbrado = (String) this.dtoGasto.getTimbrado().getPos1();
+		String nroTimbrado = this.dtoGasto.getTimbrado();
 		String[] tipos = { Config.TIPO_STRING, Config.TIPO_NUMERICO };
 		String[] campos = { "numeroFactura", "timbrado.id" };
-		String[] values = { nroFactura, idTimbrado };
+		String[] values = { nroFactura, nroTimbrado };
 		RegisterDomain rr = RegisterDomain.getInstance();
 		String descripcion = Configuracion.CAMPO_NRO_FACTURA 
-				+ this.dtoGasto.getNumeroFactura() + " - ("
-				+ this.dtoGasto.getTimbrado().getPos1() + ")";
+				+ this.dtoGasto.getNumeroFactura();
 		
 		try {
 			
@@ -876,12 +859,6 @@ class ValidadorFacturaGasto implements VerificaAceptarCancelar {
 				mensajeVerificaAceptar += "\n - Mal formato del número de Factura..";
 			}
 			
-			//Valida el nro de timbrado..
-			if ((nroTimbrado.trim().length() == 0) || (nroTimbrado.compareTo("0") == 0)) {
-				out = false;
-				mensajeVerificaAceptar += "\n - El timbrado no puede quedar vacío..";
-			}
-			
 			//Valida si la factura ya existe..
 			if (rr.existe(Gasto.class, campos, tipos, values, this.dtoGasto) == true) {
 				out = false;
@@ -892,13 +869,6 @@ class ValidadorFacturaGasto implements VerificaAceptarCancelar {
 			//Valida el total Asignado..
 			if (this.dtoGasto.getTotalAsignado() <= 0.0001) {
 				mensajeVerificaAceptar += "\n - El Total de la Factura debe ser mayor a cero..";
-				out = false;
-			}
-			
-			//Valida el vencimiento..
-			if (this.dtoGasto.getFecha().compareTo((Date) this.dtoGasto.getTimbrado().getPos2()) > 0) {
-				mensajeVerificaAceptar += "\n - La fecha de la factura no puede ser mayor o "
-						+ "igual a la fecha de vencimiento del timbrado..";
 				out = false;
 			}
 			

@@ -183,7 +183,14 @@
 			<space width="100px"/>
 		</hlayout>
 		
-		<solicitarCabecera visible="@load(vm.solicitarCabeceraVisible)" />
+		<solicitarCabecera visible="@load(vm.solicitarCabeceraVisible)">
+			<vbox pack="center" align="center" vflex="true" hflex="true">
+				<a  iconSclass="z-icon-arrow-up"
+					style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+					Ingrese los datos de cabecera
+				</a>
+			</vbox>
+		</solicitarCabecera>
 
 		<!-- ___________________ DETALLE ___________________  -->
 

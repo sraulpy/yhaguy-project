@@ -57,6 +57,12 @@
 	</grid>
 
 	<solicitarCabecera visible="@load(!vm.tabsVisible)">
+		<vbox pack="center" align="center" vflex="true" hflex="true">
+				<a  iconSclass="z-icon-arrow-up"
+					style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+					Ingrese los datos de cabecera
+				</a>
+			</vbox>s
 	</solicitarCabecera>
 	<div height="10px"></div>
 	<listbox model="@load(vm.movimientosBanco)" sclass="small-list"

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.zkoss.bind.annotation.DependsOn;
+
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 import com.coreweb.util.Misc;
@@ -14,6 +16,13 @@ import com.yhaguy.Configuracion;
 @SuppressWarnings("serial")
 public class Gasto extends Domain {
 	
+	public static final String ACREEDOR_DESPACHANTE = "DESPACHANTE";
+	public static final String ACREEDOR_PROVEEDOR = "PROVEEDOR";
+	
+	public static final String TC_SET = "S.E.T.";
+	public static final String TC_DESPACHO = "DESPACHO";
+	
+	private Date fechaCarga;
 	private Date fecha;
 	private Date vencimiento;
 	private String numeroFactura;
@@ -28,6 +37,10 @@ public class Gasto extends Domain {
 	private String observacion;
 	private String beneficiario;
 	private boolean ivaRetenido;
+	private String acreedor;
+	private String tipoCambio_;
+	private String numero;
+	private String timbrado;
 	
 	private double importeGs;
 	private double importeDs;
@@ -47,8 +60,7 @@ public class Gasto extends Domain {
 	
 	private Proveedor proveedor;
 	private Tipo moneda;	
-	private TipoMovimiento tipoMovimiento;
-	private Timbrado timbrado;	
+	private TipoMovimiento tipoMovimiento;	
 	private CondicionPago condicionPago;
 	private Tipo estadoComprobante;
 	private SucursalApp sucursal;
@@ -61,6 +73,24 @@ public class Gasto extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	/**
+	 * @return true si la factura es de acreedor despachante..
+	 */
+	@DependsOn("acreedor")
+	public boolean isAcreedorDespachante() {
+		if(this.acreedor == null) return false;
+		return this.acreedor.equals(ACREEDOR_DESPACHANTE);
+	}
+	
+	/**
+	 * @return true si es tc set..
+	 */
+	@DependsOn("tipoCambio_")
+	public boolean isTipoCambioSET() {
+		if(this.tipoCambio_ == null) return false;
+		return this.tipoCambio_.equals(TC_SET);
 	}
 	
 	/**
@@ -271,6 +301,26 @@ public class Gasto extends Domain {
 	}
 	
 	/**
+	 * @return los acreedores..
+	 */
+	public List<String> getAcreedores() {
+		List<String> out = new ArrayList<String>();
+		out.add(ACREEDOR_DESPACHANTE);
+		out.add(ACREEDOR_PROVEEDOR);
+		return out;
+	}
+	
+	/**
+	 * @return los tipos de cambio..
+	 */
+	public List<String> getTiposCambio() {
+		List<String> out = new ArrayList<String>();
+		out.add(TC_SET);
+		out.add(TC_DESPACHO);
+		return out;
+	}
+	
+	/**
 	 * @return el importe en letras..
 	 */
 	public String getImporteEnLetras() {
@@ -443,14 +493,6 @@ public class Gasto extends Domain {
 		this.tipoMovimiento = tipoMovimiento;
 	}
 
-	public Timbrado getTimbrado() {
-		return timbrado;
-	}
-
-	public void setTimbrado(Timbrado timbrado) {
-		this.timbrado = timbrado;
-	}
-
 	public CondicionPago getCondicionPago() {
 		return condicionPago;
 	}
@@ -607,5 +649,45 @@ public class Gasto extends Domain {
 
 	public void setDebitoDesglosado(Set<BancoDebito> debitoDesglosado) {
 		this.debitoDesglosado = debitoDesglosado;
+	}
+
+	public String getAcreedor() {
+		return acreedor;
+	}
+
+	public void setAcreedor(String acreedor) {
+		this.acreedor = acreedor;
+	}
+
+	public String getTipoCambio_() {
+		return tipoCambio_;
+	}
+
+	public void setTipoCambio_(String tipoCambio_) {
+		this.tipoCambio_ = tipoCambio_;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public Date getFechaCarga() {
+		return fechaCarga;
+	}
+
+	public void setFechaCarga(Date fechaCarga) {
+		this.fechaCarga = fechaCarga;
+	}
+
+	public String getTimbrado() {
+		return timbrado;
+	}
+
+	public void setTimbrado(String timbrado) {
+		this.timbrado = timbrado;
 	}
 }

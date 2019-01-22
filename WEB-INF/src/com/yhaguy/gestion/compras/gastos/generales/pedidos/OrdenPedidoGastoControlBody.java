@@ -54,7 +54,6 @@ import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.compras.gastos.subdiario.AssemblerGasto;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDetalleDTO;
-import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
@@ -221,12 +220,6 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	public void verItem(@BindingParam("item") OrdenPedidoGastoDetalleDTO item)
 			throws Exception {
 		this.showItem(item, WindowPopup.SOLO_LECTURA);
-	}
-	
-	@Command
-	@NotifyChange("*")
-	public void asignarTimbrado() {
-		this.asignacionTimbrado();
 	}
 	
 	@Command
@@ -443,19 +436,6 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		this.dtoGasto.setMoneda(this.getDtoUtil().getMonedaGuaraniConSimbolo());
 		this.dtoGasto.setSucursal(this.dto.getSucursal());
 		BindUtils.postNotifyChange(null, null, this, "*");
-	}
-	
-	/**
-	 * asignar timbrado..
-	 */
-	private void asignacionTimbrado() {
-		WindowTimbrado w = new WindowTimbrado();
-		w.setIdProveedor(this.dtoGasto.getProveedor().getId());
-		w.setTimbrado("%");
-		w.show(WindowPopup.NUEVO, w);
-		if (w.isClickAceptar()) {
-			this.dtoGasto.setTimbrado(w.getSelectedTimbrado());
-		}	
 	}
 	
 	/**
@@ -745,7 +725,7 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	//Para evitar ingresar una nueva Factura con nro y timbrado duplicado..
 	private boolean isGastoDuplicado() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		String timbrado = (String) this.dtoGasto.getTimbrado().getPos1();
+		String timbrado = this.dtoGasto.getTimbrado();
 		String numero = this.dtoGasto.getNumeroFactura();
 		return rr.getGastoByNumero(numero, timbrado) != null;
 	}
@@ -884,8 +864,7 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	@DependsOn({ "dto.autorizado", "dtoGasto.numeroFactura", "dtoGasto.timbrado" })
 	public boolean isDetalleFacturaVisible() {
 		return (this.dto.isAutorizado())
-				&& (this.dtoGasto.getNumeroFactura().isEmpty() == false)
-				&& (((String) this.dtoGasto.getTimbrado().getPos1()).isEmpty() == false);
+				&& (this.dtoGasto.getNumeroFactura().isEmpty() == false);
 	}
 	
 	@DependsOn({ "dtoGasto", "deshabilitado" })

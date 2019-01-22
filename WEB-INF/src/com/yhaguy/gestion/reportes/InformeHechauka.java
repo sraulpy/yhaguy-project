@@ -183,7 +183,7 @@ public class InformeHechauka {
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
 				String rSocial = gasto.getProveedor().getRazonSocial();
-				String timbrado = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
+				String timbrado = gasto.getTimbrado();
 				String col5 = "1";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -218,7 +218,7 @@ public class InformeHechauka {
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
 				String rSocial = "PROVEEDORES DEL EXTERIOR";
-				String timbrado = gasto.getTimbrado() != null? gasto.getTimbrado().getNumero() : "";
+				String timbrado = gasto.getTimbrado();
 				String col5 = "4";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");

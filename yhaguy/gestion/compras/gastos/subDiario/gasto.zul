@@ -102,19 +102,23 @@
 					<field value="Timbrado" />
 					<hlayout>
 						<textbox id="timb"
-							value="@bind(vm.dto.timbrado.pos1)" hflex="true"
-							style="text-align:right" readonly="true"
+							value="@bind(vm.dto.timbrado)" hflex="true"
+							style="text-align:right"
 							placeholder="Nro. Timbrado.." />
-						<button iconSclass="z-icon-search"
-							onClick="@command('abrirVentanaTimbrado')"
-							disabled="@load(vm.dto.autoFactura)" />
 					</hlayout>
 				</vlayout>
 			</row>
 		</rows>
 	</grid>
 
-	<solicitarCabecera visible="@load(!vm.detalleVisible)" />
+	<solicitarCabecera visible="@load(!vm.detalleVisible)">
+		<vbox pack="center" align="center" vflex="true" hflex="true">
+				<a  iconSclass="z-icon-arrow-up"
+					style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+					Ingrese los datos de cabecera
+				</a>
+		</vbox>
+	</solicitarCabecera>
 
 	<hbox vflex="true" visible="@load(vm.detalleVisible)">
 		<vbox vflex="true">

@@ -143,7 +143,15 @@
 					</hlayout>
 
 					<solicitarCabecera
-						visible="@load(!vm.detalleVisible)" />
+						visible="@load(!vm.detalleVisible)">
+						<vbox pack="center" align="center" vflex="true"
+							hflex="true">
+							<a iconSclass="z-icon-arrow-up"
+								style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+								Ingrese los datos de cabecera
+							</a>
+						</vbox>
+					</solicitarCabecera>
 
 					<listbox
 						model="@load(vm.dto.ordenPedidoGastoDetalle)" vflex="true"
@@ -288,14 +296,9 @@
 								<cell>
 									<vlayout>
 										<field value="Timbrado" />
-										<hlayout>
-											<textbox value="@load(vm.dtoGasto.timbrado.pos1)"
-												readonly="true" placeholder="Nro. Timbrado"
+										<textbox value="@bind(vm.dtoGasto.timbrado)"
+												placeholder="Nro. Timbrado"
 												hflex="true"/>
-											<button
-												iconSclass="z-icon-search" 
-												onClick="@command('asignarTimbrado')"/>
-										</hlayout>
 									</vlayout>
 								</cell>
 								<cell visible="@load(vm.dtoGasto.debitoBancario? 'true':'false')">
@@ -324,7 +327,15 @@
 						</rows>
 					</grid>
 					<solicitarCabecera
-						visible="@load(!vm.detalleFacturaVisible)" />
+						visible="@load(!vm.detalleFacturaVisible)">
+						<vbox pack="center" align="center" vflex="true"
+							hflex="true">
+							<a iconSclass="z-icon-arrow-up"
+								style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+								Ingrese los datos de cabecera
+							</a>
+						</vbox>
+					</solicitarCabecera>
 					<hlayout sclass="button-container"
 						visible="@load(vm.detalleFacturaVisible)">
 						<button mold="bs" sclass="btn-danger btn-sm"

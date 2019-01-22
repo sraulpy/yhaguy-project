@@ -878,24 +878,15 @@
 		
 		<!-- DESPACHO -->
 		
-		<div id="dv_6" width="100%" vflex="true" style="padding:5px" visible="false">
-			<hbox>				
-						<tabbox hflex="3" vflex="true">	
+		<div id="dv_6" width="100%" vflex="true" style="padding-top:5px" visible="false">
+			<hbox width="100%">				
+					<tabbox hflex="3" vflex="true">	
 						<tabs hflex="true">
 							<tab label="Carátula Despacho" width="100%"></tab>
 						</tabs>	
 						<tabpanels>
 							<tabpanel>
-								<hlayout sclass="button-container"
-									style="background:#EEF7FA">
-									<button mold="bs"
-										sclass="btn-primary btn-sm" width="210px"
-										iconSclass="z-icon-check"
-										label=" Volcar a Importación en Curso"
-										onClick="@command('setImportacionEnCurso')"
-										disabled="@load(vm.dto.resumenGastosDespacho.esNuevo() or vm.deshabilitado)" />
-								</hlayout>
-								<grid sclass="vgrid" style="margin:10px" height="490px">
+								<grid sclass="vgrid" style="margin:10px">
 									<columns>
 										<column width="150px" />
 										<column />
@@ -1075,7 +1066,7 @@
 							</tabpanel>
 						</tabpanels>
 						</tabbox>
-						<tabbox hflex="5" vflex="1">
+						<tabbox hflex="6" vflex="1">
 							<tabs>
 								<tab label="Gastos" width="170px"></tab>
 								<tab label="Desglose por Cuentas" width="170px"></tab>
@@ -1091,9 +1082,8 @@
 										model="@load(vm.dto.gastos)">
 										<listhead>
 											<listheader label="Fecha" width="100px"></listheader>
-											<listheader label="Vencimiento" width="100px"></listheader>
-											<listheader label="Número" width="170px"></listheader>
-											<listheader label="Concepto" width="170px"></listheader>
+											<listheader label="Número" width="150px"></listheader>
+											<listheader label="Concepto" width="150px"></listheader>
 											<listheader label="Proveedor"></listheader>
 											<listheader label="Importe Gs." width="120px" align="right"></listheader>
 											<listheader label="Importe U$D" width="120px" align="right"></listheader>
@@ -1101,7 +1091,6 @@
 										<template name="model">
 											<listitem>
 												<listcell label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
-												<listcell label="@load(each[2]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 												<listcell label="@load(each[3])"></listcell>
 												<listcell label="@load(each[4])"></listcell>
 												<listcell label="@load(each[5])"></listcell>
@@ -1110,7 +1099,6 @@
 											</listitem>
 										</template>
 										<listfoot>
-											<listfooter></listfooter>
 											<listfooter></listfooter>
 											<listfooter></listfooter>
 											<listfooter></listfooter>
@@ -1525,7 +1513,7 @@
 						<textbox hflex="true"
 							style="text-align:right"
 							placeholder="Nro. Timbrado.." 
-							value="@bind(vm.nvoGasto.timbrado.numero)"/>
+							value="@bind(vm.nvoGasto.timbrado)"/>
 					</hlayout>
 					</vlayout>
 					<vlayout spacing="0">

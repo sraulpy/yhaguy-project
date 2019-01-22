@@ -5,12 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import com.coreweb.domain.Tipo;
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoBoletaDeposito;
@@ -25,6 +22,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2016;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2017;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
@@ -513,37 +511,32 @@ public class ProcesosTesoreria {
 	/**
 	 * asigna rubro a clientes que son funcionarios..
 	 */
-	public static void setRubroFuncionarioClientes(String src) throws Exception {
+	public static void setRubroFuncionarioClientes() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
-		Set<Tipo> rubros = new HashSet<Tipo>();
-		Tipo rubroFuncionario = rr.getTipoPorDescripcion("FUNCIONARIOS");
-		rubros.add(rubroFuncionario);
-		
 		String[][] cab = { { "Empresa", CSV.STRING } };
-		String[][] det = { { "CEDULA", CSV.STRING }, { "RAZONSOCIAL", CSV.STRING } };
+		String[][] det = { { "RAZONSOCIAL", CSV.STRING }, { "RUC", CSV.STRING } };
 		int count = 0;
 		
-		CSV csv = new CSV(cab, det, src);
+		EmpresaRubro rubroFuncionario = (EmpresaRubro) rr.getObject(EmpresaRubro.class.getName(), 18);
+		
+		CSV csv = new CSV(cab, det, SRC_FUNCIONARIOS);
 
 		csv.start();
 		while (csv.hashNext()) {	
-			String cedula = csv.getDetalleString("CEDULA");
 			String razonSocial = csv.getDetalleString("RAZONSOCIAL");
-			String query = "select c from Cliente c where c.empresa.ruc like '%" + cedula + "%'";
-			List<Cliente> list = rr.hql(query);
-			for (Cliente cliente : list) {
-				count ++;
-				Empresa emp = cliente.getEmpresa();
-				emp.setCi(cedula);
-				emp.setRazonSocial(razonSocial);
-				emp.setRubroEmpresas(rubros);
-				rr.saveObject(emp, "process");
-				System.out.println(count + " - " + cliente.getRazonSocial());
-			}
+			String ruc = csv.getDetalleString("RUC");
+			String query = "select e from Empresa e where e.ruc = '" + ruc + "'";
+			List<Empresa> list = rr.hql(query);
+			if (list.size() == 1) {
+				for (Empresa emp : list) {
+					emp.setRubro(rubroFuncionario);
+					rr.saveObject(emp, emp.getUsuarioMod());
+					System.out.println(count + " - " + emp.getRazonSocial());
+				}
+			}			
 			if (list.size() == 0) {
-				count ++;
-				System.err.println(count + " - " + cedula + "-" +  razonSocial);
+				System.err.println(count + " - " + ruc + "-" +  razonSocial);
 			}
 		}
 	}
@@ -1032,12 +1025,12 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.addMovimientosBancoFormaPagoDepositoBancario();
 			//ProcesosTesoreria.chequearClientesDuplicados();
 			//ProcesosTesoreria.addRecaudacionesCentral();
-			ProcesosTesoreria.addChequeTerceros();
+			//ProcesosTesoreria.addChequeTerceros();
 			//ProcesosTesoreria.setNumeroRecibos();
 			//ProcesosTesoreria.setOrigenRecaudacionCentral();
 			//ProcesosTesoreria.setEmisionChequesTerceros();
 			//ProcesosTesoreria.poblarCtaCteSaldos2017();
-			//ProcesosTesoreria.setRubroFuncionarioClientes(SRC_FUNCIONARIOS);
+			ProcesosTesoreria.setRubroFuncionarioClientes();
 			//ProcesosTesoreria.verificarRecibosAnulados();
 			//ProcesosTesoreria.setCtaCteNumeroImportacion();
 			//ProcesosTesoreria.setOrigenGastos();

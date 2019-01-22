@@ -224,7 +224,7 @@ public class TesakaParser {
 		transaccion.put("condicionCompra", gasto.isContado() ? "CONTADO" : "CREDITO");
 		transaccion.put("tipoComprobante", 1);
 		transaccion.put("fecha", misc.dateToString(gasto.getFecha(), Misc.YYYY_MM_DD));
-		transaccion.put("numeroTimbrado", gasto.getTimbrado().getNumero());
+		transaccion.put("numeroTimbrado", gasto.getTimbrado());
 		if (!gasto.isContado()) {
 			transaccion.put("cuotas", 1);
 		}

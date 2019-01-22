@@ -231,7 +231,7 @@
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Timbrado" />
-						<textbox value="@bind(vm.selectedGasto.timbrado.numero)" hflex="true" />	
+						<textbox value="@bind(vm.selectedGasto.timbrado)" hflex="true" />	
 					</vlayout>
 				</row>
 				<row>

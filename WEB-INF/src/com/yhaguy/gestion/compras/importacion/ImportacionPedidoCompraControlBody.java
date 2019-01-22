@@ -91,6 +91,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	static final String PATH = Configuracion.pathPedidoCompra;
 	static final String PATH_GENERICO = Configuracion.pathPedidoCompraGenerico;
+	static final String ZUL_GASTOS = "/yhaguy/gestion/compras/importacion/gastos.zul";	
 	
 	static final String[][] CAB = { { "Empresa", CSV.STRING } };
 	static final String[][] DET = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING } };
@@ -249,10 +250,16 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	}
 	
 	@Command 
-	@NotifyChange("nvoGasto")
+	@NotifyChange({ "nvoGasto", "nvoGastoDetalle" })
 	public void addGastoDetalle() {
 		this.nvoGasto.getDetalles().add(this.nvoGastoDetalle);
 		this.nvoGastoDetalle = new GastoDetalle();
+	}
+	
+	@Command
+	@NotifyChange({ "nvoGasto", "nvoGastoDetalle" })
+	public void deleteGastoDetalle(@BindingParam("item") GastoDetalle item) {
+		this.nvoGasto.getDetalles().remove(item);
 	}
 	
 	@Command 
@@ -261,20 +268,18 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		Timbrado timbrado = new Timbrado();
 		timbrado.setVencimiento(Utiles.getFechaFinMes());
 		this.nvoGasto = new Gasto();
-		this.nvoGasto.setTimbrado(timbrado);
-		comp.open(parent, "after_start");
+		this.nvoGasto.setTipoCambio_(Gasto.TC_SET);
+		//comp.open(parent, "after_start");
+		this.win = (Window) Executions.createComponents(ZUL_GASTOS, this.mainComponent, null);
+		this.win.doModal();
 	}
 	
 	@Command 
 	@NotifyChange("*")
 	public void addGasto() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Timbrado t = new Timbrado();
-		t.setNumero(this.nvoGasto.getTimbrado().getNumero());
-		t.setVencimiento(this.nvoGasto.getTimbrado().getVencimiento());
-		rr.saveObject(t, this.getLoginNombre());
 		this.nvoGasto.setIdImportacion(this.dto.getId());
-		this.nvoGasto.setTimbrado(t);
+		this.nvoGasto.setFechaCarga(new Date());
 		for (GastoDetalle item : this.nvoGasto.getDetalles()) {
 			this.nvoGasto.setImporteGs(this.nvoGasto.getImporteGs() + item.getMontoGs());
 			this.nvoGasto.setImporteIva10(this.nvoGasto.getImporteIva10() + item.getMontoIva());
@@ -541,6 +546,42 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			Clients.showNotification(
 					"Hubo un problema al intentar subir el archivo..",
 					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
+	
+	@Command
+	@NotifyChange("nvoGasto")
+	public void setCondicion() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CondicionPago cont = rr.getCondicionPagoById(CondicionPago.ID_CONTADO);
+		CondicionPago cred = rr.getCondicionPagoById(CondicionPago.ID_CREDITO_30);
+		this.nvoGasto.setCondicionPago(this.nvoGasto.isContado() ? cont : cred);
+	}
+	
+	@Command
+	@NotifyChange("nvoGasto")
+	public void setVencimiento() throws Exception {
+		this.setTipoCambio();
+		if (this.nvoGasto.getTipoMovimiento() == null) {
+			return;
+		}
+		int dias = 0;
+		if (!this.nvoGasto.isContado()) {
+			dias = 31;
+		}
+		this.nvoGasto.setVencimiento(Utiles.agregarDias(this.nvoGasto.getFecha(), dias));
+	}
+	
+	@Command
+	@NotifyChange("nvoGasto")
+	public void setTipoCambio() throws Exception {
+		if (this.nvoGasto.isTipoCambioSET()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			if (this.nvoGasto.getFecha() == null) return;
+			double tc = rr.getTipoCambioVenta(Utiles.agregarDias(this.nvoGasto.getFecha(), -1));
+			this.nvoGasto.setTipoCambio(tc);
+		} else {
+			this.nvoGasto.setTipoCambio(this.dto.getResumenGastosDespacho().getTipoCambio());
 		}
 	}
 	
@@ -3189,6 +3230,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				}
 				this.dto.setFechaCierre(new Date());
 				this.dto.setImportacionConfirmada(true);
+				this.dto.getImportacionFactura().get(0).setFechaOriginal(this.dto.getResumenGastosDespacho().getFechaDespacho());
 				this.setDto((ImportacionPedidoCompraDTO) this.saveDTO(this.dto));
 				this.addEventoAgendaLink("Se confirmó la Importación..", linkReporteFinal); 
 				this.mensajePopupTemporal("La Importación fue correctamente confirmada..");	
@@ -3530,7 +3572,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	@Command
 	public void guaranizarGastoDetalle() {
-		double tc = this.dto.getResumenGastosDespacho().getTipoCambio();
+		double tc = this.nvoGasto.getTipoCambio();
 		double ds = this.nvoGastoDetalle.getMontoDs();
 		this.nvoGastoDetalle.setMontoGs(ds * tc);
 		BindUtils.postNotifyChange(null, null, this.nvoGastoDetalle, "montoGs");
@@ -3538,7 +3580,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	@Command
 	public void dolarizarGastoDetalle() {
-		double tc = this.dto.getResumenGastosDespacho().getTipoCambio();
+		double tc = this.nvoGasto.getTipoCambio();
 		double gs = this.nvoGastoDetalle.getMontoGs();
 		this.nvoGastoDetalle.setMontoDs(gs / tc);
 		BindUtils.postNotifyChange(null, null, this.nvoGastoDetalle, "montoDs");
@@ -3628,10 +3670,13 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	/**
 	 * @return las condiciones..
 	 */
-	@SuppressWarnings("unchecked")
 	public List<CondicionPago> getCondicionesPago() throws Exception {
+		List<CondicionPago> out = new ArrayList<CondicionPago>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getObjects(CondicionPago.class.getName());
+		CondicionPago cont = rr.getCondicionPagoById(CondicionPago.ID_CONTADO);
+		CondicionPago cred = rr.getCondicionPagoById(CondicionPago.ID_CREDITO_30);
+		out.add(cont); out.add(cred);
+		return out;
 	}
 	
 	/**
@@ -3705,6 +3750,29 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public List<Tipo> getTiposIva() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getTipos(Configuracion.ID_TIPO_IVA);
+	}
+	
+	@DependsOn({ "nvoGasto.tipoMovimiento", "nvoGasto.fecha", "nvoGasto.condicionPago", "nvoGasto.numero",
+			"nvoGasto.moneda", "nvoGasto.proveedor", "nvoGasto.tipoCambio", "nvoGasto.acreedor" })
+	public boolean isDetalleVisible() {
+		return this.nvoGasto.getTipoMovimiento() != null && this.nvoGasto.getFecha() != null
+				&& this.nvoGasto.getCondicionPago() != null && this.nvoGasto.getNumero() != null
+				&& this.nvoGasto.getMoneda() != null && this.nvoGasto.getProveedor() != null
+				&& this.nvoGasto.getTipoCambio() > 0 && this.nvoGasto.getAcreedor() != null;
+	}
+	
+	@DependsOn({ "nvoGasto.tipoMovimiento", "nvoGasto.fecha", "nvoGasto.condicionPago", "nvoGasto.numero",
+		"nvoGasto.moneda", "nvoGasto.proveedor", "nvoGasto.tipoCambio", "nvoGasto.acreedor", "nvoGasto.detalles" })
+	public boolean isGastoEnabled() {
+		return this.nvoGasto.getTipoMovimiento() != null && this.nvoGasto.getFecha() != null
+			&& this.nvoGasto.getCondicionPago() != null && this.nvoGasto.getNumero() != null
+			&& this.nvoGasto.getMoneda() != null && this.nvoGasto.getProveedor() != null
+			&& this.nvoGasto.getTipoCambio() > 0 && this.nvoGasto.getAcreedor() != null && this.nvoGasto.getDetalles().size() > 0;
+}
+	
+	@DependsOn({ "nvoGastoDetalle.articuloGasto", "nvoGastoDetalle.montoGs", "nvoGastoDetalle.tipoIva" })
+	public boolean isItemDisabled() {
+		return this.nvoGastoDetalle.getArticuloGasto() == null || this.nvoGastoDetalle.getMontoGs() <= 0 || this.nvoGastoDetalle.getTipoIva() == null;
 	}
 	
 	public ImportacionPedidoCompraDTO getDto() {
@@ -4034,7 +4102,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 
 
 //Validador Insertar Item Orden de Compra..
-class ValidadorInsertarItemOrdenCompra implements VerificaAceptarCancelar{
+class ValidadorInsertarItemOrdenCompra implements VerificaAceptarCancelar {
 	
 	private ImportacionPedidoCompraDetalleDTO newDetalle = new ImportacionPedidoCompraDetalleDTO();
 	private String mensajeError = "";	

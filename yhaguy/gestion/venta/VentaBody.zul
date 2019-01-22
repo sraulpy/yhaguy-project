@@ -219,7 +219,14 @@
 
 		<!-- ______________________________ BOTONERA ______________________________ -->
 		
-		<solicitarCabecera visible="@load(!vm.detalleVisible)" />
+		<solicitarCabecera visible="@load(!vm.detalleVisible)">
+			<vbox pack="center" align="center" vflex="true" hflex="true">
+			<a  iconSclass="z-icon-arrow-up"
+				style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+				Ingrese los datos de cabecera
+			</a>
+		</vbox>
+		</solicitarCabecera>
 
 		<div sclass="button-container"
 			ctrlKeys="^i"

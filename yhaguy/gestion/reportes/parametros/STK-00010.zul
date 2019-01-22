@@ -5,10 +5,29 @@
 	</columns>
 	<rows>
 		<row>
+			<field value="Familia:" />
+			<combobox model="@load(vm.dato.filtro.familias_)"
+				selectedItem="@bind(vm.dato.filtro.familia_)" hflex="true"
+				readonly="false" placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Marca:" />
+			<combobox model="@load(vm.dato.filtro.marcas_)"
+				selectedItem="@bind(vm.dato.filtro.marca_)" hflex="true"
+				readonly="false" placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Artículo:" />
-			<bandbox hflex="true" placeholder="TODOS.."
-				readonly="true" value="@load(vm.dato.filtro.articulo.codigoInterno)"
-				id="bndArti" onOpen="tx_cod.focus()">
+			<bandbox hflex="true" placeholder="TODOS.." readonly="true"
+				value="@load(vm.dato.filtro.articulo.codigoInterno)" id="bndArti">
 				<bandpopup>
 					<listbox sclass="small-list" width="400px"
 						height="200px" model="@load(vm.dato.filtro.articulos)"
@@ -16,9 +35,13 @@
 						onSelect="bndArti.close()">
 						<listhead>
 							<listheader>
-								<textbox id="tx_cod" hflex="true"
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
 										value="@bind(vm.dato.filtro.codigoArticulo)" instant="true"
-										placeholder="Buscar por Código.." sclass="filter"/>
+										placeholder="Buscar por Código.." />
+								</hlayout>
 							</listheader>
 						</listhead>
 						<template name="model">
@@ -30,19 +53,15 @@
 			</bandbox>
 		</row>
 		<row>
-			<field value="Tipo de Costo:" />
-			<combobox model="@load(vm.dato.filtro.tiposDeCosto)" hflex="true"
-				value="@load(vm.dato.filtro.tipoCosto)"
-				selectedItem="@bind(vm.dato.filtro.tipoCosto)" instant="true">
+			<field value="Proveedor:" />
+			<chosenbox hflex="true" sclass="rounded" style="margin-top:5px"
+				model="@load(vm.dato.filtro.proveedoresExterior)"
+				emptyMessage="Seleccione uno o más proveedores.."
+				selectedObjects="@save(vm.dato.filtro.selectedProveedores)">
 				<template name="model">
-					<comboitem label="@load(each)" />
+					<label value="@load(each.razonSocial)"></label>
 				</template>
-			</combobox>
-		</row>
-		<row>
-			<field value="A la fecha:" />
-			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
-				placeholder="Fecha.." hflex="true" />
+			</chosenbox>
 		</row>
 	</rows>
 </grid>

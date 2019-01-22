@@ -26,6 +26,7 @@ public class GastoDTO extends DTO{
 	private String motivoComprobanteFisico = "";
 	private String cajaPagoNumero = "";
 	private String observacion = "";
+	private String timbrado = "";
 	
 	/** cuando es autoFactura se especifica el beneficiario **/
 	private String beneficiario = "";
@@ -52,7 +53,6 @@ public class GastoDTO extends DTO{
 	private MyArray proveedor = new MyArray(); //pos1:codigo - pos2:razonSocial - pos3:ruc
 	private MyArray moneda = new MyArray();
 	private MyArray tipoMovimiento = new MyArray();
-	private MyArray timbrado = new MyArray();
 	private MyArray condicionPago = new MyArray();
 	private MyPair estadoComprobante = new MyPair();
 	private MyPair sucursal = new MyPair();
@@ -290,14 +290,6 @@ public class GastoDTO extends DTO{
 		this.tipoMovimiento = tipoMovimiento;
 	}
 
-	public MyArray getTimbrado() {
-		return timbrado;
-	}
-
-	public void setTimbrado(MyArray timbrado) {
-		this.timbrado = timbrado;
-	}
-
 	public MyArray getCondicionPago() {
 		return condicionPago;
 	}
@@ -470,5 +462,13 @@ public class GastoDTO extends DTO{
 
 	public void setBanco(MyArray banco) {
 		this.banco = banco;
+	}
+
+	public String getTimbrado() {
+		return timbrado;
+	}
+
+	public void setTimbrado(String timbrado) {
+		this.timbrado = timbrado;
 	}
 }

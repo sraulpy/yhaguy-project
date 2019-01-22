@@ -34,7 +34,6 @@ import com.yhaguy.domain.CentroCosto;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
-import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.contabilidad.subdiario.SubDiarioDTO;
 import com.yhaguy.inicio.AccesoDTO;
 
@@ -177,25 +176,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		formaPago.setRetencionTimbrado("");
 		formaPago.setRetencionVencimiento(null);
 	}
-	
-	@Command 
-	@NotifyChange("*")
-	public void abrirVentanaTimbrado() {
-		String nroTimbrado = (String) this.dto.getTimbrado().getPos1();
-
-		WindowTimbrado w = new WindowTimbrado();
-		w.setIdProveedor(this.dto.getProveedor().getId());
-		w.setTimbrado(nroTimbrado);
-		w.show(WindowPopup.NUEVO, w);
-
-		if (w.isClickAceptar()) {
-			this.dto.setTimbrado(w.getSelectedTimbrado());
-		} else {
-			this.dto.setTimbrado(new MyArray("", null));
-		}
-
-		BindUtils.postNotifyChange(null, null, this.dto, "timbrado");
-	}	
 	
 	@Command
 	@NotifyChange({"dto", "simboloMoneda", "labelTotalFactura", "format"})
@@ -340,7 +320,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		if(this.dto.isAutoFactura() == false) {
 			this.dto.setProveedor(new MyArray());
 			this.dto.setNumeroFactura("");
-			this.dto.setTimbrado(new MyArray());
 			this.dto.setNumeroTimbrado("");
 			this.dto.setBeneficiario("");
 		}			
@@ -402,8 +381,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 				(String) talonario.getPos1(), 7, true);
 		
 		this.dto.setNumeroFactura("00" + boca + "-00" + punto + "-" + nro);
-		this.dto.setTimbrado(this.getTimbrado((MyPair) talonario.getPos6()));
-		this.dto.setNumeroTimbrado((String) this.dto.getTimbrado().getPos1());
 		this.dto.setProveedor(this.getProveedor(Configuracion.ID_PROVEEDOR_YHAGUY_MRA));	
 
 		BindUtils.postNotifyChange(null, null, this.dto, "numeroFactura");
@@ -473,11 +450,9 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	public boolean isDetalleVisible() {
 		if (this.dto.isAutoFactura())
 			return this.dto.getBeneficiario().isEmpty() == false;
-
-		String timbrado = (String) this.dto.getTimbrado().getPos1();
+		
 		return (this.dto.getProveedor().esNuevo() == false)
-				&& (this.dto.getNumeroFactura().isEmpty() == false)
-				&& (timbrado.isEmpty() == false);
+				&& (this.dto.getNumeroFactura().isEmpty() == false);
 	}
 	
 	/**
@@ -489,16 +464,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		MyArray out = new MyArray();
 		out.setId(cc.getId());
 		out.setPos1(cc.getDescripcion());
-		return out;
-	}
-	
-	/**
-	 * @return timbrado como MyArray..
-	 */
-	private MyArray getTimbrado(MyPair timbrado) {
-		MyArray out = new MyArray();
-		out.setId(timbrado.getId());
-		out.setPos1(timbrado.getText());		
 		return out;
 	}
 	

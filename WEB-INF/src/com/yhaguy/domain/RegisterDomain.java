@@ -2495,7 +2495,7 @@ public class RegisterDomain extends Register {
 	public Gasto getGastoByNumero(String numero, String timbrado)
 			throws Exception {
 		String query = "select g from Gasto g where g.numeroFactura = '"
-				+ numero + "' and g.timbrado.numero = '" + timbrado + "'";
+				+ numero + "' and g.timbrado = '" + timbrado + "'";
 		List<Gasto> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
@@ -8748,11 +8748,9 @@ public class RegisterDomain extends Register {
 	 */
 	public double getTipoCambioVenta(Date fecha) throws Exception {
 		String desde = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 00:00:00";
-		String hasta = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select t.id, t.venta from TipoCambio t where t.id = (select max(id) from TipoCambio)"
-				+ " and (t.fecha > '" + desde + "' and t.fecha < '" + hasta + "')";
+		String query = "select t.id, t.venta from TipoCambio t where (t.fecha = '" + desde + "')";
 		List<Object[]> list = this.hql(query);
-		return (double) list.get(0)[1];
+		return list.size() > 0? (double) list.get(0)[1] : 0.0;
 	}
 	
 	/**
@@ -9198,9 +9196,36 @@ public class RegisterDomain extends Register {
 	public List<Gasto> getLibroComprasIndistinto(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
-				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?)"
+				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?)"
 				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_PAGOS + "'"
 				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_COMPROBANTES + "'";
+				if (idSucursal > 0) {
+					query += " and g.sucursal.id = " + idSucursal;
+				}
+				query += " and g.idImportacion < 0" + " order by g.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+		listParams.add(creacionDesde);
+		listParams.add(creacionHasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return libro compras indistinto segun fecha (solo otros comprobantes)..
+	 */
+	public List<Gasto> getLibroComprasIndistinto_(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
+		String query = "select g from Gasto g where g.dbEstado != 'D'"
+				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?)"
+				+ " and (g.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_OTROS_PAGOS + "'"
+				+ " or g.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_OTROS_COMPROBANTES + "')";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}
@@ -9225,7 +9250,7 @@ public class RegisterDomain extends Register {
 	public List<Gasto> getLibroComprasDespacho(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
-				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?) ";
+				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?) ";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
 				}
@@ -9250,7 +9275,7 @@ public class RegisterDomain extends Register {
 	public List<Gasto> getLibroComprasDespacho_(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
-				+ " and (g.fecha between ? and ?) and (g.modificado between ? and ?) "
+				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?) "
 				+ " and g.proveedor.empresa.ruc != '"+ Proveedor.RUC_MIN_REL_EXTERIORES +"'";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;

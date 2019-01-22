@@ -12,6 +12,7 @@
 		&hibernate-domain; 
 
 		<property name="fecha" />
+		<property name="fechaCarga" />
 		<property name="vencimiento" />
 		<property name="numeroFactura" />
 		<property name="numeroTimbrado" />
@@ -31,6 +32,9 @@
 		<property name="importeDs"/>
 		<property name="importeIva10"/>
 		<property name="importeIva5"/>
+		<property name="acreedor"/>
+		<property name="tipoCambio_"/>
+		<property name="timbrado"/>
 		
 		<property name="debitoBancario">
 			<column name="debitoBancario" not-null="true" default="false" />
@@ -52,9 +56,6 @@
 			
 		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento" 
 			column="idTipoMovimiento" lazy="false"/>
-			
-		<many-to-one name="timbrado" class="com.yhaguy.domain.Timbrado"
-			column="idtimbrado" lazy="false" />
 			
 		<many-to-one name="condicionPago" class="com.yhaguy.domain.CondicionPago" 
 			column="idCondicionPago" lazy="false" />

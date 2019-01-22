@@ -6,6 +6,10 @@ import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class CondicionPago extends Domain {
+	
+	public static final long ID_CONTADO = 1;
+	public static final long ID_CREDITO_30 = 2;
+	
 	private String descripcion;
 	private int plazo;			 // dias de vencimiento
 	private int cuotas;			 // cuotas por defecto

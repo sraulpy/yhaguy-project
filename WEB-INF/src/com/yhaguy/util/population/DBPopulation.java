@@ -4293,7 +4293,7 @@ public class DBPopulation {
 		g1.setTipoMovimiento(tt.tipoMov18);
 		g1.setProveedor(prov8);
 		g1.setFecha(new Date());
-		g1.setTimbrado(t1);
+		g1.setTimbrado("");
 		g1.setNumeroFactura("001-001-0000110");
 		g1.setNumeroTimbrado("150100");
 		g1.setCondicionPago(tt.icp);

@@ -127,7 +127,14 @@
 			(vm.dato.reciboDTO.cliente.esNuevo() or vm.dato.reciboDTO.numero.isEmpty() or vm.dato.reciboDTO.cobrador.isEmpty()) 
 			: (vm.dato.cancelacionCheque or vm.dato.reembolsoPrestamo ? 
 			(vm.dato.reciboDTO.cliente.esNuevo() or vm.dato.reciboDTO.numero.isEmpty()) 
-			: vm.dato.reciboDTO.proveedor.esNuevo()))" />
+			: vm.dato.reciboDTO.proveedor.esNuevo()))">
+		<vbox pack="center" align="center" vflex="true" hflex="true">
+				<a  iconSclass="z-icon-arrow-up"
+					style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+					Ingrese los datos de cabecera
+				</a>
+		</vbox>
+	</solicitarCabecera>
 
 	<hlayout width="100%" height="100%"
 		visible="@load(!(vm.dato.reciboDTO.cobro or vm.dato.cancelacionCheque or vm.dato.reembolsoPrestamo ? 

@@ -1,12 +1,13 @@
 package com.yhaguy.gestion.compras.gastos.subdiario;
 
+import java.util.Date;
+
 import com.coreweb.domain.Domain;
 import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.GastoDetalle;
 import com.yhaguy.gestion.caja.recibos.AssemblerReciboFormaPago;
-import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 
 public class AssemblerGasto extends Assembler {
 
@@ -16,11 +17,10 @@ public class AssemblerGasto extends Assembler {
 			"motivoComprobanteFisico", "cajaPagoNumero", "observacion",
 			"beneficiario", "idImportacion", "importeGs", "importeDs",
 			"importeIva10", "importeIva5", "numeroImportacion", "despachante",
-			"debitoBancario", "no_generar_saldo" };
+			"debitoBancario", "no_generar_saldo", "timbrado" };
 
 	final static String[] ATT_PROVEEDOR = { "codigoEmpresa", "razonSocial", "ruc" };
 	final static String[] ATT_MONEDA = { "descripcion", "sigla" };
-	final static String[] ATT_TIMBRADO = { "numero", "vencimiento" };
 	final static String[] ATT_CONDICION = { "descripcion", "plazo" };
 	final static String[] ATT_TIPO_MOVIMIENTO = { "descripcion", "sigla", "clase", "tipoIva" };
 	final static String[] ATT_BANCO = { "bancoDescripcion" };
@@ -29,15 +29,15 @@ public class AssemblerGasto extends Assembler {
 	public Domain dtoToDomain(DTO dtoG) throws Exception {
 		GastoDTO dto = (GastoDTO) dtoG;
 		Gasto domain = (Gasto) getDomain(dto, Gasto.class);
-
-		if (dto.getTimbrado().esNuevo())
-			this.saveTimbrado(dto);
+		
+		if (dto.esNuevo()) {
+			domain.setFechaCarga(new Date());
+		}
 
 		this.copiarValoresAtributos(dto, domain, ATT_IGUALES);
 		this.myArrayToDomain(dto, domain, "proveedor");
 		this.myArrayToDomain(dto, domain, "moneda");
 		this.myArrayToDomain(dto, domain, "tipoMovimiento");
-		this.myArrayToDomain(dto, domain, "timbrado");
 		this.myArrayToDomain(dto, domain, "condicionPago");
 		this.myArrayToDomain(dto, domain, "banco");
 		this.myPairToDomain(dto, domain, "estadoComprobante");
@@ -56,7 +56,6 @@ public class AssemblerGasto extends Assembler {
 		this.domainToMyArray(domain, dto, "proveedor", ATT_PROVEEDOR);
 		this.domainToMyArray(domain, dto, "moneda", ATT_MONEDA);
 		this.domainToMyArray(domain, dto, "tipoMovimiento", ATT_TIPO_MOVIMIENTO);
-		this.domainToMyArray(domain, dto, "timbrado", ATT_TIMBRADO);
 		this.domainToMyArray(domain, dto, "condicionPago", ATT_CONDICION);
 		this.domainToMyArray(domain, dto, "banco", ATT_BANCO);
 		this.domainToMyPair(domain, dto, "estadoComprobante");
@@ -65,14 +64,6 @@ public class AssemblerGasto extends Assembler {
 		this.listaDomainToListaDTO(domain, dto, "formasPago", new AssemblerReciboFormaPago(dto.getNumeroFactura()));
 
 		return dto;
-	}
-
-	/**
-	 * graba el timbrado en la bd..
-	 */
-	private void saveTimbrado(GastoDTO dto) {
-		WindowTimbrado w = new WindowTimbrado();
-		w.agregarTimbrado(dto.getTimbrado(), dto.getProveedor().getId());
 	}
 }
 

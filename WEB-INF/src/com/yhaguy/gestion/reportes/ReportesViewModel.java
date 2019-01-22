@@ -10812,14 +10812,21 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Date desde_ = filtro.getFechaDesde2();
 				Date hasta_ = filtro.getFechaHasta2();
+				boolean otrosComprobantes = filtro.isFraccionado();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Object[] formato = filtro.getFormato();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
-				List<Gasto> gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
-				List<NotaCredito> notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
+				List<Gasto> gastos = new ArrayList<Gasto>();
+				List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
+				if (otrosComprobantes) {
+					gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal);
+				} else {
+					gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
+					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
+				}
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -13836,7 +13843,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 		this.gastos = gastos;
 		this.importaciones = importaciones;
 		for (Gasto gasto : gastos) {
-			String timbrado = gasto.getTimbrado() != null ? gasto.getTimbrado().getNumero() : "";
+			String timbrado = gasto.getTimbrado();
 			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY),
 					Utiles.getDateToString(gasto.getModificado(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
 					gasto.getTipoMovimiento().getDescripcion(), timbrado,

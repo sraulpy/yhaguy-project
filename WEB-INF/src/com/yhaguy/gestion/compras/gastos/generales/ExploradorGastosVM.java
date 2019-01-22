@@ -134,7 +134,6 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.selectedGasto.setImporteGs(this.selectedGasto.getImporteGs_());
 		this.selectedGasto.setImporteDs(this.selectedGasto.getImporteDs_());
-		rr.saveObject(this.selectedGasto.getTimbrado(), this.getLoginNombre());
 		rr.saveObject(this.selectedGasto, this.getLoginNombre());
 		Clients.showNotification("REGISTRO GUARDADO..");
 	}
