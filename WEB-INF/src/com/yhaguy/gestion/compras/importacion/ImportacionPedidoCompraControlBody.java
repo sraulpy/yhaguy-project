@@ -286,6 +286,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 		rr.saveObject(this.nvoGasto, this.getLoginNombre());
 		this.nvoGasto = new Gasto();
+		this.win.detach();
 		// add cta cte..
 		Clients.showNotification("REGISTRO AGREGADO..");
 	}
