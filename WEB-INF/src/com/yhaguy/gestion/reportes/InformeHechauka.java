@@ -58,22 +58,22 @@ public class InformeHechauka {
 					String nro = venta.getNumero();
 					String fecha = misc.dateToString(venta.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
 					periodo = Utiles.getDateToString(venta.getFecha(), "yyyyMM");
-					double importe = redondear(venta.getTotalImporteGs());
 					double iva10 = redondear(venta.getTotalIva10());
-					double gravada = redondear(venta.getTotalGravado10());
-					long col10 = 0;
-					long col11 = 0;
-					long col12 = 0;
+					double gravada10 = redondear(venta.getTotalGravado10());
+					double iva5 = redondear(venta.getTotalIva5());
+					double gravada5 = redondear(venta.getTotalGravado5());
+					double exenta = redondear(venta.getTotalExenta());
+					double importe = iva10 + gravada10 + iva5 + gravada5 + exenta;
 					long col14 = venta.isVentaContado() ? 1 : 2;
 					long col15 = 0;
 					String col16 = venta.getTimbrado();
 					String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 							+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
-							+ FORMATTER.format(gravada) + "" + " \t"
+							+ FORMATTER.format(gravada10) + "" + " \t"
 							+ FORMATTER.format(iva10) + "" + "\t"
-							+ FORMATTER.format(col10) + "" + "\t"
-							+ FORMATTER.format(col11) + "" + "\t"
-							+ FORMATTER.format(col12) + "" + "\t"
+							+ FORMATTER.format(gravada5) + "" + "\t"
+							+ FORMATTER.format(iva5) + "" + "\t"
+							+ FORMATTER.format(exenta) + "" + "\t"
 							+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
 							+ col15 + "" + "\t" + col16 + "" + "\r\n";
 					objects.add(object);
@@ -93,7 +93,7 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(nc.getTotalIva10());
 					cons_gravada += redondear(nc.getTotalGravado10());
-					cons_importe += redondear(nc.getImporteGs());
+					cons_importe += (cons_iva10 + cons_gravada);
 				} else {
 					String col1 = "2";
 					String col2 = ruc.substring(0, ruc.length() - 2);
@@ -102,12 +102,12 @@ public class InformeHechauka {
 					String nro = nc.getNumero();
 					String fecha = misc.dateToString(nc.getFechaEmision(), Misc.DD_MM_YYYY).replace("-", "/");
 					periodo = Utiles.getDateToString(nc.getFechaEmision(), "yyyyMM");
-					double importe = redondear(nc.getImporteGs());
 					double iva10 = redondear(nc.getTotalIva10());
 					double gravada = redondear(nc.getTotalGravado10());
+					double exenta = redondear(nc.getTotalExenta());
+					double importe = iva10 + gravada + exenta;
 					long col10 = 0;
 					long col11 = 0;
-					long col12 = 0;
 					long col14 = 2;
 					long col15 = 0;
 					String col16 = nc.getTimbrado() != null? nc.getTimbrado().getNumero() : "";
@@ -117,7 +117,7 @@ public class InformeHechauka {
 							+ FORMATTER.format(iva10) + "" + "\t"
 							+ FORMATTER.format(col10) + "" + "\t"
 							+ FORMATTER.format(col11) + "" + "\t"
-							+ FORMATTER.format(col12) + "" + "\t"
+							+ FORMATTER.format(exenta) + "" + "\t"
 							+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
 							+ col15 + "" + "\t" + col16 + "" + "\r\n";
 					objects.add(object);
@@ -129,10 +129,10 @@ public class InformeHechauka {
 		
 		String ruc = Configuracion.RUC_EMPRESA_LOCAL;
 		String rSocial = "IMPORTE CONSOLIDADO";
-		String col1 = "0";
+		String col1 = "2";
 		String col2 = ruc.substring(0, ruc.length() - 2);
 		String dv = ruc.substring(ruc.length() - 1);
-		String col5 = "3";
+		String col5 = "0";
 		String nro = "0";
 		String fecha = misc.dateToString(ventas.get(0).getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
 		periodo = Utiles.getDateToString(ventas.get(0).getFecha(), "yyyyMM");
