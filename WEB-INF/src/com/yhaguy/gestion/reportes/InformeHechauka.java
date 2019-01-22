@@ -63,7 +63,7 @@ public class InformeHechauka {
 					double exenta = redondear(venta.getTotalExenta());
 					double importe = iva10 + gravada10 + iva5 + gravada5 + exenta;
 					long col14 = venta.isVentaContado() ? 1 : 2;
-					long col15 = 0;
+					long col15 = venta.isVentaContado() ? 0 : 1;
 					String col16 = venta.getTimbrado();
 					String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 							+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
@@ -106,7 +106,7 @@ public class InformeHechauka {
 					long col10 = 0;
 					long col11 = 0;
 					long col14 = 2;
-					long col15 = 0;
+					long col15 = 1;
 					String col16 = nc.getTimbrado() != null? nc.getTimbrado().getNumero() : "";
 					String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 							+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
@@ -136,7 +136,7 @@ public class InformeHechauka {
 		long col10 = 0;
 		long col11 = 0;
 		long col12 = 0;
-		long col14 = 2;
+		long col14 = 1;
 		long col15 = 0;
 		String col16 = "0";
 		String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
