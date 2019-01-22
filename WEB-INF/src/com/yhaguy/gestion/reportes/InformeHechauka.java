@@ -38,6 +38,10 @@ public class InformeHechauka {
 		double cons_gravada = 0;
 		double cons_iva10 = 0;
 		
+		double dip_gravada = 0;
+		double dip_iva10 = 0;
+		double dip_exenta = 0;
+		
 		for (Venta venta : ventas) {
 			
 			if (!venta.isAnulado()) {
@@ -48,6 +52,11 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(venta.getTotalIva10());
 					cons_gravada += redondear(venta.getTotalGravado10());
+				} else if (ruc.equals(Configuracion.RUC_DIPLOMATICOS)) {
+					rSocial = "AGENTES DIPLOMATICOS";
+					dip_gravada += redondear(venta.getTotalIva10());
+					dip_iva10 += redondear(venta.getTotalGravado10());
+					dip_exenta += redondear(venta.getTotalExenta());
 				} else {
 					String col1 = "2";
 					String col2 = ruc.substring(0, ruc.length() - 2);
@@ -91,6 +100,11 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(nc.getTotalIva10());
 					cons_gravada += redondear(nc.getTotalGravado10());
+				} else if (ruc.equals(Configuracion.RUC_DIPLOMATICOS)) {
+					rSocial = "AGENTES DIPLOMATICOS";
+					dip_gravada += redondear(nc.getTotalIva10());
+					dip_iva10 += redondear(nc.getTotalGravado10());
+					dip_exenta += redondear(nc.getTotalExenta());
 				} else {
 					String col1 = "2";
 					String col2 = ruc.substring(0, ruc.length() - 2);
@@ -151,6 +165,36 @@ public class InformeHechauka {
 		objects.add(object);
 		registros++;
 		montoTotal += (cons_gravada + cons_iva10);
+		
+		if ((dip_exenta + dip_gravada + dip_iva10) > 0) {
+			String _ruc = Configuracion.RUC_DIPLOMATICOS;
+			String _rSocial = "IMPORTE CONSOLIDADO";
+			String _col1 = "2";
+			String _col2 = _ruc.substring(0, ruc.length() - 2);
+			String _dv = _ruc.substring(ruc.length() - 1);
+			String _col5 = "0";
+			String _nro = "0";
+			String _fecha = misc.dateToString(ventas.get(0).getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
+			periodo = Utiles.getDateToString(ventas.get(0).getFecha(), "yyyyMM");
+			long _col10 = 0;
+			long _col11 = 0;
+			long _col12 = 0;
+			long _col14 = 1;
+			long _col15 = 0;
+			String _col16 = "0";
+			String _object = _col1 + " \t" + _col2 + " \t" + _dv + " \t" + _rSocial
+					+ " \t" + _col5 + " \t" + _nro + " \t" + _fecha + " \t"
+					+ FORMATTER.format(dip_gravada) + "" + " \t"
+					+ FORMATTER.format(dip_iva10) + "" + "\t"
+					+ FORMATTER.format(_col10) + "" + "\t"
+					+ FORMATTER.format(_col11) + "" + "\t"
+					+ FORMATTER.format(_col12) + "" + "\t"
+					+ FORMATTER.format(dip_gravada + dip_iva10 + dip_exenta) + "" + "\t" + _col14 + "" + "\t"
+					+ _col15 + "" + "\t" + _col16 + "" + "\r\n";
+			objects.add(_object);
+			registros++;
+			montoTotal += (dip_gravada + dip_iva10 + dip_exenta);
+		}
 		
 		String cabecera = Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? 
 				getCabeceraBaterias(registros, montoTotal, periodo) : getCabecera(registros, montoTotal, periodo);

@@ -195,6 +195,7 @@ public class Configuracion extends Config {
 
 	public static final String RUC_EMPRESA_LOCAL = "44444401-7";
 	public static final String RUC_EMPRESA_EXTERIOR = "99999901-0";
+	public static final String RUC_DIPLOMATICOS = "77777701-0";
 	
 	public static final String RUC_PY_AUTOPARTES = "80087516-8";
 	public static final String RUC_ICATURBO = "80001949-0";
