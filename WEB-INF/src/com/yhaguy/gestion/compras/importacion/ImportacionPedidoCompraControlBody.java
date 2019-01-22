@@ -280,6 +280,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.nvoGasto.setIdImportacion(this.dto.getId());
 		this.nvoGasto.setFechaCarga(new Date());
+		this.nvoGasto.setNumeroFactura(this.nvoGasto.getNumero());
 		for (GastoDetalle item : this.nvoGasto.getDetalles()) {
 			this.nvoGasto.setImporteGs(this.nvoGasto.getImporteGs() + item.getMontoGs());
 			this.nvoGasto.setImporteIva10(this.nvoGasto.getImporteIva10() + item.getMontoIva());
