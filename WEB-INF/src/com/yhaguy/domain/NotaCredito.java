@@ -167,7 +167,7 @@ public class NotaCredito extends Domain {
 	public double getTotalGravado10() {
 		if (this.isExenta()) return 0.0;
 		Misc misc = new Misc();	
-		return misc.calcularGravado(this.getImporteGs(), 10);
+		return Math.rint(misc.calcularGravado(this.getImporteGs(), 10) * 1) / 1;
 	}
 	
 	/**

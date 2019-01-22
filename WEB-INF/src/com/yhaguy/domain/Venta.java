@@ -253,6 +253,19 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return el total iva 5..
+	 */
+	public double getTotalIva5() {
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			if (item.isIva5()) {
+				out += Utiles.getIVA(item.getImporteGs(), 5);
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total gravado 10..
 	 */
 	public double getTotalGravado10() {
@@ -263,6 +276,19 @@ public class Venta extends Domain {
 			}
 		}
 		return out - Utiles.getIVA(out, 10);
+	}
+	
+	/**
+	 * @return el total gravado 5..
+	 */
+	public double getTotalGravado5() {
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			if (item.isIva5()) {
+				out += item.getImporteGs();
+			}
+		}
+		return out - Utiles.getIVA(out, 5);
 	}
 	
 	/**
