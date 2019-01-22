@@ -37,7 +37,6 @@ public class InformeHechauka {
 
 		double cons_gravada = 0;
 		double cons_iva10 = 0;
-		double cons_importe = 0;
 		
 		for (Venta venta : ventas) {
 			
@@ -49,7 +48,6 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(venta.getTotalIva10());
 					cons_gravada += redondear(venta.getTotalGravado10());
-					cons_importe += redondear(venta.getTotalImporteGs());
 				} else {
 					String col1 = "2";
 					String col2 = ruc.substring(0, ruc.length() - 2);
@@ -93,7 +91,6 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(nc.getTotalIva10());
 					cons_gravada += redondear(nc.getTotalGravado10());
-					cons_importe += (cons_iva10 + cons_gravada);
 				} else {
 					String col1 = "2";
 					String col2 = ruc.substring(0, ruc.length() - 2);
@@ -149,11 +146,11 @@ public class InformeHechauka {
 				+ FORMATTER.format(col10) + "" + "\t"
 				+ FORMATTER.format(col11) + "" + "\t"
 				+ FORMATTER.format(col12) + "" + "\t"
-				+ FORMATTER.format(cons_importe) + "" + "\t" + col14 + "" + "\t"
+				+ FORMATTER.format(cons_gravada + cons_iva10) + "" + "\t" + col14 + "" + "\t"
 				+ col15 + "" + "\t" + col16 + "" + "\r\n";
 		objects.add(object);
 		registros++;
-		montoTotal += cons_importe;
+		montoTotal += (cons_gravada + cons_iva10);
 		
 		String cabecera = Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? 
 				getCabeceraBaterias(registros, montoTotal, periodo) : getCabecera(registros, montoTotal, periodo);
