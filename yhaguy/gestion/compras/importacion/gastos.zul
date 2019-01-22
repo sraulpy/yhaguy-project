@@ -1,0 +1,200 @@
+<window closable="true" position="center" width="1200px" border="normal">
+	<caption>
+		<html>
+			<i class="fas fa-calculator" style="margin-left:5px; margin-right:5px"></i>
+		</html>
+		<label>Gastos de Despacho</label>
+	</caption>
+	<grid sclass="vgrid">
+			<rows>
+				<row>
+					<vlayout spacing="0">
+						<field value="Concepto" />
+						<combobox placeholder="Concepto.." hflex="true"
+							model="@load(vm.tiposMovimientoGastos)"
+							selectedItem="@bind(vm.nvoGasto.tipoMovimiento)"
+							onChange="@command('setCondicion')">
+							<template name="model">
+								<comboitem label="@load(each.descripcion.toUpperCase())" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Acreedor" />
+						<combobox placeholder="Acreedor.." hflex="true"
+							model="@load(vm.nvoGasto.acreedores)"
+							selectedItem="@bind(vm.nvoGasto.acreedor)"
+							instant="true">
+							<template name="model">
+								<comboitem label="@load(each)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Fecha" />
+						<datebox hflex="true"
+							value="@bind(vm.nvoGasto.fecha)"
+							instant="true"
+							onChange="@command('setVencimiento')"></datebox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Vencimiento" />
+						<datebox hflex="true"
+							value="@bind(vm.nvoGasto.vencimiento)"></datebox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Condición" />
+						<textbox hflex="true" value="@load(vm.nvoGasto.condicionPago.descripcion)"
+							readonly="true"></textbox>
+					</vlayout>
+				</row>
+				<row>					
+					<vlayout spacing="0">
+						<field value="Número" />
+						<textbox hflex="true" value="@bind(vm.nvoGasto.numero)"></textbox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Timbrado" />
+						<textbox hflex="true"
+							style="text-align:right"
+							placeholder="Nro. Timbrado.." 
+							value="@bind(vm.nvoGasto.timbrado)"/>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Moneda" />
+						<combobox model="@load(vm.monedas)" hflex="true"
+							selectedItem="@bind(vm.nvoGasto.moneda)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion.toUpperCase())"/>
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Tipo Cambio" />
+						<hlayout>
+							<guaranibox value="@bind(vm.nvoGasto.tipoCambio)" hflex="true"
+								readonly="true"></guaranibox>
+							<combobox hflex="true" model="@load(vm.nvoGasto.tiposCambio)"
+								selectedItem="@bind(vm.nvoGasto.tipoCambio_)"
+								value="@load(vm.nvoGasto.tipoCambio_)"
+								instant="true"
+								onSelect="@command('setTipoCambio')">
+								<template name="model">
+									<comboitem label="@load(each)"></comboitem>
+								</template>
+							</combobox>
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Proveedor" />
+						<bandbox id="bdx_prov" hflex="true"
+							value="@load(vm.nvoGasto.proveedor.razonSocial)"
+							readonly="true" onOpen="tx_prov.focus()">
+							<bandpopup>
+								<listbox sclass="small-list" width="350px" height="350px"
+									model="@load(vm.proveedores)"
+									selectedItem="@bind(vm.nvoGasto.proveedor)"
+									onSelect='bdx_prov.close()'>
+									<listhead>
+										<listheader>
+											<textbox id="tx_prov" hflex="true" placeholder="Razón Social.."
+												value="@bind(vm.filterRazonSocial)" instant="true"></textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.razonSocial)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+					</vlayout>
+				</row>
+			</rows>
+		</grid>
+		<div height="350px" style="margin-top:10px">
+		<solicitarCabecera visible="@load(!vm.detalleVisible)">
+			<vbox pack="center" align="center" vflex="true" hflex="true">
+				<a  iconSclass="z-icon-arrow-up"
+					style="font-size:16px; color:#428bca; cursor:default; text-decoration:none">
+					Ingrese los datos de cabecera
+				</a>
+			</vbox>
+		</solicitarCabecera>
+		<listbox sclass="small-list" 
+			model="@load(vm.nvoGasto.detalles)" visible="@load(vm.detalleVisible)" vflex="true"
+			emptyMessage="SIN DETALLES..">
+			<listhead>
+				<listheader label="Cuenta"></listheader>
+				<listheader label="Importe Gs." width="110px" align="right"></listheader>
+				<listheader label="Importe U$D" width="110px" align="right" visible="@load(vm.nvoGasto.moneda.sigla ne 'Gs.')"></listheader>
+				<listheader label="Iva" width="100px"></listheader>
+				<listheader width="50px" align="center"></listheader>
+			</listhead>
+			<auxhead>
+				<auxheader>
+					<combobox placeholder="Cuenta.." hflex="true"
+						model="@load(vm.cuentasGastos)"
+						selectedItem="@bind(vm.nvoGastoDetalle.articuloGasto)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+				</auxheader>
+				<auxheader>
+					<guaranibox value="@bind(vm.nvoGastoDetalle.montoGs)" hflex="true" 
+						onChange="@command('dolarizarGastoDetalle')" />
+				</auxheader>
+				<auxheader>
+					<dolarbox value="@bind(vm.nvoGastoDetalle.montoDs)" hflex="true" 
+						onChange="@command('guaranizarGastoDetalle')" />
+				</auxheader>
+				<auxheader>
+					<combobox placeholder="Iva.." hflex="true"
+						model="@load(vm.tiposIva)"
+						selectedItem="@bind(vm.nvoGastoDetalle.tipoIva)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>	
+					</combobox>
+				</auxheader>
+				<auxheader>
+					<button iconSclass="z-icon-plus" onClick="@command('addGastoDetalle')"
+						disabled="@load(vm.itemDisabled)"></button>
+				</auxheader>
+			</auxhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articuloGasto.descripcion)"></listcell>
+					<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"></listcell>
+					<listcell label="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)"></listcell>
+					<listcell label="@load(each.tipoIva.descripcion)"></listcell>
+					<listcell>
+						<a iconSclass="z-icon-times" onClick="@command('deleteGastoDetalle', item=each)" />
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter>
+					<field value="ítems" />
+				</listfooter>
+				<listfooter>
+					<doublebox value="@load(vm.nvoGasto.importeGs_)" readonly="true" format="###,###,###,##0" hflex="true"
+						style="font-weight:bold;text-align:right"></doublebox>
+				</listfooter>
+				<listfooter>
+					<doublebox value="@load(vm.nvoGasto.importeDs_)" readonly="true" format="###,###,##0.00" hflex="true"
+						style="font-weight:bold;text-align:right"></doublebox>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		</div>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addGasto')"
+				disabled="@load(!vm.gastoEnabled)"></button>
+		</hbox>
+</window>
