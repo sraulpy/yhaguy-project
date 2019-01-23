@@ -122,6 +122,13 @@ public class Venta extends Domain {
 
 	private Set<VentaDetalle> detalles = new HashSet<VentaDetalle>();
 	
+	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
+	}
+	
 	@DependsOn("detalles")
 	public double getImporteGs() {
 		double out = 0;
