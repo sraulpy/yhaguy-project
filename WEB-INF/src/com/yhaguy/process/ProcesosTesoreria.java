@@ -33,7 +33,6 @@ import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Venta;
-import com.yhaguy.gestion.empresa.ctacte.visor.VisorCtaCteViewModel.DetalleMovimiento;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("unchecked")
@@ -1021,7 +1020,7 @@ public class ProcesosTesoreria {
 				}
 				List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(vta.getId());
 				for (NotaCredito ncr : ncrs_) {
-					if (!nc.isAnulado()) {
+					if (!ncr.isAnulado()) {
 						ncrs += ncr.getImporteGs();
 					}				
 				}
@@ -1038,6 +1037,46 @@ public class ProcesosTesoreria {
 					System.out.println("----------------------------------------------------");
 				}
 			}
+		}
+	}
+	
+	/**
+	 * depura los saldos por nota de credito..
+	 */
+	public static void depurarSaldosVentaCredito(Date desde, Date hasta) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Venta> vtas = rr.getVentasCredito(desde, hasta, 0);
+		for (Venta vta : vtas) {
+			if (vta.isMonedaLocal()) {
+				double recs = 0;
+				double ncrs = 0;
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla(), vta.getCliente().getIdEmpresa());
+				List<Object[]> recs_ = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+				for (Object[] rec : recs_) {
+					ReciboDetalle rdet = (ReciboDetalle) rec[1];
+					recs += rdet.getMontoGs();
+				}
+				List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(vta.getId());
+				for (NotaCredito ncr : ncrs_) {
+					if (!ncr.isAnulado()) {
+						ncrs += ncr.getImporteGs();
+					}				
+				}
+				if (ctacte != null && ctacte.getSaldo() > 0) {
+					String ctct = Utiles.getNumberFormat(ctacte.getSaldo());
+					String hist = Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs));
+					if (!ctct.equals(hist)) {
+						System.out.println();
+						System.out.println("-------- FAC.NRO: " + vta.getNumero() + " - " + vta.getCliente().getRazonSocial() + " -------------");
+						System.out.println("VENTA: " + Utiles.getNumberFormat(vta.getTotalImporteGs()) );
+						System.out.println("N.CRE: " + Utiles.getNumberFormat(ncrs));
+						System.out.println("RECIB: " + Utiles.getNumberFormat(recs));
+						System.out.println("CT.CT: " + Utiles.getNumberFormat(ctacte.getSaldo()));
+						System.out.println("V-N-R: " + Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs)));
+						System.out.println("----------------------------------------------------");
+					}				
+				}
+			}		
 		}
 	}
 	
@@ -1076,7 +1115,8 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.setOrigenGastos();
 			//ProcesosTesoreria.setDatosClientes();
 			//ProcesosTesoreria.setFechaDescuentoChequesTerceros();
-			ProcesosTesoreria.depurarSaldosPorNotaCredito();
+			//ProcesosTesoreria.depurarSaldosPorNotaCredito();
+			ProcesosTesoreria.depurarSaldosVentaCredito(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

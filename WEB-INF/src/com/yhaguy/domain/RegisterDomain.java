@@ -5415,6 +5415,20 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el movimiento de cta cte a partir del id del movimiento.
+	 */
+	public CtaCteEmpresaMovimiento getCtaCteMovimientoByIdMovimiento(
+			long idMovimiento, String siglaTm, long idEmpresa) throws Exception {
+		String query = "select c from CtaCteEmpresaMovimiento c where c.idMovimientoOriginal = "
+				+ idMovimiento
+				+ " and c.tipoMovimiento.sigla = '"
+				+ siglaTm
+				+ "' and c.idEmpresa = " + idEmpresa;
+		List<CtaCteEmpresaMovimiento> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
 	 * @return los movimientos de cta cte a partir del id del movimiento.
 	 */
 	public List<CtaCteEmpresaMovimiento> getCtaCteMovimientosByIdMovimiento(
@@ -9170,7 +9184,7 @@ public class RegisterDomain extends Register {
 				nc.setDeposito(nc.getVentaAplicada().getDeposito());
 				rr.saveObject(nc, nc.getUsuarioMod());
 				System.out.println(nc.getNumero() + " - " + nc.getVentaAplicada().getDeposito().getDescripcion());
-			}
+			}			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
