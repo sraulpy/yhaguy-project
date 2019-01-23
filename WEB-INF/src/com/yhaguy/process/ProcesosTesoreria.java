@@ -1158,9 +1158,9 @@ public class ProcesosTesoreria {
 				}
 				if (ctacte != null) {
 					double hist_ = (vta.getTotalImporteGs() - (ncrs + recs));
-					// String ctct = Utiles.getNumberFormat(ctacte.getSaldo());
-					// String hist = Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs));
 					if (hist_ < 0) {
+						ctacte.setSaldo(hist_);
+						rr.saveObject(ctacte, ctacte.getUsuarioMod());
 						System.out.println();
 						System.out.println("-------- FAC.NRO: " + vta.getNumero() + " - " + vta.getCliente().getRazonSocial() + " -------------");
 						System.out.println("VENTA: " + Utiles.getNumberFormat(vta.getTotalImporteGs()) );
