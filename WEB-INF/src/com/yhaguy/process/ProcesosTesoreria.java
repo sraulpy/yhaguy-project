@@ -1043,6 +1043,46 @@ public class ProcesosTesoreria {
 	/**
 	 * depura los saldos por nota de credito..
 	 */
+	public static void depurarSaldosNotaCredito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<NotaCredito> ncs = rr.getObjects(NotaCredito.class.getName());
+		for (NotaCredito nc : ncs) {
+			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
+				Venta vta = nc.getVentaAplicada();
+				CtaCteEmpresaMovimiento ctacteVta = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
+				CtaCteEmpresaMovimiento ctacteNcr = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla());
+				
+				if (ctacteNcr != null && ctacteNcr.getSaldo() > 0) {
+					double saldoVta = ctacteVta!= null ? ctacteVta.getSaldo() : 0.0;
+					System.out.println();
+					System.out.println("-------- N.C.: " + nc.getNumero() + " - " + nc.getCliente().getRazonSocial() + " -------------");
+					System.out.println("CT.CT.VTA: " + Utiles.getNumberFormat(saldoVta));
+					System.out.println("CT.CT.NCR: " + Utiles.getNumberFormat(ctacteNcr.getSaldo()));
+					System.out.println("----------------------------------------------------");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * depura los saldos por nota de credito..
+	 */
+	public static void depurarSaldosNotaCreditoExtracto() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<NotaCredito> ncs = rr.getObjects(NotaCredito.class.getName());
+		for (NotaCredito nc : ncs) {
+			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla(), nc.getCliente().getIdEmpresa());				
+				if (ctacte == null) {
+					System.out.println(nc.getNumero() + " - " + nc.getCliente().getRazonSocial());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * depura los saldos por nota de credito..
+	 */
 	public static void depurarSaldosVentaCredito(Date desde, Date hasta) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Venta> vtas = rr.getVentasCredito(desde, hasta, 0);
@@ -1066,6 +1106,47 @@ public class ProcesosTesoreria {
 					String ctct = Utiles.getNumberFormat(ctacte.getSaldo());
 					String hist = Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs));
 					if (!ctct.equals(hist)) {
+						System.out.println();
+						System.out.println("-------- FAC.NRO: " + vta.getNumero() + " - " + vta.getCliente().getRazonSocial() + " -------------");
+						System.out.println("VENTA: " + Utiles.getNumberFormat(vta.getTotalImporteGs()) );
+						System.out.println("N.CRE: " + Utiles.getNumberFormat(ncrs));
+						System.out.println("RECIB: " + Utiles.getNumberFormat(recs));
+						System.out.println("CT.CT: " + Utiles.getNumberFormat(ctacte.getSaldo()));
+						System.out.println("V-N-R: " + Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs)));
+						System.out.println("----------------------------------------------------");
+					}				
+				}
+			}		
+		}
+	}
+	
+	/**
+	 * depura los saldos por nota de credito..
+	 */
+	public static void depurarSaldosVentaCreditonNegativo(Date desde, Date hasta) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Venta> vtas = rr.getVentasCredito(desde, hasta, 0);
+		for (Venta vta : vtas) {
+			if (vta.isMonedaLocal()) {
+				double recs = 0;
+				double ncrs = 0;
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla(), vta.getCliente().getIdEmpresa());
+				List<Object[]> recs_ = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+				for (Object[] rec : recs_) {
+					ReciboDetalle rdet = (ReciboDetalle) rec[1];
+					recs += rdet.getMontoGs();
+				}
+				List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(vta.getId());
+				for (NotaCredito ncr : ncrs_) {
+					if (!ncr.isAnulado()) {
+						ncrs += ncr.getImporteGs();
+					}				
+				}
+				if (ctacte != null && ctacte.getSaldo() > 0) {
+					double hist_ = (vta.getTotalImporteGs() - (ncrs + recs));
+					// String ctct = Utiles.getNumberFormat(ctacte.getSaldo());
+					// String hist = Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs));
+					if (hist_ < 0) {
 						System.out.println();
 						System.out.println("-------- FAC.NRO: " + vta.getNumero() + " - " + vta.getCliente().getRazonSocial() + " -------------");
 						System.out.println("VENTA: " + Utiles.getNumberFormat(vta.getTotalImporteGs()) );
@@ -1116,7 +1197,10 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.setDatosClientes();
 			//ProcesosTesoreria.setFechaDescuentoChequesTerceros();
 			//ProcesosTesoreria.depurarSaldosPorNotaCredito();
-			ProcesosTesoreria.depurarSaldosVentaCredito(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
+			//ProcesosTesoreria.depurarSaldosVentaCredito(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
+			//ProcesosTesoreria.depurarSaldosNotaCredito();
+			//ProcesosTesoreria.depurarSaldosVentaCreditonNegativo(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
+			ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
