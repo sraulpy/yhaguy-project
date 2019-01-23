@@ -33,6 +33,7 @@ import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.gestion.empresa.ctacte.visor.VisorCtaCteViewModel.DetalleMovimiento;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("unchecked")
@@ -1001,6 +1002,45 @@ public class ProcesosTesoreria {
 	
 	}
 	
+	/**
+	 * depura los saldos por nota de credito..
+	 */
+	public static void depurarSaldosPorNotaCredito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<NotaCredito> ncs = rr.getObjects(NotaCredito.class.getName());
+		for (NotaCredito nc : ncs) {
+			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
+				double recs = 0;
+				double ncrs = 0;
+				Venta vta = nc.getVentaAplicada();
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
+				List<Object[]> recs_ = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+				for (Object[] rec : recs_) {
+					ReciboDetalle rdet = (ReciboDetalle) rec[1];
+					recs += rdet.getMontoGs();
+				}
+				List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(vta.getId());
+				for (NotaCredito ncr : ncrs_) {
+					if (!nc.isAnulado()) {
+						ncrs += ncr.getImporteGs();
+					}				
+				}
+				if (ctacte != null && ctacte.getSaldo() > 0) {
+					ctacte.setSaldo(vta.getTotalImporteGs() - (ncrs + recs));
+					rr.saveObject(ctacte, ctacte.getUsuarioMod());
+					System.out.println();
+					System.out.println("-------- N.C.: " + nc.getNumero() + " - " + nc.getCliente().getRazonSocial() + " -------------");
+					System.out.println("VENTA: " + Utiles.getNumberFormat(vta.getTotalImporteGs()) );
+					System.out.println("N.CRE: " + Utiles.getNumberFormat(ncrs));
+					System.out.println("RECIB: " + Utiles.getNumberFormat(recs));
+					System.out.println("CT.CT: " + Utiles.getNumberFormat(ctacte.getSaldo()));
+					System.out.println("V-N-R: " + Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs)));
+					System.out.println("----------------------------------------------------");
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1030,12 +1070,13 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.setOrigenRecaudacionCentral();
 			//ProcesosTesoreria.setEmisionChequesTerceros();
 			//ProcesosTesoreria.poblarCtaCteSaldos2017();
-			ProcesosTesoreria.setRubroFuncionarioClientes();
+			//ProcesosTesoreria.setRubroFuncionarioClientes();
 			//ProcesosTesoreria.verificarRecibosAnulados();
 			//ProcesosTesoreria.setCtaCteNumeroImportacion();
 			//ProcesosTesoreria.setOrigenGastos();
 			//ProcesosTesoreria.setDatosClientes();
 			//ProcesosTesoreria.setFechaDescuentoChequesTerceros();
+			ProcesosTesoreria.depurarSaldosPorNotaCredito();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
