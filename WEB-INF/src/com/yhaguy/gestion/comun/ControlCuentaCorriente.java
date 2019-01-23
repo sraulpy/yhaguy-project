@@ -12,12 +12,14 @@ import com.yhaguy.domain.BancoPrestamo;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RecaudacionCentral;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
+import com.yhaguy.domain.Venta;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.notacredito.NotaCreditoDTO;
 import com.yhaguy.gestion.notadebito.NotaDebitoDTO;
@@ -93,6 +95,44 @@ public class ControlCuentaCorriente {
 		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
 		
 		double saldo = ctmVenta.getSaldo() - (dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());
+		
+		if (saldo <= 0) {
+			ctmVenta.setSaldo(0);
+			ctm.setSaldo(saldo);
+		} else {
+			ctmVenta.setSaldo(saldo);
+			ctm.setSaldo(0);
+		}
+		
+		rr.saveObject(ctmVenta, user);
+		rr.saveObject(ctm, user);
+	}
+	
+	/**
+	 * agregar movimiento nota credito venta..
+	 */
+	public static void addNotaCreditoVenta(NotaCredito nc, String user) 
+			throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta vta = nc.getVentaAplicada();
+		TipoMovimiento tm = vta.getTipoMovimiento();
+		
+		CtaCteEmpresaMovimiento ctmVenta = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), tm.getSigla());
+		
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+		ctm.setFechaEmision(nc.getFechaEmision());
+		ctm.setFechaVencimiento(nc.getFechaEmision());
+		ctm.setIdEmpresa(nc.getCliente().getIdEmpresa());
+		ctm.setIdMovimientoOriginal(nc.getId());
+		ctm.setIdVendedor(nc.getVendedor().getId());
+		ctm.setImporteOriginal(nc.isMonedaLocal() ? nc.getImporteGs() : nc.getImporteDs());
+		ctm.setMoneda(nc.getMoneda());
+		ctm.setNroComprobante(nc.getNumero());
+		ctm.setSucursal(nc.getSucursal());
+		
+		double saldo = ctmVenta.getSaldo() - (nc.isMonedaLocal() ? nc.getImporteGs() : nc.getImporteDs());
 		
 		if (saldo <= 0) {
 			ctmVenta.setSaldo(0);

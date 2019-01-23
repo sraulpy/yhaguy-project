@@ -1074,6 +1074,20 @@ public class ProcesosTesoreria {
 			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
 				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla(), nc.getCliente().getIdEmpresa());				
 				if (ctacte == null) {
+					CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+					ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
+					ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+					ctm.setFechaEmision(nc.getFechaEmision());
+					ctm.setFechaVencimiento(nc.getFechaEmision());
+					ctm.setIdEmpresa(nc.getCliente().getIdEmpresa());
+					ctm.setIdMovimientoOriginal(nc.getId());
+					ctm.setIdVendedor(nc.getVendedor().getId());
+					ctm.setImporteOriginal(nc.isMonedaLocal() ? nc.getImporteGs() : nc.getImporteDs());
+					ctm.setSaldo(0);
+					ctm.setMoneda(nc.getMoneda());
+					ctm.setNroComprobante(nc.getNumero());
+					ctm.setSucursal(nc.getSucursal());
+					rr.saveObject(ctm, "sys");
 					System.out.println(nc.getNumero() + " - " + nc.getCliente().getRazonSocial());
 				}
 			}
@@ -1142,7 +1156,7 @@ public class ProcesosTesoreria {
 						ncrs += ncr.getImporteGs();
 					}				
 				}
-				if (ctacte != null && ctacte.getSaldo() > 0) {
+				if (ctacte != null) {
 					double hist_ = (vta.getTotalImporteGs() - (ncrs + recs));
 					// String ctct = Utiles.getNumberFormat(ctacte.getSaldo());
 					// String hist = Utiles.getNumberFormat(vta.getTotalImporteGs() - (ncrs + recs));

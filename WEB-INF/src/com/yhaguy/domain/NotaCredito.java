@@ -75,6 +75,13 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
+	}
+	
+	/**
 	 * @return el importe segun familias..
 	 */
 	public double getImporteGs(List<ArticuloFamilia> familias) {
