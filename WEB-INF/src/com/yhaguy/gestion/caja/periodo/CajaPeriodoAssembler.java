@@ -433,7 +433,7 @@ public class CajaPeriodoAssembler extends Assembler {
 			}
 		}		
 		
-		if (notaCredito.esNuevo() == false) {
+		if (notaCredito.esNuevo() == false && (!notaCredito.isNotaCreditoVentaContado())) {
 			this.actualizarCtaCteNotaCredito(notaCredito);
 		}
 	}
