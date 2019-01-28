@@ -1406,6 +1406,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_VENDEDOR_CLIENTE_ARTICULO_VOLUMEN = "VEN-00040";
 		static final String VENTAS_PROMO_COMPRA_VALVOLINE = "VEN-00041";
 		static final String VENTAS_LITRAJE = "VEN-00042";
+		static final String VENTAS_LISTA_PRECIO_DEPOSITO = "VEN-00043";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1583,6 +1584,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_LITRAJE:
 				this.ventasLitraje(mobile);
+				break;
+				
+			case VENTAS_LISTA_PRECIO_DEPOSITO:
+				this.listaPrecioPorDeposito(mobile);
 				break;
 			}
 		}
@@ -5347,6 +5352,63 @@ public class ReportesViewModel extends SimpleViewModel {
 				JRDataSource dataSource = new LitrajeArticulos(list);
 				imprimirJasper(source, params, dataSource, formato);
 				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00043
+		 */
+		private void listaPrecioPorDeposito(boolean mobile) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			try {
+				Proveedor proveedor = filtro.getProveedorExterior();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				ArticuloMarca marca = filtro.getMarca_();
+				boolean stock = filtro.isFraccionado();
+				
+				long idProveedor = proveedor != null ? proveedor.getId() : 0;
+				long idFamilia = flia != null ? flia.getId() : 0;
+				long idMarca = marca != null ? marca.getId() : 0;
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+
+				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
+				for (Object[] art : arts) {					
+					if (stock) {	
+						long min = art[6] != null ? (long) art[6] : (long) 0;
+						long may = art[7] != null ? (long) art[7] : (long) 0;
+						long mcl = art[8] != null ? (long) art[8] : (long) 0;
+						if (min > 0 || may > 0 || mcl > 0) {
+							data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
+						}
+					} else {
+						data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
+					}					
+				}
+				
+				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
+				
+				ReporteListaPrecioPorDeposito rep = new ReporteListaPrecioPorDeposito(proveedor_);
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -20726,6 +20788,63 @@ class ReportePromoValvoline extends ReporteYhaguy {
 						m.dateToString(this.desde, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta",
 						m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * VEN-00042..
+ */
+class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private String proveedor;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
+	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
+	static DatosColumnas col5 = new DatosColumnas("Mcl.", TIPO_LONG, 15);
+	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
+	static DatosColumnas col7 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 20);
+	static DatosColumnas col8 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 20);
+
+	public ReporteListaPrecioPorDeposito(String proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Lista de precios por depósito");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Precios-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

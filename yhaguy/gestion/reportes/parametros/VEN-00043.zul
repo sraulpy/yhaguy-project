@@ -1,0 +1,64 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedorExterior.razonSocial)"
+				id="bndProv_"
+				onOpen="tx_filter.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedoresExterior)"
+						selectedItem="@bind(vm.dato.filtro.proveedorExterior)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<textbox id="tx_filter" hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedorExterior)"
+										instant="true" placeholder="Buscar.." 
+										style="background-image:url('./core/css/filter.png'); background-repeat:
+												no-repeat; background-position: 98%; background-size: 10px;"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Marca:" />
+			<combobox model="@load(vm.dato.filtro.marcas_)"
+				placeholder="TODOS.."
+				selectedItem="@bind(vm.dato.filtro.marca_)"
+				instant="true" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)"></comboitem>
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Familia:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.familias_)"
+				placeholder="TODOS.."
+				selectedItem="@bind(vm.dato.filtro.familia_)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Con Stock:" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
+		</row>
+	</rows>
+</grid>
