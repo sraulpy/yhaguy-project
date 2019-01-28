@@ -42,6 +42,13 @@ public class NotaCreditoDetalle extends Domain{
 	}
 	
 	/**
+	 * @return true si es exenta..
+	 */
+	public boolean isExenta() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_EXENTO);
+	}
+	
+	/**
 	 * @return true si corresponde a flia articulo..
 	 */
 	public boolean isFamilia(long idFamilia) {
@@ -75,6 +82,9 @@ public class NotaCreditoDetalle extends Domain{
 	 * @return el importe sin iva..
 	 */
 	public double getImporteGsSinIva() {
+		if (this.isExenta()) {
+			return this.importeGs;
+		}
 		Misc misc = new Misc();
 		double iva = misc.calcularIVA(this.importeGs, 10);
 		return this.importeGs - iva;

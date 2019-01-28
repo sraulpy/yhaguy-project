@@ -130,6 +130,9 @@ public class VentaDetalle extends Domain {
 	 * @return el precio sin iva..
 	 */
 	public double getPrecioGsSinIva() {
+		if (this.isExenta()) {
+			return this.precioGs;
+		}
 		Misc misc = new Misc();
 		double iva = misc.calcularIVA(this.precioGs, 10);
 		return this.precioGs - iva;
@@ -148,7 +151,7 @@ public class VentaDetalle extends Domain {
 	 * @return el importe sin iva..
 	 */
 	public double getImporteGsSinIva() {
-		return (this.getPrecioGsSinIva() * this.cantidad);
+		return (this.getPrecioGsSinIva() * this.cantidad) - this.getDescuentoUnitarioGsSinIva();
 	}
 	
 	/**

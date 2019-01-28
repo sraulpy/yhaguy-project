@@ -4410,6 +4410,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte VEN-00033
 		 */
+		@SuppressWarnings("unchecked")
 		private void ventasPorFamilia(boolean mobile) {
 			try {				
 				Date desde = filtro.getFechaDesde();
@@ -4423,32 +4424,30 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Double> acum_costo = new HashMap<String, Double>();
 				List<Object[]> data = new ArrayList<Object[]>();
 				
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<ArticuloFamilia> flias = rr.getObjects(ArticuloFamilia.class.getName());
+				
 				if (desde == null)
 					desde = new Date();
 
 				if (hasta == null)
 					hasta = new Date();
-
-				RegisterDomain rr = RegisterDomain.getInstance();
 				
-				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente, idSucursal);
+				List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal);
 				for (Venta venta : ventas) {
 					if (!venta.isAnulado()) {
-						for (VentaDetalle item : venta.getDetalles()) {
-							ArticuloFamilia flia = item.getArticulo().getFamilia();
-							if (flia != null) {
-								String desc = flia.getDescripcion();
-								Double total = acum.get(desc);
-								Double total_costo = acum_costo.get(desc);
-								if (total != null) {
-									total += Utiles.getRedondeo(item.getImporteGsSinIva());
-									total_costo += Utiles.getRedondeo(item.getCostoTotalGs());
-									acum.put(desc, total);
-									acum_costo.put(desc, total_costo);
-								} else {
-									acum.put(desc, Utiles.getRedondeo(item.getImporteGs()));
-									acum_costo.put(desc, Utiles.getRedondeo(item.getCostoTotalGs()));
-								}
+						for (ArticuloFamilia flia : flias) {
+							String desc = flia.getDescripcion();
+							Double total = acum.get(desc);
+							Double total_costo = acum_costo.get(desc);
+							if (total != null) {
+								total += Utiles.getRedondeo(venta.getImporteGsByFamiliaSinIva(flia.getId()));
+								total_costo += Utiles.getRedondeo(venta.getCostoGsByFamilia(flia.getId()));
+								acum.put(desc, total);
+								acum_costo.put(desc, total_costo);
+							} else {
+								acum.put(desc, Utiles.getRedondeo(venta.getImporteGsByFamilia(flia.getId())));
+								acum_costo.put(desc, Utiles.getRedondeo(venta.getCostoGsByFamilia(flia.getId())));
 							}
 						}
 					}
@@ -4457,21 +4456,18 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idSucursal, "");
 				for (NotaCredito nc : ncs) {
 					if (!nc.isAnulado()) {
-						for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
-							ArticuloFamilia flia = item.getArticulo().getFamilia();
-							if (flia != null) {
-								String desc = flia.getDescripcion();
-								Double total = acum.get(desc);
-								Double total_costo = acum_costo.get(desc);
-								if (total != null) {
-									total -= Utiles.getRedondeo(item.getImporteGsSinIva());
-									total_costo -= Utiles.getRedondeo(item.getCostoTotalGsSinIva());
-									acum.put(desc, total);
-									acum_costo.put(desc, total_costo);
-								} else {
-									acum.put(desc, Utiles.getRedondeo(item.getImporteGsSinIva()) * -1);
-									acum_costo.put(desc, Utiles.getRedondeo(item.getCostoTotalGsSinIva()) * -1);
-								}
+						for (ArticuloFamilia flia : flias) {
+							String desc = flia.getDescripcion();
+							Double total = acum.get(desc);
+							Double total_costo = acum_costo.get(desc);
+							if (total != null) {
+								total -= Utiles.getRedondeo(nc.getImporteGsByFamiliaSinIva(flia.getId()));
+								total_costo -= Utiles.getRedondeo(nc.getCostoGsByFamilia(flia.getId()));
+								acum.put(desc, total);
+								acum_costo.put(desc, total_costo);
+							} else {
+								acum.put(desc, Utiles.getRedondeo(nc.getImporteGsByFamiliaSinIva(flia.getId())) * -1);
+								acum_costo.put(desc, Utiles.getRedondeo(nc.getCostoGsByFamilia(flia.getId())) * -1);
 							}
 						}
 					}				
@@ -9715,8 +9711,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 
-				double totalSinIva = totalImporte
-						- m.calcularIVA(totalImporte, 10);
+				double totalSinIva = totalImporte - m.calcularIVA(totalImporte, 10);
 				String sucursal = suc == null ? "TODOS.." : suc.getDescripcion().toUpperCase();
 				String familias_ = "TODOS..";
 				if (familias.size() > 0) {

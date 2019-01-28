@@ -109,6 +109,19 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return importe segun familia..
+	 */
+	public double getImporteGsByFamiliaSinIva(long idFamilia) {
+		double out = 0;
+		for (NotaCreditoDetalle det : this.getDetallesArticulos()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getImporteGsSinIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el costo segun familias..
 	 */
 	public double getCostoGs(List<ArticuloFamilia> familias) {

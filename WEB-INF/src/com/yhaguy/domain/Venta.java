@@ -166,6 +166,19 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return importe segun familia..
+	 */
+	public double getImporteGsByFamiliaSinIva(long idFamilia) {
+		double out = 0;
+		for (VentaDetalle det : this.getDetalles()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getImporteGsSinIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el importe segun familias..
 	 */
 	public double getTotalCostoGs(List<ArticuloFamilia> familias) {
