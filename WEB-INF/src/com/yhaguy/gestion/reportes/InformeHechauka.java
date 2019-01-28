@@ -226,7 +226,7 @@ public class InformeHechauka {
 				ruc = Configuracion.RUC_EMPRESA_LOCAL;
 			}
 
-			String col1 = "1";
+			String col1 = "2";
 			String col2 = ruc.substring(0, ruc.length() - 2);
 			String dv = ruc.substring(ruc.length() - 1);
 			String rSocial = compra.getProveedor().getRazonSocial();
@@ -256,8 +256,9 @@ public class InformeHechauka {
 		for (Gasto gasto : gastos) {
 			
 			String ruc = gasto.getProveedor().getRuc();		
+			String rSocial = gasto.getProveedor().getRazonSocial();
 			
-			if (!ruc.equals("80029222-7")) {				
+			if (!ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS) && !ruc.equals(Proveedor.RUC_MOPC) && !rSocial.equals(Proveedor.RS_PASAJES)) {				
 				if (ruc.isEmpty()) {
 					ruc = Configuracion.RUC_EMPRESA_LOCAL;
 				}
@@ -265,7 +266,6 @@ public class InformeHechauka {
 				String col1 = "2";
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
-				String rSocial = gasto.getProveedor().getRazonSocial();
 				String timbrado = gasto.getTimbrado();
 				String col5 = "1";
 				String nro = gasto.getNumeroFactura();
@@ -311,8 +311,8 @@ public class InformeHechauka {
 				double gravada5 = redondear(gasto.getGravada5());
 				double iva5 = redondear(gasto.getIva5());
 				double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
-				long col14 = gasto.isContado() ? 1 : 2;
-				long col15 = gasto.isContado() ? 0 : 1;
+				long col14 = 2;
+				long col15 = 1;
 				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
