@@ -12,6 +12,7 @@ import com.yhaguy.domain.BancoPrestamo;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RecaudacionCentral;
 import com.yhaguy.domain.Recibo;
@@ -461,5 +462,27 @@ public class ControlCuentaCorriente {
 			cli.setVentaCredito(false);
 			rr.saveObject(cli, user);
 		}
+	}
+	
+	/**
+	 * agregar movimiento gasto..
+	 */
+	public static void addGastoImportacion(Gasto gasto, String nroImportacion, long idEmpresa, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(gasto.getTipoMovimiento());
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+		ctm.setFechaEmision(gasto.getFecha());
+		ctm.setFechaVencimiento(gasto.getVencimiento());
+		ctm.setIdEmpresa(idEmpresa);
+		ctm.setIdMovimientoOriginal(gasto.getId());
+		ctm.setIdVendedor(0);
+		ctm.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+		ctm.setMoneda(gasto.getMoneda());
+		ctm.setNroComprobante(gasto.getNumeroFactura());
+		ctm.setSucursal(gasto.getSucursal());
+		ctm.setSaldo(ctm.getImporteOriginal());
+		ctm.setNumeroImportacion(nroImportacion);
+		rr.saveObject(ctm, user);	
 	}
 }

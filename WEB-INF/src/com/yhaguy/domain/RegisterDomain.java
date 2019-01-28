@@ -7854,6 +7854,25 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las importaciones segun fecha
+	 */
+	public List<Object[]> getImportaciones_(String proveedor, String numero, String factura) 
+			throws Exception {
+
+		String query = "select i from ImportacionPedidoCompra i where i.dbEstado != 'D' and i.proveedor.id = ?"
+				+ " and i.fechaCreacion between ? and ?";
+		query += " order by i.numeroPedidoCompra";
+
+		List<Object> listParams = new ArrayList<Object>();
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}		
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return las empresas
 	 */
 	public List<Empresa> getEmpresas() throws Exception {

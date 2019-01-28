@@ -38,6 +38,10 @@ public class ImportacionPedidoCompra extends Domain {
 	private boolean subDiarioConfirmado;
 	private boolean cifProrrateado;	
 	private boolean recepcionHabilitada;
+	
+	private boolean conteo1;
+	private boolean conteo2;
+	private boolean conteo3;
 
 	private CondicionPago proveedorCondicionPago;
 	private Tipo estado;
@@ -342,5 +346,29 @@ public class ImportacionPedidoCompra extends Domain {
 
 	public void setRecepcionHabilitada(boolean recepcionHabilitada) {
 		this.recepcionHabilitada = recepcionHabilitada;
+	}
+
+	public boolean isConteo1() {
+		return conteo1;
+	}
+
+	public void setConteo1(boolean conteo1) {
+		this.conteo1 = conteo1;
+	}
+
+	public boolean isConteo2() {
+		return conteo2;
+	}
+
+	public void setConteo2(boolean conteo2) {
+		this.conteo2 = conteo2;
+	}
+
+	public boolean isConteo3() {
+		return conteo3;
+	}
+
+	public void setConteo3(boolean conteo3) {
+		this.conteo3 = conteo3;
 	}
 }

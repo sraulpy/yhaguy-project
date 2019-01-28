@@ -32,6 +32,7 @@
 
 		<menu label="Abastecimiento" iconSclass="z-icon-shopping-cart">
 			<menupopup sclass="rounded">
+				<zk forEach="${vm.menuItem(self,'Articulo')}" />
 				<zk forEach="${vm.menuItem(self,'Proveedor')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'CompraLocal')}" />
@@ -53,7 +54,6 @@
 
 		<menu label="Ventas" iconSclass="z-icon-tags">
 			<menupopup sclass="rounded">
-
 				<zk forEach="${vm.menuItem(self,'Cliente')}" />
 				<zk forEach="${vm.menuItem(self,'GeoLocalizacionClientes')}" />
 				<menuseparator />
@@ -78,8 +78,6 @@
 
 		<menu label="Stock" iconSclass="z-icon-archive">
 			<menupopup sclass="rounded">
-				<zk forEach="${vm.menuItem(self,'Articulo')}" />
-				<menuseparator />
 				<zk
 					forEach="${vm.menuItem(self,'TransferenciaInterna')}" />
 				<zk

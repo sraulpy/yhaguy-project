@@ -31,6 +31,9 @@
 		<property name="subDiarioConfirmado"/>
 		<property name="cifProrrateado"/>
 		<property name="recepcionHabilitada"/>
+		<property name="conteo1" />
+		<property name="conteo2" />
+		<property name="conteo3" />
 
 		<many-to-one name="proveedorCondicionPago" class="com.yhaguy.domain.CondicionPago"
 			column="idProveedorCondicionPago" 

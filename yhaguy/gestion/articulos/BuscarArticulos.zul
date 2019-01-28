@@ -20,12 +20,13 @@
 			<space></space>			
 		</hlayout>
 		<a onClick="@command('cleanFiltros')"
-				tooltiptext="Limpiar Filtros..">
+				tooltiptext="Limpiar Filtros.."
+				style="@load(vm.articulos.size() gt 0 ? 'color:#d9534f':'')">
 			<attribute name="onClick">
 				nv_1.setSelected(true);
 			</attribute>
 				<html>
-					<i class="fas fa-broom fa-lg"></i>
+					<i class="fas fa-trash-alt fa-lg"></i>
 				</html>
 			</a>
 		<hlayout visible="false">
@@ -64,7 +65,7 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						sclass="filter_"
 						value="@bind(vm.codOriginal)" instant="true"
 						placeholder="Código Original.."
 						style="background-image:url('./core/css/filter.png'); background-repeat:
@@ -74,7 +75,7 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						sclass="filter_"
 						value="@bind(vm.codProveedor)" instant="true"
 						placeholder="Código Proveedor.."
 						style="background-image:url('./core/css/filter.png'); background-repeat:
@@ -84,7 +85,7 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true"
-						sclass="filter"
+						sclass="filter_"
 						value="@bind(vm.descripcion)" instant="true" 
 						placeholder="Descripción.."
 						style="background-image:url('./core/css/filter.png'); background-repeat:
@@ -94,7 +95,7 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true"
-						sclass="filter"
+						sclass="filter_"
 						value="@bind(vm.marca)" instant="true" 
 						placeholder="Marca.."
 						style="background-image:url('./core/css/filter.png'); background-repeat:

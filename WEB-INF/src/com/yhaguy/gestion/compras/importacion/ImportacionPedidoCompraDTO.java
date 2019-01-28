@@ -35,6 +35,10 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private boolean importacionConfirmada = false;
 	private boolean cifProrrateado = false;
 	private boolean recepcionHabilitada = false;
+	
+	private boolean conteo1 = false;
+	private boolean conteo2 = false;
+	private boolean conteo3 = false;
 
 	private MyArray proveedorCondicionPago = new MyArray();
 	private MyPair estado = new MyPair();
@@ -439,5 +443,29 @@ public class ImportacionPedidoCompraDTO extends DTO {
 
 	public void setRecepcionHabilitada(boolean recepcionHabilitada) {
 		this.recepcionHabilitada = recepcionHabilitada;
+	}
+
+	public boolean isConteo1() {
+		return conteo1;
+	}
+
+	public void setConteo1(boolean conteo1) {
+		this.conteo1 = conteo1;
+	}
+
+	public boolean isConteo2() {
+		return conteo2;
+	}
+
+	public void setConteo2(boolean conteo2) {
+		this.conteo2 = conteo2;
+	}
+
+	public boolean isConteo3() {
+		return conteo3;
+	}
+
+	public void setConteo3(boolean conteo3) {
+		this.conteo3 = conteo3;
 	}
 }

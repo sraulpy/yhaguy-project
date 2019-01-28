@@ -3,6 +3,7 @@ package com.yhaguy.domain;
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 import com.yhaguy.Configuracion;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class GastoDetalle extends Domain{
@@ -71,6 +72,15 @@ public class GastoDetalle extends Domain{
 			out += this.getMontoGs();
 		}
 		return out;
+	}
+	
+	/**
+	 * @return el monto del iva..
+	 */
+	public double getMontoIva_() {
+		if (this.isIva5()) return Utiles.getIVA(this.montoGs, 5);
+		if (this.isIva10()) return Utiles.getIVA(this.montoGs, 10);
+		return 0;
 	}
 	
 	public boolean isBaseImponible() {

@@ -1,5 +1,19 @@
 <zk>
-		
+	<style>
+		.filter{background-image:url('./core/css/filter.png');
+		background-repeat: no-repeat; background-position: 98%;
+		background-size: 10px;"} input[type="checkbox"] { display:
+		inline-block; font-family: ZK85Icons,FontAwesome; font-style:
+		normal; font-weight: normal; font-size: inherit;
+		-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing:
+		grayscale; text-rendering: auto; font-size: 18px; margin: 0 4px
+		2px 8px; background: #fff; border: 1px solid #d9d9d9;
+		-webkit-border-radius: 4px; -moz-border-radius: 4px;
+		-o-border-radius: 4px; -ms-border-radius: 4px; border-radius:
+		4px; width: 20px; height: 20px; } input[type="checkbox"] {
+		margin: 0 4px 2px 4px; font-size: 16px; width: 18px; height:
+		18px; line-height: 16px; }
+	</style>
 	<div
 		viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionPedidoCompraControlBody')"
 		width="100%" height="100%" style="padding:10px"
@@ -58,8 +72,61 @@
 
 		<!-- DATOS GENERALES -->
 
-		<div id="dv_1" width="100%" vflex="true" style="padding:5px">
-			<hbox pack="center" width="100%"
+		<div id="dv_1" width="100%" vflex="true" style="padding:5px 5px 5px 0px">
+			<borderlayout>
+				<west title="Explorador" size="100%" flex="true" collapsible="true" open="false">
+                	<listbox sclass="small-list" hflex="true" vflex="true">
+                		<listhead>
+                			<listheader>
+                				<textbox hflex="true"
+                					placeholder="Proveedor"
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"
+									readonly="@load(vm.siempreHabilitado)">
+                				</textbox>
+                			</listheader>
+                			<listheader>
+                				<textbox hflex="true" placeholder="Número Importación"
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"></textbox>
+                			</listheader>
+                			<listheader>
+                				<textbox hflex="true" placeholder="Número Factura"
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"></textbox>
+                			</listheader>
+                			<listheader>
+                				<textbox hflex="true" placeholder="Fecha Importación"
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"></textbox>
+                			</listheader>
+                			<listheader>
+                				<textbox hflex="true" placeholder="Fecha Factura"
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"></textbox>
+                			</listheader>
+                			<listheader>
+                				<textbox hflex="true" placeholder="Importe Gs."
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"></textbox>
+                			</listheader>
+                			<listheader>
+                				<textbox hflex="true" placeholder="Importe U$S"
+                					style="background-image:url('./core/css/filter.png');
+									background-repeat: no-repeat; background-position: 98%;
+									background-size: 10px;"></textbox>
+                			</listheader>
+                		</listhead>
+                	</listbox>
+            	</west>
+				<center border="none" flex="true">
+					<hbox pack="center" width="100%"
 						style="padding:20px">
 						<vlayout hflex="true" spacing="0">
 							<grid hflex="true" sclass="vgrid">
@@ -310,9 +377,10 @@
 							</listbox>
 						</vlayout>
 					</hbox>
-					<div height="15px" />
-
-					<popup id="pop_anticipos" sclass="rounded">
+				</center>
+			</borderlayout>
+			<div height="15px" />
+			<popup id="pop_anticipos" sclass="rounded">
 						<hbox width="100%"
 							style="border-bottom:solid 1px silver">
 							<label value="ANTICIPOS PENDIENTES" />
@@ -804,12 +872,18 @@
 											onClick="@command('imprimirConteo')"
 											disabled="@load(!vm.siempreHabilitado)"></button>
 										<space></space>
-										<checkbox label="Conteo 1"></checkbox>
+										<checkbox label="1&#176; Conteo" checked="@bind(vm.dto.conteo1)"></checkbox>
 										<space></space>
-										<checkbox label="Conteo 2"></checkbox>
+										<checkbox label="2&#176; Conteo" checked="@bind(vm.dto.conteo2)"></checkbox>
 										<space></space>
-										<checkbox label="Conteo 3"></checkbox>
+										<checkbox label="3&#176; Conteo" checked="@bind(vm.dto.conteo3)"></checkbox>
 										<div hflex="true"></div>
+										<button mold="bs" sclass="btn-sm btn-primary" label="Imprimir Diferencias"
+											iconSclass="z-icon-print" width="150px"
+											onClick="@command('imprimirDiferencias')"
+											disabled="@load(!vm.siempreHabilitado)"
+											visible="${vm.operacionHabilitada('VerImportacion')}"></button> 
+										<space></space>
 										<button mold="bs" sclass="btn-sm btn-info" label="Imprimir Conteo"
 											iconSclass="z-icon-print" width="150px"
 											onClick="@command('imprimirConteo_')"
@@ -825,7 +899,7 @@
 												onCreate="self.sort(true)"></listheader>
 											<listheader label="Descripción"></listheader>
 											<listheader label="1er Conteo" width="120px"></listheader>
-											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}" ></listheader>
+											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
 											<listheader label="2do Conteo" width="120px"></listheader>
 											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
 											<listheader label="3er Conteo" width="120px"></listheader>
@@ -838,35 +912,38 @@
 												<listcell>
 													<intbox vflex="true" hflex="true"
 														format="#,###,###0"
-														value="@bind(each.conteo1)"></intbox>
+														value="@bind(each.conteo1)"
+														readonly="@load(!vm.dto.conteo1)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
 														value="@load(each.conteo1 - each.cantidad_acum)"
-														style="@load((each.conteo1 - each.cantidad_acum) lt 0? 'background:#FAD9CC' : '')"></intbox>
+														style="@load((each.conteo1 - each.cantidad_acum) lt 0? 'background:#e74c3c;color:white' : ((each.conteo1 - each.cantidad_acum) gt 0? 'background:#18bc9c;color:white' : ''))"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
 														format="#,###,###0"
-														value="@bind(each.conteo2)"></intbox>
+														value="@bind(each.conteo2)"
+														readonly="@load(!vm.dto.conteo2)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo2 - each.cantidad_acum)"
-														style="@load((each.conteo2 - each.cantidad_acum) lt 0? 'background:#FAD9CC' : '')"></intbox>
+														value="@load((each.conteo1 - each.cantidad_acum) eq 0? 0 : (each.conteo2 - each.cantidad_acum))"
+														style="@load((each.conteo1 - each.cantidad_acum) eq 0? '' : ((each.conteo2 - each.cantidad_acum) lt 0? 'background:#e74c3c;color:white' : ((each.conteo2 - each.cantidad_acum) gt 0? 'background:#18bc9c;color:white' : '')))"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" 
 														format="#,###,###0"
-														value="@bind(each.conteo3)"></intbox>
+														value="@bind(each.conteo3)"
+														readonly="@load(!vm.dto.conteo3)"></intbox>
 												</listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true" readonly="true"
 														format="#,###,###0"
-														value="@load(each.conteo3 - each.cantidad_acum)"
-														style="@load((each.conteo3 - each.cantidad_acum) lt 0? 'background:#FAD9CC' : '')"></intbox>
+														value="@load((each.conteo1 - each.cantidad_acum) eq 0? 0 : ((each.conteo2 - each.cantidad_acum) eq 0? 0 : (each.conteo3 - each.cantidad_acum)))"
+														style="@load((each.conteo1 - each.cantidad_acum) eq 0? '' : ((each.conteo2 - each.cantidad_acum) eq 0? '' : ((each.conteo3 - each.cantidad_acum) lt 0? 'background:#e74c3c;color:white' : ((each.conteo3 - each.cantidad_acum) gt 0? 'background:#18bc9c;color:white' : ''))))"></intbox>
 												</listcell>
 											</listitem>
 										</template>
@@ -1261,7 +1338,7 @@
 		<!-- PRECIOS -->
 		
 		<div id="dv_8" width="100%" vflex="true" style="padding:5px" visible="false">
-			<hlayout sclass="button-container">
+					<hlayout sclass="button-container">
 						<button mold="bs" sclass="btn-primary btn-sm"
 							width="150px" iconSclass="z-icon-check"
 							onClick="@command('confirmarImportacion')"
@@ -1276,6 +1353,18 @@
 								<comboitem label="@load(each.text)" />
 							</template>
 						</combobox>
+						<div hflex="true"></div>
+						<button mold="bs" upload="true, accept=.csv"
+							onUpload="@command('uploadFilePrecios', file=event.media)" width="150px"
+							height="30px" iconSclass="z-icon-upload"
+							label=" Importar Archivo" 
+							disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"
+							sclass="btn-warning btn-sm" style="background:#f39c12"/>
+						<space />
+						<a iconSclass="z-icon-paperclip"
+							label=" ver archivo Importado" href="@load(vm.proformaCsv)"
+							target="_blank" visible="@load(vm.dto.confirmadoImportacion)" 
+							style="font-size:10pt" />
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
 						model="@load(vm.selectedImportacionFactura.detalles)">

@@ -16,7 +16,7 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 	private static String[] attIgualesImportacionPedidoCompra = { "numeroPedidoCompra", "fechaCreacion", "fechaCierre",
 			"observacion", "cambio", "confirmadoImportacion", "confirmadoVentas", "confirmadoAdministracion",
 			"propietarioActual", "pedidoConfirmado", "importacionConfirmada", "cifProrrateado", "totalImporteGs",
-			"totalImporteDs", "via", "recepcionHabilitada" };
+			"totalImporteDs", "via", "recepcionHabilitada", "conteo1", "conteo2", "conteo3" };
 
 	private static final String[] ATT_MONEDA = { "descripcion", "sigla" };	
 	private static final String[] ATT_CONDICION = { "descripcion", "plazo" };	

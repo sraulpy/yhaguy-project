@@ -73,6 +73,7 @@ import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.articulos.ArticuloDTO;
 import com.yhaguy.gestion.articulos.AssemblerArticulo;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
+import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.empresa.ctacte.AssemblerCtaCteEmpresaMovimiento;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
@@ -96,6 +97,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	static final String[][] CAB = { { "Empresa", CSV.STRING } };
 	static final String[][] DET = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING } };
 	static final String[][] DET_PROFORMA = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING } };
+	static final String[][] DET_PRECIOS = { { "CODIGO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING } };
 
 	private ImportacionPedidoCompraDTO dto = new ImportacionPedidoCompraDTO();	
 	
@@ -265,6 +267,10 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	@Command 
 	@NotifyChange("nvoGasto")
 	public void openGasto(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
+		if (this.dto.getResumenGastosDespacho().getDespachante().esNuevo()) {
+			Clients.showNotification("Antes, debe asignar el despachante..", Clients.NOTIFICATION_TYPE_WARNING, null, null, 0);
+			return;
+		}
 		Timbrado timbrado = new Timbrado();
 		timbrado.setVencimiento(Utiles.getFechaFinMes());
 		this.nvoGasto = new Gasto();
@@ -277,18 +283,26 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	@Command 
 	@NotifyChange("*")
 	public void addGasto() throws Exception {
+		String acreedor = this.nvoGasto.isAcreedorDespachante() ? 
+				this.dto.getResumenGastosDespacho().getDespachante().getRazonSocial() : this.nvoGasto.getProveedor().getRazonSocial();
+		if (!this.mensajeSiNo("La obligación de pago de esta factura será asignada al " + this.nvoGasto.getAcreedor() + " : " + acreedor)) {
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.nvoGasto.setIdImportacion(this.dto.getId());
 		this.nvoGasto.setFechaCarga(new Date());
 		this.nvoGasto.setNumeroFactura(this.nvoGasto.getNumero());
 		for (GastoDetalle item : this.nvoGasto.getDetalles()) {
-			this.nvoGasto.setImporteGs(this.nvoGasto.getImporteGs() + item.getMontoGs());
-			this.nvoGasto.setImporteIva10(this.nvoGasto.getImporteIva10() + item.getMontoIva());
+			item.setMontoIva(item.getMontoIva_());
 		}
+		this.nvoGasto.setImporteGs(this.nvoGasto.getImporteGs_());
+		this.nvoGasto.setImporteDs(this.nvoGasto.getImporteDs_());
 		rr.saveObject(this.nvoGasto, this.getLoginNombre());
+		long idEmpresa = this.nvoGasto.isAcreedorDespachante() ? 
+				this.dto.getResumenGastosDespacho().getDespachante().getEmpresa().getId() : this.nvoGasto.getProveedor().getIdEmpresa();
+		ControlCuentaCorriente.addGastoImportacion(this.nvoGasto, this.dto.getNumeroPedidoCompra(), idEmpresa, this.getLoginNombre());
 		this.nvoGasto = new Gasto();
 		this.win.detach();
-		// add cta cte..
 		Clients.showNotification("REGISTRO AGREGADO..");
 	}
 	
@@ -343,6 +357,16 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				data.add(obj1);			
 			}
 		}
+		
+		// ordena la lista segun codigo..
+		Collections.sort(data, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String cod1 = (String) o1[0];
+				String cod2 = (String) o2[0];
+				return cod1.compareTo(cod2);
+			}
+		});
 
 		ReporteYhaguy rep = new ReporteConteoImportacion(this.dto);
 		rep.setDatosReporte(data);
@@ -367,8 +391,71 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			};
 			data.add(obj1);
 		}
+		// ordena la lista segun codigo..
+		Collections.sort(data, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String cod1 = (String) o1[0];
+				String cod2 = (String) o2[0];
+				return cod1.compareTo(cod2);
+			}
+		});
 
 		ReporteYhaguy rep = new ReporteConteoImportacion_(this.dto);
+		rep.setDatosReporte(data);
+
+		ViewPdf vp = new ViewPdf();
+		vp.setBotonImprimir(false);
+		vp.setBotonCancelar(false);
+		vp.showReporte(rep, this);	
+	
+	}
+	
+	@Command
+	public void imprimirDiferencias() {		
+		boolean mostrar = false;
+		if (this.mensajeSiNo("Mostrar columna de diferencias?")) {
+			mostrar = true;
+		}
+		
+		List<Object[]> data = new ArrayList<Object[]>();
+		String conteo = "";
+		
+		for (ImportacionFacturaDetalleDTO item : this.selectedImportacionFactura.getDetalles()) {
+			if (this.dto.isConteo1() && !this.dto.isConteo2() && !this.dto.isConteo3()) {
+				conteo = "1er Conteo";
+				int dif = item.getConteo1() - item.getCantidad_acum();
+				if (dif != 0) {
+					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo1(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo1() };
+					data.add(obj);
+				}
+			} else if (!this.dto.isConteo1() && this.dto.isConteo2() && !this.dto.isConteo3()) {
+				conteo = "2do Conteo";
+				int dif = item.getConteo2() - item.getCantidad_acum();
+				if (dif != 0) {
+					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2()};
+					data.add(obj);
+				}
+			} else {
+				conteo = "3er Conteo";
+				int dif = item.getConteo3() - item.getCantidad_acum();
+				if (dif != 0) {
+					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3()};
+					data.add(obj);
+				}
+			}
+		}
+		// ordena la lista segun codigo..
+		Collections.sort(data, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String cod1 = (String) o1[0];
+				String cod2 = (String) o2[0];
+				return cod1.compareTo(cod2);
+			}
+		});
+
+		ReporteYhaguy rep = mostrar ? new ReporteDiferenciaImportacion(this.dto, conteo) : new ReporteDiferenciaImportacion_(this.dto, conteo);
 		rep.setDatosReporte(data);
 
 		ViewPdf vp = new ViewPdf();
@@ -551,6 +638,24 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 	}
 	
+	@Command 
+	@NotifyChange("*")
+	public void uploadFilePrecios(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = "precios_" + this.dto.getNumeroPedidoCompra();
+			boolean isText = "text/csv".equals(file.getContentType());
+			InputStream file_ = new ByteArrayInputStream(isText ? file.getStringData().getBytes() : file.getByteData());
+			misc.uploadFile(PATH, name, ".csv", file_);
+			this.csvPrecios();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
+	
 	@Command
 	@NotifyChange("nvoGasto")
 	public void setCondicion() throws Exception {
@@ -710,6 +815,51 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.mensajePopupTemporal("SE IMPORTARON " + list.size() + " ÍTEMS");
 			Clients.showNotification(noEncontrado);
 			MyArray trazabilidad = new MyArray(new Date(), "FACTURA CARGADA", PATH_GENERICO + "factura_" + this.dto.getNumeroPedidoCompra() + ".csv", "", "", 1, "", 0.0);
+			this.dto.getTrazabilidad().add(trazabilidad);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al leer el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
+	
+	/**
+	 * csv precios..
+	 */
+	private void csvPrecios() {
+		try {			
+			CSV csv = new CSV(CAB, DET_PRECIOS, PATH + "precios_" + this.dto.getNumeroPedidoCompra() + ".csv", ';');
+			String noEncontrado = "Códigos no encontrados: \n";
+			Map<String, Object[]> precios = new HashMap<String, Object[]>();
+			csv.start();
+			while (csv.hashNext()) {
+				String codigo = csv.getDetalleString("CODIGO"); 
+				String mayorista = csv.getDetalleString("MAYORISTA");
+				String minorista = csv.getDetalleString("MINORISTA");
+				String lista = csv.getDetalleString("LISTA");
+			 	double mayorista_ =  Double.parseDouble(mayorista.replace(".", "").replace(",", "."));
+			 	double minorista_ =  Double.parseDouble(minorista.replace(".", "").replace(",", "."));
+			 	double lista_ =  Double.parseDouble(lista.replace(".", "").replace(",", "."));
+				Object[] precio = new Object[] { mayorista_, minorista_, lista_ };
+				precios.put(codigo, precio);								
+			}
+			for (ImportacionFacturaDetalleDTO item : this.dto.getImportacionFactura().get(0).getDetalles()) {
+				Object[] precio = precios.get(item.getArticulo().getCodigoInterno());
+				if (precio != null) {
+					double may = (double) precio[0];
+					double min = (double) precio[1];
+					double lis = (double) precio[2];
+					item.setPrecioFinalGs(may);
+					item.setMinoristaGs(min);
+					item.setListaGs(lis);
+				} else {
+					noEncontrado += " \n - " + item.getArticulo().getCodigoInterno();
+				}
+			}
+			this.mensajePopupTemporal("SE IMPORTARON " + precios.size() + " ÍTEMS");
+			Clients.showNotification(noEncontrado);
+			MyArray trazabilidad = new MyArray(new Date(), "PRECIOS ASIGNADOS", PATH_GENERICO + "precios_" + this.dto.getNumeroPedidoCompra() + ".csv", "", "", 1, "", 0.0);
 			this.dto.getTrazabilidad().add(trazabilidad);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -4785,6 +4935,108 @@ class ReporteConteoImportacion_ extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Nro. Importación", numero))
 				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial())));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de diferencia de importacion..
+ */
+class ReporteDiferenciaImportacion extends ReporteYhaguy {
+	
+	private ImportacionPedidoCompraDTO importacion;	
+	private String conteo;
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Conteo", TIPO_INTEGER, 30);
+	static DatosColumnas col4 = new DatosColumnas("Diferencia", TIPO_INTEGER, 30);
+	
+	public ReporteDiferenciaImportacion(ImportacionPedidoCompraDTO importacion, String conteo) {
+		this.importacion = importacion;
+		this.conteo = conteo;
+	}
+	
+	static {
+		cols.add(col1);
+		cols.add(col3);
+		cols.add(col4);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Recepción de Mercaderías");
+		this.setDirectorio("compras");
+		this.setNombreArchivo("Importacion-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		String numero = this.importacion.getNumeroPedidoCompra();
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Nro. Importación", numero))
+				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial()))
+				.add(this.textoParValor("Conteo Nro.", conteo)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de diferencia de importacion..
+ */
+class ReporteDiferenciaImportacion_ extends ReporteYhaguy {
+	
+	private ImportacionPedidoCompraDTO importacion;	
+	private String conteo;
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Conteo", TIPO_INTEGER, 30);
+	
+	public ReporteDiferenciaImportacion_(ImportacionPedidoCompraDTO importacion, String conteo) {
+		this.importacion = importacion;
+		this.conteo = conteo;
+	}
+	
+	static {
+		cols.add(col1);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Recepción de Mercaderías");
+		this.setDirectorio("compras");
+		this.setNombreArchivo("Importacion-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		String numero = this.importacion.getNumeroPedidoCompra();
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Nro. Importación", numero))
+				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial()))
+				.add(this.textoParValor("Conteo Nro.", conteo)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
