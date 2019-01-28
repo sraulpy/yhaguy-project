@@ -216,6 +216,7 @@ public class InformeHechauka {
 
 		int registros = 0;
 		double montoTotal = 0;
+		String periodo = "";
 		
 		for (CompraLocalFactura compra : compras) {
 			
@@ -334,7 +335,7 @@ public class InformeHechauka {
 			String col2 = ruc.substring(0, ruc.length() - 2);
 			String dv = ruc.substring(ruc.length() - 1);
 			String rSocial = compra.getProveedor().getRazonSocial();
-			String timbrado = " ";
+			String timbrado = "0";
 			String col5 = "4";
 			String nro = compra.getNumero();
 			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -380,7 +381,7 @@ public class InformeHechauka {
 				long col10 = 0;
 				long col11 = 0;
 				long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
-				long col15 = 0;
+				long col15 = nc.isNotaCreditoVentaContado() ? 0 : 1;
 				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
@@ -396,9 +397,16 @@ public class InformeHechauka {
 				montoTotal += importe;
 			}			
 		}
+		
+		if (gastos.size() > 0) {
+			periodo = Utiles.getDateToString(gastos.get(0).getFecha(), "yyyyMM");		
+		} else if(compras.size() > 0) {
+			periodo = Utiles.getDateToString(compras.get(0).getFechaOriginal(), "yyyyMM");
+		}
+		
 		saveArchivo(
 				objects,
-				getCabeceraNotaCred(registros, montoTotal),
+				getCabeceraNotaCred(registros, montoTotal, periodo),
 				"HechaukaCompras-"
 						+ misc.dateToString(new Date(), Misc.DD_MM_YYYY));
 	}
@@ -482,11 +490,10 @@ public class InformeHechauka {
 	/**
 	 * @return los datos de cabecera de nota cred..
 	 */
-	private static String getCabeceraNotaCred(int registros, double montoTotal) {
+	private static String getCabeceraNotaCred(int registros, double montoTotal, String periodo) {
 		String out = "";
 		
 		String col1 = "1";
-		String periodo = "201601";
 		String col3 = "1";
 		String col4 = "911";
 		String col5 = "211";
