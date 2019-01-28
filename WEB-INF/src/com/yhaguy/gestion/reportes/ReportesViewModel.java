@@ -4427,6 +4427,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				Map<String, Double> acum = new HashMap<String, Double>();
 				Map<String, Double> acum_costo = new HashMap<String, Double>();
+				Map<String, Long> acum_cant = new HashMap<String, Long>();
 				List<Object[]> data = new ArrayList<Object[]>();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
@@ -4445,14 +4446,18 @@ public class ReportesViewModel extends SimpleViewModel {
 							String desc = flia.getDescripcion();
 							Double total = acum.get(desc);
 							Double total_costo = acum_costo.get(desc);
+							Long total_cant = acum_cant.get(desc);
 							if (total != null) {
 								total += Utiles.getRedondeo(venta.getImporteGsByFamiliaSinIva(flia.getId()));
 								total_costo += Utiles.getRedondeo(venta.getCostoGsByFamilia(flia.getId()));
+								total_cant += venta.getCantidadByFamilia(flia.getId());
 								acum.put(desc, total);
 								acum_costo.put(desc, total_costo);
+								acum_cant.put(desc, total_cant);
 							} else {
 								acum.put(desc, Utiles.getRedondeo(venta.getImporteGsByFamilia(flia.getId())));
 								acum_costo.put(desc, Utiles.getRedondeo(venta.getCostoGsByFamilia(flia.getId())));
+								acum_cant.put(desc, venta.getCantidadByFamilia(flia.getId()));
 							}
 						}
 					}
@@ -4465,14 +4470,18 @@ public class ReportesViewModel extends SimpleViewModel {
 							String desc = flia.getDescripcion();
 							Double total = acum.get(desc);
 							Double total_costo = acum_costo.get(desc);
+							Long total_cant = acum_cant.get(desc);
 							if (total != null) {
 								total -= Utiles.getRedondeo(nc.getImporteGsByFamiliaSinIva(flia.getId()));
 								total_costo -= Utiles.getRedondeo(nc.getCostoGsByFamilia(flia.getId()));
+								total_cant -= nc.getCantidadByFamilia(flia.getId());
 								acum.put(desc, total);
 								acum_costo.put(desc, total_costo);
+								acum_cant.put(desc, total_cant);
 							} else {
 								acum.put(desc, Utiles.getRedondeo(nc.getImporteGsByFamiliaSinIva(flia.getId())) * -1);
 								acum_costo.put(desc, Utiles.getRedondeo(nc.getCostoGsByFamilia(flia.getId())) * -1);
+								acum_cant.put(desc, nc.getCantidadByFamilia(flia.getId()) * -1);
 							}
 						}
 					}				
@@ -4481,9 +4490,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (String key : acum.keySet()) {
 					double total = acum.get(key);
 					double total_costo = acum_costo.get(key);
+					long total_cant = acum_cant.get(key);
 					data.add(new Object[] { key, total, total_costo, (total - total_costo),
 							Utiles.obtenerPorcentajeDelValor((total - total_costo), total),
-							Utiles.obtenerPorcentajeDelValor((total - total_costo), total_costo) });
+							Utiles.obtenerPorcentajeDelValor((total - total_costo), total_costo), total_cant });
 				}
 
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
@@ -20238,6 +20248,7 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 	static DatosColumnas col4 = new DatosColumnas("Utilidad", TIPO_DOUBLE, true);
 	static DatosColumnas col5 = new DatosColumnas("% S/Venta", TIPO_DOUBLE_DS);
 	static DatosColumnas col6 = new DatosColumnas("% S/Costo", TIPO_DOUBLE_DS);
+	static DatosColumnas col7 = new DatosColumnas("Cant.", TIPO_LONG, 35);
 
 	public ReporteVentasPorFamilia(Date desde, Date hasta, String sucursal, String cliente) {
 		this.desde = desde;
@@ -20253,6 +20264,7 @@ class ReporteVentasPorFamilia extends ReporteYhaguy {
 		cols.add(col4);
 		cols.add(col5);
 		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override

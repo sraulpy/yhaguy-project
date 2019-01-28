@@ -149,6 +149,19 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return cantidad segun familia..
+	 */
+	public long getCantidadByFamilia(long idFamilia) {
+		long out = 0;
+		for (NotaCreditoDetalle det : this.getDetallesArticulos()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getCantidad();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es nc de compra mercaderia..
 	 */
 	public boolean isNotaCreditoCompraProveedor() {
