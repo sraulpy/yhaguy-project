@@ -15,6 +15,7 @@ import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.util.Utiles;
 
@@ -229,7 +230,7 @@ public class InformeHechauka {
 			String col2 = ruc.substring(0, ruc.length() - 2);
 			String dv = ruc.substring(ruc.length() - 1);
 			String rSocial = compra.getProveedor().getRazonSocial();
-			String timbrado = compra.getTimbrado() != null? compra.getTimbrado().getNumero() : "";
+			String timbrado = compra.getTimbrado() != null? compra.getTimbrado().getNumero() : "0";
 			String col5 = "1";
 			String nro = compra.getNumero();
 			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -240,7 +241,7 @@ public class InformeHechauka {
 			long col11 = 0;
 			long col12 = 0;
 			long col14 = compra.isContado() ? 1 : 2;
-			long col15 = 0;
+			long col15 = compra.isContado() ? 0 : 1;
 			long col16 = 0;
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
@@ -269,17 +270,17 @@ public class InformeHechauka {
 				String col5 = "1";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
-				double importe = redondear(gasto.getImporteGs());
 				double iva10 = redondear(gasto.getIva10());
-				double gravada = redondear(gasto.getGravada10());
+				double gravada10 = redondear(gasto.getGravada10());
 				double exenta = redondear(gasto.getExenta());
 				double gravada5 = redondear(gasto.getGravada5());
 				double iva5 = redondear(gasto.getIva5());
+				double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
 				long col14 = gasto.isContado() ? 1 : 2;
-				long col15 = 0;
+				long col15 = gasto.isContado() ? 0 : 1;
 				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
-						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
 						+ FORMATTER.format(exenta) + "" + "\t" + col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
@@ -293,30 +294,30 @@ public class InformeHechauka {
 			
 			String ruc = gasto.getProveedor().getRuc();		
 			
-			if (ruc.equals("80029222-7")) {				
+			if (ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS)) {				
 				ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
 
 				String col1 = "2";
 				String col2 = ruc.substring(0, ruc.length() - 2);
 				String dv = ruc.substring(ruc.length() - 1);
 				String rSocial = "PROVEEDORES DEL EXTERIOR";
-				String timbrado = gasto.getTimbrado();
+				String timbrado = "0";
 				String col5 = "4";
 				String nro = gasto.getNumeroFactura();
 				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
 				double iva10 = redondear(gasto.getIva10());
-				double gravada = redondear(gasto.getBaseImponible());
-				double importe = redondear(gravada + iva10);
-				long col10 = 0;
-				long col11 = 0;
-				long col12 = 0;
+				double gravada10 = redondear(gasto.getBaseImponible());
+				double exenta = redondear(gasto.getExenta());
+				double gravada5 = redondear(gasto.getGravada5());
+				double iva5 = redondear(gasto.getIva5());
+				double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
 				long col14 = gasto.isContado() ? 1 : 2;
-				long col15 = 0;
+				long col15 = gasto.isContado() ? 0 : 1;
 				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
-						+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
-						+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-						+ FORMATTER.format(col12) + "" + "\t" + col14 + "" + "\t"
+						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
+						+ FORMATTER.format(exenta) + "" + "\t" + col14 + "" + "\t"
 						+ col15 + "" + "\t" + col16 + "" + "\r\n";
 				objects.add(object);
 				registros++;

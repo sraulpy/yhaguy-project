@@ -297,7 +297,7 @@ public class Gasto extends Domain {
 	 * @return true si es gasto importacion..
 	 */
 	public boolean isGastoImportacion() {
-		return this.getNumeroImportacion().contains("IMP");
+		return this.getIdImportacion() > 0;
 	}
 	
 	/**

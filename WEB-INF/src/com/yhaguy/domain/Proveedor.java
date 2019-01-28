@@ -12,6 +12,7 @@ import com.yhaguy.Configuracion;
 public class Proveedor extends Domain {
 	
 	public static final String RUC_MIN_REL_EXTERIORES = "80001464-2";
+	public static final String RUC_DIR_NAC_ADUANAS = "80029222-7";
 
 	Empresa empresa;
 	Tipo estadoProveedor;
