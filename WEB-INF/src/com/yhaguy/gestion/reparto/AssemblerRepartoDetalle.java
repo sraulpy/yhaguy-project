@@ -9,7 +9,9 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.RepartoDetalle;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Transferencia;
 import com.yhaguy.domain.TransferenciaDetalle;
 import com.yhaguy.domain.Venta;
@@ -18,7 +20,7 @@ import com.yhaguy.domain.VentaDetalle;
 public class AssemblerRepartoDetalle extends Assembler {
 
 	private static String[] attIgualesRepartoDetalle = { "idMovimiento",
-			"observacion", "entregado", "peso" };
+			"observacion", "entregado", "peso", "importeGs" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoR) throws Exception {
@@ -59,6 +61,10 @@ public class AssemblerRepartoDetalle extends Assembler {
 			Venta venta = this.getVenta(idMovimiento);
 			detalle = this.getVentaMyArray(venta);
 			
+		} else if (this.isRemision(sigla)) {
+			Remision rem = this.getRemision(idMovimiento);
+			detalle = this.getRemisionMyArray(rem);
+			
 		} else {
 			Transferencia transf = this.getTransferencia(idMovimiento);
 			detalle = this.getTransferenciaMyArray(transf);
@@ -73,7 +79,14 @@ public class AssemblerRepartoDetalle extends Assembler {
 		return sigla.equals(Configuracion.SIGLA_TM_PEDIDO_VENTA)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
-	}	
+	}
+	
+	/**
+	 * @return si es venta o no segun la sigla..
+	 */
+	private boolean isRemision(String sigla) {
+		return sigla.equals(Configuracion.SIGLA_TM_NOTA_REMISION);
+	}
 	
 	/**
 	 * @return la transferencia..
@@ -89,6 +102,14 @@ public class AssemblerRepartoDetalle extends Assembler {
 	private Venta getVenta(long id) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return (Venta) rr.getObject(Venta.class.getName(), id);
+	}
+	
+	/**
+	 * @return la venta..
+	 */
+	private Remision getRemision(long id) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return (Remision) rr.getObject(Remision.class.getName(), id);
 	}
 	
 	/**
@@ -115,6 +136,36 @@ public class AssemblerRepartoDetalle extends Assembler {
 		out.setPos9(tipoMovimiento);
 		out.setPos10(venta.getCliente().getDireccion());
 		out.setPos11(venta.getPesoTotal());
+		
+		return out;
+	}
+	
+	/**
+	 * @return la remision convertida a MyArray..
+	 */
+	public MyArray getRemisionMyArray(Remision remision) throws Exception {	
+		RegisterDomain rr = RegisterDomain.getInstance();
+		TipoMovimiento tm = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_REMISION);
+		MyArray out = new MyArray();
+		
+		Object[] detalles = new Object[] { "", "", "" };
+		MyArray tipoMovimiento = new MyArray();
+		tipoMovimiento.setId(tm.getId());
+		tipoMovimiento.setPos1(tm.getDescripcion());	
+		tipoMovimiento.setPos2(tm.getSigla());	
+
+		out.setId(remision.getId());
+		out.setPos1(remision.getId());
+		out.setPos2(remision.getNumero());
+		out.setPos3(remision.getFecha());
+		out.setPos4(remision.getVenta().getCliente().getRazonSocial());
+		out.setPos5(tm.getDescripcion());
+		out.setPos6(detalles[0]);
+		out.setPos7(detalles[1]);
+		out.setPos8(detalles[2]);
+		out.setPos9(tipoMovimiento);
+		out.setPos10("");
+		out.setPos11(0.0);
 		
 		return out;
 	}
@@ -159,7 +210,7 @@ public class AssemblerRepartoDetalle extends Assembler {
 		MyArray tipoMovimiento = new MyArray();
 
 		out.setPos1(transf.getId());
-		out.setPos2(transf.getNumero());
+		out.setPos2(transf.getNumeroRemision());
 		out.setPos3(transf.getFechaCreacion());
 		out.setPos4(transf.getSucursalDestino().getDescripcion());
 		out.setPos5(transf.getTransferenciaTipo().getDescripcion());

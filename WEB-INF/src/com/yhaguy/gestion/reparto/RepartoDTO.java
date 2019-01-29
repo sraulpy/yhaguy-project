@@ -33,6 +33,17 @@ public class RepartoDTO extends DTO {
 	private List<RepartoDetalleDTO> itemsEliminados = new ArrayList<RepartoDetalleDTO>();
 	private List<MyArray> serviciosTecnicos = new ArrayList<MyArray>();
 	
+	/**
+	 * @return el importe en gs..
+	 */
+	public double getImporteGs() {
+		double out = 0;
+		for (RepartoDetalleDTO item : detalles) {
+			out += item.getImporteGs();
+		}
+		return out;
+	}
+	
 	@DependsOn("serviciosTecnicos")
 	public String getServiciosTecnicos_() {
 		String out = "";

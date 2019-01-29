@@ -123,7 +123,7 @@ public class VentaRemisionViewModel extends SimpleViewModel {
 	@DependsOn({ "filterNroRemision", "filterNroVenta", "filterCliente_", "filterFechaDD", "filterFechaMM", "filterFechaAA" })
 	public List<Object[]> getRemisiones() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getRemisiones(this.filterNroRemision, this.filterNroVenta, this.filterCliente_, this.getFilterFecha());
+		return rr.getRemisiones(this.filterNroRemision, this.filterNroVenta, this.filterCliente_, this.getFilterFecha(), 200);
 	}
 	
 	@DependsOn({ "filterNumero", "filterCliente" })

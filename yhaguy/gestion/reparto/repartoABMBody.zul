@@ -105,15 +105,37 @@
 						<vlayout spacing="0"
 							visible="@load(vm.esRepartoYhaguy)">
 							<field value="Repartidor" />
-							<combobox
-								model="@load(vm.repartidores)"
+							<bandbox hflex="true"
+								placeholder="SELECCIONE EL REPARTIDOR.." readonly="true"
 								value="@load(vm.dto.repartidor.text.toUpperCase())"
-								selectedItem="@bind(vm.dto.repartidor)"
-								hflex="true">
-								<template name="model">
-									<comboitem label="@load(each.text.toUpperCase())" />
-								</template>
-							</combobox>
+								id="bndFunc_"
+								onOpen="tx_filter.focus()">
+								<bandpopup>
+									<listbox sclass="small-list"
+										width="400px" height="200px"
+										model="@load(vm.repartidores_)"
+										selectedItem="@bind(vm.dto.repartidor)"
+										onSelect="bndFunc_.close()">
+										<listhead>
+											<listheader>
+												<hlayout>
+													<textbox
+														id="tx_filter"
+														hflex="true"
+														value="@bind(vm.filter_funcionario)"
+														instant="true" placeholder="Buscar.." 
+														style="background-image:url('./core/css/filter.png'); background-repeat:
+															no-repeat; background-position: 98%; background-size: 10px;"/>
+												</hlayout>
+											</listheader>
+										</listhead>
+										<template name="model">
+											<listitem
+												label="@load(each.text.toUpperCase())" />
+										</template>
+									</listbox>
+								</bandpopup>
+							</bandbox>
 						</vlayout>
 						<vlayout spacing="0"
 							visible="@load(!vm.esRepartoYhaguy)"
@@ -204,9 +226,10 @@
 				<listheader width="40px" align="center" />
 				<listheader label="Fecha" width="100px" align="center" />
 				<listheader label="Número" width="120px" />
-				<listheader label="Tipo" width="150px" />
+				<listheader label="Tipo" width="180px" />
 				<listheader label="Ciente" />
 				<listheader label="Observación" />
+				<listheader label="Importe Gs." width="110px" align="right" />
 				<listheader label="Peso Kg." width="80px" align="right"/>
 				<listheader label="Entrega" width="80px" align="center"
 					visible="@load(vm.colEntregaVisible)"/>
@@ -234,6 +257,9 @@
 						<label value="@load(each.observacion)"/>
 					</listcell>
 					<listcell>
+						<label value="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"/>
+					</listcell>
+					<listcell>
 						<label value="@load(each.peso)"/>
 					</listcell>
 					<listcell>
@@ -248,17 +274,23 @@
 			</template>
 
 			<listfoot>
-				<listfooter span="7" align="left">
+				<listfooter span="6" align="left">
 					<hlayout>
 						<field value="@load(vm.dto.detalles.size())" />
-						<field value="ítems" />
-						<space hflex="true"></space>
-						<field>Peso total kg.</field>
-						<guaranibox readonly="true"
+						<field value="ítems" />						
+					</hlayout>
+				</listfooter>
+				<listfooter>
+					<guaranibox readonly="true"
+							value="@load(vm.dto.importeGs)"
+							style="background:#EEF7FA;text-align:right;font-weight:bold" 
+							hflex="true" />
+				</listfooter>
+				<listfooter>
+					<guaranibox readonly="true"
 							value="@load(vm.dto.pesoTotal)"
 							style="background:#EEF7FA;text-align:right;font-weight:bold" 
-							width="70px" />
-					</hlayout>
+							hflex="true" />
 				</listfooter>
 			</listfoot>
 			

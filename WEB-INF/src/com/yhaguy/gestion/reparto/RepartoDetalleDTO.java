@@ -13,6 +13,7 @@ public class RepartoDetalleDTO extends DTO {
 	private Long idMovimiento;
 	private String observacion = "";
 	private double peso = 0;
+	private double importeGs = 0;
 	private MyArray tipoMovimiento = new MyArray();
  
 	private MyArray detalle = new MyArray();
@@ -80,5 +81,13 @@ public class RepartoDetalleDTO extends DTO {
 
 	public void setPeso(double peso) {
 		this.peso = peso;
+	}
+
+	public double getImporteGs() {
+		return importeGs;
+	}
+
+	public void setImporteGs(double importeGs) {
+		this.importeGs = importeGs;
 	}
 }

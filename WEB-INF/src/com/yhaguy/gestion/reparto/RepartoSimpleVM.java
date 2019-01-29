@@ -23,6 +23,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Transferencia;
 import com.yhaguy.domain.TransferenciaDetalle;
 import com.yhaguy.domain.Venta;
@@ -128,6 +129,9 @@ public class RepartoSimpleVM extends SoloViewModel {
 	 */
 	public List<MyArray> getVentas(String numero) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
+		if (numero.trim().isEmpty()) {
+			return new ArrayList<MyArray>();
+		}
 		List<Venta> ventas;
 		long idSucursal = this.getAcceso().getSucursalOperativa().getId();
 		
@@ -141,6 +145,18 @@ public class RepartoSimpleVM extends SoloViewModel {
 	}
 	
 	/**
+	 * @return las ventas para reparto..
+	 */
+	public List<MyArray> getRemisiones(String numero) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (numero.trim().isEmpty()) {
+			return new ArrayList<MyArray>();
+		}
+		List<Object[]> remisiones = rr.getRemisiones(numero, "", "", "", 50);
+		return this.getRemisionesMyArray(remisiones);
+	}
+	
+	/**
 	 * @return las ventas convertidas a MyArray..
 	 */
 	private List<MyArray> getVentasMyArray(List<Venta> ventas) {
@@ -148,6 +164,18 @@ public class RepartoSimpleVM extends SoloViewModel {
 		for (Venta venta : ventas) {
 			MyArray vta = this.getVentaMyArray(venta);
 			out.add(vta);
+		}
+		return out;
+	}
+	
+	/**
+	 * @return las ventas convertidas a MyArray..
+	 */
+	private List<MyArray> getRemisionesMyArray(List<Object[]> remisiones) {
+		List<MyArray> out = new ArrayList<MyArray>();
+		for (Object[] remision : remisiones) {
+			MyArray rem = this.getRemisionMyArray(remision);
+			out.add(rem);
 		}
 		return out;
 	}
@@ -176,6 +204,37 @@ public class RepartoSimpleVM extends SoloViewModel {
 		out.setPos9(tipoMovimiento);
 		out.setPos10(venta.getCliente().getDireccion());
 		out.setPos11(venta.getPesoTotal());
+		out.setPos12(venta.getTotalImporteGs_());
+		
+		return out;
+	}
+	
+	/**
+	 * @return la venta convertida a MyArray..
+	 */
+	public MyArray getRemisionMyArray(Object[] remision) {		
+		MyArray out = new MyArray();
+		TipoMovimiento tm = (TipoMovimiento) remision[5];
+		
+		Object[] detalles = new Object[] { "", "", "" };
+		MyArray tipoMovimiento = new MyArray();
+		tipoMovimiento.setId(tm.getId());
+		tipoMovimiento.setPos1(tm.getDescripcion());	
+		tipoMovimiento.setPos2(tm.getSigla());	
+
+		out.setId((Long) remision[0]);
+		out.setPos1(remision[0]);
+		out.setPos2(remision[1]);
+		out.setPos3(remision[4]);
+		out.setPos4(remision[3]);
+		out.setPos5(tm.getDescripcion());
+		out.setPos6(detalles[0]);
+		out.setPos7(detalles[1]);
+		out.setPos8(detalles[2]);
+		out.setPos9(tipoMovimiento);
+		out.setPos10("");
+		out.setPos11(0.0);
+		out.setPos12(remision[6]);
 		
 		return out;
 	}
@@ -199,10 +258,10 @@ public class RepartoSimpleVM extends SoloViewModel {
 		MyArray out = new MyArray();
 		
 		Object[] detalles = this.getDetallesTransferencia(transf);
-		MyArray tipoMovimiento = this.getTmRemision();
+		MyArray tipoMovimiento = this.getTmTransferencia();
 
 		out.setPos1(transf.getId());
-		out.setPos2(transf.getNumero());
+		out.setPos2(transf.getNumeroRemision());
 		out.setPos3(transf.getFechaCreacion());
 		out.setPos4(transf.getSucursalDestino().getDescripcion());
 		out.setPos5(transf.getTransferenciaTipo().getDescripcion());
@@ -211,6 +270,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		out.setPos8(detalles[2]);
 		out.setPos9(tipoMovimiento);
 		out.setPos11(0.0);
+		out.setPos12(transf.getImporteGs());
 		return out;
 	}
 	
@@ -278,6 +338,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.addAll(this.getVentas(this.filterNumero));
 		out.addAll(this.getTransferencias());
+		out.addAll(this.getRemisiones(this.filterNumero));
 		this.filtrarMovimientos(out, this.dato.getDto().getDetalles());
 		return out;
 	}
@@ -304,8 +365,8 @@ public class RepartoSimpleVM extends SoloViewModel {
 		return (UtilDTO) this.getDtoUtil();
 	}
 	
-	private MyArray getTmRemision() {
-		return this.getUtil().getTmNotaRemision();
+	private MyArray getTmTransferencia() {
+		return this.getUtil().getTmTransferenciaMercaderia();
 	}
 	
 	private long getIdTipoTransfExterna() {

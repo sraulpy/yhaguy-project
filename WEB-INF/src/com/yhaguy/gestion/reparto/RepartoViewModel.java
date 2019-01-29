@@ -36,6 +36,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Reparto;
@@ -84,6 +85,7 @@ public class RepartoViewModel extends BodyApp {
 	private String mensajeValidacion;
 	
 	private String filter_numero = "";
+	private String filter_funcionario = "";
 	private MyArray selectedServicioTecnico;
 	
 	private Window win;
@@ -293,12 +295,13 @@ public class RepartoViewModel extends BodyApp {
 		List<Object[]> data = new ArrayList<>();
 
 		for (RepartoDetalleDTO d : this.dto.getDetalles()) {
-			Object[] obj = new Object[4];
+			Object[] obj = new Object[5];
 			String nro = (String) d.getDetalle().getPos2();
 			obj[0] = nro.length() > 10? nro.substring(8, nro.length()) : nro;
 			obj[1] = TipoMovimiento.getAbreviatura((String) d.getTipoMovimiento().getPos2());
 			obj[2] = Utiles.getMaxLength((String) d.getDetalle().getPos4(), 25);
 			obj[3] = d.getDetalle().getPos10().toString().toLowerCase();
+			obj[4] = Utiles.getRedondeo(d.getImporteGs());
 			data.add(obj);
 		}
 
@@ -320,8 +323,8 @@ public class RepartoViewModel extends BodyApp {
 		WindowPopup w = new WindowPopup();
 		w.setModo(WindowPopup.NUEVO);
 		w.setTitulo("Movimientos para Reparto");
-		w.setWidth("1000px");
-		w.setHigth("80%");
+		w.setWidth("1200px");
+		w.setHigth("90%");
 		w.setDato(this);
 		w.setCheckAC(new ValidadorInsertarItem(this));
 		w.show(Configuracion.INSERTAR_DETALLE_REPARTO_ZUL);
@@ -338,6 +341,7 @@ public class RepartoViewModel extends BodyApp {
 				this.getDtoDetalle().setTipoMovimiento(tipoMov);
 				this.getDtoDetalle().setPeso((double) item.getPos11());
 				this.getDtoDetalle().setDetalle(item);
+				this.getDtoDetalle().setImporteGs((double) item.getPos12());
 
 				this.dto.getDetalles().add(this.getDtoDetalle());
 
@@ -649,6 +653,18 @@ public class RepartoViewModel extends BodyApp {
 	public boolean isConfirmarEntregaDisabled() {
 		return this.isDeshabilitado() || !this.dto.isEnTransito();
 	}
+	
+	@DependsOn("filter_funcionario")
+	public List<MyPair> getRepartidores_() throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Funcionario> list = rr.getChoferes(this.filter_funcionario);
+		for (Funcionario func : list) {
+			MyPair func_ = new MyPair(func.getId(), func.getRazonSocial());
+			out.add(func_);
+		}
+		return out;
+	}
 
 	public List<MyPair> getRepartidores() {
 		List<MyPair> out = new ArrayList<MyPair>();
@@ -816,6 +832,14 @@ public class RepartoViewModel extends BodyApp {
 		this.selectedItem_ = selectedItem_;
 	}
 
+	public String getFilter_funcionario() {
+		return filter_funcionario;
+	}
+
+	public void setFilter_funcionario(String filter_funcionario) {
+		this.filter_funcionario = filter_funcionario;
+	}
+
 }
 
 /**
@@ -871,10 +895,11 @@ class ReporteReparto extends ReporteYhaguy {
 	private static String NOMBRE_ARCHIVO = "Reparto";
 
 	// Columnas del Reporte
-	static DatosColumnas col1 = new DatosColumnas("Nro.", TIPO_STRING, 19);
-	static DatosColumnas col2 = new DatosColumnas("Tipo", TIPO_STRING, 19);
+	static DatosColumnas col1 = new DatosColumnas("Nro.", TIPO_STRING, 25);
+	static DatosColumnas col2 = new DatosColumnas("Tipo", TIPO_STRING, 25);
 	static DatosColumnas col3 = new DatosColumnas("Cliente", TIPO_STRING, 65);
 	static DatosColumnas col4 = new DatosColumnas("Dirección", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true);
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 
@@ -889,6 +914,7 @@ class ReporteReparto extends ReporteYhaguy {
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
 	};
 
 	@Override
