@@ -2370,7 +2370,7 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_VENTA_ESTADO_FACTURADO + "')"
 				+ " AND v.sucursal.id = " + idSucursal;
 
-		List<Venta> out = this.hql(query);
+		List<Venta> out = this.hqlLimit(query, 50);
 		return out;
 	}
 
@@ -2387,7 +2387,7 @@ public class RegisterDomain extends Register {
 				+ "') AND (v.reparto = 'true') AND (v.estado.sigla = '"
 				+ Configuracion.SIGLA_VENTA_ESTADO_FACTURADO + "')";
 
-		List<Venta> out = this.hql(query);
+		List<Venta> out = this.hqlLimit(query, 50);
 		return out;
 	}
 	
@@ -2427,7 +2427,7 @@ public class RegisterDomain extends Register {
 				+ " and t.transferenciaEstado.id = "
 				+ idEstadoTransf;
 
-		List<Transferencia> out = this.hql(query);
+		List<Transferencia> out = this.hqlLimit(query, 50);
 		return out;
 	}
 
@@ -5359,6 +5359,16 @@ public class RegisterDomain extends Register {
 			throws Exception {
 		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) like '%"
 				+ razonSocial.toLowerCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los funcionarios segun razonSocial..
+	 */
+	public List<Funcionario> getChoferes(String razonSocial)
+			throws Exception {
+		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) like '%"
+				+ razonSocial.toLowerCase() + "%' and f.chofer = true";
 		return this.hql(query);
 	}
 	
@@ -9044,6 +9054,29 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Remision> list = rr.getObjects(Remision.class.getName());
+			for (Remision rem : list) {
+				double importe = 0;
+				Venta vta = rem.getVenta();
+				for (RemisionDetalle item : rem.getDetalles()) {
+					for (VentaDetalle det : vta.getDetalles()) {
+						if (det.getArticulo().getCodigoInterno().equals(item.getArticulo().getCodigoInterno())) {
+							importe += (item.getCantidad() * det.getPrecioGs());
+						}
+					}
+				}
+				rem.setImporteGs(importe);
+				rr.saveObject(rem, rem.getUsuarioMod());
+				System.out.println(rem.getNumero() + " - " + rem.getImporteGs());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void mainz(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
 			/** List<Recibo> recs = rr.getObjects(Recibo.class.getName());
 			for (Recibo rec : recs) {
 				if (rec.isPago()) {
@@ -9416,14 +9449,18 @@ public class RegisterDomain extends Register {
 	 * [2]:venta.numero
 	 * [3]:cliente
 	 * [4]:fecha
+	 * [5]:tipomovimiento
+	 * [6]:importeGs
 	 */
-	public List<Object[]> getRemisiones(String numeroRemision, String numeroFactura, String cliente, String fecha) throws Exception {
-		String query = "select r.id, r.numero, r.venta.numero, r.venta.cliente.empresa.razonSocial, r.fecha from Remision r where r.numero like '%" + numeroRemision + "%'"
+	public List<Object[]> getRemisiones(String numeroRemision, String numeroFactura, String cliente, String fecha, int limit) throws Exception {
+		String query = "select r.id, r.numero, r.venta.numero, r.venta.cliente.empresa.razonSocial, r.fecha,"
+				+ " (select t from TipoMovimiento t where t.sigla = '" + Configuracion.SIGLA_TM_NOTA_REMISION + "'),"
+				+ " r.importeGs from Remision r where r.numero like '%" + numeroRemision + "%'"
 				+ " and upper(r.venta.numero) like '%" + numeroFactura.toUpperCase() + "%'"
 				+ " and upper(r.venta.cliente.empresa.razonSocial) like '%" + cliente.toUpperCase() + "%'"
 				+ " and cast (r.fecha as string) like '%" + fecha + "%'"
 				+ " order by r.fecha";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, limit);
 	}
 	
 	/**

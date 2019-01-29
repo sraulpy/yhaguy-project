@@ -11,6 +11,7 @@ public class Remision extends Domain {
 	
 	private Date fecha;
 	private String numero;
+	private double importeGs;
 	
 	private Venta venta;
 	private Set<RemisionDetalle> detalles = new HashSet<RemisionDetalle>();
@@ -50,6 +51,14 @@ public class Remision extends Domain {
 
 	public void setDetalles(Set<RemisionDetalle> detalles) {
 		this.detalles = detalles;
+	}
+
+	public double getImporteGs() {
+		return importeGs;
+	}
+
+	public void setImporteGs(double importeGs) {
+		this.importeGs = importeGs;
 	}
 
 }

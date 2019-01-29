@@ -22,6 +22,7 @@ public class Funcionario extends Domain {
 	private boolean cobrador;
 	private boolean telecobrador;
 	private boolean tecnico;
+	private boolean chofer;
 	
 	private double porc_comision = 0;
 	private double porc_comision_cobros = 0;
@@ -301,5 +302,13 @@ public class Funcionario extends Domain {
 
 	public void setNombreEmpresa(String nombreEmpresa) {
 		this.nombreEmpresa = nombreEmpresa;
+	}
+
+	public boolean isChofer() {
+		return chofer;
+	}
+
+	public void setChofer(boolean chofer) {
+		this.chofer = chofer;
 	}
 }

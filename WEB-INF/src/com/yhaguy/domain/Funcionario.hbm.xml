@@ -38,6 +38,10 @@
 		<property name="tecnico">
 			<column name="tecnico" not-null="true" default="false" />
 		</property>
+		
+		<property name="chofer">
+			<column name="chofer" not-null="true" default="false" />
+		</property>
 
 		<many-to-one name="funcionarioEstado" class="com.coreweb.domain.Tipo"
 			column="idestado" lazy="false" />

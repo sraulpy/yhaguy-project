@@ -8,6 +8,7 @@ public class RepartoDetalle extends Domain {
 	private Long idMovimiento;
 	private String observacion;
 	private double peso;
+	private double importeGs;
 	private boolean entregado;
 	private TipoMovimiento tipoMovimiento;
 	
@@ -55,6 +56,14 @@ public class RepartoDetalle extends Domain {
 
 	public void setPeso(double peso) {
 		this.peso = peso;
+	}
+
+	public double getImporteGs() {
+		return importeGs;
+	}
+
+	public void setImporteGs(double importeGs) {
+		this.importeGs = importeGs;
 	}
 
 }

@@ -12,6 +12,7 @@
 
 		<property name="fecha"/>
 		<property name="numero"/>
+		<property name="importeGs"/>
 		
 		<many-to-one name="venta" class="com.yhaguy.domain.Venta"
 			column="id_venta" lazy="false"/>		
