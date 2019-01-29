@@ -243,12 +243,11 @@ public class InformeHechauka {
 			String col13 = "0";
 			long col14 = compra.isContado() ? 1 : 2;
 			long col15 = compra.isContado() ? 0 : 1;
-			long col16 = 0;
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
 					+ FORMATTER.format(col12) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-					+ col15 + "" + "\t" + col16 + "" + "\r\n";
+					+ col15 + "" + "\r\n";
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
@@ -280,12 +279,11 @@ public class InformeHechauka {
 				String col13 = "0";
 				long col14 = gasto.isContado() ? 1 : 2;
 				long col15 = gasto.isContado() ? 0 : 1;
-				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
 						+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-						+ col15 + "" + "\t" + col16 + "" + "\r\n";
+						+ col15 + "" + "\r\n";
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
@@ -316,12 +314,11 @@ public class InformeHechauka {
 				String col13 = "0";
 				long col14 = 2;
 				long col15 = 1;
-				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
 						+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-						+ col15 + "" + "\t" + col16 + "" + "\r\n";
+						+ col15 + "" + "\r\n";
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
@@ -352,12 +349,11 @@ public class InformeHechauka {
 			String col13 = "0";
 			long col14 = 2;
 			long col15 = 0;
-			long col16 = 0;
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
 					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
 					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
 					+ FORMATTER.format(col12) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-					+ col15 + "" + "\t" + col16 + "" + "\r\n";
+					+ col15 + "" + "\r\n";
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
@@ -388,7 +384,6 @@ public class InformeHechauka {
 				String col13 = "0";
 				long col14 = nc.isNotaCreditoVentaContado() ? 1 : 2;
 				long col15 = nc.isNotaCreditoVentaContado() ? 0 : 1;
-				long col16 = 0;
 				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado
 						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 						+ FORMATTER.format(gravada) + "" + " \t"
@@ -396,7 +391,7 @@ public class InformeHechauka {
 						+ FORMATTER.format(col10) + "" + "\t"
 						+ FORMATTER.format(col11) + "" + "\t"
 						+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-						+ col15 + "" + "\t" + col16 + "" + "\r\n";
+						+ col15 + "" + "\r\n";
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
