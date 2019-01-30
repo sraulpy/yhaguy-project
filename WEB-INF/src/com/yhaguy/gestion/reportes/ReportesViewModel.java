@@ -19566,17 +19566,42 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");		
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Double> totales = new HashMap<String, Double>();
+	Map<String, Double> totalesGravada10 = new HashMap<String, Double>();
+	Map<String, Double> totalesIva10 = new HashMap<String, Double>();
+	Map<String, Double> totalesGravada5 = new HashMap<String, Double>();
+	Map<String, Double> totalesIva5 = new HashMap<String, Double>();
+	Map<String, Double> totalesExenta = new HashMap<String, Double>();
 
 	public GastosPorCuentaContableDataSource(List<Object[]> values) {
 		this.values = values;
 		for (Object[] value : values) {
 			GastoDetalle det = (GastoDetalle) value[0];
 			Double total = totales.get(det.getArticuloGasto().getDescripcion());
+			Double totalGravada10 = totalesGravada10.get(det.getArticuloGasto().getDescripcion());
+			Double totalIva10 = totalesIva10.get(det.getArticuloGasto().getDescripcion());
+			Double totalGravada5 = totalesGravada5.get(det.getArticuloGasto().getDescripcion());
+			Double totalIva5 = totalesIva5.get(det.getArticuloGasto().getDescripcion());
+			Double totalExenta = totalesExenta.get(det.getArticuloGasto().getDescripcion());
 			if (total != null) {
 				total += det.getMontoGs();
+				totalGravada10 += det.getGravada10();
+				totalIva10 += det.getIva10();
+				totalGravada5 += det.getGravada5();
+				totalIva5 += det.getIva5();
+				totalExenta += det.getExenta();
 				totales.put(det.getArticuloGasto().getDescripcion(), total);
+				totalesGravada10.put(det.getArticuloGasto().getDescripcion(), totalGravada10);
+				totalesIva10.put(det.getArticuloGasto().getDescripcion(), totalIva10);
+				totalesGravada5.put(det.getArticuloGasto().getDescripcion(), totalGravada5);
+				totalesIva5.put(det.getArticuloGasto().getDescripcion(), totalIva5);
+				totalesExenta.put(det.getArticuloGasto().getDescripcion(), totalExenta);
 			} else {
 				totales.put(det.getArticuloGasto().getDescripcion(), det.getMontoGs());
+				totalesGravada10.put(det.getArticuloGasto().getDescripcion(), det.getGravada10());
+				totalesIva10.put(det.getArticuloGasto().getDescripcion(), det.getIva10());
+				totalesGravada5.put(det.getArticuloGasto().getDescripcion(), det.getGravada5());
+				totalesIva5.put(det.getArticuloGasto().getDescripcion(), det.getIva5());
+				totalesExenta.put(det.getArticuloGasto().getDescripcion(), det.getExenta());
 			}
 		}
 	}
@@ -19603,8 +19628,28 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 			value = gasto.getProveedor().getRazonSocial();
 		} else if ("Ruc".equals(fieldName)) {
 			value = gasto.getProveedor().getRuc();
+		} else if ("Iva10".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getIva10());
+		} else if ("Gravada10".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getGravada10());
+		} else if ("Iva5".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getIva5());
+		} else if ("Gravada5".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getGravada5());
+		} else if ("Exenta".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getExenta());
 		} else if ("Importe".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getMontoGs());
+		} else if ("TotalGravada10".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalesGravada10.get(det.getArticuloGasto().getDescripcion()));
+		} else if ("TotalIva10".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalesIva10.get(det.getArticuloGasto().getDescripcion()));
+		} else if ("TotalGravada5".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalesGravada5.get(det.getArticuloGasto().getDescripcion()));
+		} else if ("TotalIva5".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalesIva5.get(det.getArticuloGasto().getDescripcion()));
+		} else if ("TotalExenta".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalesExenta.get(det.getArticuloGasto().getDescripcion()));
 		} else if ("TotalImporte".equals(fieldName)) {
 			value = Utiles.getNumberFormat(totales.get(det.getArticuloGasto().getDescripcion()));
 		}
