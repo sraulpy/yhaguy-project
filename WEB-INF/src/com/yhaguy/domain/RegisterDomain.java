@@ -9590,4 +9590,24 @@ public class RegisterDomain extends Register {
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : new Object[] { (long) 0, 0.0 };
 	}
+	
+	/**
+	 * @return los ajustes ctacte debito..
+	 */
+	public List<AjusteCtaCte> getAjustesDebito(long idMovimientoOriginal, long idTipoMovimiento) throws Exception {
+		String query = "select a from AjusteCtaCte a where a.debito.idMovimientoOriginal = " + idMovimientoOriginal
+				+ " and a.debito.tipoMovimiento.id = " + idTipoMovimiento;
+		List<AjusteCtaCte> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return los ajustes ctacte credito..
+	 */
+	public List<AjusteCtaCte> getAjustesCredito(long idMovimientoOriginal, long idTipoMovimiento) throws Exception {
+		String query = "select a from AjusteCtaCte a where a.credito.idMovimientoOriginal = " + idMovimientoOriginal
+				+ " and a.credito.tipoMovimiento.id = " + idTipoMovimiento;
+		List<AjusteCtaCte> list = this.hql(query);
+		return list;
+	}
 }

@@ -108,6 +108,9 @@
 			<checkbox checked="@bind(vm.fraccionado)"
 				label=" Ver fraccionado en cuotas.." />
 			<space />
+			<checkbox checked="@bind(vm.aplicaciones)" 
+				label=" Ver aplicaciones.." />
+			<space />
 		</hlayout>
 
 		<hlayout sclass="button-container">
@@ -145,10 +148,17 @@
 			<button mold="bs" sclass="btn-success btn-sm" width="150px"
 				iconSclass="z-icon-print" onClick='pop_impresion.open(self, "after_end")'
 				label=" Imprimir Cuenta" />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-refresh"
+				tooltiptext="Actualizar Saldos.." visible="@load(vm.tipoCliente)" 
+				onClick="@command('depurarSaldos')" />
+			<button mold="bs" sclass="btn-warning btn-sm"
+				iconSclass="z-icon-reply"
+				tooltiptext="Reasignar Saldo.." visible="@load(vm.tipoCliente)" 
+				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedFilter ne 'Pendientes' ? 'true' : vm.selectedItem_ eq null)" />
 			<button mold="bs" sclass="btn-info btn-sm"
 				iconSclass="z-icon-pencil"
-				tooltiptext="Observaciones.." visible="@load(vm.tipoCliente)" 
-				onClick='pop_obs.open(self, "after_end")' />
+				tooltiptext="Aplicar Saldo.." visible="@load(vm.tipoCliente)"  />
 			<button mold="bs" sclass="btn-primary btn-sm"
 				iconSclass="z-icon-calendar"
 				tooltiptext="Tareas Pendientes.." visible="@load(vm.tipoCliente)" 
@@ -162,7 +172,9 @@
 		<listbox sclass="small-list" vflex="true"
 			style="margin-bottom:5px"
 			emptyMessage="NO SE ENCONTRARON MOVIMIENTOS PARA ESTA CUENTA.."
-			model="@load(vm.movimientos)">
+			model="@load(vm.movimientos)"
+			visible="@load(!vm.aplicaciones)"
+			selectedItem="@bind(vm.selectedItem_)">
 			<listhead>
 				<listheader label="Emisión" sort="auto(pos1)" />
 				<listheader label="Vencimiento" sort="auto(pos2)" />
@@ -172,6 +184,7 @@
 				<listheader label="@load(vm.columnImporte)" align="right" sort="auto(pos5)" />
 				<listheader label="@load(vm.columnSaldo)" align="right" sort="auto(pos6)" />
 				<listheader label="Detalle" align="center" width="70px" />
+				<listheader label="Aplicar" align="center" width="70px" visible="@load(vm.selectedFilter eq 'Pendientes')" />
 			</listhead>
 			<auxhead>
 				<auxheader/>
@@ -188,6 +201,7 @@
 					<textbox sclass="filter" hflex="true"
 						value="@bind(vm.numeroImportacion)" instant="true"></textbox>
 				</auxheader>
+				<auxheader/>
 				<auxheader/>
 				<auxheader/>
 				<auxheader/>
@@ -215,6 +229,10 @@
 					<listcell>
 						<a label="ítems"
 							onClick="@command('verItems', item=each, parent=self)" />
+					</listcell>
+					<listcell>
+						<a label="aplic."
+							onClick="@command('verItems_', item=each, parent=self)" />
 					</listcell>
 				</listitem>
 			</template>
@@ -249,12 +267,98 @@
 				</listfooter>
 			</listfoot>
 		</listbox>
+		
+		<listbox sclass="small-list" vflex="true"
+			style="margin-bottom:5px"
+			emptyMessage="NO SE ENCONTRARON MOVIMIENTOS PARA ESTA CUENTA.."
+			visible="@load(vm.aplicaciones)">
+			<listhead>
+				<listheader label="Emisión" sort="auto(pos1)" />
+				<listheader label="Vencimiento" sort="auto(pos2)" />
+				<listheader label="Factura Nro." sort="auto(pos3)" />
+				<listheader label="Recibos" />
+				<listheader label="Notas Crédito" align="right" />
+				<listheader label="Notas Débito" align="right" />
+				<listheader label="Saldo" align="center" />
+			</listhead>
+			<auxhead>
+				<auxheader/>
+				<auxheader/>
+				<auxheader>
+					<textbox sclass="filter" hflex="true"
+						instant="true"></textbox>
+				</auxheader>
+				<auxheader>
+				</auxheader>
+				<auxheader/>
+				<auxheader/>
+				<auxheader/>
+			</auxhead>
+			<listfoot>
+				<listfooter></listfooter>
+			</listfoot>
+		</listbox>
+		
 	</vlayout>
 
 	<style>
 		input[type="radio"], input[type="checkbox"] { margin:0px 3px 0px
 		0px; }
 	</style>
+	
+	<popup id="popSaldos" width="1000px" sclass="rounded">
+		<div style="margin:5px">
+			<field value="APLICACIÓN DE SALDOS" />
+		</div>
+		<hlayout sclass="button-container">
+			<field value="Concepto:" />
+			<label value="@load(vm.selectedItem_.pos3)"></label>
+			<space></space>
+			<field value="Número:" />
+			<label value="@load(vm.selectedItem_.pos4)"></label>
+		</hlayout>
+		<listbox height="400px" sclass="small-list"
+			model="@load(vm.movimientos)" emptyMessage="DETALLE SIN ÍTEMS.."
+			selectedItem="@bind(vm.selectedAplicacion)">
+			<listhead>
+				<listheader label="Emisión" sort="auto(pos1)" />
+				<listheader label="Vencimiento" sort="auto(pos2)" />
+				<listheader label="Concepto" sort="auto(pos3)" />
+				<listheader label="Número" sort="auto(pos4)" />
+				<listheader label="Nro. Importación" visible="@load(!vm.tipoCliente)" sort="auto(pos10)" />
+				<listheader label="@load(vm.columnImporte)" align="right" sort="auto(pos5)" />
+				<listheader label="@load(vm.columnSaldo)" align="right" sort="auto(pos6)" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell
+						label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy')"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell
+						label="@load(each.pos2) @converter('formattedDate', format='dd-MM-yyyy')"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell label="@load(each.pos3)"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell label="@load(each.pos4)"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell label="@load(each.pos10)"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell
+						label="@load(each.pos5) @converter('formattedNumber', format='###,###,###,###')"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+					<listcell
+						label="@load(each.pos6) @converter('formattedNumber', format='###,###,###,###')"
+						style="@load(each.pos7 ? 'color:red' : '')" />
+				</listitem>
+			</template>
+		</listbox>
+		<div height="5px" />
+		<hlayout>
+			<div hflex="true"></div>
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-check" width="150px" onClick="@command('aplicacionDeSaldos')" />
+		</hlayout>
+	</popup>
 
 	<popup id="popDetalle" width="800px" sclass="rounded">
 		<hbox align="end" pack="end" width="100%">

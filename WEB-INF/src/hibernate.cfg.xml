@@ -52,6 +52,7 @@
 		<mapping resource="com/yhaguy/domain/CtaCteLineaCredito.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/CtaCteEmpresaMovimiento_2016.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/CtaCteEmpresaMovimiento_2017.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/AjusteCtaCte.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Funcionario.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioCtaCteDetalle.hbm.xml" />

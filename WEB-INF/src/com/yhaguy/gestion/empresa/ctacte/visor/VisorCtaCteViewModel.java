@@ -49,6 +49,7 @@ import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.AjusteCtaCte;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
@@ -64,6 +65,7 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TareaProgramada;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
+import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
@@ -103,6 +105,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	
 	private MyArray selectedItem;
 	private MyArray selectedItem_;
+	private MyArray selectedAplicacion;
 	private MyArray cliente;
 	private DetalleMovimiento detalle = new DetalleMovimiento();
 	private DetalleGroupsModel groupModel;
@@ -110,6 +113,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private int sizeCheques = 0;
 	private double totalCheques = 0;
 	private boolean fraccionado = false;
+	private boolean aplicaciones = false;
 	
 	private boolean habilitarLinea = false;
 	private boolean updateLineaCredito = false;
@@ -131,6 +135,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	
 	@Wire
 	private Popup popDetalle;
+	
+	@Wire
+	private Popup popSaldos;
 	
 	@Wire
 	private Popup popDetalleRecibo;
@@ -463,6 +470,67 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		comp2.setDisabled(true);
 	}
 	
+	@Command
+	@NotifyChange("selectedItem_")
+	public void verItems_(@BindingParam("item") MyArray item,
+			@BindingParam("parent") Component parent) throws Exception {
+		this.selectedItem_ = item;
+		this.popSaldos.open(parent, "start_before");
+	}
+	
+	@Command
+	@NotifyChange("movimientos")
+	public void aplicacionDeSaldos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		double saldo1 = (double) this.selectedItem_.getPos6();
+		if (saldo1 < 0) saldo1 = saldo1 * -1;
+		double saldo2 = (double) this.selectedAplicacion.getPos6(); 
+		double importe = (saldo1 - saldo2) > 0 ? saldo2 : saldo1;
+		
+		CtaCteEmpresaMovimiento deb = rr.getCtaCteEmpresaMovimientoById(this.selectedItem_.getId().longValue());
+		CtaCteEmpresaMovimiento cre = rr.getCtaCteEmpresaMovimientoById(this.selectedAplicacion.getId().longValue());
+		
+		AjusteCtaCte ajuste = new AjusteCtaCte();
+		ajuste.setFecha(new Date());
+		ajuste.setDescripcion("");
+		ajuste.setDebito(deb);
+		ajuste.setCredito(cre);
+		ajuste.setImporte(importe);
+		rr.saveObject(ajuste, this.getLoginNombre());
+		
+		ControlCuentaCorriente.recalcularSaldoCtaCte(deb);
+		ControlCuentaCorriente.recalcularSaldoCtaCte(cre);
+		
+		Clients.showNotification("SALDO APLICADO..");
+		
+		this.popSaldos.close();	
+	}
+	
+	@Command
+	@NotifyChange("movimientos")
+	public void depurarSaldos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (MyArray item : this.getMovimientos()) {
+			String sigla = (String) item.getPos8();
+			if (this.isVenta(sigla)) {
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(item.getId().longValue());
+				ControlCuentaCorriente.recalcularSaldoCtaCte(ctacte);
+			}
+		}
+		Clients.showNotification("SALDOS ACTUALIZADOS..");
+	}
+	
+	@Command
+	@NotifyChange("movimientos")
+	public void reasignarSaldo() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(this.selectedItem_.getId().longValue());
+		ctacte.setSaldo(ctacte.getImporteOriginal());
+		rr.saveObject(ctacte, this.getLoginNombre());
+		Clients.showNotification("SALDO REASIGNADO..");
+	}
+	
 	/**
 	 * @return el cliente convertido a myarray..
 	 */
@@ -564,6 +632,30 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			det.setImporteGs(vta.getTotalImporteGs());
 			det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 			out.add(det);
+			
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(nc.getId(), nc.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				DetalleMovimiento det_ = new DetalleMovimiento();
+				det_.setEmision(ajuste.getFecha());
+				det_.setNumero(ajuste.getId() + "");
+				det_.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+				det_.setTipoMovimiento("CREDITO CTA.CTE.");
+				det_.setImporteGs(ajuste.getImporte());
+				det_.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				out.add(det_);			
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(nc.getId(), nc.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				DetalleMovimiento det_ = new DetalleMovimiento();
+				det_.setEmision(ajuste.getFecha());
+				det_.setNumero(ajuste.getId() + "");
+				det_.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+				det_.setTipoMovimiento("DEBITO CTA.CTE.");
+				det_.setImporteGs(ajuste.getImporte());
+				det_.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				out.add(det_);			
+			}
 		}
 		
 		// ventas
@@ -604,6 +696,30 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 				det.setImporteGs(rdet.getMontoGs());
 				out.add(det);
+			}
+			
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getId() + "");
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+				det.setTipoMovimiento("CREDITO CTA.CTE.");
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				out.add(det);			
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getId() + "");
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+				det.setTipoMovimiento("DEBITO CTA.CTE.");
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				out.add(det);			
 			}
 		}	
 		
@@ -658,6 +774,29 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 								det.setSelf(true);
 							}
 							out.add(det);
+						}
+						List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+						for (AjusteCtaCte ajuste : ajustes) {
+							DetalleMovimiento det = new DetalleMovimiento();
+							det.setEmision(ajuste.getFecha());
+							det.setNumero(ajuste.getId() + "");
+							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+							det.setTipoMovimiento("CREDITO CTA.CTE.");
+							det.setImporteGs(ajuste.getImporte());
+							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+							out.add(det);			
+						}
+						
+						List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+						for (AjusteCtaCte ajuste : ajustes_) {
+							DetalleMovimiento det = new DetalleMovimiento();
+							det.setEmision(ajuste.getFecha());
+							det.setNumero(ajuste.getId() + "");
+							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+							det.setTipoMovimiento("DEBITO CTA.CTE.");
+							det.setImporteGs(ajuste.getImporte());
+							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+							out.add(det);			
 						}
 					}					
 				}
@@ -1231,6 +1370,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		List<MyArray> out = new ArrayList<MyArray>();
 		for (CtaCteEmpresaMovimiento mov : movs) {
 			MyArray my = new MyArray();
+			my.setId(mov.getId());
 			my.setPos1(mov.getFechaEmision());
 			my.setPos2(mov.getFechaVencimiento());
 			my.setPos3(mov.getTipoMovimiento().getDescripcion());
@@ -1332,14 +1472,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		 * @return el debe..
 		 */
 		public double getDebe() {
-			return this.isVentaCredito() ? this.importeGs : 0.0;
+			return this.isVentaCredito() || this.isAjusteDebito() ? this.importeGs : 0.0;
 		}
 		
 		/**
 		 * @return el haber..
 		 */
 		public double getHaber() {
-			return this.isNotaCredito() || this.isReciboCobro() ? this.importeGs : 0.0;
+			return this.isNotaCredito() || this.isReciboCobro() || this.isAjusteCredito() ? this.importeGs : 0.0;
 		}
 		
 		/**
@@ -1394,6 +1534,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		public boolean isReciboCobro() {
 			if(sigla == null) return false;
 			return sigla.equals(Configuracion.SIGLA_TM_RECIBO_COBRO);
+		}
+		
+		/**
+		 * @return true si es ajuste credito..
+		 */
+		public boolean isAjusteCredito() {
+			if(sigla == null) return false;
+			return sigla.equals(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+		}
+		
+		/**
+		 * @return true si es ajuste debito..
+		 */
+		public boolean isAjusteDebito() {
+			if(sigla == null) return false;
+			return sigla.equals(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 		}
 
 		public String getNumero() {
@@ -1893,6 +2049,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 	public void setHistoricoLineaCredito(List<HistoricoLineaCredito> historicoLineaCredito) {
 		this.historicoLineaCredito = historicoLineaCredito;
+	}
+
+	public boolean isAplicaciones() {
+		return aplicaciones;
+	}
+
+	public void setAplicaciones(boolean aplicaciones) {
+		this.aplicaciones = aplicaciones;
+	}
+
+	public MyArray getSelectedAplicacion() {
+		return selectedAplicacion;
+	}
+
+	public void setSelectedAplicacion(MyArray selectedAplicacion) {
+		this.selectedAplicacion = selectedAplicacion;
 	}	
 }
 

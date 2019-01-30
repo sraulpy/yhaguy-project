@@ -6,6 +6,7 @@ import java.util.List;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.AjusteCtaCte;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.BancoPrestamo;
@@ -484,5 +485,96 @@ public class ControlCuentaCorriente {
 		ctm.setSaldo(ctm.getImporteOriginal());
 		ctm.setNumeroImportacion(nroImportacion);
 		rr.saveObject(ctm, user);	
+	}
+	
+	/**
+	 * recalcula el saldo en cta cte.
+	 */
+	public static void recalcularSaldoCtaCte(CtaCteEmpresaMovimiento ctacte) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (ctacte.isVentaCredito()) {
+			Venta venta = (Venta) rr.getObject(Venta.class.getName(), ctacte.getIdMovimientoOriginal());
+			if (venta != null) {
+				recalcularSaldoVentaCredito(venta);
+			}
+		}
+		if (ctacte.isNotaCreditoVenta()) {
+			NotaCredito ncr = (NotaCredito) rr.getObject(NotaCredito.class.getName(), ctacte.getIdMovimientoOriginal());
+			if (ncr != null) {
+				recalcularSaldoNotaCredito(ncr);
+			}
+		}
+	}
+	
+	/**
+	 * recalcula los saldos por venta credito..
+	 */
+	public static void recalcularSaldoVentaCredito(Venta venta) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (venta.isMonedaLocal()) {
+			double recs = 0;
+			double ncrs = 0;
+			double ajcr = 0;
+			double ajdb = 0;
+			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(venta.getId(), venta.getTipoMovimiento().getSigla(), venta.getCliente().getIdEmpresa());
+			List<Object[]> recs_ = rr.getRecibosByVenta(venta.getId(), venta.getTipoMovimiento().getId());
+			for (Object[] rec : recs_) {
+				ReciboDetalle rdet = (ReciboDetalle) rec[1];
+				recs += rdet.getMontoGs();
+			}
+			List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(venta.getId());
+			for (NotaCredito ncr : ncrs_) {
+				if (!ncr.isAnulado()) {
+					ncrs += ncr.getImporteGs();
+				}				
+			}
+			List<AjusteCtaCte> ajcr_ = rr.getAjustesCredito(venta.getId(), venta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajcr_) {
+				ajcr += ajc.getImporte();				
+			}
+			List<AjusteCtaCte> ajdb_ = rr.getAjustesDebito(venta.getId(), venta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajdb_) {
+				ajdb += ajc.getImporte();				
+			}
+			if (ctacte != null) {
+				double hist_ = ((venta.getTotalImporteGs() + ajdb) - (ncrs + recs + ajcr));
+				ctacte.setSaldo(hist_);
+				rr.saveObject(ctacte, ctacte.getUsuarioMod());				
+			}
+		}
+	}
+	
+	/**
+	 * recalcula los saldos por nota de credito..
+	 */
+	public static void recalcularSaldoNotaCredito(NotaCredito nc) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {		
+			double ncr = nc.getImporteGs();
+			double vta = nc.getVentaAplicada().getImporteGs();
+			double saldo = ncr > vta ? (ncr - vta) : 0.0;
+			double ajcr = 0;
+			double ajdb = 0;
+			
+			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla(), nc.getCliente().getIdEmpresa());
+			
+			List<AjusteCtaCte> ajcr_ = rr.getAjustesCredito(nc.getId(), nc.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajcr_) {
+				ajcr += ajc.getImporte();				
+			}
+			
+			List<AjusteCtaCte> ajdb_ = rr.getAjustesDebito(nc.getId(), nc.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajdb_) {
+				ajdb += ajc.getImporte();				
+			}
+			
+			if (ctacte != null) {
+				double hist_ = ((saldo + ajcr) - (ajdb));
+				if (hist_ < 0) {
+					ctacte.setSaldo(hist_);
+					rr.saveObject(ctacte, ctacte.getUsuarioMod());
+				}				
+			}
+		}
 	}
 }
