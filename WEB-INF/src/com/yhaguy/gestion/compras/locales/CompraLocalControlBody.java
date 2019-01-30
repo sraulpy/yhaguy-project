@@ -390,17 +390,15 @@ public class CompraLocalControlBody extends BodyApp {
 	private void imprimir() {
 		List<Object[]> data = new ArrayList<Object[]>();
 
-		for (CompraLocalOrdenDetalleDTO item : this.dto.getDetalles()) {
+		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
 			Object[] obj1 = new Object[] { item.getArticulo().getPos1(),
-					item.getArticulo().getPos2(), item.getArticulo().getPos3(),
 					item.getArticulo().getPos4(), item.getCantidad(),
 					item.getCostoGs(), item.getImporteGs() };
 			data.add(obj1);
 		}
 
-		ReporteYhaguy rep = new ReporteOrdenCompra(this.dto);
+		ReporteYhaguy rep = new ReporteOrdenCompra(this.dto.getFactura());
 		rep.setDatosReporte(data);
-		rep.setApaisada();
 
 		ViewPdf vp = new ViewPdf();
 		vp.setBotonImprimir(false);
@@ -2481,25 +2479,21 @@ class ReportePresupuesto extends ReporteYhaguy {
  */
 class ReporteOrdenCompra extends ReporteYhaguy {
 	
-	private CompraLocalOrdenDTO compra;	
+	private CompraLocalFacturaDTO compra;	
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 50);
-	static DatosColumnas col2 = new DatosColumnas("Código Proveedor", TIPO_STRING, 50);
-	static DatosColumnas col3 = new DatosColumnas("Código Original", TIPO_STRING, 50);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
 	static DatosColumnas col4 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Cantidad", TIPO_INTEGER, 30, false);
-	static DatosColumnas col6 = new DatosColumnas("Precio", TIPO_DOUBLE, 30, false); 
-	static DatosColumnas col7 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true); 
+	static DatosColumnas col5 = new DatosColumnas("Cant.", TIPO_INTEGER, 15, false);
+	static DatosColumnas col6 = new DatosColumnas("Precio", TIPO_DOUBLE, 25, false); 
+	static DatosColumnas col7 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true); 
 	
-	public ReporteOrdenCompra(CompraLocalOrdenDTO compra) {
+	public ReporteOrdenCompra(CompraLocalFacturaDTO compra) {
 		this.compra = compra;
 	}
 	
 	static {
 		cols.add(col1);
-		cols.add(col2);
-		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
 		cols.add(col6);
@@ -2508,9 +2502,9 @@ class ReporteOrdenCompra extends ReporteYhaguy {
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Orden de Compra");
+		this.setTitulo("Factura de Compra");
 		this.setDirectorio("compras/locales");
-		this.setNombreArchivo("OrdenCompra-");
+		this.setNombreArchivo("FacturaCompra-");
 		this.setTitulosColumnas(cols);
 		this.setBody(this.getCuerpo());
 	}

@@ -28,6 +28,7 @@ import com.coreweb.domain.TipoTipo;
 import com.coreweb.domain.Usuario;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
+import com.coreweb.util.Ruc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
@@ -9050,7 +9051,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void main(String[] args) {
+	public static void mainy(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Remision> list = rr.getObjects(Remision.class.getName());
@@ -9070,6 +9071,25 @@ public class RegisterDomain extends Register {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		try {
+			Ruc ruc = new Ruc();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Cliente> clientes = rr.getObjects(Cliente.class.getName());
+			for (Cliente cliente : clientes) {
+				String ruc_ = cliente.getRuc();
+				boolean valido = ruc.validarRuc(ruc_);
+				if (!valido) {					
+					System.out.println("CLIENTE: " + cliente.getRazonSocial());
+					System.out.println("RUC-ERR: " + ruc_);
+					System.out.println("----------------------------------------------------");
+				}
+				
+			}
+		} catch (Exception e) {
 		}
 	}
 	
@@ -9553,5 +9573,21 @@ public class RegisterDomain extends Register {
 		}
 		query += " order by a.codigoInterno";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return el stock por deposito..
+	 * [0]:articulo.id
+	 * [1]:precioGs
+	 */
+	public Object[] getCompraAnterior(long idArticulo, long idDetalle) throws Exception {
+		String query = "select d.articulo.id, d.costoGs from CompraLocalOrdenDetalle d"
+				+ " where d.articulo.id = " + idArticulo; 
+				if (idDetalle > 0) {
+					query += " and d.id < " + idDetalle;
+				}
+				query += " order by d.id desc";
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : new Object[] { (long) 0, 0.0 };
 	}
 }

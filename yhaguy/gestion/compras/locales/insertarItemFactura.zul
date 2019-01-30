@@ -20,29 +20,6 @@
 							onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=0)"/>
 					</hlayout>				
 			</row>
-			<row>
-				<field value="Código Proveedor:"/>				
-				<hlayout>
-						<textbox hflex="true" 
-							value="@bind(vm.dato.nvoItem.articulo.pos2)"
-							onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=1)"
-							placeholder="Código Proveedor.."/>
-						<button
-							iconSclass="z-icon-search"
-							onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=1)"/>
-					</hlayout>				
-			</row>
-			<row>
-				<field value="Código Original:" />
-				<hlayout>
-					<textbox hflex="true"
-						value="@bind(vm.dato.nvoItem.articulo.pos3)"
-						onOK="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=2)"
-						placeholder="Código Original.." />
-					<button iconSclass="z-icon-search"
-						onClick="@command('buscarArticulo', tipo=vm.dato.nvoItem, filtro=2)" />
-				</hlayout>
-			</row>
 			<row>				
 				<field value="Descripción:"/>
 				<hlayout>

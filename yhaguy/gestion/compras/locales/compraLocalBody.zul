@@ -168,6 +168,12 @@
 								<listheader label="Cantidad"
 									style="text-align:center" width="80px" align="right"
 									sort="auto(cantidad)" />
+								<listheader label="Anterior Gs."
+									style="text-align:center" width="120px" align="right"
+									/>	
+								<listheader label="Diferencia Gs."
+									style="text-align:center" width="120px" align="right" />	
+								<listheader width="30px" align="center"></listheader>	
 								<listheader label="Precio Gs."
 									style="text-align:center" width="120px" align="right"
 									sort="auto(costoGs)" />								
@@ -182,6 +188,10 @@
 									<listcell label="@load(each.articulo.pos1)" tooltiptext="@load(each.articulo.pos1)"/>
 									<listcell label="@load(each.articulo.pos4)" tooltiptext="@load(each.articulo.pos4)" />
 									<listcell label="@load(each.cantidad)" />
+									<listcell label="@load(each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" />
+									<listcell label="@load(each.costoGs - each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" style="@load(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')" />
+									<listcell style="@load(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')" 
+										iconSclass="@load(each.compraAnteriorGs eq each.costoGs ? 'z-icon-check' : (each.compraAnteriorGs gt each.costoGs ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))"></listcell>
 									<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
 									<listcell label="@load(each.iva.text)"/>
@@ -199,7 +209,7 @@
 										<field value="ítems" />
 									</hlayout>
 								</listfooter>
-								<listfooter span="4">
+								<listfooter span="5">
 									<hbox hflex="true" pack="end" align="center" style="padding:0px">
 										<field value="Iva 5%"/>
 										<guaranibox readonly="true"

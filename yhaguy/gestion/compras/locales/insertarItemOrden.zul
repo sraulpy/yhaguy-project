@@ -73,13 +73,13 @@
 						visible="@load(!vm.dato.dto.monedaLocal)"/>
 				</hlayout>
 			</row>	
-			<row visible="false">
+			<row>
 				<field value="Descuento:" style="color:red;font-weight:bold" />			
 				<hlayout sclass="z-valign-middle">
-					<guaranibox />
+					<guaranibox readonly="true" />
 					<label value="Gs." style="font-size:11px" />
 					<space />
-					<guaranibox width="50px" />
+					<guaranibox readonly="true" width="50px" />
 					<label value="%" style="font-size:11px" />
 				</hlayout>
 			</row>

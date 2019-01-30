@@ -82,6 +82,17 @@ public class CompraLocalOrdenDetalleDTO extends DTO {
 		return rr.getStock(this.articulo.getId());
 	}
 	
+	/**
+	 * @return el ultimo precio del articulo..
+	 */
+	public double getCompraAnteriorGs() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (!this.articulo.esNuevo()) {
+			return (double) rr.getCompraAnterior(this.articulo.getId(), this.getId())[1];
+		}
+		return 0.0;
+	}
+	
 	public double getCostoGs() {
 		return costoGs;
 	}
