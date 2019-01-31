@@ -549,7 +549,7 @@ public class ControlCuentaCorriente {
 	 */
 	public static void recalcularSaldoNotaCredito(NotaCredito nc) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {		
+		if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado()) && nc.isMonedaLocal()) {		
 			double ncr = nc.getImporteGs();
 			double vta = nc.getVentaAplicada().getImporteGs();
 			double saldo = ncr > vta ? (ncr - vta) : 0.0;

@@ -36,10 +36,14 @@ import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
+import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloUbicacion;
+import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
@@ -211,6 +215,40 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setCostoIvaIncluido(false);
 			this.det.setUbicacion(this.getUbicacion(idAr));
 			this.cant.focus();
+			this.verificarArticulo(idAr);
+		}
+	}
+	
+	/**
+	 * verifica si el articulo es del grupo:
+	 * - repuestos
+	 * - importado
+	 * - precio = costogs * 1.1 * 1.05 (redondeo)
+	 * - excepcion nakata, mahle y mostrador
+	 * - precio = costogs * 1.1 * 1.1 (redondeo)
+	 */
+	private void verificarArticulo(long idArticulo) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Articulo art = rr.getArticuloById(idArticulo);
+		Funcionario func = rr.getFuncionario(this.getAcceso().getFuncionario().getId());
+		if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.REPUESTOS)) {
+			if (!art.getMarca().getDescripcion().equals(ArticuloMarca.COMPRA_LOCAL)) {
+				if (art.getProveedor().isProveedorExterior()) {
+					if (art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRA
+							&& art.getProveedor().getId().longValue() != Proveedor.ID_NAKATA
+							&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRS
+							&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_ARG
+							&& !func.isVendedorMostrador()) {
+						this.det.setPrecioGs(art.getCostoGs() * 1.1 * 1.05);
+						this.det.setPrecioMinimoGs(this.det.getPrecioGs());
+						this.det.setAuxi("PROMO-REP");
+					} else {
+						this.det.setPrecioGs(art.getCostoGs() * 1.1 * 1.1);
+						this.det.setPrecioMinimoGs(this.det.getPrecioGs());
+						this.det.setAuxi("PROMO-REP");
+					}
+				}
+			}			
 		}
 	}
 	
@@ -323,6 +361,9 @@ public class VentaItemControl extends SoloViewModel {
 	 * setea el precio de venta..
 	 */
 	private void setPrecioVenta() throws Exception {
+		if (this.det.getAuxi().equals("PROMO-REP")) {
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Object[] art = rr.getArticulo_(this.det.getArticulo().getId());
 		double precio = 0;

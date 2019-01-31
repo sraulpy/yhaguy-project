@@ -1839,6 +1839,16 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		return this.selectedMoneda.equals(CTA_GS)? "Total Gs." : "Total USD.";
 	}
 	
+	@DependsOn({ "selectedItem_", "selectedAplicacion" })
+	public double getSaldoAplicar() {
+		if (this.selectedItem_ == null || this.selectedAplicacion == null) return 0.0;
+		double saldo1 = (double) this.selectedItem_.getPos6();
+		if (saldo1 < 0) saldo1 = saldo1 * -1;
+		double saldo2 = (double) this.selectedAplicacion.getPos6(); 
+		double importe = (saldo1 - saldo2) > 0 ? saldo2 : saldo1;
+		return importe;
+	}
+	
 	public String getRuc() {
 		return ruc;
 	}

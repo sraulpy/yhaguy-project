@@ -15,6 +15,11 @@ public class Proveedor extends Domain {
 	public static final String RUC_DIR_NAC_ADUANAS = "80029222-7";
 	public static final String RUC_MOPC = "80004239-5";
 	public static final String RS_PASAJES = "PASAJES";
+	
+	public static final long ID_NAKATA = 250;
+	public static final long ID_MAHLE_BRA = 634;
+	public static final long ID_MAHLE_BRS = 251;
+	public static final long ID_MAHLE_ARG = 258;
 
 	Empresa empresa;
 	Tipo estadoProveedor;

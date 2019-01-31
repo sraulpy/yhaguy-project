@@ -102,14 +102,16 @@
 				<hlayout visible="@load(vm.dto.monedaLocal)">
 					<guaranibox id="dbxPrecio"
 						value="@bind(vm.det.precioGs)" 
-						onChange="@command('validarPrecio', comp=self)"/>
+						onChange="@command('validarPrecio', comp=self)"
+						readonly="@load(vm.det.auxi eq 'PROMO-REP')" />
 					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />
 				</hlayout>
 				<hlayout visible="@load(!vm.dto.monedaLocal)">
 					<dolarbox
 						value="@bind(vm.det.precioVentaFinalDs)" 
-						onChange="@command('guaranizarPrecio', comp=self)"/>
+						onChange="@command('guaranizarPrecio', comp=self)"
+						readonly="@load(vm.det.auxi eq 'PROMO-REP')" />
 					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />
 				</hlayout>
@@ -129,7 +131,8 @@
 				<hlayout>
 					<guaranibox
 						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
-						onChange="@command('validarDescuento', cmp=self)" />
+						onChange="@command('validarDescuento', cmp=self)" 
+						readonly="@load(vm.det.auxi eq 'PROMO-REP')" />
 					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />					
 				</hlayout>
@@ -140,7 +143,8 @@
 						width="50px" format="###,##0.00"
 						sclass="label-red"
 						onChange="@command('descontarPorcentaje', cmp=self)"
-						onOK="@command('descontarPorcentaje', cmp=self)" />
+						onOK="@command('descontarPorcentaje', cmp=self)" 
+						readonly="@load(vm.det.auxi eq 'PROMO-REP')" />
 					<label value="%" sclass="label-moneda" />
 				</hlayout>
 			</row>

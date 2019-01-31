@@ -4,6 +4,8 @@ import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
 public class ArticuloMarca extends Domain {
+	
+	public static final String COMPRA_LOCAL = "COMPRA LOCAL";
 
 	private String descripcion;
 	private String familia;

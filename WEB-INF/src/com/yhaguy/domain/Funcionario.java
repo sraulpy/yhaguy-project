@@ -23,6 +23,7 @@ public class Funcionario extends Domain {
 	private boolean telecobrador;
 	private boolean tecnico;
 	private boolean chofer;
+	private boolean vendedorMostrador;
 	
 	private double porc_comision = 0;
 	private double porc_comision_cobros = 0;
@@ -310,5 +311,13 @@ public class Funcionario extends Domain {
 
 	public void setChofer(boolean chofer) {
 		this.chofer = chofer;
+	}
+
+	public boolean isVendedorMostrador() {
+		return vendedorMostrador;
+	}
+
+	public void setVendedorMostrador(boolean vendedorMostrador) {
+		this.vendedorMostrador = vendedorMostrador;
 	}
 }

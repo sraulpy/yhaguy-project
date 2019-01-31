@@ -307,15 +307,38 @@
 	</style>
 	
 	<popup id="popSaldos" width="1000px" sclass="rounded">
-		<div style="margin:5px">
-			<field value="APLICACIÓN DE SALDOS" />
-		</div>
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="APLICACIÓN DE SALDOS" />
+			</hbox>
+			<button onClick="popSaldos.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
 		<hlayout sclass="button-container">
-			<field value="Concepto:" />
-			<label value="@load(vm.selectedItem_.pos3)"></label>
-			<space></space>
-			<field value="Número:" />
-			<label value="@load(vm.selectedItem_.pos4)"></label>
+			<vlayout>
+				<hlayout>
+					<a label="" iconSclass="z-icon-arrow-left"
+						style="cursor:default;color:#e74c3c" />
+					<space></space>
+					<label value="@load(vm.selectedItem_.pos3)"></label>
+					<space></space>
+					<label value="@load(vm.selectedItem_.pos4)"></label>
+					<separator orient="vertical" bar="true"></separator>
+					<label value="SALDO A APLICAR:"></label>
+					<space></space>
+					<label value="Gs."></label>
+					<label value="@load(vm.saldoAplicar) @converter('formattedNumber', format='###,###,###')"></label>
+				</hlayout>
+				<hlayout>
+					<a label="" iconSclass="z-icon-arrow-right" style="cursor:default;color:#4cae4c" />
+					<space></space>
+					<label value="@load(vm.selectedAplicacion.pos3)"></label>
+					<space></space>
+					<label value="@load(vm.selectedAplicacion.pos4)"></label>
+				</hlayout>
+			</vlayout>			
 		</hlayout>
 		<listbox height="400px" sclass="small-list"
 			model="@load(vm.movimientos)" emptyMessage="DETALLE SIN ÍTEMS.."
