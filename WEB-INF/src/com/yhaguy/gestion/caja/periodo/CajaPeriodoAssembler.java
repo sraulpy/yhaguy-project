@@ -75,6 +75,12 @@ public class CajaPeriodoAssembler extends Assembler {
 	public Domain dtoToDomain(DTO dto) throws Exception {
 		CajaPeriodo domain = (CajaPeriodo) getDomain(dto, CajaPeriodo.class);
 		CajaPeriodoDTO dtoC = (CajaPeriodoDTO) dto;
+		
+		for (ReciboDTO rec : dtoC.getRecibos()) {
+			if (rec.isOrdenPago() || rec.isAnticipoPago()) {
+				rec.setAuxi("RETENCION");
+			}
+		}
 
 		this.copiarValoresAtributos(dto, domain, ATT_IGUALES);
 		this.myPairToDomain(dto, domain, "estado");

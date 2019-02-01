@@ -44,6 +44,13 @@ public class CompraLocalFactura extends Domain {
 	}
 	
 	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
+	}
+	
+	/**
 	 * @return gravada 10%
 	 */
 	public double getGravada10() {

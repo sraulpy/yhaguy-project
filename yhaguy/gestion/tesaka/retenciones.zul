@@ -25,6 +25,9 @@
 							onOK="@command('buscarPagos', posFiltro=2)" />
 						<button iconSclass="z-icon-search"
 							onClick="@command('buscarPagos', posFiltro=2)" />
+						<space></space>
+						<field value="Tipo Cambio:" />
+						<guaranibox placeholder="Tipo Cambio.." value="@bind(vm.tipoCambio)" />
 					</hlayout>
 				</vlayout>
 			</row>
@@ -75,7 +78,7 @@
 	<div height="5px" />
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="BUSQUE LA ÓRDEN DE PAGO.."
-		model="@load(vm.selectedPago.detalles)"
+		model="@load(vm.selectedPago.detallesFacturas)"
 		checkmark="@load(vm.checkmarkVisible)"
 		multiple="true"
 		selectedItems="@bind(vm.selectedItems)">

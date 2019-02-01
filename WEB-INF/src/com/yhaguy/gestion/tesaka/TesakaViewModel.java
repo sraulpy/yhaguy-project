@@ -3,9 +3,6 @@ package com.yhaguy.gestion.tesaka;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -30,6 +27,9 @@ import com.yhaguy.gestion.caja.recibos.ReciboDetalleDTO;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoDTO;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+
 public class TesakaViewModel extends SimpleViewModel {
 	
 	private ReciboDTO selectedPago = new ReciboDTO();
@@ -37,6 +37,8 @@ public class TesakaViewModel extends SimpleViewModel {
 	
 	private int selectedPeriodo = 0;
 	private String selectedTipoRetencion = Retencion.EMITIDAS;
+	
+	private double tipoCambio = 0;
 	
 	@Init(superclass = true)
 	public void init() {
@@ -78,7 +80,7 @@ public class TesakaViewModel extends SimpleViewModel {
 			for (ReciboDetalleDTO pago : this.selectedItems) {
 				movims.add(pago.getMovimiento());
 			}
-			TesakaParser.generarArchivoRetenciones(movims, nroPago);
+			TesakaParser.generarArchivoRetenciones(movims, nroPago, this.tipoCambio);
 			TesakaParser.setTesakaMovimiento(movims, this.getLoginNombre());
 			String tesaka = TesakaParser.setTesakaPago(
 					this.selectedPago.getId(), this.getUs().getNombre());
@@ -124,8 +126,9 @@ public class TesakaViewModel extends SimpleViewModel {
 			if (!this.isCheckmarkVisible()) {
 				this.selectedItems = new ArrayList<ReciboDetalleDTO>();
 				for (ReciboDetalleDTO item : this.selectedPago.getDetalles()) {
-					if(item.getMovimiento().isTesaka())
-						this.selectedItems.add(item);
+					if (!item.isDiferenciaCambio()) {
+						if(item.getMovimiento().isTesaka()) this.selectedItems.add(item);
+					}
 				}
 			}
 		}
@@ -256,6 +259,14 @@ public class TesakaViewModel extends SimpleViewModel {
 
 	public void setSelectedTipoRetencion(String selectedTipoRetencion) {
 		this.selectedTipoRetencion = selectedTipoRetencion;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
 	}
 }
 

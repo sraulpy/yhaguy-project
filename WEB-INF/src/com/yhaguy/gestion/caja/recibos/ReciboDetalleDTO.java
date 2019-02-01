@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyConverter;
+import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoDTO;
 import com.yhaguy.util.Utiles;
 
@@ -27,6 +28,13 @@ public class ReciboDetalleDTO extends DTO {
 	private String styleSaldoDs = "";
 	private boolean selected = false;	
 	private MyConverter format;
+	
+	/**
+	 * @return true si es dif. tipo cambio..
+	 */
+	public boolean isDiferenciaCambio() {
+		return this.getAuxi().equals(ReciboDetalle.TIPO_DIF_CAMBIO);
+	}
 	
 	/**
 	 * @return true si es cancelacion de factura..

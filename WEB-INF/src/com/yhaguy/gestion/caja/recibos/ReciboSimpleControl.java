@@ -13,6 +13,7 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -105,6 +106,26 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.dato.getReciboDTO().getDetalles().add(this.nvoItem_dif_cambio);
 		this.inicializarItemDiferenciaCambio();
 		comp.close();
+	}
+	
+	@Command
+	@NotifyChange("nvoItem_dif_cambio")
+	public void openDiferenciaCambio(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
+		this.inicializarItemDiferenciaCambio();
+		comp.open(parent, "after_end");
+	}
+	
+	@Command
+	@NotifyChange("dato.reciboDTO")
+	public void setTipoCambio_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (this.dato.getReciboDTO().isCobro() || this.dato.getReciboDTO().isAnticipoCobro()) {
+			double tc = rr.getTipoCambioCompra(Utiles.agregarDias(this.dato.getReciboDTO().getFechaEmision(), -1));
+			this.dato.getReciboDTO().setTipoCambio(tc);
+		} else {
+			double tc = rr.getTipoCambioVenta(Utiles.agregarDias(this.dato.getReciboDTO().getFechaEmision(), -1));
+			this.dato.getReciboDTO().setTipoCambio(tc);
+		}
 	}
 	
 	
@@ -1153,6 +1174,9 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.nvoItem_dif_cambio.setAuxi(ReciboDetalle.TIPO_DIF_CAMBIO);
 		this.nvoItem_dif_cambio.setConcepto("DIFERENCIA POR TIPO DE CAMBIO");
 		this.nvoItem_dif_cambio.setMovimiento(null);
+		double dif1 = (double) this.getDatosMovimientosApagar()[0];
+		double dif2 = (double) this.getDatosMovimientosApagar()[2];
+		this.nvoItem_dif_cambio.setMontoGs(dif2 - dif1);
 	}
 	
 	/**

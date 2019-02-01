@@ -277,6 +277,17 @@ public class ReciboDTO extends DTO {
 	}
 	
 	/**
+	 * @return los items que son facturas..
+	 */
+	public List<ReciboDetalleDTO> getDetallesFacturas() {
+		List<ReciboDetalleDTO> out = new ArrayList<ReciboDetalleDTO>();
+		for (ReciboDetalleDTO item : this.detalles) {
+			if(!item.isDiferenciaCambio()) out.add(item);
+		}
+		return out;
+	}
+	
+	/**
 	 * @return la razon social..
 	 */
 	public String getRazonSocial() {

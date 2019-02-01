@@ -1293,7 +1293,7 @@ public class VentaControlBody extends BodyApp {
 	
 	private void sugerirValores(VentaDTO out) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioCompra();
+		double tc = rr.getTipoCambioCompra(out.getFecha());
 		
 		MyPair deposito = this.getUsuarioPropiedad().getDepositoHabFacturar(this.utilDto);
 		MyPair sucursal = this.getAcceso().getSucursalOperativa();

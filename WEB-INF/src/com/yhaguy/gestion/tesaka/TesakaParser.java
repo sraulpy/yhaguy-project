@@ -26,6 +26,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Retencion;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoDTO;
+import com.yhaguy.util.Utiles;
 
 public class TesakaParser {
 	
@@ -34,8 +35,7 @@ public class TesakaParser {
 	/**
 	 * genera el archivo para las retenciones..
 	 */
-	public static void generarArchivoRetenciones (
-			List<CtaCteEmpresaMovimientoDTO> movimientos, String nroPago)
+	public static void generarArchivoRetenciones(List<CtaCteEmpresaMovimientoDTO> movimientos, String nroPago, double tipoCambio)
 			throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 
@@ -49,13 +49,13 @@ public class TesakaParser {
 					|| sigla.equals(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO)) {
 				CompraLocalFactura compra = rr.getFacturaCompraById(item
 						.getIdMovimientoOriginal());
-				jsonCompras.add(compraToJsonString(compra));
+				jsonCompras.add(compraToJsonString(compra, compra.isMonedaLocal(), tipoCambio));
 			}
 			
 			if (sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO)
 					|| sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO)) {
 				Gasto gasto = rr.getGastoById(item.getIdMovimientoOriginal());
-				jsonCompras.add(gastoToJsonString(gasto));
+				jsonCompras.add(gastoToJsonString(gasto, gasto.isMonedaLocal(), tipoCambio));
 			}
 		}
 		saveArchivoRetencion(jsonCompras, nroPago);
@@ -94,20 +94,21 @@ public class TesakaParser {
 	 * @return la compra en formato JSON object..
 	 */
 	@SuppressWarnings("unchecked")
-	private static String compraToJsonString(CompraLocalFactura compra) {
+	private static String compraToJsonString(CompraLocalFactura compra, boolean monedaLocal, double tipoCambio) {
 		Misc misc = new Misc();
 		
 		// detalle..
 		JSONArray detalle = new JSONArray();		
 		for (CompraLocalFacturaDetalle item : compra.getDetalles()) {
 			int signo = item.isDescuento() ? -1 : 1;
+			double costo = monedaLocal ? item.getCostoGs() : (item.getCostoDs() * tipoCambio);
 			if (item.getArticulo().getDescripcion().equals("@DESCUENTO")) {
 				signo = -1;
 			}
 			JSONObject det = new JSONObject();
 			det.put("cantidad", item.getCantidad());
 			det.put("tasaAplica", "10");
-			det.put("precioUnitario", item.getCostoGs() * signo);
+			det.put("precioUnitario", Utiles.getRedondeo(costo) * signo);
 			det.put("descripcion", item.getArticulo().getDescripcion());
 			detalle.add(det);
 		}
@@ -173,16 +174,17 @@ public class TesakaParser {
 	 * @return el gasto en formato JSON object..
 	 */
 	@SuppressWarnings("unchecked")
-	private static String gastoToJsonString(Gasto gasto) {
+	private static String gastoToJsonString(Gasto gasto, boolean monedaLocal, double tipoCambio) {
 		Misc misc = new Misc();
 		
 		// detalle..
 		JSONArray detalle = new JSONArray();		
 		for (GastoDetalle item : gasto.getDetalles()) {
+			double monto = monedaLocal ? item.getMontoGs() : (item.getMontoDs() * tipoCambio);
 			JSONObject det = new JSONObject();
 			det.put("cantidad", item.getCantidad());
 			det.put("tasaAplica", "10");
-			det.put("precioUnitario", item.getMontoGs());
+			det.put("precioUnitario", Utiles.getRedondeo(monto));
 			det.put("descripcion", item.getArticuloGasto().getDescripcion());
 			detalle.add(det);
 		}

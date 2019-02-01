@@ -20,6 +20,7 @@
 					<field value="Fecha" />
 					<datebox
 						value="@bind(vm.dato.reciboDTO.fechaEmision)"
+						onChange="@command('setTipoCambio_')"
 						hflex="true" />
 				</vlayout>
 				<vlayout spacing="0">
@@ -162,7 +163,7 @@
 				<button mold="bs" sclass="btn-info btn-sm"
 					width="100px" iconSclass="z-icon-plus-circle"
 					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
-					onClick='pop_dif_tc.open(self, "after_end")' 
+					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" 
 					visible="@load(vm.dato.reciboDTO.ordenPago)"/>
 			</hlayout>
 
