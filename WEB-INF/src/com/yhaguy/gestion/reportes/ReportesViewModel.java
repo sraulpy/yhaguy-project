@@ -5412,16 +5412,21 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
-				for (Object[] art : arts) {					
+				for (Object[] art : arts) {	
+					String familia = (String) art[10];
+					Object[] promo = new Object[] { 0.0, 0.0 };
+					if (familia.equals(ArticuloFamilia.REPUESTOS)) {
+						promo = this.verificarPromoRepuestos((long) art[0]);
+					}
 					if (stock) {	
 						long min = art[6] != null ? (long) art[6] : (long) 0;
 						long may = art[7] != null ? (long) art[7] : (long) 0;
 						long mcl = art[8] != null ? (long) art[8] : (long) 0;
 						if (min > 0 || may > 0 || mcl > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
+							data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5], promo[0], promo[1] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
+						data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5], promo[0], promo[1] });
 					}					
 				}
 				
@@ -5445,6 +5450,38 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/**
+		 * verifica si el articulo es del grupo:
+		 * - repuestos
+		 * - importado
+		 * - precio = costogs * 1.1 * 1.05 (redondeo)
+		 * - excepcion nakata, mahle y mostrador
+		 * - precio = costogs * 1.1 * 1.1 (redondeo)
+		 */
+		private Object[] verificarPromoRepuestos(long idArticulo) throws Exception {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Articulo art = rr.getArticuloById(idArticulo);
+			double precioVtaExt = 0.0;
+			double precioVtaInt = 0.0;
+			if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.REPUESTOS)) {
+				if (!art.getMarca().getDescripcion().equals(ArticuloMarca.COMPRA_LOCAL)) {
+					if (art.getProveedor().isProveedorExterior()) {
+						if (art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRA
+								&& art.getProveedor().getId().longValue() != Proveedor.ID_NAKATA
+								&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRS
+								&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_ARG) {
+							precioVtaExt = art.getCostoGs() * 1.1 * 1.05;
+							precioVtaInt = art.getCostoGs() * 1.1 * 1.1;
+						} else {
+							precioVtaExt = art.getCostoGs() * 1.1 * 1.1;
+							precioVtaInt = art.getCostoGs() * 1.1 * 1.1;
+						}
+					}
+				}			
+			}
+			return new Object[] { precioVtaExt, precioVtaInt };
 		}
 	}
 	
@@ -21074,6 +21111,8 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
 	static DatosColumnas col7 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 20);
 	static DatosColumnas col8 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 20);
+	static DatosColumnas col9 = new DatosColumnas("Ext.Gs.", TIPO_DOUBLE_GS, 20);
+	static DatosColumnas col10 = new DatosColumnas("Int.Gs.", TIPO_DOUBLE_GS, 20);
 
 	public ReporteListaPrecioPorDeposito(String proveedor) {
 		this.proveedor = proveedor;
@@ -21088,6 +21127,8 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 		cols.add(col6);
 		cols.add(col7);
 		cols.add(col8);
+		cols.add(col9);
+		cols.add(col10);
 	}
 
 	@Override
