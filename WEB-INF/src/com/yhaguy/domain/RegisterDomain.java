@@ -2911,17 +2911,33 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return las ventas segun fecha 
+	 */
+	public List<Venta> getVentas(Date desde, Date hasta, long idCliente) throws Exception {
+		return this.getVentas(desde, hasta, idCliente, 0, 0, 0);
+	}
 
 	/**
-	 * @return las ventas segun fecha
+	 * @return las ventas segun fecha 
 	 */
-	public List<Venta> getVentas(Date desde, Date hasta, long idCliente)
+	public List<Venta> getVentas(Date desde, Date hasta, long idCliente, long idRubro, long idSucursal, long idVendedor)
 			throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
 				+ " and v.fecha between ? and ?";
 		if (idCliente != 0) {
-			query += " and v.cliente.id = ?";
+			query += " and v.cliente.id = " + idCliente;
+		}
+		if (idRubro != 0) {
+			query += " and v.cliente.empresa.rubro.id = " + idRubro;
+		}
+		if (idSucursal != 0) {
+			query += " and v.sucursal.id = " + idSucursal;
+		}
+		if (idVendedor != 0) {
+			query += " and v.vendedor.id = " + idVendedor;
 		}
 		query += " order by v.numero, v.fecha";
 
@@ -2930,9 +2946,6 @@ public class RegisterDomain extends Register {
 		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
 		listParams.add(desde);
 		listParams.add(hasta);
-		if (idCliente != 0) {
-			listParams.add(idCliente);
-		}
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
@@ -3309,16 +3322,32 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
-
+	
 	/**
 	 * @return las notas de credito de venta segun fecha
 	 */
 	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente) throws Exception {
+		return this.getNotasCreditoVenta(desde, hasta, idCliente, 0, 0, 0, "");
+	}
+
+	/**
+	 * @return las notas de credito de venta segun fecha
+	 */
+	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idRubro, long idSucursal, long idVendedor, String param) throws Exception {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
 				+ Configuracion.SIGLA_IMPORTACION_ESTADO_ANULADO + "' and n.tipoMovimiento.sigla = ?"
 				+ " and (n.fechaEmision between ? and ?)";
 		if (idCliente != 0) {
 			query += " and n.cliente.id = ?";
+		}
+		if (idRubro != 0) {
+			query += " and n.cliente.empresa.rubro.id = " + idRubro;
+		}
+		if (idSucursal != 0) {
+			query += " and n.sucursal.id = " + idSucursal;
+		}
+		if (idVendedor != 0) {
+			query += " and n.vendedor.id = " + idVendedor;
 		}
 		query += " order by n.numero";
 
@@ -9251,7 +9280,7 @@ public class RegisterDomain extends Register {
 				}				
 			} **/
 			
-			List<NotaCredito> ncs = rr.getNotasCreditoVenta(Utiles.getFecha("05-10-2018 00:00:00"), new Date(), 0);
+			List<NotaCredito> ncs = rr.getNotasCreditoVenta(Utiles.getFecha("05-10-2018 00:00:00"), new Date(), 0, 0, "");
 			for (NotaCredito nc : ncs) {
 				nc.setDeposito(nc.getVentaAplicada().getDeposito());
 				rr.saveObject(nc, nc.getUsuarioMod());

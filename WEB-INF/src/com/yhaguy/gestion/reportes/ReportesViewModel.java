@@ -3683,6 +3683,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				Articulo art = filtro.getArticulo();
 				Cliente cliente = filtro.getCliente();
 				Object[] formato = filtro.getFormato();
+				Funcionario vendedor = filtro.getVendedor();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				EmpresaRubro rubro = filtro.getRubro_();
 				
 				double totalImporte = 0;
 				double totalCosto = 0;
@@ -3695,9 +3699,13 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				long idCliente = cliente == null ? 0 : cliente.getId();
+				long idCliente = cliente == null ? 0 : cliente.getId().longValue();
+				long idRubro = rubro == null ? 0 : rubro.getId().longValue();
+				long idSucursal = suc == null ? 0 : suc.getId().longValue();
+				long idVendedor = vendedor == null ? 0 : vendedor.getId().longValue();
+				long idFamilia = familia == null ? 0 : familia.getId().longValue();
 
-				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente);
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "");
 				for (NotaCredito notacred : ncs) {
 					String motivo = notacred.getMotivo().getDescripcion().substring(0, 3).toUpperCase() + ".";
 					for (NotaCreditoDetalle item : notacred.getDetallesArticulos()) {
@@ -3718,14 +3726,16 @@ public class ReportesViewModel extends SimpleViewModel {
 								notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
 								item.getArticulo().getDescripcion()};
 						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
-							data.add(nc);
-							if (!notacred.isAnulado() && art != null) {
-								totalImporte += item.getImporteGsSinIva() * -1;
-								totalCosto += item.getCostoTotalGsSinIva() * -1;
+							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
+								data.add(nc);
+								if (!notacred.isAnulado() && art != null) {
+									totalImporte += item.getImporteGsSinIva() * -1;
+									totalCosto += item.getCostoTotalGsSinIva() * -1;
+								}							
 							}
 						}
 					}
-					if (art == null && notacred.isMotivoDescuento()) {
+					if (art == null && familia == null && notacred.isMotivoDescuento()) {
 						Object[] nc = new Object[] {
 								Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
 								notacred.getNumero(),
@@ -3743,13 +3753,13 @@ public class ReportesViewModel extends SimpleViewModel {
 								"DESCUENTO CONCEDIDO" };
 						data.add(nc);
 					}
-					if (!notacred.isAnulado() && art == null) {
+					if (!notacred.isAnulado() && art == null && familia == null) {
 						totalImporte += notacred.getTotalImporteGsSinIva() * -1;
 						totalCosto += notacred.getTotalCostoGsSinIva() * -1;
 					}
 				}
 
-				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente);
+				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente, idRubro, idSucursal, idVendedor);
 				for (Venta venta : ventas) {
 					for (VentaDetalle item : venta.getDetalles()) {
 						Object[] vta = new Object[] {
@@ -3769,14 +3779,16 @@ public class ReportesViewModel extends SimpleViewModel {
 								venta.isAnulado() ? 0.0 : item.getRentabilidad(),
 								item.getArticulo().getDescripcion()};
 						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
-							data.add(vta);
-							if (!venta.isAnulado() && art != null) {
-								totalImporte += (item.getImporteGsSinIva() - item.getDescuentoUnitarioGsSinIva());
-								totalCosto += item.getCostoTotalGsSinIva();
+							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
+								data.add(vta);
+								if (!venta.isAnulado() && art != null) {
+									totalImporte += (item.getImporteGsSinIva() - item.getDescuentoUnitarioGsSinIva());
+									totalCosto += item.getCostoTotalGsSinIva();
+								}
 							}
 						}
 					}
-					if (!venta.isAnulado() && art == null) {
+					if (!venta.isAnulado() && art == null && familia == null) {
 						totalImporte += venta.getTotalImporteGsSinIva();
 						totalCosto += venta.getTotalCostoGsSinIva();
 					}

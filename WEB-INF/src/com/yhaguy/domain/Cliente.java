@@ -67,10 +67,8 @@ public class Cliente extends Domain {
 	 */
 	public String getRubro() {
 		String out = "NO DEFINIDO";
-		if (this.empresa.getRubroEmpresas().size() > 0) {
-			for (Tipo rubro : this.empresa.getRubroEmpresas()) {
-				out = rubro.getDescripcion();
-			}
+		if (this.empresa.getRubro() != null) {
+			return this.empresa.getRubro().getDescripcion();
 		}
 		return out;
 	}
