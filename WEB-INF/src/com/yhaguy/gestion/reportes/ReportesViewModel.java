@@ -3728,7 +3728,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 								data.add(nc);
-								if (!notacred.isAnulado() && art != null) {
+								if (!notacred.isAnulado() && art != null && familia != null) {
 									totalImporte += item.getImporteGsSinIva() * -1;
 									totalCosto += item.getCostoTotalGsSinIva() * -1;
 								}							
@@ -3753,7 +3753,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								"DESCUENTO CONCEDIDO" };
 						data.add(nc);
 					}
-					if (!notacred.isAnulado() && art == null && familia == null) {
+					if ((!notacred.isAnulado() && art != null) || (!notacred.isAnulado() && familia != null)) {
 						totalImporte += notacred.getTotalImporteGsSinIva() * -1;
 						totalCosto += notacred.getTotalCostoGsSinIva() * -1;
 					}
@@ -3781,7 +3781,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 								data.add(vta);
-								if (!venta.isAnulado() && art != null) {
+								if ((!venta.isAnulado() && art != null) || (!venta.isAnulado() && familia != null)) {
 									totalImporte += (item.getImporteGsSinIva() - item.getDescuentoUnitarioGsSinIva());
 									totalCosto += item.getCostoTotalGsSinIva();
 								}
@@ -5103,6 +5103,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Venta> ventas = rr.getVentas(desde, hasta, 0);
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
 				Map<String, Long> acum = new HashMap<String, Long>();
+				Map<String, Double> acum_ = new HashMap<String, Double>();
 
 				for (Venta venta : ventas) {
 					if (!venta.isAnulado()) {
@@ -5113,12 +5114,16 @@ public class ReportesViewModel extends SimpleViewModel {
 								String vendedor = venta.getVendedor().getRazonSocial();
 								String key = cliente + ";" + vendedor + ";" + cod;
 								Long cant = acum.get(key);
+								Double importe = acum_.get(key);
 								if (cant != null) {
 									cant += item.getCantidad();
+									importe += (item.getCantidad() * item.getImporteGs());
 								} else {
 									cant = item.getCantidad();
+									importe = item.getImporteGs();
 								}
 								acum.put(key, cant);
+								acum_.put(key, importe);
 							}
 						}
 					}
@@ -5133,10 +5138,13 @@ public class ReportesViewModel extends SimpleViewModel {
 								String vendedor = nc.getVentaAplicada().getVendedor().getRazonSocial();
 								String key = cliente + ";" + vendedor + ";" + cod;
 								Long cant = acum.get(key);
+								Double importe = acum_.get(key);
 								if (cant != null) {
 									cant -= item.getCantidad();
+									importe -= (item.getCantidad() * item.getImporteGs());
 								}
 								acum.put(key, cant);
+								acum_.put(key, importe);
 							}
 						}
 					}
@@ -5158,13 +5166,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (String key : keys_) {
 					Long cant = acum.get(key);
+					Double importe = acum_.get(key);
 					if (cant != null) {
 						String[] dato = key.split(";");
 						String cod = dato[2];
 						Object[] coef = codigos.get(cod);
 						int duenho = (int) coef[0];
 						int empleado = (int) coef[1];
-						data.add(new Object[] { dato[0], dato[1], cod, cant, (cant * duenho), (cant * empleado) });
+						data.add(new Object[] { dato[0], dato[1], cod, cant, importe, (cant * duenho), (cant * empleado) });
 					}					
 				}
 				
@@ -5561,6 +5570,8 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setMarca_(null);
 		this.filtro.setFamilia_(null);
 		this.filtro.setStockMayorIgual(1);
+		this.filtro.setRubro_(null);
+		this.filtro.setVendedor(null);
 	}
 
 	/**
@@ -21048,6 +21059,7 @@ class ReportePromoValvoline extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING, 60);
 	static DatosColumnas col2 = new DatosColumnas("Codigo", TIPO_STRING, 40);
 	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 25, true);
+	static DatosColumnas col3_ = new DatosColumnas("Importe Gs.", TIPO_DOUBLE, 30, true);
 	static DatosColumnas col4 = new DatosColumnas("Dueño", TIPO_LONG, 25, true);
 	static DatosColumnas col5 = new DatosColumnas("Empleado", TIPO_LONG, 25, true);
 
@@ -21061,6 +21073,7 @@ class ReportePromoValvoline extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
+		cols.add(col3_);
 		cols.add(col4);
 		cols.add(col5);
 	}
