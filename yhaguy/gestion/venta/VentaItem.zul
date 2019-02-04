@@ -103,7 +103,7 @@
 					<guaranibox id="dbxPrecio"
 						value="@bind(vm.det.precioGs)" 
 						onChange="@command('validarPrecio', comp=self)"
-						readonly="@load(vm.det.auxi eq 'PROMO-REP')" />
+						readonly="@load(vm.det.auxi eq 'PROMO-REP'? (vm.loginNombre ne 'mariza') : 'false')" />
 					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />
 				</hlayout>
