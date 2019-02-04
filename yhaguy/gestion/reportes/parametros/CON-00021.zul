@@ -15,6 +15,31 @@
 				placeholder="Hasta.." hflex="true" />
 		</row>
 		<row>
+			<field value="Fecha Carga Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde2)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Carga Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta2)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Sucursal:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.sucursales)"
+				selectedItem="@bind(vm.dato.filtro.selectedSucursal)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Otros comprobantes:" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
+		</row>
+		<row>
 			<field value="Cuenta:" />
 			<bandbox hflex="true" placeholder="TODOS.."
 				readonly="true" value="@load(vm.dato.filtro.articuloGasto.descripcion)"

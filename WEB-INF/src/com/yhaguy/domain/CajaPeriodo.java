@@ -20,6 +20,7 @@ public class CajaPeriodo extends Domain {
 	public static final String TIPO_COBROS = "CAJA COBRANZAS";
 	public static final String TIPO_COBROS_MOBILE = "CAJA COBRANZAS MOVILES";
 	public static final String TIPO_PAGOS = "CAJA PAGOS";
+	public static final String TIPO_PAGOS_EXTERIOR = "CAJA PAGOS EXTERIOR";
 
 	private String numero;
 	private Date apertura;
@@ -77,6 +78,7 @@ public class CajaPeriodo extends Domain {
 		out.add(TIPO_PAGOS);
 		out.add(TIPO_COBROS);
 		out.add(TIPO_COBROS_MOBILE);
+		out.add(TIPO_PAGOS_EXTERIOR);
 		return out;
 	}
 	

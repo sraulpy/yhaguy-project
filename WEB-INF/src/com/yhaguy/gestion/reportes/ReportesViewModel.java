@@ -10127,15 +10127,31 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void gastosPorCuentaContable(boolean mobile) throws Exception {
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			Date desde_ = filtro.getFechaDesde2();
+			Date hasta_ = filtro.getFechaHasta2();
 			ArticuloGasto cuenta = filtro.getArticuloGasto();
+			boolean otrosComprobantes = filtro.isFraccionado();
+			SucursalApp suc = filtro.getSelectedSucursal();
+			String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
+			long idSucursal = suc != null ? suc.getId() : 0;
 			Object[] formato = filtro.getFormato();
 			
 			if (desde == null) desde = new Date();
 			if (hasta == null) hasta = new Date();
+			
+			if (desde_ == null) desde_ = new Date();
+			if (hasta_ == null) hasta_ = new Date();
 
-			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Gasto> gastos = rr.getGastos(desde, hasta);
+			RegisterDomain rr = RegisterDomain.getInstance();			
+			List<Gasto> gastos = new ArrayList<Gasto>();
 			List<Object[]> dets = new ArrayList<Object[]>();
+			List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
+			if (otrosComprobantes) {
+				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal);
+			} else {
+				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
+				notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
+			}
 
 			for (Gasto gasto : gastos) {
 				for (GastoDetalle det : gasto.getDetalles()) {
@@ -10147,7 +10163,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						dets.add(new Object[]{ det, gasto });
 					}
 				}
-			}
+			}			
 			
 			Collections.sort(dets, new Comparator<Object[]>() {
 				@Override
@@ -10163,10 +10179,11 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_GASTOS_POR_CUENTA_CONTABLE;
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new GastosPorCuentaContableDataSource(dets);
+			JRDataSource dataSource = new GastosPorCuentaContableDataSource(dets, notascredito);
 			params.put("Usuario", getUs().getNombre());
 			params.put("periodo", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY) 
 					+ " a " + Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			params.put("Sucursal", sucursal);
 			imprimirJasper(source, params, dataSource, formato);
 		}
 		
@@ -10176,16 +10193,35 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void gastosPorCuentaContable_(boolean mobile) throws Exception {
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			Date desde_ = filtro.getFechaDesde2();
+			Date hasta_ = filtro.getFechaHasta2();
 			ArticuloGasto cuenta = filtro.getArticuloGasto();
+			boolean otrosComprobantes = filtro.isFraccionado();
+			SucursalApp suc = filtro.getSelectedSucursal();
+			String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
+			long idSucursal = suc != null ? suc.getId() : 0;
+			String keyNC = "DESCUENTOS OBTENIDOS";
 			
 			if (desde == null) desde = new Date();
 			if (hasta == null) hasta = new Date();
+			
+			if (desde_ == null) desde_ = new Date();
+			if (hasta_ == null) hasta_ = new Date();
 
-			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Gasto> gastos = rr.getGastos(desde, hasta);
+			RegisterDomain rr = RegisterDomain.getInstance();			
+			List<Gasto> gastos = new ArrayList<Gasto>();
+			List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
 			List<Object[]> dets = new ArrayList<Object[]>();
 			List<Object[]> data = new ArrayList<Object[]>();
 			Map<String, Object[]> values = new HashMap<String, Object[]>();
+			if (otrosComprobantes) {
+				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal);
+			} else {
+				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
+				if (cuenta == null) {
+					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
+				}
+			}
 
 			for (Gasto gasto : gastos) {
 				for (GastoDetalle det : gasto.getDetalles()) {
@@ -10197,7 +10233,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						dets.add(new Object[]{ det, gasto });
 					}
 				}
-			}		
+			}	
 			
 			for (Object[] value : dets) {
 				GastoDetalle det = (GastoDetalle) value[0];
@@ -10233,20 +10269,75 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 			}
 			
+			for (NotaCredito nc : notascredito) {
+				String key = keyNC;
+				Object[] val = values.get(key);
+				double gravada10 = nc.getTotalGravado10() * -1;
+				double gravada5 = 0.0;
+				double exenta = nc.getTotalExenta() * -1;
+				double iva10 = nc.getTotalIva10() * -1;
+				double iva5 = 0.0;
+				double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
+				if (val != null) {					
+					double totalGrav10 = (double) val[1];
+					double totalGrav5 = (double) val[2];
+					double totalIva10 = (double) val[3];
+					double totalIva5 = (double) val[4];
+					double totalExenta = (double) val[5];
+					double totalImporte = (double) val[6]; 
+					totalGrav10 += gravada10;
+					totalGrav5 += gravada5;
+					totalIva10 += iva10;
+					totalIva5 += iva5;
+					totalExenta += exenta;
+					totalImporte += importe;
+					values.put(key,
+							new Object[] { null, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+									Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
+									Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
+				} else {
+					double totalGrav10 = gravada10;
+					double totalGrav5 = gravada5;
+					double totalIva10 = iva10;
+					double totalIva5 = iva5;
+					double totalExenta = exenta;
+					double totalImporte = importe;
+					values.put(key,
+							new Object[] { null, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+									Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
+									Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
+				}
+			}
+			
 			for (String key : values.keySet()) {
-				Object[] value = values.get(key);
-				GastoDetalle det = (GastoDetalle) value[0];
-				double totalGrav10 = (double) value[1];
-				double totalGrav5 = (double) value[2];
-				double totalIva10 = (double) value[3];
-				double totalIva5 = (double) value[4];
-				double totalExenta = (double) value[5];
-				double totalImporte = (double) value[6];
-				String cod = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getCuentaContable().getCodigo() : "";
-				String desc = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getDescripcion() : "";
-				data.add(new Object[] { cod, desc, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
-						Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5), Utiles.getRedondeo(totalExenta),
-						Utiles.getRedondeo(totalImporte) });
+				if (!key.equals(keyNC)) {
+					Object[] value = values.get(key);
+					GastoDetalle det = (GastoDetalle) value[0];
+					double totalGrav10 = (double) value[1];
+					double totalGrav5 = (double) value[2];
+					double totalIva10 = (double) value[3];
+					double totalIva5 = (double) value[4];
+					double totalExenta = (double) value[5];
+					double totalImporte = (double) value[6];
+					String cod = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getCuentaContable().getCodigo() : "";
+					String desc = det.getArticuloGasto().getCuentaContable() != null ? det.getArticuloGasto().getDescripcion() : "";
+					data.add(new Object[] { cod, desc, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+							Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5), Utiles.getRedondeo(totalExenta),
+							Utiles.getRedondeo(totalImporte) });
+				} else {
+					Object[] value = values.get(key);
+					double totalGrav10 = (double) value[1];
+					double totalGrav5 = (double) value[2];
+					double totalIva10 = (double) value[3];
+					double totalIva5 = (double) value[4];
+					double totalExenta = (double) value[5];
+					double totalImporte = (double) value[6];
+					String cod = "";
+					String desc = keyNC;
+					data.add(new Object[] { cod, desc, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+							Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5), Utiles.getRedondeo(totalExenta),
+							Utiles.getRedondeo(totalImporte) });
+				}				
 			}
 			
 			Collections.sort(data, new Comparator<Object[]>() {
@@ -10259,7 +10350,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 			});	
 			
-			ReporteGastosPorCuentas rep = new ReporteGastosPorCuentas(desde, hasta, getSucursal());
+			ReporteGastosPorCuentas rep = new ReporteGastosPorCuentas(desde, hasta, sucursal);
 			rep.setDatosReporte(data);
 			rep.setApaisada();			
 
@@ -19564,6 +19655,8 @@ class ReporteDiferenciaTipoCambio extends ReporteYhaguy {
 class GastosPorCuentaContableDataSource implements JRDataSource {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");		
+	static final String KEY_NC = "DESCUENTOS OBTENIDOS";
+	
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Double> totales = new HashMap<String, Double>();
 	Map<String, Double> totalesGravada10 = new HashMap<String, Double>();
@@ -19572,7 +19665,7 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 	Map<String, Double> totalesIva5 = new HashMap<String, Double>();
 	Map<String, Double> totalesExenta = new HashMap<String, Double>();
 
-	public GastosPorCuentaContableDataSource(List<Object[]> values) {
+	public GastosPorCuentaContableDataSource(List<Object[]> values, List<NotaCredito> notasCredito) {
 		this.values = values;
 		for (Object[] value : values) {
 			GastoDetalle det = (GastoDetalle) value[0];
@@ -19604,6 +19697,45 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 				totalesExenta.put(det.getArticuloGasto().getDescripcion(), det.getExenta());
 			}
 		}
+		for (NotaCredito nc : notasCredito) {
+			if (nc.isNotaCreditoCompraAcreedor()) {
+				String key = KEY_NC;
+				double gravada10 = nc.getTotalGravado10() * -1;
+				double gravada5 = 0.0;
+				double exenta = nc.getTotalExenta() * -1;
+				double iva10 = nc.getTotalIva10() * -1;
+				double iva5 = 0.0;
+				double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
+				Double total = totales.get(key);
+				Double totalGravada10 = totalesGravada10.get(key);
+				Double totalIva10 = totalesIva10.get(key);
+				Double totalGravada5 = totalesGravada5.get(key);
+				Double totalIva5 = totalesIva5.get(key);
+				Double totalExenta = totalesExenta.get(key);
+				if (total != null) {
+					total += importe;
+					totalGravada10 += gravada10;
+					totalIva10 += iva10;
+					totalGravada5 += gravada5;
+					totalIva5 += iva5;
+					totalExenta += exenta;
+					totales.put(key, total);
+					totalesGravada10.put(key, totalGravada10);
+					totalesIva10.put(key, totalIva10);
+					totalesGravada5.put(key, totalGravada5);
+					totalesIva5.put(key, totalIva5);
+					totalesExenta.put(key, totalExenta);
+				} else {
+					totales.put(key, importe);
+					totalesGravada10.put(key, gravada10);
+					totalesIva10.put(key, iva10);
+					totalesGravada5.put(key, gravada5);
+					totalesIva5.put(key, iva5);
+					totalesExenta.put(key, exenta);
+				}
+				this.values.add(new Object[] { null, nc });
+			}
+		}
 	}
 
 	private int index = -1;
@@ -19613,46 +19745,93 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 		Object value = null;
 		String fieldName = field.getName();
 		Object[] obj = this.values.get(index);
-		GastoDetalle det = (GastoDetalle) obj[0];
-		Gasto gasto = (Gasto) obj[1];
-
-		if ("TituloDetalle".equals(fieldName)) {
-			value = det.getArticuloGasto().getDescripcion();
-		} else if ("Emision".equals(fieldName)) {
-			value = Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YY);
-		} else if ("Concepto".equals(fieldName)) {
-			value = gasto.getTipoMovimiento().getDescripcion();
-		} else if ("Numero".equals(fieldName)) {
-			value = gasto.getNumeroFactura();
-		} else if ("RazonSocial".equals(fieldName)) {
-			value = gasto.getProveedor().getRazonSocial();
-		} else if ("Ruc".equals(fieldName)) {
-			value = gasto.getProveedor().getRuc();
-		} else if ("Iva10".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.getIva10());
-		} else if ("Gravada10".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.getGravada10());
-		} else if ("Iva5".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.getIva5());
-		} else if ("Gravada5".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.getGravada5());
-		} else if ("Exenta".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.getExenta());
-		} else if ("Importe".equals(fieldName)) {
-			value = Utiles.getNumberFormat(det.getMontoGs());
-		} else if ("TotalGravada10".equals(fieldName)) {
-			value = Utiles.getNumberFormat(totalesGravada10.get(det.getArticuloGasto().getDescripcion()));
-		} else if ("TotalIva10".equals(fieldName)) {
-			value = Utiles.getNumberFormat(totalesIva10.get(det.getArticuloGasto().getDescripcion()));
-		} else if ("TotalGravada5".equals(fieldName)) {
-			value = Utiles.getNumberFormat(totalesGravada5.get(det.getArticuloGasto().getDescripcion()));
-		} else if ("TotalIva5".equals(fieldName)) {
-			value = Utiles.getNumberFormat(totalesIva5.get(det.getArticuloGasto().getDescripcion()));
-		} else if ("TotalExenta".equals(fieldName)) {
-			value = Utiles.getNumberFormat(totalesExenta.get(det.getArticuloGasto().getDescripcion()));
-		} else if ("TotalImporte".equals(fieldName)) {
-			value = Utiles.getNumberFormat(totales.get(det.getArticuloGasto().getDescripcion()));
-		}
+		
+		if (obj[0] != null) {
+			GastoDetalle det = (GastoDetalle) obj[0];
+			Gasto gasto = (Gasto) obj[1];			
+			if ("TituloDetalle".equals(fieldName)) {
+				value = det.getArticuloGasto().getDescripcion();
+			} else if ("Emision".equals(fieldName)) {
+				value = Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YY);
+			} else if ("Concepto".equals(fieldName)) {
+				value = gasto.getTipoMovimiento().getDescripcion();
+			} else if ("Numero".equals(fieldName)) {
+				value = gasto.getNumeroFactura();
+			} else if ("RazonSocial".equals(fieldName)) {
+				value = gasto.getProveedor().getRazonSocial();
+			} else if ("Ruc".equals(fieldName)) {
+				value = gasto.getProveedor().getRuc();
+			} else if ("Iva10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(det.getIva10());
+			} else if ("Gravada10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(det.getGravada10());
+			} else if ("Iva5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(det.getIva5());
+			} else if ("Gravada5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(det.getGravada5());
+			} else if ("Exenta".equals(fieldName)) {
+				value = Utiles.getNumberFormat(det.getExenta());
+			} else if ("Importe".equals(fieldName)) {
+				value = Utiles.getNumberFormat(det.getMontoGs());
+			} else if ("TotalGravada10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesGravada10.get(det.getArticuloGasto().getDescripcion()));
+			} else if ("TotalIva10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva10.get(det.getArticuloGasto().getDescripcion()));
+			} else if ("TotalGravada5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesGravada5.get(det.getArticuloGasto().getDescripcion()));
+			} else if ("TotalIva5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva5.get(det.getArticuloGasto().getDescripcion()));
+			} else if ("TotalExenta".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesExenta.get(det.getArticuloGasto().getDescripcion()));
+			} else if ("TotalImporte".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totales.get(det.getArticuloGasto().getDescripcion()));
+			}
+		} else {
+			NotaCredito nc = (NotaCredito) obj[1];	
+			double gravada10 = nc.getTotalGravado10() * -1;
+			double gravada5 = 0.0;
+			double exenta = nc.getTotalExenta() * -1;
+			double iva10 = nc.getTotalIva10() * -1;
+			double iva5 = 0.0;
+			double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
+			if ("TituloDetalle".equals(fieldName)) {
+				value = KEY_NC;
+			} else if ("Emision".equals(fieldName)) {
+				value = Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YY);
+			} else if ("Concepto".equals(fieldName)) {
+				value = nc.getTipoMovimiento().getDescripcion();
+			} else if ("Numero".equals(fieldName)) {
+				value = nc.getNumero();
+			} else if ("RazonSocial".equals(fieldName)) {
+				value = nc.getProveedor().getRazonSocial();
+			} else if ("Ruc".equals(fieldName)) {
+				value = nc.getProveedor().getRuc();
+			} else if ("Iva10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(iva10);
+			} else if ("Gravada10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(gravada10);
+			} else if ("Iva5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(iva5);
+			} else if ("Gravada5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(gravada5);
+			} else if ("Exenta".equals(fieldName)) {
+				value = Utiles.getNumberFormat(exenta);
+			} else if ("Importe".equals(fieldName)) {
+				value = Utiles.getNumberFormat(importe);
+			} else if ("TotalGravada10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesGravada10.get(KEY_NC));
+			} else if ("TotalIva10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva10.get(KEY_NC));
+			} else if ("TotalGravada5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesGravada5.get(KEY_NC));
+			} else if ("TotalIva5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva5.get(KEY_NC));
+			} else if ("TotalExenta".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesExenta.get(KEY_NC));
+			} else if ("TotalImporte".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totales.get(KEY_NC));
+			}
+		}		
 		return value;
 	}
 
