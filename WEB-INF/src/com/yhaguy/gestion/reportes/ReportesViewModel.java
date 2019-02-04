@@ -3670,7 +3670,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		}
 		
 		/**
-		 * reporte VEN-00023
+		 * reporte VEN-00023..
 		 */
 		private void ventasUtilidadDetallado(boolean mobile, boolean resumido) {
 			if (mobile) {
