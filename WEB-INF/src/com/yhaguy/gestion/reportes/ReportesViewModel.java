@@ -10270,42 +10270,44 @@ public class ReportesViewModel extends SimpleViewModel {
 			}
 			
 			for (NotaCredito nc : notascredito) {
-				String key = keyNC;
-				Object[] val = values.get(key);
-				double gravada10 = nc.getTotalGravado10() * -1;
-				double gravada5 = 0.0;
-				double exenta = nc.getTotalExenta() * -1;
-				double iva10 = nc.getTotalIva10() * -1;
-				double iva5 = 0.0;
-				double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
-				if (val != null) {					
-					double totalGrav10 = (double) val[1];
-					double totalGrav5 = (double) val[2];
-					double totalIva10 = (double) val[3];
-					double totalIva5 = (double) val[4];
-					double totalExenta = (double) val[5];
-					double totalImporte = (double) val[6]; 
-					totalGrav10 += gravada10;
-					totalGrav5 += gravada5;
-					totalIva10 += iva10;
-					totalIva5 += iva5;
-					totalExenta += exenta;
-					totalImporte += importe;
-					values.put(key,
-							new Object[] { null, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
-									Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
-									Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
-				} else {
-					double totalGrav10 = gravada10;
-					double totalGrav5 = gravada5;
-					double totalIva10 = iva10;
-					double totalIva5 = iva5;
-					double totalExenta = exenta;
-					double totalImporte = importe;
-					values.put(key,
-							new Object[] { null, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
-									Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
-									Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
+				if (nc.isNotaCreditoCompraAcreedor()) {
+					String key = keyNC;
+					Object[] val = values.get(key);
+					double gravada10 = nc.getTotalGravado10() * -1;
+					double gravada5 = 0.0;
+					double exenta = nc.getTotalExenta() * -1;
+					double iva10 = nc.getTotalIva10() * -1;
+					double iva5 = 0.0;
+					double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
+					if (val != null) {					
+						double totalGrav10 = (double) val[1];
+						double totalGrav5 = (double) val[2];
+						double totalIva10 = (double) val[3];
+						double totalIva5 = (double) val[4];
+						double totalExenta = (double) val[5];
+						double totalImporte = (double) val[6]; 
+						totalGrav10 += gravada10;
+						totalGrav5 += gravada5;
+						totalIva10 += iva10;
+						totalIva5 += iva5;
+						totalExenta += exenta;
+						totalImporte += importe;
+						values.put(key,
+								new Object[] { null, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+										Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
+										Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
+					} else {
+						double totalGrav10 = gravada10;
+						double totalGrav5 = gravada5;
+						double totalIva10 = iva10;
+						double totalIva5 = iva5;
+						double totalExenta = exenta;
+						double totalImporte = importe;
+						values.put(key,
+								new Object[] { null, Utiles.getRedondeo(totalGrav10), Utiles.getRedondeo(totalGrav5),
+										Utiles.getRedondeo(totalIva10), Utiles.getRedondeo(totalIva5),
+										Utiles.getRedondeo(totalExenta), Utiles.getRedondeo(totalImporte) });
+					}
 				}
 			}
 			
