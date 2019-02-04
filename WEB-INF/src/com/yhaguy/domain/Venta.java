@@ -219,6 +219,19 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return cantidad segun familia..
+	 */
+	public double getVolumenByFamilia(long idFamilia) {
+		double out = 0;
+		for (VentaDetalle det : this.getDetalles()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getCantidad() * det.getArticulo().getVolumen();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es anulado..
 	 */
 	public boolean isAnulado() {

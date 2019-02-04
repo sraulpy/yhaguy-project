@@ -162,6 +162,19 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return volumen segun familia..
+	 */
+	public double getVolumenByFamilia(long idFamilia) {
+		double out = 0;
+		for (NotaCreditoDetalle det : this.getDetallesArticulos()) {
+			if (det.isFamilia(idFamilia)) {
+				out += det.getCantidad() * det.getArticulo().getVolumen();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es nc de compra mercaderia..
 	 */
 	public boolean isNotaCreditoCompraProveedor() {
