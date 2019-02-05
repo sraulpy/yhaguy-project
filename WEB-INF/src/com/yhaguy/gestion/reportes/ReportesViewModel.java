@@ -3775,14 +3775,14 @@ public class ReportesViewModel extends SimpleViewModel {
 								venta.isAnulado() ? 0.0 : item.getCostoUnitarioGs(),
 								venta.isAnulado() ? (long) 0 : item.getCantidad(),
 								venta.isAnulado() ? 0.0 : item.getCostoTotalGsSinIva(),
-								venta.isAnulado() ? 0.0 : item.getImporteGsSinIva() - item.getDescuentoUnitarioGsSinIva(),
+								venta.isAnulado() ? 0.0 : item.getImporteGsSinIva(),
 								venta.isAnulado() ? 0.0 : item.getRentabilidad(),
 								item.getArticulo().getDescripcion()};
 						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 								data.add(vta);
 								if ((!venta.isAnulado() && art != null) || (!venta.isAnulado() && familia != null)) {
-									totalImporte += (item.getImporteGsSinIva() - item.getDescuentoUnitarioGsSinIva());
+									totalImporte += (item.getImporteGsSinIva());
 									totalCosto += item.getCostoTotalGsSinIva();
 								}
 							}
