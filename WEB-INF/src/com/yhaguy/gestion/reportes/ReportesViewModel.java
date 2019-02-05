@@ -3788,10 +3788,6 @@ public class ReportesViewModel extends SimpleViewModel {
 							}
 						}
 					}
-					if (!venta.isAnulado() && art == null && familia == null) {
-						totalImporte += venta.getTotalImporteGsSinIva();
-						totalCosto += venta.getTotalCostoGsSinIva();
-					}
 				}
 				double utilidad = totalImporte - totalCosto;
 				double promedioSobreCosto = Utiles.obtenerPorcentajeDelValor(utilidad, totalCosto);
