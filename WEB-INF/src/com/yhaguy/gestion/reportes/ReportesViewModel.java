@@ -3707,87 +3707,85 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "");
 				for (NotaCredito notacred : ncs) {
-					String motivo = notacred.getMotivo().getDescripcion().substring(0, 3).toUpperCase() + ".";
-					for (NotaCreditoDetalle item : notacred.getDetallesArticulos()) {
-						Object[] nc = new Object[] {
-								Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
-								notacred.getNumero(),
-								notacred.isNotaCreditoVentaContado() ? "NC-CO " + motivo : "NC-CR " + motivo,
-								notacred.getCliente().getRazonSocial().toUpperCase(),
-								notacred.getCliente().getRubro().toUpperCase(),
-								notacred.getVendedor().getRazonSocial().toUpperCase(),
-								item.getArticulo().getCodigoInterno(),
-								item.getArticulo().getMarca().getDescripcion().toUpperCase(),
-								item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
-								notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoGs() * -1,
-								notacred.isAnulado() || !notacred.isMotivoDevolucion() ? (long) 0 : Long.parseLong(item.getCantidad() + ""),
-								notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoTotalGsSinIva() * -1,
-								notacred.isAnulado() ? 0.0 : item.getImporteGsSinIva() * -1,
-								notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
-								item.getArticulo().getDescripcion()};
-						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
-							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
-								data.add(nc);
-								if (!notacred.isAnulado() && art != null && familia != null) {
-									totalImporte += item.getImporteGsSinIva() * -1;
-									totalCosto += item.getCostoTotalGsSinIva() * -1;
-								}							
+					if (!notacred.isAnulado()) {
+						String motivo = notacred.getMotivo().getDescripcion().substring(0, 3).toUpperCase() + ".";
+						for (NotaCreditoDetalle item : notacred.getDetallesArticulos()) {
+							Object[] nc = new Object[] {
+									Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
+									notacred.getNumero(),
+									notacred.isNotaCreditoVentaContado() ? "NC-CO " + motivo : "NC-CR " + motivo,
+									notacred.getCliente().getRazonSocial().toUpperCase(),
+									notacred.getCliente().getRubro().toUpperCase(),
+									notacred.getVendedor().getRazonSocial().toUpperCase(),
+									item.getArticulo().getCodigoInterno(),
+									item.getArticulo().getMarca().getDescripcion().toUpperCase(),
+									item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
+									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoGs() * -1,
+									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? (long) 0 : Long.parseLong(item.getCantidad() + ""),
+									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoTotalGsSinIva() * -1,
+									notacred.isAnulado() ? 0.0 : item.getImporteGsSinIva() * -1,
+									notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
+									item.getArticulo().getDescripcion()};
+							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
+								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
+									data.add(nc);						
+								}
 							}
 						}
-					}
-					if (art == null && familia == null && notacred.isMotivoDescuento()) {
-						Object[] nc = new Object[] {
-								Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
-								notacred.getNumero(),
-								notacred.isNotaCreditoVentaContado() ? "NC-CO " + motivo : "NC-CR " + motivo,
-								notacred.getCliente().getRazonSocial().toUpperCase(),
-								notacred.getCliente().getRubro().toUpperCase(),
-								notacred.getVendedor().getRazonSocial().toUpperCase(),
-								"DESCUENTO CONCEDIDO",
-								" - - - ", " - - - ",
-								0.0,
-								(long) 0,
-								0.0,
-								notacred.isAnulado() ? 0.0 : notacred.getTotalImporteGsSinIva() * -1,
-								notacred.isAnulado() ? 0.0 : notacred.getRentabilidad() * -1,
-								"DESCUENTO CONCEDIDO" };
-						data.add(nc);
-					}
-					if ((!notacred.isAnulado() && art != null) || (!notacred.isAnulado() && familia != null)) {
-						totalImporte += notacred.getTotalImporteGsSinIva() * -1;
-						totalCosto += notacred.getTotalCostoGsSinIva() * -1;
-					}
+						if (art == null && familia == null && notacred.isMotivoDescuento()) {
+							Object[] nc = new Object[] {
+									Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
+									notacred.getNumero(),
+									notacred.isNotaCreditoVentaContado() ? "NC-CO " + motivo : "NC-CR " + motivo,
+									notacred.getCliente().getRazonSocial().toUpperCase(),
+									notacred.getCliente().getRubro().toUpperCase(),
+									notacred.getVendedor().getRazonSocial().toUpperCase(),
+									"DESCUENTO CONCEDIDO",
+									" - - - ", " - - - ",
+									0.0,
+									(long) 0,
+									0.0,
+									notacred.isAnulado() ? 0.0 : notacred.getTotalImporteGsSinIva() * -1,
+									notacred.isAnulado() ? 0.0 : notacred.getRentabilidad() * -1,
+									"DESCUENTO CONCEDIDO" };
+							data.add(nc);
+						}
+					}					
 				}
 
 				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente, idRubro, idSucursal, idVendedor);
 				for (Venta venta : ventas) {
-					for (VentaDetalle item : venta.getDetalles()) {
-						Object[] vta = new Object[] {
-								Utiles.getDateToString(venta.getFecha(), "dd-MM-yyyy"),
-								venta.getNumero(),
-								"FAC. " + venta.getCondicionPago().getDescripcion().substring(0, 3).toUpperCase(),
-								venta.getCliente().getRazonSocial().toUpperCase(),
-								venta.getCliente().getRubro().toUpperCase(),
-								venta.getVendedor().getRazonSocial().toUpperCase(),
-								item.getArticulo().getCodigoInterno(),
-								item.getArticulo().getMarca().getDescripcion().toUpperCase(),
-								item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
-								venta.isAnulado() ? 0.0 : item.getCostoUnitarioGs(),
-								venta.isAnulado() ? (long) 0 : item.getCantidad(),
-								venta.isAnulado() ? 0.0 : item.getCostoTotalGsSinIva(),
-								venta.isAnulado() ? 0.0 : item.getImporteGsSinIva(),
-								venta.isAnulado() ? 0.0 : item.getRentabilidad(),
-								item.getArticulo().getDescripcion()};
-						if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
-							if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
-								data.add(vta);
-								if ((!venta.isAnulado() && art != null) || (!venta.isAnulado() && familia != null)) {
-									totalImporte += (item.getImporteGsSinIva());
-									totalCosto += item.getCostoTotalGsSinIva();
+					if (!venta.isAnulado()) {
+						for (VentaDetalle item : venta.getDetalles()) {
+							Object[] vta = new Object[] {
+									Utiles.getDateToString(venta.getFecha(), "dd-MM-yyyy"),
+									venta.getNumero(),
+									"FAC. " + venta.getCondicionPago().getDescripcion().substring(0, 3).toUpperCase(),
+									venta.getCliente().getRazonSocial().toUpperCase(),
+									venta.getCliente().getRubro().toUpperCase(),
+									venta.getVendedor().getRazonSocial().toUpperCase(),
+									item.getArticulo().getCodigoInterno(),
+									item.getArticulo().getMarca().getDescripcion().toUpperCase(),
+									item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
+									venta.isAnulado() ? 0.0 : item.getCostoUnitarioGs(),
+									venta.isAnulado() ? (long) 0 : item.getCantidad(),
+									venta.isAnulado() ? 0.0 : item.getCostoTotalGsSinIva(),
+									venta.isAnulado() ? 0.0 : item.getImporteGsSinIva(),
+									venta.isAnulado() ? 0.0 : item.getRentabilidad(),
+									item.getArticulo().getDescripcion()};
+							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
+								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
+									data.add(vta);
 								}
 							}
 						}
-					}
+					}					
+				}
+				for (Object[] obj : data) {
+					double costo = (double) obj[11];
+					double importe = (double) obj[12];
+					totalCosto += costo;
+					totalImporte += importe;
 				}
 				double utilidad = totalImporte - totalCosto;
 				double promedioSobreCosto = Utiles.obtenerPorcentajeDelValor(utilidad, totalCosto);
