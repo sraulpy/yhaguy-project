@@ -109,7 +109,7 @@ public class VentaDetalle extends Domain {
 	 * @return la rentabilidad del articulo..
 	 */
 	public double getRentabilidad() {
-		double ganancia = (this.getImporteGsSinIva() - this.getDescuentoUnitarioGsSinIva()) - this.getCostoTotalGsSinIva();		
+		double ganancia = (this.getImporteGsSinIva()) - this.getCostoTotalGsSinIva();		
 		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getCostoTotalGsSinIva());
 		return Utiles.redondeoDosDecimales(out);
 	}
