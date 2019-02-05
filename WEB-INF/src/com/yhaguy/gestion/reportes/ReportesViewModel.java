@@ -20793,10 +20793,28 @@ class LitrajeArticulos implements JRDataSource {
 
 	List<HistoricoMovimientoArticulo> values = new ArrayList<HistoricoMovimientoArticulo>();
 	
+	double totalEnero = 0;
+	double totalFebrero = 0;
+	double totalMarzo = 0;
+	double totalAbril = 0;
+	double totalMayo = 0;
+	double totalJunio = 0;
+	double totalJulio = 0;
+	double totalAgosto = 0;
+	double totalSetiembre = 0;
 	double totalOctubre = 0;
 	double totalNoviembre = 0;
 	double totalDiciembre = 0;
 	
+	double totalEnero_ = 0;
+	double totalFebrero_ = 0;
+	double totalMarzo_ = 0;
+	double totalAbril_ = 0;
+	double totalMayo_ = 0;
+	double totalJunio_ = 0;
+	double totalJulio_ = 0;
+	double totalAgosto_ = 0;
+	double totalSetiembre_ = 0;
 	double totalOctubre_ = 0;
 	double totalNoviembre_ = 0;
 	double totalDiciembre_ = 0;
@@ -20804,6 +20822,24 @@ class LitrajeArticulos implements JRDataSource {
 	public LitrajeArticulos(List<HistoricoMovimientoArticulo> values) {
 		this.values = values;
 		for (HistoricoMovimientoArticulo item : values) {
+			totalEnero += item.getEnero_();
+			totalEnero_ += item.get_enero();
+			totalFebrero += item.getFebrero_();
+			totalFebrero_ += item.get_febrero();
+			totalMarzo += item.getMarzo_();
+			totalMarzo_ += item.get_marzo();
+			totalAbril += item.getAbril_();
+			totalAbril_ += item.get_abril();
+			totalMayo += item.getMayo_();
+			totalMayo_ += item.get_mayo();
+			totalJunio += item.getJunio_();
+			totalJunio_ += item.get_junio();
+			totalJulio += item.getJulio_();
+			totalJulio_ += item.get_julio();
+			totalAgosto += item.getAgosto_();
+			totalAgosto_ += item.get_agosto();
+			totalSetiembre += item.getSetiembre_();
+			totalSetiembre_ += item.get_setiembre();
 			totalOctubre += item.getOctubre_();
 			totalOctubre_ += item.get_octubre();
 			totalNoviembre += item.getNoviembre_();
@@ -20949,6 +20985,42 @@ class LitrajeArticulos implements JRDataSource {
 			value = Utiles.getNumberFormatDs(this.totalDiciembre);
 		} else if ("tot_dic_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalDiciembre_);
+		} else if ("tot_ene".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalEnero);
+		} else if ("tot_ene_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalEnero_);
+		} else if ("tot_feb".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalFebrero);
+		} else if ("tot_feb_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalFebrero_);
+		} else if ("tot_mar".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalMarzo);
+		} else if ("tot_mar_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalMarzo_);
+		} else if ("tot_abr".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalAbril);
+		} else if ("tot_abr_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalAbril_);
+		} else if ("tot_may".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalMayo);
+		} else if ("tot_may_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalMayo_);
+		} else if ("tot_jun".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalJunio);
+		} else if ("tot_jun_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalJunio_);
+		} else if ("tot_jul".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalJulio);
+		} else if ("tot_jul_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalJulio_);
+		} else if ("tot_ago".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalAgosto);
+		} else if ("tot_ago_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalAgosto_);
+		} else if ("tot_set".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalSetiembre);
+		} else if ("tot_set_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalSetiembre_);
 		}
 		return value;
 	}
