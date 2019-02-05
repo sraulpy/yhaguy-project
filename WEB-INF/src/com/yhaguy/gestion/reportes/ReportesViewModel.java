@@ -8719,7 +8719,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Proveedor prov = filtro.getProveedor();
-				long idSuc = suc != null? suc.getId() : 0;
+				long idSuc = suc != null ? suc.getId() : 0;
+				long idPrv = prov != null ? prov.getId() : 0; 
 
 				if (desde == null)
 					desde = new Date();
@@ -8729,7 +8730,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc);
+				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc, idPrv);
 
 				for (CompraLocalFactura compra : compras) {
 					Object[] cmp = new Object[] {
