@@ -393,11 +393,11 @@ public class CompraLocalControlBody extends BodyApp {
 		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
 			Object[] obj1 = new Object[] { item.getArticulo().getPos1(),
 					item.getArticulo().getPos4(), item.getCantidad(),
-					item.getCostoGs(), item.getImporteGs() };
+					item.getCostoGs(), item.getImporteIva(), item.getImporteGs() };
 			data.add(obj1);
 		}
 
-		ReporteYhaguy rep = new ReporteOrdenCompra(this.dto.getFactura());
+		ReporteYhaguy rep = new ReporteOrdenCompra(this.dto.getFactura(), this.dto.getNumero(), this.dto.getObservacion());
 		rep.setDatosReporte(data);
 
 		ViewPdf vp = new ViewPdf();
@@ -2480,16 +2480,21 @@ class ReportePresupuesto extends ReporteYhaguy {
 class ReporteOrdenCompra extends ReporteYhaguy {
 	
 	private CompraLocalFacturaDTO compra;	
+	private String ordenCompra;
+	private String observacion;
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
 	static DatosColumnas col4 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col5 = new DatosColumnas("Cant.", TIPO_INTEGER, 15, false);
 	static DatosColumnas col6 = new DatosColumnas("Precio", TIPO_DOUBLE, 25, false); 
-	static DatosColumnas col7 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true); 
+	static DatosColumnas col7 = new DatosColumnas("Iva", TIPO_DOUBLE, 25, true);
+	static DatosColumnas col8 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true); 
 	
-	public ReporteOrdenCompra(CompraLocalFacturaDTO compra) {
+	public ReporteOrdenCompra(CompraLocalFacturaDTO compra, String ordenCompra, String observacion) {
 		this.compra = compra;
+		this.ordenCompra = ordenCompra;
+		this.observacion = observacion;
 	}
 	
 	static {
@@ -2498,6 +2503,7 @@ class ReporteOrdenCompra extends ReporteYhaguy {
 		cols.add(col5);
 		cols.add(col6);
 		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override
@@ -2519,16 +2525,23 @@ class ReporteOrdenCompra extends ReporteYhaguy {
 		String origen = this.compra.getSucursal().getText();
 		String proveedor = this.compra.getProveedor().getRazonSocial();
 		String condicion = (String) this.compra.getCondicionPago().getPos1();
+		String fecha = Utiles.getDateToString(this.compra.getFechaOriginal(), Utiles.DD_MM_YYYY);
 
 		VerticalListBuilder out = cmp.verticalList();
 
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList()
-				.add(this.textoParValor("Número", numero))
+				.add(this.textoParValor("Número Factura", numero))
+				.add(this.textoParValor("Fecha Factura", fecha)));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Número Ord.Compra", this.ordenCompra))
 				.add(this.textoParValor("Sucursal", origen)));
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Proveedor", proveedor))
 				.add(this.textoParValor("Condición", condicion)));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Observación", this.observacion.toUpperCase()))
+				.add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

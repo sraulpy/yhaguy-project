@@ -8717,6 +8717,9 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				Proveedor prov = filtro.getProveedor();
+				long idSuc = suc != null? suc.getId() : 0;
 
 				if (desde == null)
 					desde = new Date();
@@ -8726,20 +8729,20 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<CompraLocalFactura> compras = rr.getComprasLocales(desde,
-						hasta);
+				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc);
 
 				for (CompraLocalFactura compra : compras) {
 					Object[] cmp = new Object[] {
 							m.dateToString(compra.getFechaOriginal(),
-									Misc.DD_MM_YYYY), compra.getNumero(),
+									Utiles.DD_MM_YY), compra.getNumero(),
+							compra.getSucursal().getDescripcion(),
 							compra.getProveedor().getRazonSocial(),
 							compra.getProveedor().getRuc(),
 							compra.getImporteGs() };
 					data.add(cmp);
 				}
 
-				ReporteComprasGenerico rep = new ReporteComprasGenerico();
+				ReporteComprasGenerico rep = new ReporteComprasGenerico(desde, hasta);
 				rep.setDatosReporte(data);			
 
 				ViewPdf vp = new ViewPdf();
@@ -12235,16 +12238,21 @@ class ReporteVentasUtilidadPorArticulo extends ReporteYhaguy {
  * Reporte de Compras Generico COM-00001..
  */
 class ReporteComprasGenerico extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 30);
+	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 25);
 	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 45);
-	static DatosColumnas col2 = new DatosColumnas("Razón Social", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Ruc", TIPO_STRING, 30);
-	static DatosColumnas col4 = new DatosColumnas("Importe", TIPO_DOUBLE, 40,
-			true);
+	static DatosColumnas col2 = new DatosColumnas("Suc.", TIPO_STRING, 30);
+	static DatosColumnas col3 = new DatosColumnas("Razón Social", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Ruc", TIPO_STRING, 30);
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
 
-	public ReporteComprasGenerico() {
+	public ReporteComprasGenerico(Date desde, Date hasta) {
+		this.desde = desde;
+		this.hasta = hasta;
 	}
 
 	static {
@@ -12253,6 +12261,7 @@ class ReporteComprasGenerico extends ReporteYhaguy {
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
 	}
 
 	@Override
@@ -12270,7 +12279,9 @@ class ReporteComprasGenerico extends ReporteYhaguy {
 	@SuppressWarnings("rawtypes")
 	private ComponentBuilder getCuerpo() {
 		VerticalListBuilder out = cmp.verticalList();
-		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}

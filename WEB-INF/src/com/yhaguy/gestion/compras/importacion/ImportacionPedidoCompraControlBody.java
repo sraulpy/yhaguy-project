@@ -289,6 +289,10 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			return;
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
+		if (rr.getGastoByNumero(this.nvoGasto.getNumero(), this.nvoGasto.getTimbrado()) != null) {
+			Clients.showNotification("Ya existe una factura con el mismo número y timbrado..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		this.nvoGasto.setIdImportacion(this.dto.getId());
 		this.nvoGasto.setFechaCarga(new Date());
 		this.nvoGasto.setNumeroFactura(this.nvoGasto.getNumero());
@@ -956,6 +960,13 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			Object value = null;
 			String fieldName = field.getName();
 			Object[] item = this.detalle.get(index);
+			double importe = Utiles.getRedondeo((double) item[3]);
+			double importeDs = misc.redondeoDosDecimales((double) item[4]);
+			double iva = Utiles.getRedondeo((double) item[6]);
+			double totalImporte = Utiles.getRedondeo(totales.get(item[5]));
+			double totalImporteDs = misc.redondeoDosDecimales(totalesDs.get(item[5]));
+			double totalIva = Utiles.getRedondeo(totalesIva.get(item[5]));
+			double totalNeto = Utiles.getRedondeo(totalesNeto.get(item[5]));
 
 			if ("TituloDetalle".equals(fieldName)) {
 				value = item[5];
@@ -964,23 +975,23 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			} else if ("NroFactura".equals(fieldName)) {
 				value = item[1];
 			} else if ("Importe".equals(fieldName)) {
-				value = Utiles.getNumberFormat((double) item[3]);
+				value = Utiles.getNumberFormat(importe);
 			} else if ("Iva".equals(fieldName)) {
-				value = Utiles.getNumberFormat((double) item[6]);
+				value = Utiles.getNumberFormat(iva);
 			} else if ("Neto".equals(fieldName)) {
-				value = Utiles.getNumberFormat(((double) item[3]) - ((double) item[6]));
+				value = Utiles.getNumberFormat((importe) - (iva));
 			} else if ("ImporteDs".equals(fieldName)) {
-				value = Utiles.getNumberFormatDs((double) item[4]);
+				value = Utiles.getNumberFormatDs(importeDs);
 			} else if ("TotalImporte".equals(fieldName)) {
-				value = Utiles.getNumberFormat(totales.get(item[5]));
+				value = Utiles.getNumberFormat(totalImporte);
 			} else if ("TotalImporteDs".equals(fieldName)) {
-				value = Utiles.getNumberFormatDs(totalesDs.get(item[5]));
+				value = Utiles.getNumberFormatDs(totalImporteDs);
 			} else if ("TotalIva".equals(fieldName)) {
-				value = Utiles.getNumberFormat(totalesIva.get(item[5]));
+				value = Utiles.getNumberFormat(totalIva);
 			} else if ("TotalNeto".equals(fieldName)) {
-				value = Utiles.getNumberFormat(totalesNeto.get(item[5]));
+				value = Utiles.getNumberFormat(totalNeto);
 			} else if ("TipoCambio_".equals(fieldName)) {
-				value = Utiles.getNumberFormatDs(((double) item[3]) / ((double) item[4]));
+				value = Utiles.getNumberFormatDs(importe / importeDs);
 			}
 			return value;
 		}

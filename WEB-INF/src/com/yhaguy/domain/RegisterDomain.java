@@ -2893,11 +2893,17 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las compras locales segun fecha de factura
 	 */
-	public List<CompraLocalFactura> getComprasLocales(Date desde, Date hasta)
+	public List<CompraLocalFactura> getComprasLocales(Date desde, Date hasta, long idSucursal, long idProveedor)
 			throws Exception {
 		String query = "select c from CompraLocalFactura c where c.dbEstado != 'D' and (c.tipoMovimiento.sigla = ? or c.tipoMovimiento.sigla = ?)"
-				+ " and c.fechaOriginal between ? and ?"
-				+ " order by c.fechaOriginal";
+				+ " and c.fechaOriginal between ? and ?";
+				if (idSucursal > 0) {
+					query += " and c.sucursal.id = " + idSucursal;
+				}
+				if (idProveedor > 0) {
+					query += " and c.proveedor.id = " + idProveedor;
+				}
+				query += " order by c.fechaOriginal";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO);

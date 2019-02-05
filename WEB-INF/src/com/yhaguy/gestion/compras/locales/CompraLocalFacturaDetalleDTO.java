@@ -45,7 +45,7 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 		if(this.isExenta())
 			return 0;
 		int porc = this.isIva10()? 10 : 5;
-		return this.getMisc().calcularIVA(this.getImporteGs(), porc);
+		return Utiles.getRedondeo(this.getMisc().calcularIVA(this.getImporteGs(), porc));
 	}
 	
 	@DependsOn({"cantidad", "cantidadRecibida"})
