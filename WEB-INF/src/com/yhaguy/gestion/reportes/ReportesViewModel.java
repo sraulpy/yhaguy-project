@@ -5112,7 +5112,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								Double importe = acum_.get(key);
 								if (cant != null) {
 									cant += item.getCantidad();
-									importe += (item.getCantidad() * item.getImporteGs());
+									importe += item.getImporteGs();
 								} else {
 									cant = item.getCantidad();
 									importe = item.getImporteGs();
@@ -5136,7 +5136,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								Double importe = acum_.get(key);
 								if (cant != null) {
 									cant -= item.getCantidad();
-									importe -= (item.getCantidad() * item.getImporteGs());
+									importe -= item.getImporteGs();
 								}
 								acum.put(key, cant);
 								acum_.put(key, importe);
