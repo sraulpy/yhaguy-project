@@ -7,7 +7,7 @@
 			<row>
 				<vlayout spacing="0">
 					<field value="Número" />
-					<textbox value="@bind(vm.dato.reciboDTO.numero)  @converter(vm.dato.reciboDTO.cobro ? vm.cnv.facturaPy:vm.cnv)" 
+					<textbox value="@bind(vm.dato.reciboDTO.numero)" 
 						hflex="true" 
 						readonly="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')"
 						visible="@load(vm.dato.reciboDTO.cobro ? 'true' : 'false')" />

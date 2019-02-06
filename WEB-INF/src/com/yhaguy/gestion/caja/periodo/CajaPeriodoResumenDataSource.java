@@ -151,7 +151,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			
 			// cobranzas
 			for (Recibo cobro : planilla.getRecibosOrdenado()) {
-				if (cobro.isCobro() && !cobro.isAnulado() && !cobro.isCancelacionCheque()) {
+				if (cobro.isCobro() && !cobro.isCancelacionCheque()) {
 					this.totalCobranza += cobro.getTotalImporteGs();
 					String desc = "REC. " + cobro.getNumero_() + " - (" + cobro.getCobrador() + ")";
 					MyArray my = new MyArray(cobro.getTipoMovimiento().getDescripcion(), 

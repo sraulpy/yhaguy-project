@@ -108,7 +108,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private MyArray selectedAplicacion;
 	private MyArray cliente;
 	private DetalleMovimiento detalle = new DetalleMovimiento();
+	private DetalleMovimiento detalle_ = new DetalleMovimiento();
 	private DetalleGroupsModel groupModel;
+	private DetalleGroupsModel groupModel_;
 	
 	private int sizeCheques = 0;
 	private double totalCheques = 0;
@@ -137,6 +139,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private Popup popDetalle;
 	
 	@Wire
+	private Popup popDetalle_;
+	
+	@Wire
 	private Popup popSaldos;
 	
 	@Wire
@@ -147,6 +152,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	
 	@Wire
 	private Listbox listAplicaciones;
+	
+	@Wire
+	private Listbox listAplicaciones_;
 	
 	@Wire
 	private Listbox listAplicacionesRec;
@@ -165,6 +173,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		try {
 			this.desde = Utiles.getFecha("01-01-2016 00:00:00");
 			groupModel = new DetalleGroupsModel(detalle.getAplicaciones(), new DetalleComparator());
+			groupModel_ = new DetalleGroupsModel(detalle_.getAplicaciones(), new DetalleComparator());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -282,12 +291,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	@Command
-	@NotifyChange({ "groupModel", "detalle" })
+	@NotifyChange({ "groupModel", "detalle", "groupModel_" })
 	public void verItems(@BindingParam("item") MyArray item,
 			@BindingParam("parent") Component parent) throws Exception {
 		this.tabFac.setSelected(true);
 		this.tabRec.setSelected(true);
 		this.groupModel = new DetalleGroupsModel(new ArrayList<DetalleMovimiento>(), new DetalleComparator());
+		this.groupModel_ = new DetalleGroupsModel(new ArrayList<DetalleMovimiento>(), new DetalleComparator());
 		this.selectedItem_ = item;
 		this.detalle = new DetalleMovimiento();
 		this.detalle.setEmision((Date) item.getPos1());
@@ -310,6 +320,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	public void verAplicaciones_(@BindingParam("parent") Component parent) throws Exception {
+		this.popDetalle_.open(parent, "start_before");
+		Clients.showBusy(this.listAplicaciones_, "Buscando Aplicaciones...");
+		Events.echoEvent("onLater", this.listAplicaciones_, null);
+	}
+	
+	@Command
 	public void verAplicacionesRecibo() throws Exception {
 		Clients.showBusy(this.listAplicacionesRec, "Buscando Aplicaciones...");
 		Events.echoEvent("onLater", this.listAplicacionesRec, null);
@@ -322,6 +339,15 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		this.detalle.setAplicaciones(this.getAplicaciones(this.selectedItem_, this.detalle));
 		BindUtils.postNotifyChange(null, null, this, "detalle");
 		BindUtils.postNotifyChange(null, null, this, "groupModel");
+	}
+	
+	/**
+	 * Busca las aplicaciones..
+	 */
+	private void buscarAplicaciones_() throws Exception {
+		this.detalle_.setAplicaciones(this.getAplicaciones_());
+		BindUtils.postNotifyChange(null, null, this, "detalle_");
+		BindUtils.postNotifyChange(null, null, this, "groupModel_");
 	}
 	
 	@Command
@@ -440,6 +466,26 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		});
 		timer.setParent(this.visorCtaCte);		
 		this.buscarAplicaciones();
+	}
+	
+	/**
+	 * Cierra la ventana de progreso..
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Command
+	public void clearProgress_() throws Exception {
+		Timer timer = new Timer();
+		timer.setDelay(1000);
+		timer.setRepeats(false);
+
+		timer.addEventListener(Events.ON_TIMER, new EventListener() {
+			@Override
+			public void onEvent(Event evt) throws Exception {
+				Clients.clearBusy(listAplicaciones_);
+			}
+		});
+		timer.setParent(this.visorCtaCte);		
+		this.buscarAplicaciones_();
 	}
 	
 	/**
@@ -605,8 +651,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	/**
 	 * @return las aplicaciones del movimiento..
 	 */
-	private List<DetalleMovimiento> getAplicaciones(MyArray item,
-			DetalleMovimiento movim) throws Exception {
+	private List<DetalleMovimiento> getAplicaciones(MyArray item, DetalleMovimiento movim) throws Exception {
 		List<DetalleMovimiento> out = new ArrayList<DetalleMovimiento>();
 		String sigla = (String) item.getPos8();
 		long idmovimiento = (long) item.getPos9();
@@ -631,17 +676,19 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			det.setTipoMovimiento(vta.getTipoMovimiento().getDescripcion());
 			det.setImporteGs(vta.getTotalImporteGs());
 			det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			det.setIdMovimiento(vta.getId());
 			out.add(det);
 			
 			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(nc.getId(), nc.getTipoMovimiento().getId());
 			for (AjusteCtaCte ajuste : ajustes) {
 				DetalleMovimiento det_ = new DetalleMovimiento();
 				det_.setEmision(ajuste.getFecha());
-				det_.setNumero(ajuste.getId() + "");
+				det_.setNumero(ajuste.getDebito().getNroComprobante());
 				det_.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 				det_.setTipoMovimiento("CREDITO CTA.CTE.");
 				det_.setImporteGs(ajuste.getImporte());
 				det_.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det_.setIdMovimiento(ajuste.getId());
 				out.add(det_);			
 			}
 			
@@ -649,11 +696,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			for (AjusteCtaCte ajuste : ajustes_) {
 				DetalleMovimiento det_ = new DetalleMovimiento();
 				det_.setEmision(ajuste.getFecha());
-				det_.setNumero(ajuste.getId() + "");
+				det_.setNumero(ajuste.getCredito().getNroComprobante());
 				det_.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				det_.setTipoMovimiento("DEBITO CTA.CTE.");
 				det_.setImporteGs(ajuste.getImporte());
 				det_.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det_.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+				det_.setSigla_(ajuste.getCredito().getTipoMovimiento().getSigla());
 				out.add(det_);			
 			}
 		}
@@ -664,6 +713,231 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			movim.setNumero(vta.getNumero());
 			movim.setImporteGs(vta.getTotalImporteGs());
 			movim.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			movim.setIdMovimiento(vta.getId());
+		}
+
+		if (vta != null) {
+			List<NotaCredito> ncs = rr.getNotaCreditosByVenta(vta.getId());
+			for (NotaCredito nc : ncs) {
+				if (!nc.isAnulado()) {
+					DetalleMovimiento det = new DetalleMovimiento();
+					det.setEmision(nc.getFechaEmision());
+					det.setNumero(nc.getNumero());
+					det.setSigla(nc.getTipoMovimiento().getSigla());
+					det.setTipoMovimiento(nc.getTipoMovimiento().getDescripcion() + " - " + 
+							nc.getMotivo().getDescripcion().toUpperCase());
+					det.setImporteGs(nc.getImporteGs());
+					det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+					det.setIdMovimiento(nc.getId());
+					if ((this.isNotaCredito(sigla) && !nc.getNumero().equals(movim.getNumero()))
+							|| !this.isNotaCredito(sigla)) {
+						out.add(det);
+					}
+				}				
+			}
+			List<Object[]> recs = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+			for (Object[] rec : recs) {
+				Recibo recibo = (Recibo) rec[0];
+				ReciboDetalle rdet = (ReciboDetalle) rec[1];
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(recibo.getFechaEmision());
+				det.setNumero(recibo.getNumero());
+				det.setSigla(recibo.getTipoMovimiento().getSigla());
+				det.setTipoMovimiento(recibo.getTipoMovimiento().getDescripcion());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setImporteGs(rdet.getMontoGs());
+				det.setIdMovimiento(recibo.getId());
+				out.add(det);
+			}
+			
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getDebito().getNroComprobante());
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+				det.setTipoMovimiento("CREDITO CTA.CTE.");
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getDebito().getIdMovimientoOriginal());
+				det.setSigla_(ajuste.getDebito().getTipoMovimiento().getSigla());
+				out.add(det);			
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getCredito().getNroComprobante());
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+				det.setTipoMovimiento("DEBITO CTA.CTE.");
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+				det.setSigla_(ajuste.getCredito().getTipoMovimiento().getSigla());
+				out.add(det);			
+			}
+		}	
+		
+		if (this.isReciboCobro(sigla)) {
+			Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), idmovimiento);
+			Map<String, String> vtas = new HashMap<String, String>();
+			for (ReciboDetalle rdet : rec.getDetalles()) {
+				Venta venta = rdet.getVenta();
+				if (venta != null) {
+					String data = vtas.get(venta.getNumero());
+					if (data == null) {
+						vtas.put(venta.getNumero(), venta.getNumero());
+						DetalleMovimiento vdet = new DetalleMovimiento();
+						vdet.setEmision(venta.getFecha());
+						vdet.setNumero(venta.getNumero());
+						vdet.setSigla(venta.getTipoMovimiento().getSigla());
+						vdet.setTipoMovimiento(venta.getTipoMovimiento().getDescripcion());
+						vdet.setImporteGs(venta.getTotalImporteGs());
+						vdet.setAgrupador(venta.getNumero());
+						vdet.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+						vdet.setIdMovimiento(venta.getId());
+						out.add(vdet);
+						
+						List<NotaCredito> ncs = rr.getNotaCreditosByVenta(venta.getId());
+						for (NotaCredito nc : ncs) {
+							DetalleMovimiento det = new DetalleMovimiento();
+							det.setEmision(nc.getFechaEmision());
+							det.setNumero(nc.getNumero());
+							det.setSigla(nc.getTipoMovimiento().getSigla());
+							det.setTipoMovimiento(nc.getTipoMovimiento().getDescripcion() + " - " + 
+									nc.getMotivo().getDescripcion().toUpperCase());
+							det.setImporteGs(nc.getImporteGs());
+							det.setAgrupador(venta.getNumero());
+							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+							det.setIdMovimiento(nc.getId());
+							if ((this.isNotaCredito(sigla) && !nc.getNumero().equals(movim.getNumero()))
+									|| !this.isNotaCredito(sigla)) {
+								out.add(det);
+							}				
+						}
+						List<Object[]> recs = rr.getRecibosByVenta(venta.getId(), venta.getTipoMovimiento().getId());
+						for (Object[] rec_ : recs) {
+							Recibo recibo = (Recibo) rec_[0];
+							ReciboDetalle rdet_ = (ReciboDetalle) rec_[1];
+							DetalleMovimiento det = new DetalleMovimiento();
+							det.setEmision(recibo.getFechaEmision());
+							det.setNumero(recibo.getNumero());
+							det.setSigla(recibo.getTipoMovimiento().getSigla());
+							det.setTipoMovimiento(recibo.getTipoMovimiento().getDescripcion());
+							det.setImporteGs(rdet_.getMontoGs());
+							det.setAgrupador(venta.getNumero());
+							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+							det.setIdMovimiento(recibo.getId());
+							if (recibo.getNumero().equals(movim.getNumero())) {
+								det.setSelf(true);
+							}
+							out.add(det);
+						}
+						List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+						for (AjusteCtaCte ajuste : ajustes) {
+							DetalleMovimiento det = new DetalleMovimiento();
+							det.setEmision(ajuste.getFecha());
+							det.setNumero(ajuste.getDebito().getNroComprobante());
+							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+							det.setTipoMovimiento("CREDITO CTA.CTE.");
+							det.setImporteGs(ajuste.getImporte());
+							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+							det.setIdMovimiento(ajuste.getId());
+							out.add(det);			
+						}
+						
+						List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+						for (AjusteCtaCte ajuste : ajustes_) {
+							DetalleMovimiento det = new DetalleMovimiento();
+							det.setEmision(ajuste.getFecha());
+							det.setNumero(ajuste.getCredito().getNroComprobante());
+							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+							det.setTipoMovimiento("DEBITO CTA.CTE.");
+							det.setImporteGs(ajuste.getImporte());
+							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+							det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+							out.add(det);			
+						}
+					}					
+				}
+			}
+		}
+		if (!this.isReciboCobro(sigla)) {
+			out.add(movim);
+			// ordena la lista segun fecha..
+			Collections.sort(out, new Comparator<DetalleMovimiento>() {
+				@Override
+				public int compare(DetalleMovimiento o1, DetalleMovimiento o2) {
+					Date fecha1 = o1.getEmision();
+					Date fecha2 = o2.getEmision();
+					return fecha1.compareTo(fecha2);
+				}
+			});
+		}	
+		
+		double saldo = 0;
+		for (DetalleMovimiento det : out) {
+			saldo += det.getDebe() - det.getHaber();
+			det.setSaldo(saldo);
+		}		
+		return out;
+	}
+	
+	/**
+	 * @return las aplicaciones del movimiento..
+	 */
+	private List<DetalleMovimiento> getAplicaciones_() throws Exception {
+		
+		DetalleMovimiento movim = new DetalleMovimiento();
+		movim.setEmision(this.detalle_.getEmision());
+		movim.setVencimiento(this.detalle_.getVencimiento());
+		movim.setNumero(this.detalle_.getNumero());
+		movim.setSigla(this.detalle_.getSigla());
+		movim.setTipoMovimiento(this.detalle_.getTipoMovimiento());
+		
+		List<DetalleMovimiento> out = new ArrayList<DetalleMovimiento>();
+		String sigla = this.detalle_.getSigla_();
+		long idmovimiento = this.detalle_.getIdMovimiento();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta vta = null;
+		movim.setSelf(true);
+		
+		// notas de credito
+		if (this.isNotaCredito(sigla)) {
+			NotaCredito nc = (NotaCredito) rr.getObject(NotaCredito.class.getName(), idmovimiento);
+			vta = nc.getVentaAplicada();
+			movim.setNumero(nc.getNumero());
+			movim.setImporteGs(nc.getImporteGs());
+			movim.setTipoMovimiento(nc.getTipoMovimiento().getDescripcion() + " - " + 
+						nc.getMotivo().getDescripcion().toUpperCase());
+			movim.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			
+			DetalleMovimiento det = new DetalleMovimiento();
+			det.setEmision(vta.getFecha());
+			det.setNumero(vta.getNumero());
+			det.setSigla(vta.getTipoMovimiento().getSigla());
+			det.setTipoMovimiento(vta.getTipoMovimiento().getDescripcion());
+			det.setImporteGs(vta.getTotalImporteGs());
+			det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			out.add(det);
+		}
+		
+		// ventas
+		if (this.isVenta(sigla)) {
+			vta = (Venta) rr.getObject(Venta.class.getName(), idmovimiento);
+			movim.setNumero(vta.getNumero());
+			movim.setImporteGs(vta.getTotalImporteGs());
+			movim.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			
+			DetalleMovimiento det = new DetalleMovimiento();
+			det.setEmision(vta.getFecha());
+			det.setNumero(vta.getNumero());
+			det.setSigla(vta.getTipoMovimiento().getSigla());
+			det.setTipoMovimiento(vta.getTipoMovimiento().getDescripcion());
+			det.setImporteGs(vta.getTotalImporteGs());
+			det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			out.add(det);
 		}
 
 		if (vta != null) {
@@ -702,11 +976,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			for (AjusteCtaCte ajuste : ajustes) {
 				DetalleMovimiento det = new DetalleMovimiento();
 				det.setEmision(ajuste.getFecha());
-				det.setNumero(ajuste.getId() + "");
+				det.setNumero(ajuste.getDebito().getNroComprobante());
 				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 				det.setTipoMovimiento("CREDITO CTA.CTE.");
 				det.setImporteGs(ajuste.getImporte());
 				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getDebito().getIdMovimientoOriginal());
+				det.setSigla_(ajuste.getDebito().getTipoMovimiento().getSigla());
 				out.add(det);			
 			}
 			
@@ -714,11 +990,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			for (AjusteCtaCte ajuste : ajustes_) {
 				DetalleMovimiento det = new DetalleMovimiento();
 				det.setEmision(ajuste.getFecha());
-				det.setNumero(ajuste.getId() + "");
+				det.setNumero(ajuste.getCredito().getNroComprobante());
 				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				det.setTipoMovimiento("DEBITO CTA.CTE.");
 				det.setImporteGs(ajuste.getImporte());
 				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+				det.setSigla_(ajuste.getCredito().getTipoMovimiento().getSigla());
 				out.add(det);			
 			}
 		}	
@@ -775,45 +1053,19 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 							}
 							out.add(det);
 						}
-						List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
-						for (AjusteCtaCte ajuste : ajustes) {
-							DetalleMovimiento det = new DetalleMovimiento();
-							det.setEmision(ajuste.getFecha());
-							det.setNumero(ajuste.getId() + "");
-							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
-							det.setTipoMovimiento("CREDITO CTA.CTE.");
-							det.setImporteGs(ajuste.getImporte());
-							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
-							out.add(det);			
-						}
-						
-						List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
-						for (AjusteCtaCte ajuste : ajustes_) {
-							DetalleMovimiento det = new DetalleMovimiento();
-							det.setEmision(ajuste.getFecha());
-							det.setNumero(ajuste.getId() + "");
-							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
-							det.setTipoMovimiento("DEBITO CTA.CTE.");
-							det.setImporteGs(ajuste.getImporte());
-							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
-							out.add(det);			
-						}
 					}					
 				}
 			}
 		}
-		if (!this.isReciboCobro(sigla)) {
-			out.add(movim);
-			// ordena la lista segun fecha..
-			Collections.sort(out, new Comparator<DetalleMovimiento>() {
-				@Override
-				public int compare(DetalleMovimiento o1, DetalleMovimiento o2) {
-					Date fecha1 = o1.getEmision();
-					Date fecha2 = o2.getEmision();
-					return fecha1.compareTo(fecha2);
-				}
-			});
-		}	
+			
+		Collections.sort(out, new Comparator<DetalleMovimiento>() {
+			@Override
+			public int compare(DetalleMovimiento o1, DetalleMovimiento o2) {
+				Date fecha1 = o1.getEmision();
+				Date fecha2 = o2.getEmision();
+				return fecha1.compareTo(fecha2);
+			}
+		});
 		
 		double saldo = 0;
 		for (DetalleMovimiento det : out) {
@@ -1425,12 +1677,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		private String numeroPlanilla;
 		private String facturaAplicada;
 		private String sigla;
+		private String sigla_;
 		private String tipoMovimiento;
 		private String motivo;
 		private List<MyArray> detalles;
 		private List<MyArray> formasPago;
 		private String agrupador;
 		private String descripcion;
+		private long idMovimiento;
 		
 		private List<DetalleMovimiento> aplicaciones = new ArrayList<DetalleMovimiento>();
 		
@@ -1623,6 +1877,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		public void setAplicaciones(List<DetalleMovimiento> aplicaciones) {
 			this.aplicaciones = aplicaciones;
 			groupModel = new DetalleGroupsModel(aplicaciones, new DetalleComparator());
+			groupModel_ = new DetalleGroupsModel(aplicaciones, new DetalleComparator());
 		}
 
 		public double getImporteGs() {
@@ -1679,6 +1934,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 		public void setDescripcion(String descripcion) {
 			this.descripcion = descripcion;
+		}
+
+		public long getIdMovimiento() {
+			return idMovimiento;
+		}
+
+		public void setIdMovimiento(long idMovimiento) {
+			this.idMovimiento = idMovimiento;
+		}
+
+		public String getSigla_() {
+			return sigla_;
+		}
+
+		public void setSigla_(String sigla_) {
+			this.sigla_ = sigla_;
 		}		
 	}
 	
@@ -2075,6 +2346,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 	public void setSelectedAplicacion(MyArray selectedAplicacion) {
 		this.selectedAplicacion = selectedAplicacion;
+	}
+
+	public DetalleMovimiento getDetalle_() {
+		return detalle_;
+	}
+
+	public void setDetalle_(DetalleMovimiento detalle_) {
+		this.detalle_ = detalle_;
+	}
+
+	public DetalleGroupsModel getGroupModel_() {
+		return groupModel_;
+	}
+
+	public void setGroupModel_(DetalleGroupsModel groupModel_) {
+		this.groupModel_ = groupModel_;
 	}	
 }
 

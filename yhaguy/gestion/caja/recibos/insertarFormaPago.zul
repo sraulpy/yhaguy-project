@@ -174,15 +174,12 @@
 			</row>
 			
 			<row id="rwVencimiento" visible="false">
-				<field value="Fecha del Cheque:"/>
-				<hlayout>
-					<datebox readonly="true" value="@bind(vm.nvoFormaPago.chequeFecha)" />
-					<labelConstrain/>
-				</hlayout>				
+				<field value="Fecha:"/>
+				<datebox readonly="true" hflex="true" value="@bind(vm.nvoFormaPago.chequeFecha)" />			
 			</row>	
 			
 			<row id="rwMontoCheque" visible="false">
-				<field>Monto del Cheque:</field>
+				<field>Monto:</field>
 				<hlayout>
 					<guaranibox value="@bind(vm.nvoFormaPago.montoChequeGs)" />
 					<label value="Gs." style="font-size:11px"/>
@@ -207,10 +204,7 @@
 			
 			<row id="rwDepositoReferencia" visible="false">
 				<field value="Número de Referencia:"/>
-				<hlayout>
-					<textbox value="@bind(vm.nvoFormaPago.depositoNroReferencia)"/>
-					<labelConstrain/>
-				</hlayout>				
+				<textbox value="@bind(vm.nvoFormaPago.depositoNroReferencia)" hflex="true"/>			
 			</row>
 			
 			<!-- ________________________ Forma Pago Retención _________________________ -->

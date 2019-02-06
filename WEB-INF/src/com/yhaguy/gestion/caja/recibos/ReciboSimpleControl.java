@@ -973,7 +973,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			
 		} else if(siglaFP.compareTo(siglaFPDB) == 0){
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(true);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
 			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);

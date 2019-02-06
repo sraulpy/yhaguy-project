@@ -562,4 +562,24 @@ public class Utiles {
 		}
 	      return sum / values.size();
 	  }
+	
+	/**
+	 * @return true si solo contiene numeros..
+	 */
+	public static boolean validarNumeroFactura(String str) {
+		if (str == null || str.length() == 0)
+			return false;
+
+		for (int i = 0; i < str.length(); i++) {
+			if (!Character.isDigit(str.charAt(i)) && (Character.toString(str.charAt(i)).compareTo("-") != 0)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static void main(String[] args) {
+		String test = "001-001-0145885";
+		System.out.println(test.charAt(7));
+	}
 }

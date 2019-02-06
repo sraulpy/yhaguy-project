@@ -43,6 +43,8 @@ import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.ImportacionFactura;
+import com.yhaguy.domain.ImportacionFacturaDetalle;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
@@ -226,6 +228,7 @@ public class VentaItemControl extends SoloViewModel {
 	 * - precio = costogs * 1.1 * 1.05 (redondeo)
 	 * - excepcion nakata, mahle y mostrador
 	 * - precio = costogs * 1.1 * 1.1 (redondeo)
+	 * - sac importacion 22 = mayorista * 0.95
 	 */
 	private void verificarArticulo(long idArticulo) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -233,7 +236,19 @@ public class VentaItemControl extends SoloViewModel {
 		Funcionario func = rr.getFuncionario(this.getAcceso().getFuncionario().getId());
 		if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.REPUESTOS)) {
 			if (!art.getMarca().getDescripcion().equals(ArticuloMarca.COMPRA_LOCAL)) {
-				if (art.getProveedor().isProveedorExterior()) {
+				boolean sac = false;
+				if (art.getCodigoInterno().startsWith("SAC ")) {
+					ImportacionFactura imp = rr.getImportacionFacturaById(22);
+					for (ImportacionFacturaDetalle det : imp.getDetalles()) {
+						if (det.getArticulo().getCodigoInterno().equals(art.getCodigoInterno())) {
+							this.det.setPrecioGs(art.getPrecioGs() * 0.95);
+							this.det.setPrecioMinimoGs(this.det.getPrecioGs());
+							this.det.setAuxi("PROMO-REP");
+							sac = true;
+						}
+					}
+				}
+				if (art.getProveedor().isProveedorExterior() && !sac) {
 					if (art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRA
 							&& art.getProveedor().getId().longValue() != Proveedor.ID_NAKATA
 							&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRS

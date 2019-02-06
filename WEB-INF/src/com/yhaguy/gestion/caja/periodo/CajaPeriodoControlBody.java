@@ -2691,6 +2691,12 @@ class ValidadorAgregarRecibo implements VerificaAceptarCancelar {
 			mensaje += "\n - Debe ingresar el número de recibo..";
 		}
 		
+		if (this.recibo.isCobro() && ((this.recibo.getNumero().length() != 15) || (this.recibo.getNumero().charAt(3) != '-') || (this.recibo.getNumero().charAt(7) != '-')
+				|| !Utiles.validarNumeroFactura(this.recibo.getNumero()))) {
+			out = false;
+			mensaje += "\n - Formato incorrecto de número..";
+		}
+		
 		if (this.recibo.isCobro() && this.recibo.isEntregado() && this.recibo.getNumeroRecibo().isEmpty()) {
 			out = false;
 			mensaje += "\n - Debe ingresar el número de recibo..";
