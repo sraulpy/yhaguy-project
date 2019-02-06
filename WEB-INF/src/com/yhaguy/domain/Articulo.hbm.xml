@@ -47,16 +47,16 @@
 		<many-to-one name="marca" class="com.yhaguy.domain.ArticuloMarca"
 			column="id_marca" lazy="false" />
 			
-		<many-to-one name="grupo" class="com.yhaguy.domain.ArticuloGrupo"
+		<many-to-one name="articuloGrupo" class="com.yhaguy.domain.ArticuloGrupo"
 			column="id_grupo" lazy="false" />
 			
-		<many-to-one name="linea" class="com.yhaguy.domain.ArticuloLinea"
+		<many-to-one name="articuloLinea" class="com.yhaguy.domain.ArticuloLinea"
 			column="id_linea" lazy="false" />
 			
-		<many-to-one name="aplicacion" class="com.yhaguy.domain.ArticuloAplicacion"
+		<many-to-one name="articuloAplicacion" class="com.yhaguy.domain.ArticuloAplicacion"
 			column="id_aplicacion" lazy="false" />
 			
-		<many-to-one name="modelo" class="com.yhaguy.domain.ArticuloModelo"
+		<many-to-one name="articuloModelo" class="com.yhaguy.domain.ArticuloModelo"
 			column="id_modelo" lazy="false" />
 		
 		<many-to-one name="articuloEstado" class="com.coreweb.domain.Tipo"
@@ -67,8 +67,6 @@
 			column="idArticuloMarca" lazy="false" />
 		<many-to-one name="articuloParte" class="com.coreweb.domain.Tipo"
 			column="idArticuloParte" lazy="false" />
-		<many-to-one name="articuloLinea" class="com.coreweb.domain.Tipo"
-			column="idArticuloLinea" lazy="false" />
 		<many-to-one name="articuloUnidadMedida" class="com.coreweb.domain.Tipo"
 			column="idArticuloUnidadMedida" lazy="false" />
 

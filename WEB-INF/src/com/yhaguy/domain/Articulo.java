@@ -40,17 +40,21 @@ public class Articulo extends Domain {
 	private Tipo articuloEstado; 
 	private Tipo articuloFamilia; 
 	private Tipo articuloMarca; 
-	private Tipo articuloParte; 						
-	private Tipo articuloLinea; 
+	private Tipo articuloParte; 
 	private Tipo articuloUnidadMedida; 
 	
 	private ArticuloFamilia familia;
 	private ArticuloMarca marca;
-	private ArticuloGrupo grupo;
-	private ArticuloLinea linea;
-	private ArticuloAplicacion aplicacion;
-	private ArticuloModelo modelo;
-	
+	private ArticuloGrupo articuloGrupo;
+	private ArticuloLinea articuloLinea;
+	private ArticuloAplicacion articuloAplicacion;
+	private ArticuloModelo articuloModelo;
+	private ArticuloSubGrupo articuloSubGrupo;
+	private ArticuloAPI articuloAPI;
+	private ArticuloProcedencia articuloProcedencia;
+	private ArticuloIndicecarga articuloIndiceCarga;
+	private ArticuloLado articuloLado;
+		
 	private long stock = 0;
 	
 	private Proveedor proveedor;
@@ -216,14 +220,6 @@ public class Articulo extends Domain {
 
 	public void setArticuloParte(Tipo articuloParte) {
 		this.articuloParte = articuloParte;
-	}
-
-	public Tipo getArticuloLinea() {
-		return articuloLinea;
-	}
-
-	public void setArticuloLinea(Tipo articuloLinea) {
-		this.articuloLinea = articuloLinea;
 	}
 
 	public Tipo getArticuloUnidadMedida() {
@@ -412,35 +408,75 @@ public class Articulo extends Domain {
 		this.marca = marca;
 	}
 
-	public ArticuloGrupo getGrupo() {
-		return grupo;
+	public ArticuloGrupo getArticuloGrupo() {
+		return articuloGrupo;
 	}
 
-	public void setGrupo(ArticuloGrupo grupo) {
-		this.grupo = grupo;
+	public void setArticuloGrupo(ArticuloGrupo articuloGrupo) {
+		this.articuloGrupo = articuloGrupo;
 	}
 
-	public ArticuloLinea getLinea() {
-		return linea;
+	public ArticuloAplicacion getArticuloAplicacion() {
+		return articuloAplicacion;
 	}
 
-	public void setLinea(ArticuloLinea linea) {
-		this.linea = linea;
+	public void setArticuloAplicacion(ArticuloAplicacion articuloAplicacion) {
+		this.articuloAplicacion = articuloAplicacion;
 	}
 
-	public ArticuloAplicacion getAplicacion() {
-		return aplicacion;
+	public ArticuloModelo getArticuloModelo() {
+		return articuloModelo;
 	}
 
-	public void setAplicacion(ArticuloAplicacion aplicacion) {
-		this.aplicacion = aplicacion;
+	public void setArticuloModelo(ArticuloModelo articuloModelo) {
+		this.articuloModelo = articuloModelo;
 	}
 
-	public ArticuloModelo getModelo() {
-		return modelo;
+	public ArticuloSubGrupo getArticuloSubGrupo() {
+		return articuloSubGrupo;
 	}
 
-	public void setModelo(ArticuloModelo modelo) {
-		this.modelo = modelo;
+	public void setArticuloSubGrupo(ArticuloSubGrupo articuloSubGrupo) {
+		this.articuloSubGrupo = articuloSubGrupo;
+	}
+
+	public ArticuloAPI getArticuloAPI() {
+		return articuloAPI;
+	}
+
+	public void setArticuloAPI(ArticuloAPI articuloAPI) {
+		this.articuloAPI = articuloAPI;
+	}
+
+	public ArticuloProcedencia getArticuloProcedencia() {
+		return articuloProcedencia;
+	}
+
+	public void setArticuloProcedencia(ArticuloProcedencia articuloProcedencia) {
+		this.articuloProcedencia = articuloProcedencia;
+	}
+
+	public ArticuloIndicecarga getArticuloIndiceCarga() {
+		return articuloIndiceCarga;
+	}
+
+	public void setArticuloIndiceCarga(ArticuloIndicecarga articuloIndiceCarga) {
+		this.articuloIndiceCarga = articuloIndiceCarga;
+	}
+
+	public ArticuloLado getArticuloLado() {
+		return articuloLado;
+	}
+
+	public void setArticuloLado(ArticuloLado articuloLado) {
+		this.articuloLado = articuloLado;
+	}
+
+	public ArticuloLinea getArticuloLinea() {
+		return articuloLinea;
+	}
+
+	public void setArticuloLinea(ArticuloLinea articuloLinea) {
+		this.articuloLinea = articuloLinea;
 	}
 }

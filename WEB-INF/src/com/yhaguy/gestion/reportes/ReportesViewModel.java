@@ -70,6 +70,7 @@ import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.ContableAsiento;
 import com.yhaguy.domain.ContableAsientoDetalle;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
@@ -5515,7 +5516,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setRazonSocialProveedorExterior("");
 		this.filtro.setTodosLosClientes(false);
 		this.filtro.setTodosLosVendedores(false);
-		this.filtro.setTodos(false);
+		this.filtro.setTodos(true);
 		this.filtro.setArticulo(null);
 		this.filtro.setCodigoArticulo("");
 		this.filtro.setTipoSaldoMigracion(ReportesFiltros.TODOS);
@@ -8719,8 +8720,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Proveedor prov = filtro.getProveedor();
+				CondicionPago cond = filtro.getCondicion();
 				long idSuc = suc != null ? suc.getId() : 0;
 				long idPrv = prov != null ? prov.getId() : 0; 
+				long idCon = cond != null ? cond.getId() : 0; 
 
 				if (desde == null)
 					desde = new Date();
@@ -8730,16 +8733,16 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc, idPrv);
+				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc, idPrv, idCon);
 
 				for (CompraLocalFactura compra : compras) {
 					Object[] cmp = new Object[] {
 							m.dateToString(compra.getFechaOriginal(),
 									Utiles.DD_MM_YY), compra.getNumero(),
+							compra.getCondicionPago().getDescripcion().toUpperCase().substring(0, 3),
 							compra.getSucursal().getDescripcion(),
 							compra.getProveedor().getRazonSocial(),
-							compra.getProveedor().getRuc(),
-							compra.getImporteGs() };
+							Utiles.getRedondeo(compra.getImporteGs()) };
 					data.add(cmp);
 				}
 
@@ -9183,7 +9186,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void movimientosArticulos() {
 			try {					
-				Proveedor proveedor_ = filtro.getProveedorExterior();
+				Proveedor proveedor_ = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedor();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				boolean todos = filtro.isTodos();
@@ -12246,10 +12249,10 @@ class ReporteComprasGenerico extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 25);
 	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 45);
-	static DatosColumnas col2 = new DatosColumnas("Suc.", TIPO_STRING, 30);
-	static DatosColumnas col3 = new DatosColumnas("Razón Social", TIPO_STRING);
-	static DatosColumnas col4 = new DatosColumnas("Ruc", TIPO_STRING, 30);
-	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
+	static DatosColumnas col2 = new DatosColumnas("Cond.", TIPO_STRING, 25);
+	static DatosColumnas col3 = new DatosColumnas("Suc.", TIPO_STRING, 30);
+	static DatosColumnas col4 = new DatosColumnas("Razón Social", TIPO_STRING);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
 
 	public ReporteComprasGenerico(Date desde, Date hasta) {
 		this.desde = desde;
@@ -12262,7 +12265,7 @@ class ReporteComprasGenerico extends ReporteYhaguy {
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
-		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override

@@ -85,11 +85,10 @@
 											</hlayout>	
 											<field value="Línea:" />
 											<combobox
-												model="@load(vm.dtoUtil.articuloLinea)" 
+												model="@load(vm.lineas)"
 												value="@load(vm.dto.articuloLinea.text.toUpperCase())"
-												selectedItem="@bind(vm.dto.articuloLinea)"
-												hflex="true"
-												instant="true">
+												selectedItem="@bind(vm.dto.articuloLinea)" hflex="true"
+												style="margin-right:20px" instant="true">
 												<template
 													name="model">
 													<comboitem
@@ -126,7 +125,7 @@
 												</template>
 											</combobox>
 											
-											<field value="Marca Producto:" />
+											<field value="Marca:" />
 											<combobox
 												model="@load(vm.marcas)"
 												value="@load(vm.dto.marca.descripcion)"
@@ -188,6 +187,127 @@
 													name="model">
 													<comboitem
 														label="@load(each)" />
+												</template>
+											</combobox>
+											<field value="API:" />
+											<combobox hflex="true">
+											</combobox>
+										</row>
+										<row>
+											<field value="Grupo:" />
+											<combobox
+												model="@load(vm.grupos)" value="@load(vm.dto.articuloGrupo.text)"
+												selectedItem="@bind(vm.dto.articuloGrupo)" hflex="true"
+												style="margin-right:20px">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
+												</template>
+											</combobox>
+											<field value="Procedencia:" />
+											<combobox
+												model="@load(vm.procedencias)" value="@load(vm.dto.articuloProcedencia.text)"
+												selectedItem="@bind(vm.dto.articuloProcedencia)" hflex="true">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
+												</template>
+											</combobox>
+										</row>
+										<row>
+											<field value="Sub Grupo:" />
+											<combobox
+												model="@load(vm.subGrupos)"
+												value="@load(vm.dto.articuloSubGrupo.text)"
+												selectedItem="@bind(vm.dto.articuloSubGrupo)" hflex="true"
+												style="margin-right:20px">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
+												</template>
+											</combobox>
+											<field value="Presentación:" />
+											<combobox hflex="true">
+											</combobox>
+										</row>
+										<row>
+											<field value="Lado:" />
+											<combobox
+												model="@load(vm.lados)" value="@load(vm.dto.articuloLado.text)"
+												selectedItem="@bind(vm.dto.articuloLado)" hflex="true"
+												style="margin-right:20px">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
+												</template>
+											</combobox>
+											<field value="Unidades por Caja:" />
+											<combobox hflex="true">
+											</combobox>
+										</row>
+										<row>
+											<field value="Modelo:" />
+											<combobox
+												model="@load(vm.modelos)" value="@load(vm.dto.articuloModelo.text)"
+												selectedItem="@bind(vm.dto.articuloModelo)" hflex="true"
+												style="margin-right:20px">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
+												</template>
+											</combobox>
+											<field value="Índice de Carga:" />
+											<combobox
+												model="@load(vm.indiceCargas)" value="@load(vm.dto.articuloIndiceCarga.text)"
+												selectedItem="@bind(vm.dto.articuloIndiceCarga)" hflex="true">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
+												</template>
+											</combobox>
+										</row>
+										<row>
+											<field value="Máximo:" />
+											<combobox hflex="true"
+												style="margin-right:20px">
+											</combobox>
+											<field value="FOB/CIF Local:" />
+											<textbox hflex="true"></textbox>
+										</row>
+										<row>
+											<field value="SKU:" />
+											<textbox hflex="true"
+												style="margin-right:20px" />
+											<field value="80 / 20:" />
+											<textbox hflex="true" />
+										</row>
+										<row>
+											<field value="NCM:" />
+											<combobox hflex="true"
+												style="margin-right:20px">
+											</combobox>
+											<field value="CBM:" />
+											<combobox hflex="true"
+												style="margin-right:20px">
+											</combobox>
+										</row>
+										<row>
+											<field value="Aplicación:" />
+											<combobox
+												model="@load(vm.aplicaciones)"
+												value="@load(vm.dto.articuloAplicacion.text)"
+												selectedItem="@bind(vm.dto.articuloAplicacion)" hflex="true"
+												style="margin-right:20px">
+												<template
+													name="model">
+													<comboitem
+														label="@load(each.text)" />
 												</template>
 											</combobox>
 										</row>

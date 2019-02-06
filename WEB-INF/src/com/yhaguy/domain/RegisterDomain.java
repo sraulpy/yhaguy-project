@@ -2893,7 +2893,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las compras locales segun fecha de factura
 	 */
-	public List<CompraLocalFactura> getComprasLocales(Date desde, Date hasta, long idSucursal, long idProveedor)
+	public List<CompraLocalFactura> getComprasLocales(Date desde, Date hasta, long idSucursal, long idProveedor, long idCondicion)
 			throws Exception {
 		String query = "select c from CompraLocalFactura c where c.dbEstado != 'D' and (c.tipoMovimiento.sigla = ? or c.tipoMovimiento.sigla = ?)"
 				+ " and c.fechaOriginal between ? and ?";
@@ -2902,6 +2902,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idProveedor > 0) {
 					query += " and c.proveedor.id = " + idProveedor;
+				}
+				if (idCondicion > 0) {
+					query += " and c.condicionPago.id = " + idCondicion;
 				}
 				query += " order by c.fechaOriginal";
 
@@ -5682,6 +5685,17 @@ public class RegisterDomain extends Register {
 		String query = "select p from Proveedor p where lower(p.empresa.razonSocial) like '%"
 				+ razonSocial.toLowerCase() + "%'"
 				+ " and p.tipoProveedor.sigla = '"+ Configuracion.SIGLA_PROVEEDOR_TIPO_EXTERIOR +"'"
+				+ " order by p.empresa.razonSocial";
+		return this.hqlLimit(query, 200);
+	}
+	
+	/**
+	 * @return la lista de proveedores segun razonsocial..
+	 */
+	public List<Proveedor> getProveedoresLocales(String razonSocial) throws Exception {
+		String query = "select p from Proveedor p where lower(p.empresa.razonSocial) like '%"
+				+ razonSocial.toLowerCase() + "%'"
+				+ " and p.tipoProveedor.sigla = '"+ Configuracion.SIGLA_PROVEEDOR_TIPO_LOCAL +"'"
 				+ " order by p.empresa.razonSocial";
 		return this.hqlLimit(query, 200);
 	}

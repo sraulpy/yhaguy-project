@@ -54,5 +54,16 @@
 				</bandpopup>
 			</bandbox>
 		</row>
+		<row>
+			<field value="Condición:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.condiciones)"
+				selectedItem="@bind(vm.dato.filtro.condicion)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
 	</rows>
 </grid>

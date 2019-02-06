@@ -15,10 +15,22 @@
 				placeholder="Hasta.." hflex="true" />
 		</row>
 		<row>
+			<field value="Origen:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.origenes)"
+				selectedItem="@bind(vm.dato.filtro.origen)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		<row visible="@load(vm.dato.filtro.origen eq 'INTERNACIONAL')">
 			<field value="Proveedor:" />
 			<bandbox hflex="true" placeholder="TODOS.."
 				readonly="true" value="@load(vm.dato.filtro.proveedorExterior.razonSocial)"
-				id="bndProv_">
+				id="bndProv_"
+				onOpen="tx_prov.focus()">
 				<bandpopup>
 					<listbox sclass="small-list" width="400px"
 						height="200px" model="@load(vm.dato.filtro.proveedoresExterior)"
@@ -31,7 +43,39 @@
 										iconSclass="z-icon-filter" disabled="true" />
 									<textbox hflex="true"
 										value="@bind(vm.dato.filtro.razonSocialProveedorExterior)"
-										instant="true" placeholder="Buscar.." />
+										instant="true" placeholder="Buscar.." 
+										id="tx_prov"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row visible="@load(vm.dato.filtro.origen eq 'LOCAL')">
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedorLocal.razonSocial)"
+				id="bndProv"
+				onOpen="tx_prove.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedoresLocales)"
+						selectedItem="@bind(vm.dato.filtro.proveedorLocal)"
+						onSelect="bndProv.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedorLocal)"
+										instant="true" placeholder="Buscar.." 
+										id="tx_prove"/>
 								</hlayout>
 							</listheader>
 						</listhead>

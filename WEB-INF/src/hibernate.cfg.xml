@@ -81,7 +81,13 @@
 		<mapping resource="com/yhaguy/domain/ArticuloLinea.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloGrupo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloModelo.hbm.xml" />
-		<mapping resource="com/yhaguy/domain/ArticuloAplicacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloAplicacion.hbm.xml" />		
+		<mapping resource="com/yhaguy/domain/ArticuloSubLinea.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloSubGrupo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloAPI.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloProcedencia.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloIndicecarga.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloLado.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/ProveedorArticulo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/Proveedor.hbm.xml" />

@@ -22,6 +22,7 @@ import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
@@ -81,6 +82,9 @@ public class ReportesFiltros {
 	public static final String COSTO_ULTIMO = "ÚLTIMO COSTO";
 	public static final String COSTO_PROMEDIO = "COSTO PROMEDIO";
 	
+	public static final String ORIGEN_LOCAL = "LOCAL";
+	public static final String ORIGEN_INTERNACIONAL = "INTERNACIONAL";
+	
 	private Date fechaDesde;
 	private Date fechaHasta;
 	private Date fechaDesde2;
@@ -125,7 +129,7 @@ public class ReportesFiltros {
 	private String codigoArticulo = "";
 	private String tipoSaldoMigracion = TODOS;
 	private String tipoRentabilidad = TODOS;
-	private boolean todos = false;
+	private boolean todos = true;
 	private boolean excluirPyAutopartes = false;
 	private boolean excluirIcaturbo = false;
 	private boolean costoPromedio = false;
@@ -190,12 +194,16 @@ public class ReportesFiltros {
 	
 	private Proveedor proveedorExterior;
 	private String razonSocialProveedorExterior = "";
+	private Proveedor proveedorLocal;
+	private String razonSocialProveedorLocal = "";
+	private String origen = ORIGEN_LOCAL;
 
 	// Filtros de Tesoreria..
 	private String libradoPor = "";
 	private String nroComprobanteCheque = "";
 	private boolean descontadoCheque = true;
 	private String estadoCuentaCliente;
+	private CondicionPago condicion;
 	
 	// Filtros de Usuarios
 	private boolean usuariosActivos = true;
@@ -517,6 +525,16 @@ public class ReportesFiltros {
 	}
 	
 	/**
+	 * @return los formatos de reporte..
+	 */
+	public List<String> getOrigenes() {
+		List<String> out = new ArrayList<String>();
+		out.add(ORIGEN_LOCAL);
+		out.add(ORIGEN_INTERNACIONAL);
+		return out;
+	}
+	
+	/**
 	 * @return los tipos de ajuste de Stock..
 	 */
 	public List<TipoMovimiento> getTiposAjustes() {
@@ -614,6 +632,12 @@ public class ReportesFiltros {
 		return rr.getProveedoresExterior(this.razonSocialProveedorExterior);
 	}
 	
+	@DependsOn("razonSocialProveedorLocal")
+	public List<Proveedor> getProveedoresLocales() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getProveedoresLocales(this.razonSocialProveedorLocal);
+	}
+	
 	@DependsOn("codigoArticulo")
 	public List<Articulo> getArticulos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -662,6 +686,11 @@ public class ReportesFiltros {
 	public List<BancoCta> getBancoCtas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getObjects(BancoCta.class.getName());
+	}
+	
+	public List<CondicionPago> getCondiciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(CondicionPago.class.getName());
 	}
 	
 	@DependsOn("nombreUsuario")
@@ -1506,5 +1535,45 @@ public class ReportesFiltros {
 			this.selectedProveedores = new ArrayList<Proveedor>();
 		}
 		this.selectedProveedores = selectedProveedores;
+	}
+
+	public void setCondicion(CondicionPago condicion) {
+		this.condicion = condicion;
+	}
+
+	public CondicionPago getCondicion() {
+		return condicion;
+	}
+
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
+	}
+
+	public Proveedor getProveedorLocal() {
+		return proveedorLocal;
+	}
+
+	public void setProveedorLocal(Proveedor proveedorLocal) {
+		this.proveedorLocal = proveedorLocal;
+	}
+
+	public String getRazonSocialProveedoLocal() {
+		return razonSocialProveedorLocal;
+	}
+
+	public void setRazonSocialProveedoLocal(String razonSocialProveedoLocal) {
+		this.razonSocialProveedorLocal = razonSocialProveedoLocal;
+	}
+
+	public String getRazonSocialProveedorLocal() {
+		return razonSocialProveedorLocal;
+	}
+
+	public void setRazonSocialProveedorLocal(String razonSocialProveedorLocal) {
+		this.razonSocialProveedorLocal = razonSocialProveedorLocal;
 	}
 }
