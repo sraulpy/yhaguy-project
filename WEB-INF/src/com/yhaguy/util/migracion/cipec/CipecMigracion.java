@@ -486,7 +486,7 @@ public class CipecMigracion extends CipecConfiguracion {
 
 				// cargar familia
 				Tipo linea = lineas.get(jediIdLinea);
-				art_cinpal.setArticuloLinea(linea);
+				//art_cinpal.setArticuloLinea(linea);
 
 				// Cargar Unidad de Medida
 				art_cinpal.setArticuloUnidadMedida(CIPEC_UNIDAD);

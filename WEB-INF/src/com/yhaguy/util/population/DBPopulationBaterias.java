@@ -851,7 +851,7 @@ public class DBPopulationBaterias {
 			ref.setObservacion("");
 			ref.setArticuloMarca(tt.sinReferenciaTipo);
 			ref.setArticuloParte(tt.sinReferenciaTipo);
-			ref.setArticuloLinea(tt.sinReferenciaTipo);
+			//ref.setArticuloLinea(tt.sinReferenciaTipo);
 			ref.setArticuloFamilia(tt.sinReferenciaTipo);
 			ref.setArticuloEstado(tt.estadoArticulo1);
 			ref.setArticuloPresentacion(rr.getArticuloPresentacionById(1));

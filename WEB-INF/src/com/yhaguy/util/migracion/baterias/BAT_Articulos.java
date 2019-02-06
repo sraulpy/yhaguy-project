@@ -47,7 +47,7 @@ public class BAT_Articulos {
 			artBat.setObservacion("");
 			artBat.setArticuloMarca(tt.sinReferenciaTipo);
 			artBat.setArticuloParte(tt.sinReferenciaTipo);
-			artBat.setArticuloLinea(tt.sinReferenciaTipo);
+			//artBat.setArticuloLinea(tt.sinReferenciaTipo);
 			artBat.setArticuloFamilia(tt.sinReferenciaTipo);
 			artBat.setArticuloEstado(tt.estadoArticulo1);
 			artBat.setArticuloPresentacion(rr.getArticuloPresentacionById(1));

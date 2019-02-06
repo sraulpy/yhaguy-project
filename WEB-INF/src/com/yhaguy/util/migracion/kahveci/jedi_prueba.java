@@ -165,7 +165,7 @@ static Misc m = new Misc();
 			art.setArticuloEstado(estado_activo);
 			art.setArticuloFamilia(familia_repuestos);
 			art.setArticuloMarca(marca_khaveci);
-			art.setArticuloLinea(linea_pesada);
+			//art.setArticuloLinea(linea_pesada);
 			art.setArticuloUnidadMedida(unidad_und);
 			art.setArticuloParte(parte_accesorio);
 			

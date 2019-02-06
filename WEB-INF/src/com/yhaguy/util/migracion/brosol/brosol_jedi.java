@@ -175,7 +175,7 @@ public class brosol_jedi {
 			art.setArticuloEstado(estado_activo);
 			art.setArticuloFamilia(familia_repuestos);
 			art.setArticuloMarca(marca_Brosol);
-			art.setArticuloLinea(linea_Liviana);
+			//art.setArticuloLinea(linea_Liviana);
 			
 			
 			if (PARTE.trim().compareTo(PARTE_FRENOS.trim()) == 0) {

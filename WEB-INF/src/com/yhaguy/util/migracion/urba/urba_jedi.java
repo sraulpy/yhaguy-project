@@ -182,11 +182,12 @@ public class urba_jedi {
 			art.setArticuloFamilia(familia_repuestos);
 			art.setArticuloMarca(marca_Urba);
 			
+			/**
 			if (LINEA.trim().compareTo(LINEA_LIVIANA.trim()) == 0) {
 				art.setArticuloLinea(linea_Liviana);
 			} else {
 				art.setArticuloLinea(linea_pesada);
-			}
+			}**/
 		
 			
 			art.setArticuloUnidadMedida(unidad_und);

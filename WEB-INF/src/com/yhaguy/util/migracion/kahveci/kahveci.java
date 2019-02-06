@@ -120,7 +120,7 @@ public static String Articulo_Kahveci_en_Jedisoft_GEcsv= "./WEB-INF/docs/migraci
 		art.setArticuloEstado(estado_activo);
 		art.setArticuloFamilia(familia_repuestos);
 		art.setArticuloMarca(marca_khaveci);
-		art.setArticuloLinea(linea_pesada);
+		//art.setArticuloLinea(linea_pesada);
 		art.setArticuloUnidadMedida(unidad_und);
 		art.setArticuloParte(parte_accesorio);
 		

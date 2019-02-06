@@ -477,8 +477,8 @@ public class ArticuloMigracion {
 						Configuracion.SIGLA_ARTICULO_PARTE_DEFAULT));
 
 				String idLinea = getColArt("IDLINEA", dato);
-				a.setArticuloLinea(getTipo(idLinea,
-						Configuracion.SIGLA_ARTICULO_LINEA_DEFAULT));
+				//a.setArticuloLinea(getTipo(idLinea,
+				//		Configuracion.SIGLA_ARTICULO_LINEA_DEFAULT));
 
 				String codigoProveedor = getColArt("CODIGO_FABRICA", dato);
 				String idProveedor = getColArt("IDCOLECCION", dato);

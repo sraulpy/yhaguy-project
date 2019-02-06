@@ -145,7 +145,7 @@ public class MRA_Articulos {
 			artMra.setObservacion("");
 			artMra.setArticuloMarca(tt.sinReferenciaTipo);
 			artMra.setArticuloParte(tt.sinReferenciaTipo);
-			artMra.setArticuloLinea(tt.sinReferenciaTipo);
+			//artMra.setArticuloLinea(tt.sinReferenciaTipo);
 			artMra.setArticuloFamilia(tt.sinReferenciaTipo);
 			artMra.setArticuloEstado(tt.estadoArticulo1);
 			artMra.setArticuloPresentacion(rr.getArticuloPresentacionById(1));
