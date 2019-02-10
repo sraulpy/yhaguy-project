@@ -65,7 +65,7 @@
 				</vlayout>
 			</row>
 			<row valign="top">
-				<cell colspan="3">
+				<cell colspan="2">
 					<vlayout style="margin-top:6px">
 						<field value="Proveedor" />
 						<hlayout valign="top"
@@ -75,7 +75,6 @@
 							<buscadorProveedor value="@bind(vm.dto)"
 								campo="razonSocial" hflex="true" />
 						</hlayout>
-
 						<hlayout visible="@load(vm.dto.autoFactura)">
 							<textbox width="100px"
 								value="@load(vm.dto.proveedor.pos3)" readonly="true" />
@@ -94,8 +93,7 @@
 						<textbox id="tx"
 							value="@bind(vm.dto.numeroFactura) @converter(vm.cnv.facturaPy)"
 							hflex="true" style="text-align:right"
-							readonly="@load(vm.dto.autoFactura)" />
-						<label value="(*)" style="color:red" />
+							readonly="@load(vm.dto.autoFactura)" />						
 					</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
@@ -105,6 +103,18 @@
 							value="@bind(vm.dto.timbrado)" hflex="true"
 							style="text-align:right"
 							placeholder="Nro. Timbrado.." />
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Sucursal" />
+					<hlayout>
+						<combobox value="@load(vm.dto.sucursal.text)" hflex="true"
+							model="@load(vm.sucursales)"
+							selectedItem="@bind(vm.dto.sucursal)" instant="true">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>							
+						</combobox>
 					</hlayout>
 				</vlayout>
 			</row>

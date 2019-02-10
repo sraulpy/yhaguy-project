@@ -24,6 +24,7 @@ public class Funcionario extends Domain {
 	private boolean tecnico;
 	private boolean chofer;
 	private boolean vendedorMostrador;
+	private long idSucursal;
 	
 	private double porc_comision = 0;
 	private double porc_comision_cobros = 0;
@@ -34,6 +35,14 @@ public class Funcionario extends Domain {
 	private Set<AccesoApp> accesos = new HashSet<AccesoApp>();
 	private Set<VentaMeta> metas = new HashSet<VentaMeta>();
 
+	public static void main(String[] args) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Funcionario> funcs = rr.getFuncionarios();
+		for (Funcionario func : funcs) {
+			func.setIdSucursal(1);
+		}
+	}
+	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
@@ -319,5 +328,13 @@ public class Funcionario extends Domain {
 
 	public void setVendedorMostrador(boolean vendedorMostrador) {
 		this.vendedorMostrador = vendedorMostrador;
+	}
+
+	public long getIdSucursal() {
+		return idSucursal;
+	}
+
+	public void setIdSucursal(long idSucursal) {
+		this.idSucursal = idSucursal;
 	}
 }

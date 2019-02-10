@@ -502,7 +502,8 @@
 								</listcell>
 								<listcell label="@load(each.emision) @converter('formattedDate', format='dd-MM-yyyy')" 
 									style="@load(each.self? 'color:blue' : '')"/>
-								<listcell label="@load(each.numero)" />
+								<listcell label="@load(each.numero)" 
+									style="@load(each.self? 'color:blue' : '')"/>
 								<listcell label="@load(each.tipoMovimiento)"
 									style="@load(each.self? 'color:blue' : '')"/>
 								<listcell label="@load(each.debe) @converter(vm.cnv.monedaLocal)" 

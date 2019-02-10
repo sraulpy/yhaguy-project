@@ -125,7 +125,7 @@
 							visible="@load(vm.dto.clienteOcasional eq null ? 'false' : 'true')"/>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Vendedor" />
+						<field value="@load(vm.sucursal.id eq 3? 'Técnico / Montador' : 'Vendedor')" />
 						<hlayout>
 							<textbox value="@bind(vm.dto.vendedor.pos1)"
 								onOK="@command('buscarVendedor')" placeholder="Nombre.." 

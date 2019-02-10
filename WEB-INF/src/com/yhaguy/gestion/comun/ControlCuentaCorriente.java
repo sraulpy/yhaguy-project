@@ -475,6 +475,7 @@ public class ControlCuentaCorriente {
 		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
 		ctm.setFechaEmision(gasto.getFecha());
 		ctm.setFechaVencimiento(gasto.getVencimiento());
+		ctm.setTipoCambio(gasto.getTipoCambio());
 		ctm.setIdEmpresa(idEmpresa);
 		ctm.setIdMovimientoOriginal(gasto.getId());
 		ctm.setIdVendedor(0);
@@ -484,6 +485,30 @@ public class ControlCuentaCorriente {
 		ctm.setSucursal(gasto.getSucursal());
 		ctm.setSaldo(ctm.getImporteOriginal());
 		ctm.setNumeroImportacion(nroImportacion);
+		rr.saveObject(ctm, user);	
+	}
+	
+	/**
+	 * agregar movimiento gasto..
+	 */
+	public static void addGasto(long idGasto, long idEmpresa, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Gasto gasto = rr.getGastoById(idGasto);
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(gasto.getTipoMovimiento());
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+		ctm.setFechaEmision(gasto.getFecha());
+		ctm.setFechaVencimiento(gasto.getVencimiento());
+		ctm.setTipoCambio(gasto.getTipoCambio());
+		ctm.setIdEmpresa(idEmpresa);
+		ctm.setIdMovimientoOriginal(gasto.getId());
+		ctm.setIdVendedor(0);
+		ctm.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+		ctm.setMoneda(gasto.getMoneda());
+		ctm.setNroComprobante(gasto.getNumeroFactura());
+		ctm.setSucursal(gasto.getSucursal());
+		ctm.setSaldo(ctm.getImporteOriginal());
+		ctm.setNumeroImportacion("");
 		rr.saveObject(ctm, user);	
 	}
 	

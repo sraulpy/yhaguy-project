@@ -28,7 +28,6 @@ import com.coreweb.domain.TipoTipo;
 import com.coreweb.domain.Usuario;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
-import com.coreweb.util.Ruc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
@@ -7247,6 +7246,14 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los funcionarios marcados como vendedor..
+	 */
+	public List<Funcionario> getVendedores(long idSucursal) throws Exception {
+		String query = "select f from Funcionario f join f.accesos where f.vendedor = 'TRUE' order by f.empresa.razonSocial";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las importaciones marcadas como en curso..
 	 */
 	public List<ImportacionPedidoCompra> getImportacionesPendientes() throws Exception {
@@ -9126,20 +9133,35 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			Ruc ruc = new Ruc();
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Cliente> clientes = rr.getObjects(Cliente.class.getName());
-			for (Cliente cliente : clientes) {
-				String ruc_ = cliente.getRuc();
-				boolean valido = ruc.validarRuc(ruc_);
-				if (!valido) {					
-					System.out.println("CLIENTE: " + cliente.getRazonSocial());
-					System.out.println("RUC-ERR: " + ruc_);
-					System.out.println("----------------------------------------------------");
+			long idempresaGodoy = 13263;
+			SucursalApp suc = rr.getSucursalAppById(2);
+			Tipo caracter = rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR);
+			List<Gasto> gastos8 = rr.getGastosDeImportacion_(19);
+			for (Gasto gasto : gastos8) {
+				if (true) {
+					CtaCteEmpresaMovimiento movim = new CtaCteEmpresaMovimiento();
+					movim.setAnulado(false);
+					movim.setCerrado(false);
+					movim.setFechaEmision(gasto.getFecha());
+					movim.setFechaVencimiento(gasto.getVencimiento());
+					movim.setIdEmpresa(idempresaGodoy);
+					movim.setIdMovimientoOriginal(gasto.getId());
+					movim.setIdVendedor(0);
+					movim.setImporteOriginal(gasto.isMonedaLocal() ? gasto.getImporteGs_() : gasto.getImporteDs_());
+					movim.setMoneda(gasto.getMoneda());
+					movim.setNroComprobante(gasto.getNumeroFactura());
+					movim.setNumeroImportacion("IMP-" + gasto.getIdImportacion());
+					movim.setSaldo(movim.getImporteOriginal());
+					movim.setSucursal(suc);
+					movim.setTipoCambio(gasto.getTipoCambio());
+					movim.setTipoCaracterMovimiento(caracter);
+					movim.setTipoMovimiento(gasto.getTipoMovimiento());
+					rr.saveObject(movim, gasto.getUsuarioMod());
+					System.out.println(gasto.getNumeroFactura() + " - " + movim.getSaldo());
 				}
-				
-			}
-		} catch (Exception e) {
+		} } catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	

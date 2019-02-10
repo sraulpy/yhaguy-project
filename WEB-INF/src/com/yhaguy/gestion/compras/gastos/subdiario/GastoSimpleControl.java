@@ -33,6 +33,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.CentroCosto;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.contabilidad.subdiario.SubDiarioDTO;
 import com.yhaguy.inicio.AccesoDTO;
@@ -201,7 +202,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		this.nvoItem = new GastoDetalleDTO();
 		this.nvoItem.setCentroCosto(this.getCentroCosto());
 		this.nvoItem.setTipoIva(this.getUtilDto().getTipoIva10());
-		this.nvoItem.setSucursal(this.getAcceso().getSucursalOperativa().getText().toUpperCase());
+		this.nvoItem.setSucursal(this.dto.getSucursal().getText());
 
 		if (this.dto.isAutoFactura() || this.dto.isBoletaVenta())
 			this.nvoItem.setTipoIva(this.getUtilDto().getTipoIvaExento());
@@ -511,6 +512,18 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		Session s = Sessions.getCurrent();
 		AccesoDTO acc = (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
 		return acc;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MyPair> getSucursales() throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		List<SucursalApp> sucs = rr.getObjects(SucursalApp.class.getName());
+		for (SucursalApp suc : sucs) {
+			MyPair my = new MyPair(suc.getId(), suc.getDescripcion());
+			out.add(my);
+		}
+		return out;
 	}
 	
 	@Override

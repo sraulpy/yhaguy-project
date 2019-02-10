@@ -48,6 +48,7 @@ import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.VehiculoMarca;
@@ -1743,6 +1744,21 @@ public class VentaControlBody extends BodyApp {
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getVehiculoModelos(this.dto.getVehiculoMarca().getId());
+	}
+	
+	/**
+	 * @return los vendedores..
+	 */
+	public List<MyArray> getVendedores() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (Funcionario vend : rr.getVendedores()) {
+			MyArray my = new MyArray();
+			my.setId(vend.getId());
+			my.setPos1(vend.getRazonSocial());
+			out.add(my);
+		}
+		return out;
 	}
 	
 	/**

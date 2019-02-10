@@ -1053,6 +1053,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.dtoGasto.setCajaPagoNumero(this.dto.getNumero());
 			this.dtoGasto.setTipoCambio(tipoCambio);
 			this.dtoGasto.setMoneda(moneda);
+			this.dtoGasto.setSucursal(this.dto.getCaja().getSucursal());
 			this.dtoGasto.setCondicionPago(this.condicionContado);
 			this.dtoGasto.setTipoMovimiento(this.tipoMvtoGastoContado);
 			this.dtoGasto.setVencimiento(new Date());
@@ -1081,7 +1082,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Agrega y guarda el gasto..
 	 */
 	private void addGasto() throws Exception {
-		this.dtoGasto.setSucursal(this.getAcceso().getSucursalOperativa());
 		this.dto.getGastos().add(this.dtoGasto);
 		if (this.dtoGasto.isAutoFactura())
 			this.dtoGasto.setNumeroFactura(this.getNumeroAutoFactura());

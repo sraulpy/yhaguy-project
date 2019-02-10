@@ -54,7 +54,7 @@ import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.compras.gastos.subdiario.AssemblerGasto;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDetalleDTO;
-import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
+import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
@@ -542,9 +542,14 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	 */
 	private void confirmar() throws Exception {
 		if(this.mensajeSiNo("Desea confirmar el Gasto..") == false)
-			return;
+			return;		
 		this.dtoGasto.setEstadoComprobante(this.getEstadoComprobanteCerrado());
 		this.dtoGasto.setObservacion(this.dto.getDescripcion());
+		if (!this.dtoGasto.isMonedaLocal()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			double tc = rr.getTipoCambioVenta(this.dtoGasto.getFecha());
+			this.dtoGasto.setTipoCambio(tc);
+		}
 		this.dtoGasto = (GastoDTO) this.saveDTO(this.dtoGasto, new AssemblerGasto());
 		this.dto.setReadonly();
 		this.dto.setConfirmado(true);
@@ -562,9 +567,6 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	 * Actualiza la Cta Cte del Proveedor..
 	 */
 	private void actualizarCtaCteProveedor(GastoDTO gasto) throws Exception {
-
-		ControlCtaCteEmpresa ctr = new ControlCtaCteEmpresa(null);
-
 		String sigla = (String) gasto.getTipoMovimiento().getPos2();
 		long idEmpresa = (long) this.dto.getProveedor().getPos6();
 		
@@ -578,31 +580,21 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 			}			
 		}
 		
-		MyPair empresa = new MyPair(idEmpresa);
 		long idMoneda = gasto.getMoneda().getId();
 		MyPair moneda = new MyPair(idMoneda);
 		moneda.setSigla((String) gasto.getMoneda().getPos2());
-		MyPair caracter = getDtoUtil().getCtaCteEmpresaCaracterMovProveedor();
 		MyArray sucursal = new MyArray();
 		sucursal.setId(this.dto.getSucursal().getId());
 
-		double importe = gasto.getImporteTotal(moneda.getSigla());
-
 		// verifica que sea movimiento credito o contado
 		if (sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO)) {
-			ctr.addCtaCteEmpresaMovimientoFacturaCredito(empresa,
-					gasto.getId(), gasto.getNumeroFactura(), gasto.getFecha(),
-					0, 1, importe, 0, importe, moneda,
-					gasto.getTipoMovimiento(), caracter, sucursal, gasto.getNumeroImportacion(),
-					gasto.getTipoCambio());
+			ControlCuentaCorriente.addGasto(gasto.getId(), idEmpresa, this.getLoginNombre());
 
 		} else if (sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO) 
-				|| sigla.equals(Configuracion.SIGLA_TM_BOLETA_VENTA)) {
-
-			ctr.addCtaCteEmpresaMovimientoFacturaContado(empresa,
-					gasto.getId(), gasto.getNumeroFactura(), gasto.getFecha(),
-					importe, moneda, gasto.getTipoMovimiento(), caracter,
-					sucursal, true, gasto.getNumeroImportacion());
+				|| sigla.equals(Configuracion.SIGLA_TM_BOLETA_VENTA)
+				|| sigla.equals(Configuracion.SIGLA_TM_OTROS_COMPROBANTES)) {
+			
+			ControlCuentaCorriente.addGasto(gasto.getId(), idEmpresa, this.getLoginNombre());
 		}
 	}
 	
