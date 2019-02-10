@@ -14023,7 +14023,7 @@ class LibroMayorDataSource implements JRDataSource {
 }
 
 /**
- * DataSource del Libro compras..
+ * DataSource del Libro compras
  */
 class LibroComprasIndistintoDataSource implements JRDataSource {
 	
