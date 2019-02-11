@@ -231,6 +231,9 @@ public class VentaItemControl extends SoloViewModel {
 	 * - sac importacion 22 = mayorista * 0.95
 	 */
 	private void verificarArticulo(long idArticulo) throws Exception {
+		if (this.isEmpresaBaterias()) {
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Articulo art = rr.getArticuloById(idArticulo);
 		Funcionario func = rr.getFuncionario(this.getAcceso().getFuncionario().getId());
