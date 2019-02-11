@@ -56,6 +56,18 @@
 								<textbox rows="1"
 									value="@bind(vm.dtoEmp.observacion)" hflex="true" />
 							</row>
+							<row>
+								<field value="Vendedor:" />
+								<combobox
+									value="@bind(vm.dtoEmp.vendedor.razonSocial)" hflex="true" 
+									readonly="true" instant="true"
+									selectedItem="@bind(vm.dtoEmp.vendedor)"
+									model="@load(vm.vendedores)">
+										<template name="model">
+											<comboitem label="@load(each.razonSocial)"></comboitem>
+										</template>
+								</combobox>
+							</row>
 						</rows>
 					</grid>
 				</vlayout>

@@ -2317,8 +2317,8 @@ public class RegisterDomain extends Register {
 	 * @return el Cliente segun razonsocial..
 	 */
 	public Cliente getClienteByRazonSocial(String razonsocial) throws Exception {
-		String query = "Select c from Cliente c where c.empresa.razonSocial = '"
-				+ razonsocial + "'";
+		String query = "Select c from Cliente c where upper(c.empresa.razonSocial) = '"
+				+ razonsocial.toUpperCase() + "'";
 		List<Cliente> out = this.hql(query);
 		if (out.size() > 0) {
 			return out.get(0);

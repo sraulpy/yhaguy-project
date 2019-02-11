@@ -7,6 +7,7 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaDTO;
 
 @SuppressWarnings("serial")
@@ -30,7 +31,6 @@ public class EmpresaDTO extends DTO {
 	private String sigla = "";
 	private boolean razonSocialSet = false; // indica si la razon social fue
 											// obtenido de la BD del SET.
-	
 	private String direccion_ = "";
 	private String telefono_ = "";
 	private String correo_ = "";
@@ -54,6 +54,7 @@ public class EmpresaDTO extends DTO {
 	private int tipoEmpresa; // 1: Proveedor, 2:Cliente, 3:Cliente/Proveedor
 
 	private CtaCteEmpresaDTO ctaCteEmpresa = new CtaCteEmpresaDTO();
+	private Funcionario vendedor;
 
 	public EmpresaDTO() {
 	}
@@ -327,5 +328,13 @@ public class EmpresaDTO extends DTO {
 
 	public void setRubro(MyArray rubro) {
 		this.rubro = rubro;
+	}
+
+	public Funcionario getVendedor() {
+		return vendedor;
+	}
+
+	public void setVendedor(Funcionario vendedor) {
+		this.vendedor = vendedor;
 	}
 }

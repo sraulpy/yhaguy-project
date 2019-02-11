@@ -1,5 +1,6 @@
 package com.yhaguy.process;
 
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
+import com.yhaguy.util.ConnectDB;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.migracion.baterias.BAT_Costos;
 
@@ -36,6 +38,7 @@ public class ProcesosVentas {
 	static final String SRC_EMPRESAS_RUBROS = "./WEB-INF/docs/procesos/EMPRESAS_RUBROS.csv";
 	static final String SRC_MIGRACION_VTAS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS.csv";
 	static final String SRC_MIGRACION_VTAS_ANULADOS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS_ANULADOS.csv";
+	static final String SRC_CLIENTE_VENDEDOR = "./WEB-INF/docs/migracion/central/CLIENTE_VENDEDOR.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -170,6 +173,48 @@ public class ProcesosVentas {
 				cli.getEmpresa().getRubroEmpresas().add(rubro);
 				rr.saveObject(cli, "process");
 				System.out.println("CLIENTE: " + cli.getRazonSocial() + " RUBRO: " + rubro.getDescripcion());
+			}
+		}
+	}
+	
+	/**
+	 * asigna vendedor a clientes..
+	 */
+	public static void setClienteVendedor() throws Exception {
+		ConnectDB conn = ConnectDB.getInstance();
+		String src = SRC_CLIENTE_VENDEDOR;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "VENDEDOR", CSV.STRING }, { "CLIENTE", CSV.STRING } };
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String vendedor = csv.getDetalleString("VENDEDOR");
+			String cliente = csv.getDetalleString("CLIENTE");	
+			Cliente cli = rr.getClienteByRazonSocial(cliente.toUpperCase());
+			Funcionario func = rr.getFuncionario(vendedor.toUpperCase());
+			if (cli != null && func != null) {
+				cli.getEmpresa().setVendedor(func);
+				rr.saveObject(cli.getEmpresa(), cli.getEmpresa().getUsuarioMod());
+				System.out.println("CLIENTE: " + cli.getRazonSocial() + " VENDEDOR: " + func.getRazonSocial());
+			} else {
+				ResultSet result = conn.getDatosCliente(cliente);
+				if (!result.next()) {
+					System.err.println(cliente + " - Ruc: - - -");
+				} else {
+					while (result.next()) {
+						String ruc = (String) result.getObject(1);
+						cli = rr.getClienteByRuc(ruc);
+						if (cli != null) {
+							System.out.println("ENCONTRADO: " + cli.getRazonSocial());
+							rr.saveObject(cli.getEmpresa(), cli.getEmpresa().getUsuarioMod());
+						} else {
+							System.out.println("NO ENCONTRADO: " + cliente + " - " + ruc);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -355,7 +400,8 @@ public class ProcesosVentas {
 			//ProcesosVentas.addRubros(SRC_RUBROS);
 			//ProcesosVentas.setRubros(SRC_EMPRESAS_RUBROS);
 			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
-			ProcesosVentas.migrarVentas();
+			//ProcesosVentas.migrarVentas();
+			ProcesosVentas.setClienteVendedor();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

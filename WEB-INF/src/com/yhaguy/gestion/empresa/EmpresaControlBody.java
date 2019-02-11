@@ -30,6 +30,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.EmpresaGrupoSociedad;
 import com.yhaguy.domain.EmpresaRubro;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Localidad;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlLogicaEmpresa;
@@ -605,6 +606,14 @@ public abstract class EmpresaControlBody extends BodyApp {
 			out.add(my);
 		}
 		return out;
+	}
+	
+	/**
+	 * @return los vendedores..
+	 */
+	public List<Funcionario> getVendedores() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getVendedores();
 	}
 
 	public CtaCteEmpresaMovimientoDTO getSelectedMov() {

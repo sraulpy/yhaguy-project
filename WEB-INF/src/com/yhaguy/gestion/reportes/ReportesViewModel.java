@@ -4713,33 +4713,54 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Venta> ventas_contado = rr.getVentasContado(desde, hasta, 0);
-				List<Venta> ventas_credito = rr.getVentasCredito(desde, hasta, 0);
+				List<Venta> ventas_contado = rr.getVentasContado_(desde, hasta, 0, 0);
+				List<Venta> ventas_credito = rr.getVentasCredito_(desde, hasta, 0, 0);
 				List<NotaCredito> notas_credito = rr.getNotasCreditoVenta(desde, hasta, 0);
 				Map<Long, Double> values_cont = new HashMap<Long, Double>();
 				Map<Long, Double> values_cred = new HashMap<Long, Double>();
 				Map<Long, Double> values_ncre = new HashMap<Long, Double>();
+				Map<Long, Double> values_anul = new HashMap<Long, Double>();
 				
 				for (Venta venta : ventas_contado) {
 					long idVend = venta.getVendedor().getId();
-					Double total = values_cont.get(idVend);
-					if(total != null) {
-						total += (double) venta.getTotalImporteGs();
+					if (!venta.isAnulado()) {
+						Double total = values_cont.get(idVend);
+						if(total != null) {
+							total += (double) venta.getTotalImporteGs();
+						} else {
+							total = (double) venta.getTotalImporteGs();
+						}
+						values_cont.put(idVend, total);
 					} else {
-						total = (double) venta.getTotalImporteGs();
+						Double total = values_anul.get(idVend);
+						if(total != null) {
+							total += (double) venta.getTotalImporteGs();
+						} else {
+							total = (double) venta.getTotalImporteGs();
+						}
+						values_anul.put(idVend, total);					
 					}
-					values_cont.put(idVend, total);
 				}
 				
 				for (Venta venta : ventas_credito) {
 					long idVend = venta.getVendedor().getId();
-					Double total = values_cred.get(idVend);
-					if(total != null) {
-						total += (double) venta.getTotalImporteGs();
+					if (!venta.isAnulado()) {
+						Double total = values_cred.get(idVend);
+						if(total != null) {
+							total += (double) venta.getTotalImporteGs();
+						} else {
+							total = (double) venta.getTotalImporteGs();
+						}
+						values_cred.put(idVend, total);
 					} else {
-						total = (double) venta.getTotalImporteGs();
+						Double total = values_anul.get(idVend);
+						if(total != null) {
+							total += (double) venta.getTotalImporteGs();
+						} else {
+							total = (double) venta.getTotalImporteGs();
+						}
+						values_anul.put(idVend, total);					
 					}
-					values_cred.put(idVend, total);
 				}
 				
 				for (NotaCredito ncred : notas_credito) {
@@ -4759,17 +4780,20 @@ public class ReportesViewModel extends SimpleViewModel {
 					Double contado = values_cont.get(vendedor.getId());
 					Double credito = values_cred.get(vendedor.getId());
 					Double ncredit = values_ncre.get(vendedor.getId());
+					Double anulado = values_anul.get(vendedor.getId());
 					
 					double contado_ = contado != null? contado : 0;
 					double credito_ = credito != null? credito : 0;
 					double ncredit_ = ncredit != null? ncredit : 0;
+					double anulado_ = anulado != null? anulado : 0;
 					
 					double contadoSiva = contado_ - m.calcularIVA(contado_, 10);
 					double creditoSiva = credito_ - m.calcularIVA(credito_, 10);
 					double notacreSiva = ncredit_ - m.calcularIVA(ncredit_, 10);
+					double anuladoSiva = anulado_ - m.calcularIVA(anulado_, 10);
 					
 					if (contado != null || credito != null) {
-						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), contadoSiva, creditoSiva, notacreSiva, (contadoSiva + creditoSiva) - notacreSiva });	
+						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), contadoSiva, creditoSiva, anuladoSiva, notacreSiva, (contadoSiva + creditoSiva) - notacreSiva });	
 					}					
 				}
 
@@ -5416,21 +5440,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
-				for (Object[] art : arts) {	
-					String familia = (String) art[10];
-					Object[] promo = new Object[] { 0.0, 0.0 };
-					if (familia.equals(ArticuloFamilia.REPUESTOS)) {
-						promo = this.verificarPromoRepuestos((long) art[0]);
-					}
+				for (Object[] art : arts) {					
 					if (stock) {	
 						long min = art[6] != null ? (long) art[6] : (long) 0;
 						long may = art[7] != null ? (long) art[7] : (long) 0;
 						long mcl = art[8] != null ? (long) art[8] : (long) 0;
 						if (min > 0 || may > 0 || mcl > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5], promo[0], promo[1] });
+							data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5], promo[0], promo[1] });
+						data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
 					}					
 				}
 				
@@ -5454,38 +5473,6 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		
-		/**
-		 * verifica si el articulo es del grupo:
-		 * - repuestos
-		 * - importado
-		 * - precio = costogs * 1.1 * 1.05 (redondeo)
-		 * - excepcion nakata, mahle y mostrador
-		 * - precio = costogs * 1.1 * 1.1 (redondeo)
-		 */
-		private Object[] verificarPromoRepuestos(long idArticulo) throws Exception {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Articulo art = rr.getArticuloById(idArticulo);
-			double precioVtaExt = 0.0;
-			double precioVtaInt = 0.0;
-			if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.REPUESTOS)) {
-				if (!art.getMarca().getDescripcion().equals(ArticuloMarca.COMPRA_LOCAL)) {
-					if (art.getProveedor().isProveedorExterior()) {
-						if (art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRA
-								&& art.getProveedor().getId().longValue() != Proveedor.ID_NAKATA
-								&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRS
-								&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_ARG) {
-							precioVtaExt = art.getCostoGs() * 1.1 * 1.05;
-							precioVtaInt = art.getCostoGs() * 1.1 * 1.1;
-						} else {
-							precioVtaExt = art.getCostoGs() * 1.1 * 1.1;
-							precioVtaInt = art.getCostoGs() * 1.1 * 1.1;
-						}
-					}
-				}			
-			}
-			return new Object[] { precioVtaExt, precioVtaInt };
 		}
 	}
 	
@@ -17689,8 +17676,9 @@ class ReporteTotalVentas extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Vendedor", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Contado S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col3 = new DatosColumnas("Crédito S/iva", TIPO_DOUBLE_GS, 35, true);
-	static DatosColumnas col4 = new DatosColumnas("N.Credito S/iva", TIPO_DOUBLE_GS, 35, true);
-	static DatosColumnas col5 = new DatosColumnas("Total S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col4 = new DatosColumnas("Anulados S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col5 = new DatosColumnas("N.Credito S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col6 = new DatosColumnas("Total S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalVentas(Date desde, Date hasta, String vendedor) {
 		this.desde = desde;
@@ -17704,6 +17692,7 @@ class ReporteTotalVentas extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override
@@ -21206,8 +21195,6 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
 	static DatosColumnas col7 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 20);
 	static DatosColumnas col8 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 20);
-	static DatosColumnas col9 = new DatosColumnas("Ext.Gs.", TIPO_DOUBLE_GS, 20);
-	static DatosColumnas col10 = new DatosColumnas("Int.Gs.", TIPO_DOUBLE_GS, 20);
 
 	public ReporteListaPrecioPorDeposito(String proveedor) {
 		this.proveedor = proveedor;
@@ -21222,8 +21209,6 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 		cols.add(col6);
 		cols.add(col7);
 		cols.add(col8);
-		cols.add(col9);
-		cols.add(col10);
 	}
 
 	@Override
