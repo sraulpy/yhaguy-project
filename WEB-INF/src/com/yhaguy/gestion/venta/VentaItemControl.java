@@ -217,7 +217,7 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setCostoIvaIncluido(false);
 			this.det.setUbicacion(this.getUbicacion(idAr));
 			this.cant.focus();
-			this.verificarArticulo(idAr);
+			this.verificarArticulo(idAr, true);
 		}
 	}
 	
@@ -230,8 +230,8 @@ public class VentaItemControl extends SoloViewModel {
 	 * - precio = costogs * 1.1 * 1.1 (redondeo)
 	 * - sac importacion 22 = mayorista * 0.95
 	 */
-	private void verificarArticulo(long idArticulo) throws Exception {
-		if (this.isEmpresaBaterias()) {
+	private void verificarArticulo(long idArticulo, boolean discontinuado) throws Exception {
+		if (discontinuado) {
 			return;
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
