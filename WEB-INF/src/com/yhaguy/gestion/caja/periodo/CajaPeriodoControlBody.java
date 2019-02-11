@@ -883,7 +883,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 			
 			if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-				this.imprimirNotaCredito();
+				this.imprimirNotaCredito_(this.selectedNotaCredito);
 			} else {
 				this.imprimirNotaCredito_(this.selectedNotaCredito);
 			}
