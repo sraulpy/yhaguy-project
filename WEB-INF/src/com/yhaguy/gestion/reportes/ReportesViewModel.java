@@ -1408,6 +1408,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_PROMO_COMPRA_VALVOLINE = "VEN-00041";
 		static final String VENTAS_LITRAJE = "VEN-00042";
 		static final String VENTAS_LISTA_PRECIO_DEPOSITO = "VEN-00043";
+		static final String VENTAS_LISTA_PRECIO_FAMILIA = "VEN-00044";
 		
 		/**
 		 * procesamiento del reporte..
