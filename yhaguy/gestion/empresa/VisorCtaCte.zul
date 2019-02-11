@@ -150,7 +150,7 @@
 				label=" Imprimir Cuenta" />
 			<button mold="bs" sclass="btn-success btn-sm"
 				iconSclass="z-icon-refresh"
-				tooltiptext="Actualizar Saldos.." visible="@load(vm.tipoCliente)" 
+				tooltiptext="Actualizar Saldos.." visible="false" 
 				onClick="@command('depurarSaldos')" />
 			<button mold="bs" sclass="btn-warning btn-sm"
 				iconSclass="z-icon-reply"
