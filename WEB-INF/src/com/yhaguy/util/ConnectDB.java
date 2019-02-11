@@ -77,6 +77,24 @@ public class ConnectDB {
 	}
 	
 	/**
+	 * Stock de articulos..
+	 */
+	public ResultSet getDatosCliente(String persona) {
+		String sql = "SELECT ruc "
+			+ "FROM PERSONA "
+			+ "WHERE PERSONA = '" + persona + "'";	                   	
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			return result;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return null;
+	}
+	
+	/**
 	 * detalle de movimientos..
 	 */
 	public ResultSet getDetalleMovimiento(String idMovimiento) {
