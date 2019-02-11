@@ -130,10 +130,10 @@
 				<hlayout>
 					<guaranibox
 						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
-						onChange="@command('validarDescuento', cmp=self)" />
+						onChange="@command('validarDescuento', cmp=self)" hflex="true" />
 					<guaranibox
 						value="@bind(vm.det.descuentoUnitarioGs)" sclass="label-red" 
-						visible="@load(vm.loginNombre eq 'mariza')" />
+						visible="@load(vm.loginNombre eq 'mariza')" hflex="true" />
 					<label value="@load(vm.dto.moneda.pos2)"
 						sclass="label-moneda" />					
 				</hlayout>
