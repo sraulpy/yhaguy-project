@@ -239,12 +239,13 @@
 										
 										<row>
 											<vlayout spacing="0">
-												<field value="Lado" />
+												<field
+													value="Aplicación" />
 												<combobox
-													model="@load(vm.lados)"
-													value="@load(vm.dto.articuloLado.text)"
-													selectedItem="@bind(vm.dto.articuloLado)" hflex="true"
-													>
+													model="@load(vm.aplicaciones)"
+													value="@load(vm.dto.articuloAplicacion.text)"
+													selectedItem="@bind(vm.dto.articuloAplicacion)"
+													hflex="true">
 													<template
 														name="model">
 														<comboitem
@@ -267,34 +268,20 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Máximo" />
-												<combobox hflex="true"
+												<field value="Parte" />
+												<combobox
+													model="@load(vm.dtoUtil.articuloParte)"
+													value="@load(vm.dto.articuloParte.text.toUpperCase())"
+													selectedItem="@bind(vm.dto.articuloParte)" hflex="true"
 													>
+													<template
+														name="model">
+														<comboitem
+															label="@load(each.text.toUpperCase())" />
+													</template>
 												</combobox>
 											</vlayout>
 										</row>
-										
-										<!--  
-										
-										<row>
-											<field value="SKU" />
-											<textbox hflex="true"  />
-											<field value="NCM" />
-											<combobox hflex="true"  />
-											<field value="Aplicación" />
-											<combobox
-												model="@load(vm.aplicaciones)"
-												value="@load(vm.dto.articuloAplicacion.text)"
-												selectedItem="@bind(vm.dto.articuloAplicacion)" hflex="true"
-												>
-												<template
-													name="model">
-													<comboitem
-														label="@load(each.text)" />
-												</template>
-											</combobox>
-										</row>
-										-->
 									</rows>
 								</grid>
 								<label value="UNIDAD DE MEDIDA" class="label label-primary" style="font-size:10pt"></label>
@@ -348,7 +335,44 @@
 												<combobox hflex="true">
 												</combobox>
 											</vlayout>
-											<vlayout spacing="0"></vlayout>
+											<vlayout spacing="0">
+												<field value="Lado" />
+												<combobox
+													model="@load(vm.lados)"
+													value="@load(vm.dto.articuloLado.text)"
+													selectedItem="@bind(vm.dto.articuloLado)" hflex="true"
+													>
+													<template
+														name="model">
+														<comboitem
+															label="@load(each.text)" />
+													</template>
+												</combobox>
+											</vlayout>
+										</row>
+										<row>
+											<vlayout spacing="0">
+												<field value="API" />
+												<combobox hflex="true">
+												</combobox>
+											</vlayout>	
+											<vlayout spacing="0">
+												<field
+													value="Índice de Carga" />
+												<combobox
+													model="@load(vm.indiceCargas)"
+													value="@load(vm.dto.articuloIndiceCarga.text)"
+													selectedItem="@bind(vm.dto.articuloIndiceCarga)"
+													hflex="true">
+													<template
+														name="model">
+														<comboitem
+															label="@load(each.text)" />
+													</template>
+												</combobox>
+											</vlayout>
+											<vlayout spacing="0">
+											</vlayout>
 										</row>
 									</rows>
 								</grid>
@@ -364,26 +388,10 @@
 									<rows>		
 										<row>	
 											<vlayout spacing="0">
-												<field value="Parte" />
-												<combobox
-													model="@load(vm.dtoUtil.articuloParte)"
-													value="@load(vm.dto.articuloParte.text.toUpperCase())"
-													selectedItem="@bind(vm.dto.articuloParte)" hflex="true"
-													>
-													<template
-														name="model">
-														<comboitem
-															label="@load(each.text.toUpperCase())" />
-													</template>
-												</combobox>
-											</vlayout>
-										</row>
-										<row>
-											<vlayout spacing="0">
-												<field value="API" />
+												<field value="Máximo" />
 												<combobox hflex="true">
 												</combobox>
-											</vlayout>											
+											</vlayout>	
 										</row>
 										<row>
 											<vlayout spacing="0">
@@ -393,23 +401,6 @@
 													model="@load(vm.procedencias)"
 													value="@load(vm.dto.articuloProcedencia.text)"
 													selectedItem="@bind(vm.dto.articuloProcedencia)"
-													hflex="true">
-													<template
-														name="model">
-														<comboitem
-															label="@load(each.text)" />
-													</template>
-												</combobox>
-											</vlayout>
-										</row>
-										<row>
-											<vlayout spacing="0">
-												<field
-													value="Índice de Carga" />
-												<combobox
-													model="@load(vm.indiceCargas)"
-													value="@load(vm.dto.articuloIndiceCarga.text)"
-													selectedItem="@bind(vm.dto.articuloIndiceCarga)"
 													hflex="true">
 													<template
 														name="model">
@@ -434,9 +425,20 @@
 										<row>
 											<vlayout spacing="0">
 												<field value="CBM" />
-												<combobox hflex="true"
-													>
+												<combobox hflex="true">
 												</combobox>
+											</vlayout>
+										</row>
+										<row>
+											<vlayout spacing="0">
+												<field value="SKU" />
+												<textbox hflex="true"  />
+											</vlayout>
+										</row>
+										<row>
+											<vlayout spacing="0">
+												<field value="NCM" />
+												<combobox hflex="true"  />
 											</vlayout>
 										</row>
 									</rows>
