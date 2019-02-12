@@ -98,8 +98,6 @@
 					</rows>
 				</grid>			
 
-				<div height="10px" />
-
 					<tabbox vflex="true" width="100%">
 						<tabs>
 							<tab label="General" hflex="true"/>						
@@ -109,55 +107,21 @@
 						</tabs>
 
 						<tabpanels>
-							<tabpanel style="padding:30px">
+							<tabpanel style="padding:10px">
 							
 								<!-- ________________ DATOS GENERALES ________________ -->
 
 							<hlayout vflex="true" hflex="true">
-								<vlayout vflex="true" hflex="true">
+								<vlayout vflex="true" hflex="true" spacing="0">
 									<div></div>
-									<label value="DATOS GENERALES" class="label label-primary" style="font-size:10pt"></label>
-									<grid sclass="vgrid" vflex="true" hflex="true">
+									<label value="DATOS GENERALES" class="label label-primary"></label>
+									<grid sclass="vgrid" hflex="true">
 									<columns>
 										<column />
 										<column />
 										<column />
 									</columns>
-									<rows>
-										<row>
-											<vlayout spacing="0" hflex="true">
-												<field
-													value="Ítem de Servicio" />
-												<hlayout>
-													<hlayout>
-														<checkbox
-															checked="@bind(vm.dto.servicio)" />
-														<label
-															value="@load(vm.dto.servicio? 'SI':'NO')" />
-													</hlayout>
-												</hlayout>
-											</vlayout>
-											<vlayout spacing="0" hflex="true">
-												<field
-														value="Importado" />
-													<hlayout>
-														<checkbox
-															checked="@bind(vm.dto.importado)" />
-														<label
-															value="@load(vm.dto.importado? 'SI':'NO')" />
-													</hlayout>
-											</vlayout>
-											<vlayout spacing="0">
-												<field
-													value="Fecha alta" />
-												<hlayout>
-													<datebox
-														value="@bind(vm.dto.fechaAlta)" readonly="true"
-														hflex="true" />
-												</hlayout>
-											</vlayout>
-										</row>
-										
+									<rows>										
 										<row>
 											<vlayout spacing="0" hflex="true">
 												<field value="Estado" />
@@ -284,14 +248,15 @@
 										</row>
 									</rows>
 								</grid>
-								<label value="UNIDAD DE MEDIDA" class="label label-primary" style="font-size:10pt"></label>
+								<space></space>
+								<label value="UNIDAD DE MEDIDA" class="label label-primary"></label>
 								<grid sclass="vgrid" vflex="true" hflex="true">
 									<columns>
 										<column />
 										<column />
 										<column />
 									</columns>
-									<rows>
+									<rows>										
 										<row>
 											<vlayout spacing="0">
 												<field
@@ -378,14 +343,49 @@
 								</grid>
 								</vlayout>
 								<space></space>
-								<vlayout vflex="true" hflex="true">
+								<vlayout vflex="true" hflex="true" spacing="0">
 									<div></div>
-									<label value="OTROS DATOS" class="label label-primary" style="font-size:10pt"></label>
+									<label value="OTROS DATOS" class="label label-primary"></label>
 								<grid sclass="vgrid" vflex="true" hflex="true">
 									<columns>
 										<column />
 									</columns>
 									<rows>		
+										<row>
+											<hlayout>
+												<vlayout spacing="0" hflex="true">
+												<field
+													value="Ítem de Servicio" />
+												<hlayout>
+													<hlayout>
+														<checkbox
+															checked="@bind(vm.dto.servicio)" />
+														<label
+															value="@load(vm.dto.servicio? 'SI':'NO')" />
+													</hlayout>
+												</hlayout>
+											</vlayout>
+											<vlayout spacing="0" hflex="true">
+												<field
+														value="Importado" />
+													<hlayout>
+														<checkbox
+															checked="@bind(vm.dto.importado)" />
+														<label
+															value="@load(vm.dto.importado? 'SI':'NO')" />
+													</hlayout>
+											</vlayout>
+											<vlayout spacing="0">
+												<field
+													value="Fecha alta" />
+												<hlayout>
+													<datebox
+														value="@bind(vm.dto.fechaAlta)" readonly="true"
+														hflex="true" />
+												</hlayout>
+											</vlayout>
+											</hlayout>
+										</row>
 										<row>	
 											<vlayout spacing="0">
 												<field value="Máximo" />
