@@ -344,11 +344,11 @@
 									</rows>
 								</grid>
 								</vlayout>
-								<separator orient="vertical" bar="true" vflex="true" style="background:#428bca" sclass="rounded" width="2px"></separator>
+								<separator orient="vertical" bar="true" vflex="true" style="background:#428bca" sclass="rounded" width="1px"></separator>
 								<vlayout vflex="true" hflex="true" spacing="0">
 									<div></div>
 									<label value="OTROS DATOS" class="label label-primary"></label>
-								<grid sclass="vgrid" vflex="true" hflex="true">
+								<grid sclass="vgrid" hflex="true">
 									<columns>
 										<column />
 										<column />
@@ -428,14 +428,45 @@
 												<field value="SKU" />
 												<textbox hflex="true"  />
 											</vlayout>									
+										</row>										
+									</rows>
+								</grid>
+								<space></space>
+								<label value="HOMOLOGACIÓN" class="label label-primary"></label>
+								<grid sclass="vgrid" vflex="true" hflex="true">
+									<columns>
+										<column></column>
+										<column></column>
+										<column></column>
+									</columns>
+									<rows>
+										<row>
+											<vlayout spacing="0">
+												<field value="Diseño" />
+												<textbox hflex="true"></textbox>
+											</vlayout>
+											<vlayout spacing="0">
+												<field value="Ancho" />
+												<intbox hflex="true"></intbox>
+											</vlayout>
+											<vlayout spacing="0">
+												<field value="Alto" />
+												<doublebox hflex="true"></doublebox>
+											</vlayout>
 										</row>
 										<row>
 											<vlayout spacing="0">
-												<field value="NCM" />
-												<combobox hflex="true"  />
+												<field value="Aro" />
+												<doublebox hflex="true"></doublebox>
 											</vlayout>
-											<vlayout></vlayout>
-											<vlayout></vlayout>
+											<vlayout spacing="0">
+												<field value="Medida" />
+												<textbox hflex="true"></textbox>
+											</vlayout>
+											<vlayout spacing="0">
+												<field value="Pisada" />
+												<textbox hflex="true"></textbox>
+											</vlayout>
 										</row>
 									</rows>
 								</grid>
@@ -561,15 +592,17 @@
 					sclass="button-container" pack="center" align="center">
 										
 					<html><![CDATA[
-        				<img id="foto" height="250px" alt="" width="330px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+        				<img id="foto" height="200px" alt="" width="280px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+    				</html>
+    				<div height="5px" />
+    				<html><![CDATA[
+        				<img id="foto_" height="200px" alt="" width="280px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
     				</html>
 					
 					<div height="5px" />
-					<hlayout visible="false">
+					<hlayout>
 						<fileupload id="upImg" label="subir imagen"
 							style="font-weight:bold" />
-						<button id="verImg" label="ver imagen"
-							style="font-weight:bold" onClick="@command('verImagen')" />
 					</hlayout>
 
 				</vbox>				
@@ -579,6 +612,8 @@
 			function setImage(url) {
 				var imagen = document.getElementById("foto");
 				imagen.src = url;
+				var imagen_ = document.getElementById("foto_");
+				imagen_.src = url;
 			}
 		</script>
 		
