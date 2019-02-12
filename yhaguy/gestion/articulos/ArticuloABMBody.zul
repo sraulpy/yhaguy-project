@@ -124,7 +124,7 @@
 									<rows>										
 										<row>
 											<vlayout spacing="0" hflex="true">
-												<field value="Estado" />
+												<field value="Estado" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.dtoUtil.articuloEstado)"
 													value="@load(vm.dto.articuloEstado.text.toUpperCase())"
@@ -137,7 +137,7 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Familia" />
+												<field value="Familia" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.familias)"
 													value="@load(vm.dto.familia_.descripcion)"
@@ -151,7 +151,7 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Marca" />
+												<field value="Marca" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.marcas)"
 													value="@load(vm.dto.marca.descripcion)"
@@ -167,11 +167,11 @@
 										
 										<row>
 											<vlayout spacing="0">
-												<field value="Sub Marca" />
+												<field value="Sub Marca" style="color:#999;font-weight:bold" />
 												<combobox hflex="true"></combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Grupo" />
+												<field value="Grupo" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.grupos)"
 													value="@load(vm.dto.articuloGrupo.text)"
@@ -186,7 +186,7 @@
 											</vlayout>
 											<vlayout spacing="0">
 												<field
-													value="Sub Grupo" />
+													value="Sub Grupo" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.subGrupos)"
 													value="@load(vm.dto.articuloSubGrupo.text)"
@@ -204,7 +204,7 @@
 										<row>
 											<vlayout spacing="0">
 												<field
-													value="Aplicación" />
+													value="Aplicación" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.aplicaciones)"
 													value="@load(vm.dto.articuloAplicacion.text)"
@@ -218,7 +218,7 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Modelo" />
+												<field value="Modelo" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.modelos)"
 													value="@load(vm.dto.articuloModelo.text)"
@@ -232,7 +232,7 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Parte" />
+												<field value="Parte" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.dtoUtil.articuloParte)"
 													value="@load(vm.dto.articuloParte.text.toUpperCase())"
@@ -260,7 +260,7 @@
 										<row>
 											<vlayout spacing="0">
 												<field
-													value="Unidad de Medida" />
+													value="Unidad de Medida" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.dtoUtil.articuloUnidadMedida)"
 													value="@load(vm.dto.articuloUnidadMedida)"
@@ -274,7 +274,7 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Peso" />
+												<field value="Peso" style="color:#999;font-weight:bold" />
 												<hlayout>
 													<doublespinner
 														hflex="true" value="@bind(vm.dto.peso)">
@@ -283,7 +283,7 @@
 												</hlayout>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Volumen" />
+												<field value="Volumen" style="color:#999;font-weight:bold" />
 												<textbox hflex="true"
 													value="@bind(vm.dto.volumen)">
 												</textbox>
@@ -291,17 +291,17 @@
 										</row>
 										<row>
 											<vlayout spacing="0">
-												<field value="Presentación" />
+												<field value="Presentación" style="color:#999;font-weight:bold" />
 												<combobox hflex="true">
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Unidades por Caja" />
+												<field value="Unidades por Caja" style="color:#999;font-weight:bold" />
 												<combobox hflex="true">
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Lado" />
+												<field value="Lado" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.lados)"
 													value="@load(vm.dto.articuloLado.text)"
@@ -317,13 +317,13 @@
 										</row>
 										<row>
 											<vlayout spacing="0">
-												<field value="API" />
+												<field value="API" style="color:#999;font-weight:bold" />
 												<combobox hflex="true">
 												</combobox>
 											</vlayout>	
 											<vlayout spacing="0">
 												<field
-													value="Índice de Carga" />
+													value="Índice de Carga" style="color:#999;font-weight:bold" />
 												<combobox
 													model="@load(vm.indiceCargas)"
 													value="@load(vm.dto.articuloIndiceCarga.text)"
