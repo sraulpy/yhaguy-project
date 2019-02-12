@@ -344,18 +344,19 @@
 									</rows>
 								</grid>
 								</vlayout>
-								<space></space>
+								<separator orient="vertical" bar="true" vflex="true" style="background:#428bca" sclass="rounded" width="2px"></separator>
 								<vlayout vflex="true" hflex="true" spacing="0">
 									<div></div>
 									<label value="OTROS DATOS" class="label label-primary"></label>
 								<grid sclass="vgrid" vflex="true" hflex="true">
 									<columns>
 										<column />
+										<column />
+										<column />
 									</columns>
 									<rows>		
 										<row>
-											<hlayout>
-												<vlayout spacing="0" hflex="true">
+											<vlayout spacing="0" hflex="true">
 												<field
 													value="Ítem de Servicio" />
 												<hlayout>
@@ -386,7 +387,6 @@
 														hflex="true" />
 												</hlayout>
 											</vlayout>
-											</hlayout>
 										</row>
 										<row>	
 											<vlayout spacing="0">
@@ -394,8 +394,6 @@
 												<combobox hflex="true">
 												</combobox>
 											</vlayout>	
-										</row>
-										<row>
 											<vlayout spacing="0">
 												<field
 													value="Procedencia" />
@@ -411,37 +409,33 @@
 													</template>
 												</combobox>
 											</vlayout>
-										</row>
-										<row>
 											<vlayout spacing="0">
 												<field value="FOB/CIF Local" />
 												<textbox hflex="true"></textbox>
-											</vlayout>											
+											</vlayout>
 										</row>
 										<row>
 											<vlayout spacing="0">
 												<field value="80 / 20" />
 												<textbox hflex="true" />
-											</vlayout>											
-										</row>
-										<row>
+											</vlayout>
 											<vlayout spacing="0">
 												<field value="CBM" />
 												<combobox hflex="true">
 												</combobox>
-											</vlayout>
-										</row>
-										<row>
+											</vlayout>	
 											<vlayout spacing="0">
 												<field value="SKU" />
 												<textbox hflex="true"  />
-											</vlayout>
+											</vlayout>									
 										</row>
 										<row>
 											<vlayout spacing="0">
 												<field value="NCM" />
 												<combobox hflex="true"  />
 											</vlayout>
+											<vlayout></vlayout>
+											<vlayout></vlayout>
 										</row>
 									</rows>
 								</grid>
