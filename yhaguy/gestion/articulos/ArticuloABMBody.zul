@@ -443,29 +443,29 @@
 										<row>
 											<vlayout spacing="0">
 												<field value="Diseño" />
-												<textbox hflex="true"></textbox>
+												<textbox value="@bind(vm.dto.disenho)" hflex="true"></textbox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Ancho" />
-												<intbox hflex="true"></intbox>
+												<intbox value="@bind(vm.dto.ancho)" hflex="true"></intbox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Alto" />
-												<doublebox hflex="true"></doublebox>
+												<doublebox value="@bind(vm.dto.alto)" hflex="true"></doublebox>
 											</vlayout>
 										</row>
 										<row>
 											<vlayout spacing="0">
 												<field value="Aro" />
-												<doublebox hflex="true"></doublebox>
+												<doublebox value="@bind(vm.dto.aro)" hflex="true"></doublebox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Medida" />
-												<textbox hflex="true"></textbox>
+												<textbox value="@bind(vm.dto.medida)" hflex="true"></textbox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Pisada" />
-												<textbox hflex="true"></textbox>
+												<textbox value="@bind(vm.dto.pisada)" hflex="true"></textbox>
 											</vlayout>
 										</row>
 									</rows>

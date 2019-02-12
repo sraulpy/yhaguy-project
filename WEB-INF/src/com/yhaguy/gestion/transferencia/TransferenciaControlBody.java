@@ -690,12 +690,27 @@ public class TransferenciaControlBody extends BodyApp {
 	 */
 	public List<MyPair> getDepositosBySucursal(Long id) throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
-
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Deposito> deps = rr.getDepositosPorSucursal(id);
 		for (Deposito deposito : deps) {
 			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
-			out.add(dep);
+			out.add(dep);		
+		}
+		return out;
+	}
+	
+	/**
+	 * @return los depositos segun la sucursal..
+	 */
+	public List<MyPair> getDepositosTemporalesBySucursal(Long id) throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Deposito> deps = rr.getDepositosPorSucursal(id);
+		for (Deposito deposito : deps) {
+			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
+			if (deposito.isTemporal()) {
+				out.add(dep);
+			}		
 		}
 		return out;
 	}
@@ -718,7 +733,7 @@ public class TransferenciaControlBody extends BodyApp {
 	@DependsOn("dto.sucursalDestino")
 	public List<MyPair> getDepositosDestinoExt() throws Exception {
 		Long idSuc = this.dto.getSucursalDestino().getId();
-		return this.getDepositosBySucursal(idSuc);
+		return this.getDepositosTemporalesBySucursal(idSuc);
 	}
 
 	@DependsOn({ "dto.depositoEntrada", "dto.depositoSalida" })

@@ -65,8 +65,14 @@
 									</hlayout>
 									<vlayout spacing="0">										
 										<field value="Sucursal"/>
-										<textbox
-											value="@load(vm.dto.sucursal.text.toUpperCase())" readonly="true" hflex="true"/>
+										<combobox value="@load(vm.dto.sucursal.text.toUpperCase())"
+											model="@load(vm.sucursales)"
+											selectedItem="@bind(vm.dto.sucursal)"
+											instant="true" hflex="true">
+											<template name="model">
+												<comboitem label="@load(each.text)"></comboitem>
+											</template>
+										</combobox>
 									</vlayout>
 									<vlayout spacing="0">
 										<field value="Estado"/>

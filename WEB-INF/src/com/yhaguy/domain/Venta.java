@@ -51,6 +51,9 @@ public class Venta extends Domain {
 	
 	/** El vendedor */
 	private Funcionario vendedor;
+	
+	/** El vendedor */
+	private Funcionario tecnico;
 
 	private Cliente cliente;
 
@@ -966,5 +969,13 @@ public class Venta extends Domain {
 
 	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
 		this.vehiculoModelo = vehiculoModelo;
+	}
+
+	public Funcionario getTecnico() {
+		return tecnico;
+	}
+
+	public void setTecnico(Funcionario tecnico) {
+		this.tecnico = tecnico;
 	}
 }

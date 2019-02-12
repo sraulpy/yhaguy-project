@@ -37,6 +37,13 @@ public class Articulo extends Domain {
 	boolean completo = false;
 	private boolean estado;
 	
+	private String disenho;
+	private int ancho;
+	private double alto;
+	private double aro;
+	private String medida;
+	private String pisada;
+	
 	private Tipo articuloEstado; 
 	private Tipo articuloFamilia; 
 	private Tipo articuloMarca; 
@@ -478,5 +485,53 @@ public class Articulo extends Domain {
 
 	public void setArticuloLinea(ArticuloLinea articuloLinea) {
 		this.articuloLinea = articuloLinea;
+	}
+
+	public String getDisenho() {
+		return disenho;
+	}
+
+	public void setDisenho(String disenho) {
+		this.disenho = disenho;
+	}
+
+	public int getAncho() {
+		return ancho;
+	}
+
+	public void setAncho(int ancho) {
+		this.ancho = ancho;
+	}
+
+	public double getAlto() {
+		return alto;
+	}
+
+	public void setAlto(double alto) {
+		this.alto = alto;
+	}
+
+	public double getAro() {
+		return aro;
+	}
+
+	public void setAro(double aro) {
+		this.aro = aro;
+	}
+
+	public String getMedida() {
+		return medida;
+	}
+
+	public void setMedida(String medida) {
+		this.medida = medida;
+	}
+
+	public String getPisada() {
+		return pisada;
+	}
+
+	public void setPisada(String pisada) {
+		this.pisada = pisada;
 	}
 }

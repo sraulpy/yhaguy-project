@@ -1591,6 +1591,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			case VENTAS_LISTA_PRECIO_DEPOSITO:
 				this.listaPrecioPorDeposito(mobile);
 				break;
+				
+			case VENTAS_LISTA_PRECIO_FAMILIA:
+				this.ventasPorListaPrecioPorFamilia(mobile);
+				break;
 			}
 		}
 
@@ -5474,6 +5478,96 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/**
+		 * VEN-00044
+		 */
+		private void ventasPorListaPrecioPorFamilia(boolean mobile) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}			
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				Map<String, Object[]> totales = new HashMap<String, Object[]>();
+				Map<String, Object[]> totales_ = new HashMap<String, Object[]>();
+				
+				long idSucursal = suc == null ? 0 : suc.getId().longValue();
+				String suc_ = suc == null ? "TODOS.." : suc.getDescripcion().toUpperCase();
+				
+				List<Venta> ventas = rr.getVentas(desde, hasta, 0, 0, idSucursal, 0);
+				for (Venta venta : ventas) {
+					if (!venta.isAnulado()) {
+						for (VentaDetalle item : venta.getDetalles()) {
+							if (item.getListaPrecio() != null) {
+								String lis = item.getListaPrecio().getDescripcion();
+								String key = lis + "-" + item.getArticulo().getFamilia().getDescripcion();
+								Object[] acum = totales.get(key);
+								Object[] acum_ = totales_.get(lis);
+								if (acum != null) {
+									double imp = (double) acum[0];
+									double imp_ = (double) acum_[0];
+									imp += item.getImporteGsSinIva();
+									imp_ += item.getImporteGsSinIva();
+									totales.put(key, acum);
+									totales_.put(lis, acum_);
+								} else {
+									acum = new Object[] { item.getImporteGsSinIva(), item.getCostoTotalGsSinIva() };
+									if (acum_ != null) {
+										//acum_ += item.getImporteGsSinIva();
+									} else {
+										//acum_ = item.getImporteGsSinIva();
+									}
+									totales.put(key, acum);
+									totales_.put(lis, acum_);
+								}
+							}							
+						}
+					}					
+				}		
+				
+				for (String key : totales.keySet()) {
+					Object[] total = totales.get(key);
+					String[] desc = key.split("-");
+					data.add(new Object[] { desc[0], desc[1], total });
+				}
+				
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						String val1 = (String) o1[0];
+						String val2 = (String) o2[0];
+						int compare = val1.compareTo(val2);				
+						return compare;
+					}
+				});
+				
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LISTA_FAMILIA;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new VentasListaPrecioFamilia(data, totales_);
+				params.put("Titulo", "Ventas y Utilidad por Lista de Precio Detallado");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Sucursal", suc_);
+				imprimirJasper(source, params, dataSource, filtro.getFormato());				
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
 		}
 	}
 	
@@ -15266,6 +15360,51 @@ class VentasUtilidadDetallado implements JRDataSource {
 			value = FORMATTER.format(det[13]);
 		} else if ("Descripcion".equals(fieldName)) {
 			value = det[14];
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de Ventas Lista Precio Familia..
+ */
+class VentasListaPrecioFamilia implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, Object[]> totales;
+	
+	public VentasListaPrecioFamilia(List<Object[]> values, Map<String, Object[]> totales) {
+		this.values = values;
+		this.totales = totales;
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+
+		if ("TituloDetalle".equals(fieldName)) {
+			value = det[0];
+		} else if ("Descripcion".equals(fieldName)) {
+			value = det[1];
+		} else if ("Importe".equals(fieldName)) {
+			value = FORMATTER.format(det[2]);
+		} else if ("TotalImporte".equals(fieldName)) {
+			value = FORMATTER.format(totales.get(det[0]));
 		}
 		return value;
 	}

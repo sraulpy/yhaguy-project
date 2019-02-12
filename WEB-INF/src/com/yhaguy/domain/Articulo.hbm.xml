@@ -37,6 +37,13 @@
 		<property name="ochentaVeinte" />
 		<property name="abc" />
 		
+		<property name="disenho" />
+		<property name="ancho" />
+		<property name="alto" />
+		<property name="aro" />
+		<property name="medida" />
+		<property name="pisada" />
+		
 		<property name="estado">
 			<column name="anulado" not-null="true" default="false" />
 		</property>

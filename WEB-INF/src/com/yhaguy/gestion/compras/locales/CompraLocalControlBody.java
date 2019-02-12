@@ -51,6 +51,7 @@ import com.yhaguy.domain.CompraLocalOrden;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
 import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
@@ -769,6 +770,7 @@ public class CompraLocalControlBody extends BodyApp {
 		this.dto.setCerrado(true);
 		this.setTimbrado();
 		this.dto.getFactura().setReadonly();
+		this.dto.getFactura().setSucursal(this.dto.getSucursal());
 		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
 		this.volcarCompra();
 		this.setEstadoABMConsulta();
@@ -1441,6 +1443,18 @@ public class CompraLocalControlBody extends BodyApp {
 	@DependsOn({ "totalVentas", "totalCompras" })
 	public String getSrcRiesgo() {
 		return this.totalVentas - this.totalCompras >= 0? "/core/images/tick.png" : "/core/images/exclamation.png";
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MyPair> getSucursales() throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<SucursalApp> sucs = rr.getObjects(SucursalApp.class.getName());
+		for (SucursalApp suc : sucs) {
+			MyPair mp = new MyPair(suc.getId(), suc.getDescripcion().toUpperCase());
+			out.add(mp);
+		}
+		return out;
 	}
 	
 	/**

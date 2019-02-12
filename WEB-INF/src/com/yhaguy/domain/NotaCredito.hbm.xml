@@ -52,6 +52,15 @@
 			
 		<many-to-one name="deposito" class="com.yhaguy.domain.Deposito"
 			column="iddeposito" lazy="false"/>		
+			
+		<many-to-one name="vehiculoTipo" class="com.yhaguy.domain.VehiculoTipo"
+			column="id_vehiculo_tipo" lazy="false" />
+		
+		<many-to-one name="vehiculoMarca" class="com.yhaguy.domain.VehiculoMarca"
+			column="id_vehiculo_marca" lazy="false" />
+			
+		<many-to-one name="vehiculoModelo" class="com.yhaguy.domain.VehiculoModelo"
+			column="id_vehiculo_modelo" lazy="false" />
 		
 		<set name="detalles" table="notacreditodetalle"
 			inverse="false" lazy="false" fetch="join">

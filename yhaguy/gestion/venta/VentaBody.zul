@@ -60,10 +60,21 @@
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Atendido por" />
-						<textbox readonly="true"
-							value="@load(vm.dto.atendido.pos1)" 
-							hflex="true"/>
+						<field value="@load(vm.dto.sucursal.id eq 3? 'Técnico / Montador' : 'Atendido por')" />
+						<hlayout>
+							<textbox readonly="true"
+								value="@load(vm.dto.atendido.pos1)" 
+								hflex="true" visible="@load(vm.dto.sucursal.id ne 3)" />
+							<combobox placeholder="Técnico / Montador.." hflex="true" visible="@load(vm.dto.sucursal.id eq 3)"
+								model="@load(vm.tecnicos)"
+								value="@load(vm.dto.tecnico.pos1)"
+								selectedItem="@bind(vm.dto.tecnico)"
+								instant="true">
+								<template name="model">
+									<comboitem label="@load(each.pos1)"></comboitem>
+								</template>	
+							</combobox>
+						</hlayout>						
 					</vlayout>
 				</row>
 				<row>
@@ -125,7 +136,7 @@
 							visible="@load(vm.dto.clienteOcasional eq null ? 'false' : 'true')"/>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="@load(vm.sucursal.id eq 3? 'Técnico / Montador' : 'Vendedor')" />
+						<field value="Vendedor" />
 						<hlayout>
 							<textbox value="@bind(vm.dto.vendedor.pos1)"
 								onOK="@command('buscarVendedor')" placeholder="Nombre.." 

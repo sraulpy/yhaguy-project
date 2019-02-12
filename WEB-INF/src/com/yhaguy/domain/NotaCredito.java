@@ -69,6 +69,10 @@ public class NotaCredito extends Domain {
 	/** Las notas de credito reclamo pueden referenciar a uno o mas servicios tecnicos **/
 	private Set<ServicioTecnico> serviciosTecnicos = new HashSet<ServicioTecnico>();
 	
+	private VehiculoTipo vehiculoTipo;
+	private VehiculoMarca vehiculoMarca;
+	private VehiculoModelo vehiculoModelo;
+	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
@@ -610,5 +614,29 @@ public class NotaCredito extends Domain {
 
 	public void setDeposito(Deposito deposito) {
 		this.deposito = deposito;
+	}
+
+	public VehiculoTipo getVehiculoTipo() {
+		return vehiculoTipo;
+	}
+
+	public void setVehiculoTipo(VehiculoTipo vehiculoTipo) {
+		this.vehiculoTipo = vehiculoTipo;
+	}
+
+	public VehiculoMarca getVehiculoMarca() {
+		return vehiculoMarca;
+	}
+
+	public void setVehiculoMarca(VehiculoMarca vehiculoMarca) {
+		this.vehiculoMarca = vehiculoMarca;
+	}
+
+	public VehiculoModelo getVehiculoModelo() {
+		return vehiculoModelo;
+	}
+
+	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
+		this.vehiculoModelo = vehiculoModelo;
 	}
 }

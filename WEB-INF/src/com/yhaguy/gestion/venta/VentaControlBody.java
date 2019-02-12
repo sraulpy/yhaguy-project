@@ -430,6 +430,7 @@ public class VentaControlBody extends BodyApp {
 		out.setCondicionPago(desde.getCondicionPago());
 		out.setDeposito(desde.getDeposito());
 		out.setVendedor(desde.getVendedor());
+		out.setTecnico(desde.getTecnico());
 		out.setDetalles(this.crearDetalleDesde(desde.getDetallesDesglose(desglose)));
 		out.setEstado(estado);
 		out.setFecha(new Date());
@@ -1299,6 +1300,9 @@ public class VentaControlBody extends BodyApp {
 		MyPair deposito = this.getUsuarioPropiedad().getDepositoHabFacturar(this.utilDto);
 		MyPair sucursal = this.getAcceso().getSucursalOperativa();
 		MyArray usuarioFuncionario = this.getAcceso().getFuncionario();
+		
+		Funcionario func = rr.getFuncionario(usuarioFuncionario.getId());
+		
 		MyArray vendedor = new MyArray();
 		vendedor.setId(usuarioFuncionario.getId());
 		vendedor.setPos1(usuarioFuncionario.getPos1());
@@ -1309,7 +1313,7 @@ public class VentaControlBody extends BodyApp {
 		out.setMoneda(this.utilDto.getMonedaGuaraniConSimbolo());
 		out.setTipoCambio(tc);
 		out.setAtendido(usuarioFuncionario);
-		out.setVendedor(vendedor);
+		if(func.isVendedor()) out.setVendedor(usuarioFuncionario);
 		out.setSucursal(sucursal);
 		out.setDeposito(deposito);
 		out.setModoVenta(this.getUsuarioPropiedad().getModoVenta(utilDto.getModosVenta()));
@@ -1690,13 +1694,14 @@ public class VentaControlBody extends BodyApp {
 	
 	/************************ GETTER/SETTER ************************/
 	
-	@DependsOn({ "dto.cliente", "dto.vendedor", "dto.deposito", "dto.formaEntrega", "dto.vehiculoTipo", "dto.vehiculoMarca", "dto.vehiculoModelo" })
+	@DependsOn({ "dto.cliente", "dto.vendedor", "dto.deposito", "dto.formaEntrega", "dto.vehiculoTipo", "dto.vehiculoMarca", "dto.vehiculoModelo", "dto.tecnico" })
 	public boolean isDetalleVisible() {
 		return (this.dto.getCliente().esNuevo() == false
 				|| this.dto.getClienteOcasional() != null)
 					&& (!this.dto.getVendedor().esNuevo())
 					&& (this.dto.getDeposito().esNuevo() == false)
-					&& this.isDatosVehiculosOK();
+					&& this.isDatosVehiculosOK()
+					&& this.isTecnicoOK();
 	}
 	
 	@DependsOn({ "deshabilitado", "selectedItems" })
@@ -1716,13 +1721,27 @@ public class VentaControlBody extends BodyApp {
 		return this.isDeshabilitado() || this.dto.esNuevo() || Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
 	}
 	
-	
+	/**
+	 * @return true si los datos del vehiculo son correctos..
+	 */
 	private boolean isDatosVehiculosOK() {
 		if (this.dto.getFormaEntrega().equals(Venta.FORMA_ENTREGA_SERVICIO)) {
 			return this.dto.getVehiculoTipo() != null && this.dto.getVehiculoMarca() != null && this.dto.getVehiculoModelo() != null;
 		} else {
 			return !this.dto.getFormaEntrega().trim().isEmpty();
 		}
+	}
+	
+	/**
+	 * @return true si los datos del tecnico son correctos..
+	 */
+	private boolean isTecnicoOK() {
+		if (this.dto.getSucursal().getId().longValue() == SucursalApp.ID_MCAL) {
+			if (this.dto.getTecnico().esNuevo()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1833,6 +1852,21 @@ public class VentaControlBody extends BodyApp {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getMonedaGuaraniConSimbolo());
 		out.add(this.getDtoUtil().getMonedaDolaresConSimbolo());
+		return out;
+	}
+	
+	/**
+	 * @return los tecnicos..
+	 */
+	public List<MyArray> getTecnicos() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Funcionario> tecnicos = rr.getFuncionariosTecnicos();
+		for (Funcionario tec : tecnicos) {
+			MyArray my = new MyArray(tec.getDescripcion());
+			my.setId(tec.getId());
+			out.add(my);
+		}
 		return out;
 	}
 	

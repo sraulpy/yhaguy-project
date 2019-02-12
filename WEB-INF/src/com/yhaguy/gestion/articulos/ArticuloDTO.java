@@ -30,6 +30,13 @@ public class ArticuloDTO extends DTO {
 	private boolean importado = true;
 	private boolean servicio = false;
 	
+	private String disenho = "";
+	private int ancho = 0;
+	private double alto = 0.0;
+	private double aro = 0.0;
+	private String medida = "";
+	private String pisada = "";
+	
 	private MyPair articuloEstado = new MyPair();
 	private MyPair articuloFamilia = new MyPair();
 	private MyPair articuloMarca = new MyPair();
@@ -411,6 +418,54 @@ public class ArticuloDTO extends DTO {
 
 	public void setArticuloLado(MyPair articuloLado) {
 		this.articuloLado = articuloLado;
+	}
+
+	public String getDisenho() {
+		return disenho;
+	}
+
+	public void setDisenho(String disenho) {
+		this.disenho = disenho;
+	}
+
+	public int getAncho() {
+		return ancho;
+	}
+
+	public void setAncho(int ancho) {
+		this.ancho = ancho;
+	}
+
+	public double getAlto() {
+		return alto;
+	}
+
+	public void setAlto(double alto) {
+		this.alto = alto;
+	}
+
+	public double getAro() {
+		return aro;
+	}
+
+	public void setAro(double aro) {
+		this.aro = aro;
+	}
+
+	public String getMedida() {
+		return medida;
+	}
+
+	public void setMedida(String medida) {
+		this.medida = medida;
+	}
+
+	public String getPisada() {
+		return pisada;
+	}
+
+	public void setPisada(String pisada) {
+		this.pisada = pisada;
 	}
 
 }

@@ -18,12 +18,18 @@ public class Deposito extends Domain {
 	public static final long ID_MAYORISTA_TEMPORAL = 8;
 	public static final long ID_MRA = 9;
 	
+	public static final String TEMPORAL = "TEMPORAL";
+	
 	private String observacion;
 	private String descripcion;	
 	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	public boolean isTemporal() {
+		return this.descripcion.contains(TEMPORAL);
 	}
 	
 	public String getObservacion() {

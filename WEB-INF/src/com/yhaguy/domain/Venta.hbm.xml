@@ -73,6 +73,9 @@
 		
 		<many-to-one name="vendedor" class="com.yhaguy.domain.Funcionario"
 			column="idVendedor" lazy="false" />
+			
+		<many-to-one name="tecnico" class="com.yhaguy.domain.Funcionario"
+			column="idTecnico" lazy="false" />
 
 		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
 			column="idcliente" lazy="false" />

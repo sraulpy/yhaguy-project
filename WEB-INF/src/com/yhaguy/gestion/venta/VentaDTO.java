@@ -55,6 +55,8 @@ public class VentaDTO extends DTO {
 	private MyPair 	modoVenta = new MyPair();
 	private MyPair estadoComprobante;
 	
+	private MyArray tecnico = new MyArray();
+	
 	/** para la impresion de la factura **/
 	private String denominacion = "";
 	
@@ -911,5 +913,13 @@ public class VentaDTO extends DTO {
 
 	public void setFormaEntrega(String formaEntrega) {
 		this.formaEntrega = formaEntrega;
+	}
+
+	public MyArray getTecnico() {
+		return tecnico;
+	}
+
+	public void setTecnico(MyArray tecnico) {
+		this.tecnico = tecnico;
 	}
 }
