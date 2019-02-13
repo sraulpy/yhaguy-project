@@ -139,7 +139,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 	private List<MyPair> getDepositos() throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Deposito> deps = rr.getDepositos();
+		List<Deposito> deps = rr.getDepositos_();
 		for (Deposito dep : deps) {
 			if (dep.getId().longValue() != Deposito.ID_MRA) {
 				out.add(new MyPair(dep.getId(), dep.getDescripcion()));

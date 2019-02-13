@@ -19,11 +19,14 @@ import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloCosto;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.ProveedorArticulo;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
+import com.yhaguy.domain.Transferencia;
+import com.yhaguy.domain.TransferenciaDetalle;
 import com.yhaguy.util.Barcode;
 import com.yhaguy.util.Utiles;
 
@@ -557,6 +560,72 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * genera transferencia interna..
+	 */
+	public static void addTransferenciaInterna(String src, long idOrigen, long idDestino, Date fecha) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "POSITIVO", CSV.STRING }, { "NEGATIVO", CSV.STRING } };
+		
+		Set<TransferenciaDetalle> dets = new HashSet<TransferenciaDetalle>();
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("CODIGO");	
+			String stock = csv.getDetalleString("NEGATIVO");
+			Integer stock_ = Integer.parseInt(stock);
+			
+			if (stock_ < 0) {
+				Articulo art = rr.getArticuloByCodigoInterno(codigo);				
+				if (art != null) {					
+					TransferenciaDetalle item = new TransferenciaDetalle();
+					item.setArticulo(art);
+					item.setCantidad(stock_ * -1);
+					item.setCantidadEnviada(stock_ * -1);
+					item.setCantidadPedida(stock_ * -1);
+					item.setCantidadRecibida(stock_ * -1);
+					item.setCosto(art.getCostoGs());
+					item.setEstado("Pendiente");
+					dets.add(item);
+					System.out.println(art.getCodigoInterno() + " - STOCK: " + stock );
+				} else {
+					System.err.println("NO ENCONTRADO: " + codigo);
+				}
+			}
+		}
+		if (dets.size() > 0) {
+			Deposito origen = (Deposito) rr.getObject(Deposito.class.getName(), idOrigen);
+			Deposito destino = (Deposito) rr.getObject(Deposito.class.getName(), idDestino);
+			SucursalApp suc = rr.getSucursalAppById(Long.parseLong(origen.getAuxi()));
+			SucursalApp suc_ = rr.getSucursalAppById(Long.parseLong(destino.getAuxi()));
+			Funcionario func = (Funcionario) rr.getObject(Deposito.class.getName(), 54);
+			Tipo tm = rr.getTipoPorSigla(Configuracion.SIGLA_TM_TRANSF_INTERNA);
+			Transferencia transf = new Transferencia();
+			transf.setDepositoEntrada(destino);
+			transf.setDepositoSalida(origen);
+			transf.setDetalles(dets);
+			transf.setFechaCreacion(fecha);
+			transf.setFechaEnvio(fecha);
+			transf.setFechaRecepcion(fecha);
+			transf.setFuncionarioCreador(func);
+			transf.setFuncionarioEnvio(func);
+			transf.setFuncionarioReceptor(func);
+			transf.setNumero("TRF-INT-" + AutoNumeroControl.getAutoNumero("TRF-INT", 7));
+			transf.setNumeroRemision("");
+			transf.setObservacion("INVENTARIO OFICIAL 02/2019 " + origen.getDescripcion());
+			transf.setSucursal(suc);
+			transf.setSucursalDestino(suc_);
+			transf.setTransferenciaEstado(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_TRANSF_PENDIENTE));
+			transf.setTransferenciaTipo(tm);
+			rr.saveObject(transf, "sys");
+			System.out.println("TRANSFERENCIA INTERNA POR INVENTARIO: " + transf.getNumero());
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -570,7 +639,10 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.generarBarcodes();
 			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MINORISTA, Deposito.ID_MINORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
-			ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Utiles.getFecha("22-01-2019 00:00:00"));
+			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Utiles.getFecha("22-01-2019 00:00:00"));
+			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MINORISTA, Deposito.ID_MINORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
+			ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
+			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

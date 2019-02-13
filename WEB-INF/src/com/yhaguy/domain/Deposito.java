@@ -17,6 +17,7 @@ public class Deposito extends Domain {
 	public static final long ID_MAYORISTA = 7;
 	public static final long ID_MAYORISTA_TEMPORAL = 8;
 	public static final long ID_MRA = 9;
+	public static final long ID_VIRTUAL_INVENTARIO = 10;
 	
 	public static final String TEMPORAL = "TEMPORAL";
 	

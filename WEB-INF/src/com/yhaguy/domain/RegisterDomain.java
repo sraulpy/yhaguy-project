@@ -6347,7 +6347,14 @@ public class RegisterDomain extends Register {
 		return (List<Deposito>) this.hql(query);
 	}
 
-
+	/**
+	 * obtener depositos incluidos virtuales
+	 */
+	public List<Deposito> getDepositos_() throws Exception {
+		String query = "select d from Deposito d where d.dbEstado != 'D' order by d.descripcion";
+		return (List<Deposito>) this.hql(query);
+	}
+	
 	/**
 	 * Obtener el perfil
 	 */
