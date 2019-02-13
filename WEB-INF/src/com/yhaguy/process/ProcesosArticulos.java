@@ -41,6 +41,7 @@ public class ProcesosArticulos {
 	static final String SRC_BATEBOL = "./WEB-INF/docs/process/BATEBOL.csv";
 	static final String SRC_INVENTARIO_MINORISTA = "./WEB-INF/docs/migracion/central/INVENTARIO_MINORISTA.csv";
 	static final String SRC_INVENTARIO_MAYORISTA = "./WEB-INF/docs/migracion/central/INVENTARIO_MAYORISTA.csv";
+	static final String SRC_INVENTARIO_MCAL = "./WEB-INF/docs/migracion/central/INVENTARIO_MCAL.csv";
 
 	/**
 	 * asigna familia a los articulos..
@@ -568,7 +569,8 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.setMarcaFamiliaArticulos(SRC_FAMILIAS_MARCAS);
 			//ProcesosArticulos.generarBarcodes();
 			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MINORISTA, Deposito.ID_MINORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
-			ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
+			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
+			ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Utiles.getFecha("22-01-2019 00:00:00"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
