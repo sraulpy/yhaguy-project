@@ -547,7 +547,7 @@ public class ProcesosArticulos {
 			ajuste.setDetalles(dets);
 			ajuste.setEstadoComprobante(estado);
 			ajuste.setFecha(fecha);
-			ajuste.setNumero("AJT-" + AutoNumeroControl.getAutoNumero("AJT", 5));
+			ajuste.setNumero("AJT-" + AutoNumeroControl.getAutoNumero("AJT", 7));
 			ajuste.setSucursal(suc);
 			ajuste.setTipoMovimiento(tm);
 			rr.saveObject(ajuste, "sys");
