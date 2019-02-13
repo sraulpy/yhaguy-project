@@ -12,7 +12,7 @@
 								<field value="Código Interno" />
 								<textbox
 									value="@bind(vm.dto.codigoInterno)"
-									hflex="true" />
+									hflex="true" readonly="@load(vm.dto.esNuevo() ? 'false' : 'true')" />
 							</vlayout>
 							<vlayout spacing="0">
 								<field value="Código Proveedor" />
@@ -588,15 +588,15 @@
 						</tabpanels>
 					</tabbox>
 			</vbox>
-				<vbox width="350px" vflex="true"
+				<vbox width="270px" vflex="true"
 					sclass="button-container" pack="center" align="center">
 										
 					<html><![CDATA[
-        				<img id="foto" height="200px" alt="" width="280px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+        				<img id="foto" height="170px" alt="" width="250px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
     				</html>
     				<div height="5px" />
     				<html><![CDATA[
-        				<img id="foto_" height="200px" alt="" width="280px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+        				<img id="foto_" height="170px" alt="" width="250px" onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
     				</html>
 					
 					<div height="5px" />

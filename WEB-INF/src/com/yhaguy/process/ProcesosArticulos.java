@@ -5,11 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.coreweb.domain.Tipo;
 import com.coreweb.extras.csv.CSV;
+import com.coreweb.util.AutoNumeroControl;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.AjusteStock;
+import com.yhaguy.domain.AjusteStockDetalle;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloCosto;
 import com.yhaguy.domain.ArticuloDeposito;
@@ -17,6 +22,8 @@ import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.ProveedorArticulo;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.util.Barcode;
 import com.yhaguy.util.Utiles;
 
@@ -32,6 +39,7 @@ public class ProcesosArticulos {
 	static final String SRC_VALVOLINE = "./WEB-INF/docs/process/VALVOLINE.csv";
 	static final String SRC_JHONSON = "./WEB-INF/docs/process/JHONSON.csv";
 	static final String SRC_BATEBOL = "./WEB-INF/docs/process/BATEBOL.csv";
+	static final String SRC_INVENTARIO_MINORISTA = "./WEB-INF/docs/migracion/central/INVENTARIO_MINORISTA.csv";
 
 	/**
 	 * asigna familia a los articulos..
@@ -494,10 +502,63 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * crea un ajuste de stock..
+	 */
+	public static void addAjusteStockPositivo(String src, long idDeposito, Date fecha) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "POSITIVO", CSV.STRING }, { "NEGATIVO", CSV.STRING } };
+		
+		Set<AjusteStockDetalle> dets = new HashSet<AjusteStockDetalle>();
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("CODIGO");	
+			String stock = csv.getDetalleString("POSITIVO");
+			Integer stock_ = Integer.parseInt(stock);
+			
+			if (stock_ > 0) {
+				Articulo art = rr.getArticuloByCodigoInterno(codigo);				
+				if (art != null) {					
+					AjusteStockDetalle item = new AjusteStockDetalle();
+					item.setArticulo(art);
+					item.setCantidad(stock_);
+					item.setCostoGs(art.getCostoGs());
+					dets.add(item);
+					System.out.println(art.getCodigoInterno() + " - STOCK: " + stock );
+				} else {
+					System.err.println("NO ENCONTRADO: " + codigo);
+				}
+			}
+		}
+		if (dets.size() > 0) {
+			Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), idDeposito);
+			SucursalApp suc = rr.getSucursalAppById(Long.parseLong(dep.getAuxi()));
+			TipoMovimiento tm = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+			Tipo estado = rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_CONFECCIONADO);
+			AjusteStock ajuste = new AjusteStock();
+			ajuste.setAutorizadoPor("INVENTARIO OFICIAL");
+			ajuste.setDeposito(dep);
+			ajuste.setDescripcion("INVENTARIO OFICIAL 02/2019 " + dep.getDescripcion());
+			ajuste.setDetalles(dets);
+			ajuste.setEstadoComprobante(estado);
+			ajuste.setFecha(fecha);
+			ajuste.setNumero("AJT-" + AutoNumeroControl.getAutoNumero("AJT", 5));
+			ajuste.setSucursal(suc);
+			ajuste.setTipoMovimiento(tm);
+			rr.saveObject(ajuste, "sys");
+			System.out.println("AJUSTE POR INVENTARIO: " + ajuste.getNumero());
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
-			ProcesosArticulos.recalcularStock(2, 2);
+			//ProcesosArticulos.recalcularStock(2, 2);
 			//ProcesosArticulos.verificarUltimoCosto();
 			//ProcesosArticulos.setProveedorArticulos(SRC_JHONSON, 40);
 			//ProcesosArticulos.setCostoArticulos();
@@ -505,6 +566,7 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.poblarHistoricoStock();
 			//ProcesosArticulos.setMarcaFamiliaArticulos(SRC_FAMILIAS_MARCAS);
 			//ProcesosArticulos.generarBarcodes();
+			ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MINORISTA, Deposito.ID_MINORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
