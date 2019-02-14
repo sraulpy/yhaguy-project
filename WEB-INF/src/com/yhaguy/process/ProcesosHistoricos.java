@@ -125,6 +125,7 @@ public class ProcesosHistoricos {
 		hist.setId_funcionario(0);
 		hist.setTotal_venta(hist.getTotal_venta() + venta);
 		hist.setTotal_notacredito(hist.getTotal_notacredito() + notaCredito);
+		hist.setId_sucursal(2);
 		if (servicio) {
 			hist.setTotal_venta_servicio(hist.getTotal_venta_servicio() + venta);
 		}
