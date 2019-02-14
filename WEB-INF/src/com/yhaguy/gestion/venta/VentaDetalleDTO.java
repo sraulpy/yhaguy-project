@@ -3,6 +3,7 @@ package com.yhaguy.gestion.venta;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
+import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
@@ -74,6 +75,34 @@ public class VentaDetalleDTO extends DTO {
 	@DependsOn({ "precioVentaFinalDs", "cantidad" })
 	public double getImporteDsSinDescuento() {
 		return this.precioVentaFinalDs * this.cantidad;
+	}
+	
+	/**
+	 * @return el importe sin iva..
+	 */
+	public double getImporteGsSinIva() {
+		return (this.getPrecioGsSinIva() * this.cantidad) - this.getDescuentoUnitarioGsSinIva();
+	}
+	
+	/**
+	 * @return el descuento unitario sin iva..
+	 */
+	public double getDescuentoUnitarioGsSinIva() {
+		Misc misc = new Misc();
+		double iva = misc.calcularIVA(this.descuentoUnitarioGs, 10);
+		return this.descuentoUnitarioGs - iva;
+	}
+	
+	/**
+	 * @return el precio sin iva..
+	 */
+	public double getPrecioGsSinIva() {
+		if (this.isExenta()) {
+			return this.precioGs;
+		}
+		Misc misc = new Misc();
+		double iva = misc.calcularIVA(this.precioGs, 10);
+		return this.precioGs - iva;
 	}
 	
 	@DependsOn("tipoIVA")

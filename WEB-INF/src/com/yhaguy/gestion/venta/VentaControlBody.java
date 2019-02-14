@@ -43,6 +43,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Cliente;
@@ -1606,6 +1607,7 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	private boolean validarFormulario() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
 		boolean out = true;
 		this.mensajeError = "No se puede completar la operación debido a: \n";
 		
@@ -1620,6 +1622,22 @@ public class VentaControlBody extends BodyApp {
 		if (this.dto.getDetalles().size() == 0) {
 			out = false;
 			mensajeError += "\n - Debe ingresar al menos un ítem..";
+		}
+		
+		for (VentaDetalleDTO item : this.dto.getDetalles()) {
+			Articulo art = rr.getArticuloById(item.getArticulo().getId());
+			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MARKETING)
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.RETAIL_SHOP)
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)) {
+				double costoGs = art.getCostoGs();
+				double importeGs = item.getImporteGsSinIva();
+				if (importeGs <= costoGs) {
+					out = false;
+					mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
+				}
+			}
 		}
 		
 		/*//verifica que el usuario tenga asignado un Modo de Venta
