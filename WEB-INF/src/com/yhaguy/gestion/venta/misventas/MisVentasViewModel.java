@@ -55,7 +55,7 @@ public class MisVentasViewModel extends SimpleViewModel {
 		
 		List<Venta> ventas = null;
 		if (this.getIdFuncionario() == ID_FUNCIONARIO_NOELIA) {
-			ventas = rr.getVentasContado(this.fechaDesde, this.fechaHasta, 0);
+			ventas = rr.getVentasContado(this.fechaDesde, this.fechaHasta, 0, 0);
 		} else {
 			ventas = rr.getVentasContadoPorVendedor(this.fechaDesde,
 					this.fechaHasta, this.getIdFuncionario());

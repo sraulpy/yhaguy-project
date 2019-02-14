@@ -223,7 +223,7 @@ public class ProcesosVentas {
 	 * historico comisiones..
 	 */
 	@SuppressWarnings("deprecation")
-	public static void addHistoricoComisiones(Date desde, Date hasta, long idSucursal) {
+	public static void addHistoricoComisiones(Date desde, Date hasta, long idSucursal, long idVendedor) {
 		try {	
 			desde.setHours(0); desde.setMinutes(0); desde.setSeconds(0);
 			hasta.setHours(23); hasta.setMinutes(0); hasta.setSeconds(0);
@@ -235,8 +235,8 @@ public class ProcesosVentas {
 			List<Venta> ventas = null;
 			List<Object[]> cobros = null;
 			
-			ventas = rr.getVentasContado(desde, hasta, 0);
-			cobros = rr.getCobranzasPorVendedor(desde, hasta, 0, idSucursal);
+			ventas = rr.getVentasContado(desde, hasta, 0, idVendedor);
+			cobros = rr.getCobranzasPorVendedor(desde, hasta, idVendedor, idSucursal);
 			
 			// Ventas contado..
 			for (Venta venta : ventas) {
@@ -291,13 +291,38 @@ public class ProcesosVentas {
 					bc.setImporteCobro(bc.getImporteCobro() + 
 							((importeCobro - Utiles.getIVA(importeCobro, Configuracion.VALOR_IVA_10))));
 					bc.setImporteNcred(bc.getImporteNcred() + importeNcr - Utiles.getIVA(importeNcr, Configuracion.VALOR_IVA_10));
-					result.put(key, bc);
+					result.put(key, bc);					
 					System.out.println("COBRO: " + cobro[1] + " - " + index + " de " + cobros.size());
 					index ++;
 				}						
 			}
 			
-			for (Funcionario vend : rr.getFuncionarios("")) {
+			if (idVendedor != 0) {
+				for (Funcionario vend : rr.getFuncionarios("")) {
+					for (Proveedor proveedor : proveedores) {
+						BeanComision bc = result.get(vend.getId() + "-" + proveedor.getId());
+						if (bc != null) {
+							HistoricoComisiones com = new HistoricoComisiones();
+							com.setMes(Utiles.getNumeroMes(hasta));
+							com.setVendedor(vend.getRazonSocial());
+							com.setProveedor(proveedor.getRazonSocial());
+							com.setImporteVenta(bc.getImporteVenta());
+							com.setImporteCobro(bc.getImporteCobro());
+							com.setImporteNotaCredito(bc.getImporteNcred());
+							com.setAnho(Utiles.getAnhoActual());
+							
+							Object[] porc_com = vend.getPorcentajeComision(proveedor.getId());
+							double porc_vta = (double) porc_com[0];
+							double porc_cob = (double) porc_com[1];
+							com.setPorc_Venta(porc_vta);
+							com.setPorc_Cobro(porc_cob);
+							rr.saveObject(com, "process");
+							System.out.println("AGREGADO: " + com.getVendedor());
+						}
+					}
+				}
+			} else {
+				Funcionario vend = rr.getFuncionario(idVendedor);
 				for (Proveedor proveedor : proveedores) {
 					BeanComision bc = result.get(vend.getId() + "-" + proveedor.getId());
 					if (bc != null) {

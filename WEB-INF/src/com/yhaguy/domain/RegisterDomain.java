@@ -3165,13 +3165,16 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las ventas segun fecha
 	 */
-	public List<Venta> getVentasContado(Date desde, Date hasta, long idCliente)
+	public List<Venta> getVentasContado(Date desde, Date hasta, long idCliente, long idVendedor)
 			throws Exception {
 		
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
 				+ " and v.fecha between ? and ? and v.estadoComprobante is null";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
+		}
+		if (idVendedor != 0) {
+			query += " and v.vendedor.id = " + idVendedor;
 		}
 		query += " order by v.numero, v.fecha";
 
@@ -5397,6 +5400,16 @@ public class RegisterDomain extends Register {
 		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) like '%"
 				+ razonSocial.toLowerCase() + "%'";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return los funcionarios segun id..
+	 */
+	public Funcionario getFuncionarios(long id)
+			throws Exception {
+		String query = "select f from Funcionario f where f.id = " + id;
+		List<Funcionario> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
 	}
 	
 	/**
@@ -9124,27 +9137,6 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void main(String[] args) {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			AjusteStock ajt = (AjusteStock) rr.getObject(AjusteStock.class.getName(), 170);
-			int count = 0;
-			for (AjusteStockDetalle item : ajt.getDetalles()) {
-				Articulo art = item.getArticulo();
-				ArticuloHistorialMigracion mig = rr.getMigracion(art.getCodigoInterno(), Deposito.ID_CENTRAL_TEMPORAL);
-				if (mig != null && mig.getDeposito().getId().longValue() == Deposito.ID_CENTRAL_TEMPORAL) {
-					mig.setDeposito(null);
-					rr.saveObject(mig, mig.getUsuarioMod());
-					System.out.println(art.getCodigoInterno());
-					count ++;
-				}
-			}
-			System.out.println(count + " DEPURADOS..");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * @return el stock por deposito..
 	 * [0]:articulo.id
@@ -9495,5 +9487,22 @@ public class RegisterDomain extends Register {
 				+ " and a.credito.tipoMovimiento.id = " + idTipoMovimiento;
 		List<AjusteCtaCte> list = this.hql(query);
 		return list;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Venta> vtas = rr.getVentasCredito(Utiles.getFecha("01-11-2018 00:00:00"), new Date(), 4656);
+			for (Venta venta : vtas) {
+				if (!venta.isAnulado()) {
+					CtaCteEmpresaMovimiento mov = rr.getCtaCteMovimientoByIdMovimiento(venta.getId(), Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+					if (mov == null) {
+						System.out.println(venta.getNumero());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

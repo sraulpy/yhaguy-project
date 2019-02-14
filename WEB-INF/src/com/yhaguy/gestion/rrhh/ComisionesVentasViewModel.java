@@ -130,7 +130,7 @@ public class ComisionesVentasViewModel extends SimpleViewModel {
 		Date hasta = Utiles.getFechaFinMes(seleccionado);
 		desde.setSeconds(0);desde.setMinutes(0);desde.setHours(0);
 		hasta.setSeconds(59);hasta.setMinutes(59);hasta.setHours(23);
-		ProcesosVentas.addHistoricoComisiones(desde, hasta, idSuc);
+		ProcesosVentas.addHistoricoComisiones(desde, hasta, idSuc, 0);
 	}
 	
 	@Command

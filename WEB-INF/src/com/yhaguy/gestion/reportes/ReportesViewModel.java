@@ -4157,7 +4157,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				} else if (filtro.isIncluirVCT()) {
 					List<Venta> ventas = rr.getVentasContado(desde, hasta,
-							idCliente);
+							idCliente, 0);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -4557,7 +4557,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, 0, 0);
-				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0);
+				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 
@@ -5995,7 +5995,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 			if (tipoRetencion.equals(ReportesFiltros.RETENCION_RECIBIDAS)) {
 				recibos = rr.getCobranzas(desde, hasta, 0, 0);
-				ventas = rr.getVentasContado(desde, hasta, 0);
+				ventas = rr.getVentasContado(desde, hasta, 0, 0);
 			} else if (tipoRetencion.equals(ReportesFiltros.RETENCION_EMITIDAS)) {
 				recibos = rr.getPagos(desde, hasta);
 			}
@@ -6923,7 +6923,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			// Ventas Contado..
 			if (vtaInc) {
-				List<Venta> ventas_ = rr.getVentasContado(desde, hasta, idCliente);
+				List<Venta> ventas_ = rr.getVentasContado(desde, hasta, idCliente, 0);
 				for (Venta venta : ventas_) {
 					if (!venta.isAnulado()) {
 						ventas.add(venta);
@@ -8584,7 +8584,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Funcionario> cobradores = filtro.getTeleCobradores();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0);
-				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0);
+				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 
@@ -8671,7 +8671,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0);
-				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0);
+				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, String> clientes = new HashMap<Long, String>();

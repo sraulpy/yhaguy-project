@@ -999,7 +999,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	 * Para hacer un refresh de la pagina..
 	 */
 	@Command @NotifyChange("*")
-	public void refresh(){		
+	public void refresh() {		
 	}
 	
 	/**
@@ -1096,13 +1096,26 @@ public class NotaCreditoControlBody extends BodyApp {
 		
 		// actualiza el stock de los articulos..
 		// asigna el nro de nc a la venta..
-		if (sigla.equals(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA)) {				
-			for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
-				ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
-				ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), this.getLoginNombre());
-				ControlArticuloStock.addMovimientoStock(out.getId(), out
+		if (sigla.equals(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA)) {
+			if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+				if (this.dto.isMotivoDevolucion()) {					
+					for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
+						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
+						ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), this.getLoginNombre());
+						ControlArticuloStock.addMovimientoStock(out.getId(), out
+								.getTipoMovimiento().getId(), item.getCantidad(), adp
+								.getId(), this.getLoginNombre());
+					}
+				
+				}
+			} else {				
+				for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
+					ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
+					ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), this.getLoginNombre());
+					ControlArticuloStock.addMovimientoStock(out.getId(), out
 						.getTipoMovimiento().getId(), item.getCantidad(), adp
 						.getId(), this.getLoginNombre());
+				}		
 			}
 		}
 		// referencia a los servicios tecnicos..
@@ -1352,7 +1365,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		return out;
 	}
 	
-	@DependsOn({ "dto.cliente", "dto.motivo", "dto.numero" })
+	@DependsOn({ "dto.cliente", "dto.motivo", "dto.numero", "dto.deposito" })
 	public boolean isDetalleVisible() {
 		boolean newPersona = this.dto.isNotaCreditoVenta() ? this.dto
 				.getCliente().esNuevo() : this.dto.getProveedor().esNuevo();
@@ -1362,7 +1375,8 @@ public class NotaCreditoControlBody extends BodyApp {
 				: !((String) this.dto.getTimbrado().getPos1()).isEmpty();
 		return ((newPersona == false)
 				&& (this.dto.getMotivo().esNuevo() == false)
-				&& (numeroOK == true) && (timbradoOK == true));
+				&& (numeroOK == true) && (timbradoOK == true)
+				&& this.dto.getDeposito() != null);
 	}
 	
 	@DependsOn("detalleVisible")

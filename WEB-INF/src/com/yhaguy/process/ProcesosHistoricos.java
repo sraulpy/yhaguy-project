@@ -33,7 +33,7 @@ public class ProcesosHistoricos {
 			double totalNCR = 0;
 			double totalSAL = 0;
 			double totalCHE = 0;
-			List<Venta> vtasContado = rr.getVentasContado(desde, new Date(), cliente.getId());
+			List<Venta> vtasContado = rr.getVentasContado(desde, new Date(), cliente.getId(), 0);
 			List<Venta> vtasCredito = rr.getVentasCredito(desde, new Date(), cliente.getId());
 			List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde, new Date(), cliente.getId());
 			
