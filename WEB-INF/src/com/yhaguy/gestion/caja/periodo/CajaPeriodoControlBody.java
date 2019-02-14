@@ -1760,14 +1760,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		Date fechaFac = (Date) nc.getDetallesFacturas().get(0).getVenta().getPos3();
 		String fechaFac_ = this.m.dateToString(fechaFac, Misc.DD_MM_YYYY);
 		String condicion = (String) nc.getDetallesFacturas().get(0).getVenta().getPos6();
-		
-		String source = ReportesViewModel.SOURCE_NOTA_CREDITO_;
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-			source = ReportesViewModel.SOURCE_NOTA_CREDITO_BATERIAS;
-		}
 
 		Map<String, Object> params = new HashMap<String, Object>();
-		JRDataSource dataSource = new NotaCreditoDataSource(nc, this.getIva10());
 		params.put("Numero", nc.getNumeroNotaCredito());
 		params.put("FechaEmision", nc.getFechaEmision_());
 		params.put("RazonSocial", nc.getRazonSocial());
@@ -1789,12 +1783,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			nc.getDetalles().add(this.getItemDescuento(nc));
 		}
 		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-			this.imprimirComprobante(source, params, dataSource);
-		} else {
-			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_NOTACREDITO, this.mainComponent, params);
-			this.win.doModal();
-		}
+		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_NOTACREDITO, this.mainComponent, params);
+		this.win.doModal();
 	}
 
 	/**
