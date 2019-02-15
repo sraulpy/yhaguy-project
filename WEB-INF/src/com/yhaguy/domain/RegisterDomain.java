@@ -34,7 +34,7 @@ import com.yhaguy.util.Utiles;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class RegisterDomain extends Register {
 
-	// El register tiene que ser un sigleton
+	// El register tiene que ser un sigleton..
 	private RegisterDomain() {
 		super();
 	}
