@@ -47,7 +47,10 @@ public class ChartVentasMetas extends SelectorComposer<Window> {
         super.doAfterCompose(comp);
         
         AccesoDTO acc = (AccesoDTO) Sessions.getCurrent().getAttribute("AccesoDTO");
-        long idSuc = acc.getSucursalOperativa().getId();
+        long idSuc = 2;
+        if (acc != null) {
+        	idSuc = acc.getSucursalOperativa().getId();
+		}
         
         Double ventas = new Double(0);
         Double cobranzas = new Double(0);

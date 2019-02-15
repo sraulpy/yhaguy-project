@@ -1175,6 +1175,79 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	/**
+	 * depura los saldos por caja..
+	 */
+	public static void depurarSaldosPorCaja(long idCaja) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CajaPeriodo caja = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), idCaja);
+		for (Recibo recibo : caja.getRecibos()) {
+			for (ReciboDetalle det : recibo.getDetalles()) {
+				Venta vta = det.getVenta();
+				if (vta != null) {
+					double recs = 0;
+					double ncrs = 0;
+					List<Object[]> recs_ = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+					for (Object[] rec : recs_) {
+						ReciboDetalle rdet = (ReciboDetalle) rec[1];
+						recs += rdet.getMontoGs();
+					}
+					List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(vta.getId());
+					for (NotaCredito ncr : ncrs_) {
+						if (!ncr.isAnulado()) {
+							ncrs += ncr.getImporteGs();
+						}
+					}
+					List<CtaCteEmpresaMovimiento> ctactes = rr.getCtaCteMovimientosByIdMovimiento(vta.getId(),
+							vta.getTipoMovimiento().getSigla());
+					for (CtaCteEmpresaMovimiento ctacte : ctactes) {
+						ctacte.setSaldo(0);
+						rr.saveObject(ctacte, ctacte.getUsuarioMod());
+					}
+					double hist = vta.getTotalImporteGs() - (ncrs + recs);
+					CtaCteEmpresaMovimiento ctacte = ctactes.get(2);
+					ctacte.setSaldo(hist);
+					rr.saveObject(ctacte, ctacte.getUsuarioMod());
+					System.out.println("DEPURADO: " + vta.getCliente().getRazonSocial() + " - " + vta.getNumero());				
+				}
+			}
+		}
+	}
+	
+	/**
+	 * depura los saldos por caja..
+	 */
+	public static void depurarSaldosPorVenta(long idVenta) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta vta = (Venta) rr.getObject(Venta.class.getName(), idVenta);
+		if (vta != null) {
+			double recs = 0;
+			double ncrs = 0;
+			List<Object[]> recs_ = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+			for (Object[] rec : recs_) {
+				ReciboDetalle rdet = (ReciboDetalle) rec[1];
+				recs += rdet.getMontoGs();
+			}
+			List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(vta.getId());
+			for (NotaCredito ncr : ncrs_) {
+				if (!ncr.isAnulado()) {
+					ncrs += ncr.getImporteGs();
+				}
+			}
+			List<CtaCteEmpresaMovimiento> ctactes = rr.getCtaCteMovimientosByIdMovimiento(vta.getId(),
+					vta.getTipoMovimiento().getSigla());
+			for (CtaCteEmpresaMovimiento ctacte : ctactes) {
+				ctacte.setSaldo(0);
+				rr.saveObject(ctacte, ctacte.getUsuarioMod());
+			}
+			double hist = vta.getTotalImporteGs() - (ncrs + recs);
+			CtaCteEmpresaMovimiento ctacte = ctactes.get(2);
+			ctacte.setSaldo(hist);
+			rr.saveObject(ctacte, ctacte.getUsuarioMod());
+			System.out.println("DEPURADO: " + vta.getCliente().getRazonSocial() + " - " + vta.getNumero());				
+		}	
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1213,8 +1286,10 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosPorNotaCredito();
 			//ProcesosTesoreria.depurarSaldosVentaCredito(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
 			//ProcesosTesoreria.depurarSaldosNotaCredito();
-			ProcesosTesoreria.depurarSaldosVentaCreditonNegativo(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
+			//ProcesosTesoreria.depurarSaldosVentaCreditonNegativo(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
 			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
+			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
+			ProcesosTesoreria.depurarSaldosPorVenta(59103);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

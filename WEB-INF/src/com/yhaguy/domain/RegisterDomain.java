@@ -9492,13 +9492,12 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Venta> vtas = rr.getVentasCredito(Utiles.getFecha("01-11-2018 00:00:00"), new Date(), 4656);
-			for (Venta venta : vtas) {
-				if (!venta.isAnulado()) {
-					CtaCteEmpresaMovimiento mov = rr.getCtaCteMovimientoByIdMovimiento(venta.getId(), Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
-					if (mov == null) {
-						System.out.println(venta.getNumero());
-					}
+			List<Articulo> arts = rr.getArticulos();
+			for (Articulo art : arts) {
+				if (art.getProveedorArticulos().size() > 0) {
+					art.setProveedor(art.getProveedorArticulos_().get(0).getProveedor());
+					rr.saveObject(art, art.getUsuarioMod());
+					System.out.println(art.getCodigoInterno() + " - " + art.getProveedor().getRazonSocial());
 				}
 			}
 		} catch (Exception e) {

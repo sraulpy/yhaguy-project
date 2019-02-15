@@ -13,10 +13,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
-import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
-import org.zkoss.zul.Button;
 
 import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.VerificaAceptarCancelar;
@@ -76,9 +74,6 @@ public class ArticuloControlBody extends BodyApp {
 	private MyArray articuloReferencia;	
 	private List<MyArray> selectedArtReferencia;
 	private List<MyArray> selectedUbicaciones;
-	
-	@Wire
-	private Button verImg;
 
 	@Init(superclass = true)
 	public void init() {
@@ -87,7 +82,6 @@ public class ArticuloControlBody extends BodyApp {
 
 	@AfterCompose(superclass = true)
 	public void afterCompose() {
-		this.verImg.setDisabled(false);
 	}
 
 	@Override

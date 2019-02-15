@@ -1,7 +1,9 @@
 package com.yhaguy.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.coreweb.domain.Domain;
@@ -248,6 +250,12 @@ public class Articulo extends Domain {
 
 	public Set<ProveedorArticulo> getProveedorArticulos() {
 		return proveedorArticulos;
+	}
+	
+	public List<ProveedorArticulo> getProveedorArticulos_() {
+		List<ProveedorArticulo> out = new ArrayList<ProveedorArticulo>();
+		out.addAll(this.proveedorArticulos);
+		return out;
 	}
 
 	public Set<ArticuloInformacionExtra> getArticuloInformacionExtras() {
