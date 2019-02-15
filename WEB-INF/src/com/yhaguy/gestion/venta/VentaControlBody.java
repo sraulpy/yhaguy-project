@@ -1301,7 +1301,7 @@ public class VentaControlBody extends BodyApp {
 		MyPair sucursal = this.getAcceso().getSucursalOperativa();
 		MyArray usuarioFuncionario = this.getAcceso().getFuncionario();
 		
-		Funcionario func = rr.getFuncionario(usuarioFuncionario.getId());
+		Funcionario func = rr.getFuncionario_(usuarioFuncionario.getId());
 		
 		MyArray vendedor = new MyArray();
 		vendedor.setId(usuarioFuncionario.getId());

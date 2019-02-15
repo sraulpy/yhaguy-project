@@ -726,7 +726,6 @@ public class RegisterDomain extends Register {
 					"Error: Mas de un funcionario para el mismo acceso.");
 		}
 		return f;
-
 	}
 
 	public List<Deposito> getDepositosPorSucursal(Long id) throws Exception {
@@ -8930,6 +8929,15 @@ public class RegisterDomain extends Register {
 	public Empresa getEmpresa(String razonsocial) throws Exception {
 		String query = "select e from Empresa e where e.razonSocial = '" + razonsocial + "'";
 		List<Empresa> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return la empresa..
+	 */
+	public Funcionario getFuncionario_(long idFuncionario) throws Exception {
+		String query = "select f from Funcionario f where f.id = " + idFuncionario;
+		List<Funcionario> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
