@@ -179,7 +179,6 @@ public class InformeHechauka {
 			periodo = Utiles.getDateToString(ventas.get(0).getFecha(), "yyyyMM");
 			long _col10 = 0;
 			long _col11 = 0;
-			long _col12 = 0;
 			long _col14 = 1;
 			long _col15 = 0;
 			String _col16 = "0";
@@ -189,7 +188,7 @@ public class InformeHechauka {
 					+ FORMATTER.format(dip_iva10) + "" + "\t"
 					+ FORMATTER.format(_col10) + "" + "\t"
 					+ FORMATTER.format(_col11) + "" + "\t"
-					+ FORMATTER.format(_col12) + "" + "\t"
+					+ FORMATTER.format(dip_exenta) + "" + "\t"
 					+ FORMATTER.format(dip_gravada + dip_iva10 + dip_exenta) + "" + "\t" + _col14 + "" + "\t"
 					+ _col15 + "" + "\t" + _col16 + "" + "\r\n";
 			objects.add(_object);
