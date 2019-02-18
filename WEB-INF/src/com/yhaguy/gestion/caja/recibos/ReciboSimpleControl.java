@@ -17,6 +17,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Popup;
@@ -591,7 +592,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		if (!this.dato.getReciboDTO().isMonedaLocal()) {
 			this.nvoFormaPago.setMontoGs(this.nvoFormaPago.getMontoDs() * this.dato.getReciboDTO().getTipoCambio());
 		}
-		
+		this.nvoFormaPago.setMontoChequeGs(this.nvoFormaPago.getMontoGs());
 		this.dato.getReciboDTO().getFormasPago().add(nvoFormaPago);
 		w.detach();
 	}
@@ -673,7 +674,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		}
 	}
 	
-	private Object[] validarFormaDePago(){
+	private Object[] validarFormaDePago() {
 		boolean valido = true;
 		String mensaje = Configuracion.TEXTO_ERROR_VALIDACION;
 		long idFormaPago = this.nvoFormaPago.getTipo().getId().longValue();
@@ -901,6 +902,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	
 	@Command @NotifyChange("*")
 	public void seleccionarFormaPago() throws Exception {
+		Clients.showNotification(this.nvoFormaPago.getMoneda().getSigla());
 		this.reloadFormaPago(this.nvoFormaPago);
 		String siglaFP = this.getNvoFormaPago().getTipo().getSigla();
 		String siglaFPCH = Configuracion.SIGLA_FORMA_PAGO_CHEQUE_PROPIO;
@@ -1017,14 +1019,14 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
 			rwChequeBanco.setVisible(true); rwLibrador.setVisible(true);
-			rwMontoCheque.setVisible(true); rwChequeAutoCobranza.setVisible(false);
+			rwMontoCheque.setVisible(false); rwChequeAutoCobranza.setVisible(false);
 			rwChequeBancoAutoCobro.setVisible(false); rwLibradorAutoCobro.setVisible(false);
 			rwVencimientoAutoCobro.setVisible(false);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwDebitoCobroCentral.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
-			rwMontoAplicado.setVisible(false);
+			rwMontoAplicado.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);	
 			this.nvoFormaPago.setChequeLibrador((String) this.dato.getReciboDTO().getCliente().getPos2());
 		

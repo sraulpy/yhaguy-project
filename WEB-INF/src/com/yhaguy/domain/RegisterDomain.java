@@ -9500,13 +9500,12 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Articulo> arts = rr.getArticulos();
-			for (Articulo art : arts) {
-				if (art.getProveedorArticulos().size() > 0) {
-					art.setProveedor(art.getProveedorArticulos_().get(0).getProveedor());
-					rr.saveObject(art, art.getUsuarioMod());
-					System.out.println(art.getCodigoInterno() + " - " + art.getProveedor().getRazonSocial());
-				}
+			List<ArticuloGrupo> arts = rr.getObjects(ArticuloGrupo.class.getName());
+			for (ArticuloGrupo grupo : arts) {
+				ArticuloSubGrupo sg = new ArticuloSubGrupo();
+				sg.setDescripcion(grupo.getDescripcion());
+				rr.saveObject(sg, "sys");
+				System.out.println(sg.getDescripcion());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -68,7 +68,7 @@ public class ReciboFormaPagoDTO extends DTO {
 	 */
 	public boolean isMonedaLocal() {
 		String sigla = (String) this.moneda.getSigla();
-		return (sigla.compareTo(Configuracion.SIGLA_MONEDA_GUARANI) == 0);
+		return sigla.equals(Configuracion.SIGLA_MONEDA_GUARANI);
 	}
 	
 	/**

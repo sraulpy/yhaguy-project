@@ -345,9 +345,9 @@
 				<field value="Importe:"/>
 				<hlayout>
 					<guaranibox id="dbxGs" value="@bind(vm.nvoFormaPago.montoGs)"
-						onChange="@command('dolarizarFormaPago')" hflex="true" visible="@load(vm.nvoFormaPago.monedaLocal)" />
+						onChange="@command('dolarizarFormaPago')" hflex="true" visible="@load(vm.nvoFormaPago.monedaLocal? 'true' : 'false')" />
 					<dolarbox id="dbxUS" value="@bind(vm.nvoFormaPago.montoDs)"
-						onChange="@command('guaranizarFormaPago')" format='#,##0.00' hflex="true" visible="@load(!vm.nvoFormaPago.monedaLocal)" />
+						onChange="@command('guaranizarFormaPago')" format='#,##0.00' hflex="true" visible="@load(!vm.nvoFormaPago.monedaLocal ? 'false' : 'true')" />
 					<label value="@load(vm.nvoFormaPago.moneda.sigla)" 
 						sclass="label-moneda"/>
 				</hlayout>
