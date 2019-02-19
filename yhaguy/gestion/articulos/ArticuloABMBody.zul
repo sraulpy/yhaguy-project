@@ -98,12 +98,11 @@
 					</rows>
 				</grid>			
 
-					<tabbox vflex="true" width="100%">
+					<tabbox vflex="true">
 						<tabs>
-							<tab label="General" hflex="true"/>						
-							<tab label="Referencias" />
-							<tab label="Ubicaciones" />
-							<tab label="Precios" />
+							<tab label="General" iconSclass="z-icon-check" />
+							<tab label="Ubicación" iconSclass="z-icon-search" />
+							<tab label="Precios" iconSclass="z-icon-tag" />
 						</tabs>
 
 						<tabpanels>
@@ -113,7 +112,7 @@
 
 							<hlayout vflex="true" hflex="true">
 								<vlayout vflex="true" hflex="true" spacing="0">
-									<div></div>
+									<div height="5px"></div>
 									<label value="DATOS GENERALES" class="label label-primary"></label>
 									<grid sclass="vgrid" hflex="true">
 									<columns>
@@ -170,7 +169,17 @@
 										<row>
 											<vlayout spacing="0">
 												<field value="Sub Marca" />
-												<combobox hflex="true" style="color:#999;font-weight:bold"></combobox>
+												<combobox
+													model="@load(vm.marcas)"
+													value="@load(vm.dto.articuloSubMarca.descripcion)"
+													selectedItem="@bind(vm.dto.articuloSubMarca)" hflex="true"
+													style="color:#999;font-weight:bold">
+													<template
+														name="model">
+														<comboitem
+															label="@load(each.descripcion)" />
+													</template>
+												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Grupo" />
@@ -281,26 +290,32 @@
 													<doublespinner
 														hflex="true" value="@bind(vm.dto.peso)" style="color:#999;font-weight:bold">
 													</doublespinner>
-													<field>Kg.</field>
 												</hlayout>
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="Volumen" />
-												<textbox hflex="true"
-													value="@bind(vm.dto.volumen)" style="color:#999;font-weight:bold">
-												</textbox>
+												<field value="Volúmen" />
+												<doublespinner
+													hflex="true" value="@bind(vm.dto.volumen)" style="color:#999;font-weight:bold">
+												</doublespinner>
 											</vlayout>
 										</row>
 										<row>
 											<vlayout spacing="0">
 												<field value="Presentación" />
-												<combobox hflex="true" style="color:#999;font-weight:bold">
+												<combobox hflex="true" style="color:#999;font-weight:bold"
+													model="@load(vm.presentaciones)"
+													selectedItem="@bind(vm.dto.presentacion)"
+													instant="true"
+													value="@load(vm.dto.presentacion.descripcion)">
+													<template name="model">
+														<comboitem label="@load(each.descripcion)"></comboitem>
+													</template>
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Unidades por Caja" />
-												<combobox hflex="true" style="color:#999;font-weight:bold">
-												</combobox>
+												<spinner hflex="true" style="color:#999;font-weight:bold"
+													value="@bind(vm.dto.unidadesCaja)"></spinner>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Lado" />
@@ -320,7 +335,16 @@
 										<row>
 											<vlayout spacing="0">
 												<field value="API" />
-												<combobox hflex="true" style="color:#999;font-weight:bold">
+												<combobox
+													model="@load(vm.apis)"
+													value="@load(vm.dto.articuloAPI.text)"
+													selectedItem="@bind(vm.dto.articuloAPI)" hflex="true"
+													style="color:#999;font-weight:bold">
+													<template
+														name="model">
+														<comboitem
+															label="@load(each.text)" />
+													</template>
 												</combobox>
 											</vlayout>	
 											<vlayout spacing="0">
@@ -472,48 +496,7 @@
 								</grid>
 								</vlayout>
 								</hlayout>
-							</tabpanel>					
-							
-							<tabpanel>
-								<!-- ________________ ARTICULOS DE REFERENCIA ________________-->
-								
-								<hlayout sclass="button-container">
-									<toolbarbutton label="Eliminar" image="/core/images/borrarItem.png" 
-										disabled="@load(vm.deleteArtRefDisabled)"
-										onClick="@command('deleteReferencia')"/>
-									<space/>
-									<toolbarbutton label="Insertar" image="/core/images/insertar.png"
-										onClick="@command('asignarReferencia')"/>
-								</hlayout>								
-								
-								<listbox sclass="small-list" vflex="true" 
-									emptyMessage="ASIGNE ARTÍCULOS DE REFERENCIA.."
-									checkmark="@load(!vm.deshabilitado)" multiple="true"
-									model="@load(vm.dto.referencias)"
-									selectedItems="@bind(vm.selectedArtReferencia)">
-									<listhead style="text-align:center">
-										<listheader width="40px" align="center"/>
-										<listheader label="Código" width="150px"/>
-										<listheader label="Descripción"/>
-									</listhead>
-									<template name="model">
-										<listitem>
-											<listcell/>
-											<listcell label="@load(each.pos1)" />
-											<listcell label="@load(each.pos2)" />
-										</listitem>
-									</template>
-									<listfoot>
-										<listfooter span="3" align="left">
-											<hlayout>
-												<field value="@load(vm.dto.referencias.size())" />
-												<field value="ítems" />
-											</hlayout>
-										</listfooter>
-									</listfoot>
-								</listbox>
-																
-							</tabpanel>
+							</tabpanel>	
 
 							<tabpanel>
 								<!-- ________________ UBICACION ________________ -->

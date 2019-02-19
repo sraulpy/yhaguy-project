@@ -41,6 +41,7 @@ public class Articulo extends Domain {
 	
 	private String disenho;
 	private int ancho;
+	private int unidadesCaja;
 	private double alto;
 	private double aro;
 	private String medida;
@@ -54,6 +55,7 @@ public class Articulo extends Domain {
 	
 	private ArticuloFamilia familia;
 	private ArticuloMarca marca;
+	private ArticuloMarca articuloSubMarca;
 	private ArticuloGrupo articuloGrupo;
 	private ArticuloLinea articuloLinea;
 	private ArticuloAplicacion articuloAplicacion;
@@ -63,6 +65,7 @@ public class Articulo extends Domain {
 	private ArticuloProcedencia articuloProcedencia;
 	private ArticuloIndicecarga articuloIndiceCarga;
 	private ArticuloLado articuloLado;
+	private ArticuloPresentacion presentacion;
 		
 	private long stock = 0;
 	
@@ -541,5 +544,29 @@ public class Articulo extends Domain {
 
 	public void setPisada(String pisada) {
 		this.pisada = pisada;
+	}
+
+	public ArticuloMarca getArticuloSubMarca() {
+		return articuloSubMarca;
+	}
+
+	public void setArticuloSubMarca(ArticuloMarca articuloSubMarca) {
+		this.articuloSubMarca = articuloSubMarca;
+	}
+
+	public ArticuloPresentacion getPresentacion() {
+		return presentacion;
+	}
+
+	public void setPresentacion(ArticuloPresentacion presentacion) {
+		this.presentacion = presentacion;
+	}
+
+	public int getUnidadesCaja() {
+		return unidadesCaja;
+	}
+
+	public void setUnidadesCaja(int unidadesCaja) {
+		this.unidadesCaja = unidadesCaja;
 	}
 }

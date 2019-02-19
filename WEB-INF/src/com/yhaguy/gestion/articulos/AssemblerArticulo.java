@@ -19,7 +19,7 @@ public class AssemblerArticulo extends Assembler {
 	static String[] attIguales = { 
 			"descripcion", "codigoInterno", "codigoProveedor", "codigoOriginal", "codigoBarra",
 			"observacion", "peso", "volumen", "fechaAlta", "prioridad", "completo", "urlImagen", "urlEspecificacion",
-			"importado", "servicio", "disenho", "ancho", "alto", "aro", "medida", "pisada" };
+			"importado", "servicio", "disenho", "ancho", "alto", "aro", "medida", "pisada", "unidadesCaja" };
 
 	static String[] attPresentacion = { "descripcion", "observacion", "unidad",
 			"peso", "unidadMedida" };
@@ -63,7 +63,9 @@ public class AssemblerArticulo extends Assembler {
 		
 		this.addReferencia(dto.getReferenciasDeleted(), dto.getReferencias(), dto.getId());
 		domain.setMarca(dto.getMarca());
+		domain.setArticuloSubMarca(dto.getArticuloSubMarca());
 		domain.setFamilia(dto.getFamilia_());
+		domain.setPresentacion(dto.getPresentacion());
 
 		return domain;
 	}
@@ -91,11 +93,8 @@ public class AssemblerArticulo extends Assembler {
 
 
 		this.listaDomainToListaDTO(domain, dto, "proveedorArticulos", new AssemblerProveedorArticulo());
-
-		this.domainToMyArray(domain, dto, "articuloPresentacion", attPresentacion);
-		
-		this.domainToMyArray(domain, dto, "familia", attFamilia);
-		
+		this.domainToMyArray(domain, dto, "articuloPresentacion", attPresentacion);		
+		this.domainToMyArray(domain, dto, "familia", attFamilia);		
 		this.domainToMyArray(domain, dto, "proveedor", attProveedor);
 
 		this.listaDomainToListaMyArray(domain, dto,
@@ -107,7 +106,9 @@ public class AssemblerArticulo extends Assembler {
 		dto.setReferencias(this.getReferencias(dto.getId()));
 		dto.setPrecios(this.getPrecios((Articulo) domain));
 		dto.setMarca(domain_.getMarca());
+		dto.setArticuloSubMarca(domain_.getArticuloSubMarca());
 		dto.setFamilia_(domain_.getFamilia());
+		dto.setPresentacion(domain_.getPresentacion());
 		
 		return dto;
 	}

@@ -43,6 +43,7 @@
 		<property name="aro" />
 		<property name="medida" />
 		<property name="pisada" />
+		<property name="unidadesCaja" />
 		
 		<property name="estado">
 			<column name="anulado" not-null="true" default="false" />
@@ -54,8 +55,14 @@
 		<many-to-one name="marca" class="com.yhaguy.domain.ArticuloMarca"
 			column="id_marca" lazy="false" />
 			
+		<many-to-one name="articuloSubMarca" class="com.yhaguy.domain.ArticuloMarca"
+			column="id_submarca" lazy="false" />
+			
 		<many-to-one name="articuloGrupo" class="com.yhaguy.domain.ArticuloGrupo"
 			column="id_grupo" lazy="false" />
+			
+		<many-to-one name="articuloSubGrupo" class="com.yhaguy.domain.ArticuloSubGrupo"
+			column="id_subgrupo" lazy="false" />
 			
 		<many-to-one name="articuloLinea" class="com.yhaguy.domain.ArticuloLinea"
 			column="id_linea" lazy="false" />
@@ -65,6 +72,18 @@
 			
 		<many-to-one name="articuloModelo" class="com.yhaguy.domain.ArticuloModelo"
 			column="id_modelo" lazy="false" />
+			
+		<many-to-one name="presentacion" class="com.yhaguy.domain.ArticuloPresentacion"
+			column="id_presentacion" lazy="false" />
+			
+		<many-to-one name="articuloLado" class="com.yhaguy.domain.ArticuloLado"
+			column="id_lado" lazy="false" />
+			
+		<many-to-one name="articuloIndiceCarga" class="com.yhaguy.domain.ArticuloIndicecarga"
+			column="id_indice_carga" lazy="false" />
+			
+		<many-to-one name="articuloAPI" class="com.yhaguy.domain.ArticuloAPI"
+			column="id_api" lazy="false" />
 		
 		<many-to-one name="articuloEstado" class="com.coreweb.domain.Tipo"
 			column="idArticuloEstado" lazy="false" />

@@ -10,6 +10,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloMarca;
+import com.yhaguy.domain.ArticuloPresentacion;
 
 @SuppressWarnings("serial")
 public class ArticuloDTO extends DTO {
@@ -36,6 +37,7 @@ public class ArticuloDTO extends DTO {
 	private double aro = 0.0;
 	private String medida = "";
 	private String pisada = "";
+	private int unidadesCaja = 0;
 	
 	private MyPair articuloEstado = new MyPair();
 	private MyPair articuloFamilia = new MyPair();
@@ -64,7 +66,9 @@ public class ArticuloDTO extends DTO {
 	private List<MyArray> precios = new ArrayList<MyArray>();
 	
 	private ArticuloMarca marca;
+	private ArticuloMarca articuloSubMarca;
 	private ArticuloFamilia familia_;
+	private ArticuloPresentacion presentacion;
 	
 	@Override
 	public String toString() {
@@ -466,6 +470,30 @@ public class ArticuloDTO extends DTO {
 
 	public void setPisada(String pisada) {
 		this.pisada = pisada;
+	}
+
+	public ArticuloMarca getArticuloSubMarca() {
+		return articuloSubMarca;
+	}
+
+	public void setArticuloSubMarca(ArticuloMarca articuloSubMarca) {
+		this.articuloSubMarca = articuloSubMarca;
+	}
+
+	public ArticuloPresentacion getPresentacion() {
+		return presentacion;
+	}
+
+	public void setPresentacion(ArticuloPresentacion presentacion) {
+		this.presentacion = presentacion;
+	}
+
+	public int getUnidadesCaja() {
+		return unidadesCaja;
+	}
+
+	public void setUnidadesCaja(int unidadesCaja) {
+		this.unidadesCaja = unidadesCaja;
 	}
 
 }

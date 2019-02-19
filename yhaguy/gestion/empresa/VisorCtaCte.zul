@@ -157,8 +157,7 @@
 				tooltiptext="Reasignar Saldo.." visible="@load(vm.tipoCliente)" 
 				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedFilter ne 'Pendientes' ? 'true' : vm.selectedItem_ eq null)" />
 			<button mold="bs" sclass="btn-info btn-sm"
-				iconSclass="z-icon-pencil"
-				tooltiptext="Aplicar Saldo.." visible="@load(vm.tipoCliente)"  />
+				iconSclass="z-icon-pencil" visible="@load(vm.tipoCliente)"  />
 			<button mold="bs" sclass="btn-primary btn-sm"
 				iconSclass="z-icon-calendar"
 				tooltiptext="Tareas Pendientes.." visible="@load(vm.tipoCliente)" 

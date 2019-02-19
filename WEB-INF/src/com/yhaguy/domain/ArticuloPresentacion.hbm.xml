@@ -12,10 +12,5 @@
 		&hibernate-domain; 
 
    				<property name="descripcion" type="string" column="descripcion"/>
-   				<property name="observacion" type="string" column="observacion"/>
-   				<property name="unidad"/>
-   				<property name="peso" />
-   				<many-to-one name="unidadMedida" class="com.coreweb.domain.Tipo" column="idunidadmedida"
-			lazy="false"/>
         </class>
 </hibernate-mapping>

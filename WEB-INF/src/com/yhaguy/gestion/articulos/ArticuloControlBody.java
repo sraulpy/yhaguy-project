@@ -38,6 +38,7 @@ import com.yhaguy.domain.ArticuloLado;
 import com.yhaguy.domain.ArticuloLinea;
 import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloModelo;
+import com.yhaguy.domain.ArticuloPresentacion;
 import com.yhaguy.domain.ArticuloProcedencia;
 import com.yhaguy.domain.ArticuloSubGrupo;
 import com.yhaguy.domain.ArticuloSubLinea;
@@ -660,6 +661,15 @@ public class ArticuloControlBody extends BodyApp {
 			out.add(my);
 		}
 		return out;
+	}
+	
+	/**
+	 * @return las presentaciones..
+	 */
+	public List<ArticuloPresentacion> getPresentaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<ArticuloPresentacion> list = rr.getObjects(ArticuloPresentacion.class.getName());		
+		return list;
 	}
 	
 	/**

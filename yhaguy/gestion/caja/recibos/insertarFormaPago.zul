@@ -67,8 +67,7 @@
 						<template name="model">
 							<comboitem label="@load(each.pos1)" />
 						</template>
-					</combobox>
-					<labelConstrain/>
+					</combobox>s
 				</hlayout>
 			</row>
 			<row id="rwEmisor" visible="false">
@@ -82,7 +81,6 @@
 							<comboitem label="@load(each.text)" />
 						</template>
 					</combobox>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			<row id="rwProcesadora" visible="false">
@@ -97,7 +95,6 @@
 							<comboitem label="@load(each.pos1)" />
 						</template>
 					</combobox>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			<row id="rwNroTarjeta" visible="false">
@@ -106,7 +103,6 @@
 					<textbox value="@bind(vm.nvoFormaPago.tarjetaNumero)
 						@converter(vm.cnv.creditCard)" 
 						width="85px" sclass="formato-numerico"/>
-					<labelConstrain/>
 					<label value="últimos 4 dígitos"
 						style="color:red;font-style:oblique"/>
 				</hlayout>				
@@ -117,7 +113,6 @@
 					<textbox
 						value="@bind(vm.nvoFormaPago.tarjetaNumeroComprobante)"
 						width="85px" sclass="formato-numerico" />
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			<row id="rwCuotas" visible="false">
@@ -125,7 +120,6 @@
 				<hlayout>
 					<spinner
 						value="@bind(vm.nvoFormaPago.tarjetaCuotas)" width="85px" />
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			
@@ -153,7 +147,6 @@
 							<comboitem label="@load(each.text)" />
 						</template>
 					</combobox>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 						
@@ -161,7 +154,6 @@
 				<field value="Nro. Cheque:"/>
 				<hlayout sclass="z-valign-middle">
 				<textbox value="@bind(vm.nvoFormaPago.chequeNumero)"/>
-				<labelConstrain/>
 				</hlayout>				
 			</row>
 			
@@ -169,7 +161,6 @@
 				<field value="Librador:"/>
 				<hlayout>
 					<textbox value="@bind(vm.nvoFormaPago.chequeLibrador)" hflex="true"/>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			
@@ -213,7 +204,6 @@
 				<field value="Número:" />
 				<hlayout>
 					<textbox value="@bind(vm.nvoFormaPago.retencionNumero)"/>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			
@@ -221,7 +211,6 @@
 				<field value="Timbrado:" />
 				<hlayout>
 					<textbox value="@bind(vm.nvoFormaPago.retencionTimbrado)"/>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			
@@ -230,7 +219,6 @@
 				<hlayout>
 					<datebox value="@bind(vm.nvoFormaPago.retencionVencimiento)"
 						constraint="no past"/>
-					<labelConstrain/>
 				</hlayout>
 			</row>
 			
@@ -307,7 +295,6 @@
 				<hlayout>
 					<textbox value="@bind(vm.nvoFormaPago.reciboDebitoNro)" 
 						hflex="true" />
-					<labelConstrain />
 				</hlayout>				
 			</row>
 			

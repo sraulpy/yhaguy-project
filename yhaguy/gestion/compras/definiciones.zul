@@ -2,39 +2,484 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.definiciones.ComprasDefinicionesViewModel')"
 	height="100%">
 
-	<tabbox>
+	<tabbox vflex="true">
 		<tabs>
-			<tab label="Cuenta Contable" />
-			<tab label="Tipo de Cambio" />
-			<tab label="Ítem de Gasto" />
-			<tab label="Timbrados" />
-			<tab label="Talonarios" />
+			<tab label="Artículos" iconSclass="z-icon-check" />
+			<tab label="Segmentaciones" iconSclass="z-icon-edit" />
 		</tabs>
 
 		<tabpanels>
-			<tabpanel apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('ctvm') @init('com.yhaguy.gestion.compras.definiciones.CuentasContablesDefinicionesViewModel')">
-				<include
-					src="/yhaguy/gestion/compras/definicionesCuentasContables.zul">
-				</include>
+		
+			<!-- ARTICULOS -->
+			
+			<tabpanel>
+			
+			<vlayout vflex="true">
+				<hlayout vflex="true">
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="FAMILIAS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_familia.open(self, "after_start")'/>
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_familia.open(self, "after_start")'
+								disabled="@load(vm.selectedFamilia eq null ? 'true':'false')"/>
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.familias)"
+							selectedItem="@bind(vm.selectedFamilia)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="MARCAS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_marca.open(self, "after_start")' />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_marca.open(self, "after_start")'
+								disabled="@load(vm.selectedMarca eq null ? 'true':'false')"/>
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.marcas)"
+							selectedItem="@bind(vm.selectedMarca)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="SUB-MARCAS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.marcas)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+				</hlayout>
+				<div height="5px"></div>
+				<hlayout vflex="true">
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="GRUPOS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.grupos)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="SUB-GRUPOS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.subGrupos)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="APLICACIONES" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.aplicaciones)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+				</hlayout>
+				<div height="5px"></div>
+			</vlayout>			
 			</tabpanel>
-			<tabpanel apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('tcvm') @init('com.yhaguy.gestion.compras.definiciones.ComprasDefinicionesViewModel')">
-				<include
-					src="/yhaguy/gestion/compras/definicionesTipoCambio.zul">
-				</include>
+			
+			<!-- OTRAS SEGMENTACIONES -->
+			
+			<tabpanel>
+			
+			<vlayout vflex="true">
+				<hlayout vflex="true">
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="MODELOS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.modelos)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="PARTES" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.partes)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="PRESENTACIONES" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.presentaciones)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+				</hlayout>
+				<div height="5px"></div>
+				<hlayout vflex="true">
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="APIS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.apis)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="ÍNDICES DE CARGA" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.indicesCarga)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+					<vbox hflex="true" vflex="true">
+						<div height="3px"></div>
+						<label value="LADOS" class="label label-primary" style="margin-left:5px"></label>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="120px"
+								iconSclass="z-icon-plus" label=" Agregar" />
+							<space></space>
+							<button mold="bs"
+								sclass="btn-warning btn-sm" width="120px"
+								iconSclass="z-icon-edit" label=" Editar" />
+							<space></space>
+							<button mold="bs" sclass="btn-info btn-sm"
+								width="120px" iconSclass="z-icon-times" label=" Eliminar"
+								disabled="true" />
+						</hlayout>
+						<listbox sclass="small-list" vflex="true"
+							model="@load(vm.lados)">
+							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+							<listhead>
+								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</vbox>
+				</hlayout>
+				<div height="5px"></div>
+			</vlayout>
+			
 			</tabpanel>
-			<tabpanel apply="org.zkoss.bind.BindComposer"
-				viewModel="@id('agvm') @init('com.yhaguy.gestion.compras.definiciones.ArticuloGastoDefinicionesViewModel')"
-				height="500px">
-				<include
-					src="/yhaguy/gestion/compras/definicionesArticuloGasto.zul">
-				</include>
-			</tabpanel>
+			
 		</tabpanels>
 
 	</tabbox>
 	
+	
+	<popup id="pop_add_familia" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevaFamilia.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addFamilia', comp=pop_add_familia)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_familia" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedFamilia.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveFamilia', comp=pop_edit_familia)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_add_marca" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevaMarca.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addMarca', comp=pop_add_marca)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_marca" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedMarca.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveMarca', comp=pop_edit_marca)" />
+		</hlayout>
+	</popup>
+
 	<style>
 		.z-tab {width:150px}
 	</style>

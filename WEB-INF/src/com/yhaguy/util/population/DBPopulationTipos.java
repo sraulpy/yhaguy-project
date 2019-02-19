@@ -2908,10 +2908,6 @@ public class DBPopulationTipos {
 		// articulo Presentacion Default
 		ArticuloPresentacion ap = new ArticuloPresentacion();
 		ap.setDescripcion(Configuracion.ID_ARTICULO_PRESENTACION_DEFAULT);
-		ap.setObservacion("Sin Obs..");
-		ap.setUnidad(1);
-		ap.setPeso(0);
-		ap.setUnidadMedida(this.sinReferenciaTipo);
 		grabarDB(ap);
 
 	}

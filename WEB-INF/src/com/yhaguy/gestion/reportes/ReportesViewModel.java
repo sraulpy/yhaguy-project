@@ -9268,11 +9268,13 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void movimientosArticulos() {
 			try {					
-				Proveedor proveedor_ = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedor();
+				Proveedor proveedor_ = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				ArticuloFamilia familia_ = filtro.getFamilia_();
 				boolean todos = filtro.isTodos();
 				long idProveedor = proveedor_ != null ? proveedor_.getId() : 0;
+				long idFamilia = familia_ != null ? familia_.getId() : 0;
 				
 				if (proveedor_ == null) {
 					Clients.showNotification("Debe seleccionar un Proveedor..", 
@@ -9281,8 +9283,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
-				List<Object[]> ventas = rr.getVentasDetallado(desde, hasta, idProveedor);
-				List<Object[]> notasCredito = rr.getNotasCreditoDetallado(desde, hasta, idProveedor);
+				List<Object[]> ventas = rr.getVentasDetallado(desde, hasta, idProveedor, idFamilia);
+				List<Object[]> notasCredito = rr.getNotasCreditoDetallado(desde, hasta, idProveedor, idFamilia);
 				List<Object[]> articulos = new ArrayList<Object[]>();
 				
 				List<Object[]> values = new ArrayList<Object[]>();

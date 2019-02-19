@@ -8973,13 +8973,13 @@ public class RegisterDomain extends Register {
 	 * [19]:fecha
 	 * [20]:cliente.empresa.razonSocial
 	 */
-	public List<Object[]> getVentasDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
+	public List<Object[]> getVentasDetallado(Date desde, Date hasta, long idProveedor, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte,"
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
-				+ " d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion, "
-				+ " d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen,"
+				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion, "
+				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
 				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha, v.cliente.empresa.razonSocial"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
@@ -8988,10 +8988,13 @@ public class RegisterDomain extends Register {
 				if (idProveedor > 0) {
 					query += " and d.articulo.proveedor.id = " + idProveedor;
 				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
+				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
 				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
-				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
-				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
+				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
+				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
 				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha, v.cliente.empresa.razonSocial";
 		return this.hql(query);
 	}
@@ -9020,13 +9023,13 @@ public class RegisterDomain extends Register {
 	 * [19]:fecha
 	 * [20]:cliente.empresa.razonSocial
 	 */
-	public List<Object[]> getNotasCreditoDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
+	public List<Object[]> getNotasCreditoDetallado(Date desde, Date hasta, long idProveedor, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte,"
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
-				+ " d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion, "
-				+ " d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen,"
+				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion, "
+				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
 				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
@@ -9034,10 +9037,13 @@ public class RegisterDomain extends Register {
 				if (idProveedor > 0) {
 					query += " and d.articulo.proveedor.id = " + idProveedor;
 				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
+				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
 				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
-				" d.articulo.marca.descripcion, d.articulo.linea.descripcion, d.articulo.grupo.descripcion," + 
-				" d.articulo.aplicacion.descripcion, d.articulo.modelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
+				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
+				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
 				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, n.fechaEmision, n.cliente.empresa.razonSocial";
 		return this.hql(query);
 	}
@@ -9421,8 +9427,8 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getArticulos(long idProveedor) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.codigoProveedor, a.referencia, a.numeroParte,"
 				+ "	a.estado, a.descripcion, a.ochentaVeinte, a.abc, a.familia.descripcion,"
-				+ " a.marca.descripcion, a.linea.descripcion, a.grupo.descripcion,"
-				+ " a.aplicacion.descripcion, a.modelo.descripcion, a.peso, a.volumen, a.proveedor.empresa.razonSocial"
+				+ " a.marca.descripcion, a.articuloLinea.descripcion, a.articuloGrupo.descripcion,"
+				+ " a.articuloAplicacion.descripcion, a.articuloModelo.descripcion, a.peso, a.volumen, a.proveedor.empresa.razonSocial"
 				+ " from Articulo a where a.proveedor.id = " + idProveedor + " order by a.descripcion";
 		return this.hql(query);
 	}
