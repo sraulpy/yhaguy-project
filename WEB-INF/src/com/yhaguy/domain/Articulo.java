@@ -55,7 +55,7 @@ public class Articulo extends Domain {
 	
 	private ArticuloFamilia familia;
 	private ArticuloMarca marca;
-	private ArticuloMarca articuloSubMarca;
+	private ArticuloSubMarca articuloSubMarca;
 	private ArticuloGrupo articuloGrupo;
 	private ArticuloLinea articuloLinea;
 	private ArticuloAplicacion articuloAplicacion;
@@ -546,14 +546,6 @@ public class Articulo extends Domain {
 		this.pisada = pisada;
 	}
 
-	public ArticuloMarca getArticuloSubMarca() {
-		return articuloSubMarca;
-	}
-
-	public void setArticuloSubMarca(ArticuloMarca articuloSubMarca) {
-		this.articuloSubMarca = articuloSubMarca;
-	}
-
 	public ArticuloPresentacion getPresentacion() {
 		return presentacion;
 	}
@@ -568,5 +560,13 @@ public class Articulo extends Domain {
 
 	public void setUnidadesCaja(int unidadesCaja) {
 		this.unidadesCaja = unidadesCaja;
+	}
+
+	public ArticuloSubMarca getArticuloSubMarca() {
+		return articuloSubMarca;
+	}
+
+	public void setArticuloSubMarca(ArticuloSubMarca articuloSubMarca) {
+		this.articuloSubMarca = articuloSubMarca;
 	}
 }

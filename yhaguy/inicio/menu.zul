@@ -14,6 +14,7 @@
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'Recibos')}" />
 				<zk forEach="${vm.menuItem(self,'Pagos')}" />
+				<zk forEach="${vm.menuItem(self,'TesakaRetenciones')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'Cheques')}" />
 				<zk forEach="${vm.menuItem(self,'ChequesTerceros')}" />	
@@ -43,12 +44,8 @@
 				<zk forEach="${vm.menuItem(self,'OrdenPedidoGasto')}" />
 				<zk forEach="${vm.menuItem(self,'ExploradorGastos')}" />
 				<zk forEach="${vm.menuItem(self,'OrdenCompra')}" />
-				<menuseparator />
-				
-				<zk forEach="${vm.menuItem(self,'TesakaRetenciones')}" />
-				
-				<zk
-					forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
+				<menuseparator />				
+				<zk forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
 			</menupopup>
 		</menu>
 

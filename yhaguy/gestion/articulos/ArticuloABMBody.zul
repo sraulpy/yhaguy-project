@@ -170,7 +170,7 @@
 											<vlayout spacing="0">
 												<field value="Sub Marca" />
 												<combobox
-													model="@load(vm.marcas)"
+													model="@load(vm.subMarcas)"
 													value="@load(vm.dto.articuloSubMarca.descripcion)"
 													selectedItem="@bind(vm.dto.articuloSubMarca)" hflex="true"
 													style="color:#999;font-weight:bold">
@@ -370,7 +370,7 @@
 								</vlayout>
 								<separator orient="vertical" bar="true" vflex="true" style="background:#428bca" sclass="rounded" width="1px"></separator>
 								<vlayout vflex="true" hflex="true" spacing="0">
-									<div></div>
+									<div height="5px"></div>
 									<label value="OTROS DATOS" class="label label-primary"></label>
 								<grid sclass="vgrid" hflex="true">
 									<columns>

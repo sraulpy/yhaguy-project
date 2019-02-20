@@ -42,6 +42,7 @@ import com.yhaguy.domain.ArticuloPresentacion;
 import com.yhaguy.domain.ArticuloProcedencia;
 import com.yhaguy.domain.ArticuloSubGrupo;
 import com.yhaguy.domain.ArticuloSubLinea;
+import com.yhaguy.domain.ArticuloSubMarca;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
@@ -525,6 +526,15 @@ public class ArticuloControlBody extends BodyApp {
 	public List<ArticuloMarca> getMarcas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<ArticuloMarca> list = rr.getMarcas();
+		return list;
+	}
+	
+	/**
+	 * @return las marcas..
+	 */
+	public List<ArticuloSubMarca> getSubMarcas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<ArticuloSubMarca> list = rr.getObjects(ArticuloSubMarca.class.getName());
 		return list;
 	}
 	

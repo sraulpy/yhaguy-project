@@ -5,7 +5,7 @@
 	<tabbox vflex="true">
 		<tabs>
 			<tab label="Artículos" iconSclass="z-icon-check" />
-			<tab label="Segmentaciones" iconSclass="z-icon-edit" />
+			<tab label="Segmentaciones" iconSclass="z-icon-edit" disabled="true"/>
 		</tabs>
 
 		<tabpanels>
@@ -94,18 +94,23 @@
 						<hlayout sclass="button-container">
 							<button mold="bs"
 								sclass="btn-primary btn-sm" width="120px"
-								iconSclass="z-icon-plus" label=" Agregar" />
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_submarca.open(self, "after_start")' />
 							<space></space>
 							<button mold="bs"
 								sclass="btn-warning btn-sm" width="120px"
-								iconSclass="z-icon-edit" label=" Editar" />
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_submarca.open(self, "after_start")'
+								disabled="@load(vm.selectedSubMarca eq null ? 'true':'false')"/>
 							<space></space>
 							<button mold="bs" sclass="btn-info btn-sm"
 								width="120px" iconSclass="z-icon-times" label=" Eliminar"
 								disabled="true" />
 						</hlayout>
 						<listbox sclass="small-list" vflex="true"
-							model="@load(vm.marcas)">
+							model="@load(vm.subMarcas)"
+							selectedItem="@bind(vm.selectedSubMarca)"
+							emptyMessage="SIN ÍTEMS..">
 							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 							<listhead>
 								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
@@ -129,18 +134,22 @@
 						<hlayout sclass="button-container">
 							<button mold="bs"
 								sclass="btn-primary btn-sm" width="120px"
-								iconSclass="z-icon-plus" label=" Agregar" />
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_grupo.open(self, "after_start")' />
 							<space></space>
 							<button mold="bs"
 								sclass="btn-warning btn-sm" width="120px"
-								iconSclass="z-icon-edit" label=" Editar" />
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_grupo.open(self, "after_start")'
+								disabled="@load(vm.selectedGrupo eq null ? 'true':'false')"/>
 							<space></space>
 							<button mold="bs" sclass="btn-info btn-sm"
 								width="120px" iconSclass="z-icon-times" label=" Eliminar"
 								disabled="true" />
 						</hlayout>
 						<listbox sclass="small-list" vflex="true"
-							model="@load(vm.grupos)">
+							model="@load(vm.grupos)"
+							selectedItem="@bind(vm.selectedGrupo)">
 							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 							<listhead>
 								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
@@ -161,18 +170,22 @@
 						<hlayout sclass="button-container">
 							<button mold="bs"
 								sclass="btn-primary btn-sm" width="120px"
-								iconSclass="z-icon-plus" label=" Agregar" />
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_subgrupo.open(self, "after_start")' />
 							<space></space>
 							<button mold="bs"
 								sclass="btn-warning btn-sm" width="120px"
-								iconSclass="z-icon-edit" label=" Editar" />
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_subgrupo.open(self, "after_start")'
+								disabled="@load(vm.selectedSubGrupo eq null ? 'true':'false')"/>
 							<space></space>
 							<button mold="bs" sclass="btn-info btn-sm"
 								width="120px" iconSclass="z-icon-times" label=" Eliminar"
 								disabled="true" />
 						</hlayout>
 						<listbox sclass="small-list" vflex="true"
-							model="@load(vm.subGrupos)">
+							model="@load(vm.subGrupos)"
+							selectedItem="@bind(vm.selectedSubGrupo)">
 							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 							<listhead>
 								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
@@ -193,18 +206,22 @@
 						<hlayout sclass="button-container">
 							<button mold="bs"
 								sclass="btn-primary btn-sm" width="120px"
-								iconSclass="z-icon-plus" label=" Agregar" />
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_aplicacion.open(self, "after_start")' />
 							<space></space>
 							<button mold="bs"
 								sclass="btn-warning btn-sm" width="120px"
-								iconSclass="z-icon-edit" label=" Editar" />
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_aplicacion.open(self, "after_start")'
+								disabled="@load(vm.selectedAplicacion eq null ? 'true':'false')"/>
 							<space></space>
 							<button mold="bs" sclass="btn-info btn-sm"
 								width="120px" iconSclass="z-icon-times" label=" Eliminar"
 								disabled="true" />
 						</hlayout>
 						<listbox sclass="small-list" vflex="true"
-							model="@load(vm.aplicaciones)">
+							model="@load(vm.aplicaciones)"
+							selectedItem="@bind(vm.selectedAplicacion)">
 							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 							<listhead>
 								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
@@ -477,6 +494,94 @@
 			<button mold="bs" sclass="btn-success btn-xs" width="50px"
 				iconSclass="z-icon-check" vflex="true"
 				onClick="@command('saveMarca', comp=pop_edit_marca)" />
+		</hlayout>
+	</popup>
+
+	<popup id="pop_add_submarca" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevaSubMarca.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addSubMarca', comp=pop_add_submarca)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_submarca" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedSubMarca.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveSubMarca', comp=pop_edit_submarca)" />
+		</hlayout>
+	</popup>
+
+	<popup id="pop_add_grupo" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevoGrupo.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addGrupo', comp=pop_add_grupo)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_grupo" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedGrupo.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveGrupo', comp=pop_edit_grupo)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_add_subgrupo" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevoSubGrupo.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addSubGrupo', comp=pop_add_subgrupo)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_subgrupo" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedSubGrupo.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveSubGrupo', comp=pop_edit_subgrupo)" />
+		</hlayout>
+	</popup>
+
+	<popup id="pop_add_aplicacion" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevaAplicacion.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addAplicacion', comp=pop_add_aplicacion)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_aplicacion" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedAplicacion.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveAplicacion', comp=pop_edit_aplicacion)" />
 		</hlayout>
 	</popup>
 

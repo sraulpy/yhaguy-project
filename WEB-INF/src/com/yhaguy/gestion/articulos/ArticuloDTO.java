@@ -11,6 +11,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPresentacion;
+import com.yhaguy.domain.ArticuloSubMarca;
 
 @SuppressWarnings("serial")
 public class ArticuloDTO extends DTO {
@@ -66,7 +67,7 @@ public class ArticuloDTO extends DTO {
 	private List<MyArray> precios = new ArrayList<MyArray>();
 	
 	private ArticuloMarca marca;
-	private ArticuloMarca articuloSubMarca;
+	private ArticuloSubMarca articuloSubMarca;
 	private ArticuloFamilia familia_;
 	private ArticuloPresentacion presentacion;
 	
@@ -472,14 +473,6 @@ public class ArticuloDTO extends DTO {
 		this.pisada = pisada;
 	}
 
-	public ArticuloMarca getArticuloSubMarca() {
-		return articuloSubMarca;
-	}
-
-	public void setArticuloSubMarca(ArticuloMarca articuloSubMarca) {
-		this.articuloSubMarca = articuloSubMarca;
-	}
-
 	public ArticuloPresentacion getPresentacion() {
 		return presentacion;
 	}
@@ -496,4 +489,11 @@ public class ArticuloDTO extends DTO {
 		this.unidadesCaja = unidadesCaja;
 	}
 
+	public ArticuloSubMarca getArticuloSubMarca() {
+		return articuloSubMarca;
+	}
+
+	public void setArticuloSubMarca(ArticuloSubMarca articuloSubMarca) {
+		this.articuloSubMarca = articuloSubMarca;
+	}
 }

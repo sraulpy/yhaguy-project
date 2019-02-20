@@ -21,6 +21,7 @@ import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloModelo;
 import com.yhaguy.domain.ArticuloPresentacion;
 import com.yhaguy.domain.ArticuloSubGrupo;
+import com.yhaguy.domain.ArticuloSubMarca;
 import com.yhaguy.domain.RegisterDomain;
 
 public class ComprasDefinicionesViewModel extends SimpleViewModel {
@@ -30,6 +31,18 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 	
 	private ArticuloMarca selectedMarca;
 	private ArticuloMarca nuevaMarca = new ArticuloMarca();
+	
+	private ArticuloSubMarca selectedSubMarca;
+	private ArticuloSubMarca nuevaSubMarca = new ArticuloSubMarca();
+	
+	private ArticuloGrupo selectedGrupo;
+	private ArticuloGrupo nuevoGrupo = new ArticuloGrupo();
+	
+	private ArticuloSubGrupo selectedSubGrupo;
+	private ArticuloSubGrupo nuevoSubGrupo = new ArticuloSubGrupo();
+
+	private ArticuloAplicacion selectedAplicacion;
+	private ArticuloAplicacion nuevaAplicacion = new ArticuloAplicacion();
 	
 	@Init(superclass = true)
 	public void init() {
@@ -98,6 +111,121 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 		Clients.showNotification("REGISTRO MODIFICADO..");
 	}
 	
+	@Command
+	@NotifyChange({ "subMarcas", "nuevaSubMarca", "selectedSubMarca" })
+	public void addSubMarca(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaSubMarca.getDescripcion() == null || this.nuevaSubMarca.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaSubMarca.setDescripcion(this.nuevaSubMarca.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevaSubMarca, this.getLoginNombre());
+		this.nuevaSubMarca = new ArticuloSubMarca();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "subMarcas", "nuevaSubMarca", "selectedSubMarca" })
+	public void saveSubMarca(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedSubMarca.getDescripcion() == null || this.selectedSubMarca.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedSubMarca.setDescripcion(this.selectedSubMarca.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedSubMarca, this.getLoginNombre());
+		this.selectedSubMarca = new ArticuloSubMarca();
+		this.selectedSubMarca = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "grupos", "nuevoGrupo", "selectedGrupo" })
+	public void addGrupo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevoGrupo.getDescripcion() == null || this.nuevoGrupo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevoGrupo.setDescripcion(this.nuevoGrupo.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevoGrupo, this.getLoginNombre());
+		this.nuevoGrupo = new ArticuloGrupo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "grupos", "nuevoGrupo", "selectedGrupo" })
+	public void saveGrupo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedGrupo.getDescripcion() == null || this.selectedGrupo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedGrupo.setDescripcion(this.selectedGrupo.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedGrupo, this.getLoginNombre());
+		this.selectedGrupo = new ArticuloGrupo();
+		this.selectedGrupo = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "subGrupos", "nuevoSubGrupo", "selectedSubGrupo" })
+	public void addSubGrupo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevoSubGrupo.getDescripcion() == null || this.nuevoSubGrupo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevoSubGrupo.setDescripcion(this.nuevoSubGrupo.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevoSubGrupo, this.getLoginNombre());
+		this.nuevoSubGrupo = new ArticuloSubGrupo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "subGrupos", "nuevoSubGrupo", "selectedSubGrupo" })
+	public void saveSubGrupo(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedSubGrupo.getDescripcion() == null || this.selectedSubGrupo.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedSubGrupo.setDescripcion(this.selectedSubGrupo.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedSubGrupo, this.getLoginNombre());
+		this.selectedSubGrupo = new ArticuloSubGrupo();
+		this.selectedSubGrupo = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "aplicaciones", "nuevaAplicacion", "selectedAplicacion" })
+	public void addAplicacion(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaAplicacion.getDescripcion() == null || this.nuevaAplicacion.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaAplicacion.setDescripcion(this.nuevaAplicacion.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevaAplicacion, this.getLoginNombre());
+		this.nuevaAplicacion = new ArticuloAplicacion();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "aplicaciones", "nuevaAplicacion", "selectedAplicacion" })
+	public void saveAplicacion(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedAplicacion.getDescripcion() == null || this.selectedAplicacion.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedAplicacion.setDescripcion(this.selectedAplicacion.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedAplicacion, this.getLoginNombre());
+		this.selectedAplicacion = new ArticuloAplicacion();
+		this.selectedAplicacion = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
 	
 	/**
 	 * GETS / SETS
@@ -113,6 +241,12 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 	public List<ArticuloMarca> getMarcas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getObjects(ArticuloMarca.class.getName());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ArticuloSubMarca> getSubMarcas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(ArticuloSubMarca.class.getName());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -199,5 +333,69 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 
 	public void setNuevaMarca(ArticuloMarca nuevaMarca) {
 		this.nuevaMarca = nuevaMarca;
+	}
+
+	public ArticuloSubMarca getSelectedSubMarca() {
+		return selectedSubMarca;
+	}
+
+	public void setSelectedSubMarca(ArticuloSubMarca selectedSubMarca) {
+		this.selectedSubMarca = selectedSubMarca;
+	}
+
+	public ArticuloSubMarca getNuevaSubMarca() {
+		return nuevaSubMarca;
+	}
+
+	public void setNuevaSubMarca(ArticuloSubMarca nuevaSubMarca) {
+		this.nuevaSubMarca = nuevaSubMarca;
+	}
+
+	public ArticuloGrupo getSelectedGrupo() {
+		return selectedGrupo;
+	}
+
+	public void setSelectedGrupo(ArticuloGrupo selectedGrupo) {
+		this.selectedGrupo = selectedGrupo;
+	}
+
+	public ArticuloGrupo getNuevoGrupo() {
+		return nuevoGrupo;
+	}
+
+	public void setNuevoGrupo(ArticuloGrupo nuevoGrupo) {
+		this.nuevoGrupo = nuevoGrupo;
+	}
+
+	public ArticuloSubGrupo getSelectedSubGrupo() {
+		return selectedSubGrupo;
+	}
+
+	public void setSelectedSubGrupo(ArticuloSubGrupo selectedSubGrupo) {
+		this.selectedSubGrupo = selectedSubGrupo;
+	}
+
+	public ArticuloSubGrupo getNuevoSubGrupo() {
+		return nuevoSubGrupo;
+	}
+
+	public void setNuevoSubGrupo(ArticuloSubGrupo nuevoSubGrupo) {
+		this.nuevoSubGrupo = nuevoSubGrupo;
+	}
+
+	public ArticuloAplicacion getSelectedAplicacion() {
+		return selectedAplicacion;
+	}
+
+	public void setSelectedAplicacion(ArticuloAplicacion selectedAplicacion) {
+		this.selectedAplicacion = selectedAplicacion;
+	}
+
+	public ArticuloAplicacion getNuevaAplicacion() {
+		return nuevaAplicacion;
+	}
+
+	public void setNuevaAplicacion(ArticuloAplicacion nuevaAplicacion) {
+		this.nuevaAplicacion = nuevaAplicacion;
 	}
 }

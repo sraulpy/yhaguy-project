@@ -55,8 +55,8 @@
 		<many-to-one name="marca" class="com.yhaguy.domain.ArticuloMarca"
 			column="id_marca" lazy="false" />
 			
-		<many-to-one name="articuloSubMarca" class="com.yhaguy.domain.ArticuloMarca"
-			column="id_submarca" lazy="false" />
+		<many-to-one name="articuloSubMarca" class="com.yhaguy.domain.ArticuloSubMarca"
+			column="id_sub_marca" lazy="false" />
 			
 		<many-to-one name="articuloGrupo" class="com.yhaguy.domain.ArticuloGrupo"
 			column="id_grupo" lazy="false" />
