@@ -155,7 +155,7 @@
 			<button mold="bs" sclass="btn-warning btn-sm"
 				iconSclass="z-icon-reply"
 				tooltiptext="Reasignar Saldo.." visible="@load(vm.tipoCliente)" 
-				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedFilter ne 'Pendientes' ? 'true' : vm.selectedItem_ eq null)" />
+				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedItem_ eq null)" />
 			<button mold="bs" sclass="btn-info btn-sm"
 				iconSclass="z-icon-pencil" visible="@load(vm.tipoCliente)"  />
 			<button mold="bs" sclass="btn-primary btn-sm"
