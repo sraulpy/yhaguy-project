@@ -163,8 +163,7 @@
 				<button mold="bs" sclass="btn-info btn-sm"
 					width="100px" iconSclass="z-icon-plus-circle"
 					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
-					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" 
-					visible="@load(vm.dato.reciboDTO.ordenPago)"/>
+					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" />
 			</hlayout>
 
 			<listbox height="355px"
