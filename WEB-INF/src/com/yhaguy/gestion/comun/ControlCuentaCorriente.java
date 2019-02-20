@@ -229,9 +229,11 @@ public class ControlCuentaCorriente {
 		ctm.setSaldo(0);
 		
 		for (ReciboDetalle det : cobro.getDetalles()) {
-			CtaCteEmpresaMovimiento ctmVenta = det.getMovimiento();
-			ctmVenta.setSaldo(ctmVenta.getSaldo() - det.getMontoGs());
-			rr.saveObject(ctmVenta, user);
+			if (det.getMovimiento() != null) {
+				CtaCteEmpresaMovimiento ctmVenta = det.getMovimiento();
+				ctmVenta.setSaldo(ctmVenta.getSaldo() - det.getMontoGs());
+				rr.saveObject(ctmVenta, user);
+			}
 		}	
 		rr.saveObject(ctm, user);
 		ControlCuentaCorriente.addRecaudacionCentral(idRecibo, user);

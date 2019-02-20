@@ -167,13 +167,15 @@ public class RecibosViewModel extends SimpleViewModel {
 			my.setPos6(recibo.getNumeroPlanilla());
 			my.setPos7(recibo.getTipoMovimiento().getDescripcion());			
 			for (ReciboDetalle det : recibo.getDetalles()) {
-				dets.add(new MyArray(this.m.dateToString(det.getMovimiento()
-						.getFechaEmision(), Misc.DD_MM_YYYY), this.m
-						.dateToString(
-								det.getMovimiento().getFechaVencimiento(),
-								Misc.DD_MM_YYYY), det.getMovimiento()
-						.getNroComprobante(), det.getMontoGs(), det
-						.getMontoGs()));
+				if (det.getMovimiento() != null) {
+					dets.add(new MyArray(this.m.dateToString(det.getMovimiento()
+							.getFechaEmision(), Misc.DD_MM_YYYY), this.m
+							.dateToString(
+									det.getMovimiento().getFechaVencimiento(),
+									Misc.DD_MM_YYYY), det.getMovimiento()
+							.getNroComprobante(), det.getMontoGs(), det
+							.getMontoGs()));
+				}				
 			}
 			for (ReciboFormaPago fp : recibo.getFormasPago()) {
 				fpgs.add(new MyArray(fp.getDescripcion(), fp.getMontoGs()));
