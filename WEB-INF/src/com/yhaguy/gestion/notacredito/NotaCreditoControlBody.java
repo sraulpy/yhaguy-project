@@ -56,6 +56,8 @@ import net.sf.jasperreports.engine.JRField;
 
 public class NotaCreditoControlBody extends BodyApp {
 	
+	static final String ADD_APLICACION = "/yhaguy/gestion/notacredito/aplicacion.zul";
+	
 	final static String TIPO_PARAM  = "tipo";
 	final static String TIPO_VENTA  = "venta";
 	final static String TIPO_COMPRA = "compra";
@@ -216,6 +218,13 @@ public class NotaCreditoControlBody extends BodyApp {
 	public void buscarFacturas() throws Exception {
 		if (this.dto.isNotaCreditoVenta()) {
 			this.buscarVentas();
+			/**
+			if (this.dto.isMotivoDescuento()) {
+				this.win = (Window) Executions.createComponents(ADD_APLICACION, this.mainComponent, null);
+				this.win.doModal();
+			} else {
+				
+			}**/
 		} else {
 			if (this.mensajeSiNo("Factura de compra de mercaderías..?")) {
 				this.buscarCompras();

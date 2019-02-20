@@ -222,16 +222,17 @@ public class ControlCuentaCorriente {
 		ctm.setIdEmpresa(cobro.getCliente().getIdEmpresa());
 		ctm.setIdMovimientoOriginal(cobro.getId());
 		ctm.setIdVendedor(0);
-		ctm.setImporteOriginal(cobro.getTotalImporteGs());
-		ctm.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		ctm.setImporteOriginal(cobro.isMonedaLocal() ? cobro.getTotalImporteGs() : cobro.getTotalImporteDs());
+		ctm.setMoneda(cobro.getMoneda());
 		ctm.setNroComprobante(cobro.getNumero());
 		ctm.setSucursal(cobro.getSucursal());
 		ctm.setSaldo(0);
 		
 		for (ReciboDetalle det : cobro.getDetalles()) {
 			if (det.getMovimiento() != null) {
+				double monto = cobro.isMonedaLocal() ? det.getMontoGs() : det.getMontoDs();
 				CtaCteEmpresaMovimiento ctmVenta = det.getMovimiento();
-				ctmVenta.setSaldo(ctmVenta.getSaldo() - det.getMontoGs());
+				ctmVenta.setSaldo(ctmVenta.getSaldo() - monto);
 				rr.saveObject(ctmVenta, user);
 			}
 		}	

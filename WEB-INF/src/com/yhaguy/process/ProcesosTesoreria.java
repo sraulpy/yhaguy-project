@@ -1287,9 +1287,9 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosVentaCredito(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
 			//ProcesosTesoreria.depurarSaldosNotaCredito();
 			//ProcesosTesoreria.depurarSaldosVentaCreditonNegativo(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
-			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
+			ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
-			ProcesosTesoreria.depurarSaldosPorVenta(59103);
+			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

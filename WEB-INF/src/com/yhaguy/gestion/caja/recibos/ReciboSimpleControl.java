@@ -17,7 +17,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Popup;
@@ -902,7 +901,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 	
 	@Command @NotifyChange("*")
 	public void seleccionarFormaPago() throws Exception {
-		Clients.showNotification(this.nvoFormaPago.getMoneda().getSigla());
 		this.reloadFormaPago(this.nvoFormaPago);
 		String siglaFP = this.getNvoFormaPago().getTipo().getSigla();
 		String siglaFPCH = Configuracion.SIGLA_FORMA_PAGO_CHEQUE_PROPIO;

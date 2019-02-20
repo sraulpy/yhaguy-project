@@ -22,11 +22,11 @@
 			
 			<row>
 				<field value="Moneda:"/>
-				<combobox model="@load(vm.dato.monedas_)" width="180px"
+				<combobox model="@load(vm.dato.monedas_)" hflex="true"
 					selectedItem="@bind(vm.nvoFormaPago.moneda)" 
 					onSelect="@command('setTipoCambio')"
 					value="@load(vm.nvoFormaPago.moneda.text.toUpperCase())"
-					instant="true" hflex="true">
+					instant="true">
 					<template name="model">
 						<comboitem label="@load(each.text)"/>
 					</template>
@@ -102,7 +102,7 @@
 				<hlayout>
 					<textbox value="@bind(vm.nvoFormaPago.tarjetaNumero)
 						@converter(vm.cnv.creditCard)" 
-						width="85px" sclass="formato-numerico"/>
+						hflex="true" sclass="formato-numerico"/>
 					<label value="últimos 4 dígitos"
 						style="color:red;font-style:oblique"/>
 				</hlayout>				
@@ -112,14 +112,14 @@
 				<hlayout>
 					<textbox
 						value="@bind(vm.nvoFormaPago.tarjetaNumeroComprobante)"
-						width="85px" sclass="formato-numerico" />
+						hflex="true" sclass="formato-numerico" />
 				</hlayout>
 			</row>
 			<row id="rwCuotas" visible="false">
 				<field value="Cuotas:"/>
 				<hlayout>
 					<spinner
-						value="@bind(vm.nvoFormaPago.tarjetaCuotas)" width="85px" />
+						value="@bind(vm.nvoFormaPago.tarjetaCuotas)" hflex="true" />
 				</hlayout>
 			</row>
 			
@@ -127,13 +127,13 @@
 						
 			<row id="rwBanco" visible="false">
 				<field value="Cuenta Banco:"/>
-				<textbox readonly="true" width="175px"
+				<textbox readonly="true" hflex="true"
 					value="@load(vm.nvoFormaPago.bancoCta.banco.pos1)"/>
 			</row>
 			
 			<row id="rwChequera" visible="false">
 				<field value="Chequera:"/>
-				<textbox readonly="true" width="175px"
+				<textbox readonly="true" hflex="true"
 					value="@load(vm.dato.selectedChequera.pos2)"/>
 			</row>
 			
@@ -153,7 +153,7 @@
 			<row id="rwNroCheque" visible="false">
 				<field value="Nro. Cheque:"/>
 				<hlayout sclass="z-valign-middle">
-				<textbox value="@bind(vm.nvoFormaPago.chequeNumero)"/>
+				<textbox value="@bind(vm.nvoFormaPago.chequeNumero)" hflex="true" />
 				</hlayout>				
 			</row>
 			
@@ -203,14 +203,14 @@
 			<row id="rwNroRetencion" visible="false">
 				<field value="Número:" />
 				<hlayout>
-					<textbox value="@bind(vm.nvoFormaPago.retencionNumero)"/>
+					<textbox value="@bind(vm.nvoFormaPago.retencionNumero)" hflex="true" />
 				</hlayout>
 			</row>
 			
 			<row id="rwTimbradoRetencion" visible="false">
 				<field value="Timbrado:" />
 				<hlayout>
-					<textbox value="@bind(vm.nvoFormaPago.retencionTimbrado)"/>
+					<textbox value="@bind(vm.nvoFormaPago.retencionTimbrado)" hflex="true" />
 				</hlayout>
 			</row>
 			

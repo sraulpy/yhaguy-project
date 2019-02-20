@@ -361,7 +361,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 				dto,
 				"articuloPresentacion",
 				com.yhaguy.domain.ArticuloPresentacion.class.getName(),
-				new String[] { "descripcion", "unidad", "peso", "unidadMedida" });
+				new String[] { "descripcion" });
 
 		utilDomainToListaMyArray(dto, "departamentos",
 				com.yhaguy.domain.DepartamentoApp.class.getName(),

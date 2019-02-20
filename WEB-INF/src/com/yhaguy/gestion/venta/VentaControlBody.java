@@ -1631,7 +1631,8 @@ public class VentaControlBody extends BodyApp {
 					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MARKETING)
 					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.RETAIL_SHOP)
 					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)) {
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)
+					&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL) {
 				double costoGs = art.getCostoGs();
 				double importeGs = item.getImporteGsSinIva();
 				if (importeGs <= costoGs) {
