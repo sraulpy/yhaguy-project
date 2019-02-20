@@ -148,10 +148,6 @@
 			<button mold="bs" sclass="btn-success btn-sm" width="150px"
 				iconSclass="z-icon-print" onClick='pop_impresion.open(self, "after_end")'
 				label=" Imprimir Cuenta" />
-			<button mold="bs" sclass="btn-success btn-sm"
-				iconSclass="z-icon-refresh"
-				tooltiptext="Actualizar Saldos.." visible="false" 
-				onClick="@command('depurarSaldos')" />
 			<button mold="bs" sclass="btn-warning btn-sm"
 				iconSclass="z-icon-reply"
 				tooltiptext="Reasignar Saldo.." visible="@load(vm.tipoCliente)" 
@@ -184,6 +180,7 @@
 				<listheader label="@load(vm.columnSaldo)" align="right" sort="auto(pos6)" />
 				<listheader label="Detalle" align="center" width="70px" />
 				<listheader label="Aplicar" align="center" width="70px" visible="@load(vm.selectedFilter eq 'Pendientes')" />
+				<listheader iconSclass="z-icon-refresh" tooltiptext="actualizar saldo.." align="center" width="40px" />
 			</listhead>
 			<auxhead>
 				<auxheader/>
@@ -200,6 +197,7 @@
 					<textbox sclass="filter" hflex="true"
 						value="@bind(vm.numeroImportacion)" instant="true"></textbox>
 				</auxheader>
+				<auxheader/>
 				<auxheader/>
 				<auxheader/>
 				<auxheader/>
@@ -232,6 +230,11 @@
 					<listcell>
 						<a label="aplic."
 							onClick="@command('verItems_', item=each, parent=self)" />
+					</listcell>
+					<listcell>
+						<a iconSclass="z-icon-refresh"
+							tooltiptext="Actualizar Saldo.."
+							onClick="@command('depurarSaldos', item=each)" />
 					</listcell>
 				</listitem>
 			</template>

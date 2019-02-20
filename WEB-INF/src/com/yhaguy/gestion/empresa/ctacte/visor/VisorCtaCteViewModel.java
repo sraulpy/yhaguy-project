@@ -555,15 +555,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	
 	@Command
 	@NotifyChange("movimientos")
-	public void depurarSaldos() throws Exception {
+	public void depurarSaldos(@BindingParam("item") MyArray item) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		for (MyArray item : this.getMovimientos()) {
-			String sigla = (String) item.getPos8();
-			if (this.isVenta(sigla)) {
-				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(item.getId().longValue());
-				ControlCuentaCorriente.recalcularSaldoCtaCte(ctacte);
-			}
-		}
+		String sigla = (String) item.getPos8();
+		if (this.isVenta(sigla)) {
+			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(item.getId().longValue());
+			ControlCuentaCorriente.recalcularSaldoCtaCte(ctacte);
+		}	
 		Clients.showNotification("SALDOS ACTUALIZADOS..");
 	}
 	
