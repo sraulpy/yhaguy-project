@@ -65,7 +65,7 @@
 	</hlayout>
 	
 	<listbox sclass="small-list"
-		emptyMessage="SELECCIONE UN CLIENTE.." height="400px"
+		emptyMessage="SELECCIONE UN CLIENTE.." height="350px"
 		model="@load(vm.saldos)"
 		selectedItem="@bind(vm.selectedItem)"
 		id="listFac"
