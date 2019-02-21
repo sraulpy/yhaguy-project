@@ -7131,7 +7131,24 @@ public class RegisterDomain extends Register {
 				+ " and e.tipoMovimiento.sigla = '" + siglaTm + "'"
 				+ " and e.tipoCaracterMovimiento.sigla = '" + caracter + "'"
 				+ " and e.moneda.sigla = '" + siglaMoneda  + "'"
-				+ " and e.saldo > 0 and e.idEmpresa = " + idEmpresa;
+				+ " and e.saldo > 0 and e.idEmpresa = " + idEmpresa
+				+ " order by e.fechaEmision";
+		List<CtaCteEmpresaMovimiento> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return el saldo en cta cte..
+	 */
+	public List<CtaCteEmpresaMovimiento> getSaldosCtaCte(long idEmpresa, String caracter, String siglaTm, String siglaMoneda, Date desde) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String query = "select e from CtaCteEmpresaMovimiento e where e.anulado = 'FALSE'"
+				+ " and e.tipoMovimiento.sigla = '" + siglaTm + "'"
+				+ " and e.tipoCaracterMovimiento.sigla = '" + caracter + "'"
+				+ " and e.moneda.sigla = '" + siglaMoneda  + "'"
+				+ " and e.fechaEmision >= '" + desde_ + "'"
+				+ " and e.saldo > 0 and e.idEmpresa = " + idEmpresa
+				+ " order by e.fechaEmision";
 		List<CtaCteEmpresaMovimiento> list = this.hql(query);
 		return list;
 	}
@@ -9517,17 +9534,6 @@ public class RegisterDomain extends Register {
 	}
 	
 	public static void main(String[] args) {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			List<ArticuloGrupo> arts = rr.getObjects(ArticuloGrupo.class.getName());
-			for (ArticuloGrupo grupo : arts) {
-				ArticuloSubGrupo sg = new ArticuloSubGrupo();
-				sg.setDescripcion(grupo.getDescripcion());
-				rr.saveObject(sg, "sys");
-				System.out.println(sg.getDescripcion());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 }

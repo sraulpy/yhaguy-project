@@ -28,6 +28,8 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	private Tipo moneda;
 	private Set<CtaCteImputacion> imputaciones = new HashSet<CtaCteImputacion>();
 	private SucursalApp sucursal;
+	
+	private double aux = 0;
 
 	private boolean cerrado = false;
 	private boolean anulado = false;
@@ -364,5 +366,13 @@ public class CtaCteEmpresaMovimiento extends Domain {
 
 	public void setTipoCambio(double tipoCambio) {
 		this.tipoCambio = tipoCambio;
+	}
+
+	public double getAux() {
+		return aux;
+	}
+
+	public void setAux(double aux) {
+		this.aux = aux;
 	}
 }

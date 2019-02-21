@@ -1,7 +1,7 @@
 <zk>
 	<menubar id="menubar" visible="@load(vm.menuVisible)">
 
-		<menu label=" Tesorería" iconSclass="z-icon-briefcase">
+		<menu label=" Finanzas" iconSclass="z-icon-briefcase">
 			<menupopup sclass="rounded">
 
 				<zk forEach="${vm.menuItem(self,'Caja')}" />
@@ -11,6 +11,7 @@
 				<zk forEach="${vm.menuItem(self,'CuentasCobrar')}" />
 				<zk forEach="${vm.menuItem(self,'CuentasPagar')}" />
 				<zk forEach="${vm.menuItem(self,'GestionCobro')}" />
+				<zk forEach="${vm.menuItem(self,'AuditoriaSaldos')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'Recibos')}" />
 				<zk forEach="${vm.menuItem(self,'Pagos')}" />

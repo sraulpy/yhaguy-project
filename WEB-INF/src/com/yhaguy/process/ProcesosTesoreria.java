@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.AjusteCtaCte;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
@@ -1074,6 +1075,7 @@ public class ProcesosTesoreria {
 			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
 				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla(), nc.getCliente().getIdEmpresa());				
 				if (ctacte == null) {
+					/**
 					CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
 					ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
 					ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
@@ -1087,7 +1089,7 @@ public class ProcesosTesoreria {
 					ctm.setMoneda(nc.getMoneda());
 					ctm.setNroComprobante(nc.getNumero());
 					ctm.setSucursal(nc.getSucursal());
-					rr.saveObject(ctm, "sys");
+					rr.saveObject(ctm, "sys");**/
 					System.out.println(nc.getNumero() + " - " + nc.getCliente().getRazonSocial());
 				}
 			}
@@ -1223,6 +1225,8 @@ public class ProcesosTesoreria {
 		if (vta != null) {
 			double recs = 0;
 			double ncrs = 0;
+			double ajtc = 0;
+			double ajtd = 0;
 			List<Object[]> recs_ = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
 			for (Object[] rec : recs_) {
 				ReciboDetalle rdet = (ReciboDetalle) rec[1];
@@ -1234,18 +1238,56 @@ public class ProcesosTesoreria {
 					ncrs += ncr.getImporteGs();
 				}
 			}
-			List<CtaCteEmpresaMovimiento> ctactes = rr.getCtaCteMovimientosByIdMovimiento(vta.getId(),
-					vta.getTipoMovimiento().getSigla());
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				ajtc += ajuste.getImporte();
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				ajtd += ajuste.getImporte();
+			}
+			List<CtaCteEmpresaMovimiento> ctactes = rr.getCtaCteMovimientosByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
 			for (CtaCteEmpresaMovimiento ctacte : ctactes) {
 				ctacte.setSaldo(0);
 				rr.saveObject(ctacte, ctacte.getUsuarioMod());
 			}
-			double hist = vta.getTotalImporteGs() - (ncrs + recs);
-			CtaCteEmpresaMovimiento ctacte = ctactes.get(2);
+			double hist = (vta.getTotalImporteGs() + ajtd) - (ncrs + recs + ajtc);
+			CtaCteEmpresaMovimiento ctacte = ctactes.get(ctactes.size() - 1);
 			ctacte.setSaldo(hist);
 			rr.saveObject(ctacte, ctacte.getUsuarioMod());
 			System.out.println("DEPURADO: " + vta.getCliente().getRazonSocial() + " - " + vta.getNumero());				
 		}	
+	}
+	
+	/**
+	 * verifica los saldos por factura de venta..
+	 */
+	public static void verificarSaldosVentaCreditoExtracto() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<NotaCredito> ncs = rr.getObjects(NotaCredito.class.getName());
+		for (NotaCredito nc : ncs) {
+			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla(), nc.getCliente().getIdEmpresa());				
+				if (ctacte == null) {
+					CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+					ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
+					ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+					ctm.setFechaEmision(nc.getFechaEmision());
+					ctm.setFechaVencimiento(nc.getFechaEmision());
+					ctm.setIdEmpresa(nc.getCliente().getIdEmpresa());
+					ctm.setIdMovimientoOriginal(nc.getId());
+					ctm.setIdVendedor(nc.getVendedor().getId());
+					ctm.setImporteOriginal(nc.isMonedaLocal() ? nc.getImporteGs() : nc.getImporteDs());
+					ctm.setSaldo(0);
+					ctm.setMoneda(nc.getMoneda());
+					ctm.setNroComprobante(nc.getNumero());
+					ctm.setSucursal(nc.getSucursal());
+					rr.saveObject(ctm, "sys");
+					System.out.println(nc.getNumero() + " - " + nc.getCliente().getRazonSocial());
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args) {

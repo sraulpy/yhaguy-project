@@ -1,0 +1,161 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.empresa.ctacte.auditoria.AuditoriaSaldosViewModel')"
+	id="win">
+	
+	<hlayout sclass="button-container" width="100%">
+		<navbar mold="bs-pills">
+			<navitem label=" CLIENTE" selected="true" width="150px"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter" />
+			<navitem label=" PROVEEDOR" iconSclass="z-icon-filter" width="150px"
+				style="text-align:center; font-size:12px" disabled="true" />
+		</navbar>
+		<space></space>
+		<radiogroup model="@load(vm.monedas)"
+			selectedItem="@bind(vm.selectedMoneda)">
+			<template name="model">
+				<radio label="@load(each)"
+					style="margin-right:10px;font-weight:bold">
+				</radio>
+			</template>
+		</radiogroup>
+		<space></space>
+		<bandbox width="150px" readonly="true" placeholder="CLIENTE.."
+			id="bndCli"
+			onOpen='tx_cod.focus()'>
+			<bandpopup>
+				<listbox sclass="small-list" width="600px"
+					height="300px" emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+					onSelect="@command('buscarSaldos')"
+					model="@load(vm.empresas)"
+					selectedItem="@bind(vm.selectedEmpresa)">
+					<attribute name="onSelect">
+						bndCli.close();
+					</attribute>
+					<listhead>
+						<listheader width="150px">
+							<textbox placeholder="Ruc.."
+								sclass="filter" hflex="true"
+								value="@bind(vm.filterRuc)"
+								instant="true" id="tx_cod">
+							</textbox>
+						</listheader>
+						<listheader>
+							<textbox placeholder="Razón Social.."
+								sclass="filter" hflex="true"
+								value="@bind(vm.filterRazonSocial)"
+								instant="true">
+							</textbox>
+						</listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each[2])"></listcell>
+							<listcell label="@load(each[1])"></listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</bandpopup>
+		</bandbox>
+		<separator orient="vertical" bar="true"></separator>
+		<field value="@load(vm.selectedEmpresa[2])" />
+		<space></space>
+		<field value="@load(vm.selectedEmpresa[1])" />			
+	</hlayout>
+	
+	<listbox sclass="small-list"
+		emptyMessage="SELECCIONE UN CLIENTE.." height="400px"
+		model="@load(vm.saldos)"
+		selectedItem="@bind(vm.selectedItem)"
+		id="listFac"
+		onLater="@command('clearProgress')">
+		<listhead>
+			<listheader label="Emisión"></listheader>
+			<listheader label="Vencimiento"></listheader>
+			<listheader label="Concepto"></listheader>
+			<listheader label="Número"></listheader>
+			<listheader label="" width="100px" align="center"></listheader>
+			<listheader label="Importe" align="right" width="150px"></listheader>
+			<listheader label="Saldo Extracto" align="right" width="150px"></listheader>
+			<listheader label="Saldo Aplicaciones" align="right" width="150px"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fechaEmision_)"></listcell>
+				<listcell label="@load(each.fechaVencimiento_)"></listcell>
+				<listcell label="@load(each.tipoMovimiento.descripcion)"></listcell>
+				<listcell label="@load(each.nroComprobante)"></listcell>
+				<listcell>
+					<a label="actualizar" visible="@load(each.saldo ne each.aux)"
+						onClick="@command('actualizarSaldo', item=each)"></a>
+				</listcell>
+				<listcell label="@load(each.importeOriginal) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.aux) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter>
+				<field value="ítems" />
+			</listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totalSaldo)" format="###,###,###,##0"
+					style="text-align:right;font-weight:bold"
+					readonly="true" hflex="true"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totalSaldo_)" format="###,###,###,##0"
+					style="text-align:right;font-weight:bold"
+					readonly="true" hflex="true"></doublebox>
+			</listfooter>
+		</listfoot>
+	</listbox>
+	<div height="5px"></div>
+	<listbox sclass="small-list"
+		emptyMessage="SIN DATOS.."
+		vflex="true" model="@load(vm.aplicaciones)">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Concepto"></listheader>
+			<listheader label="Número"></listheader>
+			<listheader label="Debe" align="right" width="150px"></listheader>
+			<listheader label="Haber" align="right" width="150px"></listheader>
+			<listheader label="Saldo" align="right" width="150px"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[5]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[6]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[7]) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter>
+				<field value="ítems" />
+			</listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter></listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totalSaldoAplicado)" format="###,###,###,##0"
+					style="text-align:right;font-weight:bold"
+					readonly="true" hflex="true"></doublebox>
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+	<style>
+		input[type="radio"], input[type="checkbox"] { margin:0px 3px 0px
+		0px; }
+	</style>
+</window>

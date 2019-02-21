@@ -1,5 +1,8 @@
 package com.yhaguy.gestion.comun;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -595,5 +598,91 @@ public class ControlCuentaCorriente {
 				}				
 			}
 		}
+	}
+	
+	/**
+	 * @return las aplicaciones de una venta..
+	 * [0]: emision
+	 * [1]: numero
+	 * [2]: concepto
+	 * [3]: importe
+	 * [4]: +-
+	 * [5]: debe
+	 * [6]: haber
+	 * [7]: saldo
+	 */
+	public static List<Object[]> getAplicacionesVenta(long idVenta) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta vta = (Venta) rr.getObject(Venta.class.getName(), idVenta);
+		if (vta != null) {
+			Date emision_ = vta.getFecha();
+			String numero_ = vta.getNumero();
+			String concepto_ = vta.getTipoMovimiento().getDescripcion();
+			Object[] det_ = new Object[] { emision_, numero_, concepto_, vta.getImporteGs(), 1, 0.0, 0.0, 0.0 };
+			out.add(det_);
+			
+			List<NotaCredito> ncs = rr.getNotaCreditosByVenta(vta.getId());
+			for (NotaCredito nc : ncs) {
+				if (!nc.isAnulado()) {
+					Date emision = nc.getFechaEmision();
+					String numero = nc.getNumero();
+					String concepto = nc.getTipoMovimiento().getDescripcion() + " - "
+							+ nc.getMotivo().getDescripcion().toUpperCase();
+					Object[] det = new Object[] { emision, numero, concepto, nc.getImporteGs(), -1, 0.0, 0.0, 0.0 };
+					out.add(det);
+				}
+			}
+			List<Object[]> recs = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+			for (Object[] rec : recs) {
+				Recibo recibo = (Recibo) rec[0];
+				ReciboDetalle rdet = (ReciboDetalle) rec[1];				
+				Date emision = recibo.getFechaEmision();
+				String numero = recibo.getNumero();
+				String concepto = recibo.getTipoMovimiento().getDescripcion();
+				Object[] det = new Object[] { emision, numero, concepto, rdet.getMontoGs(), -1, 0.0, 0.0, 0.0 };
+				out.add(det);
+			}
+			
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {				
+				Date emision = ajuste.getFecha();
+				String numero = ajuste.getDebito().getNroComprobante();
+				String concepto = "CREDITO CTA.CTE.";
+				Object[] det = new Object[] { emision, numero, concepto, ajuste.getImporte(), -1, 0.0, 0.0, 0.0 };
+				out.add(det);
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {				
+				Date emision = ajuste.getFecha();
+				String numero = ajuste.getDebito().getNroComprobante();
+				String concepto = "DEBITO CTA.CTE.";
+				Object[] det = new Object[] { emision, numero, concepto, ajuste.getImporte(), 1, 0.0, 0.0, 0.0 };
+				out.add(det);
+			}
+		}
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[0];
+				Date fecha2 = (Date) o2[0];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		double acum = 0;
+		for (Object[] item : out) {
+			int signo = (int) item[4];
+			double importe = (double) item[3];
+			double debe = signo > 0? importe : 0.0;
+			double haber = signo < 0? importe : 0.0;
+			double saldo = acum + (importe * signo);
+			item[5] = debe;
+			item[6] = haber;
+			item[7] = saldo;
+			acum += saldo;
+		}
+		return out;
 	}
 }
