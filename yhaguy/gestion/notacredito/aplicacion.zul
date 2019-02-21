@@ -1,0 +1,38 @@
+<zk>
+<window border="normal" title="Facturas con Saldo" width="900px" height="600px"
+	position="center, center" closable="true">
+	
+	<listbox sclass="small-list"
+		model="@load(vm.ventas)" vflex="true"
+		selectedItem="@bind(vm.selectedVenta)">
+		<listhead>
+			<listheader label="Concepto"></listheader>
+			<listheader label="Número"></listheader>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Sucursal"></listheader>
+			<listheader label="Saldo" align="right"></listheader>
+			<listheader label="Moneda" width="70px" align="center"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.pos1)"></listcell>
+				<listcell label="@load(each.pos2)"></listcell>
+				<listcell label="@load(each.pos3) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.pos4)"></listcell>
+				<listcell label="@load(each.pos5) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pos6)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="ítems"></listfooter>
+		</listfoot>
+	</listbox>
+	<hlayout sclass="button-container">
+		<div hflex="true"></div>
+		<button mold="bs" sclass="btn-sm btn-success"
+			iconSclass="z-icon-check" width="120px"
+			disabled="@load(vm.selectedVenta eq null)"
+			onClick="@command('aplicarDescuento')"></button>
+	</hlayout>
+</window>
+</zk>

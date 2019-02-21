@@ -1515,8 +1515,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos4(emp.getNombre());
 			my.setPos5(emp.isCuentaBloqueada());
 			my.setPos6(emp.getMotivoBloqueo());
-			my.setPos7(emp.getDireccion());
-			my.setPos8(emp.getTelefono());
+			my.setPos7(emp.getDireccion_());
+			my.setPos8(emp.getTelefono_());
 			my.setPos9(emp.getAuxi().equals(Empresa.DESBLOQUEO_TEMPORAL) ? true : false); // true si es desbloqueo temporal..
 			my.setPos10(emp.getVendedor() != null? emp.getVendedor().getRazonSocial() : "");
 			my.setPos11(emp.getObservacion().toUpperCase());

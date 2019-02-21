@@ -7124,6 +7124,19 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el saldo en cta cte..
+	 */
+	public List<CtaCteEmpresaMovimiento> getSaldosCtaCte(long idEmpresa, String caracter, String siglaTm, String siglaMoneda) throws Exception {
+		String query = "select e from CtaCteEmpresaMovimiento e where e.anulado = 'FALSE'"
+				+ " and e.tipoMovimiento.sigla = '" + siglaTm + "'"
+				+ " and e.tipoCaracterMovimiento.sigla = '" + caracter + "'"
+				+ " and e.moneda.sigla = '" + siglaMoneda  + "'"
+				+ " and e.saldo > 0 and e.idEmpresa = " + idEmpresa;
+		List<CtaCteEmpresaMovimiento> list = this.hql(query);
+		return list;
+	}
+	
+	/**
 	 * @return el banco deposito segun numero..
 	 */
 	public BancoBoletaDeposito getBancoDeposito(String numero) throws Exception {

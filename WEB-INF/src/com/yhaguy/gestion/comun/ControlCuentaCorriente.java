@@ -95,18 +95,9 @@ public class ControlCuentaCorriente {
 		ctm.setMoneda(rr.getTipoPorSigla(dto.getMoneda().getSigla()));
 		ctm.setNroComprobante(dto.getNumero());
 		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
+		ctm.setSaldo(0);
 		
-		double saldo = ctmVenta.getSaldo() - (dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());
-		
-		if (saldo <= 0) {
-			ctmVenta.setSaldo(0);
-			ctm.setSaldo(saldo);
-		} else {
-			ctmVenta.setSaldo(saldo);
-			ctm.setSaldo(0);
-		}
-		
-		rr.saveObject(ctmVenta, user);
+		recalcularSaldoCtaCte(ctmVenta);
 		rr.saveObject(ctm, user);
 	}
 	

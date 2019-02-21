@@ -36,6 +36,7 @@ import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.ImportacionFactura;
@@ -76,6 +77,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	private NotaCreditoDetalleDTO nvoItem = new NotaCreditoDetalleDTO(this.getIva10());
 	private NotaCreditoDetalleDTO selectedItemFac;
 	private MyArray selectedFactura = new MyArray();
+	private MyArray selectedVenta;
 	private List<NotaCreditoDetalleDTO> selectedItemsArt = new ArrayList<NotaCreditoDetalleDTO>();
 	private List<MyArray> _selectedItemsArt;
 	private MyArray selectedServicioTecnico;
@@ -217,14 +219,12 @@ public class NotaCreditoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void buscarFacturas() throws Exception {
 		if (this.dto.isNotaCreditoVenta()) {
-			this.buscarVentas();
-			/**
 			if (this.dto.isMotivoDescuento()) {
 				this.win = (Window) Executions.createComponents(ADD_APLICACION, this.mainComponent, null);
 				this.win.doModal();
 			} else {
-				
-			}**/
+				this.buscarVentas();
+			}
 		} else {
 			if (this.mensajeSiNo("Factura de compra de mercaderías..?")) {
 				this.buscarCompras();
@@ -270,6 +270,14 @@ public class NotaCreditoControlBody extends BodyApp {
 	public void selectServicioTecnico(@BindingParam("comp") Popup comp) {
 		this.dto.getServiciosTecnicos().add(this.selectedServicioTecnico);
 		comp.close();
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void aplicarDescuento() throws Exception {
+		this.nvoItem = this.crearDetalleDesde(this.selectedVenta, true, false, false);
+		this.win.detach();
+		this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
 	}
 	
 	/**************************************************************/
@@ -1438,6 +1446,29 @@ public class NotaCreditoControlBody extends BodyApp {
 		return this.getDtoUtil().getNotaCreditoDetalleArticulo();
 	}
 	
+	/**
+	 * @return las ventas con saldo..
+	 */
+	public List<MyArray> getVentas() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		if (!this.dto.getCliente().esNuevo()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			long idempresa = (long) this.dto.getCliente().getPos4();
+			List<CtaCteEmpresaMovimiento> ctactes = rr.getSaldosCtaCte(idempresa,
+					Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, Configuracion.SIGLA_TM_FAC_VENTA_CREDITO, this.dto.getMoneda().getSigla());
+			for (CtaCteEmpresaMovimiento ctacte : ctactes) {
+				Venta vta = (Venta) rr.getObject(Venta.class.getName(), ctacte.getIdMovimientoOriginal());
+				if (vta != null) {
+					double importe = ctacte.getSaldo();
+					MyArray my = new MyArray(vta.getTipoMovimiento().getDescripcion(), vta.getNumero(), vta.getFecha(), vta.getSucursal().getDescripcion(), importe, vta.getMoneda().getSigla());
+					my.setId(vta.getId());
+					out.add(my);
+				}
+			}
+		}
+		return out;
+	}
+	
 	public List<MyPair> getMotivosNCCompra() {
 		return this.utilDto.getMotivosNotaCredito();
 	}
@@ -1562,6 +1593,14 @@ public class NotaCreditoControlBody extends BodyApp {
 
 	public void setSelectedServicioTecnico(MyArray selectedServicioTecnico) {
 		this.selectedServicioTecnico = selectedServicioTecnico;
+	}
+
+	public MyArray getSelectedVenta() {
+		return selectedVenta;
+	}
+
+	public void setSelectedVenta(MyArray selectedVenta) {
+		this.selectedVenta = selectedVenta;
 	}
 }
 
