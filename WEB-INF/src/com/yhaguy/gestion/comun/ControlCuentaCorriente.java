@@ -681,7 +681,7 @@ public class ControlCuentaCorriente {
 			item[5] = debe;
 			item[6] = haber;
 			item[7] = saldo;
-			acum = acum + saldo;
+			acum = saldo;
 		}
 		return out;
 	}
