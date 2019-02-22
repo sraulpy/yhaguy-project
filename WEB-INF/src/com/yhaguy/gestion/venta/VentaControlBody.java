@@ -731,7 +731,7 @@ public class VentaControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 
 		for (VentaDetalleDTO item : this.dto.getDetalles()) {
-			long stock = rr.getStockDisponible(item.getArticulo().getId(), 2);
+			long stock = rr.getStockDisponible(item.getArticulo().getId(), this.dto.getDeposito().getId());
 			List<ArticuloUbicacion> ubicacion = rr.getUbicacion(item.getArticulo().getId());
 			String ubicacion_ = "";
 			for (ArticuloUbicacion ubic : ubicacion) {
