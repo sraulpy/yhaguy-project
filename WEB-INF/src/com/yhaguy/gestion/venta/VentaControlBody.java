@@ -299,7 +299,7 @@ public class VentaControlBody extends BodyApp {
 			return;
 		}		
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioVenta();
+		double tc = rr.getTipoCambioCompra();
 		this.dto.setTipoCambio(tc);
 	}
 	

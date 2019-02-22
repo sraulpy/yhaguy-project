@@ -928,6 +928,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				this.detalle = dto.getGastosDetallado();
 				for (Object[] det : this.detalle) {
 					String key = (String) det[5];
+					String desc = (String) det[2];
 					Double acum = totales.get(key);
 					Double acumDs = totalesDs.get(key);
 					Double acumNeto = totalesNeto.get(key);
@@ -935,7 +936,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					if(acum != null) {
 						acum += (double) det[3];
 						acumDs += (double) det[4];
-						acumNeto += ((double) det[3] - (double) det[6]);
+						if (!desc.equals("IVA - IMPORTACION")) {
+							acumNeto += ((double) det[3] - (double) det[6]);
+						}						
 						acumIva += (double) det[6];
 						totales.put(key, acum);
 						totalesDs.put(key, acumDs);
@@ -944,7 +947,11 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					} else {
 						totales.put(key, (double) det[3]);
 						totalesDs.put(key, (double) det[4]);
-						totalesNeto.put(key, (((double) det[3]) - (double) det[6]));
+						if (desc.equals("IVA - IMPORTACION")) {
+							totalesNeto.put(key, (double) 0);
+						} else {
+							totalesNeto.put(key, (((double) det[3]) - (double) det[6]));
+						}						
 						totalesIva.put(key, (double) det[6]);
 					}
 				}
@@ -979,7 +986,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			} else if ("Iva".equals(fieldName)) {
 				value = Utiles.getNumberFormat(iva);
 			} else if ("Neto".equals(fieldName)) {
-				value = Utiles.getNumberFormat((importe) - (iva));
+				String desc = (String) item[2];
+				if (desc.equals("IVA - IMPORTACION")) {
+					value = Utiles.getNumberFormat(0);
+				} else {
+					value = Utiles.getNumberFormat((importe) - (iva));
+				}
 			} else if ("ImporteDs".equals(fieldName)) {
 				value = Utiles.getNumberFormatDs(importeDs);
 			} else if ("TotalImporte".equals(fieldName)) {

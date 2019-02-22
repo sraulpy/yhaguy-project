@@ -8892,6 +8892,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return la ultima cotizacion..
+	 */
+	public double getTipoCambioCompra() throws Exception {
+		String query = "select t.id, t.compra from TipoCambio t where t.id = (select max(id) from TipoCambio)";
+		List<Object[]> list = this.hql(query);
+		return (double) list.get(0)[1];
+	}
+	
+	/**
 	 * @return la ultima cotizacion segun fecha..
 	 */
 	public double getTipoCambioVenta(Date fecha) throws Exception {
