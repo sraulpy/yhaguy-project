@@ -214,7 +214,7 @@
 						<doublebox
 								value="@load(vm.datosMovimientosApagar[1])" readonly="true"
 								style="text-align:right;background:#EEF7FA;font-weight:bold"
-								format="###,###,###,###" />
+								format="###,###,###,###" hflex="true" />
 					</listfooter>
 				</listfoot>
 			</listbox>
