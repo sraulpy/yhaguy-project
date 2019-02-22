@@ -210,6 +210,12 @@
 								style="text-align:right;background:#EEF7FA;font-weight:bold" />
 						</hlayout>
 					</listfooter>
+					<listfooter>
+						<doublebox
+								value="@load(vm.datosMovimientosApagar[1])" readonly="true"
+								style="text-align:right;background:#EEF7FA;font-weight:bold"
+								format="###,###,###,###" />
+					</listfooter>
 				</listfoot>
 			</listbox>
 		</vbox>
