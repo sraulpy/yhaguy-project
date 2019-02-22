@@ -5,6 +5,18 @@
 	</columns>
 	<rows>
 		<row>
+			<field value="Fecha Descuento Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde2)"
+				placeholder="Desde.." 
+				format="dd-MM-yyyy" hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Descuento Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta2)"
+				placeholder="Hasta.." 
+				format="dd-MM-yyyy" hflex="true" />
+		</row>
+		<row>
 			<field value="Fecha Vto. Cheque Desde:" />
 			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
 				placeholder="Desde.." 

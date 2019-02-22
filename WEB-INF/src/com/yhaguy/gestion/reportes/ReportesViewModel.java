@@ -6564,27 +6564,25 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			
+			Date desde_ = filtro.getFechaDesde2();
+			Date hasta_ = filtro.getFechaHasta2();
 
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Object[]> data = new ArrayList<Object[]>();
 
-			List<BancoChequeTercero> cheques = rr.getChequesTercero("", "", "",
-					"", "", "", "", "", "", "", "", "", null, "TRUE", null, null, 
-					desde, hasta, null, null, "", "", false);
+			List<BancoChequeTercero> cheques = rr.getChequesDescontados(desde_, hasta_, desde, hasta);
 
 			for (BancoChequeTercero cheque : cheques) {
-				if (cheque.isDescontado() 
-						&& !cheque.getNumeroDescuento().trim().isEmpty() 
-						&& !cheque.isAnulado()) {
-					Object[] desc = rr.getBancoDescuento(cheque.getId());
-					data.add(new Object[] {
-							Utiles.getDateToString((Date) desc[0], Utiles.DD_MM_YYYY),
-							Utiles.getDateToString(cheque.getFecha(), Utiles.DD_MM_YYYY),
-							cheque.getNumero(),
-							cheque.getBanco().getDescripcion().toUpperCase(),
-							cheque.getCliente().getRazonSocial(),
-							cheque.getMonto()});
-				}				
+				Object[] desc = rr.getBancoDescuento(cheque.getId());
+				data.add(new Object[] {
+						Utiles.getDateToString(cheque.getFechaDescuento(), Utiles.DD_MM_YYYY),
+						Utiles.getDateToString(cheque.getFecha(), Utiles.DD_MM_YYYY),
+						desc[2],
+						cheque.getNumero(),
+						cheque.getBanco().getDescripcion().toUpperCase(),
+						desc[3],
+						cheque.getMonto()});			
 			}	
 			
 			// ordena la lista segun fecha..
@@ -6606,7 +6604,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 			});
 
-			ReporteChequesDescontados rep = new ReporteChequesDescontados(desde, hasta);
+			ReporteChequesDescontados rep = new ReporteChequesDescontados(desde, hasta, desde_, hasta_);
 			rep.setDatosReporte(data);
 			rep.setApaisada();
 			
@@ -11658,18 +11656,24 @@ class ReporteChequesDescontados extends ReporteYhaguy {
 	private Date desde;
 	private Date hasta;
 	
-	public ReporteChequesDescontados(Date desde, Date hasta) {
+	private Date descuentoDesde;
+	private Date descuentoHasta;
+	
+	public ReporteChequesDescontados(Date desde, Date hasta, Date descuentoDesde, Date descuentoHasta) {
 		this.desde = desde;
 		this.hasta = hasta;
+		this.descuentoDesde = descuentoDesde;
+		this.descuentoHasta = descuentoHasta;
 	}
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col0 = new DatosColumnas("Fecha Desc.", TIPO_STRING, 30);
-	static DatosColumnas col1 = new DatosColumnas("Vto. Cheque", TIPO_STRING, 30);
-	static DatosColumnas col2 = new DatosColumnas("Nro. Cheque", TIPO_STRING, 30);
-	static DatosColumnas col3 = new DatosColumnas("Banco", TIPO_STRING, 45);
-	static DatosColumnas col4 = new DatosColumnas("Cliente", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Importe Gs.", TIPO_DOUBLE_GS, 40, true);
+	static DatosColumnas col0 = new DatosColumnas("Fecha Dto.", TIPO_STRING, 25);
+	static DatosColumnas col1 = new DatosColumnas("Vto. Cheq", TIPO_STRING, 25);
+	static DatosColumnas col2 = new DatosColumnas("Banco Dto.", TIPO_STRING, 30);
+	static DatosColumnas col3 = new DatosColumnas("Nro. Cheque", TIPO_STRING, 30);
+	static DatosColumnas col4 = new DatosColumnas("Banco Cheque", TIPO_STRING, 40);
+	static DatosColumnas col5 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 25, true);
 
 	static {
 		cols.add(col0);
@@ -11678,6 +11682,7 @@ class ReporteChequesDescontados extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);		
+		cols.add(col6);
 	}
 
 	@Override
@@ -11697,8 +11702,12 @@ class ReporteChequesDescontados extends ReporteYhaguy {
 
 		VerticalListBuilder out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList()
-				.add(this.textoParValor("Fecha Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
-				.add(this.textoParValor("Fecha Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+				.add(this.textoParValor("Descuento Desde", Utiles.getDateToString(this.descuentoDesde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Descuento Hasta", Utiles.getDateToString(this.descuentoHasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Vencimiento Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Vencimiento Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

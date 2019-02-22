@@ -6790,6 +6790,23 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los cheques de terceros..
+	 */
+	public List<BancoChequeTercero> getChequesDescontados(Date descuentoDesde, Date descuentoHasta, Date vencimientoDesde, Date vencimientoHasta)
+			throws Exception {
+		String dtoDesde = Utiles.getDateToString(descuentoDesde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String dtoHasta = Utiles.getDateToString(descuentoHasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String vtoDesde = Utiles.getDateToString(vencimientoDesde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String vtoHasta = Utiles.getDateToString(vencimientoHasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c from BancoChequeTercero c where c.dbEstado != 'D'"
+				+ " and c.anulado = 'FALSE' and c.descontado = 'TRUE'"
+				+ " and (c.fecha >= '" + vtoDesde + "' and c.fecha <= '" + vtoHasta + "')"
+				+ " and (c.fechaDescuento >= '" + dtoDesde + "' and c.fechaDescuento <= '" + dtoHasta + "')";
+				query += " order by c.fechaDescuento, c.fecha";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los cheques de terceros..
 	 * [0]:id
 	 * [1]:numero
 	 * [2]:emision
@@ -7182,9 +7199,13 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return el banco descuento segun el cheque..
+	 * [0]: fecha
+	 * [1]: id
+	 * [2]: banco
+	 * [3]: observacion
 	 */
 	public Object[] getBancoDescuento(long idCheque) throws Exception {
-		String query = "select b.fecha, b.id from BancoDescuentoCheque b join b.cheques c where c.id = " + idCheque;
+		String query = "select b.fecha, b.id, b.banco.banco.descripcion, b.observacion from BancoDescuentoCheque b join b.cheques c where c.id = " + idCheque;
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
