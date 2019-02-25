@@ -142,10 +142,10 @@
 				<hlayout>
 					<field value="@load(vm.articulos.size())"/>
 					<field value="ítems"/>
-					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:100px"/>
+					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:10px"/>
 				</hlayout>
 			</listfooter>
-			<listfooter span="3">
+			<listfooter span="4">
 			<hbox hflex="true" align="center">
 				<hbox tooltiptext="@load(vm.ultimaCompra)"
 					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">
