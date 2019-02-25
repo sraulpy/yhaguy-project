@@ -44,11 +44,13 @@
 		id="listArt">	
 		
 		<listhead>
-			<listheader width="180px"/>
-			<listheader width="180px"/>
-			<listheader width="180px"/>
+			<listheader width="150px"/>
+			<listheader width="150px"/>
+			<listheader width="150px"/>
 			<listheader />
-			<listheader width="180px"/>
+			<listheader width="150px"/>
+			<listheader width="150px"/>
+			<listheader width="150px"/>
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -102,6 +104,26 @@
 								no-repeat; background-position: 98%; background-size: 10px;"/>
 				</hlayout>				
 			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						sclass="filter_"
+						value="@bind(vm.familia)" instant="true" 
+						placeholder="Familia.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>				
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						sclass="filter_"
+						value="@bind(vm.proveedor)" instant="true" 
+						placeholder="Proveedor.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>				
+			</auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem onDoubleClick="@command('obtenerValores')"
@@ -111,6 +133,8 @@
 				<listcell label="@load(each.pos3)" />
 				<listcell label="@load(each.pos4)" />
 				<listcell label="@load(each.pos6)" />
+				<listcell label="@load(each.pos7)" />
+				<listcell label="@load(each.pos8)" />
 			</listitem>
 		</template>
 		<listfoot>
@@ -121,7 +145,7 @@
 					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:100px"/>
 				</hlayout>
 			</listfooter>
-			<listfooter span="2">
+			<listfooter span="3">
 			<hbox hflex="true" align="center">
 				<hbox tooltiptext="@load(vm.ultimaCompra)"
 					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">

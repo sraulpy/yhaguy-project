@@ -58,6 +58,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private String codProveedor = "";
 	private String descripcion = "";
 	private String marca = "";
+	private String familia = "";
+	private String proveedor = "";
 	
 	private String filter_razonsocial = "";
 	private String filter_ruc = "";
@@ -199,6 +201,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.codProveedor = "";
 		this.descripcion = "";
 		this.marca = "";
+		this.familia = "";
+		this.proveedor = "";
 	}
 	
 	@Command
@@ -276,18 +280,19 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.ubicaciones = list;
 	}
 	
-	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock" })
+	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock", "familia", "proveedor" })
 	public List<MyArray> getArticulos() throws Exception {
 		
-		if (this.codInterno.isEmpty() && this.codOriginal.isEmpty()
-				&& this.codProveedor.isEmpty() && this.descripcion.isEmpty() && this.marca.isEmpty()) {
+		if (this.codInterno.trim().isEmpty() && this.codOriginal.trim().isEmpty() && this.codProveedor.trim().isEmpty()
+				&& this.descripcion.trim().isEmpty() && this.marca.trim().isEmpty() && this.familia.trim().isEmpty()
+				&& this.proveedor.trim().isEmpty()) {
 			this.setSelectedItem(null);
 			return new ArrayList<MyArray>();
 		}
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
-				this.codOriginal, this.codProveedor, this.descripcion, this.marca);
+				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor);
 		
 		List<Object[]> arts_ = new ArrayList<>();
 		
@@ -323,6 +328,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			my.setPos3(art[3]);
 			my.setPos4(art[4]);	
 			my.setPos6(art[5]);
+			my.setPos7(art[6]);
+			my.setPos8(art[7]);
 			List<MyArray> ubics = new ArrayList<MyArray>();
 			my.setPos5(ubics);
 			out.add(my);
@@ -893,5 +900,21 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setFilterStock(int filterStock) {
 		this.filterStock = filterStock;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(String familia) {
+		this.familia = familia;
+	}
+
+	public String getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(String proveedor) {
+		this.proveedor = proveedor;
 	}
 }

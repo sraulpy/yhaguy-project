@@ -2744,11 +2744,14 @@ public class RegisterDomain extends Register {
 	 * [3]:codigoProveedor
 	 * [4]:descripcion
 	 * [5]:marca.descripcion
+	 * [6]:familia.descripcion
+	 * [7]:proveedor.razonSocial
 	 */
 	public List<Object[]> getArticulos_(String codigoInterno,
-			String codigoOriginal, String codigoProveedor, String descripcion, String marca)
+			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor)
 			throws Exception {
-		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion, a.marca.descripcion from Articulo a"
+		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
+				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial from Articulo a"
 				+ " where lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
@@ -2757,6 +2760,8 @@ public class RegisterDomain extends Register {
 				+ codigoProveedor.toLowerCase()
 				+ "%' and lower(a.descripcion) like '%"
 				+ descripcion.toLowerCase() + "%'"
+				+ " and lower(a.familia.descripcion) like '%" + familia.toLowerCase() + "%'"
+				+ " and lower(a.proveedor.empresa.razonSocial) like '%" + proveedor.toLowerCase() + "%'"
 				+ " and lower(a.marca.descripcion) like '%" + marca.toLowerCase() + "%'  order by a.codigoInterno";
 		return this.hqlLimit(query, 50);
 	}
