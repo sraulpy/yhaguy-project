@@ -5493,11 +5493,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
@@ -5515,23 +5512,17 @@ public class ReportesViewModel extends SimpleViewModel {
 								String lis = item.getListaPrecio().getDescripcion();
 								String key = lis + "-" + item.getArticulo().getFamilia().getDescripcion();
 								Object[] acum = totales.get(key);
-								Object[] acum_ = totales_.get(lis);
 								if (acum != null) {
 									double imp = (double) acum[0];
-									double imp_ = (double) acum_[0];
+									double cos = (double) acum[1];
 									imp += item.getImporteGsSinIva();
-									imp_ += item.getImporteGsSinIva();
+									cos += item.getCostoTotalGsSinIva();
+									acum[0] = imp;
+									acum[1] = cos;
 									totales.put(key, acum);
-									totales_.put(lis, acum_);
 								} else {
 									acum = new Object[] { item.getImporteGsSinIva(), item.getCostoTotalGsSinIva() };
-									if (acum_ != null) {
-										//acum_ += item.getImporteGsSinIva();
-									} else {
-										//acum_ = item.getImporteGsSinIva();
-									}
 									totales.put(key, acum);
-									totales_.put(lis, acum_);
 								}
 							}							
 						}
@@ -5541,7 +5532,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (String key : totales.keySet()) {
 					Object[] total = totales.get(key);
 					String[] desc = key.split("-");
-					data.add(new Object[] { desc[0], desc[1], total });
+					data.add(new Object[] { desc[0], desc[1], total[0], total[1] });
 				}
 				
 				Collections.sort(data, new Comparator<Object[]>() {
@@ -15413,9 +15404,19 @@ class VentasListaPrecioFamilia implements JRDataSource {
 		} else if ("Descripcion".equals(fieldName)) {
 			value = det[1];
 		} else if ("Importe".equals(fieldName)) {
-			value = FORMATTER.format(det[2]);
+			double imp = (double) det[2];
+			value = FORMATTER.format(imp);
+		} else if ("Costo".equals(fieldName)) {
+			double imp = (double) det[3];
+			value = FORMATTER.format(imp);
+		} else if ("rentcosto".equals(fieldName)) {
+			double imp = 0.0;
+			value = FORMATTER.format(imp);
+		} else if ("rentventa".equals(fieldName)) {
+			double imp = 0.0;
+			value = FORMATTER.format(imp);
 		} else if ("TotalImporte".equals(fieldName)) {
-			value = FORMATTER.format(totales.get(det[0]));
+			value = FORMATTER.format(0.0);
 		}
 		return value;
 	}
