@@ -13,7 +13,7 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private String codigoProveedor;
 	private String descripcion;
 	private String referencia;
-	private String nroParte;
+	private String codigoOriginal;
 	private String estado;
 	private String articulo;
 	private String familia;
@@ -92,6 +92,13 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private double total_;
 	
 	private double litraje;
+	
+	private int maximo;
+	private int minimo;
+	private long cantCliente;
+	
+	private double costoFobGs;
+	private double costoFobDs;
 
 	@Override
 	public int compareTo(Object o) {
@@ -128,14 +135,6 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setReferencia(String referencia) {
 		this.referencia = referencia;
-	}
-
-	public String getNroParte() {
-		return nroParte;
-	}
-
-	public void setNroParte(String nroParte) {
-		this.nroParte = nroParte;
 	}
 
 	public String getEstado() {
@@ -736,5 +735,53 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void set_diciembre(double _diciembre) {
 		this._diciembre = _diciembre;
+	}
+
+	public String getCodigoOriginal() {
+		return codigoOriginal;
+	}
+
+	public void setCodigoOriginal(String codigoOriginal) {
+		this.codigoOriginal = codigoOriginal;
+	}
+
+	public int getMaximo() {
+		return maximo;
+	}
+
+	public void setMaximo(int maximo) {
+		this.maximo = maximo;
+	}
+
+	public int getMinimo() {
+		return minimo;
+	}
+
+	public void setMinimo(int minimo) {
+		this.minimo = minimo;
+	}
+
+	public double getCostoFobGs() {
+		return costoFobGs;
+	}
+
+	public void setCostoFobGs(double costoFobGs) {
+		this.costoFobGs = costoFobGs;
+	}
+
+	public double getCostoFobDs() {
+		return costoFobDs;
+	}
+
+	public void setCostoFobDs(double costoFobDs) {
+		this.costoFobDs = costoFobDs;
+	}
+
+	public long getCantCliente() {
+		return cantCliente;
+	}
+
+	public void setCantCliente(long cantCliente) {
+		this.cantCliente = cantCliente;
 	}
 }

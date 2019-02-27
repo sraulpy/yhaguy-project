@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.DependsOn;
+
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -13,9 +16,12 @@ import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPresentacion;
 import com.yhaguy.domain.ArticuloSubMarca;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class ArticuloDTO extends DTO {
 
+	static final String ESTADO_ACTIVO = "ACTIVO";
+	static final String ESTADO_INACTIVO = "INACTIVO";
+	
 	private String descripcion = "";
 	private String codigoInterno = "";
 	private String codigoProveedor = "";
@@ -24,6 +30,8 @@ public class ArticuloDTO extends DTO {
 	private String observacion = "";
 	private String urlImagen = "";
 	private String urlEspecificacion = "";
+	private String ochentaVeinte = "";
+	private String abc = "";
 	private double peso = 0;
 	private double volumen;
 	Date fechaAlta = new Date();
@@ -31,6 +39,11 @@ public class ArticuloDTO extends DTO {
 	private boolean completo;
 	private boolean importado = true;
 	private boolean servicio = false;
+	private boolean estado = true;
+	private String estado_ = ESTADO_ACTIVO;
+	private String referencia = "";
+	private int maximo = 0;
+	private int minimo = 0;
 	
 	private String disenho = "";
 	private int ancho = 0;
@@ -96,6 +109,21 @@ public class ArticuloDTO extends DTO {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "articulos/" + this.getId() + ".png";
 		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "articulos/" + this.getId() + ".png";
+	}
+	
+	/**
+	 * @return los estados..
+	 */
+	public List<String> getEstados() {
+		List<String> out = new ArrayList<String>();
+		out.add(ESTADO_ACTIVO);
+		out.add(ESTADO_INACTIVO);
+		return out;
+	}
+	
+	@DependsOn("estado")
+	public String getEstado_() {
+		return this.estado ? ESTADO_ACTIVO : ESTADO_INACTIVO;
 	}
 
 	public List<MyArray> getReferencias() {
@@ -495,5 +523,59 @@ public class ArticuloDTO extends DTO {
 
 	public void setArticuloSubMarca(ArticuloSubMarca articuloSubMarca) {
 		this.articuloSubMarca = articuloSubMarca;
+	}
+
+	public String getReferencia() {
+		return referencia;
+	}
+
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
+	}
+
+	public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
+	public void setEstado_(String estado_) {
+		this.estado_ = estado_;
+		this.estado = estado_.equals(ESTADO_ACTIVO) ? true : false;
+		BindUtils.postNotifyChange(null, null, this, "estado");
+	}
+
+	public String getOchentaVeinte() {
+		return ochentaVeinte;
+	}
+
+	public void setOchentaVeinte(String ochentaVeinte) {
+		this.ochentaVeinte = ochentaVeinte;
+	}
+
+	public String getAbc() {
+		return abc;
+	}
+
+	public void setAbc(String abc) {
+		this.abc = abc;
+	}
+
+	public int getMaximo() {
+		return maximo;
+	}
+
+	public void setMaximo(int maximo) {
+		this.maximo = maximo;
+	}
+
+	public int getMinimo() {
+		return minimo;
+	}
+
+	public void setMinimo(int minimo) {
+		this.minimo = minimo;
 	}
 }

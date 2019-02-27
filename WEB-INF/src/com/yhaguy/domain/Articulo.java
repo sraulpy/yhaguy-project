@@ -38,6 +38,8 @@ public class Articulo extends Domain {
 	long prioridad = 0; 
 	boolean completo = false;
 	private boolean estado;
+	private int maximo;
+	private int minimo;
 	
 	private String disenho;
 	private int ancho;
@@ -568,5 +570,21 @@ public class Articulo extends Domain {
 
 	public void setArticuloSubMarca(ArticuloSubMarca articuloSubMarca) {
 		this.articuloSubMarca = articuloSubMarca;
+	}
+
+	public int getMaximo() {
+		return maximo;
+	}
+
+	public void setMaximo(int maximo) {
+		this.maximo = maximo;
+	}
+
+	public int getMinimo() {
+		return minimo;
+	}
+
+	public void setMinimo(int minimo) {
+		this.minimo = minimo;
 	}
 }

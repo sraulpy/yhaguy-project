@@ -15,7 +15,7 @@
 		<property name="codigoProveedor" />
 		<property name="descripcion" />
 		<property name="referencia" />
-		<property name="nroParte" />
+		<property name="codigoOriginal" />
 		<property name="estado" />
 		<property name="articulo" />
 		<property name="familia" />
@@ -64,6 +64,8 @@
 		<property name="noviembre" />
 		<property name="diciembre" />
 		<property name="total" />
+		<property name="maximo" />
+		<property name="minimo" />
 					
 	</class>
 </hibernate-mapping>

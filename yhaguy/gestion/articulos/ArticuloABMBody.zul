@@ -27,6 +27,12 @@
 									hflex="true"/>
 							</vlayout>
 							<vlayout spacing="0">
+								<field value="Referencia" />
+								<textbox
+									value="@bind(vm.dto.referencia)" 
+									hflex="true"/>
+							</vlayout>
+							<vlayout spacing="0">
 								<field value="Código Barra" />
 								<textbox
 									value="@bind(vm.dto.codigoBarra)" 
@@ -34,7 +40,7 @@
 							</vlayout>
 						</row>
 						<row>
-							<cell colspan="2">
+							<cell colspan="3">
 								<vlayout>
 									<field value="Descripción" />
 									<textbox hflex="true"
@@ -125,14 +131,14 @@
 											<vlayout spacing="0" hflex="true">
 												<field value="Estado" />
 												<combobox
-													model="@load(vm.dtoUtil.articuloEstado)"
-													value="@load(vm.dto.articuloEstado.text.toUpperCase())"
-													selectedItem="@bind(vm.dto.articuloEstado)" hflex="true" instant="true"
+													model="@load(vm.dto.estados)"
+													value="@load(vm.dto.estado_)"
+													selectedItem="@bind(vm.dto.estado_)" hflex="true" instant="true"
 													style="color:#999;font-weight:bold">
 													<template
 														name="model">
 														<comboitem
-															label="@load(each.text.toUpperCase())" />
+															label="@load(each)" />
 													</template>
 												</combobox>
 											</vlayout>
@@ -408,15 +414,21 @@
 												<hlayout>
 													<datebox
 														value="@bind(vm.dto.fechaAlta)" readonly="true"
-														hflex="true" />
+														hflex="true" style="color:#999;font-weight:bold" />
 												</hlayout>
 											</vlayout>
 										</row>
 										<row>	
 											<vlayout spacing="0">
-												<field value="Máximo" />
-												<combobox hflex="true">
-												</combobox>
+												<field value="Máximo / Mínimo" />
+												<hlayout>
+													<spinner hflex="true" placeholder="Máximo.."
+														value="@bind(vm.dto.maximo)" format="###,###,###"
+															style="color:#999;font-weight:bold"></spinner>
+													<spinner hflex="true" placeholder="Mínimo.."
+														value="@bind(vm.dto.minimo)" format="###,###,###"
+															style="color:#999;font-weight:bold"></spinner>
+												</hlayout>
 											</vlayout>	
 											<vlayout spacing="0">
 												<field
@@ -425,7 +437,7 @@
 													model="@load(vm.procedencias)"
 													value="@load(vm.dto.articuloProcedencia.text)"
 													selectedItem="@bind(vm.dto.articuloProcedencia)"
-													hflex="true">
+													hflex="true" style="color:#999;font-weight:bold">
 													<template
 														name="model">
 														<comboitem
@@ -435,22 +447,24 @@
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="FOB/CIF Local" />
-												<textbox hflex="true"></textbox>
+												<textbox hflex="true" style="color:#999;font-weight:bold"></textbox>
 											</vlayout>
 										</row>
 										<row>
 											<vlayout spacing="0">
 												<field value="80 / 20" />
-												<textbox hflex="true" />
+												<textbox hflex="true" value="@bind(vm.dto.ochentaVeinte)" 
+													style="color:#999;font-weight:bold" />
 											</vlayout>
 											<vlayout spacing="0">
-												<field value="CBM" />
-												<combobox hflex="true">
-												</combobox>
+												<field value="ABC" />
+												<textbox hflex="true" value="@bind(vm.dto.abc)" 
+													style="color:#999;font-weight:bold" />
 											</vlayout>	
 											<vlayout spacing="0">
 												<field value="SKU" />
-												<textbox hflex="true"  />
+												<textbox hflex="true" readonly="true" 
+													style="color:#999;font-weight:bold" />
 											</vlayout>									
 										</row>										
 									</rows>
@@ -467,29 +481,35 @@
 										<row>
 											<vlayout spacing="0">
 												<field value="Diseño" />
-												<textbox value="@bind(vm.dto.disenho)" hflex="true"></textbox>
+												<textbox value="@bind(vm.dto.disenho)" hflex="true"
+													style="color:#999;font-weight:bold"></textbox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Ancho" />
-												<intbox value="@bind(vm.dto.ancho)" hflex="true"></intbox>
+												<intbox value="@bind(vm.dto.ancho)" hflex="true"
+													style="color:#999;font-weight:bold"></intbox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Alto" />
-												<doublebox value="@bind(vm.dto.alto)" hflex="true"></doublebox>
+												<doublebox value="@bind(vm.dto.alto)" hflex="true"
+													style="color:#999;font-weight:bold"></doublebox>
 											</vlayout>
 										</row>
 										<row>
 											<vlayout spacing="0">
 												<field value="Aro" />
-												<doublebox value="@bind(vm.dto.aro)" hflex="true"></doublebox>
+												<doublebox value="@bind(vm.dto.aro)" hflex="true"
+													style="color:#999;font-weight:bold"></doublebox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Medida" />
-												<textbox value="@bind(vm.dto.medida)" hflex="true"></textbox>
+												<textbox value="@bind(vm.dto.medida)" hflex="true"
+													style="color:#999;font-weight:bold"></textbox>
 											</vlayout>
 											<vlayout spacing="0">
 												<field value="Pisada" />
-												<textbox value="@bind(vm.dto.pisada)" hflex="true"></textbox>
+												<textbox value="@bind(vm.dto.pisada)" hflex="true"
+													style="color:#999;font-weight:bold"></textbox>
 											</vlayout>
 										</row>
 									</rows>

@@ -9291,16 +9291,23 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<Long, Object[]> stock7 = new HashMap<Long, Object[]>();
 				Map<Long, Object[]> stock8 = new HashMap<Long, Object[]>();
 				
+				Map<String, Long> cantClientes = new HashMap<String, Long>();
+				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[19]);
 					String cod = (String) venta[1];
 					String key = cod + "-" + mes;
 					Integer acum = cants.get(key);
+					Long acumCliente = cantClientes.get(cod);
 					if (acum != null) {
 						acum += ((Long) venta[18]).intValue();
+						acumCliente ++;
 						cants.put(key, acum);
+						cantClientes.put(cod, acumCliente);
 					} else {
+						long cli = 1;
 						cants.put(key, ((Long) venta[18]).intValue());
+						cantClientes.put(cod, cli);
 					}
 					arts.put((long) venta[0], (long) venta[0]);
 					arts_.put((long) venta[0], (long) venta[0]);
@@ -9320,7 +9327,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				if (todos) {	
-					articulos = rr.getArticulos(idProveedor);
+					articulos = rr.getArticulos(idProveedor, idFamilia);
 					for (Object[] art : articulos) {
 						arts.put((long) art[0], (long) art[0]);
 					}
@@ -9349,17 +9356,21 @@ public class ReportesViewModel extends SimpleViewModel {
 					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
 					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
 					
-					venta = Arrays.copyOf(venta, venta.length + 3);
+					venta = Arrays.copyOf(venta, venta.length + 5);
 					Date fcl = (Date) compraLocal[1];
 					Date fcI = (Date) compraImpor[1];
 					if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
-						venta[20] = compraLocal[0];
-						venta[21] = compraLocal[1];
-						venta[22] = compraLocal[2];
+						venta[25] = compraLocal[0];
+						venta[26] = compraLocal[1];
+						venta[27] = compraLocal[2];
+						venta[28] = compraLocal[3];
+						venta[29] = compraLocal[4];
 					} else {
-						venta[20] = compraImpor[0];
-						venta[21] = compraImpor[1];
-						venta[22] = compraImpor[2];
+						venta[25] = compraImpor[0];
+						venta[26] = compraImpor[1];
+						venta[27] = compraImpor[2];
+						venta[28] = compraImpor[3];
+						venta[29] = compraImpor[4];
 					}
 					values.add(venta);
 				}
@@ -9370,7 +9381,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (arts_.get(idArt) == null) {
 							values.add(new Object[] { art[0], art[1], art[2], art[3], art[4], art[5], art[6], art[7],
 									art[8], art[9], art[10], art[11], art[12], art[13], art[14], art[15], art[16], art[17],
-									null, null, 0, null, null });
+									null, null, null, art[18], art[19], art[20], (long) 0, 0, null, null, 0.0, 0.0 });
 						}
 					}
 				}
@@ -9379,7 +9390,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String cod = (String) det[1];
 					String codProveedor = (String) det[2];
 					String referencia = (String) det[3];
-					String nroParte = (String) det[4];
+					String codigoOriginal = (String) det[4];
 					String descripcion = (String) det[6];
 					String ochentaVeinte = (String) det[7];
 					String abc = (String) det[8];
@@ -9392,9 +9403,14 @@ public class ReportesViewModel extends SimpleViewModel {
 					String peso = Utiles.getNumberFormat((double) det[15]);
 					String volumen = Utiles.getNumberFormat((double) det[16]);
 					String proveedor = (String) det[17];
-					String cantidad = det[20] + "";
-					String fechaUltimaCompra = det[21] + "";
-					String proveedoUltimaCompra = (String) det[22];
+					int maximo = (int) det[21];
+					int minimo = (int) det[22];
+					long cantCliente = (long) det[24];
+					String cantidad = det[25] + "";
+					String fechaUltimaCompra = det[26] + "";
+					String proveedoUltimaCompra = (String) det[27];
+					double costoFobGs = (double) det[23];
+					double costoFobDs = (double) det[29];
 					
 					Object[] st = stock1.get(det[0]);
 					String dep_1 = st != null ? st[1] + "" : "0";
@@ -9461,7 +9477,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setCodigoProveedor(codProveedor);
 					hist.setDescripcion(descripcion);
 					hist.setReferencia(referencia);
-					hist.setNroParte(nroParte);
+					hist.setCodigoOriginal(codigoOriginal);
 					hist.setEstado((boolean) det[5] ? "ACTIVO" : "INACTIVO");
 					hist.setArticulo("");
 					hist.setFamilia(familia);
@@ -9476,6 +9492,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setVolumen(volumen);
 					hist.setProveedor(proveedor);
 					hist.setCantidad(Long.parseLong(cantidad));
+					hist.setCantCliente(cantCliente);
+					hist.setMaximo(maximo);
+					hist.setMinimo(minimo);
+					hist.setCostoFobGs(costoFobGs);
+					hist.setCostoFobDs(costoFobDs);
 					hist.setStock1(Long.parseLong(dep_1));
 					hist.setStock2(Long.parseLong(dep_2));
 					hist.setStock3(Long.parseLong(dep_3));
@@ -20846,7 +20867,7 @@ class MovimientoArticulos implements JRDataSource {
 		}  else if ("Referencia".equals(fieldName)) {
 			value = det.getReferencia();
 		} else if ("NroParte".equals(fieldName)) {
-			value = det.getNroParte();
+			value = det.getCodigoOriginal();
 		} else if ("Estado".equals(fieldName)) {
 			value = det.getEstado();
 		} else if ("Descripcion".equals(fieldName)) {
@@ -20879,6 +20900,14 @@ class MovimientoArticulos implements JRDataSource {
 			value = det.getFechaUltimaCompra() + "";
 		} else if ("ProvLocal".equals(fieldName)) {
 			value = det.getProveedorUltimaCompra();			
+		} else if ("Maximo".equals(fieldName)) {
+			value = det.getMaximo() + "";
+		} else if ("Minimo".equals(fieldName)) {
+			value = det.getMinimo() + "";
+		} else if ("FobGs".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.getCostoFobGs()) + "";
+		} else if ("FobDs".equals(fieldName)) {
+			value = det.getCostoFobDs() + "";
 		} else if ("Dep_1".equals(fieldName)) {
 			value = det.getStock1() + "";			
 		} else if ("Dep_2".equals(fieldName)) {
@@ -20921,7 +20950,9 @@ class MovimientoArticulos implements JRDataSource {
 			value = det.getNoviembre() + "";
 		} else if ("Diciembre".equals(fieldName)) {
 			value = det.getDiciembre() + "";
-		} 
+		} else if ("CantCliente".equals(fieldName)) {
+			value = det.getCantCliente() + "";
+		}
 		return value;
 	}
 
@@ -21025,7 +21056,7 @@ class LitrajeArticulos implements JRDataSource {
 		}  else if ("Referencia".equals(fieldName)) {
 			value = det.getReferencia();
 		} else if ("NroParte".equals(fieldName)) {
-			value = det.getNroParte();
+			value = det.getCodigoOriginal();
 		} else if ("Estado".equals(fieldName)) {
 			value = det.getEstado();
 		} else if ("Descripcion".equals(fieldName)) {

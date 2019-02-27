@@ -9020,7 +9020,7 @@ public class RegisterDomain extends Register {
 	 * [1]:articulo.codigoInterno
 	 * [2]:articulo.codigoProveedor
 	 * [3]:articulo.referencia
-	 * [4]:articulo.numeroParte
+	 * [4]:articulo.codigoOriginal
 	 * [5]:articulo.estado
 	 * [6]:articulo.descripcion
 	 * [7]:articulo.ochentaVeinte
@@ -9037,15 +9037,20 @@ public class RegisterDomain extends Register {
 	 * [18]:cantidad
 	 * [19]:fecha
 	 * [20]:cliente.empresa.razonSocial
+	 * [21]:articulo.maximo
+	 * [22]:articulo.minimo
+	 * [23]:articulo.costoGs
+	 * [24]:cliente.id
 	 */
 	public List<Object[]> getVentasDetallado(Date desde, Date hasta, long idProveedor, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte,"
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.codigoOriginal,"
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
-				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion, "
+				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion,"
 				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
-				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha, v.cliente.empresa.razonSocial"
+				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha, v.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo,"
+				+ " d.articulo.costoGs, v.cliente.id"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -9056,11 +9061,12 @@ public class RegisterDomain extends Register {
 				if (idFamilia > 0) {
 					query += " and d.articulo.familia.id = " + idFamilia;
 				}
-				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.numeroParte," + 
+				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.codigoProveedor, d.articulo.referencia, d.articulo.codigoOriginal," + 
 				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
 				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
 				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
-				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha, v.cliente.empresa.razonSocial";
+				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha, v.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo," + 
+				" d.articulo.costoGs, v.cliente.id";
 		return this.hql(query);
 	}
 	
@@ -9087,6 +9093,10 @@ public class RegisterDomain extends Register {
 	 * [18]:cantidad
 	 * [19]:fecha
 	 * [20]:cliente.empresa.razonSocial
+	 * [21]:articulo.maximo
+	 * [22]:articulo.minimo
+	 * [23]:articulo.costoGs
+	 * [24]:cliente.id
 	 */
 	public List<Object[]> getNotasCreditoDetallado(Date desde, Date hasta, long idProveedor, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -9095,7 +9105,8 @@ public class RegisterDomain extends Register {
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
 				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion, "
 				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
-				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial"
+				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo,"
+				+ " d.articulo.minimo, d.articulo.costoGs, v.cliente.id"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
@@ -9109,7 +9120,8 @@ public class RegisterDomain extends Register {
 				" d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion," + 
 				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
 				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
-				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, n.fechaEmision, n.cliente.empresa.razonSocial";
+				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo," + 
+				" d.articulo.costoGs, v.cliente.id";
 		return this.hql(query);
 	}
 	
@@ -9185,13 +9197,15 @@ public class RegisterDomain extends Register {
 	 * [0]:cantidad
 	 * [1]:fecha
 	 * [2]:proveedor
+	 * [3]:costoGs
+	 * [4]:costoDs
 	 */
 	public Object[] getUltimaCompraLocal(long idArticulo) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial"
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
 				+ " from CompraLocalFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
-		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
+		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 	}
 	
 	/**
@@ -9199,13 +9213,15 @@ public class RegisterDomain extends Register {
 	 * [0]:cantidad
 	 * [1]:fecha
 	 * [2]:proveedor
+	 * [3]:costoGs
+	 * [4]:costoDs
 	 */
 	public Object[] getUltimaCompraImportacion(long idArticulo) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial"
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
 				+ " from ImportacionFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
-		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null };
+		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 	}
 	
 	/**
@@ -9474,7 +9490,7 @@ public class RegisterDomain extends Register {
 	 * [1]:articulo.codigoInterno
 	 * [2]:articulo.codigoProveedor
 	 * [3]:articulo.referencia
-	 * [4]:articulo.numeroParte
+	 * [4]:articulo.codigoOriginal
 	 * [5]:articulo.estado
 	 * [6]:articulo.descripcion
 	 * [7]:articulo.ochentaVeinte
@@ -9488,13 +9504,21 @@ public class RegisterDomain extends Register {
 	 * [15]:articulo.peso
 	 * [16]:articulo.volumen
 	 * [17]:articulo.proveedor
+	 * [18]:articulo.maximo
+	 * [19]:articulo.minimo
+	 * [20]:articulo.costoGs
 	 */
-	public List<Object[]> getArticulos(long idProveedor) throws Exception {
-		String query = "select a.id, a.codigoInterno, a.codigoProveedor, a.referencia, a.numeroParte,"
+	public List<Object[]> getArticulos(long idProveedor, long idFamilia) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.codigoProveedor, a.referencia, a.codigoOriginal,"
 				+ "	a.estado, a.descripcion, a.ochentaVeinte, a.abc, a.familia.descripcion,"
 				+ " a.marca.descripcion, a.articuloLinea.descripcion, a.articuloGrupo.descripcion,"
-				+ " a.articuloAplicacion.descripcion, a.articuloModelo.descripcion, a.peso, a.volumen, a.proveedor.empresa.razonSocial"
-				+ " from Articulo a where a.proveedor.id = " + idProveedor + " order by a.descripcion";
+				+ " a.articuloAplicacion.descripcion, a.articuloModelo.descripcion, a.peso, a.volumen, "
+				+ " a.proveedor.empresa.razonSocial, a.maximo, a.minimo, a.costoGs"
+				+ " from Articulo a where a.proveedor.id = " + idProveedor + "";
+		if (idFamilia > 0) {
+			query += " and a.familia.id = " + idFamilia;
+		}
+				query += " order by a.descripcion";
 		return this.hql(query);
 	}
 	

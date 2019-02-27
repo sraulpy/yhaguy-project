@@ -16,10 +16,10 @@ import com.yhaguy.gestion.empresa.AssemblerProveedor;
 
 public class AssemblerArticulo extends Assembler {
 
-	static String[] attIguales = { 
-			"descripcion", "codigoInterno", "codigoProveedor", "codigoOriginal", "codigoBarra",
+	static String[] attIguales = { "descripcion", "codigoInterno", "codigoProveedor", "codigoOriginal", "codigoBarra",
 			"observacion", "peso", "volumen", "fechaAlta", "prioridad", "completo", "urlImagen", "urlEspecificacion",
-			"importado", "servicio", "disenho", "ancho", "alto", "aro", "medida", "pisada", "unidadesCaja" };
+			"importado", "servicio", "disenho", "ancho", "alto", "aro", "medida", "pisada", "unidadesCaja",
+			"referencia", "estado", "ochentaVeinte", "abc", "maximo", "minimo" };
 
 	static String[] attPresentacion = { "descripcion" };
 

@@ -36,6 +36,8 @@
 		<property name="servicio" />
 		<property name="ochentaVeinte" />
 		<property name="abc" />
+		<property name="maximo" />
+		<property name="minimo" />
 		
 		<property name="disenho" />
 		<property name="ancho" />
@@ -46,7 +48,7 @@
 		<property name="unidadesCaja" />
 		
 		<property name="estado">
-			<column name="anulado" not-null="true" default="false" />
+			<column name="estado" not-null="true" default="false" />
 		</property>
 		
 		<many-to-one name="familia" class="com.yhaguy.domain.ArticuloFamilia"
