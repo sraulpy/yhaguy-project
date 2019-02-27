@@ -9106,7 +9106,7 @@ public class RegisterDomain extends Register {
 				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion, "
 				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
 				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo,"
-				+ " d.articulo.minimo, d.articulo.costoGs, v.cliente.id"
+				+ " d.articulo.minimo, d.articulo.costoGs, n.cliente.id"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
@@ -9121,7 +9121,7 @@ public class RegisterDomain extends Register {
 				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
 				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
 				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo," + 
-				" d.articulo.costoGs, v.cliente.id";
+				" d.articulo.costoGs, n.cliente.id";
 		return this.hql(query);
 	}
 	
