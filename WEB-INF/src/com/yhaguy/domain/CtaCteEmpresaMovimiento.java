@@ -17,7 +17,7 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	private long idEmpresa = 0;
 	private Date fechaEmision = new Date();
 	private long idMovimientoOriginal = 0;
-	private String nroComprobante = "comprobante";
+	private String nroComprobante = "";
 	private Date fechaVencimiento = new Date();
 	private double importeOriginal = 0;
 	private double saldo = 0;
@@ -36,6 +36,7 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	private boolean tesaka;
 	
 	private String numeroImportacion = "";
+	private String observacion = "";
 	
 	/**
 	 * @return true si es nota de credito..
@@ -374,5 +375,13 @@ public class CtaCteEmpresaMovimiento extends Domain {
 
 	public void setAux(double aux) {
 		this.aux = aux;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
 	}
 }

@@ -291,6 +291,25 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	@NotifyChange("selectedItem_")
+	public void setSelected(@BindingParam("item") MyArray item) {
+		this.selectedItem_ = item;
+	}
+	
+	@Command
+	public void updateCtaCte(@BindingParam("comp") Popup comp) throws Exception {
+		double saldo = (double) this.selectedItem_.getPos6();
+		String observacion = (String) this.selectedItem_.getPos11();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(this.selectedItem_.getId());
+		ctacte.setSaldo(saldo);
+		ctacte.setObservacion(observacion.toUpperCase());
+		rr.saveObject(ctacte, this.getLoginNombre());
+		Clients.showNotification("REGISTRO ACTUALIZADO..");
+		comp.close();
+	}
+	
+	@Command
 	@NotifyChange({ "groupModel", "detalle", "groupModel_" })
 	public void verItems(@BindingParam("item") MyArray item,
 			@BindingParam("parent") Component parent) throws Exception {
@@ -1631,6 +1650,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos8(mov.getTipoMovimiento().getSigla());
 			my.setPos9(mov.getIdMovimientoOriginal());
 			my.setPos10(mov.getNumeroImportacion().isEmpty() ? "- - -" : mov.getNumeroImportacion());
+			my.setPos11(mov.getObservacion());
 			if (this.isTodos()) {
 				out.add(my);
 			} else if (this.isPendientes()) {
