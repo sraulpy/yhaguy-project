@@ -228,7 +228,7 @@
 							onChange="@command('setSelected', item=each)"
 							onOK='pop_edicion.open(self, "after_end"); tx_desc.focus()'
 							tooltiptext="@load(each.pos11)"
-							style="@load(each.pos11.toString().length() > 0? 'color:darkblue;text-align:right;font-weight:bold' : 'text-align:right')"/>	
+							style="@load(each.pos11.toString().length() > 0? 'color:#3498db;text-align:right;font-weight:bold' : 'text-align:right')"/>	
 					</listcell>
 					<listcell>
 						<a label="ítems"
