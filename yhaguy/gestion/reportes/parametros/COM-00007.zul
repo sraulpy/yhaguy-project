@@ -88,12 +88,36 @@
 			</bandbox>
 		</row>
 		<row>
+			<field value="Familia:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.familias_)"
+				selectedItem="@bind(vm.dato.filtro.familia_)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Formato:" />
 			<textbox readonly="true" hflex="true" value="CSV"></textbox>
 		</row>
 		<row>
 			<field value="Ítems s/movimiento:" />
 			<checkbox checked="@bind(vm.dato.filtro.todos)"></checkbox>
+		</row>
+		<row>
+			<div height="10px"></div>
+		</row>
+		<row>
+			<cell colspan="2">
+				<label style="font-style:italic;color:red">Obs: Se requiere que la segmentación esté completamente asignada..</label>
+			</cell>
+		</row>
+		<row>
+			<cell colspan="2">
+				<label style="font-style:italic;color:red">proveedor, familia, marca, linea, grupo, modelo, aplicación..</label>
+			</cell>
 		</row>
 	</rows>
 </grid>
