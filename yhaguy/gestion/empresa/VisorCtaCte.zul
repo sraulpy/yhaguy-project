@@ -223,7 +223,7 @@
 					<listcell
 						style="@load(each.pos7 ? 'color:red' : '')" >
 						<doublebox hflex="true" value="@bind(each.pos6)" 
-							format="###,###,###,###" vflex="true" 
+							format="###,###,###,##0" vflex="true" 
 							readonly="@load(!vm.isOperacionHabilitada('ModificarSaldo'))" 
 							onChange="@command('setSelected', item=each)"
 							onOK='pop_edicion.open(self, "after_end"); tx_desc.focus()'
