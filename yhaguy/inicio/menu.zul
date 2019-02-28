@@ -47,6 +47,24 @@
 						<zk forEach="${vm.menuItem(self,'LibroBanco')}" />
 					</menupopup>
 				</menu>
+				
+				
+				<menu label="Contabilidad" iconSclass="z-icon-bar-chart-o" style="margin-bottom:15px;margin-top:15px">
+					<menupopup sclass="rounded">
+						<!-- <zk forEach="${vm.menuItem(self,'Asientos')}" />
+						<zk forEach="${vm.menuItem(self,'GeneracionAsientos')}" /> 
+						<zk forEach="${vm.menuItem(self, 'PlanCuentas')}" />
+						<zk forEach="${vm.menuItem(self, 'Asientos')}" /> -->
+						<zk forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
+						<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
+						<menuitem label="LIBRO COMPRAS" disabled="true" iconSclass="z-icon-caret-right" />
+						<menuitem label="LIBRO VENTAS" disabled="true" iconSclass="z-icon-caret-right" />
+						<menuitem label="LIBRO MAYOR" disabled="true" iconSclass="z-icon-caret-right" />
+						<menuitem label="SUMAS Y SALDOS" disabled="true" iconSclass="z-icon-caret-right" />
+						<menuitem label="BALANCE" disabled="true" iconSclass="z-icon-caret-right" />
+					</menupopup>
+				</menu>
+				
 			</menupopup>
 		</menu>
 
@@ -128,22 +146,6 @@
 				<menuitem label="EVALUACIÓN DEL PERSONAL" iconSclass="z-icon-caret-right"
 					disabled="true"/>
 				<zk forEach="${vm.menuItem(self,'LiquidacionSalarios')}" />
-			</menupopup>
-		</menu>
-
-		<menu label="Contable" iconSclass="z-icon-bar-chart-o">
-			<menupopup sclass="rounded">
-				<!-- <zk forEach="${vm.menuItem(self,'Asientos')}" />
-				<zk forEach="${vm.menuItem(self,'GeneracionAsientos')}" /> 
-				<zk forEach="${vm.menuItem(self, 'PlanCuentas')}" />
-				<zk forEach="${vm.menuItem(self, 'Asientos')}" /> -->
-				<zk forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
-				<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
-				<menuitem label="LIBRO COMPRAS" disabled="true" iconSclass="z-icon-caret-right" />
-				<menuitem label="LIBRO VENTAS" disabled="true" iconSclass="z-icon-caret-right" />
-				<menuitem label="LIBRO MAYOR" disabled="true" iconSclass="z-icon-caret-right" />
-				<menuitem label="SUMAS Y SALDOS" disabled="true" iconSclass="z-icon-caret-right" />
-				<menuitem label="BALANCE" disabled="true" iconSclass="z-icon-caret-right" />
 			</menupopup>
 		</menu>
 
