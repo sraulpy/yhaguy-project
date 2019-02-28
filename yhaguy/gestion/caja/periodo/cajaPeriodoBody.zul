@@ -2,8 +2,6 @@
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoControlBody')"
 		height="100%" width="100%">
-		
-		<timer delay="5000" repeats="true" onTimer="@command('verificarPedidosAprobados')" ></timer>
 
 		<!-- ___________________________ CABECERA ___________________________ -->
 
