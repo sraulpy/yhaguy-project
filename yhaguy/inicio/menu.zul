@@ -2,33 +2,51 @@
 	<menubar id="menubar" visible="@load(vm.menuVisible)">
 
 		<menu label=" Finanzas" iconSclass="z-icon-briefcase">
-			<menupopup sclass="rounded">
-
-				<zk forEach="${vm.menuItem(self,'Caja')}" />
-				<zk forEach="${vm.menuItem(self,'CajaPlanilla')}" />
-				<zk forEach="${vm.menuItem(self,'CajaPlanillaResumen')}" />
-				<menuseparator />
-				<zk forEach="${vm.menuItem(self,'CuentasCobrar')}" />
-				<zk forEach="${vm.menuItem(self,'CuentasPagar')}" />
-				<zk forEach="${vm.menuItem(self,'GestionCobro')}" />
-				<zk forEach="${vm.menuItem(self,'AuditoriaSaldos')}" />
-				<menuseparator />
-				<zk forEach="${vm.menuItem(self,'Recibos')}" />
-				<zk forEach="${vm.menuItem(self,'Pagos')}" />
-				<zk forEach="${vm.menuItem(self,'TesakaRetenciones')}" />
-				<menuseparator />
-				<zk forEach="${vm.menuItem(self,'Cheques')}" />
-				<zk forEach="${vm.menuItem(self,'ChequesTerceros')}" />	
-				<zk forEach="${vm.menuItem(self,'BancoBoletaDeposito') }" />				
-				<zk forEach="${vm.menuItem(self,'BancoTarjetas') }" />
-				<zk forEach="${vm.menuItem(self,'BancoDescuentoCheque', 'tipo=descuento') }" />	
-				<zk forEach="${vm.menuItem(self,'BancoAnticipoUtilidad', 'tipo=anticipo') }" />		
-				<zk forEach="${vm.menuItem(self,'BancoPrestamos') }" />	
-				<zk forEach="${vm.menuItem(self,'BancoPrestamoCheque', 'tipo=prestamo') }" />	
-				<zk forEach="${vm.menuItem(self,'BancoEnvioCheques', 'tipo=envio') }" />
-				<zk forEach="${vm.menuItem(self,'BancoTransferencias') }" />
-				<zk forEach="${vm.menuItem(self,'BancoConciliacion') }" />
-				<zk forEach="${vm.menuItem(self,'LibroBanco')}" />
+			<menupopup sclass="rounded" width="170px">
+				
+				<menu label=" Tesorería" iconSclass="z-icon-briefcase" style="margin-bottom:15px;margin-top:15px">
+					<menupopup sclass="rounded">
+						<zk forEach="${vm.menuItem(self,'Caja')}" />
+						<zk forEach="${vm.menuItem(self,'CajaPlanilla')}" />
+						<zk forEach="${vm.menuItem(self,'CajaPlanillaResumen')}" />
+					</menupopup>
+				</menu>	
+				
+				<menu label=" Cobranzas" iconSclass="z-icon-phone" style="margin-bottom:15px;margin-top:15px">
+					<menupopup sclass="rounded">
+						<zk forEach="${vm.menuItem(self,'Recibos')}" />
+						<zk forEach="${vm.menuItem(self,'CuentasCobrar')}" />
+						<zk forEach="${vm.menuItem(self,'GestionCobro')}" />
+						<zk forEach="${vm.menuItem(self,'AuditoriaSaldos')}" />
+					</menupopup>
+				</menu>
+				
+				<menu label=" Pagos" iconSclass="z-icon-money" style="margin-bottom:15px;margin-top:15px">
+					<menupopup sclass="rounded">
+						<zk forEach="${vm.menuItem(self,'Pagos')}" />
+						<zk forEach="${vm.menuItem(self,'TesakaRetenciones')}" />
+						<zk forEach="${vm.menuItem(self,'OrdenPedidoGasto')}" />
+						<zk forEach="${vm.menuItem(self,'ExploradorGastos')}" />
+						<zk forEach="${vm.menuItem(self,'CuentasPagar')}" />
+					</menupopup>
+				</menu>	
+				
+				<menu label=" Bancos" iconSclass="z-icon-building" style="margin-bottom:15px;margin-top:15px">
+					<menupopup sclass="rounded">
+						<zk forEach="${vm.menuItem(self,'Cheques')}" />
+						<zk forEach="${vm.menuItem(self,'ChequesTerceros')}" />	
+						<zk forEach="${vm.menuItem(self,'BancoBoletaDeposito') }" />				
+						<zk forEach="${vm.menuItem(self,'BancoTarjetas') }" />
+						<zk forEach="${vm.menuItem(self,'BancoDescuentoCheque', 'tipo=descuento') }" />	
+						<zk forEach="${vm.menuItem(self,'BancoAnticipoUtilidad', 'tipo=anticipo') }" />		
+						<zk forEach="${vm.menuItem(self,'BancoPrestamos') }" />	
+						<zk forEach="${vm.menuItem(self,'BancoPrestamoCheque', 'tipo=prestamo') }" />	
+						<zk forEach="${vm.menuItem(self,'BancoEnvioCheques', 'tipo=envio') }" />
+						<zk forEach="${vm.menuItem(self,'BancoTransferencias') }" />
+						<zk forEach="${vm.menuItem(self,'BancoConciliacion') }" />
+						<zk forEach="${vm.menuItem(self,'LibroBanco')}" />
+					</menupopup>
+				</menu>
 			</menupopup>
 		</menu>
 
