@@ -221,14 +221,8 @@
 						label="@load(each.pos5) @converter('formattedNumber', format='###,###,###,###')"
 						style="@load(each.pos7 ? 'color:red' : '')" />
 					<listcell
-						style="@load(each.pos7 ? 'color:red' : '')" >
-						<doublebox hflex="true" value="@bind(each.pos6)" 
-							format="###,###,###,##0" vflex="true" 
-							readonly="@load(!vm.isOperacionHabilitada('ModificarSaldo'))" 
-							onChange="@command('setSelected', item=each)"
-							onOK='pop_edicion.open(self, "after_end"); tx_desc.focus()'
-							tooltiptext="@load(each.pos11)"
-							style="@load(each.pos11.toString().length() > 0? 'color:#3498db;text-align:right;font-weight:bold' : 'text-align:right')"/>	
+						label="@load(each.pos6) @converter('formattedNumber', format='###,###,###,##0')"
+						style="@load(each.pos7 ? 'color:red' : '')" />	
 					</listcell>
 					<listcell>
 						<a label="ítems"
