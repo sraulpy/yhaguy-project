@@ -223,7 +223,6 @@
 					<listcell
 						label="@load(each.pos6) @converter('formattedNumber', format='###,###,###,##0')"
 						style="@load(each.pos7 ? 'color:red' : '')" />	
-					</listcell>
 					<listcell>
 						<a label="ítems"
 							onClick="@command('verItems', item=each, parent=self)" />
