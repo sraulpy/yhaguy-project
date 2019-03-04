@@ -121,8 +121,11 @@ public class AuditoriaSaldosViewModel extends SimpleViewModel {
 				: Configuracion.SIGLA_MONEDA_DOLAR;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Map<Long, Double> acum = new HashMap<Long, Double>();
+		Map<Long, Double> acumNc = new HashMap<Long, Double>();
 		List<CtaCteEmpresaMovimiento> list = rr.getSaldosCtaCte(((long) this.selectedEmpresa[0]), Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE,
 				Configuracion.SIGLA_TM_FAC_VENTA_CREDITO, siglaMoneda, desde);
+		List<CtaCteEmpresaMovimiento> listNc = rr.getSaldosCtaCte(((long) this.selectedEmpresa[0]), Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE,
+				Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA, siglaMoneda, desde);
 		List<CtaCteEmpresaMovimiento> list_ = new ArrayList<CtaCteEmpresaMovimiento>();
 		for (CtaCteEmpresaMovimiento ctacte : list) {
 			Double saldo = acum.get(ctacte.getIdMovimientoOriginal());
@@ -134,16 +137,32 @@ public class AuditoriaSaldosViewModel extends SimpleViewModel {
 			}
 			acum.put(ctacte.getIdMovimientoOriginal(), saldo);
 		}
-		for (CtaCteEmpresaMovimiento ctacte : list_) {
-			ctacte.setSaldo(acum.get(ctacte.getIdMovimientoOriginal()));
-			long idVenta = ctacte.getIdMovimientoOriginal();
-			List<Object[]> aplicaciones = ControlCuentaCorriente.getAplicacionesVenta(idVenta);
-			if (aplicaciones.size() > 0) {
-				Object[] last = aplicaciones.get(aplicaciones.size() - 1);
-				ctacte.setAux((double) last[7]);
+		for (CtaCteEmpresaMovimiento ctacte : listNc) {
+			Double saldo = acumNc.get(ctacte.getIdMovimientoOriginal());
+			if (saldo != null) {
+				saldo += ctacte.getSaldo();
 			} else {
-				ctacte.setAux(ctacte.getSaldo());
+				saldo = ctacte.getSaldo();
+				list_.add(ctacte);
 			}
+			acumNc.put(ctacte.getIdMovimientoOriginal(), saldo);
+		}
+		for (CtaCteEmpresaMovimiento ctacte : list_) {
+			if (ctacte.isVentaCredito()) {
+				ctacte.setSaldo(acum.get(ctacte.getIdMovimientoOriginal()));
+			}
+			long idVenta = ctacte.getIdMovimientoOriginal();
+			if (ctacte.isVentaCredito()) {
+				List<Object[]> aplicaciones = ControlCuentaCorriente.getAplicacionesVenta(idVenta);
+				if (aplicaciones.size() > 0) {
+					Object[] last = aplicaciones.get(aplicaciones.size() - 1);
+					ctacte.setAux((double) last[7]);
+				} else {
+					ctacte.setAux(ctacte.getSaldo());
+				}
+			} else {
+				ctacte.setAux(0.0);
+			}			
 			this.totalSaldo += ctacte.getSaldo();
 			this.totalSaldo_ += ctacte.getAux();
 		}
@@ -156,11 +175,14 @@ public class AuditoriaSaldosViewModel extends SimpleViewModel {
 	@DependsOn("selectedItem")
 	public List<Object[]> getAplicaciones() throws Exception {
 		if (this.selectedItem == null) return new ArrayList<Object[]>();
+		List<Object[]> list = new ArrayList<Object[]>();
 		long idVenta = this.selectedItem.getIdMovimientoOriginal();
-		List<Object[]> list = ControlCuentaCorriente.getAplicacionesVenta(idVenta);
-		Object[] last = list.get(list.size() - 1);
-		this.totalSaldoAplicado = (double) last[7];
-		BindUtils.postNotifyChange(null, null, this, "totalSaldoAplicado");
+		if (this.selectedItem.isVentaCredito()) {
+			list = ControlCuentaCorriente.getAplicacionesVenta(idVenta);
+			Object[] last = list.get(list.size() - 1);
+			this.totalSaldoAplicado = (double) last[7];
+			BindUtils.postNotifyChange(null, null, this, "totalSaldoAplicado");
+		}
 		return list;
 	}
 	

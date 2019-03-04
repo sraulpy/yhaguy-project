@@ -212,10 +212,6 @@
 						<field
 							value="@load(vm.dto.detallesOrdenado.size())" />
 						<field value="ítems" />
-						<space></space>
-						<label style="font-style:italic">Pedidos Aprobados</label>
-						<label class="badge primary" value="@load(vm.totalPedidosPendientes)"
-							style="background-color:#428bca"></label>
 						<space hflex="true" />
 						<label value="Saldo en Efectivo Gs."
 							sclass="label-moneda-footer" />

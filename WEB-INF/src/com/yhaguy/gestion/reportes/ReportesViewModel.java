@@ -198,7 +198,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 	@Init(superclass = true)
 	public void init() {
-		try {			
+		try {							
 			this.filtro.setFilterFechaMM("" + Utiles.getNumeroMesCorriente());
 			this.filtro.setFilterFechaAA(Utiles.getAnhoActual());
 			if (this.filtro.getFilterFechaMM().length() == 1) {

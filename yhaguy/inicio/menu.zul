@@ -135,7 +135,7 @@
 			</menupopup>
 		</menu>
 
-		<menu label="RRHH" iconSclass="z-icon-user">
+		<menu label="RR.HH" iconSclass="z-icon-user">
 			<menupopup sclass="rounded">
 
 				<zk forEach="${vm.menuItem(self,'Funcionarios')}" />
@@ -150,8 +150,6 @@
 
 		<menu id="menuSistemaItems" label="Sistema" iconSclass="z-icon-cog">
 			<menupopup sclass="rounded">
-				<menuitem label="ACCESO A REPORTES / INTERNO" iconSclass="z-icon-caret-right" href="http://10.25.1.251:8081/yhaguy/sistema.zul" target="_blank" />
-				<menuitem label="ACCESO A REPORTES / EXTERNO" iconSclass="z-icon-caret-right" href="http://gestion.yhaguyrepuestos.com.py:8081/yhaguy/sistema.zul" target="_blank" />
 				<zk forEach="${vm.menuItem(self,'Reportes')}" />
 				<zk forEach="${vm.menuItem(self,'Definiciones')}" />
 				<zk forEach="${vm.menuItem(self,'ConfiguracionUsuariosModulos')}" />

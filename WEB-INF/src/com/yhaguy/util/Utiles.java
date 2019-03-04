@@ -1,7 +1,6 @@
 package com.yhaguy.util;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -346,34 +345,34 @@ public class Utiles {
 	 * @return el string encriptado..
 	 */
 	public static String encriptar(String cadena, boolean caseSensitive) {
-
-		if (caseSensitive == false) {
-			cadena = cadena.toLowerCase();
-		}
-
-		MessageDigest md = null;
+		String secretKey = "qualityinfosolutions";
+		String base64EncryptedString = "";
 		try {
-			md = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return "** error encriptacion **";
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] digestOfPassword = md.digest(secretKey.getBytes("utf-8"));
+			byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
+
+			SecretKey key = new SecretKeySpec(keyBytes, "DESede");
+			Cipher cipher = Cipher.getInstance("DESede");
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+
+			byte[] plainTextBytes = cadena.getBytes("utf-8");
+			byte[] buf = cipher.doFinal(plainTextBytes);
+			byte[] base64Bytes = Base64.encodeBase64(buf);
+			base64EncryptedString = new String(base64Bytes);
+
+		} catch (Exception ex) {
 		}
-		md.reset();
-		md.update(cadena.getBytes());
-		byte[] b = md.digest();
-		String out = toHexadecimal(b);
-		return out;
+		return base64EncryptedString;
 	}
 	
 	public static String Desencriptar(String textoEncriptado) throws Exception {
 
-		String secretKey = "qualityinfosolutions"; // llave para desenciptar
-													// datos
+		String secretKey = "qualityinfosolutions"; 
 		String base64EncryptedString = "";
 
 		try {
-			byte[] message = Base64.decodeBase64(textoEncriptado
-					.getBytes("utf-8"));
+			byte[] message = Base64.decodeBase64(textoEncriptado.getBytes("utf-8"));
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			byte[] digestOfPassword = md.digest(secretKey.getBytes("utf-8"));
 			byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
@@ -387,10 +386,11 @@ public class Utiles {
 			base64EncryptedString = new String(plainText, "UTF-8");
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		return base64EncryptedString;
 	}
-	
+		
 	/**
 	 * @return el byte a hexadecimal..
 	 */
