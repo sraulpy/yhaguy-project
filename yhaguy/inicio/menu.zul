@@ -189,6 +189,9 @@
 			background: #EEF7FA! important;
 			color: black!important;
 		}
+		.z-button[disabled] {
+			background: linear-gradient(to bottom, #ffffff 0%, #2c3e50 100%);
+		}
 	</style>
 	
 	<!-- BOOTSTRAP FLATLY -->
