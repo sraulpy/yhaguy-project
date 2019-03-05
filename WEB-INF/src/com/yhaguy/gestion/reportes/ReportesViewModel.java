@@ -5566,7 +5566,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	/**
 	 * Limpia los atributos e inicializa los valores por defecto..
 	 */
-	public void inicializarFiltros() {
+	public void inicializarFiltros() throws Exception {
 		this.filtro.setFechaDesde(null);
 		this.filtro.setFechaHasta(null);
 		this.filtro.setFechaDesde2(null);
@@ -5640,6 +5640,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setStockMayorIgual(1);
 		this.filtro.setRubro_(null);
 		this.filtro.setVendedor(null);
+		this.filtro.setSelectedMes(Utiles.getMeses().get(Utiles.getNumeroMesCorriente() - 1));
 	}
 
 	/**
@@ -9265,6 +9266,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idProveedor = proveedor_ != null ? proveedor_.getId() : 0;
 				long idFamilia = familia_ != null ? familia_.getId() : 0;
 				
+				Date desdeCli = Utiles.getFechaInicioMes((int) filtro.getSelectedMes().getPos1());
+				Date hastaCli = Utiles.getFechaFinMes((int) filtro.getSelectedMes().getPos1());
+				
 				if (proveedor_ == null) {
 					Clients.showNotification("Debe seleccionar un Proveedor..", 
 							Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -9273,6 +9277,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetallado(desde, hasta, idProveedor, idFamilia);
+				List<Object[]> ventasCantCli = rr.getVentasDetallado(desdeCli, hastaCli, idProveedor, idFamilia);
 				List<Object[]> notasCredito = rr.getNotasCreditoDetallado(desde, hasta, idProveedor, idFamilia);
 				List<Object[]> articulos = new ArrayList<Object[]>();
 				
@@ -9293,6 +9298,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				Map<String, Integer> cantClientes = new HashMap<String, Integer>();
 				Map<String, Integer> cantClientes_ = new HashMap<String, Integer>();
+				
+				Map<String, Integer> cantClientesVig = new HashMap<String, Integer>();
+				Map<String, Integer> cantClientesVig_ = new HashMap<String, Integer>();
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[19]);
@@ -9322,6 +9330,23 @@ public class ReportesViewModel extends SimpleViewModel {
 					
 					arts.put((long) venta[0], (long) venta[0]);
 					arts_.put((long) venta[0], (long) venta[0]);
+				}
+				
+				for (Object[] venta : ventasCantCli) {
+					String cod = (String) venta[1];
+					String keyCli = cod + "-" + venta[24];
+					
+					Integer acumCliente = cantClientesVig.get(keyCli);
+					if (acumCliente == null) {
+						cantClientesVig.put(keyCli, 1);
+						Integer acumCliente_ = cantClientesVig_.get(cod);
+						if (acumCliente_ != null) {
+							acumCliente_ ++;
+							cantClientesVig_.put(cod, acumCliente_);
+						} else {
+							cantClientesVig_.put(cod, 1);
+						}
+					}
 				}
 				
 				for (Object[] ncred : notasCredito) {
@@ -9418,6 +9443,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					int minimo = (int) det[22];
 					Integer cantCliente = cantClientes_.get(cod);
 					if (cantCliente == null) cantCliente = 0;
+					Integer cantClienteVig = cantClientesVig_.get(cod);
+					if (cantClienteVig == null) cantClienteVig = 0;
 					String cantidad = det[25] + "";
 					String fechaUltimaCompra = det[26] + "";
 					String proveedoUltimaCompra = (String) det[27];
@@ -9505,6 +9532,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setProveedor(proveedor);
 					hist.setCantidad(Long.parseLong(cantidad));
 					hist.setCantCliente(cantCliente);
+					hist.setCantClienteVigente(cantClienteVig);
 					hist.setMaximo(maximo);
 					hist.setMinimo(minimo);
 					hist.setCostoFobGs(costoFobGs);
@@ -9549,6 +9577,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_ABASTECIMIENTO_MOVIM_ARTICULOS;				
 				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("MES_CLI_VIG", filtro.getSelectedMes().getPos2());
 				JRDataSource dataSource = new MovimientoArticulos(list);
 				imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV);
 				
@@ -20964,6 +20993,8 @@ class MovimientoArticulos implements JRDataSource {
 			value = det.getDiciembre() + "";
 		} else if ("CantCliente".equals(fieldName)) {
 			value = det.getCantCliente() + "";
+		} else if ("CantClienteVig".equals(fieldName)) {
+			value = det.getCantClienteVigente() + "";
 		}
 		return value;
 	}

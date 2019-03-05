@@ -99,6 +99,16 @@
 			</combobox>
 		</row>
 		<row>
+			<field value="Cant. Clientes Mes:" />
+			<combobox hflex="true" model="@load(vm.dato.filtro.meses)"
+				selectedItem="@bind(vm.dato.filtro.selectedMes)"
+				instant="true" value="@load(vm.dato.filtro.selectedMes.pos2)">
+				<template name="model">
+					<comboitem label="@load(each.pos2)"></comboitem>
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Formato:" />
 			<textbox readonly="true" hflex="true" value="CSV"></textbox>
 		</row>

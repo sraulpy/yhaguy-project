@@ -96,6 +96,7 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private int maximo;
 	private int minimo;
 	private long cantCliente;
+	private int cantClienteVigente;
 	
 	private double costoFobGs;
 	private double costoFobDs;
@@ -783,5 +784,13 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setCantCliente(long cantCliente) {
 		this.cantCliente = cantCliente;
+	}
+
+	public int getCantClienteVigente() {
+		return cantClienteVigente;
+	}
+
+	public void setCantClienteVigente(int cantClienteVigente) {
+		this.cantClienteVigente = cantClienteVigente;
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MovimientoArticulos" pageWidth="5184" pageHeight="595" orientation="Landscape" columnWidth="5144" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MovimientoArticulos" pageWidth="5256" pageHeight="595" orientation="Landscape" columnWidth="5216" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.2100000000000082"/>
-	<property name="ireport.x" value="4517"/>
+	<property name="ireport.x" value="5294"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -28,6 +28,7 @@
 	<parameter name="TOT_UTILIDAD" class="java.lang.String"/>
 	<parameter name="TOT_MARGEN_VTA" class="java.lang.String"/>
 	<parameter name="TOT_MARGEN_COSTO" class="java.lang.String"/>
+	<parameter name="MES_CLI_VIG" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '10010001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta", 150000 "Saldo Anterior",  3351450 "Debitos Periodo", 100000 "Creditos Periodo",
 150000 "Saldo Periodo" from plancuenta where id = '1'
@@ -93,6 +94,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="FobGs" class="java.lang.String"/>
 	<field name="FobDs" class="java.lang.String"/>
 	<field name="CantCliente" class="java.lang.String"/>
+	<field name="CantClienteVig" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -329,6 +331,11 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Cant. Clientes]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="5099" y="0" width="99" height="15" uuid="97255fea-7142-47d3-89ff-448b0fb99f35"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{MES_CLI_VIG}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -562,6 +569,11 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement style="Detail" x="5000" y="0" width="99" height="15" uuid="1df71c3e-2560-4c7e-ba6b-60e7e0ec8a23"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{CantCliente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="5099" y="0" width="99" height="15" uuid="916fc121-4b1b-4526-b69a-4d3421bcf4ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CantClienteVig}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
