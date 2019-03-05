@@ -65,5 +65,9 @@
 				</template>
 			</combobox>
 		</row>
+		<row>
+			<field value="Incluir N.Créditos:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)"></checkbox>
+		</row>
 	</rows>
 </grid>

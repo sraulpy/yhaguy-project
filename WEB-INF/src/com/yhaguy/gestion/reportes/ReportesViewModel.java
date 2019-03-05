@@ -8793,6 +8793,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Proveedor prov = filtro.getProveedor();
 				CondicionPago cond = filtro.getCondicion();
+				boolean incluirNC = filtro.isIncluirNCR();
 				long idSuc = suc != null ? suc.getId() : 0;
 				long idPrv = prov != null ? prov.getId() : 0; 
 				long idCon = cond != null ? cond.getId() : 0; 
@@ -8806,6 +8807,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc, idPrv, idCon);
+				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta, idSuc);
 
 				for (CompraLocalFactura compra : compras) {
 					Object[] cmp = new Object[] {
@@ -8816,6 +8818,21 @@ public class ReportesViewModel extends SimpleViewModel {
 							compra.getProveedor().getRazonSocial(),
 							Utiles.getRedondeo(compra.getImporteGs()) };
 					data.add(cmp);
+				}
+				
+				if (incluirNC) {
+					for (NotaCredito nc : ncreditos) {
+						if (nc.getCompraAplicada() != null) {
+							Object[] cmp = new Object[] {
+									m.dateToString(nc.getFechaEmision(),
+											Utiles.DD_MM_YY), nc.getNumero(),
+									"NC-" + nc.getCompraAplicada().getCondicionPago().getDescripcion().toUpperCase().substring(0, 3),
+									nc.getSucursal().getDescripcion(),
+									nc.getProveedor().getRazonSocial(),
+									Utiles.getRedondeo(nc.getImporteGs()) };
+							data.add(cmp);
+						}					
+					}
 				}
 
 				ReporteComprasGenerico rep = new ReporteComprasGenerico(desde, hasta);
