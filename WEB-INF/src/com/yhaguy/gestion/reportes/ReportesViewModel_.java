@@ -12,7 +12,7 @@ import com.yhaguy.util.Utiles;
 
 public class ReportesViewModel_ extends Control {
 
-	public ReportesViewModel_(){
+	public ReportesViewModel_() {
 		super(null);
 	}
 

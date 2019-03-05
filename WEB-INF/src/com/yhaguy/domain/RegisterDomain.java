@@ -9592,6 +9592,18 @@ public class RegisterDomain extends Register {
 		return list;
 	}
 	
+	/**
+	 * @return datos de importacion..
+	 * [0]:importacion.id
+	 * [1]:importacion.dbEstado
+	 */
+	public Object[] getImportacion(long idImportacion) throws Exception {
+		String query = "select i.id, i.dbEstado from ImportacionPedidoCompra i where i.id = " + idImportacion; 
+				query += " order by i.id desc";
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
 	public static void main(String[] args) {
 		
 	}

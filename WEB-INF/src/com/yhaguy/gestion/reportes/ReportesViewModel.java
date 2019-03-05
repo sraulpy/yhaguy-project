@@ -9291,24 +9291,35 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<Long, Object[]> stock7 = new HashMap<Long, Object[]>();
 				Map<Long, Object[]> stock8 = new HashMap<Long, Object[]>();
 				
-				Map<String, Long> cantClientes = new HashMap<String, Long>();
+				Map<String, Integer> cantClientes = new HashMap<String, Integer>();
+				Map<String, Integer> cantClientes_ = new HashMap<String, Integer>();
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[19]);
 					String cod = (String) venta[1];
 					String key = cod + "-" + mes;
+					String keyCli = cod + "-" + venta[24];
+					
 					Integer acum = cants.get(key);
-					Long acumCliente = cantClientes.get(cod);
 					if (acum != null) {
 						acum += ((Long) venta[18]).intValue();
-						acumCliente ++;
 						cants.put(key, acum);
-						cantClientes.put(cod, acumCliente);
 					} else {
-						long cli = 1;
 						cants.put(key, ((Long) venta[18]).intValue());
-						cantClientes.put(cod, cli);
 					}
+					
+					Integer acumCliente = cantClientes.get(keyCli);
+					if (acumCliente == null) {
+						cantClientes.put(keyCli, 1);
+						Integer acumCliente_ = cantClientes_.get(cod);
+						if (acumCliente_ != null) {
+							acumCliente_ ++;
+							cantClientes_.put(cod, acumCliente_);
+						} else {
+							cantClientes_.put(cod, 1);
+						}
+					}
+					
 					arts.put((long) venta[0], (long) venta[0]);
 					arts_.put((long) venta[0], (long) venta[0]);
 				}
@@ -9405,7 +9416,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					String proveedor = (String) det[17];
 					int maximo = (int) det[21];
 					int minimo = (int) det[22];
-					long cantCliente = (long) det[24];
+					Integer cantCliente = cantClientes_.get(cod);
+					if (cantCliente == null) cantCliente = 0;
 					String cantidad = det[25] + "";
 					String fechaUltimaCompra = det[26] + "";
 					String proveedoUltimaCompra = (String) det[27];

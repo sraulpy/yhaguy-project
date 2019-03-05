@@ -3392,8 +3392,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private String linkReporteFinal;
 	
 	@Command @NotifyChange("*")
-	public void confirmarImportacion() {		
+	public void confirmarImportacion() throws Exception {		
 		if (mensajeSiNo("Esta seguro de confirmar la Importación Nro.: " + this.dto.getNumeroPedidoCompra())) {
+			if (!this.validarFormulario()) {
+				this.mensajeError(this.mensajeErrorVerificar);
+				return;
+			}
 			try {
 				this.generarDiferenciaTipoCambio();
 				this.volcarImportacion();
@@ -3594,10 +3598,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				this.actualizarImporte();
 			}
 			
+			return this.validarFormulario();
+			
 		} catch (Exception e) {
 			mensajeError(e.getMessage());
 		}		
-		return this.validarFormulario();
+		return false;
 	}
 
 	private String mensajeErrorVerificar = "";
@@ -3606,7 +3612,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		return this.mensajeErrorVerificar;
 	}
 	
-	public boolean validarFormulario(){
+	public boolean validarFormulario() throws Exception {
 		boolean out = true;		
 		this.mensajeErrorVerificar = "No se puede realizar la operación debido a: \n";
 			
@@ -3628,7 +3634,17 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			if (this.dto.getTipo().esNuevo() == true) {
 				this.mensajeErrorVerificar += "\n - Debe asignar un Tipo de Importación..";
 				out = false;
-			}		
+			}	
+			
+			if (!this.dto.esNuevo()) {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				Object[] imp = rr.getImportacion(this.dto.getId());
+				Character estado = (Character) imp[1];
+				if (estado.equals('R')) {
+					out = false;
+					this.mensajeErrorVerificar += "\n - La importación ya fue cerrada por otro usuario..";
+				}
+			}
 		
 		return out;
 	}

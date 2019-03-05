@@ -2029,6 +2029,7 @@ class ReporteVenta extends ReporteYhaguy {
 		String cliente = (String) this.venta.getCliente().getPos2();
 		String condicion = (String) this.venta.getCondicionPago().getPos1();
 		String observacion = (String) this.venta.getObservacion();
+		//String direccion = (String) this.venta.getDireccion();
 
 		VerticalListBuilder out = cmp.verticalList();
 
