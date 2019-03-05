@@ -347,6 +347,18 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return la compra aplicada..
+	 */
+	public CompraLocalFactura getCompraAplicada() {
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.getCompra() != null) {
+				return item.getCompra();
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @return el vendedor de la factura aplicada..
 	 */
 	public Funcionario getVendedor_() {
