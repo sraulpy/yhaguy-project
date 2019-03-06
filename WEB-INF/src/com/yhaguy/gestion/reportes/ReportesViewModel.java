@@ -14907,7 +14907,7 @@ class ListadoTransferenciasDataSource implements JRDataSource {
 		this.desde = desde;
 		this.hasta = hasta;
 		for (Transferencia transf : transferencias) {
-			this.totalImporte += transf.getImporteGs();
+			this.totalImporte += (transf.isAnulado() ? 0.0 : transf.getImporteGs());
 		}
 	}
 
