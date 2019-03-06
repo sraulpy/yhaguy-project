@@ -521,6 +521,14 @@ public class ArticuloControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return true si es operacion habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
+	/**
 	 * @return las marcas..
 	 */
 	public List<ArticuloMarca> getMarcas() throws Exception {

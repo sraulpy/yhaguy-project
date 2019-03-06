@@ -45,6 +45,11 @@ public class ArticuloDTO extends DTO {
 	private int maximo = 0;
 	private int minimo = 0;
 	
+	private double precioGs = 0; // mayorista gs
+	private double precioDs = 0; // mayorista ds
+	private double precioMinoristaGs = 0; // minorista
+	private double precioListaGs = 0;	// autocentro
+	
 	private String disenho = "";
 	private int ancho = 0;
 	private double alto = 0.0;
@@ -577,5 +582,37 @@ public class ArticuloDTO extends DTO {
 
 	public void setMinimo(int minimo) {
 		this.minimo = minimo;
+	}
+
+	public double getPrecioGs() {
+		return precioGs;
+	}
+
+	public void setPrecioGs(double precioGs) {
+		this.precioGs = precioGs;
+	}
+
+	public double getPrecioDs() {
+		return precioDs;
+	}
+
+	public void setPrecioDs(double precioDs) {
+		this.precioDs = precioDs;
+	}
+
+	public double getPrecioMinoristaGs() {
+		return precioMinoristaGs;
+	}
+
+	public void setPrecioMinoristaGs(double precioMinoristaGs) {
+		this.precioMinoristaGs = precioMinoristaGs;
+	}
+
+	public double getPrecioListaGs() {
+		return precioListaGs;
+	}
+
+	public void setPrecioListaGs(double precioListaGs) {
+		this.precioListaGs = precioListaGs;
 	}
 }

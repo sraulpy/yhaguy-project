@@ -1470,13 +1470,20 @@ public class NotaCreditoControlBody extends BodyApp {
 	}
 	
 	public List<MyPair> getMotivosNCCompra() {
-		return this.utilDto.getMotivosNotaCredito();
+		List<MyPair> out = this.utilDto.getMotivosNotaCredito();
+		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			out.remove(this.utilDto.getMotivoNotaCreditoReclamo());
+		}
+		return out;
 	}
 	
 	public List<MyPair> getMotivosNCVenta() {
 		List<MyPair> out = new ArrayList<MyPair>();
 		out.addAll(this.utilDto.getMotivosNotaCredito());
 		out.remove(this.utilDto.getMotivoNotaCreditoDifPrecio());
+		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			out.remove(this.utilDto.getMotivoNotaCreditoReclamo());
+		}
 		return out;
 	}
 

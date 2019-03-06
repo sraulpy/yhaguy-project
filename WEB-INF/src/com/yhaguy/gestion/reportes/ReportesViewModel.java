@@ -9409,6 +9409,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
 					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
 					
+					if (compraLocal == null && compraImpor == null) {
+						compraLocal = rr.getUltimaCompraLocalMovimientosArticulos((String) venta[1]);
+					}
+					
 					venta = Arrays.copyOf(venta, venta.length + 5);
 					Date fcl = (Date) compraLocal[1];
 					Date fcI = (Date) compraImpor[1];
@@ -9432,9 +9436,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					for (Object[] art : articulos) {
 						long idArt = (long) art[0];
 						if (arts_.get(idArt) == null) {
+							Object[] ultCompra = rr.getUltimaCompraLocalMovimientosArticulos((String) art[1]);
 							values.add(new Object[] { art[0], art[1], art[2], art[3], art[4], art[5], art[6], art[7],
 									art[8], art[9], art[10], art[11], art[12], art[13], art[14], art[15], art[16], art[17],
-									null, null, null, art[18], art[19], art[20], (long) 0, 0, null, null, 0.0, 0.0 });
+									null, null, null, art[18], art[19], art[20], (long) 0, ultCompra[0], ultCompra[1], ultCompra[2], ultCompra[3], ultCompra[4] });
 						}
 					}
 				}

@@ -9205,7 +9205,7 @@ public class RegisterDomain extends Register {
 				+ " from CompraLocalFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
-		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
+		return list.size() > 0 ? list.get(0) : null;
 	}
 	
 	/**
@@ -9220,6 +9220,22 @@ public class RegisterDomain extends Register {
 		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
 				+ " from ImportacionFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return datos de ultima compra desde movimientos de articulos..
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:proveedor
+	 * [3]:costoGs
+	 * [4]:costoDs
+	 */
+	public Object[] getUltimaCompraLocalMovimientosArticulos(String codigoInterno) throws Exception {
+		String query = "select h.cantidad, h.fechaUltimaCompra, h.proveedor, h.costoGs, h.costoFob"
+				+ " from HistoricoMovimientoArticulo h where h.codigo = '" + codigoInterno + "'"
+				+ " order by h.codigo desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
 		return list.size() > 0 ? list.get(0) : new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 	}

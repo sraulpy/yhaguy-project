@@ -1611,20 +1611,20 @@ public class VentaControlBody extends BodyApp {
 		boolean out = true;
 		this.mensajeError = "No se puede completar la operación debido a: \n";
 		
-		//verifica que se haya seleccionado un cliente.
+		// verifica que se haya seleccionado un cliente.
 		if ((this.dto.getCliente().esNuevo() == true)
 				&& (this.dto.getClienteOcasional() == null)) {
 			out = false;
 			mensajeError += "\n - Debe seleccionar un Cliente..";
 		}
 		
-		//verifica que el detalle no este vacio.
+		// verifica que el detalle no este vacio.
 		if (this.dto.getDetalles().size() == 0) {
 			out = false;
 			mensajeError += "\n - Debe ingresar al menos un ítem..";
 		}
 		
-		//verificacion de costo..
+		// verificacion de costo y servicio..
 		for (VentaDetalleDTO item : this.dto.getDetalles()) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
 			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
@@ -1640,15 +1640,17 @@ public class VentaControlBody extends BodyApp {
 					mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
 				}
 			}
-		}
+			if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
+					|| art.getCodigoInterno().equals(Articulo.COD_VALVULAS)
+					|| art.getCodigoInterno().equals(Articulo.COD_DESCUENTO_BAT_USADA)) {
+				if (!this.dto.getFormaEntrega().equals(Venta.FORMA_ENTREGA_SERVICIO)) {
+					out = false;
+					mensajeError += "\n - la forma de entrega debe ser " + Venta.FORMA_ENTREGA_SERVICIO;
+				}
+			}
+		}		
 		
-		/*//verifica que el usuario tenga asignado un Modo de Venta
-		if (this.dto.getModoVenta().esNuevo() == true) {
-			out = false;
-			mensajeError += "\n - El Modo de Venta no fue asignada..";
-		}*/
-		
-		//si es Pedido verifica si se pueden reservar los items.
+		// si es Pedido verifica si se pueden reservar los items.
 		if ((this.isPresupuesto() == false) && this.dto.esNuevo() == true) {
 			Object[] obj = this.verificarStock(this.dto.getDetalles());
 			boolean stockOk = (boolean) obj[0];

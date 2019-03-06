@@ -11,6 +11,9 @@ import com.coreweb.domain.Tipo;
 
 @SuppressWarnings("serial")
 public class Articulo extends Domain {
+	
+	public static final String COD_VALVULAS = "VAL 413R";
+	public static final String COD_DESCUENTO_BAT_USADA = "@DESC. BATERIA USADA";
 
 	private String descripcion = ""; 
 	private String codigoInterno = ""; 
