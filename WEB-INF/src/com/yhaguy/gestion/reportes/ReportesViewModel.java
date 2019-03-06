@@ -5532,7 +5532,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (String key : totales.keySet()) {
 					Object[] total = totales.get(key);
 					String[] desc = key.split("-");
-					data.add(new Object[] { desc[0], desc[1], total[0], total[1] });
+					double totalVta = (double) total[0];
+					double totalCto = (double) total[1];
+					double utilidad = totalVta - totalCto;
+					double promedioSobreCosto = Utiles.obtenerPorcentajeDelValor(utilidad, totalCto);
+					double promedioSobreVenta = Utiles.obtenerPorcentajeDelValor(utilidad, totalVta);
+					data.add(new Object[] { desc[0], desc[1], totalVta, totalCto, utilidad, promedioSobreCosto, promedioSobreVenta });
 				}
 				
 				Collections.sort(data, new Comparator<Object[]>() {
@@ -15466,6 +15471,7 @@ class VentasUtilidadDetallado implements JRDataSource {
 class VentasListaPrecioFamilia implements JRDataSource {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	static final NumberFormat FORMATTER_ = new DecimalFormat("###,###,##0.00");
 
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Object[]> totales;
@@ -15493,12 +15499,15 @@ class VentasListaPrecioFamilia implements JRDataSource {
 		} else if ("Costo".equals(fieldName)) {
 			double imp = (double) det[3];
 			value = FORMATTER.format(imp);
+		} else if ("UtilidadBruta".equals(fieldName)) {
+			double imp = (double) det[4];
+			value = FORMATTER.format(imp);
 		} else if ("rentcosto".equals(fieldName)) {
-			double imp = 0.0;
-			value = FORMATTER.format(imp);
+			double imp = (double) det[5];
+			value = FORMATTER_.format(imp);
 		} else if ("rentventa".equals(fieldName)) {
-			double imp = 0.0;
-			value = FORMATTER.format(imp);
+			double imp = (double) det[6];
+			value = FORMATTER_.format(imp);
 		} else if ("TotalImporte".equals(fieldName)) {
 			value = FORMATTER.format(0.0);
 		}
