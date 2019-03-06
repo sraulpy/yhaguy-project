@@ -9418,6 +9418,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						compraLocal = rr.getUltimaCompraLocalMovimientosArticulos((String) venta[1]);
 					}
 					
+					if (compraLocal == null) compraLocal = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
+					if (compraImpor == null) compraImpor = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
+					
 					venta = Arrays.copyOf(venta, venta.length + 5);
 					Date fcl = (Date) compraLocal[1];
 					Date fcI = (Date) compraImpor[1];
