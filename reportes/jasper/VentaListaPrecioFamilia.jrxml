@@ -101,7 +101,7 @@
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Ventas según lista de precio y familia de artículo]]></text>
+				<text><![CDATA[Utilidad según lista de precio y familia de artículo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="SubTitle" x="413" y="50" width="70" height="15" uuid="2fe29cb1-a081-4a33-a531-3ad5edb67f97"/>
