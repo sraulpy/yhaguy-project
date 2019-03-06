@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class Transferencia extends Domain {
@@ -46,6 +47,14 @@ public class Transferencia extends Domain {
 			out += item.getImporteGs();
 		}
 		return out;
+	}
+	
+	/**
+	 * @return true si es anulado..
+	 */
+	public boolean isAnulado() {
+		String sigla = this.transferenciaEstado.getSigla();
+		return sigla.equals(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO);
 	}
 	
 	public String getNumero() {

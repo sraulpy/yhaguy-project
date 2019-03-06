@@ -14933,7 +14933,7 @@ class ListadoTransferenciasDataSource implements JRDataSource {
 				String origen = transf.getSucursal().getDescripcion();
 				String destino = transf.getSucursalDestino().getDescripcion();
 				String nroremision = transf.getNumeroRemision();
-				String importe = FORMATTER.format(transf.getImporteGs());
+				String importe = FORMATTER.format(transf.isAnulado() ? 0.0 : transf.getImporteGs());
 				temp.add(transf);
 				values.add(new BeanTransferencia(fecha, numero, origen,
 						destino, nroremision, importe));
