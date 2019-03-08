@@ -579,15 +579,19 @@ public class VentaControlBody extends BodyApp {
 		boolean out = true;
 		String msgError = "Los siguientes ítems no se pueden reservar: \n";		
 		long idDep = this.dto.getDeposito().getId();
+		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		for (VentaDetalleDTO item : items) {
-			long idArt = item.getArticulo().getId();
-			long cant = item.getCantidad();
-			long stock = this.ctr.stockDisponible(idArt, idDep);
-			if (cant > stock) {
-				out = false;
-				msgError = msgError + "\n - " + item.getArticulo().getPos1() 
-						+ " -pedido: " + cant + " -stock: " + stock;
+			Articulo art = rr.getArticuloById(item.getArticulo().getId());
+			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
+				long idArt = item.getArticulo().getId();
+				long cant = item.getCantidad();
+				long stock = this.ctr.stockDisponible(idArt, idDep);
+				if (cant > stock) {
+					out = false;
+					msgError = msgError + "\n - " + item.getArticulo().getPos1() 
+							+ " -pedido: " + cant + " -stock: " + stock;
+				}
 			}
 		}		
 		return new Object[]{ out, msgError };
