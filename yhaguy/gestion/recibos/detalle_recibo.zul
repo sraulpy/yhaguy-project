@@ -1,0 +1,103 @@
+<window title="Recibo" border="normal" closable="true"
+	position="center, center" width="70%" height="60%">
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Emisión" />
+					<datebox value="@load(vm.detalle.emision)" hflex="true"></datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Número" />
+					<textbox value="@load(vm.detalle.numero)" hflex="true"></textbox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Cliente" />
+					<textbox value="@load(vm.detalle.cliente)" hflex="true"></textbox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Caja Nro." />
+					<textbox value="" hflex="true"></textbox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Sucursal" />
+					<textbox value="" hflex="true"></textbox>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+	<div height="10px"></div>
+		<hlayout vflex="true">
+		<listbox vflex="true" sclass="small-list"
+			model="@load(vm.detalle.detalles)" hflex="3">
+			<auxhead>
+				<auxheader label="Facturas" colspan="4"/>
+			</auxhead>
+			<listhead style="text-align:center">
+				<listheader label="Emisión" width="100px" />
+				<listheader label="Vencimiento" width="100px" />	
+				<listheader label="Número" />
+				<listheader label="Importe Gs." width="100px" align="right"
+					style="text-align:center" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1)" />
+					<listcell label="@load(each.pos2)" />
+					<listcell label="@load(each.pos3)" />
+					<listcell label="@load(each.pos4) @converter(vm.cnv.monedaLocal)" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2">
+					<hlayout>
+						<field value="@load(vm.detalle.detalles.size())" />
+						<field value="ítems" />
+					</hlayout>
+				</listfooter>
+				<listfooter span="2">
+					<hbox pack="end" align="end" hflex="true">
+						<field value="Total Gs.:" />
+						<div width="5px"/>
+						<field value="@load(vm.detalle.totalImporteGs) @converter(vm.cnv.monedaLocal)" />
+						<div width="5px"/>
+					</hbox>
+				</listfooter>
+			</listfoot>
+		</listbox>
+		
+		<listbox vflex="true" sclass="small-list"
+			model="@load(vm.detalle.formasPago)" hflex="2">
+			<auxhead>
+				<auxheader label="Formas de Pago" colspan="2"/>
+			</auxhead>
+			<listhead style="text-align:center">
+				<listheader label="Descripción" />
+				<listheader label="Importe Gs." width="100px" align="right"
+					style="text-align:center" />
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.pos1.toString().toUpperCase())" />
+					<listcell label="@load(each.pos2) @converter(vm.cnv.monedaLocal)" />
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="2">
+					<hlayout hflex="true">
+						<field value="@load(vm.detalle.formasPago.size())" />
+						<field value="ítems" />
+						<hbox hflex="true" align="end" pack="end">
+							<field value="Total Gs.:" />
+							<div width="5px"/>
+							<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.detalle.totalImporteGs)"/>
+							<div width="5px"/>
+						</hbox>						
+					</hlayout>
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</hlayout>
+</window>
