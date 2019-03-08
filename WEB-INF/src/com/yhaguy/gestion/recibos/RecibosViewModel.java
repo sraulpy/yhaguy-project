@@ -53,6 +53,8 @@ public class RecibosViewModel extends SimpleViewModel {
 	static final String FILTRO_REEMBOLSOS_CC = "REEMBOLSOS PRESTAMOS C.C.";
 	static final String FILTRO_REEMBOLSOS_CHEQUES_RECH = "REEMBOLSOS CHEQUES RECHAZADOS";
 	
+	static final String ZUL_DETALLE = "/yhaguy/gestion/recibos/detalle_recibo.zul";	
+	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
 	private String filterFechaAA = "";
@@ -117,7 +119,10 @@ public class RecibosViewModel extends SimpleViewModel {
 		this.detalle.setCliente((String) item.getPos3());
 		this.detalle.setDetalles((List<MyArray>) item.getPos8());
 		this.detalle.setFormasPago((List<MyArray>) item.getPos9());
-		this.popDetalleRecibo.open(parent, "start_before");
+		//this.popDetalleRecibo.open(parent, "start_before");
+		
+		this.win = (Window) Executions.createComponents(ZUL_DETALLE, this.mainComponent, null);
+		this.win.doOverlapped();
 	}
 	
 	@Command

@@ -189,6 +189,14 @@ public class ReciboFormaPago extends Domain {
 		String sigla = this.tipo.getSigla();
 		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_DEBITO_COBRANZA_CENTRAL);
 	}
+	
+	/**
+	 * @return true si es canje de documentos..
+	 */
+	public boolean isCanjeDocumentos() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_CANJE_DOCUMENTOS);
+	}
 
 	public String getMontoGs_() {
 		NumberFormat FORMATTER = new DecimalFormat("###,###,##0");

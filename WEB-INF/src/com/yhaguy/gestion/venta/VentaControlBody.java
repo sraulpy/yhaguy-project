@@ -277,6 +277,13 @@ public class VentaControlBody extends BodyApp {
 	
 	@Command
 	@NotifyChange("*")
+	public void insertarContabilidad() throws Exception {
+		this.insertContabilidad();
+		this.bruc.focus();
+	}
+	
+	@Command
+	@NotifyChange("*")
 	public void formaDePago() throws Exception {
 		this.asignarFormaPago();
 	}
@@ -503,11 +510,14 @@ public class VentaControlBody extends BodyApp {
 			if (crearPedido == false) {
 				for (VentaDetalleDTO item : out.getDetalles()) {
 					RegisterDomain rr = RegisterDomain.getInstance();
-					ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), desde.getDeposito().getId());
-					ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad() * -1, this.getLoginNombre());
-					ControlArticuloStock.addMovimientoStock(out.getId(), out
-							.getTipoMovimiento().getId(), item.getCantidad()
-							* -1, adp.getId(), this.getLoginNombre());
+					Articulo art = rr.getArticuloById(item.getArticulo().getId());
+					if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
+						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), desde.getDeposito().getId());
+						ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad() * -1, this.getLoginNombre());
+						ControlArticuloStock.addMovimientoStock(out.getId(), out
+								.getTipoMovimiento().getId(), item.getCantidad()
+								* -1, adp.getId(), this.getLoginNombre());
+					}
 				}
 			}
 		}
@@ -684,6 +694,16 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	/**
+	 * inserta un item de Servicio..
+	 */
+	private void insertContabilidad() throws Exception {
+		this.nvoItem = new VentaDetalleDTO();
+		this.nvoItem.setTipoIVA(this.getIva10());
+		this.buscarItemsDeContabilidad();
+		this.nvoItem = null;
+	}
+	
+	/**
 	 * Buscador de items de servicio..
 	 */
 	private void buscarItemsDeServicio() throws Exception {
@@ -702,18 +722,41 @@ public class VentaControlBody extends BodyApp {
 			art.setPos4(art.getPos2());
 			art.setPos5(true);
 			this.nvoItem.setArticulo(art);
-			this.openItemServicio();
+			this.openItem();
 		}
 	}
 	
 	/**
-	 * Despliega la ventana para insertar un servicio..
+	 * Buscador de items de contabilidad..
 	 */
-	private void openItemServicio() throws Exception {
+	private void buscarItemsDeContabilidad() throws Exception {
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(Articulo.class);
+		b.setAtributos(new String[]{"codigoInterno", "descripcion"});		
+		b.setNombresColumnas(new String[]{"Código", "Descripción"});
+		b.setAnchoColumnas(new String[]{"110px", ""});
+		b.setTitulo("Ítems de Contabilidad");
+		b.setWidth("600px");
+		b.addWhere("familia.descripcion = '" + ArticuloFamilia.CONTABILIDAD + "'");
+		b.setContinuaSiHayUnElemento(false);
+		b.show("%");
+		if (b.isClickAceptar()) {
+			MyArray art = b.getSelectedItem();
+			art.setPos4(art.getPos2());
+			art.setPos5(true);
+			this.nvoItem.setArticulo(art);
+			this.openItem();
+		}
+	}
+	
+	/**
+	 * Despliega la ventana para insertar un servicio o contabilidad..
+	 */
+	private void openItem() throws Exception {
 		WindowPopup wp = new WindowPopup();		
 		wp.setDato(this);
 		wp.setCheckAC(new ValidadorInsertarServicio());
-		wp.setTitulo("Ítem de Servicio");
+		wp.setTitulo("Ítem de Contabilidad");
 		wp.setHigth("350px");
 		wp.setWidth("450px");
 		wp.setModo(WindowPopup.NUEVO);		

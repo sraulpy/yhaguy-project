@@ -36,6 +36,8 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
+import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.Caja;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
@@ -744,9 +746,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		long idDeposito = (this.isSucursalBaterias() ? Configuracion.ID_DEPOSITO_PRINCIPAL : pedido.getDeposito().getId());
 		for (VentaDetalleDTO item : pedido.getDetalles()) {
-			long stock = rr.getStockDisponible(item.getArticulo().getId(), idDeposito);
-			if (stock < item.getCantidad()) {
-				return false;
+			Articulo art = rr.getArticuloById(item.getArticulo().getId());
+			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
+				long stock = rr.getStockDisponible(item.getArticulo().getId(), idDeposito);
+				if (stock < item.getCantidad()) {
+					return false;
+				}
 			}
 		}
 		return true;

@@ -91,8 +91,8 @@
 						onClick="@command('actualizarSaldo', item=each)"></a>
 				</listcell>
 				<listcell label="@load(each.importeOriginal) @converter(vm.cnv.monedaLocal)"></listcell>
-				<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
-				<listcell label="@load(each.aux) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.saldo) @converter(vm.cnv.monedaExtranjera)"></listcell>
+				<listcell label="@load(each.aux) @converter(vm.cnv.monedaExtranjera)"></listcell>
 			</listitem>
 		</template>
 		<listfoot>

@@ -6913,6 +6913,19 @@ public class ReportesViewModel extends SimpleViewModel {
 									recibo.getCliente().getRazonSocial(),
 									formaPago, total });
 					}
+				} else if (formaPago.equals(ReportesFiltros.CANJE_DOCUMENTOS)) {
+					for (Recibo recibo : cobranzas) {
+						double total = recibo.getTotalCanjeDocumentos();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total != 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
 				}
 			}
 			
@@ -7527,7 +7540,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							cobro.getNumero(),
 							cobro.isAnulado() ? "ANULADO.." : cobro.getCliente().getRazonSocial().toUpperCase(),
 							cobro.getCliente().getRuc(),
-							cobro.getTotalImporteGs()
+							cobro.isCobroExterno() ? 0.0 : cobro.getTotalImporteGs()
 					};
 							data.add(cob);
 				}
@@ -14879,9 +14892,9 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			String numero = recibo.getNumero();
 			String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
 			String ruc = recibo.getCliente().getRuc();
-			String importe = FORMATTER.format(recibo.getTotalImporteGs());
+			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 			values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe));
-			this.totalImporte += recibo.getTotalImporteGs();
+			this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 		}
 	}
 }

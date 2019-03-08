@@ -274,6 +274,19 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return el total segun canje de documentos..
+	 */
+	public double getTotalCanjeDocumentos() {
+		double out = 0;
+		for (ReciboFormaPago item : this.formasPago) {
+			if (item.isCanjeDocumentos()) {
+				out += item.getMontoGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el importe total sin iva..
 	 */
 	public double getTotalImporteGsSinIva() {

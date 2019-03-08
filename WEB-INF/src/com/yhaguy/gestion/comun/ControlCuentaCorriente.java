@@ -619,7 +619,7 @@ public class ControlCuentaCorriente {
 			Date emision_ = vta.getFecha();
 			String numero_ = vta.getNumero();
 			String concepto_ = vta.getTipoMovimiento().getDescripcion();
-			Object[] det_ = new Object[] { emision_, numero_, concepto_, vta.getImporteGs(), 1, 0.0, 0.0, 0.0 };
+			Object[] det_ = new Object[] { emision_, numero_, concepto_, vta.getTotalImporteGs(), 1, 0.0, 0.0, 0.0 };
 			out.add(det_);
 			
 			List<NotaCredito> ncs = rr.getNotaCreditosByVenta(vta.getId());

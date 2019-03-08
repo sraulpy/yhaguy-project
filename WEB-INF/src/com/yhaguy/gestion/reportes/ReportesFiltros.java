@@ -67,6 +67,7 @@ public class ReportesFiltros {
 	public static final String TRANSFERENCIA_CENTRAL = "TRANSFERENCIA CASA CENTRAL";
 	public static final String SALDO_FAVOR_CLIENTE = "SALDO A FAVOR GENERADO";
 	public static final String SALDO_FAVOR_COBRADO = "SALDO A FAVOR COBRADO";
+	public static final String CANJE_DOCUMENTOS = "CANJE DE DOCUMENTOS";
 	
 	public static final String CHEQUES_DESCONTADOS = "DESCONTADOS";
 	public static final String CHEQUES_NO_DESCONTADOS = "NO DESCONTADOS";
@@ -508,6 +509,7 @@ public class ReportesFiltros {
 		out.add(TRANSFERENCIA_CENTRAL);
 		out.add(SALDO_FAVOR_CLIENTE);
 		out.add(SALDO_FAVOR_COBRADO);
+		out.add(CANJE_DOCUMENTOS);
 		return out;
 	}
 	
