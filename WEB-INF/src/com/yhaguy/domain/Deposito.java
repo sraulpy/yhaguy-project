@@ -20,6 +20,7 @@ public class Deposito extends Domain {
 	public static final long ID_VIRTUAL_INVENTARIO = 10;
 	
 	public static final String TEMPORAL = "TEMPORAL";
+	public static final Character VIRTUAL = 'V';
 	
 	private String observacion;
 	private String descripcion;	

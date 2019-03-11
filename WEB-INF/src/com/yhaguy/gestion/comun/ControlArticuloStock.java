@@ -106,7 +106,7 @@ public class ControlArticuloStock {
 	 * recalcula el stock segun deposito..
 	 */
 	public static void recalcularStock(long idArticulo, long idDeposito, String user) throws Exception {
-		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0);
+		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0, true);
 		String stockHistorial_ = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
 		long stockHistorial = Long.parseLong(stockHistorial_);
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -128,12 +128,12 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
-	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal) throws Exception {
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, boolean incluirDepositoVirtual) throws Exception {
 		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
 			desde = Utiles.getFecha("01-01-2016 00:00:00");
 		}
-		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde);
+		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, incluirDepositoVirtual);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
-	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde) throws Exception {
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde, boolean incluirDepositoVirtual) throws Exception {
 		Date hasta = new Date();
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -159,15 +159,15 @@ public class ControlArticuloStock {
 		List<Object[]> historicoEntrada;
 		List<Object[]> historicoSalida;
 
-		List<Object[]> ventas = rr.getVentasPorArticulo(idArticulo, idDeposito, desde, hasta);
-		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, idDeposito, desde, hasta);
-		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, idDeposito, desde, hasta);
-		List<Object[]> compras = rr.getComprasLocalesPorArticulo_(idArticulo, idDeposito, desde, hasta);
-		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta);
-		List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, true);
-		List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false);
-		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
-		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+		List<Object[]> ventas = rr.getVentasPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
+		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
+		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
+		List<Object[]> compras = rr.getComprasLocalesPorArticulo_(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
+		List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, true, incluirDepositoVirtual);
+		List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, incluirDepositoVirtual);
+		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, incluirDepositoVirtual);
+		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, incluirDepositoVirtual);
 		List<Object[]> migracion = rr.getMigracionPorArticulo(articulo.getCodigoInterno(), desde, hasta, idDeposito);
 
 		historicoEntrada = new ArrayList<Object[]>();

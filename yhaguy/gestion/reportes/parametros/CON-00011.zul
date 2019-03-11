@@ -30,12 +30,120 @@
 			</bandbox>
 		</row>
 		<row>
+			<field value="Origen:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.origenes)"
+				selectedItem="@bind(vm.dato.filtro.origen)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		<row visible="@load(vm.dato.filtro.origen eq 'INTERNACIONAL')">
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedorExterior.razonSocial)"
+				id="bndProv_"
+				onOpen="tx_prov.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedoresExterior)"
+						selectedItem="@bind(vm.dato.filtro.proveedorExterior)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedorExterior)"
+										instant="true" placeholder="Buscar.." 
+										id="tx_prov"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row visible="@load(vm.dato.filtro.origen eq 'LOCAL')">
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedorLocal.razonSocial)"
+				id="bndProv"
+				onOpen="tx_prove.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedoresLocales)"
+						selectedItem="@bind(vm.dato.filtro.proveedorLocal)"
+						onSelect="bndProv.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedorLocal)"
+										instant="true" placeholder="Buscar.." 
+										id="tx_prove"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Familia:" />
+			<combobox hflex="true" sclass="rounded" style="margin-top:5px"
+				model="@load(vm.dato.filtro.familias_)"
+				selectedItem="@bind(vm.dato.filtro.familia_)"
+				placeholder="Seleccione una familia..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Depósito:" />
+			<combobox hflex="true" placeholder="TODOS.."
+				model="@load(vm.dato.filtro.depositos_)"
+				instant="true"
+				selectedItem="@bind(vm.dato.filtro.deposito)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<!--  
+		<row>
 			<field value="Tipo de Costo:" />
 			<combobox model="@load(vm.dato.filtro.tiposDeCosto)" hflex="true"
 				value="@load(vm.dato.filtro.tipoCosto)"
 				selectedItem="@bind(vm.dato.filtro.tipoCosto)" instant="true">
 				<template name="model">
 					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		-->
+		<row>
+			<field value="Sucursal:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.sucursales)"
+				selectedItem="@bind(vm.dato.filtro.selectedSucursal)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
 				</template>
 			</combobox>
 		</row>

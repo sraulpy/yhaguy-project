@@ -4023,7 +4023,7 @@ public class RegisterDomain extends Register {
 	 * @return las ventas donde esta contenida el articulo.. [0]:concepto
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:cliente [6]:deposito
 	 */
-	public List<Object[]> getVentasPorArticulo(long idArticulo, long idDeposito, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getVentasPorArticulo(long idArticulo, long idDeposito, Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial, v.deposito.descripcion"
@@ -4037,6 +4037,9 @@ public class RegisterDomain extends Register {
 				+ "') and v.dbEstado != 'D' and v.estadoComprobante IS NULL";
 		if (idDeposito != 0) {
 				query += " and v.deposito.id = " + idDeposito;
+		}
+		if (!incluirDepositoVirtual) {
+			query += " and v.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
 		}
 				query += " and (v.fecha >= '"
 				+ desde_
@@ -4259,7 +4262,7 @@ public class RegisterDomain extends Register {
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:cliente [6]:deposito
 	 */
 	public List<Object[]> getNotasCreditoVtaPorArticulo(long idArticulo, long idDeposito,
-			Date desde, Date hasta) throws Exception {
+			Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, d.cantidad, d.montoGs, n.cliente.empresa.razonSocial,"
@@ -4273,7 +4276,10 @@ public class RegisterDomain extends Register {
 				+ "'";
 				if (idDeposito != 0) {
 					query += " and n.deposito.id = " + idDeposito;
-				}				
+				}
+				if (!incluirDepositoVirtual) {
+					query += " and n.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
+				}
 				query += " and (n.fechaEmision >= '"
 				+ desde_
 				+ "' and n.fechaEmision <= '" + hasta_ + "')"
@@ -4347,7 +4353,7 @@ public class RegisterDomain extends Register {
 	 * [6]:deposito
 	 */
 	public List<Object[]> getNotasCreditoCompraPorArticulo(long idArticulo, long idDeposito,
-			Date desde, Date hasta) throws Exception {
+			Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, d.cantidad, d.montoGs, n.proveedor.empresa.razonSocial,"
@@ -4361,6 +4367,9 @@ public class RegisterDomain extends Register {
 				+ "'";
 				if (idDeposito != 0) {
 					query += " and n.deposito.id = " + idDeposito;
+				}
+				if (!incluirDepositoVirtual) {
+					query += " and n.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
 				}
 				query += " and (n.fechaEmision >= '"
 				+ desde_
@@ -4425,7 +4434,7 @@ public class RegisterDomain extends Register {
 	 *         [5]:origen [6]:idsuc [7]:id salida [8]:id entrada
 	 */
 	public List<Object[]> getTransferenciasPorArticulo(long idArticulo, long idDeposito,
-			Date desde, Date hasta, boolean entrada) throws Exception {
+			Date desde, Date hasta, boolean entrada, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String deposito = entrada ? "t.depositoEntrada.descripcion" : "t.depositoSalida.descripcion";
@@ -4439,6 +4448,9 @@ public class RegisterDomain extends Register {
 				+ "'";
 		if (idDeposito != 0) {
 			query += " and " + (entrada ? "t.depositoEntrada.id" : "t.depositoSalida.id") + " = " + idDeposito;
+		}
+		if (!incluirDepositoVirtual) {
+			query += " and " + (entrada ? "t.depositoEntrada.dbEstado" : "t.depositoSalida.dbEstado") + " != '" + Deposito.VIRTUAL + "'";
 		}
 		query += " and (t.fechaCreacion >= '"
 				+ desde_
@@ -4484,7 +4496,7 @@ public class RegisterDomain extends Register {
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:proveedor [6]:deposito [7]:id
 	 */
 	public List<Object[]> getComprasLocalesPorArticulo_(long idArticulo, long idDeposito,
-			Date desde, Date hasta) throws Exception {
+			Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c.tipoMovimiento.descripcion, c.fechaOriginal, c.numero, d.cantidad, d.costoGs, "
@@ -4492,6 +4504,9 @@ public class RegisterDomain extends Register {
 				+ " (select oc.deposito.descripcion from CompraLocalOrden oc where oc.factura.id = c.id";
 		if (idDeposito != 0) {
 			query += " and oc.deposito.id = " + idDeposito;
+		}
+		if (!incluirDepositoVirtual) {
+			query += " and oc.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
 		}
 		query +=" ), c.id"
 				+ " from CompraLocalFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
@@ -4554,7 +4569,7 @@ public class RegisterDomain extends Register {
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:proveedor [6]:deposito
 	 */
 	public List<Object[]> getComprasImportacionPorArticulo(long idArticulo, long idDeposito,
-			Date desde, Date hasta) throws Exception {
+			Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c.tipoMovimiento.descripcion, c.fechaCreacion, c.numero, d.cantidad, d.costoGs, "
@@ -4562,6 +4577,9 @@ public class RegisterDomain extends Register {
 				+ " (select oc.deposito.descripcion from ImportacionPedidoCompra oc join oc.importacionFactura f where f.id = c.id";
 		if (idDeposito != 0) {
 			query += " and oc.deposito.id = " + idDeposito;
+		}
+		if (!incluirDepositoVirtual) {
+			query += " and oc.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
 		}
 		query +=" ) "
 				+ " from ImportacionFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
@@ -4649,7 +4667,7 @@ public class RegisterDomain extends Register {
 	 * @return los ajustes donde esta contenida el articulo..
 	 */
 	public List<Object[]> getAjustesPorArticulo(long idArticulo, long idDeposito, Date desde,
-			Date hasta, long idSucursal, String tipo) throws Exception {
+			Date hasta, long idSucursal, String tipo, boolean incluirDepositoVirtual) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "";
@@ -4664,6 +4682,9 @@ public class RegisterDomain extends Register {
 					+ "'";
 			if (idDeposito != 0) {
 				query += " and a.deposito.id = " + idDeposito;
+			}
+			if (!incluirDepositoVirtual) {
+				query += " and a.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
 			}
 			query += " and (a.fecha >= '"
 					+ desde_
@@ -4681,6 +4702,7 @@ public class RegisterDomain extends Register {
 			if (idDeposito != 0) {
 				query += " and a.deposito.id = " + idDeposito;
 			}
+			
 			query += " and (a.fecha >= '"
 					+ desde_
 					+ "' and a.fecha <= '"
@@ -9531,9 +9553,12 @@ public class RegisterDomain extends Register {
 				+ " a.marca.descripcion, a.articuloLinea.descripcion, a.articuloGrupo.descripcion,"
 				+ " a.articuloAplicacion.descripcion, a.articuloModelo.descripcion, a.peso, a.volumen, "
 				+ " a.proveedor.empresa.razonSocial, a.maximo, a.minimo, a.costoGs"
-				+ " from Articulo a where a.proveedor.id = " + idProveedor + "";
+				+ " from Articulo a where a.dbEstado != 'D'";
 		if (idFamilia > 0) {
 			query += " and a.familia.id = " + idFamilia;
+		}
+		if (idProveedor > 0) {
+			query += " and a.proveedor.id = " + idProveedor;
 		}
 				query += " order by a.descripcion";
 		return this.hql(query);
@@ -9570,6 +9595,29 @@ public class RegisterDomain extends Register {
 			query += " and a.familia.id = " + idFamilia;
 		}
 		query += " order by a.codigoInterno";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.descripcion
+	 * [3]:articulo.costoGs
+	 */
+	public List<Object[]> getArticulos(long idArticulo, long idProveedor, long idFamilia, boolean resumido) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs"
+				+ " from Articulo a where a.dbEstado != 'D'";
+		if (idArticulo > 0) {
+			query += " and a.id = " + idArticulo;
+		}
+		if (idFamilia > 0) {
+			query += " and a.familia.id = " + idFamilia;
+		}
+		if (idProveedor > 0) {
+			query += " and a.proveedor.id = " + idProveedor;
+		}
+				query += " order by a.descripcion";
 		return this.hql(query);
 	}
 	
