@@ -890,38 +890,63 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void listadoStockValorizado() {
 			try {
+				Proveedor proveedor = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
+				Date hasta = filtro.getFechaHasta();
+				Articulo articulo = filtro.getArticulo();
+				String tipoCosto = filtro.getTipoCosto();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				SucursalApp sucursal = filtro.getSelectedSucursal();
+				long idProveedor = proveedor != null ? proveedor.getId() : (long) 0;
+				long idSucursal = sucursal != null ? sucursal.getId() : (long) 0;
+				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
+				
+				if (familia == null) {
+					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				
+				if (hasta == null) hasta = new Date();
+				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<ArticuloDeposito> articulos = rr.getArticulosPorDeposito((long) 2);
-				double total = 0;
+				List<Object[]> arts = new ArrayList<Object[]>();
+				
+				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), "");
 
-				for (ArticuloDeposito art : articulos) {
-					double costo = art.getArticulo().getCostoGs();
-					Object[] cmp = new Object[] {
-							art.getArticulo().getCodigoInterno(),
-							art.getArticulo().getDescripcion(), costo,
-							art.getStock(), (costo * art.getStock()) };
-					if (art.getStock() != 0 && costo != 0
-							&& !art.getArticulo().isServicio()
-							&& !art.getArticulo().getCodigoInterno().startsWith("@")) {
-						data.add(cmp);
-						total += (costo * art.getStock());
-					}
+				for (Object[] art : arts) {
+					
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false);
+					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
+					
+					String codigoInterno = (String) art[1];
+					String descripcion = (String) art[2];
+					
+					String saldo = historial_ != null ? (String) historial_[7] : "0";
+					long stock = historial_ != null ? Long.parseLong(saldo) : (long) 0;
+					double costo  = (double) art[3];
+					
+					if (stock != 0 && costo > 0) {
+						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
+					}				
 				}
-
-				ReporteStockValorizado rep = new ReporteStockValorizado(total);
-				rep.setDatosReporte(data);
+				
+				String desc = articulo != null ? articulo.getCodigoInterno() + " - " + articulo.getDescripcion() : "TODOS..";
+				String familia_ = familia.getDescripcion();
+				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
+				String sucursal_ = sucursal != null ? sucursal.getDescripcion() : "TODOS..";
+				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, sucursal_);
 				rep.setApaisada();
+				rep.setDatosReporte(data);
 				
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
 				vp.setBotonCancelar(false);
 				vp.showReporte(rep, ReportesViewModel.this);
-
+				
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}		
 		}
 
 		/**
@@ -10211,7 +10236,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte CON-00011
 		 */
-		private void stockMercaderiaAunaFecha() throws Exception {
+		public void stockMercaderiaAunaFecha() throws Exception {
 			try {
 				Proveedor proveedor = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
 				Date hasta = filtro.getFechaHasta();
