@@ -152,5 +152,10 @@
 			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
 				placeholder="Fecha.." hflex="true" />
 		</row>
+		<row>
+			<cell colspan="2">
+				<label style="font-style:italic;color:red">Obs: Este informe puede tardar minutos, dependiendo del filtro..</label>
+			</cell>
+		</row>
 	</rows>
 </grid>
