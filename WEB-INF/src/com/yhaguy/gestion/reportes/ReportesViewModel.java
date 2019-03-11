@@ -911,7 +911,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> arts = new ArrayList<Object[]>();
 				
-				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), "");
+				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), true);
 
 				for (Object[] art : arts) {
 					
