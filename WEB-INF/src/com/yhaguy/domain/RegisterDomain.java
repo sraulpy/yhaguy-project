@@ -713,6 +713,7 @@ public class RegisterDomain extends Register {
 	}
 
 	public Funcionario getFuncionario(Long id) throws Exception {
+		System.out.println("----- ID FUNCIONARIO: " + id);
 		List<Funcionario> list = null;
 		Funcionario f = new Funcionario();
 		String queryFuncionario = "" + " select fu "

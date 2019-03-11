@@ -44,6 +44,8 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	static final String FILTRO_PAGADOS = "PAGADOS";
 	static final String FILTRO_PENDIENTES_PAGO = "PENDIENTES_PAGO";
 	
+	static final String ZUL_REGISTRAR_RECIBO = "/yhaguy/gestion/compras/gastos/generales/registrarRecibo.zul";
+	
 	private String selectedFiltro = FILTRO_TODOS;
 	
 	private Object[] selectedGasto_;
@@ -138,6 +140,12 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		Clients.showNotification("REGISTRO GUARDADO..");
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void registrarRecibo() throws Exception {
+		this.registrarRecibo_();
+	}
+	
 	/**
 	 * Despliega el Reporte de Pago..
 	 */
@@ -173,6 +181,14 @@ public class ExploradorGastosVM extends SimpleViewModel {
 
 		this.win = (Window) Executions.createComponents(
 				ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
+		this.win.doModal();
+	}
+	
+	/**
+	 * registra los datos del recibo de pago..
+	 */
+	private void registrarRecibo_() throws Exception {	
+		this.win = (Window) Executions.createComponents(ZUL_REGISTRAR_RECIBO, this.mainComponent, null);
 		this.win.doModal();
 	}
 	

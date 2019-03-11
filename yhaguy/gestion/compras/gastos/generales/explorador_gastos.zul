@@ -28,10 +28,16 @@
 				onClick="@command('selectFilter', filter=5)"/>
 		</navbar>
 		<space hflex="true" />
+		<button mold="bs" sclass="btn-info btn-sm" width="150px"
+				iconSclass="z-icon-check"
+				label=" registrar Recibo" 
+				disabled="@load(vm.selectedGasto_ eq null)" 
+				onClick="@command('registrarRecibo')"/>
+		<space></space>
 		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
 				iconSclass="z-icon-print"
 				label=" Imprimir" onClick="@command('imprimir')"
-				disabled="@load(vm.selectedGasto eq null)"/>
+				disabled="@load(vm.selectedGasto_ eq null)"/>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"

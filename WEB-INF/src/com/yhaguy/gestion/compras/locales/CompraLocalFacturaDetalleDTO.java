@@ -40,6 +40,12 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 		return (costoGs * cantidad) * signo;
 	}
 	
+	@DependsOn({"costoDs", "cantidad"})
+	public double getImporteDs(){
+		int signo = this.isDescuento()? -1 : 1;
+		return (costoDs * cantidad) * signo;
+	}
+	
 	@DependsOn({"iva", "costoGs", "cantidad"})
 	public double getImporteIva() {
 		if(this.isExenta())

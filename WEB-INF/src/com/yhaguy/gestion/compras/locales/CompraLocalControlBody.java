@@ -941,9 +941,9 @@ public class CompraLocalControlBody extends BodyApp {
 	 */
 	private double getImporteOriginalFactura(CompraLocalFacturaDTO factura){
 		double importeGravadaGs = (double) factura.getTotalImporteGs();
-		double importeGravadaDs = (double) factura.getTotalImporteGs();
+		double importeGravadaDs = (double) factura.getTotalImporteDs();
 		
-		if (this.dto.getMoneda().compareTo(utilDto.getMonedaGuaraniConSimbolo()) == 0) {
+		if (factura.isMonedaLocal()) {
 			return importeGravadaGs;
 		} else {
 			return importeGravadaDs;

@@ -297,7 +297,7 @@ public class ProcesosVentas {
 				}						
 			}
 			
-			if (idVendedor != 0) {
+			if (idVendedor == 0) {
 				for (Funcionario vend : rr.getFuncionarios("")) {
 					for (Proveedor proveedor : proveedores) {
 						BeanComision bc = result.get(vend.getId() + "-" + proveedor.getId());

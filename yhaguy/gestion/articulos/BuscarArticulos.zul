@@ -57,7 +57,8 @@
 				<hlayout>
 					<textbox hflex="true" 
 						sclass="filter_"
-						value="@bind(vm.codInterno)" instant="true"
+						value="@bind(vm.codInterno)" instant="true" 
+						constraint="/([a-zA-Z-0-9\\ñ\\]*[ ]*)*/:caracter no válido.."
 						id="tbox_codint"
 						placeholder="Código Interno.." 
 						style="background-image:url('./core/css/filter.png'); background-repeat:

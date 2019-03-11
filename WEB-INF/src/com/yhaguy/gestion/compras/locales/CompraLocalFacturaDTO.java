@@ -11,6 +11,7 @@ import org.zkoss.bind.annotation.DependsOn;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.Configuracion;
 import com.yhaguy.gestion.empresa.ProveedorDTO;
 
 @SuppressWarnings("serial")
@@ -42,6 +43,15 @@ public class CompraLocalFacturaDTO extends DTO{
 		double out = 0;		
 		for (CompraLocalFacturaDetalleDTO item : this.getDetalles()) {
 			out += item.getImporteGs();
+		}		
+		return out;
+	}
+	
+	@DependsOn("detalles")
+	public double getTotalImporteDs() {
+		double out = 0;		
+		for (CompraLocalFacturaDetalleDTO item : this.getDetalles()) {
+			out += item.getImporteDs();
 		}		
 		return out;
 	}
@@ -98,6 +108,14 @@ public class CompraLocalFacturaDTO extends DTO{
 		if(totalDescuento == 0 || countIva5 == 0)
 			return 0;
 		return ((totalDescuento / (countIva5)) / 21) * countIva5;
+	}
+	
+	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		String sigla = (String) this.moneda.getPos2();
+		return sigla.equals(Configuracion.SIGLA_MONEDA_GUARANI);
 	}
 	
 	/**

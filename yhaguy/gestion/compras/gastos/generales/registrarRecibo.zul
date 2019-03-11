@@ -1,0 +1,30 @@
+<window title="Registrar Recibo" closable="true"
+	width="50%" border="normal" height="200px" position="center,center">
+<div style="padding:10px">
+
+	<grid sclass="vgrid">
+		<columns>
+			<column width="35%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Nro. Recibo:" />
+				<hlayout>
+					<textbox 
+						hflex="true" />
+					<labelConstrain />
+				</hlayout>
+			</row>
+			<row>
+				<field value="Fecha Recibo:" />
+				<hlayout>
+					<datebox
+					hflex="true" />
+					<labelConstrain />
+				</hlayout>				
+			</row>
+		</rows>
+	</grid>
+</div>
+</window>

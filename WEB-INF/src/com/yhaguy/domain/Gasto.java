@@ -42,6 +42,9 @@ public class Gasto extends Domain {
 	private String numero;
 	private String timbrado;
 	
+	private String numeroRecibo;
+	private Date fechaRecibo;
+	
 	private double importeGs;
 	private double importeDs;
 	private double importeIva10;
@@ -689,5 +692,21 @@ public class Gasto extends Domain {
 
 	public void setTimbrado(String timbrado) {
 		this.timbrado = timbrado;
+	}
+
+	public String getNumeroRecibo() {
+		return numeroRecibo;
+	}
+
+	public void setNumeroRecibo(String numeroRecibo) {
+		this.numeroRecibo = numeroRecibo;
+	}
+
+	public Date getFechaRecibo() {
+		return fechaRecibo;
+	}
+
+	public void setFechaRecibo(Date fechaRecibo) {
+		this.fechaRecibo = fechaRecibo;
 	}
 }

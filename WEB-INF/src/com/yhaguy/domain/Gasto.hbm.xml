@@ -11,23 +11,23 @@
 
 		&hibernate-domain; 
 
-		<property name="fecha" />
-		<property name="fechaCarga" />
-		<property name="vencimiento" />
-		<property name="numeroFactura" />
-		<property name="numeroTimbrado" />
-		<property name="tipoCambio" />
-		<property name="totalAsignado" />
+		<property name="fecha"/>
+		<property name="fechaCarga"/>
+		<property name="vencimiento"/>
+		<property name="numeroFactura"/>
+		<property name="numeroTimbrado"/>
+		<property name="tipoCambio"/>
+		<property name="totalAsignado"/>
 		<property name="totalIvaAsignado"/>		
-		<property name="existeComprobanteFisico" />
-		<property name="motivoComprobanteFisico" />
+		<property name="existeComprobanteFisico"/>
+		<property name="motivoComprobanteFisico"/>
 		<property name="cajaPagoNumero" />
 		<property name="numeroOrdenPago" />
 		<property name="observacion" />
-		<property name="beneficiario" />
-		<property name="idImportacion" />
-		<property name="numeroImportacion" />
-		<property name="despachante" />
+		<property name="beneficiario"/>
+		<property name="idImportacion"/>
+		<property name="numeroImportacion"/>
+		<property name="despachante"/>
 		<property name="importeGs"/>
 		<property name="importeDs"/>
 		<property name="importeIva10"/>
@@ -35,6 +35,8 @@
 		<property name="acreedor"/>
 		<property name="tipoCambio_"/>
 		<property name="timbrado"/>
+		<property name="numeroRecibo"/>
+		<property name="fechaRecibo"/>
 		
 		<property name="debitoBancario">
 			<column name="debitoBancario" not-null="true" default="false" />
