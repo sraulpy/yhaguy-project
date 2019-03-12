@@ -386,28 +386,34 @@
 									</columns>
 									<rows>		
 										<row>
-											<vlayout spacing="0" hflex="true">
-												<field
-													value="Ítem de Servicio" />
+											<cell>
 												<hlayout>
-													<hlayout>
-														<checkbox
-															checked="@bind(vm.dto.servicio)" />
-														<label
-															value="@load(vm.dto.servicio? 'SI':'NO')" />
-													</hlayout>
+													<vlayout spacing="0"
+														hflex="true">
+														<field
+															value="Ítem de Servicio" />
+														<hlayout>
+															<hlayout>
+																<checkbox
+																	checked="@bind(vm.dto.servicio)" />
+																<label
+																	value="@load(vm.dto.servicio? 'SI':'NO')" />
+															</hlayout>
+														</hlayout>
+													</vlayout>
+													<vlayout spacing="0"
+														hflex="true">
+														<field
+															value="Importado" />
+														<hlayout>
+															<checkbox
+																checked="@bind(vm.dto.importado)" />
+															<label
+																value="@load(vm.dto.importado? 'SI':'NO')" />
+														</hlayout>
+													</vlayout>
 												</hlayout>
-											</vlayout>
-											<vlayout spacing="0" hflex="true">
-												<field
-														value="Importado" />
-													<hlayout>
-														<checkbox
-															checked="@bind(vm.dto.importado)" />
-														<label
-															value="@load(vm.dto.importado? 'SI':'NO')" />
-													</hlayout>
-											</vlayout>
+											</cell>
 											<vlayout spacing="0">
 												<field
 													value="Fecha alta" />
@@ -416,6 +422,20 @@
 														value="@bind(vm.dto.fechaAlta)" readonly="true"
 														hflex="true" style="color:#999;font-weight:bold" />
 												</hlayout>
+											</vlayout>
+											<vlayout spacing="0">
+												<field value="Línea" />
+												<combobox
+													model="@load(vm.lineas)"
+													value="@load(vm.dto.articuloLinea.text)"
+													selectedItem="@bind(vm.dto.articuloLinea)"
+													hflex="true" style="color:#999;font-weight:bold">
+													<template
+														name="model">
+														<comboitem
+															label="@load(each.text)" />
+													</template>
+												</combobox>
 											</vlayout>
 										</row>
 										<row>	
