@@ -20,6 +20,7 @@ import com.yhaguy.domain.ArticuloCosto;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.HistoricoMovimientoArticulo;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.ProveedorArticulo;
 import com.yhaguy.domain.RegisterDomain;
@@ -45,6 +46,8 @@ public class ProcesosArticulos {
 	static final String SRC_INVENTARIO_MINORISTA = "./WEB-INF/docs/migracion/central/INVENTARIO_MINORISTA.csv";
 	static final String SRC_INVENTARIO_MAYORISTA = "./WEB-INF/docs/migracion/central/INVENTARIO_MAYORISTA.csv";
 	static final String SRC_INVENTARIO_MCAL = "./WEB-INF/docs/migracion/central/INVENTARIO_MCAL.csv";
+	
+	static final String SRC_HISTORICO_MOVIMIENTOS = "./WEB-INF/docs/procesos/SABO.csv";
 
 	/**
 	 * asigna familia a los articulos..
@@ -626,6 +629,39 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * pobla la tabla historico_movimientos..
+	 */
+	public static void poblarHistoricoMovimientos(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } }; 
+		String[][] det = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "FECHA", CSV.STRING },
+				{ "PROVEEDOR", CSV.STRING }, { "COSTODS", CSV.STRING }, { "COSTOGS", CSV.STRING } };
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+
+			String codigo = csv.getDetalleString("CODIGO");		
+			String cantidad = csv.getDetalleString("CANTIDAD");
+			String fecha = csv.getDetalleString("FECHA");
+			String proveedor = csv.getDetalleString("PROVEEDOR");
+			String costods = csv.getDetalleString("COSTODS");
+			String costogs = csv.getDetalleString("COSTOGS");
+			HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
+			hist.setCodigo(codigo);
+			hist.setCantidad(Long.parseLong(cantidad));
+			hist.setFechaUltimaCompra(fecha);
+			hist.setProveedor(proveedor);
+			hist.setCostoFob(Double.parseDouble(costods));
+			hist.setCostoGs(Double.parseDouble(costogs));
+			rr.saveObject(hist, "sys");
+			System.out.println(codigo);
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -641,8 +677,9 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addAjusteStockPositivo(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MINORISTA, Deposito.ID_MINORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
-			ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
+			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
+			ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
