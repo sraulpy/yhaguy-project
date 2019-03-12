@@ -9437,12 +9437,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (Object[] venta : ventas) {
-					boolean found = true;
 					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
 					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
 					
 					if (compraLocal == null && compraImpor == null) {
-						found = false;
 						compraLocal = rr.getUltimaCompraLocalMovimientosArticulos((String) venta[1]);
 					}
 					
@@ -9450,30 +9448,26 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (compraImpor == null) compraImpor = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 					
 					venta = Arrays.copyOf(venta, venta.length + 5);
-					if (found) {
-						Date fcl = (Date) compraLocal[1];
-						Date fcI = (Date) compraImpor[1];
-						if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
-							venta[30] = compraLocal[0];
-							venta[31] = compraLocal[1];
-							venta[32] = compraLocal[2];
-							venta[33] = compraLocal[3];
-							venta[34] = compraLocal[4];
-						} else {
-							venta[30] = compraImpor[0];
-							venta[31] = compraImpor[1];
-							venta[32] = compraImpor[2];
-							venta[33] = compraImpor[3];
-							venta[34] = compraImpor[4];
-						}
-					} else {
+
+					Date fcl = null;
+					if (compraLocal[1] instanceof Date) {
+						fcl = (Date) compraLocal[1];
+					}
+					Date fcI = (Date) compraImpor[1];
+					if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
 						venta[30] = compraLocal[0];
 						venta[31] = compraLocal[1];
 						venta[32] = compraLocal[2];
 						venta[33] = compraLocal[3];
 						venta[34] = compraLocal[4];
+					} else {
+						venta[30] = compraImpor[0];
+						venta[31] = compraImpor[1];
+						venta[32] = compraImpor[2];
+						venta[33] = compraImpor[3];
+						venta[34] = compraImpor[4];
 					}
-					
+								
 					values.add(venta);
 				}
 				
