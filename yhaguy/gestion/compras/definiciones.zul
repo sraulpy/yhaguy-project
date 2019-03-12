@@ -5,7 +5,7 @@
 	<tabbox vflex="true">
 		<tabs>
 			<tab label="Artículos" iconSclass="z-icon-check" />
-			<tab label="Segmentaciones" iconSclass="z-icon-edit" disabled="true"/>
+			<tab label="Segmentaciones" iconSclass="z-icon-edit" />
 		</tabs>
 
 		<tabpanels>
@@ -285,25 +285,29 @@
 						<hlayout sclass="button-container">
 							<button mold="bs"
 								sclass="btn-primary btn-sm" width="120px"
-								iconSclass="z-icon-plus" label=" Agregar" />
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_parte.open(self, "after_start")' />
 							<space></space>
 							<button mold="bs"
 								sclass="btn-warning btn-sm" width="120px"
-								iconSclass="z-icon-edit" label=" Editar" />
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_parte.open(self, "after_start")'
+								disabled="@load(vm.selectedParte eq null ? 'true':'false')"/>
 							<space></space>
 							<button mold="bs" sclass="btn-info btn-sm"
 								width="120px" iconSclass="z-icon-times" label=" Eliminar"
 								disabled="true" />
 						</hlayout>
 						<listbox sclass="small-list" vflex="true"
-							model="@load(vm.partes)">
+							model="@load(vm.partes)"
+							selectedItem="@bind(vm.selectedParte)">
 							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 							<listhead>
 								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
 							</listhead>
 							<template name="model">
 								<listitem>
-									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell label="@load(each.descripcion.toUpperCase())"></listcell>
 								</listitem>
 							</template>
 							<listfoot>
@@ -412,22 +416,25 @@
 					</vbox>
 					<vbox hflex="true" vflex="true">
 						<div height="3px"></div>
-						<label value="LADOS" class="label label-primary" style="margin-left:5px"></label>
+						<label value="PROCEDENCIA" class="label label-primary" style="margin-left:5px"></label>
 						<hlayout sclass="button-container">
 							<button mold="bs"
 								sclass="btn-primary btn-sm" width="120px"
-								iconSclass="z-icon-plus" label=" Agregar" />
+								iconSclass="z-icon-plus" label=" Agregar" 
+								onClick='pop_add_procedencia.open(self, "after_start")' />
 							<space></space>
 							<button mold="bs"
 								sclass="btn-warning btn-sm" width="120px"
-								iconSclass="z-icon-edit" label=" Editar" />
+								iconSclass="z-icon-edit" label=" Editar" 
+								onClick='pop_edit_procedencia.open(self, "after_start")'
+								disabled="@load(vm.selectedProcedencia eq null ? 'true':'false')"/>
 							<space></space>
 							<button mold="bs" sclass="btn-info btn-sm"
 								width="120px" iconSclass="z-icon-times" label=" Eliminar"
 								disabled="true" />
 						</hlayout>
 						<listbox sclass="small-list" vflex="true"
-							model="@load(vm.lados)">
+							model="@load(vm.procedencias)">
 							<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 							<listhead>
 								<listheader label="Descripción" sort="auto(descripcion)" onCreate="self.sort(true)"></listheader>
@@ -582,6 +589,50 @@
 			<button mold="bs" sclass="btn-success btn-xs" width="50px"
 				iconSclass="z-icon-check" vflex="true"
 				onClick="@command('saveAplicacion', comp=pop_edit_aplicacion)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_add_procedencia" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevaProcedencia.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addProcedencia', comp=pop_add_procedencia)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_procedencia" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedProcedencia.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveProcedencia', comp=pop_edit_procedencia)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_add_parte" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.nuevaParte.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('addParte', comp=pop_add_parte)" />
+		</hlayout>
+	</popup>
+	
+	<popup id="pop_edit_parte" width="400px" sclass="rounded">
+		<hlayout>
+			<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.selectedParte.descripcion)">
+			</textbox>
+			<button mold="bs" sclass="btn-success btn-xs" width="50px"
+				iconSclass="z-icon-check" vflex="true"
+				onClick="@command('saveParte', comp=pop_edit_parte)" />
 		</hlayout>
 	</popup>
 

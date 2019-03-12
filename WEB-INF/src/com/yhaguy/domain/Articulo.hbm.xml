@@ -86,6 +86,9 @@
 			
 		<many-to-one name="articuloAPI" class="com.yhaguy.domain.ArticuloAPI"
 			column="id_api" lazy="false" />
+			
+		<many-to-one name="articuloProcedencia" class="com.yhaguy.domain.ArticuloProcedencia"
+			column="id_procedencia" lazy="false" />
 		
 		<many-to-one name="articuloEstado" class="com.coreweb.domain.Tipo"
 			column="idArticuloEstado" lazy="false" />

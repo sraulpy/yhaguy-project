@@ -9064,6 +9064,11 @@ public class RegisterDomain extends Register {
 	 * [22]:articulo.minimo
 	 * [23]:articulo.costoGs
 	 * [24]:cliente.id
+	 * [25]:articulo.subgrupo 
+	 * [26]:articulo.parte
+	 * [27]:articulo.submarca 
+	 * [28]:articulo.unidadesxcaja
+	 * [29]:articulo.procedencia
 	 */
 	public List<Object[]> getVentasDetallado(Date desde, Date hasta, long idProveedor, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -9073,7 +9078,8 @@ public class RegisterDomain extends Register {
 				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion,"
 				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
 				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), v.fecha, v.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo,"
-				+ " d.articulo.costoGs, v.cliente.id"
+				+ " d.articulo.costoGs, v.cliente.id, d.articulo.articuloSubGrupo.descripcion, d.articulo.articuloParte.descripcion, d.articulo.articuloSubMarca.descripcion,"
+				+ " d.articulo.unidadesCaja, d.articulo.articuloProcedencia.descripcion"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -9089,7 +9095,8 @@ public class RegisterDomain extends Register {
 				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
 				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
 				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, v.fecha, v.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo," + 
-				" d.articulo.costoGs, v.cliente.id";
+				" d.articulo.costoGs, v.cliente.id, d.articulo.articuloSubGrupo.descripcion, d.articulo.articuloParte.descripcion, d.articulo.articuloSubMarca.descripcion," +
+				" d.articulo.unidadesCaja, d.articulo.articuloProcedencia.descripcion";
 		return this.hql(query);
 	}
 	
@@ -9120,6 +9127,11 @@ public class RegisterDomain extends Register {
 	 * [22]:articulo.minimo
 	 * [23]:articulo.costoGs
 	 * [24]:cliente.id
+	 * [25]:articulo.subgrupo 
+	 * [26]:articulo.parte
+	 * [27]:articulo.submarca 
+	 * [28]:articulo.unidadesxcaja
+	 * [29]:articulo.procedencia
 	 */
 	public List<Object[]> getNotasCreditoDetallado(Date desde, Date hasta, long idProveedor, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -9128,8 +9140,10 @@ public class RegisterDomain extends Register {
 				+ " d.articulo.estado, d.articulo.descripcion, d.articulo.ochentaVeinte, d.articulo.abc, d.articulo.familia.descripcion,"
 				+ " d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion, "
 				+ " d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen,"
-				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo,"
-				+ " d.articulo.minimo, d.articulo.costoGs, n.cliente.id"
+				+ " d.articulo.proveedor.empresa.razonSocial, sum(d.cantidad), n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo,"				
+				+ " d.articulo.minimo, d.articulo.costoGs, n.cliente.id,"
+				+ " d.articulo.articuloSubGrupo.descripcion, d.articulo.articuloParte.descripcion, d.articulo.articuloSubMarca.descripcion,"
+				+ " d.articulo.unidadesCaja, d.articulo.articuloProcedencia.descripcion"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
@@ -9144,7 +9158,8 @@ public class RegisterDomain extends Register {
 				" d.articulo.marca.descripcion, d.articulo.articuloLinea.descripcion, d.articulo.articuloGrupo.descripcion," + 
 				" d.articulo.articuloAplicacion.descripcion, d.articulo.articuloModelo.descripcion, d.articulo.peso, d.articulo.volumen," + 
 				" d.articulo.proveedor.empresa.razonSocial, d.cantidad, n.fechaEmision, n.cliente.empresa.razonSocial, d.articulo.maximo, d.articulo.minimo," + 
-				" d.articulo.costoGs, n.cliente.id";
+				" d.articulo.costoGs, n.cliente.id, d.articulo.articuloSubGrupo.descripcion, d.articulo.articuloParte.descripcion, d.articulo.articuloSubMarca.descripcion," +
+				" d.articulo.unidadesCaja, d.articulo.articuloProcedencia.descripcion";
 		return this.hql(query);
 	}
 	
@@ -9546,13 +9561,19 @@ public class RegisterDomain extends Register {
 	 * [18]:articulo.maximo
 	 * [19]:articulo.minimo
 	 * [20]:articulo.costoGs
+	 * [21]:articulo.subgrupo 
+	 * [22]:articulo.parte
+	 * [23]:articulo.submarca 
+	 * [24]:articulo.unidadesxcaja
+	 * [25]:articulo.procedencia
 	 */
 	public List<Object[]> getArticulos(long idProveedor, long idFamilia) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.codigoProveedor, a.referencia, a.codigoOriginal,"
 				+ "	a.estado, a.descripcion, a.ochentaVeinte, a.abc, a.familia.descripcion,"
 				+ " a.marca.descripcion, a.articuloLinea.descripcion, a.articuloGrupo.descripcion,"
 				+ " a.articuloAplicacion.descripcion, a.articuloModelo.descripcion, a.peso, a.volumen, "
-				+ " a.proveedor.empresa.razonSocial, a.maximo, a.minimo, a.costoGs"
+				+ " a.proveedor.empresa.razonSocial, a.maximo, a.minimo, a.costoGs, a.articuloSubGrupo.descripcion, "
+				+ " a.articuloParte.descripcion, a.articuloSubMarca.descripcion, a.unidadesCaja, a.articuloProcedencia.descripcion"
 				+ " from Articulo a where a.dbEstado != 'D'";
 		if (idFamilia > 0) {
 			query += " and a.familia.id = " + idFamilia;

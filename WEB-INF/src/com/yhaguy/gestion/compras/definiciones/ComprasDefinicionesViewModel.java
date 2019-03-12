@@ -11,6 +11,8 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
 
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.ArticuloAPI;
 import com.yhaguy.domain.ArticuloAplicacion;
 import com.yhaguy.domain.ArticuloFamilia;
@@ -20,6 +22,7 @@ import com.yhaguy.domain.ArticuloLado;
 import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloModelo;
 import com.yhaguy.domain.ArticuloPresentacion;
+import com.yhaguy.domain.ArticuloProcedencia;
 import com.yhaguy.domain.ArticuloSubGrupo;
 import com.yhaguy.domain.ArticuloSubMarca;
 import com.yhaguy.domain.RegisterDomain;
@@ -43,6 +46,12 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 
 	private ArticuloAplicacion selectedAplicacion;
 	private ArticuloAplicacion nuevaAplicacion = new ArticuloAplicacion();
+	
+	private ArticuloProcedencia selectedProcedencia;
+	private ArticuloProcedencia nuevaProcedencia = new ArticuloProcedencia();
+	
+	private Tipo selectedParte;
+	private Tipo nuevaParte = new Tipo();
 	
 	@Init(superclass = true)
 	public void init() {
@@ -227,6 +236,65 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 		Clients.showNotification("REGISTRO MODIFICADO..");
 	}
 	
+	@Command
+	@NotifyChange({ "procedencias", "nuevaProcedencia", "selectedProcedencia" })
+	public void addProcedencia(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaProcedencia.getDescripcion() == null || this.nuevaProcedencia.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaProcedencia.setDescripcion(this.nuevaProcedencia.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevaProcedencia, this.getLoginNombre());
+		this.nuevaProcedencia = new ArticuloProcedencia();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "procedencias", "nuevaProcedencia", "selectedProcedencia" })
+	public void saveProcedencia(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedProcedencia.getDescripcion() == null || this.selectedProcedencia.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedProcedencia.setDescripcion(this.selectedProcedencia.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedProcedencia, this.getLoginNombre());
+		this.selectedProcedencia = new ArticuloProcedencia();
+		this.selectedProcedencia = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "partes", "nuevaParte", "selectedParte" })
+	public void addParte(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaParte.getDescripcion() == null || this.nuevaParte.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaParte.setDescripcion(this.nuevaParte.getDescripcion().toUpperCase());
+		this.nuevaParte.setTipoTipo(rr.getTipoTipoPorDescripcion(Configuracion.ID_TIPO_ARTICULO_PARTE));
+		rr.saveObject(this.nuevaParte, this.getLoginNombre());
+		this.nuevaParte = new Tipo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "partes", "nuevaParte", "selectedParte" })
+	public void saveParte(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedParte.getDescripcion() == null || this.selectedParte.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedParte.setDescripcion(this.selectedParte.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedParte, this.getLoginNombre());
+		this.selectedParte = new Tipo();
+		this.selectedParte = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
 	/**
 	 * GETS / SETS
 	 */
@@ -273,10 +341,12 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 		return rr.getObjects(ArticuloModelo.class.getName());
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<ArticuloModelo> getPartes() throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getObjects(ArticuloModelo.class.getName());
+	/**
+	 * @return las partes..
+	 */
+	public List<Tipo> getPartes() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		return rr.getTipos(Configuracion.ID_TIPO_ARTICULO_PARTE);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -303,6 +373,12 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 		return rr.getObjects(ArticuloLado.class.getName());
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<ArticuloProcedencia> getProcedencias() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(ArticuloProcedencia.class.getName());
+	}
+	
 	public ArticuloFamilia getSelectedFamilia() {
 		return selectedFamilia;
 	}
@@ -397,5 +473,37 @@ public class ComprasDefinicionesViewModel extends SimpleViewModel {
 
 	public void setNuevaAplicacion(ArticuloAplicacion nuevaAplicacion) {
 		this.nuevaAplicacion = nuevaAplicacion;
+	}
+
+	public ArticuloProcedencia getSelectedProcedencia() {
+		return selectedProcedencia;
+	}
+
+	public void setSelectedProcedencia(ArticuloProcedencia selectedProcedencia) {
+		this.selectedProcedencia = selectedProcedencia;
+	}
+
+	public ArticuloProcedencia getNuevaProcedencia() {
+		return nuevaProcedencia;
+	}
+
+	public void setNuevaProcedencia(ArticuloProcedencia nuevaProcedencia) {
+		this.nuevaProcedencia = nuevaProcedencia;
+	}
+
+	public Tipo getSelectedParte() {
+		return selectedParte;
+	}
+
+	public void setSelectedParte(Tipo selectedParte) {
+		this.selectedParte = selectedParte;
+	}
+
+	public Tipo getNuevaParte() {
+		return nuevaParte;
+	}
+
+	public void setNuevaParte(Tipo nuevaParte) {
+		this.nuevaParte = nuevaParte;
 	}
 }

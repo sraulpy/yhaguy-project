@@ -9337,6 +9337,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<Long, Object[]> stock6 = new HashMap<Long, Object[]>();
 				Map<Long, Object[]> stock7 = new HashMap<Long, Object[]>();
 				Map<Long, Object[]> stock8 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock9 = new HashMap<Long, Object[]>();
+				Map<Long, Object[]> stock10 = new HashMap<Long, Object[]>();
 				
 				Map<String, Integer> cantClientes = new HashMap<String, Integer>();
 				Map<String, Integer> cantClientes_ = new HashMap<String, Integer>();
@@ -9420,6 +9422,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					Object[] st6 = rr.getStockArticulo(idArticulo, Deposito.ID_MCAL_TEMPORAL);
 					Object[] st7 = rr.getStockArticulo(idArticulo, Deposito.ID_MAYORISTA);
 					Object[] st8 = rr.getStockArticulo(idArticulo, Deposito.ID_MAYORISTA_TEMPORAL);
+					Object[] st9 = rr.getStockArticulo(idArticulo, Deposito.ID_MRA_TEMPORAL);
+					Object[] st10 = rr.getStockArticulo(idArticulo, Deposito.ID_MRA);
 					stock1.put(idArticulo, st1);
 					stock2.put(idArticulo, st2);
 					stock3.put(idArticulo, st3);
@@ -9428,13 +9432,17 @@ public class ReportesViewModel extends SimpleViewModel {
 					stock6.put(idArticulo, st6);
 					stock7.put(idArticulo, st7);
 					stock8.put(idArticulo, st8);
+					stock9.put(idArticulo, st9);
+					stock10.put(idArticulo, st10);
 				}
 				
 				for (Object[] venta : ventas) {
+					boolean found = true;
 					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
 					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
 					
 					if (compraLocal == null && compraImpor == null) {
+						found = false;
 						compraLocal = rr.getUltimaCompraLocalMovimientosArticulos((String) venta[1]);
 					}
 					
@@ -9442,21 +9450,30 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (compraImpor == null) compraImpor = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 					
 					venta = Arrays.copyOf(venta, venta.length + 5);
-					Date fcl = (Date) compraLocal[1];
-					Date fcI = (Date) compraImpor[1];
-					if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
-						venta[25] = compraLocal[0];
-						venta[26] = compraLocal[1];
-						venta[27] = compraLocal[2];
-						venta[28] = compraLocal[3];
-						venta[29] = compraLocal[4];
+					if (found) {
+						Date fcl = (Date) compraLocal[1];
+						Date fcI = (Date) compraImpor[1];
+						if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
+							venta[30] = compraLocal[0];
+							venta[31] = compraLocal[1];
+							venta[32] = compraLocal[2];
+							venta[33] = compraLocal[3];
+							venta[34] = compraLocal[4];
+						} else {
+							venta[30] = compraImpor[0];
+							venta[31] = compraImpor[1];
+							venta[32] = compraImpor[2];
+							venta[33] = compraImpor[3];
+							venta[34] = compraImpor[4];
+						}
 					} else {
-						venta[25] = compraImpor[0];
-						venta[26] = compraImpor[1];
-						venta[27] = compraImpor[2];
-						venta[28] = compraImpor[3];
-						venta[29] = compraImpor[4];
+						venta[30] = compraLocal[0];
+						venta[31] = compraLocal[1];
+						venta[32] = compraLocal[2];
+						venta[33] = compraLocal[3];
+						venta[34] = compraLocal[4];
 					}
+					
 					values.add(venta);
 				}
 				
@@ -9467,7 +9484,8 @@ public class ReportesViewModel extends SimpleViewModel {
 							Object[] ultCompra = rr.getUltimaCompraLocalMovimientosArticulos((String) art[1]);
 							values.add(new Object[] { art[0], art[1], art[2], art[3], art[4], art[5], art[6], art[7],
 									art[8], art[9], art[10], art[11], art[12], art[13], art[14], art[15], art[16], art[17],
-									null, null, null, art[18], art[19], art[20], (long) 0, ultCompra[0], ultCompra[1], ultCompra[2], ultCompra[3], ultCompra[4] });
+									null, null, null, art[18], art[19], art[20], (long) 0, art[21], art[22], art[23], art[24], 
+									art[25], ultCompra[0], ultCompra[1], ultCompra[2], ultCompra[3], ultCompra[4] });
 						}
 					}
 				}
@@ -9491,15 +9509,20 @@ public class ReportesViewModel extends SimpleViewModel {
 					String proveedor = (String) det[17];
 					int maximo = (int) det[21];
 					int minimo = (int) det[22];
+					String subGrupo = (String) det[25];
+					String parte = (String) det[26];
+					String subMarca = (String) det[27];
+					int unidadesPorCaja = (int) det[28];
+					String procedencia = (String) det[29];
 					Integer cantCliente = cantClientes_.get(cod);
 					if (cantCliente == null) cantCliente = 0;
 					Integer cantClienteVig = cantClientesVig_.get(cod);
 					if (cantClienteVig == null) cantClienteVig = 0;
-					String cantidad = det[25] + "";
-					String fechaUltimaCompra = det[26] + "";
-					String proveedoUltimaCompra = (String) det[27];
-					double costoFobGs = (double) det[23];
-					double costoFobDs = (double) det[29];
+					String cantidad = det[30] + "";
+					String fechaUltimaCompra = det[31] + "";
+					String proveedoUltimaCompra = (String) det[32];
+					double costoFobGs = (double) det[33];
+					double costoFobDs = (double) det[34];
 					
 					Object[] st = stock1.get(det[0]);
 					String dep_1 = st != null ? st[1] + "" : "0";
@@ -9524,6 +9547,12 @@ public class ReportesViewModel extends SimpleViewModel {
 
 					Object[] st8 = stock8.get(det[0]);
 					String dep_8 = st8 != null ? st8[1] + "" : "0";
+					
+					Object[] st9 = stock9.get(det[0]);
+					String dep_9 = st9 != null ? st9[1] + "" : "0";
+					
+					Object[] st10 = stock10.get(det[0]);
+					String dep_10 = st10 != null ? st10[1] + "" : "0";
 					
 					Integer cantEnero = cants.get(cod + "-1");
 					String enero = cantEnero != null ? cantEnero + "" : "0";
@@ -9580,6 +9609,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setPeso(peso);
 					hist.setVolumen(volumen);
 					hist.setProveedor(proveedor);
+					hist.setSubGrupo(subGrupo);
+					hist.setParte(parte);
+					hist.setSubMarca(subMarca);
+					hist.setUnidadesCaja(unidadesPorCaja);
+					hist.setProcedencia(procedencia);
 					hist.setCantidad(Long.parseLong(cantidad));
 					hist.setCantCliente(cantCliente);
 					hist.setCantClienteVigente(cantClienteVig);
@@ -9595,6 +9629,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setStock6(Long.parseLong(dep_6));
 					hist.setStock7(Long.parseLong(dep_7));
 					hist.setStock8(Long.parseLong(dep_8));
+					hist.setStock9(Long.parseLong(dep_9));
+					hist.setStock10(Long.parseLong(dep_10));
 					hist.setStockGral(hist.getStock1() + hist.getStock2() + hist.getStock3() + hist.getStock4() + hist.getStock5() + hist.getStock6() + hist.getStock7() + hist.getStock8());
 					hist.setStockMinimo(0);
 					hist.setStockMaximo(0);
@@ -21032,6 +21068,16 @@ class MovimientoArticulos implements JRDataSource {
 			value = det.getPeso();
 		} else if ("Volumen".equals(fieldName)) {
 			value = det.getVolumen();
+		} else if ("SubGrupo".equals(fieldName)) {
+			value = det.getSubGrupo();
+		} else if ("Parte".equals(fieldName)) {
+			value = det.getParte();
+		} else if ("SubMarca".equals(fieldName)) {
+			value = det.getSubMarca();
+		} else if ("UnidadesCaja".equals(fieldName)) {
+			value = det.getUnidadesCaja() + "";
+		} else if ("Procedencia".equals(fieldName)) {
+			value = det.getProcedencia();
 		} else if ("Proveedor".equals(fieldName)) {
 			value = det.getProveedor();
 		} else if ("CantLocal".equals(fieldName)) {
@@ -21064,6 +21110,10 @@ class MovimientoArticulos implements JRDataSource {
 			value = det.getStock7() + "";			
 		} else if ("Dep_8".equals(fieldName)) {
 			value = det.getStock8() + "";			
+		} else if ("Dep_9".equals(fieldName)) {
+			value = det.getStock9() + "";			
+		} else if ("Dep_10".equals(fieldName)) {
+			value = det.getStock10() + "";			
 		} else if ("Dep_gral".equals(fieldName)) {
 			value = det.getTotal() + "";			
 		} else if ("Enero".equals(fieldName)) {

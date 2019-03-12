@@ -27,6 +27,11 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private String peso;
 	private String volumen;
 	private String proveedor;
+	private String subGrupo;
+	private String parte;
+	private String subMarca;
+	private String procedencia;
+	private int unidadesCaja;
 	private long cantidad;
 	private long stock1;
 	private long stock2;
@@ -36,6 +41,8 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private long stock6;
 	private long stock7;
 	private long stock8;
+	private long stock9;
+	private long stock10;
 	private long stockGral;
 	private long stockMinimo;
 	private long stockMaximo;
@@ -792,5 +799,61 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setCantClienteVigente(int cantClienteVigente) {
 		this.cantClienteVigente = cantClienteVigente;
+	}
+
+	public String getSubGrupo() {
+		return subGrupo;
+	}
+
+	public void setSubGrupo(String subGrupo) {
+		this.subGrupo = subGrupo;
+	}
+
+	public String getParte() {
+		return parte;
+	}
+
+	public void setParte(String parte) {
+		this.parte = parte;
+	}
+
+	public String getSubMarca() {
+		return subMarca;
+	}
+
+	public void setSubMarca(String subMarca) {
+		this.subMarca = subMarca;
+	}
+
+	public String getProcedencia() {
+		return procedencia;
+	}
+
+	public void setProcedencia(String procedencia) {
+		this.procedencia = procedencia;
+	}
+
+	public int getUnidadesCaja() {
+		return unidadesCaja;
+	}
+
+	public void setUnidadesCaja(int unidadesCaja) {
+		this.unidadesCaja = unidadesCaja;
+	}
+
+	public long getStock9() {
+		return stock9;
+	}
+
+	public void setStock9(long stock9) {
+		this.stock9 = stock9;
+	}
+
+	public long getStock10() {
+		return stock10;
+	}
+
+	public void setStock10(long stock10) {
+		this.stock10 = stock10;
 	}
 }
