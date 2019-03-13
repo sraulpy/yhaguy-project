@@ -5603,11 +5603,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
 				double totalCobrado = 0;
-				double totalCobradoItems = 0;
 				double totalContado = 0;
-				double totalContadoItems = 0;
-				Map<Long, Integer> cli_acum = new HashMap<Long, Integer>();
-				Map<Long, Integer> cli_acum_ = new HashMap<Long, Integer>();
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, String> clientes = new HashMap<Long, String>();
@@ -5617,14 +5613,13 @@ public class ReportesViewModel extends SimpleViewModel {
 					totalCobrado += (double) cobro[2];
 					Cliente cli = rec.getCliente();
 					long idCliente = cli.getId().longValue();
-					Integer total = cli_acum.get(idCliente);
+					Double total = values.get(idCliente);
 					if (total != null) {
-						total ++;
+						total += (totalCobrado - Utiles.getIVA(totalCobrado, 10));
 					} else {
-						total = 1;
+						total = (totalCobrado - Utiles.getIVA(totalCobrado, 10));
 					}
-					totalCobradoItems ++;
-					cli_acum.put(idCliente, total);
+					values.put(idCliente, total);
 					clientes.put(idCliente, cli.getRazonSocial());				
 				}	
 				
@@ -5632,31 +5627,14 @@ public class ReportesViewModel extends SimpleViewModel {
 					totalContado += venta.getTotalImporteGsSinIva();
 					Cliente cli = venta.getCliente();
 					long idCliente = cli.getId().longValue();
-					Integer total = cli_acum_.get(idCliente);
+					Double total = values_.get(idCliente);
 					if (total != null) {
-						total ++;
+						total += totalContado;
 					} else {
-						total = 1;
+						total = totalContado;
 					}
-					totalContadoItems ++;
-					cli_acum_.put(idCliente, total);
+					values_.put(idCliente, total);
 					clientes.put(idCliente, cli.getRazonSocial());
-				}
-				
-				for (Long idCliente : clientes.keySet()) {
-					Integer total = cli_acum.get(idCliente);
-					if (total != null) {
-						double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
-						double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
-						double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
-						values.put(idCliente, importe);
-					}					
-					Integer total_ = cli_acum_.get(idCliente);
-					if (total_ != null) {
-						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
-						double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
-						values_.put(idCliente, importe_);
-					}					
 				}
 
 				for (Long idCliente : clientes.keySet()) {
