@@ -891,9 +891,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				String tipoCosto = filtro.getTipoCosto();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				SucursalApp sucursal = filtro.getSelectedSucursal();
+				Deposito deposito = filtro.getDeposito();
 				long idProveedor = proveedor != null ? proveedor.getId() : (long) 0;
 				long idSucursal = sucursal != null ? sucursal.getId() : (long) 0;
 				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
+				long idDeposito = deposito != null ? deposito.getId() : (long) 0;
 				
 				if (familia == null) {
 					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -910,7 +912,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];
@@ -928,8 +930,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
 				String familia_ = familia.getDescripcion();
 				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
-				String sucursal_ = sucursal != null ? sucursal.getDescripcion() : "TODOS..";
-				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, sucursal_);
+				String deposito_ = deposito != null ? deposito.getDescripcion() : "TODOS..";
+				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, deposito_);
 				rep.setApaisada();
 				rep.setDatosReporte(data);
 				
@@ -19747,15 +19749,15 @@ class ReporteStockValorizadoAunaFecha extends ReporteYhaguy {
 	private String tipoCosto;
 	private String familia;
 	private String proveedor;
-	private String sucursal;
+	private String deposito;
 	
-	public ReporteStockValorizadoAunaFecha(Date hasta, String articulo, String tipoCosto, String familia, String proveedor, String sucursal) {
+	public ReporteStockValorizadoAunaFecha(Date hasta, String articulo, String tipoCosto, String familia, String proveedor, String deposito) {
 		this.hasta = hasta;
 		this.articulo = articulo;
 		this.tipoCosto = tipoCosto;
 		this.familia = familia;
 		this.proveedor = proveedor;
-		this.sucursal = sucursal;
+		this.deposito = deposito;
 	}
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
@@ -19796,7 +19798,7 @@ class ReporteStockValorizadoAunaFecha extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Familia", this.familia))
 				.add(this.textoParValor("Proveedor", this.proveedor))
-				.add(this.textoParValor("Sucursal", this.sucursal)));
+				.add(this.textoParValor("Depósito", this.deposito)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
