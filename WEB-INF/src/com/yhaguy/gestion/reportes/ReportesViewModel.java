@@ -1412,6 +1412,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_LITRAJE = "VEN-00042";
 		static final String VENTAS_LISTA_PRECIO_DEPOSITO = "VEN-00043";
 		static final String VENTAS_LISTA_PRECIO_FAMILIA = "VEN-00044";
+		static final String VENTAS_COBRANZAS_VENDEDOR_CLIENTE = "VEN-00045";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1597,6 +1598,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_LISTA_PRECIO_FAMILIA:
 				this.ventasPorListaPrecioPorFamilia(mobile);
+				break;
+				
+			case VENTAS_COBRANZAS_VENDEDOR_CLIENTE:
+				this.cobranzasVentasVendedorCliente(mobile);
 				break;
 			}
 		}
@@ -4950,7 +4955,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
-				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
+				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
 				double totalCobrado = 0;
 				double totalCobradoItems = 0;
 				double totalContado = 0;
@@ -5571,6 +5576,118 @@ public class ReportesViewModel extends SimpleViewModel {
 				e.printStackTrace();
 			}
 		
+		}
+		
+		/**
+		 * reporte VEN-00045
+		 */
+		private void cobranzasVentasVendedorCliente(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Funcionario vendedor = filtro.getVendedor();
+				
+				if (vendedor == null) {
+					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
+				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
+				double totalCobrado = 0;
+				double totalCobradoItems = 0;
+				double totalContado = 0;
+				double totalContadoItems = 0;
+				Map<Long, Integer> cli_acum = new HashMap<Long, Integer>();
+				Map<Long, Integer> cli_acum_ = new HashMap<Long, Integer>();
+				Map<Long, Double> values = new HashMap<Long, Double>();
+				Map<Long, Double> values_ = new HashMap<Long, Double>();
+				Map<Long, String> clientes = new HashMap<Long, String>();
+
+				for (Object[] cobro : cobros) {
+					Recibo rec = (Recibo) cobro[0];
+					totalCobrado += (double) cobro[2];
+					Cliente cli = rec.getCliente();
+					long idCliente = cli.getId().longValue();
+					Integer total = cli_acum.get(idCliente);
+					if (total != null) {
+						total ++;
+					} else {
+						total = 1;
+					}
+					totalCobradoItems ++;
+					cli_acum.put(idCliente, total);
+					clientes.put(idCliente, cli.getRazonSocial());				
+				}	
+				
+				for (Venta venta : ventas) {
+					totalContado += venta.getTotalImporteGsSinIva();
+					Cliente cli = venta.getCliente();
+					long idCliente = cli.getId().longValue();
+					Integer total = cli_acum_.get(idCliente);
+					if (total != null) {
+						total ++;
+					} else {
+						total = 1;
+					}
+					totalContadoItems ++;
+					cli_acum_.put(idCliente, total);
+					clientes.put(idCliente, cli.getRazonSocial());
+				}
+				
+				for (Long idCliente : clientes.keySet()) {
+					Integer total = cli_acum.get(idCliente);
+					if (total != null) {
+						double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
+						double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
+						double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
+						values.put(idCliente, importe);
+					}					
+					Integer total_ = cli_acum_.get(idCliente);
+					if (total_ != null) {
+						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
+						double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
+						values_.put(idCliente, importe_);
+					}					
+				}
+
+				for (Long idCliente : clientes.keySet()) {
+					Double cobrado = values.get(idCliente);
+					Double contado = values_.get(idCliente);
+					
+					double cobrado_ = cobrado != null? cobrado : 0;
+					double contado_ = contado != null? contado : 0;
+					
+					if (cobrado != null || contado != null) {
+						data.add(new Object[] { clientes.get(idCliente), cobrado_, contado_ });
+					}
+				}				
+
+				ReporteTotalCobranzasVentasCliente rep = new ReporteTotalCobranzasVentasCliente(desde, hasta, vendedor.getRazonSocial());
+				rep.setDatosReporte(data);
+				rep.setApaisada();				
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -17905,6 +18022,61 @@ class ReporteTotalCobranzasVentasProveedor extends ReporteYhaguy {
 	@Override
 	public void informacionReporte() {
 		this.setTitulo("Total cobranzas / ventas contado por vendedor / proveedor");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Cobro-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Vendedor", this.vendedor)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de total cobranzas ventas por vendedor VEN-00045..
+ */
+class ReporteTotalCobranzasVentasCliente extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private Date desde;
+	private Date hasta;
+	private String vendedor;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Cliente", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+
+	public ReporteTotalCobranzasVentasCliente(Date desde, Date hasta, String vendedor) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.vendedor = vendedor;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Total cobranzas / ventas contado por vendedor / cliente");
 		this.setDirectorio("ventas");
 		this.setNombreArchivo("Cobro-");
 		this.setTitulosColumnas(cols);
