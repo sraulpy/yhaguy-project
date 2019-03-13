@@ -5602,36 +5602,32 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
-				double totalCobrado = 0;
-				double totalContado = 0;
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, String> clientes = new HashMap<Long, String>();
 
 				for (Object[] cobro : cobros) {
 					Recibo rec = (Recibo) cobro[0];
-					totalCobrado += (double) cobro[2];
 					Cliente cli = rec.getCliente();
 					long idCliente = cli.getId().longValue();
 					Double total = values.get(idCliente);
 					if (total != null) {
-						total += (totalCobrado - Utiles.getIVA(totalCobrado, 10));
+						total += ((double) cobro[2] - Utiles.getIVA((double) cobro[2], 10));
 					} else {
-						total = (totalCobrado - Utiles.getIVA(totalCobrado, 10));
+						total = ((double) cobro[2] - Utiles.getIVA((double) cobro[2], 10));
 					}
 					values.put(idCliente, total);
 					clientes.put(idCliente, cli.getRazonSocial());				
 				}	
 				
 				for (Venta venta : ventas) {
-					totalContado += venta.getTotalImporteGsSinIva();
 					Cliente cli = venta.getCliente();
 					long idCliente = cli.getId().longValue();
 					Double total = values_.get(idCliente);
 					if (total != null) {
-						total += totalContado;
+						total += venta.getTotalImporteGsSinIva();
 					} else {
-						total = totalContado;
+						total = venta.getTotalImporteGsSinIva();
 					}
 					values_.put(idCliente, total);
 					clientes.put(idCliente, cli.getRazonSocial());
