@@ -5,9 +5,19 @@ import com.coreweb.domain.Domain;
 @SuppressWarnings("serial")
 public class Deposito extends Domain {
 
+	// depositos empresa baterias..
 	public static final long ID_DEPOSITO_PRINCIPAL = 2;
 	public static final long ID_DEPOSITO_CONTROL = 13;
+	public static final long ID_DEPOSITO_AVERIADOS = 6;
+	public static final long ID_DEPOSITO_AUXILIO = 7;
+	public static final long ID_DEPOSITO_FALLADOS = 8;
+	public static final long ID_DEPOSITO_RECLAMOS = 9;
+	public static final long ID_DEPOSITO_SECAS = 10;
+	public static final long ID_DEPOSITO_TRANSITORIO = 11;
+	public static final long ID_DEPOSITO_PRODUCCION = 12;
+	public static final long ID_DEPOSITO_SC1 = 1;
 	
+	// depositos central
 	public static final long ID_MINORISTA = 1;
 	public static final long ID_CENTRAL_TEMPORAL = 2;
 	public static final long ID_CENTRAL_RECLAMOS = 3;

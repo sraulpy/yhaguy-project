@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MovimientoArticulos" pageWidth="6336" pageHeight="595" orientation="Landscape" columnWidth="6296" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="0.8264462809917411"/>
-	<property name="ireport.x" value="2671"/>
+	<property name="ireport.zoom" value="1.3310000000000093"/>
+	<property name="ireport.x" value="5583"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -19,16 +19,17 @@
 	<parameter name="Desde" class="java.lang.String"/>
 	<parameter name="Hasta" class="java.lang.String"/>
 	<parameter name="Promedio" class="java.lang.String"/>
-	<parameter name="IVA_INC" class="java.lang.String"/>
-	<parameter name="VCR_INC" class="java.lang.String"/>
-	<parameter name="VCT_INC" class="java.lang.String"/>
-	<parameter name="NCR_CRE" class="java.lang.String"/>
-	<parameter name="TOT_VTA_NETA" class="java.lang.String"/>
-	<parameter name="TOT_COSTO" class="java.lang.String"/>
-	<parameter name="TOT_UTILIDAD" class="java.lang.String"/>
-	<parameter name="TOT_MARGEN_VTA" class="java.lang.String"/>
-	<parameter name="TOT_MARGEN_COSTO" class="java.lang.String"/>
 	<parameter name="MES_CLI_VIG" class="java.lang.String"/>
+	<parameter name="dep1" class="java.lang.String"/>
+	<parameter name="dep2" class="java.lang.String"/>
+	<parameter name="dep3" class="java.lang.String"/>
+	<parameter name="dep4" class="java.lang.String"/>
+	<parameter name="dep5" class="java.lang.String"/>
+	<parameter name="dep6" class="java.lang.String"/>
+	<parameter name="dep7" class="java.lang.String"/>
+	<parameter name="dep8" class="java.lang.String"/>
+	<parameter name="dep9" class="java.lang.String"/>
+	<parameter name="dep10" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '10010001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta", 150000 "Saldo Anterior",  3351450 "Debitos Periodo", 100000 "Creditos Periodo",
 150000 "Saldo Periodo" from plancuenta where id = '1'
@@ -244,46 +245,6 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Diciembre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3623" y="0" width="99" height="15" uuid="452d03cd-7cba-4135-a690-7629ded7fe2a"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Minorista]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="3920" y="0" width="99" height="15" uuid="fb487d3f-8d4f-4b40-9e92-d21134f7d95d"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Temp Central]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4019" y="0" width="99" height="15" uuid="c8a6fcf0-401e-4d9f-96ba-b482c9a44eb5"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Recl Central]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4118" y="0" width="99" height="15" uuid="efeecd30-7104-4a04-8dbd-0ce26243488b"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Repo Central]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4217" y="0" width="99" height="15" uuid="6061d82c-47a2-4267-ab45-86e0839c45d7"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Mcal Lopez]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4316" y="0" width="99" height="15" uuid="d48be745-12c3-46db-b226-8676a4980461"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Temp Mcal]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4415" y="0" width="99" height="15" uuid="5df5dfad-2345-4f65-b6cc-e1858701e283"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Mayorista]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4514" y="0" width="99" height="15" uuid="26ec21aa-366d-4514-973d-e43031bb7647"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Temp Mayorista]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="4811" y="0" width="99" height="15" uuid="c84b1d36-8417-40f1-9156-2ff790d22719"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[General]]></text>
@@ -324,12 +285,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Maximo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3722" y="0" width="99" height="15" uuid="06304732-494d-4bff-ac1d-b515db7d3de2"/>
+				<reportElement x="3623" y="0" width="99" height="15" uuid="06304732-494d-4bff-ac1d-b515db7d3de2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[FOB Gs]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3821" y="0" width="99" height="15" uuid="9e7bea2a-88ec-4893-a8ac-3ec41e8e5687"/>
+				<reportElement x="3722" y="0" width="99" height="15" uuid="9e7bea2a-88ec-4893-a8ac-3ec41e8e5687"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[FOB Ds]]></text>
 			</staticText>
@@ -368,16 +329,56 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Procedencia]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="4613" y="0" width="99" height="15" uuid="f2498b1e-10c5-42db-b9c3-e810c141d6ce"/>
+			<textField>
+				<reportElement x="3919" y="0" width="100" height="15" uuid="2879b13e-525e-4ad5-95da-e71c65888220"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[M.R.A.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="4712" y="0" width="99" height="15" uuid="4fb42570-5652-4c66-8e24-359cfdd29f27"/>
+				<textFieldExpression><![CDATA[$P{dep2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4019" y="0" width="100" height="15" uuid="ff69fc1a-6bc8-45c9-a335-58b59fab6ce5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Temporal M.R.A.]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{dep3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4117" y="0" width="100" height="15" uuid="8116841a-00fe-4775-841b-cc313dffe0b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4217" y="0" width="100" height="15" uuid="927e3c5f-5bd9-4a20-9e93-25bb59382378"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4315" y="0" width="100" height="15" uuid="06920fd9-ddd3-4c61-b606-90f1e0080bc9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4414" y="0" width="100" height="15" uuid="4549bede-0c2a-4af0-85de-b7220cd61675"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep7}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4513" y="0" width="100" height="15" uuid="5fcedb75-919a-4d22-ba27-1ecd2c1ff742"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep8}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4612" y="0" width="100" height="15" uuid="8d242d3e-029c-425a-87c7-54ba73c6fde3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep9}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4711" y="0" width="100" height="15" uuid="646c9ab0-5725-49f3-998a-aeba1b1a962d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep10}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3821" y="0" width="100" height="15" uuid="9e3f6b63-4c48-4285-ab31-07148cbcfcfe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dep1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -518,12 +519,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Diciembre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3623" y="0" width="99" height="15" uuid="1dc3e9c3-bdce-453b-99a6-5aebbdb70a63"/>
+				<reportElement style="Detail" x="3821" y="0" width="99" height="15" uuid="1dc3e9c3-bdce-453b-99a6-5aebbdb70a63"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3920" y="0" width="99" height="15" uuid="d4ff33b0-56b9-4f90-b060-71755ead046e"/>
+				<reportElement style="Detail" x="3919" y="0" width="99" height="15" uuid="d4ff33b0-56b9-4f90-b060-71755ead046e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_2}]]></textFieldExpression>
 			</textField>
@@ -598,12 +599,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Minimo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3821" y="0" width="99" height="15" uuid="d08bd96d-60a3-420d-8289-912bfd92d21a"/>
+				<reportElement style="Detail" x="3722" y="0" width="99" height="15" uuid="d08bd96d-60a3-420d-8289-912bfd92d21a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{FobDs}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3722" y="0" width="99" height="15" uuid="1fd42bcc-6cf2-4bcf-9dc2-8c27ea083979"/>
+				<reportElement style="Detail" x="3623" y="0" width="99" height="15" uuid="1fd42bcc-6cf2-4bcf-9dc2-8c27ea083979"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{FobGs}]]></textFieldExpression>
 			</textField>

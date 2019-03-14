@@ -750,6 +750,13 @@ public class ReportesViewModel extends SimpleViewModel {
 		}			
 		return out;
 	}
+	
+	/**
+	 * @return true si es baterias..
+	 */
+	public boolean isEmpresaBaterias() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+	}
 
 	/**
 	 * Reportes Stock..
@@ -9432,6 +9439,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<Long, Object[]> stock8 = new HashMap<Long, Object[]>();
 				Map<Long, Object[]> stock9 = new HashMap<Long, Object[]>();
 				Map<Long, Object[]> stock10 = new HashMap<Long, Object[]>();
+				Map<Integer, String> deps = new HashMap<Integer, String>();
 				
 				Map<String, Integer> cantClientes = new HashMap<String, Integer>();
 				Map<String, Integer> cantClientes_ = new HashMap<String, Integer>();
@@ -9507,26 +9515,47 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (Long idArticulo : arts.keySet()) {
-					Object[] st1 = rr.getStockArticulo(idArticulo, Deposito.ID_MINORISTA);
-					Object[] st2 = rr.getStockArticulo(idArticulo, Deposito.ID_CENTRAL_TEMPORAL);
-					Object[] st3 = rr.getStockArticulo(idArticulo, Deposito.ID_CENTRAL_RECLAMOS);
-					Object[] st4 = rr.getStockArticulo(idArticulo, Deposito.ID_CENTRAL_REPOSICION);
-					Object[] st5 = rr.getStockArticulo(idArticulo, Deposito.ID_MCAL_LOPEZ);
-					Object[] st6 = rr.getStockArticulo(idArticulo, Deposito.ID_MCAL_TEMPORAL);
-					Object[] st7 = rr.getStockArticulo(idArticulo, Deposito.ID_MAYORISTA);
-					Object[] st8 = rr.getStockArticulo(idArticulo, Deposito.ID_MAYORISTA_TEMPORAL);
-					Object[] st9 = rr.getStockArticulo(idArticulo, Deposito.ID_MRA_TEMPORAL);
-					Object[] st10 = rr.getStockArticulo(idArticulo, Deposito.ID_MRA);
-					stock1.put(idArticulo, st1);
-					stock2.put(idArticulo, st2);
-					stock3.put(idArticulo, st3);
-					stock4.put(idArticulo, st4);
-					stock5.put(idArticulo, st5);
-					stock6.put(idArticulo, st6);
-					stock7.put(idArticulo, st7);
-					stock8.put(idArticulo, st8);
-					stock9.put(idArticulo, st9);
-					stock10.put(idArticulo, st10);
+					Object[] empty = new Object[] { 0, (long) 0, "" };
+					long id1 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRINCIPAL : Deposito.ID_MINORISTA;
+					long id2 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AUXILIO : Deposito.ID_CENTRAL_TEMPORAL;
+					long id3 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AVERIADOS : Deposito.ID_CENTRAL_RECLAMOS;
+					long id4 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_CONTROL : Deposito.ID_CENTRAL_REPOSICION;
+					long id5 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_FALLADOS : Deposito.ID_MCAL_LOPEZ;
+					long id6 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRODUCCION : Deposito.ID_MCAL_TEMPORAL;
+					long id7 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_RECLAMOS : Deposito.ID_MAYORISTA;
+					long id8 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SECAS : Deposito.ID_MAYORISTA_TEMPORAL;
+					long id9 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO : Deposito.ID_MRA_TEMPORAL;
+					long id10 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SC1 : Deposito.ID_MRA;
+					Deposito d1 = (Deposito) rr.getObject(Deposito.class.getName(), id1);
+					Deposito d2 = (Deposito) rr.getObject(Deposito.class.getName(), id2);
+					Deposito d3 = (Deposito) rr.getObject(Deposito.class.getName(), id3);
+					Deposito d4 = (Deposito) rr.getObject(Deposito.class.getName(), id4);
+					Deposito d5 = (Deposito) rr.getObject(Deposito.class.getName(), id5);
+					Deposito d6 = (Deposito) rr.getObject(Deposito.class.getName(), id6);
+					Deposito d7 = (Deposito) rr.getObject(Deposito.class.getName(), id7);
+					Deposito d8 = (Deposito) rr.getObject(Deposito.class.getName(), id8);
+					Deposito d9 = (Deposito) rr.getObject(Deposito.class.getName(), id9);
+					Deposito d10 = (Deposito) rr.getObject(Deposito.class.getName(), id10);
+					Object[] st1 = d1 != null ? rr.getStockArticulo(idArticulo, d1.getId().longValue()) : empty;
+					Object[] st2 = d2 != null ? rr.getStockArticulo(idArticulo, d2.getId().longValue()) : empty;
+					Object[] st3 = d3 != null ? rr.getStockArticulo(idArticulo, d3.getId().longValue()) : empty;
+					Object[] st4 = d4 != null ? rr.getStockArticulo(idArticulo, d4.getId().longValue()) : empty;
+					Object[] st5 = d5 != null ? rr.getStockArticulo(idArticulo, d5.getId().longValue()) : empty;
+					Object[] st6 = d6 != null ? rr.getStockArticulo(idArticulo, d6.getId().longValue()) : empty;
+					Object[] st7 = d7 != null ? rr.getStockArticulo(idArticulo, d7.getId().longValue()) : empty;
+					Object[] st8 = d8 != null ? rr.getStockArticulo(idArticulo, d8.getId().longValue()) : empty;
+					Object[] st9 = d9 != null ? rr.getStockArticulo(idArticulo, d9.getId().longValue()) : empty;
+					Object[] st10 = d10 != null ? rr.getStockArticulo(idArticulo, d10.getId().longValue()) : empty;
+					stock1.put(idArticulo, st1); deps.put(1, d1 != null ? d1.getDescripcion() : "NO DEF.");
+					stock2.put(idArticulo, st2); deps.put(2, d2 != null ? d2.getDescripcion() : "NO DEF.");
+					stock3.put(idArticulo, st3); deps.put(3, d3 != null ? d3.getDescripcion() : "NO DEF.");
+					stock4.put(idArticulo, st4); deps.put(4, d4 != null ? d4.getDescripcion() : "NO DEF.");
+					stock5.put(idArticulo, st5); deps.put(5, d5 != null ? d5.getDescripcion() : "NO DEF.");
+					stock6.put(idArticulo, st6); deps.put(6, d6 != null ? d6.getDescripcion() : "NO DEF.");
+					stock7.put(idArticulo, st7); deps.put(7, d7 != null ? d7.getDescripcion() : "NO DEF.");
+					stock8.put(idArticulo, st8); deps.put(8, d8 != null ? d8.getDescripcion() : "NO DEF.");
+					stock9.put(idArticulo, st9); deps.put(9, d9 != null ? d9.getDescripcion() : "NO DEF.");
+					stock10.put(idArticulo, st10); deps.put(10, d10 != null ? d10.getDescripcion() : "NO DEF.");
 				}
 				
 				for (Object[] venta : ventas) {
@@ -9751,6 +9780,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_ABASTECIMIENTO_MOVIM_ARTICULOS;				
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("MES_CLI_VIG", filtro.getSelectedMes().getPos2());
+				params.put("dep1", deps.get(1));
+				params.put("dep2", deps.get(2));
+				params.put("dep3", deps.get(3));
+				params.put("dep4", deps.get(4));
+				params.put("dep5", deps.get(5));
+				params.put("dep6", deps.get(6));
+				params.put("dep7", deps.get(7));
+				params.put("dep8", deps.get(8));
+				params.put("dep9", deps.get(9));
+				params.put("dep10", deps.get(10));
 				JRDataSource dataSource = new MovimientoArticulos(list);
 				imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV);
 				
