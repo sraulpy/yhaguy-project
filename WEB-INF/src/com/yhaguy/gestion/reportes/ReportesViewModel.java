@@ -9546,16 +9546,16 @@ public class ReportesViewModel extends SimpleViewModel {
 					Object[] st8 = d8 != null ? rr.getStockArticulo(idArticulo, d8.getId().longValue()) : empty;
 					Object[] st9 = d9 != null ? rr.getStockArticulo(idArticulo, d9.getId().longValue()) : empty;
 					Object[] st10 = d10 != null ? rr.getStockArticulo(idArticulo, d10.getId().longValue()) : empty;
-					stock1.put(idArticulo, st1); deps.put(1, d1 != null ? d1.getDescripcion() : "NO DEF.");
-					stock2.put(idArticulo, st2); deps.put(2, d2 != null ? d2.getDescripcion() : "NO DEF.");
-					stock3.put(idArticulo, st3); deps.put(3, d3 != null ? d3.getDescripcion() : "NO DEF.");
-					stock4.put(idArticulo, st4); deps.put(4, d4 != null ? d4.getDescripcion() : "NO DEF.");
-					stock5.put(idArticulo, st5); deps.put(5, d5 != null ? d5.getDescripcion() : "NO DEF.");
-					stock6.put(idArticulo, st6); deps.put(6, d6 != null ? d6.getDescripcion() : "NO DEF.");
-					stock7.put(idArticulo, st7); deps.put(7, d7 != null ? d7.getDescripcion() : "NO DEF.");
-					stock8.put(idArticulo, st8); deps.put(8, d8 != null ? d8.getDescripcion() : "NO DEF.");
-					stock9.put(idArticulo, st9); deps.put(9, d9 != null ? d9.getDescripcion() : "NO DEF.");
-					stock10.put(idArticulo, st10); deps.put(10, d10 != null ? d10.getDescripcion() : "NO DEF.");
+					stock1.put(idArticulo, st1); deps.put(1, d1 != null ? d1.getObservacion() : "NO DEF.");
+					stock2.put(idArticulo, st2); deps.put(2, d2 != null ? d2.getObservacion() : "NO DEF.");
+					stock3.put(idArticulo, st3); deps.put(3, d3 != null ? d3.getObservacion() : "NO DEF.");
+					stock4.put(idArticulo, st4); deps.put(4, d4 != null ? d4.getObservacion() : "NO DEF.");
+					stock5.put(idArticulo, st5); deps.put(5, d5 != null ? d5.getObservacion() : "NO DEF.");
+					stock6.put(idArticulo, st6); deps.put(6, d6 != null ? d6.getObservacion() : "NO DEF.");
+					stock7.put(idArticulo, st7); deps.put(7, d7 != null ? d7.getObservacion() : "NO DEF.");
+					stock8.put(idArticulo, st8); deps.put(8, d8 != null ? d8.getObservacion() : "NO DEF.");
+					stock9.put(idArticulo, st9); deps.put(9, d9 != null ? d9.getObservacion() : "NO DEF.");
+					stock10.put(idArticulo, st10); deps.put(10, d10 != null ? d10.getObservacion() : "NO DEF.");
 				}
 				
 				for (Object[] venta : ventas) {
