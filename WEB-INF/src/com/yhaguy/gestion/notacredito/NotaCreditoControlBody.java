@@ -1469,6 +1469,14 @@ public class NotaCreditoControlBody extends BodyApp {
 		return out;
 	}
 	
+	/**
+	 * @return true si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
 	public List<MyPair> getMotivosNCCompra() {
 		List<MyPair> out = this.utilDto.getMotivosNotaCredito();
 		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {

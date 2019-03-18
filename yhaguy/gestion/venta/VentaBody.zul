@@ -34,8 +34,15 @@
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Fecha" />
-						<datebox value="@load(vm.dto.fecha)"
+						<hlayout>
+						<datebox id="dtFecha" value="@bind(vm.dto.fecha)"
 							readonly="true" hflex="true" />
+						<button id="btn_editf" iconSclass="z-icon-check"
+							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"></button>
+						<button id="btn_editf_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"></button>
+						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Sucursal" />
@@ -145,12 +152,18 @@
 					<vlayout spacing="0">
 						<field value="Vendedor" />
 						<hlayout>
-							<textbox value="@bind(vm.dto.vendedor.pos1)"
+							<textbox id="txVend" value="@bind(vm.dto.vendedor.pos1)"
 								onOK="@command('buscarVendedor')" placeholder="Nombre.." 
 								hflex="true"/>
-							<button								
+							<button	
+								id="btnVend"							
 								iconSclass="z-icon-search"
 								onClick="@command('buscarVendedor')" />
+							<button id="btn_editv" iconSclass="z-icon-check"
+								visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+								onClick="@command('modificarVendedor', comp1=self, comp2=btn_editv_, comp3=btnVend)"></button>
+							<button id="btn_editv_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+								onClick="txVend.setReadonly(false); btnVend.setDisabled(false); txVend.focus(); btn_editv.setVisible(true); self.setVisible(false)"></button>
 						</hlayout>
 					</vlayout>
 				</row>

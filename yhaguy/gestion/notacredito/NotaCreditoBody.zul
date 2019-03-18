@@ -18,10 +18,17 @@
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Número" />
-					<textbox value="@bind(vm.dto.numero)"
-						readonly="true" 
-						placeholder="Auto-generado.."
-						hflex="true"/>
+					<hlayout>
+						<textbox id="txNro" value="@bind(vm.dto.numero)"
+							readonly="true" 
+							placeholder="Auto-generado.."
+							hflex="true"/>
+						<button id="btn_edit" iconSclass="z-icon-check"
+							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"></button>
+						<button id="btn_edit_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="txNro.setReadonly(false); txNro.focus(); btn_edit.setVisible(true); self.setVisible(false)"></button>
+					</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Fecha" />
