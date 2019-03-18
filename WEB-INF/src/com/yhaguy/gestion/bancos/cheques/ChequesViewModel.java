@@ -15,6 +15,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
@@ -28,6 +29,8 @@ import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoCheque;
+import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.inicio.AccesoDTO;
@@ -73,6 +76,10 @@ public class ChequesViewModel extends SimpleViewModel {
 	private MyArray selectedItem;
 	private MyArray selectedItem_;
 	private Window win;
+	private BancoCheque selectedCheque;
+	
+	@Wire
+	private Popup pop_item;
 	
 	@Init(superclass = true)
 	public void init() {
@@ -152,6 +159,35 @@ public class ChequesViewModel extends SimpleViewModel {
 		cheque.setMonto(0.0);
 		rr.saveObject(cheque, this.getLoginNombre());
 		Clients.showNotification("CHEQUE ANULADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "selectedCheque", "selectedCheque_" })
+	public void verItems(@BindingParam("item") MyArray item,
+			@BindingParam("parent") Component parent) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedItem = item;
+		this.selectedCheque = (BancoCheque) rr.getObject(BancoCheque.class.getName(), item.getId());
+		this.pop_item.open(parent, "start_before");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void saveCheque() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		rr.saveObject(this.selectedCheque, this.getLoginNombre());
+		ReciboFormaPago fp = this.selectedCheque.getReciboFormaPago();
+		if (fp != null) {
+			fp.setChequeNumero(this.selectedCheque.getNumero() + "");
+			fp.setChequeBanco(this.selectedCheque.getBanco().getBanco().getBancoTipo());
+			fp.setChequeLibrador(this.selectedCheque.getBeneficiario());
+			fp.setChequeFecha(this.selectedCheque.getFechaVencimiento());
+			fp.setDescripcion(fp.getTipo().getDescripcion() + " " + this.selectedCheque.getNumero());
+			rr.saveObject(fp, this.getLoginNombre());
+		}
+		this.selectedCheque = null;
+		this.pop_item.close();
+		Clients.showNotification("REGISTRO GUARDADO..");
 	}
 	
 	/***************************************************/
@@ -407,6 +443,22 @@ public class ChequesViewModel extends SimpleViewModel {
 		if (this.selectedItem == null) return "";
 		return this.selectedItem.getPos10().toString().replace("REC-PAG-", "O.P.");
 	}
+	
+	/**
+	 * @return true si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
+	/**
+	 * @return los bancos..
+	 */
+	public List<BancoCta> getBancos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getBancosCta();
+	}
 
 	private AccesoDTO getAcceso() {
 		Session s = Sessions.getCurrent();
@@ -523,6 +575,14 @@ public class ChequesViewModel extends SimpleViewModel {
 
 	public void setFechaCobro(Date fechaCobro) {
 		this.fechaCobro = fechaCobro;
+	}
+
+	public BancoCheque getSelectedCheque() {
+		return selectedCheque;
+	}
+
+	public void setSelectedCheque(BancoCheque selectedCheque) {
+		this.selectedCheque = selectedCheque;
 	}
 }
 

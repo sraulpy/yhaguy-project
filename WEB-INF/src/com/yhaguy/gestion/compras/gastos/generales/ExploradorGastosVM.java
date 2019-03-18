@@ -351,6 +351,14 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
+	/**
 	 * @return las sucursales..
 	 */
 	@SuppressWarnings("unchecked")

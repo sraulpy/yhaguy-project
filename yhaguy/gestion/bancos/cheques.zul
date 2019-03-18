@@ -77,6 +77,7 @@
 			<listheader label="Moneda" align="center" width="65px" />
 			<listheader label="Cobrado" align="center" width="65px"
 				tooltiptext="Cheque Cobrado.."/>
+			<listheader label="" align="center" width="50px" />
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -155,6 +156,7 @@
 			<auxheader>
 			</auxheader>
 			<auxheader />
+			<auxheader />			
 			<auxheader />
 		</auxhead>
 		<template name="model">
@@ -175,6 +177,9 @@
 						<label value="SI" class="label label-success" visible="@load(each.pos11)" />
 						<label value="NO" class="label label-danger" visible="@load(!each.pos11)" />
 					</div>
+				</listcell>
+				<listcell>
+					<a label="ítems" onClick="@command('verItems', item=each, parent=self)"></a>
 				</listcell>
 			</listitem>
 		</template>
@@ -206,5 +211,62 @@
 			<datebox placeholder="Fecha Cobro.." hflex="true"
 				value="@bind(vm.fechaCobro)"></datebox>
 		</vbox>
+	</popup>
+	
+	<popup id="pop_item" sclass="rounded" height="350px" width="600px">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="DETALLE DEL CHEQUE" />
+			</hbox>
+			<button onClick="pop_item.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="10px"/>
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<field value="Banco:" />
+					<combobox hflex="true"
+						value="@load(vm.selectedCheque.banco.banco.descripcion.toUpperCase())"
+						model="@load(vm.bancos)"
+						selectedItem="@bind(vm.selectedCheque.banco)">
+						<template name="model">
+							<comboitem label="@load(each.banco.descripcion.toUpperCase())"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<field value="Nro. Cheque:" />
+					<longbox value="@bind(vm.selectedCheque.numero)" hflex="true"></longbox>
+				</row>
+				<row>
+					<field value="Emisión:" />
+					<datebox value="@bind(vm.selectedCheque.fechaEmision)" hflex="true"></datebox>
+				</row>
+				<row>
+					<field value="Vencimiento:" />
+					<datebox value="@bind(vm.selectedCheque.fechaVencimiento)" hflex="true"></datebox>
+				</row>
+				<row>
+					<field value="Beneficiario:" />
+					<textbox value="@bind(vm.selectedCheque.beneficiario)" hflex="true"></textbox>
+				</row>
+				<row>
+					<field value="Moneda:" />
+					<textbox value="@load(vm.selectedCheque.moneda.descripcion.toUpperCase())" hflex="true" readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Importe:" />
+					<guaranibox value="@load(vm.selectedCheque.monto)" hflex="true" readonly="true"></guaranibox>
+				</row>
+			</rows>
+		</grid>
+		<div height="5px"/>
+		<hlayout sclass="button-container">
+			<div hflex="true"></div>
+			<button mold="bs" sclass="btn-sm btn-success" width="150px" iconSclass="z-icon-check"
+				disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+				onClick="@command('saveCheque')"></button>
+		</hlayout>
+		<div height="5px"/>
 	</popup>
 </window>
