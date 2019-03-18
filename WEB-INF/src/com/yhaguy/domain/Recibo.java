@@ -582,6 +582,19 @@ public class Recibo extends Domain {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
+	
+	public void setNumero_(String numero) {
+		this.numero = numero;
+		if (this.isCobro() && numero.contains("-")) {
+			this.nro = Long.parseLong(numero.substring(numero.lastIndexOf("-") + 1, numero.length()));
+		} else {
+			try {
+				this.nro = Long.parseLong(numero);
+			} catch (Exception e) {
+				System.out.println("formato incorrecto de nro recibo: " + numero);
+			}			
+		}		
+	}
 
 	public long getIdUsuarioCarga() {
 		return idUsuarioCarga;

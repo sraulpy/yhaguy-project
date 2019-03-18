@@ -2,26 +2,38 @@
 	position="center, center" width="70%" height="60%">
 	<grid sclass="vgrid">
 		<rows>
-			<row>
-				<vlayout spacing="0">
-					<field value="Emisión" />
-					<datebox value="@load(vm.detalle.emision)" hflex="true"></datebox>
-				</vlayout>
+			<row>				
 				<vlayout spacing="0">
 					<field value="Número" />
-					<textbox value="@load(vm.detalle.numero)" hflex="true"></textbox>
+					<textbox value="@bind(vm.detalle.numero)" hflex="true"></textbox>
 				</vlayout>
+				<vlayout spacing="0">
+					<field value="Emisión" />
+					<datebox value="@bind(vm.detalle.emision)" hflex="true"></datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Cobrador" />
+					<combobox value="@load(vm.detalle.cobrador)" hflex="true"
+						model="@load(vm.cobradores)"
+						selectedItem="@bind(vm.detalle.cobrador)">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>
+					</combobox>
+				</vlayout>
+			</row>
+			<row>	
 				<vlayout spacing="0">
 					<field value="Cliente" />
-					<textbox value="@load(vm.detalle.cliente)" hflex="true"></textbox>
+					<textbox value="@load(vm.detalle.cliente)" hflex="true" readonly="true"></textbox>
+				</vlayout>			
+				<vlayout spacing="0">
+					<field value="Moneda" />
+					<textbox value="@load(vm.detalle.moneda.toUpperCase())" hflex="true" readonly="true"></textbox>
 				</vlayout>
 				<vlayout spacing="0">
-					<field value="Caja Nro." />
-					<textbox value="" hflex="true"></textbox>
-				</vlayout>
-				<vlayout spacing="0">
-					<field value="Sucursal" />
-					<textbox value="" hflex="true"></textbox>
+					<field value="T.Cambio" />
+					<guaranibox value="@load(vm.detalle.tipoCambio)" hflex="true" readonly="true"></guaranibox>
 				</vlayout>
 			</row>
 		</rows>
@@ -99,5 +111,10 @@
 				</listfooter>
 			</listfoot>
 		</listbox>
+	</hlayout>
+	<hlayout sclass="button-container">
+		<div hflex="true"></div>
+		<button mold="bs" sclass="btn-sm btn-success" width="150px" iconSclass="z-icon-check"
+			onClick="@command('saveRecibo')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"></button>
 	</hlayout>
 </window>

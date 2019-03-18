@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
@@ -33,6 +34,9 @@ import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.BancoChequeTercero;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
@@ -109,9 +113,10 @@ public class RecibosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
-	@NotifyChange("detalle")
+	@NotifyChange({ "detalle", "selectedItem" })
 	public void verItems(@BindingParam("item") MyArray item,
 			@BindingParam("parent") Component parent) throws Exception {
+		this.selectedItem = item;
 		this.detalle = new DetalleMovimiento();
 		this.detalle.setEmision((Date) item.getPos1());
 		this.detalle.setNumero(String.valueOf(item.getPos2()));
@@ -119,6 +124,9 @@ public class RecibosViewModel extends SimpleViewModel {
 		this.detalle.setCliente((String) item.getPos3());
 		this.detalle.setDetalles((List<MyArray>) item.getPos8());
 		this.detalle.setFormasPago((List<MyArray>) item.getPos9());
+		this.detalle.setCobrador((String) item.getPos11());
+		this.detalle.setMoneda((String) item.getPos12());
+		this.detalle.setTipoCambio((double) item.getPos13());
 		//this.popDetalleRecibo.open(parent, "start_before");
 		
 		this.win = (Window) Executions.createComponents(ZUL_DETALLE, this.mainComponent, null);
@@ -133,6 +141,36 @@ public class RecibosViewModel extends SimpleViewModel {
 	@Command
 	public void imprimirItem() throws Exception {
 		this.imprimirRecibo();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void saveRecibo() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), this.selectedItem.getId());
+		if (rec != null) {
+			rec.setNumero(this.detalle.getNumero());
+			rec.setNumero_(this.detalle.getNumero());
+			rec.setFechaEmision(this.detalle.getEmision());
+			rec.setCobrador(this.detalle.getCobrador());
+			rr.saveObject(rec, this.getLoginNombre());
+			CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(rec.getId(), rec.getTipoMovimiento().getSigla());
+			if (movim != null) {
+				movim.setNroComprobante(this.detalle.getNumero());
+				rr.saveObject(movim, this.getLoginNombre());
+			}
+			for (ReciboFormaPago fp : rec.getFormasPago()) {
+				if (fp.isChequeTercero()) {
+					BancoChequeTercero cheque = rr.getChequeTercero(fp.getId());
+					if (cheque != null) {
+						cheque.setNumeroRecibo(rec.getNumero());
+						rr.saveObject(cheque, this.getLoginNombre());
+					}
+				}
+			}
+		}
+		this.win.detach();
+		Clients.showNotification("REGISTRO GUARDADO..");
 	}
 	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA",
@@ -189,6 +227,8 @@ public class RecibosViewModel extends SimpleViewModel {
 			my.setPos9(fpgs);
 			my.setPos10(recibo.isAnulado());	
 			my.setPos11(recibo.getCobrador());
+			my.setPos12(recibo.getMoneda().getDescripcion());
+			my.setPos13(recibo.getTipoCambio());
 			out.add(my);
 			this.totalImporteGs += recibo.getTotalImporteGs();
 		}
@@ -330,6 +370,9 @@ public class RecibosViewModel extends SimpleViewModel {
 		private String numero;
 		private String tipoMovimiento;
 		private String cliente;
+		private String cobrador;
+		private String moneda;
+		private double tipoCambio;
 		private List<MyArray> detalles;
 		private List<MyArray> formasPago;
 		
@@ -394,6 +437,30 @@ public class RecibosViewModel extends SimpleViewModel {
 
 		public void setFormasPago(List<MyArray> formasPago) {
 			this.formasPago = formasPago;
+		}
+
+		public String getCobrador() {
+			return cobrador;
+		}
+
+		public void setCobrador(String cobrador) {
+			this.cobrador = cobrador;
+		}
+
+		public String getMoneda() {
+			return moneda;
+		}
+
+		public void setMoneda(String moneda) {
+			this.moneda = moneda;
+		}
+
+		public double getTipoCambio() {
+			return tipoCambio;
+		}
+
+		public void setTipoCambio(double tipoCambio) {
+			this.tipoCambio = tipoCambio;
 		}			
 	}	
 	
@@ -422,6 +489,14 @@ public class RecibosViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return true si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
+	/**
 	 * @return los formatos de reporte..
 	 */
 	public List<Object[]> getFormatos() {
@@ -431,7 +506,19 @@ public class RecibosViewModel extends SimpleViewModel {
 		out.add(ReportesViewModel.FORMAT_CSV);
 		return out;
 	}
-
+	
+	/**
+	 * @return los cobradores..
+	 */
+	public List<String> getCobradores() throws Exception {
+		List<String> out = new ArrayList<String>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (Funcionario func : rr.getFuncionariosCobradores()) {
+			out.add(func.getRazonSocial().toUpperCase());
+		}
+		return out;
+	}
+	
 	public String getFilterFechaDD() {
 		return filterFechaDD;
 	}

@@ -46,10 +46,12 @@ import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloUbicacion;
+import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.VehiculoMarca;
@@ -315,6 +317,32 @@ public class VentaControlBody extends BodyApp {
 	public void informacionVehiculo(@BindingParam("parent") Component parent, @BindingParam("comp") Popup comp, @BindingParam("item") VentaDetalleDTO item) {
 		this.selectedItem = item;
 		comp.open(parent, "after_end");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarNumero(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta vta = (Venta) rr.getObject(Venta.class.getName(), this.dto.getId());
+		vta.setNumero(this.dto.getNumero());
+		rr.saveObject(vta, this.getLoginNombre());
+		List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientosByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
+		for (CtaCteEmpresaMovimiento movim : movims) {
+			movim.setNroComprobante(vta.getNumero());
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		for (ReciboFormaPago fp : vta.getFormasPago()) {
+			if (fp.isChequeTercero()) {
+				BancoChequeTercero cheque = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), fp.getId());
+				if (cheque != null) {
+					cheque.setNumeroVenta(vta.getNumero());
+					rr.saveObject(cheque, this.getLoginNombre());
+				}
+			}
+		}
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
 	/***************************************************************/

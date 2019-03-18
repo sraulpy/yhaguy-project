@@ -29,6 +29,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.inicio.AccesoDTO;
@@ -75,6 +76,7 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 	private String selectedFiltro = FILTRO_TODOS;
 	private MyArray nvoCheque;
 	private Tipo selectedMoneda;
+	private BancoChequeTercero selectedCheque_;
 	
 	private double totalImporte = 0;
 	private Date fechaRechazo = new Date();
@@ -82,6 +84,9 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 	
 	@Wire
 	private Popup pop_img;
+	
+	@Wire
+	private Popup pop_item;
 
 	@Init(superclass = true)
 	public void init() {
@@ -149,6 +154,33 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 		} else {
 			this.selectedFiltro = FILTRO_A_DEPOSITAR;
 		}
+	}
+	
+	@Command
+	@NotifyChange({ "selectedCheque", "selectedCheque_" })
+	public void verItems(@BindingParam("item") MyArray item,
+			@BindingParam("parent") Component parent) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedCheque = item;
+		this.selectedCheque_ = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), item.getId());
+		this.pop_item.open(parent, "start_before");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void saveCheque() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		rr.saveObject(this.selectedCheque_, this.getLoginNombre());
+		ReciboFormaPago fp = this.selectedCheque_.getReciboFormaPago();
+		if (fp != null) {
+			fp.setChequeNumero(this.selectedCheque_.getNumero());
+			fp.setChequeBanco(this.selectedCheque_.getBanco());
+			fp.setChequeLibrador(this.selectedCheque_.getLibrado());
+			fp.setChequeFecha(this.selectedCheque_.getFecha());
+			rr.saveObject(fp, this.getLoginNombre());
+		}
+		this.pop_item.close();
+		Clients.showNotification("REGISTRO GUARDADO..");
 	}
 	
 	/**
@@ -400,6 +432,22 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 	public List<Tipo> getMonedas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getTipos(Configuracion.ID_TIPO_MONEDA);
+	}
+	
+	/**
+	 * @return true si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
+	/**
+	 * @return los bancos..
+	 */
+	public List<Tipo> getBancos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_BANCOS_TERCEROS);
 	}
 	
 	/**
@@ -663,6 +711,14 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 
 	public void setSelectedMoneda(Tipo selectedMoneda) {
 		this.selectedMoneda = selectedMoneda;
+	}
+
+	public BancoChequeTercero getSelectedCheque_() {
+		return selectedCheque_;
+	}
+
+	public void setSelectedCheque_(BancoChequeTercero selectedCheque_) {
+		this.selectedCheque_ = selectedCheque_;
 	}
 }
 
