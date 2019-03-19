@@ -15,6 +15,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
@@ -278,6 +279,40 @@ public class NotaCreditoControlBody extends BodyApp {
 		this.nvoItem = this.crearDetalleDesde(this.selectedVenta, true, false, false);
 		this.win.detach();
 		this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarNumero(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		NotaCredito nc = (NotaCredito) rr.getObject(NotaCredito.class.getName(), this.dto.getId());
+		nc.setNumero(this.dto.getNumero());
+		rr.saveObject(nc, this.getLoginNombre());
+		List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientosByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla());
+		for (CtaCteEmpresaMovimiento movim : movims) {
+			movim.setNroComprobante(nc.getNumero());
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarFecha(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		NotaCredito nc = (NotaCredito) rr.getObject(NotaCredito.class.getName(), this.dto.getId());
+		nc.setFechaEmision(this.dto.getFechaEmision());
+		rr.saveObject(nc, this.getLoginNombre());
+		List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientosByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla());
+		for (CtaCteEmpresaMovimiento movim : movims) {
+			movim.setFechaEmision(nc.getFechaEmision());
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
 	/**************************************************************/

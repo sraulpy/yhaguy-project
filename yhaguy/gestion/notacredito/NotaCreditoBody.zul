@@ -18,7 +18,7 @@
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Número" />
-					<hlayout>
+					<hlayout valign="top">
 						<textbox id="txNro" value="@bind(vm.dto.numero)"
 							readonly="true" 
 							placeholder="Auto-generado.."
@@ -32,9 +32,15 @@
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Fecha" />
-					<datebox
-						value="@bind(vm.dto.fechaEmision)"
-						hflex="true" />
+					<hlayout valign="top">
+						<datebox id="dtFecha" value="@bind(vm.dto.fechaEmision)"
+							readonly="true" hflex="true" />
+						<button id="btn_editf" iconSclass="z-icon-check"
+							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"></button>
+						<button id="btn_editf_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"></button>
+						</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Moneda" />
