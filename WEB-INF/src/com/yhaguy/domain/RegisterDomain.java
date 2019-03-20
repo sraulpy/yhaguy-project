@@ -5831,6 +5831,39 @@ public class RegisterDomain extends Register {
 		});
 		return out;
 	}
+	
+	/**
+	 * @return los clientes con facturas pendientes ordenado alfabeticamente..
+	 */
+	public List<Object[]> getClientesConFacturasPendientes() throws Exception {
+		String query = "select c.id, c.idEmpresa from CtaCteEmpresaMovimiento c where c.dbEstado != 'D'"
+				+ " and c.anulado = 'FALSE' and c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
+				+ "' and c.saldo > 0";
+
+		List<Object[]> out = new ArrayList<Object[]>();
+		Map<Long, Object[]> emps = new HashMap<Long, Object[]>();
+		List<Object[]> movs = this.hql(query);
+
+		for (Object[] item : movs) {
+			Object[] emp = this.getEmpresa((long) item[1]);
+			if (emp != null) {
+				emps.put((long) item[1], emp);
+			}
+		}
+		for (Long idEmp : emps.keySet()) {
+			out.add(emps.get(idEmp));
+		}
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String rs1 = (String) o1[2];
+				String rs2 = (String) o2[2];
+				return rs1.compareTo(rs2);
+			}
+		});
+		return out;
+	}
 
 	/**
 	 * @return las facturas vencidas segun el cliente..
@@ -9727,5 +9760,25 @@ public class RegisterDomain extends Register {
 		query+=	" GROUP BY ncd.articulo.codigoInterno" +
 				" ORDER BY 1";
 		return this.hql(query);
+	}
+	
+	public static void main(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Empresa> emps = rr.getEmpresas();
+			for (Empresa emp : emps) {
+				if (!emp.getObservacion().trim().isEmpty()) {
+					EmpresaObservacion obs = new EmpresaObservacion();
+					obs.setDescripcion(emp.getObservacion().toUpperCase());
+					obs.setFecha(emp.getModificado());
+					obs.setUsuario("ADMIN");
+					emp.getObservaciones().add(obs);
+					rr.saveObject(emp, emp.getUsuarioMod());
+					System.out.println(emp.getRazonSocial());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

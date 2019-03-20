@@ -153,7 +153,8 @@
 				tooltiptext="Reasignar Saldo.." visible="@load(vm.tipoCliente)" 
 				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedItem_ eq null)" />
 			<button mold="bs" sclass="btn-info btn-sm"
-				iconSclass="z-icon-pencil" visible="@load(vm.tipoCliente)"  />
+				iconSclass="z-icon-pencil" visible="@load(vm.tipoCliente)"  
+				onClick='pop_obs.open(self, "after_end")' />
 			<button mold="bs" sclass="btn-primary btn-sm"
 				iconSclass="z-icon-calendar"
 				tooltiptext="Tareas Pendientes.." visible="@load(vm.tipoCliente)" 
@@ -858,18 +859,18 @@
 		</listbox>
 	</popup>
 	
-	<popup id="pop_pendientes" width="900px" sclass="rounded">
+	<popup id="pop_pendientes" width="1000px" sclass="rounded">
 		<hbox align="end" pack="end" width="100%">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
 				style="border-bottom:solid 1px silver">
-				<field value="Tareas Programadas Pendientes.." />
+				<field value="Historial de llamadas al Cliente.." />
 			</hbox>
 			<button onClick="pop_pendientes.close()"
 				iconSclass="z-icon-times">
 			</button>
 		</hbox>
 		<div height="5px" />
-		<listbox height="300px" sclass="small-list"
+		<listbox height="500px" sclass="small-list"
 			model="@load(vm.tareasPendientes)"
 			emptyMessage="NO REGISTRA TAREAS PENDIENTES..">
 			<listhead>
@@ -898,18 +899,33 @@
 			</button>
 		</hbox>
 		<div height="5px" />
-		<textbox rows="15" width="100%" placeholder="OBSERVACIONES DEL CLIENTE.." readonly="true"
-			id="tx_obs"
-			value="@bind(vm.selectedItem.pos11)"></textbox>
-		<div height="5px" />
 		<hbox align="center" pack="end" width="100%"
 			visible="@load(vm.isOperacionHabilitada('BloquearCtaCteCliente'))">
-			<button iconSclass="z-icon-pencil" mold="bs" sclass="btn-sm btn-primary" width="70px"
+			<textbox  hflex="true" placeholder="OBSERVACIONES DEL CLIENTE.." readonly="true"
+			id="tx_obs"
+			value="@bind(vm.selectedItem.pos11)"></textbox>
+			<button iconSclass="z-icon-pencil" mold="bs" sclass="btn-xs btn-primary" width="70px" vflex="true"
 				onClick='tx_obs.setReadonly(false); tx_obs.focus(); btn_obs.setDisabled(false)'></button>
-			<button iconSclass="z-icon-check" mold="bs" sclass="btn-sm btn-success" width="70px"
+			<button iconSclass="z-icon-check" mold="bs" sclass="btn-xs btn-success" width="70px" vflex="true"
 				disabled="true" id="btn_obs"
 				onClick="@command('saveObservacion', comp1=tx_obs, comp2=self)"></button>
 		</hbox>
+		<div height="5px" />
+		<listbox sclass="small-list" height="300px"
+			model="@load(vm.selectedItem.pos12)">
+			<listhead>
+				<listheader label="Observación"></listheader>
+				<listheader label="Fecha" width="130px"></listheader>
+				<listheader label="Usuario" width="110px"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.descripcion)"></listcell>
+					<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy hh:mm')"></listcell>
+					<listcell label="@load(each.usuario)"></listcell>
+				</listitem>
+			</template>
+		</listbox>		
 	</popup>
 	
 	<popup id="pop_impresion" sclass="rounded">

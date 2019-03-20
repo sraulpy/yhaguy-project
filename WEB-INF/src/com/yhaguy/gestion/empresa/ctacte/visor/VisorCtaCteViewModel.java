@@ -54,6 +54,7 @@ import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaObservacion;
 import com.yhaguy.domain.HistoricoLineaCredito;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
@@ -1122,7 +1123,11 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private void guardarObservacion() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Empresa emp = rr.getEmpresaById(this.selectedItem.getId());
-		emp.setObservacion(this.selectedItem.getPos11().toString().toUpperCase());
+		EmpresaObservacion obs = new EmpresaObservacion();
+		obs.setDescripcion(this.selectedItem.getPos11().toString().toUpperCase());
+		obs.setFecha(new Date());
+		obs.setUsuario(this.getLoginNombre().toUpperCase());
+		emp.getObservaciones().add(obs);
 		rr.saveObject(emp, this.getLoginNombre());
 		Clients.showNotification("Observacion registrada..!");
 	}
@@ -1538,7 +1543,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos8(emp.getTelefono_());
 			my.setPos9(emp.getAuxi().equals(Empresa.DESBLOQUEO_TEMPORAL) ? true : false); // true si es desbloqueo temporal..
 			my.setPos10(emp.getVendedor() != null? emp.getVendedor().getRazonSocial() : "");
-			my.setPos11(emp.getObservacion().toUpperCase());
+			my.setPos11("");
+			my.setPos12(emp.getObservaciones());
 			out.add(my);
 		}
 		return out;
@@ -1629,7 +1635,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			return new ArrayList<TareaProgramada>();
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getTareasProgramadasPendientes(this.selectedItem.getId());
+		return rr.getTareasProgramadas(this.selectedItem.getId());
 	}
 		
 	/**

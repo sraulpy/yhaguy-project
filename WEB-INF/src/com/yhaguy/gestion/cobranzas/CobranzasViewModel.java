@@ -112,7 +112,7 @@ public class CobranzasViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("*")
 	public void buscarClientes() throws Exception {
-		Clients.showBusy(this.listCli, "Buscando Clientes con facturas vencidas...");
+		Clients.showBusy(this.listCli, "Buscando Clientes con facturas pendientes...");
 		Events.echoEvent("onLater", this.listCli, null);
 	}
 	
@@ -255,7 +255,7 @@ public class CobranzasViewModel extends SimpleViewModel {
 	 */
 	public void buscarClientes_() throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> clientes = rr.getClientesConFacturasVencidas_();
+		List<Object[]> clientes = rr.getClientesConFacturasPendientes();
 		this.clientes = new ArrayList<MyArray>();
 		for (Object[] emp : clientes) {
 			long idEmp = (long) emp[0];

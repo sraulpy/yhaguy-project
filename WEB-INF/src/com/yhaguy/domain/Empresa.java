@@ -56,6 +56,8 @@ public class Empresa extends Domain {
 	Set<Tipo> monedas = new HashSet<Tipo>();
 	Set<Contacto> contactos = new HashSet<Contacto>();
 	
+	private Set<EmpresaObservacion> observaciones = new HashSet<EmpresaObservacion>();
+	
 	public Empresa() {
 	}
 	
@@ -393,5 +395,13 @@ public class Empresa extends Domain {
 
 	public void setRubro(EmpresaRubro rubro) {
 		this.rubro = rubro;
+	}
+
+	public Set<EmpresaObservacion> getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(Set<EmpresaObservacion> observaciones) {
+		this.observaciones = observaciones;
 	}
 }

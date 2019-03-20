@@ -95,6 +95,13 @@
 			<many-to-many column="idrubroempresa" class="com.coreweb.domain.Tipo" />
 		</set>
 
+		<set name="observaciones" table="empresa_observacion" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idempresa" not-null="false" />
+			</key>
+			<one-to-many class="com.yhaguy.domain.EmpresaObservacion" />
+		</set>
 
 	</class>
 </hibernate-mapping>
