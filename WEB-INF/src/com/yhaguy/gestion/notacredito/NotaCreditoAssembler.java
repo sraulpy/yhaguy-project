@@ -67,6 +67,7 @@ public class NotaCreditoAssembler extends Assembler {
 		}
 		
 		domain.setVendedor(domain.getVendedor_());
+		domain.setTecnico(domain.getTecnico_());
 		
 		return domain;
 	}

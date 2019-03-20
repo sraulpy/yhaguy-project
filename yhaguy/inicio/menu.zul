@@ -82,6 +82,7 @@
 				<zk forEach="${vm.menuItem(self,'OrdenCompra')}" />
 				<menuseparator />				
 				<zk forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
+				<zk forEach="${vm.menuItem(self, 'ArticuloPivot')}" />
 			</menupopup>
 		</menu>
 

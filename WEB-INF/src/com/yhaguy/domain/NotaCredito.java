@@ -61,6 +61,9 @@ public class NotaCredito extends Domain {
 	
 	private Funcionario vendedor;
 	
+	/** El tecnico */
+	private Funcionario tecnico;
+	
 	private Deposito deposito;
 	
 	/** Los detalles de las N.C pueden hacer referencia a facturas ó articulos segun el tipo **/
@@ -370,6 +373,17 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return el tecnico de la factura aplicada..
+	 */
+	public Funcionario getTecnico_() {
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.getVenta() != null)
+				return item.getVenta().getTecnico();
+		}
+		return null;
+	}
+	
+	/**
 	 * @return true si el motivo es por descuento..
 	 */
 	public boolean isMotivoDescuento() {
@@ -650,5 +664,13 @@ public class NotaCredito extends Domain {
 
 	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
 		this.vehiculoModelo = vehiculoModelo;
+	}
+
+	public Funcionario getTecnico() {
+		return tecnico;
+	}
+
+	public void setTecnico(Funcionario tecnico) {
+		this.tecnico = tecnico;
 	}
 }

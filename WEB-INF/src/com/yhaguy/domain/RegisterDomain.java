@@ -9691,7 +9691,41 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
-	public static void main(String[] args) {
-		
+	/**
+	 * @return cantidad vendida dentro de un periodo..
+	 */
+	public List<Object[]> getMovimientosArticulos(Date desde, Date hasta, String familia, String proveedor, String marca, long idSucursal) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT vd.articulo.codigoInterno," + 
+				"		sum(vd.cantidad)" +   
+				"	FROM Venta v join v.detalles vd " +
+				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
+				"      AND v.tipoMovimiento.id in(18,19)" + 
+				"      AND v.estadoComprobante IS NULL" +
+				"	   AND upper(vd.articulo.familia.descripcion) like '%" + familia.toUpperCase() + "%'" +
+				"	   AND upper(vd.articulo.marca.descripcion) like '%" + marca.toUpperCase() + "%'" +
+				"	   AND upper(vd.articulo.proveedor.empresa.razonSocial) like '%" + proveedor.toUpperCase() + "%'";
+				if (idSucursal > 0) {
+					query += " AND v.sucursal.id = " + idSucursal;
+				}
+		query+= "	GROUP BY vd.articulo.codigoInterno" +
+				"	ORDER BY 1" + 
+				"      UNION ALL" + 
+				"	SELECT ncd.articulo.codigoInterno," + 
+				"     	sum(ncd.cantidad) * -1" +  
+				"	FROM NotaCredito nc join nc.detalles ncd" +  
+				"	WHERE (v.fechaEmision >= '" + desde_ + "' and v.fechaEmision <= '" + hasta_ + "')" + 
+				"        AND nc.tipoMovimiento.id in (20)" + 
+				"        AND nc.estadoComprobante.id = 217" +
+				"	     AND upper(ncd.articulo.familia.descripcion) like '%" + familia.toUpperCase() + "%'" +
+				"	   	 AND upper(ncd.articulo.marca.descripcion) like '%" + marca.toUpperCase() + "%'" +
+				"	     AND upper(ncd.articulo.proveedor.empresa.razonSocial) like '%" + proveedor.toUpperCase() + "%'";
+				if (idSucursal > 0) {
+					query += " AND nc.sucursal.id = " + idSucursal;
+				}
+		query+=	" GROUP BY ncd.articulo.codigoInterno" +
+				" ORDER BY 1";
+		return this.hql(query);
 	}
 }

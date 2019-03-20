@@ -30,6 +30,7 @@ public class Funcionario extends Domain {
 	private double porc_comision_cobros = 0;
 
 	private String nombreEmpresa;
+	private String nombreTecnico;
 	
 	private Empresa empresa;
 	private Set<AccesoApp> accesos = new HashSet<AccesoApp>();
@@ -336,5 +337,13 @@ public class Funcionario extends Domain {
 
 	public void setIdSucursal(long idSucursal) {
 		this.idSucursal = idSucursal;
+	}
+
+	public String getNombreTecnico() {
+		return nombreTecnico;
+	}
+
+	public void setNombreTecnico(String nombreTecnico) {
+		this.nombreTecnico = nombreTecnico;
 	}
 }

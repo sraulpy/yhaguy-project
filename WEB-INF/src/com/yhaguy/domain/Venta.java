@@ -52,7 +52,7 @@ public class Venta extends Domain {
 	/** El vendedor */
 	private Funcionario vendedor;
 	
-	/** El vendedor */
+	/** El tecnico */
 	private Funcionario tecnico;
 
 	private Cliente cliente;

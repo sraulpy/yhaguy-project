@@ -199,6 +199,8 @@ public class NotaCreditoControlBody extends BodyApp {
 		try {
 			if (this.dto.isSolicitudNotaCreditoVenta()) {
 				this.imprimirSolicitudNC();
+			} else if (this.dto.isNotaCreditoCompra()) {
+				this.imprimirNotaCreditoCompra();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -741,6 +743,23 @@ public class NotaCreditoControlBody extends BodyApp {
 		params.put("Motivo", this.dto.getMotivo().getText().toUpperCase());
 		params.put("Observacion", this.dto.getObservacion().toUpperCase());
 		params.put("Cliente", this.dto.getCliente().getPos2());
+		params.put("Usuario", getUs().getNombre());
+		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+	}
+	
+	/**
+	 * Despliega el Reporte de Nota Credito Compra..
+	 */
+	private void imprimirNotaCreditoCompra() throws Exception {		
+		String source = ReportesViewModel.SOURCE_NC_COMPRA;
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new SolicitudNotaCreditoDataSource();
+		params.put("Fecha", Utiles.getDateToString(this.dto.getFechaEmision(), Utiles.DD_MM_YYYY));
+		params.put("Numero", this.dto.getNumero());
+		params.put("Motivo", this.dto.getMotivo().getText().toUpperCase());
+		params.put("Observacion", this.dto.getObservacion().toUpperCase());
+		params.put("Proveedor", this.dto.getProveedor().getPos2());
+		params.put("Factura", this.dto.getDetallesFacturas().get(0).getCompra().getPos2());
 		params.put("Usuario", getUs().getNombre());
 		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
 	}
@@ -1364,7 +1383,10 @@ public class NotaCreditoControlBody extends BodyApp {
 				this.dets.add(new MyArray("ÍTEMS", 
 						item.getArticulo().getPos1(),
 						item.getArticulo().getPos2(), 
-						item.getCantidad() + ""));
+						item.getCantidad() + "",
+						dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getMontoGs()) : Utiles.getNumberFormatDs(item.getMontoDs()),
+						dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getImporteGs()) : Utiles.getNumberFormatDs(item.getImporteDs()),
+						dto.isMonedaLocal() ? Utiles.getNumberFormat(dto.getImporteGs()) : Utiles.getNumberFormatDs(dto.getImporteDs())));
 			}
 		}
 
@@ -1383,7 +1405,13 @@ public class NotaCreditoControlBody extends BodyApp {
 				value = item.getPos2();
 			} else if ("Cantidad".equals(fieldName)) {
 				value = item.getPos4();
-			} 
+			} else if ("Precio".equals(fieldName)) {
+				value = item.getPos5();
+			} else if ("Importe".equals(fieldName)) {
+				value = item.getPos6();
+			} else if ("TotalImporte".equals(fieldName)) {
+				value = item.getPos7();
+			}
 			return value;
 		}
 

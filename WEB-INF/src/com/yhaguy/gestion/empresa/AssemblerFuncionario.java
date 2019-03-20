@@ -40,6 +40,7 @@ public class AssemblerFuncionario extends Assembler {
 		this.listaDTOToListaDomain(dtoFun, domain, "accesos", true, true, new AssemblerAcceso());
 		
 		domain.setNombreEmpresa(domain.getEmpresa().getRazonSocial());
+		domain.setNombreTecnico(domain.getEmpresa().getRazonSocial());
 
 		return domain;
 	}
