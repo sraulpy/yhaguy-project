@@ -154,16 +154,18 @@
 				<button mold="bs" sclass="btn-danger btn-sm"
 					width="100px" iconSclass="z-icon-minus-circle"
 					onClick="@command('eliminarItemFactura')" label=" Eliminar" 
-					disabled="@load(vm.selectedFacturaItems.size() eq 0? 'true':'false')"/>
+					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
 				<space />
 				<button mold="bs" sclass="btn-success btn-sm"
 					width="100px" iconSclass="z-icon-plus-circle"
-					onClick="@command('insertarDetalle')" label=" Insertar" />
+					onClick="@command('insertarDetalle')" label=" Insertar" 
+					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
 				<space />
 				<button mold="bs" sclass="btn-info btn-sm"
 					width="100px" iconSclass="z-icon-plus-circle"
 					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
-					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" />
+					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" 
+					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
 			</hlayout>
 
 			<listbox height="355px"

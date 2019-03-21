@@ -10,6 +10,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDTO;
 import com.yhaguy.gestion.empresa.AssemblerFuncionario;
@@ -61,6 +62,8 @@ public class ReciboDTO extends DTO {
 	private List<MyPair> estadosComprobantes;
 
 	private RetencionIvaDTO retencion;
+	
+	private List<BancoChequeTercero> chequesEliminar = new ArrayList<BancoChequeTercero>();
 
 	public boolean isDetalleVacio() {
 		return this.detalles.size() == 0;
@@ -187,7 +190,12 @@ public class ReciboDTO extends DTO {
 		if (this.getDetalles().size() == 0 || !this.isCobro()) {
 			return null;
 		}
-		long idVendedor = this.getDetalles().get(0).getMovimiento().getIdVendedor();
+		long idVendedor = 0;
+		if (this.getDetalles().size() > 0) {
+			if (this.getDetalles().get(0).getMovimiento() != null) {
+				idVendedor = this.getDetalles().get(0).getMovimiento().getIdVendedor();
+			}
+		}
 		if (idVendedor <= 0) return null;
 		return (FuncionarioDTO) new AssemblerFuncionario().getDTObyId(Funcionario.class.getName(), idVendedor);
 	}
@@ -577,5 +585,13 @@ public class ReciboDTO extends DTO {
 
 	public void setCobrador(String cobrador) {
 		this.cobrador = cobrador;
+	}
+
+	public List<BancoChequeTercero> getChequesEliminar() {
+		return chequesEliminar;
+	}
+
+	public void setChequesEliminar(List<BancoChequeTercero> chequesEliminar) {
+		this.chequesEliminar = chequesEliminar;
 	}
 }

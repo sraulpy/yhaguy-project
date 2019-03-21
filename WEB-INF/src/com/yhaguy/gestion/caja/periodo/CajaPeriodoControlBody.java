@@ -38,12 +38,14 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Caja;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Talonario;
 import com.yhaguy.domain.Venta;
@@ -63,6 +65,7 @@ import com.yhaguy.gestion.comun.ControlAnulacionMovimientos;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDTO;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDetalleDTO;
+import com.yhaguy.gestion.modulos.Permisos;
 import com.yhaguy.gestion.notacredito.NotaCreditoAssembler;
 import com.yhaguy.gestion.notacredito.NotaCreditoControlBody;
 import com.yhaguy.gestion.notacredito.NotaCreditoDTO;
@@ -441,7 +444,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.reciboDTO.setTipoMovimiento(tipoMovto);
 			this.reciboDTO.setMoneda(this.monedaLocal);
 			this.reciboDTO.setTipoCambio(tc);
-			this.reciboDTO.setImputar(true);
+			if (this.reciboDTO.esNuevo()) {
+				this.reciboDTO.setImputar(true);
+			} 
 			this.reciboDTO.setEstadoComprobante(this.estadoComprobanteConfeccionado);
 			this.reciboDTO.setEstadosComprobantes(this.utilDto.getEstadosComprobantes());
 			this.reciboDTO.setNumeroPlanilla(this.dto.getNumero());
@@ -464,17 +469,20 @@ public class CajaPeriodoControlBody extends BodyApp {
 		byte[] ori = this.m.serializar(this.reciboDTO);
 
 		WindowPopup w = new WindowPopup();
-		w.setModo(modo);
+		w.setModo(WindowPopup.NUEVO);
 		w.setTitulo(titulo);
 		w.setWidth("1100px");
 		w.setHigth("650px");
 		w.setCheckAC(new ValidadorAgregarRecibo(this));
 		w.setDato(this);
-		if (modo.equals(WindowPopup.SOLO_LECTURA))
+		if (modo.equals(WindowPopup.SOLO_LECTURA) && !this.isOperacionHabilitada(Permisos.MODIFICAR_RECIBOS))
 			w.setSoloBotonCerrar();
 		w.show(Configuracion.RECIBO_ZUL);
 
 		if (w.isClickAceptar()) {
+			if (!this.reciboDTO.esNuevo()) {
+				this.reciboDTO.setMovimientoBancoActualizado(false);
+			}
 			this.saveRecibo();
 			if (this.reciboDTO.isCobro()) {
 				ProcesosHistoricos.updateHistoricoCobranzaMeta(this.reciboDTO.getTotalImporteGsSinIva());
@@ -524,7 +532,20 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 
 		if (this.validarFormulario() == true) {
-
+			if (!this.reciboDTO.esNuevo()) {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				for (BancoChequeTercero cheque : this.reciboDTO.getChequesEliminar()) {
+					rr.deleteObject(cheque);
+				}
+				for (ReciboFormaPagoDTO fp : this.reciboDTO.getFormasPago()) {
+					ReciboFormaPago rfp = (ReciboFormaPago) rr.getObject(ReciboFormaPago.class.getName(), fp.getId());
+					if (rfp != null) {
+						rfp.setOrden("1");
+						rr.saveObject(rfp, rfp.getUsuarioMod());
+					}					
+				}
+			}
+			
 			this.asignarNumeros();
 
 			CajaPeriodoDTO cajaDto = (CajaPeriodoDTO) this.saveDTO(this.dto);
@@ -544,10 +565,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 		for (ReciboDTO recibo : this.dto.getRecibos()) {
 			if (recibo.isMovimientoBancoActualizado() == false) {
 				for (ReciboFormaPagoDTO formaPago : recibo.getFormasPago()) {
-					ctr.registrarMovimientoBanco(formaPago,
-							recibo.getFechaEmision(), recibo.getSucursal(),
-							recibo.getCliente().getId(), this.dto.getNumero(),
-							recibo.getNumero(), "", recibo.getVendedorRazonSocial());
+					if (!formaPago.getOrden().equals("1")) {
+						ctr.registrarMovimientoBanco(formaPago,
+								recibo.getFechaEmision(), recibo.getSucursal(),
+								recibo.getCliente().getId(), this.dto.getNumero(),
+								recibo.getNumero(), "", recibo.getVendedorRazonSocial());
+					}					
 				}
 				recibo.setMovimientoBancoActualizado(true);
 				this.saveDTO(recibo, new AssemblerRecibo());
@@ -2285,6 +2308,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 	/*********************** GETTER/SETTER **********************/
 	
+	/**
+	 * @return si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
+	
 	@DependsOn({ "arqueo.pos1", "arqueo.pos2", "arqueo.pos3" })
 	public double getTotalArqueo() {
 		double totalEfectivo = (double) this.arqueo.getPos1();
@@ -2694,7 +2725,7 @@ class ValidadorAgregarRecibo implements VerificaAceptarCancelar {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		try {
-			if (this.recibo.isCobro() && rr.getRecibo(this.recibo.getNumero()) != null) {
+			if (this.recibo.isCobro() && this.recibo.esNuevo() && rr.getRecibo(this.recibo.getNumero()) != null) {
 				out = false;
 				mensaje += "\n - Ya existe un Recibo con el mismo número..";
 			}

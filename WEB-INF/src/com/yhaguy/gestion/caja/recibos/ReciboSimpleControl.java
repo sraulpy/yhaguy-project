@@ -810,7 +810,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private String formaPagoItemsEliminar;	
 
 	@Command @NotifyChange("*")
-	public void eliminarItemFormaPago(){
+	public void eliminarItemFormaPago() throws Exception{
 		
 		Object[] validar = this.validarOperacion(OPERACION_ELIMINAR_FORMA_PAGO);
 		boolean valido = (boolean) validar[0];
@@ -822,7 +822,14 @@ public class ReciboSimpleControl extends SoloViewModel {
 		}
 		
 		if (this.confirmarEliminarItemFormaPago() == true) {
+			RegisterDomain rr = RegisterDomain.getInstance();
 			for (ReciboFormaPagoDTO d : this.selectedFormaPagoItems) {
+				if (d.isChequeTercero()) {
+					BancoChequeTercero cheque = rr.getChequeTercero(d.getId());
+					if (cheque != null) {
+						this.dato.getReciboDTO().getChequesEliminar().add(cheque);
+					}
+				}
 				this.dato.getReciboDTO().getFormasPago().remove(d);
 			}
 			this.selectedFormaPagoItems = new ArrayList<ReciboFormaPagoDTO>();
