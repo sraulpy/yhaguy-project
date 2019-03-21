@@ -126,7 +126,7 @@
 			</auxheader>
 		</auxhead>
 		<template name="model">
-			<listitem onDoubleClick="@command('obtenerValores')"
+			<listitem onClick="@command('obtenerValores')"
 				onOK="@command('obtenerValores')">
 				<listcell label="@load(each.pos1)" />
 				<listcell label="@load(each.pos2)" />
