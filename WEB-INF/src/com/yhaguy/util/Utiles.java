@@ -32,6 +32,8 @@ public class Utiles {
 	public static final String DD_MM_YY = "dd-MM-yy";
 	public static final String DD_MM_YYYY_HH_MM_SS = "dd-MM-yyyy hh:mm:ss";
 	public static final String D_MMMM_YYYY = "d 'de' MMMM 'del' yyyy";
+	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd hh:mm:ss";
+	public static final String YYYY_MM_DD = "yyyy-MM-dd";
 	
 	public static final String ENERO = "ENERO";
 	public static final String FEBRERO = "FEBRERO";

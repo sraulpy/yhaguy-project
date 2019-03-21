@@ -173,6 +173,15 @@ public class RecibosViewModel extends SimpleViewModel {
 		Clients.showNotification("REGISTRO GUARDADO..");
 	}
 	
+	@Command
+	public void habilitarImpresion() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), this.selectedItem.getId());
+		rec.setOrden(Utiles.getDateToString(new Date(), Utiles.YYYY_MM_DD_HH_MM_SS));
+		rr.saveObject(rec, rec.getUsuarioMod());
+		Clients.showNotification("IMPRESIÓN HABILITADA..");
+	}
+	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA",
 			"filterNumero", "filterRazonSocial", "filterRuc", 
 			"filterCaja", "selectedFiltro", "filterCobrador" })
