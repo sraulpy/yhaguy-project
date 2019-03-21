@@ -3,14 +3,9 @@ package com.yhaguy.gestion.recibos;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -47,8 +42,15 @@ import com.yhaguy.gestion.caja.recibos.ReciboDetalleDTO;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.inicio.AccesoDTO;
+import com.yhaguy.process.ProcesosTesoreria;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
+
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 @SuppressWarnings("unchecked")
 public class RecibosViewModel extends SimpleViewModel {
@@ -180,6 +182,45 @@ public class RecibosViewModel extends SimpleViewModel {
 		rec.setOrden(Utiles.getDateToString(new Date(), Utiles.YYYY_MM_DD_HH_MM_SS));
 		rr.saveObject(rec, rec.getUsuarioMod());
 		Clients.showNotification("IMPRESIÓN HABILITADA..");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void anularRecibo() throws Exception {
+		List<CtaCteEmpresaMovimiento> movims = new ArrayList<CtaCteEmpresaMovimiento>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), this.selectedItem.getId());
+		if (rec.getFechaEmision().compareTo(Utiles.getFechaInicioMes()) < 0) {
+			Clients.showNotification("El recibo no corresponde al mes corriente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		rec.setTotalImporteDs(0);
+		rec.setTotalImporteGs(0);
+		rec.setMotivoAnulacion("");
+		rec.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO));
+		for (ReciboFormaPago fp : rec.getFormasPago()) {
+			if (fp.isChequeTercero()) {
+				BancoChequeTercero cheque = rr.getChequeTercero(fp.getId());
+				if (cheque != null) {
+					rr.deleteObject(cheque);
+				}
+			}
+			rr.deleteObject(fp);
+		}
+		for (ReciboDetalle det : rec.getDetalles()) {
+			movims.add(det.getMovimiento());
+			rr.deleteObject(det);
+		}
+		for (CtaCteEmpresaMovimiento movim : movims) {
+			if (movim.isVentaCredito()) {
+				ProcesosTesoreria.depurarSaldosPorVenta(movim.getIdMovimientoOriginal());
+			}
+		}
+		rec.setDetalles(new HashSet<ReciboDetalle>());
+		rec.setFormasPago(new HashSet<ReciboFormaPago>());
+		rr.saveObject(rec, this.getLoginNombre());
+		this.win.detach();
+		Clients.showNotification("RECIBO ANULADO");
 	}
 	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA",
