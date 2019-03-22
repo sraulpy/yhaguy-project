@@ -89,6 +89,8 @@ public class VentaDTO extends DTO {
 	private List<VentaDetalleDTO> detalles = new ArrayList<VentaDetalleDTO>();	
 	private List<ReciboFormaPagoDTO> formasPago = new ArrayList<ReciboFormaPagoDTO>();	
 	
+	private List<BancoChequeTercero> chequesEliminar = new ArrayList<BancoChequeTercero>();
+	
 	/**
 	 * @return el descuento mayorista..
 	 */
@@ -921,5 +923,13 @@ public class VentaDTO extends DTO {
 
 	public void setTecnico(MyArray tecnico) {
 		this.tecnico = tecnico;
+	}
+
+	public List<BancoChequeTercero> getChequesEliminar() {
+		return chequesEliminar;
+	}
+
+	public void setChequesEliminar(List<BancoChequeTercero> chequesEliminar) {
+		this.chequesEliminar = chequesEliminar;
 	}
 }

@@ -23,6 +23,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
+import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -109,8 +110,15 @@ public class VentaSimpleControl extends SoloViewModel {
 	
 	@Command
 	@NotifyChange({ "dato", "selectedFormasPago" })
-	public void deleteFormaPago() {
+	public void deleteFormaPago() throws Exception {
 		if (this.mensajeSiNo("Desea eliminar el ítem..")) {
+			if (this.selectedFormaPago.isChequeTercero()) {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				BancoChequeTercero cheque = rr.getChequeTercero(this.selectedFormaPago.getId());
+				if (cheque != null) {
+					this.dato.getDto().getChequesEliminar().add(cheque);
+				}
+			}
 			this.dato.getDto().getFormasPago().remove(this.selectedFormaPago);
 			this.selectedFormaPago = null;
 		}

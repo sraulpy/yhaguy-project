@@ -882,6 +882,12 @@ public class VentaControlBody extends BodyApp {
 		wp.show(Configuracion.VENTA_LISTA_FORMA_PAGO_ZUL_);
 
 		if (wp.isClickAceptar() == true) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			for (BancoChequeTercero cheque : this.dto.getChequesEliminar()) {
+				rr.deleteObject(cheque);
+			}
+			this.dto.getChequesEliminar().clear();
+			
 			this.addSaldoFavorCliente(this.dto);
 			this.cancelSaldoFavorCliente(this.dto);
 			this.dto = (VentaDTO) this.saveDTO(this.dto);			
