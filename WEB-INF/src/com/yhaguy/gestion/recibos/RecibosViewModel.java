@@ -186,17 +186,21 @@ public class RecibosViewModel extends SimpleViewModel {
 	
 	@Command
 	@NotifyChange("*")
-	public void anularRecibo() throws Exception {
+	public void anularRecibo(@BindingParam("motivo") String motivo) throws Exception {
+		if (motivo.trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR EL MOTIVO..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		List<CtaCteEmpresaMovimiento> movims = new ArrayList<CtaCteEmpresaMovimiento>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), this.selectedItem.getId());
 		if (rec.getFechaEmision().compareTo(Utiles.getFechaInicioMes()) < 0) {
-			Clients.showNotification("El recibo no corresponde al mes corriente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			Clients.showNotification("EL RECIBO NO CORRESPONDE AL MES CORRIENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
 		rec.setTotalImporteDs(0);
 		rec.setTotalImporteGs(0);
-		rec.setMotivoAnulacion("");
+		rec.setMotivoAnulacion(motivo);
 		rec.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO));
 		for (ReciboFormaPago fp : rec.getFormasPago()) {
 			if (fp.isChequeTercero()) {
@@ -215,6 +219,11 @@ public class RecibosViewModel extends SimpleViewModel {
 			if (movim.isVentaCredito()) {
 				ProcesosTesoreria.depurarSaldosPorVenta(movim.getIdMovimientoOriginal());
 			}
+		}
+		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(rec.getId(), rec.getTipoMovimiento().getSigla());
+		if (movim != null) {
+			movim.setAnulado(true);
+			rr.saveObject(movim, this.getLoginNombre());
 		}
 		rec.setDetalles(new HashSet<ReciboDetalle>());
 		rec.setFormasPago(new HashSet<ReciboFormaPago>());

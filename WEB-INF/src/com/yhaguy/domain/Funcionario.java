@@ -33,6 +33,7 @@ public class Funcionario extends Domain {
 	private String nombreTecnico;
 	
 	private Empresa empresa;
+	private Tecnico tecnico_;
 	private Set<AccesoApp> accesos = new HashSet<AccesoApp>();
 	private Set<VentaMeta> metas = new HashSet<VentaMeta>();
 
@@ -345,5 +346,13 @@ public class Funcionario extends Domain {
 
 	public void setNombreTecnico(String nombreTecnico) {
 		this.nombreTecnico = nombreTecnico;
+	}
+
+	public Tecnico getTecnico_() {
+		return tecnico_;
+	}
+
+	public void setTecnico_(Tecnico tecnico_) {
+		this.tecnico_ = tecnico_;
 	}
 }

@@ -54,6 +54,7 @@ public class Venta extends Domain {
 	
 	/** El tecnico */
 	private Funcionario tecnico;
+	private Tecnico tecnico_;
 
 	private Cliente cliente;
 
@@ -977,5 +978,13 @@ public class Venta extends Domain {
 
 	public void setTecnico(Funcionario tecnico) {
 		this.tecnico = tecnico;
+	}
+
+	public Tecnico getTecnico_() {
+		return tecnico_;
+	}
+
+	public void setTecnico_(Tecnico tecnico_) {
+		this.tecnico_ = tecnico_;
 	}
 }

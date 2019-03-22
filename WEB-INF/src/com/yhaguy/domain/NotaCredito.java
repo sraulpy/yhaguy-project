@@ -63,6 +63,7 @@ public class NotaCredito extends Domain {
 	
 	/** El tecnico */
 	private Funcionario tecnico;
+	private Tecnico _tecnico;
 	
 	private Deposito deposito;
 	
@@ -672,5 +673,13 @@ public class NotaCredito extends Domain {
 
 	public void setTecnico(Funcionario tecnico) {
 		this.tecnico = tecnico;
+	}
+
+	public Tecnico get_tecnico() {
+		return _tecnico;
+	}
+
+	public void set_tecnico(Tecnico _tecnico) {
+		this._tecnico = _tecnico;
 	}
 }

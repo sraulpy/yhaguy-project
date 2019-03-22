@@ -1,0 +1,85 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.tarjetas.BancoTarjetaViewModel')">
+	
+	<grid sclass="vgrid" style="margin:5px">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Procesadora" />
+					<combobox hflex="true"
+						model="@load(vm.procesadoras)">
+						<template name="model">
+							<comboitem label="@load(each.nombre.toUpperCase())"></comboitem>
+						</template>
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Tipo Tarjeta" />
+					<combobox hflex="true"
+						model="@load(vm.tiposTarjetas)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Comisión %" />
+					<guaranibox hflex="true"></guaranibox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Desde" />
+					<datebox hflex="true"></datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Hasta" />
+					<datebox hflex="true"></datebox>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"></button>
+	</hlayout>
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE TARJETAS..">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Número Operación"></listheader>
+			<listheader label="Importe" align="right"></listheader>
+			<listheader label="Comisión" align="right"></listheader>
+			<listheader label="Iva Comisión" align="right"></listheader>
+			<listheader label="Renta" align="right"></listheader>
+			<listheader label="Iva Importe" align="right"></listheader>
+			<listheader label="Crédito" align="right"></listheader>
+			<listheader label="Banco"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" sclass="filter" placeholder="Día.."
+						value="@bind(vm.filterFechaDD)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Mes.."
+						value="@bind(vm.filterFechaMM)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Año.."
+						value="@bind(vm.filterFechaAA)" instant="true"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Nro. Operacion.." instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+</window>

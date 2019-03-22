@@ -64,10 +64,10 @@ public class NotaCreditoAssembler extends Assembler {
 				caja.getNotasCredito().add(domain);
 				rr.saveObject(caja, this.getLogin());
 			}
-		}
-		
+		}		
 		domain.setVendedor(domain.getVendedor_());
 		domain.setTecnico(domain.getTecnico_());
+		domain.set_tecnico(domain.getTecnico() != null ? domain.getTecnico().getTecnico_() : null);
 		
 		return domain;
 	}

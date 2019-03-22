@@ -75,6 +75,7 @@ public class AssemblerVenta extends Assembler {
 		domain.setVehiculoTipo(dto.getVehiculoTipo());
 		domain.setVehiculoMarca(dto.getVehiculoMarca());
 		domain.setVehiculoModelo(dto.getVehiculoModelo());
+		domain.setTecnico_(domain.getTecnico() != null ? domain.getTecnico().getTecnico_() : null);
 
 		// genera la venta fiscal..
 		if ((dto.esNuevo() == true)

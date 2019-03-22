@@ -51,6 +51,9 @@
 		<many-to-one name="funcionarioEstado" class="com.coreweb.domain.Tipo"
 			column="idestado" lazy="false" />
 			
+		<many-to-one name="tecnico_" class="com.yhaguy.domain.Tecnico"
+			column="idtecnico" lazy="false" />
+			
 		<many-to-one name="funcionarioCargo" class="com.coreweb.domain.Tipo"
 			column="idcargo" lazy="false" />
 

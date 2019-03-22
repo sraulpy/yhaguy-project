@@ -9765,17 +9765,26 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Empresa> emps = rr.getEmpresas();
-			for (Empresa emp : emps) {
-				if (!emp.getObservacion().trim().isEmpty()) {
-					EmpresaObservacion obs = new EmpresaObservacion();
-					obs.setDescripcion(emp.getObservacion().toUpperCase());
-					obs.setFecha(emp.getModificado());
-					obs.setUsuario("ADMIN");
-					emp.getObservaciones().add(obs);
-					rr.saveObject(emp, emp.getUsuarioMod());
-					System.out.println(emp.getRazonSocial());
-				}
+			List<Funcionario> funcs = rr.getFuncionarios();
+			for (Funcionario func : funcs) {
+				Tecnico tec = new Tecnico();
+				tec.setNombre(func.getRazonSocial());
+				rr.saveObject(tec, "sys");
+				func.setTecnico_(tec);
+				rr.saveObject(func, func.getUsuarioMod());
+				System.out.println(func.getRazonSocial());
+			}
+			List<Venta> vtas = rr.getVentasCredito(Utiles.getFecha("05-10-2018 00:00:00"), new Date(), 0);
+			for (Venta vta : vtas) {
+				vta.setTecnico_(vta.getTecnico() != null? vta.getTecnico().getTecnico_() : null);
+				rr.saveObject(vta, vta.getUsuarioMod());
+				System.out.println(vta.getTecnico_() != null ? vta.getTecnico_().getNombre() : " - - - ");
+			}
+			List<NotaCredito> ncs = rr.getNotasCreditoVenta(Utiles.getFecha("05-02-2019 00:00:00"), new Date(), 0);
+			for (NotaCredito nc : ncs) {
+				nc.set_tecnico(nc.getTecnico() != null? nc.getTecnico().getTecnico_() : null);
+				rr.saveObject(nc, nc.getUsuarioMod());
+				System.out.println(nc.get_tecnico() != null ? nc.get_tecnico().getNombre() : " - - - ");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

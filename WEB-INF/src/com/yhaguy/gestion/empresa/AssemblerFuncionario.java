@@ -12,6 +12,8 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.domain.AccesoApp;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Tecnico;
 import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.inicio.AssemblerAcceso;
 
@@ -41,6 +43,17 @@ public class AssemblerFuncionario extends Assembler {
 		
 		domain.setNombreEmpresa(domain.getEmpresa().getRazonSocial());
 		domain.setNombreTecnico(domain.getEmpresa().getRazonSocial());
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (domain.getTecnico_() == null) {			
+			Tecnico tec = new Tecnico();
+			tec.setNombre(domain.getEmpresa().getRazonSocial());
+			rr.saveObject(tec, this.getLogin());
+			domain.setTecnico_(tec);
+		} else {
+			domain.getTecnico_().setNombre(domain.getEmpresa().getRazonSocial());
+			rr.saveObject(domain.getTecnico_(), this.getLogin());
+		}
 
 		return domain;
 	}

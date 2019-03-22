@@ -115,7 +115,7 @@
 	<hlayout sclass="button-container">
 		<div hflex="true"></div>
 		<button mold="bs" sclass="btn-sm btn-danger" width="150px" iconSclass="z-icon-times"
-			onClick="@command('anularRecibo')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+			onClick='pop_motivo.open(self, "after_start");tx_motivo.focus()' disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 			label="Anular"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-info" width="150px" iconSclass="z-icon-print"
@@ -126,4 +126,12 @@
 			onClick="@command('saveRecibo')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 			label="Guardar Cambios"></button>
 	</hlayout>
+	
+	<popup id="pop_motivo" sclass="rounded">
+		<div style="padding:5px">
+			<textbox id="tx_motivo" width="300px" placeholder="INGRESE EL MOTIVO.."></textbox>
+			<button mold="bs" sclass="btn-xs btn-danger" iconSclass="z-icon-check"
+				onClick="@command('anularRecibo', motivo=tx_motivo.text)"></button>
+		</div>
+	</popup>
 </window>
