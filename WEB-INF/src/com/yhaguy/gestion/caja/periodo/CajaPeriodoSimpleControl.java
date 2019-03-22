@@ -81,7 +81,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 	public void setTipoCambio() throws Exception {
 		if (!this.dato.getNvoFormaPago().isMonedaLocal()) {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			double tc = rr.getTipoCambioVenta();
+			double tc = rr.getTipoCambioCompra();
 			this.dato.getSelectedVenta().setTipoCambio(tc);
 			this.dato.getNvoFormaPago().setMontoDs(this.dato.getNvoFormaPago().getMontoGs() / this.dato.getSelectedVenta().getTipoCambio());
 		}
@@ -450,9 +450,9 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		dato.getNvoFormaPago().setMoneda(new MyPair(moneda.getId(), moneda.getDescripcion(), moneda.getSigla()));
 		dato.getNvoFormaPago().setMontoGs(montoGs - totalGs);
 		dato.getNvoFormaPago().setMontoDs(montoDs - totalDs);
-		if (!dato.getNvoFormaPago().isMonedaLocal()) {
+	/**	if (!dato.getNvoFormaPago().isMonedaLocal()) {
 			dato.getNvoFormaPago().setMontoDs(dato.getNvoFormaPago().getMontoGs() / dato.getSelectedVenta().getTipoCambio());
-		}
+		} **/
 	}
 	
 	/**

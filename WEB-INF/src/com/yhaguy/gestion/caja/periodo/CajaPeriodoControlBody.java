@@ -2991,19 +2991,19 @@ class ValidadorFormaPagoVenta implements VerificaAceptarCancelar {
 
 		VentaDTO venta = this.ctr.getSelectedVenta();
 
-		double totalVT = venta.getTotalImporteGs();
+		double totalVT = venta.isMonedaLocal() ? venta.getTotalImporteGs() : venta.getTotalImporteDs();
 		double totalFP = 0;
 
 		String totalVT_ = this.ctr.m.formatoGs(totalVT);
 
 		for (ReciboFormaPagoDTO item : venta.getFormasPago()) {
-			totalFP += item.getMontoGs();
+			totalFP += venta.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs();
 		}
 
 		if ((totalVT != totalFP)) {
 			valido = false;
 			this.mensaje += "\n - El importe de las Formas de Pago debe ser: "
-					+ totalVT_ + " Gs.";
+					+ totalVT_ + venta.getMoneda().getPos1();
 		}
 
 		return valido;
