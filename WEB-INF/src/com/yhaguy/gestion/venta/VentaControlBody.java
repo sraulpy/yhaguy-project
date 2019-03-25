@@ -65,6 +65,7 @@ import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.comun.ReservaDetalleDTO;
 import com.yhaguy.gestion.empresa.ClienteDTO;
+import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
@@ -2147,7 +2148,7 @@ class ReporteVenta extends ReporteYhaguy {
 		String cliente = (String) this.venta.getCliente().getPos2();
 		String condicion = (String) this.venta.getCondicionPago().getPos1();
 		String observacion = (String) this.venta.getObservacion();
-		//String direccion = (String) this.venta.getDireccion();
+		String direccion = (String) this.venta.getDireccion();
 
 		VerticalListBuilder out = cmp.verticalList();
 
@@ -2169,6 +2170,12 @@ class ReporteVenta extends ReporteYhaguy {
 				.add(this.textoParValor("Observación", observacion))
 				.add(this.venta.isPresupuesto() ? this.textoParValor("Válido por", this.venta.getValidez() + " Días") : this.texto("")));
 		
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Dirección", direccion))
+				.add(this.textoParValor("Generado", Utiles.getDateToString(this.venta.getFecha(), "dd-MM-yyyy HH:mm:ss"))));
+
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
@@ -2220,6 +2227,7 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 		String cliente = (String) this.venta.getCliente().getPos2();
 		String condicion = (String) this.venta.getCondicionPago().getPos1();
 		String moneda = (String) this.venta.getMoneda().getPos1();
+		String direccion = (String) this.venta.getDireccion();
 
 		VerticalListBuilder out = cmp.verticalList();
 
@@ -2240,6 +2248,10 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(
 				this.textoParValor("Moneda", moneda)));
 
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Dirección", direccion))
+				.add(this.textoParValor("Generado", Utiles.getDateToString(this.venta.getFecha(), "dd-MM-yyyy HH:mm:ss"))));
+		
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

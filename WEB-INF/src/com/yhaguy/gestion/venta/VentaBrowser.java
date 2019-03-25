@@ -27,7 +27,7 @@ public class VentaBrowser extends Browser{
 	
 	@Override
 	public void setingInicial() {
-		this.setWidthWindows("1200px");
+		this.setWidthWindows("100%");
 		this.setHigthWindows("90%");
 		this.addOrden("numero");
 	}
@@ -67,7 +67,7 @@ public class VentaBrowser extends Browser{
 		
 		col5.setCampo("vendedor.empresa.razonSocial"); 	
 		col5.setTitulo("Vendedor");
-		col5.setWidthColumna("100px");
+		col5.setWidthColumna("130px");
 		
 		col8.setCampo("tipoMovimiento.descripcion");
 		col8.setTitulo("Tipo Movimiento");

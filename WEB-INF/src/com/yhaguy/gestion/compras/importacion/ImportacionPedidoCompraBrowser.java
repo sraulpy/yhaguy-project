@@ -17,7 +17,7 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 
 	@Override
 	public void setingInicial() {
-		this.setWidthWindows("1200px");
+		this.setWidthWindows("100%");
 		this.setHigthWindows("90%");
 		this.addOrden("fechaCreacion desc, numeroPedidoCompra");
 	}
@@ -45,11 +45,11 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 
 		col1.setCampo("numeroPedidoCompra"); 	
 		col1.setTitulo("Número");
-		col1.setWidthColumna("85px");
+		col1.setWidthColumna("120px");
 		
 		col1_.setCampo("numeroFactura"); 	
 		col1_.setTitulo("Factura Nro.");
-		col1_.setWidthColumna("85px");
+		col1_.setWidthColumna("150px");
 		
 		col2.setCampo("proveedor.empresa.razonSocial"); 	
 		col2.setTitulo("Proveedor");

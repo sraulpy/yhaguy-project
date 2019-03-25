@@ -16,7 +16,7 @@
 						<textbox value="@load(vm.dto.numero)"
 							readonly="true" 
 							placeholder="Pendiente.."
-							hflex="true"/>
+							hflex="true" />
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Creación" />
@@ -85,7 +85,7 @@
 					<vlayout spacing="0">
 						<field value="Número" />
 						<textbox value="@load(vm.dto.numero)"
-							readonly="true" 
+							readonly="true" hflex="true"
 							placeholder="Pendiente.."/>
 					</vlayout>
 					<vlayout spacing="0">
@@ -93,9 +93,10 @@
 						<hlayout>
 							<datebox
 								value="@load(vm.dto.fechaCreacion)"
-								readonly="false" width="100px"/>
+								readonly="false" hflex="true"/>
 							<textbox
-								value="@load(vm.dto.funcionarioCreador.pos1)" readonly="true" />
+								value="@load(vm.dto.funcionarioCreador.pos1)" readonly="true" 
+								hflex="true" />
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0"
@@ -107,48 +108,45 @@
 								readonly="true"
 								width="80px" />
 							<textbox
-								value="@load(vm.dto.funcionarioReceptor.pos1)" readonly="true" />
+								value="@load(vm.dto.funcionarioReceptor.pos1)" readonly="true" 
+								hflex="true" />
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Estado" />
 						<textbox
-							value="@load(vm.dto.transferenciaEstado.text)" readonly="true" />
+							value="@load(vm.dto.transferenciaEstado.text)" readonly="true" hflex="true" />
 					</vlayout>
 				</row>
 				<row>
 					<vlayout spacing="0">
 						<field value="Origen" />
-						<hlayout visible="@load(!vm.detalleVisibleExt)"
-							style="margin-right:30px">
+						<hlayout visible="@load(!vm.detalleVisibleExt)">
 							<textbox hflex="true"
 								readonly="true"
 								value="@load(vm.dto.sucursal.text.toUpperCase())"/>
 							<combobox model="@load(vm.depositos)"
 								selectedItem="@bind(vm.dto.depositoSalida)"
 								value="@load(vm.dto.depositoSalida.text)" instant="true"
-								width="80px">
+								hflex="true">
 								<template name="model">
 									<comboitem label="@load(each.text)" />
 								</template>
 							</combobox>
-							<labelConstrain />
 						</hlayout>
-						<hlayout visible="@load(vm.detalleVisibleExt)"
-							style="margin-right:30px">
+						<hlayout visible="@load(vm.detalleVisibleExt)">
 							<textbox hflex="true"
 								readonly="true"
 								value="@load(vm.dto.sucursal.text.toUpperCase())"/>
 							<textbox 
 								value="@load(vm.dto.depositoSalida.text)"
-								readonly="true" width="70px" />
-							<labelConstrain />
+								readonly="true" hflex="true" />
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0"
 						visible="@load(!vm.dto.depositoSalida.esNuevo())">
 						<field value="Destino" />
-						<hlayout style="margin-right:30px" visible="@load(!vm.transferido)">
+						<hlayout visible="@load(!vm.transferido)">
 							<combobox hflex="true"
 								model="@load(vm.sucursales)"
 								selectedItem="@bind(vm.dto.sucursalDestino)"
@@ -159,7 +157,7 @@
 								</template>
 							</combobox>
 							<combobox
-								width="80px"
+								hflex="true"
 								model="@load(vm.depositosDestinoExt)"
 								selectedItem="@bind(vm.dto.depositoEntrada)"
 								value="@load(vm.dto.depositoEntrada.text)"
@@ -168,16 +166,14 @@
 									<comboitem label="@load(each.text)" />
 								</template>
 							</combobox>
-							<labelConstrain />
 						</hlayout>
-						<hlayout style="margin-right:30px" visible="@load(vm.transferido)">
+						<hlayout visible="@load(vm.transferido)">
 							<textbox hflex="true"
 								readonly="true"
 								value="@load(vm.dto.sucursalDestino.text)"/>
-							<textbox width="80px" readonly="true"
+							<textbox hflex="true" readonly="true"
 								placeholder="Depósito"
 								value="@load(vm.dto.depositoEntrada.text)"/>
-							<labelConstrain />
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
@@ -212,19 +208,25 @@
 
 		<hlayout sclass="button-container"
 			visible="@load(vm.transferenciaInterna? vm.detalleVisible : vm.detalleVisibleExt)">
-			<toolbarbutton label="Eliminar"
-				image="/core/images/borrarItem.png"
+			<button mold="bs" label="Eliminar"
+				iconSclass="z-icon-times-circle"
+				sclass="btn-sm btn-danger"
 				onClick="@command('eliminarItem')"
+				width="120px"
 				disabled="@load(vm.transferenciaInterna? vm.eliminarItemDisabled : vm.eliminarItemExtDisabled)" />
 			<space />
-			<toolbarbutton label="Insertar"
-				image="/core/images/insertar.png"
+			<button mold="bs" label="Insertar"
+				iconSclass="z-icon-plus-circle"
+				sclass="btn-sm btn-primary"
 				onClick="@command('insertarItem')" 
+				width="120px"
 				disabled="@load(vm.insertarDisabled)"/>
 			<space />
-			<toolbarbutton label="Confirmar"
-				image="/core/images/accept2.png"
+			<button mold="bs" label="Confirmar"
+				iconSclass="z-icon-check"
+				sclass="btn-sm btn-success"
 				onClick="@command('confirmarTransferencia')"
+				width="120px"
 				disabled="@load(vm.transferenciaInterna? vm.confirmarDisabled : vm.confirmarExtDisabled)" />
 			<space />
 		</hlayout>
@@ -303,8 +305,8 @@
 				<listfooter align="right">
 					<hlayout style="margin-right:5px"
 						visible="@load(!vm.transferenciaInterna)">
-						<dolarbox hflex="true"
-							style="background:#dddddd;font-weight:bold;text-align:right"
+						<guaranibox hflex="true"
+							style="font-weight:bold;text-align:right"
 							value="@load(vm.dto.totalCosto)"/>
 					</hlayout>
 				</listfooter>

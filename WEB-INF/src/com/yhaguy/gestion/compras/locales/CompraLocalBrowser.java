@@ -17,8 +17,8 @@ public class CompraLocalBrowser extends Browser {
 
 	@Override
 	public void setingInicial() {
-		this.setWidthWindows("1200px");
-		this.setHigthWindows("85%");
+		this.setWidthWindows("100%");
+		this.setHigthWindows("90%");
 		this.addOrden("id");
 	}
 	
