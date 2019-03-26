@@ -115,6 +115,15 @@ public class VentaDetalle extends Domain {
 	}
 	
 	/**
+	 * @return la rentabilidad del articulo sobre venta..
+	 */
+	public double getRentabilidadVenta() {
+		double ganancia = (this.getImporteGsSinIva()) - this.getCostoTotalGsSinIva();		
+		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getImporteGsSinIva());
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
 	 * @return true si el item es del proveedor que recibe como parametro..
 	 */
 	public boolean isProveedor(long idProveedor) {

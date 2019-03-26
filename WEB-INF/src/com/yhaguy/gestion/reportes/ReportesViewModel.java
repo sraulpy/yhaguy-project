@@ -3748,7 +3748,9 @@ public class ReportesViewModel extends SimpleViewModel {
 									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoTotalGsSinIva() * -1,
 									notacred.isAnulado() ? 0.0 : item.getImporteGsSinIva() * -1,
 									notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
-									item.getArticulo().getDescripcion()};
+									item.getArticulo().getDescripcion(),
+									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
+									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1 };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									data.add(nc);						
@@ -3770,7 +3772,9 @@ public class ReportesViewModel extends SimpleViewModel {
 									0.0,
 									notacred.isAnulado() ? 0.0 : notacred.getTotalImporteGsSinIva() * -1,
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidad() * -1,
-									"DESCUENTO CONCEDIDO" };
+									"DESCUENTO CONCEDIDO",
+									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
+									notacred.isAnulado() ? 0.0 : 0.0 };
 							data.add(nc);
 						}
 					}					
@@ -3795,7 +3799,9 @@ public class ReportesViewModel extends SimpleViewModel {
 									venta.isAnulado() ? 0.0 : item.getCostoTotalGsSinIva(),
 									venta.isAnulado() ? 0.0 : item.getImporteGsSinIva(),
 									venta.isAnulado() ? 0.0 : item.getRentabilidad(),
-									item.getArticulo().getDescripcion()};
+									item.getArticulo().getDescripcion(),
+									venta.isAnulado() ? 0.0 : item.getRentabilidadVenta(),
+									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									data.add(vta);
@@ -15606,6 +15612,10 @@ class VentasUtilidadDetallado implements JRDataSource {
 			value = FORMATTER.format(det[13]);
 		} else if ("Descripcion".equals(fieldName)) {
 			value = det[14];
+		} else if ("Rent_".equals(fieldName)) {
+			value = FORMATTER.format(det[15]);
+		} else if ("Ganancia".equals(fieldName)) {
+			value = FORMATTER.format(det[16]);
 		}
 		return value;
 	}

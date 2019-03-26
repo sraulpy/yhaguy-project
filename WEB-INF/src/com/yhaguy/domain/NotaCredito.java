@@ -285,6 +285,22 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return la rentabilidad de la nota de credito..
+	 */
+	public double getRentabilidadVenta() {
+		if (!this.isMotivoDevolucion()) {
+			double vta = this.getVentaAplicada().getTotalImporteGsSinIva();
+			double nc = this.getTotalImporteGsSinIva();
+			double porc = Utiles.obtenerPorcentajeDelValor(nc, vta);
+			double rentVta = this.getVentaAplicada().getRentabilidad();			
+			return (rentVta * porc) / 100;
+		}		
+		double ganancia = this.getTotalImporteGsSinIva() - this.getTotalCostoGsSinIva();	
+		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getTotalImporteGsSinIva());
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
 	 * @return true si es anulado..
 	 */
 	public boolean isAnulado() {

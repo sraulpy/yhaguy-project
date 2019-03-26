@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2052" pageHeight="595" orientation="Landscape" columnWidth="2012" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.1000000000000059"/>
-	<property name="ireport.x" value="823"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2210" pageHeight="595" orientation="Landscape" columnWidth="2170" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="ireport.zoom" value="2.143588810000013"/>
+	<property name="ireport.x" value="3580"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -28,6 +28,7 @@
 	<parameter name="TOT_UTILIDAD" class="java.lang.String"/>
 	<parameter name="TOT_MARGEN_VTA" class="java.lang.String"/>
 	<parameter name="TOT_MARGEN_COSTO" class="java.lang.String"/>
+	<parameter name="TOT_GANANCIA" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '10010001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta", 150000 "Saldo Anterior",  3351450 "Debitos Periodo", 100000 "Creditos Periodo",
 150000 "Saldo Periodo" from plancuenta where id = '1'
@@ -71,6 +72,8 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="Tot_10" class="java.lang.String"/>
 	<field name="Tot_11" class="java.lang.String"/>
 	<field name="Tot_12" class="java.lang.String"/>
+	<field name="Rent_" class="java.lang.String"/>
+	<field name="Ganancia" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -243,7 +246,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Importe S/Iva]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="1950" y="73" width="60" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="5ea1bd0c-05fd-4c7e-b711-457eb1a2064c"/>
+				<reportElement style="Column header" mode="Transparent" x="2044" y="73" width="60" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="5ea1bd0c-05fd-4c7e-b711-457eb1a2064c"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -251,7 +254,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Rent.]]></text>
 			</staticText>
 			<line>
-				<reportElement x="3" y="88" width="2007" height="1" uuid="55aa73f5-aca3-4422-8096-7300d27c5cf7"/>
+				<reportElement x="3" y="88" width="2161" height="1" uuid="55aa73f5-aca3-4422-8096-7300d27c5cf7"/>
 			</line>
 			<staticText>
 				<reportElement style="Column header" mode="Transparent" x="1430" y="46" width="68" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="bc7f1004-603a-4ef2-843c-56e7efe5be3e"/>
@@ -357,6 +360,22 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TOT_MARGEN_COSTO}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="2104" y="73" width="60" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="4492c22d-ef60-41df-a9da-79221a0bcf02"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Rent.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="1950" y="73" width="93" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="262720ac-b953-4b02-9021-1b5f056e4e45"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Ganancia]]></text>
+			</staticText>
 		</band>
 	</title>
 	<detail>
@@ -427,7 +446,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1950" y="0" width="60" height="15" uuid="577ffa33-03ca-4361-8012-dc9c3e7150bc"/>
+				<reportElement style="Detail" x="2044" y="0" width="60" height="15" uuid="577ffa33-03ca-4361-8012-dc9c3e7150bc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Rent}]]></textFieldExpression>
 			</textField>
@@ -436,12 +455,22 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2104" y="0" width="60" height="15" uuid="9a5bca9f-0b46-4adf-b8ab-67839e417521"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Rent_}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1950" y="0" width="93" height="15" uuid="c026e2f1-510d-4869-ad35-6d1ab8232011"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Ganancia}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
 		<band height="50">
 			<line>
-				<reportElement x="1644" y="13" width="363" height="1" uuid="86c454bd-4b93-416c-9a7f-c4d12551c582"/>
+				<reportElement x="1644" y="13" width="399" height="1" uuid="86c454bd-4b93-416c-9a7f-c4d12551c582"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="1780" y="17" width="77" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8f2ff266-3ba9-42f1-a8da-dc1db418dc2b"/>
@@ -458,6 +487,14 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TOT_VTA_NETA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="1950" y="17" width="93" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6b76864e-c241-4b06-a947-9131b2b5ce53"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOT_UTILIDAD}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
