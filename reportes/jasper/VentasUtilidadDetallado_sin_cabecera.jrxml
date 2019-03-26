@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2052" pageHeight="595" orientation="Landscape" columnWidth="2012" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2210" pageHeight="595" orientation="Landscape" columnWidth="2170" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="0.9090909090909124"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="938"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -67,6 +67,8 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="Tot_11" class="java.lang.String"/>
 	<field name="Tot_12" class="java.lang.String"/>
 	<field name="Descripcion" class="java.lang.String"/>
+	<field name="Rent_" class="java.lang.String"/>
+	<field name="Ganancia" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -142,7 +144,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1949" y="0" width="60" height="15" uuid="577ffa33-03ca-4361-8012-dc9c3e7150bc"/>
+				<reportElement style="Detail" x="2041" y="0" width="60" height="15" uuid="577ffa33-03ca-4361-8012-dc9c3e7150bc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Rent}]]></textFieldExpression>
 			</textField>
@@ -150,6 +152,16 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement style="Detail" x="1045" y="0" width="432" height="15" uuid="06b01670-4823-45b9-a5ec-34430d862751"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2101" y="0" width="60" height="15" uuid="b127bef5-7391-4e21-970c-64731ddfbcce"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Rent_}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1949" y="0" width="93" height="15" uuid="0e6ffd68-4385-4905-bb9c-45d4640d89fe"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Ganancia}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
