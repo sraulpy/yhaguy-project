@@ -1195,9 +1195,22 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return el Stock disponible..
+	 * [0]:id
+	 * [1]:stock
 	 */
 	public Object[] getStockDisponible_(long idArticulo, long idDeposito) throws Exception {
 		String query = "select a.id, a.stock from ArticuloDeposito a where a.articulo.id = " + idArticulo + " and a.deposito.id = " + idDeposito;
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return el Stock disponible..
+	 * [0]:id
+	 * [1]:stock
+	 */
+	public Object[] getStockDisponible_(String codigoInterno, long idDeposito) throws Exception {
+		String query = "select a.id, a.stock from ArticuloDeposito a where upper(a.articulo.codigoInterno) = '" + codigoInterno.toUpperCase() + "' and a.deposito.id = " + idDeposito;
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
@@ -9726,11 +9739,16 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return cantidad vendida dentro de un periodo..
+	 * [0]: articulo.codigoInterno
+	 * [1]: articulo.codigoOriginal
+	 * [2]: articulo.minimo
+	 * [3]: cantidad
 	 */
-	public List<Object[]> getMovimientosArticulos(Date desde, Date hasta, String familia, String proveedor, String marca, long idSucursal) throws Exception {
+	public List<Object[]> getMovimientosArticulos(Date desde, Date hasta, String familia, String proveedor,
+			String marca, long idSucursal, String codigoInterno, String codigoOriginal) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "SELECT vd.articulo.codigoInterno," + 
+		String query = "SELECT vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo," + 
 				"		sum(vd.cantidad)" +   
 				"	FROM Venta v join v.detalles vd " +
 				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
@@ -9738,14 +9756,16 @@ public class RegisterDomain extends Register {
 				"      AND v.estadoComprobante IS NULL" +
 				"	   AND upper(vd.articulo.familia.descripcion) like '%" + familia.toUpperCase() + "%'" +
 				"	   AND upper(vd.articulo.marca.descripcion) like '%" + marca.toUpperCase() + "%'" +
-				"	   AND upper(vd.articulo.proveedor.empresa.razonSocial) like '%" + proveedor.toUpperCase() + "%'";
+				"	   AND upper(vd.articulo.proveedor.empresa.razonSocial) like '%" + proveedor.toUpperCase() + "%'" +
+				"    AND upper(vd.articulo.codigoInterno) like '%" + codigoInterno.toUpperCase() + "%'" +
+				"    AND upper(vd.articulo.codigoOriginal) like '%" + codigoOriginal.toUpperCase() + "%'";
 				if (idSucursal > 0) {
 					query += " AND v.sucursal.id = " + idSucursal;
 				}
-		query+= "	GROUP BY vd.articulo.codigoInterno" +
+		query+= "	GROUP BY vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo" +
 				"	ORDER BY 1" + 
 				"      UNION ALL" + 
-				"	SELECT ncd.articulo.codigoInterno," + 
+				"	SELECT ncd.articulo.codigoInterno, ncd.articulo.codigoOriginal, ncd.articulo.minimo," + 
 				"     	sum(ncd.cantidad) * -1" +  
 				"	FROM NotaCredito nc join nc.detalles ncd" +  
 				"	WHERE (v.fechaEmision >= '" + desde_ + "' and v.fechaEmision <= '" + hasta_ + "')" + 
@@ -9753,11 +9773,13 @@ public class RegisterDomain extends Register {
 				"        AND nc.estadoComprobante.id = 217" +
 				"	     AND upper(ncd.articulo.familia.descripcion) like '%" + familia.toUpperCase() + "%'" +
 				"	   	 AND upper(ncd.articulo.marca.descripcion) like '%" + marca.toUpperCase() + "%'" +
-				"	     AND upper(ncd.articulo.proveedor.empresa.razonSocial) like '%" + proveedor.toUpperCase() + "%'";
+				"	     AND upper(ncd.articulo.proveedor.empresa.razonSocial) like '%" + proveedor.toUpperCase() + "%'" +
+				"        AND upper(vd.articulo.codigoInterno) like '%" + codigoInterno.toUpperCase() + "%'" +
+				"        AND upper(vd.articulo.codigoOriginal) like '%" + codigoOriginal.toUpperCase() + "%'";
 				if (idSucursal > 0) {
 					query += " AND nc.sucursal.id = " + idSucursal;
 				}
-		query+=	" GROUP BY ncd.articulo.codigoInterno" +
+		query+=	" GROUP BY ncd.articulo.codigoInterno, ncd.articulo.codigoOriginal, ncd.articulo.minimo" +
 				" ORDER BY 1";
 		return this.hql(query);
 	}

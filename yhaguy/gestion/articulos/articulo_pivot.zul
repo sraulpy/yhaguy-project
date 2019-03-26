@@ -154,9 +154,10 @@
 		<listfoot>
 			<listfooter span="3">
 				<hlayout>
-					<field value="@load(vm.articulos.size())"/>
-					<field value="ítems"/>
-					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:10px"/>
+					<space></space>
+					<field value="Existencia"/>
+					<label class="badge" style="margin-left:5px;background:#357ebd;color:white"
+						visible="@load(vm.existencia eq null? 'false':'true')" value="@load(vm.stock)"></label>
 				</hlayout>
 			</listfooter>
 			<listfooter span="4">
@@ -164,9 +165,8 @@
 				<hbox tooltiptext="@load(vm.ultimaCompra)"
 					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">
 					<label value="Últ. Compra:"
-						style="font-style:italic;font-weight:bold" />
-					<label value="@load(vm.ultimaCompra)"
-						style="font-style:italic" />
+						style="font-weight:bold" />
+					<label value="@load(vm.ultimaCompra)" style="color:#357ebd" />
 				</hbox>
 				<hbox width="60px" style="margin-right:10px">
 					<toolbarbutton image="/core/images/table_chart.png"
@@ -189,15 +189,45 @@
 		<listbox rows="5" hflex="1" sclass="small-list"
 			model="@load(vm.movimientos)" vflex="true">
 			<listhead>
-				<listheader label="Código" sort="auto(0)"/>
+				<listheader label="">
+					<textbox hflex="true" placeholder="Interno" style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
+								value="@bind(vm.filter_codInterno)" instant="true"></textbox>
+				</listheader>
+				<listheader>
+					<textbox hflex="true" placeholder="Original" style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
+								value="@bind(vm.filter_codOriginal)" instant="true"></textbox>	
+				</listheader>
+				<listheader width="40px" align="center"></listheader>
 				<listheader label="Ventas" sort="auto(1)" width="70px" align="right" />
-				<listheader label="Stock" width="70px" align="right" />
+				<listheader label="Stock" width="70px" align="right" tooltiptext="@load(vm.deposito)" />
+				<listheader label="Resto" width="70px" align="right" tooltiptext="@load(vm.depositoResto)" />
 			</listhead>
 			<template name="model">
 				<listitem onDoubleClick="@command('setFiltro', codigo=each[0])">
 					<listcell label="@load(each[0])" />
 					<listcell label="@load(each[1])" />
-					<listcell></listcell>
+					<listcell tooltiptext="@load(each[2])">
+						<div visible="@load(each[2] - each[4] lt 0)">
+							<html>
+								<i class="fas fa-battery-full" style="color:green"></i>
+							</html>
+						</div>
+						<div visible="@load(each[2] - each[4] eq 0)">
+							<html>
+								<i class="fas fa-battery-three-quarters	" style="color:#357ebd"></i>
+							</html>
+						</div>
+						<div visible="@load(each[2] - each[4] gt 0)">
+							<html>
+								<i class="fas fa-circle" style="color:red"></i>
+							</html>
+						</div>
+					</listcell>
+					<listcell label="@load(each[3])" />
+					<listcell label="@load(each[4])" />
+					<listcell label="@load(each[5])" />
 				</listitem>
 			</template>
 		</listbox>		

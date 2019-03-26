@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -62,6 +63,8 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	
 	private String filter_razonsocial = "";
 	private String filter_ruc = "";
+	private String filter_codInterno = "";
+	private String filter_codOriginal = "";
 	
 	private List<ArticuloUbicacion> ubicaciones = new ArrayList<ArticuloUbicacion>();
 	
@@ -621,14 +624,104 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		return list;
 	}
 	
+	@DependsOn("selectedSucursal")
+	private long getIdDeposito() {
+		if (this.selectedSucursal != null) {
+			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_MCAL) {
+				return Deposito.ID_MCAL_LOPEZ;
+			}
+		}
+		if (this.selectedSucursal != null) {
+			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_CENTRAL) {
+				return Deposito.ID_MINORISTA;
+			}
+		}
+		return 0;
+	}
+	
+	@DependsOn("selectedSucursal")
+	private Object[] getIdDepositoResto() {
+		if (this.selectedSucursal != null) {
+			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_MCAL) {
+				return new Object[] { Deposito.ID_MINORISTA, Deposito.ID_MAYORISTA };
+			}
+			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_CENTRAL) {
+				return new Object[] { Deposito.ID_MCAL_LOPEZ, Deposito.ID_MAYORISTA };
+			}
+			if (this.selectedSucursal.getDescripcion().equals("TODOS")) {
+				return new Object[] { Deposito.ID_MCAL_LOPEZ, Deposito.ID_MINORISTA, Deposito.ID_MAYORISTA };
+			}
+		}
+		return new Object[] { (long) 0, (long) 0 };
+	}
+	
+	@DependsOn("selectedSucursal")
+	public String getDeposito() {
+		if (this.selectedSucursal != null) {
+			return " Stock " + this.selectedSucursal.getDescripcion();
+		}
+		return "";
+	}
+	
+	@DependsOn("selectedSucursal")
+	public String getDepositoResto() {
+		if (this.selectedSucursal != null) {
+			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_MCAL) {
+				return "Stock minorista + mayorista";
+			}
+			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_CENTRAL) {
+				return "Stock mariscal + mayorista";
+			}
+		}
+		return "";
+	}
+	
+	
 	/**
 	 * @return los movimientos..
 	 */
-	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal" })
+	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno", "filter_codOriginal" })
 	public List<Object[]> getMovimientos() throws Exception {
 		if (this.selectedSucursal == null) return new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();		
-		return rr.getMovimientosArticulos(this.desde_, this.hasta_, this.familia, this.proveedor, this.marca, this.selectedSucursal.getId());
+		List<Object[]> list = rr.getMovimientosArticulos(this.desde_, this.hasta_, this.familia, this.proveedor,
+				this.marca, this.selectedSucursal.getId(), this.filter_codInterno, this.filter_codOriginal);
+		List<Object[]> list_ = new ArrayList<Object[]>();
+		for (Object[] item : list) {
+			item = Arrays.copyOf(item, item.length + 2);
+			String cod = (String) item[0];
+			long idDep = this.getIdDeposito();
+			long resto = 0;
+			Object[] rest0 = this.getIdDepositoResto();
+			Object[] stock = rr.getStockDisponible_(cod, idDep);
+			Object[] rest1 = rr.getStockDisponible_(cod, (long) rest0[0]);
+			Object[] rest2 = rr.getStockDisponible_(cod, (long) rest0[1]);
+			if (rest1 != null) {
+				resto += (long) rest1[1];
+			}
+			if (rest2 != null) {
+				resto += (long) rest2[1];
+			}
+			if (stock != null) {
+				long stock_ = (long) stock[1];
+				item[4] = stock_;
+				item[5] = resto;
+			} else {
+				if (this.selectedSucursal.getDescripcion().equals("TODOS")) {
+					Object[] exist = rr.getStockDisponible_(cod, (long) rest0[2]);
+					if (exist != null) {
+						resto += (long) exist[1];
+					}
+					item[4] = resto;
+					item[5] = resto;
+				} else {
+					item[4] = (long) 0;
+					item[5] = resto;
+				}
+			}
+			list_.add(item);
+		}
+		return list_;
 	}
 
 	/**
@@ -955,5 +1048,21 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 
 	public void setSelectedSucursal(SucursalApp selectedSucursal) {
 		this.selectedSucursal = selectedSucursal;
+	}
+
+	public String getFilter_codInterno() {
+		return filter_codInterno;
+	}
+
+	public void setFilter_codInterno(String filter_codInterno) {
+		this.filter_codInterno = filter_codInterno;
+	}
+
+	public String getFilter_codOriginal() {
+		return filter_codOriginal;
+	}
+
+	public void setFilter_codOriginal(String filter_codOriginal) {
+		this.filter_codOriginal = filter_codOriginal;
 	}
 }
