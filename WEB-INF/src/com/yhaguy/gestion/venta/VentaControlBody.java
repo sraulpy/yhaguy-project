@@ -58,6 +58,7 @@ import com.yhaguy.domain.VehiculoMarca;
 import com.yhaguy.domain.VehiculoModelo;
 import com.yhaguy.domain.VehiculoTipo;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.comun.ControlArticuloStock;
@@ -378,6 +379,22 @@ public class VentaControlBody extends BodyApp {
 		comp1.setVisible(false);
 		comp2.setVisible(true);
 		comp3.setDisabled(true);
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarTipoCambio(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta vta = (Venta) rr.getObject(Venta.class.getName(), this.dto.getId());
+		vta.setTipoCambio(dto.getTipoCambio());
+		vta.setTotalImporteGs(vta.getTotalImporteDs() * dto.getTipoCambio());
+		for (VentaDetalle item : vta.getDetalles()) {
+			item.setPrecioGs(item.getPrecioVentaFinalDs() * dto.getTipoCambio());
+		}
+		rr.saveObject(vta, this.getLoginNombre());		
+		comp1.setVisible(false);
+		comp2.setVisible(true);
 		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	

@@ -25,11 +25,13 @@
 						<textbox id="txNro" readonly="true"
 							value="@bind(vm.dto.numero)"
 							hflex="true"/>
-						<button id="btn_edit" iconSclass="z-icon-check"
+						<button mold="bs" id="btn_edit" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"></button>
-						<button id="btn_edit_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="txNro.setReadonly(false); txNro.focus(); btn_edit.setVisible(true); self.setVisible(false)"></button>
+							onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"
+							sclass="btn-xs btn-success" width="30px"></button>
+						<button mold="bs" id="btn_edit_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="txNro.setReadonly(false); txNro.focus(); btn_edit.setVisible(true); self.setVisible(false)"
+							sclass="btn-xs btn-info" width="30px"></button>
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
@@ -37,11 +39,13 @@
 						<hlayout>
 						<datebox id="dtFecha" value="@bind(vm.dto.fecha)"
 							readonly="true" hflex="true" />
-						<button id="btn_editf" iconSclass="z-icon-check"
+						<button mold="bs" id="btn_editf" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"></button>
-						<button id="btn_editf_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"></button>
+							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"
+							sclass="btn-xs btn-success" width="30px"></button>
+						<button mold="bs" id="btn_editf_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"
+							sclass="btn-xs btn-info" width="30px"></button>
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
@@ -110,9 +114,11 @@
 									campo="nombre" hflex="true"
 									readonly="@load(!vm.clienteEditable)" />							
 								<button
+									mold="bs" sclass="btn-xs btn-info"
 									iconSclass="@load(vm.addClienteOcasionalIcono[0])"
 									onClick="@command('addClienteOcasional')"
-									tooltiptext="@load(vm.addClienteOcasionalIcono[1])"/>
+									tooltiptext="@load(vm.addClienteOcasionalIcono[1])"
+									width="30px" height="25px" />
 								<div width="5px"/>
 							</hlayout>
 						</vlayout>
@@ -128,8 +134,14 @@
 									<comboitem label="@load(each.pos1)" />
 								</template>
 							</combobox>
-							<guaranibox value="@load(vm.dto.tipoCambio)" 
-								readonly="true"/>
+							<doublebox id="dbxTC" value="@bind(vm.dto.tipoCambio)" readonly="true" format="###,###,##0" style="text-align:right" />
+							<button mold="bs" id="btn_editTC" iconSclass="z-icon-check"
+								visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+								onClick="@command('modificarTipoCambio', comp1=self, comp2=btn_edit_TC)"
+								sclass="btn-xs btn-success" width="30px"></button>
+							<button mold="bs" id="btn_edit_TC" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+								onClick="dbxTC.setReadonly(false); dbxTC.focus(); btn_editTC.setVisible(true); self.setVisible(false)"
+								sclass="btn-xs btn-info" width="30px"></button>
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
@@ -151,19 +163,22 @@
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Vendedor" />
-						<hlayout>
+						<hlayout valign="top">
 							<textbox id="txVend" value="@bind(vm.dto.vendedor.pos1)"
 								onOK="@command('buscarVendedor')" placeholder="Nombre.." 
 								hflex="true"/>
-							<button	
+							<button	mold="bs"
 								id="btnVend"							
 								iconSclass="z-icon-search"
-								onClick="@command('buscarVendedor')" />
-							<button id="btn_editv" iconSclass="z-icon-check"
+								onClick="@command('buscarVendedor')" 
+								sclass="btn-xs btn-info" width="30px" />
+							<button mold="bs" id="btn_editv" iconSclass="z-icon-check"
 								visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-								onClick="@command('modificarVendedor', comp1=self, comp2=btn_editv_, comp3=btnVend)"></button>
-							<button id="btn_editv_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-								onClick="txVend.setReadonly(false); btnVend.setDisabled(false); txVend.focus(); btn_editv.setVisible(true); self.setVisible(false)"></button>
+								onClick="@command('modificarVendedor', comp1=self, comp2=btn_editv_, comp3=btnVend)"
+								sclass="btn-xs btn-success" width="30px"></button>
+							<button mold="bs" id="btn_editv_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+								onClick="txVend.setReadonly(false); btnVend.setDisabled(false); txVend.focus(); btn_editv.setVisible(true); self.setVisible(false)"
+								sclass="btn-xs btn-info" width="30px"></button>
 						</hlayout>
 					</vlayout>
 				</row>
