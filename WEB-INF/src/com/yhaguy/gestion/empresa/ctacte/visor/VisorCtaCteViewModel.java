@@ -744,6 +744,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 					det.setSigla(nc.getTipoMovimiento().getSigla());
 					det.setTipoMovimiento(nc.getTipoMovimiento().getDescripcion() + " - " + 
 							nc.getMotivo().getDescripcion().toUpperCase());
+					det.setTipoMovimiento_(nc.getTipoMovimiento().getDescripcion());
 					det.setImporteGs(nc.getImporteGs());
 					det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 					det.setIdMovimiento(nc.getId());
@@ -762,6 +763,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				det.setNumero(recibo.getNumero());
 				det.setSigla(recibo.getTipoMovimiento().getSigla());
 				det.setTipoMovimiento(recibo.getTipoMovimiento().getDescripcion());
+				det.setTipoMovimiento_(recibo.getTipoMovimiento().getDescripcion());
 				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 				det.setImporteGs(rdet.getMontoGs());
 				det.setIdMovimiento(recibo.getId());
@@ -775,6 +777,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				det.setNumero(ajuste.getDebito().getNroComprobante());
 				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 				det.setTipoMovimiento("CREDITO CTA.CTE.");
+				det.setTipoMovimiento_(det.getTipoMovimiento());
 				det.setImporteGs(ajuste.getImporte());
 				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 				det.setIdMovimiento(ajuste.getDebito().getIdMovimientoOriginal());
@@ -789,6 +792,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				det.setNumero(ajuste.getCredito().getNroComprobante());
 				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				det.setTipoMovimiento("DEBITO CTA.CTE.");
+				det.setTipoMovimiento_(det.getTipoMovimiento());
 				det.setImporteGs(ajuste.getImporte());
 				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 				det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
@@ -859,6 +863,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 							det.setNumero(ajuste.getDebito().getNroComprobante());
 							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 							det.setTipoMovimiento("CREDITO CTA.CTE.");
+							det.setTipoMovimiento_(det.getTipoMovimiento());
 							det.setImporteGs(ajuste.getImporte());
 							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 							det.setIdMovimiento(ajuste.getId());
@@ -872,6 +877,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 							det.setNumero(ajuste.getCredito().getNroComprobante());
 							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 							det.setTipoMovimiento("DEBITO CTA.CTE.");
+							det.setTipoMovimiento_(det.getTipoMovimiento());
 							det.setImporteGs(ajuste.getImporte());
 							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
 							det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
@@ -889,7 +895,10 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				public int compare(DetalleMovimiento o1, DetalleMovimiento o2) {
 					Date fecha1 = o1.getEmision();
 					Date fecha2 = o2.getEmision();
-					return fecha1.compareTo(fecha2);
+					if (fecha1 != null && fecha2 != null) {
+						return fecha1.compareTo(fecha2);
+					}
+					return 0;
 				}
 			});
 		}	
@@ -1136,18 +1145,35 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	 * impresion del reporte..
 	 */
 	private void imprimir_(boolean mobile) throws Exception {
-		List<Object[]> data = new ArrayList<Object[]>();
-
+		List<Object[]> data = new ArrayList<Object[]>();		
+		
 		for (MyArray mov : this.getMovimientos()) {
 			Date emision = (Date) mov.getPos1();
 			Date vto = (Date) mov.getPos2();
 			String nro = (String) mov.getPos4();
+			double saldo = (double) mov.getPos6();
+			
 			Object[] obj = new Object[] {
 					m.dateToString(emision, Misc.DD_MM_YYYY),
 					m.dateToString(vto, Misc.DD_MM_YYYY),
 					mov.getPos3(), nro.replace("(1/1)", "").replace("(1/3)", "").replace("(2/3)", "").replace("(3/3)", ""),
 					mov.getPos5(), mov.getPos6() };
 			data.add(obj);
+			
+			if (saldo < 0) {
+				this.setDetalles(mov);
+				List<DetalleMovimiento> dets = this.getAplicaciones(mov, this.detalle);
+				for (DetalleMovimiento det : dets) {
+					if (!det.isSelf()) {
+						Object[] obj_ = new Object[] {
+								Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
+								Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
+								">> " + det.getTipoMovimiento_(), det.getNumero(),
+								det.getImporteGs() * -1, 0.0 };
+						data.add(obj_);
+					}							
+				}
+			}
 		}
 
 		Map<String, String> params = new HashMap<String, String>();
@@ -1167,8 +1193,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		} else {
 			rep.ejecutar();
 			Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
-		}
-		
+		}		
 	}	
 	
 	/**
@@ -1703,6 +1728,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		private String sigla;
 		private String sigla_;
 		private String tipoMovimiento;
+		private String tipoMovimiento_;
 		private String motivo;
 		private List<MyArray> detalles;
 		private List<MyArray> formasPago;
@@ -1974,6 +2000,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 		public void setSigla_(String sigla_) {
 			this.sigla_ = sigla_;
+		}
+
+		public String getTipoMovimiento_() {
+			return tipoMovimiento_;
+		}
+
+		public void setTipoMovimiento_(String tipoMovimiento_) {
+			this.tipoMovimiento_ = tipoMovimiento_;
 		}		
 	}
 	

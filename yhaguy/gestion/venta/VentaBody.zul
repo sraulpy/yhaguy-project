@@ -134,7 +134,7 @@
 									<comboitem label="@load(each.pos1)" />
 								</template>
 							</combobox>
-							<doublebox id="dbxTC" value="@bind(vm.dto.tipoCambio)" readonly="true" format="###,###,##0" style="text-align:right" />
+							<doublebox id="dbxTC" value="@bind(vm.dto.tipoCambio)" readonly="true" format="###,###,##0.00" style="text-align:right" />
 							<button mold="bs" id="btn_editTC" iconSclass="z-icon-check"
 								visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 								onClick="@command('modificarTipoCambio', comp1=self, comp2=btn_edit_TC)"
