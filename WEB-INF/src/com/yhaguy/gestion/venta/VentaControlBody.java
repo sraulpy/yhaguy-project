@@ -1990,14 +1990,9 @@ public class VentaControlBody extends BodyApp {
 	 * @return condiciones de pago..
 	 */
 	public List<MyArray> getCondicionesPagos() {
-		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
-			List<MyArray> out = new ArrayList<MyArray>();
-			out.add(this.getDtoUtil().getCondicionPagoContado());
-			out.add(this.getDtoUtil().getCondicionPagoCredito30());
-		}
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getCondicionPagoContado());
-		out.add(this.getDtoUtil().getCondicionPagoCredito90());
+		out.add(this.getDtoUtil().getCondicionPagoCredito30());
 		return out;
 	}
 	

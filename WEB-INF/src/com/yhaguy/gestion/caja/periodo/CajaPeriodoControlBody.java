@@ -103,6 +103,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	private int totalPedidosPendientes = 0;
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	static final NumberFormat FORMATTER_DS = new DecimalFormat("###,###,##0.00");
 
 	@Init(superclass = true)
 	public void init() {
@@ -1591,17 +1592,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Despliega el Reporte de Cobro..
 	 */
 	private void imprimirCobro() throws Exception {
-		//String source = ReportesViewModel.SOURCE_RECIBO_COBRO;
 		Map<String, Object> params = new HashMap<String, Object>();
-		//JRDataSource dataSource = new ReciboCobroDataSource();
 		params.put("RazonSocial", this.reciboDTO.getRazonSocial());
 		params.put("Ruc", this.reciboDTO.getRuc());
 		params.put("Numero", this.reciboDTO.getNumero());
-		params.put("ImporteEnLetras", this.reciboDTO.getImporteEnLetras());
-		params.put("ImporteTotal",
-				FORMATTER.format(this.reciboDTO.getTotalImporteGs()));
+		params.put("ImporteEnLetras", this.reciboDTO.isMonedaLocal() ? this.reciboDTO.getImporteEnLetras() : this.reciboDTO.getImporteEnLetrasDs());
+		params.put("ImporteTotal", this.reciboDTO.isMonedaLocal() ? FORMATTER.format(this.reciboDTO.getTotalImporteGs()) : FORMATTER_DS.format(this.reciboDTO.getTotalImporteDs()));
 		params.put("Usuario", this.getUs().getNombre());
-		//this.imprimirComprobante(source, params, dataSource);
 		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_RECIBO, this.mainComponent, params);
 		this.win.doModal();
 	}

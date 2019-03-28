@@ -5537,7 +5537,7 @@ public class RegisterDomain extends Register {
 				+ idMovimiento
 				+ " and c.tipoMovimiento.sigla = '"
 				+ siglaTm
-				+ "'";
+				+ "' order by c.id";
 		List<CtaCteEmpresaMovimiento> list = this.hql(query);
 		return list;
 	}
@@ -9787,26 +9787,22 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Funcionario> funcs = rr.getFuncionarios();
-			for (Funcionario func : funcs) {
-				Tecnico tec = new Tecnico();
-				tec.setNombre(func.getRazonSocial());
-				rr.saveObject(tec, "sys");
-				func.setTecnico_(tec);
-				rr.saveObject(func, func.getUsuarioMod());
-				System.out.println(func.getRazonSocial());
-			}
-			List<Venta> vtas = rr.getVentasCredito(Utiles.getFecha("05-10-2018 00:00:00"), new Date(), 0);
-			for (Venta vta : vtas) {
-				vta.setTecnico_(vta.getTecnico() != null? vta.getTecnico().getTecnico_() : null);
-				rr.saveObject(vta, vta.getUsuarioMod());
-				System.out.println(vta.getTecnico_() != null ? vta.getTecnico_().getNombre() : " - - - ");
-			}
-			List<NotaCredito> ncs = rr.getNotasCreditoVenta(Utiles.getFecha("05-02-2019 00:00:00"), new Date(), 0);
-			for (NotaCredito nc : ncs) {
-				nc.set_tecnico(nc.getTecnico() != null? nc.getTecnico().getTecnico_() : null);
-				rr.saveObject(nc, nc.getUsuarioMod());
-				System.out.println(nc.get_tecnico() != null ? nc.get_tecnico().getNombre() : " - - - ");
+			List<CtaCteEmpresaMovimiento> movims = rr.getMovimientosConSaldo(
+					Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+			
+			for (CtaCteEmpresaMovimiento movim : movims) {
+				List<CtaCteEmpresaMovimiento> list = rr.getCtaCteMovimientosByIdMovimiento(movim.getIdMovimientoOriginal(), Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+				if (list.size() > 1) {
+					double saldo = 0;
+					for (CtaCteEmpresaMovimiento mov : list) {
+						saldo += mov.getSaldo();
+					}
+					list.get(0).setSaldo(saldo);
+					rr.saveObject(list.get(0), list.get(0).getUsuarioMod());
+					rr.deleteObject(list.get(1));
+					rr.deleteObject(list.get(2));
+				}
+				System.out.println("--- " + movim.getNroComprobante());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

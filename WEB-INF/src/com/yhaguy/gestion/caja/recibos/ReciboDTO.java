@@ -116,8 +116,7 @@ public class ReciboDTO extends DTO {
 		if(this.tipoMovimiento == null) return false;
 		String sigla = (String) this.getTipoMovimiento().getPos2();
 		boolean cobro = sigla.equals(Configuracion.SIGLA_TM_RECIBO_COBRO);
-		boolean anticipoCobro = sigla
-				.equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
+		boolean anticipoCobro = sigla.equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
 		return cobro || anticipoCobro;
 
 	}
@@ -315,14 +314,14 @@ public class ReciboDTO extends DTO {
 	 * @return el importe en letras..
 	 */
 	public String getImporteEnLetras() {
-		return getMisc().numberToLetter(this.getTotalImporteGs());
+		return "Guaraníes " + getMisc().numberToLetter(this.getTotalImporteGs());
 	}
 	
 	/**
 	 * @return el importe en letras ds..
 	 */
 	public String getImporteEnLetrasDs() {
-		return getMisc().numberToLetter(this.getTotalImporteDs());
+		return "Dólares " + getMisc().numberToLetter(this.getTotalImporteDs());
 	}
 
 	public String getNumero() {

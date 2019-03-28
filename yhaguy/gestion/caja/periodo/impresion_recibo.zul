@@ -36,7 +36,7 @@
 	
 	<hlayout>
 		<div width="340px"></div>
-		<label value="@load(vm.reciboDTO.importeEnLetras)" sclass="custom"></label>
+		<label value="@load(vm.reciboDTO.monedaLocal ? vm.reciboDTO.importeEnLetras : vm.reciboDTO.importeEnLetrasDs)" sclass="custom"></label>
 		<div width="75px"></div>
 	</hlayout>
 	
@@ -54,7 +54,8 @@
 					<label value="@load(each.movimiento.nroComprobante_)" sclass="det"></label>
 				</div>		
 				<div width="100px" style="text-align:right">
-					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -71,7 +72,8 @@
 				<div width="60px"></div>
 				<div width="70px"></div>
 				<div width="100px" style="text-align:right">
-					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -79,7 +81,8 @@
 	</hlayout>
 	<hlayout>
 		<div width="220px"></div>
-		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+		<label value="@load(vm.reciboDTO.totalImporteDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 	</hlayout>
 	<div height="5px"></div>
 	<hlayout>
@@ -110,7 +113,7 @@
 	
 	<hlayout>
 		<div width="340px"></div>
-		<label value="@load(vm.reciboDTO.importeEnLetras)" sclass="custom"></label>
+		<label value="@load(vm.reciboDTO.monedaLocal ? vm.reciboDTO.importeEnLetras : vm.reciboDTO.importeEnLetrasDs)" sclass="custom"></label>
 		<div width="75px"></div>
 	</hlayout>
 	
@@ -128,7 +131,8 @@
 					<label value="@load(each.movimiento.nroComprobante_)" sclass="det"></label>
 				</div>		
 				<div width="100px" style="text-align:right">
-					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -145,7 +149,8 @@
 				<div width="60px"></div>
 				<div width="70px"></div>
 				<div width="100px" style="text-align:right">
-					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -153,7 +158,8 @@
 	</hlayout>
 	<hlayout>
 		<div width="220px"></div>
-		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+		<label value="@load(vm.reciboDTO.totalImporteDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 	</hlayout>
 	<div height="5px"></div>
 	<hlayout>
@@ -184,7 +190,7 @@
 	
 	<hlayout>
 		<div width="340px"></div>
-		<label value="@load(vm.reciboDTO.importeEnLetras)" sclass="custom"></label>
+		<label value="@load(vm.reciboDTO.monedaLocal ? vm.reciboDTO.importeEnLetras : vm.reciboDTO.importeEnLetrasDs)" sclass="custom"></label>
 		<div width="75px"></div>
 	</hlayout>
 	
@@ -202,8 +208,9 @@
 					<label value="@load(each.movimiento.nroComprobante_)" sclass="det"></label>
 				</div>		
 				<div width="100px" style="text-align:right">
-					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-				</div>	
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
+				</div>
 			</hbox>
 		</template>
 	</vbox>
@@ -219,7 +226,8 @@
 				<div width="60px"></div>
 				<div width="70px"></div>
 				<div width="100px" style="text-align:right">
-					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -227,7 +235,8 @@
 	</hlayout>
 	<hlayout>
 		<div width="220px"></div>
-		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<label value="@load(vm.reciboDTO.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det" visible="@load(vm.reciboDTO.monedaLocal)"></label>
+		<label value="@load(vm.reciboDTO.totalImporteDs) @converter('formattedNumber', format='###,###,##0.00')" sclass="det" visible="@load(!vm.reciboDTO.monedaLocal)"></label>
 	</hlayout>
 	<div height="5px"></div>
 	<hlayout>

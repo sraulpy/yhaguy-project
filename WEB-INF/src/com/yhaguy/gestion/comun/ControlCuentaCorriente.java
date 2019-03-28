@@ -221,6 +221,9 @@ public class ControlCuentaCorriente {
 		ctm.setNroComprobante(cobro.getNumero());
 		ctm.setSucursal(cobro.getSucursal());
 		ctm.setSaldo(0);
+		if (cobro.isCobroAnticipo()) {
+			ctm.setSaldo(ctm.getImporteOriginal() * -1);
+		}
 		
 		for (ReciboDetalle det : cobro.getDetalles()) {
 			if (det.getMovimiento() != null) {
@@ -525,6 +528,10 @@ public class ControlCuentaCorriente {
 			if (ncr != null) {
 				recalcularSaldoNotaCredito(ncr);
 			}
+		}
+		if (ctacte.isAnticipoCobro()) {
+			ctacte.setSaldo(0);
+			rr.saveObject(ctacte, ctacte.getUsuarioMod());
 		}
 	}
 	
