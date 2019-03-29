@@ -236,7 +236,7 @@
 				<row>
 					<field>Monto del Préstamo:</field>
 					<guaranibox hflex="true" readonly="true"
-						value="@load(vm.chequeDescuento.totalImporte)"/>
+						value="@load(vm.chequeDescuento.totalImporteAcreditado)"/>
 				</row>
 				<row>
 					<field>Impuestos:</field>
