@@ -16,6 +16,7 @@
 		<property name="numero" />
 		<property name="librado" />
 		<property name="monto" />
+		<property name="montoAcreditado" />
 		<property name="depositado" />
 		<property name="observacion" />
 		<property name="descontado" />	

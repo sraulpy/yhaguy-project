@@ -170,6 +170,7 @@
 					<listheader label="Descontado" width="100px"
 						style="text-align:center" align="center" />
 					<listheader label="Importe" align="right" sort="auto(pos6)" />
+					<listheader label="Acreditado" align="right" sort="auto(pos6)" />
 				</listhead>
 				<template name="model">
 					<listitem>
@@ -179,33 +180,36 @@
 						<listcell label="@load(each.pos2.toString().toUpperCase())" />
 						<listcell label="@load(each.pos3)"
 							tooltiptext="@load(each.pos3)" />
-						<listcell label="@load(each.pos9.toString().toUpperCase())"
-							tooltiptext="@load(each.pos9)" />
+						<listcell label="@load(each.pos10.toString().toUpperCase())"
+							tooltiptext="@load(each.pos10)" />
 						<listcell label="@load(each.pos4.toString().toUpperCase())"
 							tooltiptext="@load(each.pos4)" />
 						<listcell>
 							<hlayout>
 								<label value="SI"
-									style="color:green; font-size:11px" visible="@load(each.pos6)" />
+									style="color:green; font-size:11px" visible="@load(each.pos7)" />
 								<label value="NO"
-									style="color:red; font-size:11px" visible="@load(!each.pos6)" />
+									style="color:red; font-size:11px" visible="@load(!each.pos7)" />
 							</hlayout>
 						</listcell>
 						<listcell>
 							<hlayout>
 								<label value="SI"
-									style="color:green; font-size:11px" visible="@load(each.pos8)" />
+									style="color:green; font-size:11px" visible="@load(each.pos9)" />
 								<label value="NO"
-									style="color:red; font-size:11px" visible="@load(!each.pos8)" />
+									style="color:red; font-size:11px" visible="@load(!each.pos9)" />
 							</hlayout>
 						</listcell>
 						<listcell>
 							<label value="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
 						</listcell>
+						<listcell>
+							<doublebox hflex="true" vflex="true" style="text-align:right" value="@bind(each.pos6)" format="###,###,##0"></doublebox>
+						</listcell>
 					</listitem>
 				</template>
 				<listfoot>
-					<listfooter span="9" align="left">
+					<listfooter span="10" align="left">
 						<hlayout>
 							<field value=""/>
 							<field value="ítems" />
@@ -217,6 +221,8 @@
 							<field value="Importe Total Gs." />
 							<guaranibox style="background:#EEF7FA;font-weight:bold;text-align:right;margin-right:10px"
 								value="@load(vm.chequeDescuento.totalImporte)"/>
+							<guaranibox style="background:#EEF7FA;font-weight:bold;text-align:right;margin-right:10px"
+								value="@load(vm.chequeDescuento.totalImporteAcreditado)"/>
 						</hlayout>
 					</listfooter>
 				</listfoot>
@@ -283,5 +289,7 @@
 			</rows>
 		</grid>		
 	</popup>
-	
+	<style>
+		.z-doublebox { min-height:20px }
+	</style>
 </window>

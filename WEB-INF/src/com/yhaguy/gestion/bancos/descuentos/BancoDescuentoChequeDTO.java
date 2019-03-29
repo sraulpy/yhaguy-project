@@ -64,6 +64,21 @@ public class BancoDescuentoChequeDTO extends DTO {
 		return out;
 	}
 	
+	@DependsOn("cheques")
+	public double getTotalImporteAcreditado() {
+		double out = 0;
+		for (MyArray cheque : this.cheques) {
+			out += (double)cheque.getPos6();
+		}
+		for (BancoChequeDTO cheque : this.chequesPropios) {
+			out += cheque.getMonto();
+		}
+		for (ReciboFormaPagoDTO fp : this.formasPago) {
+			out += fp.getMontoGs();
+		}
+		return out;
+	}
+	
 	@DependsOn({ "cheques", "chequesPropios" })
 	public List<MyArray> getCheques_() {
 		List<MyArray> out = new ArrayList<MyArray>();

@@ -8416,7 +8416,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getDescuentosPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select ('DESCUENTO DE CHEQUES'), " //CASE WHEN B.marker = 1 THEN 1 ELSE NULL END
+		String query = "select ('DESCUENTO DE CHEQUES'), " 
 				+ " b.fecha, cast(b.id as string), (CASE WHEN (b.liq_neto_aldia + b.liq_neto_diferidos) = 0 THEN b.totalImporte_gs"
 				+ " ELSE (b.liq_neto_aldia + b.liq_neto_diferidos) END) , b.banco.banco.descripcion, b.observacion"
 				+ " from BancoDescuentoCheque b where"

@@ -19,6 +19,7 @@ public class BancoChequeTercero extends Domain {
 	private String librado = "";
 	private Tipo moneda;
 	private double monto;
+	private double montoAcreditado;
 	private ReciboFormaPago reciboFormaPago;
 	private Cliente cliente;
 	private boolean depositado;
@@ -326,5 +327,13 @@ public class BancoChequeTercero extends Domain {
 
 	public void setRechazoInterno(boolean rechazoInterno) {
 		this.rechazoInterno = rechazoInterno;
+	}
+
+	public double getMontoAcreditado() {
+		return montoAcreditado;
+	}
+
+	public void setMontoAcreditado(double montoAcreditado) {
+		this.montoAcreditado = montoAcreditado;
 	}
 }

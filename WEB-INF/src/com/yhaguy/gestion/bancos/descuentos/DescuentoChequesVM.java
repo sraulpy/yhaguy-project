@@ -121,7 +121,7 @@ public class DescuentoChequesVM extends BodyApp {
 		this.imprimir();
 	}
 
-	static final String[] ATT_CHEQUE_TERCERO = { "fecha", "banco.descripcion", "numero", "librado", "monto" };
+	static final String[] ATT_CHEQUE_TERCERO = { "fecha", "banco.descripcion", "numero", "librado", "monto", "montoAcreditado" };
 	static final String[] COLS_CHEQUE_TERCERO = { "Fecha", "Banco", "Numero", "Librado Por", "Monto" };
 	
 	static final String[] ATT_CHEQUE_PROPIO = { "numero", "banco.banco.descripcion", "beneficiario" };
@@ -140,7 +140,7 @@ public class DescuentoChequesVM extends BodyApp {
 		b.setClase(BancoChequeTercero.class);
 		b.setAtributos(ATT_CHEQUE_TERCERO);
 		b.setNombresColumnas(COLS_CHEQUE_TERCERO);
-		b.setAnchoColumnas(new String[]{"120px", "", "120px", "", "120px"});
+		b.setAnchoColumnas(new String[]{"120px", "", "120px", "", "120px", "0px"});
 		b.setTitulo("Cheques de Terceros");
 		b.addWhere(whereCheque1);
 		b.addWhere(whereCheque2);
@@ -154,6 +154,11 @@ public class DescuentoChequesVM extends BodyApp {
 				this.mensajeError(Configuracion.TEXTO_ERROR_ITEM_DUPLICADO);
 			} else {
 				this.chequeDescuento.getCheques().add(b.getSelectedItem());
+			}
+			for (MyArray cheq : this.chequeDescuento.getCheques()) {
+				if (cheq.getId().longValue() == b.getSelectedItem().getId().longValue()) {
+					cheq.setPos6(cheq.getPos5());
+				}
 			}
 		}
 	}

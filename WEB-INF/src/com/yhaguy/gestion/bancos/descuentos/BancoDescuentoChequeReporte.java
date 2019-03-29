@@ -46,7 +46,7 @@ public class BancoDescuentoChequeReporte extends ReporteYhaguy {
 			}
 			Object[] obj1 = new Object[] { Utiles.getDateToString(vto, Utiles.DD_MM_YY), nro,
 					Utiles.getMaxLength(banco, 7), Utiles.getMaxLength(cliente, 20),
-					Utiles.getMaxLength(librador, 20), (double) m.getPos5() };
+					Utiles.getMaxLength(librador, 20), (double) m.getPos6() };
 			data.add(obj1);
 		}
 		this.setDatosReporte(data);

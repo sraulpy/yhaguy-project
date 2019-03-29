@@ -17,7 +17,7 @@ public class AssemblerBancoDescuentoCheque extends Assembler {
 			"liq_neto_aldia", "liq_neto_diferidos", "liq_registrado", "confirmado" };
 	
 	static final String[] ATT_CHEQUES = { "fecha", "banco", "numero",
-			"librado", "monto", "depositado", "sucursalApp", "descontado" };
+			"librado", "monto", "montoAcreditado", "depositado", "sucursalApp", "descontado" };
 	
 	static final String[] ATT_BANCO = { "banco" };
 	
@@ -34,11 +34,11 @@ public class AssemblerBancoDescuentoCheque extends Assembler {
 		this.myPairToDomain(dto, domain, "moneda");
 		this.myArrayToDomain(dto, domain, "banco");
 		this.myArrayToDomain(dto, domain, "acreedor");
-		this.listaMyArrayToListaDomain(dto, domain, "cheques");
 		this.listaDTOToListaDomain(dto, domain, "chequesPropios", false, false, new AssemblerBancoCheque());
 		this.listaDTOToListaDomain(dto, domain, "formasPago", true, true, new AssemblerReciboFormaPago(""));
+		this.listaMyArrayToListaDomain(dto, domain, "cheques", ATT_CHEQUES, true, true);
 		
-		domain.setTotalImporte_gs(dto.getTotalImporte());
+		domain.setTotalImporte_gs(dto.getTotalImporteAcreditado());
 
 		return domain;
 	}
@@ -61,7 +61,7 @@ public class AssemblerBancoDescuentoCheque extends Assembler {
 		for (MyArray cheque : dto.getCheques()) {
 			BancoChequeTercero ch = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), cheque.getId());
 			if (ch != null) {
-				cheque.setPos9(ch.getCliente().getRazonSocial());
+				cheque.setPos10(ch.getCliente().getRazonSocial());
 			}
 		}
 		return dto;
