@@ -9784,7 +9784,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void main(String[] args) {
+	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<CtaCteEmpresaMovimiento> movims = rr.getMovimientosConSaldo(
@@ -9804,6 +9804,16 @@ public class RegisterDomain extends Register {
 				}
 				System.out.println("--- " + movim.getNroComprobante());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Usuario user = rr.getUsuario("sergio", "yhaguysa0985");
+			System.out.println(user.getNombre());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

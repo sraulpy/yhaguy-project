@@ -36,7 +36,7 @@ public class BancoDescuentoChequeReporte extends ReporteYhaguy {
 		for (MyArray m : descuentoCheques.getCheques_()) {
 			Date vto = (Date) m.getPos1();
 			String nro = (String) m.getPos3();
-			String cliente = m.getPos9().toString();
+			String cliente = m.getPos10().toString();
 			String librador = m.getPos4().toString().toUpperCase();
 			String banco = "";
 			if (m.getPos2() instanceof MyPair) {

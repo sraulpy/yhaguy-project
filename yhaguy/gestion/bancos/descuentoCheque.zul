@@ -175,11 +175,9 @@
 				<template name="model">
 					<listitem>
 						<listcell></listcell>
-						<listcell
-							label="@load(each.pos1)  @converter('formatedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(each.pos1)  @converter('formatedDate', format='dd-MM-yyyy')" />
 						<listcell label="@load(each.pos2.toString().toUpperCase())" />
-						<listcell label="@load(each.pos3)"
-							tooltiptext="@load(each.pos3)" />
+						<listcell label="@load(each.pos3)" tooltiptext="@load(each.pos3)" />
 						<listcell label="@load(each.pos10.toString().toUpperCase())"
 							tooltiptext="@load(each.pos10)" />
 						<listcell label="@load(each.pos4.toString().toUpperCase())"
