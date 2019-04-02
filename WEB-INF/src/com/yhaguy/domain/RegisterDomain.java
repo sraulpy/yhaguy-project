@@ -9076,6 +9076,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el tecnico..
+	 */
+	public Tecnico getTecnico(String nombre) throws Exception {
+		String query = "select t from Tecnico t where upper(t.nombre) = '" + nombre.toUpperCase() + "'";
+		List<Tecnico> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
 	 * @return los departamentos..
 	 */
 	public List<DepartamentoApp> getDepartamentos(long idSucursal) throws Exception {
@@ -9743,13 +9752,14 @@ public class RegisterDomain extends Register {
 	 * [1]: articulo.codigoOriginal
 	 * [2]: articulo.minimo
 	 * [3]: cantidad
+	 * [4]: articulo.proveedor.id
 	 */
 	public List<Object[]> getMovimientosArticulos(Date desde, Date hasta, String familia, String proveedor,
 			String marca, long idSucursal, String codigoInterno, String codigoOriginal) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "SELECT vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo," + 
-				"		sum(vd.cantidad)" +   
+				"		sum(vd.cantidad), vd.articulo.proveedor.id" +   
 				"	FROM Venta v join v.detalles vd " +
 				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
 				"      AND v.tipoMovimiento.id in(18,19)" + 
@@ -9762,11 +9772,11 @@ public class RegisterDomain extends Register {
 				if (idSucursal > 0) {
 					query += " AND v.sucursal.id = " + idSucursal;
 				}
-		query+= "	GROUP BY vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo" +
+		query+= "	GROUP BY vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo, vd.articulo.proveedor.id" +
 				"	ORDER BY 1" + 
 				"      UNION ALL" + 
 				"	SELECT ncd.articulo.codigoInterno, ncd.articulo.codigoOriginal, ncd.articulo.minimo," + 
-				"     	sum(ncd.cantidad) * -1" +  
+				"     	sum(ncd.cantidad) * -1, ncd.articulo.proveedor.id" +  
 				"	FROM NotaCredito nc join nc.detalles ncd" +  
 				"	WHERE (v.fechaEmision >= '" + desde_ + "' and v.fechaEmision <= '" + hasta_ + "')" + 
 				"        AND nc.tipoMovimiento.id in (20)" + 
@@ -9779,7 +9789,7 @@ public class RegisterDomain extends Register {
 				if (idSucursal > 0) {
 					query += " AND nc.sucursal.id = " + idSucursal;
 				}
-		query+=	" GROUP BY ncd.articulo.codigoInterno, ncd.articulo.codigoOriginal, ncd.articulo.minimo" +
+		query+=	" GROUP BY ncd.articulo.codigoInterno, ncd.articulo.codigoOriginal, ncd.articulo.minimo, ncd.articulo.proveedor.id" +
 				" ORDER BY 1";
 		return this.hql(query);
 	}
@@ -9812,8 +9822,19 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Usuario user = rr.getUsuario("sergio", "yhaguysa0985");
-			System.out.println(user.getNombre());
+			List<Venta> vtas = rr.getVentas(Utiles.getFecha("01-01-2019 00:00:00"), new Date(), 0);
+			for (Venta venta : vtas) {
+				System.out.println(venta.getNumero());
+				if (venta.getTecnico() != null) {
+					Tecnico tec = rr.getTecnico(venta.getTecnico().getRazonSocial());
+					if (tec != null) {
+						venta.setTecnico_(tec);
+						rr.saveObject(tec, venta.getUsuarioMod());
+						System.err.println(tec.getNombre());
+					}
+				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

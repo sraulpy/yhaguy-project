@@ -1,0 +1,41 @@
+<window id="win" border="normal"
+	width="1000px" height="400px" position="right,bottom">
+	<hlayout sclass="button-container">
+		<field value="Proveedor:" />
+		<hlayout hflex="true">
+			<label value="@load(vm.selectedCompra.proveedor.razonSocial)"></label>
+		</hlayout>
+		<button mold="bs" sclass="btn-xs btn-danger" iconSclass="z-icon-times" onClick="win.detach()"></button>
+	</hlayout>
+	<hlayout vflex="true">
+		<listbox sclass="small-list" width="300px" vflex="true"
+			model="@load(vm.compras)"
+			selectedItem="@bind(vm.selectedCompra)">
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.proveedor.razonSocial)"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<listbox sclass="small-list" hflex="true" vflex="true"
+			model="@load(vm.selectedCompra.detalles)">
+			<listhead>
+				<listheader label="Código"></listheader>
+				<listheader label="Cantidad" align="right"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+					<listcell label="@load(each.cantidad)"></listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter align="right" span="2">
+					<button mold="bs" label=" Generar Órdenes de Compra"
+						iconSclass="z-icon-shopping-cart" sclass="btn-sm btn-success"></button>
+				</listfooter>
+			</listfoot>	
+		</listbox>
+	</hlayout>
+
+</window>

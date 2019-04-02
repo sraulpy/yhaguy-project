@@ -50,8 +50,9 @@
 			</template>
 		</combobox>
 		</hlayout>
+		<hlayout vflex="3">
 		<listbox sclass="small-list"
-			vflex="4"
+			vflex="true" hflex="true"
 			emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
 			model="@load(vm.articulos)"
 			selectedItem="@bind(vm.selectedItem)"
@@ -185,9 +186,49 @@
 		</listfoot>
 	</listbox>
 	
+	<listbox sclass="small-list" vflex="true" width="400px"
+		style="background:#adb5bd"
+		model="@load(vm.abastecimiento)">
+		<listhead>
+			<listheader>
+				<div>
+					<html>
+						<i class="fas fa-shopping-basket" style="color:#18bc9c">
+						</i>
+					</html>
+				</div>
+			</listheader>
+			<listheader label="Cant." width="60px" align="right"></listheader>
+			<listheader label="" width="50px" align="center" style="cursor:pointer"
+				onClick="@command('generarCompra')">
+				<html>
+					<i class="fas fa-shopping-cart" style="color:#428bca"></i>
+				</html>
+			</listheader>
+			<listheader label="" width="50px" align="center" style="cursor:pointer">
+				<html>
+					<i class="fas fa-dolly" style="color:#f39c12"></i>
+				</html>
+			</listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0])" style="color:#999;font-weight:bold" />
+				<listcell label="@load(each[7])" style="color:#999;font-weight:bold" />
+				<listcell>
+					<checkbox></checkbox>
+				</listcell>
+				<listcell>
+					<checkbox></checkbox>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	</hlayout>
 	<hlayout style="margin-top:5px" vflex="3">
 		<listbox rows="5" hflex="1" sclass="small-list"
-			model="@load(vm.movimientos)" vflex="true">
+			model="@load(vm.movimientos)" vflex="true"
+			selectedItem="@bind(vm.selectedMovimiento)">
 			<listhead>
 				<listheader label="">
 					<textbox hflex="true" placeholder="Interno" style="background-image:url('./core/css/filter.png'); background-repeat:
@@ -200,9 +241,14 @@
 								value="@bind(vm.filter_codOriginal)" instant="true"></textbox>	
 				</listheader>
 				<listheader width="40px" align="center"></listheader>
-				<listheader label="Ventas" sort="auto(1)" width="70px" align="right" />
+				<listheader label="Ventas" sort="auto(3)" width="70px" align="right" />
 				<listheader label="Stock" width="70px" align="right" tooltiptext="@load(vm.deposito)" />
 				<listheader label="Resto" width="70px" align="right" tooltiptext="@load(vm.depositoResto)" />
+				<listheader label="" width="50px" align="center">
+					<intbox id="int_cant" inplace="true" hflex="true"
+						value="@bind(vm.selectedMovimiento[7])"
+						onOK="@command('addItem')"></intbox>
+				</listheader>
 			</listhead>
 			<template name="model">
 				<listitem onDoubleClick="@command('setFiltro', codigo=each[0])">
@@ -226,16 +272,34 @@
 						</div>
 					</listcell>
 					<listcell label="@load(each[3])" />
-					<listcell label="@load(each[4])" />
-					<listcell label="@load(each[5])" />
+					<listcell label="@load(each[5]) @converter('formattedNumber', format='###,###,##0')" />
+					<listcell label="@load(each[6]) @converter('formattedNumber', format='###,###,##0')" />
+					<listcell onClick="@command('selectItem', item=each, comp=int_cant)">
+						<div>
+							<html>
+								<i class="fas fa-shopping-basket" style="color:#adb5bd"></i>
+							</html>
+						</div>
+					</listcell>
 				</listitem>
 			</template>
 		</listbox>		
 		<vlayout hflex="2" vflex="true">
-			<div>
-				<label value="Entrada a Stock : " style="margin-left:5px;font-style:italic;color:green" />
-				<label value="@load(vm.stockEntrada)" style="margin-left:5px;font-style:italic;color:green" />
-			</div>
+			<hlayout>
+				<div>
+					<label value="Entrada: " style="margin-left:5px;color:green" />
+					<label value="@load(vm.stockEntrada)" style="margin-left:5px;color:green" />
+				</div>
+				<div>
+					<label value="Salida: " style="margin-left:5px;color:red"/>
+					<label value="@load(vm.stockSalida)" style="margin-left:5px;color:red"/>
+				</div>
+				<div>
+					<label value="Saldo: " style="margin-left:5px;color:blue"/>
+					<label value="@load(vm.stockEntrada - vm.stockSalida)" style="margin-left:5px;color:blue"/>
+				</div>				
+				
+			</hlayout>			
 			<listbox sclass="small-list" hflex="true" vflex="true"
 				model="@load(vm.historicoEntrada)"
 				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
@@ -264,10 +328,6 @@
 					</listitem>
 				</template>
 			</listbox>
-			<div>
-				<label value="Salida de Stock : " style="margin-left:5px;font-style:italic;color:red"/>
-				<label value="@load(vm.stockSalida)" style="margin-left:5px;font-style:italic;color:red"/>
-			</div>
 			<listbox sclass="small-list" hflex="true" vflex="true"
 				model="@load(vm.historicoSalida)"
 				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
@@ -433,6 +493,17 @@
 		{margin-right:5px; background:lightyellow} .custom-listheader
 		.z-listheader-content { line-height: 15px; font-weight:normal}
 		.z-html { display:block; }
+		input[type="checkbox"] { display:
+		inline-block; font-family: ZK85Icons,FontAwesome; font-style:
+		normal; font-weight: normal; font-size: inherit;
+		-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing:
+		grayscale; text-rendering: auto; font-size: 18px; margin: 0 4px
+		2px 8px; background: #fff; border: 1px solid #d9d9d9;
+		-webkit-border-radius: 4px; -moz-border-radius: 4px;
+		-o-border-radius: 4px; -ms-border-radius: 4px; border-radius:
+		4px; width: 20px; height: 20px; } input[type="checkbox"] {
+		margin: 0 4px 2px 4px; font-size: 16px; width: 18px; height:
+		18px; line-height: 16px; }
 	</style>
 	
 </window>
