@@ -1422,6 +1422,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_LISTA_PRECIO_DEPOSITO = "VEN-00043";
 		static final String VENTAS_LISTA_PRECIO_FAMILIA = "VEN-00044";
 		static final String VENTAS_COBRANZAS_VENDEDOR_CLIENTE = "VEN-00045";
+		static final String VENTAS_LISTA_PRECIO_DEPOSITO_ = "VEN-00046";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1611,6 +1612,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_COBRANZAS_VENDEDOR_CLIENTE:
 				this.cobranzasVentasVendedorCliente(mobile);
+				break;
+				
+			case VENTAS_LISTA_PRECIO_DEPOSITO_:
+				this.listaPrecioPorDeposito_(mobile);
 				break;
 			}
 		}
@@ -5678,6 +5683,61 @@ public class ReportesViewModel extends SimpleViewModel {
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * VEN-00046
+		 */
+		private void listaPrecioPorDeposito_(boolean mobile) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			try {
+				Proveedor proveedor = filtro.getProveedorExterior();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				ArticuloMarca marca = filtro.getMarca_();
+				boolean stock = filtro.isFraccionado();
+				
+				long idProveedor = proveedor != null ? proveedor.getId() : 0;
+				long idFamilia = flia != null ? flia.getId() : 0;
+				long idMarca = marca != null ? marca.getId() : 0;
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+
+				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
+				for (Object[] art : arts) {					
+					if (stock) {	
+						long min = art[6] != null ? (long) art[6] : (long) 0;
+						long may = art[7] != null ? (long) art[7] : (long) 0;
+						if (min > 0 || may > 0) {
+							data.add(new Object[] { art[1], art[2], art[6], art[7], art[3] });
+						}
+					} else {
+						data.add(new Object[] { art[1], art[2], art[6], art[7], art[3] });
+					}					
+				}
+				
+				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
+				
+				ReporteListaPrecioPorDeposito_ rep = new ReporteListaPrecioPorDeposito_(proveedor_);
+				rep.setDatosReporte(data);
+				rep.setApaisada();			
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
@@ -8882,107 +8942,110 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();
-				boolean incluirChequesRechazados = filtro.isIncluirCHQ_RECH();
-				boolean incluirPrestamos = filtro.isIncluirPRE();
 
-				if (desde == null) desde = filtro.getFechaInicioOperaciones();
+				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
+				
+				Map<String, Object[]> acum = new HashMap<String, Object[]>();
+				List<Object[]> data = new ArrayList<Object[]>();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Object[]> data = new ArrayList<Object[]>();
-				List<Object[]> historico;
-				List<Object[]> historicoDEBE;
-				List<Object[]> historicoHABER;
-				Map<String, String> totalSaldo = new HashMap<String, String>();
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
 
-				List<Object[]> ventas = rr.getVentasPorCliente_(idCliente, desde, hasta);
-				List<Object[]> cheques_rechazados = rr.getChequesRechazadosPorCliente(idCliente, desde, hasta);
-				List<Object[]> prestamos_cc = rr.getPrestamosCC(idCliente, desde, hasta);
-				List<Object[]> ntcsv = rr.getNotasCreditoPorCliente(idCliente, desde, hasta);
-				List<Object[]> recibos = rr.getRecibosPorCliente(idCliente, desde, hasta);
-				List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
-				List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
-
-				historicoDEBE = new ArrayList<Object[]>();
-				historicoHABER = new ArrayList<Object[]>();
+				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
+				List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
+				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde, hasta, idCliente);
+				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
+				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
+				List<Object[]> reembolsos = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 				
-				historicoDEBE.addAll(ventas);				
-				if (incluirChequesRechazados) historicoDEBE.addAll(cheques_rechazados);
-				if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);				
-				
-				historicoHABER.addAll(ntcsv);
-				historicoHABER.addAll(recibos);
-				if (incluirChequesRechazados) historicoHABER.addAll(reembolsos_cheques_rechazados);
-				if (incluirPrestamos) historicoHABER.addAll(reembolsos_prestamos_cc);				
-
-				for (Object[] movim : historicoDEBE) {
-					movim[0] = "(+)" + movim[0];
+				for (Object[] venta : ventas) {
+					String key = (String) venta[1];
+					venta = Arrays.copyOf(venta, venta.length + 5);
+					venta[3] = 0.0;
+					venta[4] = 0.0;
+					venta[5] = 0.0;
+					venta[6] = 0.0;
+					venta[7] = 0.0;
+					acum.put(key, venta);
 				}
-
-				historico = new ArrayList<Object[]>();
-				historico.addAll(historicoDEBE);
-				historico.addAll(historicoHABER);
-
-				// ordena la lista segun fecha..
-				Collections.sort(historico, new Comparator<Object[]>() {
-					@Override
-					public int compare(Object[] o1, Object[] o2) {
-						Date fecha1 = (Date) o1[1];
-						Date fecha2 = (Date) o2[1];
-						return fecha1.compareTo(fecha2);
+				
+				for (Object[] cheque : chequesRechazados) {
+					String key = (String) cheque[1];
+					double importe = (double) cheque[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[3] = importe;
+					} else {
+						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0 };
 					}
-				});
+					acum.put(key, obj);
+				}
 				
-				double saldo = 0;
-				
-				Collections.sort(historico, new Comparator<Object[]>() {
-					@Override
-					public int compare(Object[] o1, Object[] o2) {
-						String val1 = (String) o1[4];
-						String val2 = (String) o2[4];			
-						int compare = val1.compareTo(val2);
-						if (compare == 0) {
-							Date emision1 = (Date) o1[1];
-							Date emision2 = (Date) o2[1];
-				            return emision1.compareTo(emision2);
-				        }
-				        else {
-				            return compare;
-				        }
+				for (Object[] ncred : ncreditos) {
+					String key = (String) ncred[1];
+					double importe = (double) ncred[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[4] = importe * -1;
+					} else {
+						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0 };
 					}
-				});
+					acum.put(key, obj);
+				}
 				
-				String key = "";
-				for (Object[] hist : historico) {
-					String razonsocial = (String) hist[4];
-					if(!key.equals(razonsocial)) saldo = 0;					
-					boolean ent = ((String) hist[0]).startsWith("(+)");
-					String fecha = Utiles.getDateToString((Date) hist[1], Utiles.DD_MM_YY);
-					String hora = Utiles.getDateToString((Date) hist[1], "hh:mm");
-					String numero = (String) hist[2];
-					String concepto = ((String) hist[0]).replace("(+)", "");
-					String entrada = ent ? Utiles.getNumberFormat(Double.parseDouble(hist[3] + "")) : "";
-					String salida = ent ? "" : Utiles.getNumberFormat(Double.parseDouble(hist[3] + ""));
-					saldo += ent ? Double.parseDouble(hist[3] + "") :  Double.parseDouble(hist[3] + "") * -1;
-					String saldo_ = Utiles.getNumberFormat(saldo);
-					data.add(new Object[] { fecha, hora, numero, concepto, entrada, salida, saldo_, razonsocial, (Date) hist[1] });
-					totalSaldo.put(razonsocial, saldo_);
-					key = razonsocial;
+				for (Object[] rec : recibos) {
+					String key = (String) rec[1];
+					double importe = (double) rec[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[5] = importe * -1;
+					} else {
+						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] ndeb : ndebitos) {
+					String key = (String) ndeb[1];
+					double importe = (double) ndeb[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[6] = importe;
+					} else {
+						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] reemb : reembolsos) {
+					String key = (String) reemb[1];
+					double importe = (double) reemb[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[7] = importe;
+					} else {
+						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (String key : acum.keySet()) {
+					Object[] data_ = acum.get(key);
+					data.add(data_);
 				}
 				
 				String cli = cliente != null ? cliente.getRazonSocial() : "TODOS..";
-				String sourceConsolidado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CONSOLIDADO_DHS;
-				String source = sourceConsolidado;
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO;
 				String titulo = "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
-				params.put("desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
-				params.put("hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				imprimirJasper(source, params, dataSource, formato);
 				
 			} catch (Exception e) {
@@ -21924,5 +21987,116 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
+	}
+}
+
+/**
+ * VEN-00046..
+ */
+class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	private String proveedor;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
+	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
+	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
+
+	public ReporteListaPrecioPorDeposito_(String proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col6);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Lista de precios por depósito");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Precios-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * DataSource de Saldos de Clientes detallado DHS..
+ */
+class CtaCteSaldosResumidoDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	
+	/**
+	 * [0]:cliente
+	 * [1]:importe ventas
+	 */
+	public CtaCteSaldosResumidoDataSource(List<Object[]> values, String cliente) {
+		this.values = values;
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		String cliente = (String) det[1];
+		double ventas = (double) det[2];
+		double chequesRechazados = (double) det[3];
+		double ncreditos = (double) det[4];
+		double recibos = (double) det[5];
+		double ndebitos = (double) det[6];
+		double reembolsos = (double) det[7];
+		
+		if ("Cliente".equals(fieldName)) {
+			value = cliente;
+		} else if ("Ventas".equals(fieldName)) {
+			value = Utiles.getNumberFormat(ventas);
+		} else if ("ChequesRechazados".equals(fieldName)) {
+			value = Utiles.getNumberFormat(chequesRechazados);
+		} else if ("NotasCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(ncreditos);
+		} else if ("Recibos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(recibos);
+		} else if ("NotasDebito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(ndebitos);
+		} else if ("Reembolsos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(reembolsos);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
 	}
 }

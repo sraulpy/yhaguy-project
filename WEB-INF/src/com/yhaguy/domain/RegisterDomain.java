@@ -9794,6 +9794,135 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return importe venta credito dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getVentasCreditoPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT v.cliente.id, v.cliente.empresa.razonSocial, sum(v.totalImporteGs)" +   
+				"	FROM Venta v" +
+				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
+				"      AND v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" + 
+				"      AND v.estadoComprobante IS NULL";
+		if (idCliente > 0) {
+			query += " AND v.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los cheques rechazados segun cliente.. 
+	 * [0]:cliente.id
+	 * [1]:cliente.razonSocial 
+	 * [2]:sum(monto)
+	 */
+	public List<Object[]> getChequesRechazadosPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select b.cliente.id, b.cliente.empresa.razonSocial, sum(b.monto)"
+				+ " from BancoChequeTercero b where"
+				+ " b.rechazado = 'true' and b.dbEstado != 'D'" +
+				"	AND (b.fechaRechazo >= '" + desde_ + "' and b.fechaRechazo <= '" + hasta_ + "')";
+		if (idCliente > 0) {
+			query += " AND b.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY b.cliente.id, b.cliente.empresa.razonSocial" +
+		" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe nota credito cred. dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getNotasCreditoPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT nc.cliente.id, nc.cliente.empresa.razonSocial, sum(nc.importeGs)" +   
+				"	FROM NotaCredito nc" +
+				"	WHERE (nc.fechaEmision >= '" + desde_ + "' and nc.fechaEmision <= '" + hasta_ + "')" + 
+				"      AND nc.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "'" +
+				"      AND nc.auxi = '" + NotaCredito.NCR_CREDITO + "'" + 
+				"      AND nc.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'";
+		if (idCliente > 0) {
+			query += " AND nc.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY nc.cliente.id, nc.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe recibos dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getRecibosPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT r.cliente.id, r.cliente.empresa.razonSocial, sum(r.totalImporteGs)" +   
+				"	FROM Recibo r" +
+				"	WHERE (r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '" + hasta_ + "')" + 
+				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_COBRO + "'";
+		if (idCliente > 0) {
+			query += " AND r.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY r.cliente.id, r.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe nota debito dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getNotasDebitoPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT nd.cliente.id, nd.cliente.empresa.razonSocial, sum(nd.importeGs)" +   
+				"	FROM NotaDebito nd" +
+				"	WHERE (nd.fecha >= '" + desde_ + "' and nd.fecha <= '" + hasta_ + "')" + 
+				"      AND nd.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'";
+		if (idCliente > 0) {
+			query += " AND nd.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY nd.cliente.id, nd.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe reembolsos dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getReembolsosPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT r.cliente.id, r.cliente.empresa.razonSocial, sum(r.totalImporteGs)" +   
+				"	FROM Recibo r" +
+				"	WHERE (r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '" + hasta_ + "')" + 
+				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "'";
+		if (idCliente > 0) {
+			query += " AND r.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY r.cliente.id, r.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
@@ -9822,21 +9951,13 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Venta> vtas = rr.getVentas(Utiles.getFecha("01-01-2019 00:00:00"), new Date(), 0);
-			for (Venta venta : vtas) {
-				System.out.println(venta.getNumero());
-				if (venta.getTecnico() != null) {
-					Tecnico tec = rr.getTecnico(venta.getTecnico().getRazonSocial());
-					if (tec != null) {
-						venta.setTecnico_(tec);
-						rr.saveObject(tec, venta.getUsuarioMod());
-						System.err.println(tec.getNombre());
-					}
-				}
+			List<NotaDebito> ndbs = rr.getObjects(NotaDebito.class.getName());
+			for (NotaDebito ndb : ndbs) {
+				ndb.setImporteGs(ndb.getTotalImporteGs());
+				rr.saveObject(ndb, ndb.getUsuarioMod());
+				System.out.println(ndb.getNumero());
 			}
-			
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

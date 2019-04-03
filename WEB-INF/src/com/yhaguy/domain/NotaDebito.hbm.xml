@@ -14,6 +14,7 @@
 		<property name="timbrado"/>
 		<property name="fecha"/>
 		<property name="numeroFactura"/>
+		<property name="importeGs"/>
 		
 		<many-to-one name="sucursal" class="com.yhaguy.domain.SucursalApp"
 			column="idsucursal" lazy="false"/>

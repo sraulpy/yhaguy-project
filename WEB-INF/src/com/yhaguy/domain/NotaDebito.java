@@ -14,7 +14,8 @@ public class NotaDebito extends Domain {
 	private String numero;
 	private String timbrado;
 	private Date fecha;
-	private String numeroFactura;
+	private String numeroFactura;	
+	private double importeGs;
 
 	private SucursalApp sucursal;
 	private TipoMovimiento tipoMovimiento;
@@ -147,5 +148,13 @@ public class NotaDebito extends Domain {
 
 	public void setTimbrado(String timbrado) {
 		this.timbrado = timbrado;
+	}
+
+	public double getImporteGs() {
+		return importeGs;
+	}
+
+	public void setImporteGs(double importeGs) {
+		this.importeGs = importeGs;
 	}
 }

@@ -51,6 +51,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_SALDO_DET_DHS_ = "/reportes/jasper/CtaCteSaldosDetalladoDHS_.jasper";
 	public static final String SOURCE_SALDO_CONSOLIDADO_DHS = "/reportes/jasper/CtaCteSaldosConsolidadoDHS.jasper";
 	public static final String SOURCE_SALDO_CONSOLIDADO = "/reportes/jasper/CtaCteSaldosConsolidado.jasper";
+	public static final String SOURCE_SALDO_CLIENTES_RESUMIDO = "/reportes/jasper/CtaCteSaldosResumido.jasper";
 	public static final String SOURCE_CTA_CTE_SALDOS_DESGLOSADO = "/reportes/jasper/CtaCteSaldosDesglosado.jasper";
 	public static final String SOURCE_COBROS_DET = "/reportes/jasper/CobrosDetallado.jasper";
 	public static final String SOURCE_CHEQUE_AL_DIA = "/reportes/jasper/test.jasper";

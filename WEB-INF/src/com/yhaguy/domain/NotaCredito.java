@@ -15,6 +15,9 @@ import com.yhaguy.util.Utiles;
 @SuppressWarnings("serial")
 public class NotaCredito extends Domain {
 	
+	public static final String NCR_CREDITO = "NCR-CRE";
+	public static final String NCR_CONTADO = "NCR-CON";
+	
 	private String numero;
 	private String timbrado_;
 	private String observacion;
