@@ -220,7 +220,7 @@ public class ControlArticuloStock {
 			String concepto = ((String) hist[0]).replace("(+)", "");
 			String entrada = ent ? hist[3] + "" : "";
 			String salida = ent ? "" : hist[3] + "";
-			String importe = Utiles.getNumberFormat((double) hist[4]);;
+			String importe = Utiles.getNumberFormat((double) hist[4]);
 			String dep = (String) hist[6];
 			saldo += ent ? Long.parseLong(hist[3] + "") :  Long.parseLong(hist[3] + "") * -1;
 			data.add(new Object[] { fecha, hora, numero, concepto, dep, entrada, salida, saldo + "", importe });

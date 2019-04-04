@@ -74,9 +74,5 @@
 				</template>
 			</chosenbox>
 		</row>
-		<row>
-			<field value="Stock >=" />
-			<spinner value="@bind(vm.dato.filtro.stockMayorIgual)"></spinner>
-		</row>
 	</rows>
 </grid>

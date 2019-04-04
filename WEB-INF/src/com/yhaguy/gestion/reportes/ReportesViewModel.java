@@ -1227,17 +1227,32 @@ public class ReportesViewModel extends SimpleViewModel {
 					proveedores_ += prov.getRazonSocial() + " / ";
 				}
 				
+				long id1 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRINCIPAL : Deposito.ID_MINORISTA;
+				long id2 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SECAS : Deposito.ID_CENTRAL_TEMPORAL;
+				long id3 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO : Deposito.ID_CENTRAL_REPOSICION;
+				long id4 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_FALLADOS : Deposito.ID_CENTRAL_RECLAMOS;
+				long id5 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AVERIADOS : Deposito.ID_MAYORISTA;
+				long id6 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AUXILIO : Deposito.ID_MAYORISTA_TEMPORAL;
+				long id7 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRODUCCION : Deposito.ID_MCAL_LOPEZ;
+				long id8 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_CONTROL : Deposito.ID_MCAL_TEMPORAL;
+				
+				String[] deps_ = new String[] { "Minorista", "Temporal Central", "Reclamos Central",
+						"Reposicion Central", "Mayorista", "Temporal Mayorista", "Mcal Lopez", "Temporal Mcal Lopez" };
+				
+				String[] depsBaterias = new String[] { "Principal", "Secas", "Transitorio",
+						"Fallados", "Averiados", "Auxilio", "Produccion", "Control" };
+				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				
 				List<Deposito> deps = new ArrayList<Deposito>();
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MINORISTA));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_CENTRAL_TEMPORAL));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_CENTRAL_REPOSICION));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_CENTRAL_RECLAMOS));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MAYORISTA));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MAYORISTA_TEMPORAL));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MCAL_LOPEZ));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_MCAL_TEMPORAL));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id1));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id2));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id3));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id4));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id5));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id6));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id7));
+				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id8));
 				
 				List<Object[]> data = new ArrayList<Object[]>();
 				
@@ -1246,14 +1261,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] art : articulos) {
 					long idArt = (long) art[0];
 					String cod = (String) art[1];
-					Object[] stock1 = rr.getStockArticulo(idArt, Deposito.ID_MINORISTA);
-					Object[] stock2 = rr.getStockArticulo(idArt, Deposito.ID_CENTRAL_TEMPORAL);
-					Object[] stock3 = rr.getStockArticulo(idArt, Deposito.ID_CENTRAL_REPOSICION);
-					Object[] stock4 = rr.getStockArticulo(idArt, Deposito.ID_CENTRAL_RECLAMOS);
-					Object[] stock5 = rr.getStockArticulo(idArt, Deposito.ID_MAYORISTA);
-					Object[] stock6 = rr.getStockArticulo(idArt, Deposito.ID_MAYORISTA_TEMPORAL);
-					Object[] stock7 = rr.getStockArticulo(idArt, Deposito.ID_MCAL_LOPEZ);
-					Object[] stock8 = rr.getStockArticulo(idArt, Deposito.ID_MCAL_TEMPORAL);
+					Object[] stock1 = rr.getStockArticulo(idArt, id1);
+					Object[] stock2 = rr.getStockArticulo(idArt, id2);
+					Object[] stock3 = rr.getStockArticulo(idArt, id3);
+					Object[] stock4 = rr.getStockArticulo(idArt, id4);
+					Object[] stock5 = rr.getStockArticulo(idArt, id5);
+					Object[] stock6 = rr.getStockArticulo(idArt, id6);
+					Object[] stock7 = rr.getStockArticulo(idArt, id7);
+					Object[] stock8 = rr.getStockArticulo(idArt, id8);
 					long stock1_ = (long) stock1[1];
 					long stock2_ = (long) stock2[1];
 					long stock3_ = (long) stock3[1];
@@ -1279,7 +1294,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String marca_ = marca == null ? "TODOS.." : marca.getDescripcion();
 				String articulo_ = articulo == null ? "TODOS.." : articulo.getDescripcion();
 				
-				ReporteExistenciaArticulosDeposito rep = new ReporteExistenciaArticulosDeposito(familia_, articulo_, marca_, proveedores_);
+				ReporteExistenciaArticulosDeposito rep = new ReporteExistenciaArticulosDeposito(familia_, articulo_, marca_, proveedores_, isEmpresaBaterias() ? depsBaterias : deps_);
 				rep.setDatosReporte(data);
 				rep.setApaisada();				
 
@@ -8958,7 +8973,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde, hasta, idCliente);
 				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
 				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
-				List<Object[]> reembolsos = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
+				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
 				
 				for (Object[] venta : ventas) {
 					String key = (String) venta[1];
@@ -9024,9 +9039,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					double importe = (double) reemb[2];
 					Object[] obj = acum.get(key);
 					if (obj != null) {
-						obj[7] = importe;
+						obj[7] = importe * -1;
 					} else {
-						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe };
+						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1 };
 					}
 					acum.put(key, obj);
 				}
@@ -10582,9 +10597,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				String tipoCosto = filtro.getTipoCosto();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				SucursalApp sucursal = filtro.getSelectedSucursal();
+				Deposito deposito = filtro.getDeposito();
 				long idProveedor = proveedor != null ? proveedor.getId() : (long) 0;
 				long idSucursal = sucursal != null ? sucursal.getId() : (long) 0;
 				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
+				long idDeposito = deposito != null ? deposito.getId() : (long) 0;
 				
 				if (familia == null) {
 					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -10597,11 +10614,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> arts = new ArrayList<Object[]>();
 				
-				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), "");
+				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), true);
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];
@@ -10616,11 +10633,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					}				
 				}
 				
-				String desc = articulo != null ? articulo.getCodigoInterno() + " - " + articulo.getDescripcion() : "TODOS..";
+				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
 				String familia_ = familia.getDescripcion();
 				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
-				String sucursal_ = sucursal != null ? sucursal.getDescripcion() : "TODOS..";
-				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, sucursal_);
+				String deposito_ = deposito != null ? deposito.getDescripcion() : "TODOS..";
+				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, deposito_);
 				rep.setApaisada();
 				rep.setDatosReporte(data);
 				
@@ -10632,7 +10649,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}		
 		}
 		
 		/**
@@ -17399,20 +17416,28 @@ class ReporteExistenciaArticulosDeposito extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
-	static DatosColumnas col2 = new DatosColumnas("Minorista", TIPO_LONG, 20, true);
-	static DatosColumnas col3 = new DatosColumnas("Temporal Central", TIPO_LONG, 20, true);
-	static DatosColumnas col4 = new DatosColumnas("Reclamos Central", TIPO_LONG, 20, true);
-	static DatosColumnas col5 = new DatosColumnas("Reposición Central", TIPO_LONG, 20, true);
-	static DatosColumnas col6 = new DatosColumnas("Mayorista", TIPO_LONG, 20, true);
-	static DatosColumnas col7 = new DatosColumnas("Temporal Mayorista", TIPO_LONG, 20, true);
-	static DatosColumnas col8 = new DatosColumnas("Mcal López", TIPO_LONG, 20, true);
-	static DatosColumnas col9 = new DatosColumnas("Temporal Mcal López", TIPO_LONG, 20, true);
+	static DatosColumnas col2 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col3 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col4 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col5 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col6 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col7 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col8 = new DatosColumnas("", TIPO_LONG, 20, true);
+	static DatosColumnas col9 = new DatosColumnas("", TIPO_LONG, 20, true);
 
-	public ReporteExistenciaArticulosDeposito(String familia, String articulo, String marca, String proveedor) {
+	public ReporteExistenciaArticulosDeposito(String familia, String articulo, String marca, String proveedor, String[] depositos) {
 		this.familia = familia;
 		this.articulo = articulo;
 		this.marca = marca;
 		this.proveedor = proveedor;
+		col2.setTitulo(depositos[0]);
+		col3.setTitulo(depositos[1]);
+		col4.setTitulo(depositos[2]);
+		col5.setTitulo(depositos[3]);
+		col6.setTitulo(depositos[4]);
+		col7.setTitulo(depositos[5]);
+		col8.setTitulo(depositos[6]);
+		col9.setTitulo(depositos[7]);
 	}
 
 	static {
