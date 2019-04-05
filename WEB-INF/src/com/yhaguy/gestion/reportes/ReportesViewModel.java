@@ -8963,6 +8963,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				Map<String, Object[]> acum = new HashMap<String, Object[]>();
 				List<Object[]> data = new ArrayList<Object[]>();
+				
+				double totalVentas = 0.0;
+				double totalChequesRechazados = 0.0;
+				double totalNotasCredito = 0.0;
+				double totalRecibos = 0.0;
+				double totalNotasDebito = 0.0;
+				double totalChequesReembolsos = 0.0;
+				double totalMigracion = 0.0;
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 
@@ -8974,15 +8982,17 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
 				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
 				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
+				List<Object[]> migracion = rr.getCtaCteMigracionPorCliente(desde, hasta, idCliente);
 				
 				for (Object[] venta : ventas) {
 					String key = (String) venta[1];
-					venta = Arrays.copyOf(venta, venta.length + 5);
+					venta = Arrays.copyOf(venta, venta.length + 6);
 					venta[3] = 0.0;
 					venta[4] = 0.0;
 					venta[5] = 0.0;
 					venta[6] = 0.0;
 					venta[7] = 0.0;
+					venta[8] = 0.0;
 					acum.put(key, venta);
 				}
 				
@@ -8993,7 +9003,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[3] = importe;
 					} else {
-						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0 };
+						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0 };
 					}
 					acum.put(key, obj);
 				}
@@ -9005,7 +9015,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[4] = importe * -1;
 					} else {
-						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0 };
+						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
 					}
 					acum.put(key, obj);
 				}
@@ -9017,7 +9027,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[5] = importe * -1;
 					} else {
-						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
+						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0 };
 					}
 					acum.put(key, obj);
 				}
@@ -9029,7 +9039,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[6] = importe;
 					} else {
-						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0 };
 					}
 					acum.put(key, obj);
 				}
@@ -9041,13 +9051,39 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[7] = importe * -1;
 					} else {
-						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1 };
+						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] mig : migracion) {
+					String key = (String) mig[1];
+					double importe = (double) mig[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[8] = importe;
+					} else {
+						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe };
 					}
 					acum.put(key, obj);
 				}
 				
 				for (String key : acum.keySet()) {
 					Object[] data_ = acum.get(key);
+					double vtas = (double) data_[2];
+					double rech = (double) data_[3];
+					double ncrs = (double) data_[4];
+					double recs = (double) data_[5];
+					double ndeb = (double) data_[6];
+					double reem = (double) data_[7];
+					double migr = (double) data_[8];
+					totalVentas += vtas;
+					totalChequesRechazados += rech;
+					totalNotasCredito += ncrs;
+					totalRecibos += recs;
+					totalNotasDebito += ndeb;
+					totalChequesReembolsos += reem;
+					totalMigracion += migr;
 					data.add(data_);
 				}
 				
@@ -9055,7 +9091,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO;
 				String titulo = "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli);
+				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
+						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
+						totalChequesReembolsos, totalMigracion);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -22074,13 +22112,29 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
 
 	List<Object[]> values = new ArrayList<Object[]>();
+	double totalVentas = 0.0;
+	double totalChequesRechazados = 0.0;
+	double totalNotasCredito = 0.0;
+	double totalRecibos = 0.0;
+	double totalNotasDebito = 0.0;
+	double totalChequesReembolsos = 0.0;
+	double totalMigracion = 0.0;
 	
 	/**
 	 * [0]:cliente
 	 * [1]:importe ventas
 	 */
-	public CtaCteSaldosResumidoDataSource(List<Object[]> values, String cliente) {
+	public CtaCteSaldosResumidoDataSource(List<Object[]> values, String cliente, double totalVentas,
+			double totalChequesRechazados, double totalNotasCredito, double totalRecibos, double totalNotasDebito,
+			double totalChequesReembolsos, double totalMigracion) {
 		this.values = values;
+		this.totalVentas = totalVentas;
+		this.totalChequesRechazados = totalChequesRechazados;
+		this.totalNotasCredito = totalNotasCredito;
+		this.totalRecibos = totalRecibos;
+		this.totalNotasDebito = totalNotasDebito;
+		this.totalChequesReembolsos = totalChequesReembolsos;
+		this.totalMigracion = totalMigracion;
 	}
 
 	private int index = -1;
@@ -22097,6 +22151,8 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		double recibos = (double) det[5];
 		double ndebitos = (double) det[6];
 		double reembolsos = (double) det[7];
+		double migracion = (double) det[8];
+		double saldo = ventas + chequesRechazados + ncreditos + recibos + ndebitos + reembolsos + migracion;
 		
 		if ("Cliente".equals(fieldName)) {
 			value = cliente;
@@ -22112,6 +22168,27 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 			value = Utiles.getNumberFormat(ndebitos);
 		} else if ("Reembolsos".equals(fieldName)) {
 			value = Utiles.getNumberFormat(reembolsos);
+		} else if ("Migracion".equals(fieldName)) {
+			value = Utiles.getNumberFormat(migracion);
+		} else if ("Saldo".equals(fieldName)) {
+			value = Utiles.getNumberFormat(saldo);
+		} else if ("TotalVentas".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalVentas);
+		} else if ("TotalChequesRechazados".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalChequesRechazados);
+		} else if ("TotalNotasCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalNotasCredito);
+		} else if ("TotalRecibos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalRecibos);
+		} else if ("TotalNotasDebito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalNotasDebito);
+		} else if ("TotalChequesReembolso".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalChequesReembolsos);
+		} else if ("TotalMigracion".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalMigracion);
+		} else if ("TotalSaldo".equals(fieldName)) {
+			double totalSaldo =  totalVentas + totalChequesRechazados + totalNotasCredito + totalRecibos + totalNotasDebito + totalChequesReembolsos + totalMigracion;
+			value = Utiles.getNumberFormat(totalSaldo);
 		}
 		return value;
 	}

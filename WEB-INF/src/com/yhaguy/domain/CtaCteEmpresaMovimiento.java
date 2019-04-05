@@ -28,6 +28,7 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	private Tipo moneda;
 	private Set<CtaCteImputacion> imputaciones = new HashSet<CtaCteImputacion>();
 	private SucursalApp sucursal;
+	private Cliente cliente;
 	
 	private double aux = 0;
 
@@ -392,5 +393,13 @@ public class CtaCteEmpresaMovimiento extends Domain {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 }

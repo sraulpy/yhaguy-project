@@ -5374,9 +5374,8 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, String caracter, long idMoneda) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c from CtaCteEmpresaMovimiento c where c.idEmpresa = "
-				+ idEmpresa
-				+ " and c.tipoCaracterMovimiento.sigla = '"
+		String query = "select c from CtaCteEmpresaMovimiento c where "
+				+ " c.tipoCaracterMovimiento.sigla = '"
 				+ caracter
 				+ "'"
 				+ " and c.anulado != 'TRUE'"
@@ -5387,8 +5386,11 @@ public class RegisterDomain extends Register {
 				+ hasta_
 				+ "'"
 				+ " and c.moneda.id = " + idMoneda
-				+ " and c.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "'"
-				+ " order by c.fechaEmision, c.fechaVencimiento asc";
+				+ " and c.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "'";
+		if (idEmpresa > 0) {
+			query += " and c.idEmpresa = " + idEmpresa;
+		}
+				query += " order by c.fechaEmision, c.fechaVencimiento asc";
 		List<CtaCteEmpresaMovimiento> list = this.hql(query);
 		return list;
 	}
@@ -9923,6 +9925,28 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return importe ctacte dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getCtaCteMigracionPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT c.cliente.id, c.cliente.empresa.razonSocial, sum(c.importeOriginal)" +   
+				"	FROM CtaCteEmpresaMovimiento c" +
+				"	WHERE (c.fechaEmision >= '" + desde_ + "' and c.fechaEmision <= '" + hasta_ + "')" + 
+				"   AND c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" +
+				"   AND c.auxi = 'MIGRACION'";
+		if (idCliente > 0) {
+			query += " AND c.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY c.cliente.id, c.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
@@ -9955,7 +9979,16 @@ public class RegisterDomain extends Register {
 			for (NotaDebito ndb : ndbs) {
 				ndb.setImporteGs(ndb.getTotalImporteGs());
 				rr.saveObject(ndb, ndb.getUsuarioMod());
-				System.out.println(ndb.getNumero());
+				System.out.println("----- " + ndb.getNumero());
+			}
+			List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientos(0,Utiles.getFecha("01-01-2018 00:00:00"), Utiles.getFecha("04-10-2018 23:00:00"), Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 31);
+			for (CtaCteEmpresaMovimiento ctacte : movims) {
+				if (ctacte.isVentaCredito()) {
+					Cliente cli = rr.getClienteByEmpresa(ctacte.getIdEmpresa());
+					ctacte.setCliente(cli);
+					rr.saveObject(ctacte, ctacte.getUsuarioMod());
+					System.out.println("----- " + ctacte.getNroComprobante());
+				}
 			}
 		} catch (Exception e) {
 		}
