@@ -25,6 +25,7 @@ import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.CondicionPago;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
@@ -136,6 +137,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.selectedGasto.setImporteGs(this.selectedGasto.getImporteGs_());
 		this.selectedGasto.setImporteDs(this.selectedGasto.getImporteDs_());
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(this.selectedGasto.getId(), this.selectedGasto.getTipoMovimiento().getSigla());
+		if (ctacte != null) {
+			ctacte.setNroComprobante(this.selectedGasto.getNumero());
+			ctacte.setImporteOriginal(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
+			ctacte.setSaldo(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
+			rr.saveObject(ctacte, this.getLoginNombre());
+		}
 		rr.saveObject(this.selectedGasto, this.getLoginNombre());
 		Clients.showNotification("REGISTRO GUARDADO..");
 	}
