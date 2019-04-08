@@ -81,5 +81,9 @@
 			<field value="Ventas Contado:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirVCT)" />
 		</row>
+		<row>
+			<field value="Boca expedición:" />
+			<textbox value="@bind(vm.dato.filtro.expedicion)" hflex="true" placeholder="TODOS.." />
+		</row>
 	</rows>
 </grid>

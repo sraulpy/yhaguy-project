@@ -713,7 +713,6 @@ public class RegisterDomain extends Register {
 	}
 
 	public Funcionario getFuncionario(Long id) throws Exception {
-		System.out.println("----- ID FUNCIONARIO: " + id);
 		List<Funcionario> list = null;
 		Funcionario f = new Funcionario();
 		String queryFuncionario = "" + " select fu "
@@ -3015,10 +3014,11 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las ventas segun fecha
 	 */
-	public List<Venta> getVentas_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+	public List<Venta> getVentas_(Date desde, Date hasta, long idCliente, long idSucursal, String expedicion) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
-				+ " and v.fecha between ? and ?";
+				+ " and v.fecha between ? and ?"
+				+ " and v.numero like '%" + expedicion + "%'";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
@@ -3502,9 +3502,10 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las notas de credito de venta segun fecha
 	 */
-	public List<NotaCredito> getNotasCreditoVenta_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+	public List<NotaCredito> getNotasCreditoVenta_(Date desde, Date hasta, long idCliente, long idSucursal, String expedicion) throws Exception {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.tipoMovimiento.sigla = ?"
-				+ " and (n.fechaEmision between ? and ?)";
+				+ " and (n.fechaEmision between ? and ?)"
+				+ " and n.numero like '%" + expedicion + "%'";
 
 		if (idCliente != 0) {
 			query += " and n.cliente.id = ?";

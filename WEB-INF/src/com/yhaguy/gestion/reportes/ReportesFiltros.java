@@ -125,6 +125,7 @@ public class ReportesFiltros {
 	
 	private Recibo recibo;
 	private String numeroRecibo = "";
+	private String expedicion = "";
 	
 	private Articulo articulo;
 	private String codigoArticulo = "";
@@ -1577,5 +1578,13 @@ public class ReportesFiltros {
 
 	public void setRazonSocialProveedorLocal(String razonSocialProveedorLocal) {
 		this.razonSocialProveedorLocal = razonSocialProveedorLocal;
+	}
+
+	public String getExpedicion() {
+		return expedicion;
+	}
+
+	public void setExpedicion(String expedicion) {
+		this.expedicion = expedicion;
 	}
 }
