@@ -359,8 +359,8 @@ public class ReportesViewModel extends SimpleViewModel {
 	 */
 	private void loguearse_(Component comp1, Component comp2) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		this.pass = Utiles.encriptar(this.pass, true);
-		if (rr.getUsuario(this.user, this.pass) != null) {
+		String clave = m.encriptar(this.pass, true);
+		if (rr.getUsuario(this.user, clave) != null) {
 			LoginUsuario lu = new LoginUsuario();
 			LoginUsuarioDTO uDto = lu.log(this.user, this.pass);
 			this.setAtributoSession(Config.LOGEADO, uDto.isLogeado());

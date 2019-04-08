@@ -9976,20 +9976,12 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<NotaDebito> ndbs = rr.getObjects(NotaDebito.class.getName());
-			for (NotaDebito ndb : ndbs) {
-				ndb.setImporteGs(ndb.getTotalImporteGs());
-				rr.saveObject(ndb, ndb.getUsuarioMod());
-				System.out.println("----- " + ndb.getNumero());
-			}
-			List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientos(0,Utiles.getFecha("01-01-2018 00:00:00"), Utiles.getFecha("04-10-2018 23:00:00"), Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 31);
-			for (CtaCteEmpresaMovimiento ctacte : movims) {
-				if (ctacte.isVentaCredito()) {
-					Cliente cli = rr.getClienteByEmpresa(ctacte.getIdEmpresa());
-					ctacte.setCliente(cli);
-					rr.saveObject(ctacte, ctacte.getUsuarioMod());
-					System.out.println("----- " + ctacte.getNroComprobante());
-				}
+			String clave = "yhaguysa0985";
+			Misc m = new Misc();
+			String clave_ = m.encriptar(clave, true);
+			Usuario u = rr.getUsuario("sergio", clave_);
+			if (u != null) {
+				System.out.println(u.getNombre());
 			}
 		} catch (Exception e) {
 		}
