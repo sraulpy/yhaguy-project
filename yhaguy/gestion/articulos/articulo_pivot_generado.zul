@@ -1,0 +1,55 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.pivot.ArticuloPivotGeneradoVM')"
+	height="100%">
+	
+	<vlayout vflex="true">	
+		<hlayout sclass="button-container">
+			<button mold="bs" sclass="btn-info btn-sm" width="170px"
+				iconSclass="z-icon-shopping-cart"
+				label=" Generar Compra" />
+			<html>
+					<i class="fas fa-shopping-cart" style="color:#f39c12" ></i>
+			</html>
+			<a label=" Generar Compra" style="color:#f39c12"></a>
+			<space></space>
+			<html>
+					<i class="fas fa-dolly" style="color:#f39c12" ></i>
+			</html>
+			<a label=" Generar Transferencia" style="color:#f39c12" dir="reverse"></a>
+		</hlayout>
+		<listbox sclass="small-list" hflex="true" vflex="true"
+		emptyMessage="SIN ENLACES GENERADOS..">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Usuario"></listheader>
+			<listheader label="Proveedor"></listheader>
+			<listheader label="Concepto"></listheader>
+			<listheader width="50px"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" placeholder="DD.." style="text-align:right"></textbox>
+					<textbox hflex="true" placeholder="MM.." style="text-align:right"></textbox>
+					<textbox hflex="true" placeholder="YYYY.." style="text-align:right"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox placeholder="Usuario.." hflex="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox placeholder="Proveedor.." hflex="true"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox placeholder="Concepto.." hflex="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<listfoot>
+			<listfooter>
+				<field value="ítems" />
+			</listfooter>
+		</listfoot>
+		</listbox>
+	</vlayout>	
+</window>

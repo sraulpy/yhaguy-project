@@ -129,7 +129,9 @@ public class CompraLocalFacturaDTO extends DTO{
 							CompraLocalFacturaDetalleDTO o2) {
 						String id1 = o1.getOrden();
 						String id2 = o2.getOrden();
-						return (int) id1.compareTo(id2);
+						int id1_ = Integer.parseInt(id1);
+						int id2_ = Integer.parseInt(id2);
+						return (int) (id1_ - id2_);
 					}
 				});
 		return detalles;

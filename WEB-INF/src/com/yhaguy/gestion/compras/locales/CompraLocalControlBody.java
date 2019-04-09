@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.compras.locales;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,8 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
@@ -382,6 +385,11 @@ public class CompraLocalControlBody extends BodyApp {
 		BindUtils.postNotifyChange(null, null, item, "*");
 	}
 	
+	@Listen("onUpload=#upImg")
+	public void uploadImage(UploadEvent event) throws IOException {
+		this.subirImagen(event);
+	}
+	
 	/*********************************************************/
 	
 	
@@ -396,7 +404,8 @@ public class CompraLocalControlBody extends BodyApp {
 		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
 			Object[] obj1 = new Object[] { item.getArticulo().getPos1(),
 					item.getArticulo().getPos4(), item.getCantidad(),
-					item.getCostoGs(), item.getImporteIva(), item.getImporteGs() };
+					this.dto.isMonedaLocal() ? Utiles.getRedondeo(item.getCostoGs()) : Utiles.redondeoDosDecimales(item.getCostoDs()), 
+					this.dto.isMonedaLocal() ? Utiles.getRedondeo(item.getImporteGs()) : Utiles.redondeoDosDecimales(item.getImporteDs()) };
 			data.add(obj1);
 		}
 
@@ -884,6 +893,22 @@ public class CompraLocalControlBody extends BodyApp {
 			if (fac.getTipoMovimiento().compareTo(notaDebitoCompra) == 0) {
 				// falta implementar
 			}
+	}
+	
+	/**
+	 * upload del adjunto..
+	 */
+	@SuppressWarnings("static-access")
+	private void subirImagen(UploadEvent event) throws IOException {
+		String fileName = this.dto.getNumero();
+		String folder = Configuracion.pathOrdenCompra;
+		// String format = "." + event.getMedia().getFormat();
+
+		if (this.m.uploadFile(folder, fileName, event, this.m.TIPO_DOCUMENTO) == true) {
+			//this.dto.setUrlImagen(fileName + format);
+		}
+		BindUtils.postNotifyChange(null, null, this, "*");
+		Clients.showNotification("Imagen correctamente subida..");
 	}
 	
 	/***************************************************************/	
@@ -2512,25 +2537,30 @@ class ReporteOrdenCompra extends ReporteYhaguy {
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
-	static DatosColumnas col4 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Cant.", TIPO_INTEGER, 15, false);
-	static DatosColumnas col6 = new DatosColumnas("Precio", TIPO_DOUBLE, 25, false); 
-	static DatosColumnas col7 = new DatosColumnas("Iva", TIPO_DOUBLE, 25, true);
-	static DatosColumnas col8 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true); 
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Cant.", TIPO_INTEGER, 15, false);
+	static DatosColumnas col4 = new DatosColumnas("Precio", TIPO_DOUBLE, 25, false); 
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true); 
 	
 	public ReporteOrdenCompra(CompraLocalFacturaDTO compra, String ordenCompra, String observacion) {
 		this.compra = compra;
 		this.ordenCompra = ordenCompra;
 		this.observacion = observacion;
+		if (!compra.isMonedaLocal()) {
+			col4.setTipo(TIPO_DOUBLE_DS);
+			col5.setTipo(TIPO_DOUBLE_DS);
+		} else {
+			col4.setTipo(TIPO_DOUBLE);
+			col5.setTipo(TIPO_DOUBLE);
+		}
 	}
 	
 	static {
 		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
-		cols.add(col6);
-		cols.add(col7);
-		cols.add(col8);
 	}
 
 	@Override
@@ -2568,7 +2598,7 @@ class ReporteOrdenCompra extends ReporteYhaguy {
 				.add(this.textoParValor("Condición", condicion)));
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Observación", this.observacion.toUpperCase()))
-				.add(this.texto("")));
+				.add(this.textoParValor("Moneda", this.compra.getMoneda().getPos1())));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

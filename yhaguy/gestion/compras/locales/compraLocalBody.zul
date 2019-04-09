@@ -182,10 +182,16 @@
 								<listheader width="30px" align="center"></listheader>	
 								<listheader label="Precio Gs."
 									style="text-align:center" width="120px" align="right"
-									sort="auto(costoGs)" />								
+									sort="auto(costoGs)" />	
+								<listheader label="Precio U$D"
+									style="text-align:center" width="120px" align="right"
+									sort="auto(costoDs)" visible="@load(!vm.dto.monedaLocal)" />							
 								<listheader label="Importe Gs."
 									style="text-align:center" width="130px" align="right"
-									sort="auto(importeGs)" />								
+									sort="auto(importeGs)" />	
+								<listheader label="Importe U$D"
+									style="text-align:center" width="130px" align="right"
+									sort="auto(importeDs)" visible="@load(!vm.dto.monedaLocal)" />							
 								<listheader label="IVA" width="80px"/>
 								<listheader width="50px" align="center"></listheader>	
 							</listhead>
@@ -199,7 +205,9 @@
 									<listcell style="@load(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')" 
 										iconSclass="@load(each.compraAnteriorGs eq each.costoGs ? 'z-icon-check' : (each.compraAnteriorGs gt each.costoGs ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))"></listcell>
 									<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
+									<listcell label="@load(each.costoDs) @converter('formattedNumber', format='###,###,##0.00')" />
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
+									<listcell label="@load(each.importeDs) @converter('formattedNumber', format='###,###,##0.00')" />
 									<listcell label="@load(each.iva.text)"/>
 									<listcell>
 										<a iconSclass="z-icon-bar-chart-o"
@@ -215,25 +223,27 @@
 										<field value="ítems" />
 									</hlayout>
 								</listfooter>
-								<listfooter span="5">
-									<hbox hflex="true" pack="end" align="center" style="padding:0px">
-										<field value="Iva 5%"/>
-										<guaranibox readonly="true"
-											style="background:#EEF7FA;text-align:right;font-weight:bold"
-											value="@load(vm.dto.totalIva5)"/>
-										<div width="10px"></div>
-										<field value="Iva 10%"/>
-										<guaranibox readonly="true"
-											style="background:#EEF7FA;text-align:right;font-weight:bold"
-											value="@load(vm.dto.totalIva10)"/>
-										<div width="10px"></div>										
-										<field value="Total Importe Gs." />
-										<guaranibox readonly="true"
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
 											style="background:#EEF7FA;text-align:right;font-weight:bold"
 											value="@load(vm.dto.totalImporteGs)" 
-											width="120px"/>																				
-									</hbox>
+											hflex="true" />
 								</listfooter>
+								<listfooter>
+									<doublebox readonly="true"
+											style="background:#EEF7FA;text-align:right;font-weight:bold"
+											value="@load(vm.dto.totalImporteDs)" 
+											hflex="true" format="###,###,##0.00" />
+								</listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
 							</listfoot>
 						</listbox>
 						
@@ -441,6 +451,9 @@
 								iconSclass="z-icon-minus-circle"
 								onClick="@command('insertarDescuento')" label=" Descuento" />
 							<space />	
+							<button id="upImg" upload="true" width="120px"
+								height="30px" iconSclass="z-icon-upload"
+								label=" Adjuntar" />
 							<space hflex="true"></space>
 						<field>Caja:</field>
 						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="200px" disabled="@load(!vm.siempreHabilitado)"
@@ -489,9 +502,15 @@
 								<listheader label="Precio Gs."
 									style="text-align:center" width="120px" align="right"
 									sort="auto(costoGs)" />
+								<listheader label="Precio U$D"
+									style="text-align:center" width="120px" align="right"
+									sort="auto(costoDs)" visible="@load(!vm.dto.monedaLocal)" />
 								<listheader label="Importe Gs."
 									style="text-align:center" width="130px" align="right"
 									sort="auto(importeGs)" />
+								<listheader label="Importe U$D"
+									style="text-align:center" width="130px" align="right"
+									sort="auto(importeDs)" visible="@load(!vm.dto.monedaLocal)" />
 								<listheader label="IVA" width="60px"/>	
 							</listhead>
 							<template name="model">
@@ -523,41 +542,50 @@
 									<listcell>
 										<label
 											value="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
+									</listcell>	
+									<listcell>
+										<label
+											value="@load(each.costoDs) @converter('formattedNumber', format='###,###,##0.00')" />
 									</listcell>		
 									<listcell>
 										<label
 											value="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
 									</listcell>
+									<listcell>
+										<label
+											value="@load(each.importeDs) @converter('formattedNumber', format='###,###,##0.00')" />
+									</listcell>
 									<listcell label="@load(each.iva.text)"/>
 								</listitem>
 							</template>
 							<listfoot>
-								<listfooter span="7" align="left">
+								<listfooter align="left">
 									<hlayout>
 										<label
 											value="@load(vm.dto.factura.detalles.size())"
 											style="font-weight:bold" />
 										<label value="ítems"
 											style="font-weight:bold" />
-										<space hflex="true" />
-										<field value="Iva 5%" />
-										<guaranibox readonly="true"
-											style="background:#EEF7FA;text-align:right;font-weight:bold"
-											value="@load(vm.dto.factura.totalIva5)"/>
-										<space />
-										<field value="Iva 10%" />
-										<guaranibox readonly="true"
-											style="background:#EEF7FA;text-align:right;font-weight:bold"
-											value="@load(vm.dto.factura.totalIva10)"/>
-										<space />
-										<field value="Total Importe" />
-										<field
-											value="@load(vm.dtoUtil.simboloMonedaLocal)" />
-										<guaranibox readonly="true"
-											style="background:#EEF7FA;text-align:right;font-weight:bold"
-											value="@load(vm.dto.factura.totalImporteGs)" />
 									</hlayout>
 								</listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter></listfooter>
+								<listfooter>
+									<guaranibox readonly="true"
+											style="background:#EEF7FA;text-align:right;font-weight:bold"
+											value="@load(vm.dto.factura.totalImporteGs)" />
+								</listfooter>
+								<listfooter>
+									<doublebox readonly="true"
+											style="background:#EEF7FA;text-align:right;font-weight:bold"
+											value="@load(vm.dto.factura.totalImporteDs)" 
+											format="###,###,##0.00" />
+								</listfooter>
+								<listfooter></listfooter>
 							</listfoot>
 						</listbox>
 				</tabpanel>
