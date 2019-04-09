@@ -226,7 +226,7 @@
 	</listbox>
 	</hlayout>
 	<hlayout style="margin-top:5px" vflex="3">
-		<listbox rows="5" hflex="1" sclass="small-list"
+		<listbox rows="5" hflex="5" sclass="small-list"
 			model="@load(vm.movimientos)" vflex="true"
 			selectedItem="@bind(vm.selectedMovimiento)">
 			<listhead>
@@ -242,7 +242,10 @@
 				</listheader>
 				<listheader width="40px" align="center"></listheader>
 				<listheader label="Ventas" sort="auto(3)" width="70px" align="right" />
-				<listheader label="Stock" width="70px" align="right" tooltiptext="@load(vm.deposito)" />
+				<listheader width="70px" align="right" tooltiptext="@load(vm.deposito)">
+					<textbox width="50px" placeholder="Stock" hflex="true" style="text-align:center"
+						value="@bind(vm.filter_stock)" instant="true"></textbox>
+				</listheader>
 				<listheader label="Resto" width="70px" align="right" tooltiptext="@load(vm.depositoResto)" />
 				<listheader label="" width="50px" align="center">
 					<intbox id="int_cant" inplace="true" hflex="true"
@@ -255,17 +258,17 @@
 					<listcell label="@load(each[0])" />
 					<listcell label="@load(each[1])" />
 					<listcell tooltiptext="@load(each[2])">
-						<div visible="@load(each[2] - each[4] lt 0)">
+						<div visible="@load(each[2] - each[5] lt 0)">
 							<html>
 								<i class="fas fa-battery-full" style="color:green"></i>
 							</html>
 						</div>
-						<div visible="@load(each[2] - each[4] eq 0)">
+						<div visible="@load(each[2] - each[5] eq 0)">
 							<html>
 								<i class="fas fa-battery-three-quarters	" style="color:#357ebd"></i>
 							</html>
 						</div>
-						<div visible="@load(each[2] - each[4] gt 0)">
+						<div visible="@load(each[2] - each[5] gt 0)">
 							<html>
 								<i class="fas fa-circle" style="color:red"></i>
 							</html>
@@ -284,7 +287,7 @@
 				</listitem>
 			</template>
 		</listbox>		
-		<vlayout hflex="2" vflex="true">
+		<vlayout hflex="7" vflex="true">
 			<hlayout>
 				<div>
 					<label value="Entrada: " style="margin-left:5px;color:green" />

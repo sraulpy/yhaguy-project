@@ -72,6 +72,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	private String filter_ruc = "";
 	private String filter_codInterno = "";
 	private String filter_codOriginal = "";
+	private String filter_stock = "";
 	
 	private List<ArticuloUbicacion> ubicaciones = new ArrayList<ArticuloUbicacion>();
 	
@@ -757,7 +758,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	/**
 	 * @return los movimientos..
 	 */
-	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno", "filter_codOriginal" })
+	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno", "filter_codOriginal", "filter_stock" })
 	public List<Object[]> getMovimientos() throws Exception {
 		if (this.selectedSucursal == null) return new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();		
@@ -797,7 +798,15 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 				}
 			}
 			item[7] = 0;
-			list_.add(item);
+			if (!this.filter_stock.isEmpty()) {
+				long fstock = Long.parseLong(this.filter_stock);
+				long _stock = (long) item[5];
+				if (fstock == _stock) {
+					list_.add(item);
+				}
+			} else {
+				list_.add(item);
+			}
 		}
 		return list_;
 	}
@@ -1174,5 +1183,13 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 
 	public void setSelectedCompra(CompraLocalOrden selectedCompra) {
 		this.selectedCompra = selectedCompra;
+	}
+
+	public String getFilter_stock() {
+		return filter_stock;
+	}
+
+	public void setFilter_stock(String filter_stock) {
+		this.filter_stock = filter_stock;
 	}
 }
