@@ -4761,8 +4761,8 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Venta> ventas_contado = rr.getVentasContado_(desde, hasta, 0, 0);
-				List<Venta> ventas_credito = rr.getVentasCredito_(desde, hasta, 0, 0);
+				List<Venta> ventas_contado = rr.getVentasContado_(desde, hasta, 0, 0, "");
+				List<Venta> ventas_credito = rr.getVentasCredito_(desde, hasta, 0, 0, "");
 				List<NotaCredito> notas_credito = rr.getNotasCreditoVenta(desde, hasta, 0);
 				Map<Long, Double> values_cont = new HashMap<Long, Double>();
 				Map<Long, Double> values_cred = new HashMap<Long, Double>();
@@ -10412,7 +10412,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 
 				} else if (filtro.isIncluirVCR()) {
-					List<Venta> ventas = rr.getVentasCredito_(desde, hasta, idCliente, idSucursal);
+					List<Venta> ventas = rr.getVentasCredito_(desde, hasta, idCliente, idSucursal, expedicion);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -10434,7 +10434,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 
 				} else if (filtro.isIncluirVCT()) {
-					List<Venta> ventas = rr.getVentasContado_(desde, hasta, idCliente, idSucursal);
+					List<Venta> ventas = rr.getVentasContado_(desde, hasta, idCliente, idSucursal, expedicion);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -11812,7 +11812,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 
 				} else if (filtro.isIncluirVCR()) {
-					List<Venta> ventas = rr.getVentasCredito_(desde, hasta, idCliente, idSucursal);
+					List<Venta> ventas = rr.getVentasCredito_(desde, hasta, idCliente, idSucursal, "");
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -11838,7 +11838,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 
 				} else if (filtro.isIncluirVCT()) {
-					List<Venta> ventas = rr.getVentasContado_(desde, hasta, idCliente, idSucursal);
+					List<Venta> ventas = rr.getVentasContado_(desde, hasta, idCliente, idSucursal, "");
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),

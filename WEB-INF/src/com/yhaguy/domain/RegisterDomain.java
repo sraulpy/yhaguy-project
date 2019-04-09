@@ -3215,10 +3215,11 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las ventas segun fecha
 	 */
-	public List<Venta> getVentasContado_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+	public List<Venta> getVentasContado_(Date desde, Date hasta, long idCliente, long idSucursal, String expedicion) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
-				+ " and v.fecha between ? and ?";
+				+ " and v.fecha between ? and ?"
+				+ " and v.numero like '%" + expedicion + "%'";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
@@ -3300,10 +3301,11 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las ventas segun fecha
 	 */
-	public List<Venta> getVentasCredito_(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
+	public List<Venta> getVentasCredito_(Date desde, Date hasta, long idCliente, long idSucursal, String expedicion) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.tipoMovimiento.sigla = ?"
-				+ " and v.fecha between ? and ?";
+				+ " and v.fecha between ? and ?"
+				+ " and v.numero like '%" + expedicion + "%'";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
 		}
