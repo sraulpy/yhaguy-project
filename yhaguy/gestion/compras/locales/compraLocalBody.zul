@@ -632,8 +632,7 @@
 						model="@load(vm.itemsCostoFinal)">
 						<listhead>
 							<listheader label="Código"
-								style="text-align:center" width="200px" sort="auto(pos1)"
-								onCreate='self.sort(true)' />
+								style="text-align:center" width="200px" sort="auto(pos1)" />
 							<listheader label="Descripción"
 								style="text-align:center" sort="auto(pos2)" />
 							<listheader label="Costo Final Gs. S/iva"
@@ -696,7 +695,7 @@
 						model="@load(vm.dto.factura.detalles)">
 						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 						<listhead>
-							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.pos1)" onCreate='self.sort(true)' />
+							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.pos1)" />
 							<listheader label="Descripción" style="text-align:center" />
 							<listheader label="Mayorista Gs." style="text-align:center" align="right" width="200px" />
 							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />

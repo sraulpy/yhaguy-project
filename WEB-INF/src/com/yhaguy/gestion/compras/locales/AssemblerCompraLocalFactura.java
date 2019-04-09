@@ -120,6 +120,8 @@ class AssemblerCompraLocalFacturaDetalle extends Assembler{
 		this.myPairToDomain(dto, domain, "tipoDescuento");
 		this.myPairToDomain(dto, domain, "iva");
 		
+		domain.setOrden(dto.getOrden());
+		
 		return domain;
 	}
 

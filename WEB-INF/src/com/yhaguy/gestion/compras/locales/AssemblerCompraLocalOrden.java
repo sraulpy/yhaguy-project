@@ -79,12 +79,13 @@ class AssemblerCompraLocalOrdenDetalle extends Assembler {
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {
-		CompraLocalOrdenDetalle domain = (CompraLocalOrdenDetalle) getDomain(
-				dto, CompraLocalOrdenDetalle.class);
+		CompraLocalOrdenDetalle domain = (CompraLocalOrdenDetalle) getDomain(dto, CompraLocalOrdenDetalle.class);
 
 		this.copiarValoresAtributos(dto, domain, attIguales);
 		this.myArrayToDomain(dto, domain, "articulo");
 		this.myPairToDomain(dto, domain, "iva");
+		
+		domain.setOrden(dto.getOrden());
 
 		return domain;
 	}

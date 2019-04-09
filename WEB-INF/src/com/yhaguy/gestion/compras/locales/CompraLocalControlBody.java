@@ -3,6 +3,8 @@ package com.yhaguy.gestion.compras.locales;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
@@ -423,6 +425,7 @@ public class CompraLocalControlBody extends BodyApp {
 	 */
 	private void insertarItem(boolean presupuesto) throws Exception {
 		this.nvoDetalle = new CompraLocalOrdenDetalleDTO();
+		this.nvoDetalle.setOrden((this.dto.getDetalles().size() + 1) + "");
 		this.nvoDetalle.setPresupuesto(presupuesto);
 		this.nvoDetalle.setIva(this.getTiposDeIva().get(0));
 		WindowPopup w = new WindowPopup();
@@ -482,6 +485,7 @@ public class CompraLocalControlBody extends BodyApp {
 		fac.setCondicionPago(this.dto.getCondicionPago());
 		for (CompraLocalOrdenDetalleDTO item : this.dto.getDetalles()) {
 			CompraLocalFacturaDetalleDTO det = new CompraLocalFacturaDetalleDTO();
+			det.setOrden(item.getOrden());
 			det.setArticulo(item.getArticulo());
 			det.setCantidad(item.getCantidad());
 			det.setCantidadRecibida(item.getCantidad());
@@ -700,8 +704,7 @@ public class CompraLocalControlBody extends BodyApp {
 		
 		List<MyArray> out = new ArrayList<MyArray>();
 		Hashtable<Long, MyArray> items = new Hashtable<>();
-		CompraLocalFacturaDTO f = this.dto.getFactura() == null? 
-				new CompraLocalFacturaDTO() : this.dto.getFactura();
+		CompraLocalFacturaDTO f = this.dto.getFactura() == null? new CompraLocalFacturaDTO() : this.dto.getFactura();
 
 			Object[] datos = this.datosFactura(f);
 			double dctoGlobal = (double) datos[0];
@@ -744,10 +747,10 @@ public class CompraLocalControlBody extends BodyApp {
 						mr.setPos4(m.redondeoCuatroDecimales(
 								(costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10))
 								/ this.dto.getTipoCambio()));
-
 						mr.setPos5(new Integer(d.getCantidad()));
 						mr.setPos6(d.getCostoGs());
 						mr.setPos7(d.getCostoDs());
+						mr.setPos8(d.getOrden());
 						items.put(d.getArticulo().getId(), mr);
 					}
 				}
@@ -757,6 +760,16 @@ public class CompraLocalControlBody extends BodyApp {
 			for (Long key : keys) {
 				out.add(items.get(key));
 			}
+			Collections.sort(out,
+					new Comparator<MyArray>() {
+						@Override
+						public int compare(MyArray o1,
+								MyArray o2) {
+							String id1 = (String) o1.getPos8();
+							String id2 = (String) o2.getPos8();
+							return (int) id1.compareTo(id2);
+						}
+					});
 		return out;
 	}
 	
@@ -1359,7 +1372,7 @@ public class CompraLocalControlBody extends BodyApp {
 			this.mensajeError += "\n - Debe ingresar al menos un ítem..";
 		}
 		
-		if ((!this.dto.esNuevo()) && (!this.dto.getFactura().getNumero().isEmpty())) {
+		if ((!this.dto.esNuevo()) && (this.dto.getFactura() != null) && (!this.dto.getFactura().getNumero().isEmpty())) {
 			this.setTimbrado();
 		}
 		

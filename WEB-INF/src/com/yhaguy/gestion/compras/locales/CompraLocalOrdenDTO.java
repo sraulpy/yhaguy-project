@@ -124,12 +124,9 @@ public class CompraLocalOrdenDTO extends DTO{
 					@Override
 					public int compare(CompraLocalOrdenDetalleDTO o1,
 							CompraLocalOrdenDetalleDTO o2) {
-						long id1 = o1.getId().longValue();
-						long id2 = o2.getId().longValue();
-						if (id1 < 0) {
-							return 1;
-						}
-						return (int) (id1 - id2);
+						String id1 = o1.getOrden();
+						String id2 = o2.getOrden();
+						return (int) id1.compareTo(id2);
 					}
 				});
 		return detalles;
