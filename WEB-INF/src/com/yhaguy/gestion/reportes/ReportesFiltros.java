@@ -600,7 +600,7 @@ public class ReportesFiltros {
 	 * @return la fecha de inicio de operaciones..
 	 */
 	public Date getFechaInicioOperaciones() throws Exception {
-		return Utiles.getFecha("01-01-2016 00:00:00");
+		return Utiles.getFechaInicioOperaciones();
 	}
 	
 	@DependsOn("razonSocialVendedor")

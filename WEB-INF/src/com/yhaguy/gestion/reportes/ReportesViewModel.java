@@ -8955,11 +8955,13 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				Date inicio = filtro.getFechaInicioOperaciones();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
+				Date desde_ = desde.compareTo(inicio) > 0 ? desde : inicio;
 				
 				Map<String, Object[]> acum = new HashMap<String, Object[]>();
 				List<Object[]> data = new ArrayList<Object[]>();
@@ -8976,9 +8978,9 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
 
-				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
+				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde_, hasta, idCliente);
 				List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
-				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde, hasta, idCliente);
+				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde_, hasta, idCliente);
 				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
 				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
 				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);

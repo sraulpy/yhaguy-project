@@ -22,6 +22,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.coreweb.util.MyArray;
+import com.yhaguy.Configuracion;
 
 public class Utiles {
 	
@@ -173,7 +174,10 @@ public class Utiles {
 	 * @return la fecha de inicio de operaciones..
 	 */
 	public static Date getFechaInicioOperaciones() throws Exception {
-		return Utiles.getFecha("01-01-2016 00:00:00");
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			return Utiles.getFecha("01-01-2016 00:00:00");
+		}
+		return Utiles.getFecha("05-10-2018 00:00:00");
 	}
 	
 	/**
