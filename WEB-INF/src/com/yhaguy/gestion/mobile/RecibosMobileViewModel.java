@@ -317,13 +317,21 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	 * @return la caja de cobranzas del dia..
 	 */
 	private CajaPeriodo getCajaPlanilla() throws Exception {
+		String cobradorExterno1 = "MIGUEL OTAZU";
+		String cobradorExterno2 = "HUGO FERNANDEZ";
 		String fecha = Utiles.getDateToString(new Date(), "yyyy-MM-dd");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<CajaPeriodo> cajas = rr.getCajaPlanillas_("", fecha);
 		for (CajaPeriodo caja : cajas) {
-			if (caja.isCajaCobrosMobile() && caja.isAbierto()) {
-				return caja;
-			}
+			if (this.selectedCobrador.getRazonSocial().equals(cobradorExterno1) || this.selectedCobrador.getRazonSocial().equals(cobradorExterno2)) {
+				if (caja.isCajaCobrosMobileInterior() && caja.isAbierto()) {
+					return caja;
+				}
+			} else {
+				if (caja.isCajaCobrosMobile() && caja.isAbierto()) {
+					return caja;
+				}
+			}			
 		}
 		return null;
 	}

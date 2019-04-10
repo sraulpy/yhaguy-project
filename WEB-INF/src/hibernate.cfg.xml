@@ -91,6 +91,8 @@
 		<mapping resource="com/yhaguy/domain/ArticuloIndicecarga.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloLado.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloSubMarca.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloPivot.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloPivotDetalle.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/ProveedorArticulo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/Proveedor.hbm.xml" />

@@ -35,7 +35,7 @@
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Fecha" />
+						<field value="Fecha / Vencimiento" />
 						<hlayout>
 						<datebox id="dtFecha" value="@bind(vm.dto.fecha)"
 							readonly="true" hflex="true" />
@@ -46,6 +46,7 @@
 						<button mold="bs" id="btn_editf_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"
 							sclass="btn-xs btn-info" width="30px"></button>
+						<datebox value="@bind(vm.dto.vencimiento)" hflex="true" />
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">

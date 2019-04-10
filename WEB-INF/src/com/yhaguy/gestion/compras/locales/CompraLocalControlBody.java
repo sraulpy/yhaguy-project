@@ -902,10 +902,10 @@ public class CompraLocalControlBody extends BodyApp {
 	private void subirImagen(UploadEvent event) throws IOException {
 		String fileName = this.dto.getNumero();
 		String folder = Configuracion.pathOrdenCompra;
-		// String format = "." + event.getMedia().getFormat();
+		String format = "." + event.getMedia().getFormat();
 
 		if (this.m.uploadFile(folder, fileName, event, this.m.TIPO_DOCUMENTO) == true) {
-			//this.dto.setUrlImagen(fileName + format);
+			this.dto.setAuxi(fileName + format);
 		}
 		BindUtils.postNotifyChange(null, null, this, "*");
 		Clients.showNotification("Imagen correctamente subida..");

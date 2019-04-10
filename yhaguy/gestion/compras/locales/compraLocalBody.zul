@@ -454,6 +454,11 @@
 							<button id="upImg" upload="true" width="120px"
 								height="30px" iconSclass="z-icon-upload"
 								label=" Adjuntar" />
+							<space></space>	
+							<a iconSclass="z-icon-paperclip"
+								label=" ver documento" href="@load(vm.dto.auxi)"
+								target="_blank" 
+								style="font-size:10pt" />
 							<space hflex="true"></space>
 						<field>Caja:</field>
 						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="200px" disabled="@load(!vm.siempreHabilitado)"
