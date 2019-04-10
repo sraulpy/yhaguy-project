@@ -4,13 +4,10 @@
 	
 	<vlayout vflex="true">	
 		<hlayout sclass="button-container">
-			<button mold="bs" sclass="btn-info btn-sm" width="170px"
-				iconSclass="z-icon-shopping-cart"
-				label=" Generar Compra" />
 			<html>
-					<i class="fas fa-shopping-cart" style="color:#f39c12" ></i>
+					<i class="fas fa-shopping-cart" style="color:#428bca" ></i>
 			</html>
-			<a label=" Generar Compra" style="color:#f39c12"></a>
+			<a label=" Generar Compra" style="color:#428bca"></a>
 			<space></space>
 			<html>
 					<i class="fas fa-dolly" style="color:#f39c12" ></i>

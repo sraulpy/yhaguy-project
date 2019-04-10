@@ -1,5 +1,5 @@
 <window border="normal"
-	width="98%" height="98%"
+	width="100%" height="100%"
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel')"
 	onCreate="tbox_codint.focus()"
