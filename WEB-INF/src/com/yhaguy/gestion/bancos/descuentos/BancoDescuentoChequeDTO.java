@@ -109,9 +109,10 @@ public class BancoDescuentoChequeDTO extends DTO {
 			my.setPos3(cheque.getNumero() + "");
 			my.setPos4(cheque.getBeneficiario().toUpperCase());
 			my.setPos5(cheque.getMonto());
-			my.setPos6(false);
-			my.setPos7(null);
+			my.setPos6(cheque.getMonto());
+			my.setPos7(false);
 			my.setPos8(this.isReadonly() ? true : false);
+			my.setPos9(false);
 			out.add(my);
 		}
 		return out;
