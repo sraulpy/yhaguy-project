@@ -9934,7 +9934,29 @@ public class RegisterDomain extends Register {
 	 * [1]: cliente.empresa.razonSocial
 	 * [2]: sum(importe)
 	 */
-	public List<Object[]> getCtaCteMigracionPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+	public List<Object[]> getCtaCteMigracionPorClienteVentas(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT c.cliente.id, c.cliente.empresa.razonSocial, sum(c.importeOriginal)" +   
+				"	FROM CtaCteEmpresaMovimiento c" +
+				"	WHERE (c.fechaEmision >= '" + desde_ + "' and c.fechaEmision <= '" + hasta_ + "')" + 
+				"   AND c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" +
+				"   AND c.auxi = 'MIGRACION'";
+		if (idCliente > 0) {
+			query += " AND c.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY c.cliente.id, c.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe ctacte dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getCtaCteMigracionPorClienteNotasCredito(Date desde, Date hasta, long idCliente) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "SELECT c.cliente.id, c.cliente.empresa.razonSocial, sum(c.importeOriginal)" +   

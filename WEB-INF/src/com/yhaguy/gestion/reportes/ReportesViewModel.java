@@ -8984,7 +8984,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
 				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
 				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
-				List<Object[]> migracion = rr.getCtaCteMigracionPorCliente(desde, hasta, idCliente);
+				List<Object[]> migracion = rr.getCtaCteMigracionPorClienteVentas(desde, hasta, idCliente);
 				
 				for (Object[] venta : ventas) {
 					String key = (String) venta[1];

@@ -368,18 +368,34 @@
 									</vlayout>
 									<vlayout spacing="0">
 										<field value="Número Factura"/>
-										<textbox hflex="true"
-											value="@bind(vm.dto.factura.numero) @converter(vm.cnv.facturaPy)"
-											style="text-align:right"/>
+										<hlayout valign="top">
+											<textbox id="txNro_" readonly="true"
+												value="@bind(vm.dto.factura.numero) @converter(vm.cnv.facturaPy)"
+												hflex="true" style="text-align:right" />
+											<button mold="bs" id="btn_edit" iconSclass="z-icon-check"
+												visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"
+												sclass="btn-xs btn-success" width="30px"></button>
+											<button mold="bs" id="btn_edit_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="txNro_.setReadonly(false); txNro_.focus(); btn_edit.setVisible(true); self.setVisible(false)"
+												sclass="btn-xs btn-info" width="30px"></button>
+										</hlayout>
 									</vlayout>	
 									<vlayout spacing="0">
 										<field value="Timbrado"/>
-										<hlayout>
+										<hlayout valign="top">
 											<textbox value="@load(vm.dto.factura.timbrado.pos1)"
 												placeholder="Nro. Timbrado.." readonly="true" hflex="true"/>
-											<button
-												iconSclass="z-icon-search"
+											<button id="btn_timb" mold="bs"
+												iconSclass="z-icon-search" sclass="btn-xs btn-info" width="30px"
 												onClick="@command('abrirVentanaTimbrado')" />
+											<button mold="bs" id="btn_edit_timb_" iconSclass="z-icon-check"
+												visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="@command('modificarTimbrado', comp1=self, comp2=btn_edit_timb)"
+												sclass="btn-xs btn-success" width="30px"></button>
+											<button mold="bs" id="btn_edit_timb" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="btn_timb.setDisabled(false); self.setVisible(false); btn_edit_timb_.setVisible(true)"
+												sclass="btn-xs btn-info" width="30px"></button>
 										</hlayout>
 									</vlayout>
 									<vlayout spacing="0">										
@@ -418,11 +434,16 @@
 									</vlayout>
 									<vlayout spacing="0">
 										<field value="T. Cambio"/>
-										<hbox hflex="true"
-											sclass="z-valign-bottom">											
-											<guaranibox value="@load(vm.dto.factura.tipoCambio)" readonly="true" hflex="true"/>
-											<label value="Gs." style="font-size:11px" />
-										</hbox>
+										<hlayout valign="top">											
+											<doublebox id="dbx_tc" value="@bind(vm.dto.factura.tipoCambio)" readonly="true" hflex="true" format="###,###,##0" style="text-align:right"/>
+											<button mold="bs" id="btn_edit_tc" iconSclass="z-icon-check"
+												visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="@command('modificarTipoCambio', comp1=self, comp2=btn_edit_tc_)"
+												sclass="btn-xs btn-success" width="30px"></button>
+											<button mold="bs" id="btn_edit_tc_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="dbx_tc.setReadonly(false); dbx_tc.focus(); btn_edit_tc.setVisible(true); self.setVisible(false)"
+												sclass="btn-xs btn-info" width="30px"></button>
+										</hlayout>
 									</vlayout>
 									<vlayout spacing="0">
 										<field value="Condición"/>

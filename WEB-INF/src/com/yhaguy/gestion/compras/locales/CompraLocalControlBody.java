@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
@@ -388,6 +389,52 @@ public class CompraLocalControlBody extends BodyApp {
 	@Listen("onUpload=#upImg")
 	public void uploadImage(UploadEvent event) throws IOException {
 		this.subirImagen(event);
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarNumero(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CompraLocalFactura compra = (CompraLocalFactura) rr.getObject(CompraLocalFactura.class.getName(), this.dto.getFactura().getId());
+		compra.setNumero(this.dto.getFactura().getNumero());
+		rr.saveObject(compra, this.getLoginNombre());
+		CompraLocalOrden orden = (CompraLocalOrden) rr.getObject(CompraLocalOrden.class.getName(), this.dto.getId());
+		orden.setNumeroFactura(this.dto.getFactura().getNumero());
+		rr.saveObject(orden, this.getLoginNombre());		
+		List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientosByIdMovimiento(compra.getId(), compra.getTipoMovimiento().getSigla());
+		for (CtaCteEmpresaMovimiento movim : movims) {
+			movim.setNroComprobante(compra.getNumero());
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarTimbrado(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarTipoCambio(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		if (this.dto.isMonedaLocal()) {
+			return;
+		}
+		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
+			item.setCostoGs(item.getCostoDs() * this.dto.getFactura().getTipoCambio());
+		}
+		this.dto.getFactura().setImporteGs(this.dto.getFactura().getImporteDs() * this.dto.getFactura().getTipoCambio());
+		this.dto.getFactura().setImporteIva10(Utiles.getIVA(this.dto.getTotalImporteGs(), Configuracion.VALOR_IVA_10));
+		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
 	/*********************************************************/
@@ -905,7 +952,7 @@ public class CompraLocalControlBody extends BodyApp {
 		String format = "." + event.getMedia().getFormat();
 
 		if (this.m.uploadFile(folder, fileName, event, this.m.TIPO_DOCUMENTO) == true) {
-			this.dto.setAuxi(fileName + format);
+			this.dto.setAuxi(Configuracion.pathOrdenCompraGenerico + fileName + format);
 		}
 		BindUtils.postNotifyChange(null, null, this, "*");
 		Clients.showNotification("Imagen correctamente subida..");
