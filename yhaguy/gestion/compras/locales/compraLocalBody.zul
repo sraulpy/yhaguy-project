@@ -369,7 +369,7 @@
 									<vlayout spacing="0">
 										<field value="Número Factura"/>
 										<hlayout valign="top">
-											<textbox id="txNro_" readonly="true"
+											<textbox id="txNro_"
 												value="@bind(vm.dto.factura.numero) @converter(vm.cnv.facturaPy)"
 												hflex="true" style="text-align:right" />
 											<button mold="bs" id="btn_edit" iconSclass="z-icon-check"
