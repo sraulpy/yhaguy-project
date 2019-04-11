@@ -53,11 +53,12 @@
 		<vbox hflex="true" vflex="true"
 			visible="@load(vm.selectedItem eq null ? 'false' : 'true')">
 			<hlayout sclass="button-container">
-				<toolbarbutton image="/core/images/anular.png"
-					label="Anular" tooltiptext="Anular Movimiento.."
+				<button mold="bs" iconSclass="z-icon-times"
+					label=" Anular" tooltiptext="Anular Movimiento.."
 					onClick="@command('anularMovimiento')" 
 					disabled="@load(vm.selectedMovimiento.esNuevo()? 'true' : 'false'
-						or vm.selectedMovimiento.pos6? 'true' : 'false')"/>
+						or vm.selectedMovimiento.pos6? 'true' : 'false')"
+					width="150px" sclass="btn-sm btn-danger"/>
 			</hlayout>
 			<grid sclass="vgrid">
 				<columns>
