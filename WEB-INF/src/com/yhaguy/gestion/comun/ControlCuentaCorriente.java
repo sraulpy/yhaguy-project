@@ -10,6 +10,7 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AjusteCtaCte;
+import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.BancoPrestamo;
@@ -334,10 +335,26 @@ public class ControlCuentaCorriente {
 	public static void addPrestamoInterno(long idPrestamo, String user) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		BancoDescuentoCheque prestamo = (BancoDescuentoCheque) rr.getObject(BancoDescuentoCheque.class.getName(), idPrestamo);
+		for (BancoCheque cheque : prestamo.getChequesPropios()) {
+			CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+			ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL));
+			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+			ctm.setFechaEmision(prestamo.getFecha());
+			ctm.setFechaVencimiento(cheque.getFechaVencimiento());
+			ctm.setIdEmpresa(prestamo.getAcreedor().getId());
+			ctm.setIdMovimientoOriginal(prestamo.getId());
+			ctm.setIdVendedor(0);
+			ctm.setImporteOriginal(cheque.getMonto());
+			ctm.setMoneda(prestamo.getMoneda());
+			ctm.setNroComprobante("NRO. " + prestamo.getId() + " / CHEQUE NRO. " + cheque.getNumero() );
+			ctm.setSucursal(prestamo.getSucursalApp());
+			ctm.setSaldo(cheque.getMonto());
+			rr.saveObject(ctm, user);
+		}
 		for (BancoChequeTercero cheque : prestamo.getCheques()) {
 			CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
 			ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL));
-			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
 			ctm.setFechaEmision(prestamo.getFecha());
 			ctm.setFechaVencimiento(cheque.getFecha());
 			ctm.setIdEmpresa(prestamo.getAcreedor().getId());
@@ -348,6 +365,22 @@ public class ControlCuentaCorriente {
 			ctm.setNroComprobante("NRO. " + prestamo.getId() + " / CHEQUE NRO. " + cheque.getNumero() );
 			ctm.setSucursal(prestamo.getSucursalApp());
 			ctm.setSaldo(cheque.getMonto());
+			rr.saveObject(ctm, user);
+		}
+		for (ReciboFormaPago item : prestamo.getFormasPago()) {
+			CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+			ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL));
+			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+			ctm.setFechaEmision(prestamo.getFecha());
+			ctm.setFechaVencimiento(prestamo.getFecha());
+			ctm.setIdEmpresa(prestamo.getAcreedor().getId());
+			ctm.setIdMovimientoOriginal(prestamo.getId());
+			ctm.setIdVendedor(0);
+			ctm.setImporteOriginal(item.getMontoGs());
+			ctm.setMoneda(prestamo.getMoneda());
+			ctm.setNroComprobante("NRO. " + prestamo.getId());
+			ctm.setSucursal(prestamo.getSucursalApp());
+			ctm.setSaldo(ctm.getImporteOriginal());
 			rr.saveObject(ctm, user);
 		}
 	}
