@@ -92,13 +92,13 @@
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>	
 				<div width="95px" style="text-align:right">
-					<label value="0" sclass="det"></label>
+					<label value="@load(each.exenta ? each.importeGsSinDescuento : 0) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
 				<div width="65px" style="text-align:right">
 					<label value="0" sclass="det"></label>
 				</div>
 				<div width="70px" style="text-align:right">
-					<label value="@load(each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.exenta ? 0 : each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
 			</hbox>
 		</template>
@@ -106,7 +106,10 @@
 	
 	<hlayout>
 		<div hflex="true"></div>
-		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<label value="@load(vm.selectedVenta.totalImporteGsExenta) @converter(vm.cnv.monedaLocal)" sclass="det"
+			visible="@load(vm.selectedVenta.totalImporteGsExenta ne 0)"></label>
+		<div width="120px"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGsIvaIncluido) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div width="30px"></div>
 	</hlayout>
 	<div height="1px"></div>
@@ -207,13 +210,13 @@
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>	
 				<div width="95px" style="text-align:right">
-					<label value="0" sclass="det"></label>
+					<label value="@load(each.exenta ? each.importeGsSinDescuento : 0) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
 				<div width="65px" style="text-align:right">
 					<label value="0" sclass="det"></label>
 				</div>
 				<div width="70px" style="text-align:right">
-					<label value="@load(each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.exenta ? 0 : each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
 			</hbox>
 		</template>
@@ -221,7 +224,10 @@
 	
 	<hlayout>
 		<div hflex="true"></div>
-		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<label value="@load(vm.selectedVenta.totalImporteGsExenta) @converter(vm.cnv.monedaLocal)" sclass="det"
+			visible="@load(vm.selectedVenta.totalImporteGsExenta ne 0)"></label>
+		<div width="120px"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGsIvaIncluido) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div width="30px"></div>
 	</hlayout>
 	<div height="1px"></div>
@@ -322,13 +328,13 @@
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>	
 				<div width="95px" style="text-align:right">
-					<label value="0" sclass="det"></label>
+					<label value="@load(each.exenta ? each.importeGsSinDescuento : 0) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
 				<div width="65px" style="text-align:right">
 					<label value="0" sclass="det"></label>
 				</div>
 				<div width="70px" style="text-align:right">
-					<label value="@load(each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+					<label value="@load(each.exenta ? 0 : each.importeGsSinDescuento) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
 			</hbox>
 		</template>
@@ -336,7 +342,10 @@
 	
 	<hlayout>
 		<div hflex="true"></div>
-		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
+		<label value="@load(vm.selectedVenta.totalImporteGsExenta) @converter(vm.cnv.monedaLocal)" sclass="det"
+			visible="@load(vm.selectedVenta.totalImporteGsExenta ne 0)"></label>
+		<div width="120px"></div>
+		<label value="@load(vm.selectedVenta.totalImporteGsIvaIncluido) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div width="30px"></div>
 	</hlayout>
 	<div height="1px"></div>

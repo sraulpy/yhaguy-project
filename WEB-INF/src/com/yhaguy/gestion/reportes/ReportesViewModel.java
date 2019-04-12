@@ -10271,7 +10271,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 			List<Venta> ventas = rr.getVentas(desde, hasta, 0, 0);
 			List<NotaCredito> notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0);
-			InformeHechauka.generarInformeHechauka(new ArrayList<Venta>(), notasCredito);
+			InformeHechauka.generarInformeHechauka(ventas, notasCredito);
 			Clients.showNotification("Informe Hechauka generado..");
 		}
 
@@ -10316,7 +10316,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_FC_XLS : 
 						com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_FC;
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new LibroVentasDataSource(ventas, new ArrayList<NotaCredito>(), new ArrayList<NotaDebito>(), desde, hasta);
+			JRDataSource dataSource = new LibroVentasDataSource(ventas, notasCredito, notasDebito, desde, hasta);
 			params.put("Usuario", getUs().getNombre());
 			params.put("Sucursal", suc_);
 			imprimirJasper(source, params, dataSource, formato);

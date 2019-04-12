@@ -162,6 +162,28 @@ public class VentaDTO extends DTO {
 		return out;
 	}
 	
+	@DependsOn("detalles")
+	public double getTotalImporteGsIvaIncluido() {
+		double out = 0;		
+		for (VentaDetalleDTO item : this.detalles) {
+			if (!item.isImpresionDescuento()) {
+				out += item.isExenta() ? 0.0 : item.getImporteGs();
+			}
+		}		
+		return out;
+	}
+	
+	@DependsOn("detalles")
+	public double getTotalImporteGsExenta() {
+		double out = 0;		
+		for (VentaDetalleDTO item : this.detalles) {
+			if (!item.isImpresionDescuento()) {
+				out += item.isExenta() ? item.getImporteGs() : 0.0;
+			}
+		}		
+		return out;
+	}
+	
 	/**
 	 * @return el importe total sin iva..
 	 */
