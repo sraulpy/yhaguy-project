@@ -1290,6 +1290,14 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	/**
+	 * verifica hechauka contra libro ventas..
+	 */
+	public static void verificarHechaukaVentas() {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();

@@ -40,10 +40,10 @@
 					</combobox>
 				</vlayout>
 				<vlayout spacing="0">
-					<field value="Acreedor" />
+					<field value="Deudor" />
 					<bandbox hflex="true" value="@load(vm.chequeDescuento.acreedor.pos2)"
 						onOpen="tx_filter.focus()" readonly="true"
-						placeholder="Acreedor.."
+						placeholder="Deudor.."
 						id="bnd_emp">
 						<bandpopup>
 							<listbox sclass="small-list" width="500px" height="300px"
@@ -288,7 +288,7 @@
 						<button mold="bs" sclass="btn-success btn-sm"
 							iconSclass="z-icon-check" hflex="true" 
 							disabled="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)"
-							onClick="@command('addLiquidacionPrestamo')"/>
+							onClick="@command('addLiquidacionPrestamo')" />
 					</cell>
 				</row>
 			</rows>

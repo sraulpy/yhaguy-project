@@ -53,6 +53,7 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(venta.getTotalIva10());
 					cons_gravada += redondear(venta.getTotalGravado10());
+					System.out.println("--- CONSOLIDADO: " + venta.getNumero() + " - " + (Utiles.getNumberFormat(venta.getTotalIva10() + venta.getTotalGravado10())));
 				} else if (ruc.equals(Configuracion.RUC_DIPLOMATICOS)) {
 					rSocial = "AGENTES DIPLOMATICOS";
 					dip_gravada += redondear(venta.getTotalIva10());

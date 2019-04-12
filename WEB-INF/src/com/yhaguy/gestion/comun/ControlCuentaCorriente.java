@@ -346,7 +346,7 @@ public class ControlCuentaCorriente {
 			ctm.setIdVendedor(0);
 			ctm.setImporteOriginal(cheque.getMonto());
 			ctm.setMoneda(prestamo.getMoneda());
-			ctm.setNroComprobante("NRO. " + prestamo.getId() + " / CHEQUE NRO. " + cheque.getNumero() );
+			ctm.setNroComprobante("PRESTAMO NRO. " + prestamo.getId());
 			ctm.setSucursal(prestamo.getSucursalApp());
 			ctm.setSaldo(cheque.getMonto());
 			rr.saveObject(ctm, user);
@@ -362,7 +362,7 @@ public class ControlCuentaCorriente {
 			ctm.setIdVendedor(0);
 			ctm.setImporteOriginal(cheque.getMonto());
 			ctm.setMoneda(prestamo.getMoneda());
-			ctm.setNroComprobante("NRO. " + prestamo.getId() + " / CHEQUE NRO. " + cheque.getNumero() );
+			ctm.setNroComprobante("PRESTAMO NRO. " + prestamo.getId());
 			ctm.setSucursal(prestamo.getSucursalApp());
 			ctm.setSaldo(cheque.getMonto());
 			rr.saveObject(ctm, user);
@@ -378,7 +378,7 @@ public class ControlCuentaCorriente {
 			ctm.setIdVendedor(0);
 			ctm.setImporteOriginal(item.getMontoGs());
 			ctm.setMoneda(prestamo.getMoneda());
-			ctm.setNroComprobante("NRO. " + prestamo.getId());
+			ctm.setNroComprobante("PRESTAMO NRO. " + prestamo.getId());
 			ctm.setSucursal(prestamo.getSucursalApp());
 			ctm.setSaldo(ctm.getImporteOriginal());
 			rr.saveObject(ctm, user);

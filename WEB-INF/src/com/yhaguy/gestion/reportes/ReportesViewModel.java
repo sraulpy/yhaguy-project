@@ -10269,7 +10269,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
 
-			List<Venta> ventas = rr.getVentas(desde, hasta, 0);
+			List<Venta> ventas = rr.getVentas(desde, hasta, 0, 0);
 			List<NotaCredito> notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0);
 			InformeHechauka.generarInformeHechauka(ventas, notasCredito);
 			Clients.showNotification("Informe Hechauka generado..");
@@ -14308,23 +14308,21 @@ class LibroVentasDataSource implements JRDataSource {
 			String razonSocial = ncred.isAnulado() ? "ANULADO" : ncred.getCliente().getRazonSocial();
 			String ruc = ncred.getCliente().getRuc();
 			if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
-			double grav5 = 0.0;
-			double grav10 = ncred.isAnulado() ? 0.0 : (ncred.getTotalGravado10() * -1);
-			double iva5 = 0.0;
-			double iva10 = ncred.isAnulado() ? 0.0 : (ncred.getTotalIva10() * -1);
-			double total = ncred.isAnulado() ? 0.0 : (ncred.getImporteGs() * -1);
+			double iva10 = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalIva10()) * -1;
+			double gravada = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalGravado10()) * -1;
+			double exenta = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalExenta()) * -1;
+			double importe = (iva10 + gravada + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					ncred.isAnulado() ? "" : ruc, grav10, iva10, grav5, iva5,
-					total, 0.0));
+					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, 0.0));
 			if (ncred.isAnulado() == false) {
 				this.totalGravada -= (ncred.getTotalGravado10());
 				this.totalImpuesto -= (ncred.getTotalIva10());
-				this.totalImporte -= (ncred.getImporteGs());
+				this.totalImporte -= (ncred.getTotalIva10() + ncred.getTotalGravado10() + ncred.getTotalExenta());
 
 				if (ncred.isNotaCreditoVentaContado()) {
-					this.totalNCContado -= (ncred.getImporteGs());
+					this.totalNCContado -= (ncred.getTotalIva10() + ncred.getTotalGravado10() + ncred.getTotalExenta());
 				} else {
-					this.totalNCCredito -= (ncred.getImporteGs());
+					this.totalNCCredito -= (ncred.getTotalIva10() + ncred.getTotalGravado10() + ncred.getTotalExenta());
 				}
 			}
 		}
@@ -14337,26 +14335,33 @@ class LibroVentasDataSource implements JRDataSource {
 			if (razonSocial == null) razonSocial = vta.getCliente().getRazonSocial();
 			String ruc = vta.getCliente().getRuc();
 			if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
-			double grav5 = 0.0;
-			double grav10 = vta.isAnulado() ? 0.0 : vta.getTotalGravado10();
-			double iva5 = 0.0;
-			double iva10 = vta.isAnulado() ? 0.0 : vta.getTotalIva10();
-			double total = vta.isAnulado() ? 0.0 : vta.getTotalImporteGs();
-			double exenta = vta.isAnulado() ? 0.0 : vta.getTotalExenta();
+			double iva10 = vta.isAnulado() ? 0.0 : redondear(vta.getTotalIva10());
+			double gravada10 = vta.isAnulado() ? 0.0 : redondear(vta.getTotalGravado10());
+			double iva5 = vta.isAnulado() ? 0.0 : redondear(vta.getTotalIva5());
+			double gravada5 = vta.isAnulado() ? 0.0 : redondear(vta.getTotalGravado5());
+			double exenta = vta.isAnulado() ? 0.0 : redondear(vta.getTotalExenta());
+			double importe = vta.isAnulado() ? 0.0 : (iva10 + gravada10 + iva5 + gravada5 + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					vta.isAnulado() ? "" : ruc, grav10, iva10, grav5, iva5, total, exenta));
+					vta.isAnulado() ? "" : ruc, gravada10, iva10, gravada5, iva5, importe, exenta));
 			if (vta.isAnulado() == false) {
 				this.totalGravada += (vta.getTotalGravado10());
 				this.totalImpuesto += (vta.getTotalIva10());
-				this.totalImporte += (vta.getTotalImporteGs_());
+				this.totalImporte += importe;
 				this.totalExenta += vta.getTotalExenta();
 				if (vta.isVentaContado()) {
-					this.totalContado += (vta.getTotalImporteGs_());
+					this.totalContado += (importe);
 				} else {
-					this.totalCredito += (vta.getTotalImporteGs_());
+					this.totalCredito += (importe);
 				}
 			}
 		}
+	}
+	
+	/**
+	 * @return el monto redondeado..
+	 */
+	private static double redondear(double monto) {
+		return Math.rint(monto * 1) / 1;
 	}
 }
 
