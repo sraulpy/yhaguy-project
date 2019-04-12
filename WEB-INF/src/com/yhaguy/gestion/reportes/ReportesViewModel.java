@@ -10271,7 +10271,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 			List<Venta> ventas = rr.getVentas(desde, hasta, 0, 0);
 			List<NotaCredito> notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0);
-			InformeHechauka.generarInformeHechauka(ventas, new ArrayList<NotaCredito>());
+			InformeHechauka.generarInformeHechauka(new ArrayList<Venta>(), notasCredito);
 			Clients.showNotification("Informe Hechauka generado..");
 		}
 
