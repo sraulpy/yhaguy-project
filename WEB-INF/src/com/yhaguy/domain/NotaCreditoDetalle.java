@@ -42,6 +42,19 @@ public class NotaCreditoDetalle extends Domain{
 	}
 	
 	/**
+	 * @return la lista de precio del item..
+	 */
+	public ArticuloListaPrecio getListaPrecio() {
+		if(this.getVenta() == null) return null;
+		for (VentaDetalle item : this.getVenta().getDetalles()) {
+			if (this.articulo.getCodigoInterno().equals(item.getArticulo().getCodigoInterno())) {
+				return item.getListaPrecio();
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @return true si es exenta..
 	 */
 	public boolean isExenta() {

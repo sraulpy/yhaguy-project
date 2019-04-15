@@ -5610,7 +5610,64 @@ public class ReportesViewModel extends SimpleViewModel {
 							}							
 						}
 					}					
-				}		
+				}	
+				
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0, idSucursal, true);
+				for (NotaCredito ncr : ncs) {
+					if (!ncr.isAnulado()) {
+						if (!ncr.isMotivoDescuento()) {
+							for (NotaCreditoDetalle det : ncr.getDetallesArticulos()) {
+								ArticuloListaPrecio lp = det.getListaPrecio();
+								if (lp != null) {
+									if ((art != null && art.getCodigoInterno().equals(det.getArticulo().getCodigoInterno()))
+											|| art == null) {
+										String lis = lp.getDescripcion();
+										String key = lis + "-" + det.getArticulo().getFamilia().getDescripcion();
+										Object[] acum = totales.get(key);
+										if (acum != null) {
+											double imp = (double) acum[0];
+											double cos = (double) acum[1];
+											imp -= det.getImporteGsSinIva();
+											cos -= det.getCostoTotalGsSinIva();
+											acum[0] = imp;
+											acum[1] = cos;
+											totales.put(key, acum);
+										} else {
+											acum = new Object[] { det.getImporteGsSinIva() * -1, det.getCostoTotalGsSinIva() * -1 };
+											totales.put(key, acum);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				for (Venta venta : ventas) {
+					if (!venta.isAnulado()) {
+						for (VentaDetalle item : venta.getDetalles()) {
+							if (item.getListaPrecio() != null) {
+								if ((art != null && art.getCodigoInterno().equals(item.getArticulo().getCodigoInterno()))
+										|| art == null) {
+									String lis = item.getListaPrecio().getDescripcion();
+									String key = lis + "-" + item.getArticulo().getFamilia().getDescripcion();
+									Object[] acum = totales.get(key);
+									if (acum != null) {
+										double imp = (double) acum[0];
+										double cos = (double) acum[1];
+										imp += item.getImporteGsSinIva();
+										cos += item.getCostoTotalGsSinIva();
+										acum[0] = imp;
+										acum[1] = cos;
+										totales.put(key, acum);
+									} else {
+										acum = new Object[] { item.getImporteGsSinIva(), item.getCostoTotalGsSinIva() };
+										totales.put(key, acum);
+									}
+								}
+							}							
+						}
+					}					
+				}	
 				
 				for (String key : totales.keySet()) {
 					Object[] total = totales.get(key);
