@@ -773,6 +773,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String ARTICULOS_SIN_MOVIMIENTO = "STK-00008";
 		static final String EXISTENCIA_ARTICULOS = "STK-00009";
 		static final String STOCK_VALORIZADO = "STK-00010";
+		static final String REMISION_CLIENTES = "STK-00011";
 
 		/**
 		 * procesamiento del reporte..
@@ -818,6 +819,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case STOCK_VALORIZADO:
 				this.stockValorizadoResumido();
+				break;
+				
+			case REMISION_CLIENTES:
+				this.listadoRemisiones();
 				break;
 			}
 		}
@@ -1383,6 +1388,37 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}		
+		}
+		
+		/**
+		 * Reporte STK-00011
+		 */
+		private void listadoRemisiones() {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				
+				List<Object[]> remisiones = rr.getRemisiones(desde, hasta);
+				
+				for (Object[] rem : remisiones) {
+					data.add(new Object[]{ Utiles.getDateToString((Date) rem[4], Utiles.DD_MM_YY), rem[1], rem[2], rem[3] });
+				}
+				
+				ReporteRemisiones rep = new ReporteRemisiones(desde, hasta);
+				rep.setDatosReporte(data);
+				
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -22214,3 +22250,53 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		return false;
 	}
 }
+
+/**
+ * Reporte de remisiones STK-00011..
+ */
+class ReporteRemisiones extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 20);
+	static DatosColumnas col1 = new DatosColumnas("Remisión Nro.", TIPO_STRING, 35);
+	static DatosColumnas col2 = new DatosColumnas("Factura Nro.", TIPO_STRING, 35);
+	static DatosColumnas col3 = new DatosColumnas("Cliente", TIPO_STRING);
+
+	public ReporteRemisiones(Date desde, Date hasta) {
+		this.desde = desde;
+		this.hasta = hasta;
+	}
+
+	static {
+		cols.add(col0);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Listado de Remisiones a clientes");
+		this.setDirectorio("Articulos");
+		this.setNombreArchivo("Remisiones-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+

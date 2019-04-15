@@ -9567,6 +9567,27 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return remision segun numero, factura o cliente..
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:venta.numero
+	 * [3]:cliente
+	 * [4]:fecha
+	 * [5]:tipomovimiento
+	 * [6]:importeGs
+	 */
+	public List<Object[]> getRemisiones(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select r.id, r.numero, r.venta.numero, r.venta.cliente.empresa.razonSocial, r.fecha,"
+				+ " (select t from TipoMovimiento t where t.sigla = '" + Configuracion.SIGLA_TM_NOTA_REMISION + "'),"
+				+ " r.importeGs from Remision r where "
+				+ " (r.fecha >= '" + desde_ + "' and r.fecha <= '" + hasta_ + "')"
+				+ " order by r.fecha";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return los modelos segun marca..
 	 */
 	public List<VehiculoModelo> getVehiculoModelos(long idMarca) throws Exception {

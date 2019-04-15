@@ -103,6 +103,18 @@ public class NotaCreditoDTO extends DTO {
 	}
 	
 	/**
+	 * @return la venta aplicada..
+	 */
+	public MyArray getVentaAplicada() {
+		for (NotaCreditoDetalleDTO item : this.detalles) {
+			if (item.getVenta() != null) {
+				return item.getVenta();
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @return el total del iva..
 	 */
 	public double getTotalIva() {

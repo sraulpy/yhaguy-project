@@ -48,7 +48,11 @@
 	</hlayout>
 	
 	<vbox height="110px">
-		<div height="30px"></div>
+		<div height="20px"></div>
+		<hlayout>
+				<div width="170px"></div>
+				<label value="@load(vm.selectedRemision.venta.numero)" maxlength="40" sclass="det"></label>
+			</hlayout>
 		<hlayout>
 			<div width="170px"></div>
 			<label value="@load(vm.selectedRemision.venta.sucursal.descripcion.toLowerCase())" maxlength="40" sclass="det"></label>
@@ -113,7 +117,11 @@
 	</hlayout>
 	
 	<vbox height="110px">
-		<div height="30px"></div>
+		<div height="20px"></div>
+		<hlayout>
+				<div width="170px"></div>
+				<label value="@load(vm.selectedRemision.venta.numero)" maxlength="40" sclass="det"></label>
+			</hlayout>
 		<hlayout>
 			<div width="170px"></div>
 			<label value="@load(vm.selectedRemision.venta.sucursal.descripcion.toLowerCase())" maxlength="40" sclass="det"></label>
@@ -178,7 +186,11 @@
 	</hlayout>
 	
 	<vbox height="110px">
-		<div height="30px"></div>
+		<div height="20px"></div>
+		<hlayout>
+			<div width="170px"></div>
+			<label value="@load(vm.selectedRemision.venta.numero)" maxlength="40" sclass="det"></label>
+		</hlayout>
 		<hlayout>
 			<div width="170px"></div>
 			<label value="@load(vm.selectedRemision.venta.sucursal.descripcion.toLowerCase())" maxlength="40" sclass="det"></label>

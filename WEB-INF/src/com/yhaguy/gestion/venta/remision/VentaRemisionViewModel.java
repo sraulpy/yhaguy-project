@@ -86,7 +86,7 @@ public class VentaRemisionViewModel extends SimpleViewModel {
 	}
 	
 	@Command
-	@NotifyChange("*")
+	@NotifyChange({ "selectedRemision_", "selectedRemision" })
 	public void selectRemision() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		long idRemision = (long) this.selectedRemision_[0];
