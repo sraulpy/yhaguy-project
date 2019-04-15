@@ -5642,32 +5642,6 @@ public class ReportesViewModel extends SimpleViewModel {
 						}
 					}
 				}
-				for (Venta venta : ventas) {
-					if (!venta.isAnulado()) {
-						for (VentaDetalle item : venta.getDetalles()) {
-							if (item.getListaPrecio() != null) {
-								if ((art != null && art.getCodigoInterno().equals(item.getArticulo().getCodigoInterno()))
-										|| art == null) {
-									String lis = item.getListaPrecio().getDescripcion();
-									String key = lis + "-" + item.getArticulo().getFamilia().getDescripcion();
-									Object[] acum = totales.get(key);
-									if (acum != null) {
-										double imp = (double) acum[0];
-										double cos = (double) acum[1];
-										imp += item.getImporteGsSinIva();
-										cos += item.getCostoTotalGsSinIva();
-										acum[0] = imp;
-										acum[1] = cos;
-										totales.put(key, acum);
-									} else {
-										acum = new Object[] { item.getImporteGsSinIva(), item.getCostoTotalGsSinIva() };
-										totales.put(key, acum);
-									}
-								}
-							}							
-						}
-					}					
-				}	
 				
 				for (String key : totales.keySet()) {
 					Object[] total = totales.get(key);
