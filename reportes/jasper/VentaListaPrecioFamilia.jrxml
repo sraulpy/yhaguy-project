@@ -33,9 +33,9 @@
 	<field name="TituloDetalle" class="java.lang.String"/>
 	<field name="Asentable" class="java.lang.String"/>
 	<field name="Resumen" class="java.lang.String"/>
-	<field name="ResumenActivo" class="java.lang.String"/>
-	<field name="ResumenPasivo" class="java.lang.String"/>
-	<field name="ResumenIngresos" class="java.lang.String"/>
+	<field name="TotalVenta" class="java.lang.String"/>
+	<field name="TotalCosto" class="java.lang.String"/>
+	<field name="TotalUtilidad" class="java.lang.String"/>
 	<field name="ResumenEgresos" class="java.lang.String"/>
 	<field name="TotalResumen1" class="java.lang.String"/>
 	<field name="TotalResumen2" class="java.lang.String"/>
@@ -87,6 +87,30 @@
 				<line>
 					<reportElement x="2" y="4" width="617" height="1" uuid="d2d84e8e-d80a-45a3-a8f1-a69f7939b569"/>
 				</line>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+					<reportElement style="Detail" mode="Transparent" x="168" y="8" width="109" height="15" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="80e8e562-b930-473e-98f2-4013bb711e51"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TotalVenta}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+					<reportElement style="Detail" mode="Transparent" x="277" y="8" width="109" height="15" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="c4d2855a-37b5-4807-826d-db35e2321bf1"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TotalCosto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+					<reportElement style="Detail" mode="Transparent" x="386" y="8" width="107" height="15" forecolor="#0E0B06" backcolor="#FFFFFF" uuid="d885041b-e99c-4dd6-8433-d70d8e0cfaca"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TotalUtilidad}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>

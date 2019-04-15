@@ -5640,6 +5640,31 @@ public class ReportesViewModel extends SimpleViewModel {
 								}
 							}
 						}
+						if (ncr.isMotivoDescuento()) {
+							double importe = ncr.getTotalImporteGsSinIva();
+							Venta vta = ncr.getVentaAplicada();
+							int size = vta.getDetalles().size();
+							double prorrateo = importe / size;
+							for (VentaDetalle item : vta.getDetalles()) {
+								if (item.getListaPrecio() != null) {
+									if ((art != null && art.getCodigoInterno().equals(item.getArticulo().getCodigoInterno()))
+											|| art == null) {
+										String lis = item.getListaPrecio().getDescripcion();
+										String key = lis + "-" + item.getArticulo().getFamilia().getDescripcion();
+										Object[] acum = totales.get(key);
+										if (acum != null) {
+											double imp = (double) acum[0];
+											double cos = (double) acum[1];
+											imp += prorrateo;
+											cos += prorrateo;
+											acum[0] = imp;
+											acum[1] = cos;
+											totales.put(key, acum);
+										}
+									}
+								}							
+							}
+						}
 					}
 				}
 				
@@ -5652,6 +5677,19 @@ public class ReportesViewModel extends SimpleViewModel {
 					double promedioSobreCosto = Utiles.obtenerPorcentajeDelValor(utilidad, totalCto);
 					double promedioSobreVenta = Utiles.obtenerPorcentajeDelValor(utilidad, totalVta);
 					data.add(new Object[] { desc[0], desc[1], totalVta, totalCto, utilidad, promedioSobreCosto, promedioSobreVenta });
+					
+					Object[] acum = totales_.get(desc[0]);
+					if (acum != null) {
+						double totalVta_ = (double) acum[0];
+						double totalCto_ = (double) acum[1];
+						double totalUti_ = (double) acum[2];
+						totalVta_ += totalVta;
+						totalCto_ += totalCto;
+						totalUti_ += utilidad;
+						totales_.put(desc[0], new Object[]{ totalVta_, totalCto_, totalUti_ });
+					} else {
+						totales_.put(desc[0], new Object[]{ totalVta, totalCto, utilidad });
+					}
 				}
 				
 				Collections.sort(data, new Comparator<Object[]>() {
@@ -15976,6 +16014,7 @@ class VentasListaPrecioFamilia implements JRDataSource {
 		Object value = null;
 		String fieldName = field.getName();
 		Object[] det = this.values.get(index);
+		Object[] tot = this.totales.get(det[0]);
 
 		if ("TituloDetalle".equals(fieldName)) {
 			value = det[0];
@@ -15998,6 +16037,12 @@ class VentasListaPrecioFamilia implements JRDataSource {
 			value = FORMATTER_.format(imp);
 		} else if ("TotalImporte".equals(fieldName)) {
 			value = FORMATTER.format(0.0);
+		} else if ("TotalVenta".equals(fieldName)) { 
+			value = FORMATTER.format(tot != null ? tot[0] : 0.0);
+		} else if ("TotalCosto".equals(fieldName)) { 
+			value = FORMATTER.format(tot != null ? tot[1] : 0.0);
+		} else if ("TotalUtilidad".equals(fieldName)) { 
+			value = FORMATTER.format(tot != null ? tot[2] : 0.0);
 		}
 		return value;
 	}
