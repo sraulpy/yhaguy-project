@@ -27,6 +27,7 @@ import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Gasto;
+import com.yhaguy.domain.GastoDetalle;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
@@ -51,6 +52,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	
 	private Object[] selectedGasto_;
 	private Gasto selectedGasto;
+	private GastoDetalle nvoDetalle = new GastoDetalle();
 	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
@@ -111,9 +113,10 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	}
 	
 	@Command
-	@NotifyChange("selectedGasto")
+	@NotifyChange({ "selectedGasto", "nvoDetalle" })
 	public void verItems(@BindingParam("item") Gasto item,
 			@BindingParam("parent") Component parent) throws Exception {
+		this.nvoDetalle = new GastoDetalle();
 		this.selectedGasto = item;
 		this.pop_det.open(parent, "start_before");
 	}
@@ -152,6 +155,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	@NotifyChange("*")
 	public void registrarRecibo() throws Exception {
 		this.registrarRecibo_();
+	}
+	
+	@Command
+	@NotifyChange("selectedGasto")
+	public void insertarItem(@BindingParam("comp") Component comp) throws Exception {
+		this.selectedGasto.getDetalles().add(this.nvoDetalle);
+		comp.setVisible(false);
 	}
 	
 	/**
@@ -518,5 +528,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 
 	public void setFilterArticuloGasto(String filterArticuloGasto) {
 		this.filterArticuloGasto = filterArticuloGasto;
+	}
+
+	public GastoDetalle getNvoDetalle() {
+		return nvoDetalle;
+	}
+
+	public void setNvoDetalle(GastoDetalle nvoDetalle) {
+		this.nvoDetalle = nvoDetalle;
 	}
 }

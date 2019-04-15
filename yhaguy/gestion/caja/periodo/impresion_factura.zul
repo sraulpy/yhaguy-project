@@ -33,7 +33,7 @@
 		<div width="94px">
 			<label value="${arg.Ruc}" sclass="det"></label>
 		</div>	
-		<div width="90px"></div>
+		<div width="80px"></div>
 		<div width="60px" style="text-align:right">
 			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
 		</div>
@@ -151,7 +151,7 @@
 		<div width="94px">
 			<label value="${arg.Ruc}" sclass="det"></label>
 		</div>	
-		<div width="90px"></div>
+		<div width="80px"></div>
 		<div width="60px" style="text-align:right">
 			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
 		</div>
@@ -269,7 +269,7 @@
 		<div width="94px">
 			<label value="${arg.Ruc}" sclass="det"></label>
 		</div>	
-		<div width="90px"></div>
+		<div width="80px"></div>
 		<div width="60px" style="text-align:right">
 			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
 		</div>

@@ -279,7 +279,7 @@
 		</grid>
 		<div height="5px"></div>
 		<hlayout>
-		<listbox height="300px"
+		<listbox height="300px" sclass="rounded"
 			model="@load(vm.selectedGasto.detalles)" hflex="true">
 			<listhead style="text-align:center">
 				<listheader label="Código" width="110px" />
@@ -291,7 +291,65 @@
 					style="text-align:center" />
 				<listheader label="Importe IVA" width="110px" align="right"
 					style="text-align:center" />
+				<listheader width="50px" align="center">
+					<a iconSclass="z-icon-plus" style="color:#428bca"
+						hflex="true" vflex="true"
+						onClick="aux_ins.setVisible(true)"></a>
+				</listheader>
 			</listhead>
+			<auxhead id="aux_ins" visible="false">
+				<auxheader></auxheader>
+				<auxheader>
+					<bandbox
+						value="@load(vm.nvoDetalle.articuloGasto.descripcion)"
+						hflex="true" id="bnd_cta">
+						<bandpopup>
+							<listbox sclass="small-list" width="700px"
+								model="@load(vm.articulosGastos)"
+								selectedItem="@bind(vm.nvoDetalle.articuloGasto)"
+								onSelect="bnd_cta.close()">
+								<listhead>
+									<listheader>
+										<textbox hflex="true"
+											placeholder="Buscar Cuenta.."
+											value="@bind(vm.filterArticuloGasto)" instant="true">
+										</textbox>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.descripcion)">
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</auxheader>
+				<auxheader>
+					<combobox hflex="true" value="@load(each.tipoIva.descripcion)"
+							model="@load(vm.tiposIva)"
+							selectedItem="@bind(vm.nvoDetalle.tipoIva)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>
+						</combobox>
+				</auxheader>
+				<auxheader>
+					<guaranibox value="@bind(vm.nvoDetalle.montoGs)" hflex="true" />	
+				</auxheader>
+				<auxheader>
+					<doublebox value="@bind(vm.nvoDetalle.montoDs)" hflex="true" format="#,###,###.00" />
+				</auxheader>
+				<auxheader>
+					<guaranibox value="@bind(vm.nvoDetalle.montoIva)" hflex="true" />
+				</auxheader>
+				<auxheader>
+					<a iconSclass="z-icon-check" style="color:#4cae4c"
+						hflex="true" vflex="true" onClick="@command('insertarItem', comp=aux_ins)"></a>
+				</auxheader>
+			</auxhead>
 			<template name="model">
 				<listitem>
 					<listcell label="@load(each.articuloGasto.cuentaContable.codigo)" />
@@ -336,6 +394,7 @@
 					<listcell>
 						<guaranibox value="@bind(each.montoIva)" hflex="true" />	
 					</listcell>
+					<listcell></listcell>
 				</listitem>
 			</template>
 			<listfoot>
