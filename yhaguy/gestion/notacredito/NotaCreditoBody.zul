@@ -23,11 +23,13 @@
 							readonly="true" 
 							placeholder="Auto-generado.."
 							hflex="true"/>
-						<button id="btn_edit" iconSclass="z-icon-check"
+						<button mold="bs" id="btn_edit" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"></button>
-						<button id="btn_edit_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="txNro.setReadonly(false); txNro.focus(); btn_edit.setVisible(true); self.setVisible(false)"></button>
+							onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"
+							sclass="btn-xs btn-success" width="30px"></button>
+						<button mold="bs" id="btn_edit_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="txNro.setReadonly(false); txNro.focus(); btn_edit.setVisible(true); self.setVisible(false)"
+							sclass="btn-xs btn-info" width="30px"></button>
 					</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
@@ -35,11 +37,13 @@
 					<hlayout valign="top">
 						<datebox id="dtFecha" value="@bind(vm.dto.fechaEmision)"
 							readonly="true" hflex="true" />
-						<button id="btn_editf" iconSclass="z-icon-check"
+						<button mold="bs" id="btn_editf" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"></button>
-						<button id="btn_editf_" iconSclass="z-icon-edit" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
-							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"></button>
+							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"
+							sclass="btn-xs btn-success" width="30px"></button>
+						<button mold="bs" id="btn_editf_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"
+							sclass="btn-xs btn-info" width="30px"></button>
 						</hlayout>
 				</vlayout>
 				<vlayout spacing="0">

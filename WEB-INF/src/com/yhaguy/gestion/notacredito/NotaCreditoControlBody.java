@@ -222,11 +222,13 @@ public class NotaCreditoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void buscarFacturas() throws Exception {
 		if (this.dto.isNotaCreditoVenta()) {
-			if (this.dto.isMotivoDescuento()) {
+			if (this.dto.isMotivoDescuento() && this.mensajeSiNo("Aplicar a venta crédito?")) {
 				this.win = (Window) Executions.createComponents(ADD_APLICACION, this.mainComponent, null);
 				this.win.doModal();
-			} else {
+			} else if (this.dto.isMotivoDevolucion() || this.dto.isMotivoReclamo()) {
 				this.buscarVentas();
+			} else {
+				this.buscarVentasContado();
 			}
 		} else {
 			if (this.mensajeSiNo("Factura de compra de mercaderías..?")) {
@@ -358,6 +360,64 @@ public class NotaCreditoControlBody extends BodyApp {
 				+ " or c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
 				+ "') and c.moneda.id = " + this.dto.getMoneda().getId()
+				+ " and c.estadoComprobante is null");
+		b.setContinuaSiHayUnElemento(false);
+		b.show("%");
+
+		if (b.isClickAceptar()) {
+
+			if (this.existeFacturaEnDetalle(b.getSelectedItem()) == true) {
+				String error = "No se puede completar la operación debido a: \n";
+				error += "\n - Ya existe la factura en el detalle..";
+				this.mensajeError(error);
+				return;
+			}
+
+			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false);
+
+			if (this.dto.isMotivoDescuento()) {
+				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
+
+			} else {
+				this.dto.getDetalles().add(this.nvoItem);
+			}
+		}
+	}
+	
+	/**
+	 * Busca las ventas..
+	 */
+	private void buscarVentasContado() throws Exception {
+
+		String campoImporte = this.dto.isMonedaLocal() ? "totalImporteGs"
+				: "totalImporteDs";
+
+		String[] atributos = new String[] { "tipoMovimiento.descripcion",
+				"numero", "fecha", "sucursal.descripcion", campoImporte };
+
+		String[] columnas = new String[] { "Tipo Movimiento", "Número",
+				"Fecha", "Sucursal",
+				"Importe " + this.dto.getMoneda().getSigla() };
+
+		String[] tipos = new String[] { Config.TIPO_STRING, Config.TIPO_STRING,
+				Config.TIPO_DATE, Config.TIPO_STRING, Config.TIPO_NUMERICO };
+
+		long idCliente = this.dto.getCliente().getId();
+
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(Venta.class);
+		b.setTitulo("Facturas de Venta - Cliente: "
+				+ this.dto.getCliente().getPos2() + " en Moneda: "
+				+ this.dto.getMoneda().getSigla());
+		b.setTipos(tipos);
+		b.setAtributos(atributos);
+		b.setNombresColumnas(columnas);
+		b.setWidth("980px");
+		b.addOrden("numero");
+		b.addWhere("c.cliente.id = " + idCliente + " and "
+				+ " c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' "
+				+ " and c.moneda.id = " + this.dto.getMoneda().getId()
 				+ " and c.estadoComprobante is null");
 		b.setContinuaSiHayUnElemento(false);
 		b.show("%");

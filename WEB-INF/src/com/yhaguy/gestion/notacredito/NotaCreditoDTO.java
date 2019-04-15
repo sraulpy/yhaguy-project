@@ -18,7 +18,7 @@ public class NotaCreditoDTO extends DTO {
 	
 	private String numero = "";
 	private String timbrado_ = "";
-	private String observacion = "Sin obs..";
+	private String observacion = "";
 	private String enlace = "";
 	private String numeroNotaCredito = "";
 	
