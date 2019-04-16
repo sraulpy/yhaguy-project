@@ -218,7 +218,7 @@ public class InformeHechauka {
 		int registros = 0;
 		double montoTotal = 0;
 		String periodo = "";
-		
+		/**
 		for (CompraLocalFactura compra : compras) {			
 			String ruc = compra.getProveedor().getRuc();			
 			if (ruc.isEmpty()) {
@@ -253,7 +253,6 @@ public class InformeHechauka {
 		}
 		
 		for (Gasto gasto : gastos) {
-			/**
 			String ruc = gasto.getProveedor().getRuc();		
 			String rSocial = gasto.getProveedor().getRazonSocial();
 			
@@ -286,7 +285,7 @@ public class InformeHechauka {
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
-			} **/
+			}
 		}
 		
 		for (Gasto gasto : gastos) {
@@ -356,7 +355,7 @@ public class InformeHechauka {
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
-		}
+		}**/
 
 		for (NotaCredito nc : ncs) {
 			
