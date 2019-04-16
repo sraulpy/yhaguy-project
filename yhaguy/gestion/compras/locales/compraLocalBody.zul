@@ -202,9 +202,11 @@
 									<listcell label="@load(each.cantidad)" />
 									<listcell label="@load(each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" />
 									<listcell label="@load(each.costoGs - each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" 
-										style="@load(each.compraAnteriorGs eq 0? 'color:yellow' : (each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red'))" />
-									<listcell style="@load(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')" 
-										iconSclass="@load(each.compraAnteriorGs eq each.costoGs ? 'z-icon-check' : (each.compraAnteriorGs gt each.costoGs ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))"></listcell>
+										style="@load(each.compraAnteriorGs eq 0? 'color:#f39c12' : 
+											((each.compraAnteriorGs - each.costoGs gt -1 and each.compraAnteriorGs - each.costoGs lt 1)? 'color:green' : (each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')))" />
+									<listcell style="@load(each.compraAnteriorGs eq 0? 'color:#f39c12' : (each.compraAnteriorGs - each.costoGs gt -1 and each.compraAnteriorGs - each.costoGs lt 1)? 'color:green' :
+										(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red'))" 
+										iconSclass="@load((each.compraAnteriorGs - each.costoGs gt -1 and each.compraAnteriorGs - each.costoGs lt 1)? 'z-icon-check':(each.compraAnteriorGs eq 0? 'z-icon-circle' : (each.compraAnteriorGs eq each.costoGs ? 'z-icon-check' : (each.compraAnteriorGs gt each.costoGs ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))))"></listcell>
 									<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
 									<listcell label="@load(each.costoDs) @converter('formattedNumber', format='###,###,##0.00')" />
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
