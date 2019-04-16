@@ -220,7 +220,6 @@ public class InformeHechauka {
 		String periodo = "";
 		
 		for (CompraLocalFactura compra : compras) {	
-			/**
 			String ruc = compra.getProveedor().getRuc();			
 			if (ruc.isEmpty()) {
 				ruc = Configuracion.RUC_EMPRESA_LOCAL;
@@ -286,7 +285,7 @@ public class InformeHechauka {
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
-			}**/
+			}
 		}
 		
 		for (Gasto gasto : gastos) {
@@ -324,9 +323,7 @@ public class InformeHechauka {
 			}
 		}
 		
-		/**
-		for (ImportacionFactura compra : importaciones) {
-			
+		for (ImportacionFactura compra : importaciones) {			
 			String ruc = Configuracion.RUC_EMPRESA_EXTERIOR;			
 			if (ruc.isEmpty()) {
 				ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
@@ -357,10 +354,9 @@ public class InformeHechauka {
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
-		} **/
+		}
 
-		for (NotaCredito nc : ncs) {
-			/**
+		for (NotaCredito nc : ncs) {			
 			if (!nc.isAnulado()) {
 				String ruc = nc.getCliente().getRuc();
 				if (ruc.isEmpty()) {
@@ -395,7 +391,7 @@ public class InformeHechauka {
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
-			}	**/		
+			}	
 		}
 		
 		if (gastos.size() > 0) {
