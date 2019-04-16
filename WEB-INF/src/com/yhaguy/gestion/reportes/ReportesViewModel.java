@@ -14778,7 +14778,6 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 		this.gastos = gastos;
 		this.importaciones = importaciones;
 		for (Gasto gasto : gastos) {
-			System.out.println("------ NRO.FACT: " + gasto.getNumero());
 			String timbrado = gasto.getTimbrado();
 			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY),
 					Utiles.getDateToString(gasto.getModificado(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
