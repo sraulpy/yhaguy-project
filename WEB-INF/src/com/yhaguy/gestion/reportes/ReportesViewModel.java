@@ -10387,16 +10387,28 @@ public class ReportesViewModel extends SimpleViewModel {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			boolean incluirNC = filtro.isIncluirNCR();
+			boolean incluirCO = filtro.isIncluirCOM();
+			boolean incluirGA = filtro.isIncluirGastos();
+			boolean incluirBI = filtro.isIncluirBaseImponible();
 
-			List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
-			List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, 0);
+			List<NotaCredito> ncs = new ArrayList<NotaCredito>();
+			if (incluirNC) ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
+			List<CompraLocalFactura> compras = new ArrayList<>();
+			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0);
 			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde, new Date());
 			List<Gasto> gastos = new ArrayList<Gasto>();
-			List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, desde, new Date(), 0);
-			List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, desde, new Date(), 0);
-			gastos.addAll(gastosIndistinto);
-			gastos.addAll(gastosDespacho);			
-			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones);
+			if (incluirGA) {
+				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, desde, new Date(), 0);
+				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, desde, new Date(), 0);
+				gastos.addAll(gastosIndistinto);
+				gastos.addAll(gastosDespacho);	
+			}
+			if (incluirBI && !incluirGA) {
+				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, desde, new Date(), 0);
+				gastos.addAll(gastosDespacho);
+			}
+			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones, incluirBI, incluirGA);
 			Clients.showNotification("Informe Hechauka generado..");
 		}
 

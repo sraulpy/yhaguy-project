@@ -211,7 +211,8 @@ public class InformeHechauka {
 	 * Generar informe Hechauka..
 	 */
 	public static synchronized void generarInformeHechaukaCompras(List<NotaCredito> ncs,
-			List<CompraLocalFactura> compras, List<Gasto> gastos, List<ImportacionFactura> importaciones) throws Exception {
+			List<CompraLocalFactura> compras, List<Gasto> gastos, List<ImportacionFactura> importaciones, 
+			boolean incluirBaseImponible, boolean incluirGastos) throws Exception {
 		Misc misc = new Misc();
 		List<String> objects = new ArrayList<String>();
 
@@ -252,74 +253,77 @@ public class InformeHechauka {
 			montoTotal += importe;
 		}
 		
-		for (Gasto gasto : gastos) {
-			String ruc = gasto.getProveedor().getRuc();		
-			String rSocial = gasto.getProveedor().getRazonSocial();
-			
-			if (!ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS) && !ruc.equals(Proveedor.RUC_MOPC) && !rSocial.equals(Proveedor.RS_PASAJES)) {				
-				if (ruc.isEmpty()) {
-					ruc = Configuracion.RUC_EMPRESA_LOCAL;
+		if (incluirGastos) {
+			for (Gasto gasto : gastos) {
+				String ruc = gasto.getProveedor().getRuc();		
+				String rSocial = gasto.getProveedor().getRazonSocial();
+				
+				if (!ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS) && !ruc.equals(Proveedor.RUC_MOPC) && !rSocial.equals(Proveedor.RS_PASAJES)) {				
+					if (ruc.isEmpty()) {
+						ruc = Configuracion.RUC_EMPRESA_LOCAL;
+					}
+
+					String col1 = "2";
+					String col2 = ruc.substring(0, ruc.length() - 2);
+					String dv = ruc.substring(ruc.length() - 1);
+					String timbrado = gasto.getTimbrado();
+					String col5 = "1";
+					String nro = gasto.getNumeroFactura();
+					String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
+					double iva10 = redondear(gasto.getIva10());
+					double gravada10 = redondear(gasto.getGravada10());
+					double exenta = redondear(gasto.getExenta());
+					double gravada5 = redondear(gasto.getGravada5());
+					double iva5 = redondear(gasto.getIva5());
+					double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
+					String col13 = "0";
+					long col14 = gasto.isContado() ? 1 : 2;
+					long col15 = gasto.isContado() ? 0 : 1;
+					String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
+							+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+							+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
+							+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
+							+ col15 + "" + "\r\n";
+					objects.add(object);
+					registros++;
+					montoTotal += importe;
 				}
-
-				String col1 = "2";
-				String col2 = ruc.substring(0, ruc.length() - 2);
-				String dv = ruc.substring(ruc.length() - 1);
-				String timbrado = gasto.getTimbrado();
-				String col5 = "1";
-				String nro = gasto.getNumeroFactura();
-				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
-				double iva10 = redondear(gasto.getIva10());
-				double gravada10 = redondear(gasto.getGravada10());
-				double exenta = redondear(gasto.getExenta());
-				double gravada5 = redondear(gasto.getGravada5());
-				double iva5 = redondear(gasto.getIva5());
-				double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
-				String col13 = "0";
-				long col14 = gasto.isContado() ? 1 : 2;
-				long col15 = gasto.isContado() ? 0 : 1;
-				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
-						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
-						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
-						+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-						+ col15 + "" + "\r\n";
-				objects.add(object);
-				registros++;
-				montoTotal += importe;
 			}
-		}
+		}		
 		
-		for (Gasto gasto : gastos) {
-			
-			String ruc = gasto.getProveedor().getRuc();		
-			
-			if (ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS)) {				
-				ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
+		if (incluirBaseImponible) {
+			for (Gasto gasto : gastos) {			
+				String ruc = gasto.getProveedor().getRuc();		
+				
+				if (ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS)) {				
+					ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
 
-				String col1 = "2";
-				String col2 = ruc.substring(0, ruc.length() - 2);
-				String dv = ruc.substring(ruc.length() - 1);
-				String rSocial = "PROVEEDORES DEL EXTERIOR";
-				String timbrado = "0";
-				String col5 = "4";
-				String nro = gasto.getNumeroFactura();
-				String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
-				double iva10 = redondear(gasto.getIva10());
-				double gravada10 = redondear(gasto.getBaseImponible());
-				double exenta = redondear(gasto.getExenta());
-				double gravada5 = redondear(gasto.getGravada5());
-				double iva5 = redondear(gasto.getIva5());
-				double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
-				String col13 = "0";
-				long col14 = 2;
-				long col15 = 1;
-				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
-						+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
-						+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
-						+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
-						+ col15 + "" + "\r\n";
-				objects.add(object);
-				registros++;
-				montoTotal += importe;
+					String col1 = "2";
+					String col2 = ruc.substring(0, ruc.length() - 2);
+					String dv = ruc.substring(ruc.length() - 1);
+					String rSocial = "PROVEEDORES DEL EXTERIOR";
+					String timbrado = "0";
+					String col5 = "4";
+					String nro = gasto.getNumeroFactura();
+					String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
+					double iva10 = redondear(gasto.getIva10());
+					double gravada10 = redondear(gasto.getBaseImponible());
+					double exenta = redondear(gasto.getExenta());
+					double gravada5 = redondear(gasto.getGravada5());
+					double iva5 = redondear(gasto.getIva5());
+					double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
+					String col13 = "0";
+					long col14 = 2;
+					long col15 = 1;
+					String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
+							+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+							+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
+							+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
+							+ col15 + "" + "\r\n";
+					objects.add(object);
+					registros++;
+					montoTotal += importe;
+				}
 			}
 		}
 		

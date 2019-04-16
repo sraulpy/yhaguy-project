@@ -174,6 +174,9 @@ public class ReportesFiltros {
 	private boolean incluirREC = true;
 	private boolean incluirCHQ_RECH = true;
 	private boolean incluirPRE = true;
+	private boolean incluirCOM = true;
+	private boolean incluirBaseImponible = true;
+	private boolean incluirGastos = true;
 	
 	private Funcionario vendedor;
 	private String razonSocialVendedor = "";
@@ -1586,5 +1589,29 @@ public class ReportesFiltros {
 
 	public void setExpedicion(String expedicion) {
 		this.expedicion = expedicion;
+	}
+
+	public boolean isIncluirCOM() {
+		return incluirCOM;
+	}
+
+	public void setIncluirCOM(boolean incluirCOM) {
+		this.incluirCOM = incluirCOM;
+	}
+
+	public boolean isIncluirBaseImponible() {
+		return incluirBaseImponible;
+	}
+
+	public void setIncluirBaseImponible(boolean incluirBaseImponible) {
+		this.incluirBaseImponible = incluirBaseImponible;
+	}
+
+	public boolean isIncluirGastos() {
+		return incluirGastos;
+	}
+
+	public void setIncluirGastos(boolean incluirGastos) {
+		this.incluirGastos = incluirGastos;
 	}
 }
