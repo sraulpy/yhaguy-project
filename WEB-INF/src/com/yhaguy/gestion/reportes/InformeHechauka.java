@@ -286,7 +286,7 @@ public class InformeHechauka {
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
-			}
+			}**/
 		}
 		
 		for (Gasto gasto : gastos) {
@@ -321,9 +321,10 @@ public class InformeHechauka {
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
-			} **/
+			}
 		}
 		
+		/**
 		for (ImportacionFactura compra : importaciones) {
 			
 			String ruc = Configuracion.RUC_EMPRESA_EXTERIOR;			
@@ -356,7 +357,7 @@ public class InformeHechauka {
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
-		}
+		} **/
 
 		for (NotaCredito nc : ncs) {
 			/**
