@@ -9993,6 +9993,15 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return enlaces generados..
+	 */
+	public List<ArticuloPivot> getArticulosPivotGenerados(String fecha) throws Exception {
+		String query = "select a from ArticuloPivot a where cast (a.fecha as string) like '%" + fecha + "%'"
+				+ "	order by a.fecha";
+		return this.hql(query);
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

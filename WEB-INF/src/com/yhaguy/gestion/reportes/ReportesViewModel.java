@@ -15081,6 +15081,7 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 	List<BeanLibroCompra> values = new ArrayList<BeanLibroCompra>();
 	List<CompraLocalFactura> creditos = new ArrayList<CompraLocalFactura>();
 	List<CompraLocalFactura> contado = new ArrayList<CompraLocalFactura>();
+	Misc misc = new Misc();
 	
 	double cred_gravada10 = 0;
 	double cred_gravada5 = 0;
@@ -15116,10 +15117,11 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 			String timbrado = compra.getTimbrado().getNumero();
 			String proveedor = compra.getProveedor().getRazonSocial();
 			String ruc = compra.getProveedor().getRuc();
-			double gravada10 = compra.getGravada10();
+			double importe = redondear(compra.getImporteGs());
+			double iva10 = redondear(misc.calcularIVA(importe, 10));
+			double gravada10 = redondear(importe - iva10);
 			double gravada5 = compra.getGravada5();
 			double exenta = compra.getExenta();
-			double iva10 = compra.getIva10();
 			double iva5 = compra.getIva5();
 			double total = gravada10 + gravada5 + iva10 + iva5 + exenta;
 			
@@ -15172,17 +15174,23 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 		}
 		
 		for (CompraLocalFactura compra : creditos) {
-			cred_gravada10 += compra.getGravada10();
+			double importe = redondear(compra.getImporteGs());
+			double iva10 = redondear(misc.calcularIVA(importe, 10));
+			double gravada10 = redondear(importe - iva10);
+			cred_gravada10 += gravada10;
 			cred_gravada5 += compra.getGravada5();
-			cred_iva10 += compra.getIva10();
+			cred_iva10 += iva10;
 			cred_iva5 += compra.getIva5();
 			cred_exenta += compra.getExenta();
 		}
 		
 		for (CompraLocalFactura compra : contado) {
-			cont_gravada10 += compra.getGravada10();
+			double importe = redondear(compra.getImporteGs());
+			double iva10 = redondear(misc.calcularIVA(importe, 10));
+			double gravada10 = redondear(importe - iva10);
+			cont_gravada10 += gravada10;
 			cont_gravada5 += compra.getGravada5();
-			cont_iva10 += compra.getIva10();
+			cont_iva10 += iva10;
 			cont_iva5 += compra.getIva5();
 			cont_exenta += compra.getExenta();
 		}
@@ -15197,6 +15205,13 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 			}
 		});
     }
+	
+	/**
+	 * @return el monto redondeado..
+	 */
+	private static double redondear(double monto) {
+		return Math.rint(monto * 1) / 1;
+	}
 	
 	private int index = -1;
 
