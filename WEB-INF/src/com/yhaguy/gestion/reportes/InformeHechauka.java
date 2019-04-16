@@ -148,7 +148,7 @@ public class InformeHechauka {
 		String col5 = "0";
 		String nro = "0";
 		String fecha = ventas.size() > 0 ? misc.dateToString(ventas.get(0).getFecha(), Misc.DD_MM_YYYY).replace("-", "/") : "";
-		periodo = ventas.size() > 0 ? Utiles.getDateToString(ventas.get(0).getFecha(), "ventas.size() > 0 ?yyyyMM") : "";
+		periodo = ventas.size() > 0 ? Utiles.getDateToString(ventas.get(0).getFecha(), "yyyyMM") : "";
 		long col10 = 0;
 		long col11 = 0;
 		long col12 = 0;

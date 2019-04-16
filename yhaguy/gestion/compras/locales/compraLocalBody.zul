@@ -201,7 +201,8 @@
 									<listcell label="@load(each.articulo.pos4)" tooltiptext="@load(each.articulo.pos4)" />
 									<listcell label="@load(each.cantidad)" />
 									<listcell label="@load(each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" />
-									<listcell label="@load(each.costoGs - each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" style="@load(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')" />
+									<listcell label="@load(each.costoGs - each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" 
+										style="@load(each.compraAnteriorGs eq 0? 'color:yellow' : (each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red'))" />
 									<listcell style="@load(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')" 
 										iconSclass="@load(each.compraAnteriorGs eq each.costoGs ? 'z-icon-check' : (each.compraAnteriorGs gt each.costoGs ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))"></listcell>
 									<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
