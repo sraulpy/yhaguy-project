@@ -210,6 +210,7 @@
 					<i class="fas fa-dolly" style="color:#f39c12"></i>
 				</html>
 			</listheader>
+			<listheader width="40px" align="center"></listheader>
 		</listhead>
 		<template name="model">
 			<listitem>
@@ -220,6 +221,9 @@
 				</listcell>
 				<listcell>
 					<checkbox></checkbox>
+				</listcell>
+				<listcell>
+					<a iconSclass="z-icon-times" onClick="@command('deleteItem', item=each)"></a>
 				</listcell>
 			</listitem>
 		</template>
@@ -240,7 +244,7 @@
 								no-repeat; background-position: 98%; background-size: 10px;"
 								value="@bind(vm.filter_codOriginal)" instant="true"></textbox>	
 				</listheader>
-				<listheader width="40px" align="center"></listheader>
+				<listheader width="40px" label="KPI" align="center" tooltiptext="Key Performance Indicator.."></listheader>
 				<listheader label="Ventas" sort="auto(3)" width="70px" align="right" />
 				<listheader width="70px" align="right" tooltiptext="@load(vm.deposito)">
 					<textbox width="50px" placeholder="Stock" hflex="true" style="text-align:center"
@@ -250,7 +254,7 @@
 				<listheader label="" width="50px" align="center">
 					<intbox id="int_cant" inplace="true" hflex="true"
 						value="@bind(vm.selectedMovimiento[7])"
-						onOK="@command('addItem')"></intbox>
+						onOK="@command('addItem', comp=self)"></intbox>
 				</listheader>
 			</listhead>
 			<template name="model">
@@ -286,6 +290,21 @@
 					</listcell>
 				</listitem>
 			</template>
+			<listfoot>
+				<listfooter span="3">
+					<hlayout>
+						<div width="5px"></div>
+						<div>
+							<html>
+								<i class="fas fa-file-excel fa-lg" style="color:green"></i>
+							</html>
+						</div>
+					</hlayout>					
+				</listfooter>
+				<listfooter label="0" align="right"></listfooter>
+				<listfooter label="0" align="right"></listfooter>
+				<listfooter label="0" align="right"></listfooter>
+			</listfoot>
 		</listbox>		
 		<vlayout hflex="7" vflex="true">
 			<hlayout>

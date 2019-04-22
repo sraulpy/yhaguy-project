@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
@@ -31,7 +32,6 @@ import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
-import com.coreweb.util.AutoNumeroControl;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -40,10 +40,10 @@ import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
+import com.yhaguy.domain.ArticuloPivot;
+import com.yhaguy.domain.ArticuloPivotDetalle;
 import com.yhaguy.domain.ArticuloPrecioJedisoft;
 import com.yhaguy.domain.ArticuloUbicacion;
-import com.yhaguy.domain.CompraLocalOrden;
-import com.yhaguy.domain.CompraLocalOrdenDetalle;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
@@ -86,8 +86,8 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	
 	private Object[] selectedMovimiento;
 	private List<Object[]> abastecimiento = new ArrayList<Object[]>();
-	private List<CompraLocalOrden> compras = new ArrayList<CompraLocalOrden>();
-	private CompraLocalOrden selectedCompra;
+	private List<ArticuloPivot> compras = new ArrayList<ArticuloPivot>();
+	private ArticuloPivot selectedCompra;
 	
 	private int calcPorcentaje = 0;
 	private int calcPorcentaje_ = 0;
@@ -254,7 +254,15 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	
 	@Command
 	@NotifyChange("abastecimiento")
-	public void addItem() {
+	public void addItem(@BindingParam("comp") Component comp) {
+		for (Object[] item : this.abastecimiento) {
+			String cod = (String) item[0];
+			String cod_ = (String) this.selectedMovimiento[0];
+			if (cod.equals(cod_)) {
+				Clients.showNotification("el item ya fue agregado..", Clients.NOTIFICATION_TYPE_ERROR, comp, "after_end", 0);
+				return;
+			}
+		}
 		this.abastecimiento.add(this.selectedMovimiento);
 	}
 	
@@ -271,27 +279,22 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		}
 		for (Long idprov : proveedores.keySet()) {
 			Proveedor prov = rr.getProveedorById(idprov);
-			CompraLocalOrden oc = new CompraLocalOrden();
-			oc.setFechaCreacion(new Date());
-			oc.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_ORDEN_COMPRA));
-			oc.setProveedor(prov);
-			oc.setCondicionPago(rr.getCondicionPagoById(2));
-			oc.setObservacion("Generado automatico..");
-			oc.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-			oc.setSucursal(this.selectedSucursal);
+			ArticuloPivot ap = new ArticuloPivot();
+			ap.setFecha(new Date());
+			ap.setConcepto(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_ORDEN_COMPRA).getDescripcion());
+			ap.setProveedor(prov);
+			ap.setUsuario(this.getLoginNombre());
 			for (Object[] item : this.abastecimiento) {
 				long idprov_ = (long) item[4];
 				if (idprov_ == idprov.longValue()) {
 					Articulo art = rr.getArticulo((String) item[0]);
-					CompraLocalOrdenDetalle det = new CompraLocalOrdenDetalle();
+					ArticuloPivotDetalle det = new ArticuloPivotDetalle();
 					det.setArticulo(art);
 					det.setCantidad((int) item[7]);
-					det.setCantidadRecibida((int) item[7]);
-					det.setIva(rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10));
-					oc.getDetalles().add(det);
+					ap.getDetalles().add(det);
 				}
 			}
-			this.compras.add(oc);
+			this.compras.add(ap);
 		}	
 		this.win = (Window) Executions.createComponents(ZUL_ORDEN_COMPRA, this.mainComponent, null);
 		this.win.doOverlapped();
@@ -300,12 +303,17 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	@Command
 	public void generarCompras_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		for (CompraLocalOrden compra : this.compras) {
-			compra.setNumero("OCL-" + AutoNumeroControl.getAutoNumero(Configuracion.NRO_COMPRA_LOCAL_ORDEN, 5));
+		for (ArticuloPivot compra : this.compras) {
 			rr.saveObject(compra, this.getLoginNombre());
 		}
 		this.win.detach();
 		Clients.showNotification("ORDENES DE COMPRA GENERADAS..");
+	}
+	
+	@Command
+	@NotifyChange("abastecimiento")
+	public void deleteItem(@BindingParam("item") Object[] item) {
+		this.abastecimiento.remove(item);
 	}
 	
 	/**
@@ -721,16 +729,16 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	private Object[] getIdDepositoResto() {
 		if (this.selectedSucursal != null) {
 			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_MCAL) {
-				return new Object[] { Deposito.ID_MINORISTA, Deposito.ID_MAYORISTA };
+				return new Object[] { Deposito.ID_MINORISTA, Deposito.ID_MAYORISTA, Deposito.ID_CENTRAL_REPOSICION };
 			}
 			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_CENTRAL) {
-				return new Object[] { Deposito.ID_MCAL_LOPEZ, Deposito.ID_MAYORISTA };
+				return new Object[] { Deposito.ID_MCAL_LOPEZ, Deposito.ID_MAYORISTA, (long) 0 };
 			}
 			if (this.selectedSucursal.getDescripcion().equals("TODOS")) {
 				return new Object[] { Deposito.ID_MCAL_LOPEZ, Deposito.ID_MINORISTA, Deposito.ID_MAYORISTA };
 			}
 		}
-		return new Object[] { (long) 0, (long) 0 };
+		return new Object[] { (long) 0, (long) 0, (long) 0 };
 	}
 	
 	@DependsOn("selectedSucursal")
@@ -745,7 +753,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	public String getDepositoResto() {
 		if (this.selectedSucursal != null) {
 			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_MCAL) {
-				return "Stock minorista + mayorista";
+				return "Stock minorista + mayorista + rep.central";
 			}
 			if (this.selectedSucursal.getId().longValue() == SucursalApp.ID_CENTRAL) {
 				return "Stock mariscal + mayorista";
@@ -774,11 +782,15 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 			Object[] stock = rr.getStockDisponible_(cod, idDep);
 			Object[] rest1 = rr.getStockDisponible_(cod, (long) rest0[0]);
 			Object[] rest2 = rr.getStockDisponible_(cod, (long) rest0[1]);
+			Object[] rest3 = rr.getStockDisponible_(cod, (long) rest0[2]);
 			if (rest1 != null) {
 				resto += (long) rest1[1];
 			}
 			if (rest2 != null) {
 				resto += (long) rest2[1];
+			}
+			if (rest3 != null) {
+				resto += (long) rest3[1];
 			}
 			if (stock != null) {
 				long stock_ = (long) stock[1];
@@ -786,10 +798,6 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 				item[6] = resto;
 			} else {
 				if (this.selectedSucursal.getDescripcion().equals("TODOS")) {
-					Object[] exist = rr.getStockDisponible_(cod, (long) rest0[2]);
-					if (exist != null) {
-						resto += (long) exist[1];
-					}
 					item[5] = resto;
 					item[6] = resto;
 				} else {
@@ -1169,19 +1177,19 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		this.abastecimiento = abastecimiento;
 	}
 
-	public List<CompraLocalOrden> getCompras() {
+	public List<ArticuloPivot> getCompras() {
 		return compras;
 	}
 
-	public void setCompras(List<CompraLocalOrden> compras) {
+	public void setCompras(List<ArticuloPivot> compras) {
 		this.compras = compras;
 	}
 
-	public CompraLocalOrden getSelectedCompra() {
+	public ArticuloPivot getSelectedCompra() {
 		return selectedCompra;
 	}
 
-	public void setSelectedCompra(CompraLocalOrden selectedCompra) {
+	public void setSelectedCompra(ArticuloPivot selectedCompra) {
 		this.selectedCompra = selectedCompra;
 	}
 

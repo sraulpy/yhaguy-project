@@ -12,6 +12,7 @@ import com.coreweb.extras.browser.Browser;
 import com.coreweb.extras.browser.ColumnaBrowser;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.ImportacionPedidoCompra;
+import com.yhaguy.util.Utiles;
 
 public class ImportacionPedidoCompraBrowser extends Browser{
 
@@ -140,9 +141,10 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 		
 		col14.setCampo("totalImporteDs"); 	
 		col14.setTitulo("Importe U$D.");
-		col14.setComponente(Browser.LABEL_NUMERICO);
+		col14.setComponente("getImporteDsComp");
 		col14.setTipo(Config.TIPO_NUMERICO);
 		col14.setWidthColumna("120px");
+		col14.setEstilo("text-align:right");
 		
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
@@ -198,6 +200,13 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 		} else {
 			l.setValue("");
 		}
+		return l;
+	}
+	
+	public HtmlBasedComponent getImporteDsComp(Object obj, Object[] datos) {
+		Label l = new Label();
+		double importe = (double) obj;
+		l.setValue(Utiles.getNumberFormatDs(importe));
 		return l;
 	}
 		

@@ -1,7 +1,9 @@
 package com.yhaguy.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.coreweb.domain.Domain;
@@ -47,6 +49,12 @@ public class ArticuloPivot extends Domain {
 
 	public Set<ArticuloPivotDetalle> getDetalles() {
 		return detalles;
+	}
+	
+	public List<ArticuloPivotDetalle> getDetalles_() {
+		List<ArticuloPivotDetalle> out = new ArrayList<ArticuloPivotDetalle>();
+		out.addAll(this.getDetalles());
+		return out;
 	}
 
 	public void setDetalles(Set<ArticuloPivotDetalle> detalles) {

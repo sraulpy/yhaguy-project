@@ -7,21 +7,30 @@
 			<html>
 					<i class="fas fa-shopping-cart" style="color:#428bca" ></i>
 			</html>
-			<a label=" Generar Compra" style="color:#428bca"></a>
+			<a label=" Generar Compra" style="@load(vm.selectedItem eq null? 'color:#428bca;opacity:.55' : 'color:#428bca')"></a>
 			<space></space>
 			<html>
-					<i class="fas fa-dolly" style="color:#f39c12" ></i>
+					<i class="fas fa-dolly" style="color:#f39c12"></i>
 			</html>
-			<a label=" Generar Transferencia" style="color:#f39c12" dir="reverse"></a>
+			<a label=" Generar Transferencia" style="@load(vm.selectedItem eq null? 'color:#f39c12;opacity:.55' : 'color:#f39c12')"></a>
+			<space></space>
+			<html>
+					<i class="fas fa-print" style="color:#18bc9c" ></i>
+			</html>
+			<a label=" Imprimir" style="@load(vm.selectedItem eq null? 'color:#18bc9c;opacity:.55' : 'color:#18bc9c')" dir="reverse" onClick="@command('imprimir')"
+				disabled="@load(vm.selectedItem eq null)">
+			</a>
 		</hlayout>
 		<listbox sclass="small-list" hflex="true" vflex="true"
-		emptyMessage="SIN ENLACES GENERADOS..">
+			emptyMessage="SIN ENLACES GENERADOS.."
+			model="@load(vm.enlaces)" selectedItem="@bind(vm.selectedItem)">
 		<listhead>
 			<listheader label="Fecha"></listheader>
 			<listheader label="Usuario"></listheader>
 			<listheader label="Proveedor"></listheader>
 			<listheader label="Concepto"></listheader>
-			<listheader width="50px"></listheader>
+			<listheader width="50px" align="center"></listheader>
+			<listheader width="50px" align="center"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader>
@@ -41,7 +50,22 @@
 				<textbox placeholder="Concepto.." hflex="true"></textbox>
 			</auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.usuario.toUpperCase())"></listcell>
+				<listcell label="@load(each.proveedor.razonSocial)"></listcell>
+				<listcell label="@load(each.concepto)"></listcell>
+				<listcell>
+					<a label="items" onClick='pop_det.open(self, "after_end")'></a>
+				</listcell>
+				<listcell>
+					<a iconSclass="z-icon-exclamation-circle" style="color:#d43f3a"></a>
+				</listcell>
+			</listitem>
+		</template>
 		<listfoot>
 			<listfooter>
 				<field value="ítems" />
@@ -49,4 +73,33 @@
 		</listfoot>
 		</listbox>
 	</vlayout>	
+	<popup id="pop_det" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">		
+			<hbox pack="start" align="center" hflex="true" vflex="true" style="border-bottom:solid 1px silver">
+				<field value="@load(vm.selectedItem.concepto)" />
+			</hbox>
+			<button onClick="pop_det.close()" iconSclass="z-icon-times"></button>
+		</hbox>
+		<div height="5px"></div>
+		<listbox width="600px" height="300px" sclass="small-list" model="@load(vm.selectedItem.detalles)">
+			<listhead>
+				<listheader label="Código" width="150px"></listheader>
+				<listheader label="Descripción"></listheader>
+				<listheader label="Cantidad" align="right" width="100px"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+					<listcell label="@load(each.articulo.descripcion)"></listcell>
+					<listcell label="@load(each.cantidad)"></listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter span="3">
+					<field value="@load(vm.selectedItem.detalles_.size())" />
+					<field value="ítems" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</popup>
 </window>

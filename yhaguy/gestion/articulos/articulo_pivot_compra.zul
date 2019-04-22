@@ -32,7 +32,8 @@
 			<listfoot>
 				<listfooter align="right" span="2">
 					<button mold="bs" label=" Generar Órdenes de Compra"
-						iconSclass="z-icon-shopping-cart" sclass="btn-sm btn-success"></button>
+						iconSclass="z-icon-shopping-cart" sclass="btn-sm btn-success"
+						onClick="@command('generarCompras_')"></button>
 				</listfooter>
 			</listfoot>	
 		</listbox>

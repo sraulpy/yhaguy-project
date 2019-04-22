@@ -3421,6 +3421,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				}
 				this.dto.setFechaCierre(new Date());
 				this.dto.setImportacionConfirmada(true);
+				this.dto.setPedidoConfirmado(true);
 				this.dto.getImportacionFactura().get(0).setFechaOriginal(this.dto.getResumenGastosDespacho().getFechaDespacho());
 				this.setDto((ImportacionPedidoCompraDTO) this.saveDTO(this.dto));
 				this.addEventoAgendaLink("Se confirmó la Importación..", linkReporteFinal); 

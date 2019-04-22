@@ -451,17 +451,19 @@ public class CompraLocalControlBody extends BodyApp {
 	 * modificar el tipo de cambio..
 	 */
 	private void modificarTC() {
-		for (CompraLocalOrdenDetalleDTO det : this.dto.getDetalles()) {
-			det.setCostoGs(det.getCostoDs() * this.dto.getFactura().getTipoCambio());
-		}
-		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
-			item.setCostoGs(item.getCostoDs() * this.dto.getFactura().getTipoCambio());
-		}
-		this.dto.setTipoCambio(this.dto.getFactura().getTipoCambio());
-		this.dto.getFactura().setImporteGs(this.dto.getFactura().getImporteDs() * this.dto.getFactura().getTipoCambio());
-		this.dto.getFactura().setImporteIva10(Utiles.getIVA(this.dto.getTotalImporteGs(), Configuracion.VALOR_IVA_10));
-		BindUtils.postNotifyChange(null, null, this.dto, "*");
-		BindUtils.postNotifyChange(null, null, this.dto.getFactura(), "*");
+		if (!this.dto.isMonedaLocal()) {
+			for (CompraLocalOrdenDetalleDTO det : this.dto.getDetalles()) {
+				det.setCostoGs(det.getCostoDs() * this.dto.getFactura().getTipoCambio());
+			}
+			for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
+				item.setCostoGs(item.getCostoDs() * this.dto.getFactura().getTipoCambio());
+			}
+			this.dto.setTipoCambio(this.dto.getFactura().getTipoCambio());
+			this.dto.getFactura().setImporteGs(this.dto.getFactura().getImporteDs() * this.dto.getFactura().getTipoCambio());
+			this.dto.getFactura().setImporteIva10(Utiles.getIVA(this.dto.getTotalImporteGs(), Configuracion.VALOR_IVA_10));
+			BindUtils.postNotifyChange(null, null, this.dto, "*");
+			BindUtils.postNotifyChange(null, null, this.dto.getFactura(), "*");
+		}		
 	}
 	
 	/*********************************************************/
@@ -1051,7 +1053,7 @@ public class CompraLocalControlBody extends BodyApp {
 	 * retorna el importe original de la factura de acuerdo
 	 * al tipo de moneda..
 	 */
-	private double getImporteOriginalFactura(CompraLocalFacturaDTO factura){
+	private double getImporteOriginalFactura(CompraLocalFacturaDTO factura) {
 		double importeGravadaGs = (double) factura.getTotalImporteGs();
 		double importeGravadaDs = (double) factura.getTotalImporteDs();
 		
