@@ -892,6 +892,22 @@ public class RegisterDomain extends Register {
 			return 0;
 		}
 	}
+	
+	/**
+	 * @return el ultimo Costo en Dolares segun el Articulo..
+	 */
+	public double getUltimoCostoDs(long idArticulo) throws Exception {
+		String query = "select a.costoFinalDs from ArticuloCosto a where a.articulo.id = "
+				+ idArticulo
+				+ " and a.fechaCompra = (select max(ar.fechaCompra) from ArticuloCosto ar"
+				+ " where ar.articulo.id = " + idArticulo + ")";
+		List<Object> list = this.hql(query);
+		if (list.size() > 0) {
+			return (double) list.get(0);
+		} else {
+			return 0;
+		}
+	}
 
 	// Retorna el ultimo Costo FOB en Dolares segun el Articulo y el Tipo de
 	// Movimiento
@@ -9731,6 +9747,22 @@ public class RegisterDomain extends Register {
 	 */
 	public Object[] getCompraAnterior(long idArticulo, long idDetalle) throws Exception {
 		String query = "select d.articulo.id, d.costoGs from CompraLocalOrdenDetalle d"
+				+ " where d.articulo.id = " + idArticulo; 
+				if (idDetalle > 0) {
+					query += " and d.id < " + idDetalle;
+				}
+				query += " order by d.id desc";
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : new Object[] { (long) 0, 0.0 };
+	}
+	
+	/**
+	 * @return el stock por deposito..
+	 * [0]:articulo.id
+	 * [1]:precioDs
+	 */
+	public Object[] getCompraAnteriorDs(long idArticulo, long idDetalle) throws Exception {
+		String query = "select d.articulo.id, d.costoDs from CompraLocalOrdenDetalle d"
 				+ " where d.articulo.id = " + idArticulo; 
 				if (idDetalle > 0) {
 					query += " and d.id < " + idDetalle;

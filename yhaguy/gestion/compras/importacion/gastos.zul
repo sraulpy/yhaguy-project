@@ -43,9 +43,14 @@
 							value="@bind(vm.nvoGasto.vencimiento)"></datebox>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Condición" />
-						<textbox hflex="true" value="@load(vm.nvoGasto.condicionPago.descripcion)"
-							readonly="true"></textbox>
+						<field value="Sucursal" />
+						<combobox hflex="true" model="@load(vm.sucursales)"
+							selectedItem="@bind(vm.nvoGasto.sucursal)"
+							value="@load(vm.nvoGasto.sucursal.descripcion)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>
+						</combobox>
 					</vlayout>
 				</row>
 				<row>					

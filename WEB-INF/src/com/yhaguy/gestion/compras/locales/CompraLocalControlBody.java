@@ -357,13 +357,18 @@ public class CompraLocalControlBody extends BodyApp {
 	}
 	
 	@Command
-	public void calcularVencimiento(){
+	public void calcularVencimiento() throws Exception {
 		CompraLocalFacturaDTO factura = this.dto.getFactura();
 		int plazo = (Integer) factura.getCondicionPago().getPos2();
 		Date emision = factura.getFechaOriginal();
 		Date vencimiento = m.calcularFechaVencimiento(emision, plazo);
 		factura.setFechaVencimiento(vencimiento);
 		BindUtils.postNotifyChange(null, null, factura, "fechaVencimiento");
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta(Utiles.agregarDias(emision, -1));
+		factura.setTipoCambio(tc);
+		this.modificarTC();
 	}
 	
 	@Command
@@ -422,19 +427,41 @@ public class CompraLocalControlBody extends BodyApp {
 	
 	@Command
 	@NotifyChange("*")
-	public void modificarTipoCambio(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
-		if (this.dto.isMonedaLocal()) {
-			return;
-		}
-		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
-			item.setCostoGs(item.getCostoDs() * this.dto.getFactura().getTipoCambio());
-		}
-		this.dto.getFactura().setImporteGs(this.dto.getFactura().getImporteDs() * this.dto.getFactura().getTipoCambio());
-		this.dto.getFactura().setImporteIva10(Utiles.getIVA(this.dto.getTotalImporteGs(), Configuracion.VALOR_IVA_10));
+	public void modificarFecha(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
 		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
 		comp1.setVisible(false);
 		comp2.setVisible(true);
 		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void modificarTipoCambio(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		if (this.dto.isMonedaLocal()) {
+			return;
+		}
+		this.modificarTC();
+		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	/**
+	 * modificar el tipo de cambio..
+	 */
+	private void modificarTC() {
+		for (CompraLocalOrdenDetalleDTO det : this.dto.getDetalles()) {
+			det.setCostoGs(det.getCostoDs() * this.dto.getFactura().getTipoCambio());
+		}
+		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
+			item.setCostoGs(item.getCostoDs() * this.dto.getFactura().getTipoCambio());
+		}
+		this.dto.setTipoCambio(this.dto.getFactura().getTipoCambio());
+		this.dto.getFactura().setImporteGs(this.dto.getFactura().getImporteDs() * this.dto.getFactura().getTipoCambio());
+		this.dto.getFactura().setImporteIva10(Utiles.getIVA(this.dto.getTotalImporteGs(), Configuracion.VALOR_IVA_10));
+		BindUtils.postNotifyChange(null, null, this.dto, "*");
+		BindUtils.postNotifyChange(null, null, this.dto.getFactura(), "*");
 	}
 	
 	/*********************************************************/
@@ -1035,11 +1062,13 @@ public class CompraLocalControlBody extends BodyApp {
 		}		
 	}
 
-	private void sugerirValores(CompraLocalOrdenDTO nvoDto){
+	private void sugerirValores(CompraLocalOrdenDTO nvoDto) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta(Utiles.agregarDias(nvoDto.getFechaCreacion(), -1));
 		nvoDto.setSucursal(accesosUsuario.getSucursalOperativa());	
 		nvoDto.setTipoMovimiento(utilDto.getTmOrdenCompra());
 		nvoDto.setMoneda(monedaLocal);
-		nvoDto.setTipoCambio(utilDto.getCambioVentaBCP(nvoDto.getMoneda()));
+		nvoDto.setTipoCambio(tc);
 		nvoDto.setCondicionPago(utilDto.getCondicionPagoContado());
 	}
 	

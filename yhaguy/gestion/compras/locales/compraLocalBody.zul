@@ -58,7 +58,7 @@
 										<field value="T. Cambio"/>
 										<hbox hflex="true"
 											sclass="z-valign-bottom">											
-											<guaranibox value="@load(vm.dto.tipoCambio)" readonly="true" width="100px"/>
+											<doublebox value="@load(vm.dto.tipoCambio)" readonly="true" width="100px" format="###,###,##0.00" />
 											<label value="Gs." style="font-size:11px" />
 										</hbox>
 									</vlayout>
@@ -174,10 +174,10 @@
 								<listheader label="Cantidad"
 									style="text-align:center" width="80px" align="right"
 									sort="auto(cantidad)" />
-								<listheader label="Anterior Gs."
+								<listheader label="@load(vm.dto.monedaLocal ? 'Anterior Gs.' : 'Anterior U$D')"
 									style="text-align:center" width="120px" align="right"
 									/>	
-								<listheader label="Diferencia Gs."
+								<listheader label="@load(vm.dto.monedaLocal ? 'Diferencia Gs.' : 'Diferencia U$D')"
 									style="text-align:center" width="120px" align="right" />	
 								<listheader width="30px" align="center"></listheader>	
 								<listheader label="Precio Gs."
@@ -200,13 +200,13 @@
 									<listcell label="@load(each.articulo.pos1)" tooltiptext="@load(each.articulo.pos1)"/>
 									<listcell label="@load(each.articulo.pos4)" tooltiptext="@load(each.articulo.pos4)" />
 									<listcell label="@load(each.cantidad)" />
-									<listcell label="@load(each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" />
-									<listcell label="@load(each.costoGs - each.compraAnteriorGs) @converter(vm.cnv.monedaLocal)" 
-										style="@load(each.compraAnteriorGs eq 0? 'color:#f39c12' : 
-											((each.compraAnteriorGs - each.costoGs gt -1 and each.compraAnteriorGs - each.costoGs lt 1)? 'color:green' : (each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red')))" />
-									<listcell style="@load(each.compraAnteriorGs eq 0? 'color:#f39c12' : (each.compraAnteriorGs - each.costoGs gt -1 and each.compraAnteriorGs - each.costoGs lt 1)? 'color:green' :
-										(each.compraAnteriorGs ge each.costoGs ? 'color:green' : 'color:red'))" 
-										iconSclass="@load((each.compraAnteriorGs - each.costoGs gt -1 and each.compraAnteriorGs - each.costoGs lt 1)? 'z-icon-check':(each.compraAnteriorGs eq 0? 'z-icon-circle' : (each.compraAnteriorGs eq each.costoGs ? 'z-icon-check' : (each.compraAnteriorGs gt each.costoGs ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))))"></listcell>
+									<listcell label="@load((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs)) @converter(vm.dto.monedaLocal ? vm.cnv.monedaLocal : vm.cnv.monedaExtranjera)" />
+									<listcell label="@load((vm.dto.monedaLocal ? each.costoGs : each.costoDs) - (vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs)) @converter(vm.dto.monedaLocal ? vm.cnv.monedaLocal : vm.cnv.monedaExtranjera)" 
+										style="@load((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) eq 0? 'color:#f39c12' : 
+											(((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) - (vm.dto.monedaLocal ? each.costoGs : each.costoDs) gt -1 and (vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) - (vm.dto.monedaLocal ? each.costoGs : each.costoDs) lt 1)? 'color:green' : ((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) ge (vm.dto.monedaLocal ? each.costoGs : each.costoDs) ? 'color:green' : 'color:red')))" />
+									<listcell style="@load((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) eq 0? 'color:#f39c12' : ((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) - (vm.dto.monedaLocal ? each.costoGs : each.costoDs) gt -1 and (vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) - (vm.dto.monedaLocal ? each.costoGs : each.costoDs) lt 1)? 'color:green' :
+										((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) ge (vm.dto.monedaLocal ? each.costoGs : each.costoDs) ? 'color:green' : 'color:red'))" 
+										iconSclass="@load(((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) - (vm.dto.monedaLocal ? each.costoGs : each.costoDs) gt -1 and (vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) - (vm.dto.monedaLocal ? each.costoGs : each.costoDs) lt 1)? 'z-icon-check':((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) eq 0? 'z-icon-circle' : ((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) eq (vm.dto.monedaLocal ? each.costoGs : each.costoDs) ? 'z-icon-check' : ((vm.dto.monedaLocal ? each.compraAnteriorGs : each.compraAnteriorDs) gt (vm.dto.monedaLocal ? each.costoGs : each.costoDs) ? 'z-icon-arrow-down' : 'z-icon-arrow-up' ))))"></listcell>
 									<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
 									<listcell label="@load(each.costoDs) @converter('formattedNumber', format='###,###,##0.00')" />
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
@@ -403,8 +403,21 @@
 									</vlayout>
 									<vlayout spacing="0">										
 										<field value="Fecha Emisión"/>
-										<datebox hflex="true" value="@bind(vm.dto.factura.fechaOriginal)" 
-											onChange="@command('calcularVencimiento')"/>
+										<hlayout valign="top">
+											<datebox id="dtbox_fecha" hflex="true" value="@bind(vm.dto.factura.fechaOriginal)" 
+												onChange="@command('calcularVencimiento')" />
+											<button mold="bs" id="btn_edit_fecha" iconSclass="z-icon-check"
+												visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="@command('modificarFecha', comp1=self, comp2=btn_edit_fecha_)"
+												sclass="btn-xs btn-success" width="30px">
+												<attribute name="onClick">
+													dtbox_fecha.setButtonVisible(false);
+												</attribute>
+											</button>
+											<button mold="bs" id="btn_edit_fecha_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+												onClick="dtbox_fecha.setReadonly(false); self.setVisible(false); btn_edit_fecha.setVisible(true);dtbox_fecha.setButtonVisible(true)"
+												sclass="btn-xs btn-info" width="30px"></button>
+										</hlayout>										
 									</vlayout>
 									<vlayout spacing="0">										
 										<field value="Fecha Vencimiento"/>
@@ -438,7 +451,7 @@
 									<vlayout spacing="0">
 										<field value="T. Cambio"/>
 										<hlayout valign="top">											
-											<doublebox id="dbx_tc" value="@bind(vm.dto.factura.tipoCambio)" readonly="true" hflex="true" format="###,###,##0" style="text-align:right"/>
+											<doublebox id="dbx_tc" value="@bind(vm.dto.factura.tipoCambio)" readonly="true" hflex="true" format="###,###,##0.00" style="text-align:right"/>
 											<button mold="bs" id="btn_edit_tc" iconSclass="z-icon-check"
 												visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 												onClick="@command('modificarTipoCambio', comp1=self, comp2=btn_edit_tc_)"

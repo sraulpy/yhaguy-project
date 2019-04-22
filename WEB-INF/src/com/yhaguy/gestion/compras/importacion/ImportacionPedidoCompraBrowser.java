@@ -164,20 +164,25 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 	}	
 	
 	public HtmlBasedComponent getCerradoComp(Object obj, Object[] datos) {
-		Image img = (Image) this.getImagenOKCancel(obj, datos);
+		Image img = new Image();
 		if ((boolean) obj == true) {
+			img.setSrc(Config.IMAGEN_CHECK);
 			img.setTooltiptext("Confirmado..");
 		} else {
 			img.setTooltiptext("Pendiente..");
+			img.setSrc(Config.ICONO_EXCLAMACION_16X16);
 		}
 		return img;
 	}
 	
 	public HtmlBasedComponent getConfirmadoComp(Object obj, Object[] datos) {
-		Image img = (Image) this.getImagenCheck(obj, datos);
+		Image img = new Image();
 		if ((boolean) obj == true) {
+			img.setSrc(Config.ICONO_EXCLAMACION_16X16);
 			img.setTooltiptext("Confirmado..");
-		} 
+		} else {
+			img.setSrc(Config.ICONO_EXCLAMACION_16X16);
+		}
 		return img;
 	}
 	

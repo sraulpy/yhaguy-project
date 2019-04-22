@@ -68,6 +68,7 @@ import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Timbrado;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.articulos.ArticuloDTO;
@@ -266,16 +267,18 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	@Command 
 	@NotifyChange("nvoGasto")
-	public void openGasto(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
+	public void openGasto(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) 
+		throws Exception {
 		if (this.dto.getResumenGastosDespacho().getDespachante().esNuevo()) {
 			Clients.showNotification("Antes, debe asignar el despachante..", Clients.NOTIFICATION_TYPE_WARNING, null, null, 0);
 			return;
 		}
+		RegisterDomain rr = RegisterDomain.getInstance();
 		Timbrado timbrado = new Timbrado();
 		timbrado.setVencimiento(Utiles.getFechaFinMes());
 		this.nvoGasto = new Gasto();
 		this.nvoGasto.setTipoCambio_(Gasto.TC_SET);
-		//comp.open(parent, "after_start");
+		this.nvoGasto.setSucursal(rr.getSucursalAppById(SucursalApp.ID_CENTRAL));
 		this.win = (Window) Executions.createComponents(ZUL_GASTOS, this.mainComponent, null);
 		this.win.doModal();
 	}
@@ -3865,6 +3868,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public List<Tipo> getMonedas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getTipos(Configuracion.ID_TIPO_MONEDA);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SucursalApp> getSucursales() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(SucursalApp.class.getName());
 	}
 	
 	/**
