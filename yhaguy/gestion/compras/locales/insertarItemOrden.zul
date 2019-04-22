@@ -66,7 +66,7 @@
 						onChange="@command('dolarizar', item=vm.dato.nvoDetalle)" />
 					<label value="Gs." style="font-size:11px" />
 					<space />
-					<guaranibox value="@bind(vm.dato.nvoDetalle.costoDs)"
+					<dolarbox value="@bind(vm.dato.nvoDetalle.costoDs)"
 						onChange="@command('guaranizar', item=vm.dato.nvoDetalle)" 
 						visible="@load(!vm.dato.dto.monedaLocal)"/>
 					<label value="U$D" style="font-size:11px" 
@@ -101,7 +101,7 @@
 						readonly="true"/>
 					<label value="Gs." style="font-size:11px" />
 					<space />
-					<guaranibox
+					<dolarbox
 						value="@load(vm.dato.nvoDetalle.importeDs)"
 						readonly="true" 
 						visible="@load(!vm.dato.dto.monedaLocal)"/>

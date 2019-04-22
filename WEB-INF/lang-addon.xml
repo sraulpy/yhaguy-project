@@ -84,7 +84,7 @@
 			</property> -->
 		<property>
 			<property-name>format</property-name>
-			<property-value>###,###,##0.0000</property-value>
+			<property-value>###,###,##0.00</property-value>
 		</property>
 		<property>
 			<property-name>style</property-name>
