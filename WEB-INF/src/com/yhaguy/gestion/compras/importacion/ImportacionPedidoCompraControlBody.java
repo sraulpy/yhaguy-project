@@ -435,18 +435,27 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				}
 			} else if (!this.dto.isConteo1() && this.dto.isConteo2() && !this.dto.isConteo3()) {
 				conteo = "2do Conteo";
+				int dif1 = item.getConteo1() - item.getCantidad_acum();
 				int dif = item.getConteo2() - item.getCantidad_acum();
-				if (dif != 0) {
-					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2()};
-					data.add(obj);
-				}
+				if (dif1 != 0) {
+					if (dif != 0) {
+						Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2()};
+						data.add(obj);
+					}
+				}				
 			} else {
 				conteo = "3er Conteo";
+				int dif1 = item.getConteo1() - item.getCantidad_acum();
+				int dif2 = item.getConteo2() - item.getCantidad_acum();
 				int dif = item.getConteo3() - item.getCantidad_acum();
-				if (dif != 0) {
-					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3()};
-					data.add(obj);
-				}
+				if (dif1 != 0) {
+					if (dif2 != 0) {
+						if (dif != 0) {
+							Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3()};
+							data.add(obj);
+						}
+					}					
+				}				
 			}
 		}
 		// ordena la lista segun codigo..
