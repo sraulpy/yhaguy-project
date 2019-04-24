@@ -36,8 +36,7 @@ public class ControlCuentaCorriente {
 	/**
 	 * agregar movimiento nota credito compra..
 	 */
-	public static void addNotaCreditoCompra(NotaCreditoDTO dto, String user) 
-			throws Exception {		
+	public static void addNotaCreditoCompra(NotaCreditoDTO dto, String user) throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		MyArray factura = dto.getFacturas().get(0);
 		TipoMovimiento tm = rr.getTipoMovimientoById(((MyPair) factura.getPos4()).getId());
@@ -62,17 +61,17 @@ public class ControlCuentaCorriente {
 		ctm.setNroComprobante(dto.getNumero());
 		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
 		
-		double saldo = ctmCompra.getSaldoFinal() - (dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());
-		
-		if (saldo <= 0) {
-			ctmCompra.setSaldo(0);
-			ctm.setSaldo(saldo);
-		} else {
-			ctmCompra.setSaldo(saldo);
-			ctm.setSaldo(0);
+		if (ctmCompra != null) {
+			double saldo = ctmCompra.getSaldo() - (dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());			
+			if (saldo <= 0) {
+				ctmCompra.setSaldo(0);
+				ctm.setSaldo(saldo);
+			} else {
+				ctmCompra.setSaldo(saldo);
+				ctm.setSaldo(0);
+			}
+			rr.saveObject(ctmCompra, user);
 		}
-		
-		rr.saveObject(ctmCompra, user);
 		rr.saveObject(ctm, user);
 	}
 	
