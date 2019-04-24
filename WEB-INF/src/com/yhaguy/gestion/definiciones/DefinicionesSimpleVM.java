@@ -51,7 +51,7 @@ public class DefinicionesSimpleVM extends SoloViewModel {
 	public void abrirVentanaTimbrado() {
 
 		WindowTimbrado w = new WindowTimbrado();
-		w.setIdProveedor(Configuracion.ID_PROVEEDOR_YHAGUY_MRA);
+		w.setIdProveedor(Configuracion.ID_PROVEEDOR_YHAGUY);
 		w.setTimbrado("%");
 		w.show(WindowPopup.NUEVO, w);
 

@@ -382,7 +382,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 				(String) talonario.getPos1(), 7, true);
 		
 		this.dto.setNumeroFactura("00" + boca + "-00" + punto + "-" + nro);
-		this.dto.setProveedor(this.getProveedor(Configuracion.ID_PROVEEDOR_YHAGUY_MRA));	
+		this.dto.setProveedor(this.getProveedor(Configuracion.ID_PROVEEDOR_YHAGUY));	
 
 		BindUtils.postNotifyChange(null, null, this.dto, "numeroFactura");
 		BindUtils.postNotifyChange(null, null, this.dto, "numeroTimbrado");

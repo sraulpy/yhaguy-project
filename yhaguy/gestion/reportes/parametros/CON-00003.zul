@@ -1,6 +1,6 @@
 <grid sclass="vgrid">
 	<columns>
-		<column width="35%" />
+		<column width="45%" />
 		<column />
 	</columns>
 	<rows>
@@ -13,6 +13,14 @@
 			<field value="Fecha Hasta:" />
 			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
 				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Ventas Contado/Crédito:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirVCT)" />
+		</row>
+		<row>
+			<field value="Notas de Crédito:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)" />
 		</row>
 	</rows>
 </grid>

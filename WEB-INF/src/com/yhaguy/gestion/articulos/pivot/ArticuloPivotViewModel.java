@@ -108,6 +108,10 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	
 	private int filterStock = 0;
 	
+	private long totalVentas = 0;
+	private long totalStock = 0;
+	private long totalResto = 0;
+	
 	@Wire
 	private Popup pop_img;
 	
@@ -249,6 +253,9 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	@NotifyChange("selectedMovimiento")
 	public void selectItem(@BindingParam("item") Object[] item, @BindingParam("comp") Intbox comp) {
 		this.selectedMovimiento = item;
+		this.selectedMovimiento[7] = (int) item[2] - (long) item[5];
+		this.selectedMovimiento[8] = (int) item[2] - ((long) item[5] + (long) item[6]) > 0 ? true : false; 
+		this.selectedMovimiento[9] = (int) item[2] - ((long) item[5] + (long) item[6]) > 0 ? false : true; 
 		comp.focus();
 	}
 	
@@ -274,8 +281,10 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Map<Long, Long> proveedores = new HashMap<Long, Long>();
 		for (Object[] item : this.abastecimiento) {
-			long idprov = (long) item[4];
-			proveedores.put(idprov, idprov);
+			if ((boolean) item[8]) {
+				long idprov = (long) item[4];
+				proveedores.put(idprov, idprov);
+			}			
 		}
 		for (Long idprov : proveedores.keySet()) {
 			Proveedor prov = rr.getProveedorById(idprov);
@@ -285,17 +294,45 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 			ap.setProveedor(prov);
 			ap.setUsuario(this.getLoginNombre());
 			for (Object[] item : this.abastecimiento) {
-				long idprov_ = (long) item[4];
-				if (idprov_ == idprov.longValue()) {
-					Articulo art = rr.getArticulo((String) item[0]);
-					ArticuloPivotDetalle det = new ArticuloPivotDetalle();
-					det.setArticulo(art);
-					det.setCantidad((int) item[7]);
-					ap.getDetalles().add(det);
+				if ((boolean) item[8]) {
+					long idprov_ = (long) item[4];
+					if (idprov_ == idprov.longValue()) {
+						Articulo art = rr.getArticulo((String) item[0]);
+						ArticuloPivotDetalle det = new ArticuloPivotDetalle();
+						det.setArticulo(art);
+						det.setCantidad(Integer.parseInt(item[7] + ""));
+						ap.getDetalles().add(det);
+					}
 				}
 			}
 			this.compras.add(ap);
 		}	
+		this.win = (Window) Executions.createComponents(ZUL_ORDEN_COMPRA, this.mainComponent, null);
+		this.win.doOverlapped();
+	}
+	
+	@Command
+	@NotifyChange("compras")
+	public void generarTransferencia() throws Exception {
+		this.compras.clear();
+		this.selectedCompra = null;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Proveedor prov = rr.getProveedorById(Configuracion.ID_PROVEEDOR_YHAGUY);
+		ArticuloPivot ap = new ArticuloPivot();
+		ap.setFecha(new Date());
+		ap.setConcepto(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_TRANS_MERCADERIA).getDescripcion());
+		ap.setProveedor(prov);
+		ap.setUsuario(this.getLoginNombre());
+		for (Object[] item : this.abastecimiento) {
+			if ((boolean) item[9]) {
+				Articulo art = rr.getArticulo((String) item[0]);
+				ArticuloPivotDetalle det = new ArticuloPivotDetalle();
+				det.setArticulo(art);
+				det.setCantidad(Integer.parseInt(item[7] + ""));
+				ap.getDetalles().add(det);			
+			}
+		}
+		this.compras.add(ap);	
 		this.win = (Window) Executions.createComponents(ZUL_ORDEN_COMPRA, this.mainComponent, null);
 		this.win.doOverlapped();
 	}
@@ -768,13 +805,16 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	 */
 	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno", "filter_codOriginal", "filter_stock" })
 	public List<Object[]> getMovimientos() throws Exception {
+		this.totalVentas = 0;
+		this.totalResto = 0;
+		this.totalStock = 0;
 		if (this.selectedSucursal == null) return new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> list = rr.getMovimientosArticulos(this.desde_, this.hasta_, this.familia, this.proveedor,
 				this.marca, this.selectedSucursal.getId(), this.filter_codInterno, this.filter_codOriginal);
 		List<Object[]> list_ = new ArrayList<Object[]>();
 		for (Object[] item : list) {
-			item = Arrays.copyOf(item, item.length + 3);
+			item = Arrays.copyOf(item, item.length + 5);
 			String cod = (String) item[0];
 			long idDep = this.getIdDeposito();
 			long resto = 0;
@@ -806,6 +846,8 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 				}
 			}
 			item[7] = 0;
+			item[8] = false;
+			item[9] = false;
 			if (!this.filter_stock.isEmpty()) {
 				long fstock = Long.parseLong(this.filter_stock);
 				long _stock = (long) item[5];
@@ -816,6 +858,14 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 				list_.add(item);
 			}
 		}
+		for (Object[] item : list_) {
+			this.totalVentas += (long) item[3];
+			this.totalStock += (long) item[5];
+			this.totalResto += (long) item[6];
+		}
+		BindUtils.postNotifyChange(null, null, this, "totalVentas");
+		BindUtils.postNotifyChange(null, null, this, "totalStock");
+		BindUtils.postNotifyChange(null, null, this, "totalResto");
 		return list_;
 	}
 
@@ -1199,5 +1249,29 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 
 	public void setFilter_stock(String filter_stock) {
 		this.filter_stock = filter_stock;
+	}
+
+	public long getTotalVentas() {
+		return totalVentas;
+	}
+
+	public void setTotalVentas(long totalVentas) {
+		this.totalVentas = totalVentas;
+	}
+
+	public long getTotalStock() {
+		return totalStock;
+	}
+
+	public void setTotalStock(long totalStock) {
+		this.totalStock = totalStock;
+	}
+
+	public long getTotalResto() {
+		return totalResto;
+	}
+
+	public void setTotalResto(long totalResto) {
+		this.totalResto = totalResto;
 	}
 }

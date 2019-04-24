@@ -700,7 +700,7 @@ public class DefinicionesViewModel extends SimpleViewModel {
 				t.setNumero((String) timb.getPos1());
 				t.setVencimiento((Date) timb.getPos2());
 				rr.saveObject(t, this.getLoginNombre());
-				Proveedor p = rr.getProveedorById(Configuracion.ID_PROVEEDOR_YHAGUY_MRA);
+				Proveedor p = rr.getProveedorById(Configuracion.ID_PROVEEDOR_YHAGUY);
 				p.getTimbrados().add(t);
 				rr.saveObject(p, this.getLoginNombre());
 			} else {

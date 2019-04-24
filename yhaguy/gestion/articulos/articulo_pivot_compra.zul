@@ -32,8 +32,11 @@
 			<listfoot>
 				<listfooter align="right" span="2">
 					<button mold="bs" label=" Generar Órdenes de Compra"
-						iconSclass="z-icon-shopping-cart" sclass="btn-sm btn-success"
-						onClick="@command('generarCompras_')"></button>
+						iconSclass="z-icon-check" sclass="btn-sm btn-info"
+						onClick="@command('generarCompras_')" visible="@load(vm.selectedCompra.concepto eq 'ORDEN DE COMPRA')"></button>
+					<button mold="bs" label=" Generar Transferencia"
+						iconSclass="z-icon-check" sclass="btn-sm btn-warning"
+						onClick="@command('generarCompras_')" visible="@load(vm.selectedCompra.concepto eq 'TRANSFERENCIA MERCADERIA')"></button>
 				</listfooter>
 			</listfoot>	
 		</listbox>

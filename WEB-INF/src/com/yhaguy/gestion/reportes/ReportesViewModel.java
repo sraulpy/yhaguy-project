@@ -9223,6 +9223,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String cli = cliente != null ? cliente.getRazonSocial() : "TODOS..";
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO;
+				if (!formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_PDF)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO_;
+				}
 				String titulo = "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
@@ -21106,9 +21109,7 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 					acum[index] = saldo;
 				} 
 				data.put(idEmpresa + "", acum);
-			}
-			
-			
+			}			
 		}
 		
 		for (String key : data.keySet()) {
@@ -21170,7 +21171,7 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 	@Override
 	public boolean next() throws JRException {
 		if (index < this.values.size() - 1) {
-			index++;
+			index ++;
 			return true;
 		}
 		return false;
@@ -22420,7 +22421,7 @@ class ReporteRemisiones extends ReporteYhaguy {
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Listado de Remisiones a clientes");
+		this.setTitulo("Listado de remisiones a clientes");
 		this.setDirectorio("Articulos");
 		this.setNombreArchivo("Remisiones-");
 		this.setTitulosColumnas(cols);

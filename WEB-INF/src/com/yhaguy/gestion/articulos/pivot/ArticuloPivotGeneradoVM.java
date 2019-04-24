@@ -46,19 +46,26 @@ public class ArticuloPivotGeneradoVM extends SimpleViewModel {
 	}
 	
 	@Command
-	public void imprimir() {
+	public void imprimir() throws Exception {
 		this.imprimir_();
 	}
 	
 	/**
 	 * impresion de la compra..
 	 */
-	private void imprimir_() {
+	private void imprimir_() throws Exception {
 		List<Object[]> data = new ArrayList<Object[]>();
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
 
 		for (ArticuloPivotDetalle item : this.selectedItem.getDetalles()) {
+			double precioUlt = 0;
+			Object[] ultCompra = rr.getUltimaCompra(item.getArticulo().getId());
+			if (ultCompra != null) {
+				precioUlt = (double) ultCompra[4];
+			}
 			Object[] obj1 = new Object[] { item.getArticulo().getCodigoInterno(),
-					item.getArticulo().getDescripcion(), item.getCantidad() };
+					item.getArticulo().getDescripcion(), item.getCantidad(), Utiles.getNumberFormat(precioUlt) };
 			data.add(obj1);
 		}
 
@@ -139,15 +146,18 @@ class ReporteEnlaceGenerado extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Cant.", TIPO_INTEGER, 15, false);
+	static DatosColumnas col4 = new DatosColumnas("Ult.Compra", TIPO_STRING, 25);
 	
 	public ReporteEnlaceGenerado(ArticuloPivot enlace) {
 		this.enlace = enlace;
 	}
 	
 	static {
+		col4.setAlineacionColuman(COLUMNA_ALINEADA_DERECHA);
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
+		cols.add(col4);
 	}
 
 	@Override

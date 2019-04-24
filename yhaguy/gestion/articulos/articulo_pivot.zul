@@ -205,7 +205,8 @@
 					<i class="fas fa-shopping-cart" style="color:#428bca"></i>
 				</html>
 			</listheader>
-			<listheader label="" width="50px" align="center" style="cursor:pointer">
+			<listheader label="" width="50px" align="center" style="cursor:pointer"
+				onClick="@command('generarTransferencia')">
 				<html>
 					<i class="fas fa-dolly" style="color:#f39c12"></i>
 				</html>
@@ -213,14 +214,14 @@
 			<listheader width="40px" align="center"></listheader>
 		</listhead>
 		<template name="model">
-			<listitem>
-				<listcell label="@load(each[0])" style="color:#999;font-weight:bold" />
-				<listcell label="@load(each[7])" style="color:#999;font-weight:bold" />
+			<listitem style="@load((each[2] - (each[5] + each[6])) gt 0? 'background:#607D8B' : '')">
+				<listcell label="@load(each[0])" style="@load((each[2] - (each[5] + each[6])) gt 0? 'color:white;font-weight:bold' : 'color:#999;font-weight:bold')" />
+				<listcell label="@load(each[7])" style="@load((each[2] - (each[5] + each[6])) gt 0? 'color:white;font-weight:bold' : 'color:#999;font-weight:bold')" />
 				<listcell>
-					<checkbox></checkbox>
+					<checkbox checked="@bind(each[8])"></checkbox>
 				</listcell>
 				<listcell>
-					<checkbox></checkbox>
+					<checkbox checked="@bind(each[9])"></checkbox>
 				</listcell>
 				<listcell>
 					<a iconSclass="z-icon-times" onClick="@command('deleteItem', item=each)"></a>
@@ -301,9 +302,9 @@
 						</div>
 					</hlayout>					
 				</listfooter>
-				<listfooter label="0" align="right"></listfooter>
-				<listfooter label="0" align="right"></listfooter>
-				<listfooter label="0" align="right"></listfooter>
+				<listfooter label="@load(vm.totalVentas)" align="right"></listfooter>
+				<listfooter label="@load(vm.totalStock)" align="right"></listfooter>
+				<listfooter label="@load(vm.totalResto)" align="right"></listfooter>
 			</listfoot>
 		</listbox>		
 		<vlayout hflex="7" vflex="true">
