@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CtaCteSaldosResumido" pageWidth="1414" pageHeight="595" orientation="Landscape" columnWidth="1374" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="3.4522712143931242"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.4522712143931247"/>
+	<property name="ireport.x" value="1250"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -209,47 +209,47 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<summary>
 		<band height="50">
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="343" y="16" width="114" height="15" uuid="e5d34cc4-2fbb-49a5-929f-c932f7fe150d"/>
+				<reportElement style="Detail" x="345" y="16" width="113" height="15" uuid="e5d34cc4-2fbb-49a5-929f-c932f7fe150d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalVentas}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="456" y="16" width="114" height="15" uuid="6481403b-8d96-4245-a5ac-3e134cf4b1d0"/>
+				<reportElement style="Detail" x="458" y="16" width="113" height="15" uuid="6481403b-8d96-4245-a5ac-3e134cf4b1d0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalChequesRechazados}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="569" y="16" width="114" height="15" uuid="6d723c02-4e53-4506-8846-dd86e0518970"/>
+				<reportElement style="Detail" x="571" y="16" width="113" height="15" uuid="6d723c02-4e53-4506-8846-dd86e0518970"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalNotasCredito}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="682" y="16" width="114" height="15" uuid="8615ccba-6b7e-4abd-9b1d-b450fac1878e"/>
+				<reportElement style="Detail" x="684" y="16" width="113" height="15" uuid="8615ccba-6b7e-4abd-9b1d-b450fac1878e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalRecibos}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="795" y="16" width="114" height="15" uuid="96e80868-6c28-4c3f-9617-ee6c8976b3b8"/>
+				<reportElement style="Detail" x="797" y="16" width="113" height="15" uuid="96e80868-6c28-4c3f-9617-ee6c8976b3b8"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalNotasDebito}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="908" y="16" width="114" height="15" uuid="a1c733ef-b0bb-431c-b0ef-de7d8ec12b9a"/>
+				<reportElement style="Detail" x="910" y="16" width="113" height="15" uuid="a1c733ef-b0bb-431c-b0ef-de7d8ec12b9a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalChequesReembolso}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1021" y="16" width="115" height="15" uuid="27b74296-a267-4fbe-ac8a-0e6ce8ce67ab"/>
+				<reportElement style="Detail" x="1023" y="16" width="113" height="15" uuid="27b74296-a267-4fbe-ac8a-0e6ce8ce67ab"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalMigracion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1259" y="16" width="113" height="15" uuid="4208697d-35ba-4f88-82ce-c7ab28d1af69"/>
+				<reportElement style="Detail" x="1260" y="16" width="113" height="15" uuid="4208697d-35ba-4f88-82ce-c7ab28d1af69"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalSaldo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1135" y="16" width="125" height="15" uuid="06f8ba3d-be54-4cda-837e-9e47979aa2c7"/>
+				<reportElement style="Detail" x="1136" y="16" width="124" height="15" uuid="06f8ba3d-be54-4cda-837e-9e47979aa2c7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotalMigracionChequesRechazados}]]></textFieldExpression>
 			</textField>
