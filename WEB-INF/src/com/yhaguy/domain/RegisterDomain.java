@@ -4443,7 +4443,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getTransferenciasPorArticulo(long idArticulo,
 			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
-		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
@@ -5116,10 +5116,8 @@ public class RegisterDomain extends Register {
 	 * @return los datos de la ultima compra del articulo..
 	 */
 	public Object[] getUltimaCompra(long idArticulo) throws Exception {
-		List<Object[]> transfs = this.getTransferenciasPorArticulo(idArticulo,
-				null, null);
-		List<Object[]> compras = this.getComprasLocalesPorArticulo(idArticulo,
-				null, null);
+		List<Object[]> transfs = this.getTransferenciasPorArticulo(idArticulo, null, null);
+		List<Object[]> compras = this.getComprasLocalesPorArticulo(idArticulo, null, null);
 		Object[] compra = compras.size() > 0 ? compras.get(0) : null;
 		Object[] transf = transfs.size() > 0 ? transfs.get(0) : null;
 		Date fcompra = (Date) (compra == null ? null : compra[1]);
@@ -10009,6 +10007,28 @@ public class RegisterDomain extends Register {
 	 * [1]: cliente.empresa.razonSocial
 	 * [2]: sum(importe)
 	 */
+	public List<Object[]> getCtaCteMigracionPorClienteChequesRechazados(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT c.cliente.id, c.cliente.empresa.razonSocial, sum(c.importeOriginal)" +   
+				"	FROM CtaCteEmpresaMovimiento c" +
+				"	WHERE (c.fechaEmision >= '" + desde_ + "' and c.fechaEmision <= '" + hasta_ + "')" + 
+				"   AND c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_CHEQUE_RECHAZADO + "'" +
+				"   AND c.auxi = 'MIGRACION'";
+		if (idCliente > 0) {
+			query += " AND c.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY c.cliente.id, c.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe ctacte dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
 	public List<Object[]> getCtaCteMigracionPorClienteNotasCredito(Date desde, Date hasta, long idCliente) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
@@ -10062,12 +10082,12 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			String clave = "yhaguysa0985";
-			Misc m = new Misc();
-			String clave_ = m.encriptar(clave, true);
-			Usuario u = rr.getUsuario("sergio", clave_);
-			if (u != null) {
-				System.out.println(u.getNombre());
+			String query = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id = 32 and c.fechaEmision < '2018-10-05 00:00:00'";
+			List<CtaCteEmpresaMovimiento> list = rr.hql(query);
+			for (CtaCteEmpresaMovimiento movim : list) {
+				movim.setCliente(rr.getClienteByEmpresa(movim.getEmpresa().getId()));
+				rr.saveObject(movim, "sys");
+				System.out.println(movim.getNroComprobante());
 			}
 		} catch (Exception e) {
 		}
