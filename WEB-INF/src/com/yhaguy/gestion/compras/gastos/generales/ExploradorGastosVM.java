@@ -142,7 +142,7 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		this.selectedGasto.setImporteDs(this.selectedGasto.getImporteDs_());
 		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(this.selectedGasto.getId(), this.selectedGasto.getTipoMovimiento().getSigla());
 		if (ctacte != null) {
-			ctacte.setNroComprobante(this.selectedGasto.getNumero());
+			ctacte.setNroComprobante(this.selectedGasto.getNumeroFactura());
 			ctacte.setImporteOriginal(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
 			ctacte.setSaldo(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
 			rr.saveObject(ctacte, this.getLoginNombre());

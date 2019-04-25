@@ -10082,11 +10082,12 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			String query = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id = 32 and c.fechaEmision < '2018-10-05 00:00:00'";
+			String query = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id IN (9,10,12,44) and c.nroComprobante is null";
 			List<CtaCteEmpresaMovimiento> list = rr.hql(query);
 			for (CtaCteEmpresaMovimiento movim : list) {
-				movim.setCliente(rr.getClienteByEmpresa(movim.getEmpresa().getId()));
-				rr.saveObject(movim, "sys");
+				Gasto gasto = rr.getGastoById(movim.getIdMovimientoOriginal());
+				movim.setNroComprobante(gasto.getNumeroFactura());
+				rr.saveObject(movim, movim.getUsuarioMod());
 				System.out.println(movim.getNroComprobante());
 			}
 		} catch (Exception e) {

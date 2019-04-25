@@ -49,6 +49,8 @@
 				<comboitem label="@load(each.descripcion)" />
 			</template>
 		</combobox>
+		<space></space>
+		<chosenbox emptyMessage="Vendedor/es" width="150px" sclass="rounded"></chosenbox>
 		</hlayout>
 		<hlayout vflex="3">
 		<listbox sclass="small-list"
@@ -66,6 +68,7 @@
 			<listheader width="150px"/>
 			<listheader width="150px"/>
 			<listheader width="150px"/>
+			<listheader width="80px"/>
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -139,6 +142,15 @@
 								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>				
 			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"
+						sclass="filter_"
+						placeholder="Origen.."
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>				
+			</auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem onDoubleClick="@command('obtenerValores')"
@@ -150,6 +162,7 @@
 				<listcell label="@load(each.pos6)" />
 				<listcell label="@load(each.pos7)" />
 				<listcell label="@load(each.pos8)" />
+				<listcell></listcell>
 			</listitem>
 		</template>
 		<listfoot>
@@ -161,7 +174,7 @@
 						visible="@load(vm.existencia eq null? 'false':'true')" value="@load(vm.stock)"></label>
 				</hlayout>
 			</listfooter>
-			<listfooter span="4">
+			<listfooter span="5">
 			<hbox hflex="true" align="center">
 				<hbox tooltiptext="@load(vm.ultimaCompra)"
 					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">
