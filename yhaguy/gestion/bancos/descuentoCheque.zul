@@ -158,7 +158,7 @@
 				</hlayout>				
 			</hlayout>
 
-			<listbox model="@load(vm.chequeDescuento.cheques_)"
+			<listbox model="@load(vm.chequeDescuento._cheques)"
 				vflex="true" hflex="1" sclass="small-list" multiple="true"
 				selectedItems="@bind(vm.selectedCheques)" checkmark="true"
 				emptyMessage="INGRESE LOS CHEQUES A DESCONTAR..">

@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
 
 import com.coreweb.Config;
 import com.coreweb.extras.browser.Browser;
 import com.coreweb.extras.browser.ColumnaBrowser;
 import com.yhaguy.domain.BancoDescuentoCheque;
+import com.yhaguy.util.Utiles;
 
 public class BancoDescuentoChequeBrowser extends Browser {
 	
@@ -21,9 +23,9 @@ public class BancoDescuentoChequeBrowser extends Browser {
 	
 	@Override
 	public void setingInicial() {
-		this.setWidthWindows("1100px");
+		this.setWidthWindows("100%");
 		this.setHigthWindows("90%");
-		this.addOrden("fecha");
+		this.addOrden("fecha desc");
 	}
 
 	@Override
@@ -58,8 +60,8 @@ public class BancoDescuentoChequeBrowser extends Browser {
 		col6.setCampo("totalImporte_gs");
 		col6.setTitulo("Importe");
 		col6.setWidthColumna("150px");
-		col6.setComponente(Browser.LABEL_NUMERICO);
-		col6.setTipo(Browser.LABEL_NUMERICO);
+		col6.setComponente("getImporteGsComp");
+		col6.setTipo(Config.TIPO_NUMERICO);
 		
 		col7.setCampo("auxi");
 		col7.setWhere(this.where);
@@ -85,11 +87,20 @@ public class BancoDescuentoChequeBrowser extends Browser {
 	public HtmlBasedComponent getCerradoComp(Object obj, Object[] datos) {
 		Image img = (Image) this.getImagenOKCancel(obj, datos);
 		if ((boolean) obj == true) {
+			img.setSrc(Config.IMAGEN_CHECK);
 			img.setTooltiptext("Confirmado..");
 		} else {
 			img.setTooltiptext("Pendiente..");
+			img.setSrc(Config.ICONO_EXCLAMACION_16X16);
 		}
 		return img;
+	}
+	
+	public HtmlBasedComponent getImporteGsComp(Object obj, Object[] datos) {
+		Label l = new Label();
+		double importe = (double) obj;
+		l.setValue(Utiles.getNumberFormat(importe));
+		return l;
 	}
 
 	@SuppressWarnings("rawtypes")

@@ -33,7 +33,7 @@ public class BancoDescuentoChequeReporte extends ReporteYhaguy {
 		this.descuentoCheques = descuentoCheques;
 		this.titulo = titulo;
 		List<Object[]> data = new ArrayList<Object[]>();
-		for (MyArray m : descuentoCheques.getCheques_()) {
+		for (MyArray m : descuentoCheques.get_cheques()) {
 			Date vto = (Date) m.getPos1();
 			String nro = (String) m.getPos3();
 			String cliente = m.getPos10().toString();

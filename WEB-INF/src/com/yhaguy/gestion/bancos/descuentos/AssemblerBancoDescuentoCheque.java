@@ -37,6 +37,7 @@ public class AssemblerBancoDescuentoCheque extends Assembler {
 		this.listaDTOToListaDomain(dto, domain, "chequesPropios", false, false, new AssemblerBancoCheque());
 		this.listaDTOToListaDomain(dto, domain, "formasPago", true, true, new AssemblerReciboFormaPago(""));
 		this.listaMyArrayToListaDomain(dto, domain, "cheques", ATT_CHEQUES, true, true);
+		this.listaMyArrayToListaDomain(dto, domain, "cheques_", ATT_CHEQUES, true, true);
 		
 		domain.setTotalImporte_gs(dto.getTotalImporteAcreditado());
 
@@ -54,11 +55,18 @@ public class AssemblerBancoDescuentoCheque extends Assembler {
 		this.domainToMyArray(domain, dto, "banco", ATT_BANCO);
 		this.domainToMyArray(domain, dto, "acreedor", ATT_ACREEDOR);
 		this.listaDomainToListaMyArray(domain, dto, "cheques", ATT_CHEQUES);
+		this.listaDomainToListaMyArray(domain, dto, "cheques_", ATT_CHEQUES);
 		this.listaDomainToListaDTO(domain, dto, "chequesPropios", new AssemblerBancoCheque());
 		this.listaDomainToListaDTO(domain, dto, "formasPago", new AssemblerReciboFormaPago(""));
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		for (MyArray cheque : dto.getCheques()) {
+			BancoChequeTercero ch = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), cheque.getId());
+			if (ch != null) {
+				cheque.setPos10(ch.getCliente().getRazonSocial());
+			}
+		}
+		for (MyArray cheque : dto.getCheques_()) {
 			BancoChequeTercero ch = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), cheque.getId());
 			if (ch != null) {
 				cheque.setPos10(ch.getCliente().getRazonSocial());

@@ -350,7 +350,7 @@ public class ControlCuentaCorriente {
 			ctm.setSaldo(cheque.getMonto());
 			rr.saveObject(ctm, user);
 		}
-		for (BancoChequeTercero cheque : prestamo.getCheques()) {
+		for (BancoChequeTercero cheque : prestamo.getCheques_()) {
 			CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
 			ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL));
 			ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));

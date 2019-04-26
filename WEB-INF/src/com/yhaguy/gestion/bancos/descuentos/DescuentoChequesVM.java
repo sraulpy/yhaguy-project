@@ -153,11 +153,23 @@ public class DescuentoChequesVM extends BodyApp {
 			if (this.itemDuplicado(b.getSelectedItem())) {
 				this.mensajeError(Configuracion.TEXTO_ERROR_ITEM_DUPLICADO);
 			} else {
-				this.chequeDescuento.getCheques().add(b.getSelectedItem());
+				if (this.tipo.equals(ABM_PRESTAMO)) {
+					this.chequeDescuento.getCheques_().add(b.getSelectedItem());
+				} else {
+					this.chequeDescuento.getCheques().add(b.getSelectedItem());
+				}
 			}
-			for (MyArray cheq : this.chequeDescuento.getCheques()) {
-				if (cheq.getId().longValue() == b.getSelectedItem().getId().longValue()) {
-					cheq.setPos6(cheq.getPos5());
+			if (this.tipo.equals(ABM_PRESTAMO)) {
+				for (MyArray cheq : this.chequeDescuento.getCheques_()) {
+					if (cheq.getId().longValue() == b.getSelectedItem().getId().longValue()) {
+						cheq.setPos6(cheq.getPos5());
+					}
+				}
+			} else {
+				for (MyArray cheq : this.chequeDescuento.getCheques()) {
+					if (cheq.getId().longValue() == b.getSelectedItem().getId().longValue()) {
+						cheq.setPos6(cheq.getPos5());
+					}
 				}
 			}
 		}

@@ -42,6 +42,14 @@
 			<one-to-many entity-name="com.yhaguy.domain.BancoChequeTercero" />
 		</set>
 		
+		<set name="cheques_" table="bancochequetercero" inverse="false"
+			lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idBancoDescuentoCheque_" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.BancoChequeTercero" />
+		</set>
+		
 		<set name="chequesPropios" table="bancocheque" inverse="false"
 			lazy="false" fetch="join" cascade="all">
 			<key>

@@ -33,6 +33,7 @@ public class BancoDescuentoCheque extends Domain {
 	private Empresa acreedor;
 	
 	private Set<BancoChequeTercero> cheques = new HashSet<BancoChequeTercero>();
+	private Set<BancoChequeTercero> cheques_ = new HashSet<BancoChequeTercero>();
 	private Set<BancoCheque> chequesPropios = new HashSet<BancoCheque>();
 	private Set<ReciboFormaPago> formasPago = new HashSet<ReciboFormaPago>();
 	
@@ -54,6 +55,9 @@ public class BancoDescuentoCheque extends Domain {
 	public double getTotalImporteGs() {
 		double out = 0;
 		for (BancoChequeTercero cheque : this.cheques) {
+			out += cheque.getMonto();
+		}
+		for (BancoChequeTercero cheque : this.cheques_) {
 			out += cheque.getMonto();
 		}
 		for (BancoCheque cheque : this.chequesPropios) {
@@ -207,6 +211,14 @@ public class BancoDescuentoCheque extends Domain {
 
 	public void setTotalImporte_gs(double totalImporte_gs) {
 		this.totalImporte_gs = totalImporte_gs;
+	}
+
+	public Set<BancoChequeTercero> getCheques_() {
+		return cheques_;
+	}
+
+	public void setCheques_(Set<BancoChequeTercero> cheques_) {
+		this.cheques_ = cheques_;
 	}
 
 }

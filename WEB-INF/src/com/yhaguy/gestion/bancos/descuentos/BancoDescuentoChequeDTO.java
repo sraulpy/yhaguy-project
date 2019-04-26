@@ -37,6 +37,7 @@ public class BancoDescuentoChequeDTO extends DTO {
 	private MyArray acreedor;
 	
 	private List<MyArray> cheques = new ArrayList<MyArray>();
+	private List<MyArray> cheques_ = new ArrayList<MyArray>();
 	private List<BancoChequeDTO> chequesPropios = new ArrayList<BancoChequeDTO>();
 	private List<ReciboFormaPagoDTO> formasPago = new ArrayList<ReciboFormaPagoDTO>();
 	
@@ -55,6 +56,9 @@ public class BancoDescuentoChequeDTO extends DTO {
 		for (MyArray cheque : this.cheques) {
 			out += (double)cheque.getPos5();
 		}
+		for (MyArray cheque : this.cheques_) {
+			out += (double)cheque.getPos5();
+		}
 		for (BancoChequeDTO cheque : this.chequesPropios) {
 			out += cheque.getMonto();
 		}
@@ -70,6 +74,9 @@ public class BancoDescuentoChequeDTO extends DTO {
 		for (MyArray cheque : this.cheques) {
 			out += (double)cheque.getPos6();
 		}
+		for (MyArray cheque : this.cheques_) {
+			out += (double)cheque.getPos5();
+		}
 		for (BancoChequeDTO cheque : this.chequesPropios) {
 			out += cheque.getMonto();
 		}
@@ -80,9 +87,10 @@ public class BancoDescuentoChequeDTO extends DTO {
 	}
 	
 	@DependsOn({ "cheques", "chequesPropios" })
-	public List<MyArray> getCheques_() {
+	public List<MyArray> get_cheques() {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.addAll(this.cheques);
+		out.addAll(this.cheques_);
 		out.addAll(this.chequesPropiosToMyArray());
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<MyArray>() {
@@ -252,5 +260,13 @@ public class BancoDescuentoChequeDTO extends DTO {
 
 	public void setAcreedor(MyArray acreedor) {
 		this.acreedor = acreedor;
+	}
+
+	public void setCheques_(List<MyArray> cheques_) {
+		this.cheques_ = cheques_;
+	}
+
+	public List<MyArray> getCheques_() {
+		return cheques_;
 	}
 }
