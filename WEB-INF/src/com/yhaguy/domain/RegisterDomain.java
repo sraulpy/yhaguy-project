@@ -4463,6 +4463,25 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las transferencias donde esta contenida el articulo..
 	 *         [0]:concepto [1]:fecha [2]:numero [3]:cantidad [4]:costo
+	 *         [5]:destino [6]:idsuc [7]:id salida [8]:id entrada
+	 *         [12]:sucursal
+	 */
+	public Object[] getUltimaTransferenciaPorArticulo(long idArticulo) throws Exception {
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
+				+ "')"
+				+ " order by t.fechaCreacion desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 *         [0]:concepto [1]:fecha [2]:numero [3]:cantidad [4]:costo
 	 *         [5]:origen [6]:idsuc [7]:id salida [8]:id entrada
 	 */
 	public List<Object[]> getTransferenciasPorArticulo(long idArticulo, long idDeposito,

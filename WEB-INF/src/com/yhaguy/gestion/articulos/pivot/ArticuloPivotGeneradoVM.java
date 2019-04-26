@@ -60,9 +60,9 @@ public class ArticuloPivotGeneradoVM extends SimpleViewModel {
 
 		for (ArticuloPivotDetalle item : this.selectedItem.getDetalles()) {
 			double precioUlt = 0;
-			Object[] ultCompra = rr.getUltimaCompra(item.getArticulo().getId());
+			Object[] ultCompra = rr.getUltimaCompraLocal(item.getArticulo().getId());
 			if (ultCompra != null) {
-				precioUlt = (double) ultCompra[4];
+				precioUlt = (double) ultCompra[3];
 			}
 			Object[] obj1 = new Object[] { item.getArticulo().getCodigoInterno(),
 					item.getArticulo().getDescripcion(), item.getCantidad(), Utiles.getNumberFormat(precioUlt) };

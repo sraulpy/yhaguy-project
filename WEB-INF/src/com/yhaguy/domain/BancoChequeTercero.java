@@ -33,13 +33,13 @@ public class BancoChequeTercero extends Domain {
 	private boolean reembolsado;
 	private boolean cancelado;
 	
-	private String numeroPlanilla;
-	private String numeroVenta;
-	private String numeroRecibo;
-	private String numeroDeposito;
-	private String numeroDescuento;
-	private String numeroReembolso;
-	private String vendedor;
+	private String numeroPlanilla = "";
+	private String numeroVenta = "";
+	private String numeroRecibo = "";
+	private String numeroDeposito = "";
+	private String numeroDescuento = "";
+	private String numeroReembolso = "";
+	private String vendedor = "";
 	
 	private Date fechaDeposito;
 	private Date fechaDescuento;
