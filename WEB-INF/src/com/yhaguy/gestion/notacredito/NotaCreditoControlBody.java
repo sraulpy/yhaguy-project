@@ -471,7 +471,7 @@ public class NotaCreditoControlBody extends BodyApp {
 
 		BuscarElemento b = new BuscarElemento();
 		b.setClase(this.dto.isMonedaLocal() ? CompraLocalFactura.class : ImportacionFactura.class);
-		b.setTitulo("Facturas de " + (this.dto.isMonedaLocal() ? "Compras" : "Importacion") + " - Proveedor: "
+		b.setTitulo("Facturas de " + (this.dto.isMonedaLocal() ? "Compras" : "Compras") + " - Proveedor: "
 				+ this.dto.getProveedor().getPos2() + " en Moneda: "
 				+ this.dto.getMoneda().getSigla());
 		b.setAtributos(this.dto.isMonedaLocal() ? atributos : atributosDs);
@@ -488,7 +488,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO + "' "
 				+ " or c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
-				+ "') and c.moneda.id = " + this.dto.getMoneda().getId());
+				+ "')");
 		b.setContinuaSiHayUnElemento(false);
 		b.show("%");
 
