@@ -40,7 +40,6 @@ import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Gasto;
-import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.ServicioTecnico;
@@ -470,7 +469,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		long idProveedor = this.dto.getProveedor().getId();
 
 		BuscarElemento b = new BuscarElemento();
-		b.setClase(this.dto.isMonedaLocal() ? CompraLocalFactura.class : ImportacionFactura.class);
+		b.setClase(CompraLocalFactura.class);
 		b.setTitulo("Facturas de " + (this.dto.isMonedaLocal() ? "Compras" : "Compras") + " - Proveedor: "
 				+ this.dto.getProveedor().getPos2() + " en Moneda: "
 				+ this.dto.getMoneda().getSigla());
