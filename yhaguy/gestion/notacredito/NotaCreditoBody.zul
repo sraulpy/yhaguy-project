@@ -421,8 +421,12 @@
 								maxlength="45" />
 						</listcell>
 						<listcell label="@load(each.cantidad)" />
-						<listcell
-							label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
+						<listcell>
+							<hlayout>
+								<label value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" visible="@load(vm.dto.monedaLocal)" />
+								<label value="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)" visible="@load(!vm.dto.monedaLocal)" />
+							</hlayout>							
+						</listcell>
 						<listcell
 							label="@load(vm.dto.monedaLocal? each.importeGs : each.importeDs)
 							@converter(vm.dto.monedaLocal? vm.cnv.monedaLocal : vm.cnv.monedaExtranjera)" />

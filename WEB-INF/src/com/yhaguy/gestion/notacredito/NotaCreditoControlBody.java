@@ -88,8 +88,8 @@ public class NotaCreditoControlBody extends BodyApp {
 	
 	private Window win;
 	
-	static String[] tipos = new String[] { Config.TIPO_STRING, Config.TIPO_STRING,
-			Config.TIPO_DATE, Config.TIPO_STRING, Config.TIPO_NUMERICO };
+	String[] tipos = new String[] { Config.TIPO_STRING, Config.TIPO_STRING,
+			Config.TIPO_DATE, Config.TIPO_STRING, "GS" };
 	
  	
 	@Init(superclass = true)
@@ -449,14 +449,11 @@ public class NotaCreditoControlBody extends BodyApp {
 		String campoImporte = this.dto.isMonedaLocal() ? "importeGs"
 				: "importeDs";	
 		
-		String campoImporteDs = this.dto.isMonedaLocal() ? "totalAsignadoGs"
-				: "totalAsignadoDs";
-		
 		String[] atributos = new String[] { "tipoMovimiento.descripcion", "numero",
 				"fechaCreacion", "sucursal.descripcion", campoImporte };
 		
 		String[] atributosDs = new String[] { "tipoMovimiento.descripcion", "numero",
-				"fechaCreacion", "observacion", campoImporteDs };
+				"fechaCreacion", "observacion", campoImporte };
 
 		String[] columnas = new String[] { "Tipo Movimiento", "Número",
 				"Fecha", "Sucursal", "Importe " 
@@ -475,6 +472,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				+ this.dto.getMoneda().getSigla());
 		b.setAtributos(this.dto.isMonedaLocal() ? atributos : atributosDs);
 		b.setNombresColumnas(this.dto.isMonedaLocal() ? columnas : columnasDs);
+		tipos[4] = this.dto.isMonedaLocal() ? "GS" : "DS";
 		b.setTipos(tipos);
 		b.setWidth("1000px");
 		b.addOrden("numero");
@@ -598,13 +596,9 @@ public class NotaCreditoControlBody extends BodyApp {
 		if(venta){
 			out.setVenta(desde);
 		} else if(compra) {
-			if(this.dto.isMonedaLocal()) {
-				out.setCompra(desde);
-				out.setDeposito(this.getDepositoByFacturaCompra(desde.getId()));
-			} else {
-				out.setImportacion(desde);
-				out.setDeposito(this.getDepositoByFacturaImportacion(desde.getId()));
-			}
+			out.setCompra(desde);
+			out.setDeposito(this.getDepositoByFacturaCompra(desde.getId()));
+		
 		} else if (gasto) {
 			out.setGasto(desde);
 		}
@@ -633,14 +627,6 @@ public class NotaCreditoControlBody extends BodyApp {
 		return new MyPair(dep.getId(), dep.getDescripcion());
 	}
 	
-	/**
-	 * @return el deposito a partir del id de la importacion..
-	 */
-	private MyPair getDepositoByFacturaImportacion(long idImportacion) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		Deposito dep = rr.getDepositoByFacturaImportacion(idImportacion);	
-		return new MyPair(dep.getId(), dep.getDescripcion());
-	}
 	
 	/**
 	 * asignacion de timbrado..
@@ -738,6 +724,8 @@ public class NotaCreditoControlBody extends BodyApp {
 				double cant = (int) item.getPos3();
 				double monto = (this.dto.isMotivoDevolucion() || this.dto.isMotivoReclamo()) ? 
 						((double) item.getPos4() - (desc / cant)) : (double) item.getPos7();
+				double montoDs = (this.dto.isMotivoDevolucion() || this.dto.isMotivoReclamo()) ? 
+								((double) item.getPos5() - (desc / cant)) : (double) item.getPos7();
 				MyArray compra = this.selectedItemFac.getCompra();
 				MyArray venta = this.selectedItemFac.getVenta();
 
@@ -746,6 +734,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				nvoItem.setArticulo(item);
 				nvoItem.setCantidad(cantidad);
 				nvoItem.setMontoGs(monto);
+				nvoItem.setMontoDs(montoDs);
 				nvoItem.setCompra(compra);
 				nvoItem.setVenta(venta);
 				nvoItem.setDeposito(this.dto.isNotaCreditoCompra() ? this
@@ -1112,14 +1101,16 @@ public class NotaCreditoControlBody extends BodyApp {
 	/**
 	 * Inicializa valores por defecto para un nuevo DTO..
 	 */
-	private void sugerirValores(NotaCreditoDTO dto){
+	private void sugerirValores(NotaCreditoDTO dto) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta(dto.getFechaEmision());
 		MyPair sucursal = this.getAcceso().getSucursalOperativa();
 		
 		dto.setTipoMovimiento(this.tipoMovimiento);
 		dto.setSucursal(sucursal);
 		dto.setEstadoComprobante(estadoComprobanteBorrador);
 		dto.setMoneda(getDtoUtil().getMonedaGuarani());
-		dto.setTipoCambio(getDtoUtil().getCambioCompraBCP(dto.getMoneda()));
+		dto.setTipoCambio(tc);
 		
 		this.selectedFactura = new MyArray();
 		this.selectedItemsArt = new ArrayList<NotaCreditoDetalleDTO>();
@@ -1136,8 +1127,10 @@ public class NotaCreditoControlBody extends BodyApp {
 	 * Actualiza el valor del Tipo de cambio segun la moneda..
 	 */
 	@Command @NotifyChange("*")
-	public void refreshTipoCambio(){
-		this.dto.setTipoCambio(getDtoUtil().getCambioCompraBCP(this.dto.getMoneda()));
+	public void refreshTipoCambio() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta(dto.getFechaEmision());
+		this.dto.setTipoCambio(tc);
 	}
 	
 	/**

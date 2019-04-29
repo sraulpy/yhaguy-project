@@ -26,7 +26,10 @@
 				<listcell label="@load(each.pos1)" />
 				<listcell label="@load(each.pos2)" />
 				<listcell>
-					<guaranibox value="@bind(each.pos4)" hflex="true" />
+					<hlayout>
+						<guaranibox value="@bind(each.pos4)" hflex="true" visible="@load(vm.dato.dto.monedaLocal)" />
+						<dolarbox value="@bind(each.pos5)" hflex="true" visible="@load(!vm.dato.dto.monedaLocal)"/>
+					</hlayout>
 				</listcell>
 				<listcell
 					label="@load(each.pos8) @converter('formattedNumber', format='###,###,##0')" 
