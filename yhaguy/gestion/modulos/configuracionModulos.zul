@@ -1,6 +1,9 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.modulos.ConfiguracionModuloVM')"
 	height="100%">
+	
+	<button label="TEST" onClick="@command('notificaciones')"></button>
+	
 	<tabbox height="100%">
 		<tabs>
 			<tab label="Usuarios" width="200px" />

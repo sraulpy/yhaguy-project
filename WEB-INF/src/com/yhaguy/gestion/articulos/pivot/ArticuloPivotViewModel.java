@@ -45,6 +45,7 @@ import com.yhaguy.domain.ArticuloPivotDetalle;
 import com.yhaguy.domain.ArticuloPrecioJedisoft;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
@@ -67,6 +68,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	private String marca = "";
 	private String familia = "";
 	private String proveedor = "";
+	private String origen = "";
 	
 	private String filter_razonsocial = "";
 	private String filter_ruc = "";
@@ -88,6 +90,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	private List<Object[]> abastecimiento = new ArrayList<Object[]>();
 	private List<ArticuloPivot> compras = new ArrayList<ArticuloPivot>();
 	private ArticuloPivot selectedCompra;
+	private List<Funcionario> selectedVendedores = new ArrayList<Funcionario>();
 	
 	private int calcPorcentaje = 0;
 	private int calcPorcentaje_ = 0;
@@ -397,19 +400,19 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		this.ubicaciones = list;
 	}
 	
-	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock", "familia", "proveedor" })
+	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock", "familia", "proveedor", "origen" })
 	public List<MyArray> getArticulos() throws Exception {
 		
 		if (this.codInterno.trim().isEmpty() && this.codOriginal.trim().isEmpty() && this.codProveedor.trim().isEmpty()
 				&& this.descripcion.trim().isEmpty() && this.marca.trim().isEmpty() && this.familia.trim().isEmpty()
-				&& this.proveedor.trim().isEmpty()) {
+				&& this.proveedor.trim().isEmpty() && this.origen.trim().isEmpty()) {
 			this.setSelectedItem(null);
 			return new ArrayList<MyArray>();
 		}
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
-				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor);
+				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor, this.origen);
 		
 		List<Object[]> arts_ = new ArrayList<>();
 		
@@ -447,6 +450,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 			my.setPos6(art[5]);
 			my.setPos7(art[6]);
 			my.setPos8(art[7]);
+			my.setPos9(art[8]);
 			List<MyArray> ubics = new ArrayList<MyArray>();
 			my.setPos5(ubics);
 			out.add(my);
@@ -803,15 +807,23 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	/**
 	 * @return los movimientos..
 	 */
-	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno", "filter_codOriginal", "filter_stock" })
+	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno",
+			"filter_codOriginal", "filter_stock", "selectedVendedores" })
 	public List<Object[]> getMovimientos() throws Exception {
+		String vendedores = "";
+		if (this.selectedVendedores.size() > 0) {
+			for (Funcionario vend : this.selectedVendedores) {
+				vendedores += vend.getId() + ",";
+			}
+			vendedores = vendedores.substring(0, vendedores.length() - 1);
+		}
 		this.totalVentas = 0;
 		this.totalResto = 0;
 		this.totalStock = 0;
 		if (this.selectedSucursal == null) return new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> list = rr.getMovimientosArticulos(this.desde_, this.hasta_, this.familia, this.proveedor,
-				this.marca, this.selectedSucursal.getId(), this.filter_codInterno, this.filter_codOriginal);
+				this.marca, this.selectedSucursal.getId(), this.filter_codInterno, this.filter_codOriginal, vendedores);
 		List<Object[]> list_ = new ArrayList<Object[]>();
 		for (Object[] item : list) {
 			item = Arrays.copyOf(item, item.length + 5);
@@ -922,6 +934,14 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	public List<Object[]> getClientes() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getClientesConDescuento(this.filter_razonsocial, this.filter_ruc);
+	}
+	
+	/**
+	 * @return los vendedores..
+	 */
+	public List<Funcionario> getVendedores() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getVendedores();
 	}
 	
 	/**
@@ -1273,5 +1293,21 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 
 	public void setTotalResto(long totalResto) {
 		this.totalResto = totalResto;
+	}
+
+	public List<Funcionario> getSelectedVendedores() {
+		return selectedVendedores;
+	}
+
+	public void setSelectedVendedores(List<Funcionario> selectedVendedores) {
+		this.selectedVendedores = selectedVendedores;
+	}
+
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
 	}
 }

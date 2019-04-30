@@ -292,7 +292,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
-				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor);
+				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor, "");
 		
 		List<Object[]> arts_ = new ArrayList<>();
 		

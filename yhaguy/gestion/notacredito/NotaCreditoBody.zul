@@ -268,8 +268,7 @@
 				<cell colspan="2">
 					<vlayout style="margin-top:6px">
 						<field value="Observación" />
-						<textbox value="@bind(vm.dto.observacion)"
-							hflex="true" />
+						<textbox value="@bind(vm.dto.observacion)" hflex="true" />
 					</vlayout>
 				</cell>
 			</row>

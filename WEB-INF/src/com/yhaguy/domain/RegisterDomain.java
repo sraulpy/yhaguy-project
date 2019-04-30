@@ -2377,7 +2377,7 @@ public class RegisterDomain extends Register {
 
 	public List<Vehiculo> getVehiculosSucursal(long sucursal) throws Exception {
 		String query = "select v from Vehiculo v where v.sucursal.id = "
-				+ sucursal;
+				+ sucursal + " order by v.descripcion";
 		List<Vehiculo> vehiculosDomain = this.hql(query);
 
 		return vehiculosDomain;
@@ -2775,12 +2775,13 @@ public class RegisterDomain extends Register {
 	 * [5]:marca.descripcion
 	 * [6]:familia.descripcion
 	 * [7]:proveedor.razonSocial
+	 * [8]:proveedor.origen
 	 */
 	public List<Object[]> getArticulos_(String codigoInterno,
-			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor)
+			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen)
 			throws Exception {
 		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
-				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial from Articulo a"
+				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion from Articulo a"
 				+ " where lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
@@ -2791,6 +2792,7 @@ public class RegisterDomain extends Register {
 				+ descripcion.toLowerCase() + "%'"
 				+ " and lower(a.familia.descripcion) like '%" + familia.toLowerCase() + "%'"
 				+ " and lower(a.proveedor.empresa.razonSocial) like '%" + proveedor.toLowerCase() + "%'"
+				+ " and lower(a.proveedor.tipoProveedor.descripcion) like '%" + origen.toLowerCase() + "%'"
 				+ " and lower(a.marca.descripcion) like '%" + marca.toLowerCase() + "%'  order by a.codigoInterno";
 		return this.hqlLimit(query, 50);
 	}
@@ -9830,7 +9832,7 @@ public class RegisterDomain extends Register {
 	 * [4]: articulo.proveedor.id
 	 */
 	public List<Object[]> getMovimientosArticulos(Date desde, Date hasta, String familia, String proveedor,
-			String marca, long idSucursal, String codigoInterno, String codigoOriginal) throws Exception {
+			String marca, long idSucursal, String codigoInterno, String codigoOriginal, String vendedores) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "SELECT vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo," + 
@@ -9846,6 +9848,9 @@ public class RegisterDomain extends Register {
 				"    AND upper(vd.articulo.codigoOriginal) like '%" + codigoOriginal.toUpperCase() + "%'";
 				if (idSucursal > 0) {
 					query += " AND v.sucursal.id = " + idSucursal;
+				}
+				if (vendedores != null && !vendedores.isEmpty()) {
+					query += " AND v.vendedor.id IN (" + vendedores + ")";
 				}
 		query+= "	GROUP BY vd.articulo.codigoInterno, vd.articulo.codigoOriginal, vd.articulo.minimo, vd.articulo.proveedor.id" +
 				"	ORDER BY 1" + 
@@ -9863,6 +9868,9 @@ public class RegisterDomain extends Register {
 				"        AND upper(vd.articulo.codigoOriginal) like '%" + codigoOriginal.toUpperCase() + "%'";
 				if (idSucursal > 0) {
 					query += " AND nc.sucursal.id = " + idSucursal;
+				}
+				if (vendedores != null && !vendedores.isEmpty()) {
+					query += " AND nc.vendedor.id IN (" + vendedores + ")";
 				}
 		query+=	" GROUP BY ncd.articulo.codigoInterno, ncd.articulo.codigoOriginal, ncd.articulo.minimo, ncd.articulo.proveedor.id" +
 				" ORDER BY 1";

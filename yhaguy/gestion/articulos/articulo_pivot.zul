@@ -50,7 +50,13 @@
 			</template>
 		</combobox>
 		<space></space>
-		<chosenbox emptyMessage="Vendedor/es" width="150px" sclass="rounded"></chosenbox>
+		<chosenbox emptyMessage="Vendedor/es" hflex="true" sclass="rounded"
+			model="@load(vm.vendedores)"
+			selectedObjects="@bind(vm.selectedVendedores)">
+			<template name="model">
+				<label value="@load(each.razonSocial)"></label>
+			</template>
+		</chosenbox>
 		</hlayout>
 		<hlayout vflex="3">
 		<listbox sclass="small-list"
@@ -68,7 +74,7 @@
 			<listheader width="150px"/>
 			<listheader width="150px"/>
 			<listheader width="150px"/>
-			<listheader width="80px"/>
+			<listheader width="90px"/>
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -147,6 +153,7 @@
 					<textbox hflex="true"
 						sclass="filter_"
 						placeholder="Origen.."
+						value="@bind(vm.origen)" instant="true" 
 						style="background-image:url('./core/css/filter.png'); background-repeat:
 								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>				
@@ -162,7 +169,7 @@
 				<listcell label="@load(each.pos6)" />
 				<listcell label="@load(each.pos7)" />
 				<listcell label="@load(each.pos8)" />
-				<listcell></listcell>
+				<listcell label="@load(each.pos9.toString().toUpperCase())" />
 			</listitem>
 		</template>
 		<listfoot>

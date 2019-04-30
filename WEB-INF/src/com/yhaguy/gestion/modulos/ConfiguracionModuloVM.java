@@ -13,6 +13,8 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
@@ -304,6 +306,13 @@ public class ConfiguracionModuloVM extends SimpleViewModel {
 	@NotifyChange("usuarios")
 	public void resetPass() throws Exception{
 		this.resetPass_();
+	}
+	
+	@Command
+	public void notificaciones() {
+		EventQueues.lookup("NOTIFICACIONES",
+				EventQueues.APPLICATION, true).publish(
+				new Event("onNotificacion", null, null));
 	}
 
 	/***************** FUNCIONES *****************/
