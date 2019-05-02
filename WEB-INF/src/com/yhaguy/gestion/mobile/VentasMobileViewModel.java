@@ -27,6 +27,8 @@ import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Remision;
+import com.yhaguy.domain.RemisionDetalle;
 import com.yhaguy.domain.Vehiculo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
@@ -106,6 +108,32 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	
 	@Command
 	@NotifyChange("*")
+	public void generarRemision(@BindingParam("comp1") Component comp1, @BindingParam("comp2") Component comp2,
+			@BindingParam("comp3") Component comp3, @BindingParam("comp4") Component comp4) throws Exception {
+		if (!this.validarStock()) {
+			Clients.showNotification("STOCK INSUFICIENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		if (!this.validarLineaCredito()) {
+			Clients.showNotification("LINEA DE CREDITO INSUFICIENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
+		this.generarPedido(true);
+		
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		comp3.setVisible(true);
+		comp4.setVisible(false);
+		Clients.showNotification("PEDIDO GENERADO: " + this.numero);
+		
+		EventQueues.lookup(Configuracion.EVENTO_NUEVO_PEDIDO,
+				EventQueues.APPLICATION, true).publish(
+				new Event(Configuracion.ON_NUEVO_PEDIDO, null, null));
+	}
+	
+	@Command
+	@NotifyChange("*")
 	public void generarPedidoVenta(@BindingParam("comp1") Component comp1, @BindingParam("comp2") Component comp2,
 			@BindingParam("comp3") Component comp3, @BindingParam("comp4") Component comp4) throws Exception {
 		if (!this.validarStock()) {
@@ -116,6 +144,24 @@ public class VentasMobileViewModel extends SimpleViewModel {
 			Clients.showNotification("LINEA DE CREDITO INSUFICIENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
+		
+		this.generarPedido(false);
+		
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		comp3.setVisible(true);
+		comp4.setVisible(false);
+		Clients.showNotification("PEDIDO GENERADO: " + this.numero);
+		
+		EventQueues.lookup(Configuracion.EVENTO_NUEVO_PEDIDO,
+				EventQueues.APPLICATION, true).publish(
+				new Event(Configuracion.ON_NUEVO_PEDIDO, null, null));
+	}
+	
+	/**
+	 * genera el pedido de venta..
+	 */
+	private void generarPedido(boolean remision) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Venta venta = new Venta();
 		venta.setAtendido(this.selectedVendedor);
@@ -157,15 +203,24 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setFormaEntrega(Venta.FORMA_ENTREGA_REPARTO);
 		rr.saveObject(venta, "mobile");
 		this.numero = venta.getNumero();
-		comp1.setVisible(false);
-		comp2.setVisible(true);
-		comp3.setVisible(true);
-		comp4.setVisible(false);
-		Clients.showNotification("PEDIDO GENERADO: " + venta.getNumero());
 		
-		EventQueues.lookup(Configuracion.EVENTO_NUEVO_PEDIDO,
-				EventQueues.APPLICATION, true).publish(
-				new Event(Configuracion.ON_NUEVO_PEDIDO, null, null));
+		if (remision) {
+			String nro = this.numero.replace("V-PED-", "001-001-");
+			Remision rem = new Remision();
+			rem.setFecha(new Date());
+			rem.setImporteGs(venta.getTotalImporteGs_());
+			rem.setNumero(nro);
+			rem.setObservacion(observacion);
+			rem.setVenta(venta);
+			rem.setVehiculo(this.vehiculo);
+			for (VentaDetalle item : venta.getDetalles()) {
+				RemisionDetalle det = new RemisionDetalle();
+				det.setArticulo(item.getArticulo());
+				det.setCantidad(Integer.parseInt(item.getCantidad() + ""));
+				rem.getDetalles().add(det);
+			}
+			rr.saveObject(rem, "mobile");
+		}
 	}
 	
 	/**

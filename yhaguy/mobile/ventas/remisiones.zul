@@ -252,7 +252,7 @@
 				iconSclass="z-icon-check"
 				label=" Generar Pedido" height="150px" style="font-size:30pt"
 				dir="normal" visible="false"
-				onClick="@command('generarPedidoVenta', comp1=vl_observacion, comp2=vl_generado, comp3=btn_volver, comp4=self)"/>
+				onClick="@command('generarRemision', comp1=vl_observacion, comp2=vl_generado, comp3=btn_volver, comp4=self)"/>
 				
 		<button id="btn_volver" mold="bs" sclass="btn-primary btn-lg" hflex="true"
 				iconSclass="z-icon-check"

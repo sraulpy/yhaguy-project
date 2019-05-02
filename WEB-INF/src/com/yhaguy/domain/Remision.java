@@ -13,6 +13,7 @@ public class Remision extends Domain {
 	private String numero;
 	private double importeGs;
 	private String observacion = "";
+	private String vehiculo = "";
 	
 	private Venta venta;
 	private Set<RemisionDetalle> detalles = new HashSet<RemisionDetalle>();
@@ -68,6 +69,14 @@ public class Remision extends Domain {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public String getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(String vehiculo) {
+		this.vehiculo = vehiculo;
 	}
 
 }
