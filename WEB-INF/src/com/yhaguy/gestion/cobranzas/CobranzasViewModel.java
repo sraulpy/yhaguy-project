@@ -40,6 +40,7 @@ import com.coreweb.control.SimpleViewModel;
 import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.LlamadaCobranza;
@@ -255,7 +256,12 @@ public class CobranzasViewModel extends SimpleViewModel {
 	 */
 	public void buscarClientes_() throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> clientes = rr.getClientesConFacturasPendientes();
+		List<Object[]> clientes = new ArrayList<Object[]>();
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			clientes = rr.getClientesConFacturasVencidas_();
+		} else {
+			clientes = rr.getClientesConFacturasPendientes();
+		}
 		this.clientes = new ArrayList<MyArray>();
 		for (Object[] emp : clientes) {
 			long idEmp = (long) emp[0];
@@ -436,6 +442,13 @@ public class CobranzasViewModel extends SimpleViewModel {
 		out.add(CAL_SEMANA);
 		out.add(CAL_MES);
 		return out;
+	}
+	
+	/**
+	 * @return label para el campo facturas..
+	 */
+	public String getLabelFacturas() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? "CLIENTES CON FACTURAS VENCIDAS" : "CLIENTES CON FACTURAS PENDIENTES";
 	}
 	
 	/**

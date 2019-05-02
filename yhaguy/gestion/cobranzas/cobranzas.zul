@@ -67,8 +67,7 @@
 
 		<hbox vflex="true" visible="@load(vm.clientesVisible)">
 			<vbox vflex="true" spacing="0">
-				<label value="CLIENTES CON FACTURAS PENDIENTES"
-					style="font-style:italic;margin-left:10px;color:darkblue" />
+				<label value="@load(vm.labelFacturas)" style="margin-left:10px" />
 				<div hflex="true"
 					style="border-top:solid 1px; border-color:lightgrey;margin-left:10px;margin-right:10px"
 					height="7px" />
@@ -123,8 +122,7 @@
 
 			<vbox vflex="true" hflex="true" spacing="0">
 				<hlayout>
-					<label value="CLIENTE SELECCIONADO:"
-						style="font-style:italic;margin-left:10px;color:darkblue" />
+					<label value="CLIENTE SELECCIONADO:" style="margin-left:10px" />
 					<label value="@load(vm.selectedItem.pos2)"
 						style="font-style:italic;margin-left:5px;color:" />
 				</hlayout>

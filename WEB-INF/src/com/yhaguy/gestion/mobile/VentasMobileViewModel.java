@@ -357,6 +357,21 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return los depositos de remision..
+	 */
+	public List<Deposito> getDepositosRemision() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Deposito> out = new ArrayList<Deposito>();
+		List<Deposito> list = rr.getDepositosPorSucursal((long) 2);
+		for (Deposito dep : list) {
+			if (dep.getDescripcion().startsWith("MOVIL")) {
+				out.add(dep);
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return los vehiculos..
 	 */
 	public List<String> getVehiculos() throws Exception {

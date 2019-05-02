@@ -54,7 +54,7 @@
 			id="lstDeposito"
 			emptyMessage="SELECCIONE UN DEPÓSITO.."
 			style="overflow:auto" vflex="1"
-			model="@load(vm.depositos)" selectedItem="@bind(vm.selectedDeposito)"
+			model="@load(vm.depositosRemision)" selectedItem="@bind(vm.selectedDeposito)"
 			visible="false">
 			<listhead>
 				<listheader label="SELECCIONE UN DEPÓSITO" style="font-size:26pt;text-align:center" />
