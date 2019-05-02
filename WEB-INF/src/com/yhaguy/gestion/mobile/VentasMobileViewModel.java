@@ -27,6 +27,7 @@ import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Vehiculo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
@@ -39,6 +40,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	private String codigoInterno = "";
 	private String observacion = "";
 	private String numero = "";
+	private String vehiculo = "";
 	
 	private Empresa selectedEmpresa;
 	private Funcionario selectedVendedor;
@@ -152,6 +154,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setTotalImporteGs(venta.getImporteGs());
 		venta.setValidez(0);
 		venta.setVencimiento(new Date());
+		venta.setFormaEntrega(Venta.FORMA_ENTREGA_REPARTO);
 		rr.saveObject(venta, "mobile");
 		this.numero = venta.getNumero();
 		comp1.setVisible(false);
@@ -269,13 +272,12 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		return rr.getEmpresas("", "", this.razonSocial, "");
 	}
 	
-	@DependsOn("razonSocialVendedor")
+	/**
+	 * @return los vendedores..
+	 */
 	public List<Funcionario> getVendedores() throws Exception {
-		if (this.razonSocialVendedor.isEmpty()) {
-			return new ArrayList<Funcionario>();
-		}
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getFuncionarios(this.razonSocialVendedor);
+		return rr.getVendedores();
 	}
 	
 	@DependsOn("codigoInterno")
@@ -297,6 +299,18 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	public List<Deposito> getDepositos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getDepositosPorSucursal((long) 2);
+	}
+	
+	/**
+	 * @return los vehiculos..
+	 */
+	public List<String> getVehiculos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<String> out = new ArrayList<String>();
+		for (Vehiculo vehiculo : rr.getVehiculosSucursal(2)) {
+			out.add(vehiculo.getDescripcion().toUpperCase());
+		}
+		return out;
 	}
 	
 	/**
@@ -464,5 +478,13 @@ public class VentasMobileViewModel extends SimpleViewModel {
 
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+
+	public String getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(String vehiculo) {
+		this.vehiculo = vehiculo;
 	}
 }

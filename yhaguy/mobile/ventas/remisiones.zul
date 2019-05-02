@@ -163,7 +163,7 @@
 			
 			<div style="border-bottom:solid 1px">
 				<hlayout>
-					<label value="OBSERVACIÓN DEL PEDIDO"
+					<label value="OBSERVACIÓN DEL PEDIDO REMISIÓN"
 						sclass="mobile" />
 				</hlayout>
 			</div>
@@ -171,7 +171,21 @@
 			<label value="Observación" sclass="mobile" />
 			<textbox hflex="true" rows="10"
 				value="@bind(vm.observacion)"></textbox>
-			
+			<space></space>	
+			<listbox id="lstVehiculo" emptyMessage="VEHÍCULOS"
+				style="overflow:auto" vflex="true" model="@load(vm.vehiculos)"
+				selectedItem="@bind(vm.vehiculo)">
+				<listhead>
+					<listheader label="VEHÍCULO"
+						style="font-size:26pt;text-align:center" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each)" />
+					</listitem>
+				</template>
+			</listbox>
+
 		</vlayout>
 		
 		<vlayout id="vl_generado" vflex="true" visible="false" style="padding:30px">			
