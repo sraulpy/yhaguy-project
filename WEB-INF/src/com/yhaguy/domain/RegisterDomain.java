@@ -2781,7 +2781,11 @@ public class RegisterDomain extends Register {
 			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen)
 			throws Exception {
 		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
-				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion from Articulo a"
+				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial";
+				if (origen != null && !origen.isEmpty()) {
+					query += ", a.proveedor.tipoProveedor.descripcion";
+				}
+				query += " from Articulo a"
 				+ " where lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
@@ -2791,9 +2795,11 @@ public class RegisterDomain extends Register {
 				+ "%' and lower(a.descripcion) like '%"
 				+ descripcion.toLowerCase() + "%'"
 				+ " and lower(a.familia.descripcion) like '%" + familia.toLowerCase() + "%'"
-				+ " and lower(a.proveedor.empresa.razonSocial) like '%" + proveedor.toLowerCase() + "%'"
-				+ " and lower(a.proveedor.tipoProveedor.descripcion) like '%" + origen.toLowerCase() + "%'"
-				+ " and lower(a.marca.descripcion) like '%" + marca.toLowerCase() + "%'  order by a.codigoInterno";
+				+ " and lower(a.proveedor.empresa.razonSocial) like '%" + proveedor.toLowerCase() + "%'";
+				if (origen != null && !origen.isEmpty()) {
+					query += " and lower(a.proveedor.tipoProveedor.descripcion) like '%" + origen.toLowerCase() + "%'";
+				}				
+				query += " and lower(a.marca.descripcion) like '%" + marca.toLowerCase() + "%'  order by a.codigoInterno";
 		return this.hqlLimit(query, 50);
 	}
 	

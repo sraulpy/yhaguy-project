@@ -364,7 +364,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		List<Deposito> out = new ArrayList<Deposito>();
 		List<Deposito> list = rr.getDepositosPorSucursal((long) 2);
 		for (Deposito dep : list) {
-			if (dep.getDescripcion().startsWith("MOVIL")) {
+			if (dep.getDescripcion().contains("MOVIL")) {
 				out.add(dep);
 			}
 		}
