@@ -533,8 +533,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 
 		if (this.validarFormulario() == true) {
-			if (!this.reciboDTO.esNuevo()) {
-				RegisterDomain rr = RegisterDomain.getInstance();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			if (!this.reciboDTO.esNuevo()) {				
 				for (BancoChequeTercero cheque : this.reciboDTO.getChequesEliminar()) {
 					rr.deleteObject(cheque);
 				}
@@ -545,7 +545,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 						rr.saveObject(rfp, rfp.getUsuarioMod());
 					}					
 				}
-			}
+			}			
 			
 			this.asignarNumeros();
 
@@ -561,16 +561,24 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Invoca a la API de Banco para agregar los movimientos de banco..
 	 */
 	private void addMovimientoBanco() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
 		ControlBancoMovimiento ctr = new ControlBancoMovimiento(null);
 
 		for (ReciboDTO recibo : this.dto.getRecibos()) {
 			if (recibo.isMovimientoBancoActualizado() == false) {
 				for (ReciboFormaPagoDTO formaPago : recibo.getFormasPago()) {
-					if (!formaPago.getOrden().equals("1")) {
+					ReciboFormaPago fp = (ReciboFormaPago) rr.getObject(ReciboFormaPago.class.getName(), formaPago.getId());
+					if (!formaPago.getOrden().equals("1") && !formaPago.getTarjetaNumeroComprobante().equals("CHEQUE TERCERO")) {
 						ctr.registrarMovimientoBanco(formaPago,
 								recibo.getFechaEmision(), recibo.getSucursal(),
 								recibo.getCliente().getId(), this.dto.getNumero(),
 								recibo.getNumero(), "", recibo.getVendedorRazonSocial());
+					} else if (formaPago.getTarjetaNumeroComprobante().equals("CHEQUE TERCERO")) {
+						BancoChequeTercero cheque = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), Long.parseLong(formaPago.getTarjetaNumero()));
+						cheque.setReciboFormaPago(fp);
+						cheque.setNumeroRecibo(recibo.getNumero());
+						cheque.setNumeroPlanilla(this.dto.getNumero());
+						rr.saveObject(cheque, this.getLoginNombre());
 					}					
 				}
 				recibo.setMovimientoBancoActualizado(true);

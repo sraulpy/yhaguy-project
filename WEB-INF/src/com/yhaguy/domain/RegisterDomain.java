@@ -6997,6 +6997,23 @@ public class RegisterDomain extends Register {
 				+ " order by c.fecha";
 		return this.hqlLimit(query, 50);
 	}
+	
+	/**
+	 * @return los cheques de terceros..
+	 */
+	public List<BancoChequeTercero> getChequesTercero_(String razonSocial, String ruc, 
+			String banco, String numero, String librador, boolean descontado, boolean depositado)
+			throws Exception {
+		String query = "select c from BancoChequeTercero c where c.dbEstado != 'D'"
+				+ " and c.anulado = 'FALSE'"
+				+ " and upper(c.cliente.empresa.razonSocial) like '%" + razonSocial.toUpperCase() + "%'"
+				+ " and upper(c.cliente.empresa.ruc) like '%" + ruc.toUpperCase() + "%'"
+				+ " and upper(c.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
+				+ " and upper(c.numero) like '%" + numero.toUpperCase() + "%'"
+				+ " and upper(c.librado) like '%" + librador.toUpperCase() + "%'"
+				+ " order by c.fecha";
+		return this.hqlLimit(query, 50);
+	}
 
 	/**
 	 * @return un recibo a partir de una forma de pago..

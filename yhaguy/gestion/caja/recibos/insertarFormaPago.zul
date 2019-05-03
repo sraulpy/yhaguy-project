@@ -100,8 +100,7 @@
 			<row id="rwNroTarjeta" visible="false">
 				<field value="Número de Tarjeta:"/>
 				<hlayout>
-					<textbox value="@bind(vm.nvoFormaPago.tarjetaNumero)
-						@converter(vm.cnv.creditCard)" 
+					<textbox value="@bind(vm.nvoFormaPago.tarjetaNumero)" 
 						hflex="true" sclass="formato-numerico"/>
 					<label value="últimos 4 dígitos"
 						style="color:red;font-style:oblique"/>
@@ -124,11 +123,50 @@
 			</row>
 			
 			<!-- ____________________________ Datos del Cheque ____________________________ -->
+			
+			<row id="rwCheque" visible="false">
+				<field value="Cheque:" />
+				<bandbox readonly="true" hflex="true"
+					value="@load(vm.selectedChequeTercero.numero)"
+					id="bdx_cheque">
+					<bandpopup>
+						<listbox sclass="small-list" width="600px" height="250px"
+							model="@load(vm.chequesTercero_)"
+							selectedItem="@bind(vm.selectedChequeTercero)"
+							onSelect="@command('selectChequeTercero')">
+							<attribute name="onSelect">
+								bdx_cheque.close();
+							</attribute>
+							<listhead>								
+								<listheader width="100px">
+									<textbox hflex="true" value="@bind(vm.filterChequeNro)" instant="true"
+										placeholder="Número.."></textbox>
+								</listheader>
+								<listheader width="150px">
+									<textbox hflex="true" value="@bind(vm.filterChequeBanco)" instant="true"
+										placeholder="Banco.."></textbox>
+								</listheader>
+								<listheader>
+									<textbox hflex="true" value="@bind(vm.filterChequeCliente)" instant="true"
+										placeholder="Cliente.."></textbox>
+								</listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.numero)"></listcell>
+									<listcell label="@load(each.banco.descripcion)"></listcell>
+									<listcell label="@load(each.cliente.razonSocial)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</bandpopup>
+				</bandbox>
+			</row>
 						
 			<row id="rwBanco" visible="false">
 				<field value="Cuenta Banco:"/>
 				<textbox readonly="true" hflex="true"
-					value="@load(vm.nvoFormaPago.bancoCta.banco.pos1)"/>
+					value="@load(vm.nvoFormaPago.bancoCta.banco.pos1)" />
 			</row>
 			
 			<row id="rwChequera" visible="false">

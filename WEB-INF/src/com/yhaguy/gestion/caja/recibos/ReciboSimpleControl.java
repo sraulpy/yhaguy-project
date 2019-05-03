@@ -62,6 +62,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private String filterNro = "";
 	
 	private BancoChequeTercero selectedChequeAutoCobranza;
+	private BancoChequeTercero selectedChequeTercero;
 
 	@Init(superclass=true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) CajaPeriodoControlBody dato) {
@@ -613,6 +614,11 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.nvoFormaPago.setMontoGs(montoDs * this.getTipoCambio());
 	}
 	
+	@Command @NotifyChange("*")
+	public void selectChequeTercero() {
+		this.selectChequeTercero_();
+	}
+	
 	@GlobalCommand @NotifyChange("*")
 	public void updateCuentaBanco(@BindingParam("cuenta") BancoCtaDTO cuenta){
 		this.nvoFormaPago.setBancoCta(cuenta);
@@ -628,9 +634,8 @@ public class ReciboSimpleControl extends SoloViewModel {
 	
 	/**
 	 * Despliega la ventana del cheque..
-	 * @throws Exception
 	 */
-	public void showCheque() throws Exception {
+	private void showCheque() throws Exception {
 		String beneficiario = (String) this.dato.getReciboDTO().getProveedor().getPos2();
 		MyArray moneda = this.dato.getReciboDTO().getMoneda();
 		
@@ -652,6 +657,22 @@ public class ReciboSimpleControl extends SoloViewModel {
 					+ " - " +this.nvoFormaPago.getChequeNumero();
 			this.nvoFormaPago.setDescripcion(descrip);
 		}
+	}
+	
+	/**
+	 * asigna el cheque tercero..
+	 */
+	private void selectChequeTercero_() {
+		MyPair banco = new MyPair(this.selectedChequeTercero.getBanco().getId(), this.selectedChequeTercero.getBanco().getDescripcion());
+		this.nvoFormaPago.setChequeBanco(banco);
+		this.nvoFormaPago.setChequeNumero(this.selectedChequeTercero.getNumero());
+		this.nvoFormaPago.setChequeLibrador(this.selectedChequeTercero.getLibrado());
+		this.nvoFormaPago.setChequeFecha(this.selectedChequeTercero.getFecha());
+		this.nvoFormaPago.setMontoChequeGs(this.selectedChequeTercero.getMonto());
+		this.nvoFormaPago.setMontoDs(this.dato.getReciboDTO().isMonedaLocal() ? 0.0 : this.selectedChequeTercero.getMonto());
+		this.nvoFormaPago.setMontoGs(this.dato.getReciboDTO().isMonedaLocal() ? this.selectedChequeTercero.getMonto() : 0.0);
+		this.nvoFormaPago.setTarjetaNumero(this.selectedChequeTercero.getId() + "");
+		this.nvoFormaPago.setTarjetaNumeroComprobante("CHEQUE TERCERO");
 	}
 	
 	public void actualizarMontoFormaPago(BancoChequeDTO cheque){
@@ -905,6 +926,8 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private Row rwSaldoFavorCobrado;
 	@Wire
 	private Row rwMontoAplicado;
+	@Wire
+	private Row rwCheque;
 	
 	@Command @NotifyChange("*")
 	public void seleccionarFormaPago() throws Exception {
@@ -937,6 +960,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false); 
 			rwDebitoCobroCentral.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
+			rwCheque.setVisible(false);
 			dbxGs.setReadonly(true); dbxUS.setReadonly(true);
 			rwMontoAplicado.setVisible(true);
 			
@@ -957,6 +981,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 			
 		} else if(siglaFP.compareTo(siglaFPTD) == 0){
@@ -976,6 +1001,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 			
 		} else if(siglaFP.compareTo(siglaFPDB) == 0){
@@ -995,6 +1021,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 		
 		} else if(siglaFP.compareTo(siglaFPDE) == 0){
@@ -1014,6 +1041,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 		
 		} else if (siglaFP.compareTo(siglaFPCT) == 0) {
@@ -1032,6 +1060,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);	
 			this.nvoFormaPago.setChequeLibrador((String) this.dato.getReciboDTO().getCliente().getPos2());
 		
@@ -1052,6 +1081,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			if (this.dato.getReciboDTO().isOrdenPago()) {
 				rwNroRetencion.setVisible(false);
 				rwTimbradoVencimiento.setVisible(false); 
@@ -1075,6 +1105,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
 		} else if (siglaFP.equals(siglaFPDC)) {
@@ -1093,6 +1124,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
 		} else if (siglaFP.equals(siglaSFCO)) {
@@ -1111,6 +1143,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(true);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
 		} else {
@@ -1130,6 +1163,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false); 
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
+			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());		
 		}
 	}
@@ -1607,6 +1641,12 @@ public class ReciboSimpleControl extends SoloViewModel {
 		return rr.getChequesTercero(this.filterChequeCliente, "", this.filterChequeBanco, this.filterChequeNro, "", false, false);
 	}
 	
+	@DependsOn({ "filterChequeNro", "filterChequeBanco", "filterChequeCliente" })
+	public List<BancoChequeTercero> getChequesTercero_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getChequesTercero_(this.filterChequeCliente, "", this.filterChequeBanco, this.filterChequeNro, "", false, false);
+	}
+	
 	public CajaPeriodoControlBody getDato() {
 		return dato;
 	}
@@ -1763,5 +1803,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 
 	public void setNvoItem_dif_cambio(ReciboDetalleDTO nvoItem_dif_cambio) {
 		this.nvoItem_dif_cambio = nvoItem_dif_cambio;
+	}
+
+	public BancoChequeTercero getSelectedChequeTercero() {
+		return selectedChequeTercero;
+	}
+
+	public void setSelectedChequeTercero(BancoChequeTercero selectedChequeTercero) {
+		this.selectedChequeTercero = selectedChequeTercero;
 	}
 }
