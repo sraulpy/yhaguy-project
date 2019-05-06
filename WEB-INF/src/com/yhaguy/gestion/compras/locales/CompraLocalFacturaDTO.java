@@ -127,11 +127,15 @@ public class CompraLocalFacturaDTO extends DTO{
 					@Override
 					public int compare(CompraLocalFacturaDetalleDTO o1,
 							CompraLocalFacturaDetalleDTO o2) {
-						String id1 = o1.getOrden();
-						String id2 = o2.getOrden();
-						int id1_ = Integer.parseInt(id1);
-						int id2_ = Integer.parseInt(id2);
-						return (int) (id1_ - id2_);
+						try {
+							String id1 = o1.getOrden();
+							String id2 = o2.getOrden();
+							int id1_ = Integer.parseInt(id1);
+							int id2_ = Integer.parseInt(id2);
+							return (int) (id1_ - id2_);
+						} catch (Exception e) {
+							return -1;
+						}
 					}
 				});
 		return detalles;
