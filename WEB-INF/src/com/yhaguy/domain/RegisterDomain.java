@@ -10132,15 +10132,20 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			String query = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id IN (9,10,12,44) and c.nroComprobante is null";
-			List<CtaCteEmpresaMovimiento> list = rr.hql(query);
-			for (CtaCteEmpresaMovimiento movim : list) {
-				Gasto gasto = rr.getGastoById(movim.getIdMovimientoOriginal());
-				movim.setNroComprobante(gasto.getNumeroFactura());
-				rr.saveObject(movim, movim.getUsuarioMod());
-				System.out.println(movim.getNroComprobante());
+			List<Articulo> arts = rr.getArticulos();
+			for (Articulo art : arts) {
+				Object[] compra = rr.getUltimaCompraLocal(art.getId());
+				if (compra != null) {
+					int cant = (int) compra[0];
+					Date fecha = (Date) compra[1];
+					art.setFechaUltimaCompra(fecha);
+					art.setCantUltimaCompra(cant);
+					rr.saveObject(art, art.getUsuarioMod());
+					System.out.println(art.getCodigoInterno());
+				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

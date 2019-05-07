@@ -28,6 +28,8 @@
 		<property name="precioMinoristaGs" />
 		<property name="precioListaGs" />
 		<property name="fechaAlta" />
+		<property name="fechaUltimaCompra" />
+		<property name="cantUltimaCompra" />
 		<property name="prioridad" />
 		<property name="completo" />
 		<property name="urlImagen" />

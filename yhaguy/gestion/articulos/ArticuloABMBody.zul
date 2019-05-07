@@ -416,10 +416,13 @@
 											</cell>
 											<vlayout spacing="0">
 												<field
-													value="Fecha alta" />
+													value="Fecha alta / Últ.compra" />
 												<hlayout>
 													<datebox
 														value="@bind(vm.dto.fechaAlta)" readonly="true"
+														hflex="true" style="color:#999;font-weight:bold" />
+													<datebox
+														value="@bind(vm.dto.fechaUltimaCompra)" readonly="true"
 														hflex="true" style="color:#999;font-weight:bold" />
 												</hlayout>
 											</vlayout>

@@ -36,6 +36,8 @@ public class Articulo extends Domain {
 	private double precioMinoristaGs; // minorista
 	private double precioListaGs;	// autocentro
 	private Date fechaAlta; 
+	private Date fechaUltimaCompra;
+	private int cantUltimaCompra;
 	private boolean importado; 
 	private boolean servicio;
 	long prioridad = 0; 
@@ -589,5 +591,21 @@ public class Articulo extends Domain {
 
 	public void setMinimo(int minimo) {
 		this.minimo = minimo;
+	}
+
+	public Date getFechaUltimaCompra() {
+		return fechaUltimaCompra;
+	}
+
+	public void setFechaUltimaCompra(Date fechaUltimaCompra) {
+		this.fechaUltimaCompra = fechaUltimaCompra;
+	}
+
+	public int getCantUltimaCompra() {
+		return cantUltimaCompra;
+	}
+
+	public void setCantUltimaCompra(int cantUltimaCompra) {
+		this.cantUltimaCompra = cantUltimaCompra;
 	}
 }

@@ -35,6 +35,7 @@ public class ArticuloDTO extends DTO {
 	private double peso = 0;
 	private double volumen;
 	Date fechaAlta = new Date();
+	private Date fechaUltimaCompra;
 	private long prioridad = 0;
 	private boolean completo;
 	private boolean importado = true;
@@ -614,5 +615,13 @@ public class ArticuloDTO extends DTO {
 
 	public void setPrecioListaGs(double precioListaGs) {
 		this.precioListaGs = precioListaGs;
+	}
+
+	public Date getFechaUltimaCompra() {
+		return fechaUltimaCompra;
+	}
+
+	public void setFechaUltimaCompra(Date fechaUltimaCompra) {
+		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 }

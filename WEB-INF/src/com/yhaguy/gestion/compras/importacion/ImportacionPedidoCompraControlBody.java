@@ -3437,6 +3437,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	//pos5:costoFOBgs - pos6:costoFOBds - pos7:costoFinalGs - pos8:costoFinalDs |
 	private void volcarImportacion() throws Exception {
 		ControlLogica ctr = new ControlLogica(null);
+		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		for (MyArray m : this.getItemsCostoFinal()) {
 			
@@ -3462,6 +3463,10 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			double mayoristaGs = item.getPrecioFinalGs();
 			double minoristaGs = item.getMinoristaGs();
 			double listaGs = item.getListaGs();
+			Articulo art = rr.getArticuloById(idArticulo);
+			art.setFechaUltimaCompra(new Date());
+			art.setCantUltimaCompra(item.getCantidad());
+			rr.saveObject(art, this.getLoginNombre());
 			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, this.getLoginNombre());
 		}
 		

@@ -897,6 +897,7 @@ public class CompraLocalControlBody extends BodyApp {
 	 * Vuelca el Stock con los costos..
 	 */
 	private void volcarStock_Costos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		for (MyArray m : this.getItemsCostoFinal()) {
 			MyArray art = new MyArray();
@@ -920,6 +921,10 @@ public class CompraLocalControlBody extends BodyApp {
 			double mayoristaGs = item.getPrecioFinalGs();
 			double minoristaGs = item.getMinoristaGs();
 			double listaGs = item.getListaGs();
+			Articulo art = rr.getArticuloById(idArticulo);
+			art.setFechaUltimaCompra(this.dto.getFactura().getFechaOriginal());
+			art.setCantUltimaCompra(item.getCantidad());
+			rr.saveObject(art, this.getLoginNombre());
 			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, this.getLoginNombre());
 		}
 	}

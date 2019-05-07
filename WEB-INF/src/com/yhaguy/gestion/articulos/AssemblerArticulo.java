@@ -19,7 +19,8 @@ public class AssemblerArticulo extends Assembler {
 	static String[] attIguales = { "descripcion", "codigoInterno", "codigoProveedor", "codigoOriginal", "codigoBarra",
 			"observacion", "peso", "volumen", "fechaAlta", "prioridad", "completo", "urlImagen", "urlEspecificacion",
 			"importado", "servicio", "disenho", "ancho", "alto", "aro", "medida", "pisada", "unidadesCaja",
-			"referencia", "estado", "ochentaVeinte", "abc", "maximo", "minimo", "precioGs", "precioDs", "precioMinoristaGs", "precioListaGs" };
+			"referencia", "estado", "ochentaVeinte", "abc", "maximo", "minimo", "precioGs", "precioDs",
+			"precioMinoristaGs", "precioListaGs", "fechaUltimaCompra" };
 
 	static String[] attPresentacion = { "descripcion" };
 
