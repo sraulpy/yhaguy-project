@@ -38,6 +38,10 @@ public class Articulo extends Domain {
 	private Date fechaAlta; 
 	private Date fechaUltimaCompra;
 	private int cantUltimaCompra;
+	private double precioUltimaCompra;
+	private Date fechaUltimaVenta;
+	private int cantUltimaVenta;
+	private double precioUltimaVenta;
 	private boolean importado; 
 	private boolean servicio;
 	long prioridad = 0; 
@@ -607,5 +611,37 @@ public class Articulo extends Domain {
 
 	public void setCantUltimaCompra(int cantUltimaCompra) {
 		this.cantUltimaCompra = cantUltimaCompra;
+	}
+
+	public double getPrecioUltimaCompra() {
+		return precioUltimaCompra;
+	}
+
+	public void setPrecioUltimaCompra(double precioUltimaCompra) {
+		this.precioUltimaCompra = precioUltimaCompra;
+	}
+
+	public Date getFechaUltimaVenta() {
+		return fechaUltimaVenta;
+	}
+
+	public void setFechaUltimaVenta(Date fechaUltimaVenta) {
+		this.fechaUltimaVenta = fechaUltimaVenta;
+	}
+
+	public int getCantUltimaVenta() {
+		return cantUltimaVenta;
+	}
+
+	public void setCantUltimaVenta(int cantUltimaVenta) {
+		this.cantUltimaVenta = cantUltimaVenta;
+	}
+
+	public double getPrecioUltimaVenta() {
+		return precioUltimaVenta;
+	}
+
+	public void setPrecioUltimaVenta(double precioUltimaVenta) {
+		this.precioUltimaVenta = precioUltimaVenta;
 	}
 }

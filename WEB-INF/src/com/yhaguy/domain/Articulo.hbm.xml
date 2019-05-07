@@ -30,6 +30,10 @@
 		<property name="fechaAlta" />
 		<property name="fechaUltimaCompra" />
 		<property name="cantUltimaCompra" />
+		<property name="precioUltimaCompra" />
+		<property name="fechaUltimaVenta" />
+		<property name="cantUltimaVenta" />
+		<property name="precioUltimaVenta" />
 		<property name="prioridad" />
 		<property name="completo" />
 		<property name="urlImagen" />

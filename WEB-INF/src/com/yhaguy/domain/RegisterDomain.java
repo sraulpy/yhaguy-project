@@ -9355,11 +9355,28 @@ public class RegisterDomain extends Register {
 	 * [2]:proveedor
 	 * [3]:costoGs
 	 * [4]:costoDs
+	 * [5]:precioGs
 	 */
 	public Object[] getUltimaCompraLocal(long idArticulo) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs, d.costoGs"
 				+ " from CompraLocalFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return datos de ultima venta..
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:cliente
+	 * [3]:precioGs
+	 * [4]:precioDs
+	 */
+	public Object[] getUltimaVenta_(long idArticulo) throws Exception {
+		String query = "select d.cantidad, v.fecha, v.cliente.empresa.razonSocial, d.precioGs, d.precioVentaFinalDs"
+				+ " from Venta v join v.detalles d where d.articulo.id = " + idArticulo
+				+ " order by v.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
 		return list.size() > 0 ? list.get(0) : null;
 	}
@@ -10134,14 +10151,27 @@ public class RegisterDomain extends Register {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Articulo> arts = rr.getArticulos();
 			for (Articulo art : arts) {
-				Object[] compra = rr.getUltimaCompraLocal(art.getId());
+				Object[] compra = rr.getUltimaCompraLocal(art.getId());				
 				if (compra != null) {
 					int cant = (int) compra[0];
 					Date fecha = (Date) compra[1];
+					double costo = (double) compra[5];
 					art.setFechaUltimaCompra(fecha);
 					art.setCantUltimaCompra(cant);
+					art.setPrecioUltimaCompra(costo);
 					rr.saveObject(art, art.getUsuarioMod());
 					System.out.println(art.getCodigoInterno());
+				}
+				Object[] venta = rr.getUltimaVenta_(art.getId());				
+				if (venta != null) {
+					long cant = (long) venta[0];
+					Date fecha = (Date) venta[1];
+					double costo = (double) venta[3];
+					art.setFechaUltimaVenta(fecha);
+					art.setCantUltimaVenta(Integer.parseInt(cant + ""));
+					art.setPrecioUltimaVenta(costo);
+					rr.saveObject(art, art.getUsuarioMod());
+					System.err.println(art.getCodigoInterno());
 				}
 			}
 		} catch (Exception e) {

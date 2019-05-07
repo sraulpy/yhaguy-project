@@ -36,6 +36,10 @@ public class ArticuloDTO extends DTO {
 	private double volumen;
 	Date fechaAlta = new Date();
 	private Date fechaUltimaCompra;
+	private double precioUltimaCompra;
+	private Date fechaUltimaVenta;
+	private int cantUltimaVenta;
+	private double precioUltimaVenta;
 	private long prioridad = 0;
 	private boolean completo;
 	private boolean importado = true;
@@ -623,5 +627,37 @@ public class ArticuloDTO extends DTO {
 
 	public void setFechaUltimaCompra(Date fechaUltimaCompra) {
 		this.fechaUltimaCompra = fechaUltimaCompra;
+	}
+
+	public double getPrecioUltimaCompra() {
+		return precioUltimaCompra;
+	}
+
+	public void setPrecioUltimaCompra(double precioUltimaCompra) {
+		this.precioUltimaCompra = precioUltimaCompra;
+	}
+
+	public Date getFechaUltimaVenta() {
+		return fechaUltimaVenta;
+	}
+
+	public void setFechaUltimaVenta(Date fechaUltimaVenta) {
+		this.fechaUltimaVenta = fechaUltimaVenta;
+	}
+
+	public int getCantUltimaVenta() {
+		return cantUltimaVenta;
+	}
+
+	public void setCantUltimaVenta(int cantUltimaVenta) {
+		this.cantUltimaVenta = cantUltimaVenta;
+	}
+
+	public double getPrecioUltimaVenta() {
+		return precioUltimaVenta;
+	}
+
+	public void setPrecioUltimaVenta(double precioUltimaVenta) {
+		this.precioUltimaVenta = precioUltimaVenta;
 	}
 }
