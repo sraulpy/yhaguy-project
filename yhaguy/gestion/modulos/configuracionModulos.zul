@@ -2,8 +2,6 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.modulos.ConfiguracionModuloVM')"
 	height="100%">
 	
-	<button label="TEST" onClick="@command('notificaciones')"></button>
-	
 	<tabbox height="100%">
 		<tabs>
 			<tab label="Usuarios" width="200px" />
@@ -593,6 +591,9 @@
 							disabled="@load(!vm.operacionSeleccionada)" style="align:right"
 							image="/core/images/editarItem.png"
 							onClick="@command('modificarItem', index=5)" />
+						<space></space>
+						<button mold="bs" sclass="btn-info btn-sm" label="Notificaciones" onClick="@command('notificaciones')"
+							iconSclass="z-icon-flag"></button>
 					</hlayout>
 					<listbox sclass="small-list" checkmark="true"
 						vflex="true" emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."

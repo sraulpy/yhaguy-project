@@ -5,10 +5,6 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.EventQueue;
-import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.util.Clients;
 
 import com.coreweb.Config;
@@ -117,14 +113,5 @@ public class Inicio {
 						Clients.NOTIFICATION_TYPE_INFO, null, "overlap_after", 0);
 			}
 		}
-		
-		EventQueue<Event> eq = EventQueues.lookup("NOTIFICACIONES", 
-				EventQueues.APPLICATION, true);
-		eq.subscribe(new EventListener<Event>() {			
-			@Override
-			public void onEvent(Event arg0) throws Exception {
-				Clients.showNotification("TEST NOTIFICACIONES!");
-			}
-		});
 	}
 }
