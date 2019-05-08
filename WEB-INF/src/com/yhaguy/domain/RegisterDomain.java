@@ -734,7 +734,6 @@ public class RegisterDomain extends Register {
 				+ " where s.id = ? order by d.descripcion";
 		list = this.hql(queryDepositos, id);
 		return list;
-
 	}
 
 	public List<Deposito> getAllDepositos() throws Exception {
@@ -743,14 +742,12 @@ public class RegisterDomain extends Register {
 		return l;
 	}
 
-	public List<ArticuloDeposito> getArticulosPorDeposito(Long id)
-			throws Exception {
+	public List<ArticuloDeposito> getArticulosPorDeposito(Long id) throws Exception {
 		List<ArticuloDeposito> list = null;
 		String queryArticulos = ""
 				+ " select art from ArticuloDeposito art where art.deposito.id = ?";
 		list = this.hql(queryArticulos, id);
 		return list;
-
 	}
 
 	public ArticuloDeposito getArticuloDepById(long id) throws Exception {
@@ -6232,13 +6229,20 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los movimientos con saldo acumulado el saldo..
-	 * [0]:idMovimientoOriginal [1]:tipoMovimiento.id
-	 * [2]:nrocomprobante [3]:tipoMovimiento.descripcion
-	 * [4]:telefono [5]:direccion
-	 * [6]:emision [7]:vencimiento
-	 * [8]:importe [9]:saldo acum
-	 * [10]:razonSocial [11]:ruc
-	 * [12]:saldo [13]:siglaTipomovimiento
+	 * [0]:idMovimientoOriginal 
+	 * [1]:tipoMovimiento.id
+	 * [2]:nrocomprobante 
+	 * [3]:tipoMovimiento.descripcion
+	 * [4]:telefono 
+	 * [5]:direccion
+	 * [6]:emision 
+	 * [7]:vencimiento
+	 * [8]:importe 
+	 * [9]:saldo acum
+	 * [10]:razonSocial 
+	 * [11]:ruc
+	 * [12]:saldo 
+	 * [13]:siglaTipomovimiento
 	 * [14]:idempresa
 	 */
 	public List<Object[]> getSaldos(Date desde, Date hasta, String caracter, long idVendedor, long idEmpresa, 
@@ -9935,6 +9939,29 @@ public class RegisterDomain extends Register {
 			query += " AND v.cliente.id = " + idCliente;
 		}
 		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe venta credito dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 * [3]: v.fecha
+	 */
+	public List<Object[]> getVentasCreditoPorCliente_(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT v.cliente.id, v.cliente.empresa.razonSocial, sum(v.totalImporteGs), v.fecha" +   
+				"	FROM Venta v" +
+				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
+				"      AND v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" + 
+				"      AND v.estadoComprobante IS NULL";
+		if (idCliente > 0) {
+			query += " AND v.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial, v.fecha" +
 				" ORDER BY 2";
 		return this.hql(query);
 	}

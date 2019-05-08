@@ -8401,45 +8401,204 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte TES-00044
 		 */
-		private void saldosClientesPorMes(boolean mobile) {			
+		private void saldosClientesPorMes(boolean mobile) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
 			try {
-				if (mobile) {
-					Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
-					return;
-				}
-				
-				if (filtro.getAnhoDesde() == null) {
-					Clients.showNotification("DEBE SELECCIONAR UN PERIODO..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-					return;
-				}
-				String periodo = filtro.getAnhoDesde();
-				
-				RegisterDomain rr = RegisterDomain.getInstance();
-				Date desde = filtro.getFechaInicioOperaciones();		
-				Date hasta = new Date();
-				Tipo moneda = filtro.getMoneda();
-				
-				if (moneda.esNuevo()) {
-					Clients.showNotification("DEBE SELECCIONAR UNA MONEDA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-					return;
-				}
-				
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Date inicio = filtro.getFechaInicioOperaciones();
 				Object[] formato = filtro.getFormato();
-				String caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE;					
-				List<Object[]> movims = new ArrayList<Object[]>();	
+				Cliente cliente = filtro.getCliente();
 
-				movims = rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId());
-				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CTA_CTE_SALDOS_DESGLOSADO;
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+				Date desde_ = desde.compareTo(inicio) > 0 ? desde : inicio;
+				
+				Map<String, Object[]> acum = new HashMap<String, Object[]>();
+				List<Object[]> data = new ArrayList<Object[]>();
+				
+				double totalVentas = 0.0;
+				double totalChequesRechazados = 0.0;
+				double totalNotasCredito = 0.0;
+				double totalRecibos = 0.0;
+				double totalNotasDebito = 0.0;
+				double totalChequesReembolsos = 0.0;
+				double totalMigracion = 0.0;
+				double totalMigracionChequesRechazados = 0.0;
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+
+				long idCliente = cliente != null ? cliente.getId() : 0;
+
+				List<Object[]> ventas = rr.getVentasCreditoPorCliente_(desde_, hasta, idCliente);
+				List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
+				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde_, hasta, idCliente);
+				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
+				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
+				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
+				List<Object[]> migracion = rr.getCtaCteMigracionPorClienteVentas(desde, hasta, idCliente);
+				List<Object[]> migracionChequesRechazados = rr.getCtaCteMigracionPorClienteChequesRechazados(desde, hasta, idCliente);
+				
+				for (Object[] venta : ventas) {
+					String key = (String) venta[1];
+					venta = Arrays.copyOf(venta, venta.length + 7);
+					venta[4] = 0.0;
+					venta[5] = 0.0;
+					venta[6] = 0.0;
+					venta[7] = 0.0;
+					venta[8] = 0.0;
+					venta[9] = 0.0;
+					venta[10] = 0.0;
+					acum.put(key, venta);
+				}
+			
+			/**	
+				for (Object[] cheque : chequesRechazados) {
+					String key = (String) cheque[1];
+					double importe = (double) cheque[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[3] = importe;
+					} else {
+						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] ncred : ncreditos) {
+					String key = (String) ncred[1];
+					double importe = (double) ncred[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[4] = importe * -1;
+					} else {
+						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] rec : recibos) {
+					String key = (String) rec[1];
+					double importe = (double) rec[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[5] = importe * -1;
+					} else {
+						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] ndeb : ndebitos) {
+					String key = (String) ndeb[1];
+					double importe = (double) ndeb[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[6] = importe;
+					} else {
+						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] reemb : reembolsos) {
+					String key = (String) reemb[1];
+					double importe = (double) reemb[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[7] = importe * -1;
+					} else {
+						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] mig : migracion) {
+					String key = (String) mig[1];
+					double importe = (double) mig[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[8] = importe;
+					} else {
+						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+					}
+					acum.put(key, obj);
+				}
+				
+				for (Object[] mig : migracionChequesRechazados) {
+					String key = (String) mig[1];
+					double importe = (double) mig[2];
+					Object[] obj = acum.get(key);
+					if (obj != null) {
+						obj[9] = importe;
+					} else {
+						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe };
+					}
+					acum.put(key, obj);
+				} **/
+				
+				for (String key : acum.keySet()) {
+					Object[] data_ = acum.get(key);
+					double vtas = (double) data_[2];
+					double rech = (double) data_[3];
+					double ncrs = (double) data_[4];
+					double recs = (double) data_[5];
+					double ndeb = (double) data_[6];
+					double reem = (double) data_[7];
+					double migr = (double) data_[8];
+					double mgcr = (double) data_[9];
+					totalVentas += vtas;
+					totalChequesRechazados += rech;
+					totalNotasCredito += ncrs;
+					totalRecibos += recs;
+					totalNotasDebito += ndeb;
+					totalChequesReembolsos += reem;
+					totalMigracion += migr;
+					totalMigracionChequesRechazados += mgcr;
+					data.add(data_);
+				}
+				
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						String val1 = (String) o1[1];
+						String val2 = (String) o2[1];
+						int compare = val1.compareTo(val2);				
+						return compare;
+					}
+				});	
+				
+				String cli = cliente != null ? cliente.getRazonSocial() : "TODOS..";
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO;
+				if (!formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_PDF)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO_;
+				}
+				String titulo = "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new SaldosCtaCteDesglosado(movims, periodo);
-				params.put("Titulo", "Saldos de Clientes desglosado por mes (saldo a la fecha actual)");
+				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
+						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
+						totalChequesReembolsos, totalMigracion, totalMigracionChequesRechazados);
+				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
-				params.put("Periodo", filtro.getAnhoDesde());
+				params.put("Moneda", filtro.getMonedaGs());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				imprimirJasper(source, params, dataSource, formato);
+				
+				// String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CTA_CTE_SALDOS_DESGLOSADO;
+				// Map<String, Object> params = new HashMap<String, Object>();
+				// JRDataSource dataSource = new SaldosCtaCteDesglosado(movims, periodo);
+				// params.put("Titulo", "Saldos de Clientes desglosado por mes (saldo a la fecha actual)");
+				// params.put("Usuario", getUs().getNombre());
+				// params.put("Periodo", filtro.getAnhoDesde());
+				// imprimirJasper(source, params, dataSource, formato);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-			}		
+			}	
 		}
 		
 		/**
@@ -10020,7 +10179,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					Integer cantClienteVig = cantClientesVig_.get(cod);
 					if (cantClienteVig == null) cantClienteVig = 0;
 					String cantidad = det[30] + "";
-					String fechaUltimaCompra = det[31] + "";
+					String fechaUltimaCompra = Utiles.getDateToString((Date) det[31], Utiles.DD_MM_YYYY);
 					String proveedoUltimaCompra = (String) det[32];
 					double costoFobGs = (double) det[33];
 					double costoFobDs = (double) det[34];
