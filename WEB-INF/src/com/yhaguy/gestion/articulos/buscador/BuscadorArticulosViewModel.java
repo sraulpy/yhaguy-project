@@ -1,10 +1,7 @@
 package com.yhaguy.gestion.articulos.buscador;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,10 +95,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	@Init
 	public void init() {
 		try {
-			String desde="05-10-2018 00:00:00";
-			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-			this.desde = formatter.parse(desde);
-		} catch (ParseException e) {
+			this.desde = Utiles.getFechaInicioOperaciones();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
