@@ -9944,29 +9944,6 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
-	 * @return importe venta credito dentro de un periodo..
-	 * [0]: cliente.id
-	 * [1]: cliente.empresa.razonSocial
-	 * [2]: sum(importe)
-	 * [3]: v.fecha
-	 */
-	public List<Object[]> getVentasCreditoPorCliente_(Date desde, Date hasta, long idCliente) throws Exception {
-		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
-		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "SELECT v.cliente.id, v.cliente.empresa.razonSocial, sum(v.totalImporteGs), v.fecha" +   
-				"	FROM Venta v" +
-				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
-				"      AND v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" + 
-				"      AND v.estadoComprobante IS NULL";
-		if (idCliente > 0) {
-			query += " AND v.cliente.id = " + idCliente;
-		}
-		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial, v.fecha" +
-				" ORDER BY 2";
-		return this.hql(query);
-	}
-	
-	/**
 	 * @return los cheques rechazados segun cliente.. 
 	 * [0]:cliente.id
 	 * [1]:cliente.razonSocial 

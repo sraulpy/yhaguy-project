@@ -86,6 +86,32 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return el importe total de la venta segun el proveedor..
+	 */
+	public double getImporteByProveedor(long idProveedor) throws Exception {
+		double out = 0;
+		for (NotaCreditoDetalle item : this.getDetallesArticulos()) {
+			if (item.isProveedor(idProveedor)) {
+				out += item.getImporteGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el importe total de la venta segun el proveedor..
+	 */
+	public double getImporteByProveedorSinIva(long idProveedor) throws Exception {
+		double out = 0;
+		for (NotaCreditoDetalle item : this.getDetallesArticulos()) {
+			if (item.isProveedor(idProveedor)) {
+				out += item.getImporteGsSinIva();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es moneda local..
 	 */
 	public boolean isMonedaLocal() {

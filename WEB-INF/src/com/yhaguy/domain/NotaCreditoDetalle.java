@@ -42,6 +42,14 @@ public class NotaCreditoDetalle extends Domain{
 	}
 	
 	/**
+	 * @return true si el item es del proveedor que recibe como parametro..
+	 */
+	public boolean isProveedor(long idProveedor) {
+		if (this.articulo.getProveedor() == null) return false;
+		return this.articulo.getProveedor().getId().longValue() == idProveedor;
+	}
+	
+	/**
 	 * @return la lista de precio del item..
 	 */
 	public ArticuloListaPrecio getListaPrecio() {

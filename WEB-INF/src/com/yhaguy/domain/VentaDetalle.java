@@ -127,12 +127,8 @@ public class VentaDetalle extends Domain {
 	 * @return true si el item es del proveedor que recibe como parametro..
 	 */
 	public boolean isProveedor(long idProveedor) {
-		for (ProveedorArticulo item : this.articulo.getProveedorArticulos()) {
-			if (item.getProveedor().getId().longValue() == idProveedor) {
-				return true;
-			}
-		}
-		return false;
+		if (this.articulo.getProveedor() == null) return false;
+		return this.articulo.getProveedor().getId().longValue() == idProveedor;
 	}
 	
 	/**

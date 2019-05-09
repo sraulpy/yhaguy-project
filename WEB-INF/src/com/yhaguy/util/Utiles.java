@@ -135,6 +135,17 @@ public class Utiles {
 	/**
 	 * @return la fecha de inicio del mes..
 	 */
+	public static Date getFechaInicioMes(int mes, int anho) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, mes - 1);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.YEAR, anho);
+		return c.getTime();
+	}
+	
+	/**
+	 * @return la fecha de inicio del mes..
+	 */
 	@SuppressWarnings("deprecation")
 	public static Date getFechaInicioMes() {
 		Date inicio = Utiles.getFechaInicioMes(Integer.parseInt(Utiles.getMesActual()));
@@ -158,6 +169,17 @@ public class Utiles {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, mes - 1);
 		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+		return cal.getTime();
+	}
+	
+	/**
+	 * @return la fecha de fin del mes..
+	 */
+	public static Date getFechaFinMes(int mes, int anho) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, mes - 1);
+		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+		cal.set(Calendar.YEAR, anho);
 		return cal.getTime();
 	}
 	
@@ -585,7 +607,7 @@ public class Utiles {
 	}
 	
 	public static void main(String[] args) {
-		String test = "001-001-0145885";
-		System.out.println(test.charAt(7));
+		Utiles.getFechaInicioMes(1, 2019);
+		System.out.println(Utiles.getFechaInicioMes(1, 2019));
 	}
 }
