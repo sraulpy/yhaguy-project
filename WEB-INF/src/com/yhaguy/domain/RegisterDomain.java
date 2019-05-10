@@ -5800,7 +5800,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Articulo> getArticulos(String codigoInterno, int limit) throws Exception {
 		String query = "select a from Articulo a where lower(a.codigoInterno) like '%"
-				+ codigoInterno.toLowerCase() + "%' and a.codigoInterno not like '%@%'"
+				+ codigoInterno.toLowerCase() + "%'"
 				+ " order by a.codigoInterno";
 		return this.hqlLimit(query, limit);
 	}
