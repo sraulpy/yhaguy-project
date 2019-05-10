@@ -93,7 +93,7 @@
 		
 		<!-- IMPORTE EN LETRAS -->
 		<div height="7px"></div>
-		<div hflex="true" style="margin-left:160px">
+		<div hflex="true" style="margin-left:150px">
 			<div width="30px"></div>
 			<label value="@load(vm.importeEnLetras)" style="font-size:8pt; font-family:Verdana"></label>
 		</div>
