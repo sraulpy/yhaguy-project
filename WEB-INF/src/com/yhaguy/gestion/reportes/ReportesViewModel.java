@@ -3191,11 +3191,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Articulo articulo = filtro.getArticulo();
 				Proveedor fabrica = filtro.getProveedorExterior();
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				Map<String, MyArray> acum = new HashMap<String, MyArray>();
@@ -15353,12 +15350,12 @@ class LibroVentasDataSource implements JRDataSource {
 			double exenta = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalExenta()) * -1;
 			double importe = (iva10 + gravada + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, 0.0));
+					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, exenta));
 			if (ncred.isAnulado() == false) {
 				this.totalGravada -= (ncred.getTotalGravado10());
 				this.totalImpuesto -= (ncred.getTotalIva10());
 				this.totalImporte -= (ncred.getTotalIva10() + ncred.getTotalGravado10() + ncred.getTotalExenta());
-
+				this.totalExenta -= ncred.getTotalExenta();
 				if (ncred.isNotaCreditoVentaContado()) {
 					this.totalNCContado -= (ncred.getTotalIva10() + ncred.getTotalGravado10() + ncred.getTotalExenta());
 				} else {
