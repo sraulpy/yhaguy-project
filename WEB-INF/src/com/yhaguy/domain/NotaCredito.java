@@ -219,6 +219,9 @@ public class NotaCredito extends Domain {
 			if (item.getCompra() != null) {
 				return true;
 			}
+			if (item.getGasto() != null) {
+				return true;
+			}
 		}
 		return false;
 	}
