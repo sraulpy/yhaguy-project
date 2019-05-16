@@ -924,7 +924,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];
@@ -1341,7 +1341,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false, hasta);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					String familia_ = (String) art[4];
 					
@@ -11700,7 +11700,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];

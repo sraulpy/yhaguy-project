@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.stock.auditoria;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.BindUtils;
@@ -108,7 +109,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 			return new ArrayList<Object[]>();
 		}
 		List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) this.selectedArticulo[0],
-				this.selectedDeposito.getId(), this.getAcceso().getSucursalOperativa().getId(), true); 
+				this.selectedDeposito.getId(), this.getAcceso().getSucursalOperativa().getId(), true, new Date()); 
 		this.saldo = historial.size() > 0 ? Long.parseLong((String) historial.get(historial.size() - 1)[7]) : 0;
 		BindUtils.postNotifyChange(null, null, this, "saldo");
 		return historial;
@@ -119,7 +120,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 	 */
 	private List<Object[]> getHistorial(long idArticulo, long idDeposito) throws Exception {
 		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito,
-				this.getAcceso().getSucursalOperativa().getId(), true);
+				this.getAcceso().getSucursalOperativa().getId(), true, new Date());
 	}
 	
 	/**

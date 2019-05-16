@@ -106,7 +106,7 @@ public class ControlArticuloStock {
 	 * recalcula el stock segun deposito..
 	 */
 	public static void recalcularStock(long idArticulo, long idDeposito, String user) throws Exception {
-		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0, true);
+		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0, true, new Date());
 		String stockHistorial_ = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
 		long stockHistorial = Long.parseLong(stockHistorial_);
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -128,12 +128,12 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
-	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, boolean incluirDepositoVirtual) throws Exception {
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, boolean incluirDepositoVirtual, Date hasta) throws Exception {
 		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
 			desde = Utiles.getFecha("01-01-2016 00:00:00");
 		}
-		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, incluirDepositoVirtual);
+		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, hasta, incluirDepositoVirtual);
 	}
 	
 	/**
@@ -148,8 +148,7 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
-	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde, boolean incluirDepositoVirtual) throws Exception {
-		Date hasta = new Date();
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Articulo articulo = rr.getArticuloById(idArticulo);
