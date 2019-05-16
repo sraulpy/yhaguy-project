@@ -55,6 +55,7 @@
 						<zk forEach="${vm.menuItem(self,'GeneracionAsientos')}" /> 
 						<zk forEach="${vm.menuItem(self, 'PlanCuentas')}" />
 						<zk forEach="${vm.menuItem(self, 'Asientos')}" /> -->
+						<menuitem label="PLAN DE CUENTAS" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO COMPRAS" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO VENTAS" disabled="true" iconSclass="z-icon-caret-right" />
