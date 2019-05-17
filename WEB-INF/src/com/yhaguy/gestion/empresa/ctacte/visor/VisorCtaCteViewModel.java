@@ -1160,20 +1160,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 					mov.getPos5(), mov.getPos6() };
 			data.add(obj);
 			
-			if (saldo < 0) {
-				this.setDetalles(mov);
-				List<DetalleMovimiento> dets = this.getAplicaciones(mov, this.detalle);
-				for (DetalleMovimiento det : dets) {
-					if (!det.isSelf()) {
-						Object[] obj_ = new Object[] {
-								Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
-								Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
-								">> " + det.getTipoMovimiento_(), det.getNumero(),
-								det.getImporteGs() * -1, 0.0 };
-						data.add(obj_);
-					}							
+			if (this.selectedFilter.equals(CLIENTE)) {
+				if (saldo < 0) {
+					this.setDetalles(mov);
+					List<DetalleMovimiento> dets = this.getAplicaciones(mov, this.detalle);
+					for (DetalleMovimiento det : dets) {
+						if (!det.isSelf()) {
+							Object[] obj_ = new Object[] {
+									Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
+									Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
+									">> " + det.getTipoMovimiento_(), det.getNumero(),
+									det.getImporteGs() * -1, 0.0 };
+							data.add(obj_);
+						}							
+					}
 				}
-			}
+			}			
 		}
 
 		Map<String, String> params = new HashMap<String, String>();
