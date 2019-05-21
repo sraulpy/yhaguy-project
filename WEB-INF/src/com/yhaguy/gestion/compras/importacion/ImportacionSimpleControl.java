@@ -87,7 +87,6 @@ public class ImportacionSimpleControl extends SoloViewModel {
 		b.setNombresColumnas(columnas);
 		b.setWidth("800px");
 		b.setAssembler(new AssemblerArticulo());
-		b.addWhere("c.articuloEstado.sigla = '" + Configuracion.SIGLA_ARTICULO_ESTADO_ACTIVO + "'");
 		b.show(find, busqueda);
 		
 		if ((b.isClickAceptar()) && (tipo instanceof ImportacionPedidoCompraDetalleDTO)) {

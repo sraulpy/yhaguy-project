@@ -4,7 +4,7 @@ import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 
 @SuppressWarnings("serial")
-public class PlanDeCuenta extends Domain{
+public class PlanDeCuenta extends Domain {
 	
 	private String codigo;
 	private String descripcion;

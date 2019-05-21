@@ -19051,7 +19051,7 @@ class ReporteReembolsosPrestamoCasaCentral extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 20);
 	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING);
-	static DatosColumnas col4 = new DatosColumnas("Importe Gs.", TIPO_DOUBLE_GS, 30, true);
+	static DatosColumnas col4 = new DatosColumnas("Importe Gs.", TIPO_DOUBLE, 30, true);
 
 	public ReporteReembolsosPrestamoCasaCentral(String sucursal) {
 		this.sucursal = sucursal;

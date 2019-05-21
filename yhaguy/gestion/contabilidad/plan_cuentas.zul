@@ -3,30 +3,51 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.contable.plancuentas.PlanCuentasSimpleViewModel')"
 	height="100%">
 	
-	<hlayout sclass="button-container">
-		<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle" 
-			label=" Agregar" width="150px" />
-		<space />
-		<button mold="bs" sclass="btn-warning btn-sm" iconSclass="z-icon-edit" 
-			label=" Modificar" width="150px" />
-		<space />
-		<button mold="bs" sclass="btn-info btn-sm" iconSclass="z-icon-times-circle" 
-			label=" Eliminar" width="150px" />
-		<space hflex="true"></space>
-		<button mold="bs" sclass="btn-success btn-sm" iconSclass="z-icon-print" 
-			label=" Imprimir" width="150px" />
-	</hlayout>
+	<hbox vflex="true">
 	
-	<listbox sclass="small-list" model="@load(vm.planDeCuentas)" vflex="true">
+	<vbox hflex="3" vflex="true" spacing="0">
+	<hlayout sclass="button-container">
+		<field value="PLAN DE CUENTAS" />
+		<separator orient="vertical" bar="true"></separator>
+		<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-refresh" width="120px" 
+			label="Refrescar" onClick="@command('refresh')" />
+		<space></space>
+		<button mold="bs" sclass="btn-info btn-sm" iconSclass="z-icon-print" 
+			label=" Imprimir" width="120px" />		
+		<space></space>
+		<button mold="bs" sclass="btn-success btn-sm" iconSclass="z-icon-question" 
+			label=" Ayuda" width="120px" />	
+	</hlayout>	
+	
+	<listbox sclass="small-list" model="@load(vm.planCuentas)" vflex="true"
+		selectedItem="@bind(vm.selectedPlanCuenta)">
 		<listhead>
 			<listheader label="Código" width="150px"></listheader>
 			<listheader label="Descripción"></listheader>
 			<listheader label="Nivel" align="center" width="80px"></listheader>
 			<listheader label="Asentable" width="80px" align="center"></listheader>
 		</listhead>
+		<auxhead>
+			<auxheader>
+				<textbox hflex="true" placeholder="Código.."
+					value="@bind(vm.filterCodigo)" instant="true"
+					onChange="@command('setPlanCuentas_')"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" placeholder="Descripción.."
+					value="@bind(vm.filterDescripcion)" instant="true"
+					onChange="@command('setPlanCuentas_')"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
 		<template name="model">
 			<listitem>
-				<listcell label="@load(each.codigo)" style="@load(each.nivel gt 2? '':'font-weight:bold')"/>
+				<listcell label="@load(each.codigo)" style="@load(each.nivel gt 2? '':'font-weight:bold')" />
 				<listcell>
 					<hlayout>
 						<div width="50px" visible="@load(each.nivel gt 1? 'true' : 'false')"></div>
@@ -44,6 +65,87 @@
 			</listitem>
 		</template>
 	</listbox>
+	</vbox>
 	
+	<vbox hflex="2" vflex="true" spacing="0">
+	<hlayout sclass="button-container">
+		<field value="CUENTAS" />
+		<separator orient="vertical" bar="true"></separator>
+		<button mold="bs" sclass="btn-info btn-sm" iconSclass="z-icon-plus-circle" width="120px" 
+			label="Agregar" disabled="@load(vm.selectedPlanCuenta eq null)" onClick='pop_add.open(self, "after_end")'/>
+		<space></space>
+		<button mold="bs" sclass="btn-warning btn-sm" iconSclass="z-icon-edit" 
+			label=" Modificar" width="120px" disabled="true" />		
+		<space></space>
+		<button mold="bs" sclass="btn-danger btn-sm" iconSclass="z-icon-times-circle" 
+			label=" Eliminar" width="120px" disabled="true" />	
+	</hlayout>
+	<listbox sclass="small-list" model="@load(vm.cuentasContables)" vflex="true" hflex="1"
+		onSelect="@command('selectPlanCuenta')"
+		selectedItem="@bind(vm.selectedCuenta)">
+		<listhead>
+			<listheader label="Código" width="120px"></listheader>
+			<listheader label="Descripción"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<textbox hflex="true" placeholder="Código.."
+				value="@bind(vm.filterCodigo_)" instant="true"
+				style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" placeholder="Descripción.."
+				value="@bind(vm.filterDescripcion_)" instant="true"
+				style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+			</auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.codigo)"></listcell>
+				<listcell label="@load(each.descripcion)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+	</vbox>
+	</hbox>
+	<popup id="pop_add" sclass="rounded">
+	<grid sclass="vgrid" width="500px">
+		<columns>
+			<column width="30%"></column>
+		</columns>
+		<rows>
+			<row>
+				<field value="Plan de Cuenta:" />
+				<textbox value="@load(vm.selectedPlanCuenta.descripcion)" hflex="true" readonly="true"></textbox>
+			</row>
+			<row>
+				<field value="Código:" />
+				<textbox value="@bind(vm.codigo)" hflex="true" readonly="true"></textbox>
+			</row>
+			<row>
+				<field value="Descripción:" />
+				<textbox value="@bind(vm.nvaCuentaContable.descripcion)" hflex="true"></textbox>
+			</row>
+			<row>
+				<div></div>
+			</row>
+			<row>
+				<div></div>
+				<hlayout>
+					<space hflex="true"></space>
+					<button mold="bs" sclass="btn-success btn-sm" iconSclass="z-icon-check" width="120px" 
+						onClick="@command('addCuenta', comp=pop_add)"/>
+				</hlayout>
+			</row>
+		</rows>
+	</grid>	
+	</popup>
 </window>
+<style>
+	.z-listitem.z-listitem-selected>.z-listcell>.z-listcell-content {
+    	color: blue;
+	}
+</style>
 </zk>

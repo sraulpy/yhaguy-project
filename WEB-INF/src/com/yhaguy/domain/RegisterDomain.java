@@ -2100,13 +2100,28 @@ public class RegisterDomain extends Register {
 		List<CuentaContable> list = this.hql(query);
 		return list;
 	}
+	
+	/**
+	 * Retorna la lista completa de Cuentas Contables segun plan cuenta..
+	 */
+	public List<CuentaContable> getCuentasContables(long idPlanCuenta, String codigo, String descripcion) throws Exception {
+		String query = "select c from CuentaContable c where upper(c.codigo) like '%" + codigo.toUpperCase() + "%'"
+				+ " and upper(c.descripcion) like '%" + descripcion.toUpperCase() + "%'";
+		if (idPlanCuenta > 0) {
+			query += " and c.planCuenta.id = " + idPlanCuenta;
+		}
+		List<CuentaContable> list = this.hql(query);
+		return list;
+	}
 
 	/**
 	 * @return el Plan de Cuentas..
 	 * @throws Exception
 	 */
-	public List<PlanDeCuenta> getPlanDeCuentas() throws Exception {
-		String query = "select p from PlanDeCuenta p order by p.codigo";
+	public List<PlanDeCuenta> getPlanDeCuentas(String codigo, String descripcion) throws Exception {
+		String query = "select p from PlanDeCuenta p where upper(p.codigo) like '%" + codigo.toUpperCase() + "%'"
+				+ " and upper(p.descripcion) like '%" + descripcion.toUpperCase() + "%'"
+				+ " and p.nivel <= 5 order by p.codigo";
 		List<PlanDeCuenta> list = this.hql(query);
 		return list;
 	}
