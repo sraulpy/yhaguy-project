@@ -10,10 +10,7 @@
 				<hlayout id="hl_desde">
 					<datebox value="@load(vm.dato.filtro.fechaInicioOperaciones)"
 						placeholder="Desde.." hflex="true" readonly="true" buttonVisible="false" />
-					<button iconSclass="z-icon-edit" onClick='dtb_desde.setVisible(true); hl_desde.setVisible(false)'></button>
-				</hlayout>				
-				<datebox id="dtb_desde" value="@bind(vm.dato.filtro.fechaDesde)"
-					placeholder="Desde.." hflex="true" visible="false"/>
+				</hlayout>
 			</hlayout>
 		</row>
 		<row>

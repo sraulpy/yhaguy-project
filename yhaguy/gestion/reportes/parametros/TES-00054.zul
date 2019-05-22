@@ -6,8 +6,10 @@
 	<rows>
 		<row>
 			<field value="Fecha Desde:" />
-			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
-				placeholder="Desde.." hflex="true" />
+			<datebox value="@load(vm.dato.filtro.fechaInicioOperaciones)"
+				placeholder="Desde.." hflex="true"
+				buttonVisible="false" 
+				readonly="true" />
 		</row>
 		<row>
 			<field value="Fecha Hasta:" />

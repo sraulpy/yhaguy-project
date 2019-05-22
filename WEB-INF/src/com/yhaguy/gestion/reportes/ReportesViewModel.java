@@ -1221,6 +1221,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloMarca marca = filtro.getMarca_();
 				Articulo articulo = filtro.getArticulo();
 				List<Proveedor> proveedores = filtro.getSelectedProveedores();
+				List<Deposito> depositos = filtro.getSelectedDepositos();
 				
 				long idFamilia = familia == null? 0 : familia.getId();
 				long idMarca = marca == null? 0 : marca.getId();
@@ -1232,58 +1233,34 @@ public class ReportesViewModel extends SimpleViewModel {
 					proveedores_ += prov.getRazonSocial() + " / ";
 				}
 				
-				long id1 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRINCIPAL : Deposito.ID_MINORISTA;
-				long id2 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SECAS : Deposito.ID_CENTRAL_TEMPORAL;
-				long id3 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO : Deposito.ID_CENTRAL_REPOSICION;
-				long id4 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_FALLADOS : Deposito.ID_CENTRAL_RECLAMOS;
-				long id5 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AVERIADOS : Deposito.ID_MAYORISTA;
-				long id6 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AUXILIO : Deposito.ID_MAYORISTA_TEMPORAL;
-				long id7 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRODUCCION : Deposito.ID_MCAL_LOPEZ;
-				long id8 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_CONTROL : Deposito.ID_MCAL_TEMPORAL;
-				
-				String[] deps_ = new String[] { "Minorista", "Temporal Central", "Reclamos Central",
-						"Reposicion Central", "Mayorista", "Temporal Mayorista", "Mcal Lopez", "Temporal Mcal Lopez" };
-				
-				String[] depsBaterias = new String[] { "Principal", "Secas", "Transitorio",
-						"Fallados", "Averiados", "Auxilio", "Produccion", "Control" };
-				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				
-				List<Deposito> deps = new ArrayList<Deposito>();
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id1));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id2));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id3));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id4));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id5));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id6));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id7));
-				deps.add((Deposito) rr.getObject(Deposito.class.getName(), id8));
-				
-				List<Object[]> data = new ArrayList<Object[]>();
-				
+				Map<String, Object[]> data_ = new HashMap<String, Object[]>();
+				List<Object[]> data = new ArrayList<Object[]>();				
 				List<Object[]> articulos = rr.getArticulos_(idFamilia, idMarca, idArticulo, idProveedores);
 				
-				for (Object[] art : articulos) {
-					long idArt = (long) art[0];
-					String cod = (String) art[1];
-					Object[] stock1 = rr.getStockArticulo(idArt, id1);
-					Object[] stock2 = rr.getStockArticulo(idArt, id2);
-					Object[] stock3 = rr.getStockArticulo(idArt, id3);
-					Object[] stock4 = rr.getStockArticulo(idArt, id4);
-					Object[] stock5 = rr.getStockArticulo(idArt, id5);
-					Object[] stock6 = rr.getStockArticulo(idArt, id6);
-					Object[] stock7 = rr.getStockArticulo(idArt, id7);
-					Object[] stock8 = rr.getStockArticulo(idArt, id8);
-					long stock1_ = (long) stock1[1];
-					long stock2_ = (long) stock2[1];
-					long stock3_ = (long) stock3[1];
-					long stock4_ = (long) stock4[1];
-					long stock5_ = (long) stock5[1];
-					long stock6_ = (long) stock6[1];
-					long stock7_ = (long) stock7[1];
-					long stock8_ = (long) stock8[1];
-					data.add(new Object[]{ cod, stock1_, stock2_, stock3_, stock4_, stock5_, stock6_, stock7_, stock8_ });				
-				}	
+				for (int i = 0; i < depositos.size(); i++) {
+					for (Object[] art : articulos) {
+						long idArt = (long) art[0];
+						String cod = (String) art[1];					
+						Object[] stock = rr.getStockArticulo(idArt, depositos.get(i).getId());
+						long stock_ = (long) stock[1];
+						Object[] obj = data_.get(cod);
+						if (obj != null) {
+							obj[i+1] = stock_;							
+						} else {
+							obj = new Object[depositos.size() + 1];
+							obj[0] = cod;
+							obj[i+1] = stock_;
+						}
+						data_.put(cod, obj);
+					}
+				}
+				
+				for (String key : data_.keySet()) {
+					Object[] obj = data_.get(key);
+					data.add(obj);
+				}
 				
 				// ordena la lista segun codigo..
 				Collections.sort(data, new Comparator<Object[]>() {
@@ -1299,7 +1276,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String marca_ = marca == null ? "TODOS.." : marca.getDescripcion();
 				String articulo_ = articulo == null ? "TODOS.." : articulo.getDescripcion();
 				
-				ReporteExistenciaArticulosDeposito rep = new ReporteExistenciaArticulosDeposito(familia_, articulo_, marca_, proveedores_, isEmpresaBaterias() ? depsBaterias : deps_);
+				ReporteExistenciaArticulosDeposito rep = new ReporteExistenciaArticulosDeposito(familia_, articulo_, marca_, proveedores_, depositos);
 				rep.setDatosReporte(data);
 				rep.setApaisada();				
 
@@ -6201,7 +6178,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case SALDOS_CLIENTES_RESUMIDO:
-				this.saldosClientesResumido(mobile);
+				this.saldosClientesResumido(mobile, SALDOS_CLIENTES_RESUMIDO);
 				break;
 			}
 		}
@@ -9645,7 +9622,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				return;
 			}
 			try {
-				Date desde = filtro.getFechaDesde();
+				Date desde = Utiles.getFechaInicioOperaciones();
 				Date hasta = filtro.getFechaHasta();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();
@@ -9938,21 +9915,18 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * TES-00054
 		 */
-		private void saldosClientesResumido(boolean mobile) {
+		private void saldosClientesResumido(boolean mobile, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
 			}
 			try {
-				Date desde = filtro.getFechaDesde();
+				Date desde = filtro.getFechaInicioOperaciones();
 				Date hasta = filtro.getFechaHasta();
-				Date inicio = filtro.getFechaInicioOperaciones();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();
 
 				if (desde == null) desde = new Date();
-				if (hasta == null) hasta = new Date();
-				Date desde_ = desde.compareTo(inicio) > 0 ? desde : inicio;
 				
 				Map<String, Object[]> acum = new HashMap<String, Object[]>();
 				List<Object[]> data = new ArrayList<Object[]>();
@@ -9970,9 +9944,9 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
 
-				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde_, hasta, idCliente);
+				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
 				List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
-				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde_, hasta, idCliente);
+				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde, hasta, idCliente);
 				List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
 				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
 				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
@@ -10112,7 +10086,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (!formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_PDF)) {
 					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO_;
 				}
-				String titulo = "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
+				String titulo = codReporte + " - SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
 						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
@@ -18524,40 +18498,17 @@ class ReporteExistenciaArticulosDeposito extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
-	static DatosColumnas col2 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col3 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col4 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col5 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col6 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col7 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col8 = new DatosColumnas("", TIPO_LONG, 20, true);
-	static DatosColumnas col9 = new DatosColumnas("", TIPO_LONG, 20, true);
-
-	public ReporteExistenciaArticulosDeposito(String familia, String articulo, String marca, String proveedor, String[] depositos) {
+	
+	public ReporteExistenciaArticulosDeposito(String familia, String articulo, String marca, String proveedor, List<Deposito> deps) {
 		this.familia = familia;
 		this.articulo = articulo;
 		this.marca = marca;
 		this.proveedor = proveedor;
-		col2.setTitulo(depositos[0]);
-		col3.setTitulo(depositos[1]);
-		col4.setTitulo(depositos[2]);
-		col5.setTitulo(depositos[3]);
-		col6.setTitulo(depositos[4]);
-		col7.setTitulo(depositos[5]);
-		col8.setTitulo(depositos[6]);
-		col9.setTitulo(depositos[7]);
-	}
-
-	static {
+		cols.clear();
 		cols.add(col1);
-		cols.add(col2);
-		cols.add(col3);
-		cols.add(col4);
-		cols.add(col5);
-		cols.add(col6);
-		cols.add(col7);
-		cols.add(col8);
-		cols.add(col9);
+		for (Deposito deposito : deps) {
+			cols.add(new DatosColumnas(deposito.getObservacion().toLowerCase(), TIPO_LONG, 20, true));
+		}
 	}
 
 	@Override
