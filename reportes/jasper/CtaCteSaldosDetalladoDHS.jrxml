@@ -49,6 +49,14 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="haber" class="java.lang.String"/>
 	<field name="saldo" class="java.lang.String"/>
 	<field name="totalimporte" class="java.lang.String"/>
+	<field name="TotalVentas" class="java.lang.String"/>
+	<field name="TotalChequesRech" class="java.lang.String"/>
+	<field name="TotalNotasCredito" class="java.lang.String"/>
+	<field name="TotalRecibos" class="java.lang.String"/>
+	<field name="TotalNotasDebito" class="java.lang.String"/>
+	<field name="TotalReembolsosCheques" class="java.lang.String"/>
+	<field name="TotalMigracion" class="java.lang.String"/>
+	<field name="TotalMigracionCh" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<group name="totalizadora" keepTogether="true">
 		<groupExpression><![CDATA[$F{TituloDetalle}]]></groupExpression>
@@ -109,7 +117,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA["Usuario: " + $P{Usuario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="66" y="20" width="409" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="9b34080c-2228-48f6-b9dc-d4520a9926ba"/>
+				<reportElement mode="Transparent" x="66" y="20" width="477" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="9b34080c-2228-48f6-b9dc-d4520a9926ba"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -318,22 +326,22 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="59" splitType="Stretch">
+		<band height="213" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="357" y="26" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="9a00b6ac-f46d-4e8d-8973-322f83029c47"/>
+				<reportElement mode="Transparent" x="357" y="28" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="9a00b6ac-f46d-4e8d-8973-322f83029c47"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TotalSaldo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TotalVentas}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="227" y="26" width="141" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="63350d4e-7e50-4781-a211-16bc9f9cd6bf"/>
+				<reportElement mode="Transparent" x="219" y="28" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="63350d4e-7e50-4781-a211-16bc9f9cd6bf"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Total Saldo:]]></text>
+				<text><![CDATA[Ventas Crédito:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="174" y="8" width="100" height="13" uuid="e5cac51a-4ca3-4a41-b393-2f4e5f995a3e"/>
@@ -344,6 +352,137 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 			</staticText>
 			<line>
 				<reportElement x="172" y="21" width="318" height="1" uuid="b44bdc24-f3be-4392-bd6e-19839bd9aad2"/>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="47" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="d5824916-432d-48cd-a64c-3f658d15b225"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Cheques Rechazados:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="66" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="40a077c6-faa6-40fe-80af-b1d0c7abb4fc"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Notas de Crédito:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="85" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="1c08c194-ed7a-460a-9621-fe792d503ea1"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Recibos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="104" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="cb4af8da-51fd-414b-bc14-b115d25a3e51"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Notas de Débito:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="123" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="809fbf38-324d-404e-9144-2f49dbc0b128"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Reembolsos Ch.Rech.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="142" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="91456c8c-3c2e-4429-8869-33ab93d58a68"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Migración:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="161" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="b33b81c1-d5d1-4fd0-b8ba-3cd3f55de7ee"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Migración Ch.Rech.:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="161" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="213c296b-9619-4114-bde4-6aa9faa3c3a9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalMigracionCh}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="142" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8bb2ccdd-6d4e-437d-b896-a64f025cd5cb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalMigracion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="123" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="7edcdd9d-5abb-4c2c-b3a1-8c7585589b8e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalReembolsosCheques}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="104" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="0acdb8d4-d7b1-4c04-9abd-db93058545a7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalNotasDebito}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="85" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="36230a28-8df5-4a33-b583-c9d6708a1823"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalRecibos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="66" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="381f054d-13f2-44b0-8a02-d8f868183c36"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalNotasCredito}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="47" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8bf09ebb-2f12-4463-b2db-71686ac112ee"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalChequesRech}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="189" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="2d6df9d2-7531-4c9f-a45d-2fa268c85f74"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Total Saldo:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="189" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8875b4b5-8f43-4c61-9ad7-fe03a10579a3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalSaldo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="219" y="183" width="271" height="1" uuid="24a361ae-bf1d-42ae-b690-49e4c9481b9d"/>
 			</line>
 		</band>
 	</summary>

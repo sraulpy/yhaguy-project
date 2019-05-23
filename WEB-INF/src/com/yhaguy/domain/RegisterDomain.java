@@ -4246,15 +4246,15 @@ public class RegisterDomain extends Register {
 		String query = "select (select descripcion from TipoMovimiento where sigla = '" + Configuracion.SIGLA_TM_CHEQUE_RECHAZADO + "'), "
 				+ " b.emision, b.numero, b.monto, b.cliente.empresa.razonSocial"
 				+ " from BancoChequeTercero b where"
-				+ " b.rechazado = 'true' and b.dbEstado != 'D'";
+				+ " (b.rechazado = 'true' or b.rechazoInterno = 'true') and b.dbEstado != 'D'";
 		if (idCliente != 0) {
 				query += " and b.cliente.id = " + idCliente;
 		}
-				query += " and (b.emision >= '"
+				query += " and (b.fechaRechazo >= '"
 				+ desde_
-				+ "' and b.emision <= '"
+				+ "' and b.fechaRechazo <= '"
 				+ hasta_
-				+ "')" + " order by b.emision desc";
+				+ "')" + " order by b.fechaRechazo desc";
 		return this.hql(query);
 	}
 	
@@ -9949,7 +9949,7 @@ public class RegisterDomain extends Register {
 				"	FROM Venta v" +
 				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
 				"      AND v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" + 
-				"      AND v.estadoComprobante IS NULL";
+				"      AND v.dbEstado != 'D' AND v.estadoComprobante IS NULL";
 		if (idCliente > 0) {
 			query += " AND v.cliente.id = " + idCliente;
 		}
@@ -9969,7 +9969,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select b.cliente.id, b.cliente.empresa.razonSocial, sum(b.monto)"
 				+ " from BancoChequeTercero b where"
-				+ " b.rechazado = 'true' and b.dbEstado != 'D'" +
+				+ " (b.rechazado = 'true' or b.rechazoInterno = 'true') and b.dbEstado != 'D'" +
 				"	AND (b.fechaRechazo >= '" + desde_ + "' and b.fechaRechazo <= '" + hasta_ + "')";
 		if (idCliente > 0) {
 			query += " AND b.cliente.id = " + idCliente;
@@ -10014,7 +10014,9 @@ public class RegisterDomain extends Register {
 		String query = "SELECT r.cliente.id, r.cliente.empresa.razonSocial, sum(r.totalImporteGs)" +   
 				"	FROM Recibo r" +
 				"	WHERE (r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '" + hasta_ + "')" + 
-				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_COBRO + "'";
+				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_COBRO + "'" +
+				"	   AND r.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'" + 
+				"	   AND r.dbEstado != 'D' AND r.cobroExterno = 'FALSE'";
 		if (idCliente > 0) {
 			query += " AND r.cliente.id = " + idCliente;
 		}

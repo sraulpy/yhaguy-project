@@ -6,12 +6,8 @@
 	<rows>
 		<row>
 			<field value="Desde:" />
-			<hlayout valign="middle">
-				<hlayout id="hl_desde">
-					<datebox value="@load(vm.dato.filtro.fechaInicioOperaciones)"
+			<datebox value="@load(vm.dato.filtro.fechaInicioOperaciones)"
 						placeholder="Desde.." hflex="true" readonly="true" buttonVisible="false" />
-				</hlayout>
-			</hlayout>
 		</row>
 		<row>
 			<field value="Hasta:" />

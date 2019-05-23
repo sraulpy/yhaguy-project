@@ -6162,11 +6162,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case HISTORIAL_SALDOS_CLIENTES_DETALLADO:
-				this.historialMovimientosClientes(mobile, false);
+				this.historialMovimientosClientes(mobile, false, HISTORIAL_SALDOS_CLIENTES_DETALLADO);
 				break;
 				
 			case HISTORIAL_SALDOS_CLIENTES_RESUMIDO:
-				this.historialMovimientosClientes(mobile, true);
+				this.historialMovimientosClientes(mobile, true, HISTORIAL_SALDOS_CLIENTES_RESUMIDO);
 				break;
 				
 			case COBRANZAS_COBRADOR:
@@ -9487,7 +9487,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -9600,7 +9600,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES EXTERIOR RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES EXTERIOR DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaDs());
@@ -9616,7 +9616,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * TES-00050
 		 */
-		private void historialMovimientosClientes(boolean mobile, boolean consolidado) {
+		private void historialMovimientosClientes(boolean mobile, boolean consolidado, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
@@ -9638,6 +9638,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> historicoDEBE;
 				List<Object[]> historicoHABER;
 				Map<String, String> totalSaldo = new HashMap<String, String>();
+				double totalVentas = 0;
+				double totalChequesRechazados = 0;
+				double totalNotasCredito = 0;
+				double totalRecibos = 0;
+				double totalNotasDebito = 0;
+				double totalReembolsosCheques = 0;
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
 
@@ -9648,6 +9654,26 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> recibos = rr.getRecibosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
+				
+				for (Object[] venta : ventas) {
+					totalVentas += ((double) venta[3]);
+				}
+				
+				for (Object[] chequeRech : cheques_rechazados) {
+					totalChequesRechazados += ((double) chequeRech[3]);
+				}
+				
+				for (Object[] ncred : ntcsv) {
+					totalNotasCredito -= ((double) ncred[3]);
+				}
+				
+				for (Object[] rec : recibos) {
+					totalRecibos -= ((double) rec[3]);
+				}
+				
+				for (Object[] reemb : reembolsos_cheques_rechazados) {
+					totalReembolsosCheques -= ((double) reemb[3]);
+				}
 
 				historicoDEBE = new ArrayList<Object[]>();
 				historicoHABER = new ArrayList<Object[]>();
@@ -9720,9 +9746,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sourceDetallado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET_DHS;
 				String sourceConsolidado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CONSOLIDADO_DHS;
 				String source = consolidado? sourceConsolidado : sourceDetallado;
-				String titulo = consolidado ? "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)" : "SALDOS DE CLIENTES DETALLADO (HISTORIAL A UNA FECHA)";
+				String titulo = codReporte + " - " + (consolidado ? "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)" 
+						: "SALDOS DE CLIENTES DETALLADO (HISTORIAL A UNA FECHA)");
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, totalVentas,
+						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
+						totalReembolsosCheques);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -11195,11 +11224,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;	
 				
 			case HISTORIAL_SALDOS_CLIENTES:
-				this.historialMovimientosClientes(mobile, false);
+				this.historialMovimientosClientes(mobile, false, HISTORIAL_SALDOS_CLIENTES);
 				break;
 				
 			case HISTORIAL_SALDOS_CLIENTES_RESUMIDO:	
-				this.historialMovimientosClientes(mobile, true);
+				this.historialMovimientosClientes(mobile, true, HISTORIAL_SALDOS_CLIENTES_RESUMIDO);
 				break;
 				
 			case HISTORIAL_SALDOS_PROVEEDORES:
@@ -12041,20 +12070,20 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * CON-00025
 		 */
-		private void historialMovimientosClientes(boolean mobile, boolean consolidado) {
+		private void historialMovimientosClientes(boolean mobile, boolean consolidado, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
 			}
 			try {
-				Date desde = filtro.getFechaInicioOperaciones();
+				Date desde = Utiles.getFechaInicioOperaciones();
 				Date hasta = filtro.getFechaHasta();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();
 				boolean incluirChequesRechazados = filtro.isIncluirCHQ_RECH();
 				boolean incluirPrestamos = filtro.isIncluirPRE();
 
-				if (desde == null) desde = new Date();
+				if (desde == null) desde = filtro.getFechaInicioOperaciones();
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
@@ -12063,6 +12092,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> historicoDEBE;
 				List<Object[]> historicoHABER;
 				Map<String, String> totalSaldo = new HashMap<String, String>();
+				double totalVentas = 0;
+				double totalChequesRechazados = 0;
+				double totalNotasCredito = 0;
+				double totalRecibos = 0;
+				double totalNotasDebito = 0;
+				double totalReembolsosCheques = 0;
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
 
@@ -12073,18 +12108,38 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> recibos = rr.getRecibosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
+				
+				for (Object[] venta : ventas) {
+					totalVentas += ((double) venta[3]);
+				}
+				
+				for (Object[] chequeRech : cheques_rechazados) {
+					totalChequesRechazados += ((double) chequeRech[3]);
+				}
+				
+				for (Object[] ncred : ntcsv) {
+					totalNotasCredito -= ((double) ncred[3]);
+				}
+				
+				for (Object[] rec : recibos) {
+					totalRecibos -= ((double) rec[3]);
+				}
+				
+				for (Object[] reemb : reembolsos_cheques_rechazados) {
+					totalReembolsosCheques -= ((double) reemb[3]);
+				}
 
 				historicoDEBE = new ArrayList<Object[]>();
 				historicoHABER = new ArrayList<Object[]>();
 				
-				historicoDEBE.addAll(ventas);
+				historicoDEBE.addAll(ventas);				
 				if (incluirChequesRechazados) historicoDEBE.addAll(cheques_rechazados);
-				if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);
+				if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);				
 				
 				historicoHABER.addAll(ntcsv);
 				historicoHABER.addAll(recibos);
 				if (incluirChequesRechazados) historicoHABER.addAll(reembolsos_cheques_rechazados);
-				if (incluirPrestamos) historicoHABER.addAll(reembolsos_prestamos_cc);	
+				if (incluirPrestamos) historicoHABER.addAll(reembolsos_prestamos_cc);				
 
 				for (Object[] movim : historicoDEBE) {
 					movim[0] = "(+)" + movim[0];
@@ -12145,9 +12200,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sourceDetallado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET_DHS;
 				String sourceConsolidado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CONSOLIDADO_DHS;
 				String source = consolidado? sourceConsolidado : sourceDetallado;
-				String titulo = consolidado ? "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)" : "SALDOS DE CLIENTES DETALLADO (HISTORIAL A UNA FECHA)";
+				String titulo = codReporte + " - " + (consolidado ? "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)" 
+						: "SALDOS DE CLIENTES DETALLADO (HISTORIAL A UNA FECHA)");
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, totalVentas,
+						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
+						totalReembolsosCheques);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -12261,7 +12319,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -12607,7 +12665,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES EXTERIOR RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES EXTERIOR DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaDs());
@@ -14778,6 +14836,13 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 	Map<String, String> totalSaldo;
 	double totalSaldo_ = 0;
 	
+	double totalVentas = 0;
+	double totalChequesRechazados = 0;
+	double totalNotasCredito = 0;
+	double totalRecibos = 0;
+	double totalNotasDebito = 0;
+	double totalReembolsosCheques = 0;
+	
 	/**
 	 * [0]:emision
 	 * [1]:hora
@@ -14789,13 +14854,21 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 	 * [7]:razonsocial
 	 * [8]:emision
 	 */
-	public CtaCteSaldosDHSDataSource(List<Object[]> values, String cliente, Map<String, String> totalSaldo) {
+	public CtaCteSaldosDHSDataSource(List<Object[]> values, String cliente, Map<String, String> totalSaldo,
+			double totalVentas, double totalChequesRechazados, double totalNotasCredito, double totalRecibos,
+			double totalNotasDebito, double totalReembolsosCheques) {
 		this.values = values;
 		this.totalSaldo = totalSaldo;
 		for (String key : this.totalSaldo.keySet()) {
 			String saldo = this.totalSaldo.get(key);
 			totalSaldo_ += Double.parseDouble(saldo.replace(",", "").replace(".", ""));
 		}
+		this.totalVentas = totalVentas;
+		this.totalChequesRechazados = totalChequesRechazados;
+		this.totalNotasCredito = totalNotasCredito;
+		this.totalRecibos = totalRecibos;
+		this.totalNotasDebito = totalNotasDebito;
+		this.totalReembolsosCheques = totalReembolsosCheques;
 	}
 
 	private int index = -1;
@@ -14834,6 +14907,22 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 			value = this.totalSaldo.get(razonsocial);
 		} else if ("TotalSaldo".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalSaldo_);
+		}  else if ("TotalVentas".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalVentas);
+		} else if ("TotalChequesRech".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalChequesRechazados);
+		} else if ("TotalNotasCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNotasCredito);
+		} else if ("TotalRecibos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalRecibos);
+		} else if ("TotalNotasDebito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNotasDebito);
+		} else if ("TotalReembolsosCheques".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalReembolsosCheques);
+		} else if ("TotalMigracion".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
+		} else if ("TotalMigracionCh".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
 		}
 		return value;
 	}
