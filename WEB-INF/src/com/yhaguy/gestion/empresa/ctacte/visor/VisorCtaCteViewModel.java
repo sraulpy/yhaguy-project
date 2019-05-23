@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -210,6 +211,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 					this.historialMovimientosProveedores(proveedor);
 				}
 			}
+		}
+	}
+	
+	@Command
+	public void imprimirColumnas() throws Exception {
+		if (this.selectedTipo.equals(CLIENTE)) {
+			this.imprimirFormatoColumnas();
 		}
 	}
 	
@@ -1207,12 +1215,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			Date desde = Utiles.getFechaInicioOperaciones();
 			Date hasta = this.hasta;
 			Cliente cliente = rr.getClienteByEmpresa(this.selectedItem.getId());
+			boolean incluirChequesRechazados = true;
+			boolean incluirPrestamos = false;
 			
+			if (hasta == null) hasta = new Date();
+
 			List<Object[]> data = new ArrayList<Object[]>();
 			List<Object[]> historico;
 			List<Object[]> historicoDEBE;
 			List<Object[]> historicoHABER;
 			Map<String, String> totalSaldo = new HashMap<String, String>();
+			double totalVentas = 0;
+			double totalChequesRechazados = 0;
+			double totalNotasCredito = 0;
+			double totalRecibos = 0;
+			double totalNotasDebito = 0;
+			double totalReembolsosCheques = 0;
 
 			long idCliente = cliente != null ? cliente.getId() : 0;
 
@@ -1223,18 +1241,38 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			List<Object[]> recibos = rr.getRecibosPorCliente(idCliente, desde, hasta);
 			List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 			List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
+			
+			for (Object[] venta : ventas) {
+				totalVentas += ((double) venta[3]);
+			}
+			
+			for (Object[] chequeRech : cheques_rechazados) {
+				totalChequesRechazados += ((double) chequeRech[3]);
+			}
+			
+			for (Object[] ncred : ntcsv) {
+				totalNotasCredito -= ((double) ncred[3]);
+			}
+			
+			for (Object[] rec : recibos) {
+				totalRecibos -= ((double) rec[3]);
+			}
+			
+			for (Object[] reemb : reembolsos_cheques_rechazados) {
+				totalReembolsosCheques -= ((double) reemb[3]);
+			}
 
 			historicoDEBE = new ArrayList<Object[]>();
 			historicoHABER = new ArrayList<Object[]>();
 			
-			historicoDEBE.addAll(ventas);
-			historicoDEBE.addAll(cheques_rechazados);
-			historicoDEBE.addAll(prestamos_cc);
+			historicoDEBE.addAll(ventas);				
+			if (incluirChequesRechazados) historicoDEBE.addAll(cheques_rechazados);
+			if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);				
 			
 			historicoHABER.addAll(ntcsv);
 			historicoHABER.addAll(recibos);
-			historicoHABER.addAll(reembolsos_cheques_rechazados);
-			historicoHABER.addAll(reembolsos_prestamos_cc);
+			if (incluirChequesRechazados) historicoHABER.addAll(reembolsos_cheques_rechazados);
+			if (incluirPrestamos) historicoHABER.addAll(reembolsos_prestamos_cc);				
 
 			for (Object[] movim : historicoDEBE) {
 				movim[0] = "(+)" + movim[0];
@@ -1292,10 +1330,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			}
 			
 			String cli = cliente != null ? cliente.getRazonSocial() : "TODOS..";
-			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET_DHS;
+			String sourceDetallado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET_DHS;
+			String sourceConsolidado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CONSOLIDADO_DHS;
+			String source = sourceDetallado;
 			String titulo = "SALDOS DE CLIENTES DETALLADO (HISTORIAL A UNA FECHA)";
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo);
+			JRDataSource dataSource = new CtaCteSaldosDHSDataSource_(data, cli, totalSaldo, totalVentas,
+					totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
+					totalReembolsosCheques);
 			params.put("Titulo", titulo);
 			params.put("Usuario", getUs().getNombre());
 			params.put("Moneda", this.selectedMoneda);
@@ -1521,9 +1563,191 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * imprimir en formato columnas..
+	 */
+	private void imprimirFormatoColumnas() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = Utiles.getFechaInicioOperaciones();
+			Date hasta = this.hasta;
+			Cliente cliente = rr.getClienteByEmpresa(this.selectedItem.getId());
+
+			if (desde == null) desde = new Date();
+			
+			Map<String, Object[]> acum = new HashMap<String, Object[]>();
+			List<Object[]> data = new ArrayList<Object[]>();
+			
+			double totalVentas = 0.0;
+			double totalChequesRechazados = 0.0;
+			double totalNotasCredito = 0.0;
+			double totalRecibos = 0.0;
+			double totalNotasDebito = 0.0;
+			double totalChequesReembolsos = 0.0;
+			double totalMigracion = 0.0;
+			double totalMigracionChequesRechazados = 0.0;
+
+			long idCliente = cliente != null ? cliente.getId() : 0;
+
+			List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
+			List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
+			List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde, hasta, idCliente);
+			List<Object[]> recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
+			List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
+			List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
+			List<Object[]> migracion = rr.getCtaCteMigracionPorClienteVentas(desde, hasta, idCliente);
+			List<Object[]> migracionChequesRechazados = rr.getCtaCteMigracionPorClienteChequesRechazados(desde, hasta, idCliente);
+			
+			for (Object[] venta : ventas) {
+				String key = (String) venta[1];
+				venta = Arrays.copyOf(venta, venta.length + 7);
+				venta[3] = 0.0;
+				venta[4] = 0.0;
+				venta[5] = 0.0;
+				venta[6] = 0.0;
+				venta[7] = 0.0;
+				venta[8] = 0.0;
+				venta[9] = 0.0;
+				acum.put(key, venta);
+			}
+			
+			for (Object[] cheque : chequesRechazados) {
+				String key = (String) cheque[1];
+				double importe = (double) cheque[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[3] = importe;
+				} else {
+					obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] ncred : ncreditos) {
+				String key = (String) ncred[1];
+				double importe = (double) ncred[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[4] = importe * -1;
+				} else {
+					obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] rec : recibos) {
+				String key = (String) rec[1];
+				double importe = (double) rec[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[5] = importe * -1;
+				} else {
+					obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] ndeb : ndebitos) {
+				String key = (String) ndeb[1];
+				double importe = (double) ndeb[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[6] = importe;
+				} else {
+					obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] reemb : reembolsos) {
+				String key = (String) reemb[1];
+				double importe = (double) reemb[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[7] = importe * -1;
+				} else {
+					obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] mig : migracion) {
+				String key = (String) mig[1];
+				double importe = (double) mig[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[8] = importe;
+				} else {
+					obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] mig : migracionChequesRechazados) {
+				String key = (String) mig[1];
+				double importe = (double) mig[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[9] = importe;
+				} else {
+					obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (String key : acum.keySet()) {
+				Object[] data_ = acum.get(key);
+				double vtas = (double) data_[2];
+				double rech = (double) data_[3];
+				double ncrs = (double) data_[4];
+				double recs = (double) data_[5];
+				double ndeb = (double) data_[6];
+				double reem = (double) data_[7];
+				double migr = (double) data_[8];
+				double mgcr = (double) data_[9];
+				totalVentas += vtas;
+				totalChequesRechazados += rech;
+				totalNotasCredito += ncrs;
+				totalRecibos += recs;
+				totalNotasDebito += ndeb;
+				totalChequesReembolsos += reem;
+				totalMigracion += migr;
+				totalMigracionChequesRechazados += mgcr;
+				data.add(data_);
+			}
+			
+			Collections.sort(data, new Comparator<Object[]>() {
+				@Override
+				public int compare(Object[] o1, Object[] o2) {
+					String val1 = (String) o1[1];
+					String val2 = (String) o2[1];
+					int compare = val1.compareTo(val2);				
+					return compare;
+				}
+			});	
+			
+			String cli = cliente != null ? cliente.getRazonSocial() : "TODOS..";
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CLIENTES_RESUMIDO;
+			String titulo = "SALDOS DE CLIENTES RESUMIDO (A UNA FECHA)";
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
+					totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
+					totalChequesReembolsos, totalMigracion, totalMigracionChequesRechazados);
+			params.put("Titulo", titulo);
+			params.put("Usuario", getUs().getNombre());
+			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_PDF);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+	/**
 	 * Despliega el reporte en un pdf para su impresion..
 	 */
-	public void imprimirJasper(String source, Map<String, Object> parametros,
+	private void imprimirJasper(String source, Map<String, Object> parametros,
 			JRDataSource dataSource, Object[] format) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("source", source);
@@ -2549,6 +2773,225 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 			value = this.totalSaldo.get(razonsocial);
 		} else if ("TotalSaldo".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalSaldo_);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de Saldos de Clientes detallado DHS..
+ */
+class CtaCteSaldosResumidoDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	double totalVentas = 0.0;
+	double totalChequesRechazados = 0.0;
+	double totalNotasCredito = 0.0;
+	double totalRecibos = 0.0;
+	double totalNotasDebito = 0.0;
+	double totalChequesReembolsos = 0.0;
+	double totalMigracion = 0.0;
+	double totalMigracionChequesRechazados = 0.0;
+	
+	/**
+	 * [0]:cliente
+	 * [1]:importe ventas
+	 */
+	public CtaCteSaldosResumidoDataSource(List<Object[]> values, String cliente, double totalVentas,
+			double totalChequesRechazados, double totalNotasCredito, double totalRecibos, double totalNotasDebito,
+			double totalChequesReembolsos, double totalMigracion, double totalMigracionChequesRechazados) {
+		this.values = values;
+		this.totalVentas = totalVentas;
+		this.totalChequesRechazados = totalChequesRechazados;
+		this.totalNotasCredito = totalNotasCredito;
+		this.totalRecibos = totalRecibos;
+		this.totalNotasDebito = totalNotasDebito;
+		this.totalChequesReembolsos = totalChequesReembolsos;
+		this.totalMigracion = totalMigracion;
+		this.totalMigracionChequesRechazados = totalMigracionChequesRechazados;
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		String cliente = (String) det[1];
+		double ventas = (double) det[2];
+		double chequesRechazados = (double) det[3];
+		double ncreditos = (double) det[4];
+		double recibos = (double) det[5];
+		double ndebitos = (double) det[6];
+		double reembolsos = (double) det[7];
+		double migracion = (double) det[8];
+		double migracionChequesRechazados = (double) det[9];
+		double saldo = ventas + chequesRechazados + ncreditos + recibos + ndebitos + reembolsos + migracion + migracionChequesRechazados;
+		
+		if ("Cliente".equals(fieldName)) {
+			value = cliente;
+		} else if ("Ventas".equals(fieldName)) {
+			value = Utiles.getNumberFormat(ventas);
+		} else if ("ChequesRechazados".equals(fieldName)) {
+			value = Utiles.getNumberFormat(chequesRechazados);
+		} else if ("NotasCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(ncreditos);
+		} else if ("Recibos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(recibos);
+		} else if ("NotasDebito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(ndebitos);
+		} else if ("Reembolsos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(reembolsos);
+		} else if ("Migracion".equals(fieldName)) {
+			value = Utiles.getNumberFormat(migracion);
+		} else if ("MigracionChequesRechazados".equals(fieldName)) {
+			value = Utiles.getNumberFormat(migracionChequesRechazados);
+		} else if ("Saldo".equals(fieldName)) {
+			value = Utiles.getNumberFormat(saldo);
+		} else if ("TotalVentas".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalVentas);
+		} else if ("TotalChequesRechazados".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalChequesRechazados);
+		} else if ("TotalNotasCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalNotasCredito);
+		} else if ("TotalRecibos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalRecibos);
+		} else if ("TotalNotasDebito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalNotasDebito);
+		} else if ("TotalChequesReembolso".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalChequesReembolsos);
+		} else if ("TotalMigracion".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalMigracion);
+		} else if ("TotalMigracionChequesRechazados".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalMigracionChequesRechazados);
+		} else if ("TotalSaldo".equals(fieldName)) {
+			double totalSaldo = totalVentas + totalChequesRechazados + totalNotasCredito + totalRecibos
+					+ totalNotasDebito + totalChequesReembolsos + totalMigracion + totalMigracionChequesRechazados;
+			value = Utiles.getNumberFormat(totalSaldo);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de Saldos de Clientes detallado DHS..
+ */
+class CtaCteSaldosDHSDataSource_ implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, String> totalSaldo;
+	double totalSaldo_ = 0;
+	
+	double totalVentas = 0;
+	double totalChequesRechazados = 0;
+	double totalNotasCredito = 0;
+	double totalRecibos = 0;
+	double totalNotasDebito = 0;
+	double totalReembolsosCheques = 0;
+	
+	/**
+	 * [0]:emision
+	 * [1]:hora
+	 * [2]:numero
+	 * [3]:concepto
+	 * [4]:debe
+	 * [5]:haber
+	 * [6]:saldo
+	 * [7]:razonsocial
+	 * [8]:emision
+	 */
+	public CtaCteSaldosDHSDataSource_(List<Object[]> values, String cliente, Map<String, String> totalSaldo,
+			double totalVentas, double totalChequesRechazados, double totalNotasCredito, double totalRecibos,
+			double totalNotasDebito, double totalReembolsosCheques) {
+		this.values = values;
+		this.totalSaldo = totalSaldo;
+		for (String key : this.totalSaldo.keySet()) {
+			String saldo = this.totalSaldo.get(key);
+			totalSaldo_ += Double.parseDouble(saldo.replace(",", "").replace(".", ""));
+		}
+		this.totalVentas = totalVentas;
+		this.totalChequesRechazados = totalChequesRechazados;
+		this.totalNotasCredito = totalNotasCredito;
+		this.totalRecibos = totalRecibos;
+		this.totalNotasDebito = totalNotasDebito;
+		this.totalReembolsosCheques = totalReembolsosCheques;
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		String fecha = (String) det[0];
+		String hora = (String) det[1];
+		String numero = (String) det[2];
+		String concepto = (String) det[3];
+		String debe = (String) det[4];
+		String haber = (String) det[5];
+		String saldo = (String) det[6];
+		String razonsocial = (String) det[7];
+		
+		if ("fecha".equals(fieldName)) {
+			value = fecha;
+		} else if ("hora".equals(fieldName)) {
+			value = hora;
+		} else if ("numero".equals(fieldName)) {
+			value = numero;
+		} else if ("concepto".equals(fieldName)) {
+			value = concepto;
+		} else if ("debe".equals(fieldName)) {
+			value = debe;
+		} else if ("haber".equals(fieldName)) {
+			value = haber;
+		} else if ("saldo".equals(fieldName)) {
+			value = saldo;
+		} else if ("TituloDetalle".equals(fieldName)) {
+			value = razonsocial;
+		} else if ("totalimporte".equals(fieldName)) {
+			value = this.totalSaldo.get(razonsocial);
+		} else if ("TotalSaldo".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalSaldo_);
+		}  else if ("TotalVentas".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalVentas);
+		} else if ("TotalChequesRech".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalChequesRechazados);
+		} else if ("TotalNotasCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNotasCredito);
+		} else if ("TotalRecibos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalRecibos);
+		} else if ("TotalNotasDebito".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNotasDebito);
+		} else if ("TotalReembolsosCheques".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalReembolsosCheques);
+		} else if ("TotalMigracion".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
+		} else if ("TotalMigracionCh".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
 		}
 		return value;
 	}

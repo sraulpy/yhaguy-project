@@ -150,7 +150,7 @@
 				label=" Imprimir Cuenta" />
 			<button mold="bs" sclass="btn-warning btn-sm"
 				iconSclass="z-icon-reply"
-				tooltiptext="Reasignar Saldo.." visible="@load(vm.tipoCliente)" 
+				tooltiptext="Reasignar Saldo.." visible="false" 
 				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedItem_ eq null)" />
 			<button mold="bs" sclass="btn-info btn-sm"
 				iconSclass="z-icon-pencil" visible="@load(vm.tipoCliente)"  
@@ -936,7 +936,11 @@
 			<div height="5px"></div>
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				onClick="@command('imprimirDHS')"
-				label=" Formato D.H.S" />
+				label=" Formato Debe / Haber" />
+			<div height="5px"></div>
+			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
+				label=" Formato Columnas" 
+				onClick="@command('imprimirColumnas')" />
 		</vlayout>
 	</popup>
 	
