@@ -187,7 +187,10 @@ public class ReportesViewModel extends SimpleViewModel {
 	private MyArray selectedItem = TESORERIA;
 	private MyArray selectedReporte;
 	private String selectedGrupo = GRUPO_TESORERIA_CAJAS;
-
+	
+	private String filterDescripcion = "";
+	private String filterCodigo = "";
+	
 	private ReportesFiltros filtro = new ReportesFiltros();
 	private List<MyArray> reportes = new ArrayList<MyArray>();
 	private Map<String, String> favoritos = new HashMap<String, String>();
@@ -666,6 +669,17 @@ public class ReportesViewModel extends SimpleViewModel {
 				String grupo = (String) reporte.getPos4();
 				if (mod == modulo && (grupo.equals(this.selectedGrupo.trim())))
 					out.add(reporte);
+			}
+		}
+		return out;
+	}
+	
+	@DependsOn({ "filterDescripcion" })
+	public List<MyArray> getReportesSistema_() {
+		List<MyArray> out = new ArrayList<MyArray>();
+		for (MyArray reporte : this.reportes) {
+			if (reporte.getPos2().toString().toUpperCase().contains(this.filterDescripcion.toUpperCase())) {
+				out.add(reporte);
 			}
 		}
 		return out;
@@ -13085,6 +13099,22 @@ public class ReportesViewModel extends SimpleViewModel {
 
 	public void setPass(String pass) {
 		this.pass = pass;
+	}
+
+	public String getFilterDescripcion() {
+		return filterDescripcion;
+	}
+
+	public void setFilterDescripcion(String filterDescripcion) {
+		this.filterDescripcion = filterDescripcion;
+	}
+
+	public String getFilterCodigo() {
+		return filterCodigo;
+	}
+
+	public void setFilterCodigo(String filterCodigo) {
+		this.filterCodigo = filterCodigo;
 	}
 }
 

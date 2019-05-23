@@ -54,7 +54,31 @@
 					<label value="@load(vm.imprimirDisabled? 'DENEGADO':'PERMITIDO')"></label>
 					<a iconSclass="@load(vm.imprimirDisabled? 'z-icon-times':'z-icon-check')" disabled="true" style="color:#357ebd"></a>
 				</div>
-					
+				
+				<div hflex="true"></div>
+				
+				<bandbox
+					value="@load(vm.selectedReporte.pos2)" readonly="true" hflex="true" visible="false">
+					<bandpopup>
+						<listbox sclass="small-list" model="@load(vm.reportesSistema_)"
+							width="400px" height="300px"
+							selectedItem="@bind(vm.selectedReporte)">
+							<listhead>
+								<listheader>
+									<textbox hflex="true" value="@bind(vm.filterDescripcion)"
+										instant="true"
+										style="background-image:url('./core/css/filter.png'); background-repeat:
+											no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+								</listheader>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.pos2)"></listcell>
+									</listitem>
+								</template>
+							</listhead>
+						</listbox>
+					</bandpopup>
+				</bandbox>	
 			</hlayout>
 						
 			<hlayout hflex="true" children="@load(vm.grupo)"
@@ -76,8 +100,8 @@
 				</listhead>
 				<template name="model">
 					<listitem>
-						<listcell label="@load(each.pos1)"/>
-						<listcell label="@load(each.pos2)"/>
+						<listcell label="@load(each.pos1)" />
+						<listcell label="@load(each.pos2)" />
 						<listcell>
 							<a iconSclass="@load(each.pos5 ? 'z-icon-star' : 'z-icon-star-o')"
 								onClick="@command('setFavoritos', item=each)"></a>

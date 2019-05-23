@@ -1331,7 +1331,6 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			
 			String cli = cliente != null ? cliente.getRazonSocial() : "TODOS..";
 			String sourceDetallado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET_DHS;
-			String sourceConsolidado = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CONSOLIDADO_DHS;
 			String source = sourceDetallado;
 			String titulo = "SALDOS DE CLIENTES DETALLADO (HISTORIAL A UNA FECHA)";
 			Map<String, Object> params = new HashMap<String, Object>();
