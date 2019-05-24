@@ -58,7 +58,7 @@
 					model="@load(vm.reportesSistema_)" readonly="false"
 					value="@bind(vm.filterDescripcion)" instant="true"
 					placeholder="Descripción.."
-					selectedItem="@bind(vm.selectedReporte)" width="200px">
+					selectedItem="@bind(vm.selectedReporte)" width="250px">
 					<template name="model">
 						<comboitem label="@load(each.pos2)"></comboitem>
 					</template>
