@@ -9,5 +9,5 @@
 	<div fulfill="self.onCreate" vflex="true"> 		
 			<include aliasForm="Reportes"
 				src="/yhaguy/gestion/reportes/reportes.zul" />
-		</div>
+	</div>
 </window>

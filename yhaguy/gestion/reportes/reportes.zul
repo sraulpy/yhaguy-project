@@ -8,6 +8,9 @@
     		text-overflow: ellipsis;
     		overflow: hidden;
 		}
+		.z-listitem.z-listitem-selected>.z-listcell>.z-listcell-content {
+    		color: #357ebd;
+		}
 	</style>
 	
 	<hlayout vflex="true" valign="top">

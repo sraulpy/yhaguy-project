@@ -56,10 +56,16 @@
 						<zk forEach="${vm.menuItem(self, 'PlanCuentas')}" />
 						<zk forEach="${vm.menuItem(self, 'Asientos')}" /> -->
 						<zk forEach="${vm.menuItem(self,'PlanCuentas')}" />
-						<menuitem label="LIBRO VENTAS" disabled="true" iconSclass="z-icon-caret-right" />
-						<menuitem label="LIBRO COMPRAS" disabled="true" iconSclass="z-icon-caret-right" />
-						<menuitem label="HECHAUKA VENTAS" disabled="true" iconSclass="z-icon-caret-right" />
-						<menuitem label="HECHAUKA COMPRAS" disabled="true" iconSclass="z-icon-caret-right" />
+						<zk forEach="${vm.menuItem(self,'LibroVentas')}" />
+						<menu label="LIBRO COMPRAS" iconSclass="z-icon-caret-right">
+							<menupopup>
+								<zk forEach="${vm.menuItem(self,'LibroComprasAcreedores', 'cod=CON-00035')}" />
+								<zk forEach="${vm.menuItem(self,'LibroComprasDespacho', 'cod=CON-00036')}" />
+								<zk forEach="${vm.menuItem(self,'LibroComprasLocales', 'cod=CON-00037')}" />
+							</menupopup>
+						</menu>
+						<zk forEach="${vm.menuItem(self,'HechaukaVentas', 'cod=CON-00003')}" />
+						<zk forEach="${vm.menuItem(self,'HechaukaCompras', 'cod=CON-00004')}" />
 						<menuitem label="TESAKA RETENCIONES" disabled="true" iconSclass="z-icon-caret-right"  />
 						<menuitem label="ASIENTOS" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
@@ -198,6 +204,9 @@
 		}
 		.z-button[disabled] {
 			background: linear-gradient(to bottom, #ffffff 0%, #2c3e50 100%);
+		}
+		.z-listitem.z-listitem-selected>.z-listcell>.z-listcell-content {
+    		color: #357ebd;
 		}
 	</style>
 	

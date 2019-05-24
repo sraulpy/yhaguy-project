@@ -143,9 +143,4 @@
 	</grid>	
 	</popup>
 </window>
-<style>
-	.z-listitem.z-listitem-selected>.z-listcell>.z-listcell-content {
-    	color: blue;
-	}
-</style>
 </zk>

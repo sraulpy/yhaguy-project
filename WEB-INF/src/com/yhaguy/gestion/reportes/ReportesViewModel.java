@@ -212,6 +212,13 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			this.cargarFavoritos();
 			this.cargarReportes();
+			
+			if (this.getAtributoSession("COD_REPORTE") != null) {
+				this.filterCodigo = (String) this.getAtributoSession("COD_REPORTE");
+				this.selectedReporte = this.getReportesSistema_().get(0);
+				this.selectedItem = CONTABILIDAD;
+				this.seleccionarModulo((int) this.selectedReporte.getPos3());
+			}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -235,44 +242,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	public void selectModulo() {
 		this.selectedReporte = null;
 		int modulo = (int) this.selectedItem.getPos2();
-		switch (modulo) {
-		
-		case ID_TESORERIA:
-			this.selectedGrupo = GRUPO_TESORERIA_CAJAS;
-			break;
-		
-		case ID_COMPRAS:
-			this.selectedGrupo = GRUPO_COMPRAS_COMPRAS;
-			break;
-		
-		case ID_VENTAS:
-			this.selectedGrupo = GRUPO_VENTAS_UTILIDAD;
-			break;
-		
-		case ID_STOCK:
-			this.selectedGrupo = GRUPO_STOCK_ARTICULOS;
-			break;
-			
-		case ID_LOGISTICA:
-			this.selectedGrupo = GRUPO_LOGISTICA_LOGISTICA;
-			break;
-			
-		case ID_CONTABILIDAD:
-			this.selectedGrupo = GRUPO_CONTABILIDAD_CONTABILIDAD;
-			break;
-			
-		case ID_RRHH:
-			this.selectedGrupo = GRUPO_RRHH_RRHH;
-			break;
-			
-		case ID_SISTEMA:
-			this.selectedGrupo = GRUPO_SISTEMA_SISTEMA;
-			break;
-			
-		case ID_FAVORITOS:
-			this.selectedGrupo = GRUPO_FAVORITOS_FAVORITOS;
-			break;
-		}
+		this.seleccionarModulo(modulo);
 	}
 	
 	@Command
@@ -373,6 +343,50 @@ public class ReportesViewModel extends SimpleViewModel {
 			comp2.setVisible(true);
 		} else {
 			Clients.showNotification("USUARIO Y/O CLAVE INCORRECTA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
+	
+	/**
+	 * seleccion de modulo..
+	 */
+	private void seleccionarModulo(int modulo) {
+		switch (modulo) {
+
+		case ID_TESORERIA:
+			this.selectedGrupo = GRUPO_TESORERIA_CAJAS;
+			break;
+
+		case ID_COMPRAS:
+			this.selectedGrupo = GRUPO_COMPRAS_COMPRAS;
+			break;
+
+		case ID_VENTAS:
+			this.selectedGrupo = GRUPO_VENTAS_UTILIDAD;
+			break;
+
+		case ID_STOCK:
+			this.selectedGrupo = GRUPO_STOCK_ARTICULOS;
+			break;
+
+		case ID_LOGISTICA:
+			this.selectedGrupo = GRUPO_LOGISTICA_LOGISTICA;
+			break;
+
+		case ID_CONTABILIDAD:
+			this.selectedGrupo = GRUPO_CONTABILIDAD_CONTABILIDAD;
+			break;
+
+		case ID_RRHH:
+			this.selectedGrupo = GRUPO_RRHH_RRHH;
+			break;
+
+		case ID_SISTEMA:
+			this.selectedGrupo = GRUPO_SISTEMA_SISTEMA;
+			break;
+
+		case ID_FAVORITOS:
+			this.selectedGrupo = GRUPO_FAVORITOS_FAVORITOS;
+			break;
 		}
 	}
 
