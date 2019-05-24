@@ -674,11 +674,12 @@ public class ReportesViewModel extends SimpleViewModel {
 		return out;
 	}
 	
-	@DependsOn({ "filterDescripcion" })
+	@DependsOn({ "filterCodigo", "filterDescripcion" })
 	public List<MyArray> getReportesSistema_() {
 		List<MyArray> out = new ArrayList<MyArray>();
 		for (MyArray reporte : this.reportes) {
-			if (reporte.getPos2().toString().toUpperCase().contains(this.filterDescripcion.toUpperCase())) {
+			if (reporte.getPos2().toString().toUpperCase().contains(this.filterDescripcion.toUpperCase())
+					&& reporte.getPos1().toString().toUpperCase().contains(this.filterCodigo.toUpperCase())) {
 				out.add(reporte);
 			}
 		}

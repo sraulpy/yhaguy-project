@@ -420,11 +420,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 			out = false;
 		}
 		
-		if (item.getMontoGs() <= 0) {
-			mensajeError = mensajeError + "\n - El costo debe ser mayor a cero..";
-			out = false;
-		}
-		
 		return out;
 	}	
 	

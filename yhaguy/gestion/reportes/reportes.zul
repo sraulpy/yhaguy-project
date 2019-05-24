@@ -43,42 +43,38 @@
 		
 		<vbox hflex="true" vflex="true" spacing="0">
 							
-			<hlayout sclass="button-container" valign="bottom">
+			<hlayout sclass="button-container" valign="bottom">				
+				<toolbarbutton iconSclass="z-icon-search" style="cursor:default;background:transparent;border:none"></toolbarbutton>
+				<combobox buttonVisible="false" autodrop="true"
+					model="@load(vm.reportesSistema_)" readonly="false"
+					value="@bind(vm.filterCodigo)" instant="true"
+					placeholder="Código.."
+					selectedItem="@bind(vm.selectedReporte)" width="100px">
+					<template name="model">
+						<comboitem label="@load(each.pos1)"></comboitem>
+					</template>
+				</combobox>
+				<combobox buttonVisible="false" autodrop="true"
+					model="@load(vm.reportesSistema_)" readonly="false"
+					value="@bind(vm.filterDescripcion)" instant="true"
+					placeholder="Descripción.."
+					selectedItem="@bind(vm.selectedReporte)" width="200px">
+					<template name="model">
+						<comboitem label="@load(each.pos2)"></comboitem>
+					</template>
+				</combobox>
+				<space></space>
 				<button mold="bs" sclass="btn-primary btn-sm"
 					width="150px" iconSclass="z-icon-print"
 					onClick="@command('imprimir')"
 					disabled="@load(vm.imprimirDisabled)" label=" Imprimir" />
-				
-				<div style="border-bottom:solid 1px" visible="@load(vm.selectedReporte eq null? 'false':'true')">
-					<label>ACCESO AL REPORTE:</label>
-					<label value="@load(vm.imprimirDisabled? 'DENEGADO':'PERMITIDO')"></label>
-					<a iconSclass="@load(vm.imprimirDisabled? 'z-icon-times':'z-icon-check')" disabled="true" style="color:#357ebd"></a>
-				</div>
-				
-				<div hflex="true"></div>
-				
-				<bandbox
-					value="@load(vm.selectedReporte.pos2)" readonly="true" hflex="true" visible="false">
-					<bandpopup>
-						<listbox sclass="small-list" model="@load(vm.reportesSistema_)"
-							width="400px" height="300px"
-							selectedItem="@bind(vm.selectedReporte)">
-							<listhead>
-								<listheader>
-									<textbox hflex="true" value="@bind(vm.filterDescripcion)"
-										instant="true"
-										style="background-image:url('./core/css/filter.png'); background-repeat:
-											no-repeat; background-position: 98%; background-size: 10px;"></textbox>
-								</listheader>
-								<template name="model">
-									<listitem>
-										<listcell label="@load(each.pos2)"></listcell>
-									</listitem>
-								</template>
-							</listhead>
-						</listbox>
-					</bandpopup>
-				</bandbox>	
+				<div width="230px">
+					<div style="border-bottom:solid 1px" visible="@load(vm.selectedReporte eq null? 'false':'true')">
+						<label>ACCESO AL REPORTE:</label>
+						<label value="@load(vm.imprimirDisabled? 'DENEGADO':'PERMITIDO')"></label>
+						<a iconSclass="@load(vm.imprimirDisabled? 'z-icon-times':'z-icon-check')" disabled="true" style="color:#357ebd"></a>
+					</div>	
+				</div>				
 			</hlayout>
 						
 			<hlayout hflex="true" children="@load(vm.grupo)"
@@ -100,8 +96,8 @@
 				</listhead>
 				<template name="model">
 					<listitem>
-						<listcell label="@load(each.pos1)" />
-						<listcell label="@load(each.pos2)" />
+						<listcell label="@load(each.pos1)"/>
+						<listcell label="@load(each.pos2)"/>
 						<listcell>
 							<a iconSclass="@load(each.pos5 ? 'z-icon-star' : 'z-icon-star-o')"
 								onClick="@command('setFavoritos', item=each)"></a>
@@ -116,7 +112,6 @@
 					</listfooter>
 				</listfoot>
 			</listbox>
-		</vbox>
-		
+		</vbox>		
 	</hlayout>
 </window>
