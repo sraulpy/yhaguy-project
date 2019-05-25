@@ -57,7 +57,7 @@
 						<zk forEach="${vm.menuItem(self, 'Asientos')}" /> -->
 						<zk forEach="${vm.menuItem(self,'PlanCuentas')}" />
 						<zk forEach="${vm.menuItem(self,'LibroVentas')}" />
-						<menu label="LIBRO COMPRAS" iconSclass="z-icon-caret-right">
+						<menu label=" LIBRO COMPRAS" iconSclass="z-icon-caret-right">
 							<menupopup>
 								<zk forEach="${vm.menuItem(self,'LibroComprasAcreedores', 'cod=CON-00035')}" />
 								<zk forEach="${vm.menuItem(self,'LibroComprasDespacho', 'cod=CON-00036')}" />
@@ -67,6 +67,7 @@
 						<zk forEach="${vm.menuItem(self,'HechaukaVentas', 'cod=CON-00003')}" />
 						<zk forEach="${vm.menuItem(self,'HechaukaCompras', 'cod=CON-00004')}" />
 						<menuitem label="TESAKA RETENCIONES" disabled="true" iconSclass="z-icon-caret-right"  />
+						<menuitem label="COTIZACIONES" disabled="true" iconSclass="z-icon-caret-right"  />
 						<menuitem label="ASIENTOS" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO MAYOR" disabled="true" iconSclass="z-icon-caret-right" />
