@@ -8382,956 +8382,45 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte TES-00044
 		 */
-		private void saldosClientesPorMes(boolean mobile) {
-			if (mobile) {
-				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
-				return;
-			}
+		private void saldosClientesPorMes(boolean mobile) {			
 			try {
+				if (mobile) {
+					Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+					return;
+				}
+				
+				if (filtro.getAnhoDesde() == null) {
+					Clients.showNotification("DEBE SELECCIONAR UN PERIODO..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
 				String periodo = filtro.getAnhoDesde();
-				Date desde = Utiles.getFecha("01-01-" + periodo, Utiles.DD_MM_YYYY);
-				Date hasta = Utiles.getFecha("31-12-" + periodo, Utiles.DD_MM_YYYY);
-				Date desde_ = Utiles.getFechaInicioOperaciones();
-				Date hasta_ = new Date();
-				Object[] formato = filtro.getFormato();
-				Cliente cliente = filtro.getCliente();
 				
-				Map<String, Object[]> acum = new HashMap<String, Object[]>();
-				List<Object[]> data = new ArrayList<Object[]>();
-				
-				Map<String, Object[]> acumEne = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumFeb = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumMar = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumAbr = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumMay = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumJun = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumJul = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumAgo = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumSet = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumOct = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumNov = new HashMap<String, Object[]>();
-				Map<String, Object[]> acumDic = new HashMap<String, Object[]>();
-
 				RegisterDomain rr = RegisterDomain.getInstance();
+				Date desde = filtro.getFechaInicioOperaciones();		
+				Date hasta = new Date();
+				Tipo moneda = filtro.getMoneda();
+				
+				if (moneda.esNuevo()) {
+					Clients.showNotification("DEBE SELECCIONAR UNA MONEDA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				
+				Object[] formato = filtro.getFormato();
+				String caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE;					
+				List<Object[]> movims = new ArrayList<Object[]>();	
 
-				long idCliente = cliente != null ? cliente.getId() : 0;
-
-				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde_, hasta_, idCliente);
-				List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde_, hasta_, idCliente);
-				List<Object[]> ncreditos = rr.getNotasCreditoPorCliente(desde_, hasta_, idCliente);
-				List<Object[]> recibos = rr.getRecibosPorCliente(desde_, hasta_, idCliente);
-				List<Object[]> ndebitos = rr.getNotasDebitoPorCliente(desde_, hasta_, idCliente);
-				List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde_, hasta_, idCliente);
-				List<Object[]> migracion = rr.getCtaCteMigracionPorClienteVentas(desde_, hasta_, idCliente);
-				List<Object[]> migracionChequesRechazados = rr.getCtaCteMigracionPorClienteChequesRechazados(desde_, hasta_, idCliente);
-				
-				for (Object[] venta : ventas) {
-					String key = (String) venta[1];
-					venta = Arrays.copyOf(venta, venta.length + 7);
-					venta[3] = 0.0;
-					venta[4] = 0.0;
-					venta[5] = 0.0;
-					venta[6] = 0.0;
-					venta[7] = 0.0;
-					venta[8] = 0.0;
-					venta[9] = 0.0;
-					acum.put(key, venta);
-				}
-			
-				for (Object[] cheque : chequesRechazados) {
-					String key = (String) cheque[1];
-					double importe = (double) cheque[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[3] = importe;
-					} else {
-						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (Object[] ncred : ncreditos) {
-					String key = (String) ncred[1];
-					double importe = (double) ncred[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[4] = importe * -1;
-					} else {
-						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (Object[] rec : recibos) {
-					String key = (String) rec[1];
-					double importe = (double) rec[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[5] = importe * -1;
-					} else {
-						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (Object[] ndeb : ndebitos) {
-					String key = (String) ndeb[1];
-					double importe = (double) ndeb[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[6] = importe;
-					} else {
-						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (Object[] reemb : reembolsos) {
-					String key = (String) reemb[1];
-					double importe = (double) reemb[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[7] = importe * -1;
-					} else {
-						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (Object[] mig : migracion) {
-					String key = (String) mig[1];
-					double importe = (double) mig[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[8] = importe;
-					} else {
-						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (Object[] mig : migracionChequesRechazados) {
-					String key = (String) mig[1];
-					double importe = (double) mig[2];
-					Object[] obj = acum.get(key);
-					if (obj != null) {
-						obj[9] = importe;
-					} else {
-						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe };
-					}
-					acum.put(key, obj);
-				}
-				
-				for (int i = 1; i <= 12; i++) {
-					desde = Utiles.getFechaInicioMes(i, Integer.parseInt(periodo));
-					hasta = Utiles.getFechaFinMes(i, Integer.parseInt(periodo));
-					ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
-					chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
-					ncreditos = rr.getNotasCreditoPorCliente(desde, hasta, idCliente);
-					recibos = rr.getRecibosPorCliente(desde, hasta, idCliente);
-					ndebitos = rr.getNotasDebitoPorCliente(desde, hasta, idCliente);
-					reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
-					migracion = rr.getCtaCteMigracionPorClienteVentas(desde, hasta, idCliente);
-					migracionChequesRechazados = rr.getCtaCteMigracionPorClienteChequesRechazados(desde, hasta, idCliente);
-					
-					for (Object[] venta : ventas) {
-						String key = (String) venta[1];
-						venta = Arrays.copyOf(venta, venta.length + 7);
-						venta[3] = 0.0;
-						venta[4] = 0.0;
-						venta[5] = 0.0;
-						venta[6] = 0.0;
-						venta[7] = 0.0;
-						venta[8] = 0.0;
-						venta[9] = 0.0;
-						switch (i) {
-						case 1:
-							acumEne.put(key, venta);
-							break;
-						case 2:
-							acumFeb.put(key, venta);
-							break;
-						case 3:
-							acumMar.put(key, venta);
-							break;
-						case 4:
-							acumAbr.put(key, venta);
-							break;
-						case 5:
-							acumMay.put(key, venta);
-							break;
-						case 6:
-							acumJun.put(key, venta);
-							break;
-						case 7:
-							acumJul.put(key, venta);
-							break;
-						case 8:
-							acumAgo.put(key, venta);
-							break;
-						case 9:
-							acumSet.put(key, venta);
-							break;
-						case 10:
-							acumOct.put(key, venta);
-							break;
-						case 11:
-							acumNov.put(key, venta);
-							break;
-						case 12:
-							acumDic.put(key, venta);
-							break;
-						}
-					}
-					for (Object[] cheque : chequesRechazados) {
-						String key = (String) cheque[1];
-						double importe = (double) cheque[2];	
-						Object[] obj = null;
-						switch (i) {
-						case 1:
-							obj = acumEne.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumEne.put(key, obj);
-							break;
-						case 2:
-							obj = acumFeb.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumFeb.put(key, obj);
-							break;
-						case 3:
-							obj = acumMar.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumMar.put(key, obj);
-							break;
-						case 4:
-							obj = acumAbr.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumAbr.put(key, obj);
-							break;
-						case 5:
-							obj = acumMay.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumMay.put(key, obj);
-							break;
-						case 6:
-							obj = acumJun.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumJun.put(key, obj);
-							break;
-						case 7:
-							obj = acumJul.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumJul.put(key, obj);
-							break;
-						case 8:
-							obj = acumAgo.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumAgo.put(key, obj);
-							break;
-						case 9:
-							obj = acumSet.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumSet.put(key, obj);
-							break;
-						case 10:
-							obj = acumOct.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumOct.put(key, obj);
-							break;
-						case 11:
-							obj = acumNov.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumNov.put(key, obj);
-							break;
-						case 12:
-							obj = acumDic.get(key);
-							if (obj != null) {
-								obj[3] = importe;
-							} else {
-								obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumDic.put(key, obj);
-							break;
-						}
-					}
-					for (Object[] ncred : ncreditos) {						
-						String key = (String) ncred[1];
-						double importe = (double) ncred[2];	
-						Object[] obj = null;
-						switch (i) {
-						case 1:
-							obj = acumEne.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumEne.put(key, obj);
-							break;
-						case 2:
-							obj = acumFeb.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumFeb.put(key, obj);
-							break;
-						case 3:
-							obj = acumMar.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumMar.put(key, obj);
-							break;
-						case 4:
-							obj = acumAbr.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumAbr.put(key, obj);
-							break;
-						case 5:
-							obj = acumMay.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumMay.put(key, obj);
-							break;
-						case 6:
-							obj = acumJun.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumJun.put(key, obj);
-							break;
-						case 7:
-							obj = acumJul.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumJul.put(key, obj);
-							break;
-						case 8:
-							obj = acumAgo.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumAgo.put(key, obj);
-							break;
-						case 9:
-							obj = acumSet.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumSet.put(key, obj);
-							break;
-						case 10:
-							obj = acumOct.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumOct.put(key, obj);
-							break;
-						case 11:
-							obj = acumNov.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumNov.put(key, obj);
-							break;
-						case 12:
-							obj = acumDic.get(key);
-							if (obj != null) {
-								obj[4] = importe * -1;
-							} else {
-								obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumDic.put(key, obj);
-							break;
-						}
-					}
-					for (Object[] rec : recibos) {						
-						String key = (String) rec[1];
-						double importe = (double) rec[2];	
-						Object[] obj = null;
-						switch (i) {
-						case 1:
-							obj = acumEne.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumEne.put(key, obj);
-							break;
-						case 2:
-							obj = acumFeb.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumFeb.put(key, obj);
-							break;
-						case 3:
-							obj = acumMar.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumMar.put(key, obj);
-							break;
-						case 4:
-							obj = acumAbr.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumAbr.put(key, obj);
-							break;
-						case 5:
-							obj = acumMay.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumMay.put(key, obj);
-							break;
-						case 6:
-							obj = acumJun.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumJun.put(key, obj);
-							break;
-						case 7:
-							obj = acumJul.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumJul.put(key, obj);
-							break;
-						case 8:
-							obj = acumAgo.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumAgo.put(key, obj);
-							break;
-						case 9:
-							obj = acumSet.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumSet.put(key, obj);
-							break;
-						case 10:
-							obj = acumOct.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumOct.put(key, obj);
-							break;
-						case 11:
-							obj = acumNov.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumNov.put(key, obj);
-							break;
-						case 12:
-							obj = acumDic.get(key);
-							if (obj != null) {
-								obj[5] = importe * -1;
-							} else {
-								obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
-							}
-							acumDic.put(key, obj);
-							break;
-						}
-					}
-					for (Object[] ndeb : ndebitos) {						
-						String key = (String) ndeb[1];
-						double importe = (double) ndeb[2];	
-						Object[] obj = null;
-						switch (i) {
-						case 1:
-							obj = acumEne.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumEne.put(key, obj);
-							break;
-						case 2:
-							obj = acumFeb.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumFeb.put(key, obj);
-							break;
-						case 3:
-							obj = acumMar.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumMar.put(key, obj);
-							break;
-						case 4:
-							obj = acumAbr.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumAbr.put(key, obj);
-							break;
-						case 5:
-							obj = acumMay.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumMay.put(key, obj);
-							break;
-						case 6:
-							obj = acumJun.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumJun.put(key, obj);
-							break;
-						case 7:
-							obj = acumJul.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumJul.put(key, obj);
-							break;
-						case 8:
-							obj = acumAgo.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumAgo.put(key, obj);
-							break;
-						case 9:
-							obj = acumSet.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumSet.put(key, obj);
-							break;
-						case 10:
-							obj = acumOct.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumOct.put(key, obj);
-							break;
-						case 11:
-							obj = acumNov.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumNov.put(key, obj);
-							break;
-						case 12:
-							obj = acumDic.get(key);
-							if (obj != null) {
-								obj[6] = importe;
-							} else {
-								obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
-							}
-							acumDic.put(key, obj);
-							break;
-						}
-					}
-					for (Object[] reemb : reembolsos) {						
-						String key = (String) reemb[1];
-						double importe = (double) reemb[2];	
-						Object[] obj = null;
-						switch (i) {
-						case 1:
-							obj = acumEne.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumEne.put(key, obj);
-							break;
-						case 2:
-							obj = acumFeb.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumFeb.put(key, obj);
-							break;
-						case 3:
-							obj = acumMar.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumMar.put(key, obj);
-							break;
-						case 4:
-							obj = acumAbr.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumAbr.put(key, obj);
-							break;
-						case 5:
-							obj = acumMay.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumMay.put(key, obj);
-							break;
-						case 6:
-							obj = acumJun.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumJun.put(key, obj);
-							break;
-						case 7:
-							obj = acumJul.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumJul.put(key, obj);
-							break;
-						case 8:
-							obj = acumAgo.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumAgo.put(key, obj);
-							break;
-						case 9:
-							obj = acumSet.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumSet.put(key, obj);
-							break;
-						case 10:
-							obj = acumOct.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumOct.put(key, obj);
-							break;
-						case 11:
-							obj = acumNov.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumNov.put(key, obj);
-							break;
-						case 12:
-							obj = acumDic.get(key);
-							if (obj != null) {
-								obj[7] = importe * -1;
-							} else {
-								obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
-							}
-							acumDic.put(key, obj);
-							break;
-						}
-					}
-					for (Object[] mig : migracion) {						
-						String key = (String) mig[1];
-						double importe = (double) mig[2];	
-						Object[] obj = null;
-						switch (i) {
-						case 1:
-							obj = acumEne.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumEne.put(key, obj);
-							break;
-						case 2:
-							obj = acumFeb.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumFeb.put(key, obj);
-							break;
-						case 3:
-							obj = acumMar.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumMar.put(key, obj);
-							break;
-						case 4:
-							obj = acumAbr.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumAbr.put(key, obj);
-							break;
-						case 5:
-							obj = acumMay.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumMay.put(key, obj);
-							break;
-						case 6:
-							obj = acumJun.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumJun.put(key, obj);
-							break;
-						case 7:
-							obj = acumJul.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumJul.put(key, obj);
-							break;
-						case 8:
-							obj = acumAgo.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumAgo.put(key, obj);
-							break;
-						case 9:
-							obj = acumSet.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumSet.put(key, obj);
-							break;
-						case 10:
-							obj = acumOct.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumOct.put(key, obj);
-							break;
-						case 11:
-							obj = acumNov.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumNov.put(key, obj);
-							break;
-						case 12:
-							obj = acumDic.get(key);
-							if (obj != null) {
-								obj[8] = importe;
-							} else {
-								obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
-							}
-							acumDic.put(key, obj);
-							break;
-						}
-					}
-				}
-				
-				for (String key : acum.keySet()) {
-					Object[] data_ = acum.get(key);
-					Object[] data1 = acumEne.get(key);
-					Object[] data2 = acumFeb.get(key);
-					Object[] data3 = acumMar.get(key);
-					Object[] data4 = acumAbr.get(key);
-					Object[] data5 = acumMay.get(key);
-					Object[] data6 = acumJun.get(key);
-					Object[] data7 = acumJul.get(key);
-					Object[] data8 = acumAgo.get(key);
-					Object[] data9 = acumSet.get(key);
-					Object[] data10 = acumOct.get(key);
-					Object[] data11 = acumNov.get(key);
-					Object[] data12 = acumDic.get(key);
-					data_ = Arrays.copyOf(data_, data_.length + 12);
-					data_[10] = data1;
-					data_[11] = data2;
-					data_[12] = data3;
-					data_[13] = data4;
-					data_[14] = data5;
-					data_[15] = data6;
-					data_[16] = data7;
-					data_[17] = data8;
-					data_[18] = data9;
-					data_[19] = data10;
-					data_[20] = data11;
-					data_[21] = data12;
-					data.add(data_);
-				}
-				
-				Collections.sort(data, new Comparator<Object[]>() {
-					@Override
-					public int compare(Object[] o1, Object[] o2) {
-						String val1 = (String) o1[1];
-						String val2 = (String) o2[1];
-						int compare = val1.compareTo(val2);				
-						return compare;
-					}
-				});	
-				
+				movims = rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId());
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CTA_CTE_SALDOS_DESGLOSADO;
-				if (!formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_PDF)) {
-					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CTA_CTE_SALDOS_DESGLOSADO;
-				}
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new SaldosCtaCteDesglosado(data);
-				params.put("Usuario", getUs().getNombre());
-				params.put("Moneda", filtro.getMonedaGs());
-				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
-				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
-				params.put("Periodo", filtro.getAnhoDesde());
+				JRDataSource dataSource = new SaldosCtaCteDesglosado(movims, periodo);
 				params.put("Titulo", "Saldos de Clientes desglosado por mes (saldo a la fecha actual)");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Periodo", periodo);
 				imprimirJasper(source, params, dataSource, formato);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-			}	
+			}		
 		}
 		
 		/**
@@ -22050,8 +21139,55 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 	Map<String, Object[]> data = new HashMap<String, Object[]>();
 	Map<String, Double> saldo = new HashMap<String, Double>();
 	
-	public SaldosCtaCteDesglosado(List<Object[]> values) {	
-		this.values = values;
+	public SaldosCtaCteDesglosado(List<Object[]> values, String periodo) {
+		
+		for (Object[] value : values) {
+			long idEmpresa = (long) value[14];
+			double saldo = (double) value[9];
+			Double acum = this.saldo.get(idEmpresa + "");
+			if (acum != null) {
+				acum += saldo;
+			} else {
+				acum = saldo;
+			}
+			this.saldo.put(idEmpresa + "", acum);
+		}
+		
+		for (Object[] value : values) {
+			long idEmpresa = (long) value[14];
+			String razonSocial = (String) value[10];
+			Date emision = (Date) value[6];
+			double saldo = (double) value[9];
+			int index = Utiles.getNumeroMes(emision);
+			
+			if (Utiles.getDateToString(emision, "yyyy").equals(periodo)) {
+				Object[] acum = data.get(idEmpresa + "");
+				if (acum != null) {
+					acum[index] = ((double) acum[index]) + saldo;
+				} else {
+					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idEmpresa + "") };
+					acum[index] = saldo;
+				} 
+				data.put(idEmpresa + "", acum);
+			}
+			
+			
+		}
+		
+		for (String key : data.keySet()) {
+			Object[] value = data.get(key);
+			this.values.add(value);
+		}
+		
+		// ordena la lista segun fecha..
+		Collections.sort(this.values, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String rs1 = (String) o1[0];
+				String rs2 = (String) o2[0];
+				return rs1.compareTo(rs2);
+			}
+		});
 	}
 
 	private int index = -1;
@@ -22061,213 +21197,35 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 		Object value = null;
 		String fieldName = field.getName();
 		Object[] det = this.values.get(index);
-		String cliente = (String) det[1];
-		double ventas = (double) det[2];
-		double chequesRechazados = (double) det[3];
-		double ncreditos = (double) det[4];
-		double recibos = (double) det[5];
-		double ndebitos = (double) det[6];
-		double reembolsos = (double) det[7];
-		double migracion = (double) det[8];
-		double migracionChequesRechazados = (double) det[9];
-		double saldo = ventas + chequesRechazados + ncreditos + recibos + ndebitos + reembolsos + migracion + migracionChequesRechazados;
 
 		if ("Cliente".equals(fieldName)) {
-			value = cliente;
+			value = det[0];
 		} else if ("enero".equals(fieldName)) {
-			Object[] ene = (Object[]) det[10];
-			if (ene != null) {
-				double ventas1 = (double) ene[2];
-				double chequesRechazados1 = (double) ene[3];
-				double ncreditos1 = (double) ene[4];
-				double recibos1 = (double) ene[5];
-				double ndebitos1 = (double) ene[6];
-				double reembolsos1 = (double) ene[7];
-				double migracion1 = (double) ene[8];
-				double migracionChequesRechazados1 = (double) ene[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[1]);
 		} else if ("febrero".equals(fieldName)) {
-			Object[] feb = (Object[]) det[11];
-			if (feb != null) {
-				double ventas1 = (double) feb[2];
-				double chequesRechazados1 = (double) feb[3];
-				double ncreditos1 = (double) feb[4];
-				double recibos1 = (double) feb[5];
-				double ndebitos1 = (double) feb[6];
-				double reembolsos1 = (double) feb[7];
-				double migracion1 = (double) feb[8];
-				double migracionChequesRechazados1 = (double) feb[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[2]);
 		} else if ("marzo".equals(fieldName)) {
-			Object[] mar = (Object[]) det[12];
-			if (mar != null) {
-				double ventas1 = (double) mar[2];
-				double chequesRechazados1 = (double) mar[3];
-				double ncreditos1 = (double) mar[4];
-				double recibos1 = (double) mar[5];
-				double ndebitos1 = (double) mar[6];
-				double reembolsos1 = (double) mar[7];
-				double migracion1 = (double) mar[8];
-				double migracionChequesRechazados1 = (double) mar[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[3]);
 		} else if ("abril".equals(fieldName)) {
-			Object[] abr = (Object[]) det[13];
-			if (abr != null) {
-				double ventas1 = (double) abr[2];
-				double chequesRechazados1 = (double) abr[3];
-				double ncreditos1 = (double) abr[4];
-				double recibos1 = (double) abr[5];
-				double ndebitos1 = (double) abr[6];
-				double reembolsos1 = (double) abr[7];
-				double migracion1 = (double) abr[8];
-				double migracionChequesRechazados1 = (double) abr[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[4]);
 		} else if ("mayo".equals(fieldName)) {
-			Object[] may = (Object[]) det[14];
-			if (may != null) {
-				double ventas1 = (double) may[2];
-				double chequesRechazados1 = (double) may[3];
-				double ncreditos1 = (double) may[4];
-				double recibos1 = (double) may[5];
-				double ndebitos1 = (double) may[6];
-				double reembolsos1 = (double) may[7];
-				double migracion1 = (double) may[8];
-				double migracionChequesRechazados1 = (double) may[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[5]);
 		} else if ("junio".equals(fieldName)) {
-			Object[] jun = (Object[]) det[15];
-			if (jun != null) {
-				double ventas1 = (double) jun[2];
-				double chequesRechazados1 = (double) jun[3];
-				double ncreditos1 = (double) jun[4];
-				double recibos1 = (double) jun[5];
-				double ndebitos1 = (double) jun[6];
-				double reembolsos1 = (double) jun[7];
-				double migracion1 = (double) jun[8];
-				double migracionChequesRechazados1 = (double) jun[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[6]);
 		} else if ("julio".equals(fieldName)) {
-			Object[] jul = (Object[]) det[16];
-			if (jul != null) {
-				double ventas1 = (double) jul[2];
-				double chequesRechazados1 = (double) jul[3];
-				double ncreditos1 = (double) jul[4];
-				double recibos1 = (double) jul[5];
-				double ndebitos1 = (double) jul[6];
-				double reembolsos1 = (double) jul[7];
-				double migracion1 = (double) jul[8];
-				double migracionChequesRechazados1 = (double) jul[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[7]);
 		} else if ("agosto".equals(fieldName)) {
-			Object[] ago = (Object[]) det[17];
-			if (ago != null) {
-				double ventas1 = (double) ago[2];
-				double chequesRechazados1 = (double) ago[3];
-				double ncreditos1 = (double) ago[4];
-				double recibos1 = (double) ago[5];
-				double ndebitos1 = (double) ago[6];
-				double reembolsos1 = (double) ago[7];
-				double migracion1 = (double) ago[8];
-				double migracionChequesRechazados1 = (double) ago[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[8]);
 		} else if ("setiembre".equals(fieldName)) {
-			Object[] set = (Object[]) det[18];
-			if (set != null) {
-				double ventas1 = (double) set[2];
-				double chequesRechazados1 = (double) set[3];
-				double ncreditos1 = (double) set[4];
-				double recibos1 = (double) set[5];
-				double ndebitos1 = (double) set[6];
-				double reembolsos1 = (double) set[7];
-				double migracion1 = (double) set[8];
-				double migracionChequesRechazados1 = (double) set[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[9]);
 		} else if ("octubre".equals(fieldName)) {
-			Object[] oct = (Object[]) det[19];
-			if (oct != null) {
-				double ventas1 = (double) oct[2];
-				double chequesRechazados1 = (double) oct[3];
-				double ncreditos1 = (double) oct[4];
-				double recibos1 = (double) oct[5];
-				double ndebitos1 = (double) oct[6];
-				double reembolsos1 = (double) oct[7];
-				double migracion1 = (double) oct[8];
-				double migracionChequesRechazados1 = (double) oct[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[10]);
 		} else if ("noviembre".equals(fieldName)) {
-			Object[] nov = (Object[]) det[20];
-			if (nov != null) {
-				double ventas1 = (double) nov[2];
-				double chequesRechazados1 = (double) nov[3];
-				double ncreditos1 = (double) nov[4];
-				double recibos1 = (double) nov[5];
-				double ndebitos1 = (double) nov[6];
-				double reembolsos1 = (double) nov[7];
-				double migracion1 = (double) nov[8];
-				double migracionChequesRechazados1 = (double) nov[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[11]);
 		} else if ("diciembre".equals(fieldName)) {
-			Object[] dic = (Object[]) det[21];
-			if (dic != null) {
-				double ventas1 = (double) dic[2];
-				double chequesRechazados1 = (double) dic[3];
-				double ncreditos1 = (double) dic[4];
-				double recibos1 = (double) dic[5];
-				double ndebitos1 = (double) dic[6];
-				double reembolsos1 = (double) dic[7];
-				double migracion1 = (double) dic[8];
-				double migracionChequesRechazados1 = (double) dic[9];
-				double saldo1 = ventas1 + chequesRechazados1 + ncreditos1 + recibos1 + ndebitos1 + reembolsos1 + migracion1 + migracionChequesRechazados1;
-				value = FORMATTER.format(saldo1);
-			} else {
-				value = FORMATTER.format(0.0);
-			}
+			value = FORMATTER.format(det[12]);
 		} else if ("totalsaldo".equals(fieldName)) {
-			value = FORMATTER.format(saldo);
+			value = FORMATTER.format(det[13]);
 		} 
 		return value;
 	}
@@ -22275,7 +21233,7 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 	@Override
 	public boolean next() throws JRException {
 		if (index < this.values.size() - 1) {
-			index ++;
+			index++;
 			return true;
 		}
 		return false;
