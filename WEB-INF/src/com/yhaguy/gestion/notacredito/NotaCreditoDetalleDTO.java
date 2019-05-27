@@ -69,6 +69,13 @@ public class NotaCreditoDetalleDTO extends DTO {
 			return 0;
 		return this.getMisc().calcularIVA(this.getImporteGs(), 10);
 	}
+	
+	@DependsOn("tipoIva")
+	public double getIva10Ds() {
+		if (this.isIva10() == false)
+			return 0;
+		return this.getMisc().calcularIVA(this.getImporteDs(), 10);
+	}
 
 	@DependsOn("tipoIva")
 	public double getIva5() {

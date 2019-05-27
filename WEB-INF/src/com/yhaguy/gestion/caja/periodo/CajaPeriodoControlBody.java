@@ -88,6 +88,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	static final String ZUL_IMPRESION_FACTURA = "/yhaguy/gestion/caja/periodo/impresion_factura.zul";
 	static final String ZUL_IMPRESION_FACTURA_DS = "/yhaguy/gestion/caja/periodo/impresion_factura_ds.zul";
 	static final String ZUL_IMPRESION_NOTACREDITO = "/yhaguy/gestion/caja/periodo/impresion_notacredito.zul";
+	static final String ZUL_IMPRESION_NOTACREDITO_DS = "/yhaguy/gestion/caja/periodo/impresion_notacredito_ds.zul";
 	static final String ZUL_IMPRESION_RECIBO = "/yhaguy/gestion/caja/periodo/impresion_recibo.zul";
 
 	private CajaPeriodoDTO dto = new CajaPeriodoDTO();
@@ -1782,7 +1783,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("Vendedor", nc.getVendedor().getPos2());
 		params.put("Motivo", nc.getMotivo().getText().toUpperCase());
 
-		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_NOTACREDITO, this.mainComponent, params);
+		String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_DS;
+		this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
 		this.win.doModal();
 	}
 	
@@ -1816,7 +1818,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			nc.getDetalles().add(this.getItemDescuento(nc));
 		}
 		
-		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_NOTACREDITO, this.mainComponent, params);
+		String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_DS;
+		this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
 		this.win.doModal();
 	}
 

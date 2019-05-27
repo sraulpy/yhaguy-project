@@ -69,6 +69,16 @@ public class NotaCreditoDTO extends DTO {
 		return out;
 	}
 	
+	@DependsOn({"detalles", "motivo"})
+	public double getTotalIva10Ds() {
+		double out = 0;
+		for (NotaCreditoDetalleDTO item : this.getDetallesByMotivo()) {
+			if (item.isIva10())
+				out += item.getIva10Ds();
+		}
+		return out;
+	}
+	
 	@DependsOn("detalles")
 	public double getTotalIva5() {
 		double out = 0;		
@@ -351,6 +361,13 @@ public class NotaCreditoDTO extends DTO {
 	 */
 	public String getImporteEnLetras() {
 		return getMisc().numberToLetter(this.getImporteGs()).toLowerCase();
+	}
+	
+	/**
+	 * @return el importe en letras..
+	 */
+	public String getImporteEnLetrasDs() {
+		return getMisc().numberToLetter(this.getImporteDs()).toLowerCase();
 	}
 
 	public String getNumero() {
