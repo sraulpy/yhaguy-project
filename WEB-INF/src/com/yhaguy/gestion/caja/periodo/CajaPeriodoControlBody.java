@@ -776,7 +776,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 */
 	private boolean isStockDisponible(VentaDTO pedido) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		long idDeposito = (this.isSucursalBaterias() ? Configuracion.ID_DEPOSITO_PRINCIPAL : pedido.getDeposito().getId());
+		long idDeposito = pedido.getDeposito().getId();
 		for (VentaDetalleDTO item : pedido.getDetalles()) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
 			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
