@@ -3795,7 +3795,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
-										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
+										if (proveedor == null || (idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
 											data.add(nc);
 										}										
 									}															
@@ -3850,7 +3850,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
-										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
+										if (proveedor == null || (idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
 											data.add(vta);
 										}									
 									}
