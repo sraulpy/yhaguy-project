@@ -10142,6 +10142,15 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return las cotizaciones..
+	 */
+	public List<TipoCambio> getCotizaciones(String fecha) throws Exception {
+		String query = "select t from TipoCambio t where cast (t.fecha as string) like '%" + fecha + "%'"
+				+ " order by t.fecha desc";
+		return this.hqlLimit(query, 200);
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

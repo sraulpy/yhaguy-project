@@ -1580,7 +1580,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_UTILIDAD_DETALLADO: 
-				this.ventasUtilidadDetallado(mobile, false);
+				this.ventasUtilidadDetallado(mobile, false, VENTAS_UTILIDAD_DETALLADO);
 				break;
 				
 			case VENTAS_PREPARADOR_REPARTIDOR:
@@ -1624,7 +1624,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 			
 			case VENTAS_UTILIDAD_RESUMIDO:
-				this.ventasUtilidadDetallado(mobile, true);
+				this.ventasUtilidadDetallado(mobile, true, VENTAS_UTILIDAD_RESUMIDO);
 				break;
 				
 			case VENTAS_COBRANZAS_VENDEDOR:
@@ -3732,7 +3732,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte VEN-00023..
 		 */
-		private void ventasUtilidadDetallado(boolean mobile, boolean resumido) {
+		private void ventasUtilidadDetallado(boolean mobile, boolean resumido, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
@@ -3747,6 +3747,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				SucursalApp suc = filtro.getSelectedSucursal();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				EmpresaRubro rubro = filtro.getRubro_();
+				ArticuloMarca marca = filtro.getMarca_();
 				
 				double totalImporte = 0;
 				double totalCosto = 0;
@@ -3764,6 +3765,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idSucursal = suc == null ? 0 : suc.getId().longValue();
 				long idVendedor = vendedor == null ? 0 : vendedor.getId().longValue();
 				long idFamilia = familia == null ? 0 : familia.getId().longValue();
+				long idMarca = marca == null ? 0 : marca.getId().longValue();
 
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "");
 				for (NotaCredito notacred : ncs) {
@@ -3790,11 +3792,13 @@ public class ReportesViewModel extends SimpleViewModel {
 									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1 };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
-									data.add(nc);						
+									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
+										data.add(nc);										
+									}															
 								}
 							}
 						}
-						if (art == null && familia == null && notacred.isMotivoDescuento()) {
+						if (art == null && familia == null && marca == null && notacred.isMotivoDescuento()) {
 							Object[] nc = new Object[] {
 									Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
 									notacred.getNumero(),
@@ -3841,7 +3845,9 @@ public class ReportesViewModel extends SimpleViewModel {
 									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
-									data.add(vta);
+									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
+										data.add(vta);										
+									}
 								}
 							}
 						}
@@ -3864,7 +3870,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 					Map<String, Object> params = new HashMap<String, Object>();
 					JRDataSource dataSource = new VentasUtilidadDetallado(data);
-					params.put("Titulo", "Ventas y Utilidad por Articulo Detallado");
+					params.put("Titulo", codReporte + " - Ventas y Utilidad por Articulo Detallado");
 					params.put("Usuario", getUs().getNombre());
 					params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 					params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));

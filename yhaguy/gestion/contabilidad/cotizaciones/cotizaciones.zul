@@ -1,0 +1,120 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.contable.cotizaciones.CotizacionesViewModel')"
+	height="100%">
+
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-info" label="Agregar" iconSclass="z-icon-plus-circle"
+			width="150px" onClick='pop_tc.open(self, "after_start")'></button>
+		<separator orient="vertical" bar="true"></separator>
+		<field value="Cotización Dólar Vigente" />
+		<doublebox readonly="true" value="@load(vm.tipoCambioCompra)"
+			style="font-weight:bold;text-align:right" format="###,###,###.00"></doublebox>
+		<label value="Gs. a la compra"></label>
+		<space></space>
+		<doublebox readonly="true" value="@load(vm.tipoCambioVenta)"
+			style="font-weight:bold;text-align:right" format="###,###,###.00"></doublebox>
+		<label value="Gs. a la venta"></label>
+		<space></space>
+		<a label=" Link Cotización de la S.E.T." onClick='pop_set.open(self, "after_start")'
+			iconSclass="z-icon-globe"></a>
+	</hlayout>
+	<div height="5px"></div>
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS.."
+		model="@load(vm.cotizaciones)">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Moneda"></listheader>
+			<listheader label="Entidad"></listheader>
+			<listheader label="Compra" align="right"></listheader>
+			<listheader label="Venta" align="right"></listheader>
+			<listheader label="Usuario"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						value="@bind(vm.filterFechaDD)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+					<textbox hflex="true"  
+						placeholder="Mes"
+						value="@bind(vm.filterFechaMM)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+					<textbox hflex="true"  
+						placeholder="Año"
+						value="@bind(vm.filterFechaAA)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.moneda.descripcion.toUpperCase())"></listcell>
+				<listcell label="@load(each.tipoCambio.sigla)"></listcell>
+				<listcell label="@load(each.compra) @converter(vm.cnv.monedaExtranjera)"></listcell>
+				<listcell label="@load(each.venta) @converter(vm.cnv.monedaExtranjera)"></listcell>
+				<listcell label="@load(each.usuarioMod.toUpperCase())" style="padding-left:10px"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="ítems"></listfooter>
+		</listfoot>
+	</listbox>
+	<popup id="pop_set" sclass="rounded">
+		<iframe height="600px" width="1000px"
+			src="https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos"></iframe>
+	</popup>
+	
+	<popup id="pop_tc" sclass="rounded">
+		<grid sclass="vgrid" width="400px">
+			<columns>
+				<column width="35%"></column>
+				<column></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<textbox value="@load(vm.nvaCotizacion.fecha) @converter('formattedDate', format='dd-MM-yyyy')" hflex="true" readonly="true" />
+				</row>
+				<row>
+					<field value="Moneda:" />
+					<textbox value="@load(vm.nvaCotizacion.moneda.sigla)" hflex="true" readonly="true" />
+				</row>
+				<row>
+					<field value="Entidad:" />
+					<textbox value="@load(vm.nvaCotizacion.tipoCambio.sigla)" hflex="true" readonly="true" />
+				</row>
+				<row>
+					<field value="Compra:" />
+					<doublebox value="@bind(vm.nvaCotizacion.compra)"></doublebox>
+				</row>
+				<row>
+					<field value="Venta:" />
+					<doublebox value="@bind(vm.nvaCotizacion.venta)"></doublebox>
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hlayout>
+			<div hflex="true"></div>
+			<button mold="bs" sclass="btn-success btn-sm" label="Agregar" iconSclass="z-icon-check"
+				width="150px"
+				onClick="@command('addCotizacion', comp=pop_tc)"></button>
+		</hlayout>
+	</popup>
+</window>
+</zk>

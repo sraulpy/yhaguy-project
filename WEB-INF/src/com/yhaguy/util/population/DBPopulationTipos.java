@@ -691,7 +691,7 @@ public class DBPopulationTipos {
 		grabarDB(tipoCambioYhaguy);
 
 		tipoCambioOficial.setDescripcion(Configuracion.ID_TIPO_CAMBIO_BCP);
-		tipoCambioOficial.setSigla(Configuracion.SIGLA_TIPO_CAMBIO_BCP);
+		tipoCambioOficial.setSigla(Configuracion.SIGLA_TIPO_CAMBIO_SET);
 		tipoCambioOficial.setTipoTipo(tipoCambio);
 		grabarDB(tipoCambioOficial);
 

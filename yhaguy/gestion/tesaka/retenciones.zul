@@ -1,15 +1,12 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.tesaka.TesakaViewModel')"
 	height="100%">
-
+	<div style="padding:5px" vflex="true">
 	<grid sclass="vgrid">
-		<columns>
-			<column />
-			<column width="40%"/>
-		</columns>
 		<rows>
 			<row>
-				<vlayout sclass="vgrid" spacing="0">
+				<hlayout hflex="true">
+				<vlayout spacing="0" hflex="true">
 					<field value="Órden de Pago" />
 					<hlayout>
 						<textbox placeholder="Número.."
@@ -25,55 +22,27 @@
 							onOK="@command('buscarPagos', posFiltro=2)" />
 						<button iconSclass="z-icon-search"
 							onClick="@command('buscarPagos', posFiltro=2)" />
-						<space></space>
-						<field value="Tipo Cambio:" />
-						<guaranibox placeholder="Tipo Cambio.." value="@bind(vm.tipoCambio)" />
 					</hlayout>
 				</vlayout>
+				<space></space>
+				<vlayout spacing="0" hflex="true">
+					<field value="Tipo Cambio" />
+					<guaranibox placeholder="Tipo Cambio.." value="@bind(vm.tipoCambio)" width="150px" />
+				</vlayout>
+				</hlayout>
 			</row>
 		</rows>
 	</grid>
-	
+	<div height="5px"></div>
 	<hlayout sclass="button-container">
-		<toolbarbutton image="/core/images/inbox_download.png" label="Generar Archivo"
+		<button mold="bs" sclass="btn-sm btn-info" iconSclass="z-icon-download" label="Generar Archivo"
 			onClick="@command('generarArchivo')"
 			disabled="@load(vm.generarArchivoDisabled)"
-			visible="@load(vm.checkmarkVisible)"
-			tooltiptext="Generar Archivo de Retención para enviarlo al Tesaka.."/>	
+			tooltiptext="Generar Archivo de Retención para enviarlo al Tesaka.."
+			width="150px" />	
 		<space />
 		<a label="Archivo Generado" onClick="@command('downloadFile')"
-			visible="@load(!vm.checkmarkVisible)"/>
-		<space />
-		<label value="@load(vm.selectedPago.tesaka)"
-			style="font-style:italic;font-size:11px"/>
-		<separator orient="vertical" bar="true"/>
-		<space />
-		<field value="Retenciones Registradas en Tesaka:"/>
-		<combobox placeholder="Periodo.." width="120px"
-			model="@load(vm.periodos)"
-			selectedItem="@bind(vm.selectedPeriodo)">
-			<template name="model">
-				<comboitem label="@load(vm.getMes(each))"/>
-			</template>
-		</combobox>
-		<space />
-		<radiogroup model="@load(vm.tiposRetenciones)"
-			selectedItem="@bind(vm.selectedTipoRetencion)">
-			<template name="model">
-				<radio label="@load(each)" style="margin-right:10px"></radio>
-			</template>
-		</radiogroup>		
-		<space />
-		<toolbarbutton image="/core/images/inbox_upload.png" label="Importar Archivo" 
-			tooltiptext="Importar Archivo de Retenciones del Tesaka.."
-			upload="true"
-			onUpload="@command('uploadFile', file=event.media)"
-			disabled="@load(vm.selectedPeriodo eq 0? 'true' : 'false')"/>
-		<space />
-		<toolbarbutton image="/core/images/printer_.png" label="Imprimir" 
-			tooltiptext="Imprimir Retenciones del Tesaka.."
-			disabled="@load(vm.selectedPeriodo eq 0? 'true' : 'false')"
-			onClick="@command('imprimir')"/>
+			visible="@load(!vm.checkmarkVisible)" />
 	</hlayout>
 	<div height="5px" />
 	<listbox sclass="small-list" vflex="true"
@@ -108,5 +77,5 @@
 			</listfooter>
 		</listfoot>
 	</listbox>
-
+	</div>
 </window>

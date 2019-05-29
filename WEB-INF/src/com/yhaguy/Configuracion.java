@@ -228,7 +228,7 @@ public class Configuracion extends Config {
 	public static final String ID_TIPO_MONEDA_GUARANI = "Guaranies";
 	public static final String ID_TIPO_MONEDA_DOLAR = "Dolares";
 	public static final String ID_TIPO_CAMBIO_APP = "CambioAPP";
-	public static final String ID_TIPO_CAMBIO_BCP = "CambioBCP";
+	public static final String ID_TIPO_CAMBIO_BCP = "CambioSET";
 	public static final long ID_TIPO_GASTO_COMPRAS_LOCALES = -1;
 	public static final String ID_TIPO_REPARTOS = "Tipos de Reparto";
 	public static final long ID_ESTADO_ARTICULO_TEMPORAL = 3;
@@ -877,7 +877,7 @@ public class Configuracion extends Config {
 	public static String SIGLA_SUCURSAL_APP_TODAS = "SUC-APP-TO";
 
 	public static String SIGLA_TIPO_CAMBIO_APP = "YG";
-	public static String SIGLA_TIPO_CAMBIO_BCP = "BCP";
+	public static String SIGLA_TIPO_CAMBIO_SET = "SET";
 
 	public static String SIGLA_TIPO_BANCO_TARJETA_EXTRACTO_DETALLE_DET_TARJ = "BAN-TAR-DET-TARJ";
 	public static String TIPO_BANCO_TARJETA_EXTRACTO_DETALLE_DET_TARJ = "Banco Tarjeta Extracto";

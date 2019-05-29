@@ -1442,7 +1442,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		Tipo tipoCambioAPP = rr
 				.getTipoPorSigla(Configuracion.SIGLA_TIPO_CAMBIO_APP);
 		Tipo tipoCambioBCP = rr
-				.getTipoPorSigla(Configuracion.SIGLA_TIPO_CAMBIO_BCP);
+				.getTipoPorSigla(Configuracion.SIGLA_TIPO_CAMBIO_SET);
 
 		dto.setCambioAPP(this.tipoToMyPair(tipoCambioAPP));
 		dto.setCambioBCP(this.tipoToMyPair(tipoCambioBCP));
