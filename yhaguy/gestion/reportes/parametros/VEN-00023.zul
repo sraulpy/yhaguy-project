@@ -5,14 +5,13 @@
 	</columns>
 	<rows>
 		<row>
-			<field value="Fecha Desde:" />
+			<field value="Fecha:" />
+			<hlayout>
 			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
 				placeholder="Desde.." hflex="true" />
-		</row>
-		<row>
-			<field value="Fecha Hasta:" />
 			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
 				placeholder="Hasta.." hflex="true" />
+			</hlayout>
 		</row>
 		<row>
 			<field value="Sucursal:" />
@@ -134,6 +133,35 @@
 										iconSclass="z-icon-filter" disabled="true" />
 									<textbox hflex="true"
 										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedor.razonSocial)"
+				id="bndProv_">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedores)"
+						selectedItem="@bind(vm.dato.filtro.proveedor)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedor)"
 										instant="true" placeholder="Buscar.." />
 								</hlayout>
 							</listheader>

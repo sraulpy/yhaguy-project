@@ -3748,6 +3748,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloFamilia familia = filtro.getFamilia_();
 				EmpresaRubro rubro = filtro.getRubro_();
 				ArticuloMarca marca = filtro.getMarca_();
+				Proveedor proveedor = filtro.getProveedor();
 				
 				double totalImporte = 0;
 				double totalCosto = 0;
@@ -3766,6 +3767,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idVendedor = vendedor == null ? 0 : vendedor.getId().longValue();
 				long idFamilia = familia == null ? 0 : familia.getId().longValue();
 				long idMarca = marca == null ? 0 : marca.getId().longValue();
+				long idProveedor = proveedor == null ? 0 : proveedor.getId().longValue();
 
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "");
 				for (NotaCredito notacred : ncs) {
@@ -3793,12 +3795,14 @@ public class ReportesViewModel extends SimpleViewModel {
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
-										data.add(nc);										
+										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
+											data.add(nc);
+										}										
 									}															
 								}
 							}
 						}
-						if (art == null && familia == null && marca == null && notacred.isMotivoDescuento()) {
+						if (art == null && familia == null && marca == null && proveedor == null && notacred.isMotivoDescuento()) {
 							Object[] nc = new Object[] {
 									Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
 									notacred.getNumero(),
@@ -3846,7 +3850,9 @@ public class ReportesViewModel extends SimpleViewModel {
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
-										data.add(vta);										
+										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
+											data.add(vta);
+										}									
 									}
 								}
 							}
