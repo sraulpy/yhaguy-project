@@ -105,13 +105,8 @@ public class Articulo extends Domain {
 	 * @return si el proveedor esta definido para este articulo..
 	 */
 	public boolean isProveedor(long idProveedor) {
-		if (this.proveedorArticulos.size() == 0) {
-			return false;
-		}
-		for (ProveedorArticulo proveedor : this.proveedorArticulos) {
-			if (proveedor.getProveedor().getId().longValue() == idProveedor) {
-				return true;
-			}
+		if (this.proveedor != null && this.proveedor.getId().longValue() == idProveedor) {
+			return true;
 		}
 		return false;
 	}
