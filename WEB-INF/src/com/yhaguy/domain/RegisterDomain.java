@@ -10068,6 +10068,49 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return importe prestamos dentro de un periodo..
+	 * [0]: empresa.id
+	 * [1]: empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getPrestamosPorDeudor(Date desde, Date hasta, long idEmpresa) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT d.acreedor.id, d.acreedor.razonSocial, sum(d.totalImporte_gs)" +   
+				"	FROM BancoDescuentoCheque d" +
+				"	WHERE (d.fecha >= '" + desde_ + "' and d.fecha <= '" + hasta_ + "')" + 
+				"      AND d.auxi = '" + BancoDescuentoCheque.PRESTAMO + "'" +
+				"	   AND d.dbEstado = 'R'";
+		if (idEmpresa > 0) {
+			query += " AND d.acreedor.id = " + idEmpresa;
+		}
+		query+=	" GROUP BY d.acreedor.id, d.acreedor.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return importe reembolsos dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getReembolsosPrestamos(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT r.cliente.id, r.cliente.empresa.razonSocial, sum(r.totalImporteGs)" +   
+				"	FROM Recibo r" +
+				"	WHERE (r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '" + hasta_ + "')" + 
+				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_REEMBOLSO_PRESTAMO + "'";
+		if (idCliente > 0) {
+			query += " AND r.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY r.cliente.id, r.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return importe ctacte dentro de un periodo..
 	 * [0]: cliente.id
 	 * [1]: cliente.empresa.razonSocial
@@ -10179,31 +10222,85 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Articulo> arts = rr.getArticulos();
-			for (Articulo art : arts) {
-				Object[] compra = rr.getUltimaCompraLocal(art.getId());				
-				if (compra != null) {
-					int cant = (int) compra[0];
-					Date fecha = (Date) compra[1];
-					double costo = (double) compra[5];
-					art.setFechaUltimaCompra(fecha);
-					art.setCantUltimaCompra(cant);
-					art.setPrecioUltimaCompra(costo);
-					rr.saveObject(art, art.getUsuarioMod());
-					System.out.println(art.getCodigoInterno());
-				}
-				Object[] venta = rr.getUltimaVenta_(art.getId());				
-				if (venta != null) {
-					long cant = (long) venta[0];
-					Date fecha = (Date) venta[1];
-					double costo = (double) venta[3];
-					art.setFechaUltimaVenta(fecha);
-					art.setCantUltimaVenta(Integer.parseInt(cant + ""));
-					art.setPrecioUltimaVenta(costo);
-					rr.saveObject(art, art.getUsuarioMod());
-					System.err.println(art.getCodigoInterno());
+			Date desde = Utiles.getFecha("01-01-2016 00:00:00");
+			Date hasta = new Date();
+			List<Recibo> recs = rr.getCobranzas(desde, hasta, 2, 6919);
+			for (Recibo rec : recs) {
+				for (ReciboDetalle det : rec.getDetalles()) {					
+					CtaCteEmpresaMovimiento m = det.getMovimiento();
+					if (m.isPrestamoInterno()) {
+						System.out.println("REC: " + rec.getNumero());
+						rec.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_REEMBOLSO_PRESTAMO));
+						rr.saveObject(rec, "sys");
+					}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main_(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = Utiles.getFecha("01-01-2016 00:00:00");
+			Date hasta = new Date();
+			List<Venta> vtas = rr.getVentasCredito(desde, hasta, 6919);
+			List<NotaCredito> ncrs = rr.getNotasCreditoVenta(desde, hasta, 6919);
+			List<Recibo> recs = rr.getCobranzas(desde, hasta, 2, 6919);
+			double totv = 0.0;
+			double totn = 0.0;
+			double totr = 0.0;
+			for (Venta venta : vtas) {
+				if (!venta.isAnulado()) {
+					CtaCteEmpresaMovimiento m = new CtaCteEmpresaMovimiento();
+					m.setAnulado(false);
+					m.setCliente(venta.getCliente());
+					m.setFechaEmision(venta.getFecha());
+					m.setFechaVencimiento(venta.getVencimiento());
+					m.setIdEmpresa(53341);
+					m.setIdMovimientoOriginal(venta.getId());
+					m.setIdVendedor(venta.getVendedor().getId());
+					m.setImporteOriginal(venta.getImporteGs());
+					m.setMoneda(venta.getMoneda());
+					m.setNroComprobante(venta.getNumero());
+					m.setSaldo(venta.getImporteGs());
+					m.setSucursal(venta.getSucursal());
+					m.setTipoCambio(1);
+					m.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
+					m.setTipoMovimiento(venta.getTipoMovimiento());
+					rr.saveObject(m, "sys");
+					totv += venta.getImporteGs();
+					System.out.println("VENTA: " + venta.getNumero());
+				}
+			}
+			for (NotaCredito ncred : ncrs) {
+				if (!ncred.isAnulado()) {
+					if (ncred.getAuxi().equals(NotaCredito.NCR_CREDITO)) {
+						System.out.println("NCRED: " + ncred.getNumero());
+						Venta vta = ncred.getVentaAplicada();
+						System.err.println("" + vta.getId());
+						CtaCteEmpresaMovimiento m = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla(), 53341);
+						m.setSaldo(m.getSaldo() - ncred.getImporteGs());
+						rr.saveObject(m, "sys");
+						totn += ncred.getImporteGs();						
+					}
+				}
+			}
+			for (Recibo rec : recs) {
+				for (ReciboDetalle det : rec.getDetalles()) {
+					System.out.println("REC: " + rec.getNumero());
+					CtaCteEmpresaMovimiento m = det.getMovimiento();
+					m.setSaldo(m.getSaldo() - det.getMontoGs());
+					rr.saveObject(m, "sys");
+					if (m.isVentaCredito()) {
+						totr += det.getMontoGs();
+					}
+				}
+			}
+			System.out.println("VENTAS CRED.: " + Utiles.getNumberFormat(totv));
+			System.out.println("NOTAS  CRED: " + Utiles.getNumberFormat(totn));
+			System.out.println("RECIBOS: " + Utiles.getNumberFormat(totr));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

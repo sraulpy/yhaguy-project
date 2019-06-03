@@ -219,7 +219,7 @@
 							<field value=""/>
 							<field value="ítems" />
 							<space />
-							<label value="*Genera saldo en cuenta acreedora para su posterior reembolso.."
+							<label value="*Genera saldo en cuenta deudora para su posterior reembolso.."
 								style="color:red;font-style:italic"
 								visible="@load(vm.tipo eq 'prestamo')"></label>
 							<space hflex="true" />

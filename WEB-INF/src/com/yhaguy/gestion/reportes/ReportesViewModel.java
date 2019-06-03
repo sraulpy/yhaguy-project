@@ -9249,7 +9249,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
 						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
-						totalChequesReembolsos, totalMigracion, totalMigracionChequesRechazados);
+						totalChequesReembolsos, totalMigracion, totalMigracionChequesRechazados, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -22376,6 +22376,7 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 	double totalChequesReembolsos = 0.0;
 	double totalMigracion = 0.0;
 	double totalMigracionChequesRechazados = 0.0;
+	double totalPrestamos = 0.0;
 	
 	/**
 	 * [0]:cliente
@@ -22383,7 +22384,7 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 	 */
 	public CtaCteSaldosResumidoDataSource(List<Object[]> values, String cliente, double totalVentas,
 			double totalChequesRechazados, double totalNotasCredito, double totalRecibos, double totalNotasDebito,
-			double totalChequesReembolsos, double totalMigracion, double totalMigracionChequesRechazados) {
+			double totalChequesReembolsos, double totalMigracion, double totalMigracionChequesRechazados, double totalPrestamos) {
 		this.values = values;
 		this.totalVentas = totalVentas;
 		this.totalChequesRechazados = totalChequesRechazados;
@@ -22393,6 +22394,7 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		this.totalChequesReembolsos = totalChequesReembolsos;
 		this.totalMigracion = totalMigracion;
 		this.totalMigracionChequesRechazados = totalMigracionChequesRechazados;
+		this.totalPrestamos = totalPrestamos;
 	}
 
 	private int index = -1;
@@ -22427,6 +22429,10 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 			value = Utiles.getNumberFormat(ndebitos);
 		} else if ("Reembolsos".equals(fieldName)) {
 			value = Utiles.getNumberFormat(reembolsos);
+		} else if ("Prestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
+		} else if ("ReembPrestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
 		} else if ("Migracion".equals(fieldName)) {
 			value = Utiles.getNumberFormat(migracion);
 		} else if ("MigracionChequesRechazados".equals(fieldName)) {
@@ -22449,9 +22455,13 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 			value = Utiles.getNumberFormat(totalMigracion);
 		} else if ("TotalMigracionChequesRechazados".equals(fieldName)) {
 			value = Utiles.getNumberFormat(totalMigracionChequesRechazados);
+		} else if ("TotalPrestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalPrestamos);
+		} else if ("TotalReembPrestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(0.0);
 		} else if ("TotalSaldo".equals(fieldName)) {
 			double totalSaldo = totalVentas + totalChequesRechazados + totalNotasCredito + totalRecibos
-					+ totalNotasDebito + totalChequesReembolsos + totalMigracion + totalMigracionChequesRechazados;
+					+ totalNotasDebito + totalChequesReembolsos + totalMigracion + totalMigracionChequesRechazados + totalPrestamos;
 			value = Utiles.getNumberFormat(totalSaldo);
 		}
 		return value;

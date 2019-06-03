@@ -1584,8 +1584,11 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			double totalChequesReembolsos = 0.0;
 			double totalMigracion = 0.0;
 			double totalMigracionChequesRechazados = 0.0;
+			double totalPrestamos = 0.0;
+			double totalReembPrestamos = 0.0;
 
 			long idCliente = cliente != null ? cliente.getId() : 0;
+			long idEmpresa = cliente != null ? cliente.getIdEmpresa() : 0;
 
 			List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
 			List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
@@ -1595,10 +1598,12 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			List<Object[]> reembolsos = rr.getReembolsosPorCliente(desde, hasta, idCliente);
 			List<Object[]> migracion = rr.getCtaCteMigracionPorClienteVentas(desde, hasta, idCliente);
 			List<Object[]> migracionChequesRechazados = rr.getCtaCteMigracionPorClienteChequesRechazados(desde, hasta, idCliente);
+			List<Object[]> prestamos = rr.getPrestamosPorDeudor(desde, hasta, idEmpresa);
+			List<Object[]> reembPrestamos = rr.getReembolsosPrestamos(desde, hasta, idCliente);
 			
 			for (Object[] venta : ventas) {
 				String key = (String) venta[1];
-				venta = Arrays.copyOf(venta, venta.length + 7);
+				venta = Arrays.copyOf(venta, venta.length + 9);
 				venta[3] = 0.0;
 				venta[4] = 0.0;
 				venta[5] = 0.0;
@@ -1606,6 +1611,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				venta[7] = 0.0;
 				venta[8] = 0.0;
 				venta[9] = 0.0;
+				venta[10] = 0.0;
+				venta[11] = 0.0;
 				acum.put(key, venta);
 			}
 			
@@ -1616,7 +1623,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[3] = importe;
 				} else {
-					obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+					obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 				}
 				acum.put(key, obj);
 			}
@@ -1628,7 +1635,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[4] = importe * -1;
 				} else {
-					obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
+					obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 				}
 				acum.put(key, obj);
 			}
@@ -1640,7 +1647,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[5] = importe * -1;
 				} else {
-					obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
+					obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 				}
 				acum.put(key, obj);
 			}
@@ -1652,7 +1659,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[6] = importe;
 				} else {
-					obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
+					obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0, 0.0, 0.0 };
 				}
 				acum.put(key, obj);
 			}
@@ -1664,7 +1671,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[7] = importe * -1;
 				} else {
-					obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0 };
+					obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0 };
 				}
 				acum.put(key, obj);
 			}
@@ -1676,7 +1683,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[8] = importe;
 				} else {
-					obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+					obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0 };
 				}
 				acum.put(key, obj);
 			}
@@ -1688,7 +1695,31 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				if (obj != null) {
 					obj[9] = importe;
 				} else {
-					obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe };
+					obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] prest : prestamos) {
+				String key = (String) prest[1];
+				double importe = (double) prest[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[10] = importe;
+				} else {
+					obj = new Object[] { prest[0], prest[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+				}
+				acum.put(key, obj);
+			}
+			
+			for (Object[] reemb : reembPrestamos) {
+				String key = (String) reemb[1];
+				double importe = (double) reemb[2];
+				Object[] obj = acum.get(key);
+				if (obj != null) {
+					obj[11] = importe * -1;
+				} else {
+					obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe };
 				}
 				acum.put(key, obj);
 			}
@@ -1703,6 +1734,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				double reem = (double) data_[7];
 				double migr = (double) data_[8];
 				double mgcr = (double) data_[9];
+				double pres = (double) data_[10];
+				double reep = (double) data_[11];
 				totalVentas += vtas;
 				totalChequesRechazados += rech;
 				totalNotasCredito += ncrs;
@@ -1711,6 +1744,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				totalChequesReembolsos += reem;
 				totalMigracion += migr;
 				totalMigracionChequesRechazados += mgcr;
+				totalPrestamos += pres;
+				totalReembPrestamos += reep;
 				data.add(data_);
 			}
 			
@@ -1730,7 +1765,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new CtaCteSaldosResumidoDataSource(data, cli, totalVentas,
 					totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
-					totalChequesReembolsos, totalMigracion, totalMigracionChequesRechazados);
+					totalChequesReembolsos, totalMigracion, totalMigracionChequesRechazados, totalPrestamos, totalReembPrestamos);
 			params.put("Titulo", titulo);
 			params.put("Usuario", getUs().getNombre());
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
@@ -2802,6 +2837,8 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 	double totalChequesReembolsos = 0.0;
 	double totalMigracion = 0.0;
 	double totalMigracionChequesRechazados = 0.0;
+	double totalPrestamos = 0.0;
+	double totalReembPrestamos = 0.0;
 	
 	/**
 	 * [0]:cliente
@@ -2809,7 +2846,8 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 	 */
 	public CtaCteSaldosResumidoDataSource(List<Object[]> values, String cliente, double totalVentas,
 			double totalChequesRechazados, double totalNotasCredito, double totalRecibos, double totalNotasDebito,
-			double totalChequesReembolsos, double totalMigracion, double totalMigracionChequesRechazados) {
+			double totalChequesReembolsos, double totalMigracion, double totalMigracionChequesRechazados,
+			double totalPrestamos, double totalReembPrestamos) {
 		this.values = values;
 		this.totalVentas = totalVentas;
 		this.totalChequesRechazados = totalChequesRechazados;
@@ -2819,6 +2857,8 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		this.totalChequesReembolsos = totalChequesReembolsos;
 		this.totalMigracion = totalMigracion;
 		this.totalMigracionChequesRechazados = totalMigracionChequesRechazados;
+		this.totalPrestamos = totalPrestamos;
+		this.totalReembPrestamos = totalReembPrestamos;
 	}
 
 	private int index = -1;
@@ -2837,7 +2877,9 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		double reembolsos = (double) det[7];
 		double migracion = (double) det[8];
 		double migracionChequesRechazados = (double) det[9];
-		double saldo = ventas + chequesRechazados + ncreditos + recibos + ndebitos + reembolsos + migracion + migracionChequesRechazados;
+		double prestamos = (double) det[10];
+		double reembprestamos = (double) det[11];
+		double saldo = ventas + chequesRechazados + ncreditos + recibos + ndebitos + reembolsos + migracion + migracionChequesRechazados + prestamos + reembprestamos;
 		
 		if ("Cliente".equals(fieldName)) {
 			value = cliente;
@@ -2853,6 +2895,10 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 			value = Utiles.getNumberFormat(ndebitos);
 		} else if ("Reembolsos".equals(fieldName)) {
 			value = Utiles.getNumberFormat(reembolsos);
+		} else if ("Prestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(prestamos);
+		} else if ("ReembPrestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(reembprestamos);
 		} else if ("Migracion".equals(fieldName)) {
 			value = Utiles.getNumberFormat(migracion);
 		} else if ("MigracionChequesRechazados".equals(fieldName)) {
@@ -2875,9 +2921,14 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 			value = Utiles.getNumberFormat(totalMigracion);
 		} else if ("TotalMigracionChequesRechazados".equals(fieldName)) {
 			value = Utiles.getNumberFormat(totalMigracionChequesRechazados);
+		} else if ("TotalPrestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalPrestamos);
+		} else if ("TotalReembPrestamos".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totalReembPrestamos);
 		} else if ("TotalSaldo".equals(fieldName)) {
 			double totalSaldo = totalVentas + totalChequesRechazados + totalNotasCredito + totalRecibos
-					+ totalNotasDebito + totalChequesReembolsos + totalMigracion + totalMigracionChequesRechazados;
+					+ totalNotasDebito + totalChequesReembolsos + totalMigracion + totalMigracionChequesRechazados
+					+ totalPrestamos + totalReembPrestamos;
 			value = Utiles.getNumberFormat(totalSaldo);
 		}
 		return value;

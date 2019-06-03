@@ -304,7 +304,8 @@
 				<space />
 				<button mold="bs" sclass="btn-success btn-sm"
 					width="120px" iconSclass="z-icon-plus-circle"
-					onClick="@command('buscarFacturas')" label=" Insertar" />
+					onClick="@command('buscarFacturas')" label=" Insertar" 
+					disabled="@load(vm.dto.detallesFacturas.size() gt 0)" />
 				<space visible="@load(vm.dto.notaCreditoVenta)"/>
 				<button mold="bs" sclass="btn-primary btn-sm"
 					width="120px" iconSclass="z-icon-check"

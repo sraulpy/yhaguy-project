@@ -138,6 +138,15 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	}
 	
 	/**
+	 * @return true si es prestamo..
+	 */
+	public boolean isPrestamoInterno() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(
+				Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL);
+	}
+	
+	/**
 	 * @return true si es anticipo de cobro..
 	 */
 	public boolean isAnticipoCobro() {
