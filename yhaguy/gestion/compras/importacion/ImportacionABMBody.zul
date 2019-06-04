@@ -660,10 +660,10 @@
 							<listfooter />
 							<listfooter />
 							<listfooter>
-								<dolarbox
+								<doublebox
 									value="@load(vm.totalProformaDs)"
 									style="background:#EEF7FA;text-align:right;font-weight:bold"
-									readonly="true" hflex="true" />
+									readonly="true" hflex="true" format="###,###,###,##0.0000" />
 							</listfooter>
 						</listfoot>
 					</listbox>
@@ -855,9 +855,10 @@
 							<listfooter />
 							<listfooter />
 							<listfooter>
-								<dolarbox
+								<doublebox
 									value="@load(vm.totalImporteFactura[1])"
-									style="background:#EEF7FA;text-align:right;font-weight:bold" />
+									style="background:#EEF7FA;text-align:right;font-weight:bold" 
+									format="###,###,###,##0.0000" />
 							</listfooter>
 						</listfoot>
 					</listbox>
