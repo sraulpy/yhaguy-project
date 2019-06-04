@@ -641,10 +641,10 @@
 								<listcell label="@load(each.articulo.descripcion)"></listcell>
 								<listcell label="@load(each.cantidad)"></listcell>
 								<listcell label="@load(each.ultimoCostoDs)"></listcell>
-								<listcell label="@load(each.costoProformaDs) @converter(vm.cnv.monedaExtranjera)"></listcell>
+								<listcell label="@load(each.costoProformaDs) @converter('formattedNumber', format='###,###,###,##0.0000')"></listcell>
 								<listcell label="@load(each.variacion) @converter(vm.cnv.monedaExtranjera)" style="@load(each.colorVariacion)"></listcell>
 								<listcell label="@load(each.porcentajeVariacion) @converter(vm.cnv.monedaExtranjera)" style="@load(each.colorVariacion)"></listcell>
-								<listcell label="@load(each.importeProformaDs) @converter(vm.cnv.monedaExtranjera)"></listcell>
+								<listcell label="@load(each.importeProformaDs) @converter('formattedNumber', format='###,###,###,##0.0000')"></listcell>
 							</listitem>
 						</template>
 						<listfoot>
@@ -813,12 +813,13 @@
 								</listcell>
 								<listcell>
 									<div>
-										<dolarbox
+										<doublebox
 											value="@bind(each.costoDs)" inplace="true"
 											onChange="@command('notificarCostoGs', item=each, comp=self)"
 											onFocus='detFactura.setSelectedIndex(s.index)'
 											readonly="@load(each.gastoDescuento)"
-											visible="@load(!vm.deshabilitado)" />
+											visible="@load(!vm.deshabilitado)" 
+											format="###,###,###,##0.0000" /> 
 										<label
 											value="@load(each.costoDs)" visible="@load(vm.deshabilitado)"
 											sclass="label-list" />
@@ -835,7 +836,7 @@
 								</listcell>
 								<listcell>
 									<label
-										value="@load(each.importeDsCalculado) @converter(vm.cnv.monedaExtranjera)"
+										value="@load(each.importeDsCalculado) @converter('formattedNumber', format='###,###,###,##0.0000')"
 										sclass="label-list" />
 								</listcell>
 							</listitem>
