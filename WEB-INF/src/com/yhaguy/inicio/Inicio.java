@@ -70,6 +70,7 @@ public class Inicio {
 		VisorCtaCte ctrVisorCtaCte = new VisorCtaCte();
 		s.setAttribute(Config.CONTROLADOR_VISOR_CTACTE, ctrVisorCtaCte);
 		
+		/**
 		// notifica la meta del vendedor y venta del mes..
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Funcionario func = rr.getFuncionarioById(aDto.getFuncionario().getId());
@@ -112,6 +113,6 @@ public class Inicio {
 						+ "\n HOY VENCEN CHEQUES POR \n Gs: " + Utiles.getNumberFormat(totalHoy),
 						Clients.NOTIFICATION_TYPE_INFO, null, "overlap_after", 0);
 			}
-		}
+		} **/
 	}
 }
