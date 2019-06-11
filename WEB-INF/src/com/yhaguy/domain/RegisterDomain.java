@@ -834,6 +834,7 @@ public class RegisterDomain extends Register {
 		return (InvArticulo) l.get(0);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Long getInvPlanilla(String codV, int lote) throws Exception {
 		String query = "select p.id from InvPlanilla p where p.lote=" + lote
 				+ " and p.codigoVerificacion='" + codV + "'";
@@ -10224,14 +10225,13 @@ public class RegisterDomain extends Register {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Date desde = Utiles.getFecha("01-01-2016 00:00:00");
 			Date hasta = new Date();
-			List<Recibo> recs = rr.getCobranzas(desde, hasta, 2, 6919);
-			for (Recibo rec : recs) {
-				for (ReciboDetalle det : rec.getDetalles()) {					
-					CtaCteEmpresaMovimiento m = det.getMovimiento();
-					if (m.isPrestamoInterno()) {
-						System.out.println("REC: " + rec.getNumero());
-						rec.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_REEMBOLSO_PRESTAMO));
-						rr.saveObject(rec, "sys");
+			List<NotaCredito> ncrs = rr.getNotasCreditoVenta(desde, hasta, 6919);
+			for (NotaCredito ncred : ncrs) {
+				if (!ncred.isAnulado()) {
+					if (ncred.getAuxi().equals(NotaCredito.NCR_CREDITO)) {						
+						if (ncred.getDetallesFacturas().size() > 1) {
+							System.out.println("NCRED: " + ncred.getNumero());
+						}						
 					}
 				}
 			}

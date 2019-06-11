@@ -28,6 +28,7 @@ public class Venta extends Domain {
 	public static final String FORMA_ENTREGA_REPARTO = "REPARTO";
 	public static final String FORMA_ENTREGA_TRANSPORTADORA = "TRANSPORTADORA";
 	public static final String FORMA_ENTREGA_COLECTIVO = "COLECTIVO";
+	public static final String FORMA_ENTREGA_DELIVERY = "DELIVERY";
 
 	/** Presupuesto o Pedido */
 	private TipoMovimiento tipoMovimiento;
@@ -563,6 +564,7 @@ public class Venta extends Domain {
 		out.add(FORMA_ENTREGA_REPARTO);
 		out.add(FORMA_ENTREGA_TRANSPORTADORA);
 		out.add(FORMA_ENTREGA_COLECTIVO);
+		out.add(FORMA_ENTREGA_DELIVERY);
 		return out;
 	}
 	

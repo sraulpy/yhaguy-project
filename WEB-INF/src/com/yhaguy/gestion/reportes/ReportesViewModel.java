@@ -10039,7 +10039,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					Integer cantClienteVig = cantClientesVig_.get(cod);
 					if (cantClienteVig == null) cantClienteVig = 0;
 					String cantidad = det[30] + "";
-					String fechaUltimaCompra = Utiles.getDateToString((Date) det[31], Utiles.DD_MM_YYYY);
+					String fechaUltimaCompra = (String) det[31];
 					String proveedoUltimaCompra = (String) det[32];
 					double costoFobGs = (double) det[33];
 					double costoFobDs = (double) det[34];

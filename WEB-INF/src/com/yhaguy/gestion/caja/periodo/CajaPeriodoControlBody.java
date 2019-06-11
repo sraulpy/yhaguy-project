@@ -927,6 +927,18 @@ public class CajaPeriodoControlBody extends BodyApp {
 			}
 		}
 	}
+	
+	/**
+	 * @return true si es una nota de credito valida..
+	 */
+	private boolean validarNotaCredito(NotaCreditoDTO nc) throws Exception {
+		if (nc.isMotivoDevolucion()) {
+			MyArray vta = nc.getVentaAplicada();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Venta v = (Venta) rr.getObject(Venta.class.getName(), vta.getId());
+		}
+		return true;
+	}
 
 	/**
 	 * Despliega la ventana de consulta de la nota de Cred. seleccionada..
