@@ -17,6 +17,8 @@ public class NotaCredito extends Domain {
 	
 	public static final String NCR_CREDITO = "NCR-CRE";
 	public static final String NCR_CONTADO = "NCR-CON";
+	public static final String NCR_COMPRA_MERCADERIA = "NCR-COM";
+	public static final String NCR_COMPRA_GASTOS = "NCR-GTO";
 	
 	private String numero;
 	private String timbrado_;

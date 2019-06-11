@@ -50,6 +50,9 @@ public class NotaCreditoAssembler extends Assembler {
 		
 		// Actualizacion de datos de cta cte, stock, costos
 		if(_dto.isActualizarDatos() == true && !domain.isNotaCreditoGastoCajaChica()) {
+			if (_dto.isNotaCreditoCompra()) {
+				domain.setAuxi(_dto.isNotaCreditoCompraAcreedor() ? NotaCredito.NCR_COMPRA_GASTOS : NotaCredito.NCR_COMPRA_MERCADERIA);
+			}
 			this.actualizarCtaCte(_dto);
 			this.actualizarStock(_dto);
 			this.actualizarCostos(_dto);

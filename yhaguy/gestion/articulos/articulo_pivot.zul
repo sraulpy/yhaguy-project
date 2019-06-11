@@ -265,7 +265,12 @@
 								no-repeat; background-position: 98%; background-size: 10px;"
 								value="@bind(vm.filter_codOriginal)" instant="true"></textbox>	
 				</listheader>
-				<listheader width="40px" label="KPI" align="center" tooltiptext="Key Performance Indicator.."></listheader>
+				<listheader width="40px" align="center" >
+					<textbox width="30px" placeholder="KPI" style="text-align:center"
+						tooltiptext="Key Performance Indicator.."
+						value="@bind(vm.filter_kpi)"
+						onOK="@command('refreshKPI')"></textbox>
+				</listheader>
 				<listheader label="Ventas" sort="auto(3)" width="70px" align="right" />
 				<listheader width="70px" align="right" tooltiptext="@load(vm.deposito)">
 					<textbox width="50px" placeholder="Stock" hflex="true" style="text-align:center"

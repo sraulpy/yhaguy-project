@@ -760,6 +760,17 @@
 								<comboitem label="@load(each.text)"/>
 							</template>
 						</combobox>
+						<div hflex="true"></div>
+						<button width="140px" mold="bs" sclass="btn-info btn-sm" 
+							label="Sugerir Precios" iconSclass="z-icon-refresh"
+							disabled="@load(vm.cerrarCompraDisabled)" 
+							onClick="@command('sugerirPrecios')" />
+						<space></space>
+						<html>
+							<i class="fas fa-calculator" style="color:#428bca" ></i>
+						</html>
+						<a label=" Escala de Precios" style="color:#428bca"
+							onClick='pop_escala.open(self, "after_end")'></a>
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
 						model="@load(vm.dto.factura.detalles)">
@@ -767,24 +778,34 @@
 						<listhead>
 							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.pos1)" />
 							<listheader label="Descripción" style="text-align:center" />
-							<listheader label="Mayorista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Costo Gs." style="text-align:center" align="right" width="120px" />
+							<listheader label="Actual Gs." style="text-align:center;color:#18bc9c;font-weight:bold" align="right" width="120px" />
+							<listheader label="Mayorista Gs." style="text-align:center" align="right" width="120px" />
 							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />
-							<listheader label="Minorista Gs." style="text-align:center" align="right" width="200px" />
-							<listheader label="Lista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Minorista Gs." style="text-align:center" align="right" width="120px" />
+							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />
+							<listheader label="Lista Gs." style="text-align:center" align="right" width="120px" />
 						</listhead>
 						<template name="model">
 							<listitem>
 								<listcell label="@load(each.articulo.pos1)" />
 								<listcell label="@load(each.articulo.pos4)" />
+								<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
+								<listcell label="@load(each.precioActualGs) @converter(vm.cnv.monedaLocal)" 
+									style="color:#18bc9c;font-weight:bold"/>
 								<listcell>
 									<guaranibox value="@bind(each.precioFinalGs)" hflex="true" vflex="true" 
-										onChange="@command('refresh_', item=each)"/>
+										onChange="@command('refresh_', item=each)"
+										style="@load(each.precioActualGs ne each.precioFinalGs ? 
+											'background:#18bc9c;text-align:right':'text-align:right')" />
 								</listcell>
 								<listcell label="@load(each.getMargen()) 
 									@converter('formatedNumber', format='###,##0.00')" />
 								<listcell>
 									<guaranibox value="@bind(each.minoristaGs)" hflex="true" vflex="true" />
 								</listcell>
+								<listcell label="@load(each.getMargenMinorista()) 
+									@converter('formatedNumber', format='###,##0.00')" />
 								<listcell>
 									<guaranibox value="@bind(each.listaGs)" hflex="true" vflex="true" />
 								</listcell>
@@ -801,6 +822,31 @@
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
+		<popup id="pop_escala" sclass="rounded">
+			<grid sclass="vgrid" width="300px">
+				<auxhead>
+					<auxheader colspan="2" label="Escala Repuestos"></auxheader>
+				</auxhead>
+				<columns>
+					<column></column>
+					<column></column>
+				</columns>
+				<rows>
+					<row>
+						<label>de (0 a 50.000)</label>
+						<label>1.40</label>
+					</row>
+					<row>
+						<label>de (50.000 a 100.000)</label>
+						<label>1.35</label>
+					</row>
+					<row>
+						<label>mayor a (100.000)</label>
+						<label>1.30</label>
+					</row>
+				</rows>
+			</grid>
+		</popup>
 	</div>
 	<style>
 		.z-doublebox { min-height:20px }

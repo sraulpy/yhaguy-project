@@ -6,6 +6,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
@@ -73,11 +74,33 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 	}
 	
 	/**
+	 * @return el ultimo precio del articulo..
+	 */
+	public double getPrecioActualGs() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (!this.articulo.esNuevo()) {
+			Object[] art = rr.getArticulo(this.articulo.getId());
+			return (double) art[5];
+		}
+		return 0.0;
+	}
+	
+	/**
 	 * @return el margen..
 	 */
+	@DependsOn({ "costoGs", "precioFinalGs" })
 	public double getMargen() {
 		double costoGs = this.costoGs;
 		return Utiles.obtenerPorcentajeDelValor((this.precioFinalGs - costoGs), costoGs);
+	}
+	
+	/**
+	 * @return el margen..
+	 */
+	@DependsOn({ "costoGs", "minoristaGs" })
+	public double getMargenMinorista() {
+		double costoGs = this.costoGs;
+		return Utiles.obtenerPorcentajeDelValor((this.minoristaGs - costoGs), costoGs);
 	}
 	
 	@DependsOn("iva")
@@ -253,6 +276,5 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 
 	public void setListaGs(double listaGs) {
 		this.listaGs = listaGs;
-	}
-	
+	}	
 }

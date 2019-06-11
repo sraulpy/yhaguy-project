@@ -51,6 +51,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CompraLocalOrden;
@@ -129,7 +130,7 @@ public class CompraLocalControlBody extends BodyApp {
 	private Textbox txNro;
 
 	@Init(superclass=true)
-	public void init(){		
+	public void init() {		
 	}
 	
 	@AfterCompose(superclass=true)
@@ -447,6 +448,12 @@ public class CompraLocalControlBody extends BodyApp {
 		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void sugerirPrecios() throws Exception {
+		this.sugerirPrecios_();
+	}
+	
 	/**
 	 * modificar el tipo de cambio..
 	 */
@@ -464,6 +471,34 @@ public class CompraLocalControlBody extends BodyApp {
 			BindUtils.postNotifyChange(null, null, this.dto, "*");
 			BindUtils.postNotifyChange(null, null, this.dto.getFactura(), "*");
 		}		
+	}
+	
+	/**
+	 * sugiere precios..
+	 */
+	private void sugerirPrecios_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (CompraLocalFacturaDetalleDTO item : this.dto.getFactura().getDetalles()) {
+			Articulo art = rr.getArticuloById(item.getArticulo().getId());
+			if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.REPUESTOS)) {
+				double costo = item.getCostoGs();
+				double escala1 = 50000;
+				double escala2 = 100000;
+				if (costo > escala2) {
+					item.setPrecioFinalGs(costo * 1.30);
+					item.setMinoristaGs(item.getPrecioFinalGs() * 1.50);
+					item.setListaGs(item.getPrecioFinalGs() * 1.50);
+				} else if (costo > escala1 && costo <= escala2) {
+					item.setPrecioFinalGs(costo * 1.35);
+					item.setMinoristaGs(item.getPrecioFinalGs() * 1.50);
+					item.setListaGs(item.getPrecioFinalGs() * 1.50);
+				} else if (costo <= escala1) {
+					item.setPrecioFinalGs(costo * 1.40);
+					item.setMinoristaGs(item.getPrecioFinalGs() * 1.50);
+					item.setListaGs(item.getPrecioFinalGs() * 1.50);
+				}				
+			}
+		}
 	}
 	
 	/*********************************************************/
@@ -785,6 +820,7 @@ public class CompraLocalControlBody extends BodyApp {
 	/**
 	 * @return los costos finales..
 	 */
+	@SuppressWarnings("deprecation")
 	public List<MyArray> getItemsCostoFinal() {
 		
 		List<MyArray> out = new ArrayList<MyArray>();

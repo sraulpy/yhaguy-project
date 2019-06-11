@@ -2794,11 +2794,8 @@ public class RegisterDomain extends Register {
 			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen)
 			throws Exception {
 		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
-				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial";
-				if (origen != null && !origen.isEmpty()) {
-					query += ", a.proveedor.tipoProveedor.descripcion";
-				}
-				query += " from Articulo a"
+				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion"
+				+ " from Articulo a"
 				+ " where lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
@@ -9838,6 +9835,22 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return el stock por deposito..
 	 * [0]:articulo.id
+	 * [1]:precioGs
+	 */
+	public Object[] getCompraAnterior_(long idArticulo, long idDetalle) throws Exception {
+		String query = "select d.articulo.id, d.costoGs from CompraLocalFacturaDetalle d"
+				+ " where d.articulo.id = " + idArticulo; 
+				if (idDetalle > 0) {
+					query += " and d.id < " + idDetalle;
+				}
+				query += " order by d.id desc";
+		List<Object[]> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : new Object[] { (long) 0, 0.0 };
+	}
+	
+	/**
+	 * @return el stock por deposito..
+	 * [0]:articulo.id
 	 * [1]:precioDs
 	 */
 	public Object[] getCompraAnteriorDs(long idArticulo, long idDetalle) throws Exception {
@@ -10225,15 +10238,15 @@ public class RegisterDomain extends Register {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Date desde = Utiles.getFecha("01-01-2016 00:00:00");
 			Date hasta = new Date();
-			List<NotaCredito> ncrs = rr.getNotasCreditoVenta(desde, hasta, 6919);
+			List<NotaCredito> ncrs = rr.getNotasCreditoCompra(desde, hasta, 0);
 			for (NotaCredito ncred : ncrs) {
-				if (!ncred.isAnulado()) {
-					if (ncred.getAuxi().equals(NotaCredito.NCR_CREDITO)) {						
-						if (ncred.getDetallesFacturas().size() > 1) {
-							System.out.println("NCRED: " + ncred.getNumero());
-						}						
-					}
+				if (ncred.isNotaCreditoCompraAcreedor()) {
+					ncred.setAuxi(NotaCredito.NCR_COMPRA_GASTOS);
+				} else {
+					ncred.setAuxi(NotaCredito.NCR_COMPRA_MERCADERIA);
 				}
+				rr.saveObject(ncred, ncred.getUsuarioMod());
+				System.out.println(ncred.getAuxi() + " - " + ncred.getNumero());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

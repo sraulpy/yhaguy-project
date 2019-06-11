@@ -12,6 +12,7 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.NotaCreditoDetalle;
 
 @SuppressWarnings("serial")
 public class NotaCreditoDTO extends DTO {
@@ -165,6 +166,18 @@ public class NotaCreditoDTO extends DTO {
 	public boolean isNotaCreditoCompra() {
 		String sigla = (String) this.tipoMovimiento.getPos2();
 		return sigla.equals(Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA);
+	}
+	
+	/**
+	 * @return true si es nc de compra gastos..
+	 */
+	public boolean isNotaCreditoCompraAcreedor() {
+		for (NotaCreditoDetalleDTO item : this.getDetallesFacturas()) {
+			if (item.getGasto() != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

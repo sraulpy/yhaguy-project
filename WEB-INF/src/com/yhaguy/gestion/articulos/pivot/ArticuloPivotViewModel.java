@@ -75,6 +75,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	private String filter_codInterno = "";
 	private String filter_codOriginal = "";
 	private String filter_stock = "";
+	private String filter_kpi = "";
 	
 	private List<ArticuloUbicacion> ubicaciones = new ArrayList<ArticuloUbicacion>();
 	
@@ -274,6 +275,11 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 			}
 		}
 		this.abastecimiento.add(this.selectedMovimiento);
+	}
+	
+	@Command
+	@NotifyChange("filter_kpi")
+	public void refreshKPI() {
 	}
 	
 	@Command
@@ -808,7 +814,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	 * @return los movimientos..
 	 */
 	@DependsOn({ "desde_", "hasta_", "familia", "proveedor", "marca", "selectedSucursal", "filter_codInterno",
-			"filter_codOriginal", "filter_stock", "selectedVendedores" })
+			"filter_codOriginal", "filter_stock", "selectedVendedores", "filter_kpi" })
 	public List<Object[]> getMovimientos() throws Exception {
 		String vendedores = "";
 		if (this.selectedVendedores.size() > 0) {
@@ -864,6 +870,13 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 				long fstock = Long.parseLong(this.filter_stock);
 				long _stock = (long) item[5];
 				if (fstock == _stock) {
+					list_.add(item);
+				}
+			} else if (!this.filter_kpi.isEmpty()) {
+				String kpi = "";
+				if((int) item[2] - (long) item[5] > 0) kpi = "<";
+				if((int) item[2] - (long) item[5] < 0) kpi = ">";
+				if (this.filter_kpi.equals(kpi)) {
 					list_.add(item);
 				}
 			} else {
@@ -1309,5 +1322,13 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 
 	public void setOrigen(String origen) {
 		this.origen = origen;
+	}
+
+	public String getFilter_kpi() {
+		return filter_kpi;
+	}
+
+	public void setFilter_kpi(String filter_kpi) {
+		this.filter_kpi = filter_kpi;
 	}
 }
