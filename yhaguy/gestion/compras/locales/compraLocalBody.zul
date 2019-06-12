@@ -763,7 +763,6 @@
 						<div hflex="true"></div>
 						<button width="140px" mold="bs" sclass="btn-info btn-sm" 
 							label="Sugerir Precios" iconSclass="z-icon-refresh"
-							disabled="@load(vm.cerrarCompraDisabled)" 
 							onClick="@command('sugerirPrecios')" />
 						<space></space>
 						<html>
