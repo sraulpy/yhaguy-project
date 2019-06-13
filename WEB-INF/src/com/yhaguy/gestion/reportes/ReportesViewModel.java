@@ -1480,6 +1480,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_LISTA_PRECIO_FAMILIA = "VEN-00044";
 		static final String VENTAS_COBRANZAS_VENDEDOR_CLIENTE = "VEN-00045";
 		static final String VENTAS_LISTA_PRECIO_DEPOSITO_ = "VEN-00046";
+		static final String VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET = "VEN-00047";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1673,6 +1674,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_LISTA_PRECIO_DEPOSITO_:
 				this.listaPrecioPorDeposito_(mobile);
+				break;
+				
+			case VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET:
+				this.cobranzasVendedorProveedorCliente(mobile, VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET);
 				break;
 			}
 		}
@@ -5020,8 +5025,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
-				double totalCobrado = 0;
-				double totalCobradoItems = 0;
 				double totalContado = 0;
 				double totalContadoItems = 0;
 				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
@@ -5029,15 +5032,38 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, String> proveedores = new HashMap<Long, String>();
-
+				
 				for (Object[] cobro : cobros) {
-					Recibo rec = (Recibo) cobro[0];
-					totalCobrado += (double) cobro[2];
-					for (ReciboDetalle item : rec.getDetalles()) {
-						Venta vta = item.getVenta();
-						if (vta != null) {
-							for (VentaDetalle det : vta.getDetalles()) {
-								Proveedor prov = det.getArticulo().getProveedor();
+					ReciboDetalle item = (ReciboDetalle) cobro[3];
+					Venta vta = item.getVenta();
+					if (vta != null) {
+						for (VentaDetalle det : vta.getDetalles()) {
+							Proveedor prov = det.getArticulo().getProveedor();
+							long idProveedor = prov != null ? prov.getId() : 0;
+							Integer total = prov_acum.get(idProveedor);
+							if (total != null) {
+								total ++;
+							} else {
+								total = 1;
+							}
+							double porcentaje = Utiles.obtenerPorcentajeDelValor(item.getMontoGs(), vta.getTotalImporteGs());
+							double importeSinIva = Utiles.obtenerValorDelPorcentaje(det.getImporteGsSinIva(), porcentaje);
+							prov_acum.put(idProveedor, total);
+							Double acum = values.get(idProveedor);
+							if (acum != null) {
+								acum += importeSinIva;
+							} else {
+								acum = importeSinIva;
+							}
+							values.put(idProveedor, acum);
+							proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+						}
+					} else {
+						List<Object[]> dets = item.getDetalleVentaMigracion();
+						for (Object[] det : dets) {
+							Articulo art = rr.getArticulo((String) det[0]);
+							if (art != null) {
+								Proveedor prov = art.getProveedor();
 								long idProveedor = prov != null ? prov.getId() : 0;
 								Integer total = prov_acum.get(idProveedor);
 								if (total != null) {
@@ -5045,31 +5071,12 @@ public class ReportesViewModel extends SimpleViewModel {
 								} else {
 									total = 1;
 								}
-								totalCobradoItems ++;
 								prov_acum.put(idProveedor, total);
 								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
-							}
-						} else {
-							List<Object[]> dets = item.getDetalleVentaMigracion();
-							for (Object[] det : dets) {
-								Articulo art = rr.getArticulo((String) det[0]);
-								if (art != null) {
-									Proveedor prov = art.getProveedor();
-									long idProveedor = prov != null ? prov.getId() : 0;
-									Integer total = prov_acum.get(idProveedor);
-									if (total != null) {
-										total ++;
-									} else {
-										total = 1;
-									}
-									totalCobradoItems ++;
-									prov_acum.put(idProveedor, total);
-									proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
-								}								
-							}
-						} 
-					}
-				}	
+							}								
+						}
+					} 
+				}
 				
 				for (Venta venta : ventas) {
 					totalContado += venta.getTotalImporteGsSinIva();
@@ -5088,15 +5095,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 				
-				for (Long idProveedor : proveedores.keySet()) {
-					Integer total = prov_acum.get(idProveedor);
-					if (total != null) {
-						double totalCobradoSinIva = totalCobrado - Utiles.getIVA(totalCobrado, 10);
-						double porcentaje = Utiles.obtenerPorcentajeDelValor(total, totalCobradoItems);
-						double importe = Utiles.obtenerValorDelPorcentaje(totalCobradoSinIva, porcentaje);
-						values.put(idProveedor, importe);
-					}					
-					
+				for (Long idProveedor : proveedores.keySet()) {					
 					Integer total_ = prov_acum_.get(idProveedor);
 					if (total_ != null) {
 						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
@@ -5846,6 +5845,131 @@ public class ReportesViewModel extends SimpleViewModel {
 					rep.ejecutar();
 					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
 				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00047
+		 */
+		private void cobranzasVendedorProveedorCliente(boolean mobile, String codReporte) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Funcionario vendedor = filtro.getVendedor();
+				
+				if (vendedor == null) {
+					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
+				double totalCobrado = 0;
+				double totalCobradoSinIva = 0;
+				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
+				Map<Long, List<Object[]>> _prov_acum = new HashMap<Long, List<Object[]>>();
+				Map<Long, Double> values = new HashMap<Long, Double>();
+				Map<Long, Double> values_ = new HashMap<Long, Double>();
+				Map<Long, String> proveedores = new HashMap<Long, String>();
+
+				for (Object[] cobro : cobros) {
+					Recibo rec = (Recibo) cobro[0];
+					totalCobrado += (double) cobro[2];
+					ReciboDetalle item = (ReciboDetalle) cobro[3];
+					Venta vta = item.getVenta();
+					if (vta != null) {
+						for (VentaDetalle det : vta.getDetalles()) {
+							Proveedor prov = det.getArticulo().getProveedor();
+							long idProveedor = prov != null ? prov.getId() : 0;
+							Integer total = prov_acum.get(idProveedor);
+							List<Object[]> list = null;
+							if (total != null) {
+								total ++;
+								list = _prov_acum.get(idProveedor);
+							} else {
+								total = 1;
+								list = new ArrayList<Object[]>();
+							}
+							double porcentaje = Utiles.obtenerPorcentajeDelValor(item.getMontoGs(), vta.getTotalImporteGs());
+							double importe = Utiles.obtenerValorDelPorcentaje(det.getImporteGs(), porcentaje);
+							double importeSinIva = Utiles.obtenerValorDelPorcentaje(det.getImporteGsSinIva(), porcentaje);
+							list.add(new Object[] { rec.getNumero(), vta.getNumero(),
+									det.getArticulo().getCodigoInterno(), importe, importeSinIva,
+									vta.getCliente().getRazonSocial() });
+							prov_acum.put(idProveedor, total);
+							_prov_acum.put(idProveedor, list);
+							Double acum = values.get(idProveedor);
+							Double acum_ = values_.get(idProveedor);
+							if (acum != null) {
+								acum += importe;
+								acum_ += importeSinIva;
+							} else {
+								acum = importe;
+								acum_ = importeSinIva;
+							}
+							values.put(idProveedor, acum);
+							values_.put(idProveedor, acum_);
+							proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+						}
+					} else {
+						List<Object[]> dets = item.getDetalleVentaMigracion();
+						for (Object[] det : dets) {
+							Articulo art = rr.getArticulo((String) det[0]);
+							if (art != null) {
+								Proveedor prov = art.getProveedor();
+								long idProveedor = prov != null ? prov.getId() : 0;
+								Integer total = prov_acum.get(idProveedor);
+								List<Object[]> list = null;
+								if (total != null) {
+									total ++;
+									list = _prov_acum.get(idProveedor);
+								} else {
+									total = 1;
+									list = new ArrayList<Object[]>();
+								}
+								double importe = (double) det[1];
+								list.add(new Object[] { rec.getNumero(), "migracion", (String) det[0], importe,
+										(importe - Utiles.getIVA(importe, 10)), "" });
+								prov_acum.put(idProveedor, total);
+								_prov_acum.put(idProveedor, list);
+								proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+							}								
+						}
+					} 
+				}	
+
+				for (Long idProveedor : proveedores.keySet()) {
+					Double cobrado = values.get(idProveedor);
+					Double cobradoSinIva = values_.get(idProveedor);
+					
+					double cobrado_ = cobrado != null? cobrado : 0;
+					List<Object[]> items = _prov_acum.get(idProveedor);
+					
+					if (cobrado != null) {
+						totalCobrado += cobrado_;
+						totalCobradoSinIva += cobradoSinIva;
+						for (Object[] item : items) {
+							data.add(new Object[] { proveedores.get(idProveedor), cobrado_, item, cobradoSinIva });
+						}
+					}
+				}				
+
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_VENDEDOR_DETALLADO;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new CobranzasVendedorDetallado(data, totalCobrado, totalCobradoSinIva);
+				params.put("Titulo", codReporte + " - Cobranzas por vendedor detallado");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Vendedor", vendedor.getRazonSocial());
+				imprimirJasper(source, params, dataSource, filtro.getFormato());
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -22524,6 +22648,80 @@ class ReporteRemisiones extends ReporteYhaguy {
 				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
+	}
+}
+
+/**
+ * Reporte VEN-00047..
+ */
+class CobranzasVendedorDetallado implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, Object[]> data = new HashMap<String, Object[]>();
+	Map<String, Double> saldo = new HashMap<String, Double>();
+	
+	double totalSinIva = 0;
+	double totalIvaInc = 0;
+	
+	public CobranzasVendedorDetallado(List<Object[]> values, double totalIvaInc, double totalSinIva) {
+		this.values = values;
+		this.totalIvaInc = totalIvaInc;
+		this.totalSinIva = totalSinIva;
+		// ordena la lista segun fecha..
+		Collections.sort(this.values, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String rs1 = (String) o1[0];
+				String rs2 = (String) o2[0];
+				return rs1.compareTo(rs2);
+			}
+		});
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		Object[] fac = (Object[]) det[2];
+
+		if ("TituloDetalle".equals(fieldName)) {
+			value = det[0];
+		} else if ("Recibo".equals(fieldName)) {
+			value = fac[0];
+		} else if ("Factura".equals(fieldName)) {
+			value = fac[1];
+		} else if ("Codigo".equals(fieldName)) {
+			value = fac[2];
+		} else if ("Cliente".equals(fieldName)) {
+			value = fac[5];
+		} else if ("Monto".equals(fieldName)) {
+			value = FORMATTER.format(fac[3]);
+		} else if ("MontoSinIva".equals(fieldName)) {
+			value = FORMATTER.format(fac[4]);
+		} else if ("Importe".equals(fieldName)) {
+			value = FORMATTER.format(det[1]);
+		} else if ("ImporteSinIva".equals(fieldName)) {
+			value = FORMATTER.format(det[3]);
+		} else if ("TotalSinIva".equals(fieldName)) {
+			value = FORMATTER.format(this.totalSinIva);
+		} else if ("TotalIvaInc".equals(fieldName)) {
+			value = FORMATTER.format(this.totalIvaInc);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
 	}
 }
 

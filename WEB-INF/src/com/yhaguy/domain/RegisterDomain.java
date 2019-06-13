@@ -10235,19 +10235,8 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Date desde = Utiles.getFecha("01-01-2016 00:00:00");
-			Date hasta = new Date();
-			List<NotaCredito> ncrs = rr.getNotasCreditoCompra(desde, hasta, 0);
-			for (NotaCredito ncred : ncrs) {
-				if (ncred.isNotaCreditoCompraAcreedor()) {
-					ncred.setAuxi(NotaCredito.NCR_COMPRA_GASTOS);
-				} else {
-					ncred.setAuxi(NotaCredito.NCR_COMPRA_MERCADERIA);
-				}
-				rr.saveObject(ncred, ncred.getUsuarioMod());
-				System.out.println(ncred.getAuxi() + " - " + ncred.getNumero());
-			}
+			double test = Utiles.obtenerPorcentajeDelValor(20, 200);
+			System.out.println(test + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
