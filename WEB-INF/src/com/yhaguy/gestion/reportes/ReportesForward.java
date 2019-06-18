@@ -33,9 +33,9 @@ public class ReportesForward extends SimpleViewModel {
 	 */
 	private void forward() {
 		String ip = this.getMyIP();
-		String url = "http://190.211.240.130:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+		String url = "https://190.211.240.130:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 		if (ip.startsWith("192.168.") || ip.startsWith("10.25.")) {
-			url = "http://10.25.1.251:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+			url = "https://10.25.1.251:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 		}
 		String usuario = this.getLoginNombre();
 		String clave = (String) this.getAtributoSession(Config.CLAVE);
