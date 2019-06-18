@@ -5,6 +5,7 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Iframe;
@@ -40,6 +41,7 @@ public class ReportesForward extends SimpleViewModel {
 		String usuario = this.getLoginNombre();
 		String clave = (String) this.getAtributoSession(Config.CLAVE);
 		String clave_ = Utiles.encriptar(clave, true);
-		if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave_);
+		//if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave_);
+		Executions.getCurrent().sendRedirect(url + "?usuario=" + usuario + "&clave=" + clave_, "_blank");
 	}
 }
