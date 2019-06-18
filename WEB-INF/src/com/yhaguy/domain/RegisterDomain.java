@@ -2103,6 +2103,17 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * Retorna la lista completa de Cuentas Contables..
+	 */
+	public List<Object[]> getCuentasContables(String descripcion) throws Exception {
+		String query = "select c.id, c.codigo, c.descripcion from CuentaContable c"
+				+ " where upper(c.descripcion) like '%" + descripcion.toUpperCase() + "%'"
+				+ " order by c.descripcion";
+		List<Object[]> list = this.hqlLimit(query, 100);
+		return list;
+	}
+	
+	/**
 	 * Retorna la lista completa de Cuentas Contables segun plan cuenta..
 	 */
 	public List<CuentaContable> getCuentasContables(long idPlanCuenta, String codigo, String descripcion) throws Exception {
@@ -2242,7 +2253,7 @@ public class RegisterDomain extends Register {
 
 		List<BancoChequeTercero> list = this.hql(query);
 
-		// Para asignar que ya esta depositado y guardar
+		// Para asignar que ya esta descontado y guardar
 		for (BancoChequeTercero cheque : list) {
 			cheque.setDescontado(true);
 			cheque.setNumeroDescuento(numeroDescuento);
@@ -4270,7 +4281,7 @@ public class RegisterDomain extends Register {
 		}
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select (select descripcion from TipoMovimiento where sigla = '" + Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL + "'), "
+		String query = "select (select descripcion from TipoMovimiento where sigla = '" + Configuracion.SIGLA_TM_PRESTAMO_INTERNO + "'), "
 				+ " b.fecha, cast(b.id as string), b.totalChequesDescontado, (select razonSocial from Empresa where id = " + Configuracion.ID_EMPRESA_YHAGUY_CENTRAL + " )"
 				+ " from BancoDescuentoCheque b where"
 				+ " b.auxi = '" + BancoDescuentoCheque.PRESTAMO + "' and b.dbEstado != 'D'"
@@ -6275,7 +6286,7 @@ public class RegisterDomain extends Register {
 					query += " and c.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_CHEQUE_RECHAZADO + "'";
 				}
 				if (!incluirPrestamos) {
-					query += " and c.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL + "'";
+					query += " and c.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_PRESTAMO_INTERNO + "'";
 				}
 				query += " and (c.fechaEmision >= '"
 				+ desde_

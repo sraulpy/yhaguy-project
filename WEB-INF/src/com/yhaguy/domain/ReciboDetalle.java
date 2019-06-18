@@ -12,6 +12,7 @@ import com.yhaguy.util.Utiles;
 public class ReciboDetalle extends Domain {
 	
 	public static final String TIPO_DIF_CAMBIO = "DIF.T.C.";
+	public static final String TIPO_CTA_CONTABLE = "C.T.";
 	
 	private String concepto;
 	private double montoGs;

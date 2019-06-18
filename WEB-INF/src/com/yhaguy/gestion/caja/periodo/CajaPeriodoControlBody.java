@@ -428,9 +428,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 			break;
 			
 		case ES_REEMBOLSO_PRESTAMO:
-			titulo = "Reembolso de préstamo Casa Central";
+			titulo = "Reembolso de préstamo";
 			tituloDet = "Préstamos a reembolsar";
-			labelEmp = "Cliente";
+			labelEmp = "Acreedor";
 			tipoMovto = this.tipoMvtoReembolsoPrestamo;
 			break;
 		}

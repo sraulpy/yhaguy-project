@@ -11,7 +11,7 @@ import com.yhaguy.Configuracion;
 @SuppressWarnings("serial")
 public class BancoChequeTercero extends Domain {
 
-	public static final String PRESTAMO_CC = "PRESTAMO CASA CENTRAL";
+	public static final String PRESTAMO_CC = "PRESTAMO";
 	
 	private Date emision = new Date();
 	private Date fecha;

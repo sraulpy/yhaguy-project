@@ -143,7 +143,7 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	public boolean isPrestamoInterno() {
 		if (this.tipoMovimiento == null) return false;
 		return this.tipoMovimiento.getSigla().equals(
-				Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL);
+				Configuracion.SIGLA_TM_PRESTAMO_INTERNO);
 	}
 	
 	/**

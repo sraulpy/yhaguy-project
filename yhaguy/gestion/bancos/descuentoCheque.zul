@@ -2,12 +2,12 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.descuentos.DescuentoChequesVM')"
 	height="100%">
 
-	<grid sclass="vgrid" width="100%">
+	<grid sclass="vgrid">
 		<columns>
 			<column width="150px"></column>
 			<column width="150px"></column>
 			<column width="150px"></column>
-			<column visible="@load(vm.tipo eq 'prestamo')"></column>
+			<column visible="@load(vm.tipo eq 'prestamo' or vm.tipo eq 'prestamo_acreedor')"></column>
 			<column width="150px"></column>
 			<column width="150px"></column>
 			<column></column>
@@ -22,13 +22,13 @@
 						tooltiptext="Identificador del descuento de cheques."
 						hflex="true" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true" style="padding:2px">
 					<field value="Fecha" />
 					<datebox value="@bind(vm.chequeDescuento.fecha)"
 						hflex="true" 
 						format="dd-MM-yyyy" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true" style="padding:2px">
 					<field value="Banco" />
 					<combobox hflex="true"
 						value="@load(vm.chequeDescuento.banco.pos1.text)"
@@ -39,11 +39,11 @@
 						</template>
 					</combobox>
 				</vlayout>
-				<vlayout spacing="0">
-					<field value="Deudor" />
+				<vlayout spacing="0" hflex="true">
+					<field value="@load(vm.tipo eq 'prestamo' ? 'Deudor' : 'Acreedor')" />
 					<bandbox hflex="true" value="@load(vm.chequeDescuento.acreedor.pos2)"
 						onOpen="tx_filter.focus()" readonly="true"
-						placeholder="Deudor.."
+						placeholder="@load(vm.tipo eq 'prestamo' ? 'Deudor..' : 'Acreedor..')"
 						id="bnd_emp">
 						<bandpopup>
 							<listbox sclass="small-list" width="500px" height="300px"
@@ -72,7 +72,7 @@
 						</bandpopup>
 					</bandbox>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true" style="padding:2px">
 					<field value="Moneda" />
 					<combobox hflex="true"
 						model="@load(vm.dtoUtil.monedas)"
@@ -84,20 +84,20 @@
 						</template>
 					</combobox>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Total Gs." />
 					<guaranibox
 						value="@bind(vm.chequeDescuento.totalChequesDescontado)"
 						tooltiptext="Monto total de los cheques seleccionados."
 						hflex="true" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Observación" />
 					<textbox
 						hflex="true" value="@bind(vm.chequeDescuento.observacion)"
 						tooltiptext="@load(vm.chequeDescuento.observacion)" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Estado" />
 					<hlayout>
 						<textbox value="@load(vm.chequeDescuento.confirmado? 'CERRADO' : 'PENDIENTE')"
@@ -139,9 +139,9 @@
 				<space visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo')" />
 				<button mold="bs" sclass="btn-warning btn-sm"
 					iconSclass="z-icon-money" label=" Otros Valores" width="150px" 
-					visible="@load(vm.tipo eq 'prestamo')" 
+					visible="@load(vm.tipo eq 'prestamo' or vm.tipo eq 'prestamo_acreedor')" 
 					onClick="@command('formaDePago')" disabled="@load(!vm.siempreHabilitado)"/>
-				<space visible="@load(vm.tipo eq 'prestamo')" />
+				<space visible="@load(vm.tipo eq 'prestamo' or vm.tipo eq 'prestamo_acreedor')" />
 				<button mold="bs" sclass="btn-primary btn-sm"
 					iconSclass="z-icon-check"
 					onClick="@command('cerrarDescuentoCheque')" label=" Cerrar" width="150px" />

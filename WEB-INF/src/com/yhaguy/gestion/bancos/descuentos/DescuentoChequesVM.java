@@ -39,8 +39,9 @@ public class DescuentoChequesVM extends BodyApp {
 	
 	final static String ABM_DESCUENTO = "descuento";
 	final static String ABM_ANTICIPO = "anticipo";
-	final static String ABM_PRESTAMO = "prestamo";
+	final static String ABM_PRESTAMO_DEUDOR = "prestamo";
 	final static String ABM_ENVIO = "envio";
+	final static String ABM_PRESTAMO_ACREEDOR = "prestamo_acreedor";
 	
 	private String tipo = "";
 	
@@ -93,8 +94,9 @@ public class DescuentoChequesVM extends BodyApp {
 		bd.setSucursalApp(this.getAcceso().getSucursalOperativa());
 		bd.setFecha(new Date());
 		bd.setAuxi(this.tipo.equals(ABM_ANTICIPO) ? "anticipo" : (this.tipo
-				.equals(ABM_PRESTAMO) ? "prestamo" : (this.tipo
-				.equals(ABM_ENVIO) ? "envio" : "")));
+				.equals(ABM_PRESTAMO_DEUDOR) ? "prestamo" : (this.tipo
+				.equals(ABM_ENVIO) ? "envio" : (this.tipo
+				.equals(ABM_PRESTAMO_ACREEDOR) ? "prestamo_acreedor" : ""))));
 		return bd;
 	}
 
@@ -111,8 +113,9 @@ public class DescuentoChequesVM extends BodyApp {
 	@Override
 	public Browser getBrowser() {
 		String where = this.tipo.equals(ABM_ANTICIPO) ? "auxi = 'anticipo'" : 
-			(this.tipo.equals(ABM_PRESTAMO) ? "auxi = 'prestamo'" : 
-				(this.tipo.equals(ABM_ENVIO) ? "auxi = 'envio'" : "auxi != 'anticipo' and auxi != 'prestamo' and auxi != 'envio'"));
+			(this.tipo.equals(ABM_PRESTAMO_DEUDOR) ? "auxi = 'prestamo'" : 
+				(this.tipo.equals(ABM_PRESTAMO_ACREEDOR) ? "auxi = 'prestamo_acreedor'" :
+				(this.tipo.equals(ABM_ENVIO) ? "auxi = 'envio'" : "auxi != 'anticipo' and auxi != 'prestamo' and auxi != 'envio'")));
 		return new BancoDescuentoChequeBrowser(where);
 	}
 	
@@ -153,13 +156,13 @@ public class DescuentoChequesVM extends BodyApp {
 			if (this.itemDuplicado(b.getSelectedItem())) {
 				this.mensajeError(Configuracion.TEXTO_ERROR_ITEM_DUPLICADO);
 			} else {
-				if (this.tipo.equals(ABM_PRESTAMO)) {
+				if (this.tipo.equals(ABM_PRESTAMO_DEUDOR)) {
 					this.chequeDescuento.getCheques_().add(b.getSelectedItem());
 				} else {
 					this.chequeDescuento.getCheques().add(b.getSelectedItem());
 				}
 			}
-			if (this.tipo.equals(ABM_PRESTAMO)) {
+			if (this.tipo.equals(ABM_PRESTAMO_DEUDOR)) {
 				for (MyArray cheq : this.chequeDescuento.getCheques_()) {
 					if (cheq.getId().longValue() == b.getSelectedItem().getId().longValue()) {
 						cheq.setPos6(cheq.getPos5());
@@ -259,18 +262,23 @@ public class DescuentoChequesVM extends BodyApp {
 			this.chequeDescuento.setConfirmado(true);
 			this.saveDTO(chequeDescuento);
 
-			if (!this.tipo.equals(ABM_PRESTAMO)) {
+			if (!this.tipo.equals(ABM_PRESTAMO_ACREEDOR)) {
 				List<IiD> cheques = new ArrayList<IiD>();
 				cheques.addAll(this.chequeDescuento.getCheques());
+				boolean prestamo = this.tipo.equals(ABM_PRESTAMO_DEUDOR);
 				rr.updateChequesDescontados(cheques, 
 						(this.tipo.equals(ABM_ANTICIPO)? "ANTICIPO " :  
 								(this.tipo.equals(ABM_ENVIO)? "ENVIO C.C. " : ""))
 								+ this.chequeDescuento.getId() + "",
-								this.chequeDescuento.getFecha(), false);
+								this.chequeDescuento.getFecha(), prestamo);
 			}		
 			
-			if (this.tipo.equals(ABM_PRESTAMO)) {
-				ControlCuentaCorriente.addPrestamoInterno(this.chequeDescuento.getId(), this.getLoginNombre());
+			if (this.tipo.equals(ABM_PRESTAMO_DEUDOR)) {
+				ControlCuentaCorriente.addPrestamoInternoDeudor(this.chequeDescuento.getId(), this.getLoginNombre());
+			}
+			
+			if (this.tipo.equals(ABM_PRESTAMO_ACREEDOR)) {
+				ControlCuentaCorriente.addPrestamoInternoAcreedor(this.chequeDescuento.getId(), this.getLoginNombre());
 			}
 			
 			this.setEstadoABMConsulta();
@@ -359,7 +367,7 @@ public class DescuentoChequesVM extends BodyApp {
 	 */
 	private void imprimir() {
 		String titulo = this.tipo.equals(ABM_ANTICIPO) ? "Anticipo de Utilidad"
-				: (this.tipo.equals(ABM_PRESTAMO) ? "Préstamos Internos" : 
+				: (this.tipo.equals(ABM_PRESTAMO_DEUDOR) ? "Préstamos Internos" : 
 					(this.tipo.equals(ABM_ENVIO) ? "Envio de Cheques a Casa Central" : "Descuento de Cheques"));
 		ReporteYhaguy rep = new BancoDescuentoChequeReporte(this.chequeDescuento, titulo);
 		rep.setOficio();

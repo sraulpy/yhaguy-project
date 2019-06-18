@@ -148,9 +148,7 @@
 			vflex="true">
 			<hlayout sclass="button-container">
 				<field value="@load(vm.dato.reciboDTO.tituloDetalles)"/>
-				<space></space>
 				<separator orient="vertical" bar="true" />
-				<space></space>
 				<button mold="bs" sclass="btn-danger btn-sm"
 					width="100px" iconSclass="z-icon-minus-circle"
 					onClick="@command('eliminarItemFactura')" label=" Eliminar" 
@@ -166,6 +164,13 @@
 					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
 					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
+				<space />
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="100px" iconSclass="z-icon-plus-circle"
+					label=" Cuenta C.T." tooltiptext="Cta Contable.."
+					onClick="@command('openCuentaContable', comp=pop_ct, parent=self)" 
+					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" 
+					visible="@load(vm.dato.reciboDTO.ordenPago ? 'true' : 'false')" />
 			</hlayout>
 
 			<listbox height="355px"
@@ -232,9 +237,7 @@
 			
 				<hlayout sclass="button-container" hflex="true">
 					<field value="Formas de Pago" />
-					<space></space>
 					<separator orient="vertical" bar="true" />
-					<space></space>
 					<button mold="bs" sclass="btn-danger btn-sm"
 						width="100px" iconSclass="z-icon-minus-circle"
 						onClick="@command('eliminarItemFormaPago')" label=" Eliminar"
@@ -299,16 +302,59 @@
 	</hlayout>
 	
 	<popup id="pop_dif_tc" sclass="rounded">
-		<vlayout width="350px">
+		<vlayout width="450px">
+			<div height="5px"></div>
 			<hlayout>
 				<textbox hflex="true" readonly="true"
 					value="@load(vm.nvoItem_dif_cambio.descripcion)"></textbox>
 				<guaranibox value="@bind(vm.nvoItem_dif_cambio.montoGs)"/>
 				<field value="Gs." />
 			</hlayout>
+			<div height="5px"></div>
 			<button mold="bs" sclass="btn-info btn-sm"
 				iconSclass="z-icon-check" hflex="true" 
 				onClick="@command('addDetalleDiferenciaCambio', comp=pop_dif_tc)"/>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_ct" sclass="rounded">
+		<vlayout width="450px">
+			<div height="5px"></div>
+			<hlayout>
+				<bandbox id="bnd_ct" hflex="true" placeholder="Seleccione la cuenta.."
+					onOpen="tx_ct.focus()"
+					value="@bind(vm.nvoItem_ct.concepto)">
+					<bandpopup id="_ct">
+						<listbox sclass="small-list" width="300px"
+							model="@load(vm.cuentasContables)"
+							selectedItem="@bind(vm.selectedCuenta)"
+							onSelect="@command('selectCuenta')">
+							<attribute name="onSelect">
+								bnd_ct.close();
+								dbx_monto.focus();
+							</attribute>
+							<listhead>
+								<listheader>
+									<textbox id="tx_ct" hflex="true" value="@bind(vm.filterCuenta)" instant="true"
+										style="background-image:url('./core/css/filter.png'); background-repeat:
+											no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+								</listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each[2])"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</bandpopup>
+				</bandbox>
+				<doublebox id="dbx_monto" value="@bind(vm.nvoItem_ct.montoGs)" format="###,###,###" />
+				<field value="Gs." />
+			</hlayout>
+			<div height="5px"></div>
+			<button mold="bs" sclass="btn-primary btn-sm"
+				iconSclass="z-icon-check" hflex="true" 
+				onClick="@command('addDetalleCuentaContable', comp=pop_ct)"/>
 		</vlayout>
 	</popup>
 

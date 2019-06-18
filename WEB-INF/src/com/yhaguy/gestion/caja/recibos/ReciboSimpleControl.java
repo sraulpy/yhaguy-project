@@ -54,20 +54,24 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private CajaPeriodoControlBody dato = new CajaPeriodoControlBody();	
 	private ReciboDetalleDTO nvoItem;
 	private ReciboDetalleDTO nvoItem_dif_cambio;
+	private ReciboDetalleDTO nvoItem_ct;
 	
 	private String filterChequeNro = "";
 	private String filterChequeBanco = "";
 	private String filterChequeCliente = "";
+	private String filterCuenta = "";
 	
 	private String filterNro = "";
 	
 	private BancoChequeTercero selectedChequeAutoCobranza;
 	private BancoChequeTercero selectedChequeTercero;
+	private Object[] selectedCuenta;
 
 	@Init(superclass=true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) CajaPeriodoControlBody dato) {
 		this.dato = dato;
 		this.inicializarItemDiferenciaCambio();
+		this.inicializarItemCuentaContable();
 	}
 	
 	@AfterCompose(superclass=true)
@@ -110,9 +114,24 @@ public class ReciboSimpleControl extends SoloViewModel {
 	}
 	
 	@Command
+	@NotifyChange("*")
+	public void addDetalleCuentaContable(@BindingParam("comp") Popup comp) {
+		this.dato.getReciboDTO().getDetalles().add(this.nvoItem_ct);
+		this.inicializarItemCuentaContable();
+		comp.close();
+	}
+	
+	@Command
 	@NotifyChange("nvoItem_dif_cambio")
 	public void openDiferenciaCambio(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
 		this.inicializarItemDiferenciaCambio();
+		comp.open(parent, "after_end");
+	}
+	
+	@Command
+	@NotifyChange("nvoItem_ct")
+	public void openCuentaContable(@BindingParam("comp") Popup comp, @BindingParam("parent") Component parent) {
+		this.inicializarItemCuentaContable();
 		comp.open(parent, "after_end");
 	}
 	
@@ -129,6 +148,11 @@ public class ReciboSimpleControl extends SoloViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange("nvoItem_ct")
+	public void selectCuenta() {
+		this.nvoItem_ct.setConcepto((String) this.selectedCuenta[2]);
+	}
 	
 	/********* ELIMINAR ITEM DETALLES FACTURAS *********/
 	
@@ -308,7 +332,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 						this.movimientosPendientes.add(opd);
 					}
 				} else if (this.dato.getReciboDTO().isReembolsoPrestamo()) {
-					if (sigla.equals(Configuracion.SIGLA_TM_PRESTAMO_CASA_CENTRAL)) {
+					if (sigla.equals(Configuracion.SIGLA_TM_PRESTAMO_INTERNO)) {
 						this.movimientosPendientes.add(opd);
 					}
 				} else {
@@ -1221,6 +1245,16 @@ public class ReciboSimpleControl extends SoloViewModel {
 	}
 	
 	/**
+	 * inicializa el item cta contable..
+	 */
+	private void inicializarItemCuentaContable() {
+		this.nvoItem_ct = new ReciboDetalleDTO();
+		this.nvoItem_ct.setAuxi(ReciboDetalle.TIPO_CTA_CONTABLE);
+		this.nvoItem_ct.setConcepto("CUENTA CONTABLE..");
+		this.nvoItem_ct.setMovimiento(null);
+	}
+	
+	/**
 	 * @return las formas de pago..
 	 */
 	public List<MyPair> getFormasDePago() {
@@ -1647,6 +1681,12 @@ public class ReciboSimpleControl extends SoloViewModel {
 		return rr.getChequesTercero_(this.filterChequeCliente, "", this.filterChequeBanco, this.filterChequeNro, "", false, false);
 	}
 	
+	@DependsOn("filterCuenta")
+	public List<Object[]> getCuentasContables() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		return rr.getCuentasContables(this.filterCuenta);
+	}
+	
 	public CajaPeriodoControlBody getDato() {
 		return dato;
 	}
@@ -1811,5 +1851,29 @@ public class ReciboSimpleControl extends SoloViewModel {
 
 	public void setSelectedChequeTercero(BancoChequeTercero selectedChequeTercero) {
 		this.selectedChequeTercero = selectedChequeTercero;
+	}
+
+	public String getFilterCuenta() {
+		return filterCuenta;
+	}
+
+	public void setFilterCuenta(String filterCuenta) {
+		this.filterCuenta = filterCuenta;
+	}
+
+	public ReciboDetalleDTO getNvoItem_ct() {
+		return nvoItem_ct;
+	}
+
+	public void setNvoItem_ct(ReciboDetalleDTO nvoItem_ct) {
+		this.nvoItem_ct = nvoItem_ct;
+	}
+
+	public Object[] getSelectedCuenta() {
+		return selectedCuenta;
+	}
+
+	public void setSelectedCuenta(Object[] selectedCuenta) {
+		this.selectedCuenta = selectedCuenta;
 	}
 }

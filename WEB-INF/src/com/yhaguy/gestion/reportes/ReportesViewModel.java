@@ -5964,7 +5964,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_VENDEDOR_DETALLADO;
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new CobranzasVendedorDetallado(data, totalCobrado, totalCobradoSinIva);
-				params.put("Titulo", codReporte + " - Cobranzas por vendedor detallado");
+				params.put("Titulo", codReporte + " - Cobranzas por vendedor / proveedor detallado");
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));

@@ -1,0 +1,10 @@
+<window height="100%" hflex="true"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.GeolocalizacionViewModel')">
+
+	<iframe hflex="true" vflex="true"
+		src="http://190.211.240.30:8080/yhaguymap/waitingpiri/mapa1.zul">
+		
+	</iframe>
+
+</window>
