@@ -436,7 +436,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo1(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo1() };
 					data.add(obj);
 				}
-			} else if (!this.dto.isConteo1() && this.dto.isConteo2() && !this.dto.isConteo3()) {
+			} else if (this.dto.isConteo1() && this.dto.isConteo2() && !this.dto.isConteo3()) {
 				conteo = "2do Conteo";
 				int dif1 = item.getConteo1() - item.getCantidad_acum();
 				int dif = item.getConteo2() - item.getCantidad_acum();
