@@ -841,8 +841,8 @@ public class VentaControlBody extends BodyApp {
 		WindowPopup wp = new WindowPopup();		
 		wp.setDato(this);
 		wp.setCheckAC(new ValidadorInsertarServicio());
-		wp.setTitulo("Ítem de Contabilidad");
-		wp.setHigth("350px");
+		wp.setTitulo("Detalle");
+		wp.setHigth("380px");
 		wp.setWidth("450px");
 		wp.setModo(WindowPopup.NUEVO);		
 		wp.show(ZUL_ITEM_SERVICIO);
@@ -1824,6 +1824,14 @@ public class VentaControlBody extends BodyApp {
 			if (nvoItem.getCantidad() <= 0 ) {
 				this.mensaje += "\n - La cantidad debe ser mayor a cero..";
 				out = false;
+			}
+			
+			if (nvoItem.getDescripcion().equals("DESCUENTO POR BATERIA USADA")) {
+				if (nvoItem.getAmpere() <= 0 || nvoItem.getKilogramo() <= 0 || nvoItem.getCantidadDescuento() <= 0
+						|| nvoItem.getMarca().isEmpty()) {
+					this.mensaje += "\n - Debe ingresar los datos de la batería..";
+					out = false;
+				}
 			}
 			
 			return out;

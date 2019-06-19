@@ -29,9 +29,14 @@
 		<property name="precioVentaFinalGs" />
 		<property name="precioVentaFinalDs" />
 		<property name="impuestoFinal" />
-		<property name="reservado"/>
+		<property name="reservado" />
 		
-		<property name="precioGs"/>
+		<property name="precioGs" />
+		
+		<property name="ampere" />
+		<property name="kilogramo" />
+		<property name="cantidadDescuento" />
+		<property name="marca" />
 		
 		<many-to-one name="listaPrecio" class="com.yhaguy.domain.ArticuloListaPrecio"
 			column="idlistaprecio" lazy="false" />

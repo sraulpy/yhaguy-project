@@ -97,7 +97,7 @@
 			</row>
 			<row
 				visible="@load(vm.det.cantidad eq 0? 'false':'true')">
-				<field value="Precio IVA incluído:" />
+				<field value="Precio:" />
 				<hlayout>
 				<hlayout visible="@load(vm.dto.monedaLocal)">
 					<guaranibox id="dbxPrecio"
@@ -193,6 +193,39 @@
 						instant="true">
 						<template name="model">
 							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>				
+				</hlayout>
+				</cell>
+			</row>
+			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">
+				<div></div>
+			</row>
+			<!-- Datos adicionales - descuentos de baterias -->
+			<row visible="@load(vm.det.articulo.pos1 eq '@DESC. BATERIA USADA' ? 
+				(vm.det.cantidad eq 0? 'false':'true'):'false')">
+				<field value="Datos de la Batería:" />
+				<cell colspan="3">
+				<hlayout>
+					<label>Amperaje:</label>
+					<spinner placeholder="Amperaje.." hflex="true"
+						value="@bind(vm.det.ampere)"></spinner>
+					<space></space>
+					<label>Kilogramo:</label>
+					<spinner placeholder="Kilogramo.." hflex="true"
+						value="@bind(vm.det.kilogramo)"></spinner>
+					<space></space>
+					<label>Cantidad:</label>
+					<spinner placeholder="Cantidad.." hflex="true"
+						value="@bind(vm.det.cantidadDescuento)"></spinner>
+					<space></space>
+					<label>Marca:</label>
+					<combobox placeholder="Marca.." hflex="true"
+						value="@load(vm.det.marca)"
+						selectedItem="@bind(vm.det.marca)"
+						model="@load(vm.marcasBaterias)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
 						</template>
 					</combobox>				
 				</hlayout>

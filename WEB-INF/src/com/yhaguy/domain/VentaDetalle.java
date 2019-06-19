@@ -77,6 +77,11 @@ public class VentaDetalle extends Domain {
 	private VehiculoMarca vehiculoMarca;
 	private VehiculoModelo vehiculoModelo;
 	
+	private int ampere;
+	private int kilogramo;
+	private int cantidadDescuento;
+	private String marca = "";
+	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
@@ -364,5 +369,37 @@ public class VentaDetalle extends Domain {
 
 	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
 		this.vehiculoModelo = vehiculoModelo;
+	}
+
+	public int getAmpere() {
+		return ampere;
+	}
+
+	public void setAmpere(int ampere) {
+		this.ampere = ampere;
+	}
+
+	public int getKilogramo() {
+		return kilogramo;
+	}
+
+	public void setKilogramo(int kilogramo) {
+		this.kilogramo = kilogramo;
+	}
+
+	public int getCantidadDescuento() {
+		return cantidadDescuento;
+	}
+
+	public void setCantidadDescuento(int cantidadDescuento) {
+		this.cantidadDescuento = cantidadDescuento;
+	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
 	}
 }

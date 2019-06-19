@@ -18,6 +18,7 @@ import org.zkoss.zul.Window;
 
 import com.coreweb.Config;
 import com.coreweb.control.SoloViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
@@ -471,6 +472,19 @@ public class VentaSimpleControl extends SoloViewModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
+		return out;
+	}
+	
+	/**
+	 * @return las marcas de baterias..
+	 */
+	public List<String> getMarcasBaterias() throws Exception {
+		List<String> out = new ArrayList<String>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Tipo> list = rr.getTipos(Configuracion.ID_TIPO_MARCAS_BATERIAS);
+		for (Tipo tipo : list) {
+			out.add(tipo.getDescripcion());
+		}
 		return out;
 	}
 	

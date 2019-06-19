@@ -10219,6 +10219,15 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 200);
 	}
 	
+	/**
+	 * @return el tipo tipo por descripcion..
+	 */
+	public TipoTipo getTipoTipoPorDescripcion_(String descripcion) throws Exception {
+		String query = "select t from TipoTipo t where t.descripcion = '" + descripcion + "'";
+		List<TipoTipo> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

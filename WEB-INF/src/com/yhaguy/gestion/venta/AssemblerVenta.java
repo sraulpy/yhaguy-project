@@ -188,7 +188,7 @@ class AssemblerVentaPedidoDetalle extends Assembler {
 			"descuentoUnitarioGs", "descuentoUnitarioDs",
 			"precioVentaFinalUnitarioGs", "precioVentaFinalUnitarioDs",
 			"impuestoFinal", "reservado", "nombreRegla",
-			"precioGs" }; 
+			"precioGs", "ampere", "kilogramo", "cantidadDescuento", "marca" }; 
 	
 	static final String[] ATT_ARTICULO = { "codigoInterno", "codigoProveedor",
 			"codigoOriginal", "descripcion", "servicio" };

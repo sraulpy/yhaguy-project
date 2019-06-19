@@ -50,6 +50,11 @@ public class VentaDetalleDTO extends DTO {
 	private VehiculoMarca vehiculoMarca;
 	private VehiculoModelo vehiculoModelo;
 	
+	private int ampere = 0;
+	private int kilogramo = 0;
+	private int cantidadDescuento = 0;
+	private String marca = "";
+	
 	/**
 	 * Determina hasta que porcentaje de descuento 
 	 * puede hacer el usuario..
@@ -458,5 +463,37 @@ public class VentaDetalleDTO extends DTO {
 
 	public void setVehiculoModelo(VehiculoModelo vehiculoModelo) {
 		this.vehiculoModelo = vehiculoModelo;
+	}
+
+	public int getAmpere() {
+		return ampere;
+	}
+
+	public void setAmpere(int ampere) {
+		this.ampere = ampere;
+	}
+
+	public int getKilogramo() {
+		return kilogramo;
+	}
+
+	public void setKilogramo(int kilogramo) {
+		this.kilogramo = kilogramo;
+	}
+
+	public int getCantidadDescuento() {
+		return cantidadDescuento;
+	}
+
+	public void setCantidadDescuento(int cantidadDescuento) {
+		this.cantidadDescuento = cantidadDescuento;
+	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
 	}
 }

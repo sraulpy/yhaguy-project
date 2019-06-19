@@ -5,6 +5,7 @@
 		<tab label="Tipos de Vehículos" />
 		<tab label="Marcas de Vehículos" />
 		<tab label="Modelos de Vehículos" />
+		<tab label="Marcas de Baterías" />
 	</tabs>
 	<tabpanels>
 		<tabpanel>
@@ -168,6 +169,46 @@
 			</listbox>
 		</tabpanel>
 		
+		<!-- MARCAS DE BATERIAS -->
+		
+		<tabpanel>
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="130px" iconSclass="z-icon-plus" label=" Agregar" 
+					onClick='pop_add_marca_bateria.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-warning btn-sm"
+					width="130px" iconSclass="z-icon-edit" label=" Editar" 
+					disabled="@load(vm.selectedMarcaBateria eq null? 'true':'false')"
+					onClick='pop_edit_marca_bateria.open(self, "after_start")'/>
+				<space></space>
+				<button mold="bs" sclass="btn-info btn-sm"
+					width="130px" iconSclass="z-icon-times" label=" Eliminar" 
+					disabled="true" />
+				<space></space>
+			</hlayout>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="SIN MARCAS DE BATERIAS.."
+				model="@load(vm.marcasBaterias)"
+				selectedItem="@bind(vm.selectedMarcaBateria)">
+				<listhead>
+					<listheader label="Descripción" sort="auto(descripcion)" />							
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.descripcion)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</tabpanel>
+		
 	</tabpanels>
 </tabbox>
 <popup id="pop_add_zona" width="400px" sclass="rounded">
@@ -256,6 +297,24 @@
 		<button mold="bs" sclass="btn-success btn-xs"
 					width="50px" iconSclass="z-icon-check" vflex="true" 
 					onClick="@command('saveVehiculoModelo', comp=pop_edit_modelo_vehiculo)" />
+	</hlayout>
+</popup>
+<popup id="pop_add_marca_bateria" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.nuevaMarcaBateria.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('addMarcaBateria', comp=pop_add_marca_bateria)" />
+	</hlayout>
+</popup>
+<popup id="pop_edit_marca_bateria" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Descripción.."
+			value="@bind(vm.selectedMarcaBateria.descripcion)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true" 
+					onClick="@command('saveMarcaBateria', comp=pop_edit_marca_bateria)" />
 	</hlayout>
 </popup>
 </zk>

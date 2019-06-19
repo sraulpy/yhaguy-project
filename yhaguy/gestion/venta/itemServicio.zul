@@ -53,6 +53,38 @@
 					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
 				</hlayout>
 			</row>
+			<row>
+				<div height="5px"></div>
+			</row>
+			<row visible="@load(vm.dato.nvoItem.articulo.pos1 eq '@DESC. BATERIA USADA' ? 
+				(vm.dato.nvoItem.cantidad eq 0? 'false':'true'):'false')">
+				<field value="Datos de la Batería:" />
+				<cell colspan="3">
+				<hlayout>
+					<label>Amperaje:</label>
+					<spinner placeholder="Amperaje.." hflex="true"
+						value="@bind(vm.dato.nvoItem.ampere)"></spinner>
+					<space></space>
+					<label>Kilogramo:</label>
+					<spinner placeholder="Kilogramo.." hflex="true"
+						value="@bind(vm.dato.nvoItem.kilogramo)"></spinner>
+					<space></space>
+					<label>Cantidad:</label>
+					<spinner placeholder="Cantidad.." hflex="true"
+						value="@bind(vm.dato.nvoItem.cantidadDescuento)"></spinner>
+					<space></space>
+					<label>Marca:</label>
+					<combobox placeholder="Marca.." hflex="true"
+						value="@load(vm.dato.nvoItem.marca)"
+						selectedItem="@bind(vm.dato.nvoItem.marca)"
+						model="@load(vm.marcasBaterias)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>				
+				</hlayout>
+				</cell>
+			</row>
 		</rows>
 	</grid>
 

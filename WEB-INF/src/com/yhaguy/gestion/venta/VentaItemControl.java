@@ -28,6 +28,7 @@ import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -683,6 +684,14 @@ public class VentaItemControl extends SoloViewModel {
 				out = false;
 			}
 			
+			if (this.item.getDescripcion().equals("DESCUENTO POR BATERIA USADA")) {
+				if (this.item.getAmpere() <= 0 || this.item.getKilogramo() <= 0 || this.item.getCantidadDescuento() <= 0
+						|| this.item.getMarca().isEmpty()) {
+					this.mensajeError += "\n - Debe ingresar los datos de la batería..";
+					out = false;
+				}
+			}
+			
 			//la cantidad debe ser mayor a cero..
 			if (this.item.getCantidad() <= 0) {
 				this.mensajeError += "\n - La cantidad debe ser mayor a cero..";
@@ -783,6 +792,19 @@ public class VentaItemControl extends SoloViewModel {
 			out.add(this.det.getListaPrecio());
 		} else {
 			out = this.getListasDePrecio();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return las marcas de baterias..
+	 */
+	public List<String> getMarcasBaterias() throws Exception {
+		List<String> out = new ArrayList<String>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Tipo> list = rr.getTipos(Configuracion.ID_TIPO_MARCAS_BATERIAS);
+		for (Tipo tipo : list) {
+			out.add(tipo.getDescripcion());
 		}
 		return out;
 	}

@@ -24,6 +24,7 @@ import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.domain.Tipo;
+import com.coreweb.domain.TipoTipo;
 import com.coreweb.util.AutoNumeroControl;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -108,6 +109,9 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	
 	private VehiculoModelo selectedVehiculoModelo;
 	private VehiculoModelo nuevoVehiculoModelo = new VehiculoModelo();
+	
+	private Tipo selectedMarcaBateria;
+	private Tipo nuevaMarcaBateria = new Tipo();
 	
 	private Proveedor selectedProveedor;
 	private Tipo selectedFamilia;
@@ -275,6 +279,42 @@ public class DefinicionesViewModel extends SimpleViewModel {
 		rr.saveObject(this.selectedVehiculoModelo, this.getLoginNombre());
 		this.nuevoVehiculoModelo = new VehiculoModelo();
 		this.selectedVehiculoModelo = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "marcasBaterias", "nuevaMarcaBateria", "selectedMarcaBateria" })
+	public void addMarcaBateria(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaMarcaBateria.getDescripcion() == null || this.nuevaMarcaBateria.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		TipoTipo tt = rr.getTipoTipoPorDescripcion_(Configuracion.ID_TIPO_MARCAS_BATERIAS);
+		if (tt == null) {
+			tt = new TipoTipo();
+			tt.setDescripcion(Configuracion.ID_TIPO_MARCAS_BATERIAS);
+			rr.saveObject(tt, this.getLoginNombre());
+		}
+		this.nuevaMarcaBateria.setDescripcion(this.nuevaMarcaBateria.getDescripcion().toUpperCase());
+		this.nuevaMarcaBateria.setTipoTipo(tt);
+		rr.saveObject(this.nuevaMarcaBateria, this.getLoginNombre());
+		this.nuevaMarcaBateria = new Tipo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "marcasBaterias", "nuevaMarcaBateria", "selectedMarcaBateria" })
+	public void saveMarcaBateria(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedMarcaBateria.getDescripcion() == null || this.selectedMarcaBateria.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedMarcaBateria.setDescripcion(this.selectedMarcaBateria.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedMarcaBateria, this.getLoginNombre());
+		this.nuevaMarcaBateria = new Tipo();
+		this.selectedMarcaBateria = null;
 		comp.close();
 		Clients.showNotification("REGISTRO MODIFICADO..");
 	}
@@ -1387,6 +1427,14 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return las marcas de baterias..
+	 */
+	public List<Tipo> getMarcasBaterias() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_MARCAS_BATERIAS);
+	}
+	
+	/**
 	 * @return los vendedores y definicion de comision..
 	 */
 	@DependsOn({ "selectedProveedor", "selectedFamilia" })
@@ -1809,5 +1857,21 @@ public class DefinicionesViewModel extends SimpleViewModel {
 
 	public void setNuevoVehiculoModelo(VehiculoModelo nuevoVehiculoModelo) {
 		this.nuevoVehiculoModelo = nuevoVehiculoModelo;
+	}
+
+	public Tipo getSelectedMarcaBateria() {
+		return selectedMarcaBateria;
+	}
+
+	public void setSelectedMarcaBateria(Tipo selectedMarcaBateria) {
+		this.selectedMarcaBateria = selectedMarcaBateria;
+	}
+
+	public Tipo getNuevaMarcaBateria() {
+		return nuevaMarcaBateria;
+	}
+
+	public void setNuevaMarcaBateria(Tipo nuevaMarcaBateria) {
+		this.nuevaMarcaBateria = nuevaMarcaBateria;
 	}
 }
