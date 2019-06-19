@@ -5,7 +5,6 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Iframe;
@@ -34,14 +33,13 @@ public class ReportesForward extends SimpleViewModel {
 	 */
 	private void forward() {
 		String ip = this.getMyIP();
-		String url = "https://190.211.240.130:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+		String url = "http://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 		if (ip.startsWith("192.168.") || ip.startsWith("10.25.")) {
-			url = "https://10.25.1.251:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+			url = "http://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 		}
 		String usuario = this.getLoginNombre();
 		String clave = (String) this.getAtributoSession(Config.CLAVE);
 		String clave_ = Utiles.encriptar(clave, true);
-		//if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave_);
-		Executions.getCurrent().sendRedirect(url + "?usuario=" + usuario + "&clave=" + clave_, "_blank");
+		if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave_);
 	}
 }
