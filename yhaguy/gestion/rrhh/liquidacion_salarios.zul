@@ -18,7 +18,7 @@
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
-		emptyMessage="SIN REGISTROS DE LIQUIDACION DE SALARIOS.."
+		emptyMessage="SIN REGISTROS DE LIQUIDACIÓN DE SALARIOS.."
 		model="@load(vm.liquidaciones)"
 		selectedItem="@bind(vm.selectedLiquidacion)">
 		<listhead>

@@ -1,0 +1,69 @@
+<window height="100%" hflex="true"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.PlanillaSalariosViewModel')">
+
+	<hlayout sclass="button-container">
+		<combobox placeholder="Mes.."
+			model="@load(vm.meses)" selectedItem="@bind(vm.selectedMes)"></combobox>
+		<combobox placeholder="Año.."
+			model="@load(vm.anhos)" selectedItem="@bind(vm.selectedAnho)"></combobox>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-info" width="150px" label="Generar Planilla"
+			iconSclass="z-icon-check"
+			onClick='pop_procesar.open(self, "end_before")'></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		model="@load(vm.planillas)">
+		<listhead>
+			<listheader label="Salarios"></listheader>
+			<listheader label="Comisión"></listheader>
+			<listheader label="Anticipo"></listheader>
+			<listheader label="Bonificación"></listheader>
+			<listheader label="Otros Haberes"></listheader>
+			<listheader label="Total Haberes"></listheader>
+			<listheader label="Préstamos"></listheader>
+			<listheader label="Adelantos"></listheader>
+			<listheader label="Otros Dtos."></listheader>
+			<listheader label="Corporativo"></listheader>
+			<listheader label="Uniforme"></listheader>
+			<listheader label="Repuestos"></listheader>
+			<listheader label="Seguro"></listheader>
+			<listheader label="Embargo"></listheader>
+			<listheader label="IPS"></listheader>
+			<listheader label="Total Dtos"></listheader>
+			<listheader label="Total a Cobrar"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell>
+					<doublebox hflex="true"></doublebox>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	
+	<popup id="pop_procesar" sclass="rounded">
+		<vbox hflex="true">
+		<listbox sclass="small-list" width="300px" height="300px"
+			model="@load(vm.funcionarios)" multiple="true" checkmark="true">
+			<listhead>
+				<listheader width="50px" align="center"></listheader>
+				<listheader label="Funcionario"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell></listcell>
+					<listcell label="@load(each[1])"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<div height="3px"></div>
+		<button mold="bs" sclass="btn-sm btn-success" iconSclass="z-icon-check" hflex="true"></button>
+		</vbox>
+	</popup>
+	
+	<style>
+		.z-listheader-content { font-size:10px }
+	</style>
+</window>

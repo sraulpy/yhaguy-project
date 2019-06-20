@@ -577,6 +577,11 @@ public class Utiles {
 		out.add(ANHO_2018);
 		out.add(ANHO_2019);
 		out.add(ANHO_2020);
+		out.add(ANHO_2021);
+		out.add(ANHO_2022);
+		out.add(ANHO_2023);
+		out.add(ANHO_2024);
+		out.add(ANHO_2025);
 		return out;
 	}
 	

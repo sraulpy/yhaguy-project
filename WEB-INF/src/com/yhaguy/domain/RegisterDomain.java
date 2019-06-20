@@ -10228,6 +10228,15 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
+	/**
+	 * @return los funcionarios..
+	 */
+	public List<Object[]> getFuncionarios_() throws Exception {
+		String query = "select f.id, f.empresa.razonSocial from Funcionario f"
+				+ " order by f.empresa.razonSocial";
+		return this.hql(query);
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

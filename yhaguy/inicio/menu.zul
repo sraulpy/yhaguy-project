@@ -160,6 +160,7 @@
 				<menuitem label="EVALUACIÓN DEL PERSONAL" iconSclass="z-icon-caret-right"
 					disabled="true"/>
 				<zk forEach="${vm.menuItem(self,'LiquidacionSalarios')}" />
+				<zk forEach="${vm.menuItem(self,'PlanillaSalarios')}" />
 				<zk forEach="${vm.menuItem(self,'GeolocalizacionRRHH')}" />
 			</menupopup>
 		</menu>

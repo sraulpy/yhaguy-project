@@ -63,6 +63,7 @@
 		
 		<mapping resource="com/yhaguy/domain/RRHHLiquidacionSalario.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RRHHLiquidacionSalarioDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RRHHPlanillaSalarios.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Articulo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloCosto.hbm.xml" />

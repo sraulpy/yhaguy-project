@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.RRHHPlanillaSalarios" table="rrhh_planilla_salarios">
+
+		&hibernate-domain; 
+
+		<property name="mes"/>
+		<property name="anho" />
+		<property name="funcionario" />
+		
+		<property name="salarios"/>
+		<property name="comision"/>
+		<property name="anticipo"/>
+		<property name="bonificacion"/>
+		<property name="otrosHaberes"/>
+		<property name="totalHaberes"/>
+		<property name="prestamos"/>
+		<property name="adelantos"/>
+		<property name="otrosDescuentos"/>
+		<property name="corporativo"/>
+		<property name="uniforme"/>
+		<property name="repuestos"/>
+		<property name="seguro"/>
+		<property name="embargo"/>
+		<property name="ips"/>
+		
+	</class>
+</hibernate-mapping>
