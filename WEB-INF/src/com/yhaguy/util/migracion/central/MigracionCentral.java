@@ -10,13 +10,18 @@ import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AccesoApp;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloAPI;
 import com.yhaguy.domain.ArticuloAplicacion;
+import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.ArticuloGrupo;
 import com.yhaguy.domain.ArticuloHistorialMigracion;
+import com.yhaguy.domain.ArticuloLinea;
 import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloModelo;
+import com.yhaguy.domain.ArticuloProcedencia;
+import com.yhaguy.domain.ArticuloSubGrupo;
 import com.yhaguy.domain.CuentaContable;
 import com.yhaguy.domain.DepartamentoApp;
 import com.yhaguy.domain.Deposito;
@@ -498,6 +503,12 @@ public class MigracionCentral {
 			String descripcion = csv.getDetalleString("DESCRIPCION");
 			String stock = csv.getDetalleString("SALDO");
 			String costo = csv.getDetalleString("COSTO");
+			String mayorista = csv.getDetalleString("MAYORISTA");
+			String dolares = csv.getDetalleString("DOLARES");
+			String minorista = csv.getDetalleString("MINORISTA");
+			String autocentro = csv.getDetalleString("AUTOCENTRO");
+			String flia = csv.getDetalleString("FAMILIA");
+			String marca = csv.getDetalleString("MARCA");
 			
 			long stock_ = 0;
 			if (stock.contains(",")) {
@@ -507,7 +518,7 @@ public class MigracionCentral {
 				stock_ = Long.parseLong(stock);
 			}
 			
-			//Articulo art = rr.getArticulo(codigo);
+			Articulo art = rr.getArticulo(codigo);
 			
 			if (stock_ > 0) {
 				ArticuloHistorialMigracion mig = new ArticuloHistorialMigracion();
@@ -527,12 +538,12 @@ public class MigracionCentral {
 				System.out.println(codigo);
 			}
 			
-			/*if (art != null) {
-				art.setCostoGs(Double.parseDouble(costo.replace(",", ".")));
-				art.setPrecioGs(Double.parseDouble(mayorista.replace(",", ".")));
-				art.setPrecioDs(Double.parseDouble(dolares.replace(",", ".")));
-				art.setPrecioListaGs(Double.parseDouble(autocentro.replace(",", ".")));
-				art.setPrecioMinoristaGs(Double.parseDouble(minorista.replace(",", ".")));
+			if (art != null && stock_ > 0) {
+				//art.setCostoGs(Double.parseDouble(costo.replace(",", ".")));
+				//art.setPrecioGs(Double.parseDouble(mayorista.replace(",", ".")));
+				//art.setPrecioDs(Double.parseDouble(dolares.replace(",", ".")));
+				//art.setPrecioListaGs(Double.parseDouble(autocentro.replace(",", ".")));
+				//art.setPrecioMinoristaGs(Double.parseDouble(minorista.replace(",", ".")));
 				
 				ArticuloDeposito ad = new ArticuloDeposito();
 				ad.setArticulo(art);
@@ -542,7 +553,8 @@ public class MigracionCentral {
 				rr.saveObject(art, "sys");
 				rr.saveObject(ad, "sys");
 				System.out.println(codigo + " - " + dep.getDescripcion());
-			} else {
+				
+			} else if (stock_ > 0) {
 				
 				ArticuloFamilia artFlia = rr.getArticuloFamilia(flia);
 				ArticuloGrupo artGrupo = (ArticuloGrupo) rr.getObject(ArticuloGrupo.class.getName(), 1);
@@ -550,27 +562,25 @@ public class MigracionCentral {
 				ArticuloAplicacion artAplicacion = (ArticuloAplicacion) rr.getObject(ArticuloAplicacion.class.getName(), 1);
 				ArticuloModelo artModelo = (ArticuloModelo) rr.getObject(ArticuloModelo.class.getName(), 1);
 				ArticuloLinea artLinea = (ArticuloLinea) rr.getObject(ArticuloLinea.class.getName(), 1);
-				ArticuloSubLinea artSubLinea = rr.getArticuloSubLinea("SIN SUBLINEA");
-				ArticuloSubGrupo artSubGrupo = rr.getArticuloSubGrupo("SIN SUBGRUPO");
-				ArticuloProcedencia artProcedencia = rr.getArticuloProcedencia("SIN PROCEDENCIA");
-				ArticuloAPI artAPI = rr.getArticuloAPI("SIN API");
+				ArticuloSubGrupo artSubGrupo = (ArticuloSubGrupo) rr.getObject(ArticuloSubGrupo.class.getName(), 1);
+				ArticuloProcedencia artProcedencia = (ArticuloProcedencia) rr.getObject(ArticuloProcedencia.class.getName(), 1);
+				ArticuloAPI artAPI = (ArticuloAPI) rr.getObject(ArticuloAPI.class.getName(), 1);
 				
 				art = new Articulo();
 				art.setCodigoInterno(codigo);
 				art.setDescripcion(descripcion);
-				art.setPeso_("");
-				art.setVolumen_("");
+				art.setPeso(0.0);
+				art.setVolumen(0.0);
 				
 				art.setFamilia(artFlia);
 				art.setMarca(artMarca);
-				art.setGrupo(artGrupo);
-				art.setAplicacion(artAplicacion);
-				art.setModelo(artModelo);
-				art.setLinea(artLinea);
-				art.setSublinea(artSubLinea);
-				art.setSubgrupo(artSubGrupo);
-				art.setProcedencia(artProcedencia);
-				art.setAPI(artAPI);
+				art.setArticuloGrupo(artGrupo);
+				art.setArticuloAplicacion(artAplicacion);
+				art.setArticuloModelo(artModelo);
+				art.setArticuloLinea(artLinea);
+				art.setArticuloSubGrupo(artSubGrupo);
+				art.setArticuloProcedencia(artProcedencia);
+				art.setArticuloAPI(artAPI);
 				art.setArticuloEstado(rr.getTipoPorSigla(Configuracion.SIGLA_ARTICULO_ESTADO_ACTIVO));
 				
 				art.setCostoGs(Double.parseDouble(costo.replace(",", ".")));
@@ -587,7 +597,7 @@ public class MigracionCentral {
 				rr.saveObject(art, "sys");
 				rr.saveObject(ad, "sys");
 				System.err.println(codigo + " -- AGREGADO..");
-			}*/
+			}
 		}
 	}
 
@@ -656,7 +666,8 @@ public class MigracionCentral {
 			MigracionCentral.machearArticulosSaldos("6_STOCK_MCAL_TEMPORAL", 6);
 			MigracionCentral.machearArticulosSaldos("7_STOCK_MAYORISTA", 7); 
 			MigracionCentral.machearArticulosSaldos("8_STOCK_MAYORISTA_TEMPORAL", 8); **/
-			MigracionCentral.migrarArticuloCodigoBarras();
+			MigracionCentral.machearArticulosSaldos("9_STOCK_AVERIADOS_GAM", 11);
+		//	MigracionCentral.migrarArticuloCodigoBarras();
 			
 		//	MigracionCentral.migrarVendedores();
 		//	MigracionCentral.migrarRubrosClientes();

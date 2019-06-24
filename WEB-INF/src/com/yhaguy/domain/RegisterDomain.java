@@ -10257,6 +10257,24 @@ public class RegisterDomain extends Register {
 		return this.hql(query);	
 	}
 	
+	/**
+	 * @return el familia por descripcion..
+	 */
+	public ArticuloFamilia getArticuloFamilia(String descripcion) throws Exception {
+		String query = "select f from ArticuloFamilia f where f.descripcion = '" + descripcion + "'";
+		List<ArticuloFamilia> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return la marca por descripcion..
+	 */
+	public ArticuloMarca getArticuloMarca(String descripcion) throws Exception {
+		String query = "select m from ArticuloMarca m where m.descripcion = '" + descripcion + "'";
+		List<ArticuloMarca> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
