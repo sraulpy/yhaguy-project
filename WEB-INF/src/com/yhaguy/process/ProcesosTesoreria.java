@@ -1075,7 +1075,6 @@ public class ProcesosTesoreria {
 			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
 				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla(), nc.getCliente().getIdEmpresa());				
 				if (ctacte == null) {
-					/**
 					CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
 					ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
 					ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
@@ -1089,7 +1088,7 @@ public class ProcesosTesoreria {
 					ctm.setMoneda(nc.getMoneda());
 					ctm.setNroComprobante(nc.getNumero());
 					ctm.setSucursal(nc.getSucursal());
-					rr.saveObject(ctm, "sys");**/
+					rr.saveObject(ctm, "sys");
 					System.out.println(nc.getNumero() + " - " + nc.getCliente().getRazonSocial());
 				}
 			}
@@ -1314,7 +1313,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.addMovimientosBancoFormaPagoDepositoBancario();
 			//ProcesosTesoreria.chequearClientesDuplicados();
 			//ProcesosTesoreria.addRecaudacionesCentral();
-			//ProcesosTesoreria.addChequeTerceros();
+			ProcesosTesoreria.addChequeTerceros();
 			//ProcesosTesoreria.setNumeroRecibos();
 			//ProcesosTesoreria.setOrigenRecaudacionCentral();
 			//ProcesosTesoreria.setEmisionChequesTerceros();
@@ -1329,7 +1328,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosVentaCredito(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
 			//ProcesosTesoreria.depurarSaldosNotaCredito();
 			//ProcesosTesoreria.depurarSaldosVentaCreditonNegativo(Utiles.getFecha("10-10-2018 00:00:00"), new Date());
-			ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
+			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
 		} catch (Exception e) {

@@ -1,5 +1,7 @@
 package com.yhaguy.domain;
 
+import org.zkoss.bind.annotation.DependsOn;
+
 import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
@@ -29,6 +31,27 @@ public class RRHHPlanillaSalarios extends Domain {
 	public int compareTo(Object arg0) {
 		return -1;
 	}
+	
+	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
+			"uniforme", "repuestos", "seguro", "embargo", "ips", })
+	public double getTotalACobrar() {
+		return this.salarios + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
+				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
+				+ this.ips;
+	}
+	
+	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
+		"uniforme", "repuestos", "seguro", "embargo", "ips", })
+	public double getTotalADescontar() {
+		double out = 0;
+		if (this.salarios < 0) out += this.salarios; if (this.comision < 0) out += this.comision;
+		if (this.anticipo < 0) out += this.anticipo; if (this.bonificacion < 0) out += this.bonificacion;
+		if (this.otrosHaberes < 0) out += this.otrosHaberes; if (this.otrosDescuentos < 0) out += this.otrosDescuentos;
+		if (this.corporativo < 0) out += this.corporativo; if (this.uniforme < 0) out += this.uniforme;
+		if (this.repuestos < 0) out += this.repuestos; if (this.seguro < 0) out += this.seguro;
+		if (this.embargo < 0) out += this.embargo; if (this.ips < 0) out += this.ips;
+		return out;
+}
 
 	public String getFuncionario() {
 		return funcionario;

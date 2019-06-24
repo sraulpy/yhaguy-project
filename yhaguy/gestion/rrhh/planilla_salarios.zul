@@ -1,52 +1,236 @@
 <window height="100%" hflex="true"
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.PlanillaSalariosViewModel')">
-
+	<style src="/style.css" />
 	<hlayout sclass="button-container">
 		<combobox placeholder="Mes.."
-			model="@load(vm.meses)" selectedItem="@bind(vm.selectedMes)"></combobox>
+			model="@load(vm.meses)" selectedItem="@bind(vm.selectedMes)"
+			instant="true"
+			value="@load(vm.selectedMes)"></combobox>
 		<combobox placeholder="Año.."
-			model="@load(vm.anhos)" selectedItem="@bind(vm.selectedAnho)"></combobox>
+			model="@load(vm.anhos)" selectedItem="@bind(vm.selectedAnho)"
+			instant="true"
+			value="@load(vm.selectedAnho)"></combobox>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-info" width="150px" label="Generar Planilla"
 			iconSclass="z-icon-check"
 			onClick='pop_procesar.open(self, "end_before")'></button>
 	</hlayout>
-	
 	<listbox sclass="small-list" vflex="true"
 		model="@load(vm.planillas)">
+		<frozen columns="3"></frozen>
 		<listhead>
-			<listheader label="Salarios"></listheader>
-			<listheader label="Comisión"></listheader>
-			<listheader label="Anticipo"></listheader>
-			<listheader label="Bonificación"></listheader>
-			<listheader label="Otros Haberes"></listheader>
-			<listheader label="Total Haberes"></listheader>
-			<listheader label="Préstamos"></listheader>
-			<listheader label="Adelantos"></listheader>
-			<listheader label="Otros Dtos."></listheader>
-			<listheader label="Corporativo"></listheader>
-			<listheader label="Uniforme"></listheader>
-			<listheader label="Repuestos"></listheader>
-			<listheader label="Seguro"></listheader>
-			<listheader label="Embargo"></listheader>
-			<listheader label="IPS"></listheader>
-			<listheader label="Total Dtos"></listheader>
-			<listheader label="Total a Cobrar"></listheader>
+			<listheader label="Funcionario" width="170px"></listheader>
+			<listheader label="Total a Cobrar" width="100px" align="right"></listheader>
+			<listheader label="Total Descuentos" width="100px" align="right"></listheader>
+			<listheader label="Salarios" width="100px"></listheader>
+			<listheader label="Comisión" width="100px"></listheader>
+			<listheader label="Anticipo" width="100px"></listheader>
+			<listheader label="Bonificación" width="100px"></listheader>
+			<listheader label="Otros Haberes" width="100px"></listheader>
+			<listheader label="Préstamos" width="100px"></listheader>
+			<listheader label="Adelantos" width="100px"></listheader>
+			<listheader label="Otros Dtos." width="100px"></listheader>
+			<listheader label="Corporativo" width="100px"></listheader>
+			<listheader label="Uniforme" width="100px"></listheader>
+			<listheader label="Repuestos" width="100px"></listheader>
+			<listheader label="Seguro" width="100px"></listheader>
+			<listheader label="Embargo" width="100px"></listheader>
+			<listheader label="IPS" width="100px"></listheader>
 		</listhead>
 		<template name="model">
 			<listitem>
+				<listcell label="@load(each.funcionario)"></listcell>
+				<listcell label="@load(each.totalACobrar) @converter('formattedNumber', format='###,###,###,##0')"
+					style="font-size:11px;font-weight:bold"></listcell>
+				<listcell label="@load(each.totalADescontar) @converter('formattedNumber', format='###,###,###,##0')"
+					style="font-size:11px;font-weight:bold"></listcell>
 				<listcell>
-					<doublebox hflex="true"></doublebox>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.salarios)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.comision)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.anticipo)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.bonificacion)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.otrosHaberes)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.prestamos)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.adelantos)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.otrosDescuentos)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.corporativo)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.uniforme)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.repuestos)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.seguro)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.embargo)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
+				</listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each.ips)" format="###,###,###,##0"
+						onChange="@command('saveItem', item=each)"
+						></doublebox>
 				</listcell>
 			</listitem>
 		</template>
+		<listfoot>
+			<listfooter label="ítems"></listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						style="font-weight:bold;text-align:right"
+						></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalSalarios)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalComision)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalAnticipo)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalBonificacion)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalOtrosHaberes)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalOtrosDescuentos)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalCorporativo)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalUniforme)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalRepuestos)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalSeguro)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+			<listfooter>
+				<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totalIps)"
+						style="font-weight:bold;text-align:right"></doublebox>
+			</listfooter>
+		</listfoot>
 	</listbox>
-	
 	<popup id="pop_procesar" sclass="rounded">
 		<vbox hflex="true">
 		<listbox sclass="small-list" width="300px" height="300px"
-			model="@load(vm.funcionarios)" multiple="true" checkmark="true">
+			model="@load(vm.funcionarios)" multiple="true" checkmark="true"
+			selectedItems="@bind(vm.selectedFuncionarios)">
 			<listhead>
 				<listheader width="50px" align="center"></listheader>
 				<listheader label="Funcionario"></listheader>
@@ -59,11 +243,13 @@
 			</template>
 		</listbox>
 		<div height="3px"></div>
-		<button mold="bs" sclass="btn-sm btn-success" iconSclass="z-icon-check" hflex="true"></button>
+		<button mold="bs" sclass="btn-sm btn-success" iconSclass="z-icon-check" hflex="true"
+			onClick="@command('generarPlanilla')"></button>
 		</vbox>
 	</popup>
 	
 	<style>
 		.z-listheader-content { font-size:10px }
+		.z-doublebox { min-height:18px; line-height:11px; font-size:11px }
 	</style>
 </window>

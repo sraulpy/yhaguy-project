@@ -6139,7 +6139,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 
 			case SALDOS_CLIENTES_DET:
-				this.saldosCtaCteDetallado(true, mobile);
+				this.saldosCtaCteDetallado(true, mobile, SALDOS_CLIENTES_DET);
 				break;
 
 			case CLIENTES_SIN_MOVIMIENTO:
@@ -6163,7 +6163,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 
 			case SALDOS_PROVEEDORES_DET:
-				this.saldosCtaCteDetallado(false, mobile);
+				this.saldosCtaCteDetallado(false, mobile, SALDOS_PROVEEDORES_DET);
 				break;
 
 			case PAGOS_POR_PROVEEDOR:
@@ -6572,7 +6572,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte TES-00004 / TES-00010
 		 */
-		private void saldosCtaCteDetallado(boolean cliente, boolean mobile) throws Exception {
+		private void saldosCtaCteDetallado(boolean cliente, boolean mobile, String codReporte) throws Exception {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
@@ -6592,59 +6592,34 @@ public class ReportesViewModel extends SimpleViewModel {
 				Clients.showNotification("DEBE SELECCIONAR UNA MONEDA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 				return;
 			}
-			
-			boolean fraccionado = filtro.isFraccionado();
 			Object[] formato = filtro.getFormato();
 			long idVendedor = vendedor == null ? 0 : vendedor.getId();
 			long idEmpresa = cliente_ == null ? 0 : cliente_.getEmpresa().getId();
+			long idRubro = rubro == null ? 0 : rubro.getId();
 			String caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE;
 			if (!cliente) {
 				caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR;
-			}
-			List<CtaCteEmpresaMovimiento> movims_ = new ArrayList<CtaCteEmpresaMovimiento>();	
+			}	
 			List<Object[]> movims = new ArrayList<Object[]>();
 			List<Object[]> movimientos = new ArrayList<Object[]>();
 			List<Object[]> aux = new ArrayList<Object[]>();
-			Map<String, Object[]> data = new HashMap<String, Object[]>();
-			
-			if (!fraccionado) {
-				movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(), incluirChequesRechazados, incluirPrestamos);	
-				for (Object[] movim : movims) {
-					if ((rubro != null && this.isRubro(rubro.getId(), idEmpresa)) || rubro == null) {
-						long id_mov = (long) movim[0];
-						long id_tmv = (long) movim[1];
-						data.put(id_mov + "-" + id_tmv, movim);
-						movimientos.add(movim);
-					}					
-				}
-				for (String key : data.keySet()) {
-					aux.add(data.get(key));
-				}
-				// ordena la lista segun fecha..
-				/*Collections.sort(aux, new Comparator<CtaCteEmpresaMovimiento>() {
-					@Override
-					public int compare(CtaCteEmpresaMovimiento o1, CtaCteEmpresaMovimiento o2) {
-						Date fecha1 = o1.getFechaEmision();
-						Date fecha2 = o2.getFechaEmision();
-						return fecha1.compareTo(fecha2);
-					}
-				});*/
-			} else {
-				movims_ = rr.getMovimientosConSaldo(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId());
-				// ordena la lista segun fecha..
-				Collections.sort(movims_, new Comparator<CtaCteEmpresaMovimiento>() {
-					@Override
-					public int compare(CtaCteEmpresaMovimiento o1, CtaCteEmpresaMovimiento o2) {
-						Date fecha1 = o1.getFechaEmision();
-						Date fecha2 = o2.getFechaEmision();
-						return fecha1.compareTo(fecha2);
-					}
-				});
+			Map<String, Object[]> data = new HashMap<String, Object[]>();			
+
+			movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(), incluirChequesRechazados, incluirPrestamos, idRubro);	
+			for (Object[] movim : movims) {
+				long id_mov = (long) movim[0];
+				long id_tmv = (long) movim[1];
+				data.put(id_mov + "-" + id_tmv, movim);
+				movimientos.add(movim);					
 			}
+			for (String key : data.keySet()) {
+				aux.add(data.get(key));
+			}
+		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET;
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new CtaCteSaldosDataSource_(movimientos, aux);
-			params.put("Titulo", cliente ? "SALDOS DE CLIENTES DETALLADO" : "SALDOS DE PROVEEDORES DETALLADO");
+			params.put("Titulo", cliente ? codReporte + " - SALDOS DE CLIENTES DETALLADO" : " - SALDOS DE PROVEEDORES DETALLADO");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Vendedor", vendedor == null ? "TODOS.." : vendedor.getRazonSocial().toUpperCase());
 			params.put("Rubro", rubro == null ? "TODOS.." : rubro.getDescripcion().toUpperCase());
@@ -6660,7 +6635,6 @@ public class ReportesViewModel extends SimpleViewModel {
 			Object[] emp = rr.getEmpresa(idEmpresa);
 			if (emp != null && emp[5] != null) {
 				long idrubro = (long) emp[5];
-				System.out.println("---IDRUBRO: " + idRubro + " --IDRUBROFUNCIONARIO: " + idrubro);
 				if (idRubro == idrubro) {
 					return true;
 				}
@@ -8390,7 +8364,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				return;
 			}
 			
-			boolean fraccionado = filtro.isFraccionado();
 			Object[] formato = filtro.getFormato();
 			long idVendedor = vendedor == null ? 0 : vendedor.getId();
 			long idEmpresa = cliente_ == null ? 0 : cliente_.getEmpresa().getId();
@@ -8398,37 +8371,24 @@ public class ReportesViewModel extends SimpleViewModel {
 			if (!cliente) {
 				caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR;
 			}
-			List<CtaCteEmpresaMovimiento> movims_ = new ArrayList<CtaCteEmpresaMovimiento>();	
 			List<Object[]> movims = new ArrayList<Object[]>();
 			List<Object[]> movimientos = new ArrayList<Object[]>();
 			List<Object[]> aux = new ArrayList<Object[]>();
-			Map<String, Object[]> data = new HashMap<String, Object[]>();
-			
-			if (!fraccionado) {
-				movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId());	
-				for (Object[] movim : movims) {
-					if ((rubro != null && this.isRubro(rubro.getId(), idEmpresa)) || rubro == null) {
-						long id_mov = (long) movim[0];
-						long id_tmv = (long) movim[1];
-						data.put(id_mov + "-" + id_tmv, movim);
-						movimientos.add(movim);
-					}					
-				}
-				for (String key : data.keySet()) {
-					aux.add(data.get(key));
-				}
-			} else {
-				movims_ = rr.getMovimientosConSaldo(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId());
-				// ordena la lista segun fecha..
-				Collections.sort(movims_, new Comparator<CtaCteEmpresaMovimiento>() {
-					@Override
-					public int compare(CtaCteEmpresaMovimiento o1, CtaCteEmpresaMovimiento o2) {
-						Date fecha1 = o1.getFechaEmision();
-						Date fecha2 = o2.getFechaEmision();
-						return fecha1.compareTo(fecha2);
-					}
-				});
+			Map<String, Object[]> data = new HashMap<String, Object[]>();			
+
+			movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId());	
+			for (Object[] movim : movims) {
+				if ((rubro != null && this.isRubro(rubro.getId(), idEmpresa)) || rubro == null) {
+					long id_mov = (long) movim[0];
+					long id_tmv = (long) movim[1];
+					data.put(id_mov + "-" + id_tmv, movim);
+					movimientos.add(movim);
+				}					
 			}
+			for (String key : data.keySet()) {
+				aux.add(data.get(key));
+			}
+		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_CONSOLIDADO;
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new CtaCteSaldosDataSource_(movimientos, aux);

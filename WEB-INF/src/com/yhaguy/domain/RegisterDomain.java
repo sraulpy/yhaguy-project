@@ -6270,7 +6270,7 @@ public class RegisterDomain extends Register {
 	 * [14]:idempresa
 	 */
 	public List<Object[]> getSaldos(Date desde, Date hasta, String caracter, long idVendedor, long idEmpresa, 
-			long idMoneda, boolean incluirChequesrechazados, boolean incluirPrestamos) throws Exception {
+			long idMoneda, boolean incluirChequesrechazados, boolean incluirPrestamos, long idRubro) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c.idMovimientoOriginal, c.tipoMovimiento.id, c.nroComprobante, c.tipoMovimiento.descripcion, e.telefono_, e.direccion_, c.fechaEmision, c.fechaVencimiento, c.importeOriginal, "
@@ -6296,6 +6296,9 @@ public class RegisterDomain extends Register {
 		}
 		if (idEmpresa != 0) {
 			query += " and c.idEmpresa = " + idEmpresa;
+		}
+		if (idRubro != 0) {
+			query += " and c.cliente.empresa.rubro.id = " + idRubro;
 		}
 		query += " order by c.fechaEmision";
 		List<Object[]> saldos = this.hql(query);
@@ -10234,6 +10237,15 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getFuncionarios_() throws Exception {
 		String query = "select f.id, f.empresa.razonSocial from Funcionario f"
 				+ " order by f.empresa.razonSocial";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las planillas de salarios..
+	 */
+	public List<RRHHPlanillaSalarios> getPlanillaSalarios(String mes, String anho) throws Exception {
+		String query = "select p from RRHHPlanillaSalarios p where p.mes = '" + mes + "' and p.anho = '" + anho + "'"
+				+ " order by p.funcionario";
 		return this.hql(query);
 	}
 	
