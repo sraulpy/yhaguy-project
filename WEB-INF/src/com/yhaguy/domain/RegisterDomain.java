@@ -8088,7 +8088,7 @@ public class RegisterDomain extends Register {
 		String vto = misc.dateToString(new Date(), Misc.YYYY_MM_DD) + " 00:00:00";
 		String query = "select c from CtaCteEmpresaMovimiento c where"
 				+ " c.anulado != 'TRUE'"
-				+ " and c.saldo > 500"
+				+ " and c.saldo > 0.5"
 				+ " and c.fechaVencimiento <= '" + vto + "'"
 				+ " and c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'"
 				+ " order by c.fechaVencimiento asc";

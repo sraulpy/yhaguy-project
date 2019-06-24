@@ -45,7 +45,7 @@ public class TareaNotificarBloqueos {
 			"soniat@yhaguyrepuestos.com.py", "yaninaf@yhaguyrepuestos.com.py" };
 	
 	static final String[] DESTINATARIOS_CEN = new String[] { "soniat@yhaguyrepuestos.com.py",
-			"vivianag@yhaguyrepuestos.com.py", "laurap@yhaguyrepuestos.com.py", "rolandoh@yhaguyrepuestos.com.py" };
+			"vivianag@yhaguyrepuestos.com.py", "laurap@yhaguyrepuestos.com.py", "milvam@yhaguyrepuestos.com.py" };
 	
 	static final String[] COPIA_OCULTA = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 	static final String ASUNTO = "Bloqueos de Cuentas Automatico - Yhaguy Repuestos S.A.";
@@ -127,7 +127,7 @@ public class TareaNotificarBloqueos {
 			
 			EnviarCorreo correo = new EnviarCorreo(tarea);
 			correo.sendMessage(destinatarios, COPIA_OCULTA, asunto,
-					"Bloqueos de Cuentas con atraso mayor a 90 dias", "Bloqueos.pdf", directorioReportes + rep.getArchivoSalida());
+					"Bloqueos de Cuentas con atraso mayor a 60 dias", "Bloqueos.pdf", directorioReportes + rep.getArchivoSalida());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,7 +135,7 @@ public class TareaNotificarBloqueos {
 	}	
 	
 	public static void main(String[] args) {
-		TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
+		TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, COPIA_OCULTA, ASUNTO);
 		//TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }
