@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
+import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.HistoricoBloqueoClientes;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
@@ -25,16 +26,19 @@ public class TareaBloqueoClientes {
 				Date vto = movim.getFechaVencimiento();
 				long dias = Utiles.diasEntreFechas(vto, new Date());
 				if (dias >= 60) {
-					ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
-					HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
-					bloqueo.setFecha(new Date());
-					bloqueo.setVencimiento(movim.getFechaVencimiento());
-					bloqueo.setCliente(rr.getEmpresaById(movim.getIdEmpresa()).getRazonSocial());
-					bloqueo.setNumeroFactura(movim.getNroComprobante_());
-					bloqueo.setDiasVencimiento(dias);
-					bloqueo.setMotivo(MOTIVO);
-					rr.saveObject(bloqueo, "sys");
-					System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
+					Empresa emp = rr.getEmpresaById(movim.getIdEmpresa());
+					if (emp != null) {
+						ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
+						HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
+						bloqueo.setFecha(new Date());
+						bloqueo.setVencimiento(movim.getFechaVencimiento());						
+						bloqueo.setCliente(emp.getRazonSocial());
+						bloqueo.setNumeroFactura(movim.getNroComprobante_());
+						bloqueo.setDiasVencimiento(dias);
+						bloqueo.setMotivo(MOTIVO);
+						rr.saveObject(bloqueo, "sys");
+						System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
+					}					
 				}
 			}
 		} catch (Exception e) {

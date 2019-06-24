@@ -530,9 +530,11 @@ public class ControlCuentaCorriente {
 	public static void bloquearCliente(long idEmpresa, String motivo, String user) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Empresa emp = rr.getEmpresaById(idEmpresa);
-		emp.setCuentaBloqueada(true);
-		emp.setMotivoBloqueo(motivo);
-		rr.saveObject(emp, user);
+		if (emp != null) {
+			emp.setCuentaBloqueada(true);
+			emp.setMotivoBloqueo(motivo);
+			rr.saveObject(emp, user);
+		}		
 	}
 	
 	/**
