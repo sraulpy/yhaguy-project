@@ -172,7 +172,7 @@
 	</listbox>
 	
 	<hlayout style="margin-top:5px" vflex="3">
-		<listbox rows="5" hflex="true" sclass="small-list"
+		<listbox rows="5" hflex="true" sclass="small-list, small_list"
 			model="@load(vm.existencia)" vflex="true">
 			<auxhead>
 				<auxheader colspan="2" label="Existencia">
@@ -191,7 +191,7 @@
 			</listhead>
 			<template name="model">
 				<listitem>
-					<listcell label="@load(each.pos1.toString().toUpperCase())"/>
+					<listcell label="@load(each.pos1.toString().toUpperCase())" />
 					<listcell label="@load(each.pos2) @converter('formattedNumber', format='###,###,###')"/>
 				</listitem>
 			</template>
@@ -496,7 +496,9 @@
 		background:transparent; border:0px} .custom-tbox
 		{margin-right:5px; background:lightyellow} .custom-listheader
 		.z-listheader-content { line-height: 15px; font-weight:normal}
-		.z-html { display:block; }
+		.z-html { display:block; } .small_list .z-listcell-content {
+		height: 20px; line-height: 15px; min-height: 23px;
+		text-overflow: ellipsis; white-space: nowrap; font-size:11px }
 	</style>
 	
 </window>
