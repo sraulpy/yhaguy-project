@@ -493,7 +493,7 @@ public class ReportesFiltros {
 	 */
 	public List<EmpresaRubro> getRubros_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();		
-		return rr.getObjects(EmpresaRubro.class.getName());
+		return rr.getRubros_();
 	}
 	
 	/**

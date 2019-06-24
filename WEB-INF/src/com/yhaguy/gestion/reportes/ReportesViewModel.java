@@ -6247,7 +6247,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case CLIENTES_POR_RUBRO:
-				this.clientesPorRubro(mobile);
+				this.clientesPorRubro(mobile, CLIENTES_POR_RUBRO);
 				break;
 				
 			case CORRELATIVIDAD_RECIBOS:
@@ -7866,10 +7866,10 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * TES-00030
 		 */
-		private void clientesPorRubro(boolean mobile) throws Exception {
+		private void clientesPorRubro(boolean mobile, String codReporte) throws Exception {
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Tipo rubro = filtro.getRubro();
+			EmpresaRubro rubro = filtro.getRubro_();
 			long id_rubro = rubro == null? 0 : rubro.getId();
 			
 			List<Object[]> clientes = rr.getClientesByRubro(id_rubro);
@@ -7887,7 +7887,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			ReporteClientesPorRubro rep = new ReporteClientesPorRubro(desc, getSucursal());
 			rep.setApaisada();
 			rep.setDatosReporte(data);
-			
+			rep.setTitulo(codReporte + " - Clientes por Rubro");			
 
 			if (!mobile) {
 				ViewPdf vp = new ViewPdf();
@@ -19426,7 +19426,6 @@ class ReporteClientesPorRubro extends ReporteYhaguy {
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Clientes por Rubro");
 		this.setDirectorio("Clientes");
 		this.setNombreArchivo("Cli-");
 		this.setTitulosColumnas(cols);
@@ -19440,7 +19439,6 @@ class ReporteClientesPorRubro extends ReporteYhaguy {
 	private ComponentBuilder getCuerpo() {
 
 		VerticalListBuilder out = cmp.verticalList();
-		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp
 				.horizontalFlowList()
 				.add(this.textoParValor("Rubro", this.rubro.toUpperCase()))

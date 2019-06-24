@@ -7205,9 +7205,9 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Object[]> getClientesByRubro(long idRubro) throws Exception {
 		String query = "select c.empresa.razonSocial, c.empresa.ruc, c.empresa.direccion_, c.empresa.telefono_"
-				+ " from Cliente c join c.empresa.rubroEmpresas r";
+				+ " from Cliente c ";
 		if (idRubro != 0) {
-			query += " where r.id = " + idRubro;
+			query += " where c.empresa.rubro.id = " + idRubro;
 		}
 		query += " order by c.empresa.razonSocial";
 		return this.hql(query);
@@ -10247,6 +10247,14 @@ public class RegisterDomain extends Register {
 		String query = "select p from RRHHPlanillaSalarios p where p.mes = '" + mes + "' and p.anho = '" + anho + "'"
 				+ " order by p.funcionario";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return los rubros de empresas..
+	 */
+	public List<EmpresaRubro> getRubros_() throws Exception {
+		String query = "select r from EmpresaRubro r order by r.descripcion";
+		return this.hql(query);	
 	}
 	
 	public static void mainX(String[] args) {
