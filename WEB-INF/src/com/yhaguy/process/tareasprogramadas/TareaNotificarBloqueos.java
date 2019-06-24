@@ -44,8 +44,7 @@ public class TareaNotificarBloqueos {
 			"nataliac@yhaguyrepuestos.com.py", "dianaa@yhaguyrepuestos.com.py",
 			"soniat@yhaguyrepuestos.com.py", "yaninaf@yhaguyrepuestos.com.py" };
 	
-	static final String[] DESTINATARIOS_CEN = new String[] { "soniat@yhaguyrepuestos.com.py",
-			"vivianag@yhaguyrepuestos.com.py", "laurap@yhaguyrepuestos.com.py", "milvam@yhaguyrepuestos.com.py" };
+	static final String[] DESTINATARIOS_CEN = new String[] { "cobranzas@yhaguyrepuestos.com.py" };
 	
 	static final String[] COPIA_OCULTA = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 	static final String ASUNTO = "Bloqueos de Cuentas Automatico - Yhaguy Repuestos S.A.";
@@ -73,10 +72,6 @@ public class TareaNotificarBloqueos {
 			List<HistoricoBloqueoClientes> bloqueos = rr.getHistoricoBloqueoClientes(desde, hasta);
 			List<HistoricoBloqueoClientes> _bloqueos = new ArrayList<HistoricoBloqueoClientes>();
 			Map<String, HistoricoBloqueoClientes> bloqueos_ = new HashMap<String, HistoricoBloqueoClientes>();
-			
-			if (bloqueos.size() == 0) {
-				return;
-			}
 			
 			for (HistoricoBloqueoClientes bloqueo : bloqueos) {
 				if (bloqueos_.get(bloqueo.getCliente()) == null) {
@@ -135,7 +130,7 @@ public class TareaNotificarBloqueos {
 	}	
 	
 	public static void main(String[] args) {
-		TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, COPIA_OCULTA, ASUNTO);
+		TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
 		//TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }
