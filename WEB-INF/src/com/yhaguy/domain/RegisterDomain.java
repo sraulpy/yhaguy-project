@@ -10275,6 +10275,14 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
+	/**
+	 * @return las carteras de empresas..
+	 */
+	public List<EmpresaCartera> getCarteras() throws Exception {
+		String query = "select c from EmpresaCartera c order by c.descripcion";
+		return this.hql(query);	
+	}
+	
 	public static void mainX(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
