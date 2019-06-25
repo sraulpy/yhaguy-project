@@ -179,6 +179,8 @@
 				<listheader label="Nro. Importación" visible="@load(!vm.tipoCliente)" sort="auto(pos10)" />
 				<listheader label="@load(vm.columnImporte)" align="right" sort="auto(pos5)" />
 				<listheader label="@load(vm.columnSaldo)" align="right" sort="auto(pos6)" />
+				<listheader label="Cartera" sort="auto(pos12)" width="130px"
+					visible="@load(vm.isOperacionHabilitada('BloquearCtaCteCliente'))"></listheader>
 				<listheader label="Detalle" align="center" width="70px" />
 				<listheader label="Aplicar" align="center" width="70px" visible="@load(vm.selectedFilter eq 'Pendientes')" />
 				<listheader iconSclass="z-icon-refresh" tooltiptext="actualizar saldo.." align="center" width="40px" />
@@ -198,6 +200,7 @@
 					<textbox sclass="filter" hflex="true"
 						value="@bind(vm.numeroImportacion)" instant="true"></textbox>
 				</auxheader>
+				<auxheader/>
 				<auxheader/>
 				<auxheader/>
 				<auxheader/>
@@ -224,6 +227,12 @@
 					<listcell
 						label="@load(each.pos6) @converter('formattedNumber', format='###,###,###,##0')"
 						style="@load(each.pos7 ? 'color:red' : '')" />	
+					<listcell>
+						<hlayout>
+						<a iconSclass="z-icon-edit" onClick="@command('openCartera', parent=self)" />
+						<label value="@load(each.pos12.descripcion)" />	
+						</hlayout>	
+					</listcell>
 					<listcell>
 						<a label="ítems"
 							onClick="@command('verItems', item=each, parent=self)" />
@@ -771,6 +780,18 @@
 					</label>
 				</row>
 				<row>
+					<field value="Cartera:" />
+						<combobox
+							value="@load(vm.selectedItem.pos13.descripcion)"
+							model="@load(vm.carteras)"
+							instant="true" hflex="true"
+							selectedItem="@bind(vm.selectedItem.pos13)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
 					<a label="Línea de Crédito:" 
 						onClick="@command('verHistoricoLineaCredito', popup=pop_historico_linea, parent=self)"/>
 					<hlayout>
@@ -981,6 +1002,17 @@
 				</template>
 			</listbox>
 		</vlayout>
+	</popup>
+	
+	<popup id="popCartera" sclass="rounded">
+		<listbox sclass="small-list" width="130px"
+			model="@load(vm.carteras)"
+			selectedItem="@bind(vm.selectedCartera)"
+			onSelect="@command('saveCartera')">
+			<template name="model">
+				<listitem label="@load(each.descripcion)"></listitem>
+			</template>
+		</listbox>
 	</popup>
 	
 	<style>

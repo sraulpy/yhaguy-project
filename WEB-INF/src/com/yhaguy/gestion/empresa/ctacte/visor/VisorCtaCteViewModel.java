@@ -55,6 +55,7 @@ import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaObservacion;
 import com.yhaguy.domain.HistoricoLineaCredito;
 import com.yhaguy.domain.NotaCredito;
@@ -124,6 +125,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private double lineaTemporalGs = 0;
 	private String motivo = "";
 	private List<HistoricoLineaCredito> historicoLineaCredito;
+	private List<EmpresaCartera> carteras;
+	private EmpresaCartera selectedCartera;
 	
 	private Component view;
 	private Window win;
@@ -170,12 +173,16 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	@Wire
 	private Tab tabRec;
 	
+	@Wire
+	private Popup popCartera;
+	
 	@Init
 	public void init() {
 		try {
 			this.desde = Utiles.getFecha("01-01-2016 00:00:00");
 			groupModel = new DetalleGroupsModel(detalle.getAplicaciones(), new DetalleComparator());
 			groupModel_ = new DetalleGroupsModel(detalle_.getAplicaciones(), new DetalleComparator());
+			this.carteras = this.getCarteras_();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -426,6 +433,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			cli.setLimiteCredito((double) this.cliente.getPos1());
 			cli.setVentaCredito((boolean) this.cliente.getPos2());
 			rr.saveObject(cli, this.getLoginNombre());
+			Empresa emp = rr.getEmpresaById(this.selectedItem.getId());
+			emp.setCartera((EmpresaCartera) this.selectedItem.getPos13());
+			rr.saveObject(emp, this.getLoginNombre());
 			if (this.habilitarLinea) {
 				HistoricoLineaCredito hist = new HistoricoLineaCredito();
 				hist.setActivo(true);
@@ -601,6 +611,25 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		ctacte.setSaldo(ctacte.getImporteOriginal());
 		rr.saveObject(ctacte, this.getLoginNombre());
 		Clients.showNotification("SALDO REASIGNADO..");
+	}
+	
+	@Command
+	@NotifyChange("selectedCartera")
+	public void openCartera(@BindingParam("parent") Component parent) {
+		this.selectedCartera = null;
+		this.popCartera.open(parent, "after_end");
+	}
+	
+	@Command
+	@NotifyChange("selectedItem_")
+	public void saveCartera() throws Exception {
+		this.selectedItem_.setPos12(this.selectedCartera);
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(this.selectedItem_.getId().longValue());
+		ctacte.setCarteraCliente(this.selectedCartera);
+		rr.saveObject(ctacte, this.getLoginNombre());
+		Clients.showNotification("CARTERA ASIGNADA..");
+		this.popCartera.close();
 	}
 	
 	/**
@@ -1805,9 +1834,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			return new ArrayList<MyArray>();
 
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Empresa> arts = rr.getEmpresas(this.ruc, this.cedula, this.razonSocial, this.nombreFantasia);
+		List<Empresa> emps = rr.getEmpresas(this.ruc, this.cedula, this.razonSocial, this.nombreFantasia);
 
-		return this.empresasToMyArray(arts);
+		return this.empresasToMyArray(emps);
 	}
 	
 	/**
@@ -1830,6 +1859,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos10(emp.getVendedor() != null? emp.getVendedor().getRazonSocial() : "");
 			my.setPos11("");
 			my.setPos12(emp.getObservaciones());
+			my.setPos13(emp.getCartera());
 			out.add(my);
 		}
 		return out;
@@ -1942,6 +1972,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos9(mov.getIdMovimientoOriginal());
 			my.setPos10(mov.getNumeroImportacion().isEmpty() ? "- - -" : mov.getNumeroImportacion());
 			my.setPos11(mov.getObservacion());
+			my.setPos12(mov.getCarteraCliente());
 			if (this.isTodos()) {
 				out.add(my);
 			} else if (this.isPendientes()) {
@@ -2413,6 +2444,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		return out;
 	}
 	
+	/**
+	 * @return las carteras..
+	 */
+	private List<EmpresaCartera> getCarteras_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCarteras();
+	}
+	
 	@DependsOn("selectedMoneda")
 	public String getColumnImporte() {
 		return this.selectedMoneda.equals(CTA_GS)? "Importe Gs." : "Importe USD.";
@@ -2680,6 +2719,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 	public void setGroupModel_(DetalleGroupsModel groupModel_) {
 		this.groupModel_ = groupModel_;
+	}
+
+	public void setCarteras(List<EmpresaCartera> carteras) {
+		this.carteras = carteras;
+	}
+
+	public List<EmpresaCartera> getCarteras() {
+		return carteras;
+	}
+
+	public EmpresaCartera getSelectedCartera() {
+		return selectedCartera;
+	}
+
+	public void setSelectedCartera(EmpresaCartera selectedCartera) {
+		this.selectedCartera = selectedCartera;
 	}	
 }
 
