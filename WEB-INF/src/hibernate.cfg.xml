@@ -43,6 +43,7 @@
 		<mapping resource="com/yhaguy/domain/Contacto.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/EmpresaRubro.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/EmpresaObservacion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/EmpresaCartera.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Cliente.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ContactoInterno.hbm.xml" />

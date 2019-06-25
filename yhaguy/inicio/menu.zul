@@ -172,6 +172,7 @@
 				<zk forEach="${vm.menuItem(self,'ConfiguracionUsuariosModulos')}" />
 				<zk forEach="${vm.menuItem(self,'Anulaciones')}" />
 				<zk forEach="${vm.menuItem(self,'AcuseDocumento')}" />
+				<menuitem label="TAREAS PROGRAMADAS" iconSclass="z-icon-caret-right" disabled="true"/>
 				<menuitem label="BACKUPS DE SEGURIDAD" iconSclass="z-icon-caret-right" disabled="true"/>
 			</menupopup>
 		</menu>
