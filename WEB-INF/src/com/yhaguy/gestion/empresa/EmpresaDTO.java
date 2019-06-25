@@ -7,6 +7,7 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaDTO;
 
@@ -50,6 +51,7 @@ public class EmpresaDTO extends DTO {
 	MyPair tipoProveedor;
 	
 	private MyArray rubro;
+	private EmpresaCartera cartera;
 
 	private int tipoEmpresa; // 1: Proveedor, 2:Cliente, 3:Cliente/Proveedor
 
@@ -336,5 +338,13 @@ public class EmpresaDTO extends DTO {
 
 	public void setVendedor(Funcionario vendedor) {
 		this.vendedor = vendedor;
+	}
+
+	public EmpresaCartera getCartera() {
+		return cartera;
+	}
+
+	public void setCartera(EmpresaCartera cartera) {
+		this.cartera = cartera;
 	}
 }

@@ -23,6 +23,7 @@ import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
 
@@ -77,6 +78,12 @@ public class ClienteControlBody extends EmpresaControlBody {
 		
 		this.setSelectedSucursal(null);
 		this.setSelectedContacto(null);
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			aux.getEmpresa().setCartera((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), 1));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return aux;
 	}
 

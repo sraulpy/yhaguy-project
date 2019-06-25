@@ -44,6 +44,16 @@
 								</combobox>
 							</row>
 							<row>
+								<field value="Cartera:" />
+								<combobox value="@load(vm.dtoEmp.cartera.descripcion)" hflex="true"
+									model="@load(vm.carteras)"
+									selectedItem="@bind(vm.dtoEmp.cartera)">
+									<template name="model">
+										<comboitem label="@load(each.descripcion)" />
+									</template>	
+								</combobox>
+							</row>
+							<row>
 								<field value="Direccion:" />
 								<textbox value="@bind(vm.dtoEmp.direccion_)" hflex="true" />
 							</row>

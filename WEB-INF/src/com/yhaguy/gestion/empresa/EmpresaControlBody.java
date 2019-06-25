@@ -28,6 +28,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaGrupoSociedad;
 import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
@@ -606,6 +607,14 @@ public abstract class EmpresaControlBody extends BodyApp {
 			out.add(my);
 		}
 		return out;
+	}
+	
+	/**
+	 * @return las carteras..
+	 */
+	public List<EmpresaCartera> getCarteras() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCarteras();
 	}
 	
 	/**

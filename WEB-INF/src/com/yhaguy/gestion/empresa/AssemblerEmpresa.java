@@ -57,6 +57,7 @@ public class AssemblerEmpresa extends Assembler {
 		verificarFechaAperturaCtaCte(dto);
 		this.hijoDtoToHijoDomain(dto, domain, "ctaCteEmpresa", new AssemblerCtaCteEmpresa(), true);
 		domain.setVendedor(dto.getVendedor());
+		domain.setCartera(dto.getCartera());
 		
 		return domain;
 	}
@@ -81,6 +82,7 @@ public class AssemblerEmpresa extends Assembler {
 		}
 		dto.setPais(this.tipoToMyPair(domain.getPais()));
 		dto.setVendedor(domain.getVendedor());
+		dto.setCartera(domain.getCartera());
 		
 		this.listaDomainToListaMyPair(domain, dto, "monedas");
 		this.listaDomainToListaMyPair(domain, dto, "rubroEmpresas");
