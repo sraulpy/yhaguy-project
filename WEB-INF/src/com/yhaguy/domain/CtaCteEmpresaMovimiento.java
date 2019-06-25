@@ -29,7 +29,7 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	private Set<CtaCteImputacion> imputaciones = new HashSet<CtaCteImputacion>();
 	private SucursalApp sucursal;
 	private Cliente cliente;
-	private EmpresaCartera cartera;
+	private EmpresaCartera carteraCliente;
 	
 	private double aux = 0;
 
@@ -413,11 +413,11 @@ public class CtaCteEmpresaMovimiento extends Domain {
 		this.cliente = cliente;
 	}
 
-	public EmpresaCartera getCartera() {
-		return cartera;
+	public EmpresaCartera getCarteraCliente() {
+		return carteraCliente;
 	}
 
-	public void setCartera(EmpresaCartera cartera) {
-		this.cartera = cartera;
+	public void setCarteraCliente(EmpresaCartera carteraCliente) {
+		this.carteraCliente = carteraCliente;
 	}
 }

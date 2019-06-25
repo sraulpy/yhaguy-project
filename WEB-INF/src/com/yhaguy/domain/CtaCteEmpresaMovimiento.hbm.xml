@@ -42,7 +42,7 @@
 		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
 			column="idcliente" lazy="false" />
 			
-		<many-to-one name="cartera" class="com.yhaguy.domain.EmpresaCartera"
+		<many-to-one name="carteraCliente" class="com.yhaguy.domain.EmpresaCartera"
 			column="idcartera" lazy="false" />
 
 		<many-to-one name="tipoCaracterMovimiento" class="com.coreweb.domain.Tipo"
