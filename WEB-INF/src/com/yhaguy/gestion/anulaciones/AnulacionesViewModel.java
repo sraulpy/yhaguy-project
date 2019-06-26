@@ -20,6 +20,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Transferencia;
@@ -81,6 +82,10 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		
 		if (this.isNotaRemision()) {
 			this.buscarTransferencias(filtro, posFiltro);
+		}
+		
+		if (this.isNotaDebito()) {
+			this.buscarNotasDebito(filtro, posFiltro);
 		}
 		
 		this.selectedMovimiento.setPos6(false);
@@ -168,6 +173,26 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * busqueda de las notas de debito..
+	 */
+	private void buscarNotasDebito(String filtro, int posFiltro) throws Exception {
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(NotaDebito.class);
+		b.setAnchoColumnas(new String[] { "140px", "140px", "", "140px", "140px" });
+		b.setAtributos(new String[] { "numero", "cliente.empresa.ruc", "cliente.empresa.razonSocial",
+				"tipoMovimiento.descripcion", "fecha" });
+		b.setHeight("400px");
+		b.setWidth("900px");
+		b.setNombresColumnas(new String[] { "Número", "Ruc", "Razón Social", "Tipo Movimiento", "Fecha" });
+		b.setTitulo("Notas de Débito");
+		b.addWhere("c.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'");
+		b.show(filtro, posFiltro);
+		if (b.isClickAceptar()) {
+			this.selectedMovimiento = b.getSelectedItem();
+		}
+	}
+	
+	/**
 	 * busqueda de los ajustes..
 	 */
 	private void buscarAjustes(String filtro, int posFiltro) throws Exception {
@@ -212,6 +237,8 @@ public class AnulacionesViewModel extends SimpleViewModel {
 				this.anularNotaCredito(motivo);
 			} else if (this.isNotaRemision()) {
 				this.anularTransferencia(motivo);
+			}  else if (this.isNotaDebito()) {
+				this.anularNotaDebito(motivo);
 			}
 			this.selectedMovimiento.setPos6(true);
 			Clients.showNotification("Movimiento anulado..");
@@ -263,6 +290,14 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		ControlAnulacionMovimientos.anularTransferenciaRemision(
 				this.selectedMovimiento.getId(), motivo, this.getLoginNombre());
 	}
+	
+	/**
+	 * anulacion de nota de debito..
+	 */
+	private void anularNotaDebito(String motivo) throws Exception {
+		ControlAnulacionMovimientos.anularNotaDebito(
+				this.selectedMovimiento.getId(), motivo, this.getLoginNombre());
+	} 
 	
 	/**
 	 * GETS'SETS
@@ -365,6 +400,14 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		if(this.selectedItem == null) return false;
 		return this.selectedItem.getSigla().equals(
 				Configuracion.SIGLA_TM_NOTA_REMISION);
+	}
+	
+	/**
+	 * @return true si es nota de debito..
+	 */
+	private boolean isNotaDebito() {
+		return this.selectedItem.getSigla().equals(
+				Configuracion.SIGLA_TM_NOTA_DEBITO_VENTA);
 	}
 	
 	private UtilDTO getUtilDto() {

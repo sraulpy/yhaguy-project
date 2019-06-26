@@ -700,8 +700,8 @@ public class VentaItemControl extends SoloViewModel {
 			
 			// verifica si el item ya exite en el detalle..
 			if (this.isDuplicado(this.item)) {
-				this.mensajeError += "\n - No se aceptan items duplicados..";
-				out = false;
+				// this.mensajeError += "\n - No se aceptan items duplicados..";
+				// out = false;
 			}
 			
 			//verifica disponibilidad de stock si se esta insertando..

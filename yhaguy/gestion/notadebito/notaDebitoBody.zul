@@ -55,29 +55,7 @@
 						</hlayout>
 					</vlayout>
 				</cell>
-				<cell>
-					<vlayout>
-						<field value="Nota de Crédito" />
-						<bandbox hflex="true" placeholder="Aplicar a Nota de Crédito.."
-							readonly="true" id="bndNC">
-							<bandpopup>
-								<listbox sclass="small-list"
-									width="400px" height="200px"
-									onSelect="bndNC.close()">
-									<listhead>
-										<listheader>
-											<hlayout>
-												<textbox hflex="true" instant="true"
-													placeholder="Buscar por Número.." 
-													sclass="filter"/>
-											</hlayout>
-										</listheader>
-									</listhead>
-								</listbox>
-							</bandpopup>
-						</bandbox>
-					</vlayout>
-				</cell>				
+				<cell></cell>				
 			</row>
 		</rows>
 	</grid>

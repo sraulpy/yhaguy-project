@@ -19,6 +19,7 @@ import com.coreweb.extras.browser.ColumnaBrowser;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.BodyApp;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
@@ -63,7 +64,13 @@ public class NotaDebitoControlBody extends BodyApp {
 
 	@Override
 	public void setDTOCorriente(DTO dto) {
-		this.dto = (NotaDebitoDTO) dto;		
+		this.dto = (NotaDebitoDTO) dto;	
+		
+		if (this.dto.getEstadoComprobante().getSigla().equals(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO)) {			
+			this.enmascararAnulados(true);
+		} else {
+			this.enmascararAnulados(false);		
+		}
 	}
 
 	@Override
