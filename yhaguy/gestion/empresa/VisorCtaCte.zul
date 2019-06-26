@@ -759,7 +759,7 @@
 		</tabbox>
 	</popup>
 
-	<popup id="popMenu" width="300px" sclass="rounded">
+	<popup id="popMenu" width="350px" sclass="rounded">
 		<hbox align="end" pack="end" width="100%"
 			style="margin-bottom:10px">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
@@ -788,6 +788,18 @@
 							selectedItem="@bind(vm.selectedItem.pos13)">
 						<template name="model">
 							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<field value="Cobrador:" />
+						<combobox
+							value="@load(vm.cliente.pos3.razonSocial)"
+							model="@load(vm.teleCobradores)"
+							instant="true" hflex="true"
+							selectedItem="@bind(vm.cliente.pos3)">
+						<template name="model">
+							<comboitem label="@load(each.razonSocial)"></comboitem>
 						</template>
 					</combobox>
 				</row>

@@ -57,6 +57,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaObservacion;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.HistoricoLineaCredito;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
@@ -432,6 +433,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			Cliente cli = rr.getClienteByIdEmpresa(this.selectedItem.getId());
 			cli.setLimiteCredito((double) this.cliente.getPos1());
 			cli.setVentaCredito((boolean) this.cliente.getPos2());
+			cli.setCobrador((Funcionario) this.cliente.getPos3());
 			rr.saveObject(cli, this.getLoginNombre());
 			Empresa emp = rr.getEmpresaById(this.selectedItem.getId());
 			emp.setCartera((EmpresaCartera) this.selectedItem.getPos13());
@@ -640,6 +642,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		out.setId(cliente.getId());
 		out.setPos1(cliente.getLimiteCredito());
 		out.setPos2(cliente.isVentaCredito());
+		out.setPos3(cliente.getCobrador());
 		return out;
 	}
 	
@@ -2446,12 +2449,20 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return los telecobradores..
+	 */
+	public List<Funcionario> getTeleCobradores() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTeleCobradores();
+	}
+	
+	/**
 	 * @return las carteras..
 	 */
 	private List<EmpresaCartera> getCarteras_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getCarteras();
-	}
+	}	
 	
 	@DependsOn("selectedMoneda")
 	public String getColumnImporte() {
