@@ -78,6 +78,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento_2016;
 import com.yhaguy.domain.CtaCteLineaCredito;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
@@ -6056,6 +6057,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		this.filtro.setRubro_(null);
 		this.filtro.setVendedor(null);
 		this.filtro.setSelectedMes(Utiles.getMeses().get(Utiles.getNumeroMesCorriente() - 1));
+		this.filtro.setCartera(null);
 	}
 
 	/**
@@ -7584,34 +7586,35 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void clientesCredito(boolean mobile) throws Exception {
 			String estado = filtro.getEstadoCuentaCliente();
+			EmpresaCartera cartera = filtro.getCartera();
+			long idCartera = cartera != null ? cartera.getId().longValue() : 0; 
 
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Cliente> clientes = rr.getClientesCredito();
+			List<Object[]> clientes = rr.getClientesCredito(idCartera);
 			List<Object[]> data = new ArrayList<Object[]>();
 
-			for (Cliente cliente : clientes) {
+			for (Object[] cliente : clientes) {
 				Object[] cli = new Object[] {
-						cliente.getRazonSocial(),
-						cliente.getRuc(),
-						cliente.isCuentaBloqueada() ? "BLOQUEADO"
-								: "HABILITADO", cliente.getLimiteCredito() };
+						cliente[1],
+						cliente[2],
+						(boolean) cliente[3] ? "BLOQUEADO" : "HABILITADO", cliente[4] };
 				if (estado == null) {
 					data.add(cli);
 				} else if (estado
 						.equals(ReportesFiltros.ESTADO_CTA_CLIENTE_BLOQUEADO)
-						&& cliente.isCuentaBloqueada()) {
+						&& (boolean) cliente[3]) {
 					data.add(cli);
 				} else if (estado
 						.equals(ReportesFiltros.ESTADO_CTA_CLIENTE_HABILITADO)
-						&& !cliente.isCuentaBloqueada()) {
+						&& !(boolean) cliente[3]) {
 					data.add(cli);
 				}
 			}
 			String estado_ = estado == null? "TODOS.." : estado;
-			ReporteClientesCredito rep = new ReporteClientesCredito(estado_, getSucursal());
+			String cartera_ = cartera == null? "TODOS.." : cartera.getDescripcion();
+			ReporteClientesCredito rep = new ReporteClientesCredito(estado_, getSucursal(), cartera_);
 			rep.setApaisada();
-			rep.setDatosReporte(data);
-			
+			rep.setDatosReporte(data);		
 
 			if (!mobile) {
 				ViewPdf vp = new ViewPdf();
@@ -17930,6 +17933,7 @@ class ReporteClientesCredito extends ReporteYhaguy {
 	
 	private String estado;
 	private String sucursal;
+	private String cartera;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col0 = new DatosColumnas("Razón Social", TIPO_STRING);
@@ -17937,9 +17941,10 @@ class ReporteClientesCredito extends ReporteYhaguy {
 	static DatosColumnas col2 = new DatosColumnas("Estado", TIPO_STRING, 30);
 	static DatosColumnas col3 = new DatosColumnas("Límite Créd.", TIPO_DOUBLE_GS, 30, true);
 
-	public ReporteClientesCredito(String estado, String sucursal) {
+	public ReporteClientesCredito(String estado, String sucursal, String cartera) {
 		this.estado = estado;
 		this.sucursal = sucursal;
+		this.cartera = cartera;
 	}
 
 	static {
@@ -17969,6 +17974,7 @@ class ReporteClientesCredito extends ReporteYhaguy {
 		out.add(cmp
 				.horizontalFlowList()
 				.add(this.textoParValor("Estado", this.estado))
+				.add(this.textoParValor("Cartera", this.cartera))
 				.add(this.textoParValor("Sucursal", this.sucursal)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 

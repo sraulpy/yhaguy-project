@@ -24,6 +24,7 @@ import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
@@ -209,6 +210,7 @@ public class ReportesFiltros {
 	private boolean descontadoCheque = true;
 	private String estadoCuentaCliente;
 	private CondicionPago condicion;
+	private EmpresaCartera cartera;
 	
 	// Filtros de Usuarios
 	private boolean usuariosActivos = true;
@@ -618,6 +620,14 @@ public class ReportesFiltros {
 	public List<Funcionario> getTeleCobradores() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getTeleCobradores();
+	}
+	
+	/**
+	 * @return las carteras..
+	 */
+	public List<EmpresaCartera> getCarteras() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCarteras();
 	}
 	
 	@DependsOn("razonSocialCliente")
@@ -1613,5 +1623,13 @@ public class ReportesFiltros {
 
 	public void setIncluirGastos(boolean incluirGastos) {
 		this.incluirGastos = incluirGastos;
+	}
+
+	public EmpresaCartera getCartera() {
+		return cartera;
+	}
+
+	public void setCartera(EmpresaCartera cartera) {
+		this.cartera = cartera;
 	}
 }

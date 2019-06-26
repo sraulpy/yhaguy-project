@@ -834,7 +834,6 @@ public class RegisterDomain extends Register {
 		return (InvArticulo) l.get(0);
 	}
 
-	@SuppressWarnings("deprecation")
 	public Long getInvPlanilla(String codV, int lote) throws Exception {
 		String query = "select p.id from InvPlanilla p where p.lote=" + lote
 				+ " and p.codigoVerificacion='" + codV + "'";
@@ -7186,9 +7185,18 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los clientes credito..
+	 * [0]:id
+	 * [1]:razonSocial
+	 * [2]:ruc
+	 * [3]:cuentaBloqueada
+	 * [4]:limiteCredito
 	 */
-	public List<Cliente> getClientesCredito() throws Exception {
-		String query = "select c from Cliente c where c.ventaCredito = 'true' ";
+	public List<Object[]> getClientesCredito(long idCartera) throws Exception {
+		String query = "select c.id, c.empresa.razonSocial, c.empresa.ruc, "
+				+ "c.empresa.cuentaBloqueada, c.limiteCredito from Cliente c where c.ventaCredito = 'true' ";
+		if (idCartera > 0) {
+			query += " and c.empresa.cartera.id = " + idCartera;
+		}
 		return this.hql(query);
 	}
 	

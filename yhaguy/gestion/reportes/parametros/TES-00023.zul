@@ -17,5 +17,18 @@
 				</template>
 			</combobox>
 		</row>
+		<row>
+			<field value="Cartera:" />
+			<combobox
+				placeholder="TODOS.."
+				selectedItem="@bind(vm.dato.filtro.cartera)"
+				model="@load(vm.dato.filtro.carteras)"
+				instant="true"
+				hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
 	</rows>
 </grid>
