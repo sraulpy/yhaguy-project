@@ -18,6 +18,7 @@ import com.yhaguy.domain.CtaCteImputacion;
 import com.yhaguy.domain.CtaCteLineaCredito;
 import com.yhaguy.domain.CtaCteVisCliente;
 import com.yhaguy.domain.CtaCteVisProveedor;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.caja.recibos.ReciboDetalleDTO;
@@ -635,6 +636,7 @@ public class ControlCtaCteEmpresa extends Control {
 	public void addMovimiento(CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO) throws Exception {
 
 		CtaCteEmpresaMovimiento nuevoMovimientoDom = (CtaCteEmpresaMovimiento) movimientoAss.dtoToDomain(nuevoMovimientoDTO);
+		nuevoMovimientoDom.setCarteraCliente((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), 1));
 		rr.saveObject(nuevoMovimientoDom, this.getLoginNombre());
 	}
 

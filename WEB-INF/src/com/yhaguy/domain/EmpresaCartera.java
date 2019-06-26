@@ -5,10 +5,10 @@ import com.coreweb.domain.Domain;
 @SuppressWarnings("serial")
 public class EmpresaCartera extends Domain {
 
-	static final String CORRIENTE = "";
-	static final String DUDOSO_COBRO = "";
-	static final String JUDICIAL = "";
-	static final String OTROS = "";
+	static final String CORRIENTE = "CORRIENTE";
+	static final String DUDOSO_COBRO = "DUDOSO COBRO";
+	static final String JUDICIAL = "JUDICIAL";
+	static final String OTROS = "OTROS";
 	
 	private String descripcion;
 	

@@ -34,6 +34,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Banco;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CtaCteLineaCredito;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
@@ -115,6 +116,9 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	
 	private Proveedor selectedProveedor;
 	private Tipo selectedFamilia;
+	
+	private EmpresaCartera selectedCartera;
+	private EmpresaCartera nuevaCartera = new EmpresaCartera();
 
 	@Init(superclass = true)
 	public void init() {
@@ -315,6 +319,35 @@ public class DefinicionesViewModel extends SimpleViewModel {
 		rr.saveObject(this.selectedMarcaBateria, this.getLoginNombre());
 		this.nuevaMarcaBateria = new Tipo();
 		this.selectedMarcaBateria = null;
+		comp.close();
+		Clients.showNotification("REGISTRO MODIFICADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "carteras", "nuevaCartera", "selectedCartera" })
+	public void addCartera(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaCartera.getDescripcion() == null || this.nuevaCartera.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaCartera.setDescripcion(this.nuevaCartera.getDescripcion().toUpperCase());
+		rr.saveObject(this.nuevaCartera, this.getLoginNombre());
+		this.nuevaCartera = new EmpresaCartera();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
+	}
+	
+	@Command
+	@NotifyChange({ "carteras", "nuevaCartera", "selectedCartera" })
+	public void saveCartera(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.selectedCartera.getDescripcion() == null || this.selectedCartera.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selectedCartera.setDescripcion(this.selectedCartera.getDescripcion().toUpperCase());
+		rr.saveObject(this.selectedCartera, this.getLoginNombre());
+		this.nuevaCartera = new EmpresaCartera();
+		this.selectedCartera = null;
 		comp.close();
 		Clients.showNotification("REGISTRO MODIFICADO..");
 	}
@@ -1435,6 +1468,14 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return las carteras de clientes..
+	 */
+	public List<EmpresaCartera> getCarteras() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCarteras();
+	}
+	
+	/**
 	 * @return los vendedores y definicion de comision..
 	 */
 	@DependsOn({ "selectedProveedor", "selectedFamilia" })
@@ -1873,5 +1914,21 @@ public class DefinicionesViewModel extends SimpleViewModel {
 
 	public void setNuevaMarcaBateria(Tipo nuevaMarcaBateria) {
 		this.nuevaMarcaBateria = nuevaMarcaBateria;
+	}
+
+	public EmpresaCartera getSelectedCartera() {
+		return selectedCartera;
+	}
+
+	public void setSelectedCartera(EmpresaCartera selectedCartera) {
+		this.selectedCartera = selectedCartera;
+	}
+
+	public EmpresaCartera getNuevaCartera() {
+		return nuevaCartera;
+	}
+
+	public void setNuevaCartera(EmpresaCartera nuevaCartera) {
+		this.nuevaCartera = nuevaCartera;
 	}
 }
