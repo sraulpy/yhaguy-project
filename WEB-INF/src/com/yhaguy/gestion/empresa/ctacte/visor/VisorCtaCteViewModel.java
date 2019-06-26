@@ -1183,6 +1183,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	 */
 	private void imprimir_(boolean mobile) throws Exception {
 		List<Object[]> data = new ArrayList<Object[]>();		
+		Date hoy = new Date();
 		
 		for (MyArray mov : this.getMovimientos()) {
 			Date emision = (Date) mov.getPos1();
@@ -1191,10 +1192,10 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			double saldo = (double) mov.getPos6();
 			
 			Object[] obj = new Object[] {
-					m.dateToString(emision, Misc.DD_MM_YYYY),
-					m.dateToString(vto, Misc.DD_MM_YYYY),
+					m.dateToString(emision, Utiles.DD_MM_YY),
+					m.dateToString(vto, Utiles.DD_MM_YY),
 					mov.getPos3(), nro.replace("(1/1)", "").replace("(1/3)", "").replace("(2/3)", "").replace("(3/3)", ""),
-					mov.getPos5(), mov.getPos6() };
+					mov.getPos5(), mov.getPos6(), Utiles.diasEntreFechas(vto, hoy) };
 			data.add(obj);
 			
 			if (this.selectedFilter.equals(CLIENTE)) {
@@ -1204,10 +1205,10 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 					for (DetalleMovimiento det : dets) {
 						if (!det.isSelf()) {
 							Object[] obj_ = new Object[] {
-									Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
-									Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YYYY),
+									Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YY),
+									Utiles.getDateToString(det.getEmision(), Utiles.DD_MM_YY),
 									">> " + det.getTipoMovimiento_(), det.getNumero(),
-									det.getImporteGs() * -1, 0.0 };
+									det.getImporteGs() * -1, 0.0, 0 };
 							data.add(obj_);
 						}							
 					}
@@ -2746,12 +2747,13 @@ class ReporteEstadoCuenta extends ReporteYhaguy {
 	private Map<String, String> params;	
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Emisión", TIPO_STRING, 40);
-	static DatosColumnas col2 = new DatosColumnas("Vto.", TIPO_STRING, 40);
+	static DatosColumnas col1 = new DatosColumnas("Emi.", TIPO_STRING, 33);
+	static DatosColumnas col2 = new DatosColumnas("Vto.", TIPO_STRING, 33);
 	static DatosColumnas col3 = new DatosColumnas("Concepto", TIPO_STRING);
 	static DatosColumnas col4 = new DatosColumnas("Número", TIPO_STRING, 70);
 	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 50);
 	static DatosColumnas col6 = new DatosColumnas("Saldo", TIPO_DOUBLE_GS, 50, true);
+	static DatosColumnas col7 = new DatosColumnas("Mora", TIPO_LONG, 25);
 	
 	public ReporteEstadoCuenta(Map<String, String> params) {
 		this.params = params;
@@ -2764,6 +2766,7 @@ class ReporteEstadoCuenta extends ReporteYhaguy {
 		cols.add(col4);
 		cols.add(col5);
 		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override
