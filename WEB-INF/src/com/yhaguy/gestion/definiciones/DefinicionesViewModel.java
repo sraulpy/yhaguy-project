@@ -67,14 +67,15 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	static final String ZUL_BANCO = FOLDER + "definicionesBancoPopup.zul";
 	static final String ZUL_LINEA_CREDITO = FOLDER + "definicionesCtaCteLineaCredito.zul";
 	static final String ZUL_CHEQUERAS = FOLDER + "editChequeras.zul";
-	static final MyArray TESORERIA = new MyArray("Tesorería", 1, ZUL_TESORERIA);
-	static final MyArray COMPRAS = new MyArray("Compras", 2, ZUL_COMPRAS);
-	static final MyArray VENTAS = new MyArray("Ventas", 3, ZUL_VENTAS);
-	static final MyArray STOCK = new MyArray("Stock", 4, ZUL_STOCK);
-	static final MyArray LOGISTICA = new MyArray("Logística", 5, ZUL_LOGISTICA);
-	static final MyArray CONTABILIDAD = new MyArray("Contabilidad", 6, ZUL_CONTABILIDAD);
-	static final MyArray RRHH = new MyArray("Recursos Humanos", 7, ZUL_RRHH);
-	static final MyArray SISTEMA = new MyArray("Sistema", 8, ZUL_SISTEMA);
+	
+	static final MyArray TESORERIA = new MyArray("Tesorería", 1, ZUL_TESORERIA, "z-icon-briefcase");
+	static final MyArray COMPRAS = new MyArray("Compras", 2, ZUL_COMPRAS, "z-icon-shopping-cart");
+	static final MyArray VENTAS = new MyArray("Ventas", 3, ZUL_VENTAS, "z-icon-tags");
+	static final MyArray STOCK = new MyArray("Stock", 4, ZUL_STOCK, "z-icon-archive");
+	static final MyArray LOGISTICA = new MyArray("Logística", 5, ZUL_LOGISTICA, "z-icon-truck");
+	static final MyArray CONTABILIDAD = new MyArray("Contabilidad", 6, ZUL_CONTABILIDAD, "z-icon-bar-chart-o");
+	static final MyArray RRHH = new MyArray("Recursos Humanos", 7, ZUL_RRHH, "z-icon-user");
+	static final MyArray SISTEMA = new MyArray("Sistema", 8, ZUL_SISTEMA, "z-icon-cog");
 
 	private MyArray selectedItem = SISTEMA;
 	private MyArray selectedTalonario;

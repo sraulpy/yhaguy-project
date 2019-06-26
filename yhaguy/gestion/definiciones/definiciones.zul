@@ -6,7 +6,6 @@
 		<listbox vflex="true" width="200px"
 			sclass="rounded"
 			model="@load(vm.modulos)"
-			checkmark="true"
 			selectedItem="@bind(vm.selectedItem)">
 			<auxhead>
 				<auxheader colspan="2" label="Módulos" />
@@ -17,8 +16,14 @@
 			</listhead>
 			<template name="model">
 				<listitem>
-					<listcell />
-					<listcell label="@load(each.pos1)" />
+					<listcell>
+						<a iconSclass="@load(each.pos4)"
+							style="color:#357ebd" disabled="true">
+						</a>
+					</listcell>
+					<listcell
+						label="@load(each.pos1.toString().toUpperCase())"
+						style="color:#357ebd" />
 				</listitem>
 			</template>
 			<listfoot>
