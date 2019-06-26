@@ -634,9 +634,10 @@ public class ControlCtaCteEmpresa extends Control {
 	 * 
 	 */
 	public void addMovimiento(CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO) throws Exception {
-
+		Object[] emp = rr.getEmpresa(nuevoMovimientoDTO.getIdEmpresa());
+		long idCartera = emp != null ? (long) emp[6] : 1;
 		CtaCteEmpresaMovimiento nuevoMovimientoDom = (CtaCteEmpresaMovimiento) movimientoAss.dtoToDomain(nuevoMovimientoDTO);
-		nuevoMovimientoDom.setCarteraCliente((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), 1));
+		nuevoMovimientoDom.setCarteraCliente((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), idCartera));		
 		rr.saveObject(nuevoMovimientoDom, this.getLoginNombre());
 	}
 
