@@ -23,6 +23,7 @@ import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2016;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2017;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
@@ -43,6 +44,7 @@ public class ProcesosTesoreria {
 	static final String SRC_CLIENTES_CLAUDIA = "./WEB-INF/docs/process/CLIENTES-CLAUDIA.csv";
 	static final String SRC_CLIENTES_VIVIANA = "./WEB-INF/docs/process/CLIENTES-VIVIANA.csv";
 	static final String SRC_FUNCIONARIOS = "./WEB-INF/docs/procesos/FUNCIONARIOS.csv";
+	static final String SRC_CARTERA = "./WEB-INF/docs/procesos/CARTERA_CLIENTES.csv";
 	
 	/**
 	 * verificacion de facturas anuladas..
@@ -1289,6 +1291,61 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	/**
+	 * asignacion de cartera de clientes..
+	 */
+	public static void asignacionDeCartera(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } }; 
+		String[][] det = { { "CLIENTE", CSV.STRING }, { "RUC", CSV.STRING }, { "CARTERA", CSV.STRING },
+				{ "TELECOBRADOR", CSV.STRING } };
+		
+		List<EmpresaCartera> carteras = rr.getCarteras();
+		Map<String, EmpresaCartera> map = new HashMap<String, EmpresaCartera>();
+		for (EmpresaCartera item : carteras) {
+			map.put(item.getDescripcion(), item);
+		}
+		List<Funcionario> cobradores = rr.getTeleCobradores();
+		Map<String, Funcionario> mapCobs = new HashMap<String, Funcionario>();
+		for (Funcionario item : cobradores) {
+			mapCobs.put(item.getDescripcion(), item);
+		}
+		
+		List<String> noEncontrado = new ArrayList<String>();
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+
+			String cliente = csv.getDetalleString("CLIENTE");		
+			String ruc = csv.getDetalleString("RUC");
+			String cartera = csv.getDetalleString("CARTERA"); 
+			String telecobrador = csv.getDetalleString("TELECOBRADOR"); 
+			
+			EmpresaCartera cart = map.get(cartera);
+			Funcionario cob = mapCobs.get(telecobrador);
+			Empresa emp = rr.getEmpresa(cliente, ruc);
+			if (emp != null) {
+				emp.setCartera(cart);
+				rr.saveObject(emp, emp.getUsuarioMod());
+				Cliente cli = rr.getClienteByEmpresa(emp.getId());
+				if (cli != null) {
+					cli.setCobrador(cob);
+					rr.saveObject(cli, cli.getUsuarioMod());
+				}				
+				System.out.println(cliente);
+			} else {
+				noEncontrado.add(cliente);
+			}
+		}
+		System.out.println("- - - - - - - - - ");
+		for (String cliente : noEncontrado) {
+			System.err.println(cliente);
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1313,7 +1370,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.addMovimientosBancoFormaPagoDepositoBancario();
 			//ProcesosTesoreria.chequearClientesDuplicados();
 			//ProcesosTesoreria.addRecaudacionesCentral();
-			ProcesosTesoreria.addChequeTerceros();
+			//ProcesosTesoreria.addChequeTerceros();
 			//ProcesosTesoreria.setNumeroRecibos();
 			//ProcesosTesoreria.setOrigenRecaudacionCentral();
 			//ProcesosTesoreria.setEmisionChequesTerceros();
@@ -1331,6 +1388,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
+			ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

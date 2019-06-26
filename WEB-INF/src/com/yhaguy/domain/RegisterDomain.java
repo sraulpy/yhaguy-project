@@ -9171,6 +9171,15 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return la empresa..
 	 */
+	public Empresa getEmpresa(String razonsocial, String ruc) throws Exception {
+		String query = "select e from Empresa e where e.razonSocial = '" + razonsocial + "' and e.ruc = '" + ruc + "'";
+		List<Empresa> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return la empresa..
+	 */
 	public Funcionario getFuncionario_(long idFuncionario) throws Exception {
 		String query = "select f from Funcionario f where f.id = " + idFuncionario;
 		List<Funcionario> list = this.hql(query);
@@ -10291,7 +10300,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);	
 	}
 	
-	public static void mainX(String[] args) {
+	public static void main_(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<CtaCteEmpresaMovimiento> movims = rr.getMovimientosConSaldo(
@@ -10320,72 +10329,6 @@ public class RegisterDomain extends Register {
 		try {
 			double test = Utiles.obtenerPorcentajeDelValor(20, 200);
 			System.out.println(test + "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void main_(String[] args) {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Date desde = Utiles.getFecha("01-01-2016 00:00:00");
-			Date hasta = new Date();
-			List<Venta> vtas = rr.getVentasCredito(desde, hasta, 6919);
-			List<NotaCredito> ncrs = rr.getNotasCreditoVenta(desde, hasta, 6919);
-			List<Recibo> recs = rr.getCobranzas(desde, hasta, 2, 6919);
-			double totv = 0.0;
-			double totn = 0.0;
-			double totr = 0.0;
-			for (Venta venta : vtas) {
-				if (!venta.isAnulado()) {
-					CtaCteEmpresaMovimiento m = new CtaCteEmpresaMovimiento();
-					m.setAnulado(false);
-					m.setCliente(venta.getCliente());
-					m.setFechaEmision(venta.getFecha());
-					m.setFechaVencimiento(venta.getVencimiento());
-					m.setIdEmpresa(53341);
-					m.setIdMovimientoOriginal(venta.getId());
-					m.setIdVendedor(venta.getVendedor().getId());
-					m.setImporteOriginal(venta.getImporteGs());
-					m.setMoneda(venta.getMoneda());
-					m.setNroComprobante(venta.getNumero());
-					m.setSaldo(venta.getImporteGs());
-					m.setSucursal(venta.getSucursal());
-					m.setTipoCambio(1);
-					m.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE));
-					m.setTipoMovimiento(venta.getTipoMovimiento());
-					rr.saveObject(m, "sys");
-					totv += venta.getImporteGs();
-					System.out.println("VENTA: " + venta.getNumero());
-				}
-			}
-			for (NotaCredito ncred : ncrs) {
-				if (!ncred.isAnulado()) {
-					if (ncred.getAuxi().equals(NotaCredito.NCR_CREDITO)) {
-						System.out.println("NCRED: " + ncred.getNumero());
-						Venta vta = ncred.getVentaAplicada();
-						System.err.println("" + vta.getId());
-						CtaCteEmpresaMovimiento m = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla(), 53341);
-						m.setSaldo(m.getSaldo() - ncred.getImporteGs());
-						rr.saveObject(m, "sys");
-						totn += ncred.getImporteGs();						
-					}
-				}
-			}
-			for (Recibo rec : recs) {
-				for (ReciboDetalle det : rec.getDetalles()) {
-					System.out.println("REC: " + rec.getNumero());
-					CtaCteEmpresaMovimiento m = det.getMovimiento();
-					m.setSaldo(m.getSaldo() - det.getMontoGs());
-					rr.saveObject(m, "sys");
-					if (m.isVentaCredito()) {
-						totr += det.getMontoGs();
-					}
-				}
-			}
-			System.out.println("VENTAS CRED.: " + Utiles.getNumberFormat(totv));
-			System.out.println("NOTAS  CRED: " + Utiles.getNumberFormat(totn));
-			System.out.println("RECIBOS: " + Utiles.getNumberFormat(totr));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
