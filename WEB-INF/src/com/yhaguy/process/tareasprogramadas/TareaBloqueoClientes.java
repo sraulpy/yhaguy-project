@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.HistoricoBloqueoClientes;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
@@ -23,22 +24,24 @@ public class TareaBloqueoClientes {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<CtaCteEmpresaMovimiento> vencidos = rr.getCtaCteMovimientosVencidos();
 			for (CtaCteEmpresaMovimiento movim : vencidos) {
-				Date vto = movim.getFechaVencimiento();
-				long dias = Utiles.diasEntreFechas(vto, new Date());
-				if (dias >= 60) {
-					Empresa emp = rr.getEmpresaById(movim.getIdEmpresa());
-					if (emp != null) {
-						ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
-						HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
-						bloqueo.setFecha(new Date());
-						bloqueo.setVencimiento(movim.getFechaVencimiento());						
-						bloqueo.setCliente(emp.getRazonSocial());
-						bloqueo.setNumeroFactura(movim.getNroComprobante_());
-						bloqueo.setDiasVencimiento(dias);
-						bloqueo.setMotivo(MOTIVO);
-						rr.saveObject(bloqueo, "sys");
-						System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
-					}					
+				if (!movim.getCarteraCliente().getDescripcion().equals(EmpresaCartera.INCOBRABLE)) {
+					Date vto = movim.getFechaVencimiento();
+					long dias = Utiles.diasEntreFechas(vto, new Date());
+					if (dias >= 60) {
+						Empresa emp = rr.getEmpresaById(movim.getIdEmpresa());
+						if (emp != null) {
+							ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
+							HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
+							bloqueo.setFecha(new Date());
+							bloqueo.setVencimiento(movim.getFechaVencimiento());						
+							bloqueo.setCliente(emp.getRazonSocial());
+							bloqueo.setNumeroFactura(movim.getNroComprobante_());
+							bloqueo.setDiasVencimiento(dias);
+							bloqueo.setMotivo(MOTIVO);
+							rr.saveObject(bloqueo, "sys");
+							System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
+						}					
+					}
 				}
 			}
 		} catch (Exception e) {
