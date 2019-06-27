@@ -6,10 +6,26 @@ import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
 public class RRHHPlanillaSalarios extends Domain {
-
+	
+	public static final String SALARIOS = "SALARIOS";
+	public static final String COMISION = "COMISION";
+	public static final String ANTICIPO = "ANTICIPO";
+	public static final String BONIFICACION = "BONIFICACION";
+	public static final String OTROS_HABERES = "OTROS HABERES";
+	public static final String PRESTAMOS = "PRESTAMOS";
+	public static final String ADELANTOS = "ADELANTOS";
+	public static final String OTROS_DESCUENTOS = "OTROS DESCUENTOS";
+	public static final String CORPORATIVO = "CORPORATIVO";
+	public static final String UNIFORME = "UNIFORME";
+	public static final String REPUESTOS = "REPUESTOS";
+	public static final String SEGURO = "SEGURO";
+	public static final String EMBARGO = "EMBARGO";
+	public static final String IPS = "IPS";
+	
 	private String mes;
 	private String anho;
 	private String funcionario;
+	private String cargo;
 	
 	private double salarios;
 	private double comision;
@@ -33,15 +49,15 @@ public class RRHHPlanillaSalarios extends Domain {
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
-			"uniforme", "repuestos", "seguro", "embargo", "ips", })
+			"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos" })
 	public double getTotalACobrar() {
 		return this.salarios + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
 				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
-				+ this.ips;
+				+ this.ips + this.prestamos + this.adelantos;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
-		"uniforme", "repuestos", "seguro", "embargo", "ips", })
+		"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos" })
 	public double getTotalADescontar() {
 		double out = 0;
 		if (this.salarios < 0) out += this.salarios; if (this.comision < 0) out += this.comision;
@@ -50,6 +66,7 @@ public class RRHHPlanillaSalarios extends Domain {
 		if (this.corporativo < 0) out += this.corporativo; if (this.uniforme < 0) out += this.uniforme;
 		if (this.repuestos < 0) out += this.repuestos; if (this.seguro < 0) out += this.seguro;
 		if (this.embargo < 0) out += this.embargo; if (this.ips < 0) out += this.ips;
+		if (this.prestamos < 0) out += this.prestamos; if (this.adelantos < 0) out += this.adelantos;
 		return out;
 }
 
@@ -195,5 +212,13 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setAnho(String anho) {
 		this.anho = anho;
+	}
+
+	public String getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
 	}
 }
