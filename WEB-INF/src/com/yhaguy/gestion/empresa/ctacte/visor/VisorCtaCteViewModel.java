@@ -1198,7 +1198,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 					m.dateToString(emision, Utiles.DD_MM_YY),
 					m.dateToString(vto, Utiles.DD_MM_YY),
 					mov.getPos3(), nro.replace("(1/1)", "").replace("(1/3)", "").replace("(2/3)", "").replace("(3/3)", ""),
-					mov.getPos5(), mov.getPos6(), Utiles.diasEntreFechas(vto, hoy) };
+					mov.getPos5(), mov.getPos6(), Utiles.diasEntreFechas(vto != null? vto : hoy, hoy) };
 			data.add(obj);
 			
 			if (this.selectedFilter.equals(CLIENTE)) {
