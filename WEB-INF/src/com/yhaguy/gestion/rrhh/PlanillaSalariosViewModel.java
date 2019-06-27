@@ -62,6 +62,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			rr.saveObject(pl, this.getLoginNombre());
 			comp.close();
 		}
+		this.planillas = this.getPlanillas_();
 	}
 	
 	@Command

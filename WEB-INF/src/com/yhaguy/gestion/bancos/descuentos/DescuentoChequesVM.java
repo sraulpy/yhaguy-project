@@ -206,7 +206,9 @@ public class DescuentoChequesVM extends BodyApp {
 			return;
 		}
 
+		this.chequeDescuento.getCheques_().removeAll(this.selectedCheques);
 		this.chequeDescuento.getCheques().removeAll(this.selectedCheques);
+		this.chequeDescuento.get_cheques().removeAll(this.selectedCheques);
 		this.selectedCheques = new ArrayList<MyArray>();
 
 	}

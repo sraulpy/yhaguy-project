@@ -17,7 +17,7 @@
 			onClick='pop_procesar.open(self, "end_before")'></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" width="150px" label="Imprimir Liquidación"
-			iconSclass="z-icon-printer"
+			iconSclass="z-icon-print"
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimir')"></button>
 	</hlayout>
