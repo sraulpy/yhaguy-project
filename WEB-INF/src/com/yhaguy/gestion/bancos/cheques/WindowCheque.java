@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.bancos.cheques;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
@@ -153,6 +154,10 @@ public class WindowCheque extends SoloViewModel {
 		}
 	}
 	
+	public List<MyArray> getMonedas() {
+		return null;
+	}
+	
 	// para saber el tipo de momenda a usar
 	private MyArray getMonedaCorriente(){
 		MyArray out = null;
@@ -161,8 +166,7 @@ public class WindowCheque extends SoloViewModel {
 		}else{
 			out = this.cuentaDTO.getMoneda();
 		}
-		return out;
-		
+		return out;		
 	}
 
 	public double getMontoRecibo() {
