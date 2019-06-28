@@ -8379,7 +8379,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Object[]> aux = new ArrayList<Object[]>();
 			Map<String, Object[]> data = new HashMap<String, Object[]>();			
 
-			movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId());	
+			movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(), 0);	
 			for (Object[] movim : movims) {
 				if ((rubro != null && this.isRubro(rubro.getId(), idEmpresa)) || rubro == null) {
 					long id_mov = (long) movim[0];
@@ -8498,6 +8498,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = Utiles.getFecha("01-01-2016 00:00:00");		
 				Date hasta = new Date();
 				Tipo moneda = filtro.getMoneda();
+				EmpresaCartera cartera = filtro.getCartera();
+				long idCartera = cartera != null ? cartera.getId().longValue() : 0;
 				
 				if (moneda.esNuevo()) {
 					Clients.showNotification("DEBE SELECCIONAR UNA MONEDA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -8508,7 +8510,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				String caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE;					
 				List<Object[]> movims = new ArrayList<Object[]>();	
 
-				movims = rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId());
+				if (cartera != null) {
+					movims = rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId(), idCartera);
+				} else {
+					for (EmpresaCartera cart : filtro.getCarteras()) {
+						movims.addAll(rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId(), cart.getId()));
+					}
+				}
+				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CTA_CTE_SALDOS_DESGLOSADO;
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new SaldosCtaCteDesglosado(movims, periodo);
@@ -8547,7 +8556,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					totalCHE += monto;
 				}
 				
-				List<Object[]> movims = rr.getSaldos(desde, hasta, Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 0, cliente.getIdEmpresa(), gs.getId());
+				List<Object[]> movims = rr.getSaldos(desde, hasta, Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 0, cliente.getIdEmpresa(), gs.getId(), 0);
 				for (Object[] movim : movims) {
 					Date vencimiento = (Date) movim[7];
 					String sigla_tm = (String) movim[13];
@@ -21245,31 +21254,34 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 		for (Object[] value : values) {
 			long idEmpresa = (long) value[14];
 			double saldo = (double) value[9];
-			Double acum = this.saldo.get(idEmpresa + "");
+			long idCartera = (long) value[15];
+			Double acum = this.saldo.get(idCartera + "-" + idEmpresa);
 			if (acum != null) {
 				acum += saldo;
 			} else {
 				acum = saldo;
 			}
-			this.saldo.put(idEmpresa + "", acum);
+			this.saldo.put(idCartera + "-" + idEmpresa, acum);
 		}
 		
 		for (Object[] value : values) {
 			long idEmpresa = (long) value[14];
 			String razonSocial = (String) value[10];
+			String cartera = (String) value[16];
 			Date emision = (Date) value[6];
 			double saldo = (double) value[9];
+			long idCartera = (long) value[15];
 			int index = Utiles.getNumeroMes(emision);
 			
 			if (Utiles.getDateToString(emision, "yyyy").equals(periodo)) {
-				Object[] acum = data.get(idEmpresa + "");
+				Object[] acum = data.get(idCartera + "-" + idEmpresa);
 				if (acum != null) {
 					acum[index] = ((double) acum[index]) + saldo;
 				} else {
-					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idEmpresa + "") };
+					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera };
 					acum[index] = saldo;
 				} 
-				data.put(idEmpresa + "", acum);
+				data.put(idCartera + "-" + idEmpresa, acum);
 			}
 			
 			
@@ -21301,6 +21313,8 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 
 		if ("Cliente".equals(fieldName)) {
 			value = det[0];
+		} else if ("cartera".equals(fieldName)) {
+			value = det[14];
 		} else if ("enero".equals(fieldName)) {
 			value = FORMATTER.format(det[1]);
 		} else if ("febrero".equals(fieldName)) {
