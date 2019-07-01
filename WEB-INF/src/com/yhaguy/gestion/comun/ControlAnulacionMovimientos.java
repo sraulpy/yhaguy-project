@@ -19,6 +19,7 @@ import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.NotaDebito;
+import com.yhaguy.domain.NotaDebitoDetalle;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
@@ -389,6 +390,10 @@ public class ControlAnulacionMovimientos {
 		NotaDebito nd = (NotaDebito) rr.getObject(NotaDebito.class.getName(), idNotaDebito);
 		nd.setEstadoComprobante(getEstadoComprobanteAnulado());
 		nd.setAuxi(motivo);
+		nd.setImporteGs(0);
+		for (NotaDebitoDetalle ndet : nd.getDetalles()) {
+			ndet.setImporteGs(0);
+		}
 		rr.saveObject(nd, user);
 		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(nd.getId().longValue(), nd.getTipoMovimiento().getSigla());
 		movim.setAnulado(true);

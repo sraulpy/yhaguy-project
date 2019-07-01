@@ -10367,6 +10367,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LIBRO_COMPRAS_DESPACHO = "CON-00036";
 		static final String LIBRO_COMPRAS_MERCADERIA = "CON-00037";
 		static final String VENTAS_GENERICO_COSTOS = "CON-00038";
+		static final String LIBRO_COMPRAS_MATRICIAL = "CON-00040";
 		
 		/**
 		 * procesamiento del reporte..
@@ -10505,6 +10506,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			case VENTAS_GENERICO_COSTOS:
 				this.ventasGenericoCosto(mobile);
 				break;
+				
+			case LIBRO_COMPRAS_MATRICIAL:
+				this.libroComprasMatricial();
+				break;	
 				
 			case LIBRO_MAYOR:
 				this.libroMayor();
@@ -12186,6 +12191,56 @@ public class ReportesViewModel extends SimpleViewModel {
 					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
 				}
 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * Libro compras matricial.
+		 */
+		private void libroComprasMatricial() {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Date desde_ = Utiles.getFechaInicioOperaciones();
+				Date hasta_ = new Date();
+				boolean otrosComprobantes = filtro.isFraccionado();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				Object[] formato = filtro.getFormato();
+				
+				RegisterDomain rr = RegisterDomain.getInstance();
+				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
+				long idSucursal = suc != null ? suc.getId() : 0;
+				List<Gasto> gastos = new ArrayList<Gasto>();
+				List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
+				List<CompraLocalFactura> compras = new ArrayList<CompraLocalFactura>();
+				List<Gasto> despacho = new ArrayList<Gasto>();
+				List<ImportacionFactura> importaciones = new ArrayList<ImportacionFactura>();
+				
+				if (otrosComprobantes) {
+					gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal);
+				} else {
+					gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
+					despacho = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal);
+					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
+					compras = rr.getLibroComprasLocales(desde, hasta, idSucursal);
+					gastos.addAll(despacho);
+				}
+				if (suc != null && suc.getId().longValue() == SucursalApp.ID_CENTRAL) {
+					importaciones = rr.getLibroComprasImportacion(desde, hasta, desde_, hasta_);
+				}
+				
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_MATRICIAL;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new LibroComprasMatricial(gastos, importaciones, notascredito, compras);
+				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", "LIBRO I.V.A. COMPRAS");
+				params.put("Sucursal", sucursal);
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("periodo", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY) + " a " + Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				imprimirJasper(source, params, dataSource, formato);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -22700,6 +22755,198 @@ class CobranzasVendedorDetallado implements JRDataSource {
 			return true;
 		}
 		return false;
+	}
+}
+
+/**
+ * DataSource del Libro Compras
+ */
+class LibroComprasMatricial implements JRDataSource {
+	
+	List<BeanLibroCompra> values = new ArrayList<BeanLibroCompra>();
+	
+	double total_gravada10_ = 0;
+	double total_gravada5_ = 0;
+	double total_exenta_ = 0;
+	double total_iva10_ = 0;
+	double total_iva5_ = 0;
+	double total_baseimponible_ = 0;
+	double total_ = 0;
+	
+	public LibroComprasMatricial(List<Gasto> gastos, List<ImportacionFactura> importaciones, List<NotaCredito> notasCredito, List<CompraLocalFactura> compras) {
+		for (Gasto gasto : gastos) {
+			String timbrado = gasto.getTimbrado();
+			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(gasto.getFecha(), "dd"),
+					Utiles.getDateToString(gasto.getModificado(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
+					gasto.getTipoMovimiento().getDescripcion(), timbrado,
+					gasto.getProveedor().getRazonSocial(), gasto.getProveedor().getRuc(), gasto.getGravada10(),
+					gasto.getGravada5(), gasto.getIva10(), gasto.getIva5(), gasto.getExenta(),
+					gasto.getIva5() + gasto.getIva10() + gasto.getExenta() + gasto.getGravada10() + gasto.getGravada5(),
+					gasto.getBaseImponible(), gasto.getDescripcionCuenta1(), gasto.getFecha());
+			values.add(value);
+		}		
+		for (NotaCredito nc : notasCredito) {
+				Date fecha_ = nc.getFechaEmision();
+				String fechaCarga = Utiles.getDateToString(nc.getModificado(), Utiles.DD_MM_YYYY);
+				String fecha = Utiles.getDateToString(nc.getFechaEmision(), "dd");
+				String numero = nc.getNumero();
+				String concepto = "NOTA CRÉDITO-GASTO";
+				String timbrado = nc.getTimbrado().getNumero();
+				String proveedor = nc.getProveedor().getRazonSocial();
+				String ruc = nc.getProveedor().getRuc();
+				double gravada10 = nc.getTotalGravado10() * -1;
+				double gravada5 = 0.0;
+				double exenta = nc.getTotalExenta() * -1;
+				double iva10 = nc.getTotalIva10() * -1;
+				double iva5 = 0.0;
+				double total = gravada10 + gravada5 + iva10 + iva5 + exenta;
+				double baseImponible = 0.0;
+				String cuenta1 = (nc.getObservacion().contains("COMISIONES") || nc.getObservacion().contains("TELEFONIA") || nc.getObservacion().contains("CT:")) ? 
+						nc.getObservacion().replace("CT:", "") : "DESCUENTOS OBTENIDOS";
+				
+				BeanLibroCompra value = new BeanLibroCompra(fecha, fechaCarga, numero, concepto, timbrado, proveedor, ruc,
+						gravada10, gravada5, iva10, iva5, exenta, total, baseImponible, cuenta1, fecha_);
+				this.values.add(value);
+		}
+		for (ImportacionFactura fac : importaciones) {
+			BeanLibroCompra value = new BeanLibroCompra(
+					Utiles.getDateToString(fac.getFechaOriginal(), "dd"),
+					Utiles.getDateToString(fac.getModificado(), Utiles.DD_MM_YYYY), fac.getNumero(),
+					fac.getTipoMovimiento().getDescripcion(), "", "PROVEEDOR DEL EXTERIOR",
+					Configuracion.RUC_EMPRESA_EXTERIOR, 0.0, 0.0, 0.0, 0.0, (fac.getTotalImporteDs() * fac.getPorcProrrateo()),
+					(fac.getTotalImporteDs() * fac.getPorcProrrateo()), 0.0, "IMPORTACIONES EN CURSO", fac.getFechaOriginal());
+			values.add(value);
+		}
+		for (CompraLocalFactura fac : compras) {
+			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(fac.getFechaOriginal(), "dd"),
+					Utiles.getDateToString(fac.getModificado(), Utiles.DD_MM_YYYY), fac.getNumero(),
+					fac.getTipoMovimiento().getDescripcion(), "",
+					fac.getProveedor().getRazonSocial(), fac.getProveedor().getRuc(), fac.getGravada10(),
+					fac.getGravada5(), fac.getIva10(), fac.getIva5(), fac.getExenta(),
+					fac.getIva5() + fac.getIva10() + fac.getExenta() + fac.getGravada10() + fac.getGravada5(),
+					0.0, "", fac.getFechaOriginal());
+			values.add(value);
+		}
+		
+		// ordena la lista segun fecha..
+		Collections.sort(this.values, new Comparator<BeanLibroCompra>() {
+			@Override
+			public int compare(BeanLibroCompra o1, BeanLibroCompra o2) {
+				Date fecha1 = o1.fecha_;
+				Date fecha2 = o2.fecha_;
+				return fecha1.compareTo(fecha2);
+			}
+		});
+    }
+	
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+        Object value = null;
+        String fieldName = field.getName();
+        BeanLibroCompra compra = this.values.get(index);
+         
+        if ("dia".equals(fieldName)) {
+        	value = compra.fecha;
+        } else if ("FechaCarga".equals(fieldName)) {
+        	value = compra.fechaCarga;
+        } else if ("Numero".equals(fieldName)) {
+        	value = compra.numero;
+        } else if ("Concepto".equals(fieldName)) {
+        	value = compra.concepto;
+        } else if ("Timbrado".equals(fieldName)) {
+        	value = compra.timbrado;
+        } else if ("Proveedor".equals(fieldName)) {
+        	value = compra.proveedor;
+        } else if ("Ruc".equals(fieldName)) {
+        	value = compra.ruc;
+        } else if ("Gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.gravada10);
+        } else if ("Gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.gravada5);
+        } else if ("Exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.exenta);
+        } else if ("Iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.iva10);
+        } else if ("Iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.iva5);
+        } else if ("Total".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.total);
+        } else if ("Base_imponible".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.baseImponible);
+        } else if ("Total_Gravada10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_gravada10_);
+        } else if ("Total_Gravada5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_gravada5_);
+        } else if ("Total_Iva5".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_iva5_);
+        } else if ("Total_Iva10".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_iva10_);
+        } else if ("Total_Exenta".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_exenta_);
+        } else if ("Total_".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_);
+        } else if ("Total_base_imponible".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(0.0);
+        }
+        return value;
+    }
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < values.size() - 1) {
+			BeanLibroCompra compra = this.values.get(index + 1);
+	        this.total_gravada10_ += compra.gravada10;
+	        this.total_gravada5_ += compra.gravada5;
+	        this.total_iva10_ += compra.iva10;
+	        this.total_iva5_ += compra.iva5;
+	        this.total_exenta_ += compra.exenta;
+	        this.total_ = (this.total_gravada10_ + this.total_gravada5_ + this.total_iva10_ + this.total_iva5_ + this.total_exenta_);
+			index ++;
+			return true;
+		}
+		return false;
+	}
+	
+	class BeanLibroCompra {
+		Date fecha_;
+		String fecha;
+		String fechaCarga;
+		String numero;
+		String concepto;
+		String timbrado;
+		String proveedor;
+		String ruc;
+		double gravada10;
+		double gravada5;
+		double exenta;
+		double iva10;
+		double iva5;
+		double total;
+		double baseImponible;
+		String cuenta1;
+
+		public BeanLibroCompra(String fecha, String fechaCarga, String numero, String concepto, String timbrado,
+				String proveedor, String ruc, double gravada10, double gravada5, double iva10, double iva5, double exenta,
+				double total, double baseImponible, String cuenta, Date fecha_) {
+			this.fecha = fecha;
+			this.fechaCarga = fechaCarga;
+			this.numero = numero;
+			this.concepto = concepto;
+			this.timbrado = timbrado;
+			this.proveedor = proveedor;
+			this.ruc = ruc;
+			this.gravada10 = gravada10;
+			this.gravada5 = gravada5;
+			this.iva10 = iva10;
+			this.iva5 = iva5;
+			this.exenta = exenta;
+			this.total = total;
+			this.cuenta1 = cuenta;
+			this.baseImponible = baseImponible;
+			this.fecha_ = fecha_;
+		}
 	}
 }
 
