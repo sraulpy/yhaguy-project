@@ -7,7 +7,7 @@
 			<tab label="Usuarios" width="200px" />
 			<tab label="Propiedades" width="200px"
 				visible="@load(vm.selectedUsuario.id > 0 ? true : false)" />
-			<tab label="Pefiles" width="200px" />
+			<tab label="Perfiles" width="200px" />
 			<tab label="Módulos" width="200px"
 				visible="@load(vm.visibleTabsDesarrollador)" />
 			<tab label="Formularios" width="200px"
