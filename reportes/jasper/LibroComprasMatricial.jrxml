@@ -266,21 +266,21 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Detail" x="16" y="0" width="96" height="15" uuid="66da2dd0-2ac6-4858-b4d6-2d715d499bd1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="FreeSans" isBold="false"/>
+					<font fontName="Georgia" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Detail" x="121" y="0" width="197" height="15" uuid="ca53985c-ca3b-46bc-a8de-06b8ea879815"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="FreeSans" isBold="false" isPdfEmbedded="false"/>
+					<font fontName="Georgia" isBold="false" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Proveedor}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Detail" x="318" y="0" width="72" height="15" uuid="b35d85be-49a6-4070-b155-f4c95e0f6cdc"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="FreeSans" isBold="false"/>
+					<font fontName="Georgia" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Ruc}]]></textFieldExpression>
 			</textField>
