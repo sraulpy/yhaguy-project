@@ -6621,7 +6621,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_DET;
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new CtaCteSaldosDataSource_(movimientos, aux);
-			params.put("Titulo", cliente ? codReporte + " - SALDOS DE CLIENTES DETALLADO" : " - SALDOS DE PROVEEDORES DETALLADO");
+			params.put("Titulo", cliente ? codReporte + " - SALDOS DE CLIENTES DETALLADO" : codReporte + " - SALDOS DE PROVEEDORES DETALLADO");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Vendedor", vendedor == null ? "TODOS.." : vendedor.getRazonSocial().toUpperCase());
 			params.put("Rubro", rubro == null ? "TODOS.." : rubro.getDescripcion().toUpperCase());
@@ -14111,8 +14111,10 @@ class CtaCteSaldosDataSource_ implements JRDataSource {
 		String siglaTm = (String) det[13];
 		
 		if ("Numero".equals(fieldName)) {
-			int lenght = nrocomprobante.length();
-			value = nrocomprobante.substring(0, lenght < 15? lenght : 15);
+			if (nrocomprobante != null) {
+				int lenght = nrocomprobante.length();
+				value = nrocomprobante.substring(0, lenght < 15? lenght : 15);
+			}			
 		} else if ("Concepto".equals(fieldName)) {
 			value = tipomovimiento;
 		} else if ("Telefono".equals(fieldName)) {
