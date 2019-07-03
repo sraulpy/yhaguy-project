@@ -23019,6 +23019,14 @@ class LibroVentasMatricial implements JRDataSource {
 	double totalImpuesto = 0;
 	double totalImporte = 0;
 	double totalExenta = 0;
+	
+	double total_gravada10_ = 0;
+	double total_gravada5_ = 0;
+	double total_exenta_ = 0;
+	double total_iva10_ = 0;
+	double total_iva5_ = 0;
+	double total_baseimponible_ = 0;
+	double total_ = 0;
 
 	public LibroVentasMatricial(List<Venta> ventas,
 			List<NotaCredito> notasCredito, List<NotaDebito> notasDebito, Date desde, Date hasta) {
@@ -23067,6 +23075,18 @@ class LibroVentasMatricial implements JRDataSource {
 			value = FORMATTER.format(venta.getExenta());
 		} else if ("Total".equals(fieldName)) {
 			value = FORMATTER.format(venta.getTotal());
+		} else if ("Total_Exenta".equals(fieldName)) {
+			value = FORMATTER.format(this.total_exenta_);
+		} else if ("Total_Iva5".equals(fieldName)) {
+			value = FORMATTER.format(this.total_iva5_);
+		} else if ("Total_Iva10".equals(fieldName)) {
+			value = FORMATTER.format(this.total_iva10_);
+		} else if ("Total_Gravada10".equals(fieldName)) {
+			value = FORMATTER.format(this.total_gravada10_);
+		} else if ("Total_Gravada5".equals(fieldName)) {
+			value = FORMATTER.format(this.total_gravada5_);
+		} else if ("Total_".equals(fieldName)) {
+			value = FORMATTER.format(this.total_);
 		}
 		return value;
 	}
@@ -23074,6 +23094,13 @@ class LibroVentasMatricial implements JRDataSource {
 	@Override
 	public boolean next() throws JRException {
 		if (index < values.size() - 1) {
+			BeanLibroVenta venta = this.values.get(index + 1);
+	        this.total_gravada10_ += venta.getGravado10();
+	        this.total_gravada5_ += venta.getGravado5();
+	        this.total_iva10_ += venta.getIva10();
+	        this.total_iva5_ += venta.getIva5();
+	        this.total_exenta_ += venta.getExenta();
+	        this.total_ = (this.total_gravada10_ + this.total_gravada5_ + this.total_iva10_ + this.total_iva5_ + this.total_exenta_);
 			index++;
 			return true;
 		}
