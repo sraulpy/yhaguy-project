@@ -38,5 +38,18 @@
 				</template>
 			</combobox>
 		</row>
+		<row>
+			<cell colspan="2">
+				<vlayout>
+					<space></space>
+					<label style="color:red">
+						* Se recomienda descargar el documento PDF, 
+					</label>
+					<label style="color:red">
+						e imprimir desde el documento descargado..
+					</label>
+				</vlayout>
+			</cell>
+		</row>
 	</rows>
 </grid>

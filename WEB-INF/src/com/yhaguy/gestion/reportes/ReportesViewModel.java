@@ -11937,7 +11937,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, new ArrayList<>(), notascredito);
+				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, new ArrayList<ImportacionFactura>(), notascredito);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", "LIBRO DE COMPRAS INDISTINTO - LEY 125/91 MODIF. POR LEY 2421/04");
 				params.put("Sucursal", sucursal);
@@ -11974,7 +11974,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO_;
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, importaciones, new ArrayList<>());
+				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, importaciones, new ArrayList<NotaCredito>());
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", "LIBRO DE COMPRAS S/DESPACHO - LEY 125/91 MODIF. POR LEY 2421/04");
 				params.put("Sucursal", sucursal);
@@ -22865,6 +22865,8 @@ class LibroComprasMatricial implements JRDataSource {
         	value = Utiles.getNumberFormat(compra.gravada10);
         } else if ("Gravada5".equals(fieldName)) {
         	value = Utiles.getNumberFormat(compra.gravada5);
+        } else if ("Gravadas".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(compra.gravada5 + compra.gravada10);
         } else if ("Exenta".equals(fieldName)) {
         	value = Utiles.getNumberFormat(compra.exenta);
         } else if ("Iva10".equals(fieldName)) {
@@ -22879,6 +22881,8 @@ class LibroComprasMatricial implements JRDataSource {
         	value = Utiles.getNumberFormat(this.total_gravada10_);
         } else if ("Total_Gravada5".equals(fieldName)) {
         	value = Utiles.getNumberFormat(this.total_gravada5_);
+        } else if ("Total_Gravada".equals(fieldName)) {
+        	value = Utiles.getNumberFormat(this.total_gravada5_ + this.total_gravada10_);
         } else if ("Total_Iva5".equals(fieldName)) {
         	value = Utiles.getNumberFormat(this.total_iva5_);
         } else if ("Total_Iva10".equals(fieldName)) {
@@ -22888,7 +22892,7 @@ class LibroComprasMatricial implements JRDataSource {
         } else if ("Total_".equals(fieldName)) {
         	value = Utiles.getNumberFormat(this.total_);
         } else if ("Total_base_imponible".equals(fieldName)) {
-        	value = Utiles.getNumberFormat(0.0);
+        	value = Utiles.getNumberFormat(this.total_baseimponible_);
         }
         return value;
     }
@@ -22902,6 +22906,7 @@ class LibroComprasMatricial implements JRDataSource {
 	        this.total_iva10_ += compra.iva10;
 	        this.total_iva5_ += compra.iva5;
 	        this.total_exenta_ += compra.exenta;
+	        this.total_baseimponible_ += compra.baseImponible;
 	        this.total_ = (this.total_gravada10_ + this.total_gravada5_ + this.total_iva10_ + this.total_iva5_ + this.total_exenta_);
 			index ++;
 			return true;
@@ -22946,6 +22951,10 @@ class LibroComprasMatricial implements JRDataSource {
 			this.cuenta1 = cuenta;
 			this.baseImponible = baseImponible;
 			this.fecha_ = fecha_;
+		}
+		
+		public double getGravada() {
+			return this.gravada10 + this.gravada5;
 		}
 	}
 }
