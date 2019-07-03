@@ -1,7 +1,10 @@
 package com.yhaguy.gestion.contabilidad;
 
+import java.util.Date;
+
 public class BeanLibroVenta {
 
+	Date fecha_;
 	private String fecha;
 	private String concepto;
 	private String numero;
@@ -16,7 +19,8 @@ public class BeanLibroVenta {
 
 	public BeanLibroVenta(String fecha, String concepto, String numero,
 			String razonSocial, String ruc, double gravado10, double iva10,
-			double gravado5, double iva5, double total, double exenta) {
+			double gravado5, double iva5, double total, double exenta, Date fecha_) {
+		this.fecha_ = fecha_;
 		this.fecha = fecha;
 		this.concepto = concepto;
 		this.numero = numero;
@@ -116,5 +120,13 @@ public class BeanLibroVenta {
 
 	public void setExenta(Double exenta) {
 		this.exenta = exenta;
+	}
+
+	public Date getFecha_() {
+		return fecha_;
+	}
+
+	public void setFecha_(Date fecha_) {
+		this.fecha_ = fecha_;
 	}
 }
