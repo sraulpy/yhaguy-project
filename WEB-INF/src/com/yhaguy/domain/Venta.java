@@ -631,13 +631,6 @@ public class Venta extends Domain {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
-		if (this.tipoMovimiento != null) {
-			if (!this.isVentaContado()) {
-				this.vencimiento = Utiles.agregarDias(this.fecha, 30);
-			} else {
-				this.vencimiento = this.fecha;
-			}
-		}
 	}
 
 	public String getNumero() {
@@ -716,13 +709,7 @@ public class Venta extends Domain {
 	}
 
 	public void setVencimiento(Date vencimiento) {
-		if (this.tipoMovimiento != null) {
-			if (!this.isVentaContado()) {
-				this.vencimiento = Utiles.agregarDias(this.fecha, 30);
-			} else {
-				this.vencimiento = this.fecha;
-			}
-		}		
+		this.vencimiento = vencimiento;
 	}
 
 	public double getTipoCambio() {
