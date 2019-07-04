@@ -7144,9 +7144,10 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return el costo promedio del articulo..
 	 */
-	public double getCostoPromedio(long idArticulo) throws Exception {
-		Articulo art = this.getArticuloById(idArticulo);
-		String query = "select a from ArticuloCosto a where a.articulo.id = " + idArticulo;
+	public double getCostoPromedio(long idArticulo, Date fecha) throws Exception {
+		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a from ArticuloCosto a where a.articulo.id = " + idArticulo
+				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
 		List<ArticuloCosto> list = this.hql(query);
 		if (list.size() > 0) {
 			double out = 0;
@@ -7156,7 +7157,7 @@ public class RegisterDomain extends Register {
 			return Utiles.getRedondeo(out / list.size());
 		
 		} else {
-			return art.getCostoGs();
+			return 0.0;
 		}
 	}
 	
@@ -7666,17 +7667,6 @@ public class RegisterDomain extends Register {
 				+ " (c.desde >= '" + desde_ + "' and c.hasta <= '" + hasta_ + "')";
 		query += " order by c.numero";
 		return this.hql(query);
-	}
-	
-	/**
-	 * @return el costo promedio del articulo a una fecha..
-	 */
-	public double getCostoPromedio(long idArticulo, Date fecha) throws Exception {
-		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select h.costoPromedioGs from HistoricoArticuloStock h where h.idArticulo = " + idArticulo 
-				+" and h.fecha <= '" + fecha_ + "' order by h.fecha desc";
-		List<Double> list = this.hql(query);
-		return list.size() > 0 ? list.get(0) : 0;
 	}
 	
 	/**

@@ -964,6 +964,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					long stock = historial_ != null ? Long.parseLong(saldo) : (long) 0;
 					double costo  = (double) art[3];
 					
+					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+						costo = rr.getCostoPromedio(idArticulo, hasta);
+					}
+					
 					if (stock != 0 && costo > 0) {
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
 					}				
