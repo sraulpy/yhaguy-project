@@ -820,7 +820,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 
 			case LISTADO_STOCK_VALORIZADO:
-				this.listadoStockValorizado();
+				this.listadoStockValorizado(LISTADO_STOCK_VALORIZADO);
 				break;
 
 			case LISTADO_AJUSTES:
@@ -925,7 +925,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte STK-00003
 		 */
-		private void listadoStockValorizado() {
+		private void listadoStockValorizado(String codReporte) {
 			try {
 				Proveedor proveedor = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
 				Date hasta = filtro.getFechaHasta();
@@ -10409,7 +10409,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case STOCK_MERCADERIA_COSTO_PROMEDIO:
-				this.stockMercaderiaAunaFecha();
+				this.stockMercaderiaAunaFecha(STOCK_MERCADERIA_COSTO_PROMEDIO);
 				break;	
 				
 			case ANTICIPOS_PROVEEDORES_EXTERIOR:
@@ -10915,7 +10915,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte CON-00011
 		 */
-		public void stockMercaderiaAunaFecha() throws Exception {
+		public void stockMercaderiaAunaFecha(String codReporte) throws Exception {
 			try {
 				Proveedor proveedor = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
 				Date hasta = filtro.getFechaHasta();
@@ -10964,6 +10964,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
 				String deposito_ = deposito != null ? deposito.getDescripcion() : "TODOS..";
 				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, deposito_);
+				rep.setTitulo(codReporte + "STOCK VALORIZADO (A UNA FECHA)");
 				rep.setApaisada();
 				rep.setDatosReporte(data);
 				
@@ -20502,7 +20503,8 @@ class ReporteStockValorizadoAunaFecha extends ReporteYhaguy {
 	private String proveedor;
 	private String deposito;
 	
-	public ReporteStockValorizadoAunaFecha(Date hasta, String articulo, String tipoCosto, String familia, String proveedor, String deposito) {
+	public ReporteStockValorizadoAunaFecha(Date hasta, String articulo, String tipoCosto, String familia,
+			String proveedor, String deposito) {
 		this.hasta = hasta;
 		this.articulo = articulo;
 		this.tipoCosto = tipoCosto;
