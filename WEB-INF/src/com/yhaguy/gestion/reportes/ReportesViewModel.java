@@ -6182,7 +6182,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_CLIENTE_ARTICULO;
 				if (format.equals(csv) || format.equals(xls)) {
-					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE_;
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_CLIENTE_ARTICULO_;
 				}
 				
 				String flia = familia != null ? familia.getDescripcion() : "TODOS..";
