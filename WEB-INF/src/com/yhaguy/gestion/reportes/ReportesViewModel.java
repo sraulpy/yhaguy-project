@@ -6011,6 +6011,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
 				Map<String, Double> importes = new HashMap<String, Double>();
+				Map<String, Object[]> datos = new HashMap<String, Object[]>();
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[4]);
@@ -6021,6 +6022,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (acum != null) {
 						acum += ((Double) venta[3]);
 						cants.put(key, acum);
+						datos.put(cod, new Object[] { (Double) venta[9], (Double) venta[10] });
 					} else {
 						cants.put(key, ((Double) (venta[3])));
 					}
@@ -6048,7 +6050,6 @@ public class ReportesViewModel extends SimpleViewModel {
 					Double acum_ = importes.get(key);
 					if (acum_ != null) {
 						acum_ -= ((Double) nc[6]);
-						importes.put(key, acum_);
 					} else {
 						importes.put(key, ((Double) (nc[6]) * -1));
 					}
@@ -6136,6 +6137,8 @@ public class ReportesViewModel extends SimpleViewModel {
 						Double impDiciembre = importes.get(key_ + ";12");
 						if (impDiciembre == null) impDiciembre = 0.0;
 						
+						Object[] costoPrecio = rr.getCostoPrecio(codigo);
+						long stock = rr.getStock(codigo);
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
 						hist.setReferencia(descripcion);
@@ -6164,6 +6167,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.set_octubre(impOctubre);
 						hist.set_noviembre(impNoviembre);
 						hist.set_diciembre(impDiciembre);
+						hist.setCostoGs((double) costoPrecio[1]);
+						hist.setCostoFobGs((double) costoPrecio[2]);
+						hist.setStock1(stock);
 						hist.setTotal_(hist.getEnero() + hist.getFebrero() + hist.getMarzo() + hist.getAbril() + hist.getMayo() + hist.getJunio()
 								+ hist.getJulio() + hist.getAgosto() + hist.getSetiembre() + hist.getOctubre() + hist.getNoviembre() + hist.getDiciembre());
 						
@@ -23555,6 +23561,8 @@ class VentasClienteArticulo implements JRDataSource {
 			value = det.getStock8() + "";			
 		} else if ("Dep_gral".equals(fieldName)) {
 			value = det.getTotal() + "";			
+		} else if ("Stock".equals(fieldName)) {
+			value = det.getStock1() + "";			
 		} else if ("Enero".equals(fieldName)) {
 			value = det.getEnero_();
 		} else if ("Febrero".equals(fieldName)) {
@@ -23651,6 +23659,10 @@ class VentasClienteArticulo implements JRDataSource {
 			value = Utiles.getNumberFormat(this.totalSetiembre);
 		} else if ("tot_set_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalSetiembre_);
+		}  else if ("Costo".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getCostoGs());
+		}   else if ("Mayorista".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getCostoFobGs());
 		}
 		return value;
 	}

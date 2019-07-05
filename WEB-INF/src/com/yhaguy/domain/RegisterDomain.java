@@ -1188,6 +1188,23 @@ public class RegisterDomain extends Register {
 		}
 		return out;
 	}
+	
+	/**
+	 * Retorna el ArticuloDeposito a partir del id del Articulo y el id del
+	 * Deposito..
+	 */
+	public ArticuloDeposito getArticuloDeposito(String codigo, long idDeposito)
+			throws Exception {
+		ArticuloDeposito out = null;
+		String query = " select art from ArticuloDeposito art where "
+				+ " art.deposito.id = " + idDeposito
+				+ " and art.articulo.codigoInterno = '" + codigo + "'";
+		List<ArticuloDeposito> l = this.hql(query);
+		if (l.size() == 1) {
+			out = l.get(0);
+		}
+		return out;
+	}
 
 	/**
 	 * Retorna el Stock disponible a partir del id del Articulo y el id del
@@ -7273,6 +7290,21 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el stock total del articulo..
+	 */
+	public long getStock(String codigo) throws Exception {
+		long out = 0;
+		List<Deposito> deps = this.getDepositos();
+		for (long i = 2; i <= deps.size(); i++) {
+			ArticuloDeposito adp = this.getArticuloDeposito(codigo, i);
+			if (adp != null) {
+				out += adp.getStock();
+			}			
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el stock y el costo del articulo..
 	 */
 	public Object[] getStockCosto(long idarticulo) throws Exception {
@@ -9388,12 +9420,14 @@ public class RegisterDomain extends Register {
 	 * [6]:importegs
 	 * [7]:vendedor
 	 * [8]:descripcion
+	 * [9]:costogs
+	 * [10]:preciogs
 	 */
 	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * 1.1), v.fecha, v.cliente.empresa.razonSocial,"
-				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), v.vendedor.empresa.razonSocial, d.articulo.descripcion"
+				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), v.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -9423,7 +9457,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * 1.1), n.fechaEmision, n.cliente.empresa.razonSocial,"
-				+ " d.importeGs, n.vendedor.empresa.razonSocial, d.articulo.descripcion"
+				+ " d.importeGs, n.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
@@ -10360,6 +10394,16 @@ public class RegisterDomain extends Register {
 	public EmpresaCartera getCartera(String descripcion) throws Exception {
 		String query = "select c from EmpresaCartera c where c.descripcion = '" + descripcion + "'";
 		List<EmpresaCartera> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return los datos del articulo..
+	 */
+	public Object[] getCostoPrecio(String codigo) throws Exception {
+		String query = "select a.id, a.costoGs, a.precioGs from Articulo a"
+				+ " where a.codigoInterno = '" + codigo + "'";
+		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
