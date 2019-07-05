@@ -5,7 +5,7 @@
 	<grid sclass="vgrid">
 		<rows>
 			<row>
-				<hlayout hflex="true">
+				<hlayout hflex="true" valign="middle">
 				<vlayout spacing="0" hflex="true">
 					<field value="Órden de Pago" />
 					<hlayout>
@@ -27,7 +27,11 @@
 				<space></space>
 				<vlayout spacing="0" hflex="true">
 					<field value="Tipo Cambio" />
-					<guaranibox placeholder="Tipo Cambio.." value="@bind(vm.tipoCambio)" width="150px" />
+					<hlayout>
+						<guaranibox placeholder="Tipo Cambio.." value="@bind(vm.tipoCambio)" width="150px" />
+						<a label=" Link Cotización de la S.E.T." onClick='pop_set.open(self, "after_start")'
+							iconSclass="z-icon-globe"></a>
+					</hlayout>
 				</vlayout>
 				</hlayout>
 			</row>
@@ -78,4 +82,8 @@
 		</listfoot>
 	</listbox>
 	</div>
+	<popup id="pop_set" sclass="rounded">
+		<iframe height="600px" width="1000px"
+			src="https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos"></iframe>
+	</popup>
 </window>
