@@ -9377,6 +9377,65 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.volumen
+	 * [3]:cantidad
+	 * [4]:fecha
+	 * [5]:cliente.empresa.razonSocial
+	 * [6]:importegs
+	 * [7]:vendedor
+	 * [8]:descripcion
+	 */
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * 1.1), v.fecha, v.cliente.empresa.razonSocial,"
+				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), v.vendedor.empresa.razonSocial, d.articulo.descripcion"
+				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')";
+				if (idCliente > 0) {
+					query += " and v.cliente.id = " + idCliente;
+				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
+				}
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de notas de credito segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.volumen
+	 * [3]:cantidad
+	 * [4]:fecha
+	 * [5]:cliente.empresa.razonSocial
+	 * [6]:importegs
+	 * [7]:vendedor..
+	 * [8]:descripcion
+	 */
+	public List<Object[]> getNotasCreditoDetallado_(Date desde, Date hasta, long idCliente, long idFamilia) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.volumen, (d.cantidad * 1.1), n.fechaEmision, n.cliente.empresa.razonSocial,"
+				+ " d.importeGs, n.vendedor.empresa.razonSocial, d.articulo.descripcion"
+				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
+				if (idCliente > 0) {
+					query += " and n.cliente.id = " + idCliente;
+				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
+				}
+		return this.hql(query);
+	}
+	
 	public static void mainx(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

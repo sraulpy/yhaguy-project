@@ -1486,6 +1486,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_COBRANZAS_VENDEDOR_CLIENTE = "VEN-00045";
 		static final String VENTAS_LISTA_PRECIO_DEPOSITO_ = "VEN-00046";
 		static final String VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET = "VEN-00047";
+		static final String VENTAS_CLIENTE_ARTICULO_MES = "VEN-00048";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1683,6 +1684,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET:
 				this.cobranzasVendedorProveedorCliente(mobile, VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET);
+				break;
+				
+			case VENTAS_CLIENTE_ARTICULO_MES:
+				this.ventasClienteArticuloMes(mobile);
 				break;
 			}
 		}
@@ -5976,6 +5981,214 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Vendedor", vendedor.getRazonSocial());
 				imprimirJasper(source, params, dataSource, filtro.getFormato());
 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00048
+		 */
+		private void ventasClienteArticuloMes(boolean mobile) {
+			try {					
+				Object[] formato = filtro.getFormato();
+				Cliente cli = filtro.getCliente();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				
+				if (cli == null) {
+					Clients.showNotification("Debe seleccionar un cliente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}				
+				long idCliente = cli.getId();
+				long idFamilia = familia != null ? familia.getId().longValue() : 0;
+				
+				RegisterDomain rr = RegisterDomain.getInstance();				
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia);
+				
+				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
+				Map<String, Double> cants = new HashMap<String, Double>();
+				Map<String, Double> importes = new HashMap<String, Double>();
+				
+				for (Object[] venta : ventas) {
+					int mes = Utiles.getNumeroMes((Date) venta[4]);
+					String cod = (String) venta[1];
+					String des = (String) venta[8];
+					String key = cod + ";" + des + ";" + mes;
+					Double acum = cants.get(key);
+					if (acum != null) {
+						acum += ((Double) venta[3]);
+						cants.put(key, acum);
+					} else {
+						cants.put(key, ((Double) (venta[3])));
+					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ += ((Double) venta[6]);
+						importes.put(key, acum_);
+					} else {
+						importes.put(key, ((Double) (venta[6])));
+					}
+				}
+				
+				for (Object[] nc : ncs) {
+					int mes = Utiles.getNumeroMes((Date) nc[4]);
+					String cod = (String) nc[1];
+					String des = (String) nc[8];
+					String key = cod + ";" + des + ";" + mes;
+					Double acum = cants.get(key);
+					if (acum != null) {
+						acum -= ((Double) nc[3]);
+						cants.put(key, acum);
+					} else {
+						cants.put(key, ((Double) (nc[3]) * -1));
+					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ -= ((Double) nc[6]);
+						importes.put(key, acum_);
+					} else {
+						importes.put(key, ((Double) (nc[6]) * -1));
+					}
+				}
+				
+				Map<String, String> keys = new HashMap<String, String>();
+				
+				for (String key : cants.keySet()) {					
+					String codigo = key.split(";")[0];
+					String descripcion = key.split(";")[1];
+					String key_ = codigo + ";" + descripcion;
+					
+					if (keys.get(key_) == null) {
+						Double cantidad = cants.get(key);
+						
+						Double cantEnero = cants.get(key_ + ";1");
+						if (cantEnero == null) cantEnero = 0.0; 
+						
+						Double cantFebrero = cants.get(key_ + ";2");
+						if (cantFebrero == null) cantFebrero = 0.0;
+						
+						Double cantMarzo = cants.get(key_ + ";3");
+						if (cantMarzo == null) cantMarzo = 0.0;
+						
+						Double cantAbril = cants.get(key_ + ";4");
+						if (cantAbril == null) cantAbril = 0.0;
+						
+						Double cantMayo = cants.get(key_ + ";5");
+						if (cantMayo == null) cantMayo = 0.0;
+						
+						Double cantJunio = cants.get(key_ + ";6");
+						if (cantJunio == null) cantJunio = 0.0;
+						
+						Double cantJulio = cants.get(key_ + ";7");
+						if (cantJulio == null) cantJulio = 0.0;
+						
+						Double cantAgosto = cants.get(key_ + ";8");
+						if (cantAgosto == null) cantAgosto = 0.0;
+						
+						Double cantSetiembre = cants.get(key_ + ";9");
+						if (cantSetiembre == null) cantSetiembre = 0.0;
+						
+						Double cantOctubre = cants.get(key_ + ";10");
+						if (cantOctubre == null) cantOctubre = 0.0;
+						
+						Double cantNoviembre = cants.get(key_ + ";11");
+						if (cantNoviembre == null) cantNoviembre = 0.0;
+						
+						Double cantDiciembre = cants.get(key_ + ";12");
+						if (cantDiciembre == null) cantDiciembre = 0.0;
+						
+						Double impEnero = importes.get(key_ + ";1");
+						if (impEnero == null) impEnero = 0.0;
+						
+						Double impFebrero = importes.get(key_ + ";2");
+						if (impFebrero == null) impFebrero = 0.0;
+						
+						Double impMarzo = importes.get(key_ + ";3");
+						if (impMarzo == null) impMarzo = 0.0;
+						
+						Double impAbril = importes.get(key_ + ";4");
+						if (impAbril == null) impAbril = 0.0;
+						
+						Double impMayo = importes.get(key_ + ";5");
+						if (impMayo == null) impMayo = 0.0;
+						
+						Double impJunio = importes.get(key_ + ";6");
+						if (impJunio == null) impJunio = 0.0;
+						
+						Double impJulio = importes.get(key_ + ";7");
+						if (impJulio == null) impJulio = 0.0;
+						
+						Double impAgosto = importes.get(key_ + ";8");
+						if (impAgosto == null) impAgosto = 0.0;
+						
+						Double impSetiembre = importes.get(key_ + ";9");
+						if (impSetiembre == null) impSetiembre = 0.0;
+						
+						Double impOctubre = importes.get(key_ + ";10");
+						if (impOctubre == null) impOctubre = 0.0;
+						
+						Double impNoviembre = importes.get(key_ + ";11");
+						if (impNoviembre == null) impNoviembre = 0.0;
+						
+						Double impDiciembre = importes.get(key_ + ";12");
+						if (impDiciembre == null) impDiciembre = 0.0;
+						
+						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
+						hist.setDescripcion(codigo);
+						hist.setReferencia(descripcion);
+						hist.setLitraje(cantidad);
+						hist.setEnero_(cantEnero);
+						hist.setFebrero_(cantFebrero);
+						hist.setMarzo_(cantMarzo);
+						hist.setAbril_(cantAbril);
+						hist.setMayo_(cantMayo);
+						hist.setJunio_(cantJunio);
+						hist.setJulio_(cantJulio);
+						hist.setAgosto_(cantAgosto);
+						hist.setSetiembre_(cantSetiembre);
+						hist.setOctubre_(cantOctubre);
+						hist.setNoviembre_(cantNoviembre);
+						hist.setDiciembre_(cantDiciembre);
+						hist.set_enero(impEnero);
+						hist.set_febrero(impFebrero);
+						hist.set_marzo(impMarzo);
+						hist.set_abril(impAbril);
+						hist.set_mayo(impMayo);
+						hist.set_junio(impJunio);
+						hist.set_julio(impJulio);
+						hist.set_agosto(impAgosto);
+						hist.set_setiembre(impSetiembre);
+						hist.set_octubre(impOctubre);
+						hist.set_noviembre(impNoviembre);
+						hist.set_diciembre(impDiciembre);
+						hist.setTotal_(hist.getEnero() + hist.getFebrero() + hist.getMarzo() + hist.getAbril() + hist.getMayo() + hist.getJunio()
+								+ hist.getJulio() + hist.getAgosto() + hist.getSetiembre() + hist.getOctubre() + hist.getNoviembre() + hist.getDiciembre());
+						
+						list.add(hist);			
+						keys.put(key_, key_);
+					}					
+				}				
+				String format = (String) formato[0];
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_CLIENTE_ARTICULO;
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_LITRAJE_;
+				}
+				
+				String flia = familia != null ? familia.getDescripcion() : "TODOS..";
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Cliente", cli.getRazonSocial());
+				params.put("Familia", flia);
+				JRDataSource dataSource = new VentasClienteArticulo(list);
+				imprimirJasper(source, params, dataSource, formato);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -23198,6 +23411,257 @@ class LibroVentasMatricial implements JRDataSource {
 	 */
 	private static double redondear(double monto) {
 		return Math.rint(monto * 1) / 1;
+	}
+}
+
+/**
+ * DataSource de Movimientos de articulos..
+ */
+class VentasClienteArticulo implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<HistoricoMovimientoArticulo> values = new ArrayList<HistoricoMovimientoArticulo>();
+	
+	double totalEnero = 0;
+	double totalFebrero = 0;
+	double totalMarzo = 0;
+	double totalAbril = 0;
+	double totalMayo = 0;
+	double totalJunio = 0;
+	double totalJulio = 0;
+	double totalAgosto = 0;
+	double totalSetiembre = 0;
+	double totalOctubre = 0;
+	double totalNoviembre = 0;
+	double totalDiciembre = 0;
+	
+	double totalEnero_ = 0;
+	double totalFebrero_ = 0;
+	double totalMarzo_ = 0;
+	double totalAbril_ = 0;
+	double totalMayo_ = 0;
+	double totalJunio_ = 0;
+	double totalJulio_ = 0;
+	double totalAgosto_ = 0;
+	double totalSetiembre_ = 0;
+	double totalOctubre_ = 0;
+	double totalNoviembre_ = 0;
+	double totalDiciembre_ = 0;
+	
+	public VentasClienteArticulo(List<HistoricoMovimientoArticulo> values) {
+		this.values = values;
+		for (HistoricoMovimientoArticulo item : values) {
+			totalEnero += item.getEnero_();
+			totalEnero_ += item.get_enero();
+			totalFebrero += item.getFebrero_();
+			totalFebrero_ += item.get_febrero();
+			totalMarzo += item.getMarzo_();
+			totalMarzo_ += item.get_marzo();
+			totalAbril += item.getAbril_();
+			totalAbril_ += item.get_abril();
+			totalMayo += item.getMayo_();
+			totalMayo_ += item.get_mayo();
+			totalJunio += item.getJunio_();
+			totalJunio_ += item.get_junio();
+			totalJulio += item.getJulio_();
+			totalJulio_ += item.get_julio();
+			totalAgosto += item.getAgosto_();
+			totalAgosto_ += item.get_agosto();
+			totalSetiembre += item.getSetiembre_();
+			totalSetiembre_ += item.get_setiembre();
+			totalOctubre += item.getOctubre_();
+			totalOctubre_ += item.get_octubre();
+			totalNoviembre += item.getNoviembre_();
+			totalNoviembre_ += item.get_noviembre();
+			totalDiciembre += item.getDiciembre_();
+			totalDiciembre_ += item.get_diciembre();
+		}
+		Collections.sort(this.values, new Comparator<HistoricoMovimientoArticulo>() {
+			@Override
+			public int compare(HistoricoMovimientoArticulo o1, HistoricoMovimientoArticulo o2) {
+				String val1 = o1.getReferencia();
+				String val2 = o2.getReferencia();
+				int compare = val1.compareTo(val2);				
+				return compare;
+			}
+		});
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		HistoricoMovimientoArticulo det = this.values.get(index);
+		String cod = det.getCodigo();
+
+		if ("Codigo".equals(fieldName)) {
+			value = cod;
+		} else if ("CodigoProveedor".equals(fieldName)) {
+			value = det.getCodigoProveedor();
+		}  else if ("Referencia".equals(fieldName)) {
+			value = det.getReferencia();
+		} else if ("NroParte".equals(fieldName)) {
+			value = det.getCodigoOriginal();
+		} else if ("Estado".equals(fieldName)) {
+			value = det.getEstado();
+		} else if ("Descripcion".equals(fieldName)) {
+			value = det.getDescripcion();
+		} else if ("OchentaVeinte".equals(fieldName)) {
+			value = det.getOchentaVeinte();
+		} else if ("Abc".equals(fieldName)) {
+			value = det.getAbc();
+		} else if ("Familia".equals(fieldName)) {
+			value = det.getFamilia();
+		} else if ("Marca".equals(fieldName)) {
+			value = det.getMarca();
+		} else if ("Linea".equals(fieldName)) {
+			value = det.getLinea();
+		} else if ("Grupo".equals(fieldName)) {
+			value = det.getGrupo();
+		} else if ("Aplicacion".equals(fieldName)) {
+			value = det.getAplicacion();
+		} else if ("Modelo".equals(fieldName)) {
+			value = det.getModelo();
+		} else if ("Peso".equals(fieldName)) {
+			value = det.getPeso();
+		} else if ("Volumen".equals(fieldName)) {
+			value = det.getVolumen();
+		} else if ("Proveedor".equals(fieldName)) {
+			value = det.getProveedor();
+		} else if ("CantLocal".equals(fieldName)) {
+			value = det.getCantidad() + "";
+		} else if ("FechaLocal".equals(fieldName)) {
+			value = det.getFechaUltimaCompra() + "";
+		} else if ("ProvLocal".equals(fieldName)) {
+			value = det.getProveedorUltimaCompra();			
+		} else if ("Dep_1".equals(fieldName)) {
+			value = det.getStock1() + "";			
+		} else if ("Dep_2".equals(fieldName)) {
+			value = det.getStock2() + "";			
+		} else if ("Dep_3".equals(fieldName)) {
+			value = det.getStock3() + "";			
+		} else if ("Dep_4".equals(fieldName)) {
+			value = det.getStock4() + "";		
+		} else if ("Dep_5".equals(fieldName)) {
+			value = det.getStock5() + "";			
+		} else if ("Dep_6".equals(fieldName)) {
+			value = det.getStock6() + "";			
+		} else if ("Dep_7".equals(fieldName)) {
+			value = det.getStock7() + "";			
+		} else if ("Dep_8".equals(fieldName)) {
+			value = det.getStock8() + "";			
+		} else if ("Dep_gral".equals(fieldName)) {
+			value = det.getTotal() + "";			
+		} else if ("Enero".equals(fieldName)) {
+			value = det.getEnero_();
+		} else if ("Febrero".equals(fieldName)) {
+			value = det.getFebrero_();
+		} else if ("Marzo".equals(fieldName)) {
+			value = det.getMarzo_();
+		} else if ("Abril".equals(fieldName)) {
+			value = det.getAbril_();
+		} else if ("Mayo".equals(fieldName)) {
+			value = det.getMayo_();
+		} else if ("Junio".equals(fieldName)) {
+			value = det.getJunio_();
+		} else if ("Julio".equals(fieldName)) {
+			value = det.getJulio_();
+		} else if ("Agosto".equals(fieldName)) {
+			value = det.getAgosto_();
+		} else if ("Setiembre".equals(fieldName)) {
+			value = det.getSetiembre_();
+		} else if ("Octubre".equals(fieldName)) {
+			value = det.getOctubre_();
+		} else if ("Noviembre".equals(fieldName)) {
+			value = det.getNoviembre_();
+		} else if ("Diciembre".equals(fieldName)) {
+			value = det.getDiciembre_();
+		}  else if ("_Enero".equals(fieldName)) {
+			value =  Utiles.getRedondeo(det.get_enero());
+		} else if ("_Febrero".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_febrero());
+		} else if ("_Marzo".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_marzo());
+		} else if ("_Abril".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_abril());
+		} else if ("_Mayo".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_mayo());
+		} else if ("_Junio".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_junio());
+		} else if ("_Julio".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_julio());
+		} else if ("_Agosto".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_agosto());
+		} else if ("_Setiembre".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_setiembre());
+		} else if ("_Octubre".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_octubre());
+		} else if ("_Noviembre".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_noviembre());
+		} else if ("_Diciembre".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.get_diciembre());
+		} else if ("tot_oct".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalOctubre);
+		} else if ("tot_oct_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalOctubre_);
+		} else if ("tot_nov".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNoviembre);
+		} else if ("tot_nov_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalNoviembre_);
+		} else if ("tot_dic".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalDiciembre);
+		} else if ("tot_dic_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalDiciembre_);
+		} else if ("tot_ene".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalEnero);
+		} else if ("tot_ene_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalEnero_);
+		} else if ("tot_feb".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalFebrero);
+		} else if ("tot_feb_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalFebrero_);
+		} else if ("tot_mar".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalMarzo);
+		} else if ("tot_mar_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalMarzo_);
+		} else if ("tot_abr".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalAbril);
+		} else if ("tot_abr_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalAbril_);
+		} else if ("tot_may".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalMayo);
+		} else if ("tot_may_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalMayo_);
+		} else if ("tot_jun".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalJunio);
+		} else if ("tot_jun_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalJunio_);
+		} else if ("tot_jul".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalJulio);
+		} else if ("tot_jul_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalJulio_);
+		} else if ("tot_ago".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalAgosto);
+		} else if ("tot_ago_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalAgosto_);
+		} else if ("tot_set".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalSetiembre);
+		} else if ("tot_set_".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalSetiembre_);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
 	}
 }
 
