@@ -5996,6 +5996,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				boolean virtuales = filtro.isFraccionado();
 				
 				if (cli == null) {
 					Clients.showNotification("Debe seleccionar un cliente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -6138,7 +6139,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (impDiciembre == null) impDiciembre = 0.0;
 						
 						Object[] costoPrecio = rr.getCostoPrecio(codigo);
-						long stock = rr.getStock(codigo);
+						long stock = rr.getStock(codigo, virtuales);
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
 						hist.setReferencia(descripcion);

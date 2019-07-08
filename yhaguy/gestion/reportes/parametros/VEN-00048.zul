@@ -55,6 +55,10 @@
 			</combobox>
 		</row>
 		<row>
+			<field value="Incluir Depósitos virtuales:" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)" />
+		</row>
+		<row>
 			<field value="Formato:" />
 			<combobox model="@load(vm.dato.filtro.formatos)"
 				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">

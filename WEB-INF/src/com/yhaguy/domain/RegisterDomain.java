@@ -1193,12 +1193,15 @@ public class RegisterDomain extends Register {
 	 * Retorna el ArticuloDeposito a partir del id del Articulo y el id del
 	 * Deposito..
 	 */
-	public ArticuloDeposito getArticuloDeposito(String codigo, long idDeposito)
+	public ArticuloDeposito getArticuloDeposito(String codigo, long idDeposito, boolean incluirVirtual)
 			throws Exception {
 		ArticuloDeposito out = null;
 		String query = " select art from ArticuloDeposito art where "
 				+ " art.deposito.id = " + idDeposito
 				+ " and art.articulo.codigoInterno = '" + codigo + "'";
+				if (!incluirVirtual) {
+					query += " and art.deposito.dbEstado != '" + Deposito.VIRTUAL + "'";
+				}
 		List<ArticuloDeposito> l = this.hql(query);
 		if (l.size() == 1) {
 			out = l.get(0);
@@ -7292,11 +7295,11 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return el stock total del articulo..
 	 */
-	public long getStock(String codigo) throws Exception {
+	public long getStock(String codigo, boolean incluirDepositoVirtual) throws Exception {
 		long out = 0;
 		List<Deposito> deps = this.getDepositos();
 		for (long i = 2; i <= deps.size(); i++) {
-			ArticuloDeposito adp = this.getArticuloDeposito(codigo, i);
+			ArticuloDeposito adp = this.getArticuloDeposito(codigo, i, incluirDepositoVirtual);
 			if (adp != null) {
 				out += adp.getStock();
 			}			
