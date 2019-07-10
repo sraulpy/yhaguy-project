@@ -23645,11 +23645,11 @@ class VentasClienteArticulo implements JRDataSource {
 		} else if ("tot_may_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalMayo_);
 		} else if ("tot_jun".equals(fieldName)) {
-			value = Utiles.getNumberFormatDs(this.totalJunio);
+			value = Utiles.getNumberFormat(this.totalJunio);
 		} else if ("tot_jun_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalJunio_);
 		} else if ("tot_jul".equals(fieldName)) {
-			value = Utiles.getNumberFormatDs(this.totalJulio);
+			value = Utiles.getNumberFormat(this.totalJulio);
 		} else if ("tot_jul_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalJulio_);
 		} else if ("tot_ago".equals(fieldName)) {

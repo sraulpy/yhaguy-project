@@ -74,57 +74,6 @@
 
 		<div id="dv_1" width="100%" vflex="true" style="padding:5px 5px 5px 0px">
 			<borderlayout>
-				<west title="Explorador" size="100%" flex="true" collapsible="true" open="false">
-                	<listbox sclass="small-list" hflex="true" vflex="true">
-                		<listhead>
-                			<listheader>
-                				<textbox hflex="true"
-                					placeholder="Proveedor"
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"
-									readonly="@load(vm.siempreHabilitado)">
-                				</textbox>
-                			</listheader>
-                			<listheader>
-                				<textbox hflex="true" placeholder="Número Importación"
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"></textbox>
-                			</listheader>
-                			<listheader>
-                				<textbox hflex="true" placeholder="Número Factura"
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"></textbox>
-                			</listheader>
-                			<listheader>
-                				<textbox hflex="true" placeholder="Fecha Importación"
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"></textbox>
-                			</listheader>
-                			<listheader>
-                				<textbox hflex="true" placeholder="Fecha Factura"
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"></textbox>
-                			</listheader>
-                			<listheader>
-                				<textbox hflex="true" placeholder="Importe Gs."
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"></textbox>
-                			</listheader>
-                			<listheader>
-                				<textbox hflex="true" placeholder="Importe U$S"
-                					style="background-image:url('./core/css/filter.png');
-									background-repeat: no-repeat; background-position: 98%;
-									background-size: 10px;"></textbox>
-                			</listheader>
-                		</listhead>
-                	</listbox>
-            	</west>
 				<center border="none" flex="true">
 					<hbox pack="center" width="100%"
 						style="padding:20px">

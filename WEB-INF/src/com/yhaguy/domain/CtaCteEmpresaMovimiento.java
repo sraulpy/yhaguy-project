@@ -213,7 +213,9 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	 */
 	public String get_NroComprobante() {
 		return nroComprobante.replaceFirst("001-001-", "").replace("(1/1)", "")
-				.replace("(2/3)", "").replace("(3/3)", "").replace("(1/3)", "");
+				.replace("(2/3)", "").replace("(3/3)", "").replace("(1/3)", "")
+				.replaceFirst("001-003-", "").replaceFirst("001-013-", "")
+				.replaceFirst("003-001-", "");
 	}
 
 	public boolean isCerrado() {
