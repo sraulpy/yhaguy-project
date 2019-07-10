@@ -35,7 +35,7 @@
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Emisión / Vencimiento" />
+						<field value="Emisión" />
 						<hlayout>
 						<datebox id="dtFecha" value="@bind(vm.dto.fecha)"
 							readonly="true" hflex="true" />
@@ -46,17 +46,27 @@
 						<button mold="bs" id="btn_editf_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"
 							sclass="btn-xs btn-info" width="30px"></button>
-						<textbox value="@load(vm.dto.vencimiento) @converter('formattedDate', format='dd-MM-yyyy')" hflex="true" readonly="true"/>
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Sucursal" />
+						<field value="Vencimiento" />
+						<hlayout>
+						<datebox id="dtVto" value="@bind(vm.dto.vencimiento)" hflex="true" readonly="true" />
+						<button mold="bs" id="btn_editV_" iconSclass="z-icon-check"
+							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="@command('modificarVencimiento', comp1=self, comp2=btn_editV)"
+							sclass="btn-xs btn-success" width="30px"></button>
+						<button mold="bs" id="btn_editV" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+							onClick="dtVto.setReadonly(false); dtVto.setButtonVisible(true); dtVto.focus(); btn_editV_.setVisible(true); self.setVisible(false)"
+							sclass="btn-xs btn-info" width="30px"></button>
+						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Sucursal / Depósito" />
+						<hlayout>
 						<textbox value="@load(vm.dto.sucursal.text)"
 							readonly="true" 
 							hflex="true"/>
-					</vlayout>
-					<vlayout spacing="0">
-						<field value="Depósito" />
 						<combobox model="@load(vm.depositosSucursal)"
 							value="@load(vm.dto.deposito.text)"
 							selectedItem="@bind(vm.dto.deposito)"
@@ -66,6 +76,7 @@
 								<comboitem label="@load(each.text)"/>
 							</template>
 						</combobox>
+						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Estado" />
