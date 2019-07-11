@@ -49,7 +49,7 @@
 				</menu>
 				
 				
-				<menu label="Contabilidad" iconSclass="z-icon-bar-chart-o" style="margin-bottom:15px;margin-top:15px">
+				<menu label=" Contabilidad" iconSclass="z-icon-bar-chart-o" style="margin-bottom:15px;margin-top:15px">
 					<menupopup sclass="rounded">
 						<!-- <zk forEach="${vm.menuItem(self,'Asientos')}" />
 						<zk forEach="${vm.menuItem(self,'GeneracionAsientos')}" /> 
@@ -145,6 +145,8 @@
 				<zk forEach="${vm.menuItem(self,'Reparto')}" />
 				<zk forEach="${vm.menuItem(self,'PendientesReparto')}" />
 				<zk forEach="${vm.menuItem(self,'ControlCombustible')}" />
+				<menuitem label="ETIQUETAR ENVÍOS" iconSclass="z-icon-caret-right"
+					disabled="true"/>
 				<menuseparator />
 				<zk	forEach="${vm.menuItem(self,'RepartoDefiniciones')}" />
 			</menupopup>
