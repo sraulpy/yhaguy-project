@@ -145,7 +145,7 @@
 				<zk forEach="${vm.menuItem(self,'Reparto')}" />
 				<zk forEach="${vm.menuItem(self,'PendientesReparto')}" />
 				<zk forEach="${vm.menuItem(self,'ControlCombustible')}" />
-				<menuitem label="ETIQUETAR ENVÍOS" iconSclass="z-icon-caret-right"
+				<menuitem label="LOGISTICA / ETIQUETAR ENVÍOS" iconSclass="z-icon-caret-right"
 					disabled="true"/>
 				<menuseparator />
 				<zk	forEach="${vm.menuItem(self,'RepartoDefiniciones')}" />
