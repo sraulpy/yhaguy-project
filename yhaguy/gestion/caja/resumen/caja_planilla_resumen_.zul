@@ -407,7 +407,7 @@
 							<listitem>
 								<listcell>
 									<label value="Transferencias:" 
-										tooltiptext="(Total Transferencias Bancarias + Total Reembolsos prestamos)"/>
+										tooltiptext="(Total Transferencias Bancarias)"/>
 								</listcell>
 								<listcell>
 									<label value="@load(vm.selectedResumen_.resumenTransferenciasBancarias) @converter('formattedNumber', format='###,###,##0')" />

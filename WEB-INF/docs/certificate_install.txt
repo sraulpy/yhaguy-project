@@ -1,0 +1,60 @@
+keytool -genkey -alias tomcat2 -keyalg RSA -keystore /home/server/tools/certificate/yhaguy.jks
+openssl pkcs12 -export -inkey certificate.key -in certificate.crt -out tempstore.p12
+keytool -importkeystore -srckeystore tempstore.p12 -srcstoretype PKCS12 -destkeystore yhaguy.jks
+keytool -list -v -keystore yhaguy.jks
+keytool -changealias -alias 1 -destalias gestionyhaguy -keystore yhaguy.jks
+
+<!-- SERVER XML -->
+<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8444" />
+
+    <Connector port="8444" protocol="HTTP/1.1" SSLEnabled="true"
+               maxThreads="150" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS"
+	       keyAlias="gestionyhaguy"
+	       keystoreFile="/home/server/tools/certificate/yhaguy.jks"
+	       keystorePass="yhaguysa" />
+
+<!-- WEB XML -->
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>Secured</web-resource-name>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+    </security-constraint>
+
+<!-- INDEX JSP -->
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<html>
+<head>
+    <title>JSP Redirect</title>
+</head>
+<body>
+    <%
+        String redirectURL = "https://gestion.yhaguyrepuestos.com.py:8444/yhaguy/sistema.zul";
+        response.sendRedirect(redirectURL);
+    %>
+</body>
+</html>
+
+<!-- INDEX HTML -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <!--
+    Modified from the Debian original for Ubuntu
+    Last updated: 2014-03-19
+    See: https://launchpad.net/bugs/1288690
+  -->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="refresh" content="0; url=http://mra.yhaguyrepuestos.com.py:8080/yhaguy/sistema.zul">
+    <title>Apache2 Ubuntu Server Default Page: It works</title>
+    <body>
+  </body>
+</html>
+
+

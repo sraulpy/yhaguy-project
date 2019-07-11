@@ -130,7 +130,6 @@ public class CajaPlanillaResumen extends Domain {
 		double out = 0;
 		for (CajaPeriodo planilla : this.planillas) {
 			out += planilla.getTotalTransferenciasBancarias();
-			out += planilla.getTotalReembolsoPrestamos();
 		}
 		return out;
 	}
