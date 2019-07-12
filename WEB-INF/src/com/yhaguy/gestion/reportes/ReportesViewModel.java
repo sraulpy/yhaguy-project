@@ -5997,7 +5997,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				boolean virtuales = filtro.isFraccionado();
-				long idCliente = cli.getId();
+				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
@@ -6186,7 +6186,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
-				params.put("Cliente", cli.getRazonSocial());
+				params.put("Cliente", cli != null ? cli.getRazonSocial() : "TODOS..");
 				params.put("Familia", flia);
 				JRDataSource dataSource = new VentasClienteArticulo(list);
 				imprimirJasper(source, params, dataSource, formato);
