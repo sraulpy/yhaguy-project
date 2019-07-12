@@ -3,7 +3,7 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.GeolocalizacionViewModel')">
 
 	<iframe hflex="true" vflex="true"
-		src="http://190.211.240.30:8080/yhaguymap/waitingpiri/mapa1.zul">
+		src="https://mra.yhaguyrepuestos.com.py:8444/yhaguymap/waitingpiri/mapa1.zul">
 		
 	</iframe>
 
