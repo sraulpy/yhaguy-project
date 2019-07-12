@@ -5997,11 +5997,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				boolean virtuales = filtro.isFraccionado();
-				
-				if (cli == null) {
-					Clients.showNotification("Debe seleccionar un cliente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-					return;
-				}				
 				long idCliente = cli.getId();
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				
