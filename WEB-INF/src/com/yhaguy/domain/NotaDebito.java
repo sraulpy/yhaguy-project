@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
@@ -26,6 +27,16 @@ public class NotaDebito extends Domain {
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
+	}
+	
+	/**
+	 * @return true si es anulado..
+	 */
+	public boolean isAnulado() {
+		if(this.estadoComprobante == null)
+			return false;
+		String sigla = this.estadoComprobante.getSigla();
+		return sigla.equals(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO);
 	}
 	
 	/**

@@ -15,6 +15,7 @@ import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.util.Utiles;
@@ -27,7 +28,7 @@ public class InformeHechauka {
 	/**
 	 * Generar informe Hechauka..
 	 */
-	public static synchronized void generarInformeHechauka(List<Venta> ventas, List<NotaCredito> notasCredito)
+	public static synchronized void generarInformeHechauka(List<Venta> ventas, List<NotaCredito> notasCredito, List<NotaDebito> notasDebito)
 			throws Exception {
 		Misc misc = new Misc();
 		List<String> objects = new ArrayList<String>();
@@ -89,6 +90,43 @@ public class InformeHechauka {
 					registros++;
 					montoTotal += importe;
 				}				
+			}			
+		}
+		
+		for (NotaDebito nd : notasDebito) {
+			
+			if (!nd.isAnulado()) {
+				String rSocial = nd.getCliente().getRazonSocial();
+				String ruc = nd.getCliente().getRuc();
+				String col1 = "2";
+				String col2 = ruc.substring(0, ruc.length() - 2);
+				String dv = ruc.substring(ruc.length() - 1);
+				String col5 = "2";
+				String nro = nd.getNumero();
+				String fecha = misc.dateToString(nd.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
+				periodo = Utiles.getDateToString(nd.getFecha(), "yyyyMM");
+				double iva10 = redondear(nd.getTotalIva10());
+				double gravada10 = redondear(nd.getTotalGravado10());
+				double iva5 = redondear(0.0);
+				double gravada5 = redondear(0.0);
+				double exenta = redondear(0.0);
+				double importe = iva10 + gravada10 + iva5 + gravada5 + exenta;
+				long col14 = 2;
+				long col15 = 1;
+				String col16 = nd.getTimbrado();
+				String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
+						+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
+						+ FORMATTER.format(gravada10) + "" + " \t"
+						+ FORMATTER.format(iva10) + "" + "\t"
+						+ FORMATTER.format(gravada5) + "" + "\t"
+						+ FORMATTER.format(iva5) + "" + "\t"
+						+ FORMATTER.format(exenta) + "" + "\t"
+						+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
+						+ col15 + "" + "\t" + col16 + "" + "\r\n";
+				objects.add(object);
+				registros++;
+				montoTotal += importe;
+							
 			}			
 		}
 		
