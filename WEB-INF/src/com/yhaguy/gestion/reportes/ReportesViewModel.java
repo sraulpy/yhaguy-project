@@ -5994,15 +5994,20 @@ public class ReportesViewModel extends SimpleViewModel {
 				Object[] formato = filtro.getFormato();
 				Cliente cli = filtro.getCliente();
 				ArticuloFamilia familia = filtro.getFamilia_();
+				Proveedor proveedor = filtro.getProveedor();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				boolean virtuales = false;
 				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
+				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
+				int mes1 = Utiles.getNumeroMes(desde) - 1;
+				int mes2 = Utiles.getNumeroMes(hasta);
+				int rango = mes2 - mes1;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6166,9 +6171,8 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.setCostoGs((double) costoPrecio[1]);
 						hist.setCostoFobGs((double) costoPrecio[2]);
 						hist.setStock1(stock);
-						hist.setTotal_(hist.getEnero() + hist.getFebrero() + hist.getMarzo() + hist.getAbril() + hist.getMayo() + hist.getJunio()
-								+ hist.getJulio() + hist.getAgosto() + hist.getSetiembre() + hist.getOctubre() + hist.getNoviembre() + hist.getDiciembre());
-						
+						hist.setTotal_(hist.getEnero_() + hist.getFebrero_() + hist.getMarzo_() + hist.getAbril_() + hist.getMayo_() + hist.getJunio_()
+								+ hist.getJulio_() + hist.getAgosto_() + hist.getSetiembre_() + hist.getOctubre_() + hist.getNoviembre_() + hist.getDiciembre_());
 						list.add(hist);			
 						keys.put(key_, key_);
 					}					
@@ -6188,7 +6192,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				params.put("Cliente", cli != null ? cli.getRazonSocial() : "TODOS..");
 				params.put("Familia", flia);
-				JRDataSource dataSource = new VentasClienteArticulo(list);
+				params.put("Proveedor", proveedor != null ? proveedor.getRazonSocial() : "TODOS..");
+				JRDataSource dataSource = new VentasClienteArticulo(list, rango);
 				imprimirJasper(source, params, dataSource, formato);
 				
 			} catch (Exception e) {
@@ -23583,9 +23588,11 @@ class VentasClienteArticulo implements JRDataSource {
 	double totalOctubre_ = 0;
 	double totalNoviembre_ = 0;
 	double totalDiciembre_ = 0;
+	int rango = 0;
 	
-	public VentasClienteArticulo(List<HistoricoMovimientoArticulo> values) {
+	public VentasClienteArticulo(List<HistoricoMovimientoArticulo> values, int rango) {
 		this.values = values;
+		this.rango = rango;
 		for (HistoricoMovimientoArticulo item : values) {
 			totalEnero += item.getEnero_();
 			totalEnero_ += item.get_enero();
@@ -23792,6 +23799,22 @@ class VentasClienteArticulo implements JRDataSource {
 			value = Utiles.getNumberFormat(det.getCostoGs());
 		}   else if ("Mayorista".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getCostoFobGs());
+		} else if ("Total".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getEnero_() + det.getFebrero_() + det.getMarzo_() + det.getAbril_()
+					+ det.getMayo_() + det.getJunio_() + det.getJulio_() + det.getAgosto_() + det.getSetiembre_()
+					+ det.getOctubre_() + det.getNoviembre_() + det.getDiciembre_());
+		} else if ("tot_tot".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalEnero + this.totalFebrero + this.totalMarzo + this.totalAbril
+			+ this.totalMayo + this.totalJunio + this.totalJulio + this.totalAgosto + this.totalSetiembre
+			+ this.totalOctubre + this.totalNoviembre + this.totalDiciembre);
+		} else if ("Promedio".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(det.getTotal_() / this.rango);
+		} else if ("Pmeses".equals(fieldName)) {
+			if (det.getStock1() > 0) {
+				value = Utiles.getNumberFormatDs((det.getTotal_() / this.rango) / det.getStock1());
+			} else {
+				value = Utiles.getNumberFormatDs(0.0);
+			}
 		}
 		return value;
 	}
