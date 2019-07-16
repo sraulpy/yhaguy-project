@@ -86,6 +86,17 @@
 			</combobox>
 		</row>
 		<row>
+			<field value="Depósitos:" />
+			<chosenbox hflex="true" sclass="rounded" style="margin-top:5px"
+				model="@load(vm.dato.filtro.depositos_)"
+				emptyMessage="Seleccione uno o más depósitos.."
+				selectedObjects="@save(vm.dato.filtro.selectedDepositos)">
+				<template name="model">
+					<label value="@load(each.descripcion)"></label>
+				</template>
+			</chosenbox>
+		</row>
+		<row>
 			<field value="Formato:" />
 			<combobox model="@load(vm.dato.filtro.formatos)"
 				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">

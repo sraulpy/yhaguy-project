@@ -5995,9 +5995,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				Cliente cli = filtro.getCliente();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Proveedor proveedor = filtro.getProveedor();
+				List<Deposito> depositos = filtro.getSelectedDepositos();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
-				boolean virtuales = false;
 				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
@@ -6139,7 +6139,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (impDiciembre == null) impDiciembre = 0.0;
 						
 						Object[] costoPrecio = rr.getCostoPrecio(codigo);
-						long stock = rr.getStock(codigo, virtuales);
+						long stock = rr.getStock(codigo, depositos);
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
 						hist.setReferencia(descripcion);
@@ -23810,8 +23810,8 @@ class VentasClienteArticulo implements JRDataSource {
 		} else if ("Promedio".equals(fieldName)) {
 			value = Utiles.getNumberFormatDs(det.getTotal_() / this.rango);
 		} else if ("Pmeses".equals(fieldName)) {
-			if (det.getStock1() > 0) {
-				value = Utiles.getNumberFormatDs((det.getTotal_() / this.rango) / det.getStock1());
+			if ((det.getTotal_() / this.rango) > 0) {
+				value = Utiles.getNumberFormatDs(det.getStock1() / (det.getTotal_() / this.rango));
 			} else {
 				value = Utiles.getNumberFormatDs(0.0);
 			}
