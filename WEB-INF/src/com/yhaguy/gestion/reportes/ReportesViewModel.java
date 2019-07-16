@@ -6012,6 +6012,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
 				Map<String, Double> importes = new HashMap<String, Double>();
+				Map<String, Double> volumens = new HashMap<String, Double>();
 				Map<String, Object[]> datos = new HashMap<String, Object[]>();
 				
 				for (Object[] venta : ventas) {
@@ -6023,9 +6024,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (acum != null) {
 						acum += ((Double) venta[3]);
 						cants.put(key, acum);
+						volumens.put(cod, (Double) venta[2]);
 						datos.put(cod, new Object[] { (Double) venta[9], (Double) venta[10] });
 					} else {
 						cants.put(key, ((Double) (venta[3])));
+						volumens.put(cod, (Double) venta[2]);
 					}
 					Double acum_ = importes.get(key);
 					if (acum_ != null) {
@@ -6045,8 +6048,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (acum != null) {
 						acum -= ((Double) nc[3]);
 						cants.put(key, acum);
+						volumens.put(cod, (Double) nc[2]);
 					} else {
 						cants.put(key, ((Double) (nc[3]) * -1));
+						volumens.put(cod, (Double) nc[2]);
 					}
 					Double acum_ = importes.get(key);
 					if (acum_ != null) {
@@ -6140,10 +6145,12 @@ public class ReportesViewModel extends SimpleViewModel {
 						
 						Object[] costoPrecio = rr.getCostoPrecio(codigo);
 						long stock = rr.getStock(codigo, depositos);
+						Double volumen = volumens.get(codigo);
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
 						hist.setReferencia(descripcion);
 						hist.setLitraje(cantidad);
+						hist.setCoeficiente(volumen != null ? (volumen * stock) : 0.0);
 						hist.setEnero_(cantEnero);
 						hist.setFebrero_(cantFebrero);
 						hist.setMarzo_(cantMarzo);
@@ -23797,7 +23804,7 @@ class VentasClienteArticulo implements JRDataSource {
 			value = Utiles.getNumberFormat(this.totalSetiembre_);
 		}  else if ("Costo".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getCostoGs());
-		}   else if ("Mayorista".equals(fieldName)) {
+		}  else if ("Mayorista".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getCostoFobGs());
 		} else if ("Total".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getEnero_() + det.getFebrero_() + det.getMarzo_() + det.getAbril_()
@@ -23815,6 +23822,8 @@ class VentasClienteArticulo implements JRDataSource {
 			} else {
 				value = Utiles.getNumberFormatDs(0.0);
 			}
+		} else if ("Litraje".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(det.getCoeficiente());
 		}
 		return value;
 	}
