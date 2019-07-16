@@ -391,7 +391,7 @@
 													<vlayout spacing="0"
 														hflex="true">
 														<field
-															value="Ítem de Servicio" />
+															value="Ítem Servicio" />
 														<hlayout>
 															<hlayout>
 																<checkbox
