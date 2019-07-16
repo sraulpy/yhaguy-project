@@ -49,6 +49,7 @@ public class ArticuloDTO extends DTO {
 	private String referencia = "";
 	private int maximo = 0;
 	private int minimo = 0;
+	private boolean restriccionCosto = true;
 	
 	private double precioGs = 0; // mayorista gs
 	private double precioDs = 0; // mayorista ds
@@ -659,5 +660,13 @@ public class ArticuloDTO extends DTO {
 
 	public void setPrecioUltimaVenta(double precioUltimaVenta) {
 		this.precioUltimaVenta = precioUltimaVenta;
+	}
+
+	public boolean isRestriccionCosto() {
+		return restriccionCosto;
+	}
+
+	public void setRestriccionCosto(boolean restriccionCosto) {
+		this.restriccionCosto = restriccionCosto;
 	}
 }

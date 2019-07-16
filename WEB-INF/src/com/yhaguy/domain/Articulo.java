@@ -47,6 +47,7 @@ public class Articulo extends Domain {
 	long prioridad = 0; 
 	boolean completo = false;
 	private boolean estado;
+	private boolean restriccionCosto = true;
 	private int maximo;
 	private int minimo;
 	
@@ -638,5 +639,13 @@ public class Articulo extends Domain {
 
 	public void setPrecioUltimaVenta(double precioUltimaVenta) {
 		this.precioUltimaVenta = precioUltimaVenta;
+	}
+
+	public boolean isRestriccionCosto() {
+		return restriccionCosto;
+	}
+
+	public void setRestriccionCosto(boolean restriccionCosto) {
+		this.restriccionCosto = restriccionCosto;
 	}
 }

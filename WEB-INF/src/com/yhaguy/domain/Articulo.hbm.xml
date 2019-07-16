@@ -57,6 +57,10 @@
 			<column name="estado" not-null="true" default="false" />
 		</property>
 		
+		<property name="restriccionCosto">
+			<column name="restriccionCosto" not-null="true" default="true" />
+		</property>
+		
 		<many-to-one name="familia" class="com.yhaguy.domain.ArticuloFamilia"
 			column="id_familia" lazy="false" />
 			
