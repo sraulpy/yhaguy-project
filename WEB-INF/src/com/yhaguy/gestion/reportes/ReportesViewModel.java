@@ -1567,7 +1567,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_CLIENTES_MES:
-				this.ventasClientesPorMes(mobile);
+				this.ventasClientesPorMes(mobile, VENTAS_CLIENTES_MES);
 				break;
 				
 			case VENTAS_PEDIDOS_PENDIENTES: 
@@ -3363,7 +3363,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * VEN-00019 ventas por clientes por mes..
 		 */
-		private void ventasClientesPorMes(boolean mobile) {
+		private void ventasClientesPorMes(boolean mobile, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE PARA VERSION MOVIL..");
 				return;
@@ -3480,11 +3480,16 @@ public class ReportesViewModel extends SimpleViewModel {
 							value_[5], value_[6], value_[7], value_[8],
 							value_[9], value_[10], value_[11], total, value_[12], value_[13] });
 				}
-				
+				String format = (String) formato[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES;
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_;
+				}
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new VentasPorClienteDataSource(data);
-				params.put("Titulo", "Ventas por Clientes por Mes");
+				params.put("Titulo", codReporte + " - Ventas por Clientes por Mes");
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
