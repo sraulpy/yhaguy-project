@@ -10,6 +10,8 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zul.Window;
 
 import com.coreweb.Config;
 import com.coreweb.componente.BuscarElemento;
@@ -27,6 +29,7 @@ import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.BancoDescuentoCheque;
+import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.cheques.AssemblerBancoCheque;
 import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
@@ -43,15 +46,22 @@ public class DescuentoChequesVM extends BodyApp {
 	final static String ABM_ENVIO = "envio";
 	final static String ABM_PRESTAMO_ACREEDOR = "prestamo_acreedor";
 	
+	final static String ZUL_CANCELACION_PRESTAMOS = "/yhaguy/gestion/bancos/cancelacion_saldos.zul";
+	
 	private String tipo = "";
 	
 	private String filterRazonSocial = "";
 	private String filterRuc = "";
+	
+	private String filter_ruc = "";
+	private String filter_razonSocial = "";
 
 	private String mensajeError = "";
 	private BancoDescuentoChequeDTO chequeDescuento = new BancoDescuentoChequeDTO();
 	private List<MyArray> selectedCheques = new ArrayList<MyArray>();
 	private ReciboFormaPagoDTO nvoFormaPago = new ReciboFormaPagoDTO();
+	
+	private Window win;
 	
 	@Init(superclass = true)
 	public void init(@ExecutionParam("tipo") String tipo) {
@@ -229,6 +239,14 @@ public class DescuentoChequesVM extends BodyApp {
 		this.asignarFormaPago();
 	}
 	
+	@Command
+	@NotifyChange("filter_razonSocial")
+	public void openCancelacionPrestamos() {
+		this.filter_razonSocial = ((MyPair) this.getChequeDescuento().getBanco().getPos1()).getText();
+		this.win = (Window) Executions.createComponents(ZUL_CANCELACION_PRESTAMOS, this.mainComponent, null);
+		this.win.doModal();
+	}
+	
 	/**
 	 * Despliega la ventana para asignar las formas de pago..
 	 */
@@ -399,6 +417,13 @@ public class DescuentoChequesVM extends BodyApp {
 		return out;
 	}
 	
+	@DependsOn({ "filter_ruc", "filter_razonSocial" })
+	public List<Empresa> getEmpresas_() throws Exception {
+		if(this.filter_ruc.trim().isEmpty() && this.filter_razonSocial.trim().isEmpty()) return new ArrayList<Empresa>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getEmpresas(this.filter_ruc, "", this.filter_razonSocial, "");
+	}
+	
 	@DependsOn({ "filterRuc", "filterRazonSocial" })
 	public List<MyArray> getEmpresas() throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
@@ -468,5 +493,21 @@ public class DescuentoChequesVM extends BodyApp {
 
 	public void setFilterRuc(String filterRuc) {
 		this.filterRuc = filterRuc;
+	}
+
+	public String getFilter_ruc() {
+		return filter_ruc;
+	}
+
+	public void setFilter_ruc(String filter_ruc) {
+		this.filter_ruc = filter_ruc;
+	}
+
+	public String getFilter_razonSocial() {
+		return filter_razonSocial;
+	}
+
+	public void setFilter_razonSocial(String filter_razonSocial) {
+		this.filter_razonSocial = filter_razonSocial;
 	}
 }

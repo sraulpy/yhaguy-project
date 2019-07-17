@@ -68,6 +68,7 @@
 						<zk forEach="${vm.menuItem(self,'HechaukaCompras', 'cod=CON-00004')}" />
 						<zk forEach="${vm.menuItem(self,'TesakaRetenciones')}" />
 						<zk forEach="${vm.menuItem(self,'Cotizaciones')}" />
+						<zk forEach="${vm.menuItem(self,'CierreDocumentos')}" />
 						<menuitem label="ASIENTOS" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO MAYOR" disabled="true" iconSclass="z-icon-caret-right" />

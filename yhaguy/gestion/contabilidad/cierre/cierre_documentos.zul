@@ -1,0 +1,28 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.contable.cierre.CierreDocumentosVM')"
+	height="100%">
+	
+	<vbox vflex="true" hflex="true" spacing="0">
+	<hlayout sclass="button-container" hflex="true">
+		<field>Cierre de documentos a la fecha:</field>
+		<datebox></datebox>
+		<space></space>
+		<separator orient="vertical" bar="true"></separator>
+		<space></space>
+		<field>Operaciones:</field>
+		<label>Altas - Bajas - Modificaciones</label>
+	</hlayout>
+	<listbox vflex="true" hflex="true" sclass="small-list"
+		emptyMessage="SIN REGISTROS..">
+			<listhead>
+				<listheader label="Historial de cierres" />
+			</listhead>
+			<listfoot>
+				<listfooter align="left" label="ítems">
+				</listfooter>
+			</listfoot>
+	</listbox>
+	</vbox>
+</window>
+</zk>

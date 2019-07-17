@@ -254,7 +254,7 @@
 						value="@bind(vm.chequeDescuento.liq_gastos_adm)"/>
 				</row>
 				<row>
-					<field>Interes:</field>
+					<field>Interés:</field>
 					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
 						value="@bind(vm.chequeDescuento.liq_intereses)"/>
 				</row>
@@ -267,6 +267,11 @@
 					<field>Neto (Cheques Diferidos):</field>
 					<guaranibox hflex="true" readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)" 
 						value="@bind(vm.chequeDescuento.liq_neto_diferidos)"/>
+				</row>
+				<row>
+					<cell colspan="2">
+						<a iconSclass="z-icon-list" onClick="@command('openCancelacionPrestamos')"> Aplicación de saldos</a>
+					</cell>
 				</row>
 				<row>
 					<cell colspan="2">

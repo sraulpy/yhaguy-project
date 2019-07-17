@@ -232,6 +232,8 @@
 		<mapping resource="com/yhaguy/domain/RecaudacionCentral.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/AcuseDocumento.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/AcuseDocumentoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CierreDocumento.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/CierreDocumentoDetalle.hbm.xml" />
 		
 		<mapping resource="com/yhaguy/domain/ServicioTecnico.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ServicioTecnicoDetalle.hbm.xml" />
