@@ -19,8 +19,8 @@ public class Configuracion extends Config {
 	public static final String EMPRESA_MRA = "Yhaguy Repuestos S.A.";
 	public static final String USER_MOBILE = "sergio";
 	
-	public static final String URL_IMAGES_PUBLIC_MRA = "http://190.211.240.30/images/";
-	public static final String URL_IMAGES_PUBLIC_BAT = "http://190.211.240.242/images/";
+	public static final String URL_IMAGES_PUBLIC_MRA = "http://mra.yhaguyrepuestos.com.py/images/";
+	public static final String URL_IMAGES_PUBLIC_BAT = "http://baterias.yhaguyrepuestos.com.py/images/";
 
 	public static String pathProforma = PATH_SESSION + ("/yhaguy/archivos/proformas/") + "/";
 	public static String pathProformaGenerico = "/yhaguy/archivos/proformas/";

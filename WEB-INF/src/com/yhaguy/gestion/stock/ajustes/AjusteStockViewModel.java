@@ -69,6 +69,7 @@ public class AjusteStockViewModel extends BodyApp {
 		} else {
 			this.enmascararAnulados(false);
 		}
+		Clients.evalJavaScript("setImage('" + this.dto.getUrlImagen() + "')");
 	}
 
 	@Override

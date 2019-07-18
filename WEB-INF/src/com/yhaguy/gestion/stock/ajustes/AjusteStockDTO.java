@@ -37,6 +37,16 @@ public class AjusteStockDTO extends DTO {
 		return out;
 	}
 	
+	/**
+	 * @return la url de la imagen..
+	 */
+	public String getUrlImagen() {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			return Configuracion.URL_IMAGES_PUBLIC_MRA + "ajustes/" + this.getId() + ".png";
+		}
+		return Configuracion.URL_IMAGES_PUBLIC_BAT + "ajustes/" + this.getId() + ".png";
+	}
+	
 	public boolean isAjustePositivo() {
 		String sigla = (String) this.tipoMovimiento.getPos2();
 		return sigla.equals(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);

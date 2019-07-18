@@ -1,11 +1,11 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.ajustes.AjusteStockViewModel')"
-	height="100%">
-	
+	vflex="true">
+	<vlayout vflex="true" spacing="0">
 	<grid sclass="vgrid">
 		<rows>
 			<row>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Tipo Movimiento" />
 					<combobox model="@load(vm.tiposAjuste)"
 						value="@load(vm.dto.tipoMovimiento.pos1)"
@@ -22,30 +22,30 @@
 						visible="@load(vm.dto.detalles.size() eq 0? 'false':'true')"
 						hflex="true"/>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Número" />
-					<textbox value="@load(vm.dto.numero)" readonly="true"/>
+					<textbox value="@load(vm.dto.numero)" readonly="true" hflex="true"/>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Fecha" />
-					<textbox value="@load(vm.dto.fecha) @converter('formattedDate', format='dd-MM-yyyy')" readonly="true"/>
+					<textbox value="@load(vm.dto.fecha) @converter('formattedDate', format='dd-MM-yyyy')" readonly="true" hflex="true" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Sucursal" />
-					<textbox value="@load(vm.dto.sucursal.text)" readonly="true"/>
+					<textbox value="@load(vm.dto.sucursal.text)" readonly="true" hflex="true" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Estado" />
-					<textbox value="@load(vm.dto.estadoComprobante.text)" readonly="true"/>
+					<textbox value="@load(vm.dto.estadoComprobante.text)" readonly="true" hflex="true" />
 				</vlayout>
 			</row>
 			<row>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Depósito" />
 					<combobox model="@load(vm.depositosSucursal)"
 						value="@load(vm.dto.deposito.text)"
 						selectedItem="@bind(vm.dto.deposito)"
-						instant="true">
+						instant="true" hflex="true">
 						<template name="model">
 							<comboitem label="@load(each.text)"/>
 						</template>
@@ -57,17 +57,15 @@
 					<textbox value="@bind(vm.dto.descripcion)" hflex="true"/>
 				</vlayout>
 				</cell>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Autorizado por" />
 					<textbox readonly="true" 
-						value="@load(vm.dto.autorizadoPor)"/>
+						value="@load(vm.dto.autorizadoPor)" hflex="true" />
 				</vlayout>
 			</row>
 		</rows>
 	</grid>
-	
-	<div height="10px" />
-	
+		
 	<solicitarCabecera visible="@load(!vm.detalleVisible)">
 		<vbox pack="center" align="center" vflex="true" hflex="true">
 				<a  iconSclass="z-icon-arrow-up"
@@ -78,31 +76,35 @@
 	</solicitarCabecera>
 	
 	<hlayout sclass="button-container" visible="@load(vm.detalleVisible)">
-		<toolbarbutton label="Eliminar"
-				image="/core/images/borrarItem.png" 
+		<button mold="bs" label="Eliminar"
+				iconSclass="z-icon-times"
+				sclass="btn-sm btn-danger" 
+				width="120px"
 				onClick="@command('deleteItem')"
 				disabled="@load(vm.deleteItemDisabled)"/>
 			<space />
-			<toolbarbutton label="Insertar"
-				image="/core/images/insertar.png" 
+			<button mold="bs" label="Insertar"
+				iconSclass="z-icon-plus"
+				sclass="btn-sm btn-success" 
+				width="120px"
 				onClick="@command('insertItem')"/>
 			<space />
-			<toolbarbutton label="Autorizar"
-				image="/core/images/accept2.png" 
+			<button mold="bs" label="Autorizar"
+				iconSclass="z-icon-check"
+				sclass="btn-sm btn-info" 
+				width="120px"
 				onClick="@command('confirmar')"
 				disabled="@load(vm.confirmarDisabled)"/> 
 	</hlayout>
 	
-	<listbox sclass="small-list" vflex="true" checkmark="@load(vm.checkmarkVisible)"
+	<hbox vflex="true" visible="@load(vm.detalleVisible)" style="margin-bottom:10px">
+	<listbox sclass="small-list" vflex="true" hflex="5" checkmark="@load(vm.checkmarkVisible)"
 		multiple="true" emptyMessage="AGREGUE ÍTEMS AL DETALLE.."
-		visible="@load(vm.detalleVisible)"
 		model="@load(vm.dto.detalles)"
 		selectedItems="@bind(vm.selectedItems)">
 		<listhead>
 			<listheader width="40px" align="center"/>
 			<listheader label="Código Interno" width="150px"/>
-			<listheader label="Código Proveedor" width="150px" />
-			<listheader label="Código Original" width="150px" />
 			<listheader label="Descripción" />
 			<listheader label="Cantidad" width="120px" align="right"/>
 			<listheader label="Costo Gs." width="120px" align="right"/>
@@ -112,8 +114,6 @@
 			<listitem>
 				<listcell />
 				<listcell label="@load(each.articulo.pos1)" />
-				<listcell label="@load(each.articulo.pos2)" />
-				<listcell label="@load(each.articulo.pos3)" />
 				<listcell label="@load(each.articulo.pos4)" />
 				<listcell label="@load(each.cantidad)" />
 				<listcell label="@load(each.costoGs) @converter(vm.cnv.monedaLocal)" />
@@ -121,7 +121,7 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="7" align="left">
+			<listfooter span="5" align="left">
 				<hlayout>
 					<field value="@load(vm.dto.detalles.size())" />
 					<field value="ítems" />
@@ -130,9 +130,22 @@
 			<listfooter>
 				<doublebox value="@load(vm.dto.totalCostoGs)"
 					format="###,###,##0" 
-					style="background:silver; text-align:right; font-weight:bold" />
+					style="text-align:right; font-weight:bold" />
 			</listfooter>
 		</listfoot>
 	</listbox>
-	
+	<groupbox title="Documento Respaldo" mold="3d" hflex="3" vflex="true" style="text-align:center">
+		<html><![CDATA[
+        		<img id="foto" style ="height:100%; width:100%;" alt="" 
+        			onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+    	</html>
+	</groupbox>
+	</hbox>
+	</vlayout>
+	<script>
+			function setImage(url) {
+				var imagen = document.getElementById("foto");
+				imagen.src = url;
+			}
+	</script>
 </window>
