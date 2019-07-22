@@ -1,0 +1,100 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Proveedor:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.proveedor.razonSocial)"
+				id="bndProv_"
+				onOpen="tx_prov.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.proveedores)"
+						selectedItem="@bind(vm.dato.filtro.proveedor)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialProveedor)"
+										instant="true" placeholder="Buscar.." 
+										id="tx_prov"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
+			<field value="Cliente:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
+				id="bndCli_"
+				onOpen="tx_cli.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.dato.filtro.clientes)"
+						selectedItem="@bind(vm.dato.filtro.cliente)"
+						onSelect="bndCli_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialCliente)"
+										instant="true" placeholder="Buscar.."
+										id="tx_cli" />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>		
+		<row>
+			<field value="Familia:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.familias_)"
+				selectedItem="@bind(vm.dato.filtro.familia_)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Formato:" />
+			<combobox model="@load(vm.dato.filtro.formatos)"
+				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>
+			</combobox>
+		</row>
+	</rows>
+</grid>
