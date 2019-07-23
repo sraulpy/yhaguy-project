@@ -9636,7 +9636,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				return;
 			}
 			try {
-				Date desde = filtro.getFechaInicioOperaciones();
+				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();

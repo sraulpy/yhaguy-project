@@ -10088,7 +10088,8 @@ public class RegisterDomain extends Register {
 				"	FROM Venta v" +
 				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
 				"      AND v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" + 
-				"      AND v.dbEstado != 'D' AND v.estadoComprobante IS NULL";
+				"      AND v.dbEstado != 'D' AND v.estadoComprobante IS NULL" +
+				"      AND v.auxi != 'MIGRACION'";
 		if (idCliente > 0) {
 			query += " AND v.cliente.id = " + idCliente;
 		}

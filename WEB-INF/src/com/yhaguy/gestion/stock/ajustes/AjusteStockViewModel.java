@@ -443,7 +443,7 @@ class AjusteStockBrowser extends Browser {
 
 	@Override
 	public void setingInicial() {
-		this.addOrden("id");
+		this.addOrden("id desc");
 		this.setWidthWindows("900px");
 		this.setHigthWindows("80%");
 	}
