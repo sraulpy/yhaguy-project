@@ -3514,11 +3514,14 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las notas de debito segun fecha
 	 */
-	public List<NotaDebito> getNotasDebito(Date desde, Date hasta, long idSucursal) throws Exception {
+	public List<NotaDebito> getNotasDebito(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
 		String query = "select n from NotaDebito n where n.dbEstado != 'D'"
 				+ " and (n.fecha between ? and ?)";
 		if (idSucursal != 0) {
 			query += " and n.sucursal.id = " + idSucursal;
+		}
+		if (idCliente != 0) {
+			query += " and n.cliente.id = " + idCliente;
 		}
 		query += " order by n.numero";
 

@@ -11122,7 +11122,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<NotaCredito> notasCredito = new ArrayList<NotaCredito>();
 			if (incluirNCR) notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0);
 			List<NotaDebito> notasDebito = new ArrayList<NotaDebito>();
-			notasDebito = rr.getNotasDebito(desde, hasta, 0);
+			notasDebito = rr.getNotasDebito(desde, hasta, 0, 0);
 			InformeHechauka.generarInformeHechauka(ventas, notasCredito, notasDebito);
 			Clients.showNotification("Informe Hechauka generado..");
 		}
@@ -11167,13 +11167,15 @@ public class ReportesViewModel extends SimpleViewModel {
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
 			SucursalApp suc = filtro.getSelectedSucursal();
+			Cliente cli = filtro.getCliente();
 			long idSuc = suc != null ? suc.getId() : 0;
+			long idCli = cli != null ? cli.getId() : 0;
 			String suc_ = suc != null ? suc.getDescripcion() : "TODOS..";
 			Object[] formato = filtro.getFormato();
 			boolean formularioContinuo = filtro.isFormularioContinuo();
-			List<Venta> ventas = rr.getVentas(desde, hasta, 0, idSuc);
-			List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,	hasta, 0, idSuc, "");
-			List<NotaDebito> notasDebito = rr.getNotasDebito(desde,	hasta, idSuc);
+			List<Venta> ventas = rr.getVentas(desde, hasta, idCli, idSuc);
+			List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,	hasta, idCli, idSuc, "");
+			List<NotaDebito> notasDebito = rr.getNotasDebito(desde,	hasta, idCli, idSuc);
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS;
 			if (formularioContinuo)
 				source = formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS)? 
@@ -12852,7 +12854,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				List<Venta> ventas = rr.getVentas(desde, hasta, 0, idSucursal);
 				List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,	hasta, 0, idSucursal, "");
-				List<NotaDebito> notasDebito = rr.getNotasDebito(desde,	hasta, idSucursal);
+				List<NotaDebito> notasDebito = rr.getNotasDebito(desde,	hasta, 0, idSucursal);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_MATRICIAL;
 				Map<String, Object> params = new HashMap<String, Object>();
