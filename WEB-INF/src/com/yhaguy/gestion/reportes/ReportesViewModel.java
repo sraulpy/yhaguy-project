@@ -7214,8 +7214,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Object[] formato = filtro.getFormato();
 				SucursalApp sucursal = filtro.getSelectedSucursal();
+				Cliente cli = filtro.getCliente();
 				long idSucursal = sucursal == null ? 0 : sucursal.getId();
-				long idCliente = 0;
+				long idCliente = cli != null ? cli.getId() : 0;
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
 				if (desde == null)
