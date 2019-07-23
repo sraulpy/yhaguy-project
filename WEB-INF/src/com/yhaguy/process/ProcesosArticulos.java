@@ -47,8 +47,9 @@ public class ProcesosArticulos {
 	static final String SRC_INVENTARIO_MAYORISTA = "./WEB-INF/docs/migracion/central/INVENTARIO_MAYORISTA.csv";
 	static final String SRC_INVENTARIO_MCAL = "./WEB-INF/docs/migracion/central/INVENTARIO_MCAL.csv";
 	
-	static final String SRC_HISTORICO_MOVIMIENTOS = "./WEB-INF/docs/procesos/SABO.csv";
-
+	static final String SRC_HISTORICO_MOVIMIENTOS = "./WEB-INF/docs/procesos/ZF_BRASIL_MARZO19.csv";
+	static final String SRC_TECFIL = "./WEB-INF/docs/procesos/TECFIL.csv";
+	
 	/**
 	 * asigna familia a los articulos..
 	 */
@@ -662,6 +663,35 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * asigna precio a los articulos..
+	 */
+	public static void setPrecioArticulos(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING } };
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+
+			String codigo = csv.getDetalleString("CODIGO");	
+			Double mayorista = Double.parseDouble(csv.getDetalleString("MAYORISTA"));
+			Double minorista = Double.parseDouble(csv.getDetalleString("MINORISTA"));
+			Double lista = Double.parseDouble(csv.getDetalleString("LISTA"));
+			Articulo art = rr.getArticuloByCodigoInterno(codigo);
+			if (art != null) {
+				art.setPrecioGs(mayorista);
+				art.setPrecioMinoristaGs(minorista);
+				art.setPrecioListaGs(lista);
+				rr.saveObject(art, "sys");
+				System.out.println(art.getCodigoInterno());
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -679,7 +709,8 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MINORISTA, Deposito.ID_MINORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
-			ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
+			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
+			ProcesosArticulos.setPrecioArticulos(SRC_CUBIERTAS);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
