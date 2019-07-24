@@ -6015,7 +6015,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				int mes2 = Utiles.getNumeroMes(hasta);
 				int rango = mes2 - mes1;
 				
-				RegisterDomain rr = RegisterDomain.getInstance();				
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> articulos = rr.getArticulos_(idFamilia, idProveedor);
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
 				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
 				
@@ -6024,6 +6025,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Double> importes = new HashMap<String, Double>();
 				Map<String, Double> volumens = new HashMap<String, Double>();
 				Map<String, Object[]> datos = new HashMap<String, Object[]>();
+				
+				for (Object[] art : articulos) {
+					int mes = Utiles.getNumeroMes(desde);
+					String cod = (String) art[1];
+					String des = (String) art[8];
+					String key = cod + ";" + des + ";" + mes;
+					cants.put(key, 0.0);
+				}
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[4]);

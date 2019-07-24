@@ -9479,6 +9479,33 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.volumen
+	 * [3]:cantidad
+	 * [4]:fecha
+	 * [5]:cliente.empresa.razonSocial
+	 * [6]:importegs
+	 * [7]:vendedor
+	 * [8]:descripcion
+	 * [9]:costogs
+	 * [10]:preciogs
+	 */
+	public List<Object[]> getArticulos_(long idFamilia, long idProveedor) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.volumen, (a.id * 0.0), a.modificado, '',"
+				+ " (a.id * 0.0), '', a.descripcion, a.costoGs, a.precioGs"
+				+ " from Articulo a";
+				if (idFamilia > 0) {
+					query += " and a.familia.id = " + idFamilia;
+				}
+				if (idProveedor > 0) {
+					query += " and a.proveedor.id = " + idProveedor;
+				}
+		return this.hql(query);
+	}
+	
 	public static void mainx(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
