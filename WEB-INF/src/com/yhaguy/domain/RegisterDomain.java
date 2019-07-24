@@ -9496,7 +9496,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getArticulos_(long idFamilia, long idProveedor) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.volumen, (a.id * 0.0), a.modificado, '',"
 				+ " (a.id * 0.0), '', a.descripcion, a.costoGs, a.precioGs"
-				+ " from Articulo a";
+				+ " from Articulo a where a.estado = 'TRUE'";
 				if (idFamilia > 0) {
 					query += " and a.familia.id = " + idFamilia;
 				}
