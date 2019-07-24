@@ -230,7 +230,7 @@
 					<listcell>
 						<hlayout>
 						<a iconSclass="z-icon-edit" onClick="@command('openCartera', parent=self)" />
-						<label value="@load(each.pos12.descripcion)" />	
+						<label value="@load(each.pos12.descripcion)" style="font-size:11px"/>	
 						</hlayout>	
 					</listcell>
 					<listcell>
