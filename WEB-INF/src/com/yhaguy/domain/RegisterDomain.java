@@ -10169,6 +10169,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return importe anticipos dentro de un periodo..
+	 * [0]: cliente.id
+	 * [1]: cliente.empresa.razonSocial
+	 * [2]: sum(importe)
+	 */
+	public List<Object[]> getAnticiposPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT r.cliente.id, r.cliente.empresa.razonSocial, sum(r.totalImporteGs)" +   
+				"	FROM Recibo r" +
+				"	WHERE (r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '" + hasta_ + "')" + 
+				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "'" +
+				"	   AND r.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'" + 
+				"	   AND r.dbEstado != 'D' AND r.cobroExterno = 'FALSE'";
+		if (idCliente > 0) {
+			query += " AND r.cliente.id = " + idCliente;
+		}
+		query+=	" GROUP BY r.cliente.id, r.cliente.empresa.razonSocial" +
+				" ORDER BY 2";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return importe nota debito dentro de un periodo..
 	 * [0]: cliente.id
 	 * [1]: cliente.empresa.razonSocial
