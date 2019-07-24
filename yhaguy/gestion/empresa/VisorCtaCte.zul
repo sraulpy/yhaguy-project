@@ -179,7 +179,7 @@
 				<listheader label="Nro. Importación" visible="@load(!vm.tipoCliente)" sort="auto(pos10)" />
 				<listheader label="@load(vm.columnImporte)" align="right" sort="auto(pos5)" />
 				<listheader label="@load(vm.columnSaldo)" align="right" sort="auto(pos6)" />
-				<listheader label="Cartera" sort="auto(pos12)" width="130px"
+				<listheader label="Cartera" sort="auto(pos12)" width="150px"
 					visible="@load(vm.isOperacionHabilitada('BloquearCtaCteCliente'))"></listheader>
 				<listheader label="Detalle" align="center" width="70px" />
 				<listheader label="Aplicar" align="center" width="70px" visible="@load(vm.selectedFilter eq 'Pendientes')" />
