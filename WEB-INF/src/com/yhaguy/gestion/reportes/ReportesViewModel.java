@@ -6017,8 +6017,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> articulos = rr.getArticulos_(idFamilia, idProveedor);
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6236,18 +6236,20 @@ public class ReportesViewModel extends SimpleViewModel {
 				Cliente cli = filtro.getCliente();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Proveedor proveedor = filtro.getProveedor();
+				Funcionario vendedor = filtro.getVendedor();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
+				long idVendedor = vendedor != null ? vendedor.getId().longValue() : 0;
 				int mes1 = Utiles.getNumeroMes(desde) - 1;
 				int mes2 = Utiles.getNumeroMes(hasta);
 				int rango = mes2 - mes1;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6316,14 +6318,14 @@ public class ReportesViewModel extends SimpleViewModel {
 					String codigo = key.split(";")[0];
 					String key_ = codigo;
 					String ruc = "";
-					String vendedor = "";
+					String vendedor_ = "";
 					String rubro = "";
 					String zona = "";
 					Object[] dcli = clientes.get(key_);
 					
 					if (dcli != null) {
 						ruc = (String) dcli[0];
-						vendedor = (String) dcli[1];
+						vendedor_ = (String) dcli[1];
 						rubro = (String) dcli[2];
 						zona = (String) dcli[3];
 					}
@@ -6406,7 +6408,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
 						hist.setRuc(ruc);
-						hist.setVendedor(vendedor);
+						hist.setVendedor(vendedor_);
 						hist.setRubro(rubro);
 						hist.setZona(zona);
 						hist.setLitraje(cantidad);
