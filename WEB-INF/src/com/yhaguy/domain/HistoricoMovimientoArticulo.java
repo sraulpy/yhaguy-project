@@ -107,6 +107,11 @@ public class HistoricoMovimientoArticulo extends Domain {
 	
 	private double costoFobGs;
 	private double costoFobDs;
+	
+	private String ruc;
+	private String vendedor;
+	private String rubro;
+	private String zona;
 
 	@Override
 	public int compareTo(Object o) {
@@ -855,5 +860,37 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setStock10(long stock10) {
 		this.stock10 = stock10;
+	}
+
+	public String getRuc() {
+		return ruc;
+	}
+
+	public void setRuc(String ruc) {
+		this.ruc = ruc;
+	}
+
+	public String getVendedor() {
+		return vendedor;
+	}
+
+	public void setVendedor(String vendedor) {
+		this.vendedor = vendedor;
+	}
+
+	public String getRubro() {
+		return rubro;
+	}
+
+	public void setRubro(String rubro) {
+		this.rubro = rubro;
+	}
+
+	public String getZona() {
+		return zona;
+	}
+
+	public void setZona(String zona) {
+		this.zona = zona;
 	}
 }

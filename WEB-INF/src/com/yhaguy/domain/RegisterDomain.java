@@ -9425,12 +9425,20 @@ public class RegisterDomain extends Register {
 	 * [8]:descripcion
 	 * [9]:costogs
 	 * [10]:preciogs
+	 * [11]:cliente.empresa.ruc
+	 * [12]:cliente.empresa.vendedor
+	 * [13]:cliente.empresa.rubro
+	 * [14]:cliente.empresa.zona
 	 */
 	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), v.fecha, v.cliente.empresa.razonSocial,"
-				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), v.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs"
+				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), v.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs,"
+				+ " v.cliente.empresa.ruc,"
+				+ " v.cliente.empresa.vendedor.nombreEmpresa,"
+				+ " v.cliente.empresa.rubro.descripcion,"
+				+ " v.cliente.empresa.zona"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -9458,12 +9466,21 @@ public class RegisterDomain extends Register {
 	 * [6]:importegs
 	 * [7]:vendedor..
 	 * [8]:descripcion
+	 * [9]:costogs
+	 * [10]:preciogs
+	 * [11]:cliente.empresa.ruc
+	 * [12]:cliente.empresa.vendedor
+	 * [13]:cliente.empresa.rubro
+	 * [14]:cliente.empresa.zona
 	 */
 	public List<Object[]> getNotasCreditoDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), n.fechaEmision, n.cliente.empresa.razonSocial,"
-				+ " d.importeGs, n.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs"
+				+ " d.importeGs, n.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs, n.cliente.empresa.ruc,"
+				+ " n.cliente.empresa.vendedor.nombreEmpresa," 
+				+ " n.cliente.empresa.rubro.descripcion,"
+				+ " n.cliente.empresa.zona"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";

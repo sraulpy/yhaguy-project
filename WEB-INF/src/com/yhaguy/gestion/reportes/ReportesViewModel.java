@@ -6254,6 +6254,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Double> importes = new HashMap<String, Double>();
 				Map<String, Double> volumens = new HashMap<String, Double>();
 				Map<String, Object[]> datos = new HashMap<String, Object[]>();
+				Map<String, Object[]> clientes = new HashMap<String, Object[]>();
 				
 				for (Object[] venta : ventas) {
 					int mes = Utiles.getNumeroMes((Date) venta[4]);
@@ -6276,6 +6277,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					} else {
 						importes.put(key, ((Double) (venta[6])));
 					}
+					Object[] cld = clientes.get(clt);
+					if (cld == null) {
+						cld = new Object[] { venta[11], venta[12], venta[13], venta[14] };
+						clientes.put(clt, cld);
+					}
 				}
 				
 				for (Object[] nc : ncs) {
@@ -6297,6 +6303,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					} else {
 						importes.put(key, ((Double) (nc[6]) * -1));
 					}
+					Object[] cld = clientes.get(clt);
+					if (cld == null) {
+						cld = new Object[] { nc[11], nc[12], nc[13], nc[14] };
+						clientes.put(clt, cld);
+					}
 				}
 				
 				Map<String, String> keys = new HashMap<String, String>();
@@ -6304,6 +6315,18 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (String key : cants.keySet()) {					
 					String codigo = key.split(";")[0];
 					String key_ = codigo;
+					String ruc = "";
+					String vendedor = "";
+					String rubro = "";
+					String zona = "";
+					Object[] dcli = clientes.get(key_);
+					
+					if (dcli != null) {
+						ruc = (String) dcli[0];
+						vendedor = (String) dcli[1];
+						rubro = (String) dcli[2];
+						zona = (String) dcli[3];
+					}
 					
 					if (keys.get(key_) == null) {
 						Double cantidad = cants.get(key);
@@ -6382,6 +6405,10 @@ public class ReportesViewModel extends SimpleViewModel {
 						
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
+						hist.setRuc(ruc);
+						hist.setVendedor(vendedor);
+						hist.setRubro(rubro);
+						hist.setZona(zona);
 						hist.setLitraje(cantidad);
 						hist.setCoeficiente(0.0);
 						hist.setEnero_(cantEnero);
@@ -24189,6 +24216,14 @@ class VentasProveedorCliente implements JRDataSource {
 
 		if ("Codigo".equals(fieldName)) {
 			value = cod;
+		} else if ("Ruc".equals(fieldName)) {
+			value = det.getRuc();
+		} else if ("Vendedor".equals(fieldName)) {
+			value = det.getVendedor();
+		} else if ("Rubro".equals(fieldName)) {
+			value = det.getRubro();
+		} else if ("Zona".equals(fieldName)) {
+			value = det.getZona();
 		} else if ("CodigoProveedor".equals(fieldName)) {
 			value = det.getCodigoProveedor();
 		}  else if ("Referencia".equals(fieldName)) {
