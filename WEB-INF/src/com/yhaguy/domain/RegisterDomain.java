@@ -5299,7 +5299,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las cobranzas segun fecha
 	 */
-	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal, long idCliente)
+	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal, long idCliente, boolean incluirAnticipos)
 			throws Exception {
 
 		String query = "select r from Recibo r where r.dbEstado != 'D' and (r.tipoMovimiento.sigla = ? or r.tipoMovimiento.sigla = ?)"
@@ -5314,9 +5314,45 @@ public class RegisterDomain extends Register {
 		}
 		
 		query += " order by r.fechaEmision, r.numero";
-
+		
+		String anticipo = incluirAnticipos ? Configuracion.SIGLA_TM_ANTICIPO_COBRO : Configuracion.SIGLA_TM_RECIBO_COBRO;
+		
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_RECIBO_COBRO);
+		listParams.add(anticipo);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idSucursal != 0) {
+			listParams.add(idSucursal);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return los anticipos segun fecha
+	 */
+	public List<Recibo> getAnticipos(Date desde, Date hasta, long idSucursal, long idCliente)
+			throws Exception {
+
+		String query = "select r from Recibo r where r.dbEstado != 'D' and r.tipoMovimiento.sigla = ?"
+				+ " and (r.fechaEmision between ? and ?)";
+
+		if (idSucursal != 0) {
+			query += " and r.sucursal.id = ?";
+		}
+		
+		if (idCliente != 0) {
+			query += " and r.cliente.id = " + idCliente;
+		}
+		
+		query += " order by r.fechaEmision, r.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
 		listParams.add(desde);
 		listParams.add(hasta);
@@ -5394,7 +5430,7 @@ public class RegisterDomain extends Register {
 	 * @return las cobranzas por vendedor..
 	 */
 	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta, long idVendedor, long idSucursal) throws Exception {
-		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0);
+		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true);
 		List<Object[]> out = new ArrayList<Object[]>();
 
 		for (Recibo recibo : cobros) {

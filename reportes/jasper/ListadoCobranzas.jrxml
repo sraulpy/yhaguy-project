@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListadoCobranzas" pageWidth="612" pageHeight="963" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.8150000000000033"/>
-	<property name="ireport.x" value="139"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -40,6 +40,7 @@
 	<parameter name="Logo" class="java.lang.String"/>
 	<parameter name="Generado" class="java.lang.String"/>
 	<parameter name="Usuario" class="java.lang.String"/>
+	<parameter name="Titulo" class="java.lang.String"/>
 	<field name="Fecha" class="java.lang.String"/>
 	<field name="Concepto" class="java.lang.String"/>
 	<field name="Numero" class="java.lang.String"/>
@@ -58,14 +59,6 @@
 	</background>
 	<title>
 		<band height="73" splitType="Stretch">
-			<staticText>
-				<reportElement style="Title" mode="Transparent" x="66" y="20" width="240" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="89f88eab-4bc7-40d2-8446-d23096c39e1f"/>
-				<textElement verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[LISTADO DE COBRANZAS]]></text>
-			</staticText>
 			<image>
 				<reportElement x="3" y="4" width="63" height="31" uuid="04094c04-b1aa-428a-89bb-24f8f07aa040"/>
 				<imageExpression><![CDATA[$P{Logo}.toString()]]></imageExpression>
@@ -125,6 +118,14 @@
 				<reportElement x="411" y="44" width="154" height="20" uuid="6a71d615-60a8-4155-ab06-858762d033e4"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Sucursal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="67" y="21" width="326" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d4cc4193-5e4c-4ee4-b7db-3e911f383b5e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Titulo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

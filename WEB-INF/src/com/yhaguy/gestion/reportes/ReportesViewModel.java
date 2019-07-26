@@ -6614,6 +6614,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String COBRANZAS_COBRADOR_DET = "TES-00053";
 		static final String SALDOS_CLIENTES_RESUMIDO = "TES-00054";
 		static final String SALDOS_CLIENTES_POR_PROVEEDOR = "TES-00055";
+		static final String ANTICIPOS_CLIENTES = "TES-00056";
 
 		/**
 		 * procesamiento del reporte..
@@ -6691,7 +6692,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 
 			case COBRANZAS:
-				this.cobranzas(mobile);
+				this.cobranzas(mobile, COBRANZAS);
 				break;
 
 			case PLANILLAS_DE_CAJA:
@@ -6845,6 +6846,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			case SALDOS_CLIENTES_POR_PROVEEDOR:
 				this.saldosClientesProveedor(mobile, SALDOS_CLIENTES_POR_PROVEEDOR);
 				break;
+				
+			case ANTICIPOS_CLIENTES:
+				this.anticipos(mobile, ANTICIPOS_CLIENTES);
+				break;
 			}
 		}
 
@@ -6906,7 +6911,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				hasta = new Date();
 
 			if (tipoRetencion.equals(ReportesFiltros.RETENCION_RECIBIDAS)) {
-				recibos = rr.getCobranzas(desde, hasta, 0, 0);
+				recibos = rr.getCobranzas(desde, hasta, 0, 0, true);
 				ventas = rr.getVentasContado(desde, hasta, 0, 0);
 			} else if (tipoRetencion.equals(ReportesFiltros.RETENCION_EMITIDAS)) {
 				recibos = rr.getPagos(desde, hasta);
@@ -7241,7 +7246,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * reporte TES-00016
 		 */
-		private void cobranzas(boolean mobile) {
+		private void cobranzas(boolean mobile, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
@@ -7256,20 +7261,19 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idSucursal = sucursal == null ? 0 : sucursal.getId();
 				long idCliente = cli != null ? cli.getId() : 0;
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
+				boolean incluirAnticipos = filtro.isFraccionado();
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, incluirAnticipos);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_);
 				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", codReporte + " - LISTADO DE COBRANZAS");
 				imprimirJasper(source, params, dataSource, formato);
 
 			} catch (Exception e) {
@@ -7634,7 +7638,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Venta> ventas = new ArrayList<Venta>();
 
 			if (recInc) {
-				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente);
+				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true);
 				if (formaPago.isEmpty()) {
 					for (Recibo recibo : cobranzas) {
 						data.add(new Object[] {
@@ -8472,7 +8476,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true);
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				for (Recibo cobro : cobranzas) {
@@ -9506,7 +9510,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Funcionario> cobradores = filtro.getTeleCobradores();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0);
+				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, true);
 				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
@@ -9593,7 +9597,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0);
+				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, true);
 				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
@@ -9995,6 +9999,46 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				params.put("Vendedor", vendedor.getRazonSocial());
 				imprimirJasper(source, params, dataSource, filtro.getFormato());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte TES-00056
+		 */
+		private void anticipos(boolean mobile, String codReporte) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Object[] formato = filtro.getFormato();
+				SucursalApp sucursal = filtro.getSelectedSucursal();
+				Cliente cli = filtro.getCliente();
+				long idSucursal = sucursal == null ? 0 : sucursal.getId();
+				long idCliente = cli != null ? cli.getId() : 0;
+				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
+
+				if (desde == null)
+					desde = new Date();
+
+				if (hasta == null)
+					hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Recibo> cobranzas = rr.getAnticipos(desde, hasta, idSucursal, idCliente);
+				
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_);
+				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", codReporte + " - LISTADO DE ANTICIPOS");
+				imprimirJasper(source, params, dataSource, formato);
 
 			} catch (Exception e) {
 				e.printStackTrace();
