@@ -620,8 +620,10 @@ public class ControlCuentaCorriente {
 			}
 		}
 		if (ctacte.isAnticipoCobro()) {
-			ctacte.setSaldo(0);
-			rr.saveObject(ctacte, ctacte.getUsuarioMod());
+			Recibo anticipo = (Recibo) rr.getObject(Recibo.class.getName(), ctacte.getIdMovimientoOriginal());
+			if (anticipo != null) {
+				recalcularSaldoAnticipo(anticipo);
+			}
 		}
 	}
 	
@@ -693,6 +695,32 @@ public class ControlCuentaCorriente {
 					ctacte.setSaldo(hist_);
 					rr.saveObject(ctacte, ctacte.getUsuarioMod());
 				}				
+			}
+		}
+	}
+	
+	/**
+	 * recalcula los saldos por venta credito..
+	 */
+	public static void recalcularSaldoAnticipo(Recibo anticipo) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (anticipo.isMonedaLocal()) {
+			double ajcr = 0;
+			double ajdb = 0;
+			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(anticipo.getId(), anticipo.getTipoMovimiento().getSigla(), anticipo.getCliente().getIdEmpresa());
+			
+			List<AjusteCtaCte> ajcr_ = rr.getAjustesCredito(anticipo.getId(), anticipo.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajcr_) {
+				ajcr += ajc.getImporte();				
+			}
+			List<AjusteCtaCte> ajdb_ = rr.getAjustesDebito(anticipo.getId(), anticipo.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajdb_) {
+				ajdb += ajc.getImporte();				
+			}
+			if (ctacte != null) {
+				double hist_ = ((anticipo.getTotalImporteGs() - ajdb) + (ajcr));
+				ctacte.setSaldo(hist_);
+				rr.saveObject(ctacte, ctacte.getUsuarioMod());				
 			}
 		}
 	}

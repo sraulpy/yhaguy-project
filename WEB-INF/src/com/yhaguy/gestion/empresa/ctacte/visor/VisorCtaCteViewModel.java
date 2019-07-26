@@ -341,6 +341,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		this.detalle.setNumero(String.valueOf(item.getPos4()));
 		this.detalle.setSigla(String.valueOf(item.getPos8()));
 		this.detalle.setTipoMovimiento(String.valueOf(item.getPos3()));
+		if (this.isAnticipoCobro(String.valueOf(item.getPos8()))) {
+			this.detalle.setImporteGs((double) item.getPos5());
+		}
 		this.setDetalles(item);
 		if (this.isRecibo(String.valueOf(item.getPos8()))) {
 			this.popDetalleRecibo.open(parent, "start_before");
@@ -927,7 +930,40 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				}
 			}
 		}
-		if (!this.isReciboCobro(sigla)) {
+		
+		if (this.isAnticipoCobro(sigla)) {
+			Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), idmovimiento);
+			
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(rec.getId(), rec.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getDebito().getNroComprobante());
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+				det.setTipoMovimiento("CREDITO CTA.CTE.");
+				det.setTipoMovimiento_(det.getTipoMovimiento());
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getId());
+				out.add(det);			
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(rec.getId(), rec.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getCredito().getNroComprobante());
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+				det.setTipoMovimiento("DEBITO CTA.CTE.");
+				det.setTipoMovimiento_(det.getTipoMovimiento());
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+				out.add(det);			
+			}
+		}
+		
+		if (!this.isReciboCobro(sigla) && !this.isAnticipoCobro(sigla)) {
 			out.add(movim);
 			// ordena la lista segun fecha..
 			Collections.sort(out, new Comparator<DetalleMovimiento>() {
@@ -942,6 +978,25 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				}
 			});
 		}	
+		
+		if (this.isAnticipoCobro(sigla)) {
+			out.add(movim);
+			// ordena la lista segun anticipo, luego fecha..
+			Collections.sort(out, new Comparator<DetalleMovimiento>() {
+				@Override
+				public int compare(DetalleMovimiento o1, DetalleMovimiento o2) {
+					if (o1.isSelf()) {
+						return -1;
+					}
+					Date fecha1 = o1.getEmision();
+					Date fecha2 = o2.getEmision();
+					if (fecha1 != null && fecha2 != null) {
+						return fecha1.compareTo(fecha2);
+					}
+					return 0;
+				}
+			});
+		}
 		
 		double saldo = 0;
 		for (DetalleMovimiento det : out) {
@@ -1969,8 +2024,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos2(mov.getFechaVencimiento());
 			my.setPos3(mov.getTipoMovimiento().getDescripcion());
 			my.setPos4(mov.getNroComprobante());
-			my.setPos5(mov.getImporteOriginalFinal());
-			my.setPos6(mov.getSaldoFinal());	
+			my.setPos5(mov.getImporteOriginal());
+			my.setPos6(mov.getSaldo());	
 			my.setPos7(mov.isVencido());
 			my.setPos8(mov.getTipoMovimiento().getSigla());
 			my.setPos9(mov.getIdMovimientoOriginal());
@@ -2078,7 +2133,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		 * @return el haber..
 		 */
 		public double getHaber() {
-			return this.isNotaCredito() || this.isReciboCobro() || this.isAjusteCredito() ? this.importeGs : 0.0;
+			return this.isNotaCredito() || this.isReciboCobro() || this.isAnticipoCobro() || this.isAjusteCredito() ? this.importeGs : 0.0;
 		}
 		
 		/**
@@ -2133,6 +2188,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		public boolean isReciboCobro() {
 			if(sigla == null) return false;
 			return sigla.equals(Configuracion.SIGLA_TM_RECIBO_COBRO);
+		}
+		
+		/**
+		 * @return true si es anticipo de cobro..
+		 */
+		public boolean isAnticipoCobro() {
+			if(sigla == null) return false;
+			return sigla.equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
 		}
 		
 		/**
@@ -2436,6 +2499,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	 */
 	private boolean isReciboCobro(String sigla) {
 		return sigla.equals(Configuracion.SIGLA_TM_RECIBO_COBRO);
+	}
+	
+	/**
+	 * @return true si es un movimiento de anticipo..
+	 */
+	private boolean isAnticipoCobro(String sigla) {
+		return sigla.equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
 	}
 	
 	/**
