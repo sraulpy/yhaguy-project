@@ -9,14 +9,18 @@
 				style="text-align:center; font-size:12px"
 				iconSclass="z-icon-filter" 
 				onClick="@command('selectFilter', filter=1)"/>
-			<navitem label=" REEMBOLSOS PRESTAMOS C.C."
+			<navitem label=" REEMB. PRESTAMOS"
 				style="text-align:center; font-size:12px"
 				iconSclass="z-icon-filter" 
 				onClick="@command('selectFilter', filter=2)"/>
-			<navitem label=" REEMBOLSOS CHEQUES RECHAZADOS"
+			<navitem label=" REEMB. CH.RECHAZADOS"
 				style="text-align:center; font-size:12px"
 				iconSclass="z-icon-filter" 
 				onClick="@command('selectFilter', filter=3)"/>
+			<navitem label=" ANTICIPOS"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter" 
+				onClick="@command('selectFilter', filter=4)"/>
 		</navbar>
 		<space hflex="true"></space>
 		<button mold="bs" sclass="btn-primary btn-sm" width="150px"

@@ -5215,8 +5215,22 @@ public class RegisterDomain extends Register {
 	 * @return los recibos segun parametros..
 	 */
 	public List<Recibo> getRecibos(String fecha, String numero, String razonSocial, String ruc, String caja, String cobrador) throws Exception {
-		String query = "select r from Recibo r where (r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_COBRO 
-				+ "' or r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "')"
+		String query = "select r from Recibo r where (r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_COBRO + "')"
+				+ " and cast (r.fechaEmision as string) like '%" + fecha + "%'"
+				+ " and r.numero like '%" + numero + "%'"
+				+ " and upper(r.cliente.empresa.razonSocial) like '%" + razonSocial.toUpperCase() + "%'"
+				+ " and r.cliente.empresa.ruc like '%" + ruc + "%'"
+				+ " and r.numeroPlanilla like '%" + caja + "%'"
+				+ " and upper(r.cobrador) like '%" + cobrador.toUpperCase() + "%'"
+				+ " order by r.fechaEmision, r.numero";
+		return this.hqlLimit(query, 200);
+	}
+	
+	/**
+	 * @return los anticipos segun parametros..
+	 */
+	public List<Recibo> getAnticipos(String fecha, String numero, String razonSocial, String ruc, String caja, String cobrador) throws Exception {
+		String query = "select r from Recibo r where (r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "')"
 				+ " and cast (r.fechaEmision as string) like '%" + fecha + "%'"
 				+ " and r.numero like '%" + numero + "%'"
 				+ " and upper(r.cliente.empresa.razonSocial) like '%" + razonSocial.toUpperCase() + "%'"

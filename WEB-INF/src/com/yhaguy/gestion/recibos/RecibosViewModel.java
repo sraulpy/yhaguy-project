@@ -58,6 +58,7 @@ public class RecibosViewModel extends SimpleViewModel {
 	static final String FILTRO_RECIBOS = "RECIBOS";
 	static final String FILTRO_REEMBOLSOS_CC = "REEMBOLSOS PRESTAMOS C.C.";
 	static final String FILTRO_REEMBOLSOS_CHEQUES_RECH = "REEMBOLSOS CHEQUES RECHAZADOS";
+	static final String FILTRO_ANTICIPOS = "ANTICIPOS";
 	
 	static final String ZUL_DETALLE = "/yhaguy/gestion/recibos/detalle_recibo.zul";	
 	
@@ -111,7 +112,9 @@ public class RecibosViewModel extends SimpleViewModel {
 			this.selectedFiltro = FILTRO_REEMBOLSOS_CC;
 		} else if (filter == 3) {
 			this.selectedFiltro = FILTRO_REEMBOLSOS_CHEQUES_RECH;
-		} 
+		} else if (filter == 4) {
+			this.selectedFiltro = FILTRO_ANTICIPOS;
+		}
 	}
 	
 	@Command
@@ -253,6 +256,11 @@ public class RecibosViewModel extends SimpleViewModel {
 		
 		if (this.selectedFiltro.equals(FILTRO_REEMBOLSOS_CHEQUES_RECH)) {
 			recibos = rr.getReembolsosChequesRechazados(this.getFilterFecha(),
+					this.filterNumero, this.filterRazonSocial, this.filterRuc, this.filterCaja, this.filterCobrador);
+		}
+		
+		if (this.selectedFiltro.equals(FILTRO_ANTICIPOS)) {
+			recibos = rr.getAnticipos(this.getFilterFecha(),
 					this.filterNumero, this.filterRazonSocial, this.filterRuc, this.filterCaja, this.filterCobrador);
 		}
 		
