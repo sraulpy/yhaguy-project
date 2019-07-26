@@ -637,7 +637,7 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Date desde = Utiles.getFecha("01-03-2018 00:00:00");
 		Date hasta = new Date();
-		List<Recibo> recibos = rr.getCobranzas(desde, hasta, 2, 0);
+		List<Recibo> recibos = rr.getCobranzas(desde, hasta, 2, 0, true);
 		for (Recibo recibo : recibos) {
 			for (ReciboFormaPago rfp : recibo.getFormasPago()) {
 				if (rfp.isChequeTercero()) {
@@ -682,7 +682,7 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Date desde = Utiles.getFecha("01-01-2016 00:00:00");
 		Date hasta = new Date();
-		List<Recibo> recibos = rr.getCobranzas(desde, hasta, 0, 0);
+		List<Recibo> recibos = rr.getCobranzas(desde, hasta, 0, 0, true);
 		for (Recibo recibo : recibos) {
 			if (recibo.isCobro()) {
 				String numero = recibo.getNumero();
@@ -758,7 +758,7 @@ public class ProcesosTesoreria {
 		
 		List<Venta> vtas = rr.getVentasCredito(desde, hasta, 0);
 		List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
-		List<Recibo> recs = rr.getCobranzas(desde, hasta, 0, 0);
+		List<Recibo> recs = rr.getCobranzas(desde, hasta, 0, 0, true);
 		
 		for (Venta vta : vtas) {
 			if (!vta.isAnulado()) {
@@ -824,7 +824,7 @@ public class ProcesosTesoreria {
 		
 		List<Venta> vtas = rr.getVentasCredito(desde, hasta, 0);
 		List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
-		List<Recibo> recs = rr.getCobranzas(desde, hasta, 0, 0);
+		List<Recibo> recs = rr.getCobranzas(desde, hasta, 0, 0, true);
 		
 		for (Venta vta : vtas) {
 			if (!vta.isAnulado()) {
