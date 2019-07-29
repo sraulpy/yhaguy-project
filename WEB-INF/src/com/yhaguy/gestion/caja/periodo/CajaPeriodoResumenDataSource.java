@@ -92,7 +92,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 							this.totalVentaContado);
 					this.values.add(my);
 					for (ReciboFormaPago fp : venta.getFormasPago()) {
-						if (fp.isEfectivo()) {
+						if (fp.isEfectivo() && fp.isMonedaLocal()) {
 							double montoEf = venta.isAnulado() ? 0.0 : fp.getMontoGs();
 							this.totalVentaContadoEfectivo += montoEf;
 						} else if (fp.isChequeTercero()) {
