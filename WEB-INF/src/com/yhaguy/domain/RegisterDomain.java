@@ -9480,7 +9480,8 @@ public class RegisterDomain extends Register {
 	 * [13]:cliente.empresa.rubro
 	 * [14]:cliente.empresa.zona
 	 */
-	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor, long idVendedor) throws Exception {
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor,
+			long idVendedor, long idSucursal) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), v.fecha, v.cliente.empresa.razonSocial,"
@@ -9505,6 +9506,9 @@ public class RegisterDomain extends Register {
 				if (idVendedor > 0) {
 					query += " and v.vendedor.id = " + idVendedor;
 				}
+				if (idSucursal > 0) {
+					query += " and v.sucursal.id = " + idSucursal;
+				}
 		return this.hql(query);
 	}
 	
@@ -9526,7 +9530,8 @@ public class RegisterDomain extends Register {
 	 * [13]:cliente.empresa.rubro
 	 * [14]:cliente.empresa.zona
 	 */
-	public List<Object[]> getNotasCreditoDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor, long idVendedor) throws Exception {
+	public List<Object[]> getNotasCreditoDetallado_(Date desde, Date hasta, long idCliente, long idFamilia,
+			long idProveedor, long idVendedor, long idSucursal) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), n.fechaEmision, n.cliente.empresa.razonSocial,"
@@ -9548,6 +9553,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idVendedor > 0) {
 					query += " and n.vendedor.id = " + idVendedor;
+				}
+				if (idSucursal > 0) {
+					query += " and n.sucursal.id = " + idSucursal;
 				}
 		return this.hql(query);
 	}

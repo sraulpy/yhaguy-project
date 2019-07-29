@@ -117,6 +117,17 @@
 			</bandbox>
 		</row>
 		<row>
+			<field value="Sucursal:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.sucursales)"
+				selectedItem="@bind(vm.dato.filtro.selectedSucursal)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Formato:" />
 			<combobox model="@load(vm.dato.filtro.formatos)"
 				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">

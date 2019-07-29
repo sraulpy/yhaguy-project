@@ -332,9 +332,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void buscarCaja() throws Exception {
 
-		long idFuncionario = this.getAcceso().getFuncionario().getId()
-				.longValue();
-
+		long idFuncionario = this.getAcceso().getFuncionario().getId().longValue();
 		String where = "responsable.id = " + idFuncionario;
 
 		BuscarElemento b = new BuscarElemento();

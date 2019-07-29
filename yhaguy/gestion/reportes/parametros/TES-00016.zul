@@ -26,7 +26,7 @@
 			</combobox>
 		</row>
 		<row>
-			<field value="Cliente" />
+			<field value="Cliente:" />
 			<bandbox hflex="true" placeholder="TODOS.."
 				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
 				id="bndCli" onOpen="tx_filter.focus()">

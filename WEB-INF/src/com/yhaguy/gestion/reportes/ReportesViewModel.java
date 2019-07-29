@@ -1688,7 +1688,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_CLIENTE_ARTICULO_MES:
-				this.ventasClienteArticuloMes(mobile);
+				this.ventasClienteArticuloMes(mobile, VENTAS_CLIENTE_ARTICULO_MES);
 				break;
 				
 			case VENTAS_PROVEEDOR_CLIENTE_MES:
@@ -5999,26 +5999,28 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * VEN-00048
 		 */
-		private void ventasClienteArticuloMes(boolean mobile) {
+		private void ventasClienteArticuloMes(boolean mobile, String codReporte) {
 			try {					
 				Object[] formato = filtro.getFormato();
 				Cliente cli = filtro.getCliente();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Proveedor proveedor = filtro.getProveedor();
 				List<Deposito> depositos = filtro.getSelectedDepositos();
+				SucursalApp sucursal = filtro.getSelectedSucursal();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
+				long idSucursal = sucursal != null ? sucursal.getId().longValue() : 0;
 				int mes1 = Utiles.getNumeroMes(desde) - 1;
 				int mes2 = Utiles.getNumeroMes(hasta);
 				int rango = mes2 - mes1;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> articulos = rr.getArticulos_(idFamilia, idProveedor);
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6212,13 +6214,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				String flia = familia != null ? familia.getDescripcion() : "TODOS..";
+				String suc = sucursal != null ? sucursal.getDescripcion() : "TODOS..";
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				params.put("Cliente", cli != null ? cli.getRazonSocial() : "TODOS..");
 				params.put("Familia", flia);
+				params.put("Titulo", codReporte + " - VENTAS POR CLIENTE POR ARTICULO POR MES");
 				params.put("Proveedor", proveedor != null ? proveedor.getRazonSocial() : "TODOS..");
+				params.put("Sucursal", suc);
 				JRDataSource dataSource = new VentasClienteArticulo(list, rango);
 				imprimirJasper(source, params, dataSource, formato);
 				
@@ -6237,19 +6242,21 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Proveedor proveedor = filtro.getProveedor();
 				Funcionario vendedor = filtro.getVendedor();
+				SucursalApp sucursal = filtro.getSelectedSucursal();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
 				long idVendedor = vendedor != null ? vendedor.getId().longValue() : 0;
+				long idSucursal = sucursal != null ? sucursal.getId().longValue() : 0;
 				int mes1 = Utiles.getNumeroMes(desde) - 1;
 				int mes2 = Utiles.getNumeroMes(hasta);
 				int rango = mes2 - mes1;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();

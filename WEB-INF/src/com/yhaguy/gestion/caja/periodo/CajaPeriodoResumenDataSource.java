@@ -107,7 +107,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			for (Venta venta : planilla.getVentasOrdenado()) {
 				if (venta.isVentaContado() && !venta.isAnulado()) {
 					for (ReciboFormaPago fp : venta.getFormasPago()) {
-						if (fp.isEfectivo()) {
+						if (fp.isEfectivo() && fp.isMonedaLocal()) {
 							MyArray my = new MyArray(
 									venta.getDescripcionTipoMovimiento(),
 									venta.getNumero() + " - " + venta.getCliente().getRazonSocial().toUpperCase(), fp.getMontoGs(), "VENTAS CONTADO CON EFECTIVO",
