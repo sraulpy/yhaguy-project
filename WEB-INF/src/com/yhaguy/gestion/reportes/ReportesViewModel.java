@@ -23640,7 +23640,9 @@ class LibroComprasMatricial implements JRDataSource {
         	value = Utiles.getNumberFormat(this.total_);
         } else if ("Total_base_imponible".equals(fieldName)) {
         	value = Utiles.getNumberFormat(this.total_baseimponible_);
-        }
+        } else if ("Footer".equals(fieldName)) {
+			value = index < values.size() - 1? "Transporte" : "Totales";
+		}
         return value;
     }
 
@@ -23799,6 +23801,8 @@ class LibroVentasMatricial implements JRDataSource {
 			value = FORMATTER.format(this.total_gravada5_);
 		} else if ("Total_".equals(fieldName)) {
 			value = FORMATTER.format(this.total_);
+		} else if ("Footer".equals(fieldName)) {
+			value = index < values.size() - 1? "Transporte" : "Totales";
 		}
 		return value;
 	}

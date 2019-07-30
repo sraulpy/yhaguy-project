@@ -110,6 +110,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="nc_total" class="java.lang.String"/>
 	<field name="Gravadas" class="java.lang.String"/>
 	<field name="Total_Gravada" class="java.lang.String"/>
+	<field name="Footer" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -392,20 +393,20 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				</textElement>
 				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="152" y="9" width="72" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="4120f034-4651-49e7-bee5-39dd2461ebd1"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Ubuntu Condensed" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Transporte]]></text>
-			</staticText>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Detail" x="508" y="9" width="54" height="15" uuid="409f3064-e6c3-4db4-a37c-2535c978b3b3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Ubuntu Condensed" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Total_base_imponible}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement style="Detail" mode="Transparent" x="171" y="9" width="88" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="4368c232-f49f-47a7-b689-651c95adf34b"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Footer}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>
