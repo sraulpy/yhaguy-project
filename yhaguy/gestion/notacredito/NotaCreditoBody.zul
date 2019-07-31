@@ -273,6 +273,7 @@
 					<field>Caja:</field>
 					<bandbox id="bnd_caja"
 						placeholder="Aplicar a Caja.." hflex="true"
+						value="@load(vm.dto.cajaNro)"
 						disabled="@load(!vm.siempreHabilitado)" readonly="true"
 						onOpen="tx_filter.focus()">
 						<bandpopup>
