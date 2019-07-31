@@ -7,6 +7,7 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class CtaCteEmpresaMovimientoDTO extends DTO {
@@ -47,6 +48,15 @@ public class CtaCteEmpresaMovimientoDTO extends DTO {
 		Date hoy = new Date();
 		int cmp = hoy.compareTo(this.fechaVencimiento);
 		return cmp >= 0;
+	}
+	
+	/**
+	 * @return true si es gasto..
+	 */
+	public boolean isGasto() {
+		System.out.println("----> " + this.tipoMovimiento.getPos2());
+		return (boolean) this.tipoMovimiento.getPos2().equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO)
+				|| this.tipoMovimiento.getPos2().equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO);
 	}
 	
 	public String getNroComprobante_() {

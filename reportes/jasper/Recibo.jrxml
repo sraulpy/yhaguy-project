@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo " pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
 	<property name="ireport.zoom" value="1.815000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="192"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -70,7 +70,7 @@ from plancuenta where id = '1']]>
 				<textField>
 					<reportElement x="432" y="3" width="138" height="17" uuid="37fc85e1-c3cb-4f91-a89f-47f1fc25a70a"/>
 					<textElement textAlignment="Right">
-						<font isBold="true"/>
+						<font fontName="Ubuntu Condensed" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{TotalImporte}]]></textFieldExpression>
 				</textField>
@@ -210,15 +210,23 @@ from plancuenta where id = '1']]>
 		<band height="20" splitType="Stretch">
 			<textField>
 				<reportElement x="1" y="0" width="86" height="13" uuid="14fd9ff4-af78-4044-8274-67a4297bcf6b"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="87" y="0" width="330" height="13" uuid="46a30f6c-9f86-4753-a376-5023526761d6"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{DescFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="432" y="0" width="138" height="13" uuid="90151798-0ead-493a-9d42-df719098f261"/>
-				<textElement textAlignment="Right"/>
+				<reportElement x="417" y="0" width="153" height="13" uuid="90151798-0ead-493a-9d42-df719098f261"/>
+				<textElement textAlignment="Right">
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -231,7 +239,7 @@ from plancuenta where id = '1']]>
 				<text><![CDATA[Confeccionado por]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="255" y="26" width="100" height="12" uuid="fe3d71b1-78d5-4d0f-a4e3-70815c8589e7"/>
+				<reportElement x="255" y="26" width="71" height="12" uuid="fe3d71b1-78d5-4d0f-a4e3-70815c8589e7"/>
 				<text><![CDATA[Verificado por]]></text>
 			</staticText>
 			<staticText>

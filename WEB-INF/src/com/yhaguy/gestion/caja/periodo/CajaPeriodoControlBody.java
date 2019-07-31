@@ -1630,8 +1630,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new ReciboDataSource();
 		params.put("title", this.reciboDTO.getTipoMovimiento().getPos1());
-		params.put("fieldRazonSocial", this.reciboDTO.isCobro() ? "Recibí de:"
-				: "A la Orden de:");
+		params.put("fieldRazonSocial", this.reciboDTO.isCobro() ? "Recibí de:" : "A la Orden de:");
 		params.put("RazonSocial", this.reciboDTO.getRazonSocial());
 		params.put("Ruc", this.reciboDTO.getRuc());
 		params.put("NroRecibo", this.reciboDTO.getNumero());

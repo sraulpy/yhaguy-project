@@ -6,7 +6,9 @@ import java.util.Date;
 
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyConverter;
+import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.ReciboDetalle;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoDTO;
 import com.yhaguy.util.Utiles;
 
@@ -46,11 +48,22 @@ public class ReciboDetalleDTO extends DTO {
 	/**
 	 * @return la descripcion del detalle..
 	 */
-	public String getDescripcion(){
+	public String getDescripcion() {
 		if((this.concepto != null) && (!this.concepto.isEmpty()))
 			return this.concepto;
-		return (this.movimiento.getNroComprobante() + " - " + 
-				this.movimiento.getTipoMovimiento().getPos1()).toUpperCase();
+		String out = this.movimiento.getTipoMovimiento().getPos1() + " - " + this.movimiento.getNroComprobante();
+		if (this.movimiento.isGasto()) {
+			try {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				Gasto gasto = rr.getGastoById(this.movimiento.getIdMovimientoOriginal());
+				if (gasto != null) {
+					out += " - " + gasto.getDescripcionCuenta();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return out;
 	}
 	
 	/**
