@@ -15,6 +15,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
@@ -35,6 +36,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
@@ -81,6 +83,9 @@ public class NotaCreditoControlBody extends BodyApp {
 	private List<NotaCreditoDetalleDTO> selectedItemsArt = new ArrayList<NotaCreditoDetalleDTO>();
 	private List<MyArray> _selectedItemsArt;
 	private MyArray selectedServicioTecnico;
+	
+	private String filterCaja = "";
+	private CajaPeriodo selectedCaja;
 	
 	private String msgError = "";
 	private String numeroOriginal = "";
@@ -316,6 +321,24 @@ public class NotaCreditoControlBody extends BodyApp {
 		comp1.setVisible(false);
 		comp2.setVisible(true);
 		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void imputarEnCaja(@BindingParam("comp") Bandbox comp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		NotaCredito nc = rr.getNotaCredito(this.dto.getId());
+		nc.setCajaNro(this.selectedCaja.getNumero());
+		this.selectedCaja.getNotasCredito().add(nc);
+		rr.saveObject(this.selectedCaja, this.getLoginNombre());
+		
+		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla());
+		if (movim != null) {
+			movim.setSaldo(0);
+			rr.saveObject(movim, this.getLoginNombre());
+		}
+		comp.close();
+		Clients.showNotification("NOTA DE CREDITO APLICADA A PLANILLA DE CAJA NRO. " + this.selectedCaja.getNumero());
 	}
 	
 	/**************************************************************/
@@ -1482,6 +1505,15 @@ public class NotaCreditoControlBody extends BodyApp {
 	
 	/************************* GET / SET **************************/
 	
+	/**
+	 * @return las planillas de caja..
+	 */
+	@DependsOn("filterCaja")
+	public List<CajaPeriodo> getCajas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getCajaPlanillas(this.filterCaja);
+	}
+	
 	@DependsOn("filter_numero")
 	public List<MyArray> getServiciosTecnicos() throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
@@ -1731,6 +1763,22 @@ public class NotaCreditoControlBody extends BodyApp {
 
 	public void setSelectedVenta(MyArray selectedVenta) {
 		this.selectedVenta = selectedVenta;
+	}
+
+	public String getFilterCaja() {
+		return filterCaja;
+	}
+
+	public void setFilterCaja(String filterCaja) {
+		this.filterCaja = filterCaja;
+	}
+
+	public CajaPeriodo getSelectedCaja() {
+		return selectedCaja;
+	}
+
+	public void setSelectedCaja(CajaPeriodo selectedCaja) {
+		this.selectedCaja = selectedCaja;
 	}
 }
 

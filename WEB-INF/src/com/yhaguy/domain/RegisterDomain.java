@@ -10570,6 +10570,15 @@ public class RegisterDomain extends Register {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
+	/**
+	 * @return la nota de credito..
+	 */
+	public NotaCredito getNotaCredito(long id) throws Exception {
+		String query = "select n from NotaCredito n where n.id = " + id;
+		List<NotaCredito> out = this.hql(query);
+		return out.size() > 0 ? out.get(0) : null;
+	}
+	
 	public static void main_(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

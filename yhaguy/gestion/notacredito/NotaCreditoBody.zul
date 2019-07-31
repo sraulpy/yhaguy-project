@@ -264,13 +264,40 @@
 							readonly="true" visible="@load(!vm.dto.detalleEmpty)"  hflex="true" />
 					</hlayout>
 				</vlayout>
-
-				<cell colspan="2">
-					<vlayout style="margin-top:6px">
-						<field value="Observación" />
-						<textbox value="@bind(vm.dto.observacion)" hflex="true" />
-					</vlayout>
-				</cell>
+				<vlayout spacing="0">
+					<field value="Observación" />
+					<textbox value="@bind(vm.dto.observacion)"
+						hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
+					<field>Caja:</field>
+					<bandbox id="bnd_caja"
+						placeholder="Aplicar a Caja.." hflex="true"
+						disabled="@load(!vm.siempreHabilitado)" readonly="true"
+						onOpen="tx_filter.focus()">
+						<bandpopup>
+							<listbox width="200px" height="200px"
+								sclass="small-list" model="@load(vm.cajas)"
+								onSelect="@command('imputarEnCaja', comp=bnd_caja)"
+								selectedItem="@bind(vm.selectedCaja)">
+								<listhead>
+									<listheader>
+										<textbox
+											value="@bind(vm.filterCaja)" instant="true" hflex="true"
+											sclass="filter" readonly="@load(!vm.siempreHabilitado)"
+											placeholder="Nro. Planilla.." id="tx_filter">
+										</textbox>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem
+										label="@load(each.numero)">
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</vlayout>
 			</row>
 		</rows>
 	</grid>

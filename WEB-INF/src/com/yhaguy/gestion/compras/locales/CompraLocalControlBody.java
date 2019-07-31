@@ -820,7 +820,6 @@ public class CompraLocalControlBody extends BodyApp {
 	/**
 	 * @return los costos finales..
 	 */
-	@SuppressWarnings("deprecation")
 	public List<MyArray> getItemsCostoFinal() {
 		
 		List<MyArray> out = new ArrayList<MyArray>();
