@@ -130,7 +130,7 @@ public class ControlArticuloStock {
 	 */
 	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, boolean incluirDepositoVirtual, Date hasta) throws Exception {
 		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			desde = Utiles.getFecha("01-01-2016 00:00:00");
 		}
 		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, hasta, incluirDepositoVirtual);

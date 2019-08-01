@@ -135,7 +135,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		List<Venta> ventas;
 		long idSucursal = this.getAcceso().getSucursalOperativa().getId();
 		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			ventas = rr.getVentasParaRepartoBaterias(numero);
 		} else {
 			ventas = rr.getVentasParaReparto(numero, idSucursal);

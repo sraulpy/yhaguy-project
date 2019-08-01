@@ -134,7 +134,7 @@ public class VentaDTO extends DTO {
 	 * @return la url de la imagen..
 	 */
 	public String getUrlImagen() {
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "ventas/" + this.getId() + ".png";
 		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "ventas/" + this.getId() + ".png";
@@ -324,7 +324,7 @@ public class VentaDTO extends DTO {
 	 */
 	public int getCantidadFacturas_a_generar() {
 		int size = this.getDetalles().size();
-		int limite = Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? 
+		int limite = Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA) ? 
 				Configuracion.LIMITE_ITEMS_FACTURA_VENTA_BAT : Configuracion.LIMITE_ITEMS_FACTURA_VENTA;
 		Double division = (double) ((double) size / limite);
 		int entero = division.intValue();
@@ -684,7 +684,7 @@ public class VentaDTO extends DTO {
 	 * @return el sub-detalle segun el parametro de desglose..
 	 */
 	public List<VentaDetalleDTO> getDetallesDesglose(int desglose) {
-		int limite = Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? 
+		int limite = Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA) ? 
 				Configuracion.LIMITE_ITEMS_FACTURA_VENTA_BAT : Configuracion.LIMITE_ITEMS_FACTURA_VENTA;
 		int size = this.getDetalles().size();
 		int desde = (desglose - 1) * (limite);

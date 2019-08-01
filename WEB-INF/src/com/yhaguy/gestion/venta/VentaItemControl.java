@@ -818,7 +818,7 @@ public class VentaItemControl extends SoloViewModel {
 	}
 	
 	public boolean isEmpresaBaterias() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 	
 	public UtilDTO getUtilDto(){

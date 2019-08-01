@@ -194,14 +194,14 @@ public class ReportesViewModel {
 	/************************* GET/SET *************************/
 	
 	public static String getRucEmpresa() {
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return "80093865-8";
 		}
 		return "80024884-8";
 	}
 	
 	public static String getDireccionEmpresa() {
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return "Avda. Mcal. Estigarribia e/ Blas Garay y Curupayty";
 		}
 		return "Av Mariscal José Félix Estigarribia, Fernando De La Mora";

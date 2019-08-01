@@ -18,6 +18,7 @@ import com.coreweb.control.SoloViewModel;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
+import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.gestion.bancos.libro.AssemblerBancoCtaCte;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
@@ -154,8 +155,16 @@ public class WindowCheque extends SoloViewModel {
 		}
 	}
 	
+	/**
+	 * @return las monedas..
+	 */
 	public List<MyArray> getMonedas() {
-		return null;
+		return this.getDtoUtil().getMonedasConSimbolo();
+	}
+	
+	public UtilDTO getDtoUtil() {
+		UtilDTO u = (UtilDTO)super.getDtoUtil();
+		return u;
 	}
 	
 	// para saber el tipo de momenda a usar

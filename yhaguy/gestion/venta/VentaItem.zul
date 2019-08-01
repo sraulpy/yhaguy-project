@@ -91,9 +91,7 @@
 						sclass="label-moneda" />
 				</hlayout>
 				<field value="Tipo de IVA:" sclass="cell-margen"/>
-				<textbox readonly="true"
-					value="@load(vm.det.tipoIVA.text)"
-					hflex="true"/>
+				<textbox readonly="true" value="@load(vm.det.tipoIVA.text)" hflex="true" />
 			</row>
 			<row
 				visible="@load(vm.det.cantidad eq 0? 'false':'true')">

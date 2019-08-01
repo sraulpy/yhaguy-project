@@ -368,7 +368,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	private String getUrlImagen() {
 		if (this.selectedItem == null)
 			return "http://190.211.240.30/images/default.png";
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "articulos/" + this.selectedItem.getId() + ".png";
 		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "articulos/" + this.selectedItem.getId() + ".png";
@@ -381,7 +381,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		long idArticulo = this.selectedItem.getId();
 		long idDeposito = ID_DEP_1;
 		String codArt = (String) this.selectedItem.getPos1();
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			this.precios = this.getPreciosBaterias(codArt, idDeposito);
 		} else {
 			this.precios = this.getPrecios(idArticulo, idDeposito);
@@ -969,7 +969,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 	 * @return true si es baterias..
 	 */
 	public boolean isSucursalBaterias() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 	
 	public String getSiglaEstadoAnulado() {

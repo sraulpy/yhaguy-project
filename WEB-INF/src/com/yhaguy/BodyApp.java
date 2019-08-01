@@ -221,6 +221,6 @@ public abstract class BodyApp extends Body {
 	 * @return true si es baterias..
 	 */
 	public boolean isSucursalBaterias() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 }

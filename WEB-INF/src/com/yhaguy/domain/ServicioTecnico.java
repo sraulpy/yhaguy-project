@@ -57,7 +57,7 @@ public class ServicioTecnico extends Domain {
 	 * @return las facturas..
 	 */
 	public List<Venta> getFacturasList() {
-		List<Venta> list = new ArrayList<>();
+		List<Venta> list = new ArrayList<Venta>();
 		list.addAll(this.facturas);
 		return list;
 	}
@@ -66,7 +66,7 @@ public class ServicioTecnico extends Domain {
 	 * @return los detalles..
 	 */
 	public List<ServicioTecnicoDetalle> getDetallesList() {
-		List<ServicioTecnicoDetalle> list = new ArrayList<>();
+		List<ServicioTecnicoDetalle> list = new ArrayList<ServicioTecnicoDetalle>();
 		list.addAll(this.detalles);
 		return list;
 	}

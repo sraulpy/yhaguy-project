@@ -104,7 +104,7 @@ public class RepartoPendientesSimpleVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> ventas;
 		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			ventas = rr.getVentasParaRepartoBaterias_(this.getFilterFecha(), this.filter_numero, this.filter_razonSocial);
 		} else {
 			return new ArrayList<Object[]>();

@@ -257,7 +257,7 @@ public class CobranzasViewModel extends SimpleViewModel {
 	public void buscarClientes_() throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> clientes = new ArrayList<Object[]>();
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			clientes = rr.getClientesConFacturasVencidas_();
 		} else {
 			clientes = rr.getClientesConFacturasPendientes();
@@ -448,7 +448,7 @@ public class CobranzasViewModel extends SimpleViewModel {
 	 * @return label para el campo facturas..
 	 */
 	public String getLabelFacturas() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? "CLIENTES CON FACTURAS VENCIDAS" : "CLIENTES CON FACTURAS PENDIENTES";
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA) ? "CLIENTES CON FACTURAS VENCIDAS" : "CLIENTES CON FACTURAS PENDIENTES";
 	}
 	
 	/**

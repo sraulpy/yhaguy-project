@@ -194,7 +194,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Date desde = Utiles.getFecha(Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY + " 00:00:00"));
 		List<Venta> vtas = new ArrayList<Venta>();
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			vtas = rr.getPedidosPendientesBaterias(this.getSucursal().getId(), desde, new Date());
 		}
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_MRA)) {
@@ -918,7 +918,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 			this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 			
-			if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 				this.imprimirNotaCredito_(this.selectedNotaCredito);
 			} else {
 				this.imprimirNotaCredito_(this.selectedNotaCredito);
@@ -1673,7 +1673,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.selectedVenta = venta;
 		
 		//String source = ReportesViewModel.SOURCE_VENTA_;
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			//source = ReportesViewModel.SOURCE_VENTA_BATERIAS;
 		}
 		
@@ -1708,7 +1708,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("MarcaVehiculo", venta.getMarcaVehiculo().toLowerCase());
 		params.put("ChapaVehiculo", venta.getChapaVehiculo().toLowerCase());
 		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_FACTURA_BAT, this.mainComponent, params);
 			this.win.doModal();
 		} else {
@@ -1753,7 +1753,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("MarcaVehiculo", venta.getMarcaVehiculo().toLowerCase());
 		params.put("ChapaVehiculo", venta.getChapaVehiculo().toLowerCase());
 		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_FACTURA_BAT, this.mainComponent, params);
 			this.win.doModal();
 			//this.imprimirComprobante(source, params, dataSource);
@@ -1909,7 +1909,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			break;
 
 		case ES_NOTA_CREDITO_VENTA:
-			if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 				this.imprimirNotaCredito();
 			} else {
 				this.imprimirNotaCredito_(this.selectedNotaCredito);
@@ -2475,7 +2475,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		List<VentaDTO> out = new ArrayList<VentaDTO>();
 		List<Venta> vtas;
 		
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			vtas = rr.getPedidosPendientesBaterias(this.dto.getCaja()
 					.getSucursal().getId(), this.getFechaDesde(), this.getFechaHasta());
 		} else {

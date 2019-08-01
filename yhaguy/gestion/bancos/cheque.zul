@@ -118,11 +118,17 @@
 					</row>
 					<row>
 						<field value="Número:" />					
-						<hlayout sclass="z-valign-bottom">
-							<longbox value="@bind(vm.chequeDTO.numero)" 
+						<longbox value="@bind(vm.chequeDTO.numero)" 
 								hflex="true"/>
-							<labelConstrain />
-						</hlayout>
+					</row>
+					<row>
+						<field value="Moneda:" />						
+						<combobox hflex="true" model="@load(vm.monedas)"
+							selectedItem="@bind(vm.chequeDTO.moneda)">
+							<template name="model">
+								<comboitem label="@load(each.pos1.toString().toUpperCase())"></comboitem>
+							</template>
+						</combobox>
 					</row>
 					<row>
 						<field value="Monto:" />						
@@ -132,7 +138,6 @@
 								hflex="true"/>
 							<label
 								value="@load(vm.chequeDTO.moneda.pos2)" style="font-size:11px" />
-							<labelConstrain />
 						</hlayout>
 					</row>
 				</rows>
@@ -159,7 +164,6 @@
 						<field value="Beneficiario:" />						
 						<textbox width="200px"
 							value="@bind(vm.chequeDTO.beneficiario)"
-							constraint="${vm.check.noVacio}" 
 							hflex="true"/>
 					</row>
 					<row>

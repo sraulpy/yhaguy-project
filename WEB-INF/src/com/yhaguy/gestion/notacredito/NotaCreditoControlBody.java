@@ -331,6 +331,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		nc.setCajaNro(this.selectedCaja.getNumero());
 		this.selectedCaja.getNotasCredito().add(nc);
 		rr.saveObject(this.selectedCaja, this.getLoginNombre());
+		rr.saveObject(nc, nc.getUsuarioMod());
 		
 		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla());
 		if (movim != null) {
@@ -1243,7 +1244,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		// actualiza el stock de los articulos..
 		// asigna el nro de nc a la venta..
 		if (sigla.equals(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA)) {
-			if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 				if (this.dto.isMotivoDevolucion()) {					
 					for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
 						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
@@ -1626,7 +1627,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	
 	public List<MyPair> getMotivosNCCompra() {
 		List<MyPair> out = this.utilDto.getMotivosNotaCredito();
-		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			out.remove(this.utilDto.getMotivoNotaCreditoReclamo());
 		}
 		return out;
@@ -1636,7 +1637,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		List<MyPair> out = new ArrayList<MyPair>();
 		out.addAll(this.utilDto.getMotivosNotaCredito());
 		out.remove(this.utilDto.getMotivoNotaCreditoDifPrecio());
-		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			out.remove(this.utilDto.getMotivoNotaCreditoReclamo());
 		}
 		return out;

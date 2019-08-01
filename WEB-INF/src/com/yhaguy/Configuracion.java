@@ -15,7 +15,7 @@ public class Configuracion extends Config {
 
 	public static String empresa = "Yhaguy Repuestos S.A.";
 	
-	public static final String EMPRESA_BATERIAS = "Yhaguy Baterias S.A.";
+	public static final String EMPRESA_GTSA = "Grupo Toyo S.A.";
 	public static final String EMPRESA_MRA = "Yhaguy Repuestos S.A.";
 	public static final String USER_MOBILE = "sergio";
 	

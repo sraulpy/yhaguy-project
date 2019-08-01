@@ -23,7 +23,7 @@ public class TareaNotificarVentas {
 	static final String DIRECTORIO_REPORTES_MRA = "/home/mraserver/project/yhaguy-project/reportes/";
 	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy/reportes/";
 	static final String EMPRESA_MRA = Configuracion.EMPRESA_MRA;
-	static final String EMPRESA_BAT = Configuracion.EMPRESA_BATERIAS;
+	static final String EMPRESA_BAT = Configuracion.EMPRESA_GTSA;
 	
 	static final String[] DESTINATARIOS_MRA = new String[] { "davida@yhaguyrepuestos.com.py" };
 	static final String[] DESTINATARIOS_BAT = new String[] { "nataliac@yhaguyrepuestos.com.py", "dianaa@yhaguyrepuestos.com.py", "yaninaf@yhaguyrepuestos.com.py" };

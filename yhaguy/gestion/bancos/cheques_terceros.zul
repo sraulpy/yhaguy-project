@@ -308,7 +308,8 @@
 				label=" Cheque Rechazado" />
 			<button mold="bs" sclass="btn-success btn-sm" width="170px"
 				iconSclass="z-icon-plus-circle"
-				onClick="@command('registrarCheque')">
+				onClick="@command('registrarCheque')"
+				visible="false">
 				Registrar Cheque
 			</button>
 			<button mold="bs" sclass="btn-primary btn-sm" width="170px"

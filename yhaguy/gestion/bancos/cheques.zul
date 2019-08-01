@@ -32,11 +32,10 @@
 				onClick="@command('selectFilter', filter=6)" />			
 		</navbar>
 		<space hflex="true"></space>
-		<button mold="bs" sclass="btn-primary btn-sm"
+		<button visible="false" mold="bs" sclass="btn-primary btn-sm"
 			width="170px"
 			iconSclass="z-icon-plus-circle"
 			onClick="@command('registrarCheque')">Registrar Cheque</button>
-		<space />
 		<button mold="bs" sclass="btn-success btn-sm"
 			width="170px"
 			iconSclass="z-icon-times-circle"
@@ -61,7 +60,7 @@
 		selectedItem="@bind(vm.selectedItem)">
 		<auxhead>
 			<auxheader colspan="2" label="Origen"/>
-			<auxheader colspan="10" label="Cheque"/>
+			<auxheader colspan="11" label="Cheque"/>
 		</auxhead>
 		<listhead>
 			<listheader label="Caja" width="110px" />
@@ -83,7 +82,8 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
 						placeholder="Caja.."
 						value="@bind(vm.filterNumeroCaja)"
 						instant="true"/>
@@ -92,7 +92,8 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
 						placeholder="Órden Pago.."
 						value="@bind(vm.filterNumeroOrdenPago)"
 						instant="true"/>
@@ -101,7 +102,8 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
 						placeholder="Banco.."
 						value="@bind(vm.filterBanco)"
 						instant="true"/>
@@ -110,36 +112,34 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
 						placeholder="Número.."
 						value="@bind(vm.filterNro)"
 						instant="true"/>
 				</hlayout>
 			</auxheader>
+			<auxheader></auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true"  
-						sclass="filter"
-						placeholder="Emisión.."/>
-				</hlayout>
-			</auxheader>
-			<auxheader>
-				<hlayout>
-					<textbox hflex="true"  
-						placeholder="D.."
+						placeholder="D"
 						value="@bind(vm.filterFechaDD)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 					<textbox hflex="true"  
-						placeholder="M.."
+						placeholder="M"
 						value="@bind(vm.filterFechaMM)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 					<textbox hflex="true"  
-						placeholder="A.."
+						placeholder="A"
 						value="@bind(vm.filterFechaAA)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader/>
@@ -147,13 +147,19 @@
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						sclass="filter"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"
 						placeholder="Beneficiario.."
 						value="@bind(vm.filterBeneficiario)"
 						instant="true"/>
 				</hlayout>
 			</auxheader>
 			<auxheader>
+				<textbox hflex="true" placeholder="Importe.."
+					value="@bind(vm.filterMonto)"
+					instant="true"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 			</auxheader>
 			<auxheader />
 			<auxheader />			

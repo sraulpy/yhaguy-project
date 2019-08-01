@@ -65,6 +65,7 @@ public class ChequesViewModel extends SimpleViewModel {
 	private String filterBeneficiario = "";
 	private String filterNumeroCaja = "";
 	private String filterNumeroOrdenPago = "";
+	private String filterMonto = "";
 	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
@@ -218,14 +219,14 @@ public class ChequesViewModel extends SimpleViewModel {
 	
 	@DependsOn({ "filterNumeroCaja", "filterNumeroOrdenPago", "filterCuenta",
 			"filterBanco", "filterNro", "filterBeneficiario", "selectedFiltro",
-			"filterFechaDD", "filterFechaMM", "filterFechaAA" })
+			"filterFechaDD", "filterFechaMM", "filterFechaAA", "filterMonto" })
 	public List<MyArray> getCheques() throws Exception {
 		boolean aVencer = this.selectedFiltro.equals(FILTRO_A_VENCER);
 		boolean pendienteCobro = this.selectedFiltro.equals(FILTRO_PENDIENTE_COBRO);
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<BancoCheque> cheques = rr.getCheques(this.filterNro, this.filterBanco,
 				this.filterCuenta, this.filterBeneficiario, this.filterNumeroCaja, 
-				this.filterNumeroOrdenPago, aVencer, pendienteCobro, null, null, this.getFilterFecha());
+				this.filterNumeroOrdenPago, aVencer, pendienteCobro, null, null, this.getFilterFecha(), this.filterMonto);
 		return this.chequesToMyArray(cheques);
 	}
 	
@@ -583,6 +584,14 @@ public class ChequesViewModel extends SimpleViewModel {
 
 	public void setSelectedCheque(BancoCheque selectedCheque) {
 		this.selectedCheque = selectedCheque;
+	}
+
+	public String getFilterMonto() {
+		return filterMonto;
+	}
+
+	public void setFilterMonto(String filterMonto) {
+		this.filterMonto = filterMonto;
 	}
 }
 

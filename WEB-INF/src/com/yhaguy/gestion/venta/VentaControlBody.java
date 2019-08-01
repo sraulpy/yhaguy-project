@@ -1479,7 +1479,7 @@ public class VentaControlBody extends BodyApp {
 		}
 		
 		// las ventas de yhaguy baterias se hacen por reparto..
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			out.setReparto(true);
 			out.setVendedor(new MyArray());
 		}
@@ -1899,7 +1899,7 @@ public class VentaControlBody extends BodyApp {
 	
 	@DependsOn({ "deshabilitado", "dto" })
 	public boolean isCerrarDisabled() throws Exception {
-		return this.isDeshabilitado() || this.dto.esNuevo() || Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+		return this.isDeshabilitado() || this.dto.esNuevo() || Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 	
 	/**

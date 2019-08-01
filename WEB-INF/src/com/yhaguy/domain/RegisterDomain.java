@@ -5683,11 +5683,12 @@ public class RegisterDomain extends Register {
 	 */
 	public List<BancoCheque> getCheques(String numero, String banco,
 			String cuenta, String beneficiario, String numeroCaja, String numeroOrdenPago,
-			boolean aVencer, boolean pendienteCobro, Date desde, Date hasta, String vencimiento) throws Exception {
+			boolean aVencer, boolean pendienteCobro, Date desde, Date hasta, String vencimiento, String monto) throws Exception {
 		String query = "select c from BancoCheque c where cast (c.numero as string) like '%"
 				+ numero.toLowerCase()
 				+ "%'"
 				+ " and c.numeroCaja like '%" + numeroCaja + "%'"
+				+ " and cast (c.monto as string) like '%" + monto + "%'"
 				+ " and c.numeroOrdenPago like '%" + numeroOrdenPago + "%'"
 				+ " and lower(c.banco.banco.descripcion) like '%"
 				+ banco.toLowerCase()

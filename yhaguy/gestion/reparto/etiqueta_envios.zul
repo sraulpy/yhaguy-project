@@ -1,0 +1,23 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.reparto.etiqueta.EtiquetarEnviosVM')"
+	height="100%">
+	
+	<vbox pack="center" align="center" hflex="true" vflex="true"
+		style="margin:0% 30%">
+		<label style="font-size:12pt">Etiqueta de envíos.</label>
+		<hlayout sclass="button-container" hflex="true">
+			<vlayout hflex="true" style="margin:20px" spacing="10px">
+			<textbox placeholder="Cliente.." hflex="true"
+				value="@bind(vm.cliente)"></textbox>
+			<textbox placeholder="Destino.." hflex="true"
+				value="@bind(vm.destino)"></textbox>
+			<spinner placeholder="Bultos" hflex="true"
+				value="@bind(vm.bultos)"></spinner>
+			<button mold="bs" sclass="btn-sm btn-info" hflex="true"
+				iconSclass="z-icon-print" label="Imprimir"
+				onClick="@command('imprimirEtiqueta')"></button>
+			</vlayout>
+		</hlayout>
+	</vbox>
+	
+</window>

@@ -235,7 +235,7 @@ public class Gasto extends Domain {
 	 * @return la url de la imagen..
 	 */
 	public String getUrlImagen() {
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "gastos/" + this.id + ".png";
 		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "gastos/" + this.id + ".png";

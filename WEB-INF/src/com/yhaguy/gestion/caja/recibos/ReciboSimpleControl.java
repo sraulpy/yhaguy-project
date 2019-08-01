@@ -419,7 +419,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 				valido = false;
 				mensaje += "\n - No se permiten ítems duplicados..";
 			}
-			if (!Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+			if (!Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 				if (((this.selectedMovimientos.size() + this.dato.getReciboDTO()
 						.getDetalles().size()) > Configuracion.LIMITE_ITEMS_RECIBO_COBRO)
 						&& (this.dato.getReciboDTO().isCobro())) {

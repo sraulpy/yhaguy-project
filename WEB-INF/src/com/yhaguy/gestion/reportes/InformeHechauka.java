@@ -235,7 +235,7 @@ public class InformeHechauka {
 			montoTotal += (dip_gravada + dip_iva10 + dip_exenta);
 		}
 		
-		String cabecera = Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS) ? 
+		String cabecera = Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA) ? 
 				getCabeceraBaterias(registros, montoTotal, periodo) : getCabecera(registros, montoTotal, periodo);
 
 		saveArchivo(

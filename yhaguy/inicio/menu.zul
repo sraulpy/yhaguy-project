@@ -106,13 +106,13 @@
 				<zk forEach="${vm.menuItem(self,'Cliente')}" />
 				<zk forEach="${vm.menuItem(self,'GeoLocalizacionClientes')}" />
 				<menuseparator />
-				<zk forEach="${vm.menuItem(self,'VentaPresupuesto', 'tipo=presupuesto')}" />
-				<zk forEach="${vm.menuItem(self,'VentaPedido', 'tipo=pedido')}" />
-				<zk forEach="${vm.menuItem(self,'VentaFactura', 'tipo=factura')}" />
+				<zk forEach="${vm.menuItem(self,'VentaPresupuesto','tipo=presupuesto')}" />
+				<zk forEach="${vm.menuItem(self,'VentaPedido','tipo=pedido')}" />
+				<zk forEach="${vm.menuItem(self,'VentaFactura','tipo=factura')}" />
 				<zk forEach="${vm.menuItem(self,'VentaRemision')}" />
 				<menuseparator />
-				<zk forEach="${vm.menuItem(self, 'SolicitudNotaCreditoVenta', 'tipo=solicitudNCVenta')}" />
-				<zk forEach="${vm.menuItem(self, 'NotaCreditoVenta', 'tipo=venta')}" />
+				<zk forEach="${vm.menuItem(self,'SolicitudNotaCreditoVenta','tipo=solicitudNCVenta')}" />
+				<zk forEach="${vm.menuItem(self,'NotaCreditoVenta','tipo=venta')}" />
 				<zk forEach="${vm.menuItem(self,'NotaDebito')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'ListaPrecio')}" />
@@ -121,16 +121,14 @@
 				<zk forEach="${vm.menuItem(self,'ServicioTecnico')}" />
 				<zk forEach="${vm.menuItem(self,'ControlTalonarios')}" />
 				<zk forEach="${vm.menuItem(self,'RuteoVendedores')}" />
-				<zk forEach="${vm.menuItem(self,'VentaDefinicion', 'tab=cliente,empresa')}" />
+				<zk forEach="${vm.menuItem(self,'VentaDefinicion','tab=cliente,empresa')}" />
 			</menupopup>
 		</menu>
 
 		<menu label="Stock" iconSclass="z-icon-archive">
 			<menupopup sclass="rounded">
-				<zk
-					forEach="${vm.menuItem(self,'TransferenciaInterna')}" />
-				<zk
-					forEach="${vm.menuItem(self,'TransferenciaExterna')}" />
+				<zk forEach="${vm.menuItem(self,'TransferenciaInterna')}" />
+				<zk forEach="${vm.menuItem(self,'TransferenciaExterna')}" />
 				<menuseparator />
 				<menuitem label="FORMULARIO P/ SOLICITAR AJUSTE" iconSclass="z-icon-caret-right" 
 					href="/yhaguy/archivos/formularios/solicitud_ajuste.pdf" target="_blank"/>
@@ -144,12 +142,10 @@
 
 		<menu label="Logística" iconSclass="z-icon-truck">
 			<menupopup sclass="rounded">
-
 				<zk forEach="${vm.menuItem(self,'Reparto')}" />
 				<zk forEach="${vm.menuItem(self,'PendientesReparto')}" />
 				<zk forEach="${vm.menuItem(self,'ControlCombustible')}" />
-				<menuitem label="LOGISTICA / ETIQUETAR ENVÍOS" iconSclass="z-icon-caret-right"
-					disabled="true"/>
+				<zk forEach="${vm.menuItem(self,'EtiquetarEnvios')}" />
 				<menuseparator />
 				<zk	forEach="${vm.menuItem(self,'RepartoDefiniciones')}" />
 			</menupopup>

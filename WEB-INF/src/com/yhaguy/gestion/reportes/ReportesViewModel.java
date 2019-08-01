@@ -785,7 +785,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	 * @return true si es baterias..
 	 */
 	public boolean isEmpresaBaterias() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS);
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 
 	/**
@@ -8318,7 +8318,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Object[]> data = new ArrayList<Object[]>();
-			List<BancoCheque> cheques = rr.getCheques("", "", "", "", "", "", true, false, desde, hasta, "");			
+			List<BancoCheque> cheques = rr.getCheques("", "", "", "", "", "", true, false, desde, hasta, "", "");			
 			for (BancoCheque cheque : cheques) {
 				if (!cheque.isAnulado()) {
 					data.add(new Object[]{ 

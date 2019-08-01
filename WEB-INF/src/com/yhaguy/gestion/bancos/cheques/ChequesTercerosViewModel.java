@@ -456,7 +456,7 @@ public class ChequesTercerosViewModel extends SimpleViewModel {
 	private String getUrlImagen() {
 		if (this.selectedCheque == null)
 			return "http://190.211.240.30/images/default.png";
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_BATERIAS)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "cheques/" + this.selectedCheque.getPos4() + ".png";
 		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "cheques/" + this.selectedCheque.getPos4() + ".png";
