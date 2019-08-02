@@ -62,8 +62,7 @@ public class AssemblerRecibo extends Assembler {
 		this.myPairToDomain(dto, domain, "sucursal");
 		this.listaDTOToListaDomain(dto, domain, "detalles", true, true, new AssemblerReciboDetalle());
 		this.listaDTOToListaDomain(dto, domain, "formasPago", true, true, new AssemblerReciboFormaPago(domain.getNumero()));
-		this.hijoDtoToHijoDomain(dto, domain, "retencion", new RetencionIvaAssembler(), true);
-		
+		this.hijoDtoToHijoDomain(dto, domain, "retencion", new RetencionIvaAssembler(), true);		
 		this.updateGastos(domain);
 		
 		return domain;

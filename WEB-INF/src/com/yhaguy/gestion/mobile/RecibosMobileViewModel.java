@@ -157,6 +157,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		recibo.setTipoCambio(0);
 		recibo.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_RECIBO_COBRO));
 		recibo.setTotalImporteGs(this.getTotalImporteFormasPagoGs());
+		recibo.setMovimientoBancoActualizado(true);
 		rr.saveObject(recibo, "mobile");
 		this.addMovimientoCtaCte(recibo, "mobile");
 		this.addMovimientosBanco(recibo, "mobile");

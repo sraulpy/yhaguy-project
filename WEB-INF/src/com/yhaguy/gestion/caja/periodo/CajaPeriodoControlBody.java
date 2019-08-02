@@ -564,7 +564,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		ControlBancoMovimiento ctr = new ControlBancoMovimiento(null);
 
 		for (ReciboDTO recibo : this.dto.getRecibos()) {
-			if (recibo.isMovimientoBancoActualizado() == false) {
+			if (!recibo.isMovimientoBancoActualizado()) {
 				for (ReciboFormaPagoDTO formaPago : recibo.getFormasPago()) {
 					ReciboFormaPago fp = (ReciboFormaPago) rr.getObject(ReciboFormaPago.class.getName(), formaPago.getId());
 					if (!formaPago.getOrden().equals("1") && !formaPago.getTarjetaNumeroComprobante().equals("CHEQUE TERCERO")) {
