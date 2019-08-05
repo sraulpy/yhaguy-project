@@ -85,7 +85,7 @@
 					</combobox>
 				</vlayout>
 				<vlayout spacing="0" hflex="true">
-					<field value="Total Gs." />
+					<field value="Importe" />
 					<guaranibox
 						value="@bind(vm.chequeDescuento.totalChequesDescontado)"
 						tooltiptext="Monto total de los cheques seleccionados."

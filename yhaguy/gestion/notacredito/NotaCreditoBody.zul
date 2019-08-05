@@ -145,13 +145,17 @@
 							onClick='pop_serv_tec.open(self, "after_start"); tx_servtec.focus()' />
 					</hlayout>					
 				</vlayout>
-				<cell colspan="3">
+				<cell colspan="2">
 					<vlayout style="margin-top:6px">
 						<field value="Observación" />
 						<textbox value="@bind(vm.dto.observacion)"
 							hflex="true" />
 					</vlayout>
 				</cell>
+				<vlayout spacing="0">
+					<field value="Descuento por Promoción" />
+					<checkbox checked="@bind(vm.dto.promocion)"></checkbox>					
+				</vlayout>
 			</row>
 		</rows>
 	</grid>

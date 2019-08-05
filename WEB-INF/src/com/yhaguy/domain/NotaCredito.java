@@ -31,6 +31,7 @@ public class NotaCredito extends Domain {
 	private double importeIva;
 	
 	private double tipoCambio;
+	private boolean promocion;
 	
 	/** atributos que se usan como informacion adicional **/
 	private String cajaNro = "";
@@ -728,5 +729,13 @@ public class NotaCredito extends Domain {
 
 	public void set_tecnico(Tecnico _tecnico) {
 		this._tecnico = _tecnico;
+	}
+
+	public boolean isPromocion() {
+		return promocion;
+	}
+
+	public void setPromocion(boolean promocion) {
+		this.promocion = promocion;
 	}
 }

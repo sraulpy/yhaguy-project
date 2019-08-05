@@ -88,7 +88,7 @@ public class BancoDescuentoChequeReporte extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Fecha", Utiles.getDateToString(fecha, Utiles.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
-		out.add(cmp.horizontalFlowList().add(this.textoParValor("Total Descontado", Utiles.getNumberFormat(totalCheques) + " Gs.")));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Total Descontado", Utiles.getNumberFormat(totalCheques) + this.descuentoCheques.getMoneda().getSigla())));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Observaciones", observaciones)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));

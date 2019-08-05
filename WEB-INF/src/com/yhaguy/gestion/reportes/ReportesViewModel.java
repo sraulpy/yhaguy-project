@@ -5029,28 +5029,31 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Funcionario vendedor = filtro.getVendedor();
+				boolean promocion = filtro.isFraccionado();
 				
 				if (vendedor == null) {
 					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 					return;
 				}
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
+				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId().longValue(), promocion);
 				double totalContado = 0;
 				double totalContadoItems = 0;
+				double totalNotaCredito = 0;
+				double totalNotaCreditoItems = 0;
 				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
 				Map<Long, Integer> prov_acum_ = new HashMap<Long, Integer>();
+				Map<Long, Integer> prov_acnc = new HashMap<Long, Integer>();
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
+				Map<Long, Double> values_nc = new HashMap<Long, Double>();
 				Map<Long, String> proveedores = new HashMap<Long, String>();
 				
 				for (Object[] cobro : cobros) {
@@ -5115,31 +5118,55 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 				
+				for (NotaCredito ncr : notasCredito) {
+					totalNotaCredito += ncr.getTotalImporteGsSinIva();
+					for (NotaCreditoDetalle det : ncr.getDetalles()) {
+						Proveedor prov = det.getArticulo().getProveedor();
+						long idProveedor = prov != null ? prov.getId() : 0;
+						Integer total = prov_acnc.get(idProveedor);
+						if (total != null) {
+							total ++;
+						} else {
+							total = 1;
+						}
+						totalNotaCreditoItems ++;
+						prov_acnc.put(idProveedor, total);
+						proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+					}
+				}
+				
 				for (Long idProveedor : proveedores.keySet()) {					
 					Integer total_ = prov_acum_.get(idProveedor);
 					if (total_ != null) {
 						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(total_, totalContadoItems);
 						double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
 						values_.put(idProveedor, importe_);
-					}					
+					}
+					Integer totalnc = prov_acnc.get(idProveedor);
+					if (totalnc != null) {
+						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(totalnc, totalNotaCreditoItems);
+						double importe_ = Utiles.obtenerValorDelPorcentaje(totalNotaCredito, porcentaje_);
+						values_nc.put(idProveedor, importe_);
+					}
 				}
 
 				for (Long idProveedor : proveedores.keySet()) {
 					Double cobrado = values.get(idProveedor);
 					Double contado = values_.get(idProveedor);
+					Double notacre = values_nc.get(idProveedor);
 					
 					double cobrado_ = cobrado != null? cobrado : 0;
 					double contado_ = contado != null? contado : 0;
+					double notacre_ = notacre != null? notacre : 0;
 					
 					if (cobrado != null || contado != null) {
-						data.add(new Object[] { proveedores.get(idProveedor), cobrado_, contado_ });
+						data.add(new Object[] { proveedores.get(idProveedor), cobrado_, contado_, notacre_ });
 					}
 				}				
 
 				ReporteTotalCobranzasVentasProveedor rep = new ReporteTotalCobranzasVentasProveedor(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
-				rep.setApaisada();
-				
+				rep.setApaisada();				
 
 				if (!mobile) {
 					ViewPdf vp = new ViewPdf();
@@ -19431,6 +19458,7 @@ class ReporteTotalCobranzasVentasProveedor extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Proveedor", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col4 = new DatosColumnas("Total N.crédito S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalCobranzasVentasProveedor(Date desde, Date hasta, String vendedor) {
 		this.desde = desde;
@@ -19442,6 +19470,7 @@ class ReporteTotalCobranzasVentasProveedor extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
+		cols.add(col4);
 	}
 
 	@Override

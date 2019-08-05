@@ -12,7 +12,6 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Deposito;
-import com.yhaguy.domain.NotaCreditoDetalle;
 
 @SuppressWarnings("serial")
 public class NotaCreditoDTO extends DTO {
@@ -28,6 +27,7 @@ public class NotaCreditoDTO extends DTO {
 	private double importeDs = 0;
 	
 	private double tipoCambio = 0;
+	private boolean promocion = false;
 	
 	private String cajaNro = "";
 	private String planillaCajaNro = "";
@@ -589,5 +589,13 @@ public class NotaCreditoDTO extends DTO {
 
 	public void setDeposito(Deposito deposito) {
 		this.deposito = deposito;
+	}
+
+	public boolean isPromocion() {
+		return promocion;
+	}
+
+	public void setPromocion(boolean promocion) {
+		this.promocion = promocion;
 	}
 }

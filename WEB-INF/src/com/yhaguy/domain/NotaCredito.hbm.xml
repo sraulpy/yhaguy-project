@@ -17,11 +17,15 @@
 		<property name="importeGs"/>
 		<property name="importeDs"/>
 		<property name="importeIva"/>
-		<property name="tipoCambio" />
+		<property name="tipoCambio"/>
 		<property name="enlace"/>
 		<property name="cajaNro"/>
 		<property name="planillaCajaNro"/>
 		<property name="cajero"/>
+				
+		<property name="promocion">
+			<column name="promocion" not-null="true" default="false" />
+		</property>
 		
 		<many-to-one name="timbrado" class="com.yhaguy.domain.Timbrado"
 			column="idTimbrado" lazy="false"/>

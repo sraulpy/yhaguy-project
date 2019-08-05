@@ -3876,8 +3876,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las ventas segun fecha
 	 */
-	public List<Venta> getVentasContadoPorVendedor(Date desde, Date hasta,
-			long idVendedor) throws Exception {
+	public List<Venta> getVentasContadoPorVendedor(Date desde, Date hasta, long idVendedor) throws Exception {
 
 		String query = "select v from Venta v where v.dbEstado != 'D' and v.estadoComprobante is null and v.tipoMovimiento.sigla = ? and v.vendedor.id = ?"
 				+ " and v.fecha between ? and ?" + " order by v.numero, v.fecha";
@@ -3920,7 +3919,7 @@ public class RegisterDomain extends Register {
 	}
 
 	/**
-	 * @return las ventas segun fecha
+	 * @return las notas de credito segun fecha
 	 */
 	public List<NotaCredito> getNotasCreditoPorVendedor(Date desde, Date hasta,
 			long idVendedor) throws Exception {
@@ -3938,7 +3937,27 @@ public class RegisterDomain extends Register {
 		for (int i = 0; i < listParams.size(); i++) {
 			params[i] = listParams.get(i);
 		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return las notas de credito segun fecha
+	 */
+	public List<NotaCredito> getNotasCreditoPorVendedor(Date desde, Date hasta, long idVendedor, boolean promocion) throws Exception {
+		
+		String query = "select n from NotaCredito n where n.promocion = " + promocion + " and n.tipoMovimiento.sigla = ? and n.vendedor.id = ?"
+				+ " and n.fechaEmision between ? and ?" + " order by n.numero";
 
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(idVendedor);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
 		return this.hql(query, params);
 	}
 

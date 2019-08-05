@@ -61,7 +61,7 @@ public class ControlBancoMovimiento extends Control {
 		bct.setNumeroVenta("");
 		bct.setNumeroReembolso("");
 		bct.setVendedor("");
-		bct.setMonto(formaPago.getMontoChequeGs());
+		bct.setMonto(formaPago.isMonedaLocal() ? formaPago.getMontoChequeGs() : formaPago.getMontoDs());
 		bct.setDepositado(false);
 		bct.setSucursalApp(rec.getSucursal());
 		bct.setObservacion("");
@@ -400,7 +400,7 @@ public class ControlBancoMovimiento extends Control {
 			bct.setNumeroRecibo(recibo);
 			bct.setNumeroVenta(venta);
 			bct.setVendedor(vendedor);
-			bct.setMonto(rfpDto.getMontoChequeGs());
+			bct.setMonto(rfpDto.isMonedaLocal() ? rfpDto.getMontoChequeGs() : rfpDto.getMontoDs());
 			bct.setDepositado(false);
 			bct.setSucursalApp(rr.getSucursalAppById(sucursalApp.getId()));
 			bct.setObservacion("");
