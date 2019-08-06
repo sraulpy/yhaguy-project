@@ -2450,18 +2450,15 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Tipo motivo = filtro.getMotivoNotaCredito();
+				Boolean promocion = filtro.isFraccionado() ? true : null;
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 
-				List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,
-						hasta, 0);
+				List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde, hasta, 0, promocion);
 
 				for (NotaCredito nc : notasCredito) {
 					double importe = nc.isAnulado() ? 0.0 : nc.getImporteGs();
@@ -3794,7 +3791,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idMarca = marca == null ? 0 : marca.getId().longValue();
 				long idProveedor = proveedor == null ? 0 : proveedor.getId().longValue();
 
-				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "");
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "", null);
 				for (NotaCredito notacred : ncs) {
 					if (!notacred.isAnulado()) {
 						String motivo = notacred.getMotivo().getDescripcion().substring(0, 3).toUpperCase() + ".";
@@ -5028,8 +5025,9 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				Date desde_ = filtro.getFechaDesde2();
+				Date hasta_ = filtro.getFechaHasta2();
 				Funcionario vendedor = filtro.getVendedor();
-				boolean promocion = filtro.isFraccionado();
 				
 				if (vendedor == null) {
 					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -5038,22 +5036,22 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
+				if (desde_ == null) desde_ = new Date();
+				if (hasta_ == null) hasta_ = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
-				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId().longValue(), promocion);
+				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde_, hasta_, vendedor.getId().longValue(), true);
 				double totalContado = 0;
 				double totalContadoItems = 0;
-				double totalNotaCredito = 0;
-				double totalNotaCreditoItems = 0;
+				double totalNCRContado = 0;
+				double totalNCRCredito = 0;
 				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
 				Map<Long, Integer> prov_acum_ = new HashMap<Long, Integer>();
-				Map<Long, Integer> prov_acnc = new HashMap<Long, Integer>();
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
-				Map<Long, Double> values_nc = new HashMap<Long, Double>();
 				Map<Long, String> proveedores = new HashMap<Long, String>();
 				
 				for (Object[] cobro : cobros) {
@@ -5119,19 +5117,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (NotaCredito ncr : notasCredito) {
-					totalNotaCredito += ncr.getTotalImporteGsSinIva();
-					for (NotaCreditoDetalle det : ncr.getDetalles()) {
-						Proveedor prov = det.getArticulo().getProveedor();
-						long idProveedor = prov != null ? prov.getId() : 0;
-						Integer total = prov_acnc.get(idProveedor);
-						if (total != null) {
-							total ++;
-						} else {
-							total = 1;
-						}
-						totalNotaCreditoItems ++;
-						prov_acnc.put(idProveedor, total);
-						proveedores.put(idProveedor, prov != null ? prov.getRazonSocial() : "SIN PROVEEDOR");
+					if (ncr.isNotaCreditoVentaContado()) {
+						totalNCRContado += ncr.getTotalImporteGsSinIva(); 
+					} else {
+						totalNCRCredito += ncr.getTotalImporteGsSinIva(); 
 					}
 				}
 				
@@ -5142,27 +5131,21 @@ public class ReportesViewModel extends SimpleViewModel {
 						double importe_ = Utiles.obtenerValorDelPorcentaje(totalContado, porcentaje_);
 						values_.put(idProveedor, importe_);
 					}
-					Integer totalnc = prov_acnc.get(idProveedor);
-					if (totalnc != null) {
-						double porcentaje_ = Utiles.obtenerPorcentajeDelValor(totalnc, totalNotaCreditoItems);
-						double importe_ = Utiles.obtenerValorDelPorcentaje(totalNotaCredito, porcentaje_);
-						values_nc.put(idProveedor, importe_);
-					}
 				}
 
 				for (Long idProveedor : proveedores.keySet()) {
 					Double cobrado = values.get(idProveedor);
 					Double contado = values_.get(idProveedor);
-					Double notacre = values_nc.get(idProveedor);
 					
 					double cobrado_ = cobrado != null? cobrado : 0;
 					double contado_ = contado != null? contado : 0;
-					double notacre_ = notacre != null? notacre : 0;
 					
 					if (cobrado != null || contado != null) {
-						data.add(new Object[] { proveedores.get(idProveedor), cobrado_, contado_, notacre_ });
+						data.add(new Object[] { proveedores.get(idProveedor), cobrado_, contado_ });
 					}
-				}				
+				}
+				
+				data.add(new Object[] { "NOTAS DE CRÉDITO POR PROMOCIÓN", totalNCRCredito, totalNCRContado });
 
 				ReporteTotalCobranzasVentasProveedor rep = new ReporteTotalCobranzasVentasProveedor(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
@@ -5771,18 +5754,17 @@ public class ReportesViewModel extends SimpleViewModel {
 					return;
 				}
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
+				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId().longValue(), true);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
+				Map<Long, Double> values_nc = new HashMap<Long, Double>();
 				Map<Long, String> clientes = new HashMap<Long, String>();
 
 				for (Object[] cobro : cobros) {
@@ -5811,16 +5793,31 @@ public class ReportesViewModel extends SimpleViewModel {
 					values_.put(idCliente, total);
 					clientes.put(idCliente, cli.getRazonSocial());
 				}
+				
+				for (NotaCredito ncr : notasCredito) {
+					Cliente cli = ncr.getCliente();
+					long idCliente = cli.getId().longValue();
+					Double total = values_nc.get(idCliente);
+					if (total != null) {
+						total += ncr.getTotalImporteGsSinIva();
+					} else {
+						total = ncr.getTotalImporteGsSinIva();
+					}
+					values_nc.put(idCliente, total);
+					clientes.put(idCliente, cli.getRazonSocial());
+				}
 
 				for (Long idCliente : clientes.keySet()) {
 					Double cobrado = values.get(idCliente);
 					Double contado = values_.get(idCliente);
+					Double notacre = values_nc.get(idCliente);
 					
 					double cobrado_ = cobrado != null? cobrado : 0;
 					double contado_ = contado != null? contado : 0;
+					double notacre_ = notacre != null? notacre : 0;
 					
 					if (cobrado != null || contado != null) {
-						data.add(new Object[] { clientes.get(idCliente), cobrado_, contado_ });
+						data.add(new Object[] { clientes.get(idCliente), cobrado_, contado_, notacre_ });
 					}
 				}				
 
@@ -19458,7 +19455,6 @@ class ReporteTotalCobranzasVentasProveedor extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Proveedor", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
-	static DatosColumnas col4 = new DatosColumnas("Total N.crédito S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalCobranzasVentasProveedor(Date desde, Date hasta, String vendedor) {
 		this.desde = desde;
@@ -19470,7 +19466,6 @@ class ReporteTotalCobranzasVentasProveedor extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
-		cols.add(col4);
 	}
 
 	@Override
@@ -19515,6 +19510,7 @@ class ReporteTotalCobranzasVentasCliente extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Cliente", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col4 = new DatosColumnas("N.Cred.Promoción S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalCobranzasVentasCliente(Date desde, Date hasta, String vendedor) {
 		this.desde = desde;
@@ -19526,6 +19522,7 @@ class ReporteTotalCobranzasVentasCliente extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
+		cols.add(col4);
 	}
 
 	@Override

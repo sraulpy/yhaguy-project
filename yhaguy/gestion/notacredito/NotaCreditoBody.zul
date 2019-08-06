@@ -148,13 +148,23 @@
 				<cell colspan="2">
 					<vlayout style="margin-top:6px">
 						<field value="Observación" />
-						<textbox value="@bind(vm.dto.observacion)"
-							hflex="true" />
+						<textbox value="@bind(vm.dto.observacion)" hflex="true" />
 					</vlayout>
 				</cell>
 				<vlayout spacing="0">
 					<field value="Descuento por Promoción" />
-					<checkbox checked="@bind(vm.dto.promocion)"></checkbox>					
+					<hlayout>
+						<checkbox id="ch_dto" checked="@bind(vm.dto.promocion)" disabled="true"></checkbox>
+						<button mold="bs" id="btn_edit_dto" iconSclass="z-icon-check"
+							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarPromocion'))"
+							onClick="@command('modificarPromocion', comp1=self, comp2=btn_edit_dto_)"
+							sclass="btn-xs btn-success" width="30px">
+						</button>
+						<button mold="bs" id="btn_edit_dto_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarPromocion'))"
+							onClick="ch_dto.setDisabled(false);btn_edit_dto.setVisible(true); self.setVisible(false)"
+							sclass="btn-xs btn-info" width="30px">
+						</button>
+					</hlayout>					
 				</vlayout>
 			</row>
 		</rows>

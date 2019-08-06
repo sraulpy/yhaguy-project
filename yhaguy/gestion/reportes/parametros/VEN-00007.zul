@@ -18,12 +18,17 @@
 			<field value="Motivo:" />
 			<combobox model="@load(vm.dato.filtro.motivosNotaCredito)"
 				selectedItem="@bind(vm.dato.filtro.motivoNotaCredito)"
-				value="@load(vm.dato.filtro.motivoNotaCredito.descripcion.toUpperCase())">
+				value="@load(vm.dato.filtro.motivoNotaCredito.descripcion.toUpperCase())"
+				hflex="true">
 				<template name="model">
 					<comboitem
 						label="@load(each.descripcion.toUpperCase())" />
 				</template>
 			</combobox>
+		</row>
+		<row>
+			<field value="N.C.promoción:" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
 		</row>
 	</rows>
 </grid>

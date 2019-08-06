@@ -3418,16 +3418,24 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las notas de credito de venta segun fecha
 	 */
+	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, Boolean promocion) throws Exception {
+		return this.getNotasCreditoVenta(desde, hasta, idCliente, 0, 0, 0, "", promocion);
+	}
+	
+	/**
+	 * @return las notas de credito de venta segun fecha
+	 */
 	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente) throws Exception {
-		return this.getNotasCreditoVenta(desde, hasta, idCliente, 0, 0, 0, "");
+		return this.getNotasCreditoVenta(desde, hasta, idCliente, 0, 0, 0, "", null);
 	}
 
 	/**
 	 * @return las notas de credito de venta segun fecha
 	 */
-	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idRubro, long idSucursal, long idVendedor, String param) throws Exception {
+	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idRubro, long idSucursal,
+			long idVendedor, String param, Boolean promocion) throws Exception {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
-				+ Configuracion.SIGLA_IMPORTACION_ESTADO_ANULADO + "' and n.tipoMovimiento.sigla = ?"
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and n.tipoMovimiento.sigla = ?"
 				+ " and (n.fechaEmision between ? and ?)";
 		if (idCliente != 0) {
 			query += " and n.cliente.id = ?";
@@ -3440,6 +3448,9 @@ public class RegisterDomain extends Register {
 		}
 		if (idVendedor != 0) {
 			query += " and n.vendedor.id = " + idVendedor;
+		}
+		if (promocion != null) {
+			query += " and n.promocion = " + promocion;
 		}
 		query += " order by n.numero";
 

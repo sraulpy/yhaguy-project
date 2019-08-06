@@ -325,6 +325,18 @@ public class NotaCreditoControlBody extends BodyApp {
 	
 	@Command
 	@NotifyChange("*")
+	public void modificarPromocion(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		NotaCredito nc = (NotaCredito) rr.getObject(NotaCredito.class.getName(), this.dto.getId());
+		nc.setPromocion(this.dto.isPromocion());
+		rr.saveObject(nc, this.getLoginNombre());	
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
 	public void imputarEnCaja(@BindingParam("comp") Bandbox comp) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		NotaCredito nc = rr.getNotaCredito(this.dto.getId());
