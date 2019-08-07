@@ -7378,6 +7378,9 @@ public class RegisterDomain extends Register {
 	 */
 	public long getStock(String codigo, List<Deposito> depositos) throws Exception {
 		long out = 0;
+		if (depositos == null) {
+			return out;
+		}
 		for (Deposito deposito : depositos) {
 			ArticuloDeposito adp = this.getArticuloDeposito(codigo, deposito.getId().longValue());
 			if (adp != null) {
@@ -9622,10 +9625,14 @@ public class RegisterDomain extends Register {
 	 * [8]:descripcion
 	 * [9]:costogs
 	 * [10]:preciogs
+	 * [11]:articulo.proveedor.empresa.razonSocial
+	 * [12]:articulo.marca.descripcion
+	 * [13]:articulo.codigoOriginal
 	 */
 	public List<Object[]> getArticulos_(long idFamilia, long idProveedor, String medida) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.volumen, (a.id * 0.0), a.modificado, '',"
-				+ " (a.id * 0.0), '', a.descripcion, a.costoGs, a.precioGs"
+				+ " (a.id * 0.0), '', a.descripcion, a.costoGs, a.precioGs, a.proveedor.empresa.razonSocial,"
+				+ " a.marca.descripcion, a.codigoOriginal"
 				+ " from Articulo a where a.estado = 'TRUE'";
 				if (idFamilia > 0) {
 					query += " and a.familia.id = " + idFamilia;

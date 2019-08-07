@@ -6043,6 +6043,22 @@ public class ReportesViewModel extends SimpleViewModel {
 				int mes2 = Utiles.getNumeroMes(hasta);
 				int rango = mes2 - mes1;
 				
+				if (depositos.size() > 3) {
+					Clients.showNotification("MÁXIMO HASTA 3 DEPÓSITOS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				Deposito dep1 = depositos.get(0) != null ? depositos.get(0) : null;
+				Deposito dep2 = depositos.get(1) != null ? depositos.get(1) : null;
+				Deposito dep3 = depositos.get(2) != null ? depositos.get(2) : null;
+				
+				List<Deposito> deps1 = new ArrayList<Deposito>();
+				List<Deposito> deps2 = new ArrayList<Deposito>();
+				List<Deposito> deps3 = new ArrayList<Deposito>();
+				
+				if (dep1 != null) deps1.add(dep1);
+				if (dep2 != null) deps2.add(dep2);
+				if (dep3 != null) deps3.add(dep3);
+				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> articulos = new ArrayList<>();
 				if (todos) {
@@ -6061,7 +6077,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					int mes = Utiles.getNumeroMes(desde);
 					String cod = (String) art[1];
 					String des = (String) art[8];
-					String key = cod + ";" + des + ";" + mes;
+					String prove = (String) art[15];
+					String marca = (String) art[16];
+					String medid = (String) art[17];
+					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + medid + ";" + mes;
 					cants.put(key, 0.0);
 				}
 				
@@ -6203,7 +6222,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (impDiciembre == null) impDiciembre = 0.0;
 						
 						Object[] costoPrecio = rr.getCostoPrecio(codigo);
-						long stock = rr.getStock(codigo, depositos);
+						long stock1 = rr.getStock(codigo, deps1);
+						long stock2 = rr.getStock(codigo, deps2);
+						long stock3 = rr.getStock(codigo, deps3);
 						Double volumen = volumens.get(codigo);
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
@@ -6212,7 +6233,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.setMarca(marca);
 						hist.setCodigoOriginal(medida_);
 						hist.setLitraje(cantidad);
-						hist.setCoeficiente(volumen != null ? (volumen * stock) : 0.0);
+						hist.setCoeficiente(volumen != null ? (volumen * (stock1 + stock2 + stock3)) : 0.0);
 						hist.setEnero_(cantEnero);
 						hist.setFebrero_(cantFebrero);
 						hist.setMarzo_(cantMarzo);
@@ -6239,7 +6260,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.set_diciembre(impDiciembre);
 						hist.setCostoGs((double) costoPrecio[1]);
 						hist.setCostoFobGs((double) costoPrecio[2]);
-						hist.setStock1(stock);
+						hist.setStock1(stock1);
+						hist.setStock2(stock2);
+						hist.setStock3(stock3);
 						hist.setTotal_(hist.getEnero_() + hist.getFebrero_() + hist.getMarzo_() + hist.getAbril_() + hist.getMayo_() + hist.getJunio_()
 								+ hist.getJulio_() + hist.getAgosto_() + hist.getSetiembre_() + hist.getOctubre_() + hist.getNoviembre_() + hist.getDiciembre_());
 						list.add(hist);			
@@ -6262,6 +6285,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				params.put("Cliente", cli != null ? cli.getRazonSocial() : "TODOS..");
 				params.put("Familia", flia);
+				params.put("stock1", dep1 != null ? dep1.getDescripcion() : "- - -");
+				params.put("stock2", dep2 != null ? dep2.getDescripcion() : "- - -");
+				params.put("stock3", dep3 != null ? dep3.getDescripcion() : "- - -");
 				params.put("Titulo", codReporte + " - VENTAS POR CLIENTE POR ARTICULO POR MES");
 				params.put("Proveedor", proveedor != null ? proveedor.getRazonSocial() : "TODOS..");
 				params.put("Sucursal", suc);
@@ -24108,6 +24134,10 @@ class VentasClienteArticulo implements JRDataSource {
 			value = det.getTotal() + "";			
 		} else if ("Stock".equals(fieldName)) {
 			value = det.getStock1() + "";			
+		} else if ("Stock2".equals(fieldName)) {
+			value = det.getStock2() + "";			
+		} else if ("Stock3".equals(fieldName)) {
+			value = det.getStock3() + "";			
 		} else if ("Enero".equals(fieldName)) {
 			value = det.getEnero_();
 		} else if ("Febrero".equals(fieldName)) {
