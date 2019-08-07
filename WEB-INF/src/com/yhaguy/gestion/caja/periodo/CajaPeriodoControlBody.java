@@ -862,7 +862,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 	private NotaCreditoDTO selectedNotaCredito = new NotaCreditoDTO();
 
-	@Command @NotifyChange("*")
+	@Command 
+	@NotifyChange("*")
 	public void devolucionConNotaDeCredito() throws Exception {
 
 		String sigla = Configuracion.SIGLA_ESTADO_COMPROBANTE_APROBADO;

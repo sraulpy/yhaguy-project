@@ -119,6 +119,7 @@ public class Venta extends Domain {
 	private Set<ReciboFormaPago> formasPago = new HashSet<ReciboFormaPago>();
 	
 	private Reserva reserva;	
+	private String cartera;
 	
 	private String formaEntrega;
 	private VehiculoTipo vehiculoTipo;
@@ -988,5 +989,13 @@ public class Venta extends Domain {
 
 	public void setTecnico_(Tecnico tecnico_) {
 		this.tecnico_ = tecnico_;
+	}
+
+	public String getCartera() {
+		return cartera;
+	}
+
+	public void setCartera(String cartera) {
+		this.cartera = cartera;
 	}
 }

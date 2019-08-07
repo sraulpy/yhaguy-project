@@ -9512,7 +9512,7 @@ public class RegisterDomain extends Register {
 	 * [14]:cliente.empresa.zona
 	 */
 	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor,
-			long idVendedor, long idSucursal) throws Exception {
+			long idVendedor, long idSucursal, String medida) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), v.fecha, v.cliente.empresa.razonSocial,"
@@ -9540,6 +9540,9 @@ public class RegisterDomain extends Register {
 				if (idSucursal > 0) {
 					query += " and v.sucursal.id = " + idSucursal;
 				}
+				if (!medida.isEmpty()) {
+					query += " and d.articulo.codigoOriginal = '" + medida + "'";
+				}
 		return this.hql(query);
 	}
 	
@@ -9562,7 +9565,7 @@ public class RegisterDomain extends Register {
 	 * [14]:cliente.empresa.zona
 	 */
 	public List<Object[]> getNotasCreditoDetallado_(Date desde, Date hasta, long idCliente, long idFamilia,
-			long idProveedor, long idVendedor, long idSucursal) throws Exception {
+			long idProveedor, long idVendedor, long idSucursal, String medida) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), n.fechaEmision, n.cliente.empresa.razonSocial,"
@@ -9588,6 +9591,9 @@ public class RegisterDomain extends Register {
 				if (idSucursal > 0) {
 					query += " and n.sucursal.id = " + idSucursal;
 				}
+				if (!medida.isEmpty()) {
+					query += " and d.articulo.codigoOriginal = '" + medida + "'";
+				}
 		return this.hql(query);
 	}
 	
@@ -9605,7 +9611,7 @@ public class RegisterDomain extends Register {
 	 * [9]:costogs
 	 * [10]:preciogs
 	 */
-	public List<Object[]> getArticulos_(long idFamilia, long idProveedor) throws Exception {
+	public List<Object[]> getArticulos_(long idFamilia, long idProveedor, String medida) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.volumen, (a.id * 0.0), a.modificado, '',"
 				+ " (a.id * 0.0), '', a.descripcion, a.costoGs, a.precioGs"
 				+ " from Articulo a where a.estado = 'TRUE'";
@@ -9614,6 +9620,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idProveedor > 0) {
 					query += " and a.proveedor.id = " + idProveedor;
+				}
+				if (!medida.isEmpty()) {
+					query += " and a.codigoOriginal = '" + medida + "'";
 				}
 		return this.hql(query);
 	}
@@ -10226,7 +10235,8 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getVentasCreditoPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "SELECT v.cliente.id, v.cliente.empresa.razonSocial, sum(v.totalImporteGs)" +   
+		String query = "SELECT v.cliente.id, concat(v.cliente.empresa.razonSocial, ';', v.cliente.empresa.cartera.descripcion, ';', v.cartera), " +
+				"  sum(v.totalImporteGs)" +   
 				"	FROM Venta v" +
 				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
 				"      AND v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'" + 
@@ -10235,7 +10245,7 @@ public class RegisterDomain extends Register {
 		if (idCliente > 0) {
 			query += " AND v.cliente.id = " + idCliente;
 		}
-		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial" +
+		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial, v.cliente.empresa.cartera.descripcion, v.cartera" +
 				" ORDER BY 2";
 		return this.hql(query);
 	}

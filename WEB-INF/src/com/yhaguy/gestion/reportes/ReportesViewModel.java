@@ -6031,8 +6031,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				Proveedor proveedor = filtro.getProveedor();
 				List<Deposito> depositos = filtro.getSelectedDepositos();
 				SucursalApp sucursal = filtro.getSelectedSucursal();
+				String medida = filtro.getExpedicion();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
+				boolean todos = filtro.isFraccionado();
 				long idCliente = cli != null ? cli.getId() : 0;
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
@@ -6042,9 +6044,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				int rango = mes2 - mes1;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Object[]> articulos = rr.getArticulos_(idFamilia, idProveedor);
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal);
+				List<Object[]> articulos = new ArrayList<>();
+				if (todos) {
+					articulos = rr.getArticulos_(idFamilia, idProveedor, medida);
+				}
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6279,8 +6284,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				int rango = mes2 - mes1;
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -9748,7 +9753,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (Object[] venta : ventas) {
 					String key = (String) venta[1];
-					venta = Arrays.copyOf(venta, venta.length + 8);
+					String[] key_ = key.split(";");
+					venta = Arrays.copyOf(venta, venta.length + 10);
 					venta[3] = 0.0;
 					venta[4] = 0.0;
 					venta[5] = 0.0;
@@ -9757,7 +9763,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					venta[8] = 0.0;
 					venta[9] = 0.0;
 					venta[10] = 0.0;
-					acum.put(key, venta);
+					venta[11] = key_[1];
+					venta[12] = key_[2];
+					acum.put(key_[0], venta);
 				}
 				
 				for (Object[] cheque : chequesRechazados) {
@@ -9767,7 +9775,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[3] = importe;
 					} else {
-						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+						obj = new Object[] { cheque[0], cheque[1], 0.0, cheque[2], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9779,7 +9787,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[4] = importe * -1;
 					} else {
-						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+						obj = new Object[] { ncred[0], ncred[1], 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9791,7 +9799,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[5] = importe * -1;
 					} else {
-						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0 };
+						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, 0.0, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9803,7 +9811,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[6] = importe;
 					} else {
-						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0, 0.0 };
+						obj = new Object[] { ndeb[0], ndeb[1], 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, 0.0, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9815,7 +9823,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[7] = importe * -1;
 					} else {
-						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0 };
+						obj = new Object[] { reemb[0], reemb[1], 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, 0.0, 0.0, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9827,7 +9835,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[8] = importe;
 					} else {
-						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0 };
+						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9839,7 +9847,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[9] = importe;
 					} else {
-						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0 };
+						obj = new Object[] { mig[0], mig[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe, 0.0, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -9851,7 +9859,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (obj != null) {
 						obj[10] = importe * -1;
 					} else {
-						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1 };
+						obj = new Object[] { rec[0], rec[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, importe * -1, "", "" };
 					}
 					acum.put(key, obj);
 				}
@@ -23330,6 +23338,8 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		String fieldName = field.getName();
 		Object[] det = this.values.get(index);
 		String cliente = (String) det[1];
+		String cartera = (String) det[11];
+		String cartera_ = (String) det[12];
 		double ventas = (double) det[2];
 		double chequesRechazados = (double) det[3];
 		double ncreditos = (double) det[4];
@@ -23342,7 +23352,11 @@ class CtaCteSaldosResumidoDataSource implements JRDataSource {
 		double saldo = ventas + chequesRechazados + ncreditos + recibos + ndebitos + reembolsos + migracion + migracionChequesRechazados + anticipos;
 		
 		if ("Cliente".equals(fieldName)) {
-			value = cliente;
+			value = cliente.split(";")[0];
+		} else if ("Cartera".equals(fieldName)) {
+			value = cartera;
+		}  else if ("Cartera_".equals(fieldName)) {
+			value = cartera_;
 		} else if ("Ventas".equals(fieldName)) {
 			value = Utiles.getNumberFormat(ventas);
 		} else if ("ChequesRechazados".equals(fieldName)) {

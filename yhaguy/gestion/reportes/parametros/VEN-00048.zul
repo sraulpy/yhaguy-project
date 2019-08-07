@@ -110,6 +110,14 @@
 			</chosenbox>
 		</row>
 		<row>
+			<field value="Medida Cubierta:" />
+			<textbox value="@bind(vm.dato.filtro.expedicion)" hflex="true"></textbox>
+		</row>
+		<row>
+			<field value="Incluir S/ movimiento:" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
+		</row>
+		<row>
 			<field value="Formato:" />
 			<combobox model="@load(vm.dato.filtro.formatos)"
 				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">

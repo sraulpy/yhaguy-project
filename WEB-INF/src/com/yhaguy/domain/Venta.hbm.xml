@@ -55,6 +55,7 @@
 		<property name="cedulaRepartidor"/>
 		<property name="marcaVehiculo"/>
 		<property name="chapaVehiculo"/>
+		<property name="cartera"/>
 		
 		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
 			column="idEstadoComprobante" lazy="false" />

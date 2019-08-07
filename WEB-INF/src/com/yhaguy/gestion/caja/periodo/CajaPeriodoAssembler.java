@@ -501,7 +501,7 @@ public class CajaPeriodoAssembler extends Assembler {
 					venta.getTipoMovimiento(), caracterMovimiento, sucursal, false, "");
 		} else {
 			ctr.addCtaCteEmpresaMovimientoFacturaCredito(empresa, venta.getId(),
-					venta.getNumero(), venta.getFecha(), (int)venta.getCondicionPago().getPos4(), (int)venta.getCondicionPago().getPos3(),
+					venta.getNumero(), venta.getFecha(), (int)venta.getCondicionPago().getPos4(), (int) venta.getCondicionPago().getPos3(),
 					importe, 0, importe, moneda, venta.getTipoMovimiento(),
 					caracterMovimiento, sucursal, "", venta.getTipoCambio());
 		}
