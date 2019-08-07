@@ -114,7 +114,7 @@
 			<textbox value="@bind(vm.dato.filtro.expedicion)" hflex="true"></textbox>
 		</row>
 		<row>
-			<field value="Incluir S/ movimiento:" />
+			<field value="Incluir sin movimiento:" />
 			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
 		</row>
 		<row>

@@ -6069,7 +6069,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					int mes = Utiles.getNumeroMes((Date) venta[4]);
 					String cod = (String) venta[1];
 					String des = (String) venta[8];
-					String key = cod + ";" + des + ";" + mes;
+					String prove = (String) venta[15];
+					String marca = (String) venta[16];
+					String medid = (String) venta[17];
+					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + medid + ";" + mes;
 					Double acum = cants.get(key);
 					if (acum != null) {
 						acum += ((Double) venta[3]);
@@ -6093,7 +6096,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					int mes = Utiles.getNumeroMes((Date) nc[4]);
 					String cod = (String) nc[1];
 					String des = (String) nc[8];
-					String key = cod + ";" + des + ";" + mes;
+					String prove = (String) nc[15];
+					String marca = (String) nc[16];
+					String medid = (String) nc[17];
+					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + medid + ";" + mes;
 					Double acum = cants.get(key);
 					if (acum != null) {
 						acum -= ((Double) nc[3]);
@@ -6116,7 +6122,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (String key : cants.keySet()) {					
 					String codigo = key.split(";")[0];
 					String descripcion = key.split(";")[1];
-					String key_ = codigo + ";" + descripcion;
+					String proveedor_ = key.split(";")[2];
+					String marca = key.split(";")[3];
+					String medida_ = key.split(";")[4];
+					String key_ = codigo + ";" + descripcion + ";" + proveedor_ + ";" + marca + ";" + medida_;
 					
 					if (keys.get(key_) == null) {
 						Double cantidad = cants.get(key);
@@ -6199,6 +6208,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
 						hist.setReferencia(descripcion);
+						hist.setProveedor(proveedor_);
+						hist.setMarca(marca);
+						hist.setCodigoOriginal(medida_);
 						hist.setLitraje(cantidad);
 						hist.setCoeficiente(volumen != null ? (volumen * stock) : 0.0);
 						hist.setEnero_(cantEnero);
@@ -24038,8 +24050,10 @@ class VentasClienteArticulo implements JRDataSource {
 			value = cod;
 		} else if ("CodigoProveedor".equals(fieldName)) {
 			value = det.getCodigoProveedor();
-		}  else if ("Referencia".equals(fieldName)) {
+		} else if ("Referencia".equals(fieldName)) {
 			value = det.getReferencia();
+		} else if ("Medida".equals(fieldName)) {
+			value = det.getCodigoOriginal();
 		} else if ("NroParte".equals(fieldName)) {
 			value = det.getCodigoOriginal();
 		} else if ("Estado".equals(fieldName)) {

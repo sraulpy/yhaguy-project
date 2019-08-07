@@ -9510,6 +9510,9 @@ public class RegisterDomain extends Register {
 	 * [12]:cliente.empresa.vendedor
 	 * [13]:cliente.empresa.rubro
 	 * [14]:cliente.empresa.zona
+	 * [15]:articulo.proveedor.empresa.razonSocial
+	 * [16]:articulo.marca.descripcion
+	 * [17]:articulo.codigoOriginal
 	 */
 	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idCliente, long idFamilia, long idProveedor,
 			long idVendedor, long idSucursal, String medida) throws Exception {
@@ -9520,7 +9523,10 @@ public class RegisterDomain extends Register {
 				+ " v.cliente.empresa.ruc,"
 				+ " v.cliente.empresa.vendedor.nombreEmpresa,"
 				+ " v.cliente.empresa.rubro.descripcion,"
-				+ " v.cliente.empresa.zona"
+				+ " v.cliente.empresa.zona,"
+				+ " d.articulo.proveedor.empresa.razonSocial,"
+				+ " d.articulo.marca.descripcion,"
+				+ " d.articulo.codigoOriginal"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -9563,6 +9569,9 @@ public class RegisterDomain extends Register {
 	 * [12]:cliente.empresa.vendedor
 	 * [13]:cliente.empresa.rubro
 	 * [14]:cliente.empresa.zona
+	 * [15]:articulo.proveedor.empresa.razonSocial
+	 * [16]:articulo.marca.descripcion
+	 * [17]:articulo.codigoOriginal
 	 */
 	public List<Object[]> getNotasCreditoDetallado_(Date desde, Date hasta, long idCliente, long idFamilia,
 			long idProveedor, long idVendedor, long idSucursal, String medida) throws Exception {
@@ -9572,7 +9581,10 @@ public class RegisterDomain extends Register {
 				+ " d.importeGs, n.vendedor.empresa.razonSocial, d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs, n.cliente.empresa.ruc,"
 				+ " n.cliente.empresa.vendedor.nombreEmpresa," 
 				+ " n.cliente.empresa.rubro.descripcion,"
-				+ " n.cliente.empresa.zona"
+				+ " n.cliente.empresa.zona,"
+				+ " d.articulo.proveedor.empresa.razonSocial,"
+				+ " d.articulo.marca.descripcion,"
+				+ " d.articulo.codigoOriginal"
 				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "') and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
@@ -10620,32 +10632,27 @@ public class RegisterDomain extends Register {
 		return out.size() > 0 ? out.get(0) : null;
 	}
 	
-	public static void main_(String[] args) {
+	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<CtaCteEmpresaMovimiento> movims = rr.getMovimientosConSaldo(
-					Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+			String hql = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id = 19 and c.auxi != 'MIGRACION'";
+			List<CtaCteEmpresaMovimiento> movims = rr.hql(hql);
 			
 			for (CtaCteEmpresaMovimiento movim : movims) {
-				List<CtaCteEmpresaMovimiento> list = rr.getCtaCteMovimientosByIdMovimiento(movim.getIdMovimientoOriginal(), Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
-				if (list.size() > 1) {
-					double saldo = 0;
-					for (CtaCteEmpresaMovimiento mov : list) {
-						saldo += mov.getSaldo();
-					}
-					list.get(0).setSaldo(saldo);
-					rr.saveObject(list.get(0), list.get(0).getUsuarioMod());
-					rr.deleteObject(list.get(1));
-					rr.deleteObject(list.get(2));
+				Venta vta = (Venta) rr.getObject(Venta.class.getName(), movim.getIdMovimientoOriginal());
+				if (vta != null) {
+					String cartera = movim.getCarteraCliente() != null? movim.getCarteraCliente().getDescripcion() : "SIN CARTERA";
+					vta.setCartera(cartera);
+					rr.saveObject(vta, vta.getUsuarioMod());
 				}
-				System.out.println("--- " + movim.getNroComprobante());
+				System.out.println("--- " + vta.getNumero());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main_(String[] args) {
 		try {
 			double test = Utiles.obtenerPorcentajeDelValor(20, 200);
 			System.out.println(test + "");
