@@ -24,6 +24,8 @@ import org.apache.commons.lang.time.DateUtils;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 
+import net.sf.jme.Monto;
+
 public class Utiles {
 	
 	public static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
@@ -611,8 +613,47 @@ public class Utiles {
 		return true;
 	}
 	
+	// Convierte un numero a su equivalente en Letras rango (0 a 999999999999)..
+    public static String numeroAletras(Object numero) {
+        String out = "";
+
+        try {
+            if (numero instanceof Integer) {
+                out = Monto.aLetras(numero.toString());
+
+            } else if (numero instanceof Long) {
+                out = Monto.aLetras(numero.toString());
+
+            } else if (numero instanceof Double) {
+
+                DecimalFormat f = new DecimalFormat("##0.00");
+                String valor = f.format(numero);
+                String sepDec = f.getDecimalFormatSymbols().getDecimalSeparator() + "";
+                int index = valor.lastIndexOf(sepDec);
+                String entero = valor.substring(0, index);
+                String decimal = valor.substring(index + 1);
+
+                if (decimal.compareTo("00") != 0) {
+                    out = Monto.aLetras(entero) + decimal + "/100";
+                } else {
+                    out = Monto.aLetras(entero);
+                }
+
+            } else if (numero instanceof String) {
+                out = Monto.aLetras((String) numero);
+
+            } else {
+                throw new Exception("El tipo de dato no es un número");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String first = out.trim().substring(0, 1);
+        return out.replaceFirst(first, first.toUpperCase());
+    }
+	
 	public static void main(String[] args) {
-		Utiles.getFechaInicioMes(1, 2019);
-		System.out.println(Utiles.getFechaInicioMes(1, 2019));
+		String nro = "421000";
+		System.out.println(Utiles.numeroAletras(Double.parseDouble(nro)));		
 	}
 }

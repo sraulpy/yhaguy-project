@@ -1791,14 +1791,6 @@ public class VentaControlBody extends BodyApp {
 					mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
 				}
 			}
-			if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
-					|| art.getCodigoInterno().equals(Articulo.COD_VALVULAS)
-					|| art.getCodigoInterno().equals(Articulo.COD_DESCUENTO_BAT_USADA)) {
-				if (!this.dto.getFormaEntrega().equals(Venta.FORMA_ENTREGA_SERVICIO)) {
-					out = false;
-					mensajeError += "\n - la forma de entrega debe ser " + Venta.FORMA_ENTREGA_SERVICIO;
-				}
-			}
 		}		
 		
 		// si es Pedido verifica si se pueden reservar los items.
