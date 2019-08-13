@@ -12886,7 +12886,6 @@ public class ReportesViewModel extends SimpleViewModel {
 								.getTotalImporteGs(familias));
 						totalCosto += (venta.isAnulado() ? 0.0 : venta
 								.getTotalCostoGs(familias));
-						System.out.println("----COSTO: " + totalCosto + " - FAC: " + venta.getNumero());
 					}
 
 				} else if (filtro.isIncluirVCR()) {
@@ -12951,7 +12950,6 @@ public class ReportesViewModel extends SimpleViewModel {
 						familias_ += "/" + flia.getDescripcion() + " ";
 					}
 				}
-				System.out.println("----> COSTO TOTAL: " + totalCosto);
 				VentaGenericoCosto rep = new VentaGenericoCosto(totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..", familias_, totalCosto);
 				rep.setDatosReporte(data);
 				rep.setApaisada();
@@ -15878,6 +15876,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 		this.gastos = gastos;
 		this.importaciones = importaciones;
 		for (Gasto gasto : gastos) {
+			System.out.println("---> " + gasto.getNumero());
 			String timbrado = gasto.getTimbrado();
 			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY),
 					Utiles.getDateToString(gasto.getModificado(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
