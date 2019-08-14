@@ -10,6 +10,8 @@ public class EmpresaCartera extends Domain {
 	public static final String JUDICIAL = "JUDICIAL";
 	public static final String OTROS = "OTROS";
 	public static final String INCOBRABLE = "INCOBRABLE";
+	public static final String CORRIENTE_INTERIOR = "CORRIENTE INTERIOR";
+	public static final String SIN_CARTERA = "SIN CARTERA";
 	
 	private String descripcion;
 	

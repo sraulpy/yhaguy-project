@@ -6689,6 +6689,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String SALDOS_CLIENTES_RESUMIDO = "TES-00054";
 		static final String SALDOS_CLIENTES_POR_PROVEEDOR = "TES-00055";
 		static final String ANTICIPOS_CLIENTES = "TES-00056";
+		static final String COBRANZAS_DETALLADO = "TES-00057";
 
 		/**
 		 * procesamiento del reporte..
@@ -6923,6 +6924,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case ANTICIPOS_CLIENTES:
 				this.anticipos(mobile, ANTICIPOS_CLIENTES);
+				break;
+				
+			case COBRANZAS_DETALLADO:
+				this.cobranzasDetallado(mobile, COBRANZAS_DETALLADO);
 				break;
 			}
 		}
@@ -10120,6 +10125,35 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/**
+		 * reporte TES-00057
+		 */
+		private void cobranzasDetallado(boolean mobile, String codReporte) throws Exception {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();			
+			Date hasta = filtro.getFechaHasta();	
+			SucursalApp suc = filtro.getSelectedSucursal();
+			Object[] formato = filtro.getFormato();	
+			
+			long idSucursal = suc != null ? suc.getId() : 0;
+			
+			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false);
+		
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_DETALLADO;
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos);
+			params.put("Titulo", codReporte + " - COBRANZAS DETALLADO POR CARTERA");
+			params.put("Usuario", getUs().getNombre());
+			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, formato);
 		}
 	}
 
@@ -15876,7 +15910,6 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 		this.gastos = gastos;
 		this.importaciones = importaciones;
 		for (Gasto gasto : gastos) {
-			System.out.println("---> " + gasto.getNumero());
 			String timbrado = gasto.getTimbrado();
 			BeanLibroCompra value = new BeanLibroCompra(Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY),
 					Utiles.getDateToString(gasto.getModificado(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
@@ -24528,6 +24561,135 @@ class VentasProveedorCliente implements JRDataSource {
 			value = Utiles.getNumberFormat(this.totalEnero_ + this.totalFebrero_ + this.totalMarzo_ + this.totalAbril_
 			+ this.totalMayo_ + this.totalJunio_ + this.totalJulio_ + this.totalAgosto_ + this.totalSetiembre_
 			+ this.totalOctubre_ + this.totalNoviembre_ + this.totalDiciembre_);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de cobranzas detallado..
+ */
+class CobranzasDetalladoDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, Double> totales = new HashMap<String, Double>();
+	
+	public CobranzasDetalladoDataSource(List<Recibo> recibos) {
+		
+		for (Recibo recibo : recibos) {
+			for (ReciboDetalle det : recibo.getDetalles()) {
+				if (det.getMovimiento() != null) {
+					String cartera = det.getMovimiento().getCarteraCliente() != null
+							? det.getMovimiento().getCarteraCliente().getDescripcion()
+							: "SIN CARTERA";
+					this.values.add(new Object[] { recibo, det, cartera, recibo.getFechaEmision() });
+					
+					Double total = totales.get(cartera);
+					if (total != null) {
+						total += det.getMontoGs();
+					} else {
+						total = det.getMontoGs();
+					}
+					totales.put(cartera, total);
+				}				
+			}
+		}
+		
+		Collections.sort(this.values, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String val1 = (String) o1[2];
+				String val2 = (String) o2[2];			
+				int compare = val1.compareTo(val2);
+				if (compare == 0) {
+					Date emision1 = (Date) o1[3];
+					Date emision2 = (Date) o2[3];
+		            return emision1.compareTo(emision2);
+		        }
+		        else {
+		            return compare;
+		        }
+			}
+		});
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		
+		String tituloDet = (String) det[2];
+		String emision = Utiles.getDateToString((Date) det[3], Utiles.DD_MM_YYYY);
+		Recibo recibo = (Recibo) det[0];
+		ReciboDetalle item = (ReciboDetalle) det[1];
+		String cliente = recibo.getCliente().getRazonSocial();
+		String factura = item.getMovimiento().getNroComprobante();
+		String vencimiento = Utiles.getDateToString(item.getMovimiento().getFechaVencimiento(), Utiles.DD_MM_YYYY);
+		String importe = Utiles.getNumberFormat(item.getMontoGs());
+		
+		if ("TituloDetalle".equals(fieldName)) {
+			value = tituloDet.toUpperCase();
+		} else if ("Emision".equals(fieldName)) {
+			value = emision;
+		} else if ("NroRecibo".equals(fieldName)) {
+			value = recibo.getNumero();
+		} else if ("Cliente".equals(fieldName)) {
+			value = cliente;
+		} else if ("NroFactura".equals(fieldName)) {
+			value = factura;
+		} else if ("Vencimiento".equals(fieldName)) {
+			value = vencimiento;
+		} else if ("Importe".equals(fieldName)) {
+			value = importe;
+		} else if ("TotalImporte".equals(fieldName)) {
+			value = Utiles.getNumberFormat(totales.get(tituloDet));
+		} else if ("TotalCorriente".equals(fieldName)) {
+			Double tot = totales.get(EmpresaCartera.CORRIENTE);
+			if (tot == null) tot = 0.0;
+			value = Utiles.getNumberFormat(tot);
+		} else if ("TotalCorrienteInterior".equals(fieldName)) {
+			Double tot = totales.get(EmpresaCartera.CORRIENTE_INTERIOR);
+			if (tot == null) tot = 0.0;
+			value = Utiles.getNumberFormat(tot);
+		} else if ("TotalDudosoCobro".equals(fieldName)) {
+			Double tot = totales.get(EmpresaCartera.DUDOSO_COBRO);
+			if (tot == null) tot = 0.0;
+			value = Utiles.getNumberFormat(tot);
+		} else if ("TotalJudiciales".equals(fieldName)) {
+			Double tot = totales.get(EmpresaCartera.JUDICIAL);
+			if (tot == null) tot = 0.0;
+			value = Utiles.getNumberFormat(tot);
+		} else if ("TotalOtros".equals(fieldName)) {
+			Double tot = totales.get(EmpresaCartera.OTROS);
+			if (tot == null) tot = 0.0;
+			value = Utiles.getNumberFormat(tot);
+		} else if ("TotalSinCartera".equals(fieldName)) {
+			Double tot = totales.get(EmpresaCartera.SIN_CARTERA);
+			if (tot == null) tot = 0.0;
+			value = Utiles.getNumberFormat(tot);
+		} else if ("TotalCobrado".equals(fieldName)) {
+			Double tot1 = totales.get(EmpresaCartera.CORRIENTE) != null ? totales.get(EmpresaCartera.CORRIENTE) : 0.0;
+			Double tot2 = totales.get(EmpresaCartera.CORRIENTE_INTERIOR) != null ? totales.get(EmpresaCartera.CORRIENTE_INTERIOR) : 0.0;
+			Double tot3 = totales.get(EmpresaCartera.DUDOSO_COBRO) != null ? totales.get(EmpresaCartera.DUDOSO_COBRO) : 0.0;
+			Double tot4 = totales.get(EmpresaCartera.JUDICIAL) != null ? totales.get(EmpresaCartera.JUDICIAL) : 0.0;
+			Double tot5 = totales.get(EmpresaCartera.OTROS) != null ? totales.get(EmpresaCartera.OTROS) : 0.0;
+			Double tot6 = totales.get(EmpresaCartera.SIN_CARTERA) != null ? totales.get(EmpresaCartera.SIN_CARTERA) : 0.0;
+			double total = tot1 + tot2 + tot3 + tot4 + tot5 + tot6;
+			value = Utiles.getNumberFormat(total);
 		}
 		return value;
 	}
