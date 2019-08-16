@@ -79,7 +79,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<title>
 		<band height="94" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="2" y="72" width="351" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="861f5900-f029-48fa-b938-5220fcb7ad56"/>
+				<reportElement style="Column header" mode="Transparent" x="2" y="72" width="576" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="861f5900-f029-48fa-b938-5220fcb7ad56"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -246,28 +246,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				</textElement>
 				<text><![CDATA[Anticipos]]></text>
 			</staticText>
-			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="353" y="72" width="113" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="54efb039-7772-4502-b489-bfc38a0ee50e"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Cartera Asignada]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="467" y="72" width="111" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="008aead2-ce15-48e8-90f8-2ef88765696d"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Cartera]]></text>
-			</staticText>
 		</band>
 	</title>
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField>
-				<reportElement style="Detail" x="2" y="0" width="351" height="15" uuid="f29e5781-295a-4b7e-9314-adb942792436"/>
+				<reportElement style="Detail" x="2" y="0" width="576" height="15" uuid="f29e5781-295a-4b7e-9314-adb942792436"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
 			</textField>
@@ -330,16 +314,6 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement style="Detail" x="1033" y="0" width="114" height="15" uuid="93f1c644-c0f5-4046-8a38-7c474e08f867"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Anticipos}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="353" y="0" width="113" height="15" uuid="b55147bd-4433-4d9c-8413-a64e6666e849"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{Cartera}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="467" y="0" width="111" height="15" uuid="0c12ae98-aa20-4327-a649-9fa620865702"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{Cartera_}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
