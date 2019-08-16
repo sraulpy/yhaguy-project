@@ -6062,7 +6062,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> articulos = new ArrayList<>();
 				if (todos) {
-					articulos = rr.getArticulos_(idFamilia, idProveedor, medida);
+					articulos = rr.getArticulos__(idFamilia, idProveedor, medida);
 				}
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
 				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
