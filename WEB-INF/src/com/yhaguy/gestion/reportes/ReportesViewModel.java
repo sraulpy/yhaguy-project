@@ -9796,7 +9796,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (Object[] venta : ventas) {
 					String key = (String) venta[1];
-					String[] key_ = key.split(";");
 					venta = Arrays.copyOf(venta, venta.length + 10);
 					venta[3] = 0.0;
 					venta[4] = 0.0;
@@ -9806,9 +9805,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					venta[8] = 0.0;
 					venta[9] = 0.0;
 					venta[10] = 0.0;
-					venta[11] = key_[1];
-					venta[12] = key_[2];
-					acum.put(key_[0], venta);
+					venta[11] = "";
+					venta[12] = "";
+					acum.put(key, venta);
 				}
 				
 				for (Object[] cheque : chequesRechazados) {
