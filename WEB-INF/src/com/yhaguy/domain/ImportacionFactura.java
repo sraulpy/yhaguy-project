@@ -24,6 +24,8 @@ public class ImportacionFactura extends Domain{
 	private double totalAsignadoGs;
 	private double totalAsignadoDs;
 	private double porcProrrateo;
+	private double coeficiente;
+	private double tipoCambio;
 	private boolean facturaVerificada;
 	private boolean recepcionConfirmada;
 	
@@ -273,5 +275,21 @@ public class ImportacionFactura extends Domain{
 	@Override
 	public int compareTo(Object o) { 
 		return -1; 
+	}
+
+	public double getCoeficiente() {
+		return coeficiente;
+	}
+
+	public void setCoeficiente(double coeficiente) {
+		this.coeficiente = coeficiente;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
 	}
 }

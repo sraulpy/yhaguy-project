@@ -4672,7 +4672,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c.tipoMovimiento.descripcion, c.fechaCreacion, c.numero, d.cantidad, d.costoGs, "
+		String query = "select c.tipoMovimiento.descripcion, c.fechaCreacion, c.numero, d.cantidad, ((d.costoDs * c.tipoCambio) + ((d.costoDs * c.tipoCambio) * c.coeficiente)), "
 				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', 'CENTRAL'"
 				+ " from ImportacionFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -10296,7 +10296,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getVentasCreditoPorCliente(Date desde, Date hasta, long idCliente) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "SELECT v.cliente.id, concat(v.cliente.empresa.razonSocial, ';', v.cliente.empresa.cartera.descripcion, ';', v.cartera), " +
+		String query = "SELECT v.cliente.id, v.cliente.empresa.razonSocial, " +
 				"  sum(v.totalImporteGs)" +   
 				"	FROM Venta v" +
 				"	WHERE (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')" + 
@@ -10681,7 +10681,7 @@ public class RegisterDomain extends Register {
 		return out.size() > 0 ? out.get(0) : null;
 	}
 	
-	public static void main(String[] args) {
+	public static void main_(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			String hql = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id = 19 and c.auxi != 'MIGRACION'";
@@ -10701,10 +10701,17 @@ public class RegisterDomain extends Register {
 		}
 	}
 	
-	public static void main_(String[] args) {
+	public static void main(String[] args) {
 		try {
-			double test = Utiles.obtenerPorcentajeDelValor(20, 200);
-			System.out.println(test + "");
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<ImportacionPedidoCompra> imps = rr.getObjects(ImportacionPedidoCompra.class.getName());
+			for (ImportacionPedidoCompra imp : imps) {
+				if (imp.isConfirmadoImportacion()) {
+					ImportacionFactura fac = imp.getImportacionFactura_().get(0);
+					fac.setCoeficiente(imp.getResumenGastosDespacho().getCoeficiente());
+					System.out.println(imp.getNumeroPedidoCompra());
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

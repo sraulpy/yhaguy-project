@@ -15,9 +15,8 @@ import com.yhaguy.util.Utiles;
 public class TareaCerrarCajasCentral {
 
 	public static void main(String[] args) {
-		try {
-			for (int i = 1; i <= 31; i++) {				
-				Date fecha = Utiles.getFecha(i + "-04-2019 19:00:00", Utiles.DD_MM_YYYY_HH_MM_SS);
+		try {			
+				Date fecha = new Date();
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String desde = Utiles.getDateToString(fecha, Utiles.DD_MM_YYYY) + " 00:00:00";
 				String hasta = Utiles.getDateToString(fecha, Utiles.DD_MM_YYYY) + " 23:59:00";
@@ -91,7 +90,6 @@ public class TareaCerrarCajasCentral {
 				rr.saveObject(tarea, "sys");
 							
 				System.out.println("CIERRE DE CAJAS REALIZADO..");
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

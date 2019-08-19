@@ -84,11 +84,10 @@
 						</vlayout>
 						<vlayout spacing="0">
 							<field value="Número" />
-							<textbox value="@bind(vm.nvoResumen.numero)" hflex="true"
-								readonly="true"/>
+							<textbox value="@bind(vm.nvoResumen.numero)" hflex="true" readonly="true"/>
 						</vlayout>
 						<vlayout spacing="0">
-							<field value="Reembolso Valores Baterías"/>
+							<field value="Reembolso Valores Baterías" />
 							<bandbox placeholder="Búsqueda de Depósitos.." hflex="true" readonly="true"
 									value="@load(vm.nvoResumen.deposito_diferidos.numeroBoleta)"
 									id="bndDep">

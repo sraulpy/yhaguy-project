@@ -33,6 +33,7 @@ import org.zkoss.zul.Timer;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.util.AutoNumeroControl;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
@@ -702,6 +703,14 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 	public List<BancoCta> getBancoCuentas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getBancosCta();
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<Tipo> getMonedas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_MONEDA);
 	}
 	
 	/**

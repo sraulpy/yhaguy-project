@@ -172,6 +172,38 @@ public class CajaPeriodo extends Domain {
 	}
 	
 	/**
+	 * @return ingreso total con efectivo en ds..
+	 */
+	public double getTotalEfectivoIngresoDs() {
+		double out = 0;
+		for (Venta venta : this.ventas) {
+			if (!venta.isAnulado() && venta.isVentaContado()) {
+				for (ReciboFormaPago fp : venta.getFormasPago()) {
+					if(fp.isEfectivo() && !fp.isMonedaLocal())
+						out += fp.getMontoDs();
+				}
+			}			
+		}		
+		for (Recibo cobro : this.recibos) {
+			if(cobro.isCobro() && !cobro.isAnulado()) {
+				for (ReciboFormaPago fp : cobro.getFormasPago()) {
+					if(fp.isEfectivo() && !fp.isMonedaLocal())
+						out += fp.getMontoDs();
+				}
+			}			
+		}
+		for (Recibo cobro : this.recibos) {
+			if(cobro.isCancelacionCheque() && !cobro.isAnulado()) {
+				for (ReciboFormaPago fp : cobro.getFormasPago()) {
+					if(fp.isEfectivo() && !fp.isMonedaLocal())
+						out += fp.getMontoDs();
+				}
+			}			
+		}
+		return out;
+	}
+	
+	/**
 	 * @return egreso total con efectivo..
 	 */
 	public double getTotalEfectivoEgreso() {
@@ -198,6 +230,21 @@ public class CajaPeriodo extends Domain {
 		for (NotaCredito nc : this.notasCredito) {
 			if (!nc.isAnulado() && nc.isNotaCreditoVentaContado()) {
 				out += nc.getImporteGs();
+			}			
+		}
+		return out;
+	}
+	
+	/**
+	 * @return egreso total con efectivo ds..
+	 */
+	public double getTotalEfectivoEgresoDs() {
+		double out = 0;
+		for (NotaCredito nc : this.notasCredito) {
+			if (!nc.isAnulado() && nc.isNotaCreditoVentaContado()) {
+				if (!nc.isMonedaLocal()) {
+					out += nc.getImporteDs();
+				}
 			}			
 		}
 		return out;
@@ -247,6 +294,19 @@ public class CajaPeriodo extends Domain {
 	}
 	
 	/**
+	 * @return el importe total de cheques diferidos ds..
+	 */
+	public double getTotalChequeDiferidoDs(Date fecha) {
+		double out = 0;
+		for (ReciboFormaPago fp : this.getChequesTercero()) {
+			if ((!fp.isMonedaLocal()) && fp.isChequeAdelantado(fecha)) {
+				out += fp.getMontoDs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el importe total de cheques al dia..
 	 */
 	public double getTotalChequeAlDia(Date fecha) {
@@ -260,12 +320,36 @@ public class CajaPeriodo extends Domain {
 	}
 	
 	/**
+	 * @return el importe total de cheques al dia ds..
+	 */
+	public double getTotalChequeAlDiaDs(Date fecha) {
+		double out = 0;
+		for (ReciboFormaPago fp : this.getChequesTercero()) {
+			if ((!fp.isMonedaLocal()) && fp.isChequeAlDia(fecha)) {
+				out += fp.getMontoDs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total de transferencias bancarias..
 	 */
 	public double getTotalTransferenciasBancarias() {
 		double out = 0;
 		for (ReciboFormaPago fp : this.getDepositosBancarios()) {
 			out += fp.getMontoGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total de transferencias bancarias ds..
+	 */
+	public double getTotalTransferenciasBancariasDs() {
+		double out = 0;
+		for (ReciboFormaPago fp : this.getDepositosBancariosDs()) {
+			out += fp.getMontoDs();
 		}
 		return out;
 	}
@@ -732,6 +816,48 @@ public class CajaPeriodo extends Domain {
 			if (!recibo.isAnulado() && !recibo.isReembolsoPrestamo()) {
 				for (ReciboFormaPago fp : recibo.getFormasPago()) {
 					if (fp.isDepositoBancario()) {
+						String desc = "COB. "
+								+ recibo.getNumero().substring(8,
+										recibo.getNumero().length())
+								+ " - "
+								+ fp.getDepositoBancoCta()
+										.getBancoDescripcion() + " - "
+								+ fp.getDepositoNroReferencia();
+						fp.setDescripcion(desc);
+						out.add(fp);
+					}
+				}
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return las formas de pago con deposito bancario ds..
+	 */
+	public List<ReciboFormaPago> getDepositosBancariosDs() {
+		List<ReciboFormaPago> out = new ArrayList<ReciboFormaPago>();
+		for (Venta venta : this.getVentasOrdenado()) {
+			if (!venta.isAnulado()) {
+				for (ReciboFormaPago fp : venta.getFormasPago()) {
+					if ((!fp.isMonedaLocal()) && fp.isDepositoBancario()) {
+						String desc = "VTA. "
+								+ venta.getNumero().substring(8,
+										venta.getNumero().length())
+								+ " - "
+								+ fp.getDepositoBancoCta()
+										.getBancoDescripcion() + " - "
+								+ fp.getDepositoNroReferencia();
+						fp.setDescripcion(desc);
+						out.add(fp);
+					}
+				}
+			}
+		}
+		for (Recibo recibo : this.getRecibosOrdenado()) {
+			if (!recibo.isAnulado() && !recibo.isReembolsoPrestamo()) {
+				for (ReciboFormaPago fp : recibo.getFormasPago()) {
+					if ((!fp.isMonedaLocal()) && fp.isDepositoBancario()) {
 						String desc = "COB. "
 								+ recibo.getNumero().substring(8,
 										recibo.getNumero().length())

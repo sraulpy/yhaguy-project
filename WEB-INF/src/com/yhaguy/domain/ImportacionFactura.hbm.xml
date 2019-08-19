@@ -27,6 +27,8 @@
    				<property name="porcProrrateo"/>
    				<property name="facturaVerificada" />
    				<property name="recepcionConfirmada" />
+   				<property name="coeficiente"/>
+   				<property name="tipoCambio"/>
    				
    				<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"
    					lazy="false"/>

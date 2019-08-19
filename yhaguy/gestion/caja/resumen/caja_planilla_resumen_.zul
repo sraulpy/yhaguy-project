@@ -454,6 +454,8 @@
 						</listbox>
 				</hlayout>
 			
+				<hbox hflex="true">
+				<vbox hflex="2">
 				<div
 					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<a sclass="title" onClick='pop_val_bat.open(self, "after_start"); tx_filter_val_bat.focus()'>REEMBOLSOS VALORES BATERÍAS</a>
@@ -586,7 +588,73 @@
 						+ vm.selectedResumen_.resumenChequeAlDiaPrestamoCC
 						+ vm.selectedResumen_.totalDepositosDiferidos) @converter('formattedNumber', format='###,###,##0')" />
 				</hlayout>
-				<space></space>
+				</vbox>
+				<listbox sclass="small-list" hflex="1"
+							style="border: solid 1px silver; border-radius:8px; padding:10px; margin-right:10px; margin-top:5px">
+							<listhead>
+								<listheader></listheader>
+								<listheader align="right"></listheader>
+							</listhead>
+							<listitem>
+								<listcell>
+									<label value="Efectivo:" />
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenEfectivoDs) @converter('formattedNumber', format='###,###,##0.00')" />
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque al día:" />
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeAlDiaDs) @converter('formattedNumber', format='###,###,##0.00')" />
+								</listcell>						
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Cheque diferido:" />
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenChequeDiferidoDs) @converter('formattedNumber', format='###,###,##0.00')" />
+								</listcell>							
+							</listitem>
+							<listitem>
+								<listcell>
+									<label value="Transf. bancarias:" />
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenTransferenciasBancariasDs) @converter('formattedNumber', format='###,###,##0.00')" />
+								</listcell>							
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listitem>
+								<listcell>
+								</listcell>
+								<listcell>
+								</listcell>
+							</listitem>
+							<listitem>
+								<listcell></listcell>
+								<listcell></listcell>							
+							</listitem>
+							<listfoot>
+								<listfooter>
+									<field value="RECAUDACIÓN U$D"></field>
+								</listfooter>
+								<listfooter align="right">
+									<dolarbox readonly="true"
+										style="text-align:right;background:#EEF7FA;font-weight:bold"
+										value="@load(vm.selectedResumen_.totalResumenDs)"
+										hflex="true"/>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</hbox>
+				<space></space>				
 				<hlayout sclass="button-container">
 					<button mold="bs" sclass="btn-success btn-sm"
 						iconSclass="z-icon-plus-circle" label=" Generar Depósito" 
@@ -634,9 +702,9 @@
 							<combobox hflex="true"
 								model="@load(vm.bancoCuentas)"
 								selectedItem="@bind(vm.nvoDeposito.nroCuenta)"
-								value="@load(vm.nvoDeposito.nroCuenta.banco.descripcion)">
+								value="@load(vm.nvoDeposito.nroCuenta.descripcion)">
 								<template name="model">
-									<comboitem label="@load(each.banco.descripcion)"/>
+									<comboitem label="@load(each.descripcion)"/>
 								</template>
 							</combobox>
 						</vlayout>
@@ -651,14 +719,14 @@
 					</row>
 					<row>
 						<cell colspan="2">
-							<vlayout spacing="5px">
+						<vlayout spacing="5px">
 							<field value="Observación" />
 							<textbox hflex="true" value="@bind(vm.nvoDeposito.observacion)"/>
 						</vlayout>
 						</cell>
 						<cell>
 							<vlayout spacing="5px">
-							<field value="Total Efectivo Gs." />
+							<field value="Total Efectivo" />
 							<guaranibox hflex="true" value="@bind(vm.nvoDeposito.totalEfectivo)" />
 						</vlayout>
 						</cell>						

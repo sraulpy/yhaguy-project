@@ -46,6 +46,17 @@ public class CajaPlanillaResumen extends Domain {
 	}
 	
 	/**
+	 * @return el total en efectivo en ds..
+	 */
+	public double getResumenEfectivoDs() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += (planilla.getTotalEfectivoIngresoDs() - planilla.getTotalEfectivoEgresoDs());
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total en efectivo..
 	 */
 	@DependsOn({ "sobranteFaltante", "efectivoNoDepositado" })
@@ -64,6 +75,17 @@ public class CajaPlanillaResumen extends Domain {
 		double out = 0;
 		for (CajaPeriodo planilla : this.planillas) {
 			out += planilla.getTotalChequeAlDia(this.fecha);
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total en cheque al dia ds..
+	 */
+	public double getResumenChequeAlDiaDs() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += planilla.getTotalChequeAlDiaDs(this.fecha);
 		}
 		return out;
 	}
@@ -89,6 +111,17 @@ public class CajaPlanillaResumen extends Domain {
 		double out = 0;
 		for (CajaPeriodo planilla : this.planillas) {
 			out += planilla.getTotalChequeDiferido(this.fecha);
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total en cheque diferido ds..
+	 */
+	public double getResumenChequeDiferidoDs() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += planilla.getTotalChequeDiferidoDs(this.fecha);
 		}
 		return out;
 	}
@@ -130,6 +163,17 @@ public class CajaPlanillaResumen extends Domain {
 		double out = 0;
 		for (CajaPeriodo planilla : this.planillas) {
 			out += planilla.getTotalTransferenciasBancarias();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total en transferencias bancarias ds..
+	 */
+	public double getResumenTransferenciasBancariasDs() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += planilla.getTotalTransferenciasBancariasDs();
 		}
 		return out;
 	}
@@ -196,6 +240,14 @@ public class CajaPlanillaResumen extends Domain {
 				+ this.getResumenTransferenciasBancarias()
 				+ this.getResumenChequeDiferidoADepositar()
 				+ this.getResumenReembolsoChequesRechazados();
+	}
+	
+	/**
+	 * @return el total de resumen ds..
+	 */
+	public double getTotalResumenDs() {
+		return this.getResumenEfectivoDs() + this.getResumenChequeAlDiaDs()
+				+ this.getResumenTransferenciasBancariasDs();
 	}
 	
 	/**
@@ -334,6 +386,17 @@ public class CajaPlanillaResumen extends Domain {
 		for (CajaPeriodo caja : this.planillas) {
 			out.addAll(caja.getDepositosBancarios());
 			out.addAll(caja.getDepositosBancariosReembolsoPrestamos());
+		}
+		return out;
+	}
+	
+	/**
+	 * @return las transferencias bancarias ds..
+	 */
+	public List<ReciboFormaPago> getTransferenciasBancariasDs() {
+		List<ReciboFormaPago> out = new ArrayList<ReciboFormaPago>();
+		for (CajaPeriodo caja : this.planillas) {
+			out.addAll(caja.getDepositosBancariosDs());
 		}
 		return out;
 	}
