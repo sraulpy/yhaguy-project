@@ -10306,7 +10306,7 @@ public class RegisterDomain extends Register {
 		if (idCliente > 0) {
 			query += " AND v.cliente.id = " + idCliente;
 		}
-		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial, v.cliente.empresa.cartera.descripcion, v.cartera" +
+		query+=	" GROUP BY v.cliente.id, v.cliente.empresa.razonSocial" +
 				" ORDER BY 2";
 		return this.hql(query);
 	}
