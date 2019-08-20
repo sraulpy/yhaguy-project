@@ -9,7 +9,14 @@
 			disabled="@load(vm.selectedEmpresa eq null? 'true':'false')"
 			label=" Seleccionar Cliente" height="150px" style="font-size:30pt"
 			dir="normal"
-			onClick="btn_crear_rec.setVisible(true); lstCobradores.setVisible(true); lstClientes.setVisible(false); self.setVisible(false)" />
+			onClick="btn_sel_mon.setVisible(true); btn_crear_rec.setVisible(false); lstMonedas.setVisible(true); lstClientes.setVisible(false); self.setVisible(false)" />
+
+		<button id="btn_sel_mon" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			disabled="@load(vm.selectedMoneda eq null? 'true':'false')"
+			label=" Seleccionar Moneda" height="150px" style="font-size:30pt"
+			dir="normal" visible="false"
+			onClick="btn_crear_rec.setVisible(true); lstCobradores.setVisible(true); lstMonedas.setVisible(false); self.setVisible(false)" />
 
 		<button id="btn_crear_rec" mold="bs" sclass="btn-primary btn-lg" hflex="true"
 			iconSclass="z-icon-check"
@@ -28,7 +35,7 @@
 		<button id="btn_selFormaPago" mold="bs" sclass="btn-primary btn-lg" hflex="true"
 			iconSclass="z-icon-check"
 			label=" Seleccionar Forma de Pago" height="150px" style="font-size:30pt"
-			disabled="@load(vm.selectedTipoFormaPago eq null? 'true' : 'false')"
+			disabled="@load(vm.selectedTipoFormaPago eq null? 'true' : (vm.selectedMonedaFormaPago eq null ? 'true' : 'false'))"
 			dir="normal" visible="false"
 			onClick="@command('seleccionarFormaPago', comp1 = vl_formaPago, comp2 = lst_formaPagos, comp3 = self, comp4 = hl_gen_recibo)"/>
 			
@@ -61,8 +68,7 @@
 			id="lstClientes"
 			emptyMessage="BUSQUE UN CLIENTE.."
 			style="overflow:auto" vflex="1"
-			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedEmpresa)"
-			onSelect="@command('buscarMovimientos')">
+			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedEmpresa)">
 			<listhead>
 				<listheader />
 			</listhead>
@@ -81,6 +87,32 @@
 			</listitem>
 		</template>
 		</listbox>
+		
+		<!-- LISTA DE MONEDAS -->
+		
+		<vlayout id="lstMonedas" visible="false">
+		<listbox			
+			emptyMessage="SELECCIONE UNA MONEDA"
+			style="overflow:auto" vflex="1"			
+			model="@load(vm.monedas)" selectedItem="@bind(vm.selectedMoneda)"
+			onSelect="@command('buscarMovimientos')">
+			<listhead>
+				<listheader />
+			</listhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.descripcion)" />
+			</listitem>
+		</template>
+		</listbox>
+		<space></space>
+		<space></space>
+		<vlayout visible="@load(vm.selectedMoneda.id eq 32)">
+		<label value="Tipo de Cambio" sclass="mobile" />
+				<doublebox hflex="true" value="@bind(vm.tipoCambio)"
+					format="###,###,##0" style="text-align:right"/>
+		</vlayout>
+		</vlayout>
 		
 		<!-- LISTA DE COBRADORES -->
 		
@@ -131,14 +163,14 @@
 					<listcell label="@load(each.movimiento._NroComprobante)"
 						style="@load(each.movimiento.vencido ? 'color:red' : '')" />
 					<listcell
-						label="@load(each.movimiento.saldo) @converter('formattedNumber', format='###,###,###,##0')"
+						label="@load(each.movimiento.saldo) @converter('formattedNumber', format=vm.selectedMoneda.id eq 31? '###,###,###,##0':'###,###,###,##0.00')"
 						style="@load(each.movimiento.vencido ? 'color:red' : '')" />
 					<listcell>
 						<doublebox
 							style="text-align:right;font-weight:bold"
-							format="###,###,###,##0" 
+							format="@load(vm.selectedMoneda.id eq 31? '###,###,###,##0':'###,###,###,##0.00')"
 							hflex="true"
-							value="@bind(each.montoGs)"
+							value="@bind(vm.selectedMoneda.id eq 31? each.montoGs : each.montoDs)"
 							readonly="@load(each.selected? 'false':'true')"
 							onChange="@command('refresh')"
 							instant="true"/>
@@ -149,23 +181,37 @@
 				<listfooter span="4" align="left">
 					<hlayout>
 						<div hflex="true"></div>
-						<label value="Total Gs." style="font-size: 30pt;font-weight:bold"/>
+						<label value="Total" style="font-size: 30pt;font-weight:bold"/>
+						<space></space>
+						<label value="@load(vm.selectedMoneda.sigla)" style="font-size: 30pt;font-weight:bold"/>
 						<doublebox
 							style="background:#EEF7FA;text-align:right;font-weight:bold"
-							value="@load(vm.totalImporteGs)" format="###,###,###,##0" />
+							value="@load(vm.selectedMoneda.id eq 31? vm.totalImporteGs : vm.totalImporteDs)" 
+							format="@load(vm.selectedMoneda.id eq 31? '###,###,###,##0':'###,###,###,##0.00')" />
 					</hlayout>
 				</listfooter>
 			</listfoot>
 		</listbox>
 		
-		<listbox id="lst_formaPagos" visible="false"
-			style="overflow:auto" vflex="1"
+		<vlayout id="lst_formaPagos" visible="false" vflex="true">
+		<listbox
+			style="overflow:auto" vflex="2"
 			model="@load(vm.formasDePago)"
 			selectedItem="@bind(vm.selectedTipoFormaPago)">
 				<template name="model">
 					<listitem label="@load(each.descripcion.toUpperCase())" />
 				</template>
 		</listbox>
+		<space></space>
+		<listbox
+			style="overflow:auto" vflex="1"
+			model="@load(vm.monedas)"
+			selectedItem="@bind(vm.selectedMonedaFormaPago)">
+				<template name="model">
+					<listitem label="@load(each.descripcion.toUpperCase())" />
+				</template>
+		</listbox>
+		</vlayout>
 		
 		<vlayout id="vl_formaPago" vflex="true" visible="false" style="padding:30px">
 			
@@ -178,9 +224,18 @@
 			<!-- FORMA DE PAGO EFECTIVO O RECAUDACION CC -->
 			
 			<vlayout visible="@load(vm.efectivo or vm.recaudacionCC)">
-				<label value="Monto Gs." sclass="mobile" />
+				<hlayout>
+					<label value="Monto" sclass="mobile" />
+					<label value="@load(vm.nvoFormaPago.moneda.sigla)" sclass="mobile" />
+				</hlayout>				
 				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
-					format="###,###,##0" style="text-align:right"/>
+					format="###,###,##0" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 31 ? 'true' : 'false')" 
+					onChange="@command('dolarizar')" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoDs)"
+					format="###,###,##0.00" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 32? 'true' : 'false')" 
+					onChange="@command('guaranizar')" />
 			</vlayout>
 			
 			<!-- FORMA DE PAGO CHEQUE DE TERCERO -->
@@ -199,9 +254,18 @@
 				<label value="Número Cheque" sclass="mobile" />
 				<textbox hflex="true" value="@bind(vm.nvoFormaPago.chequeNumero)"/>
 				<space></space>
-				<label value="Monto del Cheque Gs." sclass="mobile" />
+				<hlayout>
+					<label value="Monto del Cheque" sclass="mobile" />
+					<label value="@load(vm.nvoFormaPago.moneda.sigla)" sclass="mobile" />
+				</hlayout>
 				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
-					format="###,###,##0" style="text-align:right"/>
+					format="###,###,##0" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 31? 'true' : 'false')"
+					onChange="@command('dolarizar')" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoDs)"
+					format="###,###,##0.00" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 32? 'true' : 'false')"
+					onChange="@command('guaranizar')" />
 				<space></space>
 				<label value="Fecha del Cheque" sclass="mobile" />
 				<datebox readonly="true" hflex="true" value="@bind(vm.nvoFormaPago.chequeFecha)"/>
@@ -226,40 +290,70 @@
 				<label value="Número Referencia" sclass="mobile" />
 				<textbox hflex="true" value="@bind(vm.nvoFormaPago.depositoNroReferencia)"/>
 				<space></space>
-				<label value="Monto Gs." sclass="mobile" />
+				<hlayout>
+					<label value="Monto" sclass="mobile" />
+					<label value="@load(vm.nvoFormaPago.moneda.sigla)" sclass="mobile" />
+				</hlayout>
 				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
-					format="###,###,##0" style="text-align:right"/>
+					format="###,###,##0" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 31 ? 'true' : 'false')" 
+					onChange="@command('dolarizar')" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoDs)"
+					format="###,###,##0.00" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 32 ? 'true' : 'false')"
+					onChange="@command('guaranizar')" />
 			</vlayout>
 			
 			<!-- FORMA DE PAGO RETENCION -->
 			
 			<vlayout visible="@load(vm.retencion)">
-				<label value="Monto Gs." sclass="mobile" />
+				<hlayout>
+					<label value="Monto" sclass="mobile" />
+					<label value="@load(vm.nvoFormaPago.moneda.sigla)" sclass="mobile" />
+				</hlayout>
 				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoGs)"
-					format="###,###,##0" style="text-align:right"/>
+					format="###,###,##0" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 31 ? 'true':'false')" 
+					onChange="@command('dolarizar')" />
+				<doublebox hflex="true" value="@bind(vm.nvoFormaPago.montoDs)"
+					format="###,###,##0.00" style="text-align:right" 
+					visible="@load(vm.nvoFormaPago.moneda.id eq 32 ? 'true':'false')" 
+					onChange="@command('guaranizar')" />
 			</vlayout>
 			
 			<space vflex="true"></space>
 			<hbox hflex="true" style="margin:0px 30px 0px 30px;border-bottom: solid 2px">
 					<space></space>
-					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;">Sub-total Facturas:</label>
-					<space hflex="true"></space>
-					<label style="font-size:32pt" value="@load(vm.totalImporteGs) @converter(vm.cnv.monedaLocal)"></label>
+					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;">Sub-total Facturas</label>
 					<space></space>
-				</hbox>
+					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;"
+						value="@load(vm.selectedMoneda.sigla)"></label>
+					<space hflex="true"></space>
+					<label style="font-size:32pt" value="@load(vm.totalImporteGs) @converter(vm.cnv.monedaLocal)"
+						visible="@load(vm.selectedMoneda.id eq 31 ? 'true' : 'false')"></label>
+					<label style="font-size:32pt" value="@load(vm.totalImporteDs) @converter(vm.cnv.monedaExtranjera)"
+						visible="@load(vm.selectedMoneda.id eq 32 ? 'true' : 'false')"></label>
+					<space></space>
+			</hbox>
 			<space></space>
 			<hbox hflex="true" style="margin:0px 30px 0px 30px;border-bottom: solid 2px">
 					<space></space>
-					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;">Sub-total Formas Pago:</label>
+					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;">Sub-total Formas Pago</label>
+					<space></space>
+					<label sclass="mobile" style="text-overflow: ellipsis;white-space: nowrap;"
+						value="@load(vm.selectedMoneda.sigla)"></label>
 					<space hflex="true"></space>
-					<label style="font-size:32pt" value="@load(vm.totalImporteFormasPagoGs_) @converter(vm.cnv.monedaLocal)"></label>
+					<label style="font-size:32pt" value="@load(vm.totalImporteFormasPagoGs_) @converter(vm.cnv.monedaLocal)"
+						visible="@load(vm.selectedMoneda.id eq 31? 'true' : 'false')"></label>
+					<label style="font-size:32pt" value="@load(vm.totalImporteFormasPagoDs_) @converter(vm.cnv.monedaExtranjera)"
+						visible="@load(vm.selectedMoneda.id eq 32? 'true' : 'false')"></label>
 					<space></space>
 			</hbox>
 		</vlayout>
 		
 		<!-- VISTA PRELIMINAR DEL RECIBO -->
 		
-		<vlayout id="vl_confirmar" vflex="true" style="padding:30px" visible="false">
+		<vlayout id="vl_confirmar" vflex="true" style="padding:20px" visible="false">
 			
 			<div style="text-align:center">
 				<label value="RECIBO DE DINERO" sclass="mobile" style="font-weight:bold" />
@@ -275,17 +369,25 @@
 			<listbox style="overflow:auto" vflex="1"
 				model="@load(vm.selectedDetalles)">
 				<listhead>
-					<listheader /><listheader align="right" width="40%"/>
+					<listheader />
+					<listheader align="right" width="20%"/>
+					<listheader align="right" width="20%"/>
 				</listhead>
 				<template name="model">
 					<listitem>
 						<listcell label="@load(each.movimiento._NroComprobante)" />
+						<listcell label="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)" />
 						<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
 					</listitem>
 				</template>
 				<listfoot>
 					<listfooter>
-						<label style="font-size:32pt;font-weight:bold" value="Total Gs."></label>
+						<label style="font-size:32pt;font-weight:bold" value="Importe Total:"></label>
+					</listfooter>
+					<listfooter>
+						<doublebox hflex="true" value="@bind(vm.totalImporteDs)"
+							format="###,###,##0.00" style="text-align:right;font-weight:bold;background:#EEF7FA"
+							readonly="true"/>
 					</listfooter>
 					<listfooter>
 						<doublebox hflex="true" value="@bind(vm.totalImporteGs)"
@@ -299,17 +401,25 @@
 			<listbox style="overflow:auto" vflex="1"
 				model="@load(vm.selectedFormasPagos)">
 				<listhead>
-					<listheader/><listheader align="right" width="40%"/>
+					<listheader/>
+					<listheader align="right" width="20%"/>
+					<listheader align="right" width="20%"/>
 				</listhead>
 				<template name="model">
 					<listitem>
 						<listcell label="@load(each.tipo.descripcion.toUpperCase())" />
+						<listcell label="@load(each.montoDs) @converter(vm.cnv.monedaExtranjera)" />
 						<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)" />
 					</listitem>
 				</template>
 				<listfoot>
 					<listfooter>
-						<label style="font-size:32pt;font-weight:bold" value="Total Gs."></label>
+						<label style="font-size:32pt;font-weight:bold" value="Importe Total:"></label>
+					</listfooter>
+					<listfooter>
+						<doublebox hflex="true" value="@bind(vm.totalImporteFormasPagoDs)"
+							format="###,###,##0.00" style="text-align:right;font-weight:bold;background:#EEF7FA"
+							readonly="true"/>
 					</listfooter>
 					<listfooter>
 						<doublebox hflex="true" value="@bind(vm.totalImporteFormasPagoGs)"
@@ -318,6 +428,11 @@
 					</listfooter>
 				</listfoot>
 			</listbox>
+			<space></space>
+			<label value="Diferencia por Tipo de Cambio" sclass="mobile" style="font-weight:bold" />
+			<doublebox hflex="true" value="@load(vm.totalImporteFormasPagoGs - vm.totalImporteGs)"
+							format="###,###,##0" style="text-align:right;font-weight:bold;background:#EEF7FA"
+							readonly="true"/>
 		</vlayout>
 		
 		<!-- MENSAJE -->

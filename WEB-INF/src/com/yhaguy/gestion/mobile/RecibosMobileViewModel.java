@@ -45,6 +45,9 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	private List<ReciboDetalle> movimientos = new ArrayList<ReciboDetalle>();
 	private Tipo selectedTipoFormaPago;
 	private ReciboFormaPago nvoFormaPago = new ReciboFormaPago();
+	private Tipo selectedMoneda;
+	private Tipo selectedMonedaFormaPago;
+	private double tipoCambio = 0;
 	
 	private String razonSocial = "";
 	private String razonSocialCobrador = "";
@@ -58,6 +61,8 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	public void init() {
 		try {
 			this.desde = Utiles.getFecha("01-01-2016 00:00:00");
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.tipoCambio = rr.getTipoCambioCompra();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,22 +75,33 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	@Command
 	public void refresh() {
 		BindUtils.postNotifyChange(null, null, this, "totalImporteGs");
+		BindUtils.postNotifyChange(null, null, this, "totalImporteDs");
 	}
 	
 	@Command
 	public void setMonto() {
+		if (this.selectedMoneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI)) {
+			this.tipoCambio = 1;
+		}
 		for (ReciboDetalle item : this.selectedDetalles) {
 			if (item.getMontoGs() == 0) {
 				item.setMontoGs(item.getMovimiento().getSaldo());
+				if (this.selectedMoneda.getSigla().equals(Configuracion.SIGLA_MONEDA_DOLAR)) {
+					item.setMontoDs(item.getMovimiento().getSaldo());
+					item.setMontoGs(item.getMovimiento().getSaldo() * item.getMovimiento().getTipoCambio());
+				}
 				BindUtils.postNotifyChange(null, null, item, "montoGs");
+				BindUtils.postNotifyChange(null, null, item, "montoDs");
 			}
 		}
 		for (ReciboDetalle item : this.movimientos) {
 			if (!this.selectedDetalles.contains(item)) {
 				item.setMontoGs(0);
+				item.setMontoDs(0);
 				item.setSelected(false);
 				BindUtils.postNotifyChange(null, null, item, "selected");
 				BindUtils.postNotifyChange(null, null, item, "montoGs");
+				BindUtils.postNotifyChange(null, null, item, "montoDs");
 			} else {
 				item.setSelected(true);
 				BindUtils.postNotifyChange(null, null, item, "selected");
@@ -104,11 +120,16 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 			this.calcularRetencion();
 		} else {
 			this.nvoFormaPago.setMontoGs(this.getTotalImporteGs() - this.getTotalImporteFormasPagoGs());
+			this.nvoFormaPago.setMontoDs(this.getTotalImporteDs() - this.getTotalImporteFormasPagoDs());
+			if (this.selectedMoneda.getSigla().equals(Configuracion.SIGLA_MONEDA_DOLAR)) {
+				this.nvoFormaPago.setMontoGs(this.getTotalImporteGs_() - this.getTotalImporteFormasPagoGs());
+			}
 		}
 		comp1.setVisible(true);
 		comp2.setVisible(false);
 		comp3.setVisible(false);
 		comp4.setVisible(true);
+		this.selectedMonedaFormaPago = null;
 	}
 	
 	@Command
@@ -152,12 +173,19 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		recibo.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_CONFECCIONADO));
 		recibo.setFechaEmision(new Date());
 		recibo.getFormasPago().addAll(this.selectedFormasPagos);
-		recibo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		recibo.setMoneda(this.selectedMoneda);
 		recibo.setSucursal(rr.getSucursalAppById(2));
-		recibo.setTipoCambio(0);
+		recibo.setTipoCambio(this.tipoCambio);
 		recibo.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_RECIBO_COBRO));
 		recibo.setTotalImporteGs(this.getTotalImporteFormasPagoGs());
 		recibo.setMovimientoBancoActualizado(true);
+		if (!recibo.isMonedaLocal()) {
+			ReciboDetalle det = new ReciboDetalle();
+			det.setAuxi(ReciboDetalle.TIPO_DIF_CAMBIO);
+			det.setMontoGs(this.getTotalImporteFormasPagoGs() - this.getTotalImporteGs());
+			det.setConcepto("DIFERENCIA POR TIPO DE CAMBIO");
+			recibo.getDetalles().add(det);
+		}
 		rr.saveObject(recibo, "mobile");
 		this.addMovimientoCtaCte(recibo, "mobile");
 		this.addMovimientosBanco(recibo, "mobile");
@@ -188,7 +216,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<CtaCteEmpresaMovimiento> list = rr.getMovimientosConSaldo(
 				this.desde, this.hasta, Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 0,
-				this.selectedEmpresa.getId(), 31);
+				this.selectedEmpresa.getId(), this.selectedMoneda.getId());
 		List<CtaCteEmpresaMovimiento> list_ = this.getMovimientosDesfraccionados(list);
 		for (CtaCteEmpresaMovimiento item : list_) {
 			ReciboDetalle det = new ReciboDetalle();
@@ -199,11 +227,22 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange({ "nvoFormaPago.montoGs", "totalImporteGs", "totalImporteDs", "totalImporteFormasPagoGs_", "totalImporteFormasPagoDs_" })
+	public void guaranizar() {
+		this.nvoFormaPago.setMontoGs(this.nvoFormaPago.getMontoDs() * this.tipoCambio);
+	}
+	
+	@Command
+	@NotifyChange({ "nvoFormaPago.montoDs", "totalImporteDs", "totalImporteGs", "totalImporteFormasPagoGs_", "totalImporteFormasPagoDs_" })
+	public void dolarizar() {
+		this.nvoFormaPago.setMontoDs(this.nvoFormaPago.getMontoGs() / this.tipoCambio);
+	}
+	
 	/**
 	 * inicializa los valores de la forma de pago..
 	 */
 	private void inicializarFormaPago() throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
 		this.nvoFormaPago = new ReciboFormaPago();
 		this.nvoFormaPago.setDescripcion("");
 		this.nvoFormaPago.setChequeLibrador("");
@@ -217,7 +256,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		this.nvoFormaPago.setRetencionVencimiento(Utiles.getFechaFinMes());
 		this.nvoFormaPago.setTarjetaNumero("");
 		this.nvoFormaPago.setTarjetaNumeroComprobante("");
-		this.nvoFormaPago.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		this.nvoFormaPago.setMoneda(this.selectedMonedaFormaPago);
 		if (this.selectedEmpresa != null) {
 			this.nvoFormaPago.setChequeLibrador(this.selectedEmpresa.getRazonSocial());
 		}
@@ -311,6 +350,35 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		for (ReciboDetalle item : this.selectedDetalles) {
 			out += item.getMontoGs();
 		}
+		return out;
+	}
+	
+	@DependsOn("selectedDetalles")
+	public double getTotalImporteDs() throws Exception {
+		double out = 0;
+		for (ReciboDetalle item : this.selectedDetalles) {
+			out += item.getMontoDs();
+		}
+		return out;
+	}
+	
+	@DependsOn("selectedDetalles")
+	public double getTotalImporteGs_() throws Exception {
+		double out = 0;
+		for (ReciboDetalle item : this.selectedDetalles) {
+			out += (item.getMontoDs() * this.tipoCambio);
+		}
+		return out;
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<Tipo> getMonedas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Tipo> out = new ArrayList<Tipo>();
+		out.add(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		out.add(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_DOLAR));
 		return out;
 	}
 	
@@ -419,11 +487,30 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return el total importe formas pago..
+	 */
+	public double getTotalImporteFormasPagoDs() {
+		double out = 0;
+		for (ReciboFormaPago fp : this.selectedFormasPagos) {
+			out += fp.getMontoDs();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total importe formas pago como subtotal..
 	 */
 	@DependsOn("nvoFormaPago.montoGs")
 	public double getTotalImporteFormasPagoGs_() {
 		return this.getTotalImporteFormasPagoGs() + this.nvoFormaPago.getMontoGs();
+	}
+	
+	/**
+	 * @return el total importe formas pago como subtotal..
+	 */
+	@DependsOn("nvoFormaPago.montoDs")
+	public double getTotalImporteFormasPagoDs_() {
+		return this.getTotalImporteFormasPagoDs() + this.nvoFormaPago.getMontoDs();
 	}
 	
 	/**
@@ -460,11 +547,11 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	public boolean isAgregarFormaPagoEnabled() {
 		if (this.isChequeTercero()) {
 			if (this.nvoFormaPago.getChequeBanco() != null && this.nvoFormaPago.getChequeFecha() != null
-					&& !this.nvoFormaPago.getChequeNumero().isEmpty() && this.nvoFormaPago.getMontoGs() > 0) {
+					&& !this.nvoFormaPago.getChequeNumero().isEmpty() && this.nvoFormaPago.getMontoGs() != 0) {
 				return true;
 			}
 		} else {
-			if (this.nvoFormaPago.getMontoGs() > 0) {
+			if (this.nvoFormaPago.getMontoGs() != 0) {
 				return true;
 			}
 		}
@@ -549,5 +636,29 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 
 	public void setMensaje(String mensaje) {
 		this.mensaje = mensaje;
+	}
+
+	public Tipo getSelectedMoneda() {
+		return selectedMoneda;
+	}
+
+	public void setSelectedMoneda(Tipo selectedMoneda) {
+		this.selectedMoneda = selectedMoneda;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public Tipo getSelectedMonedaFormaPago() {
+		return selectedMonedaFormaPago;
+	}
+
+	public void setSelectedMonedaFormaPago(Tipo selectedMonedaFormaPago) {
+		this.selectedMonedaFormaPago = selectedMonedaFormaPago;
 	}
 }
