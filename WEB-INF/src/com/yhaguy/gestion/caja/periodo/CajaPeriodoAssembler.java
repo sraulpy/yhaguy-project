@@ -465,6 +465,10 @@ public class CajaPeriodoAssembler extends Assembler {
 			AssemblerRecibo.registrarReciboPago("ANTICIPO", new Date(), rec.getId(), this.getLogin(), true);
 			ControlCuentaCorriente.addReciboDePagoAnticipado(rec.getId(), this.getLogin(), (String) rec.getMoneda().getPos2());
 		}
+		// desbloqueo automatico
+		if (rec.isCobro()) {
+			ControlCuentaCorriente.verificarBloqueoCliente((long) rec.getCliente().getPos4(), rec.getCliente().getId(), this.getLogin());
+		}
 	}
 
 	/**

@@ -653,7 +653,13 @@ public class Utiles {
     }
 	
 	public static void main(String[] args) {
-		String nro = "421000";
-		System.out.println(Utiles.numeroAletras(Double.parseDouble(nro)));		
+		Date hoy = new Date();
+		Date test;
+		try {
+			test = Utiles.getFecha("01-08-2019 00:00:00");
+			System.out.println(Utiles.diasEntreFechas(test, hoy));	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 }

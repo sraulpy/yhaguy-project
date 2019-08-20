@@ -561,10 +561,20 @@ public class ControlCuentaCorriente {
 	public static void verificarBloqueoCliente(long idEmpresa, long idCliente, String user) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Empresa emp = rr.getEmpresaById(idEmpresa);
+		Date hoy = new Date();
+		boolean desbloquear = true;
 		
-		//rr.getCtaCteMovimientos(desde, hasta, caracter, idMoneda, siglaTm);
+		List<Object[]> vencidos = rr.getCtaCteMovimientosVencidos(idEmpresa);
 		
-		if(emp.getAuxi().equals(Empresa.DESBLOQUEO_TEMPORAL)) {
+		for (Object[] movim : vencidos) {
+			Date vto = (Date) movim[2];
+			long dias = Utiles.diasEntreFechas(vto, hoy);
+			if (dias >= 60) {
+				desbloquear = false;
+			}
+		}
+		
+		if(desbloquear) {
 			emp.setAuxi("");
 			emp.setCuentaBloqueada(false);
 			emp.setMotivoBloqueo("Restauracion automática por cobro de facturas..");

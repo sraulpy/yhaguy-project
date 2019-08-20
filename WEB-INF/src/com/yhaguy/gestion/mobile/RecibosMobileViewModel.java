@@ -290,6 +290,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	private void addMovimientoCtaCte(Recibo rec, String user) 
 		throws Exception {
 		ControlCuentaCorriente.addReciboDeCobro(rec.getId(), user);
+		ControlCuentaCorriente.verificarBloqueoCliente(rec.getCliente().getIdEmpresa(), rec.getCliente().getId(), user);
 	}
 	
 	/**

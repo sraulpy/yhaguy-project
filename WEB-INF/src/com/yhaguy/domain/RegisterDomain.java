@@ -5584,6 +5584,22 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los movimientos de cta cte.
+	 */
+	public List<Object[]> getCtaCteMovimientosVencidos(long idEmpresa) throws Exception {
+		String vto = misc.dateToString(new Date(), Misc.YYYY_MM_DD) + " 00:00:00";
+		String query = "select c.id, c.idEmpresa, c.fechaVencimiento, c.importeOriginal from CtaCteEmpresaMovimiento c where"
+				+ " c.idEmpresa = " + idEmpresa
+				+ " and c.anulado != 'TRUE'"
+				+ " and c.saldo > 0.5"
+				+ " and c.fechaVencimiento <= '" + vto + "'"
+				+ " and c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'"
+				+ " order by c.fechaVencimiento asc";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
 	 * @return los movimientos de saldo a favor de cta cte. de una empresa
 	 */
 	public List<CtaCteEmpresaMovimiento> getCtaCteSaldosFavor(long idEmpresa) throws Exception {
