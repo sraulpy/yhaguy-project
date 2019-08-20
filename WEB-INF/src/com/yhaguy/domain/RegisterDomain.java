@@ -10683,7 +10683,7 @@ public class RegisterDomain extends Register {
 	 * @return los datos del articulo..
 	 */
 	public Object[] getCostoPrecio(String codigo) throws Exception {
-		String query = "select a.id, a.costoGs, a.precioGs from Articulo a"
+		String query = "select a.id, a.costoGs, a.precioGs, a.precioMinoristaGs, a.precioListaGs from Articulo a"
 				+ " where a.codigoInterno = '" + codigo + "'";
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;

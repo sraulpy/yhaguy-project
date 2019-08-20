@@ -108,6 +108,9 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private double costoFobGs;
 	private double costoFobDs;
 	
+	private double precioMinorista;
+	private double precioLista;
+	
 	private String ruc;
 	private String vendedor;
 	private String rubro;
@@ -892,5 +895,21 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setZona(String zona) {
 		this.zona = zona;
+	}
+
+	public double getPrecioMinorista() {
+		return precioMinorista;
+	}
+
+	public void setPrecioMinorista(double precioMinorista) {
+		this.precioMinorista = precioMinorista;
+	}
+
+	public double getPrecioLista() {
+		return precioLista;
+	}
+
+	public void setPrecioLista(double precioLista) {
+		this.precioLista = precioLista;
 	}
 }

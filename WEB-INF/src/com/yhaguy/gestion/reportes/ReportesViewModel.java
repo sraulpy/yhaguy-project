@@ -6049,7 +6049,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				Deposito dep1 = depositos.size() > 0 ? depositos.get(0) : null;
 				Deposito dep2 = depositos.size() > 1 ? depositos.get(1) : null;
-				Deposito dep3 = depositos.size() >= 2 ? depositos.get(2) : null;
+				Deposito dep3 = depositos.size() > 2 ? depositos.get(2) : null;
 				
 				List<Deposito> deps1 = new ArrayList<Deposito>();
 				List<Deposito> deps2 = new ArrayList<Deposito>();
@@ -6260,6 +6260,8 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.set_diciembre(impDiciembre);
 						hist.setCostoGs((double) costoPrecio[1]);
 						hist.setCostoFobGs((double) costoPrecio[2]);
+						hist.setPrecioMinorista((double) costoPrecio[3]);
+						hist.setPrecioLista((double) costoPrecio[4]);
 						hist.setStock1(stock1);
 						hist.setStock2(stock2);
 						hist.setStock3(stock3);
@@ -24297,10 +24299,14 @@ class VentasClienteArticulo implements JRDataSource {
 			value = Utiles.getNumberFormat(this.totalSetiembre);
 		} else if ("tot_set_".equals(fieldName)) {
 			value = Utiles.getNumberFormat(this.totalSetiembre_);
-		}  else if ("Costo".equals(fieldName)) {
+		} else if ("Costo".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getCostoGs());
-		}  else if ("Mayorista".equals(fieldName)) {
+		} else if ("Mayorista".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getCostoFobGs());
+		} else if ("Minorista".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getPrecioMinorista());
+		} else if ("Lista".equals(fieldName)) {
+			value = Utiles.getNumberFormat(det.getPrecioLista());
 		} else if ("Total".equals(fieldName)) {
 			value = Utiles.getNumberFormat(det.getEnero_() + det.getFebrero_() + det.getMarzo_() + det.getAbril_()
 					+ det.getMayo_() + det.getJunio_() + det.getJulio_() + det.getAgosto_() + det.getSetiembre_()
