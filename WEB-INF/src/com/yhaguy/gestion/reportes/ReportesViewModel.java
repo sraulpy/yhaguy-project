@@ -6049,7 +6049,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				Deposito dep1 = depositos.size() > 0 ? depositos.get(0) : null;
 				Deposito dep2 = depositos.size() > 1 ? depositos.get(1) : null;
-				Deposito dep3 = depositos.size() > 2 ? depositos.get(2) : null;
+				Deposito dep3 = depositos.size() >= 2 ? depositos.get(2) : null;
 				
 				List<Deposito> deps1 = new ArrayList<Deposito>();
 				List<Deposito> deps2 = new ArrayList<Deposito>();
