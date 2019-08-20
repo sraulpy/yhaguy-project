@@ -534,6 +534,9 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	 */
 	private boolean isDatosValidos() throws Exception {
 		boolean out = true;
+		if (this.selectedMoneda.getSigla().equals(Configuracion.SIGLA_MONEDA_DOLAR)) {
+			return true;
+		}
 		this.mensaje = "NO SE PUDO GENERAR EL RECIBO DEBIDO A: \n";
 		double dif = this.getTotalImporteGs() - this.getTotalImporteFormasPagoGs();
 		if (dif > 100 || dif < -100) {
