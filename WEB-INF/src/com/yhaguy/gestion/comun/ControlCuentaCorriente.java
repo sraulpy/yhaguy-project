@@ -556,6 +556,27 @@ public class ControlCuentaCorriente {
 	}
 	
 	/**
+	 * verifica si corresponde desbloquear al cliente..
+	 */
+	public static void verificarBloqueoCliente(long idEmpresa, long idCliente, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Empresa emp = rr.getEmpresaById(idEmpresa);
+		
+		//rr.getCtaCteMovimientos(desde, hasta, caracter, idMoneda, siglaTm);
+		
+		if(emp.getAuxi().equals(Empresa.DESBLOQUEO_TEMPORAL)) {
+			emp.setAuxi("");
+			emp.setCuentaBloqueada(false);
+			emp.setMotivoBloqueo("Restauracion automática por cobro de facturas..");
+			rr.saveObject(emp, user);
+			
+			Cliente cli = rr.getClienteById(idCliente);
+			cli.setVentaCredito(true);
+			rr.saveObject(cli, user);
+		}
+	}
+	
+	/**
 	 * agregar movimiento gasto..
 	 */
 	public static void addGastoImportacion(Gasto gasto, String nroImportacion, long idEmpresa, String user) throws Exception {
