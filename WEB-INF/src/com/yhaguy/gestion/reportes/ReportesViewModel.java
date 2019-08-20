@@ -6690,6 +6690,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String SALDOS_CLIENTES_POR_PROVEEDOR = "TES-00055";
 		static final String ANTICIPOS_CLIENTES = "TES-00056";
 		static final String COBRANZAS_DETALLADO = "TES-00057";
+		static final String REEMBOLSOS_DETALLADO = "TES-00058";
 
 		/**
 		 * procesamiento del reporte..
@@ -6928,6 +6929,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case COBRANZAS_DETALLADO:
 				this.cobranzasDetallado(mobile, COBRANZAS_DETALLADO);
+				break;
+				
+			case REEMBOLSOS_DETALLADO:
+				this.reembolsosDetallado(mobile, REEMBOLSOS_DETALLADO);
 				break;
 			}
 		}
@@ -10147,6 +10152,35 @@ public class ReportesViewModel extends SimpleViewModel {
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos);
 			params.put("Titulo", codReporte + " - COBRANZAS DETALLADO POR CARTERA");
+			params.put("Usuario", getUs().getNombre());
+			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, formato);
+		}
+		
+		/**
+		 * reporte TES-00058
+		 */
+		private void reembolsosDetallado(boolean mobile, String codReporte) throws Exception {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();			
+			Date hasta = filtro.getFechaHasta();	
+			SucursalApp suc = filtro.getSelectedSucursal();
+			Object[] formato = filtro.getFormato();	
+			
+			long idSucursal = suc != null ? suc.getId() : 0;
+			
+			List<Recibo> recibos = rr.getReembolsosCheques(desde, hasta, idSucursal);
+		
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_REEMBOLSOS_DETALLADO;
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos);
+			params.put("Titulo", codReporte + " - REEMBOLSOS DE CHEQUES RECHAZADOS POR CARTERA");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
