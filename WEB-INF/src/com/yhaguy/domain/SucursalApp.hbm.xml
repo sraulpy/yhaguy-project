@@ -16,6 +16,10 @@
 		<property name="establecimiento" />
 		<property name="direccion" />
 		<property name="telefono" />
+		
+		<property name="saldoTransferencias">
+			<column name="saldoTransferencias" not-null="true" default="false" />
+		</property>
 
 		<set name="depositos" table="Deposito"
 			inverse="false" lazy="false" fetch="select" cascade="all">

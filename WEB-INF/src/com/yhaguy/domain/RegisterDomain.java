@@ -6744,10 +6744,10 @@ public class RegisterDomain extends Register {
 	public List<Articulo> getArticulos(long idFamilia, long idMarca, long idArticulo) throws Exception {
 		String query = "select a from Articulo a where a.dbEstado != 'D' and a.codigoInterno not like '@%'";
 		if (idFamilia != 0) {
-			query += " and a.articuloFamilia.id = " + idFamilia;
+			query += " and a.familia.id = " + idFamilia;
 		}
 		if (idMarca != 0) {
-			query += " and a.articuloMarca.id = " + idMarca;
+			query += " and a.marca.id = " + idMarca;
 		}
 		if (idArticulo != 0) {
 			query += " and a.id = " + idArticulo;
@@ -10718,7 +10718,7 @@ public class RegisterDomain extends Register {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void _main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<ImportacionPedidoCompra> imps = rr.getObjects(ImportacionPedidoCompra.class.getName());
@@ -10727,6 +10727,29 @@ public class RegisterDomain extends Register {
 					ImportacionFactura fac = imp.getImportacionFactura_().get(0);
 					fac.setCoeficiente(imp.getResumenGastosDespacho().getCoeficiente());
 					System.out.println(imp.getNumeroPedidoCompra());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Articulo> arts = rr.getArticulos(4, 0, 0);
+			Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), Deposito.ID_REFACTURACIONES);
+			for (Articulo art : arts) {
+				ArticuloDeposito ad = rr.getArticuloDeposito(art.getId(), Deposito.ID_REFACTURACIONES);
+				if (ad == null) {
+					ad = new ArticuloDeposito();
+					ad.setArticulo(art);
+					ad.setDeposito(dep);
+					ad.setStock(0);
+					ad.setStockMaximo(0);
+					ad.setStockMinimo(0);
+					rr.saveObject(ad, "sys");
+					System.out.println(art.getCodigoInterno());					
 				}
 			}
 		} catch (Exception e) {

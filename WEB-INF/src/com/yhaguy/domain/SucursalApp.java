@@ -19,6 +19,8 @@ public class SucursalApp extends Domain {
 	private String direccion;
 	private String telefono;
 	
+	private boolean saldoTransferencias;
+	
 	private Set<Deposito> depositos = new HashSet<Deposito>();
 	
 	@Override
@@ -72,5 +74,13 @@ public class SucursalApp extends Domain {
 
 	public void setDepositos(Set<Deposito> depositos) {
 		this.depositos = depositos;
+	}
+
+	public boolean isSaldoTransferencias() {
+		return saldoTransferencias;
+	}
+
+	public void setSaldoTransferencias(boolean saldoTransferencias) {
+		this.saldoTransferencias = saldoTransferencias;
 	}
 }

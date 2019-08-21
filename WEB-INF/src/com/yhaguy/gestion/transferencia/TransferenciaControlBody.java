@@ -40,6 +40,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Transferencia;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
@@ -405,6 +406,13 @@ public class TransferenciaControlBody extends BodyApp {
 	 * actualiza cta cte..
 	 */
 	private void actualizarCtaCte() throws Exception {
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		SucursalApp suc = rr.getSucursalAppById(this.getSucursal().getId());
+		if (!suc.isSaldoTransferencias()) {
+			return;
+		}
+		
 		ControlCtaCteEmpresa ctacte = new ControlCtaCteEmpresa(null);
 		MyPair emp = new MyPair();
 		emp.setId(Configuracion.ID_EMPRESA_YHAGUY_CENTRAL);
