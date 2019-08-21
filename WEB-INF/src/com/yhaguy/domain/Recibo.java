@@ -62,6 +62,22 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return el saldo en extracto..
+	 */
+	public double getSaldoCtaCte() {		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			CtaCteEmpresaMovimiento ccm = rr.getCtaCteMovimientoByIdMovimiento(this.getId(), this.getTipoMovimiento().getSigla());
+			if (ccm != null) {
+				return ccm.getSaldo();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	/**
 	 * @return true si es anulado..
 	 */
 	public boolean isAnulado() {

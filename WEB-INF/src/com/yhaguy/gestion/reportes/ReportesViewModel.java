@@ -10119,7 +10119,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Recibo> cobranzas = rr.getAnticipos(desde, hasta, idSucursal, idCliente);
 				
-				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_ANTICIPOS;
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_);
 				params.put("Usuario", getUs().getNombre());
@@ -16528,9 +16528,9 @@ class ListadoCobranzasDataSource implements JRDataSource {
 	String sucursal;
 
 	double totalImporte = 0;
+	double totalSaldo = 0;
 
-	public ListadoCobranzasDataSource(List<Recibo> recibos, Date desde,
-			Date hasta, String sucursal) {
+	public ListadoCobranzasDataSource(List<Recibo> recibos, Date desde, Date hasta, String sucursal) {
 		this.recibos = recibos;
 		this.desde = desde;
 		this.hasta = hasta;
@@ -16555,6 +16555,8 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			value = this.sucursal;
 		} else if ("TotalImporte".equals(fieldName)) {
 			value = FORMATTER.format(this.totalImporte);
+		} else if ("TotalSaldo".equals(fieldName)) {
+			value = FORMATTER.format(this.totalSaldo);
 		}
 		return value;
 	}
@@ -16573,13 +16575,16 @@ class ListadoCobranzasDataSource implements JRDataSource {
 	 */
 	private void loadDatos() {
 		for (Recibo recibo : this.recibos) {
+			double saldo_ = recibo.getSaldoCtaCte();
 			String fecha = misc.dateToString(recibo.getFechaEmision(), Misc.DD_MM_YYYY);
 			String numero = recibo.getNumero();
 			String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
 			String ruc = recibo.getCliente().getRuc();
 			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
-			values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe));
+			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
+			values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
 			this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+			this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
 		}
 	}
 }

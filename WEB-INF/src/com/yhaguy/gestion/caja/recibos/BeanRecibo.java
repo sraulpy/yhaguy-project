@@ -7,14 +7,16 @@ public class BeanRecibo {
 	private String razonSocial;
 	private String ruc;
 	private String importe;
+	private String saldo;
 
 	public BeanRecibo(String fecha, String numero, String razonSocial,
-			String ruc, String importe) {
+			String ruc, String importe, String saldo) {
 		this.fecha = fecha;
 		this.numero = numero;
 		this.razonSocial = razonSocial;
 		this.ruc = ruc;
 		this.importe = importe;
+		this.saldo = saldo;
 	}
 
 	public String getFecha() {
@@ -55,5 +57,13 @@ public class BeanRecibo {
 
 	public void setImporte(String importe) {
 		this.importe = importe;
+	}
+
+	public String getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(String saldo) {
+		this.saldo = saldo;
 	}
 }
