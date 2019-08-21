@@ -154,6 +154,9 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private Popup popDetalleRecibo;
 	
 	@Wire
+	private Popup popDetalleCheque;
+	
+	@Wire
 	private Popup popMenu;
 	
 	@Wire
@@ -347,6 +350,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		this.setDetalles(item);
 		if (this.isRecibo(String.valueOf(item.getPos8()))) {
 			this.popDetalleRecibo.open(parent, "start_before");
+		} else if (this.isChequeRechazado(String.valueOf(item.getPos8()))) {
+			this.popDetalleCheque.open(parent, "start_before");
 		} else {
 			this.popDetalle.open(parent, "start_before");
 		}
@@ -703,6 +708,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			}
 			for (ReciboFormaPago fp : rec.getFormasPago()) {
 				formasPago.add(new MyArray(fp.getDescripcion(), fp.getMontoGs()));
+			}
+		}  else if (this.isChequeRechazado(sigla)) {
+			BancoChequeTercero che = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), idmovimiento);
+			if (che != null) {
+				this.detalle.setDescripcion(che.getBanco().getDescripcion());
+				this.detalle.setLibrador(che.getLibrado());
+				this.detalle.setMotivo(che.getObservacion());
+				this.detalle.setFechaRechazo(che.getFechaRechazo());
 			}
 		}		
 		this.detalle.setDetalles(detalles);
@@ -2072,6 +2085,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		
 		private Date emision; 
 		private Date vencimiento;
+		private Date fechaRechazo;
 		private String numero;
 		private String numeroPlanilla;
 		private String facturaAplicada;
@@ -2084,6 +2098,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		private List<MyArray> formasPago;
 		private String agrupador;
 		private String descripcion;
+		private String librador;
 		private long idMovimiento;
 		
 		private List<DetalleMovimiento> aplicaciones = new ArrayList<DetalleMovimiento>();
@@ -2366,6 +2381,22 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 		public void setTipoMovimiento_(String tipoMovimiento_) {
 			this.tipoMovimiento_ = tipoMovimiento_;
+		}
+
+		public String getLibrador() {
+			return librador;
+		}
+
+		public void setLibrador(String librador) {
+			this.librador = librador;
+		}
+
+		public Date getFechaRechazo() {
+			return fechaRechazo;
+		}
+
+		public void setFechaRechazo(Date fechaRechazo) {
+			this.fechaRechazo = fechaRechazo;
 		}		
 	}
 	
@@ -2506,6 +2537,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	 */
 	private boolean isAnticipoCobro(String sigla) {
 		return sigla.equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
+	}
+	
+	/**
+	 * @return true si es un movimiento de cheque rechazado..
+	 */
+	private boolean isChequeRechazado(String sigla) {
+		return sigla.equals(Configuracion.SIGLA_TM_CHEQUE_RECHAZADO);
 	}
 	
 	/**

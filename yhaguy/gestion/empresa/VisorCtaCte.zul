@@ -758,6 +758,51 @@
 			</tabpanels>
 		</tabbox>
 	</popup>
+	
+	<popup id="popDetalleCheque" width="500px" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="@load(vm.detalle.tipoMovimiento)" />
+			</hbox>
+			<button onClick="popDetalleCheque.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="3px"></div>
+		<grid sclass="vgrid" style="margin:10px">
+			<columns>
+				<column width="30%"></column>
+				<column></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Banco:" />
+					<label value="@load(vm.detalle.descripcion)" />
+				</row>
+				<row>
+					<field value="Fecha del Cheque:" />
+					<label value="@load(vm.detalle.emision) @converter('formattedDate', format='dd-MM-yyyy')" />
+				</row>
+				<row>
+					<field value="Cheque Nro." />
+					<label value="@load(vm.detalle.numero)" />
+				</row>
+				<row>
+					<field value="Librador:" />
+					<label value="@load(vm.detalle.librador)" />
+				</row>
+				<row>
+					<field value="Motivo:" />
+					<label value="@load(vm.detalle.motivo)" />
+				</row>
+				<row>
+					<field value="Fecha de rechazo:" />
+					<label value="@load(vm.detalle.fechaRechazo) @converter('formattedDate', format='dd-MM-yyyy')" />
+				</row>
+			</rows>
+		</grid>
+	</popup>
 
 	<popup id="popMenu" width="350px" sclass="rounded">
 		<hbox align="end" pack="end" width="100%"
