@@ -563,6 +563,7 @@ public class VentaControlBody extends BodyApp {
 		out.setVehiculoMarca(desde.getVehiculoMarca());
 		out.setVehiculoModelo(desde.getVehiculoModelo());
 		out.setFormaEntrega(desde.getFormaEntrega());
+		out.setCartera(desde.getCartera());
 
 		if (crearPedido == true) {
 			out.setAtendido(this.getAcceso().getFuncionario());
@@ -1198,6 +1199,7 @@ public class VentaControlBody extends BodyApp {
 		
 		if (this.validarFormulario() == true) {
 			
+			this.dto.setCartera((String) this.dto.getCliente().getPos14());
 			this.dto.setEstado(estado_PedidoCerrado);
 			this.dto = (VentaDTO) this.saveDTO(this.dto);
 			this.mensajePopupTemporal("Pedido Correctamente Aprobado..");
@@ -1495,7 +1497,7 @@ public class VentaControlBody extends BodyApp {
 	 * @return [0]: total del importe en moneda local
 	 * @return [1]: total del importe en moneda extranjera
 	 */
-	public Object[] getDatosVenta(){
+	public Object[] getDatosVenta() {
 		
 		double totalImporteGs = 0;
 		double totalImporteDs = 0;
@@ -1714,7 +1716,6 @@ public class VentaControlBody extends BodyApp {
 	@Override
 	public boolean verificarAlGrabar() {
 		boolean out = false;
-		
 		try {
 			this.dto.setDenominacion((String) this.dto.getCliente().getPos2());
 			out = this.validarFormulario();
@@ -1734,7 +1735,6 @@ public class VentaControlBody extends BodyApp {
 			}
 			
 			if (out == true) {				
-				
 				//Verifica si hubo modificaciones para agregar el dato en la agenda.
 				if ((this.dto.esNuevo() == false) && (this.siHuboCambiosEnDTO() == true)) {
 					

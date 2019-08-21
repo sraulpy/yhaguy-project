@@ -3496,7 +3496,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					(int) fac.getCondicionPago().getPos2(), 1,
 					importeOriginal, 0, (importeOriginal - this.dto.getTotalAnticipoAplicadoDs()), moneda,
 					tipoMovimiento, this.getDtoUtil().getCtaCteEmpresaCaracterMovProveedor(), sucursal, "", 
-					this.dto.getResumenGastosDespacho().getTipoCambio());			
+					this.dto.getResumenGastosDespacho().getTipoCambio(), "");			
 		}
 		
 		for (ImportacionAplicacionAnticipoDTO anticipo : this.dto.getAplicacionAnticipos()) {

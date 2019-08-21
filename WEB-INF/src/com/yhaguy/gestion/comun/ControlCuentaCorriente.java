@@ -577,7 +577,7 @@ public class ControlCuentaCorriente {
 		if(desbloquear) {
 			emp.setAuxi("");
 			emp.setCuentaBloqueada(false);
-			emp.setMotivoBloqueo("Restauracion automática por cobro de facturas..");
+			emp.setMotivoBloqueo("Restauracion automatica por cobro de facturas..");
 			rr.saveObject(emp, user);
 			
 			Cliente cli = rr.getClienteById(idCliente);

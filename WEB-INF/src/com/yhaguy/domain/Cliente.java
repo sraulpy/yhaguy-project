@@ -202,6 +202,14 @@ public class Cliente extends Domain {
 
 	public void setIdEmpresa(long idEmpresa) {
 	}
+	
+	public String getCartera() {
+		if (empresa.getCartera() == null) return EmpresaCartera.SIN_CARTERA;
+		return empresa.getCartera().getDescripcion();
+	}
+
+	public void setCartera(String cartera) {
+	}
 
 	public String getRazonSocial() {
 		String razonSocial = this.empresa.getRazonSocial();

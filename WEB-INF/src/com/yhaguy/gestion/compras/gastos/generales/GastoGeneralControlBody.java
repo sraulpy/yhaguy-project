@@ -474,7 +474,7 @@ public class GastoGeneralControlBody extends GastoSubDiarioControlBody {
 						gasto.getId() , gasto.getNumeroFactura(), gasto.getFecha(),
 						0, 1, importe, 0, importe, moneda, gasto.getTipoMovimiento(),
 						caracter, sucursal, gasto.getNumeroImportacion(),
-						gasto.getTipoCambio());
+						gasto.getTipoCambio(), "");
 				
 			} else if (sigla
 					.compareTo(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO) == 0) {

@@ -51,6 +51,7 @@ public class VentaDTO extends DTO {
 	private String 	observacion = "sin obs..";
 	private String 	preparadoPor = "";
 	private String 	obsReparto = "";
+	private String  cartera = "";
 	private MyArray moneda = new MyArray();
 	private MyPair 	modoVenta = new MyPair();
 	private MyPair estadoComprobante;
@@ -953,5 +954,13 @@ public class VentaDTO extends DTO {
 
 	public void setChequesEliminar(List<BancoChequeTercero> chequesEliminar) {
 		this.chequesEliminar = chequesEliminar;
+	}
+
+	public String getCartera() {
+		return cartera;
+	}
+
+	public void setCartera(String cartera) {
+		this.cartera = cartera;
 	}
 }

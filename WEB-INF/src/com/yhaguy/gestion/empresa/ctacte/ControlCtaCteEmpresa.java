@@ -511,7 +511,7 @@ public class ControlCtaCteEmpresa extends Control {
 		nuevoMovimientoDTO.setTipoCaracterMovimiento(tipoCaracterMovimiento);
 		nuevoMovimientoDTO.setSucursal(sucursal);
 
-		this.addMovimiento(nuevoMovimientoDTO);
+		this.addMovimiento(nuevoMovimientoDTO, "");
 	}
 
 	/**
@@ -579,7 +579,7 @@ public class ControlCtaCteEmpresa extends Control {
 	public void addCtaCteEmpresaMovimientoFacturaCredito(IiD empresa, long idMovimientoOriginal, String nroComprobante,
 			Date fechaEmision, int diasEntreVencimientos, int cuotasVencimiento, double importeOriginal,
 			double entregaInicial, double saldo, MyPair moneda, MyArray tipoMovimiento, MyPair tipoCaracterMovimiento,
-			MyArray sucursal, String numeroImportacion, double tipoCambio) throws Exception {
+			MyArray sucursal, String numeroImportacion, double tipoCambio, String cartera) throws Exception {
 
 		CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO = new CtaCteEmpresaMovimientoDTO();
 		nuevoMovimientoDTO.setIdEmpresa(empresa.getId());
@@ -598,7 +598,7 @@ public class ControlCtaCteEmpresa extends Control {
 			nuevoMovimientoDTO.setImporteOriginal(entregaInicial);
 			nuevoMovimientoDTO.setNroComprobante(nroComprobante + "");
 			nuevoMovimientoDTO.setSaldo(0);
-			this.addMovimiento(nuevoMovimientoDTO);
+			this.addMovimiento(nuevoMovimientoDTO, cartera);
 
 			for (int i = 1; i <= cuotasVencimiento; i++) {
 
@@ -606,7 +606,7 @@ public class ControlCtaCteEmpresa extends Control {
 				nuevoMovimientoDTO.setNroComprobante(nroComprobante + "");
 				nuevoMovimientoDTO.setImporteOriginal(importeOriginal);
 				nuevoMovimientoDTO.setSaldo(importeOriginal / cuotasVencimiento);
-				this.addMovimiento(nuevoMovimientoDTO);
+				this.addMovimiento(nuevoMovimientoDTO, cartera);
 			}
 
 		} else {
@@ -617,7 +617,7 @@ public class ControlCtaCteEmpresa extends Control {
 				nuevoMovimientoDTO.setNroComprobante(nroComprobante + "");
 				nuevoMovimientoDTO.setImporteOriginal(importeOriginal);
 				nuevoMovimientoDTO.setSaldo(saldo / cuotasVencimiento);
-				this.addMovimiento(nuevoMovimientoDTO);
+				this.addMovimiento(nuevoMovimientoDTO, cartera);
 			}
 
 		}
@@ -633,9 +633,9 @@ public class ControlCtaCteEmpresa extends Control {
 	 * @throws Exception
 	 * 
 	 */
-	public void addMovimiento(CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO) throws Exception {
-		EmpresaCartera cartera = rr.getCartera(EmpresaCartera.CORRIENTE);
-		long idCartera = cartera != null? cartera.getId() : 1;
+	public void addMovimiento(CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO, String cartera) throws Exception {
+		EmpresaCartera cartera_ = rr.getCartera(cartera);
+		long idCartera = cartera_ != null? cartera_.getId() : 1;
 		CtaCteEmpresaMovimiento nuevoMovimientoDom = (CtaCteEmpresaMovimiento) movimientoAss.dtoToDomain(nuevoMovimientoDTO);
 		nuevoMovimientoDom.setCarteraCliente((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), idCartera));		
 		rr.saveObject(nuevoMovimientoDom, this.getLoginNombre());
@@ -979,7 +979,7 @@ public class ControlCtaCteEmpresa extends Control {
 		nuevoMovimientoDTO.setTipoCaracterMovimiento(tipoCaracterMovimiento);
 		nuevoMovimientoDTO.setSucursal(sucursal);
 
-		this.addMovimiento(nuevoMovimientoDTO);
+		this.addMovimiento(nuevoMovimientoDTO, "");
 	}
 
 	/**
@@ -1035,7 +1035,7 @@ public class ControlCtaCteEmpresa extends Control {
 		nuevoMovimientoDTO.setTipoCaracterMovimiento(tipoCaracterMovimiento);
 		nuevoMovimientoDTO.setSucursal(sucursal);
 
-		this.addMovimiento(nuevoMovimientoDTO);
+		this.addMovimiento(nuevoMovimientoDTO, "");
 	}
 
 	// ******************************************UTILES*******************************************//

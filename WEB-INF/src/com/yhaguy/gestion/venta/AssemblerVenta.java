@@ -23,16 +23,15 @@ import com.yhaguy.gestion.empresa.ClienteDTO;
 
 public class AssemblerVenta extends Assembler {
 
-	private static String[] attIgualesVenta = { "idEnlaceSiguiente", "fecha",
-			"vencimiento", "cuotas", "numero", "timbrado", "tipoCambio", "observacion", "preparadoPor",
-			"numeroPresupuesto", "numeroPedido", "numeroFactura", "numeroPlanillaCaja",
-			"totalImporteGs", "totalImporteDs", "reparto",
-			"puntoPartida", "fechaTraslado", "fechaFinTraslado", "repartidor",
-			"cedulaRepartidor", "marcaVehiculo", "chapaVehiculo", "denominacion", "validez", "formaEntrega" };
+	private static String[] attIgualesVenta = { "idEnlaceSiguiente", "fecha", "vencimiento", "cuotas", "numero",
+			"timbrado", "tipoCambio", "observacion", "preparadoPor", "numeroPresupuesto", "numeroPedido",
+			"numeroFactura", "numeroPlanillaCaja", "totalImporteGs", "totalImporteDs", "reparto", "puntoPartida",
+			"fechaTraslado", "fechaFinTraslado", "repartidor", "cedulaRepartidor", "marcaVehiculo", "chapaVehiculo",
+			"denominacion", "validez", "formaEntrega", "cartera" };
 
-	private static String[] attCliente = { "codigoEmpresa", "razonSocial",
-			"ruc", "idEmpresa", "tipoCliente", "direccion", "telefono",
-			"nombreFantasia", "cuentaBloqueada", "nombre", "ventaCredito", "limiteCredito", "descuentoMayorista" };
+	private static String[] attCliente = { "codigoEmpresa", "razonSocial", "ruc", "idEmpresa", "tipoCliente",
+			"direccion", "telefono", "nombreFantasia", "cuentaBloqueada", "nombre", "ventaCredito", "limiteCredito",
+			"descuentoMayorista", "cartera" };
 
 	private static String[] attTipo = { "descripcion", "sigla" };
 
@@ -111,10 +110,8 @@ public class AssemblerVenta extends Assembler {
 		this.domainToMyArray(dom, dto, "moneda", attTipo);
 		this.domainToMyPair(domain, dto, "modoVenta");
 		this.domainToMyPair(domain, dto, "estadoComprobante");
-		this.listaDomainToListaDTO(domain, dto, "formasPago",
-				new AssemblerReciboFormaPago(dto.getNumero()));
-		this.listaDomainToListaDTO(dom, dto, "detalles",
-				new AssemblerVentaPedidoDetalle());
+		this.listaDomainToListaDTO(domain, dto, "formasPago", new AssemblerReciboFormaPago(dto.getNumero()));
+		this.listaDomainToListaDTO(dom, dto, "detalles", new AssemblerVentaPedidoDetalle());
 		
 		dto.setVehiculoTipo(dom.getVehiculoTipo());
 		dto.setVehiculoMarca(dom.getVehiculoMarca());
