@@ -32,19 +32,27 @@
 			<auxheader />
 			<auxheader>
 				<textbox hflex="true" value="@bind(vm.ruc)"
-					instant="true" id="tbox_cod" sclass="filter" />
+					instant="true" id="tbox_cod" sclass="filter" 
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 			</auxheader>
 			<auxheader>
 				<textbox hflex="true" value="@bind(vm.cedula)"
-					instant="true" sclass="filter" />
+					instant="true" sclass="filter" 
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 			</auxheader>
 			<auxheader>
 				<textbox hflex="true" value="@bind(vm.razonSocial)"
-					instant="true" sclass="filter" />
+					instant="true" sclass="filter" 
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 			</auxheader>
 			<auxheader>
 				<textbox hflex="true" value="@bind(vm.nombreFantasia)"
-					instant="true" sclass="filter" />
+					instant="true" sclass="filter" 
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 			</auxheader>
 		</auxhead>
 		<template name="model">
