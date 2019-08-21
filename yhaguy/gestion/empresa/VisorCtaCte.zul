@@ -190,15 +190,21 @@
 				<auxheader/>
 				<auxheader>
 					<textbox sclass="filter" hflex="true"
-						value="@bind(vm.concepto)" instant="true"></textbox>
+						value="@bind(vm.concepto)" instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 				</auxheader>
 				<auxheader>
 					<textbox sclass="filter" hflex="true"
-						value="@bind(vm.numero)" instant="true"></textbox>
+						value="@bind(vm.numero)" instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 				</auxheader>
 				<auxheader visible="@load(!vm.tipoCliente)">
 					<textbox sclass="filter" hflex="true"
-						value="@bind(vm.numeroImportacion)" instant="true"></textbox>
+						value="@bind(vm.numeroImportacion)" instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 				</auxheader>
 				<auxheader/>
 				<auxheader/>
