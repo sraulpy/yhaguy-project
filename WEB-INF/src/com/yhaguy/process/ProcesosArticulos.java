@@ -302,8 +302,6 @@ public class ProcesosArticulos {
 				List<Object[]> compras = rr.getComprasLocalesPorArticulo(idarticulo, desde_, hasta_);
 				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idarticulo, desde_, hasta_);
 				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idarticulo, desde_, hasta_);
-				//List<Object[]> transfs = rr.getTransferenciasPorArticulo(idarticulo, iddeposito, desde_, hasta_, true);
-				//List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idarticulo, iddeposito, desde_, hasta_, false);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idarticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idarticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				List<Object[]> migracion = rr.getMigracionPorArticulo(adp.getArticulo().getCodigoInterno(), desde_, hasta_, idSucursal);
@@ -349,7 +347,7 @@ public class ProcesosArticulos {
 			}			
 		}
 		
-		for (long i = 2; i <= 12; i++) {
+		for (long i = 2; i <= 16; i++) {
 			if (i != idDepositoControl ) {
 				List<ArticuloDeposito> adps_ = new ArrayList<ArticuloDeposito>();
 				if (idArticulo <= 0) {
