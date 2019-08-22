@@ -10218,7 +10218,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 			
 			case MATRIZ_REPOSICION_MERCADERIAS:
-				this.matrizReposicion();
+				this.matrizReposicion(MATRIZ_REPOSICION_MERCADERIAS);
 				break;
 				
 			case ULTIMO_COSTO_ARTICULOS:
@@ -10349,17 +10349,14 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * matriz para reposicion de mercaderias..		
 		 */
-		private void matrizReposicion() {
+		private void matrizReposicion(String codReporte) {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Proveedor proveedor = filtro.getProveedorExterior();
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 				
 				if (proveedor == null) {
 					Clients.showNotification("Debe seleccionar un proveedor..", 
@@ -10368,40 +10365,34 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Venta> ventas = rr.getVentas(desde, hasta, 0);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, 0, 0, proveedor.getId(), 0, 0, "");
 				List<Object[]> data = new ArrayList<Object[]>();
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
 				
-				for (Venta venta : ventas) {
-					int mes = Utiles.getNumeroMes(venta.getFecha()) - 1;
-					if (!venta.isAnulado()) {
-						for (VentaDetalle item : venta.getDetalles()) {
-							if (item.getArticulo().isProveedor(proveedor.getId())) {
-								String cod = item.getArticulo().getCodigoInterno();
-								String key = cod + "-" + mes;
-								Object[] acum = values.get(key);
-								Object[] datos = rr.getStockCosto(item.getArticulo().getId());
-								long stock = (long) datos[0];
-								double costo = (double) datos[1];
-								if (acum != null) {
-									long cant = (long) acum[0];
-									cant += item.getCantidad();
-									values.put(key, new Object[] { cant, mes, cod, stock, costo });
-								} else {
-									values.put(key,
-											new Object[] { item.getCantidad(), mes, cod, stock, costo });
-								}
-							}														
-						}
-					}
+				for (Object[] venta : ventas) {
+					int mes = Utiles.getNumeroMes((Date) venta[4]) - 1;
+					String cod = (String) venta[1];
+					String key = cod + "-" + mes;
+					long idArticulo = (long) venta[0];
+					Object[] acum = values.get(key);
+					
+					long stock = rr.getStockArticulo(idArticulo);
+					double costo = (double) rr.getCostoPrecio(cod)[1];
+					if (acum != null) {
+						double cant = (double) acum[0];
+						cant += ((double) venta[3]);
+						values.put(key, new Object[] { cant, mes, cod, stock, costo });
+					} else {
+						values.put(key, new Object[] { (double) venta[3], mes, cod, stock, costo });
+					}				
 				}
 				
 				for (String key : values.keySet()) {
 					Object[] value = values.get(key);
 					String cod = (String) value[2];
 					int mes = (int) value[1];
-					long cant = (long) value[0];
+					double cant = (double) value[0];
 					long stock = (long) value[3];
 					double costo = (double) value[4];
 					Object[] value_ = values_.get(cod);
@@ -10409,10 +10400,10 @@ public class ReportesViewModel extends SimpleViewModel {
 						value_[mes] = cant;
 						values_.put(cod, value_);
 					} else {
-						Object[] datos = new Object[] { (long) 0, (long) 0,
-								(long) 0, (long) 0, (long) 0, (long) 0,
-								(long) 0, (long) 0, (long) 0, (long) 0,
-								(long) 0, (long) 0, stock, costo };
+						Object[] datos = new Object[] { (double) 0, (double) 0,
+								(double) 0, (double) 0, (double) 0, (double) 0,
+								(double) 0, (double) 0, (double) 0, (double) 0,
+								(double) 0, (double) 0, stock, costo };
 						datos[mes] = cant;
 						values_.put(cod, datos);
 					}
@@ -10420,26 +10411,26 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (String key : values_.keySet()) {
 					Object[] value_ = values_.get(key);
-					List<Long> list = new ArrayList<Long>();
-					list.add((Long) value_[0]);
-					list.add((Long) value_[1]);
-					list.add((Long) value_[2]);
-					list.add((Long) value_[3]);
-					list.add((Long) value_[4]);
-					list.add((Long) value_[5]);
-					list.add((Long) value_[6]);
-					list.add((Long) value_[7]);
-					list.add((Long) value_[8]);
-					list.add((Long) value_[9]);
-					list.add((Long) value_[10]);
-					list.add((Long) value_[11]);
-					long max = Collections.max(list);
-					long sum = 0;
+					List<Double> list = new ArrayList<Double>();
+					list.add((Double) value_[0]);
+					list.add((Double) value_[1]);
+					list.add((Double) value_[2]);
+					list.add((Double) value_[3]);
+					list.add((Double) value_[4]);
+					list.add((Double) value_[5]);
+					list.add((Double) value_[6]);
+					list.add((Double) value_[7]);
+					list.add((Double) value_[8]);
+					list.add((Double) value_[9]);
+					list.add((Double) value_[10]);
+					list.add((Double) value_[11]);
+					double max = Collections.max(list);
+					double sum = 0;
 					int size = (Utiles.getNumeroMes(hasta) + 1) - Utiles.getNumeroMes(desde);
-					for (Long value : list) {
+					for (Double value : list) {
 						sum += value;
 					}
-					long prom = sum / size;
+					double prom = sum / size;
 					data.add(new Object[] { key, 0.0, value_[13], value_[0],
 							value_[1], value_[2], value_[3], value_[4],
 							value_[5], value_[6], value_[7], value_[8],
@@ -10447,12 +10438,21 @@ public class ReportesViewModel extends SimpleViewModel {
 							max, prom });
 				}
 				
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						String cod1 = (String) o1[0];
+						String cod2 = (String) o2[0];
+						int compare = cod1.compareTo(cod2);				
+						return compare;
+					}
+				});	
+				
 				String proveedor_ = proveedor.getRazonSocial();
-				String titulo = ReporteMatrizReposicion.MATRIZ_REPOSICION;
+				String titulo = codReporte + "-" + ReporteMatrizReposicion.MATRIZ_REPOSICION;
 				ReporteMatrizReposicion rep = new ReporteMatrizReposicion(desde, hasta, proveedor_, getSucursal(), titulo);
 				rep.setDatosReporte(data);
-				rep.setApaisada();
-				
+				rep.setApaisada();			
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
@@ -19922,21 +19922,21 @@ class ReporteMatrizReposicion extends ReporteYhaguy {
 	static DatosColumnas col0 = new DatosColumnas("Código", TIPO_STRING);
 	static DatosColumnas col1 = new DatosColumnas("Costo Ds", TIPO_DOUBLE_DS, 80);
 	static DatosColumnas col2 = new DatosColumnas("Costo Gs", TIPO_DOUBLE_GS, 80);
-	static DatosColumnas col3 = new DatosColumnas("Ene", TIPO_LONG, 50, true);
-	static DatosColumnas col4 = new DatosColumnas("Feb", TIPO_LONG, 50, true);
-	static DatosColumnas col5 = new DatosColumnas("Mar", TIPO_LONG, 50, true);
-	static DatosColumnas col6 = new DatosColumnas("Abr", TIPO_LONG, 50, true);
-	static DatosColumnas col7 = new DatosColumnas("May", TIPO_LONG, 50, true);
-	static DatosColumnas col8 = new DatosColumnas("Jun", TIPO_LONG, 50, true);
-	static DatosColumnas col9 = new DatosColumnas("Jul", TIPO_LONG, 50, true);
-	static DatosColumnas col10 = new DatosColumnas("Ago", TIPO_LONG, 50, true);
-	static DatosColumnas col11 = new DatosColumnas("Set", TIPO_LONG, 50, true);
-	static DatosColumnas col12 = new DatosColumnas("Oct", TIPO_LONG, 50, true);
-	static DatosColumnas col13 = new DatosColumnas("Nov", TIPO_LONG, 50, true);
-	static DatosColumnas col14 = new DatosColumnas("Dic", TIPO_LONG, 50, true);
+	static DatosColumnas col3 = new DatosColumnas("Ene", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col4 = new DatosColumnas("Feb", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col5 = new DatosColumnas("Mar", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col6 = new DatosColumnas("Abr", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col7 = new DatosColumnas("May", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col8 = new DatosColumnas("Jun", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col9 = new DatosColumnas("Jul", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col10 = new DatosColumnas("Ago", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col11 = new DatosColumnas("Set", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col12 = new DatosColumnas("Oct", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col13 = new DatosColumnas("Nov", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col14 = new DatosColumnas("Dic", TIPO_DOUBLE, 50, true);
 	static DatosColumnas col15 = new DatosColumnas("Stock", TIPO_LONG, 50);
-	static DatosColumnas col16 = new DatosColumnas("Max", TIPO_LONG, 50);
-	static DatosColumnas col17 = new DatosColumnas("Prom", TIPO_LONG, 50);
+	static DatosColumnas col16 = new DatosColumnas("Max", TIPO_DOUBLE, 50);
+	static DatosColumnas col17 = new DatosColumnas("Prom", TIPO_DOUBLE, 50);
 	
 	public ReporteMatrizReposicion(Date desde, Date hasta, String proveedor, String sucursal, String titulo) {
 		this.desde = desde;
