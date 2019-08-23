@@ -77,6 +77,9 @@ public class Utiles {
 	public static final String NRO_NOVIEMBRE_ = "11";
 	public static final String NRO_DICIEMBRE_ = "12";
 	
+	public static final String ANHO_2012 = "2012";
+	public static final String ANHO_2013 = "2013";
+	public static final String ANHO_2014 = "2014";
 	public static final String ANHO_2015 = "2015";
 	public static final String ANHO_2016 = "2016";
 	public static final String ANHO_2017 = "2017";

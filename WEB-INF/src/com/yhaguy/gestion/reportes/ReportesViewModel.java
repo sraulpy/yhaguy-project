@@ -9084,7 +9084,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String periodo = filtro.getAnhoDesde();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
-				Date desde = Utiles.getFecha("01-01-2016 00:00:00");		
+				Date desde = Utiles.getFecha("01-01-2012 00:00:00");		
 				Date hasta = new Date();
 				Tipo moneda = filtro.getMoneda();
 				EmpresaCartera cartera = filtro.getCartera();
