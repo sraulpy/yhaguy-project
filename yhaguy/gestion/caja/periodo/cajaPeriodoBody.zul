@@ -82,45 +82,45 @@
 		<hlayout sclass="button-container"
 			visible="@load(vm.botoneraVisible)"
 			id="botonera">
-			<button mold="bs" sclass="btn-info btn-sm" width="105px"
+			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('abrirVentanaRecibo', tipo=4)"
 				disabled="@load(!vm.dto.caja.cobro)" label=" Cobro" />
-			<button mold="bs" sclass="btn-primary btn-sm" width="105px"
+			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				disabled="@load(!vm.dto.caja.cobro)" label=" Reembolsos" 
 				onClick='popReembolso.open(self)'/>
-			<button mold="bs" sclass="btn-success btn-sm" width="105px"
+			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('abrirVentanaReposicion', tipo=2)"
 				disabled="@load(!vm.dto.caja.reposicion)" label=" Reposición" />	
-			<button mold="bs" sclass="btn-warning btn-sm" width="105px"
+			<button mold="bs" sclass="btn-warning btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('facturar', tipo=4)"
 				disabled="@load(!vm.dto.caja.facturacion)" label=" Facturación" />
 			<space width="30px" />
-			<button mold="bs" sclass="btn-info btn-sm" width="105px"
+			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('abrirVentanaRecibo', tipo=1)"
 				disabled="@load(!vm.dto.caja.pago)" label=" Pago" />	
-			<button mold="bs" sclass="btn-primary btn-sm" width="105px"
+			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('showFormGastos')"
 				disabled="@load(!vm.dto.caja.gasto)" label=" Gasto" />
-			<button mold="bs" sclass="btn-success btn-sm" width="105px"
+			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('abrirVentanaReposicion', tipo=3)"
 				disabled="@load(!vm.dto.caja.egreso)" label=" Egreso" />	
-			<button mold="bs" sclass="btn-warning btn-sm" width="105px"
+			<button mold="bs" sclass="btn-warning btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('devolucionConNotaDeCredito')"
 				disabled="@load(!vm.dto.caja.notaCredito)" label=" N. Crédito" />			
 			<space hflex="true" />
-			<button mold="bs" sclass="btn-primary btn-sm" width="105px"
+			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-print"
 				onClick="@command('imprimirItem')"
 				disabled="@load(vm.selectedItem eq null)" label=" Imprimir" />	
-			<button mold="bs" sclass="btn-danger btn-sm" width="105px"
+			<button mold="bs" sclass="btn-danger btn-sm" hflex="true"
 				iconSclass="z-icon-lock"
 				onClick="@command('cerrarCaja')"
 				disabled="@load(vm.dto.detalles.size() eq 0 or vm.abrirCajaDisabled)" label=" Cerrar" />	

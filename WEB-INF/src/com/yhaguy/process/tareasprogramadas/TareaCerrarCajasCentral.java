@@ -26,7 +26,7 @@ public class TareaCerrarCajasCentral {
 				
 				for (CajaPeriodo caja : cajas) {
 					if (caja.getCaja().getSucursal().getId() == SucursalApp.ID_CENTRAL) {
-						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile()) {
+						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile() || caja.isCajaCobrosMobileInterior()) {
 							caja.setDbEstado('R');
 							caja.setCierre(fecha);
 							caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
@@ -56,7 +56,7 @@ public class TareaCerrarCajasCentral {
 				
 				for (CajaPeriodo caja : cajas) {
 					if (caja.getCaja().getSucursal().getId() == SucursalApp.ID_MCAL) {
-						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile()) {
+						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile() || caja.isCajaCobrosMobileInterior()) {
 							caja.setDbEstado('R');
 							caja.setCierre(fecha);
 							caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
