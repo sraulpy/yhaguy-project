@@ -137,15 +137,27 @@
 
 		<hlayout sclass="button-container"
 			visible="@load(vm.dto.readonly)">
-			<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-print"
 				onClick="@command('reporteCajaPlanilla')"
 				disabled="@load(!vm.siempreHabilitado)" label=" Resumen de Caja" />	
 			<space />	
-			<button mold="bs" sclass="btn-primary btn-sm" width="110px"
+			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-print"
 				onClick="@command('imprimirItem')"
 				disabled="@load(vm.selectedItem eq null)" label=" Imprimir" />
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
+				iconSclass="z-icon-unlock"
+				onClick="@command('abrirCaja')"
+				disabled="@load(!vm.isOperacionHabilitada('ReabrirCaja'))" 
+				label=" Abrir Caja" />
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
+				iconSclass="z-icon-check"
+				onClick="@command('confirmarRendicion')"
+				disabled="@load(!vm.isOperacionHabilitada('ReabrirCaja'))" 
+				label=" Confirmar Rendición" />
 		</hlayout>
 
 		<listbox model="@load(vm.dto.detallesOrdenado)" vflex="true"

@@ -40,7 +40,7 @@ import com.yhaguy.gestion.venta.VentaDTO;
 
 public class CajaPeriodoAssembler extends Assembler {
 
-	final static String[] ATT_IGUALES = { "numero", "apertura", "cierre", "tipo" };
+	final static String[] ATT_IGUALES = { "numero", "apertura", "cierre", "tipo", "controlRendicion" };
 	final static String[] ATT_NC = { "numero" };
 	final static String[] ATT_ARQUEO = { "totalEfectivo", "totalCheque", "totalTarjeta" };
 	

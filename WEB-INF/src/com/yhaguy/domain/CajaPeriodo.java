@@ -27,6 +27,7 @@ public class CajaPeriodo extends Domain {
 	private Date apertura;
 	private Date cierre;
 	private String tipo;
+	private boolean controlRendicion;
 
 	/**
 	 * estados de la planilla: abierta - cerrada - procesada (tiene una caja de
@@ -1220,5 +1221,13 @@ public class CajaPeriodo extends Domain {
 
 	public void setCompras(Set<CompraLocalFactura> compras) {
 		this.compras = compras;
+	}
+
+	public boolean isControlRendicion() {
+		return controlRendicion;
+	}
+
+	public void setControlRendicion(boolean controlRendicion) {
+		this.controlRendicion = controlRendicion;
 	}
 }

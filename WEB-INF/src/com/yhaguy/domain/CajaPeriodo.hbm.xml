@@ -15,6 +15,10 @@
 		<property name="cierre" />
 		<property name="tipo" />
 		
+		<property name="controlRendicion">
+			<column name="controlRendicion" not-null="true" default="false" />
+		</property>
+		
 		<many-to-one name="estado" class="com.coreweb.domain.Tipo"
 			column="idEstado" 
 			lazy="false"/>

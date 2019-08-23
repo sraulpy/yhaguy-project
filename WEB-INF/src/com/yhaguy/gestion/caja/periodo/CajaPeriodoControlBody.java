@@ -217,6 +217,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 	}
 	
 	@Command
+	@NotifyChange("*")
+	public void confirmarRendicion() throws Exception {
+		this.confirmarRendicionCaja();
+	}
+	
+	@Command
 	@NotifyChange("selectedVenta")
 	public void guaranizarVenta() throws Exception {
 		if (!this.selectedVenta.isMonedaLocal()) {
@@ -291,6 +297,17 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.dto.setCierre(null);
 			this.dto.setEstado(this.getDtoUtil().getCajaPeriodoEstadoAbierta());
 			this.dto.setDbEstado(' ');
+			this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
+		}	
+	}
+	
+	/**
+	 * reabrir caja..
+	 */
+	private void confirmarRendicionCaja() throws Exception {
+		
+		if (this.mensajeSiNo("Confirma la rendicion de esta caja..?")) {
+			this.dto.setControlRendicion(true);
 			this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 		}	
 	}

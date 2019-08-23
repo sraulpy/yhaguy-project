@@ -22,6 +22,7 @@ public class CajaPeriodoDTO extends DTO {
 	private Date apertura = new Date();
 	private Date cierre;
 	private String tipo = "";
+	private boolean controlRendicion = false;
 	
 	private MyArray verificador = new MyArray();
 	private MyArray responsable = new MyArray();
@@ -231,6 +232,14 @@ public class CajaPeriodoDTO extends DTO {
 
 	public void setCompras(List<CompraLocalFacturaDTO> compras) {
 		this.compras = compras;
+	}
+
+	public boolean isControlRendicion() {
+		return controlRendicion;
+	}
+
+	public void setControlRendicion(boolean controlRendicion) {
+		this.controlRendicion = controlRendicion;
 	}
 }
 
