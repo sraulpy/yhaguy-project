@@ -5,45 +5,79 @@
 	<grid sclass="vgrid" style="margin:5px">
 		<rows>
 			<row>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Procesadora" />
 					<combobox hflex="true"
-						model="@load(vm.procesadoras)">
+						model="@load(vm.procesadoras)"
+						selectedItem="@bind(vm.selectedProcesadora)">
 						<template name="model">
 							<comboitem label="@load(each.nombre.toUpperCase())"></comboitem>
 						</template>
 					</combobox>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Tipo Tarjeta" />
 					<combobox hflex="true"
-						model="@load(vm.tiposTarjetas)">
+						model="@load(vm.tiposTarjetas)"
+						selectedItem="@bind(vm.selectedFormaPago)">
 						<template name="model">
-							<comboitem label="@load(each)"></comboitem>
+							<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
 						</template>
 					</combobox>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Comisión %" />
-					<guaranibox hflex="true"></guaranibox>
+					<guaranibox value="@bind(vm.comision)" hflex="true"></guaranibox>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
+					<field value="Renta %" />
+					<guaranibox value="@bind(vm.renta)" hflex="true"></guaranibox>
+				</vlayout>
+				<vlayout spacing="0" hflex="true">
+					<field value="Retención Iva %" />
+					<doublebox value="@bind(vm.retencionIva)" hflex="true"
+						readonly="true" format="###,###,##0.00000"></doublebox>
+				</vlayout>
+				<vlayout spacing="0" hflex="true">
+					<field value="Sucursal" />
+					<combobox hflex="true"
+						model="@load(vm.sucursales)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
+						</template>
+					</combobox>
+				</vlayout>
+				<vlayout spacing="0" hflex="true">
 					<field value="Desde" />
-					<datebox hflex="true"></datebox>
+					<datebox value="@bind(vm.desde)" hflex="true"></datebox>
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="true">
 					<field value="Hasta" />
-					<datebox hflex="true"></datebox>
+					<datebox value="@bind(vm.hasta)" hflex="true"></datebox>
 				</vlayout>
 			</row>
 		</rows>
 	</grid>
 	<hlayout sclass="button-container">
 		<button mold="bs" sclass="btn-sm btn-success" 
-			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"></button>
+			iconSclass="z-icon-refresh" label="Refrescar" hflex="true"
+			onClick="@command('buscarMovimientos')"
+			disabled="@load(!vm.refrescarEnabled)"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-check" label="Confirmar" hflex="true"
+			disabled="@load(vm.movimientos.size() eq 0)"
+			onClick='pop_bco.open(self, "after_end")'>
+		</button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-print" label="Imprimir" hflex="true">
+		</button>
+		<space></space>
 	</hlayout>
 	<listbox sclass="small-list" vflex="true"
-		emptyMessage="SIN REGISTROS DE TARJETAS..">
+		emptyMessage="SIN REGISTROS DE TARJETAS.."
+		model="@load(vm.movimientos)">
 		<listhead>
 			<listheader label="Fecha"></listheader>
 			<listheader label="Número Operación"></listheader>
@@ -53,33 +87,88 @@
 			<listheader label="Renta" align="right"></listheader>
 			<listheader label="Iva Importe" align="right"></listheader>
 			<listheader label="Crédito" align="right"></listheader>
-			<listheader label="Banco"></listheader>
+			<listheader label="Fecha Crédito"></listheader>
+			<listheader label="Nro. T.Débito"></listheader>
+			<listheader label="" align="center" width="40px"></listheader>
 		</listhead>
-		<auxhead>
-			<auxheader>
-				<hlayout>
-					<textbox hflex="true" sclass="filter" placeholder="Día.."
-						value="@bind(vm.filterFechaDD)" instant="true"></textbox>
-					<textbox hflex="true" sclass="filter" placeholder="Mes.."
-						value="@bind(vm.filterFechaMM)" instant="true"></textbox>
-					<textbox hflex="true" sclass="filter" placeholder="Año.."
-						value="@bind(vm.filterFechaAA)" instant="true"></textbox>
-				</hlayout>
-			</auxheader>
-			<auxheader>
-				<textbox hflex="true" sclass="filter" placeholder="Nro. Operacion.." instant="true"></textbox>
-			</auxheader>
-			<auxheader></auxheader>
-			<auxheader></auxheader>
-			<auxheader></auxheader>
-			<auxheader></auxheader>
-			<auxheader></auxheader>
-			<auxheader></auxheader>
-			<auxheader></auxheader>
-		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[4]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[5]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[6]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[7]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true"
+						value="@bind(each[8])" format="###,###,##0"></doublebox>
+				</listcell>
+				<listcell>
+					<datebox hflex="true" vflex="true"
+						value="@bind(each[9])" style="margin-left:7px"
+						sclass="custom"></datebox>
+				</listcell>
+				<listcell>
+					<textbox hflex="true" vflex="true"
+					 	value="@bind(each[10])" sclass="custom"></textbox>
+				</listcell>
+				<listcell>
+					<a iconSclass="@load(each[11]? 'z-icon-check-circle':'z-icon-exclamation-circle')"
+						style="@load(each[11]? 'color:green':'color:red')"></a>
+				</listcell>
+			</listitem>
+		</template>
 		<listfoot>
-			<listfooter label="items"></listfooter>
+			<listfooter>
+				<hlayout>
+					<field value="@load(vm.movimientos.size())" />
+					<field value="ítems" />
+				</hlayout>
+			</listfooter>
+			<listfooter></listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totales[0])" readonly="true" 
+					hflex="true" format="###,###,##0" style="font-weight:bold;text-align:right" />
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totales[1])" readonly="true"
+					hflex="true" format="###,###,##0" style="font-weight:bold;text-align:right" />
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totales[2])" readonly="true" 
+					hflex="true" format="###,###,##0" style="font-weight:bold;text-align:right" />
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totales[3])" readonly="true"
+					hflex="true" format="###,###,##0" style="font-weight:bold;text-align:right" />
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totales[4])" readonly="true"
+					hflex="true" format="###,###,##0" style="font-weight:bold;text-align:right" />
+			</listfooter>
+			<listfooter>
+				<doublebox value="@load(vm.totales[5])" readonly="true"
+					hflex="true" format="###,###,##0" style="font-weight:bold;text-align:right" />
+			</listfooter>
 		</listfoot>
 	</listbox>
-	
+	<popup id="pop_bco" sclass="rounded" style="padding:10px">
+		<vlayout spacing="10px" width="250px">
+			<field value="Banco" />
+			<combobox hflex="true" model="@load(vm.bancos)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+			<button mold="bs" sclass="btn-sm btn-success" label="Confirmar"
+				iconSclass="z-icon-check" hflex="true"
+				onClick="@command('confirmar', comp=pop_bco)"></button>
+		</vlayout>
+	</popup>
+	<style>
+	.z-textbox, .z-doublebox { min-height:18px }
+	.custom .z-datebox-input { height:18px; font-size: 12px }
+	.custom .z-datebox-button { height:18px; font-size: 10px }
+	</style>
 </window>

@@ -10717,6 +10717,27 @@ public class RegisterDomain extends Register {
 		return out.size() > 0 ? out.get(0) : null;
 	}
 	
+	/**
+	 * @return las formas de pago..
+	 * [0]: id
+	 * [1]: modificado
+	 * [2]: tarjetaNumeroComprobante
+	 * [3]: montoGs
+	 * [11]: acreditado
+	 */
+	public List<Object[]> getFormasPago(Date desde, Date hasta, String sigla, long idProcesadora) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select f.id, f.modificado, f.tarjetaNumeroComprobante, f.montoGs, '', '', '', '', '', '', '', f.acreditado"
+				+ " from ReciboFormaPago f where f.tipo.sigla = '" + sigla + "'"
+				+ " and (f.fechaOperacion >= '" + desde_ + "' and f.fechaOperacion <= '" + hasta_ + "')";
+		if (idProcesadora > 0) {
+			query += " and f.tarjetaProcesadora.id = " + idProcesadora;
+		}
+				query += " order by f.fechaOperacion";
+		return this.hql(query);	
+	}
+	
 	public static void main_(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

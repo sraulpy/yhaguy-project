@@ -131,7 +131,7 @@
 				<zk forEach="${vm.menuItem(self,'TransferenciaExterna')}" />
 				<menuseparator />
 				<menuitem label="FORMULARIO P/ SOLICITAR AJUSTE" iconSclass="z-icon-caret-right" 
-					href="/yhaguy/archivos/formularios/solicitud_ajuste.pdf" target="_blank"/>
+					href="/yhaguy/archivos/formularios/solicitud_ajuste.pdf" target="_blank" />
 				<zk forEach="${vm.menuItem(self,'AjusteStock')}" />
 				<zk forEach="${vm.menuItem(self,'AuditoriaStock')}" />
 				<zk forEach="${vm.menuItem(self,'Inventario')}" />

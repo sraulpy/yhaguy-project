@@ -30,6 +30,12 @@
 		<property name="retencionVencimiento" />
 		<property name="nroComprobanteAsociado" />
 		<property name="reciboDebitoNro" />
+		<property name="fechaAcreditacion" />
+		<property name="fechaOperacion" />
+		
+		<property name="acreditado">
+			<column name="acreditado" not-null="true" default="false" />
+		</property>
 
 		<many-to-one name="tipo" class="com.coreweb.domain.Tipo"
 			column="idTipo" lazy="false" />

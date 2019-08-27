@@ -44,6 +44,9 @@ public class ReciboFormaPago extends Domain {
 
 	/** La procesadora de la Tarjeta.. **/
 	private ProcesadoraTarjeta tarjetaProcesadora;
+	private boolean acreditado;
+	private Date fechaAcreditacion;
+	private Date fechaOperacion = new Date();
 
 	/** Cobros o pagos con cheque **/
 	private Date chequeFecha;
@@ -402,5 +405,29 @@ public class ReciboFormaPago extends Domain {
 
 	public void setReciboDebitoNro(String reciboDebitoNro) {
 		this.reciboDebitoNro = reciboDebitoNro;
+	}
+
+	public Date getFechaAcreditacion() {
+		return fechaAcreditacion;
+	}
+
+	public void setFechaAcreditacion(Date fechaAcreditacion) {
+		this.fechaAcreditacion = fechaAcreditacion;
+	}
+
+	public boolean isAcreditado() {
+		return acreditado;
+	}
+
+	public void setAcreditado(boolean acreditado) {
+		this.acreditado = acreditado;
+	}
+
+	public Date getFechaOperacion() {
+		return fechaOperacion;
+	}
+
+	public void setFechaOperacion(Date fechaOperacion) {
+		this.fechaOperacion = fechaOperacion;
 	}
 }
