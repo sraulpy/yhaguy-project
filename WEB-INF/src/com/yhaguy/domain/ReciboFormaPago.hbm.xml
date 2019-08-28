@@ -32,6 +32,8 @@
 		<property name="reciboDebitoNro" />
 		<property name="fechaAcreditacion" />
 		<property name="fechaOperacion" />
+		<property name="idSucursal" />
+		<property name="importeAcreditado" />
 		
 		<property name="acreditado">
 			<column name="acreditado" not-null="true" default="false" />

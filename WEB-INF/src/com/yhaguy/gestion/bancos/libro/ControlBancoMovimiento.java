@@ -484,6 +484,9 @@ public class ControlBancoMovimiento extends Control {
 			movim.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_DEPOSITO_BANCARIO));
 			rr.saveObject(movim, this.getLoginNombre());
 		}
+		ReciboFormaPago fp = (ReciboFormaPago) rr.getObject(ReciboFormaPago.class.getName(), rfpDto.getId());
+		fp.setIdSucursal(sucursalApp.getId());
+		rr.saveObject(fp, this.getLoginNombre());
 	}
 }
 

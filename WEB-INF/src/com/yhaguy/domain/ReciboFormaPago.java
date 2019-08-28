@@ -15,6 +15,8 @@ public class ReciboFormaPago extends Domain {
 	private double montoGs;
 	private double montoDs;
 	
+	private long idSucursal;
+	
 	/** El monto original del cheque **/
 	private double montoChequeGs;
 
@@ -45,6 +47,7 @@ public class ReciboFormaPago extends Domain {
 	/** La procesadora de la Tarjeta.. **/
 	private ProcesadoraTarjeta tarjetaProcesadora;
 	private boolean acreditado;
+	private double importeAcreditado;
 	private Date fechaAcreditacion;
 	private Date fechaOperacion = new Date();
 
@@ -429,5 +432,21 @@ public class ReciboFormaPago extends Domain {
 
 	public void setFechaOperacion(Date fechaOperacion) {
 		this.fechaOperacion = fechaOperacion;
+	}
+
+	public long getIdSucursal() {
+		return idSucursal;
+	}
+
+	public void setIdSucursal(long idSucursal) {
+		this.idSucursal = idSucursal;
+	}
+
+	public double getImporteAcreditado() {
+		return importeAcreditado;
+	}
+
+	public void setImporteAcreditado(double importeAcreditado) {
+		this.importeAcreditado = importeAcreditado;
 	}
 }

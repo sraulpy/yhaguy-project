@@ -32,6 +32,8 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	private Date hasta;
 	private Tipo selectedFormaPago;
 	private ProcesadoraTarjeta selectedProcesadora;
+	private SucursalApp selectedSucursal;
+	private BancoCta selectedBanco;
 	private double comision = 0;
 	private double renta = 1;
 	private double retencionIva = 0.90909;
@@ -41,6 +43,7 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	private String filterFechaAA = "";
 	
 	private List<Object[]> movimientos = new ArrayList<Object[]>();
+	private List<Object[]> selectedMovimientos;
 
 	@Init(superclass = true)
 	public void init() {
@@ -69,21 +72,21 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	private void buscarMovimientos_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> list = rr.getFormasPago(this.desde, this.hasta, this.selectedFormaPago.getSigla(),
-				this.selectedProcesadora.getId());
+				this.selectedProcesadora.getId(), this.selectedSucursal.getId());
 		List<Object[]> list_ = new ArrayList<Object[]>();
 		for (Object[] item : list) {
 			double importe = (double) item[3];
+			double acreditado = (double) item[8];
 			//item = Arrays.copyOf(item, item.length + 8);
 			item[4] = Utiles.obtenerValorDelPorcentaje(importe, this.comision);
 			item[5] = Utiles.getIVA((double) item[4], 10);
 			item[6] = Utiles.obtenerValorDelPorcentaje(importe, this.renta);
 			item[7] = Utiles.obtenerValorDelPorcentaje(importe, this.retencionIva);
-			item[8] = importe - (((double) item[4]) + ((double) item[5]) + ((double) item[6]) + ((double) item[7]));
+			item[8] = acreditado > 0 ? acreditado : importe - (((double) item[4]) + ((double) item[5]) + ((double) item[6]) + ((double) item[7]));
 			item[9] = item[1];
-			item[10] = "";
-			//item[11] = false;
 			list_.add(item);
 		}
+		this.selectedMovimientos = null;
 		this.movimientos.clear();
 		this.movimientos = list_;
 	}
@@ -93,13 +96,17 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	 */
 	private void confirmarMovimientos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		for (Object[] item : this.movimientos) {
+		for (Object[] item : this.selectedMovimientos) {
 			item[11] = true;
 			ReciboFormaPago fp = (ReciboFormaPago) rr.getObject(ReciboFormaPago.class.getName(), (long) item[0]);
 			fp.setAcreditado(true);
 			fp.setFechaAcreditacion((Date) item[9]);
+			fp.setReciboDebitoNro((String) item[10]);
+			fp.setImporteAcreditado((double) item[8]);
+			fp.setDepositoBancoCta(this.selectedBanco);
 			rr.saveObject(fp, this.getLoginNombre());
 		}
+		this.selectedMovimientos = null;
 		Clients.showNotification("REGISTROS CONFIRMADOS..!");
 	}
 	
@@ -128,10 +135,10 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 		return new Object[] { totalImporte, totalComision, totalIvaComision, totalRenta, totalIvaRetencion, totalCredito };
 	}
 	
-	@DependsOn({ "selectedProcesadora", "selectedFormaPago", "desde", "hasta" })
+	@DependsOn({ "selectedProcesadora", "selectedFormaPago", "desde", "hasta", "selectedSucursal" })
 	public boolean isRefrescarEnabled() {
 		return this.selectedProcesadora != null && this.selectedFormaPago != null && this.desde != null
-				&& this.hasta != null;
+				&& this.hasta != null && this.selectedSucursal != null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -249,5 +256,29 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 
 	public void setSelectedProcesadora(ProcesadoraTarjeta selectedProcesadora) {
 		this.selectedProcesadora = selectedProcesadora;
+	}
+
+	public SucursalApp getSelectedSucursal() {
+		return selectedSucursal;
+	}
+
+	public void setSelectedSucursal(SucursalApp selectedSucursal) {
+		this.selectedSucursal = selectedSucursal;
+	}
+
+	public BancoCta getSelectedBanco() {
+		return selectedBanco;
+	}
+
+	public void setSelectedBanco(BancoCta selectedBanco) {
+		this.selectedBanco = selectedBanco;
+	}
+
+	public List<Object[]> getSelectedMovimientos() {
+		return selectedMovimientos;
+	}
+
+	public void setSelectedMovimientos(List<Object[]> selectedMovimientos) {
+		this.selectedMovimientos = selectedMovimientos;
 	}	
 }
