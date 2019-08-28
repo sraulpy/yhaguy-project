@@ -142,7 +142,7 @@ public class CajaPeriodo extends Domain {
 		for (Venta venta : this.ventas) {
 			if (!venta.isAnulado() && venta.isVentaContado()) {
 				for (ReciboFormaPago fp : venta.getFormasPago()) {
-					if(fp.isEfectivo())
+					if(fp.isEfectivo() && fp.isMonedaLocal())
 						out += fp.getMontoGs();
 				}
 			}			
@@ -150,7 +150,7 @@ public class CajaPeriodo extends Domain {
 		for (Recibo cobro : this.recibos) {
 			if(cobro.isCobro() && !cobro.isAnulado()) {
 				for (ReciboFormaPago fp : cobro.getFormasPago()) {
-					if(fp.isEfectivo())
+					if(fp.isEfectivo() && fp.isMonedaLocal())
 						out += fp.getMontoGs();
 				}
 			}			
@@ -158,7 +158,7 @@ public class CajaPeriodo extends Domain {
 		for (Recibo cobro : this.recibos) {
 			if(cobro.isCancelacionCheque() && !cobro.isAnulado()) {
 				for (ReciboFormaPago fp : cobro.getFormasPago()) {
-					if(fp.isEfectivo())
+					if(fp.isEfectivo() && fp.isMonedaLocal())
 						out += fp.getMontoGs();
 				}
 			}			
