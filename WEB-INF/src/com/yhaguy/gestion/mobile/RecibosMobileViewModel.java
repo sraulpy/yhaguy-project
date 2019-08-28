@@ -257,6 +257,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		this.nvoFormaPago.setTarjetaNumero("");
 		this.nvoFormaPago.setTarjetaNumeroComprobante("");
 		this.nvoFormaPago.setMoneda(this.selectedMonedaFormaPago);
+		this.nvoFormaPago.setIdSucursal(2);
 		if (this.selectedEmpresa != null) {
 			this.nvoFormaPago.setChequeLibrador(this.selectedEmpresa.getRazonSocial());
 		}

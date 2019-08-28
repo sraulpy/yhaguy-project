@@ -79,7 +79,7 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 			double acreditado = (double) item[8];
 			//item = Arrays.copyOf(item, item.length + 8);
 			item[4] = Utiles.obtenerValorDelPorcentaje(importe, this.comision);
-			item[5] = Utiles.getIVA((double) item[4], 10);
+			item[5] = Utiles.obtenerValorDelPorcentaje((double) item[4], 10);
 			item[6] = Utiles.obtenerValorDelPorcentaje(importe, this.renta);
 			item[7] = Utiles.obtenerValorDelPorcentaje(importe, this.retencionIva);
 			item[8] = acreditado > 0 ? acreditado : importe - (((double) item[4]) + ((double) item[5]) + ((double) item[6]) + ((double) item[7]));

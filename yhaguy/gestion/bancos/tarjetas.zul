@@ -142,6 +142,7 @@
 			</listitem>
 		</template>
 		<listfoot>
+			<listfooter></listfooter>
 			<listfooter>
 				<hlayout>
 					<field value="@load(vm.movimientos.size())" />
