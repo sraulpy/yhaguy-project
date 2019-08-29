@@ -31,7 +31,9 @@ public class TareaCerrarCajasCentral {
 							caja.setCierre(fecha);
 							caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
 							rr.saveObject(caja, "sys");
-							cajas_.add(caja);
+							if (!caja.isCajaCobrosMobileInterior()) {
+								cajas_.add(caja);
+							}
 						}
 					}				
 				}	
