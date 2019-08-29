@@ -289,7 +289,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.nvoDeposito_.setDbEstado('R');
 		this.nvoDeposito_.setCerrado(true);
-		this.nvoDeposito.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
+		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito_, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito_, this.getLoginNombre());
 		
