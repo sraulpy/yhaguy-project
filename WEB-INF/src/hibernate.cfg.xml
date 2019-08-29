@@ -4,15 +4,11 @@
         "classpath://org/hibernate/hibernate-configuration-3.0.dtd"
         [ <!ENTITY hibernate-core SYSTEM "classpath://com/coreweb/hibernate-core.cfg.xml"> ]>
 <hibernate-configuration>
-<!-- 
-1902
-
- -->
 	<session-factory>
 
 		<!-- Postgres -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguy_central</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguydb</property>
 
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">yrsa0985</property>
