@@ -1310,7 +1310,7 @@
 							height="30px" iconSclass="z-icon-upload"
 							label=" Importar Archivo" 
 							disabled="@load(vm.dto.esNuevo() or vm.deshabilitado)"
-							sclass="btn-warning btn-sm" style="background:#f39c12"/>
+							sclass="btn-warning btn-sm" />
 						<space />
 						<a iconSclass="z-icon-paperclip"
 							label=" ver archivo Importado" href="@load(vm.proformaCsv)"

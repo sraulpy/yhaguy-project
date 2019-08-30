@@ -3410,6 +3410,10 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				this.mensajeError(this.mensajeErrorVerificar);
 				return;
 			}
+			if (this.dto.getResumenGastosDespacho().getTipoCambio() <= 100) {
+				this.mensajeError("Falta el tipo de cambio en el resumen de despacho..");
+				return;
+			}
 			try {
 				this.generarDiferenciaTipoCambio();
 				this.volcarImportacion();
