@@ -87,11 +87,11 @@
 				<row>
 					<field value="Banco Origen:" />
 					<combobox hflex="true"
-						value="@load(vm.nva_transferencia.origen.banco.descripcion.toUpperCase())"
+						value="@load(vm.nva_transferencia.origen.descripcion.toUpperCase())"
 						model="@load(vm.bancos)"
 						selectedItem="@bind(vm.nva_transferencia.origen)" instant="true">
 						<template name="model">
-							<comboitem label="@load(each.banco.descripcion.toUpperCase())" />
+							<comboitem label="@load(each.descripcion.toUpperCase())" />
 						</template>	
 					</combobox>
 				</row>
