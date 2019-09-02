@@ -68,23 +68,12 @@
 				<cell colspan="2">
 					<vlayout style="margin-top:6px">
 						<field value="Proveedor" />
-						<hlayout valign="top"
-							visible="@load(!vm.dto.autoFactura)">
+						<hlayout valign="top">
 							<buscadorProveedor value="@bind(vm.dto)"
 								campo="ruc" width="100px" buttonVisible="false" />
 							<buscadorProveedor value="@bind(vm.dto)"
 								campo="razonSocial" hflex="true" />
 						</hlayout>
-						<hlayout visible="@load(vm.dto.autoFactura)">
-							<textbox width="100px"
-								value="@load(vm.dto.proveedor.pos3)" readonly="true" />
-							<textbox hflex="true"
-								value="@load(vm.dto.proveedor.pos2)" readonly="true" />
-							<textbox id="txb_benef"
-								placeholder="Beneficiario.." hflex="true"
-								value="@bind(vm.dto.beneficiario)" />
-						</hlayout>
-
 					</vlayout>
 				</cell>
 				<vlayout spacing="0">

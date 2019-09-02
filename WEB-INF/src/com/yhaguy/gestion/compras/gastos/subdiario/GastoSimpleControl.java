@@ -31,7 +31,6 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.CentroCosto;
-import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -318,12 +317,11 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	@Command
 	@NotifyChange("dto")
 	public void updateTipoMovimiento() throws Exception {
-		if(this.dto.isAutoFactura() == false) {
-			this.dto.setProveedor(new MyArray());
-			this.dto.setNumeroFactura("");
-			this.dto.setNumeroTimbrado("");
-			this.dto.setBeneficiario("");
-		}			
+		this.dto.setProveedor(new MyArray());
+		this.dto.setNumeroFactura("");
+		this.dto.setNumeroTimbrado("");
+		this.dto.setBeneficiario("");
+			
 		this.modificarCondicionPago();
 		this.calcularVencimiento();
 		this.verificarAutoFactura();
@@ -381,8 +379,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		String nro = AutoNumeroControl.getAutoNumero(
 				(String) talonario.getPos1(), 7, true);
 		
-		this.dto.setNumeroFactura("00" + boca + "-00" + punto + "-" + nro);
-		this.dto.setProveedor(this.getProveedor(Configuracion.ID_PROVEEDOR_YHAGUY));	
+		this.dto.setNumeroFactura("00" + boca + "-00" + punto + "-" + nro);	
 
 		BindUtils.postNotifyChange(null, null, this.dto, "numeroFactura");
 		BindUtils.postNotifyChange(null, null, this.dto, "numeroTimbrado");
@@ -460,20 +457,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		MyArray out = new MyArray();
 		out.setId(cc.getId());
 		out.setPos1(cc.getDescripcion());
-		return out;
-	}
-	
-	/**
-	 * @return timbrado como MyArray..
-	 */
-	private MyArray getProveedor(long idProveedor) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		Proveedor prov = rr.getProveedorById(idProveedor);
-		MyArray out = new MyArray();
-		out.setId(idProveedor);	
-		out.setPos1(prov.getCodigoEmpresa());
-		out.setPos2(prov.getRazonSocial());
-		out.setPos3(prov.getRuc());
 		return out;
 	}
 
