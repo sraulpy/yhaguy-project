@@ -176,6 +176,8 @@
 				<zk forEach="${vm.menuItem(self,'AcuseDocumento')}" />
 				<menuitem label="TAREAS PROGRAMADAS" iconSclass="z-icon-caret-right" disabled="true"/>
 				<menuitem label="BACKUPS DE SEGURIDAD" iconSclass="z-icon-caret-right" disabled="true"/>
+				<menuitem label="CONTROL DE VERSIONES" iconSclass="z-icon-caret-right" 
+					href="https://drive.google.com/open?id=1n7B8AyTteEACIy2jwgVg47J4-0VVMAvkG9RHs2GF-fc" target="_blank" />
 			</menupopup>
 		</menu>
 
