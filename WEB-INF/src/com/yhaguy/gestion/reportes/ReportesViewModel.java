@@ -10202,6 +10202,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String MATRIZ_IMPORTACIONES = "COM-00005";
 		static final String LISTADO_IMPORTACIONES = "COM-00006";
 		static final String MOVIMIENTOS_ARTICULOS = "COM-00007";
+		static final String MATRIZ_COMPRAS_LOCALES = "COM-00008";
 
 		/**
 		 * procesamiento del reporte..
@@ -10235,6 +10236,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case MOVIMIENTOS_ARTICULOS:
 				this.movimientosArticulos();
+				break;
+			
+			case MATRIZ_COMPRAS_LOCALES:
+				this.comprasArticuloMes(false, MATRIZ_COMPRAS_LOCALES);
 				break;
 			}
 		}
@@ -11124,6 +11129,240 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("dep10", deps.get(10));
 				JRDataSource dataSource = new MovimientoArticulos(list);
 				imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00048
+		 */
+		private void comprasArticuloMes(boolean mobile, String codReporte) {
+			try {					
+				Object[] formato = filtro.getFormato();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				Proveedor proveedor = filtro.getProveedor();
+				List<Deposito> depositos = filtro.getSelectedDepositos();
+				SucursalApp sucursal = filtro.getSelectedSucursal();
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				long idFamilia = familia != null ? familia.getId().longValue() : 0;
+				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
+				long idSucursal = sucursal != null ? sucursal.getId().longValue() : 0;
+				int mes1 = Utiles.getNumeroMes(desde) - 1;
+				int mes2 = Utiles.getNumeroMes(hasta);
+				int rango = mes2 - mes1;
+				
+				if (depositos.size() > 3) {
+					Clients.showNotification("MÁXIMO HASTA 3 DEPÓSITOS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				Deposito dep1 = depositos.size() > 0 ? depositos.get(0) : null;
+				Deposito dep2 = depositos.size() > 1 ? depositos.get(1) : null;
+				Deposito dep3 = depositos.size() > 2 ? depositos.get(2) : null;
+				
+				List<Deposito> deps1 = new ArrayList<Deposito>();
+				List<Deposito> deps2 = new ArrayList<Deposito>();
+				List<Deposito> deps3 = new ArrayList<Deposito>();
+				
+				if (dep1 != null) deps1.add(dep1);
+				if (dep2 != null) deps2.add(dep2);
+				if (dep3 != null) deps3.add(dep3);
+				
+				RegisterDomain rr = RegisterDomain.getInstance();				
+				List<Object[]> locales = rr.getComprasLocalesDetallado(desde, hasta, idFamilia, idProveedor, idSucursal);
+				
+				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
+				Map<String, Double> cants = new HashMap<String, Double>();
+				Map<String, Double> importes = new HashMap<String, Double>();
+				Map<String, Double> volumens = new HashMap<String, Double>();
+				Map<String, Object[]> datos = new HashMap<String, Object[]>();
+				
+				for (Object[] compra : locales) {
+					int mes = Utiles.getNumeroMes((Date) compra[4]);
+					String cod = (String) compra[1];
+					String des = (String) compra[8];
+					String prove = (String) compra[15];
+					String marca = (String) compra[16];
+					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + mes;
+					Double acum = cants.get(key);
+					if (acum != null) {
+						acum += ((Double) compra[3]);
+						cants.put(key, acum);
+						volumens.put(cod, (Double) compra[2]);
+						datos.put(cod, new Object[] { (Double) compra[9], (Double) compra[10] });
+					} else {
+						cants.put(key, ((Double) (compra[3])));
+						volumens.put(cod, (Double) compra[2]);
+					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ += ((Double) compra[6]);
+						importes.put(key, acum_);
+					} else {
+						importes.put(key, ((Double) (compra[6])));
+					}
+				}
+				
+				Map<String, String> keys = new HashMap<String, String>();
+				
+				for (String key : cants.keySet()) {					
+					String codigo = key.split(";")[0];
+					String descripcion = key.split(";")[1];
+					String proveedor_ = key.split(";")[2];
+					String marca = key.split(";")[3];
+					String key_ = codigo + ";" + descripcion + ";" + proveedor_ + ";" + marca;
+					
+					if (keys.get(key_) == null) {
+						Double cantidad = cants.get(key);
+						
+						Double cantEnero = cants.get(key_ + ";1");
+						if (cantEnero == null) cantEnero = 0.0; 
+						
+						Double cantFebrero = cants.get(key_ + ";2");
+						if (cantFebrero == null) cantFebrero = 0.0;
+						
+						Double cantMarzo = cants.get(key_ + ";3");
+						if (cantMarzo == null) cantMarzo = 0.0;
+						
+						Double cantAbril = cants.get(key_ + ";4");
+						if (cantAbril == null) cantAbril = 0.0;
+						
+						Double cantMayo = cants.get(key_ + ";5");
+						if (cantMayo == null) cantMayo = 0.0;
+						
+						Double cantJunio = cants.get(key_ + ";6");
+						if (cantJunio == null) cantJunio = 0.0;
+						
+						Double cantJulio = cants.get(key_ + ";7");
+						if (cantJulio == null) cantJulio = 0.0;
+						
+						Double cantAgosto = cants.get(key_ + ";8");
+						if (cantAgosto == null) cantAgosto = 0.0;
+						
+						Double cantSetiembre = cants.get(key_ + ";9");
+						if (cantSetiembre == null) cantSetiembre = 0.0;
+						
+						Double cantOctubre = cants.get(key_ + ";10");
+						if (cantOctubre == null) cantOctubre = 0.0;
+						
+						Double cantNoviembre = cants.get(key_ + ";11");
+						if (cantNoviembre == null) cantNoviembre = 0.0;
+						
+						Double cantDiciembre = cants.get(key_ + ";12");
+						if (cantDiciembre == null) cantDiciembre = 0.0;
+						
+						Double impEnero = importes.get(key_ + ";1");
+						if (impEnero == null) impEnero = 0.0;
+						
+						Double impFebrero = importes.get(key_ + ";2");
+						if (impFebrero == null) impFebrero = 0.0;
+						
+						Double impMarzo = importes.get(key_ + ";3");
+						if (impMarzo == null) impMarzo = 0.0;
+						
+						Double impAbril = importes.get(key_ + ";4");
+						if (impAbril == null) impAbril = 0.0;
+						
+						Double impMayo = importes.get(key_ + ";5");
+						if (impMayo == null) impMayo = 0.0;
+						
+						Double impJunio = importes.get(key_ + ";6");
+						if (impJunio == null) impJunio = 0.0;
+						
+						Double impJulio = importes.get(key_ + ";7");
+						if (impJulio == null) impJulio = 0.0;
+						
+						Double impAgosto = importes.get(key_ + ";8");
+						if (impAgosto == null) impAgosto = 0.0;
+						
+						Double impSetiembre = importes.get(key_ + ";9");
+						if (impSetiembre == null) impSetiembre = 0.0;
+						
+						Double impOctubre = importes.get(key_ + ";10");
+						if (impOctubre == null) impOctubre = 0.0;
+						
+						Double impNoviembre = importes.get(key_ + ";11");
+						if (impNoviembre == null) impNoviembre = 0.0;
+						
+						Double impDiciembre = importes.get(key_ + ";12");
+						if (impDiciembre == null) impDiciembre = 0.0;
+						
+						Object[] costoPrecio = rr.getCostoPrecio(codigo);
+						long stock1 = rr.getStock(codigo, deps1);
+						long stock2 = rr.getStock(codigo, deps2);
+						long stock3 = rr.getStock(codigo, deps3);
+						Double volumen = volumens.get(codigo);
+						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
+						hist.setDescripcion(codigo);
+						hist.setReferencia(descripcion);
+						hist.setProveedor(proveedor_);
+						hist.setMarca(marca);
+						hist.setCodigoOriginal("");
+						hist.setLitraje(cantidad);
+						hist.setCoeficiente(volumen != null ? (volumen * (stock1 + stock2 + stock3)) : 0.0);
+						hist.setEnero_(cantEnero);
+						hist.setFebrero_(cantFebrero);
+						hist.setMarzo_(cantMarzo);
+						hist.setAbril_(cantAbril);
+						hist.setMayo_(cantMayo);
+						hist.setJunio_(cantJunio);
+						hist.setJulio_(cantJulio);
+						hist.setAgosto_(cantAgosto);
+						hist.setSetiembre_(cantSetiembre);
+						hist.setOctubre_(cantOctubre);
+						hist.setNoviembre_(cantNoviembre);
+						hist.setDiciembre_(cantDiciembre);
+						hist.set_enero(impEnero);
+						hist.set_febrero(impFebrero);
+						hist.set_marzo(impMarzo);
+						hist.set_abril(impAbril);
+						hist.set_mayo(impMayo);
+						hist.set_junio(impJunio);
+						hist.set_julio(impJulio);
+						hist.set_agosto(impAgosto);
+						hist.set_setiembre(impSetiembre);
+						hist.set_octubre(impOctubre);
+						hist.set_noviembre(impNoviembre);
+						hist.set_diciembre(impDiciembre);
+						hist.setCostoGs((double) costoPrecio[1]);
+						hist.setCostoFobGs((double) costoPrecio[2]);
+						hist.setPrecioMinorista((double) costoPrecio[3]);
+						hist.setPrecioLista((double) costoPrecio[4]);
+						hist.setStock1(stock1);
+						hist.setStock2(stock2);
+						hist.setStock3(stock3);
+						hist.setTotal_(hist.getEnero_() + hist.getFebrero_() + hist.getMarzo_() + hist.getAbril_() + hist.getMayo_() + hist.getJunio_()
+								+ hist.getJulio_() + hist.getAgosto_() + hist.getSetiembre_() + hist.getOctubre_() + hist.getNoviembre_() + hist.getDiciembre_());
+						list.add(hist);			
+						keys.put(key_, key_);
+					}					
+				}				
+				String format = (String) formato[0];
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_MATRIZ_COMPRAS_LOCALES;
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_MATRIZ_COMPRAS_LOCALES_;
+				}
+				
+				String flia = familia != null ? familia.getDescripcion() : "TODOS..";
+				String suc = sucursal != null ? sucursal.getDescripcion() : "TODOS..";
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Familia", flia);
+				params.put("Cliente", "");
+				params.put("stock1", dep1 != null ? dep1.getDescripcion() : "- - -");
+				params.put("stock2", dep2 != null ? dep2.getDescripcion() : "- - -");
+				params.put("stock3", dep3 != null ? dep3.getDescripcion() : "- - -");
+				params.put("Titulo", codReporte + " - MATRIZ DE COMPRAS LOCALES POR ARTICULO POR MES");
+				params.put("Proveedor", proveedor != null ? proveedor.getRazonSocial() : "TODOS..");
+				params.put("Sucursal", suc);
+				JRDataSource dataSource = new VentasClienteArticulo(list, rango);
+				imprimirJasper(source, params, dataSource, formato);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

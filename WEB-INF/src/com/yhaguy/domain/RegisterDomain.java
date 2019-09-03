@@ -9724,6 +9724,55 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.volumen
+	 * [3]:cantidad
+	 * [4]:fecha
+	 * [5]:cliente.empresa.razonSocial
+	 * [6]:importegs
+	 * [7]:''
+	 * [8]:descripcion
+	 * [9]:costogs
+	 * [10]:preciogs
+	 * [11]:cliente.empresa.ruc
+	 * [12]:cliente.empresa.vendedor
+	 * [13]:cliente.empresa.rubro
+	 * [14]:cliente.empresa.zona
+	 * [15]:articulo.proveedor.empresa.razonSocial
+	 * [16]:articulo.marca.descripcion
+	 * [17]:articulo.codigoOriginal
+	 */
+	public List<Object[]> getComprasLocalesDetallado(Date desde, Date hasta, long idFamilia, long idProveedor, long idSucursal) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, (d.articulo.volumen), (d.cantidad * 1.0), c.fechaOriginal, c.proveedor.empresa.razonSocial,"
+				+ " ((d.costoGs * d.cantidad) - d.descuentoGs), '', d.articulo.descripcion, d.articulo.costoGs, d.articulo.precioGs,"
+				+ " c.proveedor.empresa.ruc,"
+				+ " '',"
+				+ " c.proveedor.empresa.rubro.descripcion,"
+				+ " '',"
+				+ " d.articulo.proveedor.empresa.razonSocial,"
+				+ " d.articulo.marca.descripcion,"
+				+ " d.articulo.codigoOriginal"
+				+ " from CompraLocalFactura c join c.detalles d where (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')"
+				+ " and (c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')";
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
+				}
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				if (idSucursal > 0) {
+					query += " and c.sucursal.id = " + idSucursal;
+				}
+		return this.hql(query);
+	}
+	
 	public static void mainx(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
