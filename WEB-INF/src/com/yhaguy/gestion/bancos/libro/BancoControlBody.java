@@ -240,6 +240,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta);
+		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
@@ -251,6 +252,7 @@ public class BancoControlBody extends BodyApp {
 		historicoDEBE.addAll(prestamosBancarios);
 		historicoDEBE.addAll(formasPagoDeposito);
 		historicoDEBE.addAll(formasPagoDeposito_);
+		historicoDEBE.addAll(formasPagoTarjeta);
 		
 		historicoHABER.addAll(cheques);
 		historicoHABER.addAll(chequesRechazados);

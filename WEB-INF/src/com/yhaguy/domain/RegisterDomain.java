@@ -10776,10 +10776,10 @@ public class RegisterDomain extends Register {
 	 * [10]: reciboDebitoNro
 	 * [11]: acreditado
 	 */
-	public List<Object[]> getFormasPago(Date desde, Date hasta, String sigla, long idProcesadora, long idSucursal) throws Exception {
+	public List<Object[]> getFormasPagoTarjeta(Date desde, Date hasta, String sigla, long idProcesadora, long idSucursal) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select f.id, f.modificado, f.tarjetaNumeroComprobante, f.montoGs, '', '', '', '', f.importeAcreditado, '', f.reciboDebitoNro, f.acreditado"
+		String query = "select f.id, f.fechaAcreditacion, f.tarjetaNumeroComprobante, f.montoGs, '', '', '', '', f.importeAcreditado, '', f.reciboDebitoNro, f.acreditado"
 				+ " from ReciboFormaPago f where f.tipo.sigla = '" + sigla + "'"
 				+ " and (f.fechaOperacion >= '" + desde_ + "' and f.fechaOperacion <= '" + hasta_ + "')";
 		if (idProcesadora > 0) {
@@ -10790,6 +10790,62 @@ public class RegisterDomain extends Register {
 		}
 				query += " order by f.fechaOperacion";
 		return this.hql(query);	
+	}
+	
+	/**
+	 * @return las formas de pago..
+	 * [0]: id
+	 * [1]: modificado
+	 * [2]: tarjetaNumeroComprobante
+	 * [3]: montoGs
+	 * [8]: importeAcreditado
+	 * [10]: reciboDebitoNro
+	 * [11]: acreditado
+	 * [12]: fechaAcreditacion
+	 * [13]: procesadora
+	 * [14]: banco
+	 * [15]: nroCuenta
+	 */
+	public List<Object[]> getFormasPagoTarjeta_(String fecha, String sigla, long idProcesadora, long idSucursal, boolean acreditado) throws Exception {
+		String query = "select f.id, f.fechaOperacion, f.tarjetaNumeroComprobante, f.montoGs, '', '', '', '',"
+				+ " f.importeAcreditado, '', f.reciboDebitoNro, f.acreditado, f.fechaAcreditacion, f.tarjetaProcesadora.nombre,"
+				+  (acreditado ? " f.depositoBancoCta.banco.descripcion" : "''") + ","
+				+  (acreditado ? " f.depositoBancoCta.nroCuenta" : "''")
+				+ " from ReciboFormaPago f where f.tipo.sigla = '" + sigla + "'"
+				+ " and cast (f.fechaOperacion as string) like '%" + fecha + "%'"
+				+ " and f.acreditado = " + acreditado;
+		if (idProcesadora > 0) {
+			query += " and f.tarjetaProcesadora.id = " + idProcesadora;
+		}
+		if (idSucursal > 0) {
+			query += " and f.idSucursal = " + idSucursal;
+		}
+				query += " order by f.fechaOperacion";
+		return this.hql(query);	
+	}
+	
+	/**
+	 * @return las formas de pago tarjeta cta. segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs 
+	 * [4]:banco 
+	 */
+	public List<Object[]> getFormasPagoTarjetaPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select ('ACREDITACION TARJETA'), "
+				+ " f.fechaAcreditacion, f.tarjetaNumeroComprobante, f.importeAcreditado, f.depositoBancoCta.banco.descripcion, concat(f.tarjetaNumeroComprobante, ' - ', f.tarjetaProcesadora.nombre)"
+				+ " from ReciboFormaPago f where (f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_TARJETA_CREDITO + "'"
+						+ " or f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_TARJETA_DEBITO + "')"
+				+ " and f.depositoBancoCta.id = " + idBanco
+				+ " and (f.fechaAcreditacion >= '"
+				+ desde_
+				+ "' and f.fechaAcreditacion <= '"
+				+ hasta_
+				+ "')" + " order by f.fechaAcreditacion desc";
+		return this.hql(query);
 	}
 	
 	public static void main_(String[] args) {

@@ -48,7 +48,7 @@ public class ReciboFormaPago extends Domain {
 	private ProcesadoraTarjeta tarjetaProcesadora;
 	private boolean acreditado;
 	private double importeAcreditado;
-	private Date fechaAcreditacion;
+	private Date fechaAcreditacion = new Date();
 	private Date fechaOperacion = new Date();
 
 	/** Cobros o pagos con cheque **/

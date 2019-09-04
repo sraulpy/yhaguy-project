@@ -71,7 +71,7 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	 */
 	private void buscarMovimientos_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> list = rr.getFormasPago(this.desde, this.hasta, this.selectedFormaPago.getSigla(),
+		List<Object[]> list = rr.getFormasPagoTarjeta(this.desde, this.hasta, this.selectedFormaPago.getSigla(),
 				this.selectedProcesadora.getId(), this.selectedSucursal.getId());
 		List<Object[]> list_ = new ArrayList<Object[]>();
 		for (Object[] item : list) {

@@ -61,7 +61,7 @@
 						id="tbox_codint"
 						placeholder="Código Interno.." 
 						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"/>
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>				
 			</auxheader>
 			<auxheader>
