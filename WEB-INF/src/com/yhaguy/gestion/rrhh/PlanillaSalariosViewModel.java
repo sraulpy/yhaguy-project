@@ -29,6 +29,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 
 	private String selectedMes = "";
 	private String selectedAnho = "";
+	private String selectedTipo = "";
+	
 	private RRHHPlanillaSalarios selectedPlanilla;
 	
 	private List<Object[]> selectedFuncionarios;
@@ -58,6 +60,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			RRHHPlanillaSalarios pl = new RRHHPlanillaSalarios();
 			pl.setMes(this.selectedMes);
 			pl.setAnho(this.selectedAnho);
+			pl.setTipo(this.selectedTipo);
 			pl.setFuncionario((String) func[1]);
 			rr.saveObject(pl, this.getLoginNombre());
 			comp.close();
@@ -274,11 +277,21 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return los tipos de salarios..
+	 */
+	public List<String> getTipos() {
+		List<String> out = new ArrayList<>();
+		out.add(RRHHPlanillaSalarios.TIPO_COMISIONES);
+		out.add(RRHHPlanillaSalarios.TIPO_SALARIOS);
+		return out;
+	}
+	
+	/**
 	 * @return las planillas..
 	 */
 	public List<RRHHPlanillaSalarios> getPlanillas_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<RRHHPlanillaSalarios> out = rr.getPlanillaSalarios(this.selectedMes, this.selectedAnho);
+		List<RRHHPlanillaSalarios> out = rr.getPlanillaSalarios(this.selectedMes, this.selectedAnho, this.selectedTipo);
 		return out;
 	}
 	
@@ -333,5 +346,13 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 
 	public void setSelectedPlanilla(RRHHPlanillaSalarios selectedPlanilla) {
 		this.selectedPlanilla = selectedPlanilla;
+	}
+
+	public String getSelectedTipo() {
+		return selectedTipo;
+	}
+
+	public void setSelectedTipo(String selectedTipo) {
+		this.selectedTipo = selectedTipo;
 	}
 }

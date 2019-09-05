@@ -11,10 +11,15 @@
 			model="@load(vm.anhos)" selectedItem="@bind(vm.selectedAnho)"
 			instant="true" onSelect="@command('selectPeriodo')"
 			value="@load(vm.selectedAnho)"></combobox>
+		<combobox placeholder="Tipo.."
+			model="@load(vm.tipos)" selectedItem="@bind(vm.selectedTipo)"
+			instant="true" onSelect="@command('selectPeriodo')"
+			value="@load(vm.selectedTipo)"></combobox>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-info" width="150px" label="Generar Planilla"
 			iconSclass="z-icon-check"
-			onClick='pop_procesar.open(self, "end_before")'></button>
+			onClick='pop_procesar.open(self, "end_before")'
+			disabled="@load(vm.selectedMes eq ''? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" width="150px" label="Imprimir Liquidación"
 			iconSclass="z-icon-print"
@@ -23,7 +28,8 @@
 	</hlayout>
 	<listbox sclass="small-list" vflex="true"
 		model="@load(vm.planillas)"
-		selectedItem="@bind(vm.selectedPlanilla)">
+		selectedItem="@bind(vm.selectedPlanilla)"
+		emptyMessage="SIN REGISTROS..">
 		<frozen columns="4"></frozen>
 		<listhead>
 			<listheader label="Funcionario" width="170px"></listheader>

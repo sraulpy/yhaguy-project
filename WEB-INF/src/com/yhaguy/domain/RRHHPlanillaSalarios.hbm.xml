@@ -15,6 +15,7 @@
 		<property name="anho" />
 		<property name="funcionario" />
 		<property name="cargo" />
+		<property name="tipo" />
 		
 		<property name="salarios"/>
 		<property name="comision"/>

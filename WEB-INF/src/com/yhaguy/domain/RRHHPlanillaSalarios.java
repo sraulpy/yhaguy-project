@@ -22,10 +22,14 @@ public class RRHHPlanillaSalarios extends Domain {
 	public static final String EMBARGO = "EMBARGO";
 	public static final String IPS = "IPS";
 	
+	public static final String TIPO_COMISIONES = "COMISIONES";
+	public static final String TIPO_SALARIOS = "SALARIOS";
+	
 	private String mes;
 	private String anho;
 	private String funcionario;
 	private String cargo;
+	private String tipo;
 	
 	private double salarios;
 	private double comision;
@@ -220,5 +224,13 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 }

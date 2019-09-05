@@ -10698,8 +10698,8 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las planillas de salarios..
 	 */
-	public List<RRHHPlanillaSalarios> getPlanillaSalarios(String mes, String anho) throws Exception {
-		String query = "select p from RRHHPlanillaSalarios p where p.mes = '" + mes + "' and p.anho = '" + anho + "'"
+	public List<RRHHPlanillaSalarios> getPlanillaSalarios(String mes, String anho, String tipo) throws Exception {
+		String query = "select p from RRHHPlanillaSalarios p where p.mes = '" + mes + "' and p.anho = '" + anho + "' and p.tipo = '" + tipo + "'"
 				+ " order by p.funcionario";
 		return this.hql(query);
 	}
