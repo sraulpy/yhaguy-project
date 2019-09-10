@@ -206,6 +206,7 @@ public class Venta extends Domain {
 		for (VentaDetalle det : this.getDetalles()) {
 			if (det.isFamilia(idFamilia)) {
 				out += det.getCostoTotalGsSinIva();
+				System.out.println("--> COSTO: " + det.getCostoTotalGsSinIva());
 			}
 		}
 		return out;

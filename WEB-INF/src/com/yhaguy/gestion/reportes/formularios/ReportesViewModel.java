@@ -112,6 +112,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_LISTADO_ANTICIPOS = "/reportes/jasper/ListadoAnticipos.jasper";
 	public static final String SOURCE_MATRIZ_COMPRAS_LOCALES = "/reportes/jasper/MatrizComprasLocales.jasper";
 	public static final String SOURCE_MATRIZ_COMPRAS_LOCALES_ = "/reportes/jasper/MatrizComprasLocales_.jasper";
+	public static final String SOURCE_PLANILLA_SALARIOS = "/reportes/jasper/PlanillaSalarios.jasper";
 	
 	static final String CONTEXT = Sessions.getCurrent().getWebApp().getRealPath("/");
 	static final String LOGO = CONTEXT + "/logo.png";
