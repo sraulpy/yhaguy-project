@@ -580,6 +580,7 @@ public class ControlCtaCteEmpresa extends Control {
 			Date fechaEmision, int diasEntreVencimientos, int cuotasVencimiento, double importeOriginal,
 			double entregaInicial, double saldo, MyPair moneda, MyArray tipoMovimiento, MyPair tipoCaracterMovimiento,
 			MyArray sucursal, String numeroImportacion, double tipoCambio, String cartera) throws Exception {
+		cuotasVencimiento = 1;
 
 		CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO = new CtaCteEmpresaMovimientoDTO();
 		nuevoMovimientoDTO.setIdEmpresa(empresa.getId());
