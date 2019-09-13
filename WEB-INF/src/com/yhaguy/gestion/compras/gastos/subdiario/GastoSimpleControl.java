@@ -433,12 +433,8 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		return out;
 	}
 	
-	@DependsOn({ "dto.proveedor", "dto.numeroFactura", "dto.timbrado",
-			"dto.beneficiario" })
-	public boolean isDetalleVisible() {
-		if (this.dto.isAutoFactura())
-			return this.dto.getBeneficiario().isEmpty() == false;
-		
+	@DependsOn({ "dto.proveedor", "dto.numeroFactura", "dto.timbrado" })
+	public boolean isDetalleVisible() {		
 		return (this.dto.getProveedor().esNuevo() == false)
 				&& (this.dto.getNumeroFactura().isEmpty() == false);
 	}
