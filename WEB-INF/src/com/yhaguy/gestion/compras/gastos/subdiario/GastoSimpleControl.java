@@ -18,7 +18,6 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Row;
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import com.coreweb.componente.VerificaAceptarCancelar;
@@ -68,9 +67,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	private ReciboFormaPagoDTO selectedFormaPago;
 	
 	private Window win;
-	
-	@Wire
-	private Textbox txb_benef;	
+		
 	@Wire
 	private Row rwNroRetencion;
 	@Wire
@@ -385,8 +382,6 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		BindUtils.postNotifyChange(null, null, this.dto, "numeroTimbrado");
 		BindUtils.postNotifyChange(null, null, this.dto, "timbrado");
 		BindUtils.postNotifyChange(null, null, this.dto, "proveedor");
-		
-		this.txb_benef.focus();
 	}
 	
 	
