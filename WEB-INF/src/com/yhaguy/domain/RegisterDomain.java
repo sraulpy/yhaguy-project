@@ -10806,13 +10806,17 @@ public class RegisterDomain extends Register {
 	 * [14]: banco
 	 * [15]: nroCuenta
 	 */
-	public List<Object[]> getFormasPagoTarjeta_(String fecha, String sigla, long idProcesadora, long idSucursal, boolean acreditado) throws Exception {
+	public List<Object[]> getFormasPagoTarjeta_(String fecha, String sigla, long idProcesadora, long idSucursal,
+			boolean acreditado, String fechaCredito, String procesadora, String numero) throws Exception {
 		String query = "select f.id, f.fechaOperacion, f.tarjetaNumeroComprobante, f.montoGs, '', '', '', '',"
 				+ " f.importeAcreditado, '', f.reciboDebitoNro, f.acreditado, f.fechaAcreditacion, f.tarjetaProcesadora.nombre,"
 				+  (acreditado ? " f.depositoBancoCta.banco.descripcion" : "''") + ","
 				+  (acreditado ? " f.depositoBancoCta.nroCuenta" : "''")
 				+ " from ReciboFormaPago f where f.tipo.sigla = '" + sigla + "'"
 				+ " and cast (f.fechaOperacion as string) like '%" + fecha + "%'"
+				+ " and cast (f.fechaAcreditacion as string) like '%" + fechaCredito + "%'"
+				+ " and upper (f.tarjetaProcesadora.nombre) like '%" + procesadora.toUpperCase() + "%'"
+				+ " and upper (f.tarjetaNumeroComprobante) like '%" + numero.toUpperCase() + "%'"
 				+ " and f.acreditado = " + acreditado;
 		if (idProcesadora > 0) {
 			query += " and f.tarjetaProcesadora.id = " + idProcesadora;

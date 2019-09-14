@@ -1042,8 +1042,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 */
 	private void addReposicion(int tipo) throws Exception {
 
-		ReciboFormaPagoDTO formaPago = (ReciboFormaPagoDTO) this.reposicion
-				.getPos14();
+		ReciboFormaPagoDTO formaPago = (ReciboFormaPagoDTO) this.reposicion.getPos14();
 
 		formaPago.setMoneda((MyPair) this.reposicion.getPos9());
 		formaPago.setMontoGs((double) this.reposicion.getPos5());

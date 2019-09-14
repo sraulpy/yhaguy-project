@@ -32,6 +32,12 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
 	private String filterFechaAA = "";
+	private String procesadora = "";
+	private String operacion = "";
+	
+	private String filterFechaDD_ = "";
+	private String filterFechaMM_ = "";
+	private String filterFechaAA_ = "";
 	
 	private Tipo selectedTipo;
 	private Object[] totales = new Object[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
@@ -43,6 +49,11 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 			this.filterFechaAA = Utiles.getAnhoActual();
 			if (this.filterFechaMM.length() == 1) {
 				this.filterFechaMM = "0" + this.filterFechaMM;
+			}
+			this.filterFechaMM_ = "" + Utiles.getNumeroMesCorriente();
+			this.filterFechaAA_ = Utiles.getAnhoActual();
+			if (this.filterFechaMM_.length() == 1) {
+				this.filterFechaMM_ = "0" + this.filterFechaMM_;
 			}
 			this.selectedTipo = this.getTiposTarjetas().get(0);
 		} catch (Exception e) {
@@ -64,19 +75,21 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 		}
 	}
 	
-	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA", "selectedTipo", "selectedFiltro" })
+	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA", "filterFechaDD_", "filterFechaMM_",
+			"filterFechaAA_", "selectedTipo", "selectedFiltro", "procesadora", "operacion" })
 	public List<Object[]> getMovimientos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		boolean acreditado = this.selectedFiltro.equals(FILTRO_ACREDITADOS) ? true : false;
-		List<Object[]> list = rr.getFormasPagoTarjeta_(this.getFilterFecha(), this.selectedTipo.getSigla(), 0, 0, acreditado);
+		List<Object[]> list = rr.getFormasPagoTarjeta_(this.getFilterFecha(), this.selectedTipo.getSigla(), 0, 0,
+				acreditado, this.getFilterFecha_(), this.procesadora, this.operacion);
 		double totalImporte = 0;
 		double totalCredito = 0;
 		for (Object[] item : list) {
 			totalImporte += ((double) item[3]);
 			totalCredito += ((double) item[8]);
 		}
-		this.totales = new Object[] { totalImporte, totalCredito };		
-		
+		this.totales = new Object[] { totalImporte, totalCredito };
+
 		return list;
 	}
 	
@@ -128,6 +141,21 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 		return this.filterFechaAA + "-" + this.filterFechaMM + "-" + this.filterFechaDD;
 	}
 	
+	/**
+	 * @return el filtro de fecha..
+	 */
+	private String getFilterFecha_() {
+		if (this.filterFechaAA_.isEmpty() && this.filterFechaDD_.isEmpty() && this.filterFechaMM_.isEmpty())
+			return "";
+		if (this.filterFechaAA_.isEmpty())
+			return this.filterFechaMM_ + "-" + this.filterFechaDD_;
+		if (this.filterFechaMM_.isEmpty())
+			return this.filterFechaAA_;
+		if (this.filterFechaMM_.isEmpty() && this.filterFechaDD_.isEmpty())
+			return this.filterFechaAA_;
+		return this.filterFechaAA_ + "-" + this.filterFechaMM_ + "-" + this.filterFechaDD_;
+	}
+	
 	public String getFilterFechaDD() {
 		return filterFechaDD;
 	}
@@ -174,5 +202,45 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 
 	public void setSelectedFiltro(String selectedFiltro) {
 		this.selectedFiltro = selectedFiltro;
+	}
+
+	public String getFilterFechaDD_() {
+		return filterFechaDD_;
+	}
+
+	public void setFilterFechaDD_(String filterFechaDD_) {
+		this.filterFechaDD_ = filterFechaDD_;
+	}
+
+	public String getFilterFechaMM_() {
+		return filterFechaMM_;
+	}
+
+	public void setFilterFechaMM_(String filterFechaMM_) {
+		this.filterFechaMM_ = filterFechaMM_;
+	}
+
+	public String getFilterFechaAA_() {
+		return filterFechaAA_;
+	}
+
+	public void setFilterFechaAA_(String filterFechaAA_) {
+		this.filterFechaAA_ = filterFechaAA_;
+	}
+
+	public String getProcesadora() {
+		return procesadora;
+	}
+
+	public void setProcesadora(String procesadora) {
+		this.procesadora = procesadora;
+	}
+
+	public String getOperacion() {
+		return operacion;
+	}
+
+	public void setOperacion(String operacion) {
+		this.operacion = operacion;
 	}	
 }
