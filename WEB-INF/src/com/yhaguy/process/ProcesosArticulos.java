@@ -171,7 +171,7 @@ public class ProcesosArticulos {
 				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde_, hasta_);
 				List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde_, hasta_);
 				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, desde_, hasta_);
-				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, desde_, hasta_);
+				List<Object[]> transfs = rr.getTransferenciasPorArticuloMRA(idArticulo, desde_, hasta_);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				List<Object[]> migracion = rr.getMigracionPorArticulo(adp.getArticulo().getCodigoInterno(), desde_, hasta_, idSucursal);
@@ -301,7 +301,7 @@ public class ProcesosArticulos {
 				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idarticulo, desde_, hasta_);
 				List<Object[]> compras = rr.getComprasLocalesPorArticulo(idarticulo, desde_, hasta_);
 				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idarticulo, desde_, hasta_);
-				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idarticulo, desde_, hasta_);
+				List<Object[]> transfs = rr.getTransferenciasPorArticuloMRA(idarticulo, desde_, hasta_);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idarticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idarticulo, desde_, hasta_, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 				List<Object[]> migracion = rr.getMigracionPorArticulo(adp.getArticulo().getCodigoInterno(), desde_, hasta_, idSucursal);
@@ -454,7 +454,7 @@ public class ProcesosArticulos {
 					List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(art.getId(), desde, date);
 					List<Object[]> compras = rr.getComprasLocalesPorArticulo(art.getId(), desde, date);
 					List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(art.getId(), desde, date);
-					List<Object[]> transfs = rr.getTransferenciasPorArticulo(art.getId(), desde, date);
+					List<Object[]> transfs = rr.getTransferenciasPorArticuloMRA(art.getId(), desde, date);
 					List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(art.getId(), desde, date, 2, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 					List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(art.getId(), desde, date, 2, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 					List<Object[]> migracion = rr.getMigracionPorArticulo(art.getCodigoInterno(), desde, date, 2);

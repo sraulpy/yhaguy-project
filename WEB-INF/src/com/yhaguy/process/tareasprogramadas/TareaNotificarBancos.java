@@ -28,7 +28,7 @@ public class TareaNotificarBancos {
 	static final String DIRECTORIO_BASE_BAT = "/home/server/project/yhaguy-project/";
 	static final String DIRECTORIO_REPORTES_MRA = "/home/mraserver/project/yhaguy/reportes/";
 	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy-project/reportes/";
-	static final String EMPRESA_MRA = Configuracion.EMPRESA_MRA;
+	static final String EMPRESA_MRA = Configuracion.EMPRESA_YRSA;
 	static final String EMPRESA_BAT = Configuracion.EMPRESA_GTSA;
 	
 	static final String[] DESTINATARIOS_MRA = new String[] {

@@ -500,11 +500,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> ventas = rr.getVentasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfs_ = rr.getTransferenciasPorArticuloMRA(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 		List<Object[]> migracion = rr.getMigracionPorArticulo((String) this.selectedItem.getPos1(), this.desde, this.hasta, 0);
@@ -515,6 +516,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(ntcsv);
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
+		if (this.isEmpresaMRA()) this.historicoEntrada.addAll(transfs_);
 		
 		this.historicoSalida = new ArrayList<Object[]>();
 		this.historicoSalida.addAll(ajustStockNeg);
@@ -595,7 +597,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
-		if (this.isSucursalBaterias()) {
+		if (this.isEmpresaGTSA()) {
 			List<Deposito> deps = rr.getDepositosPorSucursal(ID_SUC_PRINCIPAL);
 			for (Deposito dep : deps) {
 				out.add(new MyPair(dep.getId(), dep.getDescripcion()));
@@ -677,8 +679,15 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	/**
 	 * @return true si es baterias..
 	 */
-	public boolean isSucursalBaterias() {
+	public boolean isEmpresaGTSA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
+	}
+	
+	/**
+	 * @return true si es mra..
+	 */
+	public boolean isEmpresaMRA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 	}
 	
 	public String getSiglaEstadoAnulado() {

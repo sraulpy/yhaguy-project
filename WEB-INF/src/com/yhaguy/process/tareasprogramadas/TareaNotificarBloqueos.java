@@ -34,7 +34,7 @@ public class TareaNotificarBloqueos {
 	static final String DIRECTORIO_REPORTES_MRA = "/home/mraserver/project/yhaguy-project/reportes/";
 	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy/reportes/";
 	static final String DIRECTORIO_REPORTES_CEN = "/home/server/project/yhaguy-central/reportes/";
-	static final String EMPRESA = Configuracion.EMPRESA_MRA;
+	static final String EMPRESA = Configuracion.EMPRESA_YRSA;
 	static final String EMPRESA_BAT = Configuracion.EMPRESA_GTSA;
 	
 	static final String[] DESTINATARIOS_MRA = new String[] {

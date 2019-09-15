@@ -1487,7 +1487,7 @@ public class VentaControlBody extends BodyApp {
 		}
 		
 		// en mra el pedido lo prepara el vendedor de mostrador..
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_MRA)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
 			out.setPreparadoPor((String) usuarioFuncionario.getPos1());
 		}
 	}

@@ -4511,12 +4511,52 @@ public class RegisterDomain extends Register {
 				+ "' and n.fechaEmision <= '" + hasta_ + "')";
 		return this.hql(query);
 	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
+	public List<Object[]> getTransferenciasPorArticuloMRA(long idArticulo,
+			Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.sucursalDestino.id != " + SucursalApp.ID_MRA
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
 
 	/**
 	 * @return las transferencias donde esta contenida el articulo..
-	 *         [0]:concepto [1]:fecha [2]:numero [3]:cantidad [4]:costo
-	 *         [5]:destino [6]:idsuc [7]:id salida [8]:id entrada
-	 *         [12]:sucursal
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
 	 */
 	public List<Object[]> getTransferenciasPorArticulo(long idArticulo,
 			Date desde, Date hasta) throws Exception {
@@ -5213,7 +5253,7 @@ public class RegisterDomain extends Register {
 	 * @return los datos de la ultima compra del articulo..
 	 */
 	public Object[] getUltimaCompra(long idArticulo) throws Exception {
-		List<Object[]> transfs = this.getTransferenciasPorArticulo(idArticulo, null, null);
+		List<Object[]> transfs = this.getTransferenciasPorArticuloMRA(idArticulo, null, null);
 		List<Object[]> compras = this.getComprasLocalesPorArticulo(idArticulo, null, null);
 		Object[] compra = compras.size() > 0 ? compras.get(0) : null;
 		Object[] transf = transfs.size() > 0 ? transfs.get(0) : null;
@@ -10875,14 +10915,9 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<ImportacionPedidoCompra> imps = rr.getObjects(ImportacionPedidoCompra.class.getName());
-			for (ImportacionPedidoCompra imp : imps) {
-				if (imp.isConfirmadoImportacion()) {
-					ImportacionFactura fac = imp.getImportacionFactura_().get(0);
-					fac.setCoeficiente(imp.getResumenGastosDespacho().getCoeficiente());
-					fac.setTipoCambio(imp.getResumenGastosDespacho().getTipoCambio());
-					System.out.println(imp.getNumeroPedidoCompra());
-				}
+			List<Object[]> transfs = rr.getTransferenciasPorArticuloMRA(14668, Utiles.getFecha("01-01-2016 00:00:00"), new Date());
+			for (Object[] obj : transfs) {
+				System.out.println(obj[0]);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

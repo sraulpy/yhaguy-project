@@ -58,50 +58,37 @@
 				<textbox hflex="true"
 						placeholder="Procesadora"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+								no-repeat; background-position: 98%; background-size: 10px;"
+						value="@bind(vm.procesadora)" instant="true"></textbox>
 			</auxheader>
 			<auxheader>
 				<textbox hflex="true"
 						placeholder="Nro. Operación.."
 						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+								no-repeat; background-position: 98%; background-size: 10px;"
+						value="@bind(vm.operacion)" instant="true"></textbox>
 			</auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
-			<auxheader>
-				<textbox hflex="true"
-						placeholder="Banco.."
-						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
-			</auxheader>
-			<auxheader>
-				<textbox hflex="true"
-						placeholder="Cuenta.."
-						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
-			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
 			<auxheader>
 				<hlayout>
 					<textbox hflex="true" 
-						placeholder="Día.." instant="true"
+						placeholder="Día.." instant="true" value="@bind(vm.filterFechaDD_)"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
 								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 					<textbox hflex="true"
-						placeholder="Mes.." instant="true"
+						placeholder="Mes.." instant="true" value="@bind(vm.filterFechaMM_)"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
 								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 					<textbox hflex="true"
-						placeholder="Año.." instant="true"
+						placeholder="Año.." instant="true" value="@bind(vm.filterFechaAA_)"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
 								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 				</hlayout>
 			</auxheader>
-			<auxheader>
-				<textbox hflex="true"
-						placeholder="Nro. Tarjeta Débito"
-						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
-			</auxheader>
+			<auxheader></auxheader>
 			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">

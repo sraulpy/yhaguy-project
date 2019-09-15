@@ -197,7 +197,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			vtas = rr.getPedidosPendientesBaterias(this.getSucursal().getId(), desde, new Date());
 		}
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_MRA)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
 			vtas = rr.getPedidosPendientes(this.getSucursal().getId(), desde, new Date());
 		}		
 		this.totalPedidosPendientes = vtas.size();
