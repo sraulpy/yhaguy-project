@@ -57,6 +57,7 @@ import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ReservaDTO;
+import com.yhaguy.gestion.modulos.Permisos;
 import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 
@@ -777,6 +778,11 @@ public class VentaItemControl extends SoloViewModel {
 			MyArray mprecio = new MyArray(precio.getDescripcion(), precio.getMargen(), precio.getFormula());
 			mprecio.setId(precio.getId());
 			out.add(mprecio);
+			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_MAYORISTA)) {
+				if (precio.getDescripcion().contains("MAYORISTA")) {
+					out.remove(mprecio);
+				}
+			}
 		}
 		return out;
 	}
@@ -815,6 +821,14 @@ public class VentaItemControl extends SoloViewModel {
 	public AccesoDTO getAcceso() {
 		Session s = Sessions.getCurrent();
 		return (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
+	}
+	
+	/**
+	 * @return si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
 	}
 	
 	public boolean isEmpresaBaterias() {
