@@ -502,7 +502,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<Object[]> ventas = rr.getVentasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> transfs_ = rr.getTransferenciasPorArticuloMRA(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfsMra = rr.getTransferenciasPorArticuloMRAentrada(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfsMra_ = rr.getTransferenciasPorArticuloMRAsalida(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
@@ -516,13 +517,13 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(ntcsv);
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
-		if (this.isEmpresaMRA()) this.historicoEntrada.addAll(transfs_);
+		if (this.isEmpresaMRA()) this.historicoEntrada.addAll(transfsMra);
 		
 		this.historicoSalida = new ArrayList<Object[]>();
 		this.historicoSalida.addAll(ajustStockNeg);
 		this.historicoSalida.addAll(ventas);
 		this.historicoSalida.addAll(ntcsc);
-		this.historicoSalida.addAll(transfs);
+		this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsMra_ : transfs);
 		
 		/** for (Object[] transf : transfs) {
 			long idsuc = (long) transf[6];
