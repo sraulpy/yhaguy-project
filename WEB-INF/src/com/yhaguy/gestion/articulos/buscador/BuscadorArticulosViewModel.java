@@ -16,6 +16,8 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
@@ -41,6 +43,8 @@ import com.yhaguy.domain.ImportacionPedidoCompra;
 import com.yhaguy.domain.ImportacionPedidoCompraDetalle;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
+import com.yhaguy.gestion.modulos.Permisos;
+import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 
 public class BuscadorArticulosViewModel extends SimpleViewModel {
@@ -471,6 +475,11 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			MyArray mprecio = new MyArray(precio.getDescripcion(), precio.getMargen(), precio.getFormula());
 			mprecio.setId(precio.getId());
 			out.add(mprecio);
+			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_MAYORISTA)) {
+				if (precio.getDescripcion().contains("MAYORISTA")) {
+					out.remove(mprecio);
+				}
+			}
 		}
 		return out;
 	}
@@ -667,6 +676,14 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	public List<Object[]> getClientes() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getClientesConDescuento(this.filter_razonsocial, this.filter_ruc);
+	}
+	
+	/**
+	 * @return el acceso..
+	 */
+	public AccesoDTO getAcceso() {
+		Session s = Sessions.getCurrent();
+		return (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
 	}
 	
 	/**

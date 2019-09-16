@@ -226,7 +226,7 @@
 				<listheader/>
 				<listheader align="right" width="200px"/>
 				<listheader width="30px" align="center"/>
-				<listheader width="30px" align="center" visible="@load(vm.loginNombre eq 'hugog' or vm.loginNombre eq 'david')"/>
+				<listheader width="30px" align="center" visible="@load(vm.loginNombre eq 'david')"/>
 			</listhead>
 			<template name="model">
 				<listitem>
