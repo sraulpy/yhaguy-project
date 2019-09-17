@@ -22,7 +22,7 @@ public class AssemblerRecibo extends Assembler {
 			"nombreUsuarioCarga", "fechaEmision", "totalImporteGs",
 			"totalImporteDs", "tipoCambio", "movimientoBancoActualizado",
 			"motivoAnulacion", "cobroExterno", "tesaka", "numeroPlanilla", 
-			"entregado", "numeroRecibo", "fechaRecibo", "nro", "cobrador" };
+			"entregado", "numeroRecibo", "fechaRecibo", "nro", "cobrador", "saldodeudor" };
 	
 	private static String[] attEmpresa = { "codigoEmpresa", "razonSocial", "ruc", "idEmpresa" };	
 	

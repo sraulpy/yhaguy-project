@@ -242,6 +242,29 @@ public class ControlCuentaCorriente {
 	}
 	
 	/**
+	 * agregar movimiento recibo con saldo deudor..
+	 */
+	public static void addReciboDeudor(long idRecibo, String user) throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Recibo cobro = (Recibo) rr.getObject(Recibo.class.getName(), idRecibo);
+		
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(cobro.getTipoMovimiento());
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+		ctm.setFechaEmision(cobro.getFechaEmision());
+		ctm.setFechaVencimiento(cobro.getFechaEmision());
+		ctm.setIdEmpresa(cobro.getCliente().getIdEmpresa());
+		ctm.setIdMovimientoOriginal(cobro.getId());
+		ctm.setIdVendedor(0);
+		ctm.setImporteOriginal(cobro.isMonedaLocal() ? cobro.getTotalImporteGs() : cobro.getTotalImporteDs());
+		ctm.setMoneda(cobro.getMoneda());
+		ctm.setNroComprobante(cobro.getNumero());
+		ctm.setSucursal(cobro.getSucursal());
+		ctm.setSaldo(cobro.isMonedaLocal() ? cobro.getTotalImporteGs() : cobro.getTotalImporteDs());	
+		rr.saveObject(ctm, user);
+	}
+	
+	/**
 	 * agregar movimiento recibo de pago anticipado..
 	 */
 	public static void addReciboDePagoAnticipado(long idOrdenPago, String user, String siglaMoneda) throws Exception {		

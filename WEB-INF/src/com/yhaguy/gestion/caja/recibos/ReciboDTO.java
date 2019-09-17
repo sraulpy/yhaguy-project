@@ -56,7 +56,8 @@ public class ReciboDTO extends DTO {
 	private String tituloDetalles = "";
 	private String labelEmpresa = "";
 	private boolean anticipo = false;
-	private boolean imputar = false; 
+	private boolean imputar = false;
+	private boolean saldodeudor  = false;
 
 	/** los estados de comprobantes **/
 	private List<MyPair> estadosComprobantes;
@@ -592,5 +593,13 @@ public class ReciboDTO extends DTO {
 
 	public void setChequesEliminar(List<BancoChequeTercero> chequesEliminar) {
 		this.chequesEliminar = chequesEliminar;
+	}
+
+	public boolean isSaldodeudor() {
+		return saldodeudor;
+	}
+
+	public void setSaldodeudor(boolean saldodeudor) {
+		this.saldodeudor = saldodeudor;
 	}
 }

@@ -97,7 +97,6 @@
 							checked="@bind(vm.dato.reciboDTO.anticipo)"
 							onCheck="@command('checkAnticipo', check=self.checked)" />
 					</vlayout>
-					<space />
 					<vlayout spacing="0"
 						visible="false">
 						<field value="A Cobrar"/>
@@ -111,6 +110,12 @@
 						<field value="Otra Suc."/>
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.cobroExterno)" />
+					</vlayout>
+					<space></space>
+					<vlayout spacing="0">
+						<field value="Saldo Deudor"/>
+						<checkbox
+							checked="@bind(vm.dato.reciboDTO.saldodeudor)" />
 					</vlayout>
 				</hlayout>				
 				<hlayout>				
@@ -150,23 +155,20 @@
 				<field value="@load(vm.dato.reciboDTO.tituloDetalles)"/>
 				<separator orient="vertical" bar="true" />
 				<button mold="bs" sclass="btn-danger btn-sm"
-					width="100px" iconSclass="z-icon-minus-circle"
+					hflex="true" iconSclass="z-icon-minus-circle"
 					onClick="@command('eliminarItemFactura')" label=" Eliminar" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
-				<space />
 				<button mold="bs" sclass="btn-success btn-sm"
-					width="100px" iconSclass="z-icon-plus-circle"
+					hflex="true" iconSclass="z-icon-plus-circle"
 					onClick="@command('insertarDetalle')" label=" Insertar" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
-				<space />
 				<button mold="bs" sclass="btn-info btn-sm"
-					width="100px" iconSclass="z-icon-plus-circle"
+					hflex="true" iconSclass="z-icon-plus-circle"
 					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
 					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
-				<space />
 				<button mold="bs" sclass="btn-primary btn-sm"
-					width="100px" iconSclass="z-icon-plus-circle"
+					hflex="true" iconSclass="z-icon-plus-circle"
 					label=" Cuenta C.T." tooltiptext="Cta Contable.."
 					onClick="@command('openCuentaContable', comp=pop_ct, parent=self)" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" 

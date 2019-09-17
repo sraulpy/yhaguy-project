@@ -24,6 +24,7 @@ public class Recibo extends Domain {
 	private char estado; // anulado - contabilizado
 	private String tesaka;
 	private String cobrador;
+	private boolean saldodeudor;
 	
 	private double totalImporteGs;
 	private double totalImporteDs;
@@ -821,5 +822,13 @@ public class Recibo extends Domain {
 
 	public void setCobrador(String cobrador) {
 		this.cobrador = cobrador;
+	}
+
+	public boolean isSaldodeudor() {
+		return saldodeudor;
+	}
+
+	public void setSaldodeudor(boolean saldodeudor) {
+		this.saldodeudor = saldodeudor;
 	}
 }

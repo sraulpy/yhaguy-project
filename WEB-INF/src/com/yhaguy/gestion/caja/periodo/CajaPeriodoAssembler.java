@@ -469,6 +469,10 @@ public class CajaPeriodoAssembler extends Assembler {
 		if (rec.isCobro()) {
 			ControlCuentaCorriente.verificarBloqueoCliente((long) rec.getCliente().getPos4(), rec.getCliente().getId(), this.getLogin());
 		}
+		// saldo deudor..
+		if (rec.isSaldodeudor()) {
+			ControlCuentaCorriente.addReciboDeudor(rec.getId(), this.getLogin());
+		}
 	}
 
 	/**

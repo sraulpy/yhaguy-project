@@ -950,8 +950,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private Row rwSaldoFavorCobrado;
 	@Wire
 	private Row rwMontoAplicado;
-	@Wire
-	private Row rwCheque;
 	
 	@Command @NotifyChange("*")
 	public void seleccionarFormaPago() throws Exception {
@@ -984,7 +982,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false); 
 			rwDebitoCobroCentral.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
-			rwCheque.setVisible(false);
 			dbxGs.setReadonly(true); dbxUS.setReadonly(true);
 			rwMontoAplicado.setVisible(true);
 			
@@ -1005,7 +1002,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 			
 		} else if(siglaFP.compareTo(siglaFPTD) == 0){
@@ -1025,7 +1021,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 			
 		} else if(siglaFP.compareTo(siglaFPDB) == 0){
@@ -1045,7 +1040,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 		
 		} else if(siglaFP.compareTo(siglaFPDE) == 0){
@@ -1065,7 +1059,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 		
 		} else if (siglaFP.compareTo(siglaFPCT) == 0) {
@@ -1084,7 +1077,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);	
 			this.nvoFormaPago.setChequeLibrador((String) this.dato.getReciboDTO().getCliente().getPos2());
 		
@@ -1105,7 +1097,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			if (this.dato.getReciboDTO().isOrdenPago()) {
 				rwNroRetencion.setVisible(false);
 				rwTimbradoVencimiento.setVisible(false); 
@@ -1129,7 +1120,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
 		} else if (siglaFP.equals(siglaFPDC)) {
@@ -1148,7 +1138,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
 		} else if (siglaFP.equals(siglaSFCO)) {
@@ -1167,7 +1156,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(true);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
 		} else {
@@ -1187,7 +1175,6 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false); 
 			rwSaldoFavorCobrado.setVisible(false);
 			rwMontoAplicado.setVisible(true);
-			rwCheque.setVisible(false);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());		
 		}
 	}
