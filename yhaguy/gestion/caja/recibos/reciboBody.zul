@@ -170,7 +170,7 @@
 					label=" Cuenta C.T." tooltiptext="Cta Contable.."
 					onClick="@command('openCuentaContable', comp=pop_ct, parent=self)" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" 
-					visible="@load(vm.dato.reciboDTO.ordenPago ? 'true' : 'false')" />
+					visible="@load(vm.dato.reciboDTO.ordenPago ? 'true' : vm.dato.reciboDTO.cobro ? 'true' : 'false')" />
 			</hlayout>
 
 			<listbox height="355px"
