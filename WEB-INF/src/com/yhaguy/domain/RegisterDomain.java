@@ -10925,6 +10925,15 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return el maximo descuento
+	 */
+	public int getMaximoDescuento(long idLista) throws Exception {
+		String query = "select a.id, a.rango_descuento_1 from ArticuloListaPrecio a where a.id = " + idLista;
+		Object[] result = (Object[]) this.hql(query).get(0);
+		return (int) result[1];
+	}
+	
 	public static void main_(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

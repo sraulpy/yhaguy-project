@@ -18,6 +18,7 @@ public class ArticuloListaPrecio extends Domain {
 	private String formula;
 	private int margen;
 	private boolean activo;
+	private int rango_descuento_1;
 	
 	private Date desde;
 	private Date hasta;
@@ -91,5 +92,13 @@ public class ArticuloListaPrecio extends Domain {
 
 	public void setFormula(String formula) {
 		this.formula = formula;
+	}
+
+	public int getRango_descuento_1() {
+		return rango_descuento_1;
+	}
+
+	public void setRango_descuento_1(int rango_descuento_1) {
+		this.rango_descuento_1 = rango_descuento_1;
 	}
 }

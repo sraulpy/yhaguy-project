@@ -1991,9 +1991,7 @@ public class VentaControlBody extends BodyApp {
 			out.setPos2(cli.getListaPrecio().getMargen());
 			out.setPos3(cli.getListaPrecio().getFormula());
 		} else {
-			Funcionario func = rr.getFuncionario(this.getAcceso().getId());
 			long idListaPrecio = ArticuloListaPrecio.ID_MINORISTA;
-			if (!func.isVendedorMostrador()) idListaPrecio = ArticuloListaPrecio.ID_MAYORISTA_GS;
 			ArticuloListaPrecio lp = rr.getListaDePrecio(idListaPrecio);
 			if (lp != null) {
 				out = new MyArray(lp.getDescripcion(), lp.getMargen(), lp.getFormula());
