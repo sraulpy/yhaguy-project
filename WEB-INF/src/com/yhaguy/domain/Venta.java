@@ -135,6 +135,14 @@ public class Venta extends Domain {
 		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
 	}
 	
+	/**
+	 * @return el nombre del tecnico..
+	 */
+	public String getNombreTecnico() {
+		if (this.getTecnico() == null) return "";
+		return this.getTecnico().getRazonSocial();
+	}
+	
 	@DependsOn("detalles")
 	public double getImporteGs() {
 		double out = 0;

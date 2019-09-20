@@ -3813,7 +3813,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
 									item.getArticulo().getDescripcion(),
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
-									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1 };
+									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1,
+									notacred.getVentaAplicada().getNombreTecnico() };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
@@ -3841,7 +3842,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidad() * -1,
 									"DESCUENTO CONCEDIDO",
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
-									notacred.isAnulado() ? 0.0 : 0.0 };
+									notacred.isAnulado() ? 0.0 : 0.0,
+									notacred.getVentaAplicada().getNombreTecnico() };
 							data.add(nc);
 						}
 					}					
@@ -3868,7 +3870,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									venta.isAnulado() ? 0.0 : item.getRentabilidad(),
 									item.getArticulo().getDescripcion(),
 									venta.isAnulado() ? 0.0 : item.getRentabilidadVenta(),
-									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) };
+									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()),
+									venta.getNombreTecnico() };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
@@ -17374,6 +17377,8 @@ class VentasUtilidadDetallado implements JRDataSource {
 			value = FORMATTER.format(det[15]);
 		} else if ("Ganancia".equals(fieldName)) {
 			value = FORMATTER.format(det[16]);
+		}  else if ("Tecnico".equals(fieldName)) {
+			value = det[17];
 		}
 		return value;
 	}
