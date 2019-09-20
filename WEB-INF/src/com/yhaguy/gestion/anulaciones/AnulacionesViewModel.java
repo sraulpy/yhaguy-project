@@ -19,6 +19,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.AjusteStock;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.RegisterDomain;
@@ -37,12 +38,25 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	private List<MyPair> tiposDeMovimientos;
 	
 	private String filterDesc = "";
+	
+	private Date fechaCierre;
 
 	@Init(superclass = true)
 	public void init() {
 		this.selectedMovimiento.setPos5(new Date());
 		this.selectedMovimiento.setPos6(false);
 		this.setTiposDeMovimientos();
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@AfterCompose(superclass = true)
@@ -94,6 +108,12 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("*")
 	public void anularMovimiento() {
+		Date emision = (Date) this.getSelectedMovimiento().getPos5();
+		if (emision.compareTo(this.fechaCierre) <= 0) {
+			Clients.showNotification("La fecha del registro seleccionado ya fue cerrado contablemente.",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		String motivo = this.getMotivoAnulacion();
 		if (!motivo.trim().isEmpty()) {
 			this.anularMovimiento_(motivo);

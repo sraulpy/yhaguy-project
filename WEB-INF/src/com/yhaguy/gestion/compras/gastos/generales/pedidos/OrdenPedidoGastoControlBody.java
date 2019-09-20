@@ -2,6 +2,7 @@ package com.yhaguy.gestion.compras.gastos.generales.pedidos;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.BancoDebito;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CentroCosto;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Gasto;
@@ -89,6 +91,8 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	
 	private CajaPeriodo selectedCaja;
 	
+	private Date fechaCierre;
+	
 	private List<BancoDebito> debitoDesglosado = new ArrayList<BancoDebito>();
 	private BancoDebito nvoDebito = new BancoDebito();
 	
@@ -97,6 +101,17 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 
 	@Init(superclass = true)
 	public void init() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@AfterCompose(superclass = true)
@@ -648,6 +663,13 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return la restriccion de fecha..
+	 */
+	public String getConstraintFecha() {
+	    return "after " + new SimpleDateFormat("yyyyMMdd").format(this.getFechaCierre());
+	}
+	
+	/**
 	 * @return validacion los datos del Formulario..
 	 */
 	public boolean validarFormulario() {
@@ -1106,6 +1128,14 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 
 	public void setNvoDebito(BancoDebito nvoDebito) {
 		this.nvoDebito = nvoDebito;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }
 

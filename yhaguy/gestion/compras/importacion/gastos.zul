@@ -35,7 +35,8 @@
 						<datebox hflex="true"
 							value="@bind(vm.nvoGasto.fecha)"
 							instant="true"
-							onChange="@command('setVencimiento')"></datebox>
+							onChange="@command('setVencimiento')"
+							constraint="@load(vm.constraintFecha)"></datebox>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Vencimiento" />

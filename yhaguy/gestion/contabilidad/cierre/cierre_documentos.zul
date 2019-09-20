@@ -6,18 +6,41 @@
 	<vbox vflex="true" hflex="true" spacing="0">
 	<hlayout sclass="button-container" hflex="true">
 		<field>Cierre de documentos a la fecha:</field>
-		<datebox></datebox>
+		<datebox value="@bind(vm.fecha)"
+			instant="true"></datebox>
 		<space></space>
 		<separator orient="vertical" bar="true"></separator>
 		<space></space>
 		<field>Operaciones:</field>
 		<label>Altas - Bajas - Modificaciones</label>
+		<space></space>
+		<button mold="bs" sclass="btn-info btn-sm" label="Confirmar"
+			iconSclass="z-icon-check" width="150px"
+			disabled="@load(vm.fecha eq null? 'true' : 'false')"
+			onClick="@command('addCierre')"></button>
 	</hlayout>
 	<listbox vflex="true" hflex="true" sclass="small-list"
-		emptyMessage="SIN REGISTROS..">
+		emptyMessage="SIN REGISTROS.."
+		model="@load(vm.cierres)">
+			<auxhead>
+				<auxheader label="Historial de cierres"
+					colspan="3"></auxheader>
+			</auxhead>
 			<listhead>
-				<listheader label="Historial de cierres" />
+				<listheader label="Fecha Cierre" />
+				<listheader label="Usuario"></listheader>
+				<listheader label="Registrado en Fecha"></listheader>
 			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"
+						style="${forEachStatus.index eq 0? 'background-color:#428bca; color:white':''}"></listcell>
+					<listcell label="@load(each.usuarioMod.toUpperCase())"
+						style="${forEachStatus.index eq 0? 'background-color:#428bca; color:white':''}"></listcell>
+					<listcell label="@load(each.modificado) @converter('formattedDate', format='dd-MM-yyyy')"
+						style="${forEachStatus.index eq 0? 'background-color:#428bca; color:white':''}"></listcell>
+				</listitem>
+			</template>
 			<listfoot>
 				<listfooter align="left" label="ítems">
 				</listfooter>

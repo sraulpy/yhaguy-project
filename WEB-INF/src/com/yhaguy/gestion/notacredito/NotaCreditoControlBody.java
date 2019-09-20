@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.notacredito;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.CajaPeriodo;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
@@ -91,6 +93,8 @@ public class NotaCreditoControlBody extends BodyApp {
 	private String numeroOriginal = "";
 	private String filter_numero = "";
 	
+	private Date fechaCierre;
+	
 	private Window win;
 	
 	String[] tipos = new String[] { Config.TIPO_STRING, Config.TIPO_STRING,
@@ -127,6 +131,17 @@ public class NotaCreditoControlBody extends BodyApp {
 			break;
 			
 		}
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 	
 	@AfterCompose(superclass = true)
@@ -1592,6 +1607,13 @@ public class NotaCreditoControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return la restriccion de fecha..
+	 */
+	public String getConstraintFecha() {
+	    return "after " + new SimpleDateFormat("yyyyMMdd").format(this.getFechaCierre());
+	}
+	
+	/**
 	 * @return los depositos
 	 */
 	public List<Deposito> getDepositos() throws Exception {
@@ -1792,6 +1814,14 @@ public class NotaCreditoControlBody extends BodyApp {
 
 	public void setSelectedCaja(CajaPeriodo selectedCaja) {
 		this.selectedCaja = selectedCaja;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }
 

@@ -20,7 +20,7 @@
 				<vlayout spacing="0">
 					<field value="Fecha" />
 					<datebox value="@bind(vm.dto.fecha)" hflex="true"
-						onChange="@command('updateFecha')" constraint="no future" />
+						onChange="@command('updateFecha')" constraint="@load(vm.constraintFecha)" />
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Condición" />

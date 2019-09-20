@@ -205,7 +205,8 @@
 					<field value="Fecha" />
 					<datebox
 						hflex="true" 
-						value="@bind(vm.dto.fechaEmision)" />
+						value="@bind(vm.dto.fechaEmision)" 
+						constraint="@load(vm.constraintFecha)"/>
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Sucursal" />

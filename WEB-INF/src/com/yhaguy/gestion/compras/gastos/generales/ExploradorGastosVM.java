@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.compras.gastos.generales;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.coreweb.domain.Tipo;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.ArticuloGasto;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Gasto;
@@ -71,6 +73,8 @@ public class ExploradorGastosVM extends SimpleViewModel {
 	private int listSize = 0;
 	private double totalImporteGs = 0;
 	
+	private Date fechaCierre;
+	
 	private Window win;
 	
 	@Wire
@@ -86,6 +90,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 			this.filterFechaAA = Utiles.getAnhoActual();
 			if (this.filterFechaMM.length() == 1) {
 				this.filterFechaMM = "0" + this.filterFechaMM;
+			}
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -318,6 +329,14 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		return rr.getArticulosGastos(this.filterArticuloGasto, 100);
 	}
 	
+	@DependsOn({ "selectedGasto", "fechaCierre" })
+	public boolean isGuardarHabilitado() {
+		if (this.selectedGasto == null) {
+			return false;
+		}
+		return this.selectedGasto.getFecha().compareTo(this.fechaCierre) > 0;
+	}
+	
 	/**
 	 * @return el filtro de fecha..
 	 */
@@ -536,5 +555,13 @@ public class ExploradorGastosVM extends SimpleViewModel {
 
 	public void setNvoDetalle(GastoDetalle nvoDetalle) {
 		this.nvoDetalle = nvoDetalle;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }

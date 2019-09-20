@@ -2,6 +2,7 @@ package com.yhaguy.gestion.compras.importacion;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,6 +60,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Gasto;
@@ -115,9 +117,22 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private MyArray nvaTrazabilidad = new MyArray(new Date(), "", "", "", "", 1, "", 0.0);
 	
 	public MyArray totalesCostoFinal = new MyArray(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	
+	private Date fechaCierre;
 
 	@Init(superclass = true)
 	public void init() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@AfterCompose(superclass = true)
@@ -3396,6 +3411,13 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		return coefGasto;
 	}
 	
+	/**
+	 * @return la restriccion de fecha..
+	 */
+	public String getConstraintFecha() {
+	    return "no future, after " + new SimpleDateFormat("yyyyMMdd").format(this.getFechaCierre());
+	}
+	
 	/***********************************************************************************************/	
 	
 	
@@ -4312,6 +4334,14 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 
 	public void setSelectedFormato(Object[] selectedFormato) {
 		this.selectedFormato = selectedFormato;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 	
 	/***********************************************************************************************/

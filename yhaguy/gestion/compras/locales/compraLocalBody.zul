@@ -405,7 +405,8 @@
 										<field value="Fecha Emisión"/>
 										<hlayout valign="top">
 											<datebox id="dtbox_fecha" hflex="true" value="@bind(vm.dto.factura.fechaOriginal)" 
-												onChange="@command('calcularVencimiento')" />
+												onChange="@command('calcularVencimiento')" 
+												constraint="@load(vm.constraintFecha)"/>
 											<button mold="bs" id="btn_edit_fecha" iconSclass="z-icon-check"
 												visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 												onClick="@command('modificarFecha', comp1=self, comp2=btn_edit_fecha_)"

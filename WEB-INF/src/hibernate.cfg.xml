@@ -8,7 +8,7 @@
 
 		<!-- Postgres -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguydb</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguy_central</property>
 
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">yrsa0985</property>
@@ -229,7 +229,6 @@
 		<mapping resource="com/yhaguy/domain/AcuseDocumento.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/AcuseDocumentoDetalle.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/CierreDocumento.hbm.xml" />
-		<mapping resource="com/yhaguy/domain/CierreDocumentoDetalle.hbm.xml" />
 		
 		<mapping resource="com/yhaguy/domain/ServicioTecnico.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ServicioTecnicoDetalle.hbm.xml" />

@@ -1,6 +1,8 @@
 package com.yhaguy.gestion.compras.gastos.subdiario;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.BindUtils;
@@ -30,6 +32,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.CentroCosto;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -67,6 +70,8 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	private ReciboFormaPagoDTO selectedFormaPago;
 	
 	private Window win;
+	
+	private Date fechaCierre;
 		
 	@Wire
 	private Row rwNroRetencion;
@@ -80,7 +85,18 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	@Init(superclass = true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) GastoDTO dato) {
 		this.dto = dato;
-		this.monedasSeleccionadas.add(this.dto.getMoneda()); 
+		this.monedasSeleccionadas.add(this.dto.getMoneda());
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 	
 	@AfterCompose(superclass = true)
@@ -418,6 +434,13 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	/*********************** GET/SET ***********************/
 	
 	/**
+	 * @return la restriccion de fecha..
+	 */
+	public String getConstraintFecha() {
+	    return "no future, after " + new SimpleDateFormat("yyyyMMdd").format(this.getFechaCierre());
+	}
+	
+	/**
 	 * @return las formas de pago..
 	 */
 	public List<MyPair> getFormasDePago() {
@@ -584,5 +607,13 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 
 	public void setSelectedFormaPago(ReciboFormaPagoDTO selectedFormaPago) {
 		this.selectedFormaPago = selectedFormaPago;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }

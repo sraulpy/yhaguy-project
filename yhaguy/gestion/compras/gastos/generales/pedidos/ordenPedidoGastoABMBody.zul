@@ -254,7 +254,8 @@
 									<field value="Fecha"/>
 									<datebox value="@bind(vm.dtoGasto.fecha)"
 										onChange="@command('selectVencimiento')"
-										hflex="true"/>
+										hflex="true"
+										constraint="@load(vm.constraintFecha)"/>
 								</vlayout>
 								<vlayout spacing="0">
 									<field value="Vencimiento"/>

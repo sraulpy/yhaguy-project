@@ -30,6 +30,7 @@ import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoChequeTercero;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Recibo;
@@ -81,6 +82,8 @@ public class RecibosViewModel extends SimpleViewModel {
 	private ReciboDTO reciboDto;
 	private Object[] selectedFormato;
 	
+	private Date fechaCierre;
+	
 	private Window win;
 	
 	@Wire
@@ -94,9 +97,16 @@ public class RecibosViewModel extends SimpleViewModel {
 			if (this.filterFechaMM.length() == 1) {
 				this.filterFechaMM = "0" + this.filterFechaMM;
 			}
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}	
 	}
 	
 	@AfterCompose(superclass = true)
@@ -550,6 +560,14 @@ public class RecibosViewModel extends SimpleViewModel {
 		return this.filterFechaAA + "-" + this.filterFechaMM + "-" + this.filterFechaDD;
 	}
 	
+	@DependsOn({ "detalle", "fechaCierre" })
+	public boolean isGuardarHabilitado() {
+		if (this.detalle == null) {
+			return false;
+		}
+		return this.detalle.getEmision().compareTo(this.fechaCierre) > 0;
+	}
+	
 	private AccesoDTO getAcceso() {
 		Session s = Sessions.getCurrent();
 		return (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
@@ -696,6 +714,14 @@ public class RecibosViewModel extends SimpleViewModel {
 
 	public void setFilterCobrador(String filterCobrador) {
 		this.filterCobrador = filterCobrador;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }
 

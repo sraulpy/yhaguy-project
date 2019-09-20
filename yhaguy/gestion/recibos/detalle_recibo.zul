@@ -115,15 +115,15 @@
 	<hlayout sclass="button-container">
 		<div hflex="true"></div>
 		<button mold="bs" sclass="btn-sm btn-danger" width="150px" iconSclass="z-icon-times"
-			onClick='pop_motivo.open(self, "after_start");tx_motivo.focus()' disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+			onClick='pop_motivo.open(self, "after_start");tx_motivo.focus()' disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo') or (!vm.guardarHabilitado))"
 			label="Anular"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-info" width="150px" iconSclass="z-icon-print"
-			onClick="@command('habilitarImpresion')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+			onClick="@command('habilitarImpresion')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo') or (!vm.guardarHabilitado))"
 			label="Habilitar Impresión"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-success" width="150px" iconSclass="z-icon-check"
-			onClick="@command('saveRecibo')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
+			onClick="@command('saveRecibo')" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo') or (!vm.guardarHabilitado))"
 			label="Guardar Cambios"></button>
 	</hlayout>
 	

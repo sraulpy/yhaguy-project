@@ -1,7 +1,9 @@
 package com.yhaguy.gestion.caja.recibos;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.BindUtils;
@@ -33,6 +35,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoChequeTercero;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.ReciboDetalle;
@@ -66,12 +69,25 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private BancoChequeTercero selectedChequeAutoCobranza;
 	private BancoChequeTercero selectedChequeTercero;
 	private Object[] selectedCuenta;
+	
+	private Date fechaCierre;
 
 	@Init(superclass=true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) CajaPeriodoControlBody dato) {
 		this.dato = dato;
 		this.inicializarItemDiferenciaCambio();
 		this.inicializarItemCuentaContable();
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@AfterCompose(superclass=true)
@@ -1621,6 +1637,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 	/******************* GETTER/SETTER *****************/	
 	
 	/**
+	 * @return la restriccion de fecha..
+	 */
+	public String getConstraintFecha() {
+	    return "after " + new SimpleDateFormat("yyyyMMdd").format(this.getFechaCierre());
+	}
+	
+	/**
 	 * utilDto de la app.
 	 */
 	public UtilDTO getDtoUtil() {
@@ -1862,5 +1885,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 
 	public void setSelectedCuenta(Object[] selectedCuenta) {
 		this.selectedCuenta = selectedCuenta;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }

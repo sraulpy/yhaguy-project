@@ -10934,28 +10934,56 @@ public class RegisterDomain extends Register {
 		return (int) result[1];
 	}
 	
-	public static void main_(String[] args) {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			String hql = "select c from CtaCteEmpresaMovimiento c where c.tipoMovimiento.id = 19 and c.auxi != 'MIGRACION'";
-			List<CtaCteEmpresaMovimiento> movims = rr.hql(hql);
-			
-			for (CtaCteEmpresaMovimiento movim : movims) {
-				Venta vta = (Venta) rr.getObject(Venta.class.getName(), movim.getIdMovimientoOriginal());
-				if (vta != null) {
-					String cartera = movim.getCarteraCliente() != null? movim.getCarteraCliente().getDescripcion() : "SIN CARTERA";
-					vta.setCartera(cartera);
-					rr.saveObject(vta, vta.getUsuarioMod());
-				}
-				System.out.println("--- " + vta.getNumero());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	/**
+	 * @return el historial de cierres..
+	 */
+	public List<CierreDocumento> getCierreDocumentos() throws Exception {
+		String query = "select c from CierreDocumento c order by c.fecha desc";
+		return this.hqlLimit(query, 50);
 	}
 	
 	public static void main(String[] args) {
-		try {			
+		try {	
+			Date desde = Utiles.getFecha("05-10-2018 00:00:00");
+			Date hasta = new Date();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Articulo> arts = rr.getArticulos(4, 0, 0);
+			for (Articulo art : arts) {
+				Date fechaImp = desde;
+				Date fechaCom = desde;
+				List<Object[]> imps = rr.getComprasImportacionPorArticulo(art.getId(), desde, hasta);
+				List<Object[]> locs = rr.getComprasLocalesPorArticulo(art.getId(), desde, hasta);
+				if (imps.size() > 0) {
+					fechaImp = (Date) imps.get(0)[1];
+				}
+				if (locs.size() > 0) {
+					fechaCom = (Date) locs.get(0)[1];
+				}
+				if (imps.size() > 0 || locs.size() > 0) {
+					double precioMay = art.getPrecioGs();
+					if (fechaImp.compareTo(fechaCom) > 0) {
+						System.out.println(art.getCodigoInterno() + " - COSTO IMPORTACION");
+						if (precioMay <= 50000.00) {
+							art.setPrecioMinoristaGs((precioMay * 1.40) / 0.80);
+							art.setPrecioListaGs((precioMay * 1.40) / 0.80);
+						} else if (precioMay <= 100000.00) {
+							art.setPrecioMinoristaGs((precioMay * 1.35) / 0.80);
+							art.setPrecioListaGs((precioMay * 1.35) / 0.80);
+						} else if (precioMay > 100000.00) {
+							art.setPrecioMinoristaGs((precioMay * 1.30) / 0.80);
+							art.setPrecioListaGs((precioMay * 1.30) / 0.80);
+						}
+					} else {
+						System.out.println(art.getCodigoInterno() + " - COSTO LOCAL");
+						art.setPrecioMinoristaGs((precioMay) / 0.80);
+						art.setPrecioListaGs((precioMay) / 0.80);
+					}
+					rr.saveObject(art, art.getUsuarioMod());
+				} else {
+					System.out.println(art.getCodigoInterno() + " - SIN MOVIMIENTO");
+				}
+				
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

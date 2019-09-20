@@ -21,7 +21,8 @@
 					<datebox
 						value="@bind(vm.dato.reciboDTO.fechaEmision)"
 						onChange="@command('setTipoCambio_')"
-						hflex="true" />
+						hflex="true"
+						constraint="@load(vm.constraintFecha)" />
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Moneda" />

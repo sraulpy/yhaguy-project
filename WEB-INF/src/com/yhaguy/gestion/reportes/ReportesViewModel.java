@@ -13129,26 +13129,17 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
 					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal, "");
 					for (NotaCredito notacred : ncs) {
-						int length = notacred.getCliente().getRazonSocial()
-								.length();
+						int length = notacred.getCliente().getRazonSocial().length();
 						int maxlength = length > 25 ? 25 : length;
-						String motivo = notacred.getMotivo().getDescripcion()
-								.substring(0, 3).toUpperCase()
-								+ ".";
+						String motivo = notacred.getMotivo().getDescripcion().substring(0, 3).toUpperCase() + ".";
 						Object[] nc = new Object[] {
-								m.dateToString(notacred.getFechaEmision(),
-										"dd-MM-yy"),
+								m.dateToString(notacred.getFechaEmision(), "dd-MM-yy"),
 								notacred.getNumero(),
-								notacred.getCliente().getRazonSocial()
-										.substring(0, maxlength)
-										+ "..",
+								notacred.getCliente().getRazonSocial().substring(0, maxlength) + "..",
 								notacred.getCliente().getRuc(),
-								notacred.isNotaCreditoVentaContado() ? "NC-CO "
-										+ motivo : "NC-CR " + motivo,
-								notacred.isAnulado() ? 0.0 : notacred
-										.getImporteGs(familias) * -1,
-								notacred.isAnulado() ? 0.0 : notacred
-												.getCostoGs(familias) * -1};
+								notacred.isNotaCreditoVentaContado() ? "NC-CO " + motivo : "NC-CR " + motivo,
+								notacred.isAnulado() ? 0.0 : notacred.getImporteGs(familias) * -1,
+								notacred.isAnulado() ? 0.0 : notacred.getCostoGs(familias) * -1};
 
 						if (filtro.isIncluirNCR()
 								&& notacred.isNotaCreditoVentaContado()) {
@@ -13160,10 +13151,8 @@ public class ReportesViewModel extends SimpleViewModel {
 						} else if (filtro.isIncluirNCR_CRED()
 								&& !notacred.isNotaCreditoVentaContado()) {
 							data.add(nc);
-							totalImporte += (notacred.isAnulado() ? 0.0
-									: notacred.getImporteGs(familias) * -1);
-							totalCosto += (notacred.isAnulado() ? 0.0
-									: notacred.getCostoGs(familias) * -1);
+							totalImporte += (notacred.isAnulado() ? 0.0 : notacred.getImporteGs(familias) * -1);
+							totalCosto += (notacred.isAnulado() ? 0.0 : notacred.getCostoGs(familias) * -1);
 						}
 					}
 				}
@@ -13172,26 +13161,15 @@ public class ReportesViewModel extends SimpleViewModel {
 					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, "");
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
-								m.dateToString(venta.getFecha(), "dd-MM-yy"),
-								venta.getNumero(),
-								getMaxLength(
-										venta.getDenominacion() == null ? venta
-												.getCliente().getRazonSocial()
-												: venta.getDenominacion(), 25),
+								m.dateToString(venta.getFecha(), "dd-MM-yy"), venta.getNumero(),
+								getMaxLength(venta.getDenominacion() == null ? venta.getCliente().getRazonSocial() : venta.getDenominacion(), 25),
 								venta.getCliente().getRuc(),
-								"FAC. "
-										+ venta.getCondicionPago()
-												.getDescripcion()
-												.substring(0, 3).toUpperCase(),
-								venta.isAnulado() ? 0.0 : venta
-										.getTotalImporteGs(familias),
-								venta.isAnulado() ? 0.0 : venta
-										.getTotalCostoGs(familias)};
+								"FAC. " + venta.getCondicionPago().getDescripcion().substring(0, 3).toUpperCase(),
+								venta.isAnulado() ? 0.0 : venta.getTotalImporteGs(familias),
+								venta.isAnulado() ? 0.0 : venta.getTotalCostoGs(familias) };
 						data.add(vta);
-						totalImporte += (venta.isAnulado() ? 0.0 : venta
-								.getTotalImporteGs(familias));
-						totalCosto += (venta.isAnulado() ? 0.0 : venta
-								.getTotalCostoGs(familias));
+						totalImporte += (venta.isAnulado() ? 0.0 : venta.getTotalImporteGs(familias));
+						totalCosto += (venta.isAnulado() ? 0.0 : venta.getTotalCostoGs(familias));
 					}
 
 				} else if (filtro.isIncluirVCR()) {
@@ -13235,15 +13213,11 @@ public class ReportesViewModel extends SimpleViewModel {
 										+ venta.getCondicionPago()
 												.getDescripcion()
 												.substring(0, 3).toUpperCase(),
-								venta.isAnulado() ? 0.0 : venta
-										.getTotalImporteGs(familias),
-								venta.isAnulado() ? 0.0 : venta
-										.getTotalCostoGs(familias)};
+								venta.isAnulado() ? 0.0 : venta.getTotalImporteGs(familias),
+								venta.isAnulado() ? 0.0 : venta.getTotalCostoGs(familias)};
 						data.add(vta);
-						totalImporte += (venta.isAnulado() ? 0.0 : venta
-								.getTotalImporteGs(familias));
-						totalCosto += (venta.isAnulado() ? 0.0 : venta
-								.getTotalCostoGs(familias));
+						totalImporte += (venta.isAnulado() ? 0.0 : venta.getTotalImporteGs(familias));
+						totalCosto += (venta.isAnulado() ? 0.0 : venta.getTotalCostoGs(familias));
 					}
 				}
 
