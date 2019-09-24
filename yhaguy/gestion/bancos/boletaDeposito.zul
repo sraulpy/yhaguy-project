@@ -23,7 +23,7 @@
 						<textbox value="@bind(vm.bancoCuenta)"
 							readonly="true"
 							tooltiptext="Nombre del banco de la cuenta seleccionada."
-							width="150px" />
+							hflex="true" />
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Número de Boleta" />
