@@ -30,23 +30,23 @@
 						<textbox
 							value="@bind(vm.bancoDeposito.numeroBoleta)"
 							tooltiptext="Número de la Boleta de Depósito."
-							width="150px" />
+							hflex="true" />
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Fecha" />
-						<datebox value="@bind(vm.bancoDeposito.fecha)" width="130px" />
+						<datebox value="@bind(vm.bancoDeposito.fecha)" hflex="true" />
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Estado" />
 						<textbox
 							value="@load(vm.bancoDeposito.cerrado? 'CERRADO' : 'PENDIENTE')"
-							readonly="true"  />
+							readonly="true" hflex="true"  />
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Sucursal" />
 						<textbox
 							value="@load(vm.bancoDeposito.sucursalApp)" readonly="true"
-							tooltiptext="Sucursal operativa del usuario." width="170px" />
+							tooltiptext="Sucursal operativa del usuario." hflex="true" />
 					</vlayout>
 
 				</row>
@@ -55,12 +55,12 @@
 						<field value="Monto Total" />
 						<monedabox value="@bind(vm.bancoDeposito.monto)"
 							tooltiptext="Monto total del depósito."
-							width="150px" />
+							hflex="true" />
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Efectivo Total" />
 						<monedabox
-							value="@bind(vm.bancoDeposito.totalEfectivo)" width="150px" />
+							value="@bind(vm.bancoDeposito.totalEfectivo)" hflex="true" />
 					</vlayout>
 					<cell colspan="3">
 						<vlayout style="margin-top:5px">
@@ -78,7 +78,7 @@
 			<vbox vflex="true" hflex="20%">
 				<hlayout sclass="button-container">
 					<button mold="bs" sclass="btn-success btn-sm"
-						width="100px" iconSclass="z-icon-plus-circle"
+						hflex="true" iconSclass="z-icon-plus-circle"
 						onClick="@command('insertarPlanilla')"
 						label=" Insertar" />
 				</hlayout>
@@ -113,28 +113,28 @@
 			<vbox vflex="true" hflex="80%">
 				<hlayout sclass="button-container">
 					<button mold="bs" sclass="btn-danger btn-sm"
-						width="140px" iconSclass="z-icon-minus-circle"
+						hflex="true" iconSclass="z-icon-minus-circle"
 						onClick="@command('removerChequesSeleccionados')"
 						label=" Eliminar" />
 					<space />
 					<button mold="bs" sclass="btn-primary btn-sm"
-						width="140px" iconSclass="z-icon-plus-circle"
+						hflex="true" iconSclass="z-icon-plus-circle"
 						onClick="@command('insertarChequesDePlanilla')"
 						disabled="@load(vm.selectedPlanilla eq null? 'true' : 'false')"
 						label=" Cheques Planilla" />
 					<space />
 					<button mold="bs" sclass="btn-info btn-sm"
-						width="150px" iconSclass="z-icon-plus-circle"
+						hflex="true" iconSclass="z-icon-plus-circle"
 						onClick="@command('buscarChequeTercero')"
 						label=" Cheques Pendientes" />
 					<space />
 					<button mold="bs" sclass="btn-warning btn-sm"
-						width="140px" iconSclass="z-icon-plus-circle"
+						hflex="true" iconSclass="z-icon-plus-circle"
 						onClick="@command('addRecaudacionCentral')"
 						label=" Rec. Casa Central" />
 					<space />
 					<button mold="bs" sclass="btn-success btn-sm"
-						width="140px" iconSclass="z-icon-check"
+						hflex="true" iconSclass="z-icon-check"
 						onClick="@command('cerrarBoletaDeposito')"
 						label=" Cerrar" 
 						disabled="@load(vm.bancoDeposito.esNuevo() or vm.deshabilitado)"/>
