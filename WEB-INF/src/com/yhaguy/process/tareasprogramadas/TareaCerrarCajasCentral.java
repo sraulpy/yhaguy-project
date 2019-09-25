@@ -23,10 +23,11 @@ public class TareaCerrarCajasCentral {
 				List<CajaPeriodo> cajas = rr.getCajaPlanillas(Utiles.getFecha(desde), Utiles.getFecha(hasta));
 				List<CajaPeriodo> cajas_ = new ArrayList<CajaPeriodo>();
 				List<CajaPeriodo> cajas_mcal = new ArrayList<CajaPeriodo>();
+				List<CajaPeriodo> cajas_int = new ArrayList<CajaPeriodo>();
 				
 				for (CajaPeriodo caja : cajas) {
 					if (caja.getCaja().getSucursal().getId() == SucursalApp.ID_CENTRAL) {
-						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile() || caja.isCajaCobrosMobileInterior()) {
+						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile()) {
 							caja.setDbEstado('R');
 							caja.setCierre(fecha);
 							caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
@@ -37,6 +38,20 @@ public class TareaCerrarCajasCentral {
 						}
 					}				
 				}	
+				
+				for (CajaPeriodo caja : cajas) {
+					if (caja.getCaja().getSucursal().getId() == SucursalApp.ID_CENTRAL) {
+						if (caja.isCajaCobrosMobileInterior()) {
+							caja.setDbEstado('R');
+							caja.setCierre(fecha);
+							caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
+							rr.saveObject(caja, "sys");
+							if (!caja.isCajaCobrosMobileInterior()) {
+								cajas_int.add(caja);
+							}
+						}
+					}				
+				}
 				
 				if (cajas_.size() > 0) {
 					CajaPlanillaResumen resumen = new CajaPlanillaResumen();
@@ -56,9 +71,27 @@ public class TareaCerrarCajasCentral {
 					rr.saveObject(resumen, "sys");
 				}
 				
+				if (cajas_int.size() > 0) {
+					CajaPlanillaResumen resumen = new CajaPlanillaResumen();
+					resumen.setNumero(AutoNumeroControl.getAutoNumero("RESUMEN-", 7));
+					resumen.setFecha(fecha);
+					resumen.setSobranteFaltante(0);
+					resumen.setEfectivoNoDepositado(0);
+					resumen.setChequeNoDepositado(0);
+					resumen.setObs_cheque_no_depositado("");
+					resumen.setObs_efectivo_no_depositado("");
+					resumen.getPlanillas().addAll(cajas_int);
+					String nroPlanillas = "INTERIOR: ";
+					for (CajaPeriodo planilla : cajas_) {
+						nroPlanillas += planilla.getNumero() + " - ";
+					}
+					resumen.setNumeroPlanillas(nroPlanillas);
+					rr.saveObject(resumen, "sys");
+				}
+				
 				for (CajaPeriodo caja : cajas) {
 					if (caja.getCaja().getSucursal().getId() == SucursalApp.ID_MCAL) {
-						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile() || caja.isCajaCobrosMobileInterior()) {
+						if (caja.isCajaVentas() || caja.isCajaCobros() || caja.isCajaCobrosMobile()) {
 							caja.setDbEstado('R');
 							caja.setCierre(fecha);
 							caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
