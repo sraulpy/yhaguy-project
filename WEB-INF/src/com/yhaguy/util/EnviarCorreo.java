@@ -56,6 +56,13 @@ public class EnviarCorreo {
 	
 	public EnviarCorreo(Tarea_Programada tarea) {
 		this.tarea = tarea;
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
+			SMTP_HOST_NAME = SMTP_HOST_NAME_GT;
+			SMTP_PORT = SMTP_PORT_GT;
+			SMTP_START_TLS_ENABLE = SMTP_START_TLS_ENABLE_GT;
+			EMAIL_FROM = EMAIL_FROM_GT;
+			EMAIL_FROM_PASSWORD = EMAIL_FROM_PASSWORD_GT;
+		}
 	}
 
 	public void sendMessage(String[] recipients, String[] recipientsCCO, 

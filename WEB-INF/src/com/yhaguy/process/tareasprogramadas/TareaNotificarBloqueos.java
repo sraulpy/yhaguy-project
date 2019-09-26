@@ -29,10 +29,10 @@ public class TareaNotificarBloqueos {
 	static final String TAREA_NOTIFICAR_BLOQUEOS = "CORREO BLOQUEO CLIENTES ENVIADO";
 	static final String USER_NOTIF = "sys";
 	static final String DIRECTORIO_BASE_MRA = "/home/mraserver/project/yhaguy-project/";
-	static final String DIRECTORIO_BASE_BAT = "/home/server/project/yhaguy/";
+	static final String DIRECTORIO_BASE_BAT = "/home/server/project/yhaguy-baterias/";
 	static final String DIRECTORIO_BASE_CEN = "/home/server/project/yhaguy-central/";
 	static final String DIRECTORIO_REPORTES_MRA = "/home/mraserver/project/yhaguy-project/reportes/";
-	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy/reportes/";
+	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy-baterias/reportes/";
 	static final String DIRECTORIO_REPORTES_CEN = "/home/server/project/yhaguy-central/reportes/";
 	static final String EMPRESA = Configuracion.EMPRESA_YRSA;
 	static final String EMPRESA_BAT = Configuracion.EMPRESA_GTSA;
@@ -41,14 +41,14 @@ public class TareaNotificarBloqueos {
 			"davida@yhaguyrepuestos.com.py", "soniat@yhaguyrepuestos.com.py" };
 	
 	static final String[] DESTINATARIOS_BAT = new String[] {
-			"nataliac@yhaguyrepuestos.com.py", "dianaa@yhaguyrepuestos.com.py",
-			"soniat@yhaguyrepuestos.com.py", "yaninaf@yhaguyrepuestos.com.py" };
+			"nataliac@gtsa.com.py", "dianaa@gtsa.com.py",
+			"silviap@gtsa.com.py" };
 	
 	static final String[] DESTINATARIOS_CEN = new String[] { "cobranzas@yhaguyrepuestos.com.py" };
 	
 	static final String[] COPIA_OCULTA = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 	static final String ASUNTO = "Bloqueos de Cuentas Automatico - Yhaguy Repuestos S.A.";
-	static final String ASUNTO_BAT = "Bloqueos de Cuentas Automatico - Yhaguy Baterias";
+	static final String ASUNTO_BAT = "Bloqueos de Cuentas Automatico - Grupo Toyo S.A.";
 	
 	/**
 	 * notificacion por email de bloqueos automaticos..
@@ -130,8 +130,8 @@ public class TareaNotificarBloqueos {
 	}	
 	
 	public static void main(String[] args) {
-		TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
-		//TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
+		//TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
+		TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }
 

@@ -101,7 +101,6 @@ public class TareaNotificarDesbloqueos {
 	
 	public static void main(String[] args) {
 		//TareaNotificarDesbloqueos.enviarCorreoDesbloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
-		Configuracion.empresa = Configuracion.EMPRESA_GTSA;
 		TareaNotificarDesbloqueos.enviarCorreoDesbloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }
