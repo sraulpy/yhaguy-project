@@ -25,10 +25,10 @@ public class TareaNotificarDesbloqueos {
 	static final String TAREA_NOTIFICAR_DESBLOQUEOS = "CORREO DESBLOQUEO CLIENTES ENVIADO";
 	static final String USER_NOTIF = "sys";
 	static final String DIRECTORIO_BASE_MRA = "/home/mraserver/project/yhaguy-project/";
-	static final String DIRECTORIO_BASE_BAT = "/home/server/project/yhaguy/";
+	static final String DIRECTORIO_BASE_BAT = "/home/server/project/yhaguy-baterias/";
 	static final String DIRECTORIO_BASE_CEN = "/home/server/project/yhaguy-central/";
 	static final String DIRECTORIO_REPORTES_MRA = "/home/mraserver/project/yhaguy-project/reportes/";
-	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy/reportes/";
+	static final String DIRECTORIO_REPORTES_BAT = "/home/server/project/yhaguy-baterias/reportes/";
 	static final String DIRECTORIO_REPORTES_CEN = "/home/server/project/yhaguy-central/reportes/";
 	static final String EMPRESA = Configuracion.EMPRESA_YRSA;
 	static final String EMPRESA_BAT = Configuracion.EMPRESA_GTSA;
