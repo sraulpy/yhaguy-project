@@ -37,8 +37,8 @@ public class TareaNotificarDesbloqueos {
 			"davida@yhaguyrepuestos.com.py", "soniat@yhaguyrepuestos.com.py" };
 	
 	static final String[] DESTINATARIOS_BAT = new String[] {
-			"nataliac@yhaguyrepuestos.com.py", "dianaa@yhaguyrepuestos.com.py",
-			"soniat@yhaguyrepuestos.com.py", "yaninaf@yhaguyrepuestos.com.py" };
+			"nataliac@gtsa.com.py", "dianaa@gtsa.com.py",
+			"silviap@gtsa.com.py" };
 	
 	static final String[] DESTINATARIOS_CEN = new String[] { "cobranzas@yhaguyrepuestos.com.py" };
 	
@@ -100,8 +100,8 @@ public class TareaNotificarDesbloqueos {
 	}	
 	
 	public static void main(String[] args) {
-		TareaNotificarDesbloqueos.enviarCorreoDesbloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
-		//TareaNotificarBloqueos.enviarCorreoBloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
+		//TareaNotificarDesbloqueos.enviarCorreoDesbloqueos(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
+		TareaNotificarDesbloqueos.enviarCorreoDesbloqueos(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }
 

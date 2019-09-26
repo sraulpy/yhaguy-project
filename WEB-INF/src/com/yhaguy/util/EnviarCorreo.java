@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.sun.mail.util.MailSSLSocketFactory;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Tarea_Programada;
 
@@ -26,11 +27,17 @@ public class EnviarCorreo {
 	static final String EMAIL_FROM_GMAIL = "yhaguysys@gmail.com";
 	static final String EMAIL_FROM_PASSWORD_GMAIL = "yhaguyserversystem123";
 	
-	private static final String SMTP_HOST_NAME = "mail.yhaguyrepuestos.com.py";
-	private static final String SMTP_PORT = "465";
-	private static final String SMTP_START_TLS_ENABLE = "true";
-	private static final String EMAIL_FROM = "sistemagestion@yhaguyrepuestos.com.py";
-	private static final String EMAIL_FROM_PASSWORD = "YhagY_1820";
+	private static String SMTP_HOST_NAME = "mail.yhaguyrepuestos.com.py";
+	private static String SMTP_PORT = "465";
+	private static String SMTP_START_TLS_ENABLE = "true";
+	private static String EMAIL_FROM = "sistemagestion@yhaguyrepuestos.com.py";
+	private static String EMAIL_FROM_PASSWORD = "YhagY_1820";
+	
+	private static final String SMTP_HOST_NAME_GT = "mail.gtsa.com.py";
+	private static final String SMTP_PORT_GT = "465";
+	private static final String SMTP_START_TLS_ENABLE_GT = "true";
+	private static final String EMAIL_FROM_GT = "sistema@gtsa.com.py";
+	private static final String EMAIL_FROM_PASSWORD_GT = "gtsa0985";
 	
 	public static final String[] DESTINATARIO = new String[]{ "sergioraul777@gmail.com" };
 	public static final String[] COPIA_OCULTA = new String[]{ "sergioraul777@gmail.com" };
@@ -38,6 +45,13 @@ public class EnviarCorreo {
 	private Tarea_Programada tarea;
 	
 	public EnviarCorreo() {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
+			SMTP_HOST_NAME = SMTP_HOST_NAME_GT;
+			SMTP_PORT = SMTP_PORT_GT;
+			SMTP_START_TLS_ENABLE = SMTP_START_TLS_ENABLE_GT;
+			EMAIL_FROM = EMAIL_FROM_GT;
+			EMAIL_FROM_PASSWORD = EMAIL_FROM_PASSWORD_GT;
+		}
 	}
 	
 	public EnviarCorreo(Tarea_Programada tarea) {
