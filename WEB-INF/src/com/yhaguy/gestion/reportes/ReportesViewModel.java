@@ -6696,6 +6696,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String ANTICIPOS_CLIENTES = "TES-00056";
 		static final String COBRANZAS_DETALLADO = "TES-00057";
 		static final String REEMBOLSOS_DETALLADO = "TES-00058";
+		static final String CHEQUES_CLIENTES_EMISION = "TES-00059";
 
 		/**
 		 * procesamiento del reporte..
@@ -6753,7 +6754,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 
 			case CHEQUES_POR_CLIENTE:
-				this.chequesPorCliente(mobile);
+				this.chequesPorCliente(mobile, CHEQUES_POR_CLIENTE);
 				break;
 
 			case CHEQUES_POR_NRO_COMPBT:
@@ -6938,6 +6939,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case REEMBOLSOS_DETALLADO:
 				this.reembolsosDetallado(mobile, REEMBOLSOS_DETALLADO);
+				break;
+				
+			case CHEQUES_CLIENTES_EMISION:
+				this.chequesPorClienteSegunEmision(mobile, CHEQUES_CLIENTES_EMISION);
 				break;
 			}
 		}
@@ -7445,7 +7450,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		 * acuerdo a los parametros optenidos desde el filtro que podrian ser:
 		 * FechaDesde, FechaHasta, LibradoPor
 		 */
-		private void chequesPorCliente(boolean mobile) throws Exception {
+		private void chequesPorCliente(boolean mobile, String codReporte) throws Exception {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
@@ -7462,22 +7467,17 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<BancoChequeTercero> cheques = rr.getChequesTercero(desde,
-						hasta, banco, idCliente);
+				List<BancoChequeTercero> cheques = rr.getChequesTercero(desde, hasta, banco, idCliente);
 
 				if (selectedCheque != null) {
-					int length = selectedCheque.getLibrado() == null ? 0
-							: selectedCheque.getLibrado().length();
+					int length = selectedCheque.getLibrado() == null ? 0 : selectedCheque.getLibrado().length();
 					int maxlength = length > 40 ? 40 : length;
-					String librador = selectedCheque.getLibrado() == null ? "---"
-							: selectedCheque.getLibrado().substring(0,
-									maxlength);
+					String librador = selectedCheque.getLibrado() == null ? "---" : selectedCheque.getLibrado().substring(0, maxlength);
 					Object[] obj = new Object[] {
-							m.dateToString(selectedCheque.getFecha(),
-									Misc.DD_MM_YYYY),
+							m.dateToString(selectedCheque.getEmision(), Utiles.DD_MM_YY),
+							m.dateToString(selectedCheque.getFecha(), Utiles.DD_MM_YY),
 							selectedCheque.getNumero(),
-							selectedCheque.getBanco().getDescripcion()
-									.toUpperCase(), librador.toUpperCase(),
+							selectedCheque.getBanco().getDescripcion().toUpperCase(), librador.toUpperCase(),
 							selectedCheque.isDepositado() ? "SI" : "NO",
 							selectedCheque.isDescontado() ? "SI" : "NO",
 							selectedCheque.getMonto() };
@@ -7486,14 +7486,12 @@ public class ReportesViewModel extends SimpleViewModel {
 					for (BancoChequeTercero cheque : cheques) {
 						int length = cheque.getLibrado().length();
 						int maxlength = length > 40 ? 40 : length;
-						String librador = cheque.getLibrado() == null ? "---"
-								: cheque.getLibrado().substring(0, maxlength);
+						String librador = cheque.getLibrado() == null ? "---" : cheque.getLibrado().substring(0, maxlength);
 						Object[] obj = new Object[] {
-								m.dateToString(cheque.getFecha(),
-										Misc.DD_MM_YYYY),
+								m.dateToString(cheque.getEmision(), Utiles.DD_MM_YY),
+								m.dateToString(cheque.getFecha(), Utiles.DD_MM_YY),
 								cheque.getNumero(),
-								cheque.getBanco().getDescripcion()
-										.toUpperCase(), librador.toUpperCase(),
+								cheque.getBanco().getDescripcion().toUpperCase(), librador.toUpperCase(),
 								cheque.isDepositado() ? "SI" : "NO",
 								cheque.isDescontado() ? "SI" : "NO",
 								cheque.getMonto() };
@@ -7502,17 +7500,13 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				String sucursal = getAcceso().getSucursalOperativa().getText();
-				String nroCheque = selectedCheque == null ? "TODOS.."
-						: selectedCheque.getNumero();
-				String banco_ = banco == null || selectedCheque != null ? "TODOS.."
-						: banco.getDescripcion();
-				String cliente_ = cliente == null ? "TODOS.." : cliente
-						.getRazonSocial();
-				ReporteChequesDeTerceros rep = new ReporteChequesDeTerceros(
-						desde, hasta, sucursal, nroCheque, banco_, cliente_);
-				rep.setDatosReporte(data);
-				
+				String nroCheque = selectedCheque == null ? "TODOS.." : selectedCheque.getNumero();
+				String banco_ = banco == null || selectedCheque != null ? "TODOS.." : banco.getDescripcion();
+				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
+				ReporteChequesDeTerceros rep = new ReporteChequesDeTerceros(desde, hasta, sucursal, nroCheque, banco_, cliente_);
+				rep.setDatosReporte(data);				
 				rep.setApaisada();
+				rep.setTitulo(codReporte + " - Listado de Cheques de Clientes");
 
 				if (!mobile) {
 					ViewPdf vp = new ViewPdf();
@@ -10190,6 +10184,63 @@ public class ReportesViewModel extends SimpleViewModel {
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 			imprimirJasper(source, params, dataSource, formato);
+		}
+		
+		/**
+		 * TES-00059 Genera el reporte correspondiente a todos los cheques de
+		 * terceros ya sea que se hayan efectivizados o depositados o no de
+		 * acuerdo a los parametros optenidos desde el filtro que podrian ser:
+		 * FechaDesde, FechaHasta, LibradoPor
+		 */
+		private void chequesPorClienteSegunEmision(boolean mobile, String codReporte) throws Exception {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Tipo banco = filtro.getBancoTercero();
+
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<BancoChequeTercero> cheques = rr.getChequesTerceroEmision(desde, hasta, banco, 0);
+
+				for (BancoChequeTercero cheque : cheques) {
+					int length = cheque.getLibrado().length();
+					int maxlength = length > 40 ? 40 : length;
+					String librador = cheque.getLibrado() == null ? "---" : cheque.getLibrado().substring(0, maxlength);
+					Object[] obj = new Object[] {
+							m.dateToString(cheque.getEmision(), Utiles.DD_MM_YY),
+							m.dateToString(cheque.getFecha(), Utiles.DD_MM_YY),
+							cheque.getNumero(),
+							cheque.getBanco().getDescripcion().toUpperCase(), librador.toUpperCase(),
+							cheque.isDepositado() ? "SI" : "NO",
+							cheque.isDescontado() ? "SI" : "NO",
+							cheque.getMonto() };
+					data.add(obj);
+				}
+
+				String sucursal = getAcceso().getSucursalOperativa().getText();
+				String nroCheque = "TODOS..";
+				String banco_ = banco == null ? "TODOS.." : banco.getDescripcion();
+				String cliente_ = "TODOS..";
+				ReporteChequesDeTerceros rep = new ReporteChequesDeTerceros(desde, hasta, sucursal, nroCheque, banco_, cliente_);
+				rep.setDatosReporte(data);	
+				rep.setTitulo(codReporte + " - Listado de Cheques de Clientes");
+				rep.setApaisada();
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -18397,15 +18448,14 @@ class ReporteCobranzasFormaPago extends ReporteYhaguy {
 class ReporteChequesDeTerceros extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col0 = new DatosColumnas("Vencimiento", TIPO_STRING,
-			40);
-	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 40);
-	static DatosColumnas col2 = new DatosColumnas("Banco", TIPO_STRING, 50);
+	static DatosColumnas col = new DatosColumnas("Emision", TIPO_STRING, 20);
+	static DatosColumnas col0 = new DatosColumnas("Vto.", TIPO_STRING, 20);
+	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 30);
+	static DatosColumnas col2 = new DatosColumnas("Banco", TIPO_STRING, 40);
 	static DatosColumnas col3 = new DatosColumnas("Librador", TIPO_STRING);
 	static DatosColumnas col4 = new DatosColumnas("Depositado", TIPO_STRING, 30);
 	static DatosColumnas col5 = new DatosColumnas("Descontado", TIPO_STRING, 30);
-	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 40,
-			true);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
 
 	private Date desde;
 	private Date hasta;
@@ -18425,6 +18475,7 @@ class ReporteChequesDeTerceros extends ReporteYhaguy {
 	}
 
 	static {
+		cols.add(col);
 		cols.add(col0);
 		cols.add(col1);
 		cols.add(col2);
@@ -18436,7 +18487,6 @@ class ReporteChequesDeTerceros extends ReporteYhaguy {
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Listado de Cheques de Clientes");
 		this.setDirectorio("banco");
 		this.setNombreArchivo("cheque-");
 		this.setTitulosColumnas(cols);
