@@ -7051,6 +7051,38 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return los cheques de terceros..
+	 */
+	public List<BancoChequeTercero> getChequesTerceroEmision(Date desde, Date hasta,
+			Tipo banco, long idCliente) throws Exception {
+		String query = "select c from BancoChequeTercero c where c.dbEstado != 'D'"
+				+ " and c.anulado = 'FALSE'" + " and c.emision between ? and ?";
+
+		if (banco != null) {
+			query += " and c.banco.id = ?";
+		}
+		if (idCliente != 0) {
+			query += " and c.cliente.id = ?";
+		}
+		query += " order by c.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (banco != null) {
+			listParams.add(banco.getId());
+		}
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
 
 	/**
 	 * @return los cheques de terceros..
