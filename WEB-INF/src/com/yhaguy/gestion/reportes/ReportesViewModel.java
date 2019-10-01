@@ -16873,8 +16873,10 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			String ruc = recibo.getCliente().getRuc();
 			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
-			if (recibo.isCobroAnticipo() && !importe.equals(saldo)) {
+			if (recibo.isCobroAnticipo()) {
+				System.out.println("ES ANTICIPO -------> " + numero);
 				for (Object[] aplicacion : recibo.getAplicacionesAnticipo()) {
+					System.out.println("APLICACION -------> " + numero);
 					fecha = misc.dateToString((Date) aplicacion[0], Misc.DD_MM_YYYY);
 					String imp = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : aplicacion[1]);
 					values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, imp, imp));
