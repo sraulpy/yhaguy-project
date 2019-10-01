@@ -79,6 +79,30 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return la lista de aplicaciones de anticipos..
+	 * [0]: fecha
+	 * [1]: importe
+	 */
+	public List<Object[]> getAplicacionesAnticipo() throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		if (this.isCobroAnticipo()) {
+			RegisterDomain rr = RegisterDomain.getInstance();			
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(this.getId(), this.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				Object[] det = new Object[] { ajuste.getFecha(), ajuste.getImporte() };
+				out.add(det);			
+			}
+			
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(this.getId(), this.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				Object[] det = new Object[] { ajuste.getFecha(), ajuste.getImporte() };
+				out.add(det);			
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es anulado..
 	 */
 	public boolean isAnulado() {
