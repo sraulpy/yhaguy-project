@@ -7355,7 +7355,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idSucursal = sucursal == null ? 0 : sucursal.getId();
 				long idCliente = cli != null ? cli.getId() : 0;
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
-				boolean incluirAnticipos = filtro.isFraccionado();
+				boolean incluirAnticipos = true;
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
@@ -7365,7 +7365,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_);
+				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_, false);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", codReporte + " - LISTADO DE COBRANZAS");
 				imprimirJasper(source, params, dataSource, formato);
@@ -10118,7 +10118,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_ANTICIPOS;
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_);
+				JRDataSource dataSource = new ListadoCobranzasDataSource(cobranzas, desde, hasta, sucursal_, true);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", codReporte + " - LISTADO DE ANTICIPOS");
 				imprimirJasper(source, params, dataSource, formato);
@@ -16797,12 +16797,16 @@ class ListadoCobranzasDataSource implements JRDataSource {
 	double totalImporte = 0;
 	double totalSaldo = 0;
 
-	public ListadoCobranzasDataSource(List<Recibo> recibos, Date desde, Date hasta, String sucursal) {
+	public ListadoCobranzasDataSource(List<Recibo> recibos, Date desde, Date hasta, String sucursal, boolean anticipos) {
 		this.recibos = recibos;
 		this.desde = desde;
 		this.hasta = hasta;
 		this.sucursal = sucursal;
-		this.loadDatos();
+		if(anticipos) {
+			this.loadDatos();
+		} else {
+			this.loadDatosCobranzas();
+		}
 	}
 
 	private int index = -1;
@@ -16852,6 +16856,31 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
 			this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 			this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+		}
+	}
+	
+	/**
+	 * carga los datos para el reporte..
+	 */
+	private void loadDatosCobranzas() {
+		for (Recibo recibo : this.recibos) {
+			double saldo_ = recibo.getSaldoCtaCte();
+			if (saldo_ < 0) saldo_ = saldo_ * -1;
+			String fecha = misc.dateToString(recibo.getFechaEmision(), Misc.DD_MM_YYYY);
+			String numero = recibo.getNumero();
+			String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
+			String ruc = recibo.getCliente().getRuc();
+			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
+			if (recibo.isCobroAnticipo() && !importe.equals(saldo)) {
+				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
+				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+				this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+			} else if (!recibo.isCobroAnticipo()) {
+				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
+				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+				this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+			}				
 		}
 	}
 }
