@@ -27,11 +27,11 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.RazonSocial}" maxlength="38" sclass="det"></label>
+			<label value="${arg.RazonSocial.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
-			<label value="${arg.Ruc}" sclass="det"></label>
+			<label value="${arg.Ruc.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
 		<div width="80px"></div>
 		<div width="60px" style="text-align:right">
@@ -45,11 +45,11 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.Direccion}" maxlength="38" sclass="det"></label>
+			<label value="${arg.Direccion.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
-			<label value="${arg.Vendedor}" sclass="det"></label>
+			<label value="${arg.Vendedor.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
 		<div width="94px"></div>
 		<div>
@@ -61,7 +61,7 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.Telefono}" maxlength="38" sclass="det"></label>
+			<label value="${arg.Telefono.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
@@ -83,10 +83,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="215px">
-					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos4.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
@@ -145,11 +145,11 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.RazonSocial}" maxlength="38" sclass="det"></label>
+			<label value="${arg.RazonSocial.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
-			<label value="${arg.Ruc}" sclass="det"></label>
+			<label value="${arg.Ruc.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
 		<div width="80px"></div>
 		<div width="60px" style="text-align:right">
@@ -163,11 +163,11 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.Direccion}" maxlength="38" sclass="det"></label>
+			<label value="${arg.Direccion.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
-			<label value="${arg.Vendedor}" sclass="det"></label>
+			<label value="${arg.Vendedor.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
 		<div width="94px"></div>
 		<div>
@@ -179,7 +179,7 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.Telefono}" maxlength="38" sclass="det"></label>
+			<label value="${arg.Telefono.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
@@ -201,10 +201,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="215px">
-					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos4.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
@@ -263,11 +263,11 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.RazonSocial}" maxlength="38" sclass="det"></label>
+			<label value="${arg.RazonSocial.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
-			<label value="${arg.Ruc}" sclass="det"></label>
+			<label value="${arg.Ruc.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
 		<div width="80px"></div>
 		<div width="60px" style="text-align:right">
@@ -281,11 +281,11 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.Direccion}" maxlength="38" sclass="det"></label>
+			<label value="${arg.Direccion.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
-			<label value="${arg.Vendedor}" sclass="det"></label>
+			<label value="${arg.Vendedor.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
 		<div width="94px"></div>
 		<div>
@@ -297,7 +297,7 @@
 	<hlayout>
 		<div width="170px"></div>
 		<div width="207px">
-			<label value="${arg.Telefono}" maxlength="38" sclass="det"></label>
+			<label value="${arg.Telefono.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
 		<div width="58px"></div>	
 		<div width="94px">
@@ -319,10 +319,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="215px">
-					<label value="@load(each.articulo.pos4)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos4.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>

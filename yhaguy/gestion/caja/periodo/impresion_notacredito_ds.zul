@@ -27,10 +27,10 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.cliente.pos2)" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
-			<label value="@load(vm.selectedNotaCredito.cliente.pos3)" sclass="det"></label>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos3.toString().toLowerCase())" sclass="det"></label>
 		</div>	
 		<div width="50px"></div>
 	</hlayout>
@@ -38,7 +38,7 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.cliente.pos5)" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos5.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
@@ -67,10 +67,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos2)" sclass="det"></label>
+					<label value="@load(each.articulo.pos2.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="225px">
-					<label value="@load(each.articulo.pos1)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,###.00')" sclass="det"></label>
@@ -126,7 +126,7 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.cliente.pos5)" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos5.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
@@ -155,10 +155,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos2)" sclass="det"></label>
+					<label value="@load(each.articulo.pos2.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="225px">
-					<label value="@load(each.articulo.pos1)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,###.00')" sclass="det"></label>
@@ -214,7 +214,7 @@
 	<hlayout>
 		<div width="180px"></div>
 		<div hflex="true">
-			<label value="@load(vm.selectedNotaCredito.cliente.pos5)" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.selectedNotaCredito.cliente.pos5.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
@@ -243,10 +243,10 @@
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
 				<div width="100px">
-					<label value="@load(each.articulo.pos2)" sclass="det"></label>
+					<label value="@load(each.articulo.pos2.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="225px">
-					<label value="@load(each.articulo.pos1)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.montoDs) @converter('formattedNumber', format='###,###,###.00')" sclass="det"></label>
