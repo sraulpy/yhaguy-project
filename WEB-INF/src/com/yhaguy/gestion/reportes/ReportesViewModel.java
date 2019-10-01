@@ -16799,11 +16799,15 @@ class ListadoCobranzasDataSource implements JRDataSource {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.sucursal = sucursal;
-		if(anticipos) {
-			this.loadDatos();
-		} else {
-			this.loadDatosCobranzas();
-		}
+		try {
+			if(anticipos) {
+				this.loadDatos();
+			} else {
+				this.loadDatosCobranzas();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
 
 	private int index = -1;
@@ -16859,7 +16863,7 @@ class ListadoCobranzasDataSource implements JRDataSource {
 	/**
 	 * carga los datos para el reporte..
 	 */
-	private void loadDatosCobranzas() {
+	private void loadDatosCobranzas() throws Exception {
 		for (Recibo recibo : this.recibos) {
 			double saldo_ = recibo.getSaldoCtaCte();
 			if (saldo_ < 0) saldo_ = saldo_ * -1;
@@ -16869,11 +16873,14 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			String ruc = recibo.getCliente().getRuc();
 			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
-			String _saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : (recibo.getTotalImporteGs() - saldo_));
 			if (recibo.isCobroAnticipo() && !importe.equals(saldo)) {
-				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, _saldo, saldo));
-				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : (recibo.getTotalImporteGs() - saldo_));
-				this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+				for (Object[] aplicacion : recibo.getAplicacionesAnticipo()) {
+					fecha = misc.dateToString((Date) aplicacion[0], Misc.DD_MM_YYYY);
+					String imp = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : aplicacion[1]);
+					values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, imp, imp));
+					this.totalImporte += (recibo.isCobroExterno() ? 0.0 : (double) aplicacion[1]);
+					this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : (double) aplicacion[1]);
+				}				
 			} else if (!recibo.isCobroAnticipo()) {
 				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
 				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
