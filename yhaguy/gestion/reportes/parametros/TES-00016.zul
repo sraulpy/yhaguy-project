@@ -50,10 +50,6 @@
 					</listbox>
 				</bandpopup>
 			</bandbox>
-		</row>
-		<row>
-			<field value="Incluir Anticipos:" />
-			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
 		</row>	
 		<row>
 			<field value="Formato:" />
