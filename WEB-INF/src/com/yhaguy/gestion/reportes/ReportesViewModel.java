@@ -16869,8 +16869,9 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			String ruc = recibo.getCliente().getRuc();
 			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
+			String _saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : (recibo.getTotalImporteGs() - saldo_));
 			if (recibo.isCobroAnticipo() && !importe.equals(saldo)) {
-				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, saldo, saldo));
+				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, _saldo, saldo));
 				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : saldo_);
 				this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
 			} else if (!recibo.isCobroAnticipo()) {
