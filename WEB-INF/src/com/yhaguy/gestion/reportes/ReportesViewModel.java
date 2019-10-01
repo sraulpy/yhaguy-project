@@ -10107,11 +10107,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idCliente = cli != null ? cli.getId() : 0;
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Recibo> cobranzas = rr.getAnticipos(desde, hasta, idSucursal, idCliente);
@@ -16873,8 +16870,8 @@ class ListadoCobranzasDataSource implements JRDataSource {
 			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
 			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
 			if (recibo.isCobroAnticipo() && !importe.equals(saldo)) {
-				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
-				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, saldo, saldo));
+				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : saldo_);
 				this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
 			} else if (!recibo.isCobroAnticipo()) {
 				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
