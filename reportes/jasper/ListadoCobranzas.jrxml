@@ -193,23 +193,37 @@
 					<jr:listContents height="18" width="568">
 						<textField>
 							<reportElement x="0" y="3" width="66" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
+							<textElement>
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="66" y="3" width="95" height="12" uuid="dc95d3d7-0576-4708-bdb4-a1c17ee0917b"/>
+							<textElement>
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="161" y="3" width="269" height="12" uuid="4f571979-6a8e-45a4-a569-7daa67773db0"/>
+							<textElement>
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="430" y="3" width="66" height="12" uuid="7aa8ea60-873b-4a83-bb59-e74472508281"/>
+							<textElement>
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{ruc}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="496" y="3" width="68" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
-							<textElement textAlignment="Right"/>
+							<textElement textAlignment="Right">
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
