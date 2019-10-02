@@ -7,6 +7,8 @@ import com.coreweb.domain.Domain;
 @SuppressWarnings("serial")
 public class AjusteCtaCte extends Domain {
 
+	public static final String ANTICIPOS = "ANTICIPO";
+	
 	private Date fecha;
 	private String descripcion;
 	private double importe;
