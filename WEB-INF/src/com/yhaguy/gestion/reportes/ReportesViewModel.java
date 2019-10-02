@@ -16804,6 +16804,15 @@ class ListadoCobranzasDataSource implements JRDataSource {
 		if (!anticipos) {
 			this.loadAplicacionesAnticipos();
 		}
+		Collections.sort(this.values, new Comparator<BeanRecibo>() {
+			@Override
+			public int compare(BeanRecibo o1, BeanRecibo o2) {
+				String val1 = o1.getFecha();
+				String val2 = o2.getFecha();
+				int compare = val1.compareTo(val2);				
+				return compare;
+			}
+		});
 	}
 
 	private int index = -1;
