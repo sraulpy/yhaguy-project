@@ -157,6 +157,10 @@
 				iconSclass="z-icon-print" onClick='pop_impresion.open(self, "after_end")'
 				label=" Imprimir Cuenta" />
 			<button mold="bs" sclass="btn-warning btn-sm"
+				iconSclass="z-icon-sort-amount-desc"
+				tooltiptext="Generar Cuotas.." 
+				disabled="@load(vm.selectedItem_ eq null)" />
+			<button mold="bs" sclass="btn-warning btn-sm"
 				iconSclass="z-icon-reply"
 				tooltiptext="Reasignar Saldo.." visible="false" 
 				onClick="@command('reasignarSaldo')" disabled="@load(vm.selectedItem_ eq null)" />

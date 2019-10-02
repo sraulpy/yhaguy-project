@@ -586,8 +586,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		CtaCteEmpresaMovimiento cre = rr.getCtaCteEmpresaMovimientoById(this.selectedAplicacion.getId().longValue());
 		
 		AjusteCtaCte ajuste = new AjusteCtaCte();
+		if (deb.isAnticipoCobro()) {
+			ajuste.setAuxi(AjusteCtaCte.ANTICIPOS);
+			ajuste.setOrden(deb.getNroComprobante());
+			ajuste.setIp_pc(deb.getEmpresa().getRuc());
+		}
+		ajuste.setDescripcion(deb.getEmpresa().getRazonSocial());
 		ajuste.setFecha(new Date());
-		ajuste.setDescripcion("");
 		ajuste.setDebito(deb);
 		ajuste.setCredito(cre);
 		ajuste.setImporte(importe);

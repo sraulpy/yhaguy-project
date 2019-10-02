@@ -80,7 +80,7 @@ public class TareaCerrarCajasCentral {
 					resumen.setObs_efectivo_no_depositado("");
 					resumen.getPlanillas().addAll(cajas_int);
 					String nroPlanillas = "INTERIOR: ";
-					for (CajaPeriodo planilla : cajas_) {
+					for (CajaPeriodo planilla : cajas_int) {
 						nroPlanillas += planilla.getNumero() + " - ";
 					}
 					resumen.setNumeroPlanillas(nroPlanillas);
