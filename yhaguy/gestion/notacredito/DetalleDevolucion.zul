@@ -9,13 +9,14 @@
 		visible="@load(vm.dato.dto.motivoDevolucion or vm.dato.dto.motivoReclamo)">
 		<auxhead>
 			<auxheader colspan="5" label="ítem" />
-			<auxheader colspan="2" label="Cantidad" />
+			<auxheader colspan="3" label="Cantidad" />
 		</auxhead>
 		<listhead>
 			<listheader width="40px" align="center" />
 			<listheader label="Código" width="140px" />
 			<listheader label="Descripción" />
-			<listheader label="Precio Gs." align="right" width="90px" />
+			<listheader label="Precio Gs." align="right" width="90px" visible="@load(vm.dato.dto.monedaLocal)" />
+			<listheader label="Precio U$" align="right" width="90px" visible="@load(!vm.dato.dto.monedaLocal)" />
 			<listheader label="Descuento" align="right" width="90px" />
 			<listheader label="Factura" align="right" width="90px" />
 			<listheader label="Devolución" align="right" width="90px" />
@@ -26,10 +27,10 @@
 				<listcell label="@load(each.pos1)" />
 				<listcell label="@load(each.pos2)" />
 				<listcell>
-					<hlayout>
-						<guaranibox value="@bind(each.pos4)" hflex="true" visible="@load(vm.dato.dto.monedaLocal)" />
-						<dolarbox value="@bind(each.pos5)" hflex="true" visible="@load(!vm.dato.dto.monedaLocal)"/>
-					</hlayout>
+					<guaranibox value="@bind(each.pos4)" hflex="true"  />
+				</listcell>
+				<listcell>
+					<dolarbox value="@bind(each.pos5)" hflex="true" />
 				</listcell>
 				<listcell
 					label="@load(each.pos8) @converter('formattedNumber', format='###,###,##0')" 

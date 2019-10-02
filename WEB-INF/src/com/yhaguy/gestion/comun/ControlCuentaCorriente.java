@@ -716,6 +716,37 @@ public class ControlCuentaCorriente {
 				ctacte.setSaldo(hist_);
 				rr.saveObject(ctacte, ctacte.getUsuarioMod());				
 			}
+		}		
+		if (!venta.isMonedaLocal()) {
+			double recs = 0;
+			double ncrs = 0;
+			double ajcr = 0;
+			double ajdb = 0;
+			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(venta.getId(), venta.getTipoMovimiento().getSigla(), venta.getCliente().getIdEmpresa());
+			List<Object[]> recs_ = rr.getRecibosByVenta(venta.getId(), venta.getTipoMovimiento().getId());
+			for (Object[] rec : recs_) {
+				ReciboDetalle rdet = (ReciboDetalle) rec[1];
+				recs += rdet.getMontoDs();
+			}
+			List<NotaCredito> ncrs_ = rr.getNotaCreditosByVenta(venta.getId());
+			for (NotaCredito ncr : ncrs_) {
+				if (!ncr.isAnulado()) {
+					ncrs += ncr.getImporteDs();
+				}				
+			}
+			List<AjusteCtaCte> ajcr_ = rr.getAjustesCredito(venta.getId(), venta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajcr_) {
+				ajcr += ajc.getImporte();				
+			}
+			List<AjusteCtaCte> ajdb_ = rr.getAjustesDebito(venta.getId(), venta.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajc : ajdb_) {
+				ajdb += ajc.getImporte();				
+			}
+			if (ctacte != null) {
+				double hist_ = ((venta.getTotalImporteDs() + ajdb) - (ncrs + recs + ajcr));
+				ctacte.setSaldo(hist_);
+				rr.saveObject(ctacte, ctacte.getUsuarioMod());				
+			}
 		}
 	}
 	

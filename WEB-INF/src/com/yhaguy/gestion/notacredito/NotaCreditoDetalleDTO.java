@@ -196,7 +196,7 @@ public class NotaCreditoDetalleDTO extends DTO {
 			art.setPos2(item.getArticulo().getDescripcion());
 			art.setPos3((int) item.getCantidad());
 			art.setPos4(item.getPrecioGs());
-			art.setPos5(item.getPrecioGs());
+			art.setPos5(item.getPrecioVentaFinalDs());
 			art.setPos6((int) 0);
 			art.setPos7((double) 0);
 			art.setPos8(item.getDescuentoUnitarioGs());

@@ -13167,11 +13167,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<ArticuloFamilia> familias = new ArrayList<ArticuloFamilia>();
 				familias.addAll(_familias);
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
@@ -13205,6 +13202,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							data.add(nc);
 							totalImporte += (notacred.isAnulado() ? 0.0 : notacred.getImporteGs(familias) * -1);
 							totalCosto += (notacred.isAnulado() ? 0.0 : notacred.getCostoGs(familias) * -1);
+							System.out.println("---> " + notacred.getNumero() + " - " + totalCosto);
 						}
 					}
 				}
@@ -13222,6 +13220,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						data.add(vta);
 						totalImporte += (venta.isAnulado() ? 0.0 : venta.getTotalImporteGs(familias));
 						totalCosto += (venta.isAnulado() ? 0.0 : venta.getTotalCostoGs(familias));
+						System.out.println("---> " + venta.getNumero() + " - " + totalCosto);
 					}
 
 				} else if (filtro.isIncluirVCR()) {
