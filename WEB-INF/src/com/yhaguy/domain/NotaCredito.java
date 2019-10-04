@@ -195,18 +195,6 @@ public class NotaCredito extends Domain {
 				out += det.getCostoTotalGsSinIva();
 			}
 		}
-		if (this.isMotivoDescuento() && this.isNotaCreditoVenta()) {
-			Venta vta = this.getVentaAplicada();
-			for (VentaDetalle det : vta.getDetalles()) {
-				if (det.isFamilia(idFamilia)) {
-					double porc = Utiles.obtenerPorcentajeDelValor(det.getImporteGs(), vta.getTotalImporteGs());
-					double apli = Utiles.obtenerValorDelPorcentaje(this.getImporteGs(), porc);
-					double porcCosto = Utiles.obtenerPorcentajeDelValor(det.getCostoTotalGsSinIva(), det.getImporteGs());
-					double apliCosto = Utiles.obtenerValorDelPorcentaje(apli, porcCosto);
-					out += apliCosto;
-				}
-			}
-		}
 		return Math.rint(out * 1) / 1;
 	}
 	
@@ -303,12 +291,6 @@ public class NotaCredito extends Domain {
 			if (item.getArticulo() != null) {
 				out += item.getCostoTotalGsSinIva();
 			}
-		}
-		if (this.isMotivoDescuento() && this.isNotaCreditoVenta()) {
-			Venta vta = this.getVentaAplicada();
-			double porc = Utiles.obtenerPorcentajeDelValor(vta.getTotalCostoGsSinIva(), vta.getTotalImporteGs());
-			double apli = Utiles.obtenerValorDelPorcentaje(this.getImporteGs(), porc);
-			out += apli;
 		}
 		return Math.rint(out * 1) / 1;
 	}
