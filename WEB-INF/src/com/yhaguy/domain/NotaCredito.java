@@ -145,6 +145,16 @@ public class NotaCredito extends Domain {
 				out += det.getImporteGs();
 			}
 		}
+		if (this.isMotivoDescuento()) {
+			Venta vta = this.getVentaAplicada();
+			for (VentaDetalle det : vta.getDetalles()) {
+				if (det.isFamilia(idFamilia)) {
+					double porc = Utiles.obtenerPorcentajeDelValor(det.getImporteGs(), vta.getTotalImporteGs());
+					double apli = Utiles.obtenerValorDelPorcentaje(this.getImporteGs(), porc);
+					out += apli;
+				}
+			}
+		}
 		return out;
 	}
 	
@@ -172,7 +182,7 @@ public class NotaCredito extends Domain {
 		for (ArticuloFamilia familia : familias) {
 			out += this.getCostoGsByFamilia(familia.getId());
 		}
-		return out;
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**
@@ -185,7 +195,19 @@ public class NotaCredito extends Domain {
 				out += det.getCostoTotalGsSinIva();
 			}
 		}
-		return out;
+		if (this.isMotivoDescuento() && this.isNotaCreditoVenta()) {
+			Venta vta = this.getVentaAplicada();
+			for (VentaDetalle det : vta.getDetalles()) {
+				if (det.isFamilia(idFamilia)) {
+					double porc = Utiles.obtenerPorcentajeDelValor(det.getImporteGs(), vta.getTotalImporteGs());
+					double apli = Utiles.obtenerValorDelPorcentaje(this.getImporteGs(), porc);
+					double porcCosto = Utiles.obtenerPorcentajeDelValor(det.getCostoTotalGsSinIva(), det.getImporteGs());
+					double apliCosto = Utiles.obtenerValorDelPorcentaje(apli, porcCosto);
+					out += apliCosto;
+				}
+			}
+		}
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**
@@ -277,13 +299,16 @@ public class NotaCredito extends Domain {
 	 */
 	public double getTotalCostoGsSinIva() {
 		double out = 0;
-		if (!this.isMotivoDevolucion()) {
-			return 0.0;
-		}
 		for (NotaCreditoDetalle item : this.detalles) {
 			if (item.getArticulo() != null) {
 				out += item.getCostoTotalGsSinIva();
 			}
+		}
+		if (this.isMotivoDescuento() && this.isNotaCreditoVenta()) {
+			Venta vta = this.getVentaAplicada();
+			double porc = Utiles.obtenerPorcentajeDelValor(vta.getTotalCostoGsSinIva(), vta.getTotalImporteGs());
+			double apli = Utiles.obtenerValorDelPorcentaje(this.getImporteGs(), porc);
+			out += apli;
 		}
 		return Math.rint(out * 1) / 1;
 	}
