@@ -241,7 +241,7 @@ public class NotaCredito extends Domain {
 	 */
 	public boolean isNotaCreditoCompraAcreedor() {
 		for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
-			if (item.getGasto() != null) {
+			if (item.getGasto() != null || item.getImportacion() != null) {
 				return true;
 			}
 		}
