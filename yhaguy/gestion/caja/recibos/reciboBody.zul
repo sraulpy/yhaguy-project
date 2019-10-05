@@ -245,12 +245,10 @@
 						hflex="true" iconSclass="z-icon-minus-circle"
 						onClick="@command('eliminarItemFormaPago')" label=" Eliminar"
 						disabled="@load(vm.selectedFormaPagoItems.size() eq 0? 'true':'false')" />
-					<space />
 					<button mold="bs" sclass="btn-success btn-sm"
 						hflex="true" iconSclass="z-icon-plus-circle"
 						onClick="@command('abrirPopupFormaPago')" label=" Insertar" 
 						disabled="@load((!vm.anticipo) and (vm.dato.reciboDTO.detalles.size() eq 0? 'true':'false'))" />
-					<space />
 				</hlayout>
 
 				<listbox height="355px"

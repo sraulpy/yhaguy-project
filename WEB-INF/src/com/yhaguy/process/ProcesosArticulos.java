@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.coreweb.domain.Tipo;
@@ -18,6 +20,8 @@ import com.yhaguy.domain.AjusteStockDetalle;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloCosto;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.HistoricoMovimientoArticulo;
@@ -49,6 +53,7 @@ public class ProcesosArticulos {
 	
 	static final String SRC_HISTORICO_MOVIMIENTOS = "./WEB-INF/docs/procesos/ZF_BRASIL_MARZO19.csv";
 	static final String SRC_PRECIOS = "./WEB-INF/docs/procesos/PRECIOS.csv";
+	static final String SRC_MARCAS_FAMILIAS = "./WEB-INF/docs/procesos/MARCA_FAMILIA.csv";
 	
 	/**
 	 * asigna familia a los articulos..
@@ -690,6 +695,47 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * asigna marca y familia a los articulos..
+	 */
+	public static void setFamiliaMarca(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "FAMILIA", CSV.STRING }, { "MARCA", CSV.STRING } };
+		
+		ArticuloFamilia filtros = rr.getArticuloFamilia(ArticuloFamilia.FILTROS);
+		ArticuloFamilia lubricantes = rr.getArticuloFamilia(ArticuloFamilia.LUBRICANTES);
+		ArticuloFamilia cubiertas = rr.getArticuloFamilia(ArticuloFamilia.CUBIERTAS);
+		ArticuloFamilia repuestos = rr.getArticuloFamilia(ArticuloFamilia.REPUESTOS);
+		ArticuloFamilia baterias = rr.getArticuloFamilia(ArticuloFamilia.BATERIAS);
+		
+		Map<Long, ArticuloFamilia> flias = new HashMap<Long, ArticuloFamilia>();
+		flias.put(filtros.getId(), filtros);
+		flias.put(lubricantes.getId(), lubricantes);
+		flias.put(cubiertas.getId(), cubiertas);
+		flias.put(repuestos.getId(), repuestos);
+		flias.put(baterias.getId(), baterias);
+		
+		CSV csv = new CSV(cab, det, src);
+
+		csv.start();
+		while (csv.hashNext()) {
+
+			String codigo = csv.getDetalleString("CODIGO");	
+			String familia = csv.getDetalleString("FAMILIA");
+			String marca = csv.getDetalleString("MARCA");
+			Articulo art = rr.getArticuloByCodigoInterno(codigo);
+			if (art != null) {
+				ArticuloMarca marca_ = (ArticuloMarca) rr.getObject(ArticuloMarca.class.getName(), Long.parseLong(marca));
+				art.setFamilia(flias.get(Long.parseLong(familia)));
+				art.setMarca(marca_);
+				rr.saveObject(art, "sys");
+				System.out.println(art.getCodigoInterno());
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -708,7 +754,8 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MAYORISTA, Deposito.ID_MAYORISTA, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
-			ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
+			//ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
+			ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

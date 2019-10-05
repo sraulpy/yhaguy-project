@@ -1352,7 +1352,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				arts = rr.getArticulos(idArticulo, idProveedor, idFamilia, true);
 
 				for (Object[] art : arts) {
-					
+					System.out.println(art[0]);
 					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false, hasta);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					String familia_ = (String) art[4];
