@@ -10138,13 +10138,12 @@ public class ReportesViewModel extends SimpleViewModel {
 			SucursalApp suc = filtro.getSelectedSucursal();
 			Object[] formato = filtro.getFormato();	
 			
-			long idSucursal = suc != null ? suc.getId() : 0;
-			
+			long idSucursal = suc != null ? suc.getId() : 0;			
 			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false);
 		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_DETALLADO;
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos);
+			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos, desde, hasta, true);
 			params.put("Titulo", codReporte + " - COBRANZAS DETALLADO POR CARTERA");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
@@ -10173,7 +10172,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_REEMBOLSOS_DETALLADO;
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos);
+			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos, desde, hasta, false);
 			params.put("Titulo", codReporte + " - REEMBOLSOS DE CHEQUES RECHAZADOS POR CARTERA");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
@@ -24902,16 +24901,22 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Double> totales = new HashMap<String, Double>();
+	Date desde;
+	Date hasta;
 	
-	public CobranzasDetalladoDataSource(List<Recibo> recibos) {
-		
+	public CobranzasDetalladoDataSource(List<Recibo> recibos, Date desde, Date hasta, boolean cobranzas) {
+		this.desde = desde;
+		this.hasta = hasta;
 		for (Recibo recibo : recibos) {
 			for (ReciboDetalle det : recibo.getDetalles()) {
 				if (det.getMovimiento() != null) {
 					String cartera = det.getMovimiento().getCarteraCliente() != null
 							? det.getMovimiento().getCarteraCliente().getDescripcion()
 							: "SIN CARTERA";
-					this.values.add(new Object[] { recibo, det, cartera, recibo.getFechaEmision() });
+					this.values.add(new Object[] { recibo, det, cartera, recibo.getFechaEmision(), recibo.getNumero(),
+							recibo.getCliente().getRazonSocial(), det.getMovimiento().getNroComprobante(),
+							Utiles.getDateToString(det.getMovimiento().getFechaVencimiento(), Utiles.DD_MM_YYYY),
+							Utiles.getNumberFormat(det.getMontoGs()) });
 					
 					Double total = totales.get(cartera);
 					if (total != null) {
@@ -24922,6 +24927,10 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 					totales.put(cartera, total);
 				}				
 			}
+		}
+		
+		if (cobranzas) {
+			this.loadAplicacionesAnticipos();
 		}
 		
 		Collections.sort(this.values, new Comparator<Object[]>() {
@@ -24941,6 +24950,36 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 			}
 		});
 	}
+	
+	/**
+	 * busca las aplicaciones de anticipos..
+	 */
+	private void loadAplicacionesAnticipos() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<AjusteCtaCte> apls = rr.getAplicacionesAnticipos(this.desde, this.hasta);
+			for (AjusteCtaCte apl : apls) {
+				String cartera = apl.getCredito().getCarteraCliente() != null
+						? apl.getCredito().getCarteraCliente().getDescripcion()
+						: "SIN CARTERA";
+				String cliente = apl.getDescripcion();
+				String numero = apl.getOrden();
+				String factura = apl.getCredito().getNroComprobante();
+				String vencimiento = Utiles.getDateToString(apl.getCredito().getFechaVencimiento(), Utiles.DD_MM_YYYY);
+				String importe = Utiles.getNumberFormat(apl.getImporte());
+				this.values.add(new Object[] { null, null, cartera, apl.getFecha(), numero, cliente, factura, vencimiento, importe });
+				Double total = totales.get(cartera);
+				if (total != null) {
+					total += apl.getImporte();
+				} else {
+					total = apl.getImporte();
+				}
+				totales.put(cartera, total);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
 
 	private int index = -1;
 
@@ -24952,19 +24991,18 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 		
 		String tituloDet = (String) det[2];
 		String emision = Utiles.getDateToString((Date) det[3], Utiles.DD_MM_YYYY);
-		Recibo recibo = (Recibo) det[0];
-		ReciboDetalle item = (ReciboDetalle) det[1];
-		String cliente = recibo.getCliente().getRazonSocial();
-		String factura = item.getMovimiento().getNroComprobante();
-		String vencimiento = Utiles.getDateToString(item.getMovimiento().getFechaVencimiento(), Utiles.DD_MM_YYYY);
-		String importe = Utiles.getNumberFormat(item.getMontoGs());
+		String cliente = (String) det[5];
+		String numero = (String) det[4];
+		String factura = (String) det[6];
+		String vencimiento = (String) det[7];
+		String importe = (String) det[8];
 		
 		if ("TituloDetalle".equals(fieldName)) {
 			value = tituloDet.toUpperCase();
 		} else if ("Emision".equals(fieldName)) {
 			value = emision;
 		} else if ("NroRecibo".equals(fieldName)) {
-			value = recibo.getNumero();
+			value = numero;
 		} else if ("Cliente".equals(fieldName)) {
 			value = cliente;
 		} else if ("NroFactura".equals(fieldName)) {
