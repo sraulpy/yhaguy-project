@@ -13065,7 +13065,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, new ArrayList<ImportacionFactura>(), notascredito);
+				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, new ArrayList<ImportacionFactura>(), notascredito, false);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", "LIBRO DE COMPRAS INDISTINTO - LEY 125/91 MODIF. POR LEY 2421/04");
 				params.put("Sucursal", sucursal);
@@ -13095,6 +13095,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idSucursal = suc != null ? suc.getId() : 0;
 				List<Gasto> gastos = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal);
 				List<ImportacionFactura> importaciones = new ArrayList<ImportacionFactura>();
+				List<NotaCredito> notasCreditos = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
 				
 				if (suc.getId().longValue() == SucursalApp.ID_CENTRAL) {
 					importaciones = rr.getLibroComprasImportacion(desde, hasta, desde_, hasta_);
@@ -13102,7 +13103,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO_;
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, importaciones, new ArrayList<NotaCredito>());
+				JRDataSource dataSource = new LibroComprasIndistintoDataSource(gastos, importaciones, notasCreditos, true);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", "LIBRO DE COMPRAS S/DESPACHO - LEY 125/91 MODIF. POR LEY 2421/04");
 				params.put("Sucursal", sucursal);
@@ -16179,7 +16180,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 	double total_iva5 = 0;
 	double total_baseimponible = 0;
 	
-	public LibroComprasIndistintoDataSource(List<Gasto> gastos, List<ImportacionFactura> importaciones, List<NotaCredito> notasCredito) {
+	public LibroComprasIndistintoDataSource(List<Gasto> gastos, List<ImportacionFactura> importaciones, List<NotaCredito> notasCredito, boolean despacho) {
 		this.gastos = gastos;
 		this.importaciones = importaciones;
 		for (Gasto gasto : gastos) {
@@ -16205,7 +16206,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 			total_baseimponible += gasto.getBaseImponible();
 		}		
 		for (NotaCredito nc : notasCredito) {
-			if (nc.isNotaCreditoCompraAcreedor()) {
+			if (nc.isNotaCreditoCompraAcreedor() || (despacho && nc.isNotaCreditoGastoDespacho())) {
 				Date fecha_ = nc.getFechaEmision();
 				String fechaCarga = Utiles.getDateToString(nc.getModificado(), Utiles.DD_MM_YYYY);
 				String fecha = Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YYYY);

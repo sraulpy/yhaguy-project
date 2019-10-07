@@ -252,6 +252,21 @@ public class NotaCredito extends Domain {
 	public boolean isNotaCreditoCompraAcreedor() {
 		for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
 			if (item.getGasto() != null || item.getImportacion() != null) {
+				if (item.getGasto() != null && item.getGasto().isGastoImportacion()) {
+					return false;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return true si es nc de compra gastos de despacho..
+	 */
+	public boolean isNotaCreditoGastoDespacho() {
+		for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
+			if (item.getGasto() != null && item.getGasto().isGastoImportacion()) {
 				return true;
 			}
 		}
