@@ -98,7 +98,7 @@ public class NotaCredito extends Domain {
 				out += item.getImporteGs();
 			}
 		}
-		return out;
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class NotaCredito extends Domain {
 				out += item.getImporteGsSinIva();
 			}
 		}
-		return out;
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public class NotaCredito extends Domain {
 		for (ArticuloFamilia familia : familias) {
 			out += this.getImporteGsByFamilia(familia.getId());
 		}
-		return out;
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**
@@ -155,7 +155,7 @@ public class NotaCredito extends Domain {
 				}
 			}
 		}
-		return out;
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**
@@ -168,7 +168,17 @@ public class NotaCredito extends Domain {
 				out += det.getImporteGsSinIva();
 			}
 		}
-		return out;
+		if (this.isMotivoDescuento()) {
+			Venta vta = this.getVentaAplicada();
+			for (VentaDetalle det : vta.getDetalles()) {
+				if (det.isFamilia(idFamilia)) {
+					double porc = Utiles.obtenerPorcentajeDelValor(det.getImporteGs(), vta.getTotalImporteGs());
+					double apli = Utiles.obtenerValorDelPorcentaje(this.getTotalImporteGsSinIva(), porc);
+					out += apli;
+				}
+			}
+		}
+		return Math.rint(out * 1) / 1;
 	}
 	
 	/**

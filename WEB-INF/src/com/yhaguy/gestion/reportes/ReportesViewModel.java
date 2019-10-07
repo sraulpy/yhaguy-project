@@ -4544,11 +4544,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<ArticuloFamilia> flias = rr.getObjects(ArticuloFamilia.class.getName());
 				
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 				
 				List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, "");
 				for (Venta venta : ventas) {
