@@ -124,7 +124,7 @@
 			<auxheader />
 		</auxhead>
 		<template name="model">
-			<listitem>
+			<listitem style="@load(each.pos12? 'text-decoration:line-through; color:red' : '')">
 				<listcell label="@load(each.pos6)"/>
 				<listcell label="@load(each.pos1) @converter('formattedDate', format='dd-MM-yyyy')"/>
 				<listcell label="@load(each.pos2)" />

@@ -181,6 +181,7 @@ public class PagosViewModel extends SimpleViewModel {
 			my.setPos9(fpgs);
 			my.setPos10(pago.getNumeroRecibo().isEmpty() ? "- - -" : pago.getNumeroRecibo());
 			my.setPos11(pago.isEntregado());
+			my.setPos12(pago.isAnulado());
 			switch (this.selectedFiltro) {
 			case FILTRO_TODOS:
 				out.add(my);

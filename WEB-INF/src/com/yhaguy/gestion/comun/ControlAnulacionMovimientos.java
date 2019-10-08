@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.comun;
 
+import java.util.HashSet;
 import java.util.List;
 
 import com.coreweb.domain.Tipo;
@@ -21,6 +22,7 @@ import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.NotaDebitoDetalle;
 import com.yhaguy.domain.Recibo;
+import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.RetencionIva;
@@ -402,6 +404,50 @@ public class ControlAnulacionMovimientos {
 	}
 	
 	/**
+	 * anulacion de una orden de pago..
+	 */
+	public static void anularOrdenPago(long idOrden, String motivo, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Recibo op = (Recibo) rr.getObject(Recibo.class.getName(), idOrden);
+		op.setEstadoComprobante(getEstadoComprobanteAnulado());
+		op.setMotivoAnulacion(motivo);
+		op.setTotalImporteGs(0);
+		op.setTotalImporteDs(0);	
+		
+		if (op.isEntregado()) {
+			for (ReciboDetalle item : op.getDetalles()) {
+				if (item.getMovimiento() != null) {
+					item.getMovimiento().setSaldo(item.getMovimiento().getSaldo() + (op.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs()));
+					rr.saveObject(item.getMovimiento(), user);
+				}
+			}
+		}		
+		for (ReciboFormaPago fp : op.getFormasPago()) {
+			if (fp.isChequePropio()) {
+				ControlAnulacionMovimientos.anularChequePropio(fp.getId(), user);
+			}
+		}		
+		for (ReciboFormaPago fp : op.getFormasPago()) {
+			if (!fp.isChequePropio()) {
+				rr.deleteObject(fp);
+			}
+		}		
+		for (ReciboDetalle item : op.getDetalles()) {
+			rr.deleteObject(item);
+		}
+		op.setDetalles(new HashSet<ReciboDetalle>());
+		op.setFormasPago(new HashSet<ReciboFormaPago>());
+		rr.saveObject(op, user);
+		
+		CtaCteEmpresaMovimiento movim = rr.getCtaCteMovimientoByIdMovimiento(op.getId().longValue(), op.getTipoMovimiento().getSigla());
+		if (movim != null) {
+			movim.setAnulado(true);
+			movim.setSaldo(0);
+			rr.saveObject(movim, user);
+		}		
+	}
+	
+	/**
 	 * anulacion de una compra local..
 	 */
 	public static void anularCompraLocal(long idCompraLocal) {
@@ -427,12 +473,14 @@ public class ControlAnulacionMovimientos {
 	/**
 	 * anulacion de cheque propio..
 	 */
-	public static void anularChequePropio(long idFormaPago, String user)
-			throws Exception {
+	public static void anularChequePropio(long idFormaPago, String user) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		BancoCheque cheque = rr.getChequePropio(idFormaPago);
-		cheque.setAnulado(true);
-		rr.saveObject(cheque, user);
+		if (cheque != null) {
+			cheque.setAnulado(true);
+			cheque.setMonto(0);
+			rr.saveObject(cheque, user);
+		}
 	}
 	
 	/**

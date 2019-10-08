@@ -22,6 +22,7 @@ import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaDebito;
+import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Transferencia;
@@ -100,6 +101,10 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		
 		if (this.isNotaDebito()) {
 			this.buscarNotasDebito(filtro, posFiltro);
+		}
+		
+		if (this.isOrdenPago()) {
+			this.buscarOrdenesPago(filtro, posFiltro);
 		}
 		
 		this.selectedMovimiento.setPos6(false);
@@ -213,6 +218,26 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * busqueda de las ordenes de pago..
+	 */
+	private void buscarOrdenesPago(String filtro, int posFiltro) throws Exception {
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(Recibo.class);
+		b.setAnchoColumnas(new String[] { "140px", "140px", "", "140px", "140px" });
+		b.setAtributos(new String[] { "numero", "proveedor.empresa.ruc", "proveedor.empresa.razonSocial",
+				"tipoMovimiento.descripcion", "fechaEmision" });
+		b.setHeight("400px");
+		b.setWidth("900px");
+		b.setNombresColumnas(new String[] { "Número", "Ruc", "Razón Social", "Tipo Movimiento", "Fecha" });
+		b.setTitulo("Órdenes de Pago");
+		b.addWhere("c.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'");
+		b.show(filtro, posFiltro);
+		if (b.isClickAceptar()) {
+			this.selectedMovimiento = b.getSelectedItem();
+		}
+	}
+	
+	/**
 	 * busqueda de los ajustes..
 	 */
 	private void buscarAjustes(String filtro, int posFiltro) throws Exception {
@@ -259,6 +284,8 @@ public class AnulacionesViewModel extends SimpleViewModel {
 				this.anularTransferencia(motivo);
 			}  else if (this.isNotaDebito()) {
 				this.anularNotaDebito(motivo);
+			} else if (this.isOrdenPago()) {
+				this.anularOrdenPago(motivo);
 			}
 			this.selectedMovimiento.setPos6(true);
 			Clients.showNotification("Movimiento anulado..");
@@ -316,6 +343,14 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	 */
 	private void anularNotaDebito(String motivo) throws Exception {
 		ControlAnulacionMovimientos.anularNotaDebito(
+				this.selectedMovimiento.getId(), motivo, this.getLoginNombre());
+	} 
+	
+	/**
+	 * anulacion de orden de pago..
+	 */
+	private void anularOrdenPago(String motivo) throws Exception {
+		ControlAnulacionMovimientos.anularOrdenPago(
 				this.selectedMovimiento.getId(), motivo, this.getLoginNombre());
 	} 
 	
@@ -428,6 +463,14 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	private boolean isNotaDebito() {
 		return this.selectedItem.getSigla().equals(
 				Configuracion.SIGLA_TM_NOTA_DEBITO_VENTA);
+	}
+	
+	/**
+	 * @return true si es nota de debito..
+	 */
+	private boolean isOrdenPago() {
+		return this.selectedItem.getSigla().equals(
+				Configuracion.SIGLA_TM_RECIBO_PAGO);
 	}
 	
 	private UtilDTO getUtilDto() {
