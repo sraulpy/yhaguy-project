@@ -39,7 +39,7 @@
 						<textbox
 							value="@load(vm.dato.reciboDTO.moneda.pos1)"
 							visible="@load(!vm.dato.reciboDTO.detalleVacio)" readonly="true"
-							width="100px" />
+							hflex="true" />
 					</hlayout>
 				</vlayout>
 				<hlayout>

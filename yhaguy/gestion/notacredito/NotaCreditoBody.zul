@@ -113,8 +113,7 @@
 								width="100px"/>						
 							<textbox value="@load(vm.dto.cliente.pos2)"
 								readonly="true" visible="@load(!vm.motivoEditable)"
-								hflex="true" />							
-							<labelConstrain />
+								hflex="true" />	
 						</hlayout>
 					</vlayout>
 				</cell>
@@ -133,7 +132,6 @@
 						</combobox>
 						<textbox value="@load(vm.dto.motivo.text)" hflex="true"
 							visible="@load(!vm.motivoEditable)" readonly="true" />
-						<labelConstrain />
 					</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
@@ -187,7 +185,6 @@
 					<textbox value="@bind(vm.dto.numero)"
 						readonly="@load(vm.dto.notaCreditoVenta || vm.deshabilitado)" 
 						placeholder="@load(vm.dto.notaCreditoVenta? 'Autogenerado..':'Número..')"
-						constraint="${vm.check.noVacio}"
 						hflex="true"/>
 				</vlayout>
 				<vlayout spacing="0">
@@ -205,8 +202,7 @@
 					<field value="Fecha" />
 					<datebox
 						hflex="true" 
-						value="@bind(vm.dto.fechaEmision)" 
-						constraint="@load(vm.constraintFecha)"/>
+						value="@bind(vm.dto.fechaEmision)" />
 				</vlayout>
 				<vlayout spacing="0">
 					<field value="Sucursal" />
@@ -228,7 +224,7 @@
 				<cell colspan="2">
 					<vlayout style="margin-top:5px">
 						<field value="Proveedor"/>
-						<hlayout>
+						<hbox hflex="true" spacing="5px">
 							<buscadorProveedor value="@bind(vm.dto)"
 								campo="ruc" width="100px" 
 								visible="@load(vm.motivoEditable)"
@@ -238,11 +234,10 @@
 								visible="@load(vm.motivoEditable)"/>
 							<textbox value="@load(vm.dto.proveedor.pos3)"
 								readonly="true" visible="@load(!vm.motivoEditable)"
-								hflex="true" />	
+								width="100px" />	
 							<textbox value="@load(vm.dto.proveedor.pos2)"
-								readonly="true" hflex="true" visible="@load(!vm.motivoEditable)" />													
-							<labelConstrain />							
-						</hlayout>
+								readonly="true" hflex="true" visible="@load(!vm.motivoEditable)" />																			
+						</hbox>
 					</vlayout>
 				</cell>
 				<vlayout spacing="0">
