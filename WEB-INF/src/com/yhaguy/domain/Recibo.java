@@ -63,6 +63,18 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return true si es recibo contra cuenta..
+	 */
+	public boolean isReciboContraCuenta() {
+		for (ReciboDetalle det : this.detalles) {
+			if (det.getAuxi().equals(ReciboDetalle.TIPO_CTA_CONTABLE)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * @return el saldo en extracto..
 	 */
 	public double getSaldoCtaCte() {		

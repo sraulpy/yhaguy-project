@@ -16828,16 +16828,18 @@ class ListadoCobranzasDataSource implements JRDataSource {
 	 */
 	private void loadDatos() {
 		for (Recibo recibo : this.recibos) {
-			double saldo_ = recibo.getSaldoCtaCte();
-			String fecha = misc.dateToString(recibo.getFechaEmision(), Misc.DD_MM_YYYY);
-			String numero = recibo.getNumero();
-			String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
-			String ruc = recibo.getCliente().getRuc();
-			String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
-			String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
-			values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
-			this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
-			this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+			if (!recibo.isReciboContraCuenta()) {
+				double saldo_ = recibo.getSaldoCtaCte();
+				String fecha = misc.dateToString(recibo.getFechaEmision(), Misc.DD_MM_YYYY);
+				String numero = recibo.getNumero();
+				String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
+				String ruc = recibo.getCliente().getRuc();
+				String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+				String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
+				values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
+				this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
+				this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+			}
 		}
 	}
 	
@@ -24909,24 +24911,25 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 		this.desde = desde;
 		this.hasta = hasta;
 		for (Recibo recibo : recibos) {
-			for (ReciboDetalle det : recibo.getDetalles()) {
-				if (det.getMovimiento() != null) {
-					String cartera = det.getMovimiento().getCarteraCliente() != null
-							? det.getMovimiento().getCarteraCliente().getDescripcion()
-							: "SIN CARTERA";
-					this.values.add(new Object[] { recibo, det, cartera, recibo.getFechaEmision(), recibo.getNumero(),
-							recibo.getCliente().getRazonSocial(), det.getMovimiento().getNroComprobante(),
-							Utiles.getDateToString(det.getMovimiento().getFechaVencimiento(), Utiles.DD_MM_YYYY),
-							Utiles.getNumberFormat(det.getMontoGs()) });
-					
-					Double total = totales.get(cartera);
-					if (total != null) {
-						total += det.getMontoGs();
-					} else {
-						total = det.getMontoGs();
-					}
-					totales.put(cartera, total);
-				}				
+			if (!recibo.isReciboContraCuenta()) {
+				for (ReciboDetalle det : recibo.getDetalles()) {
+					if (det.getMovimiento() != null) {
+						String cartera = det.getMovimiento().getCarteraCliente() != null
+								? det.getMovimiento().getCarteraCliente().getDescripcion()
+								: "SIN CARTERA";
+						this.values.add(new Object[] { recibo, det, cartera, recibo.getFechaEmision(), recibo.getNumero(),
+								recibo.getCliente().getRazonSocial(), det.getMovimiento().getNroComprobante(),
+								Utiles.getDateToString(det.getMovimiento().getFechaVencimiento(), Utiles.DD_MM_YYYY),
+								Utiles.getNumberFormat(det.getMontoGs()) });						
+						Double total = totales.get(cartera);
+						if (total != null) {
+							total += det.getMontoGs();
+						} else {
+							total = det.getMontoGs();
+						}
+						totales.put(cartera, total);
+					}				
+				}
 			}
 		}
 		
