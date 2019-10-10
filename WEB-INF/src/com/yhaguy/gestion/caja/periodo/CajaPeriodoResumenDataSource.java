@@ -446,8 +446,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			
 			// reembolso de cheques rechazados internos..
 			for (Recibo cobro : planilla.getRecibosOrdenado()) {
-				if (cobro.isCancelacionCheque() && cobro.isCancelacionChequeRechazadoInterno() && !cobro.isCancelacionChequeRechazadoInterno() && !cobro.isAnulado()
-						&& !cobro.isCobroExterno()) {
+				if (cobro.isCancelacionCheque() && cobro.isCancelacionChequeRechazadoInterno() && !cobro.isAnulado() && !cobro.isCobroExterno()) {
 					for (ReciboFormaPago rfp : cobro.getFormasPago()) {
 						if (rfp.isEfectivo()) {
 							this.totalCancelacionChequeEfectivo += rfp.getMontoGs();
