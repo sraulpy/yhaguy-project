@@ -6320,7 +6320,7 @@ public class RegisterDomain extends Register {
 			Date hasta, String caracter, long idVendedor, long idEmpresa, long idMoneda) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c from CtaCteEmpresaMovimiento c where c.anulado = 'FALSE' and c.saldo > 0 and"
+		String query = "select c from CtaCteEmpresaMovimiento c where c.anulado = 'FALSE' and c.saldo != 0 and"
 				+ " c.tipoCaracterMovimiento.sigla = '"
 				+ caracter
 				+ "'"
