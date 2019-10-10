@@ -475,9 +475,11 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			MyArray mprecio = new MyArray(precio.getDescripcion(), precio.getMargen(), precio.getFormula());
 			mprecio.setId(precio.getId());
 			out.add(mprecio);
-			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_MAYORISTA)) {
-				if (precio.getDescripcion().contains("MAYORISTA")) {
-					out.remove(mprecio);
+			if (!this.getLoginNombre().equals("login")) {
+				if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_MAYORISTA)) {
+					if (precio.getDescripcion().contains("MAYORISTA")) {
+						out.remove(mprecio);
+					}
 				}
 			}
 		}
