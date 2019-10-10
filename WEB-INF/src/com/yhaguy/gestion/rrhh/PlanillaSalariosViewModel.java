@@ -86,6 +86,11 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		this.imprimirLiquidacion();
 	}
 	
+	@Command
+	public void imprimirPlanilla() throws Exception {
+		this.imprimirPlanilla_();
+	}
+	
 	/**
 	 * Despliega el Reporte de liquidacion de salario..
 	 */
@@ -98,6 +103,19 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		params.put("Cargo", this.selectedPlanilla.getCargo());
 		params.put("Periodo", this.selectedPlanilla.getMes() + " " +  this.selectedPlanilla.getAnho());
 		params.put("Usuario", getUs().getNombre());
+		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+	}
+	
+	/**
+	 * Despliega el Reporte de planilla de salario..
+	 */
+	private void imprimirPlanilla_() throws Exception {		
+		String source = ReportesViewModel.SOURCE_PLANILLA_SALARIOS;
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new PlanillaSalariosDataSource(this.planillas);
+		params.put("Periodo", this.getSelectedMes() + " " +  this.getSelectedAnho() + " - " + this.selectedTipo);
+		params.put("Usuario", getUs().getNombre());
+		params.put("Titulo", "Planilla de Salarios");
 		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
 	}
 	
@@ -248,6 +266,41 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * DataSource de planilla de salarios..
+	 */
+	class PlanillaSalariosDataSource implements JRDataSource {
+
+		List<RRHHPlanillaSalarios> salarios;
+		double totalImporteGs = 0;
+
+		public PlanillaSalariosDataSource(List<RRHHPlanillaSalarios> salarios) {
+			this.salarios = salarios;
+		}
+
+		private int index = -1;
+
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+			Object value = null;
+			String fieldName = field.getName();
+			RRHHPlanillaSalarios item = this.salarios.get(index);
+			if ("Funcionario".equals(fieldName)) {
+				value = item.getFuncionario();
+			} 
+			return value;
+		}
+
+		@Override
+		public boolean next() throws JRException {
+			if (index < salarios.size() - 1) {
+				index++;
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	/**
 	 * GETS / SETS 
 	 */
 	public Object[] getTotales() {
@@ -283,6 +336,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		List<String> out = new ArrayList<>();
 		out.add(RRHHPlanillaSalarios.TIPO_COMISIONES);
 		out.add(RRHHPlanillaSalarios.TIPO_SALARIOS);
+		out.add(RRHHPlanillaSalarios.TIPO_PREMIOS);
 		return out;
 	}
 	

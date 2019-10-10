@@ -10796,6 +10796,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Object[]> getFuncionarios_() throws Exception {
 		String query = "select f.id, f.empresa.razonSocial from Funcionario f"
+				+ " where f.funcionarioEstado.sigla = '" + Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'"
 				+ " order by f.empresa.razonSocial";
 		return this.hql(query);
 	}
