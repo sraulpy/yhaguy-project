@@ -54,6 +54,7 @@ public class ProcesosArticulos {
 	static final String SRC_HISTORICO_MOVIMIENTOS = "./WEB-INF/docs/procesos/ZF_BRASIL_MARZO19.csv";
 	static final String SRC_PRECIOS = "./WEB-INF/docs/procesos/PRECIOS.csv";
 	static final String SRC_MARCAS_FAMILIAS = "./WEB-INF/docs/procesos/MARCA_FAMILIA.csv";
+	static final String SRC_PRECIOS_MRA = "./WEB-INF/docs/procesos/PRECIOS_MRA.csv";
 	
 	/**
 	 * asigna familia a los articulos..
@@ -794,7 +795,8 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.addTransferenciaInterna(SRC_INVENTARIO_MCAL, Deposito.ID_MCAL_LOPEZ, Deposito.ID_VIRTUAL_INVENTARIO, Utiles.getFecha("22-01-2019 00:00:00"));
 			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
 			//ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
-			ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
+			//ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
+			ProcesosArticulos.setPreciosMra(SRC_PRECIOS_MRA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
