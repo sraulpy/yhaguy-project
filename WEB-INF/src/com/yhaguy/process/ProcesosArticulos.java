@@ -736,6 +736,45 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * asignacion de precios mra
+	 */
+	public static void setPreciosMra(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING } };
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+
+			String codigo = csv.getDetalleString("CODIGO");	
+			Double mayorista = Double.parseDouble(csv.getDetalleString("MAYORISTA"));
+			Double minorista = Double.parseDouble(csv.getDetalleString("MINORISTA"));
+			Double lista = Double.parseDouble(csv.getDetalleString("LISTA"));
+			Articulo art = rr.getArticuloByCodigoInterno(codigo);
+			if (art != null) {
+				Object[] cl = rr.getUltimaCompraLocal(art.getId());
+				Object[] tr = rr.getUltimaTransferenciaPorArticulo(art.getId());
+				Date fcl = cl != null ? ((Date) cl[1]) : Utiles.getFecha("01-01-2000 00:00:00");
+				Date ftr = tr != null ? ((Date) tr[1]) : Utiles.getFecha("01-01-2000 00:00:00");
+				
+				if (ftr.compareTo(fcl) > 0) {
+					art.setPrecioGs(mayorista);
+					art.setPrecioMinoristaGs(minorista);
+					art.setPrecioListaGs(lista);
+					rr.saveObject(art, "sys");
+					System.out.println("transferencia:" + art.getCodigoInterno());
+				} else {
+					System.err.println("compra_local: " + art.getCodigoInterno());
+				}
+			} else {
+				System.err.println("codigo_dif: " + codigo);
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
