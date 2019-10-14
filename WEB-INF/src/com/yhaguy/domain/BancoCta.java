@@ -20,7 +20,7 @@ public class BancoCta extends Domain{
 		return this.banco.getDescripcion().toUpperCase() + " - " + this.nroCuenta + " - " + this.moneda.getSigla().toUpperCase();
 	}
 	
-	public String getBancoDescripcion(){
+	public String getBancoDescripcion() {
 		return this.banco.getDescripcion().toUpperCase();
 	}
 	
