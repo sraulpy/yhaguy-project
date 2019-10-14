@@ -3499,7 +3499,8 @@ public class RegisterDomain extends Register {
 	public List<NotaCredito> getNotasCreditoVentaByMotivo(Date desde, Date hasta, String siglaMotivo) throws Exception {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and n.tipoMovimiento.sigla = ?"
-				+ " and (n.fechaEmision between ? and ?)";
+				+ " and (n.fechaEmision between ? and ?)"
+				+ " and n.motivo.sigla = ?";
 		query += " order by n.numero";
 
 		List<Object> listParams = new ArrayList<Object>();

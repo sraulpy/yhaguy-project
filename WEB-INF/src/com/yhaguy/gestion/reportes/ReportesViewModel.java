@@ -6390,6 +6390,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					Double acum_ = importes.get(key);
 					if (acum_ != null) {
 						acum_ -= ((Double) nc[6]);
+						importes.put(key, acum_);
 					} else {
 						importes.put(key, ((Double) (nc[6]) * -1));
 					}
@@ -6407,6 +6408,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					Double acum_ = importes.get(key);
 					if (acum_ != null) {
 						acum_ -= (idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs());
+						importes.put(key, acum_);
 					} else {
 						importes.put(key, ((idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs()) * -1));
 					}
