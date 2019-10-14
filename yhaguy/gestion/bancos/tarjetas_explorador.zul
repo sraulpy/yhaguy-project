@@ -189,7 +189,7 @@
 	<button mold="bs" sclass="btn-primary btn-sm" hflex="true" iconSclass="z-icon-check"
 		label="Guardar Cambios"
 		onClick="@command('guardarCambios')"
-		disabled="@load((!vm.isOperacionHabilitada('ModificarTarjeta')) or (!vm.guardarHabilitado))"></button>
+		disabled="@load((!vm.isOperacionHabilitada('ModificarTarjeta')))"></button>
 	</vlayout>
 	</popup>
 </window>
