@@ -497,7 +497,7 @@
 		{margin-right:5px; background:lightyellow} .custom-listheader
 		.z-listheader-content { line-height: 15px; font-weight:normal}
 		.z-html { display:block; } .small_list .z-listcell-content {
-		height: 20px; line-height: 15px; min-height: 23px;
+		height: 20px; line-height: 15px; min-height: 22px;
 		text-overflow: ellipsis; white-space: nowrap; font-size:10px }
 	</style>
 	
