@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.bancos.tarjetas;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -9,12 +10,18 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Popup;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.domain.Tipo;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.ProcesadoraTarjeta;
+import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.util.Utiles;
@@ -39,8 +46,15 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 	private String filterFechaMM_ = "";
 	private String filterFechaAA_ = "";
 	
+	private Date fechaCierre;
+	
 	private Tipo selectedTipo;
+	private Object[] selectedItem;
+	private ReciboFormaPago selected;
 	private Object[] totales = new Object[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+	
+	@Wire
+	private Popup pop_det;
 
 	@Init(superclass = true)
 	public void init() {
@@ -56,6 +70,14 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 				this.filterFechaMM_ = "0" + this.filterFechaMM_;
 			}
 			this.selectedTipo = this.getTiposTarjetas().get(0);
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -73,6 +95,24 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 		} else if (filter == 2) {
 			this.selectedFiltro = FILTRO_PENDIENTES;
 		}
+	}
+	
+	@Command
+	@NotifyChange({ "selectedItem", "selected" })
+	public void verItems(@BindingParam("item") Object[] item,
+			@BindingParam("parent") Component parent) throws Exception {
+		this.selectedItem = item;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selected = (ReciboFormaPago) rr.getObject(ReciboFormaPago.class.getName(), (long) item[0]);
+		this.pop_det.open(parent, "start_before");
+	}
+	
+	@Command
+	@NotifyChange("selected")
+	public void guardarCambios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		rr.saveObject(this.selected, this.getLoginNombre());
+		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA", "filterFechaDD_", "filterFechaMM_",
@@ -96,6 +136,22 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 	/**
 	 * GETS / SETS
 	 */
+	
+	@DependsOn({ "selected", "fechaCierre" })
+	public boolean isGuardarHabilitado() {
+		if (this.selected == null) {
+			return false;
+		}
+		return this.selected.getFechaOperacion().compareTo(this.fechaCierre) > 0;
+	}
+	
+	/**
+	 * @return si la operacion es habilitada..
+	 */
+	public boolean isOperacionHabilitada(String operacion) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.isOperacionHabilitada(this.getLoginNombre(), operacion);
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<ProcesadoraTarjeta> getProcesadoras() throws Exception {
@@ -242,5 +298,29 @@ public class BancoTarjetaExploradorVM extends SimpleViewModel {
 
 	public void setOperacion(String operacion) {
 		this.operacion = operacion;
+	}
+
+	public Object[] getSelectedItem() {
+		return selectedItem;
+	}
+
+	public void setSelectedItem(Object[] selectedItem) {
+		this.selectedItem = selectedItem;
+	}
+
+	public ReciboFormaPago getSelected() {
+		return selected;
+	}
+
+	public void setSelected(ReciboFormaPago selected) {
+		this.selected = selected;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}	
 }

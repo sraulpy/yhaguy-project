@@ -1,3 +1,4 @@
+<zk>
 <window width="100%" height="100%"
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.tarjetas.BancoTarjetaExploradorVM')">
@@ -35,6 +36,7 @@
 			<listheader label="Cuenta" align="right"></listheader>
 			<listheader label="Fecha Crédito"></listheader>
 			<listheader label="Nro. T.Débito"></listheader>
+			<listheader label="" align="center" width="40px"></listheader>
 			<listheader label="" align="center" width="40px"></listheader>
 		</listhead>
 		<auxhead>
@@ -90,6 +92,7 @@
 			</auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
@@ -106,6 +109,9 @@
 					<a iconSclass="@load(each[11]? 'z-icon-check-circle':'z-icon-exclamation-circle')"
 						style="@load(each[11]? 'color:green':'color:red')"></a>
 				</listcell>
+				<listcell tooltiptext="Detalle..">
+					<a onClick="@command('verItems', item=each, parent=self)" iconSclass="z-icon-list"></a>
+				</listcell>
 			</listitem>
 		</template>
 		<listfoot>
@@ -116,4 +122,75 @@
 			</listfooter>
 		</listfoot>
 	</listbox>
+	<popup id="pop_det" sclass="rounded">
+	<vlayout width="400px" style="padding:10px">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="40%"></column>
+			<column></column>
+		</columns>
+		<rows>
+			<row>
+				<field value="Fecha operación:" />
+				<datebox value="@bind(vm.selected.fechaOperacion)" hflex="true"></datebox>
+			</row>
+			<row>
+				<field value="Procesadora:" />
+				<combobox model="@load(vm.procesadoras)"
+					selectedItem="@bind(vm.selected.tarjetaProcesadora)"
+					value="@load(vm.selected.tarjetaProcesadora.nombre.toUpperCase())"
+					hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.nombre.toUpperCase())" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Nro. operación:" />
+				<textbox value="@bind(vm.selected.tarjetaNumeroComprobante)" hflex="true"></textbox>
+			</row>
+			<row>
+				<field value="Importe:" />
+				<guaranibox value="@bind(vm.selected.montoGs)" hflex="true"></guaranibox>
+			</row>
+			<row>
+				<field value="Acreditado:" />
+				<guaranibox value="@bind(vm.selected.importeAcreditado)" hflex="true"></guaranibox>
+			</row>
+			<row>
+				<field value="Banco:" />
+				<combobox model="@load(vm.bancos)"
+					selectedItem="@bind(vm.selected.depositoBancoCta)"
+					value="@load(vm.selected.depositoBancoCta.descripcion)"
+					hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.descripcion)" />
+					</template>
+				</combobox>
+			</row>
+			<row>
+				<field value="Fecha acreditación:" />
+				<datebox value="@bind(vm.selected.fechaAcreditacion)" hflex="true"></datebox>
+			</row>
+			<row>
+				<field value="Tipo de tarjeta:" />
+				<combobox model="@load(vm.tiposTarjetas)"
+					selectedItem="@bind(vm.selected.tipo)"
+					value="@load(vm.selected.tipo.descripcion.toUpperCase())"
+					hflex="true">
+					<template name="model">
+						<comboitem label="@load(each.descripcion.toUpperCase())" />
+					</template>
+				</combobox>
+			</row>
+		</rows>
+	</grid>
+	<div height="5px"></div>
+	<button mold="bs" sclass="btn-primary btn-sm" hflex="true" iconSclass="z-icon-check"
+		label="Guardar Cambios"
+		onClick="@command('guardarCambios')"
+		disabled="@load((!vm.isOperacionHabilitada('ModificarTarjeta')) or (!vm.guardarHabilitado))"></button>
+	</vlayout>
+	</popup>
 </window>
+</zk>
