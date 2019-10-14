@@ -3474,7 +3474,7 @@ public class RegisterDomain extends Register {
  	 */
 	public List<NotaCredito> getNotasCreditoVentaVendedor(Date desde, Date hasta, long idVendedor) throws Exception {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
-				+ Configuracion.SIGLA_IMPORTACION_ESTADO_ANULADO + "' and n.tipoMovimiento.sigla = ?"
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and n.tipoMovimiento.sigla = ?"
 				+ " and (n.fechaEmision between ? and ?)";
 		if (idVendedor != 0) {
 			query += " and n.vendedor.id = " + idVendedor;
@@ -3485,6 +3485,28 @@ public class RegisterDomain extends Register {
 		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
 		listParams.add(desde);
 		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return las notas de credito de venta segun fecha y motivo.
+ 	 */
+	public List<NotaCredito> getNotasCreditoVentaByMotivo(Date desde, Date hasta, String siglaMotivo) throws Exception {
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '"
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and n.tipoMovimiento.sigla = ?"
+				+ " and (n.fechaEmision between ? and ?)";
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+		listParams.add(siglaMotivo);
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {

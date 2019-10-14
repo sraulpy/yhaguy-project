@@ -1490,6 +1490,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_CLIENTE_ARTICULO_MES = "VEN-00048";
 		static final String VENTAS_PROVEEDOR_CLIENTE_MES = "VEN-00049";
 		static final String VENTAS_PROVEEDOR_MES = "VEN-00050";
+		static final String VENTAS_PROVEEDOR_CLIENTE_MES_CANT = "VEN-00051";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1699,6 +1700,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_PROVEEDOR_MES:
 				this.ventasProveedorPorMes(mobile, VENTAS_PROVEEDOR_MES);
+				break;
+				
+			case VENTAS_PROVEEDOR_CLIENTE_MES_CANT:
+				this.ventasProveedorClientePorMes_(mobile, VENTAS_PROVEEDOR_CLIENTE_MES_CANT);
 				break;
 			}
 		}
@@ -6790,6 +6795,270 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Cliente", cli != null ? cli.getRazonSocial() : "TODOS..");
 				params.put("Familia", flia);
 				params.put("Sucursal", suc);
+				params.put("Proveedor", proveedor != null ? proveedor.getRazonSocial() : "TODOS..");
+				JRDataSource dataSource = new VentasProveedorCliente(list, rango);
+				imprimirJasper(source, params, dataSource, formato);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte VEN-00051
+		 */
+		private void ventasProveedorClientePorMes_(boolean mobile, String codReporte) {
+			try {					
+				Object[] formato = filtro.getFormato();
+				Cliente cli = filtro.getCliente();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				Proveedor proveedor = filtro.getProveedor();
+				Funcionario vendedor = filtro.getVendedor();
+				SucursalApp sucursal = filtro.getSelectedSucursal();
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				long idCliente = cli != null ? cli.getId() : 0;
+				long idFamilia = familia != null ? familia.getId().longValue() : 0;
+				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
+				long idVendedor = vendedor != null ? vendedor.getId().longValue() : 0;
+				long idSucursal = sucursal != null ? sucursal.getId().longValue() : 0;
+				int mes1 = Utiles.getNumeroMes(desde) - 1;
+				int mes2 = Utiles.getNumeroMes(hasta);
+				int rango = mes2 - mes1;
+				
+				RegisterDomain rr = RegisterDomain.getInstance();				
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<NotaCredito> ncs_ = rr.getNotasCreditoVentaByMotivo(desde, hasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DESCUENTO);
+				
+				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
+				Map<String, Double> cants = new HashMap<String, Double>();
+				Map<String, Double> importes = new HashMap<String, Double>();
+				Map<String, Double> volumens = new HashMap<String, Double>();
+				Map<String, Object[]> datos = new HashMap<String, Object[]>();
+				Map<String, Object[]> clientes = new HashMap<String, Object[]>();
+				
+				for (Object[] venta : ventas) {
+					int mes = Utiles.getNumeroMes((Date) venta[4]);
+					String clt = (String) venta[5];
+					String key = clt + ";" + mes;
+					Double acum = cants.get(key);
+					if (acum != null) {
+						acum += ((Double) venta[3]);
+						cants.put(key, acum);
+						volumens.put(clt, (Double) venta[2]);
+						datos.put(clt, new Object[] { (Double) venta[9], (Double) venta[10] });
+					} else {
+						cants.put(key, ((Double) (venta[3])));
+						volumens.put(clt, (Double) venta[2]);
+					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ += ((Double) venta[6]);
+						importes.put(key, acum_);
+					} else {
+						importes.put(key, ((Double) (venta[6])));
+					}
+					Object[] cld = clientes.get(clt);
+					if (cld == null) {
+						cld = new Object[] { venta[11], venta[12], venta[13], venta[14] };
+						clientes.put(clt, cld);
+					}
+				}
+				
+				for (Object[] nc : ncs) {
+					int mes = Utiles.getNumeroMes((Date) nc[4]);
+					String clt = (String) nc[5];
+					String key = clt + ";" + mes;
+					Double acum = cants.get(key);
+					if (acum != null) {
+						acum -= ((Double) nc[3]);
+						cants.put(key, acum);
+						volumens.put(clt, (Double) nc[2]);
+					} else {
+						cants.put(key, ((Double) (nc[3]) * -1));
+						volumens.put(clt, (Double) nc[2]);
+					}
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ -= ((Double) nc[6]);
+					} else {
+						importes.put(key, ((Double) (nc[6]) * -1));
+					}
+					Object[] cld = clientes.get(clt);
+					if (cld == null) {
+						cld = new Object[] { nc[11], nc[12], nc[13], nc[14] };
+						clientes.put(clt, cld);
+					}
+				}
+				
+				for (NotaCredito nc : ncs_) {
+					int mes = Utiles.getNumeroMes(nc.getFechaEmision());
+					String clt = nc.getCliente().getRazonSocial();
+					String key = clt + ";" + mes;				
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ -= (idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs());
+					} else {
+						importes.put(key, ((idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs()) * -1));
+					}
+					Object[] cld = clientes.get(clt);
+					if (cld == null) {
+						cld = new Object[] { nc.getCliente().getRuc(), nc.getVendedor().getNombreEmpresa(),
+								nc.getCliente().getRubro(), nc.getCliente().getEmpresa().getZona() };
+						clientes.put(clt, cld);
+					}
+				}
+				
+				Map<String, String> keys = new HashMap<String, String>();
+				
+				for (String key : cants.keySet()) {					
+					String codigo = key.split(";")[0];
+					String key_ = codigo;
+					String ruc = "";
+					String vendedor_ = "";
+					String rubro = "";
+					String zona = "";
+					Object[] dcli = clientes.get(key_);
+					
+					if (dcli != null) {
+						ruc = (String) dcli[0];
+						vendedor_ = (String) dcli[1];
+						rubro = (String) dcli[2];
+						zona = (String) dcli[3];
+					}
+					
+					if (keys.get(key_) == null) {
+						Double cantidad = cants.get(key);
+						
+						Double cantEnero = cants.get(key_ + ";1");
+						if (cantEnero == null) cantEnero = 0.0; 
+						
+						Double cantFebrero = cants.get(key_ + ";2");
+						if (cantFebrero == null) cantFebrero = 0.0;
+						
+						Double cantMarzo = cants.get(key_ + ";3");
+						if (cantMarzo == null) cantMarzo = 0.0;
+						
+						Double cantAbril = cants.get(key_ + ";4");
+						if (cantAbril == null) cantAbril = 0.0;
+						
+						Double cantMayo = cants.get(key_ + ";5");
+						if (cantMayo == null) cantMayo = 0.0;
+						
+						Double cantJunio = cants.get(key_ + ";6");
+						if (cantJunio == null) cantJunio = 0.0;
+						
+						Double cantJulio = cants.get(key_ + ";7");
+						if (cantJulio == null) cantJulio = 0.0;
+						
+						Double cantAgosto = cants.get(key_ + ";8");
+						if (cantAgosto == null) cantAgosto = 0.0;
+						
+						Double cantSetiembre = cants.get(key_ + ";9");
+						if (cantSetiembre == null) cantSetiembre = 0.0;
+						
+						Double cantOctubre = cants.get(key_ + ";10");
+						if (cantOctubre == null) cantOctubre = 0.0;
+						
+						Double cantNoviembre = cants.get(key_ + ";11");
+						if (cantNoviembre == null) cantNoviembre = 0.0;
+						
+						Double cantDiciembre = cants.get(key_ + ";12");
+						if (cantDiciembre == null) cantDiciembre = 0.0;
+						
+						Double impEnero = importes.get(key_ + ";1");
+						if (impEnero == null) impEnero = 0.0;
+						
+						Double impFebrero = importes.get(key_ + ";2");
+						if (impFebrero == null) impFebrero = 0.0;
+						
+						Double impMarzo = importes.get(key_ + ";3");
+						if (impMarzo == null) impMarzo = 0.0;
+						
+						Double impAbril = importes.get(key_ + ";4");
+						if (impAbril == null) impAbril = 0.0;
+						
+						Double impMayo = importes.get(key_ + ";5");
+						if (impMayo == null) impMayo = 0.0;
+						
+						Double impJunio = importes.get(key_ + ";6");
+						if (impJunio == null) impJunio = 0.0;
+						
+						Double impJulio = importes.get(key_ + ";7");
+						if (impJulio == null) impJulio = 0.0;
+						
+						Double impAgosto = importes.get(key_ + ";8");
+						if (impAgosto == null) impAgosto = 0.0;
+						
+						Double impSetiembre = importes.get(key_ + ";9");
+						if (impSetiembre == null) impSetiembre = 0.0;
+						
+						Double impOctubre = importes.get(key_ + ";10");
+						if (impOctubre == null) impOctubre = 0.0;
+						
+						Double impNoviembre = importes.get(key_ + ";11");
+						if (impNoviembre == null) impNoviembre = 0.0;
+						
+						Double impDiciembre = importes.get(key_ + ";12");
+						if (impDiciembre == null) impDiciembre = 0.0;
+						
+						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
+						hist.setDescripcion(codigo);
+						hist.setRuc(ruc);
+						hist.setVendedor(vendedor_);
+						hist.setRubro(rubro);
+						hist.setZona(zona);
+						hist.setLitraje(cantidad);
+						hist.setCoeficiente(0.0);
+						hist.setEnero_(cantEnero);
+						hist.setFebrero_(cantFebrero);
+						hist.setMarzo_(cantMarzo);
+						hist.setAbril_(cantAbril);
+						hist.setMayo_(cantMayo);
+						hist.setJunio_(cantJunio);
+						hist.setJulio_(cantJulio);
+						hist.setAgosto_(cantAgosto);
+						hist.setSetiembre_(cantSetiembre);
+						hist.setOctubre_(cantOctubre);
+						hist.setNoviembre_(cantNoviembre);
+						hist.setDiciembre_(cantDiciembre);
+						hist.set_enero(impEnero);
+						hist.set_febrero(impFebrero);
+						hist.set_marzo(impMarzo);
+						hist.set_abril(impAbril);
+						hist.set_mayo(impMayo);
+						hist.set_junio(impJunio);
+						hist.set_julio(impJulio);
+						hist.set_agosto(impAgosto);
+						hist.set_setiembre(impSetiembre);
+						hist.set_octubre(impOctubre);
+						hist.set_noviembre(impNoviembre);
+						hist.set_diciembre(impDiciembre);
+						hist.setCostoGs(0.0);
+						hist.setCostoFobGs(0.0);
+						hist.setTotal_(hist.get_enero() + hist.get_febrero() + hist.get_marzo() + hist.get_abril() + hist.get_mayo() + hist.get_junio()
+								+ hist.get_julio() + hist.get_agosto() + hist.get_setiembre() + hist.get_octubre() + hist.get_noviembre() + hist.get_diciembre());
+						list.add(hist);			
+						keys.put(key_, key_);
+					}					
+				}				
+				String format = (String) formato[0];
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_PROVEEDOR_CLIENTE;
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_PROVEEDOR_CLIENTE_;
+				}
+				
+				String flia = familia != null ? familia.getDescripcion() : "TODOS..";
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", codReporte + " - VENTAS POR PROVEEDOR POR CLIENTE");
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Cliente", cli != null ? cli.getRazonSocial() : "TODOS..");
+				params.put("Familia", flia);
 				params.put("Proveedor", proveedor != null ? proveedor.getRazonSocial() : "TODOS..");
 				JRDataSource dataSource = new VentasProveedorCliente(list, rango);
 				imprimirJasper(source, params, dataSource, formato);
