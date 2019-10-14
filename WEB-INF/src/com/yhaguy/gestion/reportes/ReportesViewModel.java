@@ -6337,6 +6337,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
 				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<NotaCredito> ncs_ = rr.getNotasCreditoVentaByMotivo(desde, hasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DESCUENTO);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6395,6 +6396,24 @@ public class ReportesViewModel extends SimpleViewModel {
 					Object[] cld = clientes.get(clt);
 					if (cld == null) {
 						cld = new Object[] { nc[11], nc[12], nc[13], nc[14] };
+						clientes.put(clt, cld);
+					}
+				}
+				
+				for (NotaCredito nc : ncs_) {
+					int mes = Utiles.getNumeroMes(nc.getFechaEmision());
+					String clt = nc.getCliente().getRazonSocial();
+					String key = clt + ";" + mes;				
+					Double acum_ = importes.get(key);
+					if (acum_ != null) {
+						acum_ -= (idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs());
+					} else {
+						importes.put(key, ((idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs()) * -1));
+					}
+					Object[] cld = clientes.get(clt);
+					if (cld == null) {
+						cld = new Object[] { nc.getCliente().getRuc(), nc.getVendedor().getNombreEmpresa(),
+								nc.getCliente().getRubro(), nc.getCliente().getEmpresa().getZona() };
 						clientes.put(clt, cld);
 					}
 				}
@@ -6829,7 +6848,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
 				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
-				List<NotaCredito> ncs_ = rr.getNotasCreditoVentaByMotivo(desde, hasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DESCUENTO);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6888,24 +6906,6 @@ public class ReportesViewModel extends SimpleViewModel {
 					Object[] cld = clientes.get(clt);
 					if (cld == null) {
 						cld = new Object[] { nc[11], nc[12], nc[13], nc[14] };
-						clientes.put(clt, cld);
-					}
-				}
-				
-				for (NotaCredito nc : ncs_) {
-					int mes = Utiles.getNumeroMes(nc.getFechaEmision());
-					String clt = nc.getCliente().getRazonSocial();
-					String key = clt + ";" + mes;				
-					Double acum_ = importes.get(key);
-					if (acum_ != null) {
-						acum_ -= (idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs());
-					} else {
-						importes.put(key, ((idProveedor > 0 ? nc.getImporteByProveedor(idProveedor) : nc.getImporteGs()) * -1));
-					}
-					Object[] cld = clientes.get(clt);
-					if (cld == null) {
-						cld = new Object[] { nc.getCliente().getRuc(), nc.getVendedor().getNombreEmpresa(),
-								nc.getCliente().getRubro(), nc.getCliente().getEmpresa().getZona() };
 						clientes.put(clt, cld);
 					}
 				}
