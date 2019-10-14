@@ -498,7 +498,7 @@
 		.z-listheader-content { line-height: 15px; font-weight:normal}
 		.z-html { display:block; } .small_list .z-listcell-content {
 		height: 20px; line-height: 15px; min-height: 23px;
-		text-overflow: ellipsis; white-space: nowrap; font-size:11px }
+		text-overflow: ellipsis; white-space: nowrap; font-size:10px }
 	</style>
 	
 </window>
