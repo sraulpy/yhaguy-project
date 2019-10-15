@@ -12,12 +12,12 @@
 			</template>
 		</combobox>
 		<space></space>
-		<navbar mold="bs-pills">
-			<navitem label=" PENDIENTES" selected="true"
+		<navbar mold="bs-pills" hflex="2">
+			<navitem label=" PENDIENTES " selected="true"
 				style="text-align:center; font-size:12px"
 				iconSclass="z-icon-filter"
 				onClick="@command('selectFilter', filter=2)" />
-			<navitem label=" ACREDITADOS" 
+			<navitem label=" ACREDITADOS " 
 				style="text-align:center; font-size:12px"
 				iconSclass="z-icon-filter"
 				onClick="@command('selectFilter', filter=1)" />

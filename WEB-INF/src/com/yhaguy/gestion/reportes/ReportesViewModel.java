@@ -1683,7 +1683,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_LISTA_PRECIO_DEPOSITO_:
-				this.listaPrecioPorDeposito_(mobile);
+				this.listaPrecioPorDeposito_(mobile, VENTAS_LISTA_PRECIO_DEPOSITO_);
 				break;
 				
 			case VENTAS_COBRANZAS_VENDEDOR_PROVEEDOR_CLIENTE_DET:
@@ -5854,7 +5854,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * VEN-00046
 		 */
-		private void listaPrecioPorDeposito_(boolean mobile) {
+		private void listaPrecioPorDeposito_(boolean mobile, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
@@ -5873,15 +5873,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
-				for (Object[] art : arts) {					
-					if (stock) {	
-						long min = art[6] != null ? (long) art[6] : (long) 0;
-						long may = art[7] != null ? (long) art[7] : (long) 0;
-						if (min > 0 || may > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[7], art[3] });
+				for (Object[] art : arts) {	
+					long min = art[6] != null ? (long) art[6] : (long) 0;
+					long may = art[7] != null ? (long) art[7] : (long) 0;
+					long mac = art[11] != null ? (long) art[11] : (long) 0;
+					if (stock) {						
+						if (min > 0 || may > 0 || mac > 0) {
+							data.add(new Object[] { art[1], art[2], min, may, mac, art[3] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[7], art[3] });
+						data.add(new Object[] { art[1], art[2], min, may, mac, art[3] });
 					}					
 				}
 				
@@ -5889,7 +5890,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				ReporteListaPrecioPorDeposito_ rep = new ReporteListaPrecioPorDeposito_(proveedor_);
 				rep.setDatosReporte(data);
-				rep.setApaisada();			
+				rep.setApaisada();	
+				rep.setTitulo(codReporte + " - Lista de precios por depósito");
 
 				if (!mobile) {
 					ViewPdf vp = new ViewPdf();
@@ -24160,8 +24162,9 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
-	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
+	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 13);
+	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 13);
+	static DatosColumnas col5 = new DatosColumnas("May.Cen.", TIPO_LONG, 15);
 	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
 
 	public ReporteListaPrecioPorDeposito_(String proveedor) {
@@ -24173,12 +24176,12 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 		cols.add(col2);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
 		cols.add(col6);
 	}
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Lista de precios por depósito");
 		this.setDirectorio("ventas");
 		this.setNombreArchivo("Precios-");
 		this.setTitulosColumnas(cols);
