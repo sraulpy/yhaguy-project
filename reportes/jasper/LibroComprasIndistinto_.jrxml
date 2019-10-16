@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroComprasIndistinto" pageWidth="1916" pageHeight="1008" orientation="Landscape" columnWidth="1876" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.948717100000013"/>
-	<property name="ireport.x" value="1993"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="2275"/>
+	<property name="ireport.y" value="166"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -102,6 +102,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="FechaCarga" class="java.lang.String"/>
 	<field name="Base_imponible" class="java.lang.String"/>
 	<field name="Total_base_imponible" class="java.lang.String"/>
+	<field name="nc_gravada10" class="java.lang.String"/>
+	<field name="nc_gravada5" class="java.lang.String"/>
+	<field name="nc_iva10" class="java.lang.String"/>
+	<field name="nc_iva5" class="java.lang.String"/>
+	<field name="nc_exenta" class="java.lang.String"/>
+	<field name="nc_total" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -390,7 +396,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 		</band>
 	</detail>
 	<summary>
-		<band height="171">
+		<band height="189">
 			<staticText>
 				<reportElement x="887" y="66" width="205" height="20" uuid="93162e97-5235-49f6-86ad-9f419aa2f7ae"/>
 				<textElement verticalAlignment="Middle"/>
@@ -566,7 +572,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{cred_gravada5}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1318" y="126" width="113" height="20" uuid="bf4b120a-1068-46fb-9998-11a52a83b178"/>
+				<reportElement style="Detail" x="1317" y="126" width="113" height="20" uuid="bf4b120a-1068-46fb-9998-11a52a83b178"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{cred_iva10}]]></textFieldExpression>
 			</textField>
@@ -596,12 +602,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{otros_gravada5}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1318" y="145" width="113" height="20" uuid="bc87dc52-02f2-4870-bafb-1ae0a54129ac"/>
+				<reportElement style="Detail" x="1317" y="145" width="113" height="20" uuid="bc87dc52-02f2-4870-bafb-1ae0a54129ac"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{otros_iva10}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1431" y="145" width="113" height="20" uuid="38758590-66d9-42c7-84bb-be13aa0b08b1"/>
+				<reportElement style="Detail" x="1430" y="145" width="113" height="20" uuid="38758590-66d9-42c7-84bb-be13aa0b08b1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{otros_iva5}]]></textFieldExpression>
 			</textField>
@@ -662,6 +668,41 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement style="Detail" x="1482" y="11" width="96" height="15" uuid="d7a88792-94d8-4a25-818e-c81470b8596b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Total_base_imponible}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="887" y="165" width="205" height="20" uuid="90481b40-8ee7-4d8f-ab54-89087ae1bce0"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Notas de crédito gasto]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1092" y="165" width="113" height="20" uuid="9aec8ec3-157d-43d9-9162-eebbe9e300cc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nc_gravada10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1204" y="165" width="113" height="20" uuid="b2a0172d-8309-4487-8fff-0f8003fc8d41"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nc_gravada5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1317" y="165" width="113" height="20" uuid="646cd787-b9cf-4a97-a04a-60e5e0ed8bdd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nc_iva10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1430" y="165" width="113" height="20" uuid="124fd4d4-940a-40c5-9c2b-4916b7882dc8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nc_iva5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1543" y="165" width="113" height="20" uuid="73b9ffa8-34c0-40c9-ac82-3d6af1c78543"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nc_exenta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="1656" y="165" width="112" height="20" uuid="229e7548-ae2e-4dc4-b777-77e4cc247987"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nc_total}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
