@@ -77,7 +77,8 @@
 		</template>
 	</listbox>
 	<hbox pack="center" width="100%"
-		style="margin: 10px 10px 5px 10px">
+		style="margin-top:10px;margin-bottom:5px">
+		<space />
 		<button label="ACEPTAR" iconSclass="z-icon-check"
 			hflex="true"
 			mold="bs" sclass="btn-primary btn-sm" 
@@ -90,6 +91,7 @@
 			mold="bs" sclass="btn-primary btn-sm" 
 			onClick="@command('cancelarFacturacion')"
 			dir="normal"/>
+		<space />
 	</hbox>
 	
 	<style>
