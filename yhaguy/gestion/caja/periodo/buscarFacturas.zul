@@ -77,18 +77,18 @@
 		</template>
 	</listbox>
 	<hbox pack="center" width="100%"
-		style="margin-top:10px;margin-bottom:5px">
+		style="margin: 10px 10px 5px 10px">
 		<button label="ACEPTAR" iconSclass="z-icon-check"
-			width="150px" 
+			hflex="true"
+			mold="bs" sclass="btn-primary btn-sm" 
 			onClick="@command('facturarVenta')"
 			disabled="@load(vm.selectedVenta eq null? 'true':'false')"
-			style="font-weight:bold;padding:7px"
 			dir="normal"/>
 		<space />
 		<button label="CANCELAR" iconSclass="z-icon-times"
-			width="150px" 
+			hflex="true"
+			mold="bs" sclass="btn-primary btn-sm" 
 			onClick="@command('cancelarFacturacion')"
-			style="font-weight:bold;padding:7px"
 			dir="normal"/>
 	</hbox>
 	
