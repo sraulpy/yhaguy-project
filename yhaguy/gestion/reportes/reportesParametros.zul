@@ -8,16 +8,19 @@
 			<include src="@load(vm.parametroZul)"></include>
 		</center>
 		<south>
-			<toolbar align="center" style="padding:5px">
+			<toolbar align="center" style="padding:5px 15px 5px 15px">
 				<hlayout>
 					<button label="ACEPTAR" tooltiptext="Aceptar"
-						iconSclass="z-icon-check" width="150px"
-						style="font-weight:bold;padding:7px" dir="normal" 
-						onClick="@global-command('imprimirReporte')"/>
+						iconSclass="z-icon-check" hflex="true"
+						dir="normal" 
+						onClick="@global-command('imprimirReporte')"
+						mold="bs" sclass="btn-primary btn-sm" />
+					<space></space>
 					<button id="btnCancel" label="CANCELAR"
-						tooltiptext="Cancelar" iconSclass="z-icon-times" width="150px"
-						style="font-weight:bold;padding:7px" dir="normal"
-						onClick="win_rep.detach()" />
+						tooltiptext="Cancelar" iconSclass="z-icon-times" hflex="true"
+						dir="normal"
+						onClick="win_rep.detach()" 
+						mold="bs" sclass="btn-primary btn-sm" />
 				</hlayout>
 			</toolbar>
 		</south>
