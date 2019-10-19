@@ -117,7 +117,7 @@ public abstract class BodyApp extends Body {
 	public List<MyPair> getDepositosSucursal() throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		if (this.isSucursalBaterias()) {
+		if (this.isEmpresaGTSA() || this.isEmpresaMRA()) {
 			List<Deposito> deps = rr.getDepositosPorSucursal(this.getSucursal().getId());
 			for (Deposito deposito : deps) {
 				MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
@@ -218,9 +218,16 @@ public abstract class BodyApp extends Body {
 	}	
 	
 	/**
-	 * @return true si es baterias..
+	 * @return true si es GTSA..
 	 */
-	public boolean isSucursalBaterias() {
+	public boolean isEmpresaGTSA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
+	}
+	
+	/**
+	 * @return true si es MRA..
+	 */
+	public boolean isEmpresaMRA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 	}
 }
