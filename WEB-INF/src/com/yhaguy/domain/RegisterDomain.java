@@ -8403,12 +8403,14 @@ public class RegisterDomain extends Register {
 	 */
 	public List<ImportacionPedidoCompra> getImportaciones(Date desde, Date hasta, long idProveedor) throws Exception {
 
-		String query = "select i from ImportacionPedidoCompra i where i.dbEstado != 'D' and i.proveedor.id = ?"
+		String query = "select i from ImportacionPedidoCompra i where i.dbEstado != 'D'"
 				+ " and i.fechaCreacion between ? and ?";
+		if (idProveedor != 0) {
+			query += "and i.proveedor.id = " + idProveedor;
+		}
 		query += " order by i.numeroPedidoCompra";
 
 		List<Object> listParams = new ArrayList<Object>();
-		listParams.add(idProveedor);
 		listParams.add(desde);
 		listParams.add(hasta);
 

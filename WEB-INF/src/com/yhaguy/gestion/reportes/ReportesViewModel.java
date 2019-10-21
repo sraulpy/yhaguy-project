@@ -115,6 +115,7 @@ import com.yhaguy.gestion.caja.periodo.CajaPeriodoResumenDataSource;
 import com.yhaguy.gestion.caja.recibos.BeanFormaPago;
 import com.yhaguy.gestion.caja.recibos.BeanRecibo;
 import com.yhaguy.gestion.caja.resumen.ResumenDataSource;
+import com.yhaguy.gestion.compras.importacion.BeanImportacion;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ControlArticuloStock;
 import com.yhaguy.gestion.contabilidad.BeanLibroVenta;
@@ -176,7 +177,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	static final String GRUPO_VENTAS_CLIENTES = " CLIENTES";
 	static final String GRUPO_VENTAS_ARTICULOS = " ARTICULOS";
 	static final String GRUPO_VENTAS_AUDITORIA = " AUDITORIA";
-	static final String GRUPO_VENTAS_NOTACREDITO = " NOTAS DE CREDITO";
+	static final String GRUPO_VENTAS_NOTACREDITO = " NOTAS CREDITO";
 	
 	static final String GRUPO_STOCK_ARTICULOS = " ARTICULOS";	
 	static final String GRUPO_LOGISTICA_LOGISTICA = " LOGISTICA";
@@ -720,6 +721,18 @@ public class ReportesViewModel extends SimpleViewModel {
 			return FOLDER_MOBILE_PARAMS + "/" + this.getCodigoReporte() + ".zul";
 		}
 		return "";
+	}
+	
+	@DependsOn("selectedReporte")
+	public String getVistaPrevia() throws Exception {
+		String port = (Executions.getCurrent().getServerPort() == 80) ? ""
+				: (":" + Executions.getCurrent().getServerPort());
+		String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port
+				+ Executions.getCurrent().getContextPath();
+		if (!this.isImprimirDisabled()) {			
+			return url + "/yhaguy/archivos/reportes/" + this.getCodigoReporte() + ".pdf";
+		}
+		return url + "/yhaguy/archivos/reportes/default.pdf";
 	}
 
 	/**
@@ -10804,7 +10817,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case LISTADO_IMPORTACIONES:
-				this.listadoImportaciones();
+				this.listadoImportaciones(LISTADO_IMPORTACIONES);
 				break;
 				
 			case MOVIMIENTOS_ARTICULOS:
@@ -11263,8 +11276,9 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * listado de facturas de compras..
 		 */
-		private void listadoImportaciones() {
+		private void listadoImportaciones(String codReporte) {
 			try {
+				Object[] formato = filtro.getFormato();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Proveedor prov = filtro.getProveedorExterior();
@@ -11274,30 +11288,15 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Object[]> data = new ArrayList<Object[]>();
 				List<ImportacionPedidoCompra> compras = rr.getImportaciones(desde, hasta, idProv);
 
-				for (ImportacionPedidoCompra compra : compras) {
-					Object[] cmp = new Object[] {
-							Utiles.getDateToString(compra.getFechaCreacion(), Utiles.DD_MM_YYYY), 
-							compra.getNumeroPedidoCompra(),
-							compra.getImportacionFactura_().get(0).getNumero(),
-							compra.getProveedor().getRazonSocial(),
-							compra.getCambio(),
-							compra.getTotalImporteGs(),
-							compra.getTotalImporteDs()};
-					data.add(cmp);
-				}
-
 				String proveedor = prov == null? "TODOS.." : prov.getRazonSocial();
-				ReporteComprasImportacion rep = new ReporteComprasImportacion(desde, hasta, proveedor);
-				rep.setApaisada();
-				rep.setDatosReporte(data);			
-
-				ViewPdf vp = new ViewPdf();
-				vp.setBotonImprimir(false);
-				vp.setBotonCancelar(false);
-				vp.showReporte(rep, ReportesViewModel.this);
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_IMPORTACIONES;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new ListadoImportacionesDataSource(compras, desde, hasta, proveedor);
+				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", codReporte + " - LISTADO DE IMPORTACIONES");
+				imprimirJasper(source, params, dataSource, formato);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -16731,7 +16730,6 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 			total_baseimponible += gasto.getBaseImponible();
 		}		
 		for (NotaCredito nc : notasCredito) {
-			System.out.println("--> " + nc.getNumero() + (nc.isNotaCreditoCompraAcreedor() && !despacho) + " - " + (despacho && nc.isNotaCreditoGastoDespacho()));
 			if ((nc.isNotaCreditoCompraAcreedor() && !despacho) || (despacho && nc.isNotaCreditoGastoDespacho())) {
 				Date fecha_ = nc.getFechaEmision();
 				String fechaCarga = Utiles.getDateToString(nc.getModificado(), Utiles.DD_MM_YYYY);
@@ -25588,6 +25586,104 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 			return true;
 		}
 		return false;
+	}
+}
+
+/**
+ * DataSource del listado de importaciones..
+ */
+class ListadoImportacionesDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	Misc misc = new Misc();
+
+	List<BeanImportacion> values = new ArrayList<BeanImportacion>();
+	List<ImportacionPedidoCompra> importaciones;
+	Date desde;
+	Date hasta;
+	String proveedor;
+
+	double totalfobgs = 0;
+	double totalfobds = 0;
+	double totalcifgs = 0;
+	double totalcifds = 0;
+
+	public ListadoImportacionesDataSource(List<ImportacionPedidoCompra> importaciones, Date desde, Date hasta, String proveedor) {
+		this.importaciones = importaciones;
+		this.desde = desde;
+		this.hasta = hasta;
+		this.proveedor = proveedor;
+		this.loadDatos();	
+		Collections.sort(this.values, new Comparator<BeanImportacion>() {
+			@Override
+			public int compare(BeanImportacion o1, BeanImportacion o2) {
+				Date val1 = o1.getFechaDespacho_();
+				Date val2 = o2.getFechaDespacho_();
+				int compare = val1.compareTo(val2);				
+				return compare;
+			}
+		});
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+
+		if ("Importaciones".equals(fieldName)) {
+			value = this.values;
+		} else if ("Desde".equals(fieldName)) {
+			value = misc.dateToString(this.desde, Misc.DD_MM_YYYY);
+		} else if ("Hasta".equals(fieldName)) {
+			value = misc.dateToString(this.hasta, Misc.DD_MM_YYYY);
+		} else if ("Proveedor".equals(fieldName)) {
+			value = this.proveedor;
+		} else if ("totfobgs".equals(fieldName)) {
+			value = FORMATTER.format(this.totalfobgs);
+		} else if ("totfobds".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalfobds);
+		} else if ("totcifgs".equals(fieldName)) {
+			value = FORMATTER.format(this.totalcifgs);
+		} else if ("totcifds".equals(fieldName)) {
+			value = Utiles.getNumberFormatDs(this.totalcifds);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < 0) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * carga los datos para el reporte..
+	 */
+	private void loadDatos() {
+		for (ImportacionPedidoCompra imp : this.importaciones) {
+			if (imp.getImportacionFactura().size() > 0) {
+				String fecha = misc.dateToString(imp.getResumenGastosDespacho().getFechaDespacho(), Misc.DD_MM_YYYY);
+				String numero = imp.getNumeroPedidoCompra();
+				String numeroFactura = imp.getNumeroFactura();
+				String proveedor = imp.getProveedor().getRazonSocial();
+				String cantidad = imp.getCantidadTotal() + "";
+				String fobgs = Utiles.getNumberFormat(imp.getResumenGastosDespacho().getValorFOBgs());
+				String fobds = Utiles.getNumberFormatDs(imp.getResumenGastosDespacho().getValorFOBds());
+				String cifgs = Utiles.getNumberFormat(imp.getResumenGastosDespacho().getValorCIFgs());
+				String cifds = Utiles.getNumberFormatDs(imp.getResumenGastosDespacho().getValorCIFds());
+				values.add(new BeanImportacion(fecha, numero, numeroFactura, cantidad, "", proveedor, fobgs, fobds, cifgs, cifds,
+						imp.getResumenGastosDespacho().getFechaDespacho()));
+				this.totalfobgs += imp.getResumenGastosDespacho().getValorFOBgs();
+				this.totalfobds += imp.getResumenGastosDespacho().getValorFOBds();
+				this.totalcifgs += imp.getResumenGastosDespacho().getValorCIFgs();
+				this.totalcifds += imp.getResumenGastosDespacho().getValorCIFds();
+			}			
+		}
 	}
 }
 

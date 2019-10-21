@@ -60,6 +60,17 @@ public class ImportacionPedidoCompra extends Domain {
 	private ImportacionResumenGastosDespacho resumenGastosDespacho;
 	
 	private SubDiario subDiario;
+	
+	/**
+	 * @return la cantidad total de items..
+	 */
+	public int getCantidadTotal() {
+		int out = 0;
+		for (ImportacionPedidoCompraDetalle det : this.importacionPedidoCompraDetalle) {
+			out += det.getCantidad();
+		}
+		return out;
+	}
 
 	public SubDiario getSubDiario() {
 		return subDiario;
