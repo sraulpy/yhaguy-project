@@ -25666,7 +25666,7 @@ class ListadoImportacionesDataSource implements JRDataSource {
 	 */
 	private void loadDatos() {
 		for (ImportacionPedidoCompra imp : this.importaciones) {
-			if (imp.getImportacionFactura().size() > 0) {
+			if (imp.getResumenGastosDespacho().getFechaDespacho() != null) {
 				String fecha = misc.dateToString(imp.getResumenGastosDespacho().getFechaDespacho(), Misc.DD_MM_YYYY);
 				String numero = imp.getNumeroPedidoCompra();
 				String numeroFactura = imp.getNumeroFactura();
