@@ -14,12 +14,13 @@ public class BeanImportacion {
 	private String fobds;
 	private String cifgs;
 	private String cifds;
+	private String tipocambio;
 	
 	private Date fechaDespacho_;
 	
 	public BeanImportacion(String fechaDespacho, String numeroImportacion, String numeroFactura, String cantidad,
-			String observacion, String proveedor, String fobgs, String fobds, String cifgs, String cifds, Date fechaDespacho_) {
-		super();
+			String observacion, String proveedor, String fobgs, String fobds, String cifgs, String cifds, Date fechaDespacho_,
+			String tipocambio) {
 		this.fechaDespacho = fechaDespacho;
 		this.numeroImportacion = numeroImportacion;
 		this.numeroFactura = numeroFactura;
@@ -30,6 +31,7 @@ public class BeanImportacion {
 		this.fobds = fobds;
 		this.cifgs = cifgs;
 		this.cifds = cifds;
+		this.tipocambio = tipocambio;
 		this.fechaDespacho_ = fechaDespacho_;
 	}
 	public String getFechaDespacho() {
@@ -97,5 +99,11 @@ public class BeanImportacion {
 	}
 	public void setFechaDespacho_(Date fechaDespacho_) {
 		this.fechaDespacho_ = fechaDespacho_;
+	}
+	public String getTipocambio() {
+		return tipocambio;
+	}
+	public void setTipocambio(String tipocambio) {
+		this.tipocambio = tipocambio;
 	}	
 }
