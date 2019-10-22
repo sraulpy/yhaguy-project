@@ -17,6 +17,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Vlayout;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.domain.Tipo;
@@ -31,6 +32,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.process.ProcesosHistoricos;
@@ -48,6 +50,8 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	private Tipo selectedMoneda;
 	private Tipo selectedMonedaFormaPago;
 	private double tipoCambio = 0;
+	
+	private TipoMovimiento selectedConcepto;
 	
 	private String razonSocial = "";
 	private String razonSocialCobrador = "";
@@ -76,6 +80,15 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	public void refresh() {
 		BindUtils.postNotifyChange(null, null, this, "totalImporteGs");
 		BindUtils.postNotifyChange(null, null, this, "totalImporteDs");
+	}
+	
+	@Command
+	public void selectConcepto(@BindingParam("comp1") Vlayout comp1, @BindingParam("rec") Vlayout rec,
+			@BindingParam("ant") Vlayout ant, @BindingParam("ree") Vlayout ree) {
+		if (this.isRecibo()) rec.setVisible(true);
+		if (this.isAnticipo()) ant.setVisible(true);
+		if (this.isReembolsoCheque()) ree.setVisible(true);
+		comp1.setVisible(false);
 	}
 	
 	@Command
@@ -134,6 +147,26 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	
 	@Command
 	@NotifyChange("*")
+	public void seleccionarFormaPago_(@BindingParam("comp1") Component comp1, @BindingParam("comp2") Component comp2) 
+			throws Exception {
+		this.inicializarFormaPago();
+		this.nvoFormaPago.setTipo(this.selectedTipoFormaPago);
+		if (this.nvoFormaPago.isRetencion()) {
+			this.calcularRetencion();
+		} else {
+			this.nvoFormaPago.setMontoGs(this.getTotalImporteGs() - this.getTotalImporteFormasPagoGs());
+			this.nvoFormaPago.setMontoDs(this.getTotalImporteDs() - this.getTotalImporteFormasPagoDs());
+			if (this.selectedMoneda.getSigla().equals(Configuracion.SIGLA_MONEDA_DOLAR)) {
+				this.nvoFormaPago.setMontoGs(this.getTotalImporteGs_() - this.getTotalImporteFormasPagoGs());
+			}
+		}
+		comp1.setVisible(true);
+		comp2.setVisible(false);
+		this.selectedMonedaFormaPago = null;
+	}
+	
+	@Command
+	@NotifyChange("*")
 	public void agregarFormaPago(@BindingParam("comp1") Component comp1, @BindingParam("comp2") Component comp2,
 			@BindingParam("comp3") Component comp3, @BindingParam("comp4") Component comp4) 
 			throws Exception {
@@ -176,10 +209,11 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		recibo.setMoneda(this.selectedMoneda);
 		recibo.setSucursal(rr.getSucursalAppById(2));
 		recibo.setTipoCambio(this.tipoCambio);
-		recibo.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_RECIBO_COBRO));
+		recibo.setTipoMovimiento(this.selectedConcepto);
 		recibo.setTotalImporteGs(this.getTotalImporteFormasPagoGs());
+		recibo.setTotalImporteDs(this.getTotalImporteFormasPagoDs());
 		recibo.setMovimientoBancoActualizado(true);
-		if (!recibo.isMonedaLocal()) {
+		if (!recibo.isMonedaLocal() && this.isRecibo()) {
 			ReciboDetalle det = new ReciboDetalle();
 			det.setAuxi(ReciboDetalle.TIPO_DIF_CAMBIO);
 			det.setMontoGs(this.getTotalImporteFormasPagoGs() - this.getTotalImporteGs());
@@ -195,8 +229,8 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 			caja.getRecibos().add(recibo);
 			rr.saveObject(caja, "mobile");
 		}
-		this.mensaje = "RECIBO " + recibo.getNumero() + " CORRECTAMENTE GENERADO..";
-		Clients.showNotification("RECIBO GENERADO..!");
+		this.mensaje = this.selectedConcepto.getDescripcion() + " " + recibo.getNumero() + " CORRECTAMENTE GENERADO..";
+		Clients.showNotification(this.selectedConcepto.getDescripcion() + " GENERADO..!");
 		comp1.setVisible(false);
 		comp2.setVisible(false);
 		comp3.setVisible(true);
@@ -204,6 +238,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		this.selectedDetalles = new ArrayList<ReciboDetalle>();
 		this.selectedFormasPagos = new ArrayList<ReciboFormaPago>();
 		this.razonSocial = "";
+		this.selectedConcepto = null;
 	}
 	
 	/**
@@ -344,6 +379,39 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getEmpresas("", "", this.razonSocial, "");
+	}
+	
+	/**
+	 * @return los conceptos..
+	 */
+	public List<TipoMovimiento> getConceptos() throws Exception {
+		List<TipoMovimiento> out = new ArrayList<TipoMovimiento>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		TipoMovimiento rec = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_RECIBO_COBRO);
+		TipoMovimiento ant = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
+		TipoMovimiento ree = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO);
+		out.add(rec);
+		out.add(ant);
+		out.add(ree);
+		return out;
+	}
+	
+	@DependsOn("selectedConcepto")
+	public boolean isRecibo() {
+		if (this.selectedConcepto == null) return false;
+		return this.selectedConcepto.getSigla().equals(Configuracion.SIGLA_TM_RECIBO_COBRO);
+	}
+	
+	@DependsOn("selectedConcepto")
+	public boolean isAnticipo() {
+		if (this.selectedConcepto == null) return false;
+		return this.selectedConcepto.getSigla().equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO);
+	}
+	
+	@DependsOn("selectedConcepto")
+	public boolean isReembolsoCheque() {
+		if (this.selectedConcepto == null) return false;
+		return this.selectedConcepto.getSigla().equals(Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO);
 	}
 	
 	@DependsOn("selectedDetalles")
@@ -541,7 +609,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		}
 		this.mensaje = "NO SE PUDO GENERAR EL RECIBO DEBIDO A: \n";
 		double dif = this.getTotalImporteGs() - this.getTotalImporteFormasPagoGs();
-		if (dif > 100 || dif < -100) {
+		if (this.isRecibo() && (dif > 100 || dif < -100)) {
 			out = false;
 			this.mensaje += "\n EL TOTAL DE FACTURAS Y FORMAS DE PAGO NO COINCIDEN..";
 		}
@@ -665,5 +733,13 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 
 	public void setSelectedMonedaFormaPago(Tipo selectedMonedaFormaPago) {
 		this.selectedMonedaFormaPago = selectedMonedaFormaPago;
+	}
+
+	public TipoMovimiento getSelectedConcepto() {
+		return selectedConcepto;
+	}
+
+	public void setSelectedConcepto(TipoMovimiento selectedConcepto) {
+		this.selectedConcepto = selectedConcepto;
 	}
 }
