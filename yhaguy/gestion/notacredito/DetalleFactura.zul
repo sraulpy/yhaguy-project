@@ -36,7 +36,7 @@
 					</div>
 					<div visible="@load(!vm.dato.dto.monedaLocal)">
 						<dolarbox value="@bind(vm.dato.nvoItem.montoDs)"
-							onChange="@command('convertirMoneda')" hflex="true" />
+							onChange="@command('convertirMoneda')" width="100px" />
 						<label></label>
 						<label value="U$D" sclass="label-moneda" />
 					</div>
