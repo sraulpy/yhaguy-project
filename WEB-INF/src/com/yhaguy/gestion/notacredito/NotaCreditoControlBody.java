@@ -682,7 +682,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO + "' "
 				+ " or c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
-				+ "')");
+				+ "') and c.moneda.id = " + this.dto.getMoneda().getId());
 		b.setContinuaSiHayUnElemento(false);
 		b.show("%");
 
