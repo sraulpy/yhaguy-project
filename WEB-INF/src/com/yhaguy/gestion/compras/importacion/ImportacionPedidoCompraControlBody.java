@@ -3444,6 +3444,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				this.dto.setReadonly();
 				for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 					fac.setReadonly();
+					fac.setTotalAsignadoDs(fac.getTotalImporteDs());
+					fac.setTotalAsignadoGs(fac.getTotalImporteGs());
 				}
 				this.dto.setFechaCierre(new Date());
 				this.dto.setImportacionConfirmada(true);
