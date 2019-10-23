@@ -44,6 +44,7 @@ import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Gasto;
+import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.ServicioTecnico;
@@ -74,6 +75,10 @@ public class NotaCreditoControlBody extends BodyApp {
 	
 	final static String STYLE_LABEL_BLUE = "color:blue;font-weight:bold;font-size:14px";
 	final static String STYLE_LABEL_RED = "color:red;font-weight:bold;font-size:14px";
+	
+	final static String NC_COMPRA_LOCAL = "Compra Local";
+	final static String NC_GASTOS = "Gastos";
+	final static String NC_IMPORTACION = "Importacion";
 	
 	private NotaCreditoDTO dto = new NotaCreditoDTO();
 	private MyArray tipoMovimiento = new MyArray();
@@ -251,11 +256,33 @@ public class NotaCreditoControlBody extends BodyApp {
 			}
 		} else {
 			if (this.mensajeSiNo("Factura de compra de mercaderías..?")) {
-				this.buscarCompras();
+				if (this.mensajeSiNo("Factura de compras locales..?")) {
+					this.buscarCompras();
+				} else {
+					this.buscarImportaciones();
+				}
 			} else {
 				this.buscarGastos();
 			}
 		}
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void buscarFacturasCompra() throws Exception {
+		this.buscarCompras();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void buscarFacturasGasto() throws Exception {
+		this.buscarGastos();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void buscarFacturasImportacion() throws Exception {
+		this.buscarImportaciones();
 	}
 	
 	@Command
@@ -299,7 +326,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	@Command 
 	@NotifyChange("*")
 	public void aplicarDescuento() throws Exception {
-		this.nvoItem = this.crearDetalleDesde(this.selectedVenta, true, false, false);
+		this.nvoItem = this.crearDetalleDesde(this.selectedVenta, true, false, false, false);
 		this.win.detach();
 		this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
 	}
@@ -423,7 +450,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				return;
 			}
 
-			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false);
+			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false, false);
 
 			if (this.dto.isMotivoDescuento()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
@@ -481,7 +508,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				return;
 			}
 
-			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false);
+			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false, false);
 
 			if (this.dto.isMotivoDescuento()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
@@ -549,7 +576,7 @@ public class NotaCreditoControlBody extends BodyApp {
 				return;
 			}
 
-			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), false, true, false);
+			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), false, true, false, false);
 
 			if (this.dto.isMotivoDescuento()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
@@ -605,7 +632,70 @@ public class NotaCreditoControlBody extends BodyApp {
 				return;
 			}
 
-			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), false, false, true);
+			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), false, false, true, false);
+
+			if (this.dto.isMotivoDescuento()) {
+				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
+
+			} else {
+				this.dto.getDetalles().add(this.nvoItem);
+			}
+		}
+	}
+	
+	/**
+	 * Busca las importaciones..
+	 */
+	private void buscarImportaciones() throws Exception {
+		
+		String campoImporte = this.dto.isMonedaLocal() ? "totalAsignadoGs" : "totalAsignadoDs";	
+		
+		String[] atributos = new String[] { "tipoMovimiento.descripcion", "numero",
+				"fechaCreacion", "observacion", campoImporte };
+		
+		String[] atributosDs = new String[] { "tipoMovimiento.descripcion", "numero",
+				"fechaCreacion", "observacion", campoImporte };
+
+		String[] columnas = new String[] { "Tipo Movimiento", "Número",
+				"Fecha", "Observacion", "Importe " 
+				+ this.dto.getMoneda().getSigla() };
+		
+		String[] columnasDs = new String[] { "Tipo Movimiento", "Número",
+				"Fecha", "Observacion", "Importe " 
+				+ this.dto.getMoneda().getSigla() };
+
+		long idProveedor = this.dto.getProveedor().getId();
+
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(ImportacionFactura.class);
+		b.setTitulo("Facturas de " + (this.dto.isMonedaLocal() ? "Importacion" : "Importacion") + " - Proveedor: "
+				+ this.dto.getProveedor().getPos2() + " en Moneda: "
+				+ this.dto.getMoneda().getSigla());
+		b.setAtributos(this.dto.isMonedaLocal() ? atributos : atributosDs);
+		b.setNombresColumnas(this.dto.isMonedaLocal() ? columnas : columnasDs);
+		tipos[4] = this.dto.isMonedaLocal() ? "GS" : "DS";
+		b.setTipos(tipos);
+		b.setWidth("1000px");
+		b.addOrden("numero");
+		b.addWhere("c.proveedor.id = " + idProveedor + " and "
+				+ "(c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO + "' "
+				+ " or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
+				+ "')");
+		b.setContinuaSiHayUnElemento(false);
+		b.show("%");
+
+		if (b.isClickAceptar()) {
+
+			if (this.existeFacturaEnDetalle(b.getSelectedItem()) == true) {
+				String error = "No se puede completar la operación debido a: \n";
+				error += "\n - Ya existe la factura en el detalle..";
+				this.mensajeError(error);
+				return;
+			}
+
+			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), false, false, false, true);
 
 			if (this.dto.isMotivoDescuento()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
@@ -638,20 +728,23 @@ public class NotaCreditoControlBody extends BodyApp {
 	/**
 	 * Crea un Detalle de NC a partir de una factura de venta o de Compra..
 	 */
-	private NotaCreditoDetalleDTO crearDetalleDesde(MyArray desde, boolean venta, boolean compra, boolean gasto) 
+	private NotaCreditoDetalleDTO crearDetalleDesde(MyArray desde, boolean venta, boolean compra, boolean gasto, boolean importacion) 
 		throws Exception {
 
 		NotaCreditoDetalleDTO out = new NotaCreditoDetalleDTO(this.getIva10());		
 		out.setCantidad(1);
-		out.setTipoDetalle(getDtoUtil().getNotaCreditoDetalleFactura());		
+		out.setTipoDetalle(getDtoUtil().getNotaCreditoDetalleFactura());
 		if(venta){
 			out.setVenta(desde);
 		} else if(compra) {
 			out.setCompra(desde);
-			out.setDeposito(this.getDepositoByFacturaCompra(desde.getId()));
-		
+			out.setDeposito(this.getDepositoByFacturaCompra(desde.getId()));		
 		} else if (gasto) {
 			out.setGasto(desde);
+		}  else if(importacion) {
+			out.setImportacion(desde);
+			out.setDeposito(this.getDepositoByFacturaCompra(desde.getId()));
+			out.setTipoIva(new MyPair(this.getDtoUtil().getTipoIvaExento().getId()));
 		}
 		return out;
 	} 
@@ -1180,7 +1273,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	@Command @NotifyChange("*")
 	public void refreshTipoCambio() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioVenta(dto.getFechaEmision());
+		double tc = rr.getTipoCambioVenta(Utiles.agregarDias(dto.getFechaEmision(), -1));
 		this.dto.setTipoCambio(tc);
 	}
 	
@@ -1604,6 +1697,17 @@ public class NotaCreditoControlBody extends BodyApp {
 				|| this.dto.esNuevo()
 				|| (this.dto.isMotivoDescuento() && this.dto
 						.getDetallesFacturas().size() == 0);
+	}
+	
+	/**
+	 * @return los tipos de nc compra..
+	 */
+	public List<String> getTiposNotaCreditoCompra() {
+		List<String> out = new ArrayList<String>();
+		out.add(NC_COMPRA_LOCAL);
+		out.add(NC_GASTOS);
+		out.add(NC_IMPORTACION);
+		return out;
 	}
 	
 	/**

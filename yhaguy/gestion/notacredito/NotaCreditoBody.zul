@@ -264,14 +264,16 @@
 							value="@load(vm.dto.moneda.text)"
 							selectedItem="@bind(vm.dto.moneda)"
 							onChange="@command('refreshTipoCambio')" instant="true"
-							visible="@load(vm.dto.detalleEmpty)"
 							hflex="true">
 							<template name="model">
 								<comboitem label="@load(each.text)" />
 							</template>
 						</combobox>
-						<textbox value="@load(vm.dto.moneda.text)"
-							readonly="true" visible="@load(!vm.dto.detalleEmpty)"  hflex="true" />
+						<guaranibox value="@load(vm.dto.tipoCambio)"
+							readonly="true" hflex="true" />
+						<label
+							value="@load(vm.dtoUtil.simboloMonedaLocal)"
+							sclass="label-moneda" />
 					</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
@@ -343,8 +345,14 @@
 				<button mold="bs" sclass="btn-success btn-sm"
 					width="120px" iconSclass="z-icon-plus-circle"
 					onClick="@command('buscarFacturas')" label=" Insertar" 
-					disabled="@load(vm.dto.detallesFacturas.size() gt 0)" />
+					disabled="@load(vm.dto.detallesFacturas.size() gt 0)" 
+					visible="@load(vm.dto.notaCreditoVenta)" />
 				<space visible="@load(vm.dto.notaCreditoVenta)"/>
+				<button mold="bs" sclass="btn-success btn-sm"
+					width="120px" iconSclass="z-icon-plus-circle"
+					onClick='pop_tipos.open(self, "after_start")' label=" Insertar" 
+					disabled="@load(vm.dto.detallesFacturas.size() gt 0)" 
+					visible="@load(!vm.dto.notaCreditoVenta)" />
 				<button mold="bs" sclass="btn-primary btn-sm"
 					width="120px" iconSclass="z-icon-check"
 					disabled="@load(!vm.aprobarEnabled)"
@@ -476,13 +484,6 @@
 							<field value="@load(vm.dto.detallesArticulos.size())"/>
 							<field value="ítems"/>
 							<space hflex="true"/>
-							<label value="IVA Gs."
-								sclass="label-moneda-footer" />
-							<guaranibox sclass="footer-input"
-								style="background:#EEF7FA" value="@load(vm.dto.importeIva)" />
-							<space />
-							<label value="@load(vm.labelImporte)"
-								sclass="label-moneda-footer" />
 							<guaranibox
 								value="@load(vm.dto.importesDevoluciones[0])"
 								visible="@load(vm.dto.monedaLocal)" sclass="footer-input"
@@ -515,6 +516,17 @@
 					</listitem>
 				</template>
 			</listbox>
+		</vbox>
+	</popup>
+
+	<popup id="pop_tipos" sclass="rounded">
+		<vbox width="200px" spacing="10px">
+			<button mold="bs" sclass="btn-sm btn-primary" label="Compra Local" hflex="true"
+				onClick="@command('buscarFacturasCompra')"></button>
+			<button mold="bs" sclass="btn-sm btn-primary" label="Gastos" hflex="true"
+				onClick="@command('buscarFacturasGasto')"></button>
+			<button mold="bs" sclass="btn-sm btn-primary" label="Importación" hflex="true"
+				onClick="@command('buscarFacturasImportacion')"></button>
 		</vbox>
 	</popup>
 

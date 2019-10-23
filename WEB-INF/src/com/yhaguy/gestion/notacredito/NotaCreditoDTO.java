@@ -419,12 +419,7 @@ public class NotaCreditoDTO extends DTO {
 	}
 
 	public double getImporteIva() {
-		double importeFac = (double) this.getImportesFacturas()[0];
-		double importeDev = (double) this.getImportesDevoluciones()[0];
-		double importe = this.isMotivoDescuento()? importeFac : importeDev;
-		double iva = this.getMisc().calcularIVA(importe,
-				Configuracion.VALOR_IVA_10);
-		return this.getMisc().redondeoDosDecimales(iva);
+		return 0;
 	}
 
 	public void setImporteIva(double importeIva) {
