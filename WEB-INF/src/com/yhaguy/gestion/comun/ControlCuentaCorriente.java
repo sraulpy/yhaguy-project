@@ -34,7 +34,7 @@ import com.yhaguy.util.Utiles;
 public class ControlCuentaCorriente {
 
 	/**
-	 * agregar movimiento nota credito compra..
+	 * agregar movimiento nota credito compra gasto e importacion..
 	 */
 	public static void addNotaCreditoCompra(NotaCreditoDTO dto, String user) throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
