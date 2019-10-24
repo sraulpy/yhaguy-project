@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.venta.remision;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.coreweb.control.SimpleViewModel;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.RemisionDetalle;
+import com.yhaguy.domain.Vehiculo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
@@ -39,6 +41,7 @@ public class VentaRemisionViewModel extends SimpleViewModel {
 	private String filterNroRemision = "";
 	private String filterNroVenta = "";
 	private String filterCliente_ = "";
+	private String filterVehiculo = "";
 	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
@@ -120,16 +123,28 @@ public class VentaRemisionViewModel extends SimpleViewModel {
 	 * GETS / SETS
 	 */
 	
-	@DependsOn({ "filterNroRemision", "filterNroVenta", "filterCliente_", "filterFechaDD", "filterFechaMM", "filterFechaAA" })
+	@DependsOn({ "filterNroRemision", "filterNroVenta", "filterCliente_", "filterFechaDD", "filterFechaMM", "filterFechaAA", "filterVehiculo" })
 	public List<Object[]> getRemisiones() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getRemisiones(this.filterNroRemision, this.filterNroVenta, this.filterCliente_, this.getFilterFecha(), 200);
+		return rr.getRemisiones(this.filterNroRemision, this.filterNroVenta, this.filterCliente_, this.getFilterFecha(), this.filterVehiculo, 200);
 	}
 	
 	@DependsOn({ "filterNumero", "filterCliente" })
 	public List<Object[]> getVentas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getVentas(this.filterNumero, this.filterCliente);
+	}
+	
+	/**
+	 * @return los vehiculos..
+	 */
+	public List<String> getVehiculos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<String> out = new ArrayList<String>();
+		for (Vehiculo vehiculo : rr.getVehiculosSucursal(2)) {
+			out.add(vehiculo.getDescripcion().toUpperCase());
+		}
+		return out;
 	}
 	
 	/**
@@ -241,5 +256,13 @@ public class VentaRemisionViewModel extends SimpleViewModel {
 
 	public void setSelectedRemision_(Object[] selectedRemision_) {
 		this.selectedRemision_ = selectedRemision_;
+	}
+
+	public String getFilterVehiculo() {
+		return filterVehiculo;
+	}
+
+	public void setFilterVehiculo(String filterVehiculo) {
+		this.filterVehiculo = filterVehiculo;
 	}
 }

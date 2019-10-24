@@ -58,6 +58,7 @@ public class ControlCuentaCorriente {
 		ctm.setIdVendedor(dto.getVendedor().getId());
 		ctm.setImporteOriginal(dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs());
 		ctm.setMoneda(rr.getTipoPorSigla(dto.getMoneda().getSigla()));
+		ctm.setTipoCambio(dto.getTipoCambio());
 		ctm.setNroComprobante(dto.getNumero());
 		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
 		
@@ -71,6 +72,8 @@ public class ControlCuentaCorriente {
 				ctm.setSaldo(0);
 			}
 			rr.saveObject(ctmCompra, user);
+		} else {
+			ctm.setSaldo((dto.isMonedaLocal() ? dto.getImporteGs() : dto.getImporteDs()) * -1);
 		}
 		rr.saveObject(ctm, user);
 	}

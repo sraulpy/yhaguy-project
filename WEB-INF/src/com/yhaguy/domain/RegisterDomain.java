@@ -10198,13 +10198,15 @@ public class RegisterDomain extends Register {
 	 * [4]:fecha
 	 * [5]:tipomovimiento
 	 * [6]:importeGs
+	 * [7]:vehiculo
 	 */
-	public List<Object[]> getRemisiones(String numeroRemision, String numeroFactura, String cliente, String fecha, int limit) throws Exception {
+	public List<Object[]> getRemisiones(String numeroRemision, String numeroFactura, String cliente, String fecha, String vehiculo, int limit) throws Exception {
 		String query = "select r.id, r.numero, r.venta.numero, r.venta.cliente.empresa.razonSocial, r.fecha,"
 				+ " (select t from TipoMovimiento t where t.sigla = '" + Configuracion.SIGLA_TM_NOTA_REMISION + "'),"
-				+ " r.importeGs from Remision r where r.numero like '%" + numeroRemision + "%'"
+				+ " r.importeGs, r.vehiculo from Remision r where r.numero like '%" + numeroRemision + "%'"
 				+ " and upper(r.venta.numero) like '%" + numeroFactura.toUpperCase() + "%'"
 				+ " and upper(r.venta.cliente.empresa.razonSocial) like '%" + cliente.toUpperCase() + "%'"
+				+ " and upper(r.vehiculo) like '%" + vehiculo.toUpperCase() + "%'"
 				+ " and cast (r.fecha as string) like '%" + fecha + "%'"
 				+ " order by r.fecha";
 		return this.hqlLimit(query, limit);

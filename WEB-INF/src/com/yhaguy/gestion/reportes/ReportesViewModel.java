@@ -7233,6 +7233,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String COBRANZAS_DETALLADO = "TES-00057";
 		static final String REEMBOLSOS_DETALLADO = "TES-00058";
 		static final String CHEQUES_CLIENTES_EMISION = "TES-00059";
+		static final String SALDOS_POR_FAMILIA = "TES-00060";
 
 		/**
 		 * procesamiento del reporte..
@@ -7479,6 +7480,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case CHEQUES_CLIENTES_EMISION:
 				this.chequesPorClienteSegunEmision(mobile, CHEQUES_CLIENTES_EMISION);
+				break;
+				
+			case SALDOS_POR_FAMILIA:
+				this.saldosPorFamilia(mobile, SALDOS_POR_FAMILIA);
 				break;
 			}
 		}
@@ -10773,6 +10778,34 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/**
+		 * reporte TES-00060
+		 */
+		private void saldosPorFamilia(boolean mobile, String codReporte) throws Exception {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();			
+			Date hasta = filtro.getFechaHasta();	
+			SucursalApp suc = filtro.getSelectedSucursal();
+			Object[] formato = filtro.getFormato();	
+			
+			long idSucursal = suc != null ? suc.getId() : 0;			
+			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false);
+		
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_DETALLADO;
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos, desde, hasta, true);
+			params.put("Titulo", codReporte + " - COBRANZAS DETALLADO POR CARTERA");
+			params.put("Usuario", getUs().getNombre());
+			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, formato);
 		}
 	}
 

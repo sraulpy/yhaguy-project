@@ -25,6 +25,7 @@
 			<listheader label="Remision Nro."></listheader>
 			<listheader label="Factura Nro."></listheader>	
 			<listheader label="Cliente"></listheader>
+			<listheader label="Vehículo"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader>
@@ -55,6 +56,10 @@
 				<textbox sclass="filter" placeholder="Cliente.." hflex="true"
 					value="@bind(vm.filterCliente_)" instant="true"></textbox>
 			</auxheader>
+			<auxheader>
+				<textbox sclass="filter" placeholder="Vehículo" hflex="true"
+					value="@bind(vm.filterVehiculo)" instant="true"></textbox>
+			</auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
@@ -62,6 +67,7 @@
 				<listcell label="@load(each[1])"></listcell>
 				<listcell label="@load(each[2])"></listcell>
 				<listcell label="@load(each[3])"></listcell>
+				<listcell label="@load(each[7])"></listcell>
 			</listitem>
 		</template>
 		<listfoot>
@@ -118,6 +124,15 @@
 				<row>
 					<field value="Cliente:" />
 					<textbox value="@load(vm.nvaRemision.venta.cliente.razonSocial)" hflex="true" readonly="true"></textbox>					
+				</row>
+				<row>
+					<field value="Vehículo:" />
+					<combobox model="@load(vm.vehiculos)" selectedItem="@bind(vm.nvaRemision.vehiculo)"
+						hflex="true">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
 				</row>
 			</rows>
 		</grid>
