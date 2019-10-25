@@ -88,7 +88,7 @@
 				<zk forEach="${vm.menuItem(self,'Proveedor')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'CompraLocal')}" />
-				<zk forEach="${vm.menuItem(self,'Importacion')}" />
+				<zk forEach="${vm.menuItem(self,'ImportacionForward')}" />
 				<zk
 					forEach="${vm.menuItem(self, 'NotaCreditoCompra', 'tipo=compra')}" />
 				<menuseparator />
@@ -97,7 +97,7 @@
 				<zk forEach="${vm.menuItem(self,'OrdenCompra')}" />
 				<menuseparator />				
 				<zk forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
-				<zk forEach="${vm.menuItem(self, 'ArticuloPivot')}" />
+				<zk forEach="${vm.menuItem(self, 'PivotForward')}" />
 				<zk forEach="${vm.menuItem(self, 'ArticuloPivotGenerado')}" />
 			</menupopup>
 		</menu>
@@ -175,7 +175,7 @@
 				<zk forEach="${vm.menuItem(self,'Anulaciones')}" />
 				<zk forEach="${vm.menuItem(self,'AcuseDocumento')}" />
 				<menuitem label="TAREAS PROGRAMADAS" iconSclass="z-icon-caret-right" disabled="true"/>
-				<menuitem label="BACKUPS DE SEGURIDAD" iconSclass="z-icon-caret-right" disabled="true"/>
+				<zk forEach="${vm.menuItem(self,'Backups')}" />
 				<menuitem label="CONTROL DE VERSIONES" iconSclass="z-icon-caret-right" 
 					href="https://drive.google.com/open?id=1n7B8AyTteEACIy2jwgVg47J4-0VVMAvkG9RHs2GF-fc" target="_blank" />
 			</menupopup>
