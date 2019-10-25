@@ -5,10 +5,10 @@ import java.util.Date;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
-import com.yhaguy.gestion.articulos.ArticuloDTO;
+import com.coreweb.util.MyArray;
 
 @SuppressWarnings("serial")
-public class ImportacionPedidoCompraDetalleDTO extends DTO{
+public class ImportacionPedidoCompraDetalleDTO extends DTO {
 
 	private int cantidad = 0;
 	private double ultimoCostoDs = 0;
@@ -19,7 +19,7 @@ public class ImportacionPedidoCompraDetalleDTO extends DTO{
 	private int motivo;	//para las diferencias en csv
 	private int cantidadSistema = 0; //para las diferencias en csv
 	
-	private ArticuloDTO articulo = new ArticuloDTO();	
+	private MyArray articulo = new MyArray();	
 	
 	@DependsOn({"cantidad", "costoProformaGs"})
 	public double getImporteProformaGs() {
@@ -91,14 +91,6 @@ public class ImportacionPedidoCompraDetalleDTO extends DTO{
 	public void setCostoProformaDs(double costoProformaDs) {
 		this.costoProformaDs = this.getMisc().redondeoCuatroDecimales(costoProformaDs);
 	}		
-	
-	public ArticuloDTO getArticulo() {
-		return articulo;
-	}
-
-	public void setArticulo(ArticuloDTO articulo) {
-		this.articulo = articulo;
-	}
 
 	public int getMotivo() {
 		return motivo;
@@ -122,5 +114,13 @@ public class ImportacionPedidoCompraDetalleDTO extends DTO{
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public MyArray getArticulo() {
+		return articulo;
+	}
+
+	public void setArticulo(MyArray articulo) {
+		this.articulo = articulo;
 	}			
 }

@@ -5,7 +5,6 @@ import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
 import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.ImportacionFacturaDetalle;
-import com.yhaguy.gestion.articulos.AssemblerArticulo;
 import com.yhaguy.gestion.empresa.AssemblerProveedor;
 
 public class AssemblerImportacionFactura extends Assembler {
@@ -58,6 +57,9 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 			 "importeGastoDescuentoGs", "importeGastoDescuentoDs", "gastoDescuento", 
 			 "valorProrrateo", "cantidad", "cantidadRecibida", "precioFinalGs", "minoristaGs", "listaGs",
 			 "verificado", "conteo1", "conteo2", "conteo3", "cantidad_acum" };
+	
+	static final String[] ATT_ARTICULO = { "codigoInterno", "codigoProveedor",
+			"codigoOriginal", "descripcion", "servicio" };
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {
@@ -66,7 +68,7 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 
 		this.copiarValoresAtributos(dto, domain,attIgualesImportacionFacturaDetalle);	
 		this.myPairToDomain(dto, domain, "tipoGastoDescuento");
-		this.hijoDtoToHijoDomain(dto, domain, "articulo", new AssemblerArticulo(), false);		
+		this.myArrayToDomain(dto, domain, "articulo");
 
 		return domain;
 	}
@@ -78,7 +80,7 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionFacturaDetalle);
 		this.domainToMyPair(domain, dto, "tipoGastoDescuento");
-		this.hijoDomainToHijoDTO(domain, dto, "articulo", new AssemblerArticulo());		
+		this.domainToMyArray(domain, dto, "articulo", ATT_ARTICULO);
 
 		return dto;
 	}

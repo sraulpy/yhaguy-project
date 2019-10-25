@@ -471,17 +471,17 @@
 							org.zkoss.zul.listbox.autoSort="true" />
 						<listhead menupopup="auto" sizable="true">
 							<listheader width="50px" align="center" />
-							<listheader label="Código" width="150px" style="text-align: center" sort="auto(articulo.codigoInterno)"
+							<listheader label="Código" width="150px" style="text-align: center" sort="auto(articulo.pos1)"
 								onCreate="self.sort(true);" />
-							<listheader label="Descripción" style="text-align: center" sort="auto(articulo.descripcion)" />
+							<listheader label="Descripción" style="text-align: center" sort="auto(articulo.pos4)" />
 							<listheader label="Cantidad" width="150px" style="text-align: center" align="right" />
 							<listheader label="Ult. costo U$D" width="150px" style="text-align: center" align="right" />
 						</listhead>
 						<template name="model" status='s'>
 							<listitem>
 								<listcell />
-								<listcell label="@load(each.articulo.codigoInterno)"></listcell>
-								<listcell label="@load(each.articulo.descripcion)"></listcell>								
+								<listcell label="@load(each.articulo.pos1)"></listcell>
+								<listcell label="@load(each.articulo.pos4)"></listcell>								
 								<listcell label="@load(each.cantidad)"></listcell>
 								<listcell label="@load(each.ultimoCostoDs)"></listcell>
 							</listitem>
@@ -555,10 +555,10 @@
 						<listhead menupopup="auto" sizable="true">
 							<listheader width="50px" align="center" />
 							<listheader label="Código" width="130px"
-								style="text-align: center" sort="auto(articulo.codigoInterno)"
+								style="text-align: center" sort="auto(articulo.pos1)"
 								onCreate="self.sort(true);" />
 							<listheader label="Descripción"
-								style="text-align: center" sort="auto(articulo.descripcion)" />
+								style="text-align: center" sort="auto(articulo.pos4)" />
 							<listheader label="Cantidad" width="100px"
 								sort="auto(cantidad)" style="text-align: center" align="right" />
 							<listheader
@@ -586,8 +586,8 @@
 						<template name="model" status='s'>
 							<listitem>
 								<listcell />
-								<listcell label="@load(each.articulo.codigoInterno)"></listcell>
-								<listcell label="@load(each.articulo.descripcion)"></listcell>
+								<listcell label="@load(each.articulo.pos1)"></listcell>
+								<listcell label="@load(each.articulo.pos4)"></listcell>
 								<listcell label="@load(each.cantidad)"></listcell>
 								<listcell label="@load(each.ultimoCostoDs)"></listcell>
 								<listcell label="@load(each.costoProformaDs) @converter('formattedNumber', format='###,###,###,##0.0000')"></listcell>
@@ -698,17 +698,12 @@
 							<listheader width="50px" align="center"
 								visible="@load(!vm.comparativoPrr)" />
 							<listheader label="Código" width="120px"
-								style="text-align: center" sort="auto(articulo.codigoInterno)"
+								style="text-align: center" sort="auto(articulo.pos1)"
 								onCreate="self.sort(true);" />
 							<listheader label="Descripción"
-								style="text-align: center" sort="auto(articulo.descripcion)" />
+								style="text-align: center" sort="auto(articulo.pos4)" />
 							<listheader label="Tipo Gasto-Descuento"
 								style="text-align:center" visible="false" width="180px" />
-							<listheader label="U.Med." width="50px"
-								style="text-align: center" align="center" visible="false" />
-							<listheader label="Presentacion"
-								width="95px" style="text-align: center" align="right"
-								visible="false" />
 							<listheader label="Cantidad" width="80px"
 								visible="@load(!vm.comparativoPrr)" style="text-align: center"
 								align="right" sort="auto(cantidad)" />
@@ -729,24 +724,18 @@
 								<listcell />
 								<listcell>
 									<label
-										value="@load(each.articulo.codigoInterno)" multiline="false"
-										tooltiptext="@load(each.articulo.codigoInterno)"
+										value="@load(each.articulo.pos1)" multiline="false"
+										tooltiptext="@load(each.articulo.pos1)"
 										sclass="label-list" />
 								</listcell>
 								<listcell>
 									<label
 										value="@load(each.descripcion)" multiline="false"
-										tooltiptext="@load(each.articulo.descripcion)"
+										tooltiptext="@load(each.articulo.pos4)"
 										sclass="label-list" />
 								</listcell>
 								<listcell
 									label="@load(each.tipoGastoDescuento.text)"
-									sclass="label-list" />
-								<listcell
-									label="@load(each.articulo.articuloUnidadMedida.text)"
-									sclass="label-list" />
-								<listcell
-									label="@load(each.articulo.articuloPresentacion.pos1)"
 									sclass="label-list" />
 								<listcell>
 									<div>
@@ -802,8 +791,6 @@
 							<listfooter />
 							<listfooter />
 							<listfooter />
-							<listfooter />
-							<listfooter />
 							<listfooter>
 								<doublebox
 									value="@load(vm.totalImporteFactura[1])"
@@ -846,7 +833,7 @@
 										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 										<listhead>
 											<listheader label="Código" width="120px"
-												sort="auto(articulo.codigoInterno)"
+												sort="auto(articulo.pos1)"
 												onCreate="self.sort(true)"></listheader>
 											<listheader label="Descripción"></listheader>
 											<listheader label="1er Conteo" width="120px"></listheader>
@@ -858,8 +845,8 @@
 										</listhead>
 										<template name="model">
 											<listitem visible="@load(each.auxi eq 'DUPLICADO' ? 'false':'true')">
-												<listcell label="@load(each.articulo.codigoInterno)"></listcell>
-												<listcell label="@load(each.articulo.descripcion)"></listcell>
+												<listcell label="@load(each.articulo.pos1)"></listcell>
+												<listcell label="@load(each.articulo.pos4)"></listcell>
 												<listcell>
 													<intbox vflex="true" hflex="true"
 														format="#,###,###0"
@@ -1321,7 +1308,7 @@
 						model="@load(vm.selectedImportacionFactura.detalles)">
 						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 						<listhead>
-							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.codigoInterno)" onCreate='self.sort(true)' />
+							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.pos1)" onCreate='self.sort(true)' />
 							<listheader label="Descripción" style="text-align:center" />
 							<listheader label="Mayorista Gs." style="text-align:center" align="right" width="200px" />
 							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />
@@ -1330,7 +1317,7 @@
 						</listhead>
 						<template name="model">
 							<listitem>
-								<listcell label="@load(each.articulo.codigoInterno)" />
+								<listcell label="@load(each.articulo.pos1)" />
 								<listcell label="@load(each.descripcion)" />
 								<listcell>
 									<guaranibox value="@bind(each.precioFinalGs)" hflex="true" vflex="true" 
@@ -1404,7 +1391,7 @@
 					<template name="model">
 						<listitem>
 							<listcell
-								label="@load(each.articulo.codigoInterno)">
+								label="@load(each.articulo.pos1)">
 							</listcell>
 							<listcell label="@load(each.cantidad)" />
 						</listitem>
@@ -1476,7 +1463,7 @@
 					<template name="model">
 						<listitem>
 							<listcell
-								label="@load(each.articulo.codigoInterno)">
+								label="@load(each.articulo.pos1)">
 							</listcell>
 							<listcell label="@load(each.cantidad)" />
 						</listitem>

@@ -21,7 +21,6 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
-import com.yhaguy.gestion.articulos.ArticuloDTO;
 import com.yhaguy.gestion.articulos.AssemblerArticulo;
 
 public class ImportacionSimpleControl extends SoloViewModel {
@@ -70,12 +69,12 @@ public class ImportacionSimpleControl extends SoloViewModel {
 		String des = "";
 
 		if (tipo instanceof ImportacionFacturaDetalleDTO) {
-			cod = this.dato.getNvoItem().getArticulo().getCodigoInterno();
-			des = this.dato.getNvoItem().getArticulo().getDescripcion();
+			cod = (String) this.dato.getNvoItem().getArticulo().getPos1();
+			des = (String) this.dato.getNvoItem().getArticulo().getPos4();
 
 		} else {
-			cod = this.dato.getNewDetalle().getArticulo().getCodigoInterno();
-			des = this.dato.getNewDetalle().getArticulo().getDescripcion();
+			cod = (String) this.dato.getNewDetalle().getArticulo().getPos1();
+			des = (String) this.dato.getNewDetalle().getArticulo().getPos1();
 		}
 
 		find = (busqueda == BUSQUEDA_POR_CODIGO) ? cod : des;
@@ -90,10 +89,10 @@ public class ImportacionSimpleControl extends SoloViewModel {
 		b.show(find, busqueda);
 		
 		if ((b.isClickAceptar()) && (tipo instanceof ImportacionPedidoCompraDetalleDTO)) {
-			this.dato.getNewDetalle().setArticulo((ArticuloDTO) b.getSelectedItemDTO());
+			this.dato.getNewDetalle().setArticulo(b.getSelectedItem());
 			
 		} else if ((b.isClickAceptar()) && (tipo instanceof ImportacionFacturaDetalleDTO)) {
-			this.dato.getNvoItem().setArticulo((ArticuloDTO) b.getSelectedItemDTO());
+			this.dato.getNvoItem().setArticulo(b.getSelectedItem());
 		}
 		BindUtils.postNotifyChange(null, null, this.dato.getNewDetalle(), "articulo");
 		BindUtils.postNotifyChange(null, null, this.dato.getNvoItem(), "articulo");
@@ -258,7 +257,7 @@ public class ImportacionSimpleControl extends SoloViewModel {
 	@Command
 	public void notificarGastoDctoDs() {
 		double gdescGs = this.dato.getNvoItem().getImporteGastoDescuentoGs();
-		if (this.dato.getNvoItem().getArticulo().getCodigoInterno()
+		if (((String) this.dato.getNvoItem().getArticulo().getPos1())
 				.compareTo(Configuracion.CODIGO_ITEM_DESCUENTO_KEY) == 0) {
 			if (gdescGs > 0) {
 				gdescGs = gdescGs * -1;
@@ -285,7 +284,7 @@ public class ImportacionSimpleControl extends SoloViewModel {
 
 	public void notificarGastoDctoGs(double porc) {
 		double gdescDs = this.dato.getNvoItem().getImporteGastoDescuentoDs();
-		if (this.dato.getNvoItem().getArticulo().getCodigoInterno()
+		if (((String)this.dato.getNvoItem().getArticulo().getPos1())
 				.compareTo(Configuracion.CODIGO_ITEM_DESCUENTO_KEY) == 0) {
 			if (gdescDs > 0) {
 				gdescDs = gdescDs * -1;

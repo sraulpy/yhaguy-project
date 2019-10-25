@@ -58,7 +58,6 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
-import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CondicionPago;
@@ -347,8 +346,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
 				Object[] obj1 = new Object[] {
-						item.getArticulo().getCodigoInterno(),
-						item.getArticulo().getDescripcion(),
+						item.getArticulo().getPos1(),
+						item.getArticulo().getPos4(),
 						item.isVerificado() ? "SI" : "NO"
 				};
 				data.add(obj1);			
@@ -372,8 +371,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
 				Object[] obj1 = new Object[] {
-						item.getArticulo().getCodigoInterno(),
-						item.getArticulo().getDescripcion(),
+						item.getArticulo().getPos1(),
+						item.getArticulo().getPos4(),
 						""
 				};
 				data.add(obj1);			
@@ -406,7 +405,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		
 		for (ImportacionFacturaDetalleDTO item : this.selectedImportacionFactura.getDetalles()) {
 			Object[] obj1 = new Object[] {
-					item.getArticulo().getCodigoInterno(),
+					item.getArticulo().getPos1(),
 					item.getConteo1(), (item.getConteo1() - item.getCantidad_acum()),
 					item.getConteo2(), (item.getConteo2() - item.getCantidad_acum()),
 					item.getConteo3(), (item.getConteo3() - item.getCantidad_acum())
@@ -448,7 +447,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				conteo = "1er Conteo";
 				int dif = item.getConteo1() - item.getCantidad_acum();
 				if (dif != 0) {
-					Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo1(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo1() };
+					Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getConteo1(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo1() };
 					data.add(obj);
 				}
 			} else if (this.dto.isConteo1() && this.dto.isConteo2() && !this.dto.isConteo3()) {
@@ -457,7 +456,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				int dif = item.getConteo2() - item.getCantidad_acum();
 				if (dif1 != 0) {
 					if (dif != 0) {
-						Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo2()};
+						Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo2()};
 						data.add(obj);
 					}
 				}				
@@ -469,7 +468,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				if (dif1 != 0) {
 					if (dif2 != 0) {
 						if (dif != 0) {
-							Object[] obj = mostrar ? new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getCodigoInterno(), item.getConteo3()};
+							Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo3()};
 							data.add(obj);
 						}
 					}					
@@ -527,7 +526,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private boolean confirmarEliminarItemOrden(){
 		this.ordenItemsEliminar = "Esta seguro de eliminar los sgts ítems: \n";		
 		for (ImportacionPedidoCompraDetalleDTO d : this.selectedOrdenItems) {
-			this.ordenItemsEliminar = this.ordenItemsEliminar + "\n - " + d.getArticulo().getCodigoInterno();
+			this.ordenItemsEliminar = this.ordenItemsEliminar + "\n - " + d.getArticulo().getPos1();
 		}		
 		return this.mensajeSiNo(this.ordenItemsEliminar);
 	}
@@ -731,7 +730,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.dto.getSolicitudCotizaciones().clear();
 			List<ImportacionPedidoCompraDetalleDTO> list = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
 			RegisterDomain rr = RegisterDomain.getInstance();
-			AssemblerArticulo ass = new AssemblerArticulo();
 			
 			CSV csv = new CSV(CAB, DET, PATH + this.dto.getNumeroPedidoCompra() + ".csv", ';');
 			String noEncontrado = "Códigos no encontrados: \n";
@@ -743,7 +741,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				ImportacionPedidoCompraDetalleDTO item = new ImportacionPedidoCompraDetalleDTO();
 				Articulo art = rr.getArticulo(codigo);
 				if (art != null) {
-					ArticuloDTO ar = (ArticuloDTO) ass.domainToDto(art);
+					MyArray ar = new MyArray(art.getCodigoInterno(), art.getCodigoProveedor(), art.getCodigoOriginal(),
+							art.getDescripcion(), art.isServicio());
+					ar.setId(art.getId());
 					item.setArticulo(ar);
 					item.setCantidad(Integer.parseInt(cantidad));
 					list.add(item);
@@ -775,7 +775,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.dto.getImportacionPedidoCompraDetalle().clear();
 			List<ImportacionPedidoCompraDetalleDTO> list = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
 			RegisterDomain rr = RegisterDomain.getInstance();
-			AssemblerArticulo ass = new AssemblerArticulo();
 			
 			CSV csv = new CSV(CAB, DET_PROFORMA, PATH + "proforma_" + this.dto.getNumeroPedidoCompra() + ".csv", ';');
 			String noEncontrado = "Códigos no encontrados: \n";
@@ -788,7 +787,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				ImportacionPedidoCompraDetalleDTO item = new ImportacionPedidoCompraDetalleDTO();
 				Articulo art = rr.getArticulo(codigo);
 				if (art != null) {
-					ArticuloDTO ar = (ArticuloDTO) ass.domainToDto(art);
+					MyArray ar = new MyArray(art.getCodigoInterno(), art.getCodigoProveedor(), art.getCodigoOriginal(),
+							art.getDescripcion(), art.isServicio());
+					ar.setId(art.getId());
 					item.setArticulo(ar);
 					item.setCantidad(Integer.parseInt(cantidad));
 					item.setCostoProformaDs(Double.parseDouble(costoDs.replace(".", "").replace(",", ".")));
@@ -819,7 +820,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.dto.getImportacionFactura().get(0).getDetalles().clear();
 			List<ImportacionFacturaDetalleDTO> list = new ArrayList<ImportacionFacturaDetalleDTO>();
 			RegisterDomain rr = RegisterDomain.getInstance();
-			AssemblerArticulo ass = new AssemblerArticulo();
 			
 			CSV csv = new CSV(CAB, DET_PROFORMA, PATH + "factura_" + this.dto.getNumeroPedidoCompra() + ".csv", ';');
 			String noEncontrado = "Códigos no encontrados: \n";
@@ -832,7 +832,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				ImportacionFacturaDetalleDTO item = new ImportacionFacturaDetalleDTO();
 				Articulo art = rr.getArticulo(codigo);
 				if (art != null) {
-					ArticuloDTO ar = (ArticuloDTO) ass.domainToDto(art);
+					MyArray ar = new MyArray(art.getCodigoInterno(), art.getCodigoProveedor(), art.getCodigoOriginal(),
+							art.getDescripcion(), art.isServicio());
+					ar.setId(art.getId());
 					item.setArticulo(ar);
 					item.setCantidad(Integer.parseInt(cantidad));
 					item.setCostoDs(Double.parseDouble(costoDs.replace(".", "").replace(",", ".")));
@@ -876,7 +878,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				precios.put(codigo, precio);								
 			}
 			for (ImportacionFacturaDetalleDTO item : this.dto.getImportacionFactura().get(0).getDetalles()) {
-				Object[] precio = precios.get(item.getArticulo().getCodigoInterno());
+				Object[] precio = precios.get(item.getArticulo().getPos1());
 				if (precio != null) {
 					double may = (double) precio[0];
 					double min = (double) precio[1];
@@ -885,7 +887,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					item.setMinoristaGs(min);
 					item.setListaGs(lis);
 				} else {
-					noEncontrado += " \n - " + item.getArticulo().getCodigoInterno();
+					noEncontrado += " \n - " + item.getArticulo().getPos1();
 				}
 			}
 			this.mensajePopupTemporal("SE IMPORTARON " + precios.size() + " ÍTEMS");
@@ -1193,8 +1195,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		Object[] obj;		
 		for (ImportacionPedidoCompraDetalleDTO d : this.dto.getImportacionPedidoCompraDetalle()) {
 			obj = new Object[4];
-			obj[0] = d.getArticulo().getCodigoInterno();
-			obj[1] = d.getArticulo().getDescripcion();
+			obj[0] = d.getArticulo().getPos1();
+			obj[1] = d.getArticulo().getPos4();
 			obj[2] = d.getCantidad();
 			obj[3] = d.getCostoProformaDs();
 			data.add(obj);	
@@ -1918,7 +1920,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private boolean confirmarEliminarItemFactura(){
 		this.facturaItemsEliminar = "Esta seguro de eliminar los sgts ítems: \n";		
 		for (ImportacionFacturaDetalleDTO d : this.selectedFacturaItems) {
-			this.facturaItemsEliminar = this.facturaItemsEliminar + "\n - " + d.getArticulo().getCodigoInterno();
+			this.facturaItemsEliminar = this.facturaItemsEliminar + "\n - " + d.getArticulo().getPos1();
 		}		
 		return this.mensajeSiNo(this.facturaItemsEliminar);
 	}
@@ -2096,7 +2098,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	}
 	
 	public ImportacionFacturaDetalleDTO setearImportacionFacturaDetalleDTO(
-			ArticuloDTO articulo, Double cantidad, Double costoDs) {
+			MyArray articulo, Double cantidad, Double costoDs) {
 
 		ImportacionFacturaDetalleDTO out = new ImportacionFacturaDetalleDTO();
 		out.setArticulo(articulo);
@@ -2175,10 +2177,10 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		List<MyPair> gastos = utilDto.getCompraTiposGastos();
 		List<MyPair> prorrateos = utilDto.getCompraTiposProrrateo();		
 		
-		ArticuloDTO art = this.nvoItem.getArticulo();
+		MyArray art = this.nvoItem.getArticulo();
 		
 		if (art != null) {
-			String codigo = art.getCodigoInterno();
+			String codigo = (String) art.getPos1();
 			
 			if (codigo.indexOf(Configuracion.CODIGO_ITEM_DESCUENTO_KEY) >= 0) {
 				out = descuentos;
@@ -2526,9 +2528,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		
 		for (ImportacionFacturaDetalleDTO item : items) {
 			Object[] data = new Object[6];
-			data[0] = item.getArticulo().getCodigoInterno();
-			data[1] = item.getArticulo().getCodigoInterno();
-			data[2] = item.getArticulo().getDescripcion();
+			data[0] = item.getArticulo().getPos1();
+			data[1] = item.getArticulo().getPos1();
+			data[2] = item.getArticulo().getPos4();
 			data[3] = "";
 			data[4] = "";
 			data[5] = "";
@@ -2678,7 +2680,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	 * [6]:valorCIFgs [7]:valorCIFds
 	 */
 	private Double[] getValoresFromFacturas() {
-		
+
 		double valorFleteGs = 0;
 		double valorFleteDs = 0;
 		double valorSeguroGs = 0;
@@ -2687,32 +2689,18 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		double valorFOBds = 0;
 		double valorCIFgs = 0;
 		double valorCIFds = 0;
-		
+
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
-			
+
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
-				if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CIF)) {
-					if (item.getArticulo().getFamilia() == null || !item.getArticulo().getFamilia().getPos1().equals(ArticuloFamilia.CONTABILIDAD)) {					
-						valorFOBgs += item.getImporteGsCalculado();
-						valorFOBds += item.getImporteDsCalculado();
-					}
-					if (item.getArticulo().getFamilia() != null && item.getArticulo().getFamilia().getPos1().equals(ArticuloFamilia.CONTABILIDAD)) {
-						valorFleteGs += item.getImporteGsCalculado();
-						valorFleteDs += item.getImporteDsCalculado();
-					}
-					valorCIFgs += item.getImporteGsCalculado();
-					valorCIFds += item.getImporteDsCalculado();
-					
-				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)) {
-					valorFOBgs += item.getImporteGsCalculado();
-					valorFOBds += item.getImporteDsCalculado();
-					valorCIFgs += item.getImporteGsCalculado();
-					valorCIFds += item.getImporteDsCalculado();
-				}
+				valorFOBgs += item.getImporteGsCalculado();
+				valorFOBds += item.getImporteDsCalculado();
+				valorCIFgs += item.getImporteGsCalculado();
+				valorCIFds += item.getImporteDsCalculado();
 			}
 		}
-		Double[] out = {valorFleteGs, valorFleteDs, valorSeguroGs, valorSeguroDs,
-						valorFOBgs, valorFOBds, valorCIFgs, valorCIFds};
+		Double[] out = { valorFleteGs, valorFleteDs, valorSeguroGs, valorSeguroDs, valorFOBgs, valorFOBds, valorCIFgs,
+				valorCIFds };
 		return out;
 	}
 	
@@ -3095,8 +3083,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				if (d.isGastoDescuento() == false) {
 					MyArray mr = new MyArray();
 					mr.setId(idArt);
-					mr.setPos1(d.getArticulo().getCodigoInterno());
-					mr.setPos2(d.getArticulo().getDescripcion());
+					mr.setPos1(d.getArticulo().getPos1());
+					mr.setPos2(d.getArticulo().getPos4());
 					mr.setPos3(new Integer(cant));
 					mr.setPos4(costoDs);
 					mr.setPos5(costoGs);
@@ -3183,8 +3171,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					Object[] art = rr.getArticulo(idArt);
 					MyArray mr = new MyArray();
 					mr.setId(idArt);
-					mr.setPos1(d.getArticulo().getCodigoInterno());
-					mr.setPos2(d.getArticulo().getDescripcion());
+					mr.setPos1(d.getArticulo().getPos1());
+					mr.setPos2(d.getArticulo().getPos4());
 					mr.setPos3(new Integer(cant));
 					mr.setPos4(costoGs * cant);
 					mr.setPos5(0.0);						
@@ -3285,25 +3273,25 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			for (ImportacionFacturaDetalleDTO det : fac.getDetalles()) {	
 				det.setDuplicado(false);
-				ImportacionFacturaDetalleDTO item = map.get(det.getArticulo().getCodigoInterno());
+				ImportacionFacturaDetalleDTO item = map.get(det.getArticulo().getPos1());
 				if ((!det.getAuxi().equals("DUPLICADO")) && item != null) {
 					det.setAuxi("DUPLICADO");
 				} else if (!det.getAuxi().equals("DUPLICADO")) {
-					map.put(det.getArticulo().getCodigoInterno(), det);
+					map.put((String) det.getArticulo().getPos1(), det);
 				}
 				
-				Integer acum = cants.get(det.getArticulo().getCodigoInterno());
+				Integer acum = cants.get(det.getArticulo().getPos1());
 				if (acum != null) {
 					acum += det.getCantidad();
 				} else {
 					acum = det.getCantidad();					
 				}
-				cants.put(det.getArticulo().getCodigoInterno(), acum);
+				cants.put((String) det.getArticulo().getPos1(), acum);
 			}
 		}
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			for (ImportacionFacturaDetalleDTO det : fac.getDetalles()) {
-				det.setCantidad_acum(cants.get(det.getArticulo().getCodigoInterno()));
+				det.setCantidad_acum(cants.get(det.getArticulo().getPos1()));
 			}
 		}
 	}
@@ -3347,8 +3335,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				if (d.isGastoDescuento() == false) {
 					MyArray mr = new MyArray();
 					mr.setId(idArt);
-					mr.setPos1(d.getArticulo().getCodigoInterno());
-					mr.setPos2(d.getArticulo().getDescripcion());
+					mr.setPos1(d.getArticulo().getPos1());
+					mr.setPos2(d.getArticulo().getPos4());
 					mr.setPos3(costoFinal);
 					mr.setPos4(costoFinalDs);
 					mr.setPos8(costoFinal * cant);

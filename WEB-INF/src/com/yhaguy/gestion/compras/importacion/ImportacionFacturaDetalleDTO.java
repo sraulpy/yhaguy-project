@@ -3,9 +3,9 @@ package com.yhaguy.gestion.compras.importacion;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
+import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
-import com.yhaguy.gestion.articulos.ArticuloDTO;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
@@ -39,14 +39,14 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	
 	private boolean verificado = false;
 	
-	private ArticuloDTO articulo = new ArticuloDTO();		
+	private MyArray articulo = new MyArray();	
 	
 	@DependsOn({"articulo", "gastoDescuento"})
-	public String getDescripcion(){
+	public String getDescripcion() {
 		if (this.isGastoDescuento() == true) {
 			return this.tipoGastoDescuento.getText();
 		}
-		return this.articulo.getDescripcion();
+		return (String) this.articulo.getPos4();
 	}
 	
 	@DependsOn({"costoGs", "cantidad", "descuentoGs", "gastoDescuento", "importeGastoDescuentoGs"})
@@ -112,7 +112,7 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	
 	@DependsOn("articulo")
 	public boolean isReferencia(){
-		return this.getArticulo().getCodigoInterno().trim().startsWith("@");
+		return this.getArticulo().getPos1().toString().trim().startsWith("@");
 	}
 	
 	/**
@@ -213,14 +213,6 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 		this.cantidadRecibida = cantidadRecibida;
 	}
 
-	public ArticuloDTO getArticulo() {
-		return articulo;
-	}
-
-	public void setArticulo(ArticuloDTO articulo) {
-		this.articulo = articulo;
-	}
-
 	public boolean isValorProrrateo() {
 		return valorProrrateo;
 	}
@@ -315,5 +307,13 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 
 	public void setCantidad_acum(int cantidad_acum) {
 		this.cantidad_acum = cantidad_acum;
+	}
+
+	public MyArray getArticulo() {
+		return articulo;
+	}
+
+	public void setArticulo(MyArray articulo) {
+		this.articulo = articulo;
 	}
 }

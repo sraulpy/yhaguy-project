@@ -7,7 +7,6 @@ import com.yhaguy.domain.ImportacionAplicacionAnticipo;
 import com.yhaguy.domain.ImportacionGastoImprevisto;
 import com.yhaguy.domain.ImportacionPedidoCompra;
 import com.yhaguy.domain.ImportacionPedidoCompraDetalle;
-import com.yhaguy.gestion.articulos.AssemblerArticulo;
 import com.yhaguy.gestion.empresa.AssemblerProveedor;
 import com.yhaguy.gestion.empresa.ctacte.AssemblerCtaCteEmpresaMovimiento;
 
@@ -86,6 +85,9 @@ class AssemblerImportacionPedidoCompraDetalle extends Assembler {
 
 	private static String[] attIgualesImportacionPedidoCompraDetalle = { "cantidad", "ultimoCostoDs",
 			"fechaUltimoCosto", "costoProformaGs", "costoProformaDs", "observacion" };
+	
+	static final String[] ATT_ARTICULO = { "codigoInterno", "codigoProveedor",
+			"codigoOriginal", "descripcion", "servicio" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoPD) throws Exception {
@@ -94,8 +96,8 @@ class AssemblerImportacionPedidoCompraDetalle extends Assembler {
 		ImportacionPedidoCompraDetalle domain = (ImportacionPedidoCompraDetalle) getDomain(
 				dto, ImportacionPedidoCompraDetalle.class);
 
-		this.copiarValoresAtributos(dto, domain, attIgualesImportacionPedidoCompraDetalle);		
-		this.hijoDtoToHijoDomain(dto, domain, "articulo", new AssemblerArticulo(), false);
+		this.copiarValoresAtributos(dto, domain, attIgualesImportacionPedidoCompraDetalle);	
+		this.myArrayToDomain(dto, domain, "articulo");
 
 		return domain;
 	}
@@ -107,7 +109,7 @@ class AssemblerImportacionPedidoCompraDetalle extends Assembler {
 				domain, ImportacionPedidoCompraDetalleDTO.class);
 
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionPedidoCompraDetalle);		
-		this.hijoDomainToHijoDTO(domain, dto, "articulo", new AssemblerArticulo());
+		this.domainToMyArray(domain, dto, "articulo", ATT_ARTICULO);
 
 		return dto;
 	}
