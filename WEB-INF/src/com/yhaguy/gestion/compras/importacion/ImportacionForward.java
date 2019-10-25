@@ -33,9 +33,9 @@ public class ImportacionForward extends SimpleViewModel {
 	 */
 	private void forward() {
 		String ip = this.getMyIP();
-		String url = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+		String url = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/compras/importacion/importacionABMBody_.zul";
 		if (ip.startsWith("192.168.") || ip.startsWith("10.25.")) {
-			url = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+			url = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/compras/importacion/importacionABMBody_.zul";
 		}
 		String usuario = this.getLoginNombre();
 		String clave = (String) this.getAtributoSession(Config.CLAVE);

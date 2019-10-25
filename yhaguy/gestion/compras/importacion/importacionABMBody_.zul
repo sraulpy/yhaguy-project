@@ -8,6 +8,6 @@
 
 	<div fulfill="self.onCreate" vflex="true"> 		
 			<include aliasForm="Reportes"
-				src="/yhaguy/gestion/compras/importacion/importacionABMBody.zul" />
+				src="/yhaguy/gestion/compras/importacion/ImportacionABMBody.zul" />
 	</div>
 </window>
