@@ -152,7 +152,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		if (numero.trim().isEmpty()) {
 			return new ArrayList<MyArray>();
 		}
-		List<Object[]> remisiones = rr.getRemisiones(numero, "", "", "", 50);
+		List<Object[]> remisiones = rr.getRemisiones(numero, "", "", "", "", 50);
 		return this.getRemisionesMyArray(remisiones);
 	}
 	
