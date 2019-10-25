@@ -15,10 +15,10 @@
 			<listitem>
 				<listcell/>
 				<listcell>
-					<label value="@load(each.articulo.codigoInterno)" maxlength="15"/>
+					<label value="@load(each.articulo.pos1)" maxlength="15"/>
 				</listcell> 
 				<listcell>
-					<label value="@load(each.articulo.descripcion)" maxlength="40"/>
+					<label value="@load(each.articulo.pos4)" maxlength="40"/>
 				</listcell>
 				<listcell>
 					<label value="@load(each.cantidad)"/>
