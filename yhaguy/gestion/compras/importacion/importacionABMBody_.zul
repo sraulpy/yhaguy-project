@@ -1,0 +1,13 @@
+<window id="templateInicio"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionPedidoCompraControlBody_')"
+	apply="org.zkoss.bind.BindComposer"
+	height="100%" width="100%">
+	
+	<style src="/core/css/yhaguy.css" />	
+	<label id="nombreFormulario" value=" " visible="false" />
+
+	<div fulfill="self.onCreate" vflex="true"> 		
+			<include aliasForm="Reportes"
+				src="/yhaguy/gestion/compras/importacion/importacionABMBody.zul" />
+	</div>
+</window>
