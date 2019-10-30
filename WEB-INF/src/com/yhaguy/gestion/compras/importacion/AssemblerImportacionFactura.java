@@ -3,6 +3,7 @@ package com.yhaguy.gestion.compras.importacion;
 import com.coreweb.domain.Domain;
 import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.ImportacionFacturaDetalle;
 import com.yhaguy.gestion.empresa.AssemblerProveedor;
@@ -81,7 +82,8 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionFacturaDetalle);
 		this.domainToMyPair(domain, dto, "tipoGastoDescuento");
 		this.domainToMyArray(domain, dto, "articulo", ATT_ARTICULO);
-		dto.getArticulo().setPos6(domain_.getArticulo().getFamilia().getDescripcion());
+		String desc = domain_.getArticulo() != null? domain_.getArticulo().getFamilia().getDescripcion() : ArticuloFamilia.CONTABILIDAD;
+		dto.getArticulo().setPos6(desc);
 
 		return dto;
 	}
