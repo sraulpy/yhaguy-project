@@ -16309,6 +16309,17 @@ class CtaCteSaldosFamiliaDataSource implements JRDataSource {
 	public CtaCteSaldosFamiliaDataSource(List<Object[]> movims) {
 		
 		this.values = movims;
+		for (Object[] movim : movims) {
+			String tipomovimiento = (String) movim[15];
+			double saldo = (double) movim[9];
+			Double total = this.totalSaldo.get(tipomovimiento);
+			if (total != null) {
+				total += saldo;
+			} else {
+				total = saldo;
+			}
+			this.totalSaldo.put(tipomovimiento, total);
+		}
 		
 		Collections.sort(this.values, new Comparator<Object[]>() {
 			@Override
@@ -16345,14 +16356,6 @@ class CtaCteSaldosFamiliaDataSource implements JRDataSource {
 		double saldo = (double) det[9];
 		String razonSocial = (String) det[10];
 		
-		Double total = this.totalSaldo.get(tipomovimiento);
-		if (total != null) {
-			total += saldo;
-		} else {
-			total = saldo;
-		}
-		this.totalSaldo.put(tipomovimiento, total);
-		
 		if ("Numero".equals(fieldName)) {
 			if (nrocomprobante != null) {
 				int lenght = nrocomprobante.length();
@@ -16375,6 +16378,7 @@ class CtaCteSaldosFamiliaDataSource implements JRDataSource {
 		} else if ("TituloDetalle".equals(fieldName)) {
 			value = tipomovimiento;
 		} else if ("TotalImporte".equals(fieldName)) {
+			double total = this.totalSaldo.get(tipomovimiento);
 			value = FORMATTER.format(total);
 		}
 		return value;
