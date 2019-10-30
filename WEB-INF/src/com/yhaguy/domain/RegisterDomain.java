@@ -6436,14 +6436,17 @@ public class RegisterDomain extends Register {
 	 * [10]:razonSocial [11]:ruc
 	 * [12]:saldo [13]:siglaTipomovimiento
 	 * [14]:idempresa
-	 * [15]:idcartera [16]:cartera.descripcion
+	 * [15]:idcartera 
+	 * [16]:cartera.descripcion
+	 * [17]:cliente.limiteCredito
 	 */
 	public List<Object[]> getSaldos(Date desde, Date hasta, String caracter, long idVendedor, long idEmpresa, long idMoneda, long idCartera) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c.idMovimientoOriginal, c.tipoMovimiento.id, c.nroComprobante, c.tipoMovimiento.descripcion, e.telefono_, e.direccion_, c.fechaEmision, c.fechaVencimiento, c.importeOriginal, "
 				+ " (select sum(saldo) from CtaCteEmpresaMovimiento m where m.idMovimientoOriginal = c.idMovimientoOriginal and m.tipoMovimiento.id = c.tipoMovimiento.id ),"
-				+ " e.razonSocial, e.ruc, c.saldo, c.tipoMovimiento.sigla, e.id, c.carteraCliente.id, c.carteraCliente.descripcion"
+				+ " e.razonSocial, e.ruc, c.saldo, c.tipoMovimiento.sigla, e.id, c.carteraCliente.id, c.carteraCliente.descripcion,"
+				+ " (select cl.limiteCredito from Cliente cl where cl.empresa.id = e.id)"
 				+ " from CtaCteEmpresaMovimiento c, Empresa e"
 				+ " where c.idEmpresa = e.id and c.anulado = 'FALSE' and c.saldo > 0 and"
 				+ " c.tipoCaracterMovimiento.sigla = '"

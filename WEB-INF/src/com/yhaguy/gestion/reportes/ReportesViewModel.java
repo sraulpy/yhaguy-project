@@ -10790,21 +10790,49 @@ public class ReportesViewModel extends SimpleViewModel {
 			}
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Date desde = filtro.getFechaDesde();			
-			Date hasta = filtro.getFechaHasta();	
-			SucursalApp suc = filtro.getSelectedSucursal();
-			Object[] formato = filtro.getFormato();	
+			Date desde_ = Utiles.getFecha("01-01-2015 00:00:00");			
+			Date hasta_ = new Date();
+			boolean incluirChequesRechazados = false;
+			boolean incluirPrestamos = false;
+			Funcionario vendedor = filtro.getVendedor();
+			Cliente cliente_ = filtro.getCliente();
+			EmpresaRubro rubro = filtro.getRubro_();
+			Tipo moneda = filtro.getMoneda();
 			
-			long idSucursal = suc != null ? suc.getId() : 0;			
-			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false);
+			if (moneda.esNuevo()) {
+				Clients.showNotification("DEBE SELECCIONAR UNA MONEDA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+			Object[] formato = filtro.getFormato();
+			long idVendedor = vendedor == null ? 0 : vendedor.getId();
+			long idEmpresa = cliente_ == null ? 0 : cliente_.getEmpresa().getId();
+			long idRubro = rubro == null ? 0 : rubro.getId();
+			String caracter = Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE;	
+			List<Object[]> movims = new ArrayList<Object[]>();
+			List<Object[]> movims_ = new ArrayList<Object[]>();		
+
+			movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(),
+					incluirChequesRechazados, incluirPrestamos, idRubro);	
+			for (Object[] movim : movims) {
+				Venta vta = rr.getMovimientoVenta((long)movim[1], (long)movim[0]);
+				if (vta != null) {
+					for (Object[] prorrateo : vta.getProrrateoFamilia()) {
+						Object[] copy = Arrays.copyOf(movim, 17);
+						copy[15] = prorrateo[0];
+						copy[16] = prorrateo[1];
+						copy[9] = Utiles.obtenerValorDelPorcentaje((double)copy[9], (double)copy[16]);
+						movims_.add(copy);
+					}
+				}
+			}
 		
-			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_DETALLADO;
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SALDO_FAMILIA;
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new CobranzasDetalladoDataSource(recibos, desde, hasta, true);
-			params.put("Titulo", codReporte + " - COBRANZAS DETALLADO POR CARTERA");
+			JRDataSource dataSource = new CtaCteSaldosFamiliaDataSource(movims_);
+			params.put("Titulo", codReporte + " - SALDOS DE CLIENTES DETALLADO POR FAMILIA");
 			params.put("Usuario", getUs().getNombre());
-			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
-			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			params.put("Vendedor", vendedor == null ? "TODOS.." : vendedor.getRazonSocial().toUpperCase());
+			params.put("Moneda", moneda.getDescripcion().toUpperCase());
 			imprimirJasper(source, params, dataSource, formato);
 		}
 	}
@@ -16246,6 +16274,109 @@ class CobrosDetalladoDataSource implements JRDataSource {
 			value = FORMATTER.format(totalCobrado);
 		}
 
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de Saldos de Clientes detallado por familia..
+ */
+class CtaCteSaldosFamiliaDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	HashMap<String, Double> totalSaldo = new HashMap<String, Double>();	
+	
+	/**
+	 * [0]:idMovimientoOriginal [1]:tipoMovimiento.id
+	 * [2]:nrocomprobante [3]:tipoMovimiento.descripcion
+	 * [4]:telefono [5]:direccion
+	 * [6]:emision [7]:vencimiento
+	 * [8]:importe [9]:saldo acum
+	 * [10]:razonSocial [11]:ruc
+	 * [12]:saldo [13]:tipoMovimiento.sigla
+	 */
+	public CtaCteSaldosFamiliaDataSource(List<Object[]> movims) {
+		
+		this.values = movims;
+		
+		Collections.sort(this.values, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String flia1 = (String) o1[15];
+	        	String flia2 = (String) o2[15];
+							
+				int compare = flia1.compareTo(flia2);
+				if (compare != 0) {
+					return compare;
+		        } else {
+		        	Date emision1 = (Date) o1[6];
+					Date emision2 = (Date) o2[6];
+					return emision1.compareTo(emision2);
+		        }
+			}		
+		});
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+		String nrocomprobante = (String) det[2];
+		String tipomovimiento = (String) det[15]; //(String) det[3];
+		String telefono = (String) det[4];
+		String direccion = (String) det[5];
+		Date emision = (Date) det[6];
+		Date vencimiento = (Date) det[7];
+		double importe = (double) det[8];
+		double saldo = (double) det[9];
+		String razonSocial = (String) det[10];
+		
+		Double total = this.totalSaldo.get(tipomovimiento);
+		if (total != null) {
+			total += saldo;
+		} else {
+			total = saldo;
+		}
+		this.totalSaldo.put(tipomovimiento, total);
+		
+		if ("Numero".equals(fieldName)) {
+			if (nrocomprobante != null) {
+				int lenght = nrocomprobante.length();
+				value = nrocomprobante.substring(0, lenght < 15? lenght : 15);
+			}			
+		} else if ("Concepto".equals(fieldName)) {
+			value = razonSocial;
+		} else if ("Telefono".equals(fieldName)) {
+			value = telefono;
+		} else if ("Direccion".equals(fieldName)) {
+			value = direccion;
+		} else if ("Emision".equals(fieldName)) {
+			value = Utiles.getDateToString(emision, Utiles.DD_MM_YY);
+		} else if ("Vencimiento".equals(fieldName)) {
+			value = Utiles.getDateToString(vencimiento, Utiles.DD_MM_YY);;
+		} else if ("Importe".equals(fieldName)) {
+			value = FORMATTER.format(importe);
+		} else if ("SaldoGs".equals(fieldName)) {
+			value = FORMATTER.format(saldo);
+		} else if ("TituloDetalle".equals(fieldName)) {
+			value = tipomovimiento;
+		} else if ("TotalImporte".equals(fieldName)) {
+			value = FORMATTER.format(total);
+		}
 		return value;
 	}
 
@@ -23040,6 +23171,7 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 			String cartera = (String) value[16];
 			Date emision = (Date) value[6];
 			double saldo = (double) value[9];
+			double linea = (double) value[17];
 			long idCartera = (long) value[15];
 			int index = Utiles.getNumeroMes(emision);
 			
@@ -23048,7 +23180,7 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 				if (acum != null) {
 					acum[index] = ((double) acum[index]) + saldo;
 				} else {
-					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera };
+					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera, linea };
 					acum[index] = saldo;
 				} 
 				data.put(idCartera + "-" + idEmpresa, acum);
@@ -23111,7 +23243,9 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 			value = FORMATTER.format(det[12]);
 		} else if ("totalsaldo".equals(fieldName)) {
 			value = FORMATTER.format(det[13]);
-		} 
+		} else if ("lineaCredito".equals(fieldName)) {
+			value = Utiles.getNumberFormat((double) det[15]);
+		}
 		return value;
 	}
 
