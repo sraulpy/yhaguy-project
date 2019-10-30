@@ -86,5 +86,13 @@
 				</template>
 			</combobox>
 		</row>
+		<row>
+			<div></div>
+		</row>
+		<row>
+			<cell colspan="2">
+				<label style="color:red;font-style:italic">Puede tardar unos minutos debido a que procesa gran cantidad de datos..</label>
+			</cell>
+		</row>
 	</rows>
 </grid>

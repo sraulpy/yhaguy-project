@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.annotation.DependsOn;
@@ -214,7 +216,6 @@ public class Venta extends Domain {
 		for (VentaDetalle det : this.getDetalles()) {
 			if (det.isFamilia(idFamilia)) {
 				out += det.getCostoTotalGsSinIva();
-				System.out.println("--> COSTO: " + det.getCostoTotalGsSinIva() + " " + det.getArticulo().getCodigoInterno());
 			}
 		}
 		return out;
@@ -242,6 +243,33 @@ public class Venta extends Domain {
 			if (det.isFamilia(idFamilia)) {
 				out += det.getCantidad() * det.getArticulo().getVolumen();
 			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return
+	 * [0]:familia
+	 * [1]:porcentaje
+	 */
+	public List<Object[]> getProrrateoFamilia() {
+		List<Object[]> out = new ArrayList<Object[]>();
+		Map<String, Double> acum = new HashMap<String, Double>();
+		double importe = this.getTotalImporteGs();
+		for (VentaDetalle det : this.getDetalles()) {
+			String key = det.getArticulo().getFamilia().getDescripcion();
+			Double porc = acum.get(key);
+			Double porc_ = Utiles.obtenerPorcentajeDelValor(det.getImporteGs(), importe);
+			if (porc != null) {
+				porc += porc_;
+			} else {
+				porc = porc_;
+			}
+			acum.put(key, porc);
+		}
+		for (String key : acum.keySet()) {
+			double tot = acum.get(key);
+			out.add(new Object[] { key, tot });
 		}
 		return out;
 	}
