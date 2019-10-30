@@ -10,10 +10,10 @@
 			<row>
 				Código:
 				<combobox model="@load(vm.dato.itemsGastoDescuento)"
-					value="@load(vm.dato.nvoItem.articulo.descripcion)" onSelect="@command('notificarTipoDcto')"
+					value="@load(vm.dato.nvoItem.articulo.pos4)" onSelect="@command('notificarTipoDcto')"
 					selectedItem="@bind(vm.dato.nvoItem.articulo)" width="200px">
 					<template name="model">
-						<comboitem label="@load(each.descripcion)"/>
+						<comboitem label="@load(each.pos4)"/>
 					</template>
 				</combobox>
 			</row>

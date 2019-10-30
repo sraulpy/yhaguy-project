@@ -73,8 +73,6 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Timbrado;
 import com.yhaguy.domain.TipoMovimiento;
-import com.yhaguy.gestion.articulos.ArticuloDTO;
-import com.yhaguy.gestion.articulos.AssemblerArticulo;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.comun.ControlLogica;
@@ -2159,12 +2157,11 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}		
 	}	
 	
-	public List<ArticuloDTO> getItemsGastoDescuento() throws Exception{
-		List<ArticuloDTO> out = new ArrayList<ArticuloDTO>();
+	public List<MyArray> getItemsGastoDescuento() throws Exception{
+		List<MyArray> out = new ArrayList<MyArray>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		AssemblerArticulo assArt = new AssemblerArticulo();
 		for (Articulo art : rr.getItemsGastoDescuento()) {
-			ArticuloDTO a = (ArticuloDTO) assArt.domainToDto(art);
+			MyArray a = new MyArray(art.getCodigoInterno(), art.getCodigoProveedor(), art.getCodigoOriginal(), art.getDescripcion(), art.isServicio());
 			out.add(a);
 		}		
 		return out;
