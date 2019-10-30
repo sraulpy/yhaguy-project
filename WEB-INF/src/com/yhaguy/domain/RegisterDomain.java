@@ -8407,7 +8407,7 @@ public class RegisterDomain extends Register {
 	public List<ImportacionPedidoCompra> getImportaciones(Date desde, Date hasta, long idProveedor) throws Exception {
 
 		String query = "select i from ImportacionPedidoCompra i where i.dbEstado != 'D'"
-				+ " and i.fechaCreacion between ? and ?";
+				+ " and i.resumenGastosDespacho.fechaDespacho between ? and ?";
 		if (idProveedor != 0) {
 			query += "and i.proveedor.id = " + idProveedor;
 		}

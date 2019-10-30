@@ -25762,7 +25762,6 @@ class CobranzasDetalladoDataSource implements JRDataSource {
 class ListadoImportacionesDataSource implements JRDataSource {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
-	Misc misc = new Misc();
 
 	List<BeanImportacion> values = new ArrayList<BeanImportacion>();
 	List<ImportacionPedidoCompra> importaciones;
@@ -25802,9 +25801,9 @@ class ListadoImportacionesDataSource implements JRDataSource {
 		if ("Importaciones".equals(fieldName)) {
 			value = this.values;
 		} else if ("Desde".equals(fieldName)) {
-			value = misc.dateToString(this.desde, Misc.DD_MM_YYYY);
+			value = Utiles.getDateToString(this.desde, Misc.DD_MM_YYYY);
 		} else if ("Hasta".equals(fieldName)) {
-			value = misc.dateToString(this.hasta, Misc.DD_MM_YYYY);
+			value = Utiles.getDateToString(this.hasta, Misc.DD_MM_YYYY);
 		} else if ("Proveedor".equals(fieldName)) {
 			value = this.proveedor;
 		} else if ("totfobgs".equals(fieldName)) {
@@ -25834,7 +25833,7 @@ class ListadoImportacionesDataSource implements JRDataSource {
 	private void loadDatos() {
 		for (ImportacionPedidoCompra imp : this.importaciones) {
 			if (imp.getResumenGastosDespacho().getFechaDespacho() != null) {
-				String fecha = misc.dateToString(imp.getResumenGastosDespacho().getFechaDespacho(), Misc.DD_MM_YYYY);
+				String fecha = Utiles.getDateToString(imp.getResumenGastosDespacho().getFechaDespacho(), Misc.DD_MM_YYYY);
 				String numero = imp.getNumeroPedidoCompra();
 				String numeroFactura = imp.getNumeroFactura();
 				String proveedor = imp.getProveedor().getRazonSocial();
