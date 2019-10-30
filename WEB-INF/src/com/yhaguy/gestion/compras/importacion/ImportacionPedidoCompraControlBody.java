@@ -2162,6 +2162,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		for (Articulo art : rr.getItemsGastoDescuento()) {
 			MyArray a = new MyArray(art.getCodigoInterno(), art.getCodigoProveedor(), art.getCodigoOriginal(), art.getDescripcion(), art.isServicio());
+			a.setId(art.getId());
 			out.add(a);
 		}		
 		return out;
