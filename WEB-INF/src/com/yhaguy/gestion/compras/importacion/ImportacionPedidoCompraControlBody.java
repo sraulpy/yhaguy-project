@@ -58,6 +58,7 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CondicionPago;
@@ -2680,7 +2681,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	 * [6]:valorCIFgs [7]:valorCIFds
 	 */
 	private Double[] getValoresFromFacturas() {
-
+		
 		double valorFleteGs = 0;
 		double valorFleteDs = 0;
 		double valorSeguroGs = 0;
@@ -2689,18 +2690,32 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		double valorFOBds = 0;
 		double valorCIFgs = 0;
 		double valorCIFds = 0;
-
+		
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
-
+			
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
-				valorFOBgs += item.getImporteGsCalculado();
-				valorFOBds += item.getImporteDsCalculado();
-				valorCIFgs += item.getImporteGsCalculado();
-				valorCIFds += item.getImporteDsCalculado();
+				if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CIF)) {
+					if (!item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {					
+						valorFOBgs += item.getImporteGsCalculado();
+						valorFOBds += item.getImporteDsCalculado();
+					}
+					if (item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {
+						valorFleteGs += item.getImporteGsCalculado();
+						valorFleteDs += item.getImporteDsCalculado();
+					}
+					valorCIFgs += item.getImporteGsCalculado();
+					valorCIFds += item.getImporteDsCalculado();
+					
+				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)) {
+					valorFOBgs += item.getImporteGsCalculado();
+					valorFOBds += item.getImporteDsCalculado();
+					valorCIFgs += item.getImporteGsCalculado();
+					valorCIFds += item.getImporteDsCalculado();
+				}
 			}
 		}
-		Double[] out = { valorFleteGs, valorFleteDs, valorSeguroGs, valorSeguroDs, valorFOBgs, valorFOBds, valorCIFgs,
-				valorCIFds };
+		Double[] out = {valorFleteGs, valorFleteDs, valorSeguroGs, valorSeguroDs,
+						valorFOBgs, valorFOBds, valorCIFgs, valorCIFds};
 		return out;
 	}
 	

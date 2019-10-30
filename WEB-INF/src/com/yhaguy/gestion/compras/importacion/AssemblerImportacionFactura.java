@@ -75,12 +75,13 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
-
+		ImportacionFacturaDetalle domain_ = (ImportacionFacturaDetalle) domain;
 		ImportacionFacturaDetalleDTO dto = (ImportacionFacturaDetalleDTO) getDTO(domain, ImportacionFacturaDetalleDTO.class);
 
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionFacturaDetalle);
 		this.domainToMyPair(domain, dto, "tipoGastoDescuento");
 		this.domainToMyArray(domain, dto, "articulo", ATT_ARTICULO);
+		dto.getArticulo().setPos6(domain_.getArticulo().getFamilia().getDescripcion());
 
 		return dto;
 	}
