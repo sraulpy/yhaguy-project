@@ -147,6 +147,12 @@ public class VentaSimpleControl extends SoloViewModel {
 		dato.getNvoFormaPago().setMontoGs(montoDs * dato.getDto().getTipoCambio());
 	}
 	
+	@Command
+	@NotifyChange("dato.nvoItem")
+	public void guaranizarPrecio() throws Exception {
+		this.dato.getNvoItem().setPrecioGs(this.dato.getNvoItem().getPrecioVentaFinalDs() * this.dato.getDto().getTipoCambio());
+	}
+	
 	/**
 	 * Segun se seleccione el tipo de pago despliega los campos en la ventana 
 	 * de forma de pago..

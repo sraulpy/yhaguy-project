@@ -18,6 +18,7 @@ public class Configuracion extends Config {
 	public static final String EMPRESA_GTSA = "Grupo Toyo S.A.";
 	public static final String EMPRESA_YRSA = "Yhaguy Repuestos S.A.";
 	public static final String EMPRESA_YMRA = "Yhaguy Repuestos S.A. MRA";
+	public static final String EMPRESA_YRPS = "Yhaguy Representaciones S.A.";
 	public static final String USER_MOBILE = "sergio";
 	
 	public static final String URL_IMAGES_PUBLIC_MRA = "http://mra.yhaguyrepuestos.com.py/images/";
