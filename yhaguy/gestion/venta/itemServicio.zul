@@ -27,7 +27,7 @@
 			<row visible="@load(vm.dato.nvoItem.cantidad gt 0? 'true':'false')">
 				<field value="Precio:" />	
 				<hlayout>
-				<hlayout visible="@load(vm.dto.monedaLocal)">
+				<hlayout visible="@load(vm.dato.dto.monedaLocal)">
 					<guaranibox 
 						value="@bind(vm.dato.nvoItem.precioGs)" hflex="true" />
 					<label value="@load(vm.dato.dto.moneda.pos2)" sclass="label-moneda" />
