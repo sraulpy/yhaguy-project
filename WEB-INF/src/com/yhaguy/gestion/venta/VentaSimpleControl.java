@@ -148,7 +148,7 @@ public class VentaSimpleControl extends SoloViewModel {
 	}
 	
 	@Command
-	@NotifyChange("dato.nvoItem")
+	@NotifyChange("*")
 	public void guaranizarPrecio() throws Exception {
 		this.dato.getNvoItem().setPrecioGs(this.dato.getNvoItem().getPrecioVentaFinalDs() * this.dato.getDto().getTipoCambio());
 	}

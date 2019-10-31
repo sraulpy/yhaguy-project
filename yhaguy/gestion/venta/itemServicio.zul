@@ -54,8 +54,17 @@
 			<row visible="@load(vm.dato.nvoItem.cantidad gt 0? 'true':'false')">
 				<field value="Importe:" />
 				<hlayout>
-					<guaranibox readonly="true" value="@load(vm.dato.nvoItem.importeGs)"/>
-					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" />
+				<hlayout visible="@load(vm.dato.dto.monedaLocal)">
+					<guaranibox 
+						value="@bind(vm.dato.nvoItem.importeGs)" hflex="true" readonly="true" />
+					<label value="@load(vm.dato.dto.moneda.pos2)" sclass="label-moneda" />
+				</hlayout>
+				<hlayout visible="@load(!vm.dato.dto.monedaLocal)">
+					<dolarbox
+						value="@bind(vm.dato.nvoItem.importeGs)" readonly="true" hflex="true" />
+					<label value="@load(vm.dato.dto.moneda.pos2)"
+						sclass="label-moneda" />
+				</hlayout>
 				</hlayout>
 			</row>
 			<row>
