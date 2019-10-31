@@ -11,9 +11,14 @@ import org.zkoss.zul.Iframe;
 
 import com.coreweb.Config;
 import com.coreweb.control.SimpleViewModel;
+import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
 public class ReportesForward extends SimpleViewModel {
+	
+	static final String URL_REPORTE_REPUESTOS = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+	static final String URL_REPORTE_GTSA = "https://reporte.gtsa.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+	static final String URL_REPORTE_REPRESENTACIONES = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 	
 	@Wire
 	private Iframe if_rep;
@@ -32,14 +37,25 @@ public class ReportesForward extends SimpleViewModel {
 	 * redirecciona a reportes..
 	 */
 	private void forward() {
-		String ip = this.getMyIP();
-		String url = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
-		if (ip.startsWith("192.168.") || ip.startsWith("10.25.")) {
-			url = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
-		}
+		String url = this.getUrl();
 		String usuario = this.getLoginNombre();
 		String clave = (String) this.getAtributoSession(Config.CLAVE);
 		String clave_ = Utiles.encriptar(clave, true);
 		if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave_);
+	}
+	
+	/**
+	 * @return url de reportes..
+	 */
+	private String getUrl() {
+		switch (Configuracion.empresa) {
+		case Configuracion.EMPRESA_GTSA:
+			return URL_REPORTE_GTSA;
+		case Configuracion.EMPRESA_YRSA:
+			return URL_REPORTE_REPUESTOS;
+		case Configuracion.EMPRESA_YRPS:
+			return URL_REPORTE_REPRESENTACIONES;
+		}
+		return "";
 	}
 }
