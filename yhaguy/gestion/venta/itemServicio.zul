@@ -61,7 +61,7 @@
 				</hlayout>
 				<hlayout visible="@load(!vm.dato.dto.monedaLocal)">
 					<dolarbox
-						value="@bind(vm.dato.nvoItem.importeGs)" readonly="true" hflex="true" />
+						value="@bind(vm.dato.nvoItem.importeDs)" readonly="true" hflex="true" />
 					<label value="@load(vm.dato.dto.moneda.pos2)"
 						sclass="label-moneda" />
 				</hlayout>
