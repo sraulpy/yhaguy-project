@@ -87,6 +87,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 	static final String ZUL_IMPRESION_FACTURA_BAT = "/yhaguy/gestion/caja/periodo/impresion_factura.zul";
 	static final String ZUL_IMPRESION_FACTURA = "/yhaguy/gestion/caja/periodo/impresion_factura.zul";
 	static final String ZUL_IMPRESION_FACTURA_DS = "/yhaguy/gestion/caja/periodo/impresion_factura_ds.zul";
+	static final String ZUL_IMPRESION_FACTURA_RPS = "/yhaguy/gestion/caja/periodo/impresion_factura_rps.zul";
+	static final String ZUL_IMPRESION_FACTURA_RPS_DS = "/yhaguy/gestion/caja/periodo/impresion_factura_rps_ds.zul";
 	static final String ZUL_IMPRESION_NOTACREDITO = "/yhaguy/gestion/caja/periodo/impresion_notacredito.zul";
 	static final String ZUL_IMPRESION_NOTACREDITO_DS = "/yhaguy/gestion/caja/periodo/impresion_notacredito_ds.zul";
 	static final String ZUL_IMPRESION_RECIBO = "/yhaguy/gestion/caja/periodo/impresion_recibo.zul";
@@ -1727,6 +1729,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 		
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_FACTURA_BAT, this.mainComponent, params);
+			this.win.doModal();
+		} else if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			String src = venta.isMonedaLocal() ? ZUL_IMPRESION_FACTURA_RPS : ZUL_IMPRESION_FACTURA_RPS_DS;
+			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
 			this.win.doModal();
 		} else {
 			String src = venta.isMonedaLocal() ? ZUL_IMPRESION_FACTURA : ZUL_IMPRESION_FACTURA_DS;
