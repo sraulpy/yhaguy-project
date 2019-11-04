@@ -1780,6 +1780,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_FACTURA_BAT, this.mainComponent, params);
 			this.win.doModal();
 			//this.imprimirComprobante(source, params, dataSource);
+		} else if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			String src = venta.isMonedaLocal() ? ZUL_IMPRESION_FACTURA_RPS : ZUL_IMPRESION_FACTURA_RPS_DS;
+			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
+			this.win.doModal();
 		} else {
 			String src = venta.isMonedaLocal() ? ZUL_IMPRESION_FACTURA : ZUL_IMPRESION_FACTURA_DS;
 			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
