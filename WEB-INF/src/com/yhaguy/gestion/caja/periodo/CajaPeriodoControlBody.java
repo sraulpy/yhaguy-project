@@ -2399,7 +2399,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		String nro = AutoNumeroControl.getAutoNumero(
 				(String) talonario.getPos1(), 7);
 		String pref = "00"; if(boca > 9) pref = "0";
-		return pref + boca + "-00" + punto + "-" + nro;
+		String prefPunto = "00"; if(punto > 9) prefPunto = "0";
+		return pref + boca + "-" + prefPunto + punto + "-" + nro;
 	}
 	
 	/**
@@ -2412,7 +2413,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		String nro = AutoNumeroControl.getAutoNumero(
 				(String) talonario.getPos1(), 7, true);
 		String pref = "00"; if(boca > 9) pref = "0";
-		return pref + boca + "-00" + punto + "-" + nro;
+		String prefPunto = "00"; if(punto > 9) prefPunto = "0";
+		return pref + boca + "-" + prefPunto + punto + "-" + nro;
 	}
 	
 
