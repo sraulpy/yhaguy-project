@@ -14,7 +14,7 @@
 		</attribute>
 	</timer>
 	
-	<div height="42px"></div>
+	<div height="40px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -132,7 +132,7 @@
 	
 	<!-- PAGINA 2 -->
 	
-	<div height="120px"></div>
+	<div height="155px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -193,7 +193,7 @@
 	
 	<div height="25px"></div>
 	
-	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="105px">
+	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="90px">
 		<template name="children">
 			<hbox spacing="0px">
 				<div width="110px"></div>
@@ -250,7 +250,7 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="120px"></div>
+	<div height="140px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
