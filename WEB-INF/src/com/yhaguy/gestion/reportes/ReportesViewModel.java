@@ -11493,7 +11493,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					long id6 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRODUCCION : Deposito.ID_MCAL_TEMPORAL;
 					long id7 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_RECLAMOS : Deposito.ID_MAYORISTA;
 					long id8 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SECAS : Deposito.ID_MAYORISTA_TEMPORAL;
-					long id9 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO : Deposito.ID_MRA_TEMPORAL;
+					long id9 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO : Deposito.ID_MAYORISTA_CENTRAL;
 					long id10 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SC1 : Deposito.ID_MRA;
 					Deposito d1 = (Deposito) rr.getObject(Deposito.class.getName(), id1);
 					Deposito d2 = (Deposito) rr.getObject(Deposito.class.getName(), id2);
