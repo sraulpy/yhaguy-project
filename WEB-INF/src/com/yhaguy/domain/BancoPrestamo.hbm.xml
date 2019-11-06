@@ -21,6 +21,15 @@
 		<property name="tipoVencimiento"/>
 		<property name="tipoCuotas"/>
 		<property name="acreditacionImpuesto"/>
+		<property name="cancelacionAnticipada"/>
+		
+		<set name="cancelaciones" table="ctacteempresamovimiento"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="idprestamo" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.CtaCteEmpresaMovimiento"/>
+		</set>
 			
 		<many-to-one name="banco" class="com.yhaguy.domain.BancoCta" 
 			column="id_banco" lazy="false"/>

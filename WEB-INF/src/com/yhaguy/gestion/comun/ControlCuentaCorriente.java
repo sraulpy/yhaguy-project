@@ -547,7 +547,11 @@ public class ControlCuentaCorriente {
 			ctm.setSucursal(rr.getSucursalAppById(2));
 			ctm.setSaldo((double) cuota[2]);
 			rr.saveObject(ctm, user);
-		}		
+		}	
+		for (CtaCteEmpresaMovimiento ctm : prestamo.getCancelaciones()) {
+			ctm.setSaldo(0);
+			rr.saveObject(ctm, user);
+		}
 	}
 	
 	/**

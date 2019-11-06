@@ -4,25 +4,16 @@
 		id="bnd_ctacte">
 		<bandpopup>
 			<listbox sclass="small-list" width="400px" height="200px"
-				model="@load(vm.empresas_)"
 				onSelect="bnd_ctacte.close()">
 				<listhead>
 					<listheader width="100px">
-						<textbox hflex="true"
-							value="@bind(vm.filter_ruc)" instant="true" placeholder="Ruc.." />
+						<textbox hflex="true" placeholder="Ruc.." />
 					</listheader>
 					<listheader>
 						<textbox hflex="true"
-							value="@bind(vm.filter_razonSocial)" instant="true"
 							placeholder="Razón Social.." />
 					</listheader>
 				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.ruc)"></listcell>
-						<listcell label="@load(each.razonSocial)"></listcell>
-					</listitem>
-				</template>
 			</listbox>
 		</bandpopup>
 	</bandbox>

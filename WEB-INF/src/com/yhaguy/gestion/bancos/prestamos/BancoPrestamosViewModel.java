@@ -2,8 +2,11 @@ package com.yhaguy.gestion.bancos.prestamos;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -18,6 +21,7 @@ import com.coreweb.domain.Tipo;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.BancoPrestamo;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
@@ -38,6 +42,7 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 	private String filterFechaAA = "";
 	
 	private List<Object[]> cuotas = new ArrayList<Object[]>();
+	private List<CtaCteEmpresaMovimiento> selectedMovimientos;
 
 	@Init(superclass = true)
 	public void init() {
@@ -59,6 +64,11 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 			Clients.showNotification("NO SE PUDO GUARDAR, VERIFIQUE LOS DATOS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
+		if (this.selectedMovimientos != null && !this.selectedMovimientos.isEmpty()) {
+			Set<CtaCteEmpresaMovimiento> can = new HashSet<CtaCteEmpresaMovimiento>();
+			can.addAll(this.selectedMovimientos);
+			this.nvo_prestamo.setCancelaciones(can);
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		rr.saveObject(this.nvo_prestamo, this.getLoginNombre());
 		ControlCuentaCorriente.addPrestamoBancario(this.nvo_prestamo, this.cuotas, this.getLoginNombre());
@@ -71,6 +81,43 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 	@NotifyChange("filter_razonSocial")
 	public void addFilter() {
 		this.filter_razonSocial = "BANCO " + this.nvo_prestamo.getBanco().getBanco().getDescripcion().toUpperCase();
+	}
+	
+	@Command
+	@NotifyChange("cuotas")
+	public void calcularCuotas() throws Exception {
+		this.cuotas = new ArrayList<Object[]>();
+		
+		int cuotas = this.nvo_prestamo.getCuotas();
+		String dd = Utiles.getDateToString(this.nvo_prestamo.getFecha(), "dd");
+		String mm = Utiles.getDateToString(this.nvo_prestamo.getFecha(), "MM");
+		String aa = Utiles.getDateToString(this.nvo_prestamo.getFecha(), "yyyy");
+		int acum = Integer.parseInt(mm);
+		
+		for (int i = 1; i <= cuotas; i++) {
+			acum += this.nvo_prestamo.getMesesTipoVencimiento();
+			if(acum >= 12) {
+				acum = acum - 12;
+				aa = ((Integer.parseInt(aa) + 1) + "");
+			}
+			int mes_ = acum + 0;
+			Object[] cuota = new Object[] {
+					i,
+					Utiles.getFecha(dd + "-" + (mes_ > 9 ? ("" + mes_) : ("0" + mes_)) + "-" + aa + " 00:00:00"),
+					this.nvo_prestamo.getDeudaTotal() / cuotas,
+					this.nvo_prestamo.getInteres() / cuotas };
+			this.cuotas.add(cuota);
+		}		
+	}
+	
+	@Command
+	public void refreshCancelacion() {
+		double can = 0;
+		for (CtaCteEmpresaMovimiento mov : this.selectedMovimientos) {
+			can += mov.getSaldo();
+		}
+		this.nvo_prestamo.setCancelacionAnticipada(can);
+		BindUtils.postNotifyChange(null, null, this.nvo_prestamo, "cancelacionAnticipada");
 	}
 	
 	/**
@@ -111,8 +158,7 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 
 	/**
 	 * GETS / SETS
-	 */
-	
+	 */	
 	@DependsOn({ "filter_banco", "filter_numero", "filterFechaDD", "filterFechaMM", "filterFechaAA" })
 	public List<BancoPrestamo> getPrestamos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -126,31 +172,14 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 		return rr.getEmpresas(this.filter_ruc, "", this.filter_razonSocial, "");
 	}
 	
-	@Command
-	@NotifyChange("cuotas")
-	public void calcularCuotas() throws Exception {
-		this.cuotas = new ArrayList<Object[]>();
-		
-		int cuotas = this.nvo_prestamo.getCuotas();
-		String dd = Utiles.getDateToString(this.nvo_prestamo.getFecha(), "dd");
-		String mm = Utiles.getDateToString(this.nvo_prestamo.getFecha(), "MM");
-		String aa = Utiles.getDateToString(this.nvo_prestamo.getFecha(), "yyyy");
-		int acum = Integer.parseInt(mm);
-		
-		for (int i = 1; i <= cuotas; i++) {
-			acum += this.nvo_prestamo.getMesesTipoVencimiento();
-			if(acum >= 12) {
-				acum = acum - 12;
-				aa = ((Integer.parseInt(aa) + 1) + "");
-			}
-			int mes_ = acum + 0;
-			Object[] cuota = new Object[] {
-					i,
-					Utiles.getFecha(dd + "-" + (mes_ > 9 ? ("" + mes_) : ("0" + mes_)) + "-" + aa + " 00:00:00"),
-					this.nvo_prestamo.getDeudaTotal() / cuotas,
-					this.nvo_prestamo.getInteres() / cuotas };
-			this.cuotas.add(cuota);
-		}		
+	@DependsOn({ "nvo_prestamo", "nvo_prestamo.ctacte" })
+	public List<CtaCteEmpresaMovimiento> getSaldos() throws Exception {
+		if (this.nvo_prestamo == null || this.nvo_prestamo.getCtacte() == null)
+			return new ArrayList<CtaCteEmpresaMovimiento>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getMovimientosConSaldo(Utiles.getFechaInicioOperaciones(), new Date(),
+				Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR, 0, this.nvo_prestamo.getCtacte().getId(),
+				this.nvo_prestamo.getMoneda().getId());
 	}
 	
 	/**
@@ -274,5 +303,13 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 
 	public void setCuotas(List<Object[]> cuotas) {
 		this.cuotas = cuotas;
+	}
+
+	public List<CtaCteEmpresaMovimiento> getSelectedMovimientos() {
+		return selectedMovimientos;
+	}
+
+	public void setSelectedMovimientos(List<CtaCteEmpresaMovimiento> selectedMovimientos) {
+		this.selectedMovimientos = selectedMovimientos;
 	}
 }

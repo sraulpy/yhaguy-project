@@ -207,6 +207,9 @@ public class Utiles {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA)) {
 			return Utiles.getFecha("01-01-2016 00:00:00");
 		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return Utiles.getFecha("01-11-2019 00:00:00");
+		}
 		return Utiles.getFecha("05-10-2018 00:00:00");
 	}
 	

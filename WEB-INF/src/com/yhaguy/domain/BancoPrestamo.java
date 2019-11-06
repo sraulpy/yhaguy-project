@@ -2,7 +2,9 @@ package com.yhaguy.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.zkoss.bind.annotation.DependsOn;
 
@@ -28,6 +30,7 @@ public class BancoPrestamo extends Domain {
 	private double impuestos;
 	private double gastosAdministrativos;
 	private double seguro;
+	private double cancelacionAnticipada;
 	private String tipoVencimiento;
 	private String tipoCuotas;
 	private boolean acreditacionImpuesto;
@@ -35,6 +38,8 @@ public class BancoPrestamo extends Domain {
 	private BancoCta banco;
 	private Empresa ctacte;
 	private Tipo moneda;
+	
+	private Set<CtaCteEmpresaMovimiento> cancelaciones = new HashSet<CtaCteEmpresaMovimiento>();
 	
 	@Override
 	public int compareTo(Object arg0) {
@@ -46,12 +51,12 @@ public class BancoPrestamo extends Domain {
 		return this.capital + this.interes;
 	}
 	
-	@DependsOn({ "capital", "impuestos", "gastosAdministrativos", "acreditacionImpuesto" })
+	@DependsOn({ "capital", "impuestos", "gastosAdministrativos", "acreditacionImpuesto", "cancelacionAnticipada" })
 	public double getAcreditacionTotal() {
 		if(this.isAcreditacionImpuesto()) {
-			return this.capital - this.impuestos - this.gastosAdministrativos;
+			return this.capital - this.impuestos - this.gastosAdministrativos - this.cancelacionAnticipada;
 		} else {
-			return this.capital - this.gastosAdministrativos;
+			return this.capital - this.gastosAdministrativos - this.cancelacionAnticipada;
 		}
 	}
 	/**
@@ -198,5 +203,21 @@ public class BancoPrestamo extends Domain {
 
 	public void setAcreditacionImpuesto(boolean acreditacionImpuesto) {
 		this.acreditacionImpuesto = acreditacionImpuesto;
+	}
+
+	public double getCancelacionAnticipada() {
+		return cancelacionAnticipada;
+	}
+
+	public void setCancelacionAnticipada(double cancelacionAnticipada) {
+		this.cancelacionAnticipada = cancelacionAnticipada;
+	}
+
+	public Set<CtaCteEmpresaMovimiento> getCancelaciones() {
+		return cancelaciones;
+	}
+
+	public void setCancelaciones(Set<CtaCteEmpresaMovimiento> cancelaciones) {
+		this.cancelaciones = cancelaciones;
 	}
 }

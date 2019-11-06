@@ -202,9 +202,39 @@
 						readonly="true" value="@load(vm.nvo_prestamo.deudaTotal)"/>
 				</row>
 				<row>
-					<field value="Importe a acreditar:" />
+					<field value="Cancelación anticipada:" />
+					<hlayout hflex="true">
+					<bandbox hflex="true" placeholder="Cuotas.."
+						readonly="true">
+						<bandpopup>
+							<listbox height="300px" width="350px"
+								model="@load(vm.saldos)" sclass="small-list"
+								checkmark="true" multiple="true"
+								selectedItems="@bind(vm.selectedMovimientos)"
+								onSelect="@command('refreshCancelacion')">
+								<listhead>
+									<listheader width="40px" align="center"></listheader>
+									<listheader label="Comprobante"></listheader>
+									<listheader label="Saldo" align="right"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell></listcell>
+										<listcell label="@load(each.nroComprobante)"></listcell>
+										<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
+									</listitem>
+								</template>	
+							</listbox>
+						</bandpopup>
+					</bandbox>
 					<guaranibox hflex="true"  
 						style="background:#EEF7FA;text-align:right;font-weight:bold"
+						readonly="true" value="@load(vm.nvo_prestamo.cancelacionAnticipada)"/>
+					</hlayout>
+				</row>
+				<row>
+					<field value="Importe a acreditar:" />
+					<guaranibox hflex="true"  
 						readonly="true" value="@load(vm.nvo_prestamo.acreditacionTotal)"/>
 				</row>
 			</rows>

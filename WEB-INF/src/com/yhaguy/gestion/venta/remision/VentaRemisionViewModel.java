@@ -17,6 +17,7 @@ import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.RemisionDetalle;
@@ -28,6 +29,7 @@ import com.yhaguy.util.Utiles;
 public class VentaRemisionViewModel extends SimpleViewModel {
 	
 	static final String ZUL_IMPRESION_REMISION = "/yhaguy/gestion/venta/remision/impresion_remision.zul";
+	static final String ZUL_IMPRESION_REMISION_RPS = "/yhaguy/gestion/venta/remision/impresion_remision_rps.zul";
 	
 	private Remision nvaRemision;
 	private Remision selectedRemision;
@@ -115,7 +117,8 @@ public class VentaRemisionViewModel extends SimpleViewModel {
 	
 	@Command
 	public void imprimir() {
-		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_REMISION, this.mainComponent, null);
+		String src = Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS) ? ZUL_IMPRESION_REMISION_RPS : ZUL_IMPRESION_REMISION;
+		this.win = (Window) Executions.createComponents(src, this.mainComponent, null);
 		this.win.doModal();
 	}
 	
