@@ -16,15 +16,19 @@
 			instant="true" onSelect="@command('selectPeriodo')"
 			value="@load(vm.selectedTipo)"></combobox>
 		<space></space>
-		<button mold="bs" sclass="btn-sm btn-info" width="150px" label="Generar Planilla"
+		<button mold="bs" sclass="btn-sm btn-info" hflex="true" label="Generar Planilla"
 			iconSclass="z-icon-check"
 			onClick='pop_procesar.open(self, "end_before")'
 			disabled="@load(vm.selectedMes eq ''? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))"></button>
 		<space></space>
-		<button mold="bs" sclass="btn-sm btn-primary" width="150px" label="Imprimir Liquidación"
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Liquidación"
 			iconSclass="z-icon-print"
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimir')"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Planilla"
+			iconSclass="z-icon-print"
+			onClick="@command('imprimirPlanilla')"></button>
 	</hlayout>
 	<listbox sclass="small-list" vflex="true"
 		model="@load(vm.planillas)"

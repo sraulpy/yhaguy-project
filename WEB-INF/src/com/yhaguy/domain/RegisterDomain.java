@@ -11018,21 +11018,25 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return los detalles de la compra..
+	 */
+	public List<CompraLocalFacturaDetalle> getCompraDetalles(String codigo) throws Exception {
+		String query = "select d from CompraLocalFacturaDetalle d where d.articulo.codigoInterno = '" + codigo + "'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
-		try {	
-			Date desde = Utiles.getFecha("05-10-2018 00:00:00");
-			Date hasta = new Date();
+		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Recibo> anticipos = rr.getAnticipos(desde, hasta, 0, 0);
-			for (Recibo anticipo : anticipos) {
-				for (AjusteCtaCte apl : anticipo.getAplicacionesAnticipo()) {
-					apl.setAuxi(AjusteCtaCte.ANTICIPOS);
-					apl.setOrden(anticipo.getNumero());
-					apl.setIp_pc(anticipo.getCliente().getRuc());
-					apl.setDescripcion(anticipo.getCliente().getRazonSocial());
-					rr.saveObject(apl, apl.getUsuarioMod());
-					System.out.println(anticipo.getCliente().getRuc());
-				}
+			List<CompraLocalOrden> comps = rr.getObjects(CompraLocalOrden.class.getName());
+			for (CompraLocalOrden comp : comps) {
+				comp.setNumeroFactura(comp.getObservacion());
+				comp.getFactura().setNumero(comp.getObservacion());
+				comp.getFactura().setFechaOriginal(Utiles.getFecha("02-11-2019 00:00:00"));
+				comp.getFactura().setFechaVencimiento(Utiles.agregarDias(comp.getFactura().getFechaOriginal(), 30));
+				rr.saveObject(comp.getFactura(), comp.getUsuarioMod());
+				System.out.println(comp.getNumeroFactura());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

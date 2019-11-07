@@ -112,7 +112,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	private void imprimirPlanilla_() throws Exception {		
 		String source = ReportesViewModel.SOURCE_PLANILLA_SALARIOS;
 		Map<String, Object> params = new HashMap<String, Object>();
-		JRDataSource dataSource = new PlanillaSalariosDataSource(this.planillas);
+		JRDataSource dataSource = new PlanillaSalariosDataSource(this.planillas, this.getTotales());
 		params.put("Periodo", this.getSelectedMes() + " " +  this.getSelectedAnho() + " - " + this.selectedTipo);
 		params.put("Usuario", getUs().getNombre());
 		params.put("Titulo", "Planilla de Salarios");
@@ -272,9 +272,11 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 
 		List<RRHHPlanillaSalarios> salarios;
 		double totalImporteGs = 0;
+		Object[] totales;
 
-		public PlanillaSalariosDataSource(List<RRHHPlanillaSalarios> salarios) {
+		public PlanillaSalariosDataSource(List<RRHHPlanillaSalarios> salarios, Object[] totales) {
 			this.salarios = salarios;
+			this.totales = totales;
 		}
 
 		private int index = -1;
@@ -286,7 +288,71 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			RRHHPlanillaSalarios item = this.salarios.get(index);
 			if ("Funcionario".equals(fieldName)) {
 				value = item.getFuncionario();
-			} 
+			} else if ("Acobrar".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getTotalACobrar());
+			} else if ("Descuentos".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getTotalADescontar());
+			} else if ("Salarios".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getSalarios());
+			} else if ("Comision".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getComision());
+			} else if ("Anticipo".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getAnticipo());
+			} else if ("Bonificacion".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getBonificacion());
+			} else if ("Otroshaberes".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getOtrosHaberes());
+			} else if ("Prestamos".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getPrestamos());
+			} else if ("Adelantos".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getAdelantos());
+			} else if ("Otrosdtos".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getOtrosDescuentos());
+			} else if ("Corporativo".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getCorporativo());
+			} else if ("Uniforme".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getUniforme());
+			} else if ("Repuestos".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getRepuestos());
+			} else if ("Seguro".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getSeguro());
+			} else if ("Embargo".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getEmbargo());
+			} else if ("Ips".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getIps());
+			} else if ("Acobrar_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[12]);
+			} else if ("Descuentos_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[13]);
+			} else if ("Salarios_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[0]);
+			} else if ("Comision_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[1]);
+			} else if ("Anticipo_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[2]);
+			} else if ("Bonificacion_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[3]);
+			} else if ("Otroshaberes_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[4]);
+			} else if ("Prestamos_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[14]);
+			} else if ("Adelantos_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[15]);
+			} else if ("Otrosdtos_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[5]);
+			} else if ("Corporativo_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[6]);
+			} else if ("Uniforme_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[7]);
+			} else if ("Repuestos_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[8]);
+			} else if ("Seguro_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[9]);
+			} else if ("Embargo_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[10]);
+			} else if ("Ips_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[11]);
+			}
 			return value;
 		}
 
