@@ -29,6 +29,7 @@ public class BancoDescuentoChequeDTO extends DTO {
 	private double liq_intereses = 0;
 	private double liq_neto_aldia = 0;
 	private double liq_neto_diferidos = 0;
+	private double cancelacionAnticipada = 0;
 	private boolean liq_registrado = false;
 	
 	private boolean confirmado = false;
@@ -268,5 +269,13 @@ public class BancoDescuentoChequeDTO extends DTO {
 
 	public List<MyArray> getCheques_() {
 		return cheques_;
+	}
+
+	public double getCancelacionAnticipada() {
+		return cancelacionAnticipada;
+	}
+
+	public void setCancelacionAnticipada(double cancelacionAnticipada) {
+		this.cancelacionAnticipada = cancelacionAnticipada;
 	}
 }

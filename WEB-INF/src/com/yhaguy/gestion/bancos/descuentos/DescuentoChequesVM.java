@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zul.Window;
 
 import com.coreweb.Config;
 import com.coreweb.componente.BuscarElemento;
@@ -29,6 +28,7 @@ import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.BancoDescuentoCheque;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.cheques.AssemblerBancoCheque;
@@ -36,6 +36,7 @@ import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
+import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 public class DescuentoChequesVM extends BodyApp {
@@ -60,8 +61,7 @@ public class DescuentoChequesVM extends BodyApp {
 	private BancoDescuentoChequeDTO chequeDescuento = new BancoDescuentoChequeDTO();
 	private List<MyArray> selectedCheques = new ArrayList<MyArray>();
 	private ReciboFormaPagoDTO nvoFormaPago = new ReciboFormaPagoDTO();
-	
-	private Window win;
+	private List<CtaCteEmpresaMovimiento> selectedMovimientos;
 	
 	@Init(superclass = true)
 	public void init(@ExecutionParam("tipo") String tipo) {
@@ -240,11 +240,13 @@ public class DescuentoChequesVM extends BodyApp {
 	}
 	
 	@Command
-	@NotifyChange("filter_razonSocial")
-	public void openCancelacionPrestamos() {
-		this.filter_razonSocial = ((MyPair) this.getChequeDescuento().getBanco().getPos1()).getText();
-		this.win = (Window) Executions.createComponents(ZUL_CANCELACION_PRESTAMOS, this.mainComponent, null);
-		this.win.doModal();
+	public void refreshCancelacion() {
+		double can = 0;
+		for (CtaCteEmpresaMovimiento mov : this.selectedMovimientos) {
+			can += mov.getSaldo();
+		}
+		this.chequeDescuento.setCancelacionAnticipada(can);
+		BindUtils.postNotifyChange(null, null, this.chequeDescuento, "cancelacionAnticipada");
 	}
 	
 	/**
@@ -439,6 +441,15 @@ public class DescuentoChequesVM extends BodyApp {
 		return out;
 	}
 	
+	/**
+	 * @return los saldos del banco..
+	 */
+	public List<CtaCteEmpresaMovimiento> getSaldos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getMovimientosConSaldo(Utiles.getFechaInicioOperaciones(), new Date(),
+				Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR, 0, 21380, 31);
+	}
+	
 	public String getMensajeError() {
 		return mensajeError;
 	}
@@ -509,5 +520,13 @@ public class DescuentoChequesVM extends BodyApp {
 
 	public void setFilter_razonSocial(String filter_razonSocial) {
 		this.filter_razonSocial = filter_razonSocial;
+	}
+
+	public List<CtaCteEmpresaMovimiento> getSelectedMovimientos() {
+		return selectedMovimientos;
+	}
+
+	public void setSelectedMovimientos(List<CtaCteEmpresaMovimiento> selectedMovimientos) {
+		this.selectedMovimientos = selectedMovimientos;
 	}
 }

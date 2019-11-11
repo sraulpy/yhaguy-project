@@ -269,9 +269,36 @@
 						value="@bind(vm.chequeDescuento.liq_neto_diferidos)"/>
 				</row>
 				<row>
-					<cell colspan="2">
-						<a iconSclass="z-icon-list" onClick="@command('openCancelacionPrestamos')"> Aplicación de saldos</a>
-					</cell>
+					<field value="Cancelación anticipada:" />
+					<hlayout hflex="true">
+					<bandbox hflex="true" placeholder="Cuotas.."
+						readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)"
+						disabled="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)">
+						<bandpopup>
+							<listbox height="300px" width="350px"
+								model="@load(vm.saldos)" sclass="small-list"
+								checkmark="true" multiple="true"
+								selectedItems="@bind(vm.selectedMovimientos)"
+								onSelect="@command('refreshCancelacion')">
+								<listhead>
+									<listheader width="40px" align="center"></listheader>
+									<listheader label="Comprobante"></listheader>
+									<listheader label="Saldo" align="right"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell></listcell>
+										<listcell label="@load(each.nroComprobante)"></listcell>
+										<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
+									</listitem>
+								</template>	
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<guaranibox hflex="true"  
+						style="background:#EEF7FA;text-align:right;font-weight:bold"
+						readonly="true" value="@load(vm.chequeDescuento.cancelacionAnticipada)"/>
+					</hlayout>
 				</row>
 				<row>
 					<cell colspan="2">
