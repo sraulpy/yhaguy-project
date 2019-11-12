@@ -20906,7 +20906,7 @@ class ReporteMatrizReposicion extends ReporteYhaguy {
 	static DatosColumnas col14 = new DatosColumnas("Dic", TIPO_LONG, 50, true);
 	static DatosColumnas col15 = new DatosColumnas("Stock", TIPO_LONG, 50);
 	static DatosColumnas col16 = new DatosColumnas("Max", TIPO_LONG, 50);
-	static DatosColumnas col17 = new DatosColumnas("Prom", TIPO_DOUBLE, 50);
+	static DatosColumnas col17 = new DatosColumnas("Prom", TIPO_LONG, 50);
 	
 	public ReporteMatrizReposicion(Date desde, Date hasta, String proveedor, String sucursal, String titulo) {
 		this.desde = desde;
