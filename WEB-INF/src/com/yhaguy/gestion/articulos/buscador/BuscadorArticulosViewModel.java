@@ -768,8 +768,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<MyArray> out = new ArrayList<MyArray>();
 		if (this.precios != null && this.precios.size() > 0) {
 			out.add(this.precios.get(0));
-			out.add(this.precios.get(1));
-			out.add(this.precios.get(2));
+			if (this.precios.size() > 1) {
+				out.add(this.precios.get(1));
+				if (this.precios.size() > 2) {
+					out.add(this.precios.get(2));
+				}
+			}
 		}		
 		return out;
 	}
