@@ -39,6 +39,7 @@ public class AssemblerReparto extends Assembler {
 
 		this.listaDTOToListaDomain(dto, domain, "detalles", true, true, new AssemblerRepartoDetalle());		
 		this.setEstadoMovimientos((RepartoDTO) dto);
+		this.setNumeroReparto((RepartoDTO) dto);
 		
 		return domain;
 	}
@@ -79,6 +80,20 @@ public class AssemblerReparto extends Assembler {
 		this.listaDomainToListaMyArray(domain, dto, "serviciosTecnicos", attServicioTecnico);
 		
 		return dto;
+	}
+	
+	/**
+	 * asigna el numero de reparto a la venta..
+	 */
+	private void setNumeroReparto(RepartoDTO reparto) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (RepartoDetalleDTO item : reparto.getDetallesVentas()) {
+			Venta vta = (Venta) rr.getObject(Venta.class.getName(), item.getIdMovimiento());
+			if (vta != null) {
+				vta.setNumeroReparto(reparto.getNumero());
+				rr.saveObject(vta, this.getLogin());
+			}			
+		}
 	}
 	
 	/**

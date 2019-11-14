@@ -322,6 +322,13 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	@Command
+	@NotifyChange("selectedItem")
+	public void informacionReparto(@BindingParam("parent") Component parent, @BindingParam("comp") Popup comp, @BindingParam("item") VentaDetalleDTO item) {
+		this.selectedItem = item;
+		comp.open(parent, "after_end");
+	}
+	
+	@Command
 	@NotifyChange("*")
 	public void modificarNumero(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();

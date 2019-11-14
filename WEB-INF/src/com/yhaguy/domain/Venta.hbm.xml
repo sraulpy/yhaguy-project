@@ -26,6 +26,7 @@
 			<column name="numeroReciboCobro" default="" />
 		</property>
 		<property name="numeroPlanillaCaja" />
+		<property name="numeroReparto" />
 		<property name="idEnlaceSiguiente" />
 		<property name="totalImporteGs"/>
 		<property name="totalImporteDs"/>

@@ -110,6 +110,7 @@ public class Venta extends Domain {
 	private String numeroNotaCredito;
 	private String numeroReciboCobro;
 	private String numeroPlanillaCaja;
+	private String numeroReparto;
 	
 	/** Modos de venta: ej. 'venta mostrador', 'venta externa', otros */
 	private Tipo modoVenta;
@@ -1034,5 +1035,13 @@ public class Venta extends Domain {
 
 	public void setCartera(String cartera) {
 		this.cartera = cartera;
+	}
+
+	public String getNumeroReparto() {
+		return numeroReparto;
+	}
+
+	public void setNumeroReparto(String numeroReparto) {
+		this.numeroReparto = numeroReparto;
 	}
 }

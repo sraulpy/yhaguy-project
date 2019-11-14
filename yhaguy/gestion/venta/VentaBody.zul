@@ -369,6 +369,7 @@
 					style="text-align:center" align="right" />
 				<listheader label="IVA" width="50px" align="center" />
 				<listheader label="" width="50px" align="center" />
+				<listheader label="" width="50px" align="center" />
 			</listhead>
 			<template name="model">
 				<listitem
@@ -436,10 +437,17 @@
 						</html>
 						</a>
 					</listcell>
+					<listcell>
+						<a onClick="@command('informacionReparto', parent=self, comp=pop_reparto, item=each)">
+						<html>
+							<i class="fas fa-truck"></i>
+						</html>
+						</a>
+					</listcell>
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter span="10" align="left">
+				<listfooter span="11" align="left">
 					<hlayout sclass="z-valign-bottom">
 						<label value="@load(vm.labelCantidad)"
 							sclass="label-moneda-footer" />
@@ -539,6 +547,25 @@
 					<row>
 						<field value="Modelo:" />
 						<label value="@load(vm.selectedItem.vehiculoModelo.descripcion)"></label>
+					</row>
+				</rows>
+			</grid>
+		</popup>
+		
+		<popup id="pop_reparto" width="250px" sclass="rounded">
+			<grid sclass="vgrid" hflex="true" vflex="true">
+				<rows>
+					<row>
+						<field value="Reparto:" />
+						<label value="@load(vm.dto.numeroReparto)"></label>
+					</row>
+					<row>
+						<field value="Repartidor:" />
+						<label value="@load(vm.dto.repartidor)"></label>
+					</row>
+					<row>
+						<field value="Entrega:" />
+						<label value="@load(vm.selectedItem.cantidadEntregada) @converter('formattedNumber', format='###,###,###')"></label>
 					</row>
 				</rows>
 			</grid>

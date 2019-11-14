@@ -68,6 +68,7 @@ public class VentaDTO extends DTO {
 	private String numeroPedido = "";
 	private String numeroFactura = "";
 	private String numeroPlanillaCaja = "";
+	private String numeroReparto = "";
 	
 	private List<String> numerosFacturas = new ArrayList<String>();
 	
@@ -962,5 +963,13 @@ public class VentaDTO extends DTO {
 
 	public void setCartera(String cartera) {
 		this.cartera = cartera;
+	}
+
+	public String getNumeroReparto() {
+		return numeroReparto;
+	}
+
+	public void setNumeroReparto(String numeroReparto) {
+		this.numeroReparto = numeroReparto;
 	}
 }

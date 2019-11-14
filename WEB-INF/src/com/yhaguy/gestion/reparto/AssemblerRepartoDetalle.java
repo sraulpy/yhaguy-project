@@ -36,8 +36,7 @@ public class AssemblerRepartoDetalle extends Assembler {
 
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
-		RepartoDetalleDTO dto = (RepartoDetalleDTO) getDTO(domain,
-				RepartoDetalleDTO.class);
+		RepartoDetalleDTO dto = (RepartoDetalleDTO) getDTO(domain, RepartoDetalleDTO.class);
 
 		this.copiarValoresAtributos(domain, dto, attIgualesRepartoDetalle);
 		this.domainToMyArray(domain, dto, "tipoMovimiento", new String[] {
