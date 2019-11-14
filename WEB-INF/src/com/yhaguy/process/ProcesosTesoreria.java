@@ -1346,6 +1346,19 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	/**
+	 * verifica los montos de boletas de deposito..
+	 */
+	public static void verificarBancoDepositos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<BancoBoletaDeposito> list = rr.getObjects(BancoBoletaDeposito.class.getName());
+		for (BancoBoletaDeposito dep : list) {
+			dep.setTotalImporte_gs(dep.getTotalImporteGs());
+			rr.saveObject(dep, dep.getUsuarioMod());
+			System.out.println(dep.getNumeroBoleta());
+		}		
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1388,7 +1401,8 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
-			ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
+			//ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
+			ProcesosTesoreria.verificarBancoDepositos();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
