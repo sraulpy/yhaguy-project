@@ -25899,7 +25899,7 @@ class RepartosDetalladoDataSource implements JRDataSource {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
 
-	List<Object[]> values;
+	List<Object[]> values = new ArrayList<Object[]>();
 	List<Reparto> repartos;
 	Date desde;
 	Date hasta;
