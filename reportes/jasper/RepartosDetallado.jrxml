@@ -208,13 +208,6 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="15" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="384" y="0" width="90" height="15" uuid="fa545099-57e1-4ab8-b007-2784e1b6f53d"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Ubuntu Condensed" pdfFontName="Courier"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{NroFactura}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" x="474" y="0" width="66" height="15" uuid="ed3e6664-c21b-47ba-be7a-8e275b39f384"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Ubuntu Condensed" pdfFontName="Courier"/>

@@ -25925,6 +25925,10 @@ class RepartosDetalladoDataSource implements JRDataSource {
 
 		if ("TituloDetalle".equals(fieldName)) {
 			value = det[0];
+		} if ("NroFactura".equals(fieldName)) {
+			value = det[1];
+		}  if ("Codigo".equals(fieldName)) {
+			value = det[2];
 		}
 		return value;
 	}
@@ -25949,7 +25953,7 @@ class RepartosDetalladoDataSource implements JRDataSource {
 					Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
 					if (vta != null) {
 						for (VentaDetalle item : vta.getDetalles()) {
-							String nroRep = reparto.getNumero();
+							String nroRep = reparto.getNumero() + " - " + reparto.getVehiculo().getDescripcion();
 							String nroVta = vta.getNumero();
 							String codigo = item.getArticulo().getCodigoInterno();
 							this.values.add(new Object[] { nroRep, nroVta, codigo });
