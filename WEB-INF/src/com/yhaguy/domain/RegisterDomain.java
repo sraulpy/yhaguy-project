@@ -11032,7 +11032,7 @@ public class RegisterDomain extends Register {
 	public List<Reparto> getRepartos(Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select r from Reparto r where r.fechaCreacion >= '" + desde_ + "' and a.fechaCreacion <= '" + hasta_ + "'";
+		String query = "select r from Reparto r where r.fechaCreacion >= '" + desde_ + "' and r.fechaCreacion <= '" + hasta_ + "'";
 		return this.hql(query);}
 	
 	public static void main(String[] args) {
