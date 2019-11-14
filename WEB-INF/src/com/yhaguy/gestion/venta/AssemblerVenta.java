@@ -178,14 +178,11 @@ public class AssemblerVenta extends Assembler {
  */
 class AssemblerVentaPedidoDetalle extends Assembler {
 
-	static final String[] ATT_IGUALES = { "descripcion",
-			"cantidad", "costoUnitarioGs",
-			"precioVentaUnitarioGs", "precioVentaUnitarioDs",
-			"impuestoUnitario", "precioVentaFinalGs", "precioVentaFinalDs",
-			"descuentoUnitarioGs", "descuentoUnitarioDs",
-			"precioVentaFinalUnitarioGs", "precioVentaFinalUnitarioDs",
-			"impuestoFinal", "reservado", "nombreRegla",
-			"precioGs", "ampere", "kilogramo", "cantidadDescuento", "marca" }; 
+	static final String[] ATT_IGUALES = { "descripcion", "cantidad", "costoUnitarioGs", "precioVentaUnitarioGs",
+			"precioVentaUnitarioDs", "impuestoUnitario", "precioVentaFinalGs", "precioVentaFinalDs",
+			"descuentoUnitarioGs", "descuentoUnitarioDs", "precioVentaFinalUnitarioGs", "precioVentaFinalUnitarioDs",
+			"impuestoFinal", "reservado", "nombreRegla", "precioGs", "ampere", "kilogramo", "cantidadDescuento",
+			"marca", "cantidadEntregada" }; 
 	
 	static final String[] ATT_ARTICULO = { "codigoInterno", "codigoProveedor",
 			"codigoOriginal", "descripcion", "servicio" };
