@@ -1,6 +1,7 @@
 package com.yhaguy.domain;
 
 import com.coreweb.domain.Domain;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class RepartoDetalle extends Domain {
@@ -11,6 +12,16 @@ public class RepartoDetalle extends Domain {
 	private double importeGs;
 	private boolean entregado;
 	private TipoMovimiento tipoMovimiento;
+	
+	/**
+	 * @return si es venta o no segun la sigla..
+	 */
+	public boolean isVenta() {
+		String sigla = this.tipoMovimiento.getSigla();
+		return sigla.equals(Configuracion.SIGLA_TM_PEDIDO_VENTA)
+				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
+				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+	}
 	
 	public Long getIdMovimiento() {
 		return idMovimiento;

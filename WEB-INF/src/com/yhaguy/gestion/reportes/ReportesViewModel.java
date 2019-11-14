@@ -100,6 +100,8 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Reparto;
+import com.yhaguy.domain.RepartoDetalle;
 import com.yhaguy.domain.Reporte;
 import com.yhaguy.domain.ReporteFavoritos;
 import com.yhaguy.domain.SucursalApp;
@@ -430,7 +432,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			break;
 
 		case ID_LOGISTICA:
-			new ReportesDeLogistica(this.getCodigoReporte());
+			new ReportesDeLogistica(this.getCodigoReporte(), false);
 			break;
 
 		case ID_CONTABILIDAD:
@@ -452,7 +454,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			} else if(cod.startsWith(Reporte.KEY_COMPRAS)) {
 				new ReportesDeCompras(cod);
 			} else if(cod.startsWith(Reporte.KEY_LOGISTICA)) {
-				new ReportesDeLogistica(cod);
+				new ReportesDeLogistica(cod, false);
 			} else if(cod.startsWith(Reporte.KEY_CONTABILIDAD)) {
 				new ReportesDeContabilidad(cod, false);
 			} else if(cod.startsWith(Reporte.KEY_SISTEMA)) {
@@ -12009,15 +12011,20 @@ public class ReportesViewModel extends SimpleViewModel {
 	class ReportesDeLogistica {
 
 		static final String LISTADO_REPARTOS = "LOG-00001";
+		static final String LISTADO_REPARTOS_DETALLADO = "LOG-00002";
 
 		/**
 		 * procesamiento del reporte..
 		 */
-		public ReportesDeLogistica(String codigoReporte) throws Exception {
+		public ReportesDeLogistica(String codigoReporte, boolean mobile) throws Exception {
 			switch (codigoReporte) {
 
 			case LISTADO_REPARTOS:
 				this.listadoRepartos();
+				break;
+				
+			case LISTADO_REPARTOS_DETALLADO:
+				this.listadoRepartosDetallado(mobile, LISTADO_REPARTOS_DETALLADO);
 				break;
 			}
 		}
@@ -12025,8 +12032,34 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * listado de repartos..
 		 */
-		public void listadoRepartos() {
+		private void listadoRepartos() {
 			Clients.showNotification(LISTADO_REPARTOS);
+		}
+		
+		/**
+		 * listado de repartos detallado..
+		 */
+		private void listadoRepartosDetallado(boolean mobile, String codReporte) throws Exception {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();			
+			Date hasta = filtro.getFechaHasta();	
+			Object[] formato = filtro.getFormato();	
+			
+			List<Reparto> repartos = rr.getRepartos(desde, hasta);		
+			
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_REPARTOS_DETALLADO;
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new RepartosDetalladoDataSource(repartos, desde, hasta);
+			params.put("Titulo", codReporte + " - REPARTOS DETALLADO");
+			params.put("Usuario", getUs().getNombre());
+			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, formato);
 		}
 
 	}
@@ -25855,6 +25888,75 @@ class ListadoImportacionesDataSource implements JRDataSource {
 				this.totalcifgs += imp.getResumenGastosDespacho().getValorCIFgs();
 				this.totalcifds += imp.getResumenGastosDespacho().getValorCIFds();
 			}			
+		}
+	}
+}
+
+/**
+ * DataSource del listado de repartos detallado..
+ */
+class RepartosDetalladoDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values;
+	List<Reparto> repartos;
+	Date desde;
+	Date hasta;
+
+	public RepartosDetalladoDataSource(List<Reparto> repartos, Date desde, Date hasta) {
+		this.repartos = repartos;
+		this.desde = desde;
+		this.hasta = hasta;
+		try {
+			this.loadDatos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+
+		if ("TituloDetalle".equals(fieldName)) {
+			value = det[0];
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * load datos..
+	 */
+	private void loadDatos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (Reparto reparto : this.repartos) {
+			for (RepartoDetalle det : reparto.getDetalles()) {
+				if (det.isVenta()) {
+					Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
+					if (vta != null) {
+						for (VentaDetalle item : vta.getDetalles()) {
+							String nroRep = reparto.getNumero();
+							String nroVta = vta.getNumero();
+							String codigo = item.getArticulo().getCodigoInterno();
+							this.values.add(new Object[] { nroRep, nroVta, codigo });
+						}
+					}
+				}
+			}
 		}
 	}
 }

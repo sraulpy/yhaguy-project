@@ -11026,17 +11026,31 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return los repartos segun fecha
+	 */
+	public List<Reparto> getRepartos(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select r from Reparto r where r.fechaCreacion >= '" + desde_ + "' and a.fechaCreacion <= '" + hasta_ + "'";
+		return this.hql(query);}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<CompraLocalOrden> comps = rr.getObjects(CompraLocalOrden.class.getName());
-			for (CompraLocalOrden comp : comps) {
-				comp.setNumeroFactura(comp.getObservacion());
-				comp.getFactura().setNumero(comp.getObservacion());
-				comp.getFactura().setFechaOriginal(Utiles.getFecha("02-11-2019 00:00:00"));
-				comp.getFactura().setFechaVencimiento(Utiles.agregarDias(comp.getFactura().getFechaOriginal(), 30));
-				rr.saveObject(comp.getFactura(), comp.getUsuarioMod());
-				System.out.println(comp.getNumeroFactura());
+			List<Reparto> rep = rr.getObjects(Reparto.class.getName());
+			for (Reparto reparto : rep) {
+				for (RepartoDetalle det : reparto.getDetalles()) {
+					if (det.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
+							|| det.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO)) {
+						Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
+						if (vta != null) {
+							vta.setNumeroReparto(reparto.getNumero());
+							rr.saveObject(vta, vta.getUsuarioMod());
+							System.out.println(vta.getNumero());
+						}						
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
