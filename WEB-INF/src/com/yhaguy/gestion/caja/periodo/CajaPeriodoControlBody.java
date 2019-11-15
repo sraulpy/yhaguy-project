@@ -17,6 +17,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Window;
 
@@ -107,6 +108,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
 	static final NumberFormat FORMATTER_DS = new DecimalFormat("###,###,##0.00");
+	
+	@Wire
+	private Window win_caja;
 
 	@Init(superclass = true)
 	public void init() {
@@ -129,6 +133,21 @@ public class CajaPeriodoControlBody extends BodyApp {
 	@Override
 	public void setDTOCorriente(DTO dto) {
 		this.dto = (CajaPeriodoDTO) dto;
+		if (!this.dto.esReadonly() && !this.dto.esNuevo()) {
+			if (CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero()) != null) {
+				String msg = "CAJA BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero());
+				Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				this.dto = new CajaPeriodoDTO();
+			} else {
+				CajaUtil.CAJAS_ABIERTAS.put(this.dto.getNumero(), this.getUs().getNombre().toUpperCase());
+				this.win_caja.setHeight("99%");
+				this.win_caja.setWidth("99%");
+				this.win_caja.setMode(Window.MODAL);
+				this.win_caja.setClosable(true);
+				this.win_caja.setBorder("normal");
+				this.win_caja.setTitle("Caja / Planilla");
+			}
+		}
 	}
 
 	@Override
@@ -235,6 +254,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 				item.setPrecioVentaFinalDs(item.getPrecioGs() / this.selectedVenta.getTipoCambio());
 			}
 		}
+	}
+	
+	@Command
+	public void desbloquear() {
+		this.getPagina().getTool().mainComponent.detach();
+		CajaUtil.CAJAS_ABIERTAS.remove(this.dto.getNumero());
 	}
 
 	/************************************************************/

@@ -33,7 +33,8 @@
 					<combobox hflex="true"
 						value="@load(vm.chequeDescuento.banco.pos1.text)"
 						selectedItem="@bind(vm.chequeDescuento.banco)"
-						model="@load(vm.bancos)">
+						model="@load(vm.bancos)"
+						onSelect="@command('addFilter')" instant="true">
 						<template name="model">
 							<comboitem label="@load(each.pos1.text)"></comboitem>
 						</template>
@@ -270,29 +271,61 @@
 				</row>
 				<row>
 					<field value="Cancelación anticipada:" />
-					<hlayout hflex="true">
+					<hlayout hflex="true" valign="middle">
 					<bandbox hflex="true" placeholder="Cuotas.."
-						readonly="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)"
+						readonly="true"
 						disabled="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)">
 						<bandpopup>
-							<listbox height="300px" width="350px"
-								model="@load(vm.saldos)" sclass="small-list"
-								checkmark="true" multiple="true"
-								selectedItems="@bind(vm.selectedMovimientos)"
-								onSelect="@command('refreshCancelacion')">
-								<listhead>
-									<listheader width="40px" align="center"></listheader>
-									<listheader label="Comprobante"></listheader>
-									<listheader label="Saldo" align="right"></listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell></listcell>
-										<listcell label="@load(each.nroComprobante)"></listcell>
-										<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
-									</listitem>
-								</template>	
-							</listbox>
+							<vlayout>
+								<bandbox readonly="true" hflex="true"
+									disabled="@load(!vm.siempreHabilitado or vm.chequeDescuento.liq_registrado)"
+									style="margin: 5px 5px 0px 5px"
+									value="@load(vm.selectedEmpresa.razonSocial)"
+									placeholder="Cuenta.." id="bnd_empr">
+									<bandpopup>
+										<listbox sclass="small-list"
+											width="400px" height="200px" model="@load(vm.empresas_)"
+											selectedItem="@bind(vm.selectedEmpresa)"
+											onSelect='bnd_empr.close()'>
+											<listhead>
+												<listheader width="100px">
+													<textbox
+														hflex="true" value="@bind(vm.filter_ruc)" instant="true"
+														placeholder="Ruc.." />
+												</listheader>
+												<listheader>
+													<textbox
+														hflex="true" value="@bind(vm.filter_razonSocial)"
+														instant="true" placeholder="Razón Social.." />
+												</listheader>
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell label="@load(each.ruc)"></listcell>
+													<listcell label="@load(each.razonSocial)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+								<listbox height="300px" width="350px"
+									model="@load(vm.saldos)" sclass="small-list" checkmark="true"
+									multiple="true" selectedItems="@bind(vm.selectedMovimientos)"
+									onSelect="@command('refreshCancelacion')">
+									<listhead>
+										<listheader width="40px" align="center"></listheader>
+										<listheader label="Comprobante"></listheader>
+										<listheader label="Saldo" align="right"></listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell></listcell>
+											<listcell label="@load(each.nroComprobante)"></listcell>
+											<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vlayout>
 						</bandpopup>
 					</bandbox>
 					<guaranibox hflex="true"  

@@ -80,7 +80,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 	public List<MyArray> getExistencia() throws Exception {
 		List<MyArray> out = new ArrayList<MyArray>();
 		
-		if(this.selectedArticulo == null) return out;
+		if (this.selectedArticulo == null) return out;
 		
 		this.stock = 0;	
 		this.stock_ = 0;

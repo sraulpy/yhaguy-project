@@ -53,6 +53,7 @@ import com.yhaguy.gestion.bancos.debitos.BancoDebitoDTO;
 import com.yhaguy.gestion.bancos.libro.AssemblerBancoCtaCte;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
+import com.yhaguy.gestion.caja.periodo.CajaUtil;
 import com.yhaguy.gestion.compras.gastos.subdiario.AssemblerGasto;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDetalleDTO;
@@ -304,6 +305,12 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	@Command
 	@NotifyChange("*")
 	public void imputarEnCaja(@BindingParam("comp") Bandbox comp) throws Exception {
+		String caja = this.selectedCaja.getNumero();
+		if (CajaUtil.CAJAS_ABIERTAS.get(caja) != null) {
+			String msg = "CAJA " + caja + " BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(caja);
+			Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Gasto gasto = rr.getGastoById(this.dtoGasto.getId());
 		gasto.setCajaPagoNumero(this.selectedCaja.getNumero());

@@ -53,11 +53,11 @@
 		<vbox hflex="true" vflex="true"
 			visible="@load(vm.selectedItem eq null ? 'false' : 'true')">
 			<hlayout sclass="button-container">
-				<button mold="bs" iconSclass="z-icon-times"
+				<button id="btn_anular" mold="bs" iconSclass="z-icon-times"
 					label=" Anular" tooltiptext="Anular Movimiento.."
 					onClick="@command('anularMovimiento')" 
 					disabled="@load(vm.selectedMovimiento.esNuevo()? 'true' : 'false'
-						or vm.selectedMovimiento.pos6? 'true' : 'false')"
+						or vm.selectedMovimiento.pos7? 'true' : 'false')"
 					width="150px" sclass="btn-sm btn-danger"/>
 			</hlayout>
 			<grid sclass="vgrid">
@@ -90,9 +90,9 @@
 					</row>
 				</rows>
 			</grid>
-			<div style="@load(vm.selectedMovimiento.pos6? 'opacity:0.6' : '')">
+			<div style="@load(vm.selectedMovimiento.pos7? 'opacity:0.6' : '')">
 				<vbox pack="center" align="center"
-					visible="@load(vm.selectedMovimiento.pos6)"
+					visible="@load(vm.selectedMovimiento.pos7)"
 					style="position:absolute;z-index:1;width:inherit;height:200px;text-align:center">
 					<label value="ANULADO"
 						style="font-size:50pt;text-align:center;color:red" />

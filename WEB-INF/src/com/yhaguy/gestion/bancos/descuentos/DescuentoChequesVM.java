@@ -62,6 +62,7 @@ public class DescuentoChequesVM extends BodyApp {
 	private List<MyArray> selectedCheques = new ArrayList<MyArray>();
 	private ReciboFormaPagoDTO nvoFormaPago = new ReciboFormaPagoDTO();
 	private List<CtaCteEmpresaMovimiento> selectedMovimientos;
+	private Empresa selectedEmpresa;
 	
 	@Init(superclass = true)
 	public void init(@ExecutionParam("tipo") String tipo) {
@@ -90,7 +91,7 @@ public class DescuentoChequesVM extends BodyApp {
 	@Override
 	public void setDTOCorriente(DTO dto) {
 		this.chequeDescuento = (BancoDescuentoChequeDTO) dto;
-
+		this.addFilter();
 	}
 	
 	@Override
@@ -221,6 +222,12 @@ public class DescuentoChequesVM extends BodyApp {
 		this.chequeDescuento.get_cheques().removeAll(this.selectedCheques);
 		this.selectedCheques = new ArrayList<MyArray>();
 
+	}
+	
+	@Command
+	public void addFilter() {
+		this.filter_razonSocial = "BANCO " + this.chequeDescuento.getBanco().getPos1().toString().toUpperCase();
+		BindUtils.postNotifyChange(null, null, this, "filter_razonSocial");
 	}
 
 	public boolean itemDuplicado(MyArray item) {
@@ -441,13 +448,13 @@ public class DescuentoChequesVM extends BodyApp {
 		return out;
 	}
 	
-	/**
-	 * @return los saldos del banco..
-	 */
+	@DependsOn("selectedEmpresa")
 	public List<CtaCteEmpresaMovimiento> getSaldos() throws Exception {
+		if (this.selectedEmpresa == null) return new ArrayList<CtaCteEmpresaMovimiento>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getMovimientosConSaldo(Utiles.getFechaInicioOperaciones(), new Date(),
-				Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR, 0, 21380, 31);
+				Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR, 0, this.selectedEmpresa.getId(),
+				this.chequeDescuento.getMoneda().getId());
 	}
 	
 	public String getMensajeError() {
@@ -528,5 +535,13 @@ public class DescuentoChequesVM extends BodyApp {
 
 	public void setSelectedMovimientos(List<CtaCteEmpresaMovimiento> selectedMovimientos) {
 		this.selectedMovimientos = selectedMovimientos;
+	}
+
+	public Empresa getSelectedEmpresa() {
+		return selectedEmpresa;
+	}
+
+	public void setSelectedEmpresa(Empresa selectedEmpresa) {
+		this.selectedEmpresa = selectedEmpresa;
 	}
 }

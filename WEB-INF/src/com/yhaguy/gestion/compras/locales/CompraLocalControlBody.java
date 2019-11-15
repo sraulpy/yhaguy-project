@@ -62,6 +62,7 @@ import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
+import com.yhaguy.gestion.caja.periodo.CajaUtil;
 import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ControlLogica;
@@ -246,6 +247,12 @@ public class CompraLocalControlBody extends BodyApp {
 	@Command
 	@NotifyChange("*")
 	public void imputarEnCaja(@BindingParam("comp") Bandbox comp) throws Exception {
+		String caja = this.selectedCaja.getNumero();
+		if (CajaUtil.CAJAS_ABIERTAS.get(caja) != null) {
+			String msg = "CAJA " + caja + " BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(caja);
+			Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CompraLocalFactura fac = rr.getCompraLocalFactura(this.dto.getFactura().getId());
 		fac.setCajaPagoNumero(this.selectedCaja.getNumero());
