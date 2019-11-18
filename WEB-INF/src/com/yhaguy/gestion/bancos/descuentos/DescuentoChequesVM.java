@@ -226,7 +226,7 @@ public class DescuentoChequesVM extends BodyApp {
 	
 	@Command
 	public void addFilter() {
-		if (this.chequeDescuento.getBanco() != null) {
+		if (this.chequeDescuento != null && this.chequeDescuento.getBanco() != null) {
 			this.filter_razonSocial = "BANCO " + this.chequeDescuento.getBanco().getPos1().toString().toUpperCase();
 			BindUtils.postNotifyChange(null, null, this, "filter_razonSocial");
 		}		
