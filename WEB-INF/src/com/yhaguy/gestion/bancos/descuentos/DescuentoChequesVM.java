@@ -91,7 +91,9 @@ public class DescuentoChequesVM extends BodyApp {
 	@Override
 	public void setDTOCorriente(DTO dto) {
 		this.chequeDescuento = (BancoDescuentoChequeDTO) dto;
-		this.addFilter();
+		if (this.chequeDescuento != null) {
+			this.addFilter();
+		}
 	}
 	
 	@Override
