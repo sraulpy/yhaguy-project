@@ -37,6 +37,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.gestion.caja.periodo.CajaUtil;
 import com.yhaguy.gestion.caja.recibos.AssemblerRecibo;
 import com.yhaguy.gestion.caja.recibos.ReciboDTO;
 import com.yhaguy.gestion.caja.recibos.ReciboDetalleDTO;
@@ -207,6 +208,12 @@ public class RecibosViewModel extends SimpleViewModel {
 		List<CtaCteEmpresaMovimiento> movims = new ArrayList<CtaCteEmpresaMovimiento>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Recibo rec = (Recibo) rr.getObject(Recibo.class.getName(), this.selectedItem.getId());
+		String caja = rec.getNumeroPlanilla();
+		if (CajaUtil.CAJAS_ABIERTAS.get(caja) != null) {
+			String msg = "CAJA " + caja + " BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(caja);
+			Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		if (rec.getFechaEmision().compareTo(Utiles.getFechaInicioMes()) < 0) {
 			Clients.showNotification("EL RECIBO NO CORRESPONDE AL MES CORRIENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
