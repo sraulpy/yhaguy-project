@@ -25908,6 +25908,14 @@ class RepartosDetalladoDataSource implements JRDataSource {
 		this.repartos = repartos;
 		this.desde = desde;
 		this.hasta = hasta;
+		Collections.sort(this.repartos, new Comparator<Reparto>() {
+			@Override
+			public int compare(Reparto o1, Reparto o2) {
+				Date fecha1 = (Date) o1.getFechaCreacion();
+				Date fecha2 = (Date) o2.getFechaCreacion();
+				return fecha1.compareTo(fecha2);
+			}
+		});
 		try {
 			this.loadDatos();
 		} catch (Exception e) {
@@ -25927,8 +25935,16 @@ class RepartosDetalladoDataSource implements JRDataSource {
 			value = det[0];
 		} if ("NroFactura".equals(fieldName)) {
 			value = det[1];
-		}  if ("Codigo".equals(fieldName)) {
+		} if ("Cliente".equals(fieldName)) {
 			value = det[2];
+		} if ("Codigo".equals(fieldName)) {
+			value = det[3];
+		} if ("Descripcion".equals(fieldName)) {
+			value = det[4];
+		}  if ("Cantidad".equals(fieldName)) {
+			value = det[5];
+		} if ("Entrega".equals(fieldName)) {
+			value = det[6];
 		}
 		return value;
 	}
@@ -25953,10 +25969,16 @@ class RepartosDetalladoDataSource implements JRDataSource {
 					Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
 					if (vta != null) {
 						for (VentaDetalle item : vta.getDetalles()) {
-							String nroRep = reparto.getNumero() + " - " + reparto.getVehiculo().getDescripcion();
+							String fecha = Utiles.getDateToString(reparto.getFechaCreacion(), "dd/MM/yyyy");
+							String repartidor = reparto.getRepartidor().getRazonSocial();
+							String nroRep = reparto.getNumero() + " - " + fecha + " - " + repartidor;
 							String nroVta = vta.getNumero();
+							String cliente = vta.getCliente().getRazonSocial();
 							String codigo = item.getArticulo().getCodigoInterno();
-							this.values.add(new Object[] { nroRep, nroVta, codigo });
+							String descripcion = item.getArticulo().getDescripcion();
+							String cantidad = item.getCantidad() + "";
+							String entrega = item.getCantidadEntregada() + "";
+							this.values.add(new Object[] { nroRep, nroVta, cliente, codigo, descripcion, cantidad, entrega });
 						}
 					}
 				}
