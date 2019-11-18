@@ -403,6 +403,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		out.add(RRHHPlanillaSalarios.TIPO_COMISIONES);
 		out.add(RRHHPlanillaSalarios.TIPO_SALARIOS);
 		out.add(RRHHPlanillaSalarios.TIPO_PREMIOS);
+		out.add(RRHHPlanillaSalarios.TIPO_AGUINALDOS);
 		return out;
 	}
 	
