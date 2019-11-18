@@ -25,6 +25,7 @@ public class RRHHPlanillaSalarios extends Domain {
 	public static final String TIPO_COMISIONES = "COMISIONES";
 	public static final String TIPO_SALARIOS = "SALARIOS";
 	public static final String TIPO_PREMIOS = "PREMIOS";
+	public static final String TIPO_AGUINALDOS = "AGUINALDOS";
 	
 	private String mes;
 	private String anho;
