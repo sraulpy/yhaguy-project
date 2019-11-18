@@ -226,8 +226,10 @@ public class DescuentoChequesVM extends BodyApp {
 	
 	@Command
 	public void addFilter() {
-		this.filter_razonSocial = "BANCO " + this.chequeDescuento.getBanco().getPos1().toString().toUpperCase();
-		BindUtils.postNotifyChange(null, null, this, "filter_razonSocial");
+		if (this.chequeDescuento.getBanco() != null) {
+			this.filter_razonSocial = "BANCO " + this.chequeDescuento.getBanco().getPos1().toString().toUpperCase();
+			BindUtils.postNotifyChange(null, null, this, "filter_razonSocial");
+		}		
 	}
 
 	public boolean itemDuplicado(MyArray item) {
