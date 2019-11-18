@@ -32,6 +32,7 @@ import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Transferencia;
 import com.yhaguy.domain.TransferenciaDetalle;
+import com.yhaguy.gestion.comun.ControlArticuloStock;
 import com.yhaguy.util.Barcode;
 import com.yhaguy.util.Utiles;
 
@@ -776,6 +777,34 @@ public class ProcesosArticulos {
 		}
 	}
 	
+	/**
+	 * verifica si existen articulos que necesiten recalculo de stock.
+	 * [0]: articulo.codigoInterno
+	 * [1]: deposito.descripcion
+	 * [2]: deposito.stock
+	 * [3]: historial.saldo
+	 */
+	public static List<Object[]> verificarStock(long idSucursal, long idFamilia) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (Object[] art : rr.getArticulos(0, idFamilia)) {
+			long idArticulo = (long) art[0];
+			for (Deposito dep : rr.getDepositos()) {
+				long idDeposito = dep.getId();
+				List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, true, new Date());
+				String saldo = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
+				ArticuloDeposito adp = rr.getArticuloDeposito(idArticulo, idDeposito);
+				long stock = adp != null ? adp.getStock() : 0;
+				long stock_ = Long.parseLong(saldo);
+				if (stock != stock_) {
+					out.add(new Object[] { art[1], dep.getDescripcion(), stock, stock_ });
+				}
+				System.out.println(art[1]);
+			}
+		}		
+		return out;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -796,7 +825,7 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
 			//ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
 			//ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
-			ProcesosArticulos.setPreciosMra(SRC_PRECIOS_MRA);
+			ProcesosArticulos.verificarStock(2, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
