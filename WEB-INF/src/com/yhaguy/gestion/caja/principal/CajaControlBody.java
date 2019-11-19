@@ -8,6 +8,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Textbox;
 
 import com.coreweb.componente.BuscarElemento;
@@ -178,6 +179,7 @@ public class CajaControlBody extends BodyApp {
 	@Command
 	public void desbloquearCaja() {
 		CajaUtil.CAJAS_ABIERTAS.remove(this.cajaBloqueada);
+		Clients.showNotification(this.cajaBloqueada + " DESBLOQUEADA!"); 
 	}
 	
 	/**
