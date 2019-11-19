@@ -822,7 +822,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		long idDeposito = pedido.getDeposito().getId();
 		for (VentaDetalleDTO item : pedido.getDetalles()) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
-			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
+			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
+					|| !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)) {
 				long stock = rr.getStockDisponible(item.getArticulo().getId(), idDeposito);
 				if (stock < item.getCantidad()) {
 					return false;
@@ -2452,7 +2453,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 		int punto = (int) talonario.getPos3();
 		String nro = AutoNumeroControl.getAutoNumero(
 				(String) talonario.getPos1(), 7);
-		return "00" + boca + "-00" + punto + "-" + nro;
+		String pref = "00"; if(boca > 9) pref = "0";
+		String prefPunto = "00"; if(punto > 9) prefPunto = "0";
+		return pref + boca + "-" + prefPunto + punto + "-" + nro;
 	}
 
 	/**

@@ -21,6 +21,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Caja;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Talonario;
+import com.yhaguy.gestion.caja.periodo.CajaUtil;
 import com.yhaguy.inicio.AccesoDTO;
 
 public class CajaControlBody extends BodyApp {
@@ -45,6 +46,8 @@ public class CajaControlBody extends BodyApp {
 	private String filterFuncionario = "";
 	
 	private MyArray selectedSupervisor;
+	
+	private String cajaBloqueada = "";
 
 	@Init(superclass=true)
 	public void initCajaControlBody(){
@@ -170,6 +173,11 @@ public class CajaControlBody extends BodyApp {
 		if (b.isClickAceptar()) {
 			this.setTalonario(tipo, b.getSelectedItem());
 		}
+	}
+	
+	@Command
+	public void desbloquearCaja() {
+		CajaUtil.CAJAS_ABIERTAS.remove(this.cajaBloqueada);
 	}
 	
 	/**
@@ -308,5 +316,13 @@ public class CajaControlBody extends BodyApp {
 
 	public void setSelectedSupervisor(MyArray selectedSupervisor) {
 		this.selectedSupervisor = selectedSupervisor;
+	}
+
+	public String getCajaBloqueada() {
+		return cajaBloqueada;
+	}
+
+	public void setCajaBloqueada(String cajaBloqueada) {
+		this.cajaBloqueada = cajaBloqueada;
 	}
 }
