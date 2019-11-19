@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import com.coreweb.domain.AutoNumero;
 import com.coreweb.domain.Formulario;
 import com.coreweb.domain.IiD;
 import com.coreweb.domain.Modulo;
@@ -11050,7 +11051,16 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select r from Reparto r where r.fechaCreacion >= '" + desde_ + "' and r.fechaCreacion <= '" + hasta_ + "'";
-		return this.hql(query);}
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las chequeras..
+	 */
+	public List<AutoNumero> getBancoChequeras() throws Exception {
+		String query = "select a from AutoNumero a where a.auxi = 'CHEQUERA'";
+		return this.hql(query);
+	}
 	
 	public static void main(String[] args) {
 		try {
