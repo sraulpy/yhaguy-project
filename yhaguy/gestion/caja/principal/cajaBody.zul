@@ -204,7 +204,8 @@
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Desbloquear Caja" />	
-						<textbox value="@bind(vm.cajaBloqueada)" hflex="true" onOK="@command('desbloquearCaja')"></textbox>
+						<textbox value="@bind(vm.cajaBloqueada)" hflex="true" onOK="@command('desbloquearCaja')"
+							readonly="@load(!vm.siempreHabilitado)"></textbox>
 					</vlayout>									
 				</row>
 				<row>
