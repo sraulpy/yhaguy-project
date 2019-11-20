@@ -21,7 +21,7 @@ public class AssemblerArticulo extends Assembler {
 			"importado", "servicio", "disenho", "ancho", "alto", "aro", "medida", "pisada", "unidadesCaja",
 			"referencia", "estado", "ochentaVeinte", "abc", "maximo", "minimo", "restriccionCosto", "precioGs", "precioDs",
 			"precioMinoristaGs", "precioListaGs", "fechaUltimaCompra", "precioUltimaCompra", "fechaUltimaVenta",
-			"cantUltimaVenta", "precioUltimaVenta" };
+			"cantUltimaVenta", "precioUltimaVenta", "porcentajeDescuento" };
 
 	static String[] attPresentacion = { "descripcion" };
 

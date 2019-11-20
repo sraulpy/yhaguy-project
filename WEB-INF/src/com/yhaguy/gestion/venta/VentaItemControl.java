@@ -37,16 +37,10 @@ import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
-import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
-import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloUbicacion;
-import com.yhaguy.domain.Funcionario;
-import com.yhaguy.domain.ImportacionFactura;
-import com.yhaguy.domain.ImportacionFacturaDetalle;
-import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
@@ -158,8 +152,7 @@ public class VentaItemControl extends SoloViewModel {
 
 		wp = new WindowPopup();
 		wp.setDato(this);
-		wp.setCheckAC(new ValidadorVentaPedidoItem(this.det, this.cantInicial,
-				this.tipo));
+		wp.setCheckAC(new ValidadorVentaPedidoItem(this.det, this.cantInicial, this.tipo));
 		wp.setModo(modo);
 		wp.setTitulo("Ítem de Venta");
 		wp.setWidth("600px");
@@ -219,56 +212,6 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setCostoIvaIncluido(false);
 			this.det.setUbicacion(this.getUbicacion(idAr));
 			this.cant.focus();
-			this.verificarArticulo(idAr, true);
-		}
-	}
-	
-	/**
-	 * verifica si el articulo es del grupo:
-	 * - repuestos
-	 * - importado
-	 * - precio = costogs * 1.1 * 1.05 (redondeo)
-	 * - excepcion nakata, mahle y mostrador
-	 * - precio = costogs * 1.1 * 1.1 (redondeo)
-	 * - sac importacion 22 = mayorista * 0.95
-	 */
-	private void verificarArticulo(long idArticulo, boolean discontinuado) throws Exception {
-		if (discontinuado) {
-			return;
-		}
-		RegisterDomain rr = RegisterDomain.getInstance();
-		Articulo art = rr.getArticuloById(idArticulo);
-		Funcionario func = rr.getFuncionario(this.getAcceso().getFuncionario().getId());
-		if (art.getFamilia().getDescripcion().equals(ArticuloFamilia.REPUESTOS)) {
-			if (!art.getMarca().getDescripcion().equals(ArticuloMarca.COMPRA_LOCAL)) {
-				boolean sac = false;
-				if (art.getCodigoInterno().startsWith("SAC ")) {
-					ImportacionFactura imp = rr.getImportacionFacturaById(22);
-					for (ImportacionFacturaDetalle det : imp.getDetalles()) {
-						if (det.getArticulo().getCodigoInterno().equals(art.getCodigoInterno())) {
-							this.det.setPrecioGs(art.getPrecioGs() * 0.95);
-							this.det.setPrecioMinimoGs(this.det.getPrecioGs());
-							this.det.setAuxi("PROMO-REP");
-							sac = true;
-						}
-					}
-				}
-				if (art.getProveedor().isProveedorExterior() && !sac) {
-					if (art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRA
-							&& art.getProveedor().getId().longValue() != Proveedor.ID_NAKATA
-							&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_BRS
-							&& art.getProveedor().getId().longValue() != Proveedor.ID_MAHLE_ARG
-							&& !func.isVendedorMostrador()) {
-						this.det.setPrecioGs(art.getCostoGs() * 1.1 * 1.05);
-						this.det.setPrecioMinimoGs(this.det.getPrecioGs());
-						this.det.setAuxi("PROMO-REP");
-					} else {
-						this.det.setPrecioGs(art.getCostoGs() * 1.1 * 1.1);
-						this.det.setPrecioMinimoGs(this.det.getPrecioGs());
-						this.det.setAuxi("PROMO-REP");
-					}
-				}
-			}			
 		}
 	}
 	
@@ -400,8 +343,9 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setPrecioMinimoGs(precio);
 		}
 		double dto_mayorista = this.dto.getDescuentoMayorista();
-		this.det.setDescuentoPorcentaje(0);
-		this.det.setDescuentoUnitarioGs(0);
+		double porcentajeDescuento = (double) art[6];
+		this.det.setDescuentoPorcentaje(porcentajeDescuento);
+		this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), porcentajeDescuento));
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) {
 			this.det.setDescuentoPorcentaje(dto_mayorista);
 			this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), dto_mayorista));

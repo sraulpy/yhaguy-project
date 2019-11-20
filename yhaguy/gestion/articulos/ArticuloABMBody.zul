@@ -621,6 +621,12 @@
 											<field value="Restringir Costo:" />
 											<checkbox checked="@bind(vm.dto.restriccionCosto)"></checkbox>
 										</row>
+										<row>
+											<field value="Porcentaje de descuento:" />
+											<doublebox hflex="true" vflex="true"
+												value="@bind(vm.dto.porcentajeDescuento)" format="###,###,##0.00"
+												readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
+										</row>
 									</rows>
 								</grid>
 

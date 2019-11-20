@@ -50,6 +50,7 @@ public class Articulo extends Domain {
 	private boolean restriccionCosto = true;
 	private int maximo;
 	private int minimo;
+	private double porcentajeDescuento;
 	
 	private String disenho;
 	private int ancho;
@@ -647,5 +648,13 @@ public class Articulo extends Domain {
 
 	public void setRestriccionCosto(boolean restriccionCosto) {
 		this.restriccionCosto = restriccionCosto;
+	}
+
+	public double getPorcentajeDescuento() {
+		return porcentajeDescuento;
+	}
+
+	public void setPorcentajeDescuento(double porcentajeDescuento) {
+		this.porcentajeDescuento = porcentajeDescuento;
 	}
 }
