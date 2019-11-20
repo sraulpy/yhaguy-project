@@ -9341,9 +9341,11 @@ public class RegisterDomain extends Register {
 	 * [3]: precio minorista
 	 * [4]: precio mayorista gs
 	 * [5]: precio mayorista ds
+	 * [6]: porcentajeDescuento
 	 */
 	public Object[] getArticulo_(long idArticulo) throws Exception {
-		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs from Articulo a where a.id = " + idArticulo + "";
+		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs, "
+				+ "a.porcentajeDescuento from Articulo a where a.id = " + idArticulo + "";
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
@@ -11057,9 +11059,11 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las chequeras..
 	 */
-	public List<AutoNumero> getBancoChequeras() throws Exception {
-		String query = "select a from AutoNumero a where a.auxi = 'CHEQUERA'";
-		return this.hql(query);
+	public List<AutoNumero> getBancoChequeras(String descripcion) throws Exception {
+		String query = "select a from AutoNumero a where a.auxi = 'CHEQUERA'"
+				+ "	and upper(a.descripcion) like '%" + descripcion.toUpperCase() + "%'"
+				+ " order by a.descripcion";
+		return this.hqlLimit(query, 500);
 	}
 	
 	public static void main(String[] args) {
