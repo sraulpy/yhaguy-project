@@ -347,8 +347,9 @@ public class VentaItemControl extends SoloViewModel {
 		this.det.setDescuentoPorcentaje(porcentajeDescuento);
 		this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), porcentajeDescuento));
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) {
-			this.det.setDescuentoPorcentaje(dto_mayorista);
-			this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), dto_mayorista));
+			double descuento = porcentajeDescuento > dto_mayorista ? porcentajeDescuento : dto_mayorista;
+			this.det.setDescuentoPorcentaje(descuento);
+			this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), descuento));
 		}
 	}
 	
