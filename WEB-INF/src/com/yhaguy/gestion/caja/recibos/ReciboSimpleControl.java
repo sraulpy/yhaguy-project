@@ -572,7 +572,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private MyArray selectedTarjetaCredito = new MyArray("", new ArrayList<MyPair>());
 
 	@Command @NotifyChange("*")
-	public void abrirPopupFormaPago(){
+	public void abrirPopupFormaPago() {
 		
 		Object[] validar = this.validarOperacion(OPERACION_INSERTAR_FORMA_PAGO);
 		boolean valido = (boolean) validar[0];
