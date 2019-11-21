@@ -12,7 +12,7 @@
 					<hlayout valign="top">
 						<textbox sclass="searchfield" height="17px"
 							placeholder="Código"
-							value="@bind(vm.dato.newDetalle.articulo.codigoInterno)"
+							value="@bind(vm.dato.newDetalle.articulo.pos1)"
 							onOK="@command('buscarArticulo', tipo=vm.dato.newDetalle, busqueda=0)" />
 						<toolbarbutton iconSclass="z-icon-search"
 							sclass="searchBtn" width="20px"
@@ -27,7 +27,7 @@
 						<textbox 
 							sclass="searchfield" height="17px"
 							placeholder="Descripción" width="252px"
-							value="@bind(vm.dato.newDetalle.articulo.descripcion)"
+							value="@bind(vm.dato.newDetalle.articulo.pos4)"
 							onOK="@command('buscarArticulo', tipo=vm.dato.newDetalle, busqueda=1)"/>
 						<toolbarbutton iconSclass="z-icon-search"
 							sclass="searchBtn" width="20px" 
