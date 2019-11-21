@@ -54,8 +54,9 @@ public class ImportacionSimpleControl extends SoloViewModel {
 
 	/************************************ BUSCAR ARTICULO *************************************/
 
-	private static String[] attArticulo = { "codigoInterno", "descripcion" };
-	private static String[] columnas = { "Código", "Descripción" };
+	private static String[] attArticulo = { "codigoInterno", "descripcion", "descripcion", "descripcion" };
+	private static String[] columnas = { "Código", "", "", "Descripción" };
+	private static String[] ancho = { "", "0px", "0px", "" };
 
 	static int BUSQUEDA_POR_CODIGO = 0;
 	static int BUSQUEDA_POR_DESCRIPCION = 1;
@@ -84,6 +85,7 @@ public class ImportacionSimpleControl extends SoloViewModel {
 		b.setTitulo("Buscar Artículo");
 		b.setAtributos(attArticulo);
 		b.setNombresColumnas(columnas);
+		b.setAnchoColumnas(ancho);
 		b.setWidth("800px");
 		b.setAssembler(new AssemblerArticulo());
 		b.show(find, busqueda);
