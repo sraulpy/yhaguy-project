@@ -14,7 +14,7 @@
 		</attribute>
 	</timer>
 	
-	<div height="40px"></div>
+	<div height="25px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
