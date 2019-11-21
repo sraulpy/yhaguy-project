@@ -173,6 +173,12 @@
 				</hlayout>
 			</row>
 			
+			<row visible="@load(vm.dato.nvoFormaPago.tipo.sigla eq 'FP-TIP-DEP-BAN')">
+				<field value="Fecha:"/>
+				<datebox value="@bind(vm.dato.nvoFormaPago.fechaOperacion)" hflex="true" 
+					constraint="no future" />
+			</row>
+			
 			<row id="rwDepositoReferencia" visible="false">
 				<field value="Número de Referencia:"/>
 				<hlayout>

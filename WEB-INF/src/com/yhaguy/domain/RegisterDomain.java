@@ -9000,14 +9000,14 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('DEPOSITO CTA. BANCARIA'), "
-				+ " r.fechaEmision, f.depositoNroReferencia, f.montoGs, f.depositoBancoCta.banco.descripcion, concat('RECIBO NRO. ', r.numero, ' - ', r.cliente.empresa.razonSocial)"
+				+ " f.fechaOperacion, f.depositoNroReferencia, f.montoGs, f.depositoBancoCta.banco.descripcion, concat('RECIBO NRO. ', r.numero, ' - ', r.cliente.empresa.razonSocial)"
 				+ " from Recibo r join r.formasPago f where f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
 				+ " and f.depositoBancoCta.id = " + idBanco
-				+ " and (r.fechaEmision >= '"
+				+ " and (f.fechaOperacion >= '"
 				+ desde_
-				+ "' and r.fechaEmision <= '"
+				+ "' and f.fechaOperacion <= '"
 				+ hasta_
-				+ "')" + " order by r.fechaEmision desc";
+				+ "')" + " order by f.fechaOperacion desc";
 		return this.hql(query);
 	}
 	
@@ -9023,15 +9023,15 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('DEPOSITO CTA. BANCARIA'), "
-				+ " v.fecha, f.depositoNroReferencia, f.montoGs, f.depositoBancoCta.banco.descripcion, concat('VENTA NRO. ', v.numero, ' - ', v.cliente.empresa.razonSocial)"
+				+ " f.fechaOperacion, f.depositoNroReferencia, f.montoGs, f.depositoBancoCta.banco.descripcion, concat('VENTA NRO. ', v.numero, ' - ', v.cliente.empresa.razonSocial)"
 				+ " from Venta v join v.formasPago f where f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
 				+ " and v.estadoComprobante is null"
 				+ " and f.depositoBancoCta.id = " + idBanco
-				+ " and (v.fecha >= '"
+				+ " and (f.fechaOperacion >= '"
 				+ desde_
-				+ "' and v.fecha <= '"
+				+ "' and f.fechaOperacion <= '"
 				+ hasta_
-				+ "')" + " order by v.fecha desc";
+				+ "')" + " order by f.fechaOperacion desc";
 		return this.hql(query);
 	}
 	

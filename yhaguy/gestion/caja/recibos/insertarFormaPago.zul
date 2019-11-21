@@ -192,6 +192,12 @@
 				</combobox>
 			</row>
 			
+			<row visible="@load(vm.nvoFormaPago.tipo.sigla eq 'FP-TIP-DEP-BAN')">
+				<field value="Fecha:"/>
+				<datebox value="@bind(vm.nvoFormaPago.fechaOperacion)" hflex="true" 
+					constraint="no future" />
+			</row>
+			
 			<row id="rwDepositoReferencia" visible="false">
 				<field value="Número de Referencia:"/>
 				<textbox value="@bind(vm.nvoFormaPago.depositoNroReferencia)" hflex="true"/>			

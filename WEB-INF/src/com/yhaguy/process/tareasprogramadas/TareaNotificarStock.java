@@ -18,7 +18,7 @@ import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 
 public class TareaNotificarStock {
 	
-	static final String TAREA_NOTIFICAR_STOCK = "CORREO AUDITORIA STOCK ENVIADO - CUBIERTAS";
+	static final String TAREA_NOTIFICAR_STOCK = "CORREO AUDITORIA STOCK ENVIADO";
 	static final String USER_NOTIF = "sys";
 	static final String DIRECTORIO_BASE_MRA = "/home/mraserver/project/yhaguy-project/";
 	static final String DIRECTORIO_BASE_BAT = "/home/server/project/yhaguy-baterias/";
@@ -65,18 +65,18 @@ public class TareaNotificarStock {
 			
 			System.out.println("Generando el Reporte..." + new Date());
 			
-			//List<Object[]> filtros = ProcesosArticulos.verificarStock(2, 1);
-			//List<Object[]> lubricantes = ProcesosArticulos.verificarStock(2, 2);
+			List<Object[]> filtros = ProcesosArticulos.verificarStock(2, 1);
+			List<Object[]> lubricantes = ProcesosArticulos.verificarStock(2, 2);
 			List<Object[]> cubiertas = ProcesosArticulos.verificarStock(2, 3);
-			//List<Object[]> repuestos = ProcesosArticulos.verificarStock(2, 4);
-			//List<Object[]> baterias = ProcesosArticulos.verificarStock(2, 5);
+			List<Object[]> repuestos = ProcesosArticulos.verificarStock(2, 4);
+			List<Object[]> baterias = ProcesosArticulos.verificarStock(2, 5);
 			
 			List<Object[]> data = new ArrayList<Object[]>();
-			//data.addAll(filtros);
-			//data.addAll(lubricantes);
+			data.addAll(filtros);
+			data.addAll(lubricantes);
 			data.addAll(cubiertas);
-			//data.addAll(repuestos);
-			//data.addAll(baterias);
+			data.addAll(repuestos);
+			data.addAll(baterias);
 
 			Config.DIRECTORIO_REAL_REPORTES = directorioReportes;
 			Config.DIRECTORIO_BASE_REAL = directorioBase;
@@ -99,7 +99,7 @@ public class TareaNotificarStock {
 			
 			EnviarCorreo correo = new EnviarCorreo(tarea);
 			correo.sendMessage(destinatarios, COPIA_OCULTA, asunto,
-					"Auditoria de Stock - Familia", "AuditoriaStock.pdf", directorioReportes + rep.getArchivoSalida());
+					"Auditoria de Stock", "AuditoriaStock.pdf", directorioReportes + rep.getArchivoSalida());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,8 +107,8 @@ public class TareaNotificarStock {
 	}	
 	
 	public static void main(String[] args) {
-		TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
-		//TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA_RPS, DIRECTORIO_REPORTES_RPS, DIRECTORIO_BASE_RPS, DESTINATARIOS_RPS, ASUNTO_RPS);
+		//TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
+		TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA_RPS, DIRECTORIO_REPORTES_RPS, DIRECTORIO_BASE_RPS, DESTINATARIOS_RPS, ASUNTO_RPS);
 		//TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }

@@ -11,11 +11,14 @@ import java.util.Set;
 import com.coreweb.domain.Tipo;
 import com.coreweb.domain.TipoTipo;
 import com.coreweb.extras.csv.CSV;
+import com.coreweb.util.AutoNumeroControl;
 import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.HistoricoComisiones;
 import com.yhaguy.domain.NotaCredito;
@@ -39,6 +42,7 @@ public class ProcesosVentas {
 	static final String SRC_MIGRACION_VTAS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS.csv";
 	static final String SRC_MIGRACION_VTAS_ANULADOS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS_ANULADOS.csv";
 	static final String SRC_CLIENTE_VENDEDOR = "./WEB-INF/docs/migracion/central/CLIENTE_VENDEDOR.csv";
+	static final String SRC_VENTA = "./WEB-INF/docs/procesos/VENTA.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -412,8 +416,68 @@ public class ProcesosVentas {
 		}
 	}
 	
-	public static void addHistoricoVentaVendedor() {
+	/**
+	 * genera ventas..
+	 */
+	public static void generarVentas(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
 		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING }, { "PRECIO", CSV.STRING } };
+		
+		Tipo gs = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+		
+		SucursalApp central = rr.getSucursalAppById(2);
+		Tipo iva10 = rr.getTipoById(124);
+		Cliente cliente = rr.getClienteById(28225);
+		Funcionario func = rr.getFuncionario_(54);
+		Deposito deposito = (Deposito) rr.getObject(Deposito.class.getName(), 7);
+		Set<VentaDetalle> dets = new HashSet<VentaDetalle>();
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) { 
+			String cantidad = csv.getDetalleString("CANTIDAD");
+			String costo = csv.getDetalleString("COSTO");
+			String codigo = csv.getDetalleString("CODIGO");
+			
+			Articulo articulo = rr.getArticulo(codigo);			
+			
+			VentaDetalle item = new VentaDetalle();
+			item.setArticulo(articulo);
+			item.setCantidad(Long.parseLong(cantidad));
+			item.setPrecioGs(Double.parseDouble(costo));
+			item.setCostoUnitarioGs(articulo.getCostoGs());
+			item.setDescripcion(articulo.getDescripcion());
+			item.setListaPrecio(rr.getListaDePrecio(3));
+			item.setTipoIVA(iva10);
+			dets.add(item);
+			System.out.println(item.getArticulo().getCodigoInterno());
+		}
+		
+		Venta vta = new Venta();
+		vta.setCliente(cliente);
+		vta.setCondicionPago(rr.getCondicionPagoById(2));
+		vta.setAtendido(func);
+		vta.setCartera(EmpresaCartera.CORRIENTE);
+		vta.setFormaEntrega(Venta.FORMA_ENTREGA_EMPAQUE);
+		vta.setVendedor(func);
+		vta.setTecnico(func);
+		vta.setTipoCambio(1);
+		vta.setVencimiento(Utiles.agregarDias(new Date(), 30));
+		vta.setDenominacion(cliente.getRazonSocial());
+		vta.setFecha(new Date());
+		vta.setMoneda(gs);
+		vta.setNumero("V-PED-" + AutoNumeroControl.getAutoNumero(Configuracion.NRO_VENTA_PEDIDO));
+		vta.setObservacion("INVENTARIO VALVOLINE");
+		vta.setSucursal(central);
+		vta.setDeposito(deposito);
+		vta.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PEDIDO_VENTA));
+		vta.setTotalImporteGs(vta.getTotalImporteGs_());
+		vta.setDetalles(dets);
+		vta.setEstado(rr.getTipoById(118));
+		rr.saveObject(vta, "sys");
+		System.out.println("PEDIDO GENERADO: " + vta.getNumero());
 	}
 	
 	public static void main(String[] args) {
@@ -426,7 +490,8 @@ public class ProcesosVentas {
 			//ProcesosVentas.setRubros(SRC_EMPRESAS_RUBROS);
 			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
 			//ProcesosVentas.migrarVentas();
-			ProcesosVentas.setClienteVendedor();
+			//ProcesosVentas.setClienteVendedor();
+			ProcesosVentas.generarVentas(SRC_VENTA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

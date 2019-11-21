@@ -63,6 +63,8 @@ public class ReciboFormaPagoDTO extends DTO {
 	/** Cobros con saldo a favor cta cte **/
 	private MyArray ctaCteSaldoFavor;	
 	
+	private Date fechaOperacion = new Date();
+	
 	/**
 	 * @return true si la venta es en moneda local..
 	 */
@@ -359,5 +361,13 @@ public class ReciboFormaPagoDTO extends DTO {
 			this.montoGs = (double) ctaCteSaldoFavor.getPos3();
 			BindUtils.postNotifyChange(null, null, this, "montoGs");
 		}		
+	}
+
+	public Date getFechaOperacion() {
+		return fechaOperacion;
+	}
+
+	public void setFechaOperacion(Date fechaOperacion) {
+		this.fechaOperacion = fechaOperacion;
 	}	
 }

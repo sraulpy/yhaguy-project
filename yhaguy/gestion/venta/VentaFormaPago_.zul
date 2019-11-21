@@ -139,7 +139,7 @@
 			</row>
 			
 			<row id="rwVencimiento" visible="false">
-				<field value="Vencimiento:"/>
+				<field value="Fecha:"/>
 				<datebox readonly="true" 
 					value="@bind(vm.dato.nvoFormaPago.chequeFecha)"/>
 			</row>
@@ -161,6 +161,12 @@
 					</combobox>
 					<labelConstrain/>
 				</hlayout>
+			</row>
+			
+			<row visible="@load(vm.dato.nvoFormaPago.tipo.sigla eq 'FP-TIP-DEP-BAN')">
+				<field value="Fecha:"/>
+				<datebox value="@bind(vm.dato.nvoFormaPago.fechaOperacion)" hflex="true" 
+					constraint="no future" />
 			</row>
 			
 			<row id="rwDepositoReferencia" visible="false">

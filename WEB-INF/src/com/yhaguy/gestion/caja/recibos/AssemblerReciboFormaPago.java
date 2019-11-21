@@ -21,7 +21,7 @@ public class AssemblerReciboFormaPago extends Assembler {
 			"tarjetaNumeroComprobante", "tarjetaCuotas", "chequeFecha",
 			"chequeNumero", "chequeLibrador", "depositoNroReferencia",
 			"retencionNumero", "retencionTimbrado", "retencionVencimiento",
-			"chequeBancoDescripcion", "reciboDebitoNro" };
+			"chequeBancoDescripcion", "reciboDebitoNro", "fechaOperacion" };
 	
 	private static String[] attDepositoBancoCta = { "nroCuenta", "banco", "tipo","moneda" };
 	

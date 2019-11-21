@@ -1,6 +1,6 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.importacion.ImportacionSimpleControl')">
-	<grid width="450px" sclass="vgrid">
+	<grid sclass="vgrid">
 		<columns>
 			<column width="130px" />
 			<column />
@@ -8,32 +8,28 @@
 		<rows>
 			<row>
 				Código:
-				<div sclass="searchform" style="margin:0px" width="165px">
-					<hlayout valign="top">
-						<textbox sclass="searchfield" height="17px"
-							placeholder="Código"
+				<hlayout valign="top" hflex="true">
+						<textbox
+							placeholder="Código" hflex="true"
 							value="@bind(vm.dato.newDetalle.articulo.pos1)"
 							onOK="@command('buscarArticulo', tipo=vm.dato.newDetalle, busqueda=0)" />
-						<toolbarbutton iconSclass="z-icon-search"
-							sclass="searchBtn" width="20px"
+						<button iconSclass="z-icon-search"
+							sclass="searchBtn"
 							onClick="@command('buscarArticulo', tipo=vm.dato.newDetalle, busqueda=0)" />
-					</hlayout>
-				</div>
+				</hlayout>
 			</row>
 			<row>
 				Descripción:
-				<div sclass="searchform" style="margin:0px" width="280px">
-					<hlayout valign="top">
+				<hlayout valign="top">
 						<textbox 
-							sclass="searchfield" height="17px"
-							placeholder="Descripción" width="252px"
+							hflex="true"
+							placeholder="Descripción"
 							value="@bind(vm.dato.newDetalle.articulo.pos4)"
 							onOK="@command('buscarArticulo', tipo=vm.dato.newDetalle, busqueda=1)"/>
-						<toolbarbutton iconSclass="z-icon-search"
-							sclass="searchBtn" width="20px" 
+						<button iconSclass="z-icon-search"
+							sclass="searchBtn"
 							onClick="@command('buscarArticulo', tipo=vm.dato.newDetalle, busqueda=1)"/>
-					</hlayout>
-				</div>
+				</hlayout>
 			</row>
 			<row>
 				Cantidad:
