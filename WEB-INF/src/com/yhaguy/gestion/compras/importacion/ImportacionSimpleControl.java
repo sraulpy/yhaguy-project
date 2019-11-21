@@ -74,7 +74,7 @@ public class ImportacionSimpleControl extends SoloViewModel {
 
 		} else {
 			cod = (String) this.dato.getNewDetalle().getArticulo().getPos1();
-			des = (String) this.dato.getNewDetalle().getArticulo().getPos1();
+			des = (String) this.dato.getNewDetalle().getArticulo().getPos4();
 		}
 
 		find = (busqueda == BUSQUEDA_POR_CODIGO) ? cod : des;
