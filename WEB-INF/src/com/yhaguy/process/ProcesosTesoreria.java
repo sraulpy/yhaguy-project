@@ -635,7 +635,7 @@ public class ProcesosTesoreria {
 	 */
 	public static void addChequeTerceros() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Date desde = Utiles.getFecha("01-03-2018 00:00:00");
+		Date desde = Utiles.getFecha("01-10-2019 00:00:00");
 		Date hasta = new Date();
 		List<Recibo> recibos = rr.getCobranzas(desde, hasta, 2, 0, true);
 		for (Recibo recibo : recibos) {
@@ -1354,6 +1354,7 @@ public class ProcesosTesoreria {
 		List<BancoBoletaDeposito> list = rr.getObjects(BancoBoletaDeposito.class.getName());
 		for (BancoBoletaDeposito dep : list) {
 			dep.setTotalImporte_gs(dep.getTotalImporteGs());
+			dep.setMonto(dep.getTotalImporteGs());
 			rr.saveObject(dep, dep.getUsuarioMod());
 			System.out.println(dep.getNumeroBoleta());
 		}		
@@ -1383,7 +1384,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.addMovimientosBancoFormaPagoDepositoBancario();
 			//ProcesosTesoreria.chequearClientesDuplicados();
 			//ProcesosTesoreria.addRecaudacionesCentral();
-			//ProcesosTesoreria.addChequeTerceros();
+			ProcesosTesoreria.addChequeTerceros();
 			//ProcesosTesoreria.setNumeroRecibos();
 			//ProcesosTesoreria.setOrigenRecaudacionCentral();
 			//ProcesosTesoreria.setEmisionChequesTerceros();
@@ -1402,7 +1403,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
 			//ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
-			ProcesosTesoreria.verificarBancoDepositos();
+			//ProcesosTesoreria.verificarBancoDepositos();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
