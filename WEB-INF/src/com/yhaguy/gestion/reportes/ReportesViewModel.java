@@ -21095,21 +21095,21 @@ class ReporteMatrizReposicion extends ReporteYhaguy {
 	static DatosColumnas col0 = new DatosColumnas("Código", TIPO_STRING);
 	static DatosColumnas col1 = new DatosColumnas("Costo Ds", TIPO_DOUBLE_DS, 80);
 	static DatosColumnas col2 = new DatosColumnas("Costo Gs", TIPO_DOUBLE_GS, 80);
-	static DatosColumnas col3 = new DatosColumnas("Ene", TIPO_LONG, 50, true);
-	static DatosColumnas col4 = new DatosColumnas("Feb", TIPO_LONG, 50, true);
-	static DatosColumnas col5 = new DatosColumnas("Mar", TIPO_LONG, 50, true);
-	static DatosColumnas col6 = new DatosColumnas("Abr", TIPO_LONG, 50, true);
-	static DatosColumnas col7 = new DatosColumnas("May", TIPO_LONG, 50, true);
-	static DatosColumnas col8 = new DatosColumnas("Jun", TIPO_LONG, 50, true);
-	static DatosColumnas col9 = new DatosColumnas("Jul", TIPO_LONG, 50, true);
-	static DatosColumnas col10 = new DatosColumnas("Ago", TIPO_LONG, 50, true);
-	static DatosColumnas col11 = new DatosColumnas("Set", TIPO_LONG, 50, true);
-	static DatosColumnas col12 = new DatosColumnas("Oct", TIPO_LONG, 50, true);
-	static DatosColumnas col13 = new DatosColumnas("Nov", TIPO_LONG, 50, true);
-	static DatosColumnas col14 = new DatosColumnas("Dic", TIPO_LONG, 50, true);
+	static DatosColumnas col3 = new DatosColumnas("Ene", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col4 = new DatosColumnas("Feb", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col5 = new DatosColumnas("Mar", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col6 = new DatosColumnas("Abr", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col7 = new DatosColumnas("May", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col8 = new DatosColumnas("Jun", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col9 = new DatosColumnas("Jul", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col10 = new DatosColumnas("Ago", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col11 = new DatosColumnas("Set", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col12 = new DatosColumnas("Oct", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col13 = new DatosColumnas("Nov", TIPO_DOUBLE, 50, true);
+	static DatosColumnas col14 = new DatosColumnas("Dic", TIPO_DOUBLE, 50, true);
 	static DatosColumnas col15 = new DatosColumnas("Stock", TIPO_LONG, 50);
-	static DatosColumnas col16 = new DatosColumnas("Max", TIPO_LONG, 50);
-	static DatosColumnas col17 = new DatosColumnas("Prom", TIPO_LONG, 50);
+	static DatosColumnas col16 = new DatosColumnas("Max", TIPO_DOUBLE, 50);
+	static DatosColumnas col17 = new DatosColumnas("Prom", TIPO_DOUBLE, 50);
 	
 	public ReporteMatrizReposicion(Date desde, Date hasta, String proveedor, String sucursal, String titulo) {
 		this.desde = desde;
