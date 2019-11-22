@@ -1,0 +1,87 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.bancos.chequeras.ChequerasViewModel')"
+	vflex="true" hflex="true">
+	<vbox hflex="true" vflex="true" spacing="0">
+	<hlayout sclass="button-container" hflex="true">
+		<button mold="bs" sclass="btn-sm btn-primary" label="Agregar" iconSclass="z-icon-plus-circle" hflex="true"
+			onClick='pop_add.open(self, "after_start")'></button>
+		<space hflex="true"></space>
+		<space hflex="true"></space>
+		<space hflex="true"></space>
+	</hlayout>
+	
+	<listbox vflex="true" hflex="true" sclass="small-list"
+		model="@load(vm.chequeras)"
+		emptyMessage="SIN REGISTROS..">
+		<listhead>
+			<listheader label="Banco"></listheader>
+			<listheader label="Desde" align="right"></listheader>
+			<listheader label="Hasta" align="right"></listheader>
+			<listheader label="Siguiente" align="right"></listheader>
+			<listheader width="50px" align="center"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<textbox hflex="true" placeholder="Banco.."
+					value="@bind(vm.filterBanco)" instant="true"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.descripcion)"></listcell>
+				<listcell label="@load(each.numeroDesde)"></listcell>
+				<listcell label="@load(each.numeroHasta)"></listcell>
+				<listcell label="@load(each.numero + 1)"></listcell>
+				<listcell>
+					<a iconSclass="@load(each.numeroHasta lt (each.numero + 1) ? 'z-icon-lock' : 'z-icon-check')" 
+						style="@load(each.numeroHasta lt (each.numero + 1) ? 'color:red;font-size:11pt' : 'color:green;font-size:11pt')"></a>
+				</listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="ítems" span="4"></listfooter>
+		</listfoot>
+	</listbox>
+	</vbox>
+	<popup id="pop_add" sclass="rounded">
+		<vbox width="350px">
+			<grid sclass="vgrid" style="margin:10px">
+				<columns>
+					<column width="35%"></column>
+					<column></column>
+				</columns>
+				<rows>
+					<row>
+						<field value="Banco:" />
+						<combobox hflex="true" model="@load(vm.bancos)"
+							selectedItem="@bind(vm.nvaChequera.descripcion)">
+							<template name="model">
+								<comboitem label="@load(each)"></comboitem>
+							</template>
+						</combobox>
+					</row>
+					<row>
+						<field value="Desde:" />
+						<longbox value="@bind(vm.nvaChequera.numeroDesde)" hflex="true"></longbox>
+					</row>
+					<row>
+						<field value="Hasta:" />
+						<longbox value="@bind(vm.nvaChequera.numeroHasta)" hflex="true"></longbox>
+					</row>
+				</rows>
+			</grid>
+			<div height="5px"></div>
+			<button mold="bs" hflex="true" sclass="btn-sm btn-primary"
+				iconSclass="z-icon-check"
+				onClick="@command('addChequera', comp=pop_add)"
+				disabled="@load(vm.nvaChequera.descripcion eq null ? 'true' : !(vm.nvaChequera.numeroHasta > vm.nvaChequera.numeroDesde))">
+			</button>
+		</vbox>
+	</popup>
+</window>

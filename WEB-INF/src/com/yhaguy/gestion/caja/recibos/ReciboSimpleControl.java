@@ -664,6 +664,11 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.nvoFormaPago.setBancoCta(cuenta);
 	}
 	
+	@GlobalCommand @NotifyChange("*")
+	public void updateAuxi(@BindingParam("key") String key){
+		this.nvoFormaPago.setAuxi(key);
+	}
+	
 	/**
 	 * setea la moneda a la forma de pago..
 	 */

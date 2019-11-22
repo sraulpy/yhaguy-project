@@ -23,6 +23,11 @@ public class BancoCtaDTO extends DTO {
 		return cs;
 	}
 	
+	public String getDescripcion() {
+		return this.banco.getPos1().toString().toUpperCase() + " - " + this.nroCuenta + " - "
+				+ this.moneda.getPos2().toString().toUpperCase();
+	}
+	
 	public String getBancoDescripcion(){
 		return this.banco.getPos1().toString();
 	}

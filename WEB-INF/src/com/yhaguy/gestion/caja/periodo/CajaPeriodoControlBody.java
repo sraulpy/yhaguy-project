@@ -25,6 +25,7 @@ import com.coreweb.Config;
 import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.WindowPopup;
+import com.coreweb.domain.AutoNumero;
 import com.coreweb.domain.Tipo;
 import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
@@ -2111,6 +2112,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	// Asigna numeros a los Recibos
 	private void asignarNumeros() {
 		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
 			for (ReciboDTO rec : this.dto.getRecibos()) {
 				if (rec.esNuevo() && !rec.isCobro()) {
 					if (rec.isCancelacionChequeRechazado() || rec.isReembolsoPrestamo()) {
@@ -2123,6 +2125,15 @@ public class CajaPeriodoControlBody extends BodyApp {
 								+ "-"
 								+ AutoNumeroControl.getAutoNumero(Configuracion.NRO_RECIBO_PAGO, 5);
 						rec.setNumero(nro);
+						for (ReciboFormaPagoDTO fp : rec.getFormasPago()) {
+							if (fp.isChequePropio()) {
+								AutoNumero aut = rr.getAutoNumero(fp.getAuxi());
+								if (aut != null) {
+									aut.setNumero(Long.parseLong(fp.getChequeNumero()));
+									rr.saveObject(aut, this.getLoginNombre());
+								}
+							}
+						}
 					}
 					this.addEventoAgenda(ControlAgendaEvento.NORMAL,
 							this.dto.getNumero(), 0,

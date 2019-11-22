@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.bancos.cheques;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -15,19 +17,21 @@ import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
+import com.coreweb.domain.AutoNumero;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.AssemblerBancoCtaCte;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
 
-public class WindowCheque extends SoloViewModel {
+public class WindowCheque extends SoloViewModel {	
 	
+	private AutoNumero selectedChequera;
 	
-	public void show(String modo, boolean chequeManual){
-		
+	public void show(String modo, boolean chequeManual) {
 		try {
 			this.chequeManual = chequeManual;
 			wp = new WindowPopup();
@@ -37,8 +41,7 @@ public class WindowCheque extends SoloViewModel {
 			wp.setTitulo("Agregar Cheque");
 			wp.setWidth("750px");
 			wp.setHigth("530px");
-			wp.show(Configuracion.CHEQUE_ZUL);
-			
+			wp.show(Configuracion.CHEQUE_ZUL);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -51,8 +54,6 @@ public class WindowCheque extends SoloViewModel {
 	public boolean isClickAceptar(){
 		return this.wp.isClickAceptar();
 	}	
-	
-	/****************************************************/	
 	
 	private WindowPopup wp; 
 	private WindowCheque dato;
@@ -77,10 +78,15 @@ public class WindowCheque extends SoloViewModel {
 	public String getAliasFormularioCorriente(){
 		return ID.F_BANCO_CHEQUE;
 	}
-	/****************************************************/
 	
-	
-	/******************* BUSCAR BANCO *******************/
+	@Command
+	@NotifyChange("*")
+	public void setNumero() {
+		this.chequeDTO.setNumero(this.selectedChequera.getNumero() + 1);
+		Map<String, Object> mp = new HashMap<String, Object>();
+		mp.put("key", this.selectedChequera.getKey());
+		BindUtils.postGlobalCommand(null, null, "updateAuxi", mp);
+	}
 	
 	private static String[] attBanco = { "banco.descripcion", "nroCuenta",
 			"tipo.descripcion", "moneda.descripcion" };
@@ -120,6 +126,23 @@ public class WindowCheque extends SoloViewModel {
 	
 	
 	/******************  GETTER/SETTER ******************/
+	
+	@DependsOn("cuentaDTO")
+	public List<AutoNumero> getChequeras() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<AutoNumero> out = rr.getBancoChequeras(this.cuentaDTO.getDescripcion());
+		List<AutoNumero> out_ = new ArrayList<AutoNumero>();
+		for (AutoNumero item : out) {
+			item.setDescripcion("(" + item.getNumeroDesde() + " - " + item.getNumeroHasta() + ") - " + (item.getNumero() + 1));
+		}
+		out_.addAll(out);
+		for (AutoNumero item : out) {
+			if (item.getNumero() >= item.getNumeroHasta()) {
+				out_.remove(item);
+			}
+		}
+		return out_;
+	}
 	
 	public WindowPopup getWp() {
 		return wp;
@@ -192,6 +215,14 @@ public class WindowCheque extends SoloViewModel {
 
 	public void setChequeManual(boolean chequeManual) {
 		this.chequeManual = chequeManual;
+	}
+
+	public AutoNumero getSelectedChequera() {
+		return selectedChequera;
+	}
+
+	public void setSelectedChequera(AutoNumero selectedChequera) {
+		this.selectedChequera = selectedChequera;
 	}
 }
 

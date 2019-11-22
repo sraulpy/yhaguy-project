@@ -107,19 +107,30 @@
 				<rows>
 					<row>
 						<field value="Cuenta:" />
-						<hlayout>
+						<hbox hflex="true">
 							<textbox id="txCuenta"
 								value="@bind(vm.cuentaDTO.banco.pos1)"
 								onOK="@command('buscarBanco')" placeholder="Descripción.."
-								hflex="true" />
+								hflex="true" />							
+							<textbox readonly="true" hflex="true"
+								value="@load(vm.cuentaDTO.nroCuenta)"></textbox>
 							<button
 								iconSclass="z-icon-search" onClick="@command('buscarBanco')" />
-						</hlayout>
+						</hbox>
 					</row>
 					<row>
-						<field value="Número:" />					
-						<longbox value="@bind(vm.chequeDTO.numero)" 
-								hflex="true"/>
+						<field value="Número:" />
+						<hbox hflex="true">
+							<longbox value="@bind(vm.chequeDTO.numero)" hflex="true" readonly="true" />
+							<combobox hflex="true" placeholder="Chequera.."
+								model="@load(vm.chequeras)"
+								selectedItem="@bind(vm.selectedChequera)"
+								onSelect="@command('setNumero')">
+								<template name="model">
+									<comboitem label="@load(each.descripcion)"></comboitem>
+								</template>
+							</combobox>
+						</hbox>					
 					</row>
 					<row>
 						<field value="Moneda:" />						
@@ -132,13 +143,13 @@
 					</row>
 					<row>
 						<field value="Monto:" />						
-						<hlayout sclass="z-valign-bottom">
+						<hbox hflex="true">
 							<doublebox value="@bind(vm.chequeDTO.monto)"
 								format="@load(vm.format)" 
 								hflex="true"/>
 							<label
 								value="@load(vm.chequeDTO.moneda.pos2)" style="font-size:11px" />
-						</hlayout>
+						</hbox>
 					</row>
 				</rows>
 			</grid>
