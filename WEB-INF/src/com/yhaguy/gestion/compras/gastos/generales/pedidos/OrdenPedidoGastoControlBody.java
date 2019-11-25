@@ -914,7 +914,7 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		List<BancoCta> bancos = rr.getBancosCta();
 		List<MyArray> out = new ArrayList<MyArray>();
 		for (BancoCta banco : bancos) {
-			MyArray my = new MyArray(banco.getBanco().getDescripcion().toUpperCase());
+			MyArray my = new MyArray(banco.getDescripcion());
 			my.setId(banco.getId());
 			out.add(my);
 		}

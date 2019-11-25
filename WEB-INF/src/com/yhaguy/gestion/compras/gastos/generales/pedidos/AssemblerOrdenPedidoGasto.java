@@ -22,8 +22,7 @@ public class AssemblerOrdenPedidoGasto extends Assembler {
 
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
-		OrdenPedidoGastoDTO dto = (OrdenPedidoGastoDTO) getDTO(domain,
-				OrdenPedidoGastoDTO.class);
+		OrdenPedidoGastoDTO dto = (OrdenPedidoGastoDTO) getDTO(domain, OrdenPedidoGastoDTO.class);
 
 		this.copiarValoresAtributos(domain, dto, attIgualesOrdenPedidoGasto);
 
@@ -53,8 +52,7 @@ public class AssemblerOrdenPedidoGasto extends Assembler {
 		this.myPairToDomain(dto, domain, "moneda");
 		this.listaDTOToListaDomain(dto, domain, "ordenPedidoGastoDetalle",
 				true, true, new AssemblerOrdenPedidoGastoDetalle());
-		this.listaDTOToListaDomain(dto, domain, "gastos", false, false,
-				new AssemblerGasto());
+		this.listaDTOToListaDomain(dto, domain, "gastos", false, false, new AssemblerGasto());
 		
 		for (GastoDTO gasto : dto.getGastos()) {
 			domain.setNumeroFactura(gasto.getNumeroFactura());
