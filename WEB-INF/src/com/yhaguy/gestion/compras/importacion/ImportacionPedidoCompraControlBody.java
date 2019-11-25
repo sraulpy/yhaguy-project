@@ -505,7 +505,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.nvoDesglose.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO));
 		this.nvoDesglose.setIdMovimientoOriginal(this.dto.getId());	
 		this.nvoDesglose.setMoneda(rr.getTipoById(this.dto.getMoneda().getId()));
-		this.dto.getDesglose().add(this.nvoDesglose);
+		this.dto.getImportacionFactura().get(0).getDesglose().add(this.nvoDesglose);
 		this.nvoDesglose = new CtaCteEmpresaMovimiento();
 	}
 	

@@ -58,7 +58,6 @@ public class ImportacionPedidoCompra extends Domain {
 	private Set<ImportacionTrazabilidad> trazabilidad = new HashSet<ImportacionTrazabilidad>();
 	private Proveedor proveedor;
 	private ImportacionResumenGastosDespacho resumenGastosDespacho;
-	private Set<CtaCteEmpresaMovimiento> desglose = new HashSet<CtaCteEmpresaMovimiento>();
 	
 	private SubDiario subDiario;
 	
@@ -70,15 +69,6 @@ public class ImportacionPedidoCompra extends Domain {
 		for (ImportacionPedidoCompraDetalle det : this.importacionPedidoCompraDetalle) {
 			out += det.getCantidad();
 		}
-		return out;
-	}
-	
-	/**
-	 * @return el desglose de facturas..
-	 */
-	public List<CtaCteEmpresaMovimiento> getDesglose_() {
-		List<CtaCteEmpresaMovimiento> out = new ArrayList<CtaCteEmpresaMovimiento>();
-		out.addAll(this.getDesglose());
 		return out;
 	}
 
@@ -391,13 +381,5 @@ public class ImportacionPedidoCompra extends Domain {
 
 	public void setConteo3(boolean conteo3) {
 		this.conteo3 = conteo3;
-	}
-
-	public Set<CtaCteEmpresaMovimiento> getDesglose() {
-		return desglose;
-	}
-
-	public void setDesglose(Set<CtaCteEmpresaMovimiento> desglose) {
-		this.desglose = desglose;
 	}
 }

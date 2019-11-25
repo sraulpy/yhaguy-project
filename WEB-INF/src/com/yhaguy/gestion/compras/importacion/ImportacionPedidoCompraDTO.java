@@ -59,7 +59,6 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private List<ImportacionGastoImprevistoDTO> gastosImprevistos = new ArrayList<ImportacionGastoImprevistoDTO>();
 	private List<ImportacionAplicacionAnticipoDTO> aplicacionAnticipos = new ArrayList<ImportacionAplicacionAnticipoDTO>();
 	private List<MyArray> trazabilidad = new ArrayList<MyArray>();
-	private List<CtaCteEmpresaMovimiento> desglose = new ArrayList<CtaCteEmpresaMovimiento>();
 	
 	private double totalGastos = 0;
 	private double totalGastosDs = 0;
@@ -114,15 +113,6 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	 */
 	public String getNumeroFecha() {
 		return this.numeroPedidoCompra + " - " + Utiles.getDateToString(this.fechaCreacion, Utiles.DD_MM_YYYY);
-	}
-	
-	/**
-	 * @return el desglose de facturas..
-	 */
-	public Set<CtaCteEmpresaMovimiento> getDesglose_() {
-		Set<CtaCteEmpresaMovimiento> out = new HashSet<CtaCteEmpresaMovimiento>();
-		out.addAll(this.getDesglose());
-		return out;
 	}
 	
 	@DependsOn("subDiario")
@@ -480,13 +470,5 @@ public class ImportacionPedidoCompraDTO extends DTO {
 
 	public void setConteo3(boolean conteo3) {
 		this.conteo3 = conteo3;
-	}
-
-	public List<CtaCteEmpresaMovimiento> getDesglose() {
-		return desglose;
-	}
-
-	public void setDesglose(List<CtaCteEmpresaMovimiento> desglose) {
-		this.desglose = desglose;
 	}
 }
