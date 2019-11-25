@@ -3,7 +3,7 @@ package com.yhaguy.domain;
 import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
-public class ImportacionGastoImprevisto extends Domain{
+public class ImportacionGastoImprevisto extends Domain {
 
 	private double importeGs;
 	private double importeDs;

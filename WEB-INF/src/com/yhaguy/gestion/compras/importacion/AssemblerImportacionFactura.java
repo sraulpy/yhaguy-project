@@ -22,6 +22,7 @@ public class AssemblerImportacionFactura extends Assembler {
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {
 		ImportacionFactura domain = (ImportacionFactura) getDomain(dto, ImportacionFactura.class);
+		ImportacionFacturaDTO dto_ = (ImportacionFacturaDTO) dto;
 		
 		this.copiarValoresAtributos(dto, domain, attIguales);
 		this.hijoDtoToHijoDomain(dto, domain, "proveedor", new AssemblerProveedor(), false);
@@ -29,13 +30,15 @@ public class AssemblerImportacionFactura extends Assembler {
 		this.myArrayToDomain(dto, domain, "condicionPago");
 		this.myArrayToDomain(dto, domain, "moneda");
 		this.listaDTOToListaDomain(dto, domain, "detalles", true, true, new AssemblerImportacionFacturaDetalle());
-
+		domain.setDesglose(dto_.getDesglose_());
+		
 		return domain;
 	}
 
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
 		ImportacionFacturaDTO dto = (ImportacionFacturaDTO) getDTO(domain, ImportacionFacturaDTO.class);
+		ImportacionFactura domain_ = (ImportacionFactura) domain;
 
 		this.copiarValoresAtributos(domain, dto, attIguales);
 		this.hijoDomainToHijoDTO(domain, dto, "proveedor", new AssemblerProveedor());
@@ -43,6 +46,7 @@ public class AssemblerImportacionFactura extends Assembler {
 		this.domainToMyArray(domain, dto, "condicionPago", attCondicion);
 		this.domainToMyArray(domain, dto, "moneda", attMoneda);
 		this.listaDomainToListaDTO(domain, dto, "detalles", new AssemblerImportacionFacturaDetalle());
+		dto.setDesglose(domain_.getDesglose_());
 
 		return dto;
 	}

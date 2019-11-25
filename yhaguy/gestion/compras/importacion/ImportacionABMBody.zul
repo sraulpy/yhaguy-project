@@ -641,7 +641,9 @@
 						<textbox
 							value="@load(vm.selectedImportacionFactura.fechaOriginal) @converter('formatedDate', format='dd-MM-yyyy')"
 							readonly="true" hflex="true" />
-
+						<space></space>
+						<a label=" Desglose de facturas" iconSclass="z-icon-sort-amount-desc"
+							onClick='popFacturas.open(self, "after_end")'></a>
 						<!--
 							Descuento:
 							<guaranibox value="@bind(vm.selectedImportacionFactura.descuentoGs)" width="80px"
@@ -1676,6 +1678,23 @@
 				disabled="@load(!vm.siempreHabilitado)"
 				onClick="@command('imprimirResumenImportacion')" />
 		</vlayout>
+	</popup>
+	
+	<popup id="popFacturas" width="300px" height="300px" sclass="rounded">
+		<vbox vflex="true" spacing="0">
+			<vlayout sclass="button-container">
+				<textbox placeholder="Nro. Factura" hflex="true"
+					value="@bind(vm.nvoDesglose.nroComprobante)"></textbox>
+				<datebox hflex="true" placeholder="Vencimiento"
+					value="@bind(vm.nvoDesglose.fechaVencimiento)"></datebox>
+				<dolarbox hflex="true" placeholder="Importe" 
+					value="@bind(vm.nvoDesglose.importeOriginal)" />
+			</vlayout>
+			<button mold="bs" iconSclass="z-icon-plus-circle" sclass="btn-sm btn-primary" hflex="true" label="Agregar"></button>
+			<div height="5px"></div>
+			<listbox sclass="small-list" vflex="true"
+				emptyMessage="SIN REGISTROS.."></listbox>
+		</vbox>
 	</popup>
 	</div>	
 	<style>

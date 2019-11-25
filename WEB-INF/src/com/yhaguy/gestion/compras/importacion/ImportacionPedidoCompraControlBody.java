@@ -112,6 +112,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private ImportacionAplicacionAnticipoDTO selectedAnticipo;
 	private Object[] selectedFormato;
 	
+	private CtaCteEmpresaMovimiento nvoDesglose = new CtaCteEmpresaMovimiento();
+	
 	private MyArray nvaTrazabilidad = new MyArray(new Date(), "", "", "", "", 1, "", 0.0);
 	
 	public MyArray totalesCostoFinal = new MyArray(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -4345,6 +4347,14 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 
 	public void setFechaCierre(Date fechaCierre) {
 		this.fechaCierre = fechaCierre;
+	}
+
+	public CtaCteEmpresaMovimiento getNvoDesglose() {
+		return nvoDesglose;
+	}
+
+	public void setNvoDesglose(CtaCteEmpresaMovimiento nvoDesglose) {
+		this.nvoDesglose = nvoDesglose;
 	}
 	
 	/***********************************************************************************************/
