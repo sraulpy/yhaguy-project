@@ -1680,20 +1680,49 @@
 		</vlayout>
 	</popup>
 	
-	<popup id="popFacturas" width="300px" height="300px" sclass="rounded">
+	<popup id="popFacturas" width="300px" height="400px" sclass="rounded">
 		<vbox vflex="true" spacing="0">
 			<vlayout sclass="button-container">
-				<textbox placeholder="Nro. Factura" hflex="true"
-					value="@bind(vm.nvoDesglose.nroComprobante)"></textbox>
-				<datebox hflex="true" placeholder="Vencimiento"
-					value="@bind(vm.nvoDesglose.fechaVencimiento)"></datebox>
-				<dolarbox hflex="true" placeholder="Importe" 
-					value="@bind(vm.nvoDesglose.importeOriginal)" />
+				<grid sclass="vgrid">
+					<columns>
+						<column width="40%"></column>
+						<column></column>
+					</columns>
+					<rows>
+						<row>
+							<label>Nro. Factura:</label>
+							<textbox placeholder="Nro. Factura" hflex="true"
+								value="@bind(vm.nvoDesglose.nroComprobante)"></textbox>
+						</row>
+						<row>
+							<label>Emisión:</label>
+							<datebox hflex="true" placeholder="Emisión"
+								value="@bind(vm.nvoDesglose.fechaEmision)"></datebox>
+						</row>
+						<row>
+							<label>Vencimiento:</label>
+							<datebox hflex="true" placeholder="Vencimiento"
+								value="@bind(vm.nvoDesglose.fechaVencimiento)"></datebox>
+						</row>
+						<row>
+							<label>Importe:</label>
+							<dolarbox hflex="true" placeholder="Importe" 
+								value="@bind(vm.nvoDesglose.importeOriginal)" />
+						</row>
+						<row>
+							<label>Tipo Cambio:</label>
+							<dolarbox hflex="true" placeholder="Tipo Cambio.." 
+								value="@bind(vm.nvoDesglose.tipoCambio)" />
+						</row>
+					</rows>
+				</grid>
 			</vlayout>
-			<button mold="bs" iconSclass="z-icon-plus-circle" sclass="btn-sm btn-primary" hflex="true" label="Agregar"></button>
+			<button mold="bs" iconSclass="z-icon-plus-circle" sclass="btn-sm btn-primary" hflex="true" label="Agregar"
+				onClick="@command('addDesglose')"></button>
 			<div height="5px"></div>
 			<listbox sclass="small-list" vflex="true"
-				emptyMessage="SIN REGISTROS.."></listbox>
+				emptyMessage="SIN REGISTROS.."
+				model="@load()"></listbox>
 		</vbox>
 	</popup>
 	</div>	

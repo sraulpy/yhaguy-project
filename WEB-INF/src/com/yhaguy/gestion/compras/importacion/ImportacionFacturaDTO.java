@@ -37,7 +37,7 @@ public class ImportacionFacturaDTO extends DTO{
 	private MyArray condicionPago = new MyArray();
 	private MyArray moneda = new MyArray();
 	private List<ImportacionFacturaDetalleDTO> detalles = new ArrayList<ImportacionFacturaDetalleDTO>();
-	private List<CtaCteEmpresaMovimiento> desglose = new ArrayList<CtaCteEmpresaMovimiento>();
+	
 	
 	/**
 	 * @return el importe total en gs..
@@ -58,15 +58,6 @@ public class ImportacionFacturaDTO extends DTO{
 		for (ImportacionFacturaDetalleDTO det : this.detalles) {
 			out += det.getImporteDsCalculado();
 		}
-		return out;
-	}
-	
-	/**
-	 * @return el desglose de facturas..
-	 */
-	public Set<CtaCteEmpresaMovimiento> getDesglose_() {
-		Set<CtaCteEmpresaMovimiento> out = new HashSet<CtaCteEmpresaMovimiento>();
-		out.addAll(this.getDesglose());
 		return out;
 	}
 	
@@ -240,13 +231,5 @@ public class ImportacionFacturaDTO extends DTO{
 
 	public void setPorcProrrateo(double porcProrrateo) {
 		this.porcProrrateo = porcProrrateo;
-	}
-
-	public List<CtaCteEmpresaMovimiento> getDesglose() {
-		return desglose;
-	}
-
-	public void setDesglose(List<CtaCteEmpresaMovimiento> desglose) {
-		this.desglose = desglose;
 	}
 }

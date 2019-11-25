@@ -496,6 +496,19 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void addDesglose() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nvoDesglose.setSaldo(this.nvoDesglose.getImporteOriginal());
+		this.nvoDesglose.setIdEmpresa(this.dto.getProveedor().getEmpresa().getId());
+		this.nvoDesglose.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO));
+		this.nvoDesglose.setIdMovimientoOriginal(this.dto.getId());	
+		this.nvoDesglose.setMoneda(rr.getTipoById(this.dto.getMoneda().getId()));
+		this.dto.getDesglose().add(this.nvoDesglose);
+		this.nvoDesglose = new CtaCteEmpresaMovimiento();
+	}
+	
 	/************************** ELIMINAR ITEM DETALLE ORDEN COMPRA ****************************/
 	
 	private List<ImportacionPedidoCompraDetalleDTO> selectedOrdenItems = new ArrayList<ImportacionPedidoCompraDetalleDTO>();

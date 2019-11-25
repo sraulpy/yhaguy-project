@@ -2,7 +2,9 @@ package com.yhaguy.gestion.compras.importacion;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.DependsOn;
@@ -11,6 +13,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ProveedorDTO;
 import com.yhaguy.util.Utiles;
@@ -56,6 +59,7 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	private List<ImportacionGastoImprevistoDTO> gastosImprevistos = new ArrayList<ImportacionGastoImprevistoDTO>();
 	private List<ImportacionAplicacionAnticipoDTO> aplicacionAnticipos = new ArrayList<ImportacionAplicacionAnticipoDTO>();
 	private List<MyArray> trazabilidad = new ArrayList<MyArray>();
+	private List<CtaCteEmpresaMovimiento> desglose = new ArrayList<CtaCteEmpresaMovimiento>();
 	
 	private double totalGastos = 0;
 	private double totalGastosDs = 0;
@@ -110,6 +114,15 @@ public class ImportacionPedidoCompraDTO extends DTO {
 	 */
 	public String getNumeroFecha() {
 		return this.numeroPedidoCompra + " - " + Utiles.getDateToString(this.fechaCreacion, Utiles.DD_MM_YYYY);
+	}
+	
+	/**
+	 * @return el desglose de facturas..
+	 */
+	public Set<CtaCteEmpresaMovimiento> getDesglose_() {
+		Set<CtaCteEmpresaMovimiento> out = new HashSet<CtaCteEmpresaMovimiento>();
+		out.addAll(this.getDesglose());
+		return out;
 	}
 	
 	@DependsOn("subDiario")
@@ -467,5 +480,13 @@ public class ImportacionPedidoCompraDTO extends DTO {
 
 	public void setConteo3(boolean conteo3) {
 		this.conteo3 = conteo3;
+	}
+
+	public List<CtaCteEmpresaMovimiento> getDesglose() {
+		return desglose;
+	}
+
+	public void setDesglose(List<CtaCteEmpresaMovimiento> desglose) {
+		this.desglose = desglose;
 	}
 }

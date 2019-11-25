@@ -44,6 +44,7 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 		this.hijoDtoToHijoDomain(dto, domain, "proveedor", new AssemblerProveedor(), false);
 		this.hijoDtoToHijoDomain(dto, domain, "resumenGastosDespacho", new AssemblerGastosDespacho(), true);
 		this.listaMyArrayToListaDomain(dto_, domain, "trazabilidad", ATT_TRAZABILIDAD, true, true);
+		domain.setDesglose(dto_.getDesglose_());
 		
 		if (dto_.getImportacionFactura().size() > 0) {
 			domain.setFechaFactura(dto_.getImportacionFactura().get(0).getFechaOriginal());
@@ -55,8 +56,8 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
-
 		ImportacionPedidoCompraDTO dto = (ImportacionPedidoCompraDTO) getDTO(domain, ImportacionPedidoCompraDTO.class);
+		ImportacionPedidoCompra domain_ = (ImportacionPedidoCompra) domain;
 
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionPedidoCompra);
 		this.domainToMyArray(domain, dto, "proveedorCondicionPago", ATT_CONDICION);
@@ -75,6 +76,7 @@ public class AssemblerImportacionPedidoCompra extends Assembler {
 		this.hijoDomainToHijoDTO(domain, dto, "proveedor", new AssemblerProveedor());
 		this.hijoDomainToHijoDTO(domain, dto, "resumenGastosDespacho", new AssemblerGastosDespacho());
 		this.listaDomainToListaMyArray(domain, dto, "trazabilidad", ATT_TRAZABILIDAD);
+		dto.setDesglose(domain_.getDesglose_());
 
 		return dto;
 	}

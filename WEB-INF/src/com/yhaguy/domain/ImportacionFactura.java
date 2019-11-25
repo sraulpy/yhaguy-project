@@ -1,9 +1,7 @@
 package com.yhaguy.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.coreweb.domain.Domain;
@@ -36,7 +34,7 @@ public class ImportacionFactura extends Domain{
 	private CondicionPago condicionPago;
 	private Tipo moneda;
 	private Set<ImportacionFacturaDetalle> detalles = new HashSet<ImportacionFacturaDetalle>();
-	private Set<CtaCteEmpresaMovimiento> desglose = new HashSet<CtaCteEmpresaMovimiento>();
+	
 	
 	/**
 	 * @return el total de importe en gs.
@@ -57,15 +55,6 @@ public class ImportacionFactura extends Domain{
 		for (ImportacionFacturaDetalle item : this.detalles) {
 			out += item.getImporteDs();
 		}
-		return out;
-	}
-	
-	/**
-	 * @return el desglose de facturas..
-	 */
-	public List<CtaCteEmpresaMovimiento> getDesglose_() {
-		List<CtaCteEmpresaMovimiento> out = new ArrayList<CtaCteEmpresaMovimiento>();
-		out.addAll(this.getDesglose());
 		return out;
 	}
 	
@@ -303,13 +292,5 @@ public class ImportacionFactura extends Domain{
 
 	public void setTipoCambio(double tipoCambio) {
 		this.tipoCambio = tipoCambio;
-	}
-
-	public Set<CtaCteEmpresaMovimiento> getDesglose() {
-		return desglose;
-	}
-
-	public void setDesglose(Set<CtaCteEmpresaMovimiento> desglose) {
-		this.desglose = desglose;
 	}
 }
