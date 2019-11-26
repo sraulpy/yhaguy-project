@@ -30,8 +30,12 @@ public class RRHHPlanillaSalarios extends Domain {
 	private String mes;
 	private String anho;
 	private String funcionario;
+	private String cedula;
 	private String cargo;
 	private String tipo;
+	
+	private double diasTrabajados;
+	private double cantidadHorasExtras;
 	
 	private double salarios;
 	private double comision;
@@ -47,34 +51,46 @@ public class RRHHPlanillaSalarios extends Domain {
 	private double repuestos;
 	private double seguro;
 	private double embargo;
-	private double ips;
+	private double horasExtras;
+	private double responsabilidad;
+	private double vacaciones;
+	private double seguroVehicular;
+	private double ausencia;
 	
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
 	}
 	
-	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
-			"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos" })
-	public double getTotalACobrar() {
-		return this.salarios + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
-				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
-				+ this.ips + this.prestamos + this.adelantos;
+	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
+			"vacaciones" })
+	public double getTotalHaberes_() {
+		return this.salarios + this.bonificacion + this.otrosHaberes + this.horasExtras + this.responsabilidad
+				+ this.adelantos + this.comision + this.vacaciones;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
-		"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos" })
+			"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos", "horasExtras",
+			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia" })
+	public double getTotalACobrar() {
+		return this.salarios + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
+				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
+				+ this.getIps() + this.prestamos + this.adelantos + this.horasExtras + this.responsabilidad + this.vacaciones
+				+ this.seguroVehicular + this.ausencia;
+	}
+	
+	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
+			"seguro", "embargo", "ausencia", "ips" })
 	public double getTotalADescontar() {
-		double out = 0;
-		if (this.salarios < 0) out += this.salarios; if (this.comision < 0) out += this.comision;
-		if (this.anticipo < 0) out += this.anticipo; if (this.bonificacion < 0) out += this.bonificacion;
-		if (this.otrosHaberes < 0) out += this.otrosHaberes; if (this.otrosDescuentos < 0) out += this.otrosDescuentos;
-		if (this.corporativo < 0) out += this.corporativo; if (this.uniforme < 0) out += this.uniforme;
-		if (this.repuestos < 0) out += this.repuestos; if (this.seguro < 0) out += this.seguro;
-		if (this.embargo < 0) out += this.embargo; if (this.ips < 0) out += this.ips;
-		if (this.prestamos < 0) out += this.prestamos; if (this.adelantos < 0) out += this.adelantos;
-		return out;
-}
+		return this.seguroVehicular + this.prestamos + this.anticipo + this.otrosDescuentos + this.corporativo
+				+ this.uniforme + this.repuestos + this.seguro + this.embargo + this.ausencia + this.getIps();
+	}
+	
+	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
+			"vacaciones" })
+	public double getIps() {
+		return ((this.getTotalHaberes_() - (this.adelantos + this.bonificacion)) * 0.09) * -1 ;
+	}
 
 	public String getFuncionario() {
 		return funcionario;
@@ -196,14 +212,6 @@ public class RRHHPlanillaSalarios extends Domain {
 		this.embargo = embargo;
 	}
 
-	public double getIps() {
-		return ips;
-	}
-
-	public void setIps(double ips) {
-		this.ips = ips;
-	}
-
 	public String getMes() {
 		return mes;
 	}
@@ -234,5 +242,69 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+	public double getHorasExtras() {
+		return horasExtras;
+	}
+
+	public void setHorasExtras(double horasExtras) {
+		this.horasExtras = horasExtras;
+	}
+
+	public double getResponsabilidad() {
+		return responsabilidad;
+	}
+
+	public void setResponsabilidad(double responsabilidad) {
+		this.responsabilidad = responsabilidad;
+	}
+
+	public double getVacaciones() {
+		return vacaciones;
+	}
+
+	public void setVacaciones(double vacaciones) {
+		this.vacaciones = vacaciones;
+	}
+
+	public double getSeguroVehicular() {
+		return seguroVehicular;
+	}
+
+	public void setSeguroVehicular(double seguroVehicular) {
+		this.seguroVehicular = seguroVehicular;
+	}
+
+	public double getAusencia() {
+		return ausencia;
+	}
+
+	public void setAusencia(double ausencia) {
+		this.ausencia = ausencia;
+	}
+
+	public double getDiasTrabajados() {
+		return diasTrabajados;
+	}
+
+	public void setDiasTrabajados(double diasTrabajados) {
+		this.diasTrabajados = diasTrabajados;
+	}
+
+	public double getCantidadHorasExtras() {
+		return cantidadHorasExtras;
+	}
+
+	public void setCantidadHorasExtras(double cantidadHorasExtras) {
+		this.cantidadHorasExtras = cantidadHorasExtras;
 	}
 }

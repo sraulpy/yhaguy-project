@@ -16,17 +16,18 @@
 				
 				<!-- _____________________ DATOS GENERALES _____________________ -->
 			
-				<tabpanel style="padding:50px 100px 50px 100px" vflex="true">
+				<tabpanel style="padding:20px 60px 20px 60px" vflex="true">
 					
-					<vbox>
+					<vbox vflex="true" spacing="0">
 					<div height="100px" width="100px">
-						<image src="@load(vm.dto.esNuevo? '/core/images/sin_imagen.png' : '/core/images/test.jpg')" vflex="true"></image>
+						<image src="@load(vm.dto.esNuevo? '/core/images/sin_imagen.png' : '/core/images/sin_imagen.png')" vflex="true"></image>
 					</div>
 					<div hflex="true" style="color:#B5D5ED;border-bottom:solid 1px;margin:0px 5px 0px 5px"></div>
-					<div height="5px"></div>
+					<hlayout sclass="button-container" hflex="true" vflex="true"
+						style="padding: 20px">					
 					<grid sclass="vgrid" hflex="true">
 						<columns>
-							<column width="35%"></column>
+							<column width="30%"></column>
 							<column></column>
 						</columns>
 						<rows>
@@ -53,7 +54,17 @@
 							<row>
 								<field value="Teléfono:" />
 								<textbox value="@bind(vm.dto.telefono)" hflex="true" />
-							</row>
+							</row>							
+						</rows>
+					</grid>
+					<space></space>
+					<space></space>
+					<grid sclass="vgrid" hflex="true">
+						<columns>
+							<column width="30%"></column>
+							<column></column>
+						</columns>
+						<rows>
 							<row>
 								<field value="Correo Particular:" />
 								<textbox value="@bind(vm.dto.correoPersonal)" hflex="true" />
@@ -95,6 +106,7 @@
 							</row>
 						</rows>
 					</grid>
+					</hlayout>
 					</vbox>
 				</tabpanel>
 				

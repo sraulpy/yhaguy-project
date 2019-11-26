@@ -840,7 +840,6 @@ public class DefinicionesViewModel extends SimpleViewModel {
 		this.setCurrentTipeGeneric(this.getSelectedCargoFuncionario());
 		WindowPopup wp = new WindowPopup();
 		wp.setDato(this);
-		wp.setCheckAC(new ValidadorTipo(this));
 		wp.setHigth("200px");
 		wp.setWidth("400px");
 		wp.setTitulo((add ? "Agregar" : "Modificar") + " cargo de funcionario");
@@ -861,7 +860,7 @@ public class DefinicionesViewModel extends SimpleViewModel {
 			}
 
 			cargoT.setSigla(this.getSelectedCargoFuncionario().getSigla());
-			cargoT.setDescripcion(this.getSelectedCargoFuncionario().getText());
+			cargoT.setDescripcion(this.getSelectedCargoFuncionario().getText().toUpperCase());
 
 			rr.saveObject(cargoT, this.getLoginNombre());
 

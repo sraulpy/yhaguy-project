@@ -14,8 +14,12 @@
 		<property name="mes"/>
 		<property name="anho" />
 		<property name="funcionario" />
+		<property name="cedula" />
 		<property name="cargo" />
 		<property name="tipo" />
+		
+		<property name="diasTrabajados" />
+		<property name="cantidadHorasExtras" />
 		
 		<property name="salarios"/>
 		<property name="comision"/>
@@ -31,7 +35,11 @@
 		<property name="repuestos"/>
 		<property name="seguro"/>
 		<property name="embargo"/>
-		<property name="ips"/>
+		<property name="horasExtras"/>
+		<property name="responsabilidad"/>
+		<property name="vacaciones"/>
+		<property name="seguroVehicular"/>
+		<property name="ausencia"/>
 		
 	</class>
 </hibernate-mapping>

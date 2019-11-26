@@ -62,6 +62,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			pl.setAnho(this.selectedAnho);
 			pl.setTipo(this.selectedTipo);
 			pl.setFuncionario((String) func[1]);
+			pl.setCedula((String) func[2]);
+			pl.setCargo((String) func[3]);
 			rr.saveObject(pl, this.getLoginNombre());
 			comp.close();
 		}
@@ -370,7 +372,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 * GETS / SETS 
 	 */
 	public Object[] getTotales() {
-		Object[] out = new Object[]{ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		Object[] out = new Object[]{ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		if (this.planillas != null) {
 			for (RRHHPlanillaSalarios item : this.planillas) {
 				double sal = (double) out[0]; double com = (double) out[1];			
@@ -381,6 +383,9 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				double emb = (double) out[10]; double ips = (double) out[11];
 				double tco = (double) out[12]; double tde = (double) out[13];
 				double pre = (double) out[14]; double ade = (double) out[15];
+				double hex = (double) out[16]; double res = (double) out[17];
+				double vac = (double) out[18]; double sev = (double) out[19];
+				double aus = (double) out[20]; double tha = (double) out[21];
 				sal += item.getSalarios(); com += item.getComision();
 				ant += item.getAnticipo(); bon += item.getBonificacion();
 				hab += item.getOtrosHaberes(); dto += item.getOtrosDescuentos();
@@ -389,7 +394,10 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				emb += item.getEmbargo(); ips += item.getIps();
 				tco += item.getTotalACobrar(); tde += item.getTotalADescontar();
 				pre += item.getPrestamos(); ade += item.getAdelantos();
-				out = new Object[]{ sal, com, ant, bon, hab, dto, cor, uni, rep, seg, emb, ips, tco, tde, pre, ade };
+				hex += item.getHorasExtras(); res += item.getResponsabilidad();
+				vac += item.getVacaciones(); sev += item.getSeguroVehicular();
+				aus += item.getAusencia(); tha += item.getTotalHaberes_();
+				out = new Object[]{ sal, com, ant, bon, hab, dto, cor, uni, rep, seg, emb, ips, tco, tde, pre, ade, hex, res, vac, sev, aus, tha };
 			}
 		}
 		return out;

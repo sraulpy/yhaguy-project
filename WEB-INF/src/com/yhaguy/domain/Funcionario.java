@@ -36,14 +36,6 @@ public class Funcionario extends Domain {
 	private Tecnico tecnico_;
 	private Set<AccesoApp> accesos = new HashSet<AccesoApp>();
 	private Set<VentaMeta> metas = new HashSet<VentaMeta>();
-
-	public static void main(String[] args) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Funcionario> funcs = rr.getFuncionarios();
-		for (Funcionario func : funcs) {
-			func.setIdSucursal(1);
-		}
-	}
 	
 	@Override
 	public int compareTo(Object o) {

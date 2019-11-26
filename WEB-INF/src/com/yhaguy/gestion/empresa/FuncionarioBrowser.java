@@ -3,16 +3,21 @@ package com.yhaguy.gestion.empresa;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zul.A;
+
 import com.coreweb.extras.browser.Browser;
 import com.coreweb.extras.browser.ColumnaBrowser;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
 
 public class FuncionarioBrowser extends Browser {
 
 	@Override
 	public void setingInicial() {
-		this.setWidthWindows("1020px");
-		this.setHigthWindows("80%");
+		this.setWidthWindows("100%");
+		this.setHigthWindows("90%");
+		this.addOrden("funcionarioEstado.descripcion asc, empresa.nombre");
 	}
 
 	@Override
@@ -24,7 +29,6 @@ public class FuncionarioBrowser extends Browser {
 		ColumnaBrowser col3 = new ColumnaBrowser();
 		ColumnaBrowser col4 = new ColumnaBrowser();
 		ColumnaBrowser col5 = new ColumnaBrowser();
-		ColumnaBrowser col6 = new ColumnaBrowser();
 
 		col1.setCampo("empresa.nombre");
 		col1.setTitulo("Nombre");
@@ -37,14 +41,12 @@ public class FuncionarioBrowser extends Browser {
 
 		col4.setCampo("funcionarioCargo.descripcion");
 		col4.setTitulo("Cargo");
-
-		col5.setCampo("funcionarioEstado.descripcion");
+		
+		col5.setCampo("funcionarioEstado.sigla");
 		col5.setTitulo("Estado");
-
-		col6.setCampo("empresa.fechaIngreso");
-		col6.setTitulo("Fecha de Ingreso");
-		col6.setComponente(LABEL_DATE);
-		col6.setWidthColumna("150px");
+		col5.setComponente("getEstadoComp");
+		col5.setWidthColumna("70px");
+		col5.setEstilo("text-align:center");
 
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
@@ -52,11 +54,11 @@ public class FuncionarioBrowser extends Browser {
 		columnas.add(col3);
 		columnas.add(col4);
 		columnas.add(col5);
-		columnas.add(col6);
 
 		return columnas;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class getEntidadPrincipal() {
 		return Funcionario.class;
@@ -67,4 +69,16 @@ public class FuncionarioBrowser extends Browser {
 		return "Funcionarios";
 	}
 
+	public HtmlBasedComponent getEstadoComp(Object obj, Object[] datos){
+		A img = new A();
+		
+		String sigla = (String) obj;
+		boolean activo = sigla.equals(Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO);
+		
+		img.setIconSclass(activo? "z-icon-check" : "z-icon-times-circle");
+		img.setStyle(activo? "color:green;font-size:11pt" : "color:red;font-size:11pt");
+		img.setTooltiptext(activo? "Activo" : "Inactivo");
+		
+		return img;
+	}
 }

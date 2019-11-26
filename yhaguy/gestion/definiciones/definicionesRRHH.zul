@@ -1,7 +1,7 @@
 <tabbox height="100%" width="100%">
 	<tabs>
 		<tab label="Comisiones" />
-		<tab label="Funcionarios" />
+		<tab label="Cargos" />
 	</tabs>
 	<tabpanels>
 		<tabpanel>
@@ -148,15 +148,20 @@
 			</hbox>
 		</tabpanel>
 		<tabpanel>
-			<hbox width="100%" vflex="true">
-				<vbox width="100%" vflex="true">
+			<vbox width="100%" vflex="true">
 					<hlayout sclass="button-container">
 						<button mold="bs" sclass="btn-primary btn-sm" label="Agregar" 
-							onClick="@command('addCargoFuncionario')" width="130px"/>
+							onClick="@command('addCargoFuncionario')" hflex="true" 
+							iconSclass="z-icon-plus-circle" />
+						<space></space>
 						<button mold="bs" sclass="btn-warning btn-sm" label="Modificar" 
-							onClick="@command('editCargoFuncionario')" width="130px"/>
+							onClick="@command('editCargoFuncionario')" hflex="true" 
+							iconSclass="z-icon-edit" />
+						<space></space>
 						<button label="Eliminar" mold="bs" sclass="btn-info btn-sm"
-							onClick="@command('deleteCargoFuncionario')" width="130px"/>
+							onClick="@command('deleteCargoFuncionario')" hflex="true" 
+							iconSclass="z-icon-times-circle" />
+						<space></space>
 					</hlayout>
 					<listbox sclass="small-list"
 						model="@load(vm.cargosFuncionario)"
@@ -165,45 +170,14 @@
 						<listhead menupopup="auto" sizable="true">
 							<listheader label="Cargos"
 								style="text-align:center" />
-							<listheader label="Sigla"
-								style="text-align:center" />
 						</listhead>
 						<template name="model" status='s'>
 							<listitem>
 								<listcell label="@load(each.text)" />
-								<listcell label="@load(each.sigla)" />
 							</listitem>
 						</template>
 					</listbox>					
 				</vbox>
-				<vbox vflex="true" width="100%">
-					<hlayout sclass="button-container">
-						<button mold="bs" sclass="btn-primary btn-sm" label="Agregar" 
-							onClick="@command('addEstadoFuncionario')" width="130px"/>
-						<button mold="bs" sclass="btn-warning btn-sm" label="Modificar" 
-							onClick="@command('editEstadoFuncionario')" width="130px"/>
-						<button label="Eliminar" mold="bs" sclass="btn-info btn-sm"
-							onClick="@command('deleteEstadoFuncionaro')" width="130px"/>
-					</hlayout>
-					<listbox sclass="small-list"
-						model="@load(vm.estadosFuncionario)"
-						selectedItem="@bind(vm.selectedEstadoFuncionario)" vflex="true"
-						width="100%">
-						<listhead menupopup="auto" sizable="true">
-							<listheader label="Estados"
-								style="text-align:center" />
-							<listheader label="Sigla"
-								style="text-align:center" />
-						</listhead>
-						<template name="model" status='s'>
-							<listitem>
-								<listcell label="@load(each.text)" />
-								<listcell label="@load(each.sigla)" />
-							</listitem>
-						</template>
-					</listbox>
-				</vbox>
-			</hbox>
 		</tabpanel>
 	</tabpanels>
 </tabbox>

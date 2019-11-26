@@ -9,20 +9,8 @@
 		<rows>
 			<row>
 				<field value="Descripción:" />
-				<hbox>
-					<textbox
-						value="@bind(vm.dato.currentTipeGeneric.text)" width="200px" />
-					<label value="(*)" style="color:red"></label>
-				</hbox>
-			</row>
-			<row>
-				<field value="Sigla:" />
-				<hbox>
-					<textbox
-						value="@bind(vm.dato.currentTipeGeneric.sigla)" width="200px"
-						onChange="self.setValue(self.getValue().toUpperCase().trim())" />
-					<label value="(*)" style="color:red"></label>
-				</hbox>
+				<textbox
+						value="@bind(vm.dato.currentTipeGeneric.text)" hflex="true" />
 			</row>
 		</rows>
 	</grid>
