@@ -47,6 +47,7 @@ public class FuncionarioBrowser extends Browser {
 		col5.setComponente("getEstadoComp");
 		col5.setWidthColumna("70px");
 		col5.setEstilo("text-align:center");
+		col5.setWhere("funcionarioEstado.sigla = '" + Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'");
 
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
