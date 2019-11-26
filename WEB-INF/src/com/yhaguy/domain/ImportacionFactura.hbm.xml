@@ -46,10 +46,6 @@
    				   <key><column name="idFactura" not-null="false"/></key>	
    				   <one-to-many entity-name="com.yhaguy.domain.ImportacionFacturaDetalle"></one-to-many>   				   			
    				</set>  
-   				
-   				<set name="desglose" table="ctacteempresamovimiento" inverse="false" lazy="false" fetch="join" cascade="all">
-   		   			<key><column name="idimportacionpedido" not-null="false"/></key>	
-   		   			<one-to-many entity-name="com.yhaguy.domain.CtaCteEmpresaMovimiento"></one-to-many>   				   			
-   				</set>   				 				
+   				  				 				
         </class>
 </hibernate-mapping>

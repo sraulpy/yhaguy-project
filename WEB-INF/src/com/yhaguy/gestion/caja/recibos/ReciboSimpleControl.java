@@ -35,6 +35,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoChequeTercero;
+import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
@@ -1654,6 +1655,21 @@ public class ReciboSimpleControl extends SoloViewModel {
 	public UtilDTO getDtoUtil() {
 		UtilDTO u = (UtilDTO)super.getDtoUtil();
 		return u;
+	}
+	
+	/**
+	 * @return los bancos
+	 */
+	public List<MyArray> getBancos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<BancoCta> bcos = rr.getBancosCta();
+		List<MyArray> out = new ArrayList<MyArray>();
+		for (BancoCta bco : bcos) {
+			MyArray my = new MyArray(bco.getDescripcion());
+			my.setId(bco.getId());
+			out.add(my);
+		}
+		return out;
 	}
 	
 	/**

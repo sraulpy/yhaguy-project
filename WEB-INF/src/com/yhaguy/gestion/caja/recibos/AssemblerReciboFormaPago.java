@@ -16,14 +16,12 @@ public class AssemblerReciboFormaPago extends Assembler {
 		this.numeroComprobante = numeroComprobante;
 	}
 
-	private static String[] attIgualesFormaPago = { "montoGs", "montoDs",
-			"montoChequeGs", "descripcion", "tarjetaNumero",
-			"tarjetaNumeroComprobante", "tarjetaCuotas", "chequeFecha",
-			"chequeNumero", "chequeLibrador", "depositoNroReferencia",
-			"retencionNumero", "retencionTimbrado", "retencionVencimiento",
+	private static String[] ATT_IGUALES_FORMA_PAGO = { "montoGs", "montoDs", "montoChequeGs", "descripcion",
+			"tarjetaNumero", "tarjetaNumeroComprobante", "tarjetaCuotas", "chequeFecha", "chequeNumero",
+			"chequeLibrador", "depositoNroReferencia", "retencionNumero", "retencionTimbrado", "retencionVencimiento",
 			"chequeBancoDescripcion", "reciboDebitoNro", "fechaOperacion" };
 	
-	private static String[] attDepositoBancoCta = { "nroCuenta", "banco", "tipo","moneda" };
+	private static String[] ATT_DEPOSITO_BCO_CTA = { "descripcion" };
 	
 	@Override
 	public Domain dtoToDomain(DTO dto2) throws Exception {
@@ -32,7 +30,7 @@ public class AssemblerReciboFormaPago extends Assembler {
 		
 		domain.setNroComprobanteAsociado(this.numeroComprobante);
 		
-		this.copiarValoresAtributos(dto, domain, attIgualesFormaPago);
+		this.copiarValoresAtributos(dto, domain, ATT_IGUALES_FORMA_PAGO);
 		this.myPairToDomain(dto, domain, "tipo");
 		this.myPairToDomain(dto, domain, "tarjetaTipo");
 		this.myPairToDomain(dto, domain, "chequeBanco");
@@ -51,14 +49,14 @@ public class AssemblerReciboFormaPago extends Assembler {
 	public DTO domainToDto(Domain domain) throws Exception {
 		ReciboFormaPagoDTO dto = (ReciboFormaPagoDTO) getDTO(domain, ReciboFormaPagoDTO.class);
 		
-		this.copiarValoresAtributos(domain, dto, attIgualesFormaPago);
+		this.copiarValoresAtributos(domain, dto, ATT_IGUALES_FORMA_PAGO);
 		this.domainToMyPair(domain, dto, "tipo");
 		this.domainToMyPair(domain, dto, "tarjetaTipo");
 		this.domainToMyPair(domain, dto, "chequeBanco");
 		this.domainToMyPair(domain, dto, "moneda");
 		this.setProcesadora((ReciboFormaPago) domain, dto);
 
-		this.domainToMyArray(domain, dto, "depositoBancoCta", attDepositoBancoCta);
+		this.domainToMyArray(domain, dto, "depositoBancoCta", ATT_DEPOSITO_BCO_CTA);
 		
 		return dto;
 	}	

@@ -503,9 +503,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.nvoDesglose.setSaldo(this.nvoDesglose.getImporteOriginal());
 		this.nvoDesglose.setIdEmpresa(this.dto.getProveedor().getEmpresa().getId());
 		this.nvoDesglose.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO));
-		this.nvoDesglose.setIdMovimientoOriginal(this.dto.getId());	
+		this.nvoDesglose.setIdMovimientoOriginal(this.dto.getImportacionFactura().get(0).getId());	
 		this.nvoDesglose.setMoneda(rr.getTipoById(this.dto.getMoneda().getId()));
-		this.dto.getImportacionFactura().get(0).getDesglose().add(this.nvoDesglose);
+		this.nvoDesglose.setSucursal(rr.getSucursalAppById(SucursalApp.ID_CENTRAL));
+		this.nvoDesglose.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+		this.nvoDesglose.setIdImportacionPedido(this.dto.getId());
+		rr.saveObject(this.nvoDesglose, this.getLoginNombre());
 		this.nvoDesglose = new CtaCteEmpresaMovimiento();
 	}
 	
@@ -3330,7 +3333,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public void afterSave() {
 		this.agruparCantidades();
 		BindUtils.postNotifyChange(null, null, this, "*");
-		Clients.showNotification("save");
 	}
 	
 	public List<MyArray> getItemsCostoFinal(){

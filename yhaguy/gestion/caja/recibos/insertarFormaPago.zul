@@ -183,7 +183,7 @@
 				<field value="Banco:"/>
 				<combobox readonly="true"
 					value="@load(vm.nvoFormaPago.depositoBancoCta.pos1)"
-					model="@load(vm.dtoUtil.bancos)" hflex="true"
+					model="@load(vm.bancos)" hflex="true"
 					selectedItem="@bind(vm.nvoFormaPago.depositoBancoCta)"
 					instant="true">
 					<template name="model">

@@ -1722,7 +1722,18 @@
 			<div height="5px"></div>
 			<listbox sclass="small-list" vflex="true"
 				emptyMessage="SIN REGISTROS.."
-				></listbox>
+				model="@load(vm.dto.desgloseFacturas)">
+				<listhead>
+					<listheader>Nro. Factura</listheader>
+					<listheader align="right">Importe</listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each[3])"></listcell>
+						<listcell label="@load(each[4]) @converter(vm.cnv.monedaLocal)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
 		</vbox>
 	</popup>
 	</div>	

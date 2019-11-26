@@ -9255,6 +9255,24 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el desglose segun importacion.. 
+	 * [0]:id
+	 * [1]:fecha 
+	 * [2]:vencimiento 
+	 * [3]:nroComprobante 
+	 * [4]:importeOriginal 
+	 */
+	public List<Object[]> getDesgloseImportacion(long idImportacion) throws Exception {
+		if (idImportacion < 0) {
+			return new ArrayList<Object[]>();
+		}
+		String query = "select c.id, c.fechaEmision, c.fechaVencimiento, c.nroComprobante, c.importeOriginal"
+				+ " from CtaCteEmpresaMovimiento c where c.idImportacionPedido = " + idImportacion
+				+ " order by c.fechaEmision desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return la linea de credito temporal..
 	 */
 	public List<HistoricoLineaCredito> getHistoricoLineaCredito(long idCliente, boolean temporal) throws Exception {

@@ -2,9 +2,7 @@ package com.yhaguy.gestion.compras.importacion;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.DependsOn;
@@ -13,7 +11,6 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
-import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ProveedorDTO;
 import com.yhaguy.util.Utiles;
@@ -85,6 +82,15 @@ public class ImportacionPedidoCompraDTO extends DTO {
 			this.totalGastosDs += importeDs;
 		}
 		BindUtils.postNotifyChange(null, null, this, "totalGastos");
+		return out;
+	}
+	
+	/**
+	 * @return el desglose de facturas..
+	 */
+	public List<Object[]> getDesgloseFacturas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> out = rr.getDesgloseImportacion(this.getId());
 		return out;
 	}
 	
