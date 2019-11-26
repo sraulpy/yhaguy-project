@@ -26,6 +26,10 @@
 			<column name="idVendedor" default="0" />
 		</property>
 		
+		<property name="idImportacionPedido">
+			<column name="idImportacionPedido" default="0" />
+		</property>
+		
 		<property name="cerrado" index="CtaCteMovimientoCerrado_Index" />
 		
 		<property name="anulado" index="CtaCteMovimientoAnulado_Index">
