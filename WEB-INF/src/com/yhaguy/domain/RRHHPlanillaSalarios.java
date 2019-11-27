@@ -10,10 +10,10 @@ public class RRHHPlanillaSalarios extends Domain {
 	public static final String SALARIOS = "SALARIOS";
 	public static final String COMISION = "COMISION";
 	public static final String ANTICIPO = "ANTICIPO";
-	public static final String BONIFICACION = "BONIFICACION";
+	public static final String BONIFICACION = "BONIFICACION FAMILIAR";
 	public static final String OTROS_HABERES = "OTROS HABERES";
 	public static final String PRESTAMOS = "PRESTAMOS";
-	public static final String ADELANTOS = "ADELANTOS";
+	public static final String ADELANTOS = "ANTICIPO COMISIÓN";
 	public static final String OTROS_DESCUENTOS = "OTROS DESCUENTOS";
 	public static final String CORPORATIVO = "CORPORATIVO";
 	public static final String UNIFORME = "UNIFORME";
@@ -21,6 +21,11 @@ public class RRHHPlanillaSalarios extends Domain {
 	public static final String SEGURO = "SEGURO";
 	public static final String EMBARGO = "EMBARGO";
 	public static final String IPS = "IPS";
+	public static final String HORAS_EXTRAS = "HORAS EXTRAS";
+	public static final String RESPONSABILIDAD = "BONIFICACION POR RESPONSABILIDAD";
+	public static final String VACACIONES = "VACACIONES";
+	public static final String SEGURO_VEHICULAR = "SEGURO VEHICULO";
+	public static final String AUSENCIA = "AUSENCIAS";
 	
 	public static final String TIPO_COMISIONES = "COMISIONES";
 	public static final String TIPO_SALARIOS = "SALARIOS";

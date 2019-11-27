@@ -131,9 +131,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		params.put("parametros", parametros);
 		params.put("dataSource", dataSource);
 		params.put("format", format);
-
-		this.win = (Window) Executions.createComponents(
-				ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
+		this.win = (Window) Executions.createComponents(ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
 		this.win.doModal();
 	}
 	
@@ -159,12 +157,6 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 						Utiles.getNumberFormat(liquidacion.getComision()),
 						Utiles.getNumberFormat(0.0)));
 			}
-			if (liquidacion.getAnticipo() < 0) {
-				this.dets.add(new MyArray("  ", 
-						RRHHPlanillaSalarios.ANTICIPO,
-						Utiles.getNumberFormat(0.0),
-						Utiles.getNumberFormat(liquidacion.getAnticipo())));
-			}
 			if (liquidacion.getBonificacion() > 0) {
 				this.dets.add(new MyArray("  ", 
 						RRHHPlanillaSalarios.BONIFICACION,
@@ -176,6 +168,30 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 						RRHHPlanillaSalarios.OTROS_HABERES,
 						Utiles.getNumberFormat(liquidacion.getOtrosHaberes()),
 						Utiles.getNumberFormat(0.0)));
+			}
+			if (liquidacion.getHorasExtras() > 0) {
+				this.dets.add(new MyArray("  ", 
+						RRHHPlanillaSalarios.HORAS_EXTRAS,
+						Utiles.getNumberFormat(liquidacion.getHorasExtras()),
+						Utiles.getNumberFormat(0.0)));
+			}
+			if (liquidacion.getResponsabilidad() > 0) {
+				this.dets.add(new MyArray("  ", 
+						RRHHPlanillaSalarios.RESPONSABILIDAD,
+						Utiles.getNumberFormat(liquidacion.getResponsabilidad()),
+						Utiles.getNumberFormat(0.0)));
+			}
+			if (liquidacion.getVacaciones() > 0) {
+				this.dets.add(new MyArray("  ", 
+						RRHHPlanillaSalarios.VACACIONES,
+						Utiles.getNumberFormat(liquidacion.getVacaciones()),
+						Utiles.getNumberFormat(0.0)));
+			}
+			if (liquidacion.getAnticipo() < 0) {
+				this.dets.add(new MyArray("  ", 
+						RRHHPlanillaSalarios.ANTICIPO,						
+						Utiles.getNumberFormat(0.0),
+						Utiles.getNumberFormat(liquidacion.getAnticipo())));
 			}
 			if (liquidacion.getPrestamos() < 0) {
 				this.dets.add(new MyArray("  ", 
@@ -191,25 +207,25 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			}
 			if (liquidacion.getOtrosDescuentos() < 0) {
 				this.dets.add(new MyArray("  ", 
-						RRHHPlanillaSalarios.OTROS_DESCUENTOS,
+						RRHHPlanillaSalarios.OTROS_DESCUENTOS,						
 						Utiles.getNumberFormat(0.0),
 						Utiles.getNumberFormat(liquidacion.getOtrosDescuentos())));
 			}
 			if (liquidacion.getCorporativo() < 0) {
 				this.dets.add(new MyArray("  ", 
-						RRHHPlanillaSalarios.CORPORATIVO,
+						RRHHPlanillaSalarios.CORPORATIVO,						
 						Utiles.getNumberFormat(0.0),
 						Utiles.getNumberFormat(liquidacion.getCorporativo())));
 			}
 			if (liquidacion.getUniforme() < 0) {
 				this.dets.add(new MyArray("  ", 
-						RRHHPlanillaSalarios.UNIFORME,
+						RRHHPlanillaSalarios.UNIFORME,						
 						Utiles.getNumberFormat(0.0),
 						Utiles.getNumberFormat(liquidacion.getUniforme())));
 			}
 			if (liquidacion.getRepuestos() < 0) {
 				this.dets.add(new MyArray("  ", 
-						RRHHPlanillaSalarios.REPUESTOS,
+						RRHHPlanillaSalarios.REPUESTOS,						
 						Utiles.getNumberFormat(0.0),
 						Utiles.getNumberFormat(liquidacion.getRepuestos())));
 			}
@@ -224,6 +240,18 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 						RRHHPlanillaSalarios.EMBARGO,
 						Utiles.getNumberFormat(0.0),
 						Utiles.getNumberFormat(liquidacion.getEmbargo())));
+			}
+			if (liquidacion.getSeguroVehicular() < 0) {
+				this.dets.add(new MyArray("  ", 
+						RRHHPlanillaSalarios.SEGURO_VEHICULAR,
+						Utiles.getNumberFormat(0.0),
+						Utiles.getNumberFormat(liquidacion.getSeguroVehicular())));
+			}
+			if (liquidacion.getAusencia() < 0) {
+				this.dets.add(new MyArray("  ", 
+						RRHHPlanillaSalarios.AUSENCIA,
+						Utiles.getNumberFormat(0.0),
+						Utiles.getNumberFormat(liquidacion.getAusencia())));
 			}
 			if (liquidacion.getIps() < 0) {
 				this.dets.add(new MyArray("  ", 
@@ -322,6 +350,20 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				value = Utiles.getNumberFormat(item.getEmbargo());
 			} else if ("Ips".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getIps());
+			} else if ("DiasTrabajados".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getDiasTrabajados());
+			} else if ("CantHorasExtras".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getCantidadHorasExtras());
+			} else if ("Responsabilidad".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getResponsabilidad());
+			} else if ("Vacaciones".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getVacaciones());
+			} else if ("TotalHaberes".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getTotalHaberes_());
+			} else if ("Ausencia".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getAusencia());
+			} else if ("SeguroVehicular".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getSeguroVehicular());
 			} else if ("Acobrar_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[12]);
 			} else if ("Descuentos_t".equals(fieldName)) {
@@ -354,6 +396,18 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				value = Utiles.getNumberFormat((double) this.totales[10]);
 			} else if ("Ips_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[11]);
+			} else if ("Responsabilidad_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[17]);
+			}  else if ("Vacaciones_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[18]);
+			} else if ("TotalHaberes_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[21]);
+			} else if ("SeguroVehicular_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[19]);
+			} else if ("Ausencia_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[20]);
+			} else if ("HorasExtras_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[16]);
 			}
 			return value;
 		}
