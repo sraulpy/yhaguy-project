@@ -3945,6 +3945,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				double utilidad = totalImporte - totalCosto;
 				double promedioSobreCosto = Utiles.obtenerPorcentajeDelValor(utilidad, totalCosto);
 				double promedioSobreVenta = Utiles.obtenerPorcentajeDelValor(utilidad, totalImporte);
+				promedioSobreCosto = Utiles.getRedondeo(promedioSobreCosto);
+				promedioSobreVenta = Utiles.getRedondeo(promedioSobreVenta);
 				
 				if (!resumido) {
 					String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_UTILIDAD_DETALLADO;
