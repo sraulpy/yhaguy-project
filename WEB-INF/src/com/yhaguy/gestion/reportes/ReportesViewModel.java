@@ -18332,11 +18332,11 @@ class VentasUtilidadDetallado implements JRDataSource {
 		} else if ("Importe".equals(fieldName)) {
 			value = FORMATTER.format(det[12]);
 		} else if ("Rent".equals(fieldName)) {
-			value = FORMATTER.format(det[13]);
+			value = FORMATTER.format(Utiles.getRedondeo((double) det[13]));
 		} else if ("Descripcion".equals(fieldName)) {
 			value = det[14];
 		} else if ("Rent_".equals(fieldName)) {
-			value = FORMATTER.format(det[15]);
+			value = FORMATTER.format(Utiles.getRedondeo((double) det[15]));
 		} else if ("Ganancia".equals(fieldName)) {
 			value = FORMATTER.format(det[16]);
 		}  else if ("Tecnico".equals(fieldName)) {
