@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.rrhh;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
@@ -26,6 +28,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 public class PlanillaSalariosViewModel extends SimpleViewModel {
+	
+	static final String ZUL_IMPRESION_LIQUIDACION = "/yhaguy/gestion/rrhh/impresion_liquidacion.zul";
 
 	private String selectedMes = "";
 	private String selectedAnho = "";
@@ -97,15 +101,17 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 * Despliega el Reporte de liquidacion de salario..
 	 */
 	private void imprimirLiquidacion() throws Exception {		
-		String source = ReportesViewModel.SOURCE_LIQUIDACION_SALARIO;
+		//String source = ReportesViewModel.SOURCE_LIQUIDACION_SALARIO;
 		Map<String, Object> params = new HashMap<String, Object>();
-		JRDataSource dataSource = new LiquidacionSalarioDataSource(this.selectedPlanilla);
+		//JRDataSource dataSource = new LiquidacionSalarioDataSource(this.selectedPlanilla);
 		params.put("Fecha", Utiles.getDateToString(this.selectedPlanilla.getModificado(), Utiles.DD_MM_YYYY));
 		params.put("Funcionario", this.selectedPlanilla.getFuncionario());
 		params.put("Cargo", this.selectedPlanilla.getCargo());
 		params.put("Periodo", this.selectedPlanilla.getMes() + " " +  this.selectedPlanilla.getAnho());
 		params.put("Usuario", getUs().getNombre());
-		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+		//this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+		this.win = (Window) Executions.createComponents(ZUL_IMPRESION_LIQUIDACION, this.mainComponent, params);
+		this.win.doModal();
 	}
 	
 	/**
@@ -455,6 +461,97 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			}
 		}
 		return out;
+	}
+	
+	@DependsOn("selectedPlanilla")
+	public List<MyArray> getDetalles() {
+		RRHHPlanillaSalarios liquidacion = this.selectedPlanilla;
+		List<MyArray> dets = new ArrayList<MyArray>();
+		
+		if (liquidacion.getSalarios() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarios()),
+					Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getComision() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.COMISION, Utiles.getNumberFormat(liquidacion.getComision()),
+					Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getBonificacion() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.BONIFICACION,
+					Utiles.getNumberFormat(liquidacion.getBonificacion()), Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getOtrosHaberes() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.OTROS_HABERES,
+					Utiles.getNumberFormat(liquidacion.getOtrosHaberes()), Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getHorasExtras() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.HORAS_EXTRAS,
+					Utiles.getNumberFormat(liquidacion.getHorasExtras()), Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getResponsabilidad() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.RESPONSABILIDAD,
+					Utiles.getNumberFormat(liquidacion.getResponsabilidad()), Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getVacaciones() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.VACACIONES,
+					Utiles.getNumberFormat(liquidacion.getVacaciones()), Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getAnticipo() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ANTICIPO, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getAnticipo())));
+		}
+		if (liquidacion.getPrestamos() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.PRESTAMOS, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getPrestamos())));
+		}
+		if (liquidacion.getAdelantos() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ADELANTOS, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getAdelantos())));
+		}
+		if (liquidacion.getOtrosDescuentos() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.OTROS_DESCUENTOS, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getOtrosDescuentos())));
+		}
+		if (liquidacion.getCorporativo() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.CORPORATIVO, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getCorporativo())));
+		}
+		if (liquidacion.getUniforme() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.UNIFORME, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getUniforme())));
+		}
+		if (liquidacion.getRepuestos() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.REPUESTOS, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getRepuestos())));
+		}
+		if (liquidacion.getSeguro() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SEGURO, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getSeguro())));
+		}
+		if (liquidacion.getEmbargo() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.EMBARGO, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getEmbargo())));
+		}
+		if (liquidacion.getSeguroVehicular() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SEGURO_VEHICULAR, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getSeguroVehicular())));
+		}
+		if (liquidacion.getAusencia() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.AUSENCIA, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getAusencia())));
+		}
+		if (liquidacion.getIps() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.IPS, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getIps())));
+		}
+		return dets;
+	}	
+	
+	/**
+	 * @return la fecha actual
+	 */
+	public String getFecha() {
+		return Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY);
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package com.yhaguy.domain;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.domain.Domain;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class RRHHPlanillaSalarios extends Domain {
@@ -95,6 +96,20 @@ public class RRHHPlanillaSalarios extends Domain {
 			"vacaciones" })
 	public double getIps() {
 		return ((this.getTotalHaberes_() - (this.adelantos + this.bonificacion)) * 0.09) * -1 ;
+	}
+	
+	/**
+	 * @return el total a cobrar formateado..
+	 */
+	public String getTotalACobrar_() {
+		return Utiles.getNumberFormat(this.getTotalACobrar());
+	}
+	
+	/**
+	 * @return el total a cobrar formateado..
+	 */
+	public String getTotalACobrarLetras() {
+		return Utiles.numeroAletras(this.getTotalACobrar());
 	}
 
 	public String getFuncionario() {
