@@ -114,7 +114,8 @@ public class VentaDetalle extends Domain {
 	 * @return la rentabilidad del articulo..
 	 */
 	public double getRentabilidad() {
-		double ganancia = (this.getImporteGsSinIva()) - this.getCostoTotalGsSinIva();		
+		double ganancia = (this.getImporteGsSinIva()) - this.getCostoTotalGsSinIva();
+		if (ganancia <= 0) return 0.0;
 		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getCostoTotalGsSinIva());
 		return Utiles.redondeoDosDecimales(out);
 	}
@@ -123,7 +124,8 @@ public class VentaDetalle extends Domain {
 	 * @return la rentabilidad del articulo sobre venta..
 	 */
 	public double getRentabilidadVenta() {
-		double ganancia = (this.getImporteGsSinIva()) - this.getCostoTotalGsSinIva();		
+		double ganancia = (this.getImporteGsSinIva()) - this.getCostoTotalGsSinIva();	
+		if (ganancia <= 0) return 0.0;
 		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getImporteGsSinIva());
 		return Utiles.redondeoDosDecimales(out);
 	}
