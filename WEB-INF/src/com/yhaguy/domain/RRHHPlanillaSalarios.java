@@ -109,7 +109,7 @@ public class RRHHPlanillaSalarios extends Domain {
 	 * @return el total a cobrar formateado..
 	 */
 	public String getTotalACobrarLetras() {
-		return Utiles.numeroAletras(this.getTotalACobrar());
+		return Utiles.numeroAletras(Utiles.getRedondeo(this.getTotalACobrar()));
 	}
 
 	public String getFuncionario() {
