@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PlanillaSalarios" pageWidth="1613" pageHeight="595" orientation="Landscape" columnWidth="1573" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.2100000000000173"/>
-	<property name="ireport.x" value="734"/>
+	<property name="ireport.x" value="295"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -484,7 +484,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Ubuntu Condensed"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Otroshaberes}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{HorasExtras}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Detail" x="492" y="0" width="60" height="15" uuid="c5a07381-05e7-4b19-81e1-a62dfc7ee69f"/>
@@ -667,7 +667,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Ubuntu Condensed"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Otroshaberes_t}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{HorasExtras_t}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Detail" x="492" y="9" width="60" height="15" uuid="cdb925c1-a81b-45d2-9ef4-6bc09a54f1a6"/>

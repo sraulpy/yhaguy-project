@@ -370,6 +370,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				value = Utiles.getNumberFormat(item.getAusencia());
 			} else if ("SeguroVehicular".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getSeguroVehicular());
+			}  else if ("HorasExtras".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getHorasExtras());
 			} else if ("Acobrar_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[12]);
 			} else if ("Descuentos_t".equals(fieldName)) {
