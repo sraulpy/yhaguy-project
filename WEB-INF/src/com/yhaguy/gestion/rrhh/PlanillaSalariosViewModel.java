@@ -434,7 +434,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 * GETS / SETS 
 	 */
 	public Object[] getTotales() {
-		Object[] out = new Object[]{ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		Object[] out = new Object[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		if (this.planillas != null) {
 			for (RRHHPlanillaSalarios item : this.planillas) {
 				double sal = (double) out[0]; double com = (double) out[1];			
@@ -474,10 +475,6 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarios()),
 					Utiles.getNumberFormat(0.0)));
 		}
-		if (liquidacion.getComision() > 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.COMISION, Utiles.getNumberFormat(liquidacion.getComision()),
-					Utiles.getNumberFormat(0.0)));
-		}
 		if (liquidacion.getBonificacion() > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.BONIFICACION,
 					Utiles.getNumberFormat(liquidacion.getBonificacion()), Utiles.getNumberFormat(0.0)));
@@ -494,21 +491,32 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.RESPONSABILIDAD,
 					Utiles.getNumberFormat(liquidacion.getResponsabilidad()), Utiles.getNumberFormat(0.0)));
 		}
+		if (liquidacion.getAdelantos() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ADELANTOS, Utiles.getNumberFormat(liquidacion.getAdelantos()),
+					Utiles.getNumberFormat(0.0)));
+		}		
+		if (liquidacion.getComision() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.COMISION, Utiles.getNumberFormat(liquidacion.getComision()),
+					Utiles.getNumberFormat(0.0)));
+		}		
 		if (liquidacion.getVacaciones() > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.VACACIONES,
 					Utiles.getNumberFormat(liquidacion.getVacaciones()), Utiles.getNumberFormat(0.0)));
 		}
-		if (liquidacion.getAnticipo() < 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ANTICIPO, Utiles.getNumberFormat(0.0),
-					Utiles.getNumberFormat(liquidacion.getAnticipo())));
+		
+		// DESCUENTOS
+		
+		if (liquidacion.getSeguroVehicular() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SEGURO_VEHICULAR, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getSeguroVehicular())));
 		}
 		if (liquidacion.getPrestamos() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.PRESTAMOS, Utiles.getNumberFormat(0.0),
 					Utiles.getNumberFormat(liquidacion.getPrestamos())));
-		}
-		if (liquidacion.getAdelantos() < 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ADELANTOS, Utiles.getNumberFormat(0.0),
-					Utiles.getNumberFormat(liquidacion.getAdelantos())));
+		}		
+		if (liquidacion.getAnticipo() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ANTICIPO, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getAnticipo())));
 		}
 		if (liquidacion.getOtrosDescuentos() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.OTROS_DESCUENTOS, Utiles.getNumberFormat(0.0),
@@ -534,14 +542,10 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.EMBARGO, Utiles.getNumberFormat(0.0),
 					Utiles.getNumberFormat(liquidacion.getEmbargo())));
 		}
-		if (liquidacion.getSeguroVehicular() < 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SEGURO_VEHICULAR, Utiles.getNumberFormat(0.0),
-					Utiles.getNumberFormat(liquidacion.getSeguroVehicular())));
-		}
 		if (liquidacion.getAusencia() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.AUSENCIA, Utiles.getNumberFormat(0.0),
 					Utiles.getNumberFormat(liquidacion.getAusencia())));
-		}
+		}		
 		if (liquidacion.getIps() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.IPS, Utiles.getNumberFormat(0.0),
 					Utiles.getNumberFormat(liquidacion.getIps())));
