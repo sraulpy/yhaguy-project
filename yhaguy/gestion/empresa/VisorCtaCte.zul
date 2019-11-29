@@ -893,6 +893,10 @@
 					<field value="Venta Crédito:" />
 					<checkbox checked="@bind(vm.cliente.pos2)" />
 				</row>
+				<row>
+					<field value="Venta Exenta:" />
+					<checkbox checked="@bind(vm.cliente.pos4)" />
+				</row>
 			</rows>
 		</grid>
 		<button width="100%" label="Actualizar Datos.."
