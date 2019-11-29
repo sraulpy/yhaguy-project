@@ -442,6 +442,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			cli.setLimiteCredito((double) this.cliente.getPos1());
 			cli.setVentaCredito((boolean) this.cliente.getPos2());
 			cli.setCobrador((Funcionario) this.cliente.getPos3());
+			cli.setVentaExenta((boolean) this.cliente.getPos4());
 			rr.saveObject(cli, this.getLoginNombre());
 			Empresa emp = rr.getEmpresaById(this.selectedItem.getId());
 			emp.setCartera((EmpresaCartera) this.selectedItem.getPos13());
@@ -656,6 +657,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		out.setPos1(cliente.getLimiteCredito());
 		out.setPos2(cliente.isVentaCredito());
 		out.setPos3(cliente.getCobrador());
+		out.setPos4(cliente.isVentaExenta());
 		return out;
 	}
 	
