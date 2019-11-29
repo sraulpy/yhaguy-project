@@ -1,4 +1,4 @@
-<window height="1240px" width="816px" border="none"
+<window height="1247px" width="793px" border="none"
 	sclass="printable" position="center,center"
 	id="win_fac">
 	
@@ -19,19 +19,19 @@
 	<!-- PAGINA 1 -->
 	
 	<vbox hflex="true" vflex="true">
-	<div height="5px"></div>
+	<div height="20px"></div>
 	
 	<hlayout>
 		<div width="30px"></div>
-		<image src="/logo.png" width="100px"></image>
+		<image src="/logo.png" width="90px"></image>
 		<div width="150px"></div>
-		<label value="LIQUIDACIÓN DE SALARIOS" style="font-size:12pt;font-weight:bold"></label>
+		<label value="LIQUIDACIÓN DE SALARIOS" style="font-size:10pt;font-weight:bold"></label>
 	</hlayout>
 	
 	<div style="border-bottom: solid 2px; margin: 5px 0px 5px 30px" width="750px"></div>
 	
 	<hlayout style="text-align:center">
-		<label value="Conforme al artículo 235 del código del trabajador" style="font-size:11pt;font-style:italic"></label>
+		<label value="Conforme al artículo 235 del código del trabajador" style="font-size:10pt;font-style:italic"></label>
 	</hlayout>
 	
 	<div height="10px"></div>
@@ -47,44 +47,44 @@
 		</columns>	
 		<rows>
 			<row>
-				<label value="Fecha:" style="font-size:11pt"></label>
-				<label value="@load(vm.fecha)" style="font-size:11pt"></label>
-				<label value="Periodo:" style="font-size:11pt"></label>
+				<label value="Fecha:" style="font-size:10pt"></label>
+				<label value="@load(vm.fecha)" style="font-size:10pt"></label>
+				<label value="Periodo:" style="font-size:10pt"></label>
 				<hlayout>
-					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:11pt"></label>
-					<label value="@load(vm.selectedPlanilla.anho)" style="font-size:11pt"></label>
+					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:10pt"></label>
+					<label value="@load(vm.selectedPlanilla.anho)" style="font-size:10pt"></label>
 				</hlayout>
 			</row>
 			<row>
-				<label value="Funcionario:" style="font-size:11pt"></label>
-				<label value="@load(vm.selectedPlanilla.funcionario)" style="font-size:11pt"></label>
-				<label value="Cargo:" style="font-size:11pt"></label>
-				<label value="@load(vm.selectedPlanilla.cargo)" style="font-size:11pt"></label>
+				<label value="Funcionario:" style="font-size:10pt"></label>
+				<label value="@load(vm.selectedPlanilla.funcionario)" style="font-size:10pt"></label>
+				<label value="Cargo:" style="font-size:10pt"></label>
+				<label value="@load(vm.selectedPlanilla.cargo)" style="font-size:10pt"></label>
 			</row>
 		</rows>	
 	</grid>	
 	</hlayout>
 	
-	<div height="5px"></div>
+	<div height="3px"></div>
 	
 	<hlayout hflex="true">
 		<div width="150px"></div>
-		<label value="Concepto" style="font-size:12pt"></label>
+		<label value="Concepto" style="font-size:10pt"></label>
 		<div hflex="true"></div>
 		<hbox width="200px" align="end" pack="end">
 			<hbox hflex="true" align="end" pack="end">
-				<label value="Haberes" style="font-size:12pt"></label>
+				<label value="Haberes" style="font-size:10pt"></label>
 			</hbox>
 			<space></space>
 			<space></space>
 			<hbox hflex="true" align="end" pack="end">
-				<label value="Descuentos" style="font-size:12pt"></label>
+				<label value="Descuentos" style="font-size:10pt"></label>
 			</hbox>			
 		</hbox>		
 		<div width="30px"></div>
 	</hlayout>
 	
-	<div style="border-bottom: solid 2px; margin: 2px 0px 10px 30px" width="750px"></div>
+	<div style="border-bottom: solid 2px; margin: 2px 0px 5px 30px" width="750px"></div>
 	
 	<vbox children="@load(vm.detalles)" spacing="1px" height="180px" hflex="true">
 		<template name="children">
@@ -110,7 +110,7 @@
 	<div style="border-bottom: solid 2px; margin: 0px 0px 0px 30px" width="750px"></div>
 	
 	<hbox hflex="true" pack="end" align="end" style="margin-right:30px">
-		<label value="Total a cobrar:" style="font-size:11pt"></label>
+		<label value="Total a cobrar:" style="font-size:10pt"></label>
 		<space></space>
 		<space></space>
 		<div width="30px"></div>
@@ -118,20 +118,20 @@
 	</hbox>
 	
 	<hlayout style="margin: 5px 0px 0px 30px">
-		<label value="Recibí conforme la cantidad de guaraníes: " style="font-size:11pt"></label>
+		<label value="Recibí conforme la cantidad de guaraníes: " style="font-size:10pt"></label>
 		<space></space>
-		<label value="@load(vm.selectedPlanilla.totalACobrarLetras)" style="font-size:11pt"></label>
+		<label value="@load(vm.selectedPlanilla.totalACobrarLetras)" style="font-size:10pt"></label>
 	</hlayout>
 	
 	<hlayout style="margin: 50px 0px 0px 0px">
 		<div hflex="true"></div>
 		<div style="border-top:dotted 1px;padding:12px">
-			<label value="Firma del Trabajador/a" style="font-size:12pt;font-weight:bold"></label>
+			<label value="Firma del Trabajador/a" style="font-size:10pt;font-weight:bold"></label>
 		</div>
 		<space></space>
 		<space></space>
 		<div style="border-top:dotted 1px;padding:12px">
-			<label value="Firma del Empleador" style="font-size:12pt;font-weight:bold"></label>
+			<label value="Firma del Empleador" style="font-size:10pt;font-weight:bold"></label>
 		</div>
 		<div hflex="true"></div>
 	</hlayout>
@@ -145,15 +145,15 @@
 	
 	<hlayout>
 		<div width="30px"></div>
-		<image src="/logo.png" width="100px"></image>
+		<image src="/logo.png" width="90px"></image>
 		<div width="150px"></div>
-		<label value="LIQUIDACIÓN DE SALARIOS" style="font-size:12pt;font-weight:bold"></label>
+		<label value="LIQUIDACIÓN DE SALARIOS" style="font-size:10pt;font-weight:bold"></label>
 	</hlayout>
 	
 	<div style="border-bottom: solid 2px; margin: 5px 0px 5px 30px" width="750px"></div>
 	
 	<hlayout style="text-align:center">
-		<label value="Conforme al artículo 235 del código del trabajador" style="font-size:11pt;font-style:italic"></label>
+		<label value="Conforme al artículo 235 del código del trabajador" style="font-size:10pt;font-style:italic"></label>
 	</hlayout>
 	
 	<div height="10px"></div>
@@ -169,44 +169,44 @@
 		</columns>	
 		<rows>
 			<row>
-				<label value="Fecha:" style="font-size:11pt"></label>
-				<label value="@load(vm.fecha)" style="font-size:11pt"></label>
-				<label value="Periodo:" style="font-size:11pt"></label>
+				<label value="Fecha:" style="font-size:10pt"></label>
+				<label value="@load(vm.fecha)" style="font-size:10pt"></label>
+				<label value="Periodo:" style="font-size:10pt"></label>
 				<hlayout>
-					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:11pt"></label>
-					<label value="@load(vm.selectedPlanilla.anho)" style="font-size:11pt"></label>
+					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:10pt"></label>
+					<label value="@load(vm.selectedPlanilla.anho)" style="font-size:10pt"></label>
 				</hlayout>
 			</row>
 			<row>
-				<label value="Funcionario:" style="font-size:11pt"></label>
-				<label value="@load(vm.selectedPlanilla.funcionario)" style="font-size:11pt"></label>
-				<label value="Cargo:" style="font-size:11pt"></label>
-				<label value="@load(vm.selectedPlanilla.cargo)" style="font-size:11pt"></label>
+				<label value="Funcionario:" style="font-size:10pt"></label>
+				<label value="@load(vm.selectedPlanilla.funcionario)" style="font-size:10pt"></label>
+				<label value="Cargo:" style="font-size:10pt"></label>
+				<label value="@load(vm.selectedPlanilla.cargo)" style="font-size:10pt"></label>
 			</row>
 		</rows>	
 	</grid>	
 	</hlayout>
 	
-	<div height="5px"></div>
+	<div height="3px"></div>
 	
 	<hlayout hflex="true">
 		<div width="150px"></div>
-		<label value="Concepto" style="font-size:12pt"></label>
+		<label value="Concepto" style="font-size:10pt"></label>
 		<div hflex="true"></div>
 		<hbox width="200px" align="end" pack="end">
 			<hbox hflex="true" align="end" pack="end">
-				<label value="Haberes" style="font-size:12pt"></label>
+				<label value="Haberes" style="font-size:10pt"></label>
 			</hbox>
 			<space></space>
 			<space></space>
 			<hbox hflex="true" align="end" pack="end">
-				<label value="Descuentos" style="font-size:12pt"></label>
+				<label value="Descuentos" style="font-size:10pt"></label>
 			</hbox>			
 		</hbox>		
 		<div width="30px"></div>
 	</hlayout>
 	
-	<div style="border-bottom: solid 2px; margin: 2px 0px 10px 30px" width="750px"></div>
+	<div style="border-bottom: solid 2px; margin: 2px 0px 5px 30px" width="750px"></div>
 	
 	<vbox children="@load(vm.detalles)" spacing="1px" height="180px" hflex="true">
 		<template name="children">
@@ -232,7 +232,7 @@
 	<div style="border-bottom: solid 2px; margin: 0px 0px 0px 30px" width="750px"></div>
 	
 	<hbox hflex="true" pack="end" align="end" style="margin-right:30px">
-		<label value="Total a cobrar:" style="font-size:11pt"></label>
+		<label value="Total a cobrar:" style="font-size:10pt"></label>
 		<space></space>
 		<space></space>
 		<div width="30px"></div>
@@ -240,20 +240,20 @@
 	</hbox>
 	
 	<hlayout style="margin: 5px 0px 0px 30px">
-		<label value="Recibí conforme la cantidad de guaraníes: " style="font-size:11pt"></label>
+		<label value="Recibí conforme la cantidad de guaraníes: " style="font-size:10pt"></label>
 		<space></space>
-		<label value="@load(vm.selectedPlanilla.totalACobrarLetras)" style="font-size:11pt"></label>
+		<label value="@load(vm.selectedPlanilla.totalACobrarLetras)" style="font-size:10pt"></label>
 	</hlayout>
 	
 	<hlayout style="margin: 50px 0px 0px 0px">
 		<div hflex="true"></div>
 		<div style="border-top:dotted 1px;padding:12px">
-			<label value="Firma del Trabajador/a" style="font-size:12pt;font-weight:bold"></label>
+			<label value="Firma del Trabajador/a" style="font-size:10pt;font-weight:bold"></label>
 		</div>
 		<space></space>
 		<space></space>
 		<div style="border-top:dotted 1px;padding:12px">
-			<label value="Firma del Empleador" style="font-size:12pt;font-weight:bold"></label>
+			<label value="Firma del Empleador" style="font-size:10pt;font-weight:bold"></label>
 		</div>
 		<div hflex="true"></div>
 	</hlayout>
@@ -278,8 +278,8 @@
 	</style>
 	
 	<style>
-		.custom { font-size:9pt; font-family:Verdana }
-		.det { font-size:9pt; font-family:Verdana }
+		.custom { font-size:8pt; font-family:Verdana }
+		.det { font-size:8pt; font-family:Verdana }
 		.z-div { line-height:normal }
 		.z-hlayout-inner { line-height:normal }
 		.z-vlayout-inner { padding: 0px }
