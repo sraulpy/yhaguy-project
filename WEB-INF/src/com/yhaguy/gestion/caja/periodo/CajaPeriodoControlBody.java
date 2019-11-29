@@ -824,7 +824,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		for (VentaDetalleDTO item : pedido.getDetalles()) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
 			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
-					|| !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)) {
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)) {
 				long stock = rr.getStockDisponible(item.getArticulo().getId(), idDeposito);
 				if (stock < item.getCantidad()) {
 					return false;
