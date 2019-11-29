@@ -453,8 +453,7 @@ public class RegisterDomain extends Register {
 	}
 
 	public Articulo getArticuloById(long id) throws Exception {
-		return (Articulo) getObject(com.yhaguy.domain.Articulo.class.getName(),
-				id);
+		return (Articulo) getObject(com.yhaguy.domain.Articulo.class.getName(), id);
 	}
 
 	public ArticuloCosto getArticuloCostoById(long id) throws Exception {

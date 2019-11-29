@@ -258,7 +258,7 @@ public class ControlLogica extends Control {
 
 	private static String[] PROVEEDOR_NOMBRES_COLUMNAS = new String[] { "Código", "Razón Social", "Ruc", "Id Empresa" };
 
-	private static String[] WIDTH_COLUMNS = { "0px", "40%", "10%", "0px", "0px", "0px", "0px", "0px", "0px", "40%", "0px", "0px", "40%", "0px" };
+	private static String[] WIDTH_COLUMNS = { "0px", "40%", "10%", "0px", "0px", "0px", "0px", "0px", "0px", "40%", "0px", "0px", "40%", "0px", "0px" };
 
 	/**
 	 * 
@@ -346,9 +346,10 @@ public class ControlLogica extends Control {
 			"empresa.codigoEmpresa", "empresa.razonSocial", "empresa.ruc",
 			"empresa.id", "empresa.id", "empresa.id", "empresa.id",
 			"empresa.id", "empresa.cuentaBloqueada", "empresa.nombre", 
-			"ventaCredito", "limiteCredito", "empresa.direccion_", "empresa.cartera.descripcion" };
+			"ventaCredito", "limiteCredito", "empresa.direccion_", 
+			"empresa.cartera.descripcion", "ventaExenta" };
 	private static String[] CLIENTE_NOMBRES_COLUMNAS = new String[] { "Código",
-			"Razón Social", "Ruc", "Id Empresa", "", "", "", "", "", "Nombre Fantasía", "", "", "Dirección", "" };
+			"Razón Social", "Ruc", "Id Empresa", "", "", "", "", "", "Nombre Fantasía", "", "", "Dirección", "", "" };
 
 	/**
 	 * 
