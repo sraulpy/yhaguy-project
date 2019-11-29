@@ -140,7 +140,7 @@
 	
 	<!-- PAGINA 2 -->
 	
-	<space vflex="true"></space>	
+	<space height="10px"></space>	
 	
 	<vbox hflex="true" vflex="true">
 	<div height="5px"></div>
