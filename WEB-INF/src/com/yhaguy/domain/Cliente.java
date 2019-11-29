@@ -19,6 +19,7 @@ public class Cliente extends Domain {
 	private String observaciones = "";
 	
 	private boolean ventaCredito;
+	private boolean ventaExenta;
 	private double limiteCredito;
 	private double descuentoMayorista;
 	
@@ -347,5 +348,13 @@ public class Cliente extends Domain {
 
 	public void setNombreEmpresa(String nombreEmpresa) {
 		this.nombreEmpresa = nombreEmpresa;
+	}
+
+	public boolean isVentaExenta() {
+		return ventaExenta;
+	}
+
+	public void setVentaExenta(boolean ventaExenta) {
+		this.ventaExenta = ventaExenta;
 	}
 }

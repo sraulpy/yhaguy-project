@@ -797,18 +797,20 @@ public class VentaControlBody extends BodyApp {
 	 * inserta un item de Servicio..
 	 */
 	private void insertServicio() throws Exception {
+		boolean exenta = (boolean) this.dto.getCliente().getPos15();
 		this.nvoItem = new VentaDetalleDTO();
-		this.nvoItem.setTipoIVA(this.getIva10());
+		this.nvoItem.setTipoIVA(exenta ? this.getExenta() : this.getIva10());
 		this.buscarItemsDeServicio();
 		this.nvoItem = null;
 	}
 	
 	/**
-	 * inserta un item de Servicio..
+	 * inserta un item de Contabilidad..
 	 */
 	private void insertContabilidad() throws Exception {
+		boolean exenta = (boolean) this.dto.getCliente().getPos15();
 		this.nvoItem = new VentaDetalleDTO();
-		this.nvoItem.setTipoIVA(this.getIva10());
+		this.nvoItem.setTipoIVA(exenta ? this.getExenta() : this.getIva10());
 		this.buscarItemsDeContabilidad();
 		this.nvoItem = null;
 	}
@@ -1025,8 +1027,9 @@ public class VentaControlBody extends BodyApp {
 	@Command 
 	@NotifyChange("*")
 	public void insertarPedidoDetalle() throws Exception {		
+		boolean exenta = (boolean) this.dto.getCliente().getPos15();
 		VentaDetalleDTO det = new VentaDetalleDTO();
-		det.setTipoIVA(this.getIva10());
+		det.setTipoIVA(exenta ? this.getExenta() : this.getIva10());
 		det.setListaPrecio(this.getListaPrecio());
 		det.getArticulo().setPos5(false);
 		det.setVehiculoTipo(this.dto.getVehiculoTipo());

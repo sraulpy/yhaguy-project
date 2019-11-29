@@ -159,6 +159,18 @@ public abstract class BodyApp extends Body {
 	}
 	
 	/**
+	 * @return el tipo de iva 10..
+	 */
+	public MyPair getExenta() {
+		MyArray exenta =  this.getDtoUtil().getTipoIvaExento();
+		MyPair out = new MyPair();
+		out.setId(exenta.getId());
+		out.setText((String) exenta.getPos1());
+		out.setSigla((String) exenta.getPos2());
+		return out;
+	}
+	
+	/**
 	 * @return las condiciones..
 	 */
 	public List<MyArray> getCondiciones() {

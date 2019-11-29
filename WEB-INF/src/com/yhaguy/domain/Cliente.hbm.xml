@@ -22,6 +22,10 @@
 		<property name="ventaCredito">
 			<column name="ventaCredito" default="false" />
 		</property>
+		
+		<property name="ventaExenta">
+			<column name="ventaExenta" default="false" />
+		</property>
 
 		<property name="limiteCredito">
 			<column name="limiteCredito" default="0" />
