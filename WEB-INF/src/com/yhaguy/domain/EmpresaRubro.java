@@ -4,6 +4,8 @@ import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
 public class EmpresaRubro extends Domain {
+	
+	public static final String CONSUMIDOR_FINAL = "CONSUMIDOR FINAL";
 
 	private String descripcion;
 	private String subrubro; // para definir segmentaciones adicionales

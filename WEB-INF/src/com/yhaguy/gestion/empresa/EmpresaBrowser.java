@@ -69,6 +69,7 @@ public class EmpresaBrowser extends Browser{
 	}
 		
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class getEntidadPrincipal() {
 		return Cliente.class;

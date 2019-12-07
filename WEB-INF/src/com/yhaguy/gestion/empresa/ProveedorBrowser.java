@@ -55,6 +55,7 @@ public class ProveedorBrowser extends Browser{
 	}
 		
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class getEntidadPrincipal() {
 		return Proveedor.class;

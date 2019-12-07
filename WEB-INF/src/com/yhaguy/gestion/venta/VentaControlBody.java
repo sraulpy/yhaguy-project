@@ -1036,7 +1036,7 @@ public class VentaControlBody extends BodyApp {
 		det.setVehiculoMarca(this.dto.getVehiculoMarca());
 		det.setVehiculoModelo(this.dto.getVehiculoModelo());
 		boolean ok = this.abrirVentanaInsertarDetalle(det, true);
-		if (ok == true){
+		if (ok == true) {
 			this.dto.getDetalles().add(det);
 		}
 		this.bruc.focus();

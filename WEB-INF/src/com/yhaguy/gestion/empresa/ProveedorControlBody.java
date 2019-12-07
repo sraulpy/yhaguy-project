@@ -14,6 +14,7 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 
@@ -71,6 +72,7 @@ public class ProveedorControlBody extends EmpresaControlBody {
 		aux.getEmpresa().setPais(this.utilDto.getPaisParaguay());
 		aux.getEmpresa().setEmpresaGrupoSociedad(this.utilDto.getGrupoEmpresaNoDefinido());
 		aux.getEmpresa().setRegimenTributario(this.utilDto.getRegimenTributarioNoExenta());	
+		aux.getEmpresa().setRubro(this.getRubroConsumidorFinal());
 		
 		//Valores por defecto para CtaCteProveedor
 		aux.getEmpresa().getCtaCteEmpresa().setEstadoComoProveedor(this.utilDto.getCtaCteEmpresaEstadoSinCuenta());
@@ -100,6 +102,21 @@ public class ProveedorControlBody extends EmpresaControlBody {
 		return new ProveedorBrowser();
 	}
 	
+	/**
+	 * @return el rubro consumidor final
+	 */
+	private MyArray getRubroConsumidorFinal() {
+		MyArray out = new MyArray();		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			EmpresaRubro rubro = rr.getRubro(EmpresaRubro.CONSUMIDOR_FINAL);
+			out.setId(rubro.getId());
+			out.setPos1(rubro.getDescripcion());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return out;
+	}
 	
 	/************************************* UTILES ****************************************/
 	
@@ -109,6 +126,7 @@ public class ProveedorControlBody extends EmpresaControlBody {
 	//============================= VALIDAR FORMULARIO ===================================
 	
 		private String mensajeError = "";
+		@SuppressWarnings("unused")
 		private boolean controlRuc = true;
 		
 		@Override

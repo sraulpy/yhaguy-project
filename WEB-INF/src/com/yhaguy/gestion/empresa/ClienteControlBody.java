@@ -24,6 +24,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.EmpresaCartera;
+import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
 
@@ -70,6 +71,7 @@ public class ClienteControlBody extends EmpresaControlBody {
 		aux.getEmpresa().setPais(auxUtil.getPaisParaguay());
 		aux.getEmpresa().setEmpresaGrupoSociedad(auxUtil.getGrupoEmpresaNoDefinido());
 		aux.getEmpresa().setRegimenTributario(auxUtil.getRegimenTributarioNoExenta());
+		aux.getEmpresa().setRubro(this.getRubroConsumidorFinal());
 		
 		//Valores por default de CtaCte para un nuevo cliente.
 		aux.getEmpresa().getCtaCteEmpresa().setEstadoComoCliente(this.getDtoUtil().getCtaCteEmpresaEstadoSinCuenta());
@@ -190,15 +192,6 @@ public class ClienteControlBody extends EmpresaControlBody {
 			
 		}
 	}	
-
-	@Command
-	public void ventana() throws Exception{
-		System.out.println("Ventana");
-		com.coreweb.componente.WindowPopup w = new com.coreweb.componente.WindowPopup();
-		w.setDato("siiii");
-		w.show("/yhaguy/prueba/Prueba.zul");
-		
-	}
 	
 	private String mensajeError = "";
 	
@@ -219,6 +212,19 @@ public class ClienteControlBody extends EmpresaControlBody {
 	/**
 	 * GETS / SETS
 	 */
+	
+	private MyArray getRubroConsumidorFinal() {
+		MyArray out = new MyArray();		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			EmpresaRubro rubro = rr.getRubro(EmpresaRubro.CONSUMIDOR_FINAL);
+			out.setId(rubro.getId());
+			out.setPos1(rubro.getDescripcion());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return out;
+	}
 	
 	public boolean isConsultaCtaCteDisabled() throws Exception{
 		if (this.operacionHabilitada("ConsultarCtaCteClientesABM", ID.F_CLIENTE_ABM_BODY))

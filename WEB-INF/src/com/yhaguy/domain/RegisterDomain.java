@@ -10880,6 +10880,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el rubro segun descripcion..
+	 */
+	public EmpresaRubro getRubro(String descripcion) throws Exception {
+		String query = "select r from EmpresaRubro r where r.descripcion = '" + descripcion.toUpperCase() + "'";
+		List<EmpresaRubro> list = this.hql(query);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
 	 * @return el familia por descripcion..
 	 */
 	public ArticuloFamilia getArticuloFamilia(String descripcion) throws Exception {
