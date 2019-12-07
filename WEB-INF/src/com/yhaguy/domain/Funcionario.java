@@ -21,6 +21,7 @@ public class Funcionario extends Domain {
 	private boolean deposito;
 	private boolean cobrador;
 	private boolean telecobrador;
+	private boolean cobradorInterior;
 	private boolean tecnico;
 	private boolean chofer;
 	private boolean vendedorMostrador;
@@ -346,5 +347,13 @@ public class Funcionario extends Domain {
 
 	public void setTecnico_(Tecnico tecnico_) {
 		this.tecnico_ = tecnico_;
+	}
+
+	public boolean isCobradorInterior() {
+		return cobradorInterior;
+	}
+
+	public void setCobradorInterior(boolean cobradorInterior) {
+		this.cobradorInterior = cobradorInterior;
 	}
 }

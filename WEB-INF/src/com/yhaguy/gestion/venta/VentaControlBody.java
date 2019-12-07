@@ -1995,7 +1995,7 @@ public class VentaControlBody extends BodyApp {
 		}
 		
 		Cliente cli = rr.getClienteById(this.dto.getCliente().getId());
-		if (cli.getListaPrecio() != null) {
+		if (cli != null && cli.getListaPrecio() != null) {
 			out.setId(cli.getListaPrecio().getId());
 			out.setPos1(cli.getListaPrecio().getDescripcion());
 			out.setPos2(cli.getListaPrecio().getMargen());

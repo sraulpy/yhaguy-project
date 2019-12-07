@@ -36,6 +36,10 @@
 			<column name="telecobrador" not-null="true" default="false" />
 		</property>
 		
+		<property name="cobradorInterior">
+			<column name="cobradorInterior" not-null="true" default="false" />
+		</property>
+		
 		<property name="tecnico">
 			<column name="tecnico" not-null="true" default="false" />
 		</property>

@@ -138,6 +138,8 @@ public class AssemblerVenta extends Assembler {
 		out.setPos2(clienteDomain.getRazonSocial());
 		out.setPos3(clienteDomain.getRuc());
 		out.setPos4(new MyPair(clienteDomain.getTipoCliente().getId(), null));
+		out.setPos9(false);
+		out.setPos11(false);
 
 		return out;
 	}

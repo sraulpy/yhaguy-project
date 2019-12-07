@@ -1682,7 +1682,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_LITRAJE:
-				this.ventasLitraje(mobile);
+				this.ventasLitraje(mobile, VENTAS_LITRAJE);
 				break;
 				
 			case VENTAS_LISTA_PRECIO_DEPOSITO:
@@ -4196,7 +4196,6 @@ public class ReportesViewModel extends SimpleViewModel {
 					rep.ejecutar();
 					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
 				}
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -5464,7 +5463,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * VEN-00042
 		 */
-		private void ventasLitraje(boolean mobile) {
+		private void ventasLitraje(boolean mobile, String codReporte) {
 			try {					
 				Object[] formato = filtro.getFormato();
 				ArticuloMarca marca = filtro.getMarca_();
@@ -5656,6 +5655,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Titulo", codReporte + " - LITRAJE DE VENTAS EN LUBRICANTES");
 				JRDataSource dataSource = new LitrajeArticulos(list);
 				imprimirJasper(source, params, dataSource, formato);
 				
