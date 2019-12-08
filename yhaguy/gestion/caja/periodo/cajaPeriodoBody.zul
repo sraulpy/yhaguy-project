@@ -103,7 +103,8 @@
 			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('abrirVentanaRecibo', tipo=1)"
-				disabled="@load(!vm.dto.caja.pago or (vm.dto.tipo ne 'CAJA PAGOS' and vm.dto.tipo ne 'CAJA PAGOS EXTERIOR'))" label=" Pago" />	
+				disabled="@load(!vm.dto.caja.pago or (vm.dto.tipo ne 'CAJA PAGOS' and vm.dto.tipo ne 'CAJA PAGOS EXTERIOR' 
+					and vm.dto.tipo ne 'CAJA CHICA'))" label=" Pago" />	
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('showFormGastos')"
