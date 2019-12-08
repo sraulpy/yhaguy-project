@@ -150,7 +150,7 @@ public class VentaDTO extends DTO {
 				out += item.getImporteGs();
 			}
 		}		
-		return out;
+		return Utiles.getRedondeo(out);
 	}
 	
 	@DependsOn("detalles")
