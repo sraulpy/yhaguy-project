@@ -37,7 +37,11 @@
 				<listcell label="@load(each.descripcion)"></listcell>
 				<listcell label="@load(each.numeroDesde)"></listcell>
 				<listcell label="@load(each.numeroHasta)"></listcell>
-				<listcell label="@load(each.numero + 1)"></listcell>
+				<listcell>
+					<longbox vflex="true" inplace="true"
+						value="@load(each.numero + 1)"
+						onChange="@command('saveChequera', item=each, val=self.value)"></longbox>
+				</listcell>
 				<listcell>
 					<a iconSclass="@load(each.numeroHasta lt (each.numero + 1) ? 'z-icon-lock' : 'z-icon-check')" 
 						style="@load(each.numeroHasta lt (each.numero + 1) ? 'color:red;font-size:11pt' : 'color:green;font-size:11pt')"></a>
@@ -84,4 +88,7 @@
 			</button>
 		</vbox>
 	</popup>
+	<style>
+		.z-longbox { min-height:18px; line-height:11px }
+	</style>
 </window>

@@ -5728,8 +5728,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return los funcionarios segun id..
 	 */
-	public Funcionario getFuncionarios(long id)
-			throws Exception {
+	public Funcionario getFuncionarios(long id) throws Exception {
 		String query = "select f from Funcionario f where f.id = " + id;
 		List<Funcionario> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
@@ -5751,7 +5750,7 @@ public class RegisterDomain extends Register {
 		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) like '%"
 				+ razonSocial.toLowerCase()
 				+ "%' and (f.vendedor = true or f.vendedorMostrador = true) and f.funcionarioEstado.sigla = '"
-				+ Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'";
+				+ Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "' order by f.nombreEmpresa";
 		return this.hql(query);
 	}
 	

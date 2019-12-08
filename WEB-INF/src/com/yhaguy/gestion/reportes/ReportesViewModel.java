@@ -13995,6 +13995,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							totalImporte += (notacred.isAnulado() ? 0.0 : notacred.getImporteGs(familias) * -1);
 							totalCosto += (notacred.isAnulado() ? 0.0 : notacred.getCostoGs(familias) * -1);
 						}
+						System.out.println(nc[1] + " - " + nc[6]);
 					}
 				}
 
@@ -14011,6 +14012,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						data.add(vta);
 						totalImporte += (venta.isAnulado() ? 0.0 : venta.getTotalImporteGs(familias));
 						totalCosto += (venta.isAnulado() ? 0.0 : venta.getTotalCostoGs(familias));
+						System.out.println(vta[1] + " - " + vta[6]);
 					}
 
 				} else if (filtro.isIncluirVCR()) {

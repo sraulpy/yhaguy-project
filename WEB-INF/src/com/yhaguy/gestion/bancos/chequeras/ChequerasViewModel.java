@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -51,6 +52,14 @@ public class ChequerasViewModel extends SimpleViewModel {
 		this.nvaChequera.setNumeroDesde(0);
 		this.nvaChequera.setNumeroHasta(0);
 		this.nvaChequera.setDescripcion(null);
+	}
+	
+	@Command
+	public void saveChequera(@BindingParam("item") AutoNumero item, @BindingParam("val") long val) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		item.setNumero(val - 1);
+		rr.saveObject(item, this.getLoginNombre());
+		BindUtils.postNotifyChange(null, null, item, "numero");
 	}
 	
 	/**
