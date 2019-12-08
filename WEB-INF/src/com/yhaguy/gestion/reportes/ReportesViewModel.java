@@ -14057,6 +14057,10 @@ public class ReportesViewModel extends SimpleViewModel {
 						familias_ += "/" + flia.getDescripcion() + " ";
 					}
 				}
+				for (Object[] item : data) {
+					item[5] = Utiles.getRedondeo((double) item[5]);
+					item[6] = Utiles.getRedondeo((double) item[6]);
+				}
 				VentaGenericoCosto rep = new VentaGenericoCosto(totalSinIva, desde, hasta, "TODOS..", cliente_, sucursal, "TODOS..", familias_, totalCosto);
 				rep.setDatosReporte(data);
 				rep.setApaisada();
