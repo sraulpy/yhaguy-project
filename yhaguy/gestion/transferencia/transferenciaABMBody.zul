@@ -212,22 +212,19 @@
 				iconSclass="z-icon-times-circle"
 				sclass="btn-sm btn-danger"
 				onClick="@command('eliminarItem')"
-				width="120px"
-				disabled="@load(vm.transferenciaInterna? vm.eliminarItemDisabled : vm.eliminarItemExtDisabled)" />
+				width="120px" />
 			<space />
 			<button mold="bs" label="Insertar"
 				iconSclass="z-icon-plus-circle"
 				sclass="btn-sm btn-primary"
 				onClick="@command('insertarItem')" 
-				width="120px"
-				disabled="@load(vm.insertarDisabled)"/>
+				width="120px"/>
 			<space />
 			<button mold="bs" label="Confirmar"
 				iconSclass="z-icon-check"
 				sclass="btn-sm btn-success"
 				onClick="@command('confirmarTransferencia')"
-				width="120px"
-				disabled="@load(vm.transferenciaInterna? vm.confirmarDisabled : vm.confirmarExtDisabled)" />
+				width="120px" />
 			<space />
 		</hlayout>
 
