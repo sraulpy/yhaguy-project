@@ -4998,11 +4998,18 @@ public class ReportesViewModel extends SimpleViewModel {
 						data.add(new Object[]{ vendedor.getRazonSocial().toUpperCase(), contadoSiva, creditoSiva, anuladoSiva, notacreSiva, (contadoSiva + creditoSiva) - notacreSiva });	
 					}					
 				}
+				
+				for (Object[] item : data) {
+					item[1] = Utiles.getRedondeo((double) item[1]);
+					item[2] = Utiles.getRedondeo((double) item[2]);
+					item[3] = Utiles.getRedondeo((double) item[3]);
+					item[4] = Utiles.getRedondeo((double) item[4]);
+					item[5] = Utiles.getRedondeo((double) item[5]);
+				}
 
 				ReporteTotalVentas rep = new ReporteTotalVentas(desde, hasta, "TODOS..");
 				rep.setDatosReporte(data);
-				rep.setApaisada();
-				
+				rep.setApaisada();				
 
 				if (!mobile) {
 					ViewPdf vp = new ViewPdf();
