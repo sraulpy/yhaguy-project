@@ -4978,7 +4978,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 				
-				for (Funcionario vendedor : filtro.getVendedores()) {
+				for (Funcionario vendedor : filtro.getVendedores_()) {
 					Double contado = values_cont.get(vendedor.getId());
 					Double credito = values_cred.get(vendedor.getId());
 					Double ncredit = values_ncre.get(vendedor.getId());

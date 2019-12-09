@@ -5757,6 +5757,16 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return los funcionarios segun razonSocial..
 	 */
+	public List<Funcionario> getVendedores_(String razonSocial) throws Exception {
+		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) like '%"
+				+ razonSocial.toLowerCase()
+				+ "%' and (f.vendedor = true or f.vendedorMostrador = true) order by f.nombreEmpresa";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los funcionarios segun razonSocial..
+	 */
 	public Funcionario getFuncionario(String razonSocial)
 			throws Exception {
 		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) = '"

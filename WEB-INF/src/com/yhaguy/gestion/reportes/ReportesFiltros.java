@@ -618,6 +618,12 @@ public class ReportesFiltros {
 		return rr.getVendedores(this.razonSocialVendedor);
 	}
 	
+	@DependsOn("razonSocialVendedor")
+	public List<Funcionario> getVendedores_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getVendedores_(this.razonSocialVendedor);
+	}
+	
 	/**
 	 * @return los cobradores..
 	 */
