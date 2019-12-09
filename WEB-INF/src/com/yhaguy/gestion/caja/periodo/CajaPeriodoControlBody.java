@@ -134,21 +134,23 @@ public class CajaPeriodoControlBody extends BodyApp {
 	@Override
 	public void setDTOCorriente(DTO dto) {
 		this.dto = (CajaPeriodoDTO) dto;
-		if (!this.dto.esReadonly() && !this.dto.esNuevo()) {
-			if (CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero()) != null) {
-				String msg = "CAJA BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero());
-				Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-				this.dto = new CajaPeriodoDTO();
-			} else {
-				CajaUtil.CAJAS_ABIERTAS.put(this.dto.getNumero(), this.getUs().getNombre().toUpperCase());
-				this.win_caja.setHeight("99%");
-				this.win_caja.setWidth("99%");
-				this.win_caja.setMode(Window.MODAL);
-				this.win_caja.setClosable(true);
-				this.win_caja.setBorder("normal");
-				this.win_caja.setTitle("Caja / Planilla");
+		if (!this.isEmpresaGTSA()) {
+			if (!this.dto.esReadonly() && !this.dto.esNuevo()) {
+				if (CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero()) != null) {
+					String msg = "CAJA BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero());
+					Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					this.dto = new CajaPeriodoDTO();
+				} else {
+					CajaUtil.CAJAS_ABIERTAS.put(this.dto.getNumero(), this.getUs().getNombre().toUpperCase());
+					this.win_caja.setHeight("99%");
+					this.win_caja.setWidth("99%");
+					this.win_caja.setMode(Window.MODAL);
+					this.win_caja.setClosable(true);
+					this.win_caja.setBorder("normal");
+					this.win_caja.setTitle("Caja / Planilla");
+				}
 			}
-		}
+		}		
 	}
 
 	@Override
