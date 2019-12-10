@@ -14,7 +14,7 @@
 		</attribute>
 	</timer>
 	
-	<div height="25px"></div>
+	<div height="47px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -25,7 +25,7 @@
 	<div height="31px"></div>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.RazonSocial.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -33,7 +33,7 @@
 		<div width="94px">
 			<label value="${arg.Ruc.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
-		<div width="80px"></div>
+		<div width="65px"></div>
 		<div width="60px" style="text-align:right">
 			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
 		</div>
@@ -43,7 +43,7 @@
 	</hlayout>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.Direccion.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -59,7 +59,7 @@
 	</hlayout>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.Telefono.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -73,12 +73,12 @@
 		<div width="75px"></div>
 	</hlayout>
 	
-	<div height="25px"></div>
+	<div height="20px"></div>
 	
 	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="105px">
 		<template name="children">
 			<hbox spacing="0px">
-				<div width="110px"></div>
+				<div width="113px"></div>
 				<div width="50px" style="text-align:center">
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
@@ -91,10 +91,10 @@
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>	
-				<div width="105px" style="text-align:right">
+				<div width="100px" style="text-align:right">
 					<label value="@load(each.exenta ? each.importeGsSinDescuento : 0) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
-				<div width="55px" style="text-align:right">
+				<div width="60px" style="text-align:right">
 					<label value="0" sclass="det"></label>
 				</div>
 				<div width="70px" style="text-align:right">
@@ -110,16 +110,16 @@
 			visible="@load(vm.selectedVenta.totalImporteGsExenta ne 0)"></label>
 		<div width="110px"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGsIvaIncluido) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	<div height="1px"></div>
 	<hlayout>
-		<div width="175px"></div>
+		<div width="195px"></div>
 		<label value="guaraníes"></label>
 		<label value="@load(vm.selectedVenta.importeEnLetras)"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -127,12 +127,12 @@
 		<label value="@load(vm.selectedVenta.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	
 	<!-- PAGINA 2 -->
 	
-	<div height="155px"></div>
+	<div height="148px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -140,10 +140,10 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="37px"></div>
+	<div height="31px"></div>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.RazonSocial.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -151,7 +151,7 @@
 		<div width="94px">
 			<label value="${arg.Ruc.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
-		<div width="80px"></div>
+		<div width="62px"></div>
 		<div width="60px" style="text-align:right">
 			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
 		</div>
@@ -161,7 +161,7 @@
 	</hlayout>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.Direccion.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -177,7 +177,7 @@
 	</hlayout>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.Telefono.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -191,12 +191,12 @@
 		<div width="75px"></div>
 	</hlayout>
 	
-	<div height="25px"></div>
+	<div height="20px"></div>
 	
-	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="90px">
+	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="103px">
 		<template name="children">
 			<hbox spacing="0px">
-				<div width="110px"></div>
+				<div width="113px"></div>
 				<div width="50px" style="text-align:center">
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
@@ -209,10 +209,10 @@
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>	
-				<div width="105px" style="text-align:right">
+				<div width="100px" style="text-align:right">
 					<label value="@load(each.exenta ? each.importeGsSinDescuento : 0) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
-				<div width="55px" style="text-align:right">
+				<div width="60px" style="text-align:right">
 					<label value="0" sclass="det"></label>
 				</div>
 				<div width="70px" style="text-align:right">
@@ -228,16 +228,16 @@
 			visible="@load(vm.selectedVenta.totalImporteGsExenta ne 0)"></label>
 		<div width="110px"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGsIvaIncluido) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
-	<div height="1px"></div>
+	<div height="0px"></div>
 	<hlayout>
-		<div width="175px"></div>
+		<div width="195px"></div>
 		<label value="guaraníes"></label>
 		<label value="@load(vm.selectedVenta.importeEnLetras)"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -245,12 +245,12 @@
 		<label value="@load(vm.selectedVenta.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="140px"></div>
+	<div height="144px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -258,10 +258,10 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="37px"></div>
+	<div height="31px"></div>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.RazonSocial.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -269,7 +269,7 @@
 		<div width="94px">
 			<label value="${arg.Ruc.toString().toLowerCase()}" sclass="det"></label>
 		</div>	
-		<div width="80px"></div>
+		<div width="62px"></div>
 		<div width="60px" style="text-align:right">
 			<label value="X" sclass="det" visible="@load(vm.selectedVenta.condicionContado? 'true':'false')"></label>
 		</div>
@@ -279,7 +279,7 @@
 	</hlayout>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.Direccion.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -295,7 +295,7 @@
 	</hlayout>
 	
 	<hlayout>
-		<div width="170px"></div>
+		<div width="177px"></div>
 		<div width="207px">
 			<label value="${arg.Telefono.toString().toLowerCase()}" maxlength="38" sclass="det"></label>
 		</div>
@@ -309,12 +309,12 @@
 		<div width="75px"></div>
 	</hlayout>
 	
-	<div height="25px"></div>
+	<div height="20px"></div>
 	
-	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="105px">
+	<vbox children="@load(vm.selectedVenta.detallesConDescuento)" spacing="0px" height="103px">
 		<template name="children">
 			<hbox spacing="0px">
-				<div width="110px"></div>
+				<div width="113px"></div>
 				<div width="50px" style="text-align:center">
 					<label value="@load(each.cantidad)" sclass="det"></label>
 				</div>	
@@ -327,10 +327,10 @@
 				<div width="65px" style="text-align:right">
 					<label value="@load(each.precioGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>	
-				<div width="105px" style="text-align:right">
+				<div width="100px" style="text-align:right">
 					<label value="@load(each.exenta ? each.importeGsSinDescuento : 0) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 				</div>
-				<div width="55px" style="text-align:right">
+				<div width="60px" style="text-align:right">
 					<label value="0" sclass="det"></label>
 				</div>
 				<div width="70px" style="text-align:right">
@@ -346,16 +346,16 @@
 			visible="@load(vm.selectedVenta.totalImporteGsExenta ne 0)"></label>
 		<div width="110px"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGsIvaIncluido) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
-	<div height="1px"></div>
+	<div height="0px"></div>
 	<hlayout>
-		<div width="175px"></div>
+		<div width="195px"></div>
 		<label value="guaraníes"></label>
 		<label value="@load(vm.selectedVenta.importeEnLetras)"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalImporteGs) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	
 	<hlayout>
@@ -363,7 +363,7 @@
 		<label value="@load(vm.selectedVenta.totalIva10) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.totalIva) @converter(vm.cnv.monedaLocal)" sclass="det"></label>
-		<div width="30px"></div>
+		<div width="27px"></div>
 	</hlayout>
 	
 	<style media="print">
