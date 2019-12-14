@@ -25,6 +25,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoChequeTercero;
+import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
@@ -568,6 +569,21 @@ public class VentaSimpleControl extends SoloViewModel {
 		List<MyPair> out = new ArrayList<MyPair>();
 		out.add(this.getUtilDto().getFormaPagoEfectivo());
 		out.add(this.getUtilDto().getFormaPagoChequePropio());
+		return out;
+	}
+	
+	/**
+	 * @return los bancos
+	 */
+	public List<MyArray> getBancos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<BancoCta> bcos = rr.getBancosCta();
+		List<MyArray> out = new ArrayList<MyArray>();
+		for (BancoCta bco : bcos) {
+			MyArray my = new MyArray(bco.getDescripcion());
+			my.setId(bco.getId());
+			out.add(my);
+		}
 		return out;
 	}
 

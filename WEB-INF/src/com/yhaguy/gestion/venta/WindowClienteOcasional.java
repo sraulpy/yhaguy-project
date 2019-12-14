@@ -17,6 +17,8 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
+import com.yhaguy.domain.EmpresaRubro;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlLogicaEmpresa;
 import com.yhaguy.gestion.empresa.ClienteDTO;
 import com.yhaguy.gestion.empresa.EmpresaDTO;
@@ -128,6 +130,7 @@ public class WindowClienteOcasional extends SoloViewModel implements VerificaAce
 		emp.setRegimenTributario(utilDto.getRegimenTributarioNoExenta());
 		emp.setFechaIngreso(new Date());		
 		emp.setEmpresaGrupoSociedad(utilDto.getGrupoEmpresaNoDefinido());
+		emp.setRubro(this.getRubroConsumidorFinal());
 		
 		dto.setTipoCliente(this.utilDto.getTipoClienteOcasional());
 		dto.setEstadoCliente(utilDto.getEstadoClienteActivo());
@@ -204,6 +207,7 @@ public class WindowClienteOcasional extends SoloViewModel implements VerificaAce
 			cl.setPos5(this.clienteDto.getTipoCliente());
 			cl.setPos6(this.clienteDto.getEmpresa().isRazonSocialSet());
 			cl.setPos9(false);
+			cl.setPos15(false);
 			this.clienteMyArray = cl;
 		}
 		
@@ -225,10 +229,25 @@ public class WindowClienteOcasional extends SoloViewModel implements VerificaAce
 		return "Error Al Cancelar";
 	}
 
-	/*******************************************************************/	
+	/**
+	 * GETS / SETS
+	 */
 	
-	
-	/***************************** GETTER/SETTER ***********************/
+	/**
+	 * @return el rubro consumidor final..
+	 */
+	private MyArray getRubroConsumidorFinal() {
+		MyArray out = new MyArray();		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			EmpresaRubro rubro = rr.getRubro(EmpresaRubro.CONSUMIDOR_FINAL);
+			out.setId(rubro.getId());
+			out.setPos1(rubro.getDescripcion());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return out;
+	}
 	
 	public ClienteDTO getClienteDto() {
 		return clienteDto;

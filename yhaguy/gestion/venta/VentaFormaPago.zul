@@ -161,7 +161,7 @@
 				<hlayout>
 					<combobox readonly="true"
 						value="@load(vm.dato.nvoFormaPago.depositoBancoCta.pos1)"
-						model="@load(vm.dtoUtil.bancos)"
+						model="@load(vm.bancos)"
 						selectedItem="@bind(vm.dato.nvoFormaPago.depositoBancoCta)"
 						hflex="true"
 						instant="true">
