@@ -468,7 +468,8 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 						if (rfp.isChequeTercero() && rfp.isChequeAlDia(fechaPlanilla)) {
 							this.totalCancelacionChequeAldia += rfp.getMontoGs();
 							MyArray my = new MyArray(cobro.getTipoMovimiento().getDescripcion(),
-									rfp.getDescripcion().toUpperCase() + " - CLIENTE: "
+									rfp.getDescripcion().toUpperCase() 
+									+ " - " + Utiles.getDateToString(rfp.getChequeFecha(), Utiles.DD_MM_YY) + " - CLIENTE: "
 											+ cobro.getCliente().getRazonSocial(),
 									rfp.getMontoGs(), "REEMBOLSO CHEQUES RECHAZADOS CON CHEQUE AL DÍA (INTERNOS)",
 									this.totalCancelacionChequeAldia);
