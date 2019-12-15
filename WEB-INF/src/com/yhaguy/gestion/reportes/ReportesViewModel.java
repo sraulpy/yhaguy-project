@@ -7422,6 +7422,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String REEMBOLSOS_DETALLADO = "TES-00058";
 		static final String CHEQUES_CLIENTES_EMISION = "TES-00059";
 		static final String SALDOS_POR_FAMILIA = "TES-00060";
+		static final String LISTADO_PAGOS = "TES-00061";
 
 		/**
 		 * procesamiento del reporte..
@@ -7672,6 +7673,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case SALDOS_POR_FAMILIA:
 				this.saldosPorFamilia(mobile, SALDOS_POR_FAMILIA);
+				break;
+				
+			case LISTADO_PAGOS:
+				this.listadoPagos(LISTADO_PAGOS);
 				break;
 			}
 		}
@@ -11022,6 +11027,49 @@ public class ReportesViewModel extends SimpleViewModel {
 			params.put("Vendedor", vendedor == null ? "TODOS.." : vendedor.getRazonSocial().toUpperCase());
 			params.put("Moneda", moneda.getDescripcion().toUpperCase());
 			imprimirJasper(source, params, dataSource, formato);
+		}
+		
+		/**
+		 * listado de pagos a proveedores..
+		 */
+		private void listadoPagos(String codReporte) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Proveedor prov = filtro.getProveedor();
+				long idPrv = prov != null ? prov.getId() : 0; 
+
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Recibo> pagos = rr.getPagos(desde, hasta, idPrv);
+				
+				for (Recibo pago : pagos) {
+					Object[] cmp = new Object[] {
+							Utiles.getDateToString(pago.getFechaEmision(), Utiles.DD_MM_YY), 
+							pago.getNumero(),
+							pago.getNumeroRecibo(),
+							Utiles.getDateToString(pago.getFechaRecibo(), Utiles.DD_MM_YY),
+							pago.getProveedor().getRazonSocial(),
+							Utiles.getRedondeo(pago.getTotalImporteGs()) };
+					data.add(cmp);
+				}						
+				
+				ReportePagos rep = new ReportePagos(desde, hasta, "");
+				rep.setTitulo(codReporte + " - Listado de Pagos a proveedores");
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -26169,6 +26217,58 @@ class RepartosDetalladoDataSource implements JRDataSource {
 				}
 			}
 		}
+	}
+}
+
+/**
+ * Reporte de pagos..
+ */
+class ReportePagos extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 25);
+	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 40);
+	static DatosColumnas col2 = new DatosColumnas("Recibo", TIPO_STRING, 40);
+	static DatosColumnas col3 = new DatosColumnas("Fecha Rec.", TIPO_STRING, 25);
+	static DatosColumnas col4 = new DatosColumnas("Razón Social", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
+
+	public ReportePagos(Date desde, Date hasta, String proveedor) {
+		this.desde = desde;
+		this.hasta = hasta;
+	}
+
+	static {
+		cols.add(col0);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("Proveedores");
+		this.setNombreArchivo("pago-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
 	}
 }
 

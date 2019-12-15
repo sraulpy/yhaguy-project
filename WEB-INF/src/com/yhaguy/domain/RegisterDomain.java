@@ -5435,6 +5435,30 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return los pagos segun fecha
+	 */
+	public List<Recibo> getPagos(Date desde, Date hasta, long idProveedor) throws Exception {
+
+		String query = "select r from Recibo r where r.dbEstado != 'D' and (r.tipoMovimiento.sigla = ? or r.tipoMovimiento.sigla = ?)"
+				+ " and r.fechaEmision between ? and ?";
+		if(idProveedor > 0) 
+				query += " and r.proveedor.id = " + idProveedor;
+				query += " order by r.fechaEmision, r.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_RECIBO_PAGO);
+		listParams.add(Configuracion.SIGLA_TM_ANTICIPO_PAGO);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
 
 	/**
 	 * @return las cobranzas segun fecha
