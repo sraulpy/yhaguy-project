@@ -1886,11 +1886,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 		
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
-			String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO_DS : ZUL_IMPRESION_NOTACREDITO_RPS_DS;
+			String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO_RPS : ZUL_IMPRESION_NOTACREDITO_RPS_DS;
 			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
 			this.win.doModal();
 		} else {
-			String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_RPS;
+			String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_DS;
 			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
 			this.win.doModal();
 		}
