@@ -92,7 +92,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 	static final String ZUL_IMPRESION_FACTURA_RPS = "/yhaguy/gestion/caja/periodo/impresion_factura_rps.zul";
 	static final String ZUL_IMPRESION_FACTURA_RPS_DS = "/yhaguy/gestion/caja/periodo/impresion_factura_rps_ds.zul";
 	static final String ZUL_IMPRESION_NOTACREDITO = "/yhaguy/gestion/caja/periodo/impresion_notacredito.zul";
+	static final String ZUL_IMPRESION_NOTACREDITO_RPS = "/yhaguy/gestion/caja/periodo/impresion_notacredito_rps.zul";
 	static final String ZUL_IMPRESION_NOTACREDITO_DS = "/yhaguy/gestion/caja/periodo/impresion_notacredito_ds.zul";
+	static final String ZUL_IMPRESION_NOTACREDITO_RPS_DS = "/yhaguy/gestion/caja/periodo/impresion_notacredito_rps_ds.zul";
 	static final String ZUL_IMPRESION_RECIBO = "/yhaguy/gestion/caja/periodo/impresion_recibo.zul";
 
 	private CajaPeriodoDTO dto = new CajaPeriodoDTO();
@@ -1883,9 +1885,15 @@ public class CajaPeriodoControlBody extends BodyApp {
 			nc.getDetalles().add(this.getItemDescuento(nc));
 		}
 		
-		String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_DS;
-		this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
-		this.win.doModal();
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_DS;
+			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
+			this.win.doModal();
+		} else {
+			String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO_DS : ZUL_IMPRESION_NOTACREDITO_RPS_DS;
+			this.win = (Window) Executions.createComponents(src, this.mainComponent, params);
+			this.win.doModal();
+		}
 	}
 
 	/**
