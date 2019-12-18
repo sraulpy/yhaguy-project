@@ -203,6 +203,14 @@ public class ReciboFormaPago extends Domain {
 		String sigla = this.tipo.getSigla();
 		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_CANJE_DOCUMENTOS);
 	}
+	
+	/**
+	 * @return true si es deposito bancario..
+	 */
+	public boolean isValoresRepresentaciones() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_VALORES_REPRESENTACIONES);
+	}
 
 	public String getMontoGs_() {
 		NumberFormat FORMATTER = new DecimalFormat("###,###,##0");

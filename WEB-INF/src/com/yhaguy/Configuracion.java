@@ -687,6 +687,7 @@ public class Configuracion extends Config {
 	public static final String SIGLA_FORMA_PAGO_SALDO_FAVOR_COBRADO = "FP-TIP-SFC-COB";
 	public static final String SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA = "FP-TIP-DB-CT-BC";
 	public static final String SIGLA_FORMA_PAGO_CANJE_DOCUMENTOS = "OP-TIP-CJ-DC";
+	public static final String SIGLA_FORMA_PAGO_VALORES_REPRESENTACIONES = "FP-TIP-RRP";
 	public static String SIGLA_MONEDA_GUARANI = "Gs.";
 	public static String SIGLA_MONEDA_DOLAR = "U$D";
 	public static String SIGLA_MONEDA_PESO = "$";

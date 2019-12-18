@@ -45,6 +45,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalRecaudacionCentral = 0;
 	double totalTransferenciaCentral = 0;
 	double totalDolares = 0;
+	double totalValoresRepresentaciones = 0;
 
 	double totalVentaContado = 0;
 	double totalVentaContadoCheque = 0;
@@ -756,6 +757,14 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				this.totalDolares += fp.getMontoDs();
 				MyArray my = new MyArray(fp.getTipo().getDescripcion().toUpperCase(), fp.getDescripcion(), fp.getMontoDs(),
 						"RECAUDACION EN DÓLARES", this.totalDolares);
+				this.values.add(my);
+			}
+			
+			// valores representaciones..
+			for (ReciboFormaPago fp : planilla.getValoresRepresentaciones()) {
+				this.totalValoresRepresentaciones += fp.getMontoGs();
+				MyArray my = new MyArray(fp.getTipo().getDescripcion(), fp.getDescripcion(), fp.getMontoGs(),
+						"VALORES REPRESENTACIONES", this.totalValoresRepresentaciones);
 				this.values.add(my);
 			}
 			
