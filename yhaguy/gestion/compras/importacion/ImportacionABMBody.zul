@@ -1294,6 +1294,11 @@
 							</template>
 						</combobox>
 						<div hflex="true"></div>
+						<button mold="bs" sclass="btn-primary btn-sm"
+							width="150px" iconSclass="z-icon-share"
+							onClick="@command('importarPrecios')"
+							label=" Importar Precios" />
+						<space></space>
 						<button mold="bs" upload="true, accept=.csv"
 							onUpload="@command('uploadFilePrecios', file=event.media)" width="150px"
 							height="30px" iconSclass="z-icon-upload"

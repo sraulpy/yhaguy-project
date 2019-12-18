@@ -9397,7 +9397,7 @@ public class RegisterDomain extends Register {
 	 * @return articulo segun id..
 	 * [0]: id
 	 * [1]: codigoInterno
-	 * [2]: precio autocentro
+	 * [2]: precio lista
 	 * [3]: precio minorista
 	 * [4]: precio mayorista gs
 	 * [5]: precio mayorista ds

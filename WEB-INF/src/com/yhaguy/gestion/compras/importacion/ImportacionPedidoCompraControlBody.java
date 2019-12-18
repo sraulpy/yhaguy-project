@@ -512,6 +512,19 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.nvoDesglose = new CtaCteEmpresaMovimiento();
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void importarPrecios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (ImportacionFacturaDetalleDTO det : this.selectedImportacionFactura.getDetalles()) {
+			Object[] art = rr.getArticulo_(det.getArticulo().getId());
+			det.setPrecioFinalGs((double) art[4]);
+			det.setMinoristaGs((double) art[3]);
+			det.setListaGs((double) art[2]);
+		}
+		Clients.showNotification("PRECIOS VIGENTES IMPORTADOS");
+	}
+	
 	/************************** ELIMINAR ITEM DETALLE ORDEN COMPRA ****************************/
 	
 	private List<ImportacionPedidoCompraDetalleDTO> selectedOrdenItems = new ArrayList<ImportacionPedidoCompraDetalleDTO>();
