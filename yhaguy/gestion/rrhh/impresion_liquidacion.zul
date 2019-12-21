@@ -51,7 +51,8 @@
 				<label value="@load(vm.fecha)" style="font-size:10pt"></label>
 				<label value="Periodo:" style="font-size:10pt"></label>
 				<hlayout>
-					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:10pt"></label>
+					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:10pt"
+						visible="@load(vm.selectedTipo ne 'AGUINALDOS')"></label>
 					<label value="@load(vm.selectedPlanilla.anho)" style="font-size:10pt"></label>
 				</hlayout>
 			</row>
@@ -149,13 +150,13 @@
 		<div width="30px"></div>
 		<image src="/logo.png" width="90px"></image>
 		<div width="150px"></div>
-		<label value="LIQUIDACIÓN DE SALARIOS" style="font-size:10pt;font-weight:bold"></label>
+		<label value="@load(vm.tipoLiquidacion)" style="font-size:10pt;font-weight:bold"></label>
 	</hlayout>
 	
 	<div style="border-bottom: solid 2px; margin: 5px 0px 5px 30px" width="750px"></div>
 	
 	<hlayout style="text-align:center">
-		<label value="Conforme al artículo 235 del código del trabajador" style="font-size:10pt;font-style:italic"></label>
+		<label value="@load(vm.descripcionArticulo)" style="font-size:10pt;font-style:italic"></label>
 	</hlayout>
 	
 	<div height="10px"></div>
@@ -175,7 +176,8 @@
 				<label value="@load(vm.fecha)" style="font-size:10pt"></label>
 				<label value="Periodo:" style="font-size:10pt"></label>
 				<hlayout>
-					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:10pt"></label>
+					<label value="@load(vm.selectedPlanilla.mes)" style="font-size:10pt"
+						visible="@load(vm.selectedTipo ne 'AGUINALDOS')"></label>
 					<label value="@load(vm.selectedPlanilla.anho)" style="font-size:10pt"></label>
 				</hlayout>
 			</row>
