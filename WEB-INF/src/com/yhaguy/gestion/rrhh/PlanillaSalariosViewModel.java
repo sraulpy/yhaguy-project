@@ -600,6 +600,23 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		return out;
 	}
 	
+	/**
+	 * @return el tipo de liquidacion..
+	 */
+	public String getTipoLiquidacion() {
+		return this.selectedTipo.equals(RRHHPlanillaSalarios.TIPO_AGUINALDOS) ? "LIQUIDACIÓN DE AGUINALDO"
+				: "LIQUIDACIÓN DE SALARIOS";
+	}
+	
+	/**
+	 * @return el articulo..
+	 */
+	public String getDescripcionArticulo() {
+		return this.selectedTipo.equals(RRHHPlanillaSalarios.TIPO_AGUINALDOS)
+				? "Conforme al artículo 243 del código del trabajador"
+				: "Conforme al artículo 235 del código del trabajador";
+	}
+	
 	public List<Object[]> getFuncionarios() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getFuncionarios_();
