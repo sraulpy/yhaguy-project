@@ -98,9 +98,9 @@ public class RRHHPlanillaSalarios extends Domain {
 	}
 	
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
-			"vacaciones" })
+		"vacaciones", "aguinaldo" })
 	public double getIps() {
-		return ((this.getTotalHaberes_() - (this.adelantos + this.bonificacion)) * 0.09) * -1 ;
+		return ((this.getTotalHaberes_() - (this.adelantos + this.bonificacion + this.aguinaldo)) * 0.09) * -1 ;
 	}
 	
 	/**

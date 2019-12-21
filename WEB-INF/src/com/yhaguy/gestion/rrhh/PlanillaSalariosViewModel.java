@@ -336,12 +336,16 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				value = Utiles.getNumberFormat(item.getAnticipo());
 			} else if ("Bonificacion".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getBonificacion());
+			} else if ("Aguinaldo".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getAguinaldo());
 			} else if ("Otroshaberes".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getOtrosHaberes());
 			} else if ("Prestamos".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getPrestamos());
 			} else if ("Adelantos".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getAdelantos());
+			} else if ("AnticipoAguinaldo".equals(fieldName)) {
+				value = Utiles.getNumberFormat(item.getAnticipoAguinaldo());
 			} else if ("Otrosdtos".equals(fieldName)) {
 				value = Utiles.getNumberFormat(item.getOtrosDescuentos());
 			} else if ("Corporativo".equals(fieldName)) {
@@ -384,12 +388,16 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				value = Utiles.getNumberFormat((double) this.totales[2]);
 			} else if ("Bonificacion_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[3]);
+			} else if ("Aguinaldo_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[22]);
 			} else if ("Otroshaberes_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[4]);
 			} else if ("Prestamos_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[14]);
 			} else if ("Adelantos_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[15]);
+			}  else if ("AnticipoAguinaldo_t".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) this.totales[23]);
 			} else if ("Otrosdtos_t".equals(fieldName)) {
 				value = Utiles.getNumberFormat((double) this.totales[5]);
 			} else if ("Corporativo_t".equals(fieldName)) {
