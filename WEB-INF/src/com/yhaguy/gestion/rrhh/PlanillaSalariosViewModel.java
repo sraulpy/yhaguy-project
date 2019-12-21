@@ -435,7 +435,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 */
 	public Object[] getTotales() {
 		Object[] out = new Object[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		if (this.planillas != null) {
 			for (RRHHPlanillaSalarios item : this.planillas) {
 				double sal = (double) out[0]; double com = (double) out[1];			
@@ -449,6 +449,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				double hex = (double) out[16]; double res = (double) out[17];
 				double vac = (double) out[18]; double sev = (double) out[19];
 				double aus = (double) out[20]; double tha = (double) out[21];
+				double agu = (double) out[22]; double ang = (double) out[23];
 				sal += item.getSalarios(); com += item.getComision();
 				ant += item.getAnticipo(); bon += item.getBonificacion();
 				hab += item.getOtrosHaberes(); dto += item.getOtrosDescuentos();
@@ -460,7 +461,9 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				hex += item.getHorasExtras(); res += item.getResponsabilidad();
 				vac += item.getVacaciones(); sev += item.getSeguroVehicular();
 				aus += item.getAusencia(); tha += item.getTotalHaberes_();
-				out = new Object[]{ sal, com, ant, bon, hab, dto, cor, uni, rep, seg, emb, ips, tco, tde, pre, ade, hex, res, vac, sev, aus, tha };
+				agu += item.getAguinaldo(); ang += item.getAnticipoAguinaldo();
+				out = new Object[] { sal, com, ant, bon, hab, dto, cor, uni, rep, seg, emb, ips, tco, tde, pre, ade,
+						hex, res, vac, sev, aus, tha, agu, ang };
 			}
 		}
 		return out;
@@ -502,6 +505,10 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		if (liquidacion.getVacaciones() > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.VACACIONES,
 					Utiles.getNumberFormat(liquidacion.getVacaciones()), Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getAguinaldo() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.AGUINALDO, Utiles.getNumberFormat(liquidacion.getAguinaldo()),
+					Utiles.getNumberFormat(0.0)));
 		}
 		
 		// DESCUENTOS
@@ -549,6 +556,10 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		if (liquidacion.getIps() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.IPS, Utiles.getNumberFormat(0.0),
 					Utiles.getNumberFormat(liquidacion.getIps())));
+		}
+		if (liquidacion.getAnticipoAguinaldo() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ANTICIPO_AGUINALDO, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getAnticipoAguinaldo())));
 		}
 		return dets;
 	}	

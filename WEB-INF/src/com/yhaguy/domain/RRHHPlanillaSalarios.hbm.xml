@@ -40,6 +40,8 @@
 		<property name="vacaciones"/>
 		<property name="seguroVehicular"/>
 		<property name="ausencia"/>
+		<property name="aguinaldo"/>
+		<property name="anticipoAguinaldo"/>
 		
 	</class>
 </hibernate-mapping>

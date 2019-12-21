@@ -27,6 +27,8 @@ public class RRHHPlanillaSalarios extends Domain {
 	public static final String VACACIONES = "VACACIONES";
 	public static final String SEGURO_VEHICULAR = "SEGURO VEHICULO";
 	public static final String AUSENCIA = "AUSENCIAS";
+	public static final String AGUINALDO = "AGUINALDO";
+	public static final String ANTICIPO_AGUINALDO = "ANTICIPO AGUINALDO";
 	
 	public static final String TIPO_COMISIONES = "COMISIONES";
 	public static final String TIPO_SALARIOS = "SALARIOS";
@@ -62,6 +64,8 @@ public class RRHHPlanillaSalarios extends Domain {
 	private double vacaciones;
 	private double seguroVehicular;
 	private double ausencia;
+	private double aguinaldo;
+	private double anticipoAguinaldo;
 	
 	@Override
 	public int compareTo(Object arg0) {
@@ -69,27 +73,28 @@ public class RRHHPlanillaSalarios extends Domain {
 	}
 	
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
-			"vacaciones" })
+			"vacaciones", "aguinaldo" })
 	public double getTotalHaberes_() {
 		return this.salarios + this.bonificacion + this.otrosHaberes + this.horasExtras + this.responsabilidad
-				+ this.adelantos + this.comision + this.vacaciones;
+				+ this.adelantos + this.comision + this.vacaciones + this.aguinaldo;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
 			"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos", "horasExtras",
-			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia" })
+			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia", "aguinaldo", "anticipoAguinaldo" })
 	public double getTotalACobrar() {
 		return this.salarios + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
 				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
 				+ this.getIps() + this.prestamos + this.adelantos + this.horasExtras + this.responsabilidad + this.vacaciones
-				+ this.seguroVehicular + this.ausencia;
+				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo;
 	}
 	
 	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
-			"seguro", "embargo", "ausencia", "ips" })
+			"seguro", "embargo", "ausencia", "anticipoAguinaldo", "ips" })
 	public double getTotalADescontar() {
 		return this.seguroVehicular + this.prestamos + this.anticipo + this.otrosDescuentos + this.corporativo
-				+ this.uniforme + this.repuestos + this.seguro + this.embargo + this.ausencia + this.getIps();
+				+ this.uniforme + this.repuestos + this.seguro + this.embargo + this.ausencia + this.anticipoAguinaldo
+				+ this.getIps();
 	}
 	
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
@@ -326,5 +331,21 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setCantidadHorasExtras(double cantidadHorasExtras) {
 		this.cantidadHorasExtras = cantidadHorasExtras;
+	}
+
+	public double getAguinaldo() {
+		return aguinaldo;
+	}
+
+	public void setAguinaldo(double aguinaldo) {
+		this.aguinaldo = aguinaldo;
+	}
+
+	public double getAnticipoAguinaldo() {
+		return anticipoAguinaldo;
+	}
+
+	public void setAnticipoAguinaldo(double anticipoAguinaldo) {
+		this.anticipoAguinaldo = anticipoAguinaldo;
 	}
 }
