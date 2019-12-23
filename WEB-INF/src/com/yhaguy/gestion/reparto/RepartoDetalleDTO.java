@@ -11,7 +11,10 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.RepartoEntrega;
+import com.yhaguy.domain.Venta;
+import com.yhaguy.domain.VentaDetalle;
 
 @SuppressWarnings("serial")
 public class RepartoDetalleDTO extends DTO {
@@ -35,6 +38,24 @@ public class RepartoDetalleDTO extends DTO {
 		return sigla.equals(Configuracion.SIGLA_TM_PEDIDO_VENTA)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+	}
+	
+	/**
+	 * add entregas..
+	 */
+	public void addEntregas() throws Exception {
+		if (this.isVenta()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Venta vta = (Venta) rr.getObject(Venta.class.getName(), this.getIdMovimiento());
+			if (vta != null) {
+				for (VentaDetalle item : vta.getDetalles()) {
+					RepartoEntrega ent = new RepartoEntrega();
+					ent.setCantidad(item.getCantidadEntregada());
+					ent.setDetalle(item);
+					this.getEntregas().add(ent);
+				}
+			}
+		}		
 	}
 	
 	@DependsOn("entregado")

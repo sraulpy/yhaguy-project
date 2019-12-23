@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -236,10 +237,16 @@ public class RepartoViewModel extends BodyApp {
 	}
 	
 	@Command
-	public void saveCantidadEntregada(@BindingParam("item") RepartoEntrega item) throws Exception {
+	public void saveCantidadEntregada(@BindingParam("item") RepartoEntrega item, @BindingParam("ref") Component ref) throws Exception {
 		if (!this.dto.esNuevo()) {
+			if (item.getCantidad() > item.getSaldo()) {
+				item.setCantidad(0);
+				Clients.showNotification("Mayor al saldo..", Clients.NOTIFICATION_TYPE_ERROR, ref, "", 0);
+				return;
+			}
 			RegisterDomain rr = RegisterDomain.getInstance();
 			rr.saveObject(item, this.getLoginNombre());
+			BindUtils.postNotifyChange(null, null, item, "*");
 		}	
 	}
 	
@@ -340,6 +347,7 @@ public class RepartoViewModel extends BodyApp {
 				this.getDtoDetalle().setPeso((double) item.getPos11());
 				this.getDtoDetalle().setDetalle(item);
 				this.getDtoDetalle().setImporteGs((double) item.getPos12());
+				this.getDtoDetalle().addEntregas();
 
 				this.dto.getDetalles().add(this.getDtoDetalle());
 

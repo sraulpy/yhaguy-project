@@ -314,11 +314,10 @@
 						<listcell label="@load(each.detalle.cantidad)" />
 						<listcell>
 							<div hflex="true" vflex="true">						
-							<spinner value="@bind(each.cantidad)" vflex="true" hflex="true" 
+							<longbox value="@bind(each.cantidad)" vflex="true" hflex="true" 
 								onClick="self.setReadonly(false)"
-								onChange="@command('saveCantidadEntregada', item=each)" 
-								visible="@load(each.cantidad le each.saldo)"
-								maxlength="@load(each.saldo)" />
+								onChange="@command('saveCantidadEntregada', item=each, ref=self)" 
+								visible="@load(each.cantidad le each.saldo)" />
 							<label value="@load(each.cantidad)" visible="@load(each.cantidad ge each.saldo)"></label>
 							</div>
 						</listcell>
