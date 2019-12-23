@@ -316,7 +316,8 @@
 							<longbox value="@bind(each.cantidad)" vflex="true" hflex="true" 
 								onClick="self.setReadonly(false)"
 								onChange="@command('saveCantidadEntregada', item=each)" 
-								disabled="@load(each.cantidad ge each.saldo)" />
+								disabled="@load(each.cantidad ge each.saldo)"
+								style="color:black" />
 						</listcell>
 						<listcell label="@load(each.saldo)" />
 					</listitem>
