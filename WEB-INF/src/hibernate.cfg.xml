@@ -8,7 +8,7 @@
 
 		<!-- Postgres -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguy_central</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5433/yhaguydb</property>
 
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">yrsa0985</property>
@@ -189,6 +189,7 @@
 		<mapping resource="com/yhaguy/domain/VehiculoModelo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/Reparto.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RepartoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/RepartoEntrega.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ControlCombustible.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Venta.hbm.xml" />
@@ -251,8 +252,7 @@
 		<mapping resource="com/yhaguy/domain/ControlTalonario.hbm.xml" />
 
 		<!-- Maestro de articulos -->
-		<mapping resource="com/yhaguy/util/migracion/maestro/Maestro.hbm.xml" />
-		
+		<mapping resource="com/yhaguy/util/migracion/maestro/Maestro.hbm.xml" />		
 		<mapping resource="com/yhaguy/domain/UsuarioPropiedades.hbm.xml" />
 
 

@@ -299,29 +299,31 @@
 		<popup id="popDetalle" width="600px" sclass="rounded">
 			<vlayout>
 			<listbox height="300px" sclass="small-list"
-				model="@load(vm.itemsReparto)">
+				model="@load(vm.selectedItem_.entregas)">
 				<listhead style="text-align:center">
 					<listheader label="Código" width="120px" />
 					<listheader label="Descripción" />
 					<listheader label="Cantidad" width="80px" align="right" style="text-align:center" />
 					<listheader label="Entrega" width="80px" align="right" style="text-align:center" />
+					<listheader label="Saldo" width="80px" align="right" style="text-align:center" />
 				</listhead>
 				<template name="model">
 					<listitem>
-						<listcell label="@load(each.pos1)" />
-						<listcell label="@load(each.pos2)" />
-						<listcell label="@load(each.pos3)" />
+						<listcell label="@load(each.detalle.articulo.codigoInterno)" />
+						<listcell label="@load(each.detalle.articulo.descripcion)" />
+						<listcell label="@load(each.detalle.cantidad)" />
 						<listcell>
-							<longbox value="@bind(each.pos5)" vflex="true" hflex="true" 
+							<longbox value="@bind(each.cantidad)" vflex="true" hflex="true" 
 								onClick="self.setReadonly(false)"
 								onChange="@command('saveCantidadEntregada', item=each)" />
 						</listcell>
+						<listcell></listcell>
 					</listitem>
 				</template>
 			</listbox>
 			<hbox pack="center" align="end">
 				<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-print"
-					label="Imprimir Constancia" width="150px" disabled="@load(!vm.siempreHabilitado)"
+					label="Imprimir Constancia" hflex="true" disabled="@load(!vm.siempreHabilitado)"
 					onClick="@command('imprimirConstanciaEntrega')"></button>
 			</hbox>
 			</vlayout>

@@ -52,7 +52,7 @@
 			lazy="false"/>
 		
 		<set name="detalles" table="RepartoDetalle"
-			inverse="false" lazy="false" fetch="select" cascade="all">
+			inverse="false" lazy="false" fetch="join" cascade="all">
 			<key>
 				<column name="idreparto" not-null="false" />
 			</key>
