@@ -25,11 +25,11 @@ public class AssemblerRepartoDetalle extends Assembler {
 	@Override
 	public Domain dtoToDomain(DTO dtoR) throws Exception {
 		RepartoDetalleDTO dto = (RepartoDetalleDTO) dtoR;
-		RepartoDetalle domain = (RepartoDetalle) getDomain(dto,
-				RepartoDetalle.class);
+		RepartoDetalle domain = (RepartoDetalle) getDomain(dto, RepartoDetalle.class);
 
 		this.copiarValoresAtributos(dto, domain, attIgualesRepartoDetalle);
 		this.myArrayToDomain(dto, domain, "tipoMovimiento");
+		domain.setEntregas(dto.getEntregas_());
 
 		return domain;
 	}
@@ -37,10 +37,11 @@ public class AssemblerRepartoDetalle extends Assembler {
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
 		RepartoDetalleDTO dto = (RepartoDetalleDTO) getDTO(domain, RepartoDetalleDTO.class);
+		RepartoDetalle domain_ = (RepartoDetalle) domain;
 
 		this.copiarValoresAtributos(domain, dto, attIgualesRepartoDetalle);
-		this.domainToMyArray(domain, dto, "tipoMovimiento", new String[] {
-				"descripcion", "sigla" });
+		this.domainToMyArray(domain, dto, "tipoMovimiento", new String[] { "descripcion", "sigla" });
+		dto.setEntregas(domain_.getEntregas_());
 
 		this.setDetalle((RepartoDetalle) domain, dto);
 

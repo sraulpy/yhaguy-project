@@ -19,7 +19,15 @@
 
 		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento"
 			column="idtipoMovimiento"
-			lazy="false"/>		
+			lazy="false"/>	
+			
+		<set name="entregas" table="reparto_entrega"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idreparto" not-null="false" />
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.RepartoEntrega"></one-to-many>
+		</set>	
 
 	</class>
 </hibernate-mapping>

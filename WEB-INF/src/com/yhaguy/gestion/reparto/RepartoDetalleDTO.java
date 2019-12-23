@@ -1,11 +1,17 @@
 package com.yhaguy.gestion.reparto;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
 import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.RepartoEntrega;
 
 @SuppressWarnings("serial")
 public class RepartoDetalleDTO extends DTO {
@@ -18,6 +24,8 @@ public class RepartoDetalleDTO extends DTO {
  
 	private MyArray detalle = new MyArray();
 	private boolean entregado = true;
+	
+	private List<RepartoEntrega> entregas = new ArrayList<RepartoEntrega>();
 	
 	/**
 	 * @return si es venta o no segun la sigla..
@@ -89,5 +97,19 @@ public class RepartoDetalleDTO extends DTO {
 
 	public void setImporteGs(double importeGs) {
 		this.importeGs = importeGs;
+	}
+
+	public List<RepartoEntrega> getEntregas() {
+		return entregas;
+	}
+	
+	public Set<RepartoEntrega> getEntregas_() {
+		Set<RepartoEntrega> out = new HashSet<RepartoEntrega>();
+		out.addAll(this.entregas);
+		return out;
+	}
+
+	public void setEntregas(List<RepartoEntrega> entregas) {
+		this.entregas = entregas;
 	}
 }

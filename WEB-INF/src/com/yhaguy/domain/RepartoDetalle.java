@@ -1,5 +1,10 @@
 package com.yhaguy.domain;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.coreweb.domain.Domain;
 import com.yhaguy.Configuracion;
 
@@ -13,6 +18,8 @@ public class RepartoDetalle extends Domain {
 	private boolean entregado;
 	private TipoMovimiento tipoMovimiento;
 	
+	private Set<RepartoEntrega> entregas = new HashSet<RepartoEntrega>();
+	
 	/**
 	 * @return si es venta o no segun la sigla..
 	 */
@@ -21,6 +28,12 @@ public class RepartoDetalle extends Domain {
 		return sigla.equals(Configuracion.SIGLA_TM_PEDIDO_VENTA)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+	}
+	
+	public List<RepartoEntrega> getEntregas_() {
+		List<RepartoEntrega> out = new ArrayList<RepartoEntrega>();
+		out.addAll(this.entregas);
+		return out;
 	}
 	
 	public Long getIdMovimiento() {
@@ -75,6 +88,14 @@ public class RepartoDetalle extends Domain {
 
 	public void setImporteGs(double importeGs) {
 		this.importeGs = importeGs;
+	}
+
+	public Set<RepartoEntrega> getEntregas() {
+		return entregas;
+	}
+
+	public void setEntregas(Set<RepartoEntrega> entregas) {
+		this.entregas = entregas;
 	}
 
 }
