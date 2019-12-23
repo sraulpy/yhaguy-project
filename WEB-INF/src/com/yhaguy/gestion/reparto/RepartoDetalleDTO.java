@@ -50,7 +50,7 @@ public class RepartoDetalleDTO extends DTO {
 			if (vta != null) {
 				for (VentaDetalle item : vta.getDetalles()) {
 					RepartoEntrega ent = new RepartoEntrega();
-					ent.setCantidad(item.getCantidadEntregada());
+					ent.setCantidad(0);
 					ent.setDetalle(item);
 					this.getEntregas().add(ent);
 				}
