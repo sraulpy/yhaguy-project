@@ -11130,6 +11130,16 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las entregas segun iddetalle..
+	 * [0]: id
+	 * [1]: cantidad
+	 */
+	public List<Object[]> getRepartoEntregas(long idDetalle) throws Exception {
+		String query = "select r.id, r.cantidad from RepartoEntrega r where r.detalle.id = " + idDetalle;
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las chequeras..
 	 */
 	public List<AutoNumero> getBancoChequeras(String descripcion) throws Exception {
@@ -11142,16 +11152,19 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Reparto> rep = rr.getObjects(Reparto.class.getName());
+			List<Reparto> rep = rr.getRepartos(Utiles.getFecha("01-11-2019 00:00:00"), new Date());
 			for (Reparto reparto : rep) {
 				for (RepartoDetalle det : reparto.getDetalles()) {
 					if (det.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
 							|| det.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO)) {
 						Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
 						if (vta != null) {
-							vta.setNumeroReparto(reparto.getNumero());
-							rr.saveObject(vta, vta.getUsuarioMod());
-							System.out.println(vta.getNumero());
+							for (VentaDetalle item : vta.getDetalles()) {
+								RepartoEntrega ent = new RepartoEntrega();
+								ent.setCantidad(item.getCantidadEntregada());
+								ent.setDetalle(item);
+								System.out.println(item.getArticulo().getCodigoInterno());
+							}
 						}						
 					}
 				}

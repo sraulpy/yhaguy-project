@@ -317,7 +317,7 @@
 								onClick="self.setReadonly(false)"
 								onChange="@command('saveCantidadEntregada', item=each)" />
 						</listcell>
-						<listcell></listcell>
+						<listcell label="@load(each.saldo)" />
 					</listitem>
 				</template>
 			</listbox>
