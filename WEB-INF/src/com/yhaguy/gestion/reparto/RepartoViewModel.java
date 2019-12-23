@@ -40,11 +40,11 @@ import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Reparto;
+import com.yhaguy.domain.RepartoEntrega;
 import com.yhaguy.domain.ServicioTecnico;
 import com.yhaguy.domain.ServicioTecnicoDetalle;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Venta;
-import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.gestion.venta.AssemblerVenta;
 import com.yhaguy.gestion.venta.VentaDTO;
@@ -57,7 +57,6 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
-@SuppressWarnings("unchecked")
 public class RepartoViewModel extends BodyApp {
 
 	static final String NRO_REP = Configuracion.NRO_REPARTO;
@@ -204,12 +203,11 @@ public class RepartoViewModel extends BodyApp {
 	 * Muestra en un popup el detalle del item..
 	 */
 	@Command
-	@NotifyChange("itemsReparto")
+	@NotifyChange("selectedItem_")
 	public void verDetalle(@BindingParam("item") RepartoDetalleDTO item,
 			@BindingParam("comp") Component comp) {
-		this.itemsReparto = (List<MyArray>) item.getDetalle().getPos6();
-		this.popDetalle.open(comp, "after_end");
 		this.selectedItem_ = item;
+		this.popDetalle.open(comp, "after_end");
 	}
 
 	@Command
@@ -238,11 +236,11 @@ public class RepartoViewModel extends BodyApp {
 	}
 	
 	@Command
-	public void saveCantidadEntregada(@BindingParam("item") MyArray item) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		VentaDetalle det = (VentaDetalle) rr.getObject(VentaDetalle.class.getName(), item.getId());
-		det.setCantidadEntregada((long) item.getPos5());
-		rr.saveObject(det, this.getLoginNombre());
+	public void saveCantidadEntregada(@BindingParam("item") RepartoEntrega item) throws Exception {
+		if (!this.dto.esNuevo()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.saveObject(item, this.getLoginNombre());
+		}	
 	}
 	
 	@Command
@@ -491,7 +489,7 @@ public class RepartoViewModel extends BodyApp {
 		Map<String, Object> params = new HashMap<String, Object>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Venta vta = (Venta) rr.getObject(Venta.class.getName(), venta.getId());
-		JRDataSource dataSource = new ConstanciaEntregaDataSource(vta);
+		JRDataSource dataSource = new ConstanciaEntregaDataSource(vta, this.selectedItem_.getEntregas());
 		params.put("Fecha", Utiles.getDateToString(this.dto.getFechaCreacion(), Utiles.DD_MM_YYYY));
 		params.put("NroReclamo", this.dto.getNumero());
 		params.put("Cliente", vta.getCliente().getRazonSocial());
@@ -549,11 +547,11 @@ public class RepartoViewModel extends BodyApp {
 
 		List<ServicioTecnicoDetalle> detalle = new ArrayList<ServicioTecnicoDetalle>();
 		Venta venta;
-		List<VentaDetalle> dets = new ArrayList<VentaDetalle>();
+		List<RepartoEntrega> dets = new ArrayList<RepartoEntrega>();
 
-		public ConstanciaEntregaDataSource(Venta venta) {
+		public ConstanciaEntregaDataSource(Venta venta, List<RepartoEntrega> dets) {
 			this.venta = venta;
-			this.dets = venta.getDetallesOrdenado(); 
+			this.dets = dets; 
 		}
 
 		private int index = -1;
@@ -562,13 +560,13 @@ public class RepartoViewModel extends BodyApp {
 		public Object getFieldValue(JRField field) throws JRException {
 			Object value = null;
 			String fieldName = field.getName();
-			VentaDetalle item = this.dets.get(index);
+			RepartoEntrega item = this.dets.get(index);
 			if ("TituloDetalle".equals(fieldName)) {
 				value = venta.getTipoMovimiento().getDescripcion() + " - NRO. " + venta.getNumero();
 			} else if ("Descripcion".equals(fieldName)) {
-				value = item.getArticulo().getCodigoInterno() + " - " + item.getArticulo().getDescripcion();
+				value = item.getDetalle().getArticulo().getCodigoInterno() + " - " + item.getDetalle().getArticulo().getDescripcion();
 			} else if ("CantidadEntrega".equals(fieldName)) {
-				value = Utiles.getNumberFormat(item.getCantidadEntregada());
+				value = Utiles.getNumberFormat(item.getCantidad());
 			}
 			return value;
 		}
