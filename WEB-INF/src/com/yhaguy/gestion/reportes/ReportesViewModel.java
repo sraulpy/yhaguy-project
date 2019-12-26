@@ -102,6 +102,7 @@ import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Reparto;
 import com.yhaguy.domain.RepartoDetalle;
+import com.yhaguy.domain.RepartoEntrega;
 import com.yhaguy.domain.Reporte;
 import com.yhaguy.domain.ReporteFavoritos;
 import com.yhaguy.domain.SucursalApp;
@@ -26178,6 +26179,8 @@ class RepartosDetalladoDataSource implements JRDataSource {
 			value = det[5];
 		} if ("Entrega".equals(fieldName)) {
 			value = det[6];
+		} if ("Saldo".equals(fieldName)) {
+			value = det[7];
 		}
 		return value;
 	}
@@ -26201,17 +26204,18 @@ class RepartosDetalladoDataSource implements JRDataSource {
 				if (det.isVenta()) {
 					Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
 					if (vta != null) {
-						for (VentaDetalle item : vta.getDetalles()) {
+						for (RepartoEntrega item : det.getEntregas()) {
 							String fecha = Utiles.getDateToString(reparto.getFechaCreacion(), "dd/MM/yyyy");
 							String repartidor = reparto.getRepartidor().getRazonSocial();
 							String nroRep = reparto.getNumero() + " - " + fecha + " - " + repartidor;
 							String nroVta = vta.getNumero();
 							String cliente = vta.getCliente().getRazonSocial();
-							String codigo = item.getArticulo().getCodigoInterno();
-							String descripcion = item.getArticulo().getDescripcion();
-							String cantidad = item.getCantidad() + "";
-							String entrega = item.getCantidadEntregada() + "";
-							this.values.add(new Object[] { nroRep, nroVta, cliente, codigo, descripcion, cantidad, entrega });
+							String codigo = item.getDetalle().getArticulo().getCodigoInterno();
+							String descripcion = item.getDetalle().getArticulo().getDescripcion();
+							String cantidad = item.getDetalle().getCantidad() + "";
+							String entrega = item.getCantidad() + "";
+							String saldo = item.getSaldo() + "";
+							this.values.add(new Object[] { nroRep, nroVta, cliente, codigo, descripcion, cantidad, entrega, saldo });
 						}
 					}
 				}
