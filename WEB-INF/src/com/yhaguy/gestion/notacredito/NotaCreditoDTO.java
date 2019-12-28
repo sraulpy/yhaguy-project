@@ -547,6 +547,7 @@ public class NotaCreditoDTO extends DTO {
 	}
 
 	public String getNumeroNotaCredito() {
+		if(numeroNotaCredito.isEmpty()) return this.numero;
 		return numeroNotaCredito;
 	}
 

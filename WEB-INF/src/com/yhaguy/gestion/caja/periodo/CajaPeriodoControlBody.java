@@ -1849,6 +1849,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("TotalIva", FORMATTER.format(nc.getTotalIva()));
 		params.put("Vendedor", nc.getVendedor().getPos2());
 		params.put("Motivo", nc.getMotivo().getText().toUpperCase());
+		
+		if (nc.isMotivoDescuento()) {
+			nc.getDetalles().add(this.getItemDescuento(nc));
+		}
 
 		String src = nc.isMonedaLocal() ? ZUL_IMPRESION_NOTACREDITO : ZUL_IMPRESION_NOTACREDITO_DS;
 		this.win = (Window) Executions.createComponents(src, this.mainComponent, params);

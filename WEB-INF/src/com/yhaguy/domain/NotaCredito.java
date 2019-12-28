@@ -88,6 +88,14 @@ public class NotaCredito extends Domain {
 		return -1;
 	}
 	
+	public double getImporteGs_() {
+		double out = 0.0;
+		for (NotaCreditoDetalle det : detalles) {
+			out += (det.getMontoGs() * det.getCantidad());
+		}
+		return out;
+	}
+	
 	/**
 	 * @return el importe total de la venta segun el proveedor..
 	 */
