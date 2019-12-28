@@ -239,7 +239,7 @@ public class RepartoViewModel extends BodyApp {
 	@Command
 	public void saveCantidadEntregada(@BindingParam("item") RepartoEntrega item, @BindingParam("ref") Component ref) throws Exception {
 		if (item.getCantidad() > item.getSaldo()) {
-			item.setCantidad(0);
+			item.setCantidad(item.getSaldo());
 			Clients.showNotification("Mayor al saldo..", Clients.NOTIFICATION_TYPE_ERROR, ref, "", 0);
 			return;
 		}
