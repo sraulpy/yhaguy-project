@@ -2451,8 +2451,7 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
 				+ "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO
-				+ "') AND (v.reparto = 'true') AND (v.estado.sigla = '"
-				+ Configuracion.SIGLA_VENTA_ESTADO_FACTURADO + "')";
+				+ "') AND (v.reparto = 'true')";
 
 		List<Venta> out = this.hqlLimit(query, 50);
 		return out;

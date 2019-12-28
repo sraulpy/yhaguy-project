@@ -1908,6 +1908,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		out.setCantidad(1);
 		out.setMontoGs(importeGs);
 		out.setImporteGs(importeGs);
+		out.setTipoDetalle(new MyPair(0, Configuracion.SIGLA_TIPO_NC_DETALLE_ARTICULO));
 		return out;
 	}
 	
