@@ -12282,14 +12282,23 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Date desde = filtro.getFechaDesde();			
-			Date hasta = filtro.getFechaHasta();	
+			Date hasta = filtro.getFechaHasta();
+			boolean pendientes = filtro.isFraccionado();
+			Funcionario vendedor = filtro.getVendedor();
+			String vendedor_ = vendedor != null ? vendedor.getRazonSocial() : null;
 			Object[] formato = filtro.getFormato();	
 			
 			List<Reparto> repartos = rr.getRepartos(desde, hasta);		
 			
+			String format = (String) formato[0];
+			String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+			String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_REPARTOS_DETALLADO;
+			if (format.equals(csv) || format.equals(xls)) {
+				source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_REPARTOS_DETALLADO_;
+			}
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new RepartosDetalladoDataSource(repartos, desde, hasta);
+			JRDataSource dataSource = new RepartosDetalladoDataSource(repartos, desde, hasta, pendientes, vendedor_);
 			params.put("Titulo", codReporte + " - REPARTOS DETALLADO");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
@@ -26138,7 +26147,7 @@ class RepartosDetalladoDataSource implements JRDataSource {
 	Date desde;
 	Date hasta;
 
-	public RepartosDetalladoDataSource(List<Reparto> repartos, Date desde, Date hasta) {
+	public RepartosDetalladoDataSource(List<Reparto> repartos, Date desde, Date hasta, boolean pendientes, String vendedor) {
 		this.repartos = repartos;
 		this.desde = desde;
 		this.hasta = hasta;
@@ -26151,7 +26160,7 @@ class RepartosDetalladoDataSource implements JRDataSource {
 			}
 		});
 		try {
-			this.loadDatos();
+			this.loadDatos(pendientes, vendedor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -26181,6 +26190,10 @@ class RepartosDetalladoDataSource implements JRDataSource {
 			value = det[6];
 		} if ("Saldo".equals(fieldName)) {
 			value = det[7];
+		} if ("Vendedor".equals(fieldName)) {
+			value = det[8];
+		} if ("NroReparto".equals(fieldName)) {
+			value = det[9];
 		}
 		return value;
 	}
@@ -26197,7 +26210,7 @@ class RepartosDetalladoDataSource implements JRDataSource {
 	/**
 	 * load datos..
 	 */
-	private void loadDatos() throws Exception {
+	private void loadDatos(boolean pendientes, String vendedor) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		for (Reparto reparto : this.repartos) {
 			for (RepartoDetalle det : reparto.getDetalles()) {
@@ -26205,17 +26218,28 @@ class RepartosDetalladoDataSource implements JRDataSource {
 					Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
 					if (vta != null) {
 						for (RepartoEntrega item : det.getEntregas()) {
+							long saldo_ = item.getSaldo();
 							String fecha = Utiles.getDateToString(reparto.getFechaCreacion(), "dd/MM/yyyy");
 							String repartidor = reparto.getRepartidor().getRazonSocial();
 							String nroRep = reparto.getNumero() + " - " + fecha + " - " + repartidor;
 							String nroVta = vta.getNumero();
 							String cliente = vta.getCliente().getRazonSocial();
+							String vendedor_ = vta.getVendedor().getRazonSocial();
 							String codigo = item.getDetalle().getArticulo().getCodigoInterno();
 							String descripcion = item.getDetalle().getArticulo().getDescripcion();
 							String cantidad = item.getDetalle().getCantidad() + "";
 							String entrega = item.getCantidad() + "";
-							String saldo = item.getSaldo() + "";
-							this.values.add(new Object[] { nroRep, nroVta, cliente, codigo, descripcion, cantidad, entrega, saldo });
+							String saldo = saldo_ + "";
+							String nroReparto = reparto.getNumero();
+							if (!pendientes) {
+								if ((vendedor == null) || (vendedor != null && vendedor.equals(vendedor_))) {
+									this.values.add(new Object[] { nroRep, nroVta, cliente, codigo, descripcion, cantidad, entrega, saldo, vendedor_, nroReparto });
+								}								
+							} else if (pendientes && saldo_ > 0) {
+								if ((vendedor == null) || (vendedor != null && vendedor.equals(vendedor_))) {
+									this.values.add(new Object[] { nroRep, nroVta, cliente, codigo, descripcion, cantidad, entrega, saldo, vendedor_, nroReparto });
+								}								
+							}							
 						}
 					}
 				}
