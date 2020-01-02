@@ -2112,7 +2112,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				// Notas de Credito
 				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
 					if (vendedor == null) {
-						for (Funcionario vend : filtro.getVendedores()) {
+						for (Funcionario vend : filtro.getVendedores_()) {
 							for (NotaCredito nc : ncs) {
 								long idVen = vend.getId().longValue();
 								long idVenNc = nc.getVendedor().getId().longValue();
@@ -2165,7 +2165,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
 					List<Venta> ventas = new ArrayList<Venta>();
 					if (vendedor == null) {
-						for (Funcionario vend : filtro.getVendedores()) {
+						for (Funcionario vend : filtro.getVendedores_()) {
 							ventas.addAll(rr.getVentasPorVendedor(vend.getId(), desde, hasta));
 						}
 					} else {
@@ -2194,7 +2194,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				} else if (filtro.isIncluirVCR()) {
 					List<Venta> ventas = new ArrayList<Venta>();
 					if (vendedor == null) {
-						for (Funcionario vend : filtro.getVendedores()) {
+						for (Funcionario vend : filtro.getVendedores_()) {
 							ventas.addAll(rr.getVentasCreditoPorVendedor(desde, hasta, vend.getId()));
 						}
 					} else {
@@ -2223,7 +2223,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				} else if (filtro.isIncluirVCT()) {
 					List<Venta> ventas = new ArrayList<Venta>();
 					if (vendedor == null) {
-						for (Funcionario vend : filtro.getVendedores()) {
+						for (Funcionario vend : filtro.getVendedores_()) {
 							ventas.addAll(rr.getVentasContadoPorVendedor(desde, hasta, vend.getId()));
 						}
 					} else {
