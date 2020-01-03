@@ -184,10 +184,12 @@ public class ControlBancoMovimiento extends Control {
 		for (ReciboDetalle det : reembolso.getDetalles()) {
 			long idCheque = det.getMovimiento().getIdMovimientoOriginal();
 			BancoChequeTercero cheque = (BancoChequeTercero) rr.getObject(BancoChequeTercero.class.getName(), idCheque);
-			cheque.setReembolsado(true);
-			cheque.setCancelado(det.getMovimiento().getSaldo() <= 500);
-			cheque.setNumeroReembolso(reembolso.getNumero());
-			rr.saveObject(cheque, user);
+			if (cheque != null) {
+				cheque.setReembolsado(true);
+				cheque.setCancelado(det.getMovimiento().getSaldo() <= 500);
+				cheque.setNumeroReembolso(reembolso.getNumero());
+				rr.saveObject(cheque, user);
+			}			
 		}
 	}
 	
