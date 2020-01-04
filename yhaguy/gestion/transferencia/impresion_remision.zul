@@ -16,7 +16,7 @@
 	
 	<!-- PAGINA 1 -->
 	
-	<div height="33px"></div>
+	<div height="50px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -56,7 +56,7 @@
 		</hlayout>
 		<hlayout>
 			<div width="170px"></div>
-			<label value="@load(vm.dto.sucursalDestino.sigla.toLowerCase())" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.sucursalDestino.sigla.toLowerCase())" maxlength="50" sclass="det"></label>
 		</hlayout>
 	</vbox>
 	
@@ -69,10 +69,10 @@
 				</div>	
 				<div width="80px"></div>
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="215px">
-					<label value="@load(each.articulo.pos2)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos2.toString().toLowerCase())" sclass="det" maxlength="36"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -90,12 +90,12 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="27px"></div>
+	<div height="22px"></div>
 	
 	<hlayout>
 		<div width="150px"></div>
 		<div width="207px">
-			<label value="@load(vm.dto.fechaCreacion) @converter('formattedDate', format='dd-MM-yyyy')" maxlength="38" sclass="det"></label>
+			<label value="@load(vm.dto.fechaCreacion) @converter('formattedDate', format='dd-MM-yyyy')" maxlength="50" sclass="det"></label>
 		</div>
 	</hlayout>
 	
@@ -135,10 +135,10 @@
 				</div>	
 				<div width="80px"></div>
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="215px">
-					<label value="@load(each.articulo.pos2)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos2.toString().toLowerCase())" sclass="det" maxlength="50"></label>
 				</div>	
 			</hbox>
 		</template>
@@ -146,9 +146,9 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="55px"></div>
+	<div height="50px"></div>
 	
-	<div height="33px"></div>
+	<div height="30px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -201,10 +201,10 @@
 				</div>	
 				<div width="80px"></div>
 				<div width="100px">
-					<label value="@load(each.articulo.pos1)" sclass="det"></label>
+					<label value="@load(each.articulo.pos1.toString().toLowerCase())" sclass="det"></label>
 				</div>	
 				<div width="215px">
-					<label value="@load(each.articulo.pos2)" sclass="det" maxlength="36"></label>
+					<label value="@load(each.articulo.pos2.toString().toLowerCase())" sclass="det" maxlength="50"></label>
 				</div>	
 			</hbox>
 		</template>
