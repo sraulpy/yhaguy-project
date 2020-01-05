@@ -102,7 +102,7 @@ public class ProcesosTesoreria {
 		Date hasta_ = new Date();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Map<String, List<BancoChequeTercero>> duplicados = new HashMap<String, List<BancoChequeTercero>>();
-		List<BancoChequeTercero> cheques = rr.getChequesTercero(desde_, hasta_, null, 0);
+		List<BancoChequeTercero> cheques = rr.getChequesTercero(desde_, hasta_, null, 0, null, null);
 		for (BancoChequeTercero cheque : cheques) {
 			List<BancoChequeTercero> chqs = rr.getChequesTercero(cheque.getNumero());
 			if (chqs.size() > 1) {
@@ -142,7 +142,7 @@ public class ProcesosTesoreria {
 		Date desde_ = formatter.parse(desde);
 		Date hasta_ = formatter.parse(hasta);
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<BancoChequeTercero> cheques = rr.getChequesTercero(desde_, hasta_, null, 0);
+		List<BancoChequeTercero> cheques = rr.getChequesTercero(desde_, hasta_, null, 0, null, null);
 		for (BancoChequeTercero cheque : cheques) {
 			ReciboFormaPago fp = cheque.getReciboFormaPago();
 			if (fp != null) {
@@ -672,7 +672,43 @@ public class ProcesosTesoreria {
 					}
 				}
 			}
-		}		
+		}	
+		List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
+		for (Venta vta : ventas) {
+			for (ReciboFormaPago rfp : vta.getFormasPago()) {
+				if (rfp.isChequeTercero()) {
+					BancoChequeTercero cheque = rr.getChequeTercero(rfp.getId());
+					if (cheque == null) {
+						cheque = new BancoChequeTercero();
+						cheque.setAnulado(false);
+						cheque.setAuxi("RFP " + rfp.getId());
+						cheque.setBanco(rfp.getChequeBanco());
+						cheque.setCliente(vta.getCliente());
+						cheque.setDepositado(false);
+						cheque.setDescontado(false);
+						cheque.setFecha(rfp.getChequeFecha());
+						cheque.setDiferido(rfp.isChequeAdelantado(vta.getFecha()));
+						cheque.setLibrado(rfp.getChequeLibrador());
+						cheque.setMoneda(vta.getMoneda());
+						cheque.setMonto(rfp.getMontoChequeGs());
+						cheque.setNumero(rfp.getChequeNumero());
+						cheque.setNumeroDeposito("");
+						cheque.setNumeroDescuento("");
+						cheque.setNumeroReembolso("");
+						cheque.setNumeroPlanilla(vta.getNumeroPlanillaCaja());
+						cheque.setNumeroRecibo(vta.getNumero());
+						cheque.setNumeroVenta("");
+						cheque.setObservacion("");
+						cheque.setRechazado(false);
+						cheque.setReciboFormaPago(rfp);
+						cheque.setSucursalApp(vta.getSucursal());
+						cheque.setVendedor("");
+						rr.saveObject(cheque, "process");
+						System.out.println("CHEQUE AGREGADO:" + cheque.getNumero());
+					}
+				}
+			}
+		}
 	}
 	
 	/**
@@ -1384,7 +1420,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.addMovimientosBancoFormaPagoDepositoBancario();
 			//ProcesosTesoreria.chequearClientesDuplicados();
 			//ProcesosTesoreria.addRecaudacionesCentral();
-			ProcesosTesoreria.addChequeTerceros();
+			//ProcesosTesoreria.addChequeTerceros();
 			//ProcesosTesoreria.setNumeroRecibos();
 			//ProcesosTesoreria.setOrigenRecaudacionCentral();
 			//ProcesosTesoreria.setEmisionChequesTerceros();
@@ -1402,7 +1438,7 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
-			//ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
+			ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
 			//ProcesosTesoreria.verificarBancoDepositos();
 		} catch (Exception e) {
 			e.printStackTrace();
