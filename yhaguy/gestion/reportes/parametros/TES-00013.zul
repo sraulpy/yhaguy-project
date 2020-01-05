@@ -5,13 +5,25 @@
 	</columns>
 	<rows>
 		<row>
-			<field value="Fecha Desde:" />
+			<field value="Emisión Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde2)"
+				format="dd-MM-yyyy"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Emisión Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta2)"
+				format="dd-MM-yyyy"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Vto. Desde:" />
 			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
 				format="dd-MM-yyyy"
 				placeholder="Desde.." hflex="true" />
 		</row>
 		<row>
-			<field value="Fecha Hasta:" />
+			<field value="Vto. Hasta:" />
 			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
 				format="dd-MM-yyyy"
 				placeholder="Hasta.." hflex="true" />

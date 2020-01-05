@@ -8187,6 +8187,8 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void chequesPorCliente(boolean mobile, String codReporte) throws Exception {
 			try {
+				Date emisionDesde = filtro.getFechaDesde2();
+				Date emisionHasta = filtro.getFechaHasta2();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Tipo banco = filtro.getBancoTercero();
@@ -8202,7 +8204,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<BancoChequeTercero> cheques = rr.getChequesTercero(desde, hasta, banco, idCliente);
+				List<BancoChequeTercero> cheques = rr.getChequesTercero(desde, hasta, banco, idCliente, emisionDesde, emisionHasta);
 
 				if (selectedCheque != null) {
 					int length = selectedCheque.getLibrado() == null ? 0 : selectedCheque.getLibrado().length();
@@ -8215,7 +8217,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							selectedCheque.getBanco().getDescripcion().toUpperCase(), librador.toUpperCase(),
 							selectedCheque.isDepositado() ? "SI" : "NO",
 							selectedCheque.isDescontado() ? "SI" : "NO",
-							selectedCheque.getMonto() };
+							Utiles.getRedondeo(selectedCheque.getMonto()) };
 					data.add(obj);
 				} else {
 					for (BancoChequeTercero cheque : cheques) {
@@ -8229,7 +8231,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								cheque.getBanco().getDescripcion().toUpperCase(), librador.toUpperCase(),
 								cheque.isDepositado() ? "SI" : "NO",
 								cheque.isDescontado() ? "SI" : "NO",
-								cheque.getMonto() };
+								Utiles.getRedondeo(cheque.getMonto()) };
 						data.add(obj);
 					}
 				}
@@ -8846,8 +8848,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Object[]> data = new ArrayList<Object[]>();
-			List<BancoChequeTercero> cheques = rr.getChequesTercero(desde,
-					hasta, banco, 0);
+			List<BancoChequeTercero> cheques = rr.getChequesTercero(desde, hasta, banco, 0, null, null);
 
 			for (BancoChequeTercero cheque : cheques) {
 				String cliente = cheque.getCliente() == null ? "" : cheque.getCliente().getRazonSocial();

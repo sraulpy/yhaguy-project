@@ -7097,10 +7097,14 @@ public class RegisterDomain extends Register {
 	 * @return los cheques de terceros..
 	 */
 	public List<BancoChequeTercero> getChequesTercero(Date desde, Date hasta,
-			Tipo banco, long idCliente) throws Exception {
+			Tipo banco, long idCliente, Date emisionDesde, Date emisionHasta) throws Exception {
+		String emisionDesde_ = misc.dateToString(emisionDesde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String emisionHasta_ = misc.dateToString(emisionHasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c from BancoChequeTercero c where c.dbEstado != 'D'"
 				+ " and c.anulado = 'FALSE'" + " and c.fecha between ? and ?";
-
+		if (emisionDesde != null) {
+			query += " and c.emision >= '"+ emisionDesde_ +"' and c.emision <= '"+ emisionHasta_ +"'";
+		}
 		if (banco != null) {
 			query += " and c.banco.id = ?";
 		}
