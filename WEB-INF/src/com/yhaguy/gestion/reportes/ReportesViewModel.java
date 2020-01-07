@@ -7424,6 +7424,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String CHEQUES_CLIENTES_EMISION = "TES-00059";
 		static final String SALDOS_POR_FAMILIA = "TES-00060";
 		static final String LISTADO_PAGOS = "TES-00061";
+		static final String CHEQUES_GARANTIAS_RECIBIDAS = "TES-00062";
 
 		/**
 		 * procesamiento del reporte..
@@ -7678,6 +7679,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case LISTADO_PAGOS:
 				this.listadoPagos(LISTADO_PAGOS);
+				break;
+				
+			case CHEQUES_GARANTIAS_RECIBIDAS:
+				this.chequesGarantiasRecibidas(CHEQUES_GARANTIAS_RECIBIDAS);
 				break;
 			}
 		}
@@ -11067,6 +11072,43 @@ public class ReportesViewModel extends SimpleViewModel {
 				vp.setBotonImprimir(false);
 				vp.setBotonCancelar(false);
 				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * listado de cheques por garantias recibidas..
+		 */
+		private void chequesGarantiasRecibidas(String codReporte) {
+			try {				
+				/**		
+				String cuenta = "";
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Recibo> pagos = rr.getPagos(desde, hasta, idPrv);
+				
+				for (Recibo pago : pagos) {
+					Object[] cmp = new Object[] {
+							Utiles.getDateToString(pago.getFechaEmision(), Utiles.DD_MM_YY), 
+							pago.getNumero(),
+							pago.getNumeroRecibo(),
+							Utiles.getDateToString(pago.getFechaRecibo(), Utiles.DD_MM_YY),
+							pago.getProveedor().getRazonSocial(),
+							Utiles.getRedondeo(pago.getTotalImporteGs()) };
+					data.add(cmp);
+				}						
+				
+				ReportePagos rep = new ReportePagos(desde, hasta, "");
+				rep.setTitulo(codReporte + " - Listado de Pagos a proveedores");
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this); **/
 
 			} catch (Exception e) {
 				e.printStackTrace();
