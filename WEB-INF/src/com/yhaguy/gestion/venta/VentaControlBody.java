@@ -393,7 +393,7 @@ public class VentaControlBody extends BodyApp {
 	public void modificarVendedor(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2, @BindingParam("comp3") Button comp3) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Venta vta = (Venta) rr.getObject(Venta.class.getName(), this.dto.getId());
-		vta.setVendedor(rr.getFuncionario(this.dto.getVendedor().getId()));
+		vta.setVendedor(rr.getFuncionario_(this.dto.getVendedor().getId()));
 		rr.saveObject(vta, this.getLoginNombre());
 		List<CtaCteEmpresaMovimiento> movims = rr.getCtaCteMovimientosByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
 		for (CtaCteEmpresaMovimiento movim : movims) {
