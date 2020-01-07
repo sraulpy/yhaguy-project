@@ -8810,7 +8810,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								dto.getId() + "",
 								dto.getBanco().getBanco().getDescripcion().toUpperCase(),
 								Utiles.getMaxLength(cheque.getCliente().getRazonSocial(), 30),
-								cheque.getMonto()});
+								Utiles.getRedondeo(cheque.getMonto())});
 					}					
 				}
 			}
@@ -8822,7 +8822,6 @@ public class ReportesViewModel extends SimpleViewModel {
 			rep.setApaisada();
 			rep.setDatosReporte(data);
 			
-
 			if (!mobile) {
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
