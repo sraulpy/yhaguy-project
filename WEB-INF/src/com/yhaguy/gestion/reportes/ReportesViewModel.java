@@ -19868,8 +19868,8 @@ class ReporteChequesPendientesDescuento extends ReporteYhaguy {
 				.add(this.textoParValor("Sucursal", this.sucursal)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp.horizontalFlowList()
-				.add(this.textoParValor("Vto.Cheque Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
-				.add(this.textoParValor("Vto.Cheque Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Vto.Cheque Desde", m.dateToString(this.vtoDesde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Vto.Cheque Hasta", m.dateToString(this.vtoHasta, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Banco", this.banco)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
