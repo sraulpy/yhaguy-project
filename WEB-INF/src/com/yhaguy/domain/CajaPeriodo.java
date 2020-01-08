@@ -938,6 +938,19 @@ public class CajaPeriodo extends Domain {
 				}
 			}
 		}
+		for (Venta venta : this.getVentasOrdenado()) {
+			if (!venta.isAnulado()) {
+				for (ReciboFormaPago fp : venta.getFormasPago()) {
+					if (fp.isRecaudacionCentral()) {
+						String desc = "VTA. "
+								+ venta.getNumero().substring(8,
+										venta.getNumero().length());
+						fp.setDescripcion(desc);
+						out.add(fp);
+					}
+				}
+			}
+		}
 		return out;
 	}
 	
