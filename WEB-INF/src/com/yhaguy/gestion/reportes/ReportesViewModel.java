@@ -8796,7 +8796,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			if (vtoHasta == null) vtoHasta = new Date();
 			
 			Date vtoDesde_ = Utiles.getFecha(Utiles.getDateToString(vtoDesde, Utiles.DD_MM_YYYY + " 00:00:00"));
-			Date vtoHasta_ = Utiles.getFecha(Utiles.getDateToString(vtoHasta, Utiles.DD_MM_YYYY + " 23:00:00"));
+			Date vtoHasta_ = Utiles.getFecha(Utiles.getDateToString(vtoHasta, Utiles.DD_MM_YYYY + " 23:59:00"));
 
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Object[]> data = new ArrayList<Object[]>();
@@ -8806,7 +8806,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			for (BancoDescuentoCheque dto : descuentos) {
 				for (BancoChequeTercero cheque : dto.getCheques()) {
 					if (cheque.getFecha().compareTo(vtoDesde_) >= 0
-							&& cheque.getFecha().compareTo(vtoHasta_) <=0) {
+							&& cheque.getFecha().compareTo(vtoHasta_) <= 0) {
 						data.add(new Object[] { 
 								Utiles.getDateToString(cheque.getFecha(), Utiles.DD_MM_YYYY),
 								cheque.getNumero(),
