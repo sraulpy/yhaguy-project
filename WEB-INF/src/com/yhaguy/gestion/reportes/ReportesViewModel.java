@@ -5367,7 +5367,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				codigos.put("VAL 875392", new Object[] { 55000, 110000 });
 				codigos.put("VAL 884577", new Object[] { 900, 1700 });
 				codigos.put("VAL 884569", new Object[] { 900, 1700 });
-				codigos.put("VAL 854094", new Object[] { 55000, 110000 });
 				codigos.put("VAL 787301", new Object[] { 900, 1700 });
 
 				RegisterDomain rr = RegisterDomain.getInstance();
