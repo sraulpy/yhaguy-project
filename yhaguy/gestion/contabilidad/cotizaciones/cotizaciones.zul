@@ -88,7 +88,7 @@
 			<rows>
 				<row>
 					<field value="Fecha:" />
-					<textbox value="@bind(vm.nvaCotizacion.fecha) @converter('formattedDate', format='dd-MM-yyyy')" hflex="true" />
+					<datebox value="@bind(vm.nvaCotizacion.fecha)" hflex="true" />
 				</row>
 				<row>
 					<field value="Moneda:" />
