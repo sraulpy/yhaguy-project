@@ -44,10 +44,14 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	public void afterCompose() {
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Command
 	@NotifyChange("*")
 	public void addCotizacion(@BindingParam("comp") Popup comp) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nvaCotizacion.getFecha().setHours(0);
+		this.nvaCotizacion.getFecha().setMinutes(0);
+		this.nvaCotizacion.getFecha().setSeconds(0);
 		rr.saveObject(this.nvaCotizacion, this.getLoginNombre());
 		comp.close();
 		Clients.showNotification("REGISTRO AGREGADO");
