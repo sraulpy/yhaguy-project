@@ -122,7 +122,7 @@ public class ComisionesVentasViewModel extends SimpleViewModel {
 		int mes = (int) actual.getPos4();
 		int seleccionado = (int) this.selectedMes.getPos1();
 		long idSuc = this.getAcceso().getSucursalOperativa().getId();
-		if (mes <= seleccionado && !this.selectedAnho.equals(Utiles.getAnhoActual())) {
+		if (mes <= seleccionado && this.selectedAnho.equals(Utiles.getAnhoActual())) {
 			Clients.showNotification("Solo se puede procesar movimientos de meses anteriores al actual..");
 			return;
 		}
