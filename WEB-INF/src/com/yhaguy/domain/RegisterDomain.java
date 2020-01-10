@@ -11152,26 +11152,19 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 500);
 	}
 	
+	/**
+	 * @return el descuento en el que se encuentra el cheque..
+	 */
+	public List<BancoDescuentoCheque> getBancoDescuentoByCheque(long idCheque) throws Exception {
+		String query = "select d from BancoDescuentoCheque d join d.cheques c where c.id = " + idCheque;
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Reparto> rep = rr.getRepartos(Utiles.getFecha("01-11-2019 00:00:00"), new Date());
-			for (Reparto reparto : rep) {
-				for (RepartoDetalle det : reparto.getDetalles()) {
-					if (det.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO)
-							|| det.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO)) {
-						Venta vta = (Venta) rr.getObject(Venta.class.getName(), det.getIdMovimiento());
-						if (vta != null) {
-							for (VentaDetalle item : vta.getDetalles()) {
-								RepartoEntrega ent = new RepartoEntrega();
-								ent.setCantidad(item.getCantidadEntregada());
-								ent.setDetalle(item);
-								System.out.println(item.getArticulo().getCodigoInterno());
-							}
-						}						
-					}
-				}
-			}
+			List<BancoDescuentoCheque> list = rr.getBancoDescuentoByCheque(13196);
+			System.out.println(list.get(0).getId() + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

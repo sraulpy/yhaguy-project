@@ -36,6 +36,7 @@ import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
@@ -888,8 +889,21 @@ public class ReciboSimpleControl extends SoloViewModel {
 			return;
 		}
 		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		for (ReciboFormaPagoDTO d : this.selectedFormaPagoItems) {
+			if (d.isChequeTercero()) {
+				BancoChequeTercero cheque = rr.getChequeTercero(d.getId());
+				List<BancoDescuentoCheque> desc = rr.getBancoDescuentoByCheque(d.getId());
+				if (desc.size() > 0) {
+					this.mensajeError(
+							"El cheque nro. " + cheque.getNumero() + " ya está en el descuento " + desc.get(0).getId());
+					return;
+				}
+			}
+		}
+		
 		if (this.confirmarEliminarItemFormaPago() == true) {
-			RegisterDomain rr = RegisterDomain.getInstance();
 			for (ReciboFormaPagoDTO d : this.selectedFormaPagoItems) {
 				if (d.isChequeTercero()) {
 					BancoChequeTercero cheque = rr.getChequeTercero(d.getId());
