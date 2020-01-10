@@ -50,6 +50,7 @@
 			<listheader label="Proveedor" />
 			<listheader label="Ruc" width="150px" />
 			<listheader label="Importe Gs." align="right" width="120px" />
+			<listheader label="Moneda" width="80px" />
 			<listheader label="Detalle" align="center" width="70px"/>
 			<listheader label="Rec." align="center" width="40px"
 				tooltiptext="Recibo registrado.."/>
@@ -122,6 +123,7 @@
 			<auxheader />
 			<auxheader />
 			<auxheader />
+			<auxheader />
 		</auxhead>
 		<template name="model">
 			<listitem style="@load(each.pos12? 'text-decoration:line-through; color:red' : '')">
@@ -132,6 +134,7 @@
 				<listcell label="@load(each.pos3.toString().toUpperCase())" />
 				<listcell label="@load(each.pos4)" />
 				<listcell label="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
+				<listcell label="@load(each.pos13)" />
 				<listcell>
 					<a label="ítems"
 						onClick="@command('verItems', item=each, parent=self)" />
@@ -145,7 +148,7 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="9" align="right">
+			<listfooter span="10" align="right">
 				<hlayout>
 					<field value="@load(vm.listSize)" />
 					<field value="ítems" />

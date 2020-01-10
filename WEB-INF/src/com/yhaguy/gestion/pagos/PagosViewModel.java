@@ -159,7 +159,7 @@ public class PagosViewModel extends SimpleViewModel {
 			my.setPos2(pago.getNumero());
 			my.setPos3(pago.getProveedor().getRazonSocial());
 			my.setPos4(pago.getProveedor().getRuc());
-			my.setPos5(pago.getTotalImporteGs());
+			my.setPos5(pago.isMonedaLocal() ? pago.getTotalImporteGs() : pago.getTotalImporteDs());
 			my.setPos6(pago.getNumeroPlanilla());
 			my.setPos7(pago.getTipoMovimiento().getDescripcion());		
 			for (ReciboDetalle det : pago.getDetalles()) {
@@ -182,6 +182,7 @@ public class PagosViewModel extends SimpleViewModel {
 			my.setPos10(pago.getNumeroRecibo().isEmpty() ? "- - -" : pago.getNumeroRecibo());
 			my.setPos11(pago.isEntregado());
 			my.setPos12(pago.isAnulado());
+			my.setPos13(pago.getMoneda().getSigla());
 			switch (this.selectedFiltro) {
 			case FILTRO_TODOS:
 				out.add(my);
