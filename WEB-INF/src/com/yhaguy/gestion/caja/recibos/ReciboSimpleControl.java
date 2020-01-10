@@ -894,7 +894,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		for (ReciboFormaPagoDTO d : this.selectedFormaPagoItems) {
 			if (d.isChequeTercero()) {
 				BancoChequeTercero cheque = rr.getChequeTercero(d.getId());
-				List<BancoDescuentoCheque> desc = rr.getBancoDescuentoByCheque(d.getId());
+				List<BancoDescuentoCheque> desc = rr.getBancoDescuentoByCheque(cheque.getId());
 				if (desc.size() > 0) {
 					this.mensajeError(
 							"El cheque nro. " + cheque.getNumero() + " ya está en el descuento " + desc.get(0).getId());
