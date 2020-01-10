@@ -49,8 +49,8 @@
 			<listheader label="Nro. Recibo" width="150px" />
 			<listheader label="Proveedor" />
 			<listheader label="Ruc" width="150px" />
-			<listheader label="Importe Gs." align="right" width="120px" />
-			<listheader label="Moneda" width="80px" />
+			<listheader label="Importe" align="right" width="120px" />
+			<listheader label="Moneda" align="center" width="80px" />
 			<listheader label="Detalle" align="center" width="70px"/>
 			<listheader label="Rec." align="center" width="40px"
 				tooltiptext="Recibo registrado.."/>
