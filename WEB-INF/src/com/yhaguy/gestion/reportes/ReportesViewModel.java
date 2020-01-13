@@ -5985,7 +5985,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					contado_ = Utiles.getRedondeo(contado_);
 					notacre_ = Utiles.getRedondeo(notacre_);
 					
-					if (cobrado != null || contado != null) {
+					if (cobrado != null || contado != null || notacre != null) {
 						data.add(new Object[] { clientes.get(idCliente), cobrado_, contado_, notacre_ });
 					}
 				}				
