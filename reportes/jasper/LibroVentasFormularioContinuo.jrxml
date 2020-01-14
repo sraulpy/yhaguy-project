@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="804" pageHeight="842" columnWidth="796" leftMargin="4" rightMargin="4" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<property name="ireport.zoom" value="1.6500000000000106"/>
-	<property name="ireport.x" value="13"/>
+	<property name="ireport.x" value="245"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -370,7 +370,7 @@
 				<textFieldExpression><![CDATA[$F{TotalGravada}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="558" y="6" width="74" height="20" uuid="d5283d76-4db7-4451-a577-c656f1fbe10e"/>
+				<reportElement x="558" y="6" width="71" height="20" uuid="d5283d76-4db7-4451-a577-c656f1fbe10e"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{TotalImpuesto}]]></textFieldExpression>
 			</textField>
