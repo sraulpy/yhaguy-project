@@ -8644,6 +8644,19 @@ public class ReportesViewModel extends SimpleViewModel {
 									recibo.getCliente().getRazonSocial(),
 									formaPago, total });
 					}
+				}  else if (formaPago.equals(ReportesFiltros.VALORES_REPRESENTACIONES)) {
+					for (Recibo recibo : cobranzas) {
+						double total = recibo.getTotalValoresRepresentaciones();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total != 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
 				}
 			}
 			

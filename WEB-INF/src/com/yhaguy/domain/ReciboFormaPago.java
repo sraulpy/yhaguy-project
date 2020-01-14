@@ -205,7 +205,7 @@ public class ReciboFormaPago extends Domain {
 	}
 	
 	/**
-	 * @return true si es deposito bancario..
+	 * @return true si es valores representaciones..
 	 */
 	public boolean isValoresRepresentaciones() {
 		String sigla = this.tipo.getSigla();

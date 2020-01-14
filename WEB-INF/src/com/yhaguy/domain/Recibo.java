@@ -332,6 +332,19 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return el total segun valores representaciones..
+	 */
+	public double getTotalValoresRepresentaciones() {
+		double out = 0;
+		for (ReciboFormaPago item : this.formasPago) {
+			if (item.isValoresRepresentaciones()) {
+				out += item.getMontoGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el importe total sin iva..
 	 */
 	public double getTotalImporteGsSinIva() {
