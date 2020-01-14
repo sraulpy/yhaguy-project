@@ -16737,7 +16737,9 @@ class LibroVentasDataSource implements JRDataSource {
 	double totalNDebito = 0;
 
 	double totalGravada = 0;
+	double totalGravada5 = 0;
 	double totalImpuesto = 0;
+	double totalImpuesto5 = 0;
 	double totalImporte = 0;
 	double totalExenta = 0;
 
@@ -16780,8 +16782,12 @@ class LibroVentasDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalNCCredito);
 		} else if ("TotalGravada".equals(fieldName)) {
 			value = FORMATTER.format(this.totalGravada);
+		} else if ("TotalGravada5".equals(fieldName)) {
+			value = FORMATTER.format(this.totalGravada5);
 		} else if ("TotalImpuesto".equals(fieldName)) {
 			value = FORMATTER.format(this.totalImpuesto);
+		} else if ("TotalImpuesto5".equals(fieldName)) {
+			value = FORMATTER.format(this.totalImpuesto5);
 		} else if ("TotalImporte".equals(fieldName)) {
 			value = FORMATTER.format(this.totalImporte);
 		} else if ("TotalExenta".equals(fieldName)) {
@@ -16869,7 +16875,9 @@ class LibroVentasDataSource implements JRDataSource {
 					vta.isAnulado() ? "" : ruc, gravada10, iva10, gravada5, iva5, importe, exenta, vta.getFecha()));
 			if (vta.isAnulado() == false) {
 				this.totalGravada += (vta.getTotalGravado10());
+				this.totalGravada5 += (vta.getTotalGravado5());
 				this.totalImpuesto += (vta.getTotalIva10());
+				this.totalImpuesto5 += (vta.getTotalIva5());
 				this.totalImporte += importe;
 				this.totalExenta += vta.getTotalExenta();
 				if (vta.isVentaContado()) {
