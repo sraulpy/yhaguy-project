@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="612" pageHeight="792" columnWidth="604" leftMargin="4" rightMargin="4" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="756" pageHeight="792" columnWidth="748" leftMargin="4" rightMargin="4" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
-	<property name="ireport.zoom" value="1.239669421487609"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.5369215365000195"/>
+	<property name="ireport.x" value="1734"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -41,6 +41,7 @@
 		<field name="total" class="java.lang.Double"/>
 		<field name="gravado5" class="java.lang.Double"/>
 		<field name="iva5" class="java.lang.String"/>
+		<field name="exenta" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="Empresa" class="java.lang.String"/>
 	<parameter name="Logo" class="java.lang.String"/>
@@ -74,12 +75,12 @@
 	<detail>
 		<band height="14" splitType="Stretch">
 			<componentElement>
-				<reportElement x="1" y="0" width="603" height="13" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
+				<reportElement x="1" y="0" width="747" height="13" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset 1" uuid="dfc99092-153a-4a8c-8013-69dcf11d3085">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Ventas})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="13" width="603">
+					<jr:listContents height="13" width="747">
 						<textField>
 							<reportElement x="0" y="1" width="60" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
 							<textElement>
@@ -113,29 +114,43 @@
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{gravado10}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{gravado5}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0">
-							<reportElement x="434" y="1" width="55" height="12" uuid="90e52218-ac76-450b-837b-d3a2479345e5"/>
+							<reportElement x="494" y="1" width="55" height="12" uuid="90e52218-ac76-450b-837b-d3a2479345e5"/>
+							<textElement textAlignment="Right">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{iva5}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement x="672" y="1" width="74" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
+							<textElement textAlignment="Right">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement x="549" y="1" width="55" height="12" uuid="40cd8662-d91e-4ed9-99d5-853217009b1d"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{iva10}]]></textFieldExpression>
 						</textField>
 						<textField pattern="#,##0">
-							<reportElement x="528" y="1" width="74" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
+							<reportElement x="434" y="1" width="60" height="12" uuid="2c5f83c7-4fc8-4144-92bf-e88134c46f3a"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{gravado10}]]></textFieldExpression>
 						</textField>
-						<staticText>
-							<reportElement x="489" y="1" width="39" height="12" uuid="d26a2965-8cc8-4ef6-937b-8513f8f0b62d"/>
-							<textElement textAlignment="Right" verticalAlignment="Middle">
+						<textField pattern="#,##0">
+							<reportElement x="604" y="1" width="68" height="12" uuid="0313002c-2fd8-418f-a66f-caefee4236e9"/>
+							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
-							<text><![CDATA[0]]></text>
-						</staticText>
+							<textFieldExpression><![CDATA[$F{exenta}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
