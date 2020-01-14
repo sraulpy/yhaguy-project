@@ -40,7 +40,7 @@
 		<field name="iva10" class="java.lang.Double"/>
 		<field name="total" class="java.lang.Double"/>
 		<field name="gravado5" class="java.lang.Double"/>
-		<field name="iva5" class="java.lang.String"/>
+		<field name="iva5" class="java.lang.Double"/>
 		<field name="exenta" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="Empresa" class="java.lang.String"/>
