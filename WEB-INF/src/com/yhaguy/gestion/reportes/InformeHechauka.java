@@ -40,6 +40,10 @@ public class InformeHechauka {
 		double cons_gravada = 0;
 		double cons_iva10 = 0;
 		
+		double cons_gravada5 = 0;
+		double cons_iva5 = 0;
+		double cons_exenta = 0;
+		
 		double dip_gravada = 0;
 		double dip_iva10 = 0;
 		double dip_exenta = 0;
@@ -54,6 +58,9 @@ public class InformeHechauka {
 					rSocial = "IMPORTE CONSOLIDADO";
 					cons_iva10 += redondear(venta.getTotalIva10());
 					cons_gravada += redondear(venta.getTotalGravado10());
+					cons_iva5 += redondear(venta.getTotalIva5());
+					cons_gravada5 += redondear(venta.getTotalGravado5());
+					cons_exenta += redondear(venta.getTotalExenta());
 					System.out.println("--- CONSOLIDADO: " + venta.getNumero() + " - " + (Utiles.getNumberFormat(venta.getTotalIva10() + venta.getTotalGravado10())));
 				} else if (ruc.equals(Configuracion.RUC_DIPLOMATICOS)) {
 					rSocial = "AGENTES DIPLOMATICOS";
@@ -187,24 +194,22 @@ public class InformeHechauka {
 		String nro = "0";
 		String fecha = ventas.size() > 0 ? misc.dateToString(ventas.get(0).getFecha(), Misc.DD_MM_YYYY).replace("-", "/") : "";
 		periodo = ventas.size() > 0 ? Utiles.getDateToString(ventas.get(0).getFecha(), "yyyyMM") : "";
-		long col10 = 0;
-		long col11 = 0;
-		long col12 = 0;
 		long col14 = 1;
 		long col15 = 0;
+		double importe = cons_gravada + cons_iva10 + cons_gravada5 + cons_iva5 + cons_exenta;
 		String col16 = "0";
 		String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial
 				+ " \t" + col5 + " \t" + nro + " \t" + fecha + " \t"
 				+ FORMATTER.format(cons_gravada) + "" + " \t"
 				+ FORMATTER.format(cons_iva10) + "" + "\t"
-				+ FORMATTER.format(col10) + "" + "\t"
-				+ FORMATTER.format(col11) + "" + "\t"
-				+ FORMATTER.format(col12) + "" + "\t"
-				+ FORMATTER.format(cons_gravada + cons_iva10) + "" + "\t" + col14 + "" + "\t"
+				+ FORMATTER.format(cons_gravada5) + "" + "\t"
+				+ FORMATTER.format(cons_iva5) + "" + "\t"
+				+ FORMATTER.format(cons_exenta) + "" + "\t"
+				+ FORMATTER.format(importe) + "" + "\t" + col14 + "" + "\t"
 				+ col15 + "" + "\t" + col16 + "" + "\r\n";
 		objects.add(object);
 		registros++;
-		montoTotal += (cons_gravada + cons_iva10);
+		montoTotal += importe;
 		
 		if ((dip_exenta + dip_gravada + dip_iva10) > 0) {
 			String _ruc = Configuracion.RUC_DIPLOMATICOS;
