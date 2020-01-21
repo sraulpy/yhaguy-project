@@ -9833,7 +9833,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String periodo = filtro.getAnhoDesde();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
-				Date desde = Utiles.getFecha("01-01-2012 00:00:00");		
+				Date desde = Utiles.getFecha("01-01-2010 00:00:00");		
 				Date hasta = new Date();
 				Tipo moneda = filtro.getMoneda();
 				EmpresaCartera cartera = filtro.getCartera();
@@ -9849,10 +9849,18 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> movims = new ArrayList<Object[]>();	
 
 				if (cartera != null) {
-					movims = rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId(), idCartera);
+					if (periodo.equals("2019")) {
+						movims = rr.getSaldos2019(desde, hasta, caracter, 0, 0, moneda.getId(), idCartera);
+					} else {
+						movims = rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId(), idCartera);
+					}					
 				} else {
 					for (EmpresaCartera cart : filtro.getCarteras()) {
-						movims.addAll(rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId(), cart.getId()));
+						if (periodo.equals("2019")) {
+							movims.addAll(rr.getSaldos2019(desde, hasta, caracter, 0, 0, moneda.getId(), cart.getId()));
+						} else {
+							movims.addAll(rr.getSaldos(desde, hasta, caracter, 0, 0, moneda.getId(), cart.getId()));
+						}
 					}
 				}
 				
