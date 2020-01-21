@@ -7,7 +7,7 @@
 
 <hibernate-mapping>
 
-	<class name="com.yhaguy.domain.CtaCteEmpresaMovimiento_2017" table="CtaCteEmpresaMovimiento_2019">
+	<class name="com.yhaguy.domain.CtaCteEmpresaMovimiento_2019" table="CtaCteEmpresaMovimiento_2019">
 
 		&hibernate-domain;
 
