@@ -17,33 +17,35 @@ public class CtaCteEmpresaMovimiento_2019 extends Domain {
 	private long idEmpresa = 0;
 	private Date fechaEmision = new Date();
 	private long idMovimientoOriginal = 0;
-	private String nroComprobante = "comprobante";
+	private String nroComprobante = "";
 	private Date fechaVencimiento = new Date();
 	private double importeOriginal = 0;
 	private double saldo = 0;
+	private double tipoCambio = 0;
 	private long idVendedor;
-	private TipoMovimiento tipoMovimiento; /* FAC, REC, ETC. */
-	private Tipo tipoCaracterMovimiento; /* Cliente/Proveedor */
-	private Tipo moneda; /* Dolar, Guaranies, Pesos, Etc. */
+	private long idImportacionPedido;
+	private TipoMovimiento tipoMovimiento;
+	private Tipo tipoCaracterMovimiento;
+	private Tipo moneda;
 	private Set<CtaCteImputacion> imputaciones = new HashSet<CtaCteImputacion>();
-	private SucursalApp sucursal;/* Sucursal donde se realizo el movimiento */
+	private SucursalApp sucursal;
+	private Cliente cliente;
+	private EmpresaCartera carteraCliente;
+	
+	private double aux = 0;
 
 	private boolean cerrado = false;
 	private boolean anulado = false;
 	private boolean tesaka;
 	
-	/**
-	 * @return true si es movimiento de proveedor..
-	 */
-	public boolean isCaracterProveedor() {
-		return this.tipoCaracterMovimiento.getSigla().equals(
-				Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR);
-	}
+	private String numeroImportacion = "";
+	private String observacion = "";
 	
 	/**
 	 * @return true si es nota de credito..
 	 */
 	public boolean isNotaCreditoVenta() {
+		if (this.tipoMovimiento == null) return false;
 		return this.tipoMovimiento.getSigla().equals(
 				Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
 	}
@@ -94,13 +96,17 @@ public class CtaCteEmpresaMovimiento_2019 extends Domain {
 	/**
 	 * @return true si el vto esta dentro del rango de dias..
 	 */
-	public boolean isDiasVencidosEntre(long desde, long hasta, boolean avencer) {
-		if (!avencer) {
-			return this.isDiasVencidosEntre(desde, hasta);
-		}
+	public boolean isDiasVencidosEntre_(long desde, long hasta) {
 		Misc misc = new Misc();
 		long vto = misc.diasEntreFechas(this.fechaVencimiento, new Date());
 		return (vto >= desde) && (vto <= hasta);
+	}
+	
+	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
 	}
 	
 	/**
@@ -115,6 +121,7 @@ public class CtaCteEmpresaMovimiento_2019 extends Domain {
 	 * @return true si es movimiento credito..
 	 */
 	public boolean isMovimientoCredito() {
+		if (this.tipoMovimiento == null) return false;
 		return this.tipoMovimiento.getSigla().equals(
 				Configuracion.SIGLA_TM_FAC_VENTA_CREDITO)
 				|| this.tipoMovimiento.getSigla().equals(
@@ -127,8 +134,52 @@ public class CtaCteEmpresaMovimiento_2019 extends Domain {
 	 * @return true si es venta credito..
 	 */
 	public boolean isVentaCredito() {
+		if (this.tipoMovimiento == null) return false;
 		return this.tipoMovimiento.getSigla().equals(
 				Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+	}
+	
+	/**
+	 * @return true si es prestamo..
+	 */
+	public boolean isPrestamoInterno() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(
+				Configuracion.SIGLA_TM_PRESTAMO_INTERNO);
+	}
+	
+	/**
+	 * @return true si es anticipo de cobro..
+	 */
+	public boolean isAnticipoCobro() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(
+				Configuracion.SIGLA_TM_ANTICIPO_COBRO);
+	}
+	
+	/**
+	 * @return true si es gasto..
+	 */
+	public boolean isGasto() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO)
+				|| this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO);
+	}
+	
+	/**
+	 * @return true si es gasto credito..
+	 */
+	public boolean isGastoCredito() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO);
+	}
+	
+	/**
+	 * @return true si es gasto contado..
+	 */
+	public boolean isGastoContado() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO);
 	}
 	
 	/**
@@ -149,6 +200,23 @@ public class CtaCteEmpresaMovimiento_2019 extends Domain {
 			return this.getSaldo() * -1;
 		}
 		return this.saldo;
+	}
+	
+	/**
+	 * @return el nro comprobante abreviado
+	 */
+	public String getNroComprobante_() {
+		return nroComprobante.replaceFirst("001-001-", "");
+	}
+	
+	/**
+	 * @return el nro comprobante abreviado
+	 */
+	public String get_NroComprobante() {
+		return nroComprobante.replaceFirst("001-001-", "").replace("(1/1)", "")
+				.replace("(2/3)", "").replace("(3/3)", "").replace("(1/3)", "")
+				.replaceFirst("001-003-", "").replaceFirst("001-013-", "")
+				.replaceFirst("003-001-", "");
 	}
 
 	public boolean isCerrado() {
@@ -306,5 +374,61 @@ public class CtaCteEmpresaMovimiento_2019 extends Domain {
 
 	public void setTesaka(boolean tesaka) {
 		this.tesaka = tesaka;
+	}
+
+	public String getNumeroImportacion() {
+		return numeroImportacion;
+	}
+
+	public void setNumeroImportacion(String numeroImportacion) {
+		this.numeroImportacion = numeroImportacion;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public double getAux() {
+		return aux;
+	}
+
+	public void setAux(double aux) {
+		this.aux = aux;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public EmpresaCartera getCarteraCliente() {
+		return carteraCliente;
+	}
+
+	public void setCarteraCliente(EmpresaCartera carteraCliente) {
+		this.carteraCliente = carteraCliente;
+	}
+
+	public long getIdImportacionPedido() {
+		return idImportacionPedido;
+	}
+
+	public void setIdImportacionPedido(long idImportacionPedido) {
+		this.idImportacionPedido = idImportacionPedido;
 	}
 }

@@ -11,21 +11,28 @@
 
 		&hibernate-domain;
 
-		<property name="idEmpresa" index="CtaCteEmpresaMovimiento2019_Index" />
+		<property name="idEmpresa" index="CtaCteEmpresaMovimiento_2019_Index" />
 		<property name="fechaEmision" />
 		<property name="nroComprobante" />
 		<property name="idMovimientoOriginal" />
 		<property name="fechaVencimiento" />
 		<property name="importeOriginal" />
 		<property name="saldo" />
+		<property name="tipoCambio" />
+		<property name="numeroImportacion" />
+		<property name="observacion" />
 		
 		<property name="idVendedor">
 			<column name="idVendedor" default="0" />
 		</property>
 		
-		<property name="cerrado" />
+		<property name="idImportacionPedido">
+			<column name="idImportacionPedido" default="0" />
+		</property>
 		
-		<property name="anulado">
+		<property name="cerrado" index="CtaCteMovimientoCerrado_Index" />
+		
+		<property name="anulado" index="CtaCteMovimientoAnulado_Index">
 			<column name="anulado" not-null="true" default="false" />
 		</property>
 		
@@ -35,9 +42,16 @@
 
 		<many-to-one name="tipoMovimiento" class="com.yhaguy.domain.TipoMovimiento"
 			column="idTipoMovimiento" lazy="false" />
+			
+		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
+			column="idcliente" lazy="false" />
+			
+		<many-to-one name="carteraCliente" class="com.yhaguy.domain.EmpresaCartera"
+			column="idcartera" lazy="false" />
 
 		<many-to-one name="tipoCaracterMovimiento" class="com.coreweb.domain.Tipo"
-			column="idTipoCaracterMovimiento" lazy="false" />
+			column="idTipoCaracterMovimiento" lazy="false"
+			index="CtaCteMovimientoCaracter_Index" />
 
 		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
 			column="idTipoMoneda" lazy="false" />
