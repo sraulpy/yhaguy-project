@@ -23534,9 +23534,13 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 					acum[index] = saldo;
 				} 
 				data.put(idCartera + "-" + idEmpresa, acum);
-			}
-			
-			
+			} else {
+				Object[] acum = data.get(idCartera + "-" + idEmpresa);
+				if (acum == null) {
+					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera, linea };
+				}
+				data.put(idCartera + "-" + idEmpresa, acum);			
+			}			
 		}
 		
 		for (String key : data.keySet()) {
