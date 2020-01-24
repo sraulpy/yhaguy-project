@@ -48,9 +48,11 @@ public class Articulo extends Domain {
 	boolean completo = false;
 	private boolean estado;
 	private boolean restriccionCosto = true;
+	private boolean promocion = false;
 	private int maximo;
 	private int minimo;
 	private double porcentajeDescuento;
+	private String descripcionPromocion;
 	
 	private String disenho;
 	private int ancho;
@@ -656,5 +658,21 @@ public class Articulo extends Domain {
 
 	public void setPorcentajeDescuento(double porcentajeDescuento) {
 		this.porcentajeDescuento = porcentajeDescuento;
+	}
+
+	public boolean isPromocion() {
+		return promocion;
+	}
+
+	public void setPromocion(boolean promocion) {
+		this.promocion = promocion;
+	}
+
+	public String getDescripcionPromocion() {
+		return descripcionPromocion;
+	}
+
+	public void setDescripcionPromocion(String descripcionPromocion) {
+		this.descripcionPromocion = descripcionPromocion;
 	}
 }

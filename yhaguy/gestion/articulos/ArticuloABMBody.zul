@@ -627,6 +627,15 @@
 												value="@bind(vm.dto.porcentajeDescuento)" format="###,###,##0.00"
 												readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
 										</row>
+										<row>
+											<field value="Promocion:" />
+											<checkbox checked="@bind(vm.dto.promocion)"></checkbox>
+										</row>
+										<row>
+											<field value="Descripcion promocion:" />
+											<textbox hflex="true"
+												value="@bind(vm.dto.descripcionPromocion)"></textbox>
+										</row>
 									</rows>
 								</grid>
 

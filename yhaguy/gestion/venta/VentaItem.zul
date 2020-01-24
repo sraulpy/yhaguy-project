@@ -229,6 +229,14 @@
 				</hlayout>
 				</cell>
 			</row>
+			<row visible="@load(vm.det.articulo.pos5)">
+				<field value="Promocion:" />
+				<cell colspan="3">
+					<textbox readonly="true" hflex="true"
+						value="@load(vm.det.articulo.pos6)"
+						style="color:red"></textbox>
+				</cell>
+			</row>
 		</rows>
 	</grid>
 	<style>

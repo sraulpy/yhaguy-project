@@ -51,6 +51,8 @@ public class ArticuloDTO extends DTO {
 	private int minimo = 0;
 	private double porcentajeDescuento = 0;
 	private boolean restriccionCosto = true;
+	private boolean promocion = false;
+	private String descripcionPromocion = "";
 	
 	private double precioGs = 0; // mayorista gs
 	private double precioDs = 0; // mayorista ds
@@ -677,5 +679,21 @@ public class ArticuloDTO extends DTO {
 
 	public void setPorcentajeDescuento(double porcentajeDescuento) {
 		this.porcentajeDescuento = porcentajeDescuento;
+	}
+
+	public boolean isPromocion() {
+		return promocion;
+	}
+
+	public void setPromocion(boolean promocion) {
+		this.promocion = promocion;
+	}
+
+	public String getDescripcionPromocion() {
+		return descripcionPromocion;
+	}
+
+	public void setDescripcionPromocion(String descripcionPromocion) {
+		this.descripcionPromocion = descripcionPromocion;
 	}
 }

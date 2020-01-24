@@ -45,6 +45,7 @@
 		<property name="maximo" />
 		<property name="minimo" />
 		<property name="porcentajeDescuento" />
+		<property name="descripcionPromocion" />
 		
 		<property name="disenho" />
 		<property name="ancho" />
@@ -60,6 +61,10 @@
 		
 		<property name="restriccionCosto">
 			<column name="restriccionCosto" not-null="true" default="true" />
+		</property>
+		
+		<property name="promocion">
+			<column name="promocion" not-null="true" default="false" />
 		</property>
 		
 		<many-to-one name="familia" class="com.yhaguy.domain.ArticuloFamilia"

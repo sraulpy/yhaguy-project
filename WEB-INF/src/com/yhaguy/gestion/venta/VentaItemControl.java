@@ -57,15 +57,15 @@ import com.yhaguy.util.Utiles;
 
 public class VentaItemControl extends SoloViewModel {
 	
-	static final String[] ATRIBUTOS = new String[] { "articulo.codigoInterno",
-			"articulo.codigoProveedor", "articulo.codigoOriginal",
-			"articulo.descripcion", "stock", "articulo.id" };
+	static final String[] ATRIBUTOS = new String[] { "articulo.codigoInterno", "articulo.codigoProveedor",
+			"articulo.codigoOriginal", "articulo.descripcion", "stock", "articulo.id", "articulo.promocion",
+			"articulo.descripcionPromocion" };
 	
 	static final String[] COLUMNAS = new String[] { "Código Interno", "Código Proveedor",
-			"Código Original", "Descripción", "Stock", "" };
+			"Código Original", "Descripción", "Stock", "", "", "" };
 	
 	static final String[] ANCHOS = new String[] { "130px", "130px", "130px", "",
-			"60px", "0px", "0px" };
+			"60px", "0px", "0px", "0px", "0px" };
 	
 	@Wire
 	private Longbox cant;
@@ -200,11 +200,15 @@ public class VentaItemControl extends SoloViewModel {
 			codProv = (String) be.getSelectedItem().getPos2();
 			codOrig = (String) be.getSelectedItem().getPos3();
 			desc = (String) be.getSelectedItem().getPos4();
+			boolean promocion = (boolean) be.getSelectedItem().getPos7();
+			String descPromo = (String) be.getSelectedItem().getPos8();
 			this.det.getArticulo().setId(idAr);
 			this.det.getArticulo().setPos1(codInte);
 			this.det.getArticulo().setPos2(codProv);
 			this.det.getArticulo().setPos3(codOrig);
 			this.det.getArticulo().setPos4(desc);
+			this.det.getArticulo().setPos5(promocion);
+			this.det.getArticulo().setPos6(descPromo);
 			this.det.setDescripcion(desc);
 			this.det.setStockDisponible(disp);
 			this.det.setPrecioGs(0);
