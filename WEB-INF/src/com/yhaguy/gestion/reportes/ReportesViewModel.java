@@ -23499,6 +23499,7 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Object[]> data = new HashMap<String, Object[]>();
 	Map<String, Double> saldo = new HashMap<String, Double>();
+	double total = 0;
 	
 	public SaldosCtaCteDesglosado(List<Object[]> values, String periodo) {
 		
@@ -23566,6 +23567,10 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 		Object value = null;
 		String fieldName = field.getName();
 		Object[] det = this.values.get(index);
+		double total = (double) det[1] + (double) det[2] + (double) det[3] + (double) det[4] +
+				(double) det[5] + (double) det[6] + (double) det[7] + (double) det[8] +
+				(double) det[9] + (double) det[10] + (double) det[11] + (double) det[12];
+		this.total += total;
 
 		if ("Cliente".equals(fieldName)) {
 			value = det[0];
@@ -23595,6 +23600,10 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 			value = FORMATTER.format(det[11]);
 		} else if ("diciembre".equals(fieldName)) {
 			value = FORMATTER.format(det[12]);
+		} else if ("total".equals(fieldName)) {
+			value = FORMATTER.format(total);
+		} else if ("total_".equals(fieldName)) {
+			value = FORMATTER.format(this.total);
 		} else if ("totalsaldo".equals(fieldName)) {
 			value = FORMATTER.format(det[13]);
 		} else if ("lineaCredito".equals(fieldName)) {

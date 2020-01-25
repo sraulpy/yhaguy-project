@@ -10731,7 +10731,7 @@ public class RegisterDomain extends Register {
 				"	WHERE (r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '" + hasta_ + "')" + 
 				"      AND r.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_RECIBO_COBRO + "'" +
 				"	   AND r.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'" + 
-				"	   AND r.dbEstado != 'D' AND r.cobroExterno = 'FALSE'";
+				"	   AND r.dbEstado != 'D' AND r.cobroExterno = 'FALSE' AND r.saldodeudor = 'FALSE'";
 		if (idCliente > 0) {
 			query += " AND r.cliente.id = " + idCliente;
 		}
