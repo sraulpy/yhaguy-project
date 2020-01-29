@@ -48,6 +48,7 @@
 		<property name="descripcionPromocion" />
 		<property name="valeFacturacion" />
 		<property name="valePremio" />
+		<property name="valeVigencia" />
 		
 		<property name="disenho" />
 		<property name="ancho" />

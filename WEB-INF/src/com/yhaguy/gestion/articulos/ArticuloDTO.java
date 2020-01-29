@@ -55,6 +55,7 @@ public class ArticuloDTO extends DTO {
 	private String descripcionPromocion = "";
 	private double valeFacturacion = 0;
 	private double valePremio = 0;
+	private Date valeVigencia;
 	
 	private double precioGs = 0; // mayorista gs
 	private double precioDs = 0; // mayorista ds
@@ -713,5 +714,13 @@ public class ArticuloDTO extends DTO {
 
 	public void setValePremio(double valePremio) {
 		this.valePremio = valePremio;
+	}
+
+	public Date getValeVigencia() {
+		return valeVigencia;
+	}
+
+	public void setValeVigencia(Date valeVigencia) {
+		this.valeVigencia = valeVigencia;
 	}
 }

@@ -55,6 +55,7 @@ public class Articulo extends Domain {
 	private String descripcionPromocion;
 	private double valeFacturacion;
 	private double valePremio;
+	private Date valeVigencia;
 	
 	private String disenho;
 	private int ancho;
@@ -692,5 +693,13 @@ public class Articulo extends Domain {
 
 	public void setValePremio(double valePremio) {
 		this.valePremio = valePremio;
+	}
+
+	public Date getValeVigencia() {
+		return valeVigencia;
+	}
+
+	public void setValeVigencia(Date valeVigencia) {
+		this.valeVigencia = valeVigencia;
 	}
 }

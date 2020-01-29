@@ -589,7 +589,7 @@
 								<grid sclass="vgrid"
 									vflex="true">
 									<columns>
-										<column />
+										<column width="30%" />
 										<column />
 									</columns>
 									<rows>
@@ -638,13 +638,22 @@
 										</row>
 										<row>
 											<field value="Vales:" />
-											<hlayout hflex="true">
-												<doublebox hflex="true" vflex="true"
-													value="@bind(vm.dto.valeFacturacion)" format="###,###,##0.00"
+											<hlayout hflex="true" vflex="true">
+												<field value="Por cada:" />
+												<doublebox hflex="true" 
+													value="@bind(vm.dto.valeFacturacion)" format="###,###,##0"
 													readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
-												<doublebox hflex="true" vflex="true"
-													value="@bind(vm.dto.valePremio)" format="###,###,##0.00"
+												Gs.
+												<space></space>
+												<field value="Obtiene un vale de:" />
+												<doublebox hflex="true"
+													value="@bind(vm.dto.valePremio)" format="###,###,##0"
 													readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
+												Gs.
+												<space></space>
+												<field value="Vigencia:" />
+												<datebox value="@bind(vm.dto.valeVigencia)" hflex="true"
+												readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></datebox>
 											</hlayout>											
 										</row>
 									</rows>
