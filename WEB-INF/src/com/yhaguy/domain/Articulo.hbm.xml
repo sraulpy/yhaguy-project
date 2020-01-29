@@ -46,6 +46,8 @@
 		<property name="minimo" />
 		<property name="porcentajeDescuento" />
 		<property name="descripcionPromocion" />
+		<property name="valeFacturacion" />
+		<property name="valePremio" />
 		
 		<property name="disenho" />
 		<property name="ancho" />

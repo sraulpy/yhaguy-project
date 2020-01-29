@@ -636,6 +636,17 @@
 											<textbox hflex="true"
 												value="@bind(vm.dto.descripcionPromocion)"></textbox>
 										</row>
+										<row>
+											<field value="Vales:" />
+											<hlayout hflex="true">
+												<doublebox hflex="true" vflex="true"
+													value="@bind(vm.dto.valeFacturacion)" format="###,###,##0.00"
+													readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
+												<doublebox hflex="true" vflex="true"
+													value="@bind(vm.dto.valePremio)" format="###,###,##0.00"
+													readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
+											</hlayout>											
+										</row>
 									</rows>
 								</grid>
 
