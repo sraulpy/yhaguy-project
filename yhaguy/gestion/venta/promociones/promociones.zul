@@ -80,7 +80,8 @@
 			<space></space>
 			<button mold="bs" sclass="btn-sm btn-primary"
 				label="Eliminar" iconSclass="z-icon-times-circle"
-				hflex="1">
+				hflex="1"
+				onClick="@command('deleteItem')">
 			</button>
 			<space hflex="2"></space>
 		</hlayout>
@@ -88,7 +89,8 @@
 		<div style="padding:0px 50px 0px 50px" vflex="true">
 			<listbox sclass="small-list" hflex="true" vflex="true"
 				emptyMessage="SIN REGISTROS.."
-				model="@load(vm.vale.articulos)">
+				model="@load(vm.vale.articulos)"
+				selectedItem="@bind(vm.selectedItem)">
 				<listhead>
 					<listheader label="Código"></listheader>
 					<listheader label="Descripción"></listheader>
@@ -131,7 +133,7 @@
 		</listbox>
 		<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-check" hflex="true"
 			disabled="@load(vm.selectedArticulo eq null)"
-			onClick="@command('addArticulo')"></button>
+			onClick="@command('addArticulo', comp=pop_art)"></button>
 		</vbox>
 	</popup>
 </window>
