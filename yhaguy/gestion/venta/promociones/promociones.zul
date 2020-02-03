@@ -9,7 +9,7 @@
 			<button mold="bs" sclass="btn-lg btn-primary"
 				label="Vales" hflex="true" vflex="true"
 				iconSclass="z-icon-ticket"
-				style="font-size:20pt"
+				style="font-size:20pt;background:#164D64"
 				onClick='vales.setVisible(true);promos.setVisible(false)'></button>
 			<space></space>
 			<button mold="bs" sclass="btn-lg btn-warning"
