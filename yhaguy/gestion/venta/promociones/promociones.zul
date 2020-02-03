@@ -80,7 +80,7 @@
 			<space></space>
 			<button mold="bs" sclass="btn-sm btn-primary"
 				label="Eliminar" iconSclass="z-icon-times-circle"
-				hflex="1"
+				hflex="1" disabled="@load(vm.selectedItem eq null)"
 				onClick="@command('deleteItem')">
 			</button>
 			<space hflex="2"></space>

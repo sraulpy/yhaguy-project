@@ -65,7 +65,7 @@ public class VentaPromocionesVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Articulo art = rr.getArticuloById((long) this.selectedArticulo[0]);
 		this.vale.getArticulos().add(art);
-		rr.saveObject(art, this.getLoginNombre());
+		rr.saveObject(this.vale, this.getLoginNombre());
 		Clients.showNotification("ITEM AGREGADO..");
 		this.selectedArticulo = null;
 		comp.close();
