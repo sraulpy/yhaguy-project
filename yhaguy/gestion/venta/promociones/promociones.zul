@@ -108,13 +108,17 @@
 	<popup id="pop_art" sclass="rounded">
 		<vbox>
 		<listbox sclass="small-list"
-			model="@load(vm.articulos)" width="400px" height="400px">
+			model="@load(vm.articulos)" width="500px" height="400px">
 			<listhead>
 				<listheader>
-					<textbox hflex="true" value="@bind(vm.filterCodigoInterno)" instant="true"></textbox>
+					<textbox hflex="true" value="@bind(vm.filterCodigoInterno)" instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 				</listheader>
 				<listheader>
-					<textbox hflex="true" value="@bind(vm.filterDescripcion)" instant="true"></textbox>
+					<textbox hflex="true" value="@bind(vm.filterDescripcion)" instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 				</listheader>
 			</listhead>
 			<template name="model">
