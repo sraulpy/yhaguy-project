@@ -123,6 +123,7 @@
 				<zk forEach="${vm.menuItem(self,'ServicioTecnico')}" />
 				<zk forEach="${vm.menuItem(self,'ControlTalonarios')}" />
 				<zk forEach="${vm.menuItem(self,'RuteoVendedores')}" />
+				<zk forEach="${vm.menuItem(self,'VentaPromociones')}" />
 				<zk forEach="${vm.menuItem(self,'VentaDefinicion','tab=cliente,empresa')}" />
 			</menupopup>
 		</menu>

@@ -1,0 +1,121 @@
+<window hflex="true" vflex="true"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.promociones.VentaPromocionesVM')">
+	
+	<vbox id="promos" hflex="true" vflex="true"
+		pack="center" align="center" style="padding:50px">
+		
+		<hlayout hflex="true" vflex="true">
+			<button mold="bs" sclass="btn-lg btn-primary"
+				label="Vales" hflex="true" vflex="true"
+				iconSclass="z-icon-ticket"
+				style="font-size:20pt"
+				onClick='vales.setVisible(true);promos.setVisible(false)'></button>
+			<space></space>
+			<button mold="bs" sclass="btn-lg btn-warning"
+				label="Obsequios" hflex="true" vflex="true"
+				iconSclass="z-icon-gift"
+				style="font-size:20pt;background:#d9534f"></button>
+		</hlayout>
+		<space></space>
+		<hlayout hflex="true" vflex="true">
+			<button mold="bs" sclass="btn-lg btn-primary"
+				label="Descuentos" hflex="true" vflex="true"
+				style="font-size:20pt;background:#5cb85c"
+				iconSclass="z-icon-tags"></button>
+			<space></space>
+			<button mold="bs" sclass="btn-lg btn-warning"
+				label="Otros" hflex="true" vflex="true"
+				style="font-size:20pt;background:#f0ad4e"
+				iconSclass="z-icon-check"></button>
+		</hlayout>
+		
+	</vbox>
+	
+	<vbox id="vales" hflex="true" vflex="true"
+		style="padding:50px"
+		visible="false">
+		
+		<div style="padding:50px 50px 0px 50px">
+		<div style="border-bottom:solid 1px;margin:5px">
+			<label>Promoción con Vales</label>
+		</div>
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<vbox spacing="0" hflex="true">
+						<field value="Facturación Gs." />
+						<doublebox hflex="true"
+							value="@bind(vm.vale.facturacionGs)"></doublebox>
+					</vbox>
+					<vbox spacing="0" hflex="true">
+						<field value="Vale por Gs." />
+						<doublebox hflex="true"
+							value="@bind(vm.vale.valeGs)"></doublebox>
+					</vbox>
+					<vbox spacing="0" hflex="true">
+						<field value="Vigencia desde" />
+						<datebox hflex="true"
+							value="@bind(vm.vale.vigenciaDesde)"></datebox>
+					</vbox>
+					<vbox spacing="0" hflex="true">
+						<field value="Vigencia hasta" />
+						<datebox hflex="true"
+							value="@bind(vm.vale.vigenciaHasta)"></datebox>
+					</vbox>
+				</row>
+			</rows>
+		</grid>
+		</div>	
+		<div style="padding:0px 50px 0px 50px">
+		<hlayout sclass="button-container">
+			<button mold="bs" sclass="btn-sm btn-primary"
+				label="Insertar" iconSclass="z-icon-plus-circle"
+				hflex="1" onClick='pop_art.open(self, "before_start")'>
+			</button>
+			<space></space>
+			<button mold="bs" sclass="btn-sm btn-primary"
+				label="Eliminar" iconSclass="z-icon-times-circle"
+				hflex="1">
+			</button>
+			<space hflex="2"></space>
+		</hlayout>
+		</div>
+		<div style="padding:0px 50px 0px 50px" vflex="true">
+			<listbox sclass="small-list" hflex="true" vflex="true"
+				emptyMessage="SIN REGISTROS.."
+				model="@load(vm.vale.articulos)">
+				<listhead>
+					<listheader label="Código"></listheader>
+					<listheader label="Descripción"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.codigoInterno)"></listcell>
+						<listcell label="@load(each.descripcion)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter label="ítems"></listfooter>
+				</listfoot>
+			</listbox>
+		</div>
+	</vbox>
+	<popup id="pop_art" sclass="rounded">
+		<listbox sclass="small-list"
+			model="@load(vm.articulos)" width="400px">
+			<listhead>
+				<listheader>
+					<textbox hflex="true" value="@bind(vm.filterCodigoInterno)" instant="true"></textbox>
+				</listheader>
+				<listheader>
+					<textbox hflex="true" value="@bind(vm.filterDescripcion)" instant="true"></textbox>
+				</listheader>
+			</listhead>
+			<template name="model">
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+			</template>
+		</listbox>
+	</popup>
+</window>

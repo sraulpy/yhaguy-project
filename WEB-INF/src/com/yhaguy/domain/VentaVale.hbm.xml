@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.VentaVale" table="venta_vale">
+
+		&hibernate-domain; 
+
+		<property name="descripcion"/>
+		<property name="facturacionGs"/>
+		<property name="valeGs"/>
+		<property name="vigenciaDesde"/>
+		<property name="vigenciaHasta"/>
+		
+		<set name="articulos" table="articulo"
+			inverse="false" lazy="false" fetch="join">
+			<key>
+				<column name="id_vale" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.Articulo"/>
+		</set>
+				
+	</class>
+</hibernate-mapping>
