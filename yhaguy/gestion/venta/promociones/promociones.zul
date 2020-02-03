@@ -47,13 +47,13 @@
 						<field value="Facturación Gs." />
 						<guaranibox hflex="true"
 							value="@bind(vm.vale.facturacionGs)"
-							onChange="@command('saveVale')"></doublebox>
+							onChange="@command('saveVale')"></guaranibox>
 					</vbox>
 					<vbox spacing="0" hflex="true">
 						<field value="Vale por Gs." />
 						<guaranibox hflex="true"
 							value="@bind(vm.vale.valeGs)"
-							onChange="@command('saveVale')"></doublebox>
+							onChange="@command('saveVale')"></guaranibox>
 					</vbox>
 					<vbox spacing="0" hflex="true">
 						<field value="Vigencia desde" />
