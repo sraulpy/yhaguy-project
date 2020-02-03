@@ -46,22 +46,26 @@
 					<vbox spacing="0" hflex="true">
 						<field value="Facturación Gs." />
 						<doublebox hflex="true"
-							value="@bind(vm.vale.facturacionGs)"></doublebox>
+							value="@bind(vm.vale.facturacionGs)"
+							onChange="@command('saveVale')"></doublebox>
 					</vbox>
 					<vbox spacing="0" hflex="true">
 						<field value="Vale por Gs." />
 						<doublebox hflex="true"
-							value="@bind(vm.vale.valeGs)"></doublebox>
+							value="@bind(vm.vale.valeGs)"
+							onChange="@command('saveVale')"></doublebox>
 					</vbox>
 					<vbox spacing="0" hflex="true">
 						<field value="Vigencia desde" />
 						<datebox hflex="true"
-							value="@bind(vm.vale.vigenciaDesde)"></datebox>
+							value="@bind(vm.vale.vigenciaDesde)"
+							onChange="@command('saveVale')"></datebox>
 					</vbox>
 					<vbox spacing="0" hflex="true">
 						<field value="Vigencia hasta" />
 						<datebox hflex="true"
-							value="@bind(vm.vale.vigenciaHasta)"></datebox>
+							value="@bind(vm.vale.vigenciaHasta)"
+							onChange="@command('saveVale')"></datebox>
 					</vbox>
 				</row>
 			</rows>
@@ -71,7 +75,7 @@
 		<hlayout sclass="button-container">
 			<button mold="bs" sclass="btn-sm btn-primary"
 				label="Insertar" iconSclass="z-icon-plus-circle"
-				hflex="1" onClick='pop_art.open(self, "before_start")'>
+				hflex="1" onClick='pop_art.open(self, "after_start")'>
 			</button>
 			<space></space>
 			<button mold="bs" sclass="btn-sm btn-primary"
@@ -103,7 +107,7 @@
 	</vbox>
 	<popup id="pop_art" sclass="rounded">
 		<listbox sclass="small-list"
-			model="@load(vm.articulos)" width="400px">
+			model="@load(vm.articulos)" width="400px" height="400px">
 			<listhead>
 				<listheader>
 					<textbox hflex="true" value="@bind(vm.filterCodigoInterno)" instant="true"></textbox>

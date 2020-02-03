@@ -3,6 +3,7 @@ package com.yhaguy.gestion.venta.promociones;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 
@@ -30,6 +31,12 @@ public class VentaPromocionesVM extends SimpleViewModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	@Command
+	public void saveVale() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		rr.saveObject(this.vale, this.getLoginNombre());
 	}
 	
 	@AfterCompose(superclass = true)
