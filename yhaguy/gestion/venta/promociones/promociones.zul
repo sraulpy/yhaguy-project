@@ -113,8 +113,10 @@
 				</listheader>
 			</listhead>
 			<template name="model">
-				<listcell label="@load(each[1])"></listcell>
-				<listcell label="@load(each[2])"></listcell>
+				<listitem>
+					<listcell label="@load(each[1])"></listcell>
+					<listcell label="@load(each[2])"></listcell>
+				</listitem>
 			</template>
 		</listbox>
 	</popup>
