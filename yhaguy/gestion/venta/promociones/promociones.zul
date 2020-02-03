@@ -45,13 +45,13 @@
 				<row>
 					<vbox spacing="0" hflex="true">
 						<field value="Facturación Gs." />
-						<doublebox hflex="true"
+						<guaranibox hflex="true"
 							value="@bind(vm.vale.facturacionGs)"
 							onChange="@command('saveVale')"></doublebox>
 					</vbox>
 					<vbox spacing="0" hflex="true">
 						<field value="Vale por Gs." />
-						<doublebox hflex="true"
+						<guaranibox hflex="true"
 							value="@bind(vm.vale.valeGs)"
 							onChange="@command('saveVale')"></doublebox>
 					</vbox>
@@ -106,6 +106,7 @@
 		</div>
 	</vbox>
 	<popup id="pop_art" sclass="rounded">
+		<vbox>
 		<listbox sclass="small-list"
 			model="@load(vm.articulos)" width="400px" height="400px">
 			<listhead>
@@ -123,5 +124,9 @@
 				</listitem>
 			</template>
 		</listbox>
+		<button sclass="btn-sm btn-primary" iconSclass="z-icon-check" hflex="true"
+			disabled="@load(vm.selectedArticulo eq null)"
+			onClick="@command('addArticulo')"></button>
+		</vbox>
 	</popup>
 </window>
