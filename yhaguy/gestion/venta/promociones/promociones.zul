@@ -116,12 +116,14 @@
 				<listheader>
 					<textbox hflex="true" value="@bind(vm.filterCodigoInterno)" instant="true"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+								no-repeat; background-position: 98%; background-size: 10px;"
+								placeholder="Código.."></textbox>
 				</listheader>
 				<listheader>
 					<textbox hflex="true" value="@bind(vm.filterDescripcion)" instant="true"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
-								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+								no-repeat; background-position: 98%; background-size: 10px;"
+								placeholder="Descripción.."></textbox>
 				</listheader>
 			</listhead>
 			<template name="model">
