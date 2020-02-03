@@ -113,7 +113,7 @@
 			model="@load(vm.articulos)" width="500px" height="400px"
 			selectedItem="@bind(vm.selectedArticulo)">
 			<listhead>
-				<listheader>
+				<listheader width="35%">
 					<textbox hflex="true" value="@bind(vm.filterCodigoInterno)" instant="true"
 						style="background-image:url('./core/css/filter.png'); background-repeat:
 								no-repeat; background-position: 98%; background-size: 10px;"
