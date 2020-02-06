@@ -153,7 +153,8 @@
 										<combobox hflex="true"
 											model="@load(vm.condiciones)"
 											selectedItem="@bind(vm.vale.condicion)" instant="true"
-											onChange="@command('saveVale')">
+											onChange="@command('saveVale')"
+											value="@load(vm.vale.condicion.descripcion)">
 											<template name="model">
 												<comboitem label="@load(each.descripcion)"></comboitem>
 											</template>
