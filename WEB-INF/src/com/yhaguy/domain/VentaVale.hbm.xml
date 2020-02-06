@@ -15,6 +15,11 @@
 		<property name="valeGs"/>
 		<property name="vigenciaDesde"/>
 		<property name="vigenciaHasta"/>
+		<property name="vigenciaEfectivizacion"/>
+		<property name="valePorcentaje"/>
+		
+		<many-to-one name="condicion" class="com.yhaguy.domain.CondicionPago"
+			column="id_condicion" lazy="false" />
 		
 		<set name="articulos" table="articulo"
 			inverse="false" lazy="false" fetch="join">

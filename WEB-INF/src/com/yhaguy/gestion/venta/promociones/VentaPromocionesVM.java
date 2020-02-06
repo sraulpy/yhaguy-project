@@ -34,6 +34,7 @@ public class VentaPromocionesVM extends SimpleViewModel {
 			if (this.vale == null) {
 				this.vale = new VentaVale();
 				rr.saveObject(this.vale, this.getLoginNombre());
+				this.vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,6 +43,18 @@ public class VentaPromocionesVM extends SimpleViewModel {
 	
 	@AfterCompose(superclass = true)
 	public void afterCompose() {
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void loadVale(@BindingParam("id") long id) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.vale = (VentaVale) rr.getObject(VentaVale.class.getName(), id);
+		if (this.vale == null) {
+			this.vale = new VentaVale();
+			rr.saveObject(this.vale, this.getLoginNombre());
+			this.vale = (VentaVale) rr.getObject(VentaVale.class.getName(), id);
+		}	
 	}
 	
 	@Command

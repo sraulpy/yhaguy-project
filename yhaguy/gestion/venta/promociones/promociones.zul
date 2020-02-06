@@ -33,78 +33,196 @@
 	</vbox>
 	
 	<vbox id="vales" hflex="true" vflex="true"
-		style="padding:50px"
+		style="padding:20px 20px 0px 20px"
 		visible="false">
-		
-		<div style="padding:50px 50px 0px 50px">
-		<div style="border-bottom:solid 1px;margin:5px">
-			<label>Promoción con Vales</label>
-		</div>
-		<grid sclass="vgrid">
-			<rows>
-				<row>
-					<vbox spacing="0" hflex="true">
-						<field value="Facturación Gs." />
-						<guaranibox hflex="true"
-							value="@bind(vm.vale.facturacionGs)"
-							onChange="@command('saveVale')"></guaranibox>
+		<div style="padding:20px 0px 0px 20px" vflex="true" hflex="true">
+		<tabbox vflex="true" hflex="true">
+			<tabs hflex="true">
+				<tab label="Vales por monto mínimo" hflex="true" style="padding:0px 20px 0px 20px"
+					onClick="@command('loadVale', id=1)"></tab>
+				<tab label="Vales por monto facturado %" hflex="true" style="padding:0px 20px 0px 20px"
+					onClick="@command('loadVale', id=2)"></tab>
+			</tabs>
+			<tabpanels hflex="true">
+				<tabpanel style="padding:10px 10px 10px 10px"
+					hflex="true">
+					<vbox vflex="true">
+						<grid sclass="vgrid">
+							<rows>
+								<row>
+									<vbox spacing="0" hflex="true">
+										<field value="Facturación Gs." />
+										<guaranibox hflex="true"
+											value="@bind(vm.vale.facturacionGs)"
+											onChange="@command('saveVale')">
+										</guaranibox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Vale por Gs." />
+										<guaranibox hflex="true"
+											value="@bind(vm.vale.valeGs)"
+											onChange="@command('saveVale')">
+										</guaranibox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Vigencia desde" />
+										<datebox hflex="true"
+											value="@bind(vm.vale.vigenciaDesde)"
+											onChange="@command('saveVale')">
+										</datebox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Vigencia hasta" />
+										<datebox hflex="true"
+											value="@bind(vm.vale.vigenciaHasta)"
+											onChange="@command('saveVale')">
+										</datebox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Plazo máximo efectivización" />
+										<datebox hflex="true"
+											value="@bind(vm.vale.vigenciaEfectivizacion)"
+											onChange="@command('saveVale')">
+										</datebox>
+									</vbox>
+								</row>
+							</rows>
+						</grid>
+					<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-sm btn-primary" label="Insertar"
+								iconSclass="z-icon-plus-circle" hflex="1"
+								onClick='pop_art.open(self, "after_start")'>
+							</button>
+							<space></space>
+							<button mold="bs"
+								sclass="btn-sm btn-primary" label="Eliminar"
+								iconSclass="z-icon-times-circle" hflex="1"
+								disabled="@load(vm.selectedItem eq null)"
+								onClick="@command('deleteItem')">
+							</button>
+							<space hflex="2"></space>
+					</hlayout>
+					<div hflex="true" vflex="true">
+						<listbox sclass="small-list" hflex="true"
+							vflex="true" emptyMessage="SIN REGISTROS.."
+							model="@load(vm.vale.articulos)"
+							selectedItem="@bind(vm.selectedItem)">
+							<listhead>
+								<listheader label="Código"></listheader>
+								<listheader label="Descripción"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell
+										label="@load(each.codigoInterno)">
+									</listcell>
+									<listcell
+										label="@load(each.descripcion)">
+									</listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</div>
 					</vbox>
-					<vbox spacing="0" hflex="true">
-						<field value="Vale por Gs." />
-						<guaranibox hflex="true"
-							value="@bind(vm.vale.valeGs)"
-							onChange="@command('saveVale')"></guaranibox>
+				</tabpanel>
+				<tabpanel style="padding:10px 10px 10px 10px"
+					hflex="true">
+					<vbox vflex="true">
+						<grid sclass="vgrid">
+							<rows>
+								<row>
+									<vbox spacing="0" hflex="true">
+										<field value="Facturación Gs." />
+										<textbox hflex="true"
+											readonly="true" placeholder="Importe facturado">
+										</textbox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Vale Gs % sobre lo facturado" />
+										<spinner hflex="true"
+											value="@bind(vm.vale.valeGs)"
+											onChange="@command('saveVale')">
+										</spinner>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Condición de Venta" />
+										<combobox hflex="true">
+										</combobox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Vigencia desde" />
+										<datebox hflex="true"
+											value="@bind(vm.vale.vigenciaDesde)"
+											onChange="@command('saveVale')">
+										</datebox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Vigencia hasta" />
+										<datebox hflex="true"
+											value="@bind(vm.vale.vigenciaHasta)"
+											onChange="@command('saveVale')">
+										</datebox>
+									</vbox>
+									<vbox spacing="0" hflex="true">
+										<field value="Plazo máximo efectivización" />
+										<datebox hflex="true"
+											value="@bind(vm.vale.vigenciaEfectivizacion)"
+											onChange="@command('saveVale')">
+										</datebox>
+									</vbox>
+								</row>
+							</rows>
+						</grid>
+					<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-sm btn-primary" label="Insertar"
+								iconSclass="z-icon-plus-circle" hflex="1"
+								onClick='pop_art.open(self, "after_start")'>
+							</button>
+							<space></space>
+							<button mold="bs"
+								sclass="btn-sm btn-primary" label="Eliminar"
+								iconSclass="z-icon-times-circle" hflex="1"
+								disabled="@load(vm.selectedItem eq null)"
+								onClick="@command('deleteItem')">
+							</button>
+							<space></space>
+							<checkbox label=" Todos los artículos"
+								checked="@bind(vm.vale.todosArticulos)"></checkbox>
+							<space hflex="2"></space>
+					</hlayout>
+					<div hflex="true" vflex="true">
+						<listbox sclass="small-list" hflex="true"
+							vflex="true" emptyMessage="SIN REGISTROS.."
+							model="@load(vm.vale.articulos)"
+							selectedItem="@bind(vm.selectedItem)">
+							<listhead>
+								<listheader label="Código"></listheader>
+								<listheader label="Descripción"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell
+										label="@load(each.codigoInterno)">
+									</listcell>
+									<listcell
+										label="@load(each.descripcion)">
+									</listcell>
+								</listitem>
+							</template>
+							<listfoot>
+								<listfooter label="ítems"></listfooter>
+							</listfoot>
+						</listbox>
+					</div>
 					</vbox>
-					<vbox spacing="0" hflex="true">
-						<field value="Vigencia desde" />
-						<datebox hflex="true"
-							value="@bind(vm.vale.vigenciaDesde)"
-							onChange="@command('saveVale')"></datebox>
-					</vbox>
-					<vbox spacing="0" hflex="true">
-						<field value="Vigencia hasta" />
-						<datebox hflex="true"
-							value="@bind(vm.vale.vigenciaHasta)"
-							onChange="@command('saveVale')"></datebox>
-					</vbox>
-				</row>
-			</rows>
-		</grid>
-		</div>	
-		<div style="padding:0px 50px 0px 50px">
-		<hlayout sclass="button-container">
-			<button mold="bs" sclass="btn-sm btn-primary"
-				label="Insertar" iconSclass="z-icon-plus-circle"
-				hflex="1" onClick='pop_art.open(self, "after_start")'>
-			</button>
-			<space></space>
-			<button mold="bs" sclass="btn-sm btn-primary"
-				label="Eliminar" iconSclass="z-icon-times-circle"
-				hflex="1" disabled="@load(vm.selectedItem eq null)"
-				onClick="@command('deleteItem')">
-			</button>
-			<space hflex="2"></space>
-		</hlayout>
-		</div>
-		<div style="padding:0px 50px 0px 50px" vflex="true">
-			<listbox sclass="small-list" hflex="true" vflex="true"
-				emptyMessage="SIN REGISTROS.."
-				model="@load(vm.vale.articulos)"
-				selectedItem="@bind(vm.selectedItem)">
-				<listhead>
-					<listheader label="Código"></listheader>
-					<listheader label="Descripción"></listheader>
-				</listhead>
-				<template name="model">
-					<listitem>
-						<listcell label="@load(each.codigoInterno)"></listcell>
-						<listcell label="@load(each.descripcion)"></listcell>
-					</listitem>
-				</template>
-				<listfoot>
-					<listfooter label="ítems"></listfooter>
-				</listfoot>
-			</listbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
 		</div>
 	</vbox>
 	<popup id="pop_art" sclass="rounded">
