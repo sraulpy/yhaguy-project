@@ -152,7 +152,8 @@
 										<field value="Condición de Venta" />
 										<combobox hflex="true"
 											model="@load(vm.condiciones)"
-											selectedItem="@bind(vm.vale.condicion)" instant="true">
+											selectedItem="@bind(vm.vale.condicion)" instant="true"
+											onChange="@command('saveVale')">
 											<template name="model">
 												<comboitem label="@load(each.descripcion)"></comboitem>
 											</template>
@@ -197,7 +198,8 @@
 							</button>
 							<space></space>
 							<checkbox label=" Todos los artículos"
-								checked="@bind(vm.vale.todosArticulos)"></checkbox>
+								checked="@bind(vm.vale.todosArticulos)"
+								onChange="@command('saveVale')"></checkbox>
 							<space hflex="2"></space>
 					</hlayout>
 					<div hflex="true" vflex="true">
