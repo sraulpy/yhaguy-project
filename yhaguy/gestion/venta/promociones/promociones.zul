@@ -144,13 +144,18 @@
 									<vbox spacing="0" hflex="true">
 										<field value="Vale Gs % sobre lo facturado" />
 										<spinner hflex="true"
-											value="@bind(vm.vale.valeGs)"
+											value="@bind(vm.vale.valePorcentaje)"
 											onChange="@command('saveVale')">
 										</spinner>
 									</vbox>
 									<vbox spacing="0" hflex="true">
 										<field value="Condición de Venta" />
-										<combobox hflex="true">
+										<combobox hflex="true"
+											model="@load(vm.condiciones)"
+											selectedItem="@bind(vm.vale.condicion)" instant="true">
+											<template name="model">
+												<comboitem label="@load(each.descripcion)"></comboitem>
+											</template>
 										</combobox>
 									</vbox>
 									<vbox spacing="0" hflex="true">

@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.venta.promociones;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -13,6 +14,7 @@ import org.zkoss.zul.Popup;
 
 import com.coreweb.control.SimpleViewModel;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.VentaVale;
 
@@ -88,6 +90,18 @@ public class VentaPromocionesVM extends SimpleViewModel {
 	public List<Object[]> getArticulos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getArticulos(this.filterCodigoInterno, this.filterDescripcion);
+	}
+	
+	/**
+	 * @return las condiciones..
+	 */
+	public List<CondicionPago> getCondiciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CondicionPago cont = (CondicionPago) rr.getObject(CondicionPago.class.getName(), 1);
+		CondicionPago cred = (CondicionPago) rr.getObject(CondicionPago.class.getName(), 2);
+		List<CondicionPago> out = new ArrayList<CondicionPago>();
+		out.add(cont); out.add(cred);
+		return out;
 	}
 
 	public String getFilterCodigoInterno() {
