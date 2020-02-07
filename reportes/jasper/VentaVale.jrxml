@@ -54,13 +54,14 @@ from plancuenta where id = '1']]>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
-			<textField>
-				<reportElement x="184" y="9" width="190" height="15" uuid="17dfdde6-2784-4e87-9100-bf4d88468653"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="229" y="13" width="108" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="d457d5c8-0383-4bad-9e73-802c9e7406c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[VALE]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -71,7 +72,7 @@ from plancuenta where id = '1']]>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="69" y="0" width="68" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="c53d2a35-64b1-4e87-a12c-48a0dbfa662c"/>
+				<reportElement style="Column header" mode="Transparent" x="69" y="0" width="92" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="c53d2a35-64b1-4e87-a12c-48a0dbfa662c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -90,7 +91,7 @@ from plancuenta where id = '1']]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="137" y="0" width="108" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="6ce67453-1a43-4c8c-a812-ea2b3bc0ea6d"/>
+				<reportElement style="Column header" mode="Transparent" x="161" y="0" width="108" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="6ce67453-1a43-4c8c-a812-ea2b3bc0ea6d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -98,7 +99,7 @@ from plancuenta where id = '1']]>
 				<text><![CDATA[Cajero]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="245" y="1" width="200" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="9e756a16-a86c-45ff-a57e-304f6a8d9a13"/>
+				<reportElement style="Column header" mode="Transparent" x="269" y="1" width="176" height="18" forecolor="#736343" backcolor="#FFFFFF" uuid="9e756a16-a86c-45ff-a57e-304f6a8d9a13"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -117,7 +118,7 @@ from plancuenta where id = '1']]>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="69" y="0" width="68" height="21" uuid="ebd4767d-6d9e-4e7d-8a0b-1ed28a4e6bf0"/>
+				<reportElement style="Detail" x="69" y="0" width="92" height="21" uuid="ebd4767d-6d9e-4e7d-8a0b-1ed28a4e6bf0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
@@ -131,14 +132,14 @@ from plancuenta where id = '1']]>
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="137" y="0" width="108" height="21" uuid="5bed7a4e-15d5-4de9-a0f1-405db20d1a4d"/>
+				<reportElement style="Detail" x="161" y="0" width="108" height="21" uuid="5bed7a4e-15d5-4de9-a0f1-405db20d1a4d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Cajero}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="245" y="0" width="200" height="21" uuid="437a23ea-6d14-436d-9a26-8941226037ed"/>
+			<textField>
+				<reportElement style="Detail" x="269" y="0" width="176" height="21" uuid="437a23ea-6d14-436d-9a26-8941226037ed"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
