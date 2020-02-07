@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vale" pageWidth="612" pageHeight="432" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vale" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
 	<property name="ireport.zoom" value="2.4157650000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="163"/>
@@ -194,26 +194,9 @@ from plancuenta where id = '1']]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="3" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="26" splitType="Stretch">
-			<textField evaluationTime="Report">
-				<reportElement style="Column header" x="497" y="1" width="40" height="20" forecolor="#736343" uuid="902c8b29-d394-4a9d-b75d-2dbe0f92eb04"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Ubuntu Condensed" size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="Column header" x="417" y="1" width="80" height="20" forecolor="#736343" uuid="0ca5b060-a612-4387-ad83-592847f89a79"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Ubuntu Condensed" size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
+		<band height="32" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="1" width="572" height="25" forecolor="#D0B48E" backcolor="#E2F0ED" uuid="e9512908-7954-4e12-a13f-bcd886c4261d"/>
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="25" forecolor="#D0B48E" backcolor="#E2F0ED" uuid="e9512908-7954-4e12-a13f-bcd886c4261d"/>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement style="Column header" x="22" y="1" width="147" height="20" forecolor="#736343" uuid="80f0a835-8308-4a95-8ec4-10ab80803ad1"/>
 					<textElement verticalAlignment="Middle">
@@ -221,9 +204,23 @@ from plancuenta where id = '1']]>
 					</textElement>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="515" y="1" width="40" height="20" forecolor="#736343" uuid="902c8b29-d394-4a9d-b75d-2dbe0f92eb04"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Ubuntu Condensed" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="435" y="1" width="80" height="20" forecolor="#736343" uuid="0ca5b060-a612-4387-ad83-592847f89a79"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Ubuntu Condensed" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
-	</pageFooter>
+	</columnFooter>
 	<noData>
 		<band height="50">
 			<staticText>
