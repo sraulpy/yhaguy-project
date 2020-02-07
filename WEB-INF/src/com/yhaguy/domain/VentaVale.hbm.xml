@@ -17,6 +17,7 @@
 		<property name="vigenciaHasta"/>
 		<property name="vigenciaEfectivizacion"/>
 		<property name="valePorcentaje"/>
+		<property name="todosArticulos"/>
 		
 		<many-to-one name="condicion" class="com.yhaguy.domain.CondicionPago"
 			column="id_condicion" lazy="false" />
