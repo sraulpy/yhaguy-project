@@ -11229,18 +11229,53 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return saldo vale..
+	 */
+	public SaldoVale getSaldoVale(long idventa) throws Exception {
+		String query = "select s from SaldoVale s where s.idVenta = " + idventa;
+		List<SaldoVale> out = this.hql(query);
+		return out.size() > 0 ? out.get(0) : null;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Object[]> data = 
-			rr.getVentasCreditoPorCliente_(Utiles.getFecha("01-01-2010 00:00:00"), Utiles.getFecha("31-12-2019 23:00:00"), 20589);
-			double tot = 0;
-			for (Object[] vta : data) {
-				double sum = (double) vta[2];
-				tot += sum;
-				System.out.println(vta[3] + " - " + Utiles.getNumberFormat(sum));
+			List<CtaCteEmpresaMovimiento> list = rr.getObjects(CtaCteEmpresaMovimiento.class.getName());
+			for (CtaCteEmpresaMovimiento m : list) {
+				CtaCteEmpresaMovimiento_2019 c = new CtaCteEmpresaMovimiento_2019();
+				c.setAnulado(m.isAnulado());
+				c.setAux(m.getAux());
+				c.setAuxi(m.getAuxi());
+				c.setCarteraCliente(m.getCarteraCliente());
+				c.setCerrado(m.isCerrado());
+				c.setCliente(m.getCliente());
+				c.setDbEstado(m.getDbEstado());
+				c.setFechaEmision(m.getFechaEmision());
+				c.setFechaVencimiento(m.getFechaVencimiento());
+				c.setIdEmpresa(m.getIdEmpresa());
+				c.setIdImportacionPedido(m.getIdImportacionPedido());
+				c.setIdMovimientoOriginal(m.getIdMovimientoOriginal());
+				c.setIdVendedor(m.getIdVendedor());
+				c.setImporteOriginal(m.getImporteOriginal());
+				c.setImputaciones(m.getImputaciones());
+				c.setIp_pc(m.getIp_pc());
+				c.setModificado(m.getModificado());
+				c.setMoneda(m.getMoneda());
+				c.setNroComprobante(m.getNroComprobante());
+				c.setNumeroImportacion(m.getNumeroImportacion());
+				c.setObservacion(m.getObservacion());
+				c.setOrden(m.getOrden());
+				c.setSaldo(m.getSaldo());
+				c.setSucursal(m.getSucursal());
+				c.setTesaka(m.isTesaka());
+				c.setTipoCambio(m.getTipoCambio());
+				c.setTipoCaracterMovimiento(m.getTipoCaracterMovimiento());
+				c.setTipoMovimiento(m.getTipoMovimiento());
+				c.setUsuarioMod(m.getUsuarioMod());
+				rr.saveObject(c, "sys");
+				System.out.println(c.getNroComprobante());
 			}
-			System.out.println(Utiles.getNumberFormat(tot));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

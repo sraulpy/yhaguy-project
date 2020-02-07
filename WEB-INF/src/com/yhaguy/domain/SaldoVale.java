@@ -1,5 +1,7 @@
 package com.yhaguy.domain;
 
+import java.util.Date;
+
 import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
@@ -9,6 +11,7 @@ public class SaldoVale extends Domain {
 	private long idCliente;
 	private double importe;
 	private double saldo;
+	private Date validoHasta;
 	
 	@Override
 	public int compareTo(Object arg0) {
@@ -45,5 +48,13 @@ public class SaldoVale extends Domain {
 
 	public void setSaldo(double saldo) {
 		this.saldo = saldo;
+	}
+
+	public Date getValidoHasta() {
+		return validoHasta;
+	}
+
+	public void setValidoHasta(Date validoHasta) {
+		this.validoHasta = validoHasta;
 	}
 }
