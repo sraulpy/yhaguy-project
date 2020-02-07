@@ -49,8 +49,10 @@ import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SaldoVale;
 import com.yhaguy.domain.Talonario;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.domain.VentaVale;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.principal.AssemblerCaja;
 import com.yhaguy.gestion.caja.principal.CajaDTO;
@@ -781,6 +783,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		double total_vtas = 0;
 		boolean servicio = false;
 		for (VentaDTO ventaDTO : ventas) {
+			this.generarValeFacturacionMinima(ventaDTO);
+			this.generarValeFacturacionPorcentaje(ventaDTO);
 			total_vtas += ventaDTO.getTotalImporteGsSinIva();
 			if (ventaDTO.getVendedor_().toUpperCase().equals("SERVICIO")) {
 				servicio = true;
@@ -852,6 +856,40 @@ public class CajaPeriodoControlBody extends BodyApp {
 		wp.setTitulo(titulo);
 		wp.setSoloBotonCerrar();
 		wp.show(Configuracion.CAJA_VENTA_ZUL);
+	}
+	
+	/**
+	 * genera los vales si corresponde..
+	 */
+	private void generarValeFacturacionMinima(VentaDTO venta) throws Exception {
+		double generado = venta.getValeGeneradoFacturacionMinima();
+		if (generado > 0) {
+			SaldoVale saldo = new SaldoVale();
+			saldo.setIdCliente(venta.getCliente().getId());
+			saldo.setIdVenta(venta.getId());
+			saldo.setImporte(generado);
+			saldo.setSaldo(generado);
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.saveObject(saldo, this.getLoginNombre());
+			venta.getValesGenerados().add(saldo);
+		}
+	}
+	
+	/**
+	 * genera los vales por facturacion porcentaje si corresponde..
+	 */
+	private void generarValeFacturacionPorcentaje(VentaDTO venta) throws Exception {
+		double generado = venta.getValeGeneradoFacturacionPorcentaje();
+		if (generado > 0) {
+			SaldoVale saldo = new SaldoVale();
+			saldo.setIdCliente(venta.getCliente().getId());
+			saldo.setIdVenta(venta.getId());
+			saldo.setImporte(generado);
+			saldo.setSaldo(generado);
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.saveObject(saldo, this.getLoginNombre());
+			venta.getValesGenerados().add(saldo);
+		}
 	}
 
 	/**
@@ -1772,6 +1810,20 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 	}
 	
+	public void imprimirVale(VentaDTO venta) {
+
+		this.selectedVenta = venta;		
+		//JRDataSource dataSource = new VentaDataSource(venta);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("Title", "Vale");
+
+		String source = ReportesViewModel.SOURCE_REPOSICION;
+		JRDataSource dataSource = new CajaReposicionDataSource();
+		this.imprimirComprobante(source, params, dataSource);
+	
+		
+	}
+	
 	/**
 	 * impresion de la venta..
 	 */
@@ -2237,6 +2289,62 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 	}
 
+	/**
+	 * DataSource de Vale..
+	 */
+	class VentaValeDataSource implements JRDataSource {
+
+		List<MyArray> detalle = new ArrayList<MyArray>();
+		CajaReposicion rep;
+		SaldoVale vale;
+		Venta venta;
+
+		public VentaValeDataSource(SaldoVale vale) {
+			try {
+				RegisterDomain rr = RegisterDomain.getInstance();	
+				this.vale = vale;
+				this.venta = (Venta) rr.getObject(Venta.class.getName(), vale.getIdVenta());
+				this.detalle.add(new MyArray());
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		private int index = -1;
+
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+
+			Object value = null;
+			String fieldName = field.getName();
+			SaldoVale item = this.vale;
+
+			if ("Fecha".equals(fieldName)) {
+				value = Utiles.getDateToString(item.getModificado(), Utiles.DD_MM_YYYY);
+			} else if ("DescFactura".equals(fieldName)) {
+				value = item.getFormaPago().getDescripcion();
+			} else if ("Importe".equals(fieldName)) {
+				double importe = item.getFormaPago().getMontoGs();
+				value = Utiles.getNumberFormat(importe);
+			} else if ("TipoDetalle".equals(fieldName)) {
+				value = "DATOS DEL CHEQUE";
+			} else if ("observacion".equals(fieldName)) {
+				value = this.rep.getObservacion();
+			}
+			return value;
+		}
+
+		@Override
+		public boolean next() throws JRException {
+			if (index < this.detalle.size() - 1) {
+				index++;
+				return true;
+			}
+			return false;
+		}
+	}
+	
 	/**
 	 * DataSource del Recibo..
 	 */

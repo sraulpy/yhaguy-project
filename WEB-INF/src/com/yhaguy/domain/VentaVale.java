@@ -33,6 +33,7 @@ public class VentaVale extends Domain {
 	 * @return true si es vigente
 	 */
 	public boolean isVigente() {
+		if (this.vigenciaDesde == null || this.vigenciaHasta == null) return false;
 		Date hoy = new Date();
 		return hoy.compareTo(vigenciaDesde) >= 0 && hoy.compareTo(vigenciaHasta) <= 1;
 	}

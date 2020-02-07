@@ -200,12 +200,12 @@
 							<space></space>
 							<checkbox label=" Todos los artículos"
 								checked="@bind(vm.vale.todosArticulos)"
-								onChange="@command('saveVale')"></checkbox>
+								onCheck="@command('saveVale')"></checkbox>
 							<space hflex="2"></space>
 					</hlayout>
 					<div hflex="true" vflex="true">
 						<listbox sclass="small-list" hflex="true"
-							vflex="true" emptyMessage="SIN REGISTROS.."
+							vflex="true" emptyMessage="@load(vm.vale.todosArticulos ? 'TODOS LOS ARTICULOS..' : 'SIN REGISTROS..')"
 							model="@load(vm.vale.articulos)"
 							selectedItem="@bind(vm.selectedItem)">
 							<listhead>

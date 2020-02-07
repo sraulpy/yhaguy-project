@@ -929,9 +929,8 @@ public class CajaPeriodo extends Domain {
 			if (!recibo.isAnulado()) {
 				for (ReciboFormaPago fp : recibo.getFormasPago()) {
 					if (fp.isRecaudacionCentral()) {
-						String desc = "COB. "
-								+ recibo.getNumero().substring(8,
-										recibo.getNumero().length());
+						String desc = "COB. " + recibo.getNumero() + " - "
+								+ recibo.getCliente().getRazonSocial().toUpperCase();
 						fp.setDescripcion(desc);
 						out.add(fp);
 					}
@@ -942,9 +941,8 @@ public class CajaPeriodo extends Domain {
 			if (!venta.isAnulado()) {
 				for (ReciboFormaPago fp : venta.getFormasPago()) {
 					if (fp.isRecaudacionCentral()) {
-						String desc = "VTA. "
-								+ venta.getNumero().substring(8,
-										venta.getNumero().length());
+						String desc = "VTA. " + venta.getNumero() + " - "
+								+ venta.getCliente().getRazonSocial().toUpperCase();
 						fp.setDescripcion(desc);
 						out.add(fp);
 					}

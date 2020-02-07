@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.DependsOn;
@@ -20,10 +21,12 @@ import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.HistoricoLineaCredito;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SaldoVale;
 import com.yhaguy.domain.VehiculoMarca;
 import com.yhaguy.domain.VehiculoModelo;
 import com.yhaguy.domain.VehiculoTipo;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.domain.VentaVale;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.empresa.ClienteDTO;
@@ -71,6 +74,7 @@ public class VentaDTO extends DTO {
 	private String numeroReparto = "";
 	
 	private List<String> numerosFacturas = new ArrayList<String>();
+	private List<SaldoVale> valesGenerados = new ArrayList<SaldoVale>();
 	
 	// Datos que van en la impresion de la factura remision..
 	private String puntoPartida = "";
@@ -332,6 +336,56 @@ public class VentaDTO extends DTO {
 		int entero = division.intValue();
 		double decimal = division - entero;
 		return entero + (decimal > 0 ? 1 : 0);
+	}
+	
+	/**
+	 * @return el total de vale generado por facturacion minima..
+	 */
+	public double getValeGeneradoFacturacionMinima() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		VentaVale vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 1);
+		if (!vale.isVigente()) return 0.0;
+		double acumulado = 0;
+		double facturacionVale = vale.getFacturacionGs();
+		double out = 0;
+		Map<String, String> arts = vale.getArticulosMap();
+		for (VentaDetalleDTO item : this.detalles) {
+			if (arts.get(item.getArticulo().getPos1()) != null) {
+				acumulado += item.getImporteGs();
+			}
+		}		
+		while ((acumulado - facturacionVale) >= 0) {
+			out += vale.getValeGs();
+			acumulado -= facturacionVale;
+		}		
+		return out;
+	}
+	
+	/**
+	 * @return el total de vale generado por facturacion porcentaje..
+	 */
+	public double getValeGeneradoFacturacionPorcentaje() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		VentaVale vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 2);
+		if (vale.getCondicion().getId().longValue() != this.getCondicionPago().getId().longValue())
+			return 0.0;
+		if (!vale.isVigente())
+			return 0.0;
+		double acumulado = 0;
+		double porcentajeVale = vale.getValePorcentaje();
+		double out = 0;
+		if (vale.isTodosArticulos()) {
+			acumulado = this.getTotalImporteGs();
+		} else {
+			Map<String, String> arts = vale.getArticulosMap();
+			for (VentaDetalleDTO item : this.detalles) {
+				if (arts.get(item.getArticulo().getPos1()) != null) {
+					acumulado += item.getImporteGs();
+				}
+			}
+		}
+		out = Utiles.obtenerValorDelPorcentaje(acumulado, porcentajeVale);
+		return out;
 	}
 	
 	/**
@@ -971,5 +1025,13 @@ public class VentaDTO extends DTO {
 
 	public void setNumeroReparto(String numeroReparto) {
 		this.numeroReparto = numeroReparto;
+	}
+
+	public List<SaldoVale> getValesGenerados() {
+		return valesGenerados;
+	}
+
+	public void setValesGenerados(List<SaldoVale> valesGenerados) {
+		this.valesGenerados = valesGenerados;
 	}
 }
