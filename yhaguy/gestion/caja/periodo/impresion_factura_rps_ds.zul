@@ -14,7 +14,7 @@
 		</attribute>
 	</timer>
 	
-	<div height="47px"></div>
+	<div height="55px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -244,7 +244,7 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="160px"></div>
+	<div height="145px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>

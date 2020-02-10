@@ -14,7 +14,7 @@
 		</attribute>
 	</timer>
 	
-	<div height="33px"></div>
+	<div height="40px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -156,7 +156,7 @@
 		<div width="120px"></div>
 	</hlayout>
 	
-	<div height="15px"></div>
+	<div height="17px"></div>
 	
 	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="115px">
 		<template name="children">
@@ -255,7 +255,7 @@
 		<div width="120px"></div>
 	</hlayout>
 	
-	<div height="15px"></div>
+	<div height="17px"></div>
 	
 	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="115px">
 		<template name="children">
