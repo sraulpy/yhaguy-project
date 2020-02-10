@@ -9089,7 +9089,9 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('DEPOSITO CTA. BANCARIA'), "
-				+ " f.fechaOperacion, f.depositoNroReferencia, f.montoGs, f.depositoBancoCta.banco.descripcion, concat('RECIBO NRO. ', r.numero, ' - ', r.cliente.empresa.razonSocial)"
+				+ " f.fechaOperacion, f.depositoNroReferencia,"
+				+ " (CASE WHEN f.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_GUARANI + "' THEN f.montoGs ELSE f.montoDs END),"
+				+ " f.depositoBancoCta.banco.descripcion, concat('RECIBO NRO. ', r.numero, ' - ', r.cliente.empresa.razonSocial)"
 				+ " from Recibo r join r.formasPago f where f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
 				+ " and f.depositoBancoCta.id = " + idBanco
 				+ " and (f.fechaOperacion >= '"
