@@ -802,6 +802,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 		for (VentaDTO venta : ventas) {
 			this.addMovimientoBanco(venta);
 			this.imprimirVenta(venta);
+			for (SaldoVale vale : venta.getValesGenerados()) {
+				this.imprimirVale(vale);
+			}
 		}
 	}
 
@@ -870,6 +873,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			saldo.setImporte(generado);
 			saldo.setSaldo(generado);
 			RegisterDomain rr = RegisterDomain.getInstance();
+			VentaVale vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 1);
+			saldo.setValidoHasta(vale.getVigenciaEfectivizacion());
 			rr.saveObject(saldo, this.getLoginNombre());
 			venta.getValesGenerados().add(saldo);
 		}
@@ -887,6 +892,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 			saldo.setImporte(generado);
 			saldo.setSaldo(generado);
 			RegisterDomain rr = RegisterDomain.getInstance();
+			VentaVale vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 2);
+			if (vale != null) {
+				saldo.setValidoHasta(vale.getVigenciaEfectivizacion());
+			}			
 			rr.saveObject(saldo, this.getLoginNombre());
 			venta.getValesGenerados().add(saldo);
 		}
@@ -1810,18 +1819,16 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 	}
 	
-	public void imprimirVale(VentaDTO venta) {
-
-		this.selectedVenta = venta;		
-		//JRDataSource dataSource = new VentaDataSource(venta);
+	/**
+	 * impresion del vale..
+	 */
+	public void imprimirVale(SaldoVale vale) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("Title", "Vale");
 
-		String source = ReportesViewModel.SOURCE_REPOSICION;
-		JRDataSource dataSource = new CajaReposicionDataSource();
-		this.imprimirComprobante(source, params, dataSource);
-	
-		
+		String source = "/reportes/jasper/VentaVale.jasper";
+		JRDataSource dataSource = new VentaValeDataSource(vale);
+		this.imprimirComprobante(source, params, dataSource);		
 	}
 	
 	/**
@@ -2321,16 +2328,18 @@ public class CajaPeriodoControlBody extends BodyApp {
 			SaldoVale item = this.vale;
 
 			if ("Fecha".equals(fieldName)) {
-				value = Utiles.getDateToString(item.getModificado(), Utiles.DD_MM_YYYY);
-			} else if ("DescFactura".equals(fieldName)) {
-				value = item.getFormaPago().getDescripcion();
+				value = Utiles.getDateToString(this.venta.getFecha(), Utiles.DD_MM_YYYY);
+			} else if ("Factura".equals(fieldName)) {
+				value = this.venta.getNumero();
 			} else if ("Importe".equals(fieldName)) {
-				double importe = item.getFormaPago().getMontoGs();
+				double importe = this.vale.getImporte();
 				value = Utiles.getNumberFormat(importe);
-			} else if ("TipoDetalle".equals(fieldName)) {
-				value = "DATOS DEL CHEQUE";
+			} else if ("Cajero".equals(fieldName)) {
+				value = dto.getCaja().getResponsable().getPos1();
+			} else if ("Beneficiario".equals(fieldName)) {
+				value = this.venta.getCliente().getRazonSocial();
 			} else if ("observacion".equals(fieldName)) {
-				value = this.rep.getObservacion();
+				value = "VALIDO HASTA: " + Utiles.getDateToString(item.getValidoHasta(), Utiles.DD_MM_YYYY);
 			}
 			return value;
 		}
