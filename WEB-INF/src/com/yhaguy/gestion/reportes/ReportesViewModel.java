@@ -5258,10 +5258,13 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (NotaCredito ncr : notasCredito) {
+					System.out.println("----- ncr: " + ncr.getNumero());
 					if (ncr.isNotaCreditoVentaContado()) {
 						totalNCRContado += ncr.getTotalImporteGsSinIva(); 
+						System.out.println("totalNCRContado" + totalNCRContado);
 					} else {
 						totalNCRCredito += ncr.getTotalImporteGsSinIva(); 
+						System.out.println("totalNCRCredito" + totalNCRCredito);
 					}
 				}
 				
@@ -10518,6 +10521,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Object[] formato = filtro.getFormato();
 				Cliente cliente = filtro.getCliente();
+				// Tipo moneda = filtro.getMoneda();
 
 				if (desde == null) desde = new Date();
 				
@@ -10537,6 +10541,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
+				// long idMoneda = moneda != null ? moneda.getId() : 0;
 
 				List<Object[]> ventas = rr.getVentasCreditoPorCliente(desde, hasta, idCliente);
 				List<Object[]> chequesRechazados = rr.getChequesRechazadosPorCliente(desde, hasta, idCliente);
