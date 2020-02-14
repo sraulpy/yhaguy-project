@@ -3976,8 +3976,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las notas de credito segun fecha
 	 */
-	public List<NotaCredito> getNotasCreditoPorVendedor(Date desde, Date hasta, long idVendedor, boolean promocion) throws Exception {
-		
+	public List<NotaCredito> getNotasCreditoPorVendedor(Date desde, Date hasta, long idVendedor, boolean promocion) throws Exception {		
 		String query = "select n from NotaCredito n where n.promocion = " + promocion + " and n.tipoMovimiento.sigla = ? and n.vendedor.id = ?"
 				+ " and n.fechaEmision between ? and ?" + " order by n.numero";
 
@@ -11242,41 +11241,12 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
+			Date desde = Utiles.getFecha("20-01-2020 00:00:00");
+			Date hasta = Utiles.getFecha("31-01-2020 23:00:00");
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<CtaCteEmpresaMovimiento> list = rr.getObjects(CtaCteEmpresaMovimiento.class.getName());
-			for (CtaCteEmpresaMovimiento m : list) {
-				CtaCteEmpresaMovimiento_2019 c = new CtaCteEmpresaMovimiento_2019();
-				c.setAnulado(m.isAnulado());
-				c.setAux(m.getAux());
-				c.setAuxi(m.getAuxi());
-				c.setCarteraCliente(m.getCarteraCliente());
-				c.setCerrado(m.isCerrado());
-				c.setCliente(m.getCliente());
-				c.setDbEstado(m.getDbEstado());
-				c.setFechaEmision(m.getFechaEmision());
-				c.setFechaVencimiento(m.getFechaVencimiento());
-				c.setIdEmpresa(m.getIdEmpresa());
-				c.setIdImportacionPedido(m.getIdImportacionPedido());
-				c.setIdMovimientoOriginal(m.getIdMovimientoOriginal());
-				c.setIdVendedor(m.getIdVendedor());
-				c.setImporteOriginal(m.getImporteOriginal());
-				c.setImputaciones(m.getImputaciones());
-				c.setIp_pc(m.getIp_pc());
-				c.setModificado(m.getModificado());
-				c.setMoneda(m.getMoneda());
-				c.setNroComprobante(m.getNroComprobante());
-				c.setNumeroImportacion(m.getNumeroImportacion());
-				c.setObservacion(m.getObservacion());
-				c.setOrden(m.getOrden());
-				c.setSaldo(m.getSaldo());
-				c.setSucursal(m.getSucursal());
-				c.setTesaka(m.isTesaka());
-				c.setTipoCambio(m.getTipoCambio());
-				c.setTipoCaracterMovimiento(m.getTipoCaracterMovimiento());
-				c.setTipoMovimiento(m.getTipoMovimiento());
-				c.setUsuarioMod(m.getUsuarioMod());
-				rr.saveObject(c, "sys");
-				System.out.println(c.getNroComprobante());
+			List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, 51, true);
+			for (NotaCredito notaCredito : notasCredito) {
+				System.out.println(notaCredito.getNumero());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

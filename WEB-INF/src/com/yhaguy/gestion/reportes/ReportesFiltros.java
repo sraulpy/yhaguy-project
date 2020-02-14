@@ -740,6 +740,16 @@ public class ReportesFiltros {
 			this.fechaDesde.setSeconds(00);
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
+	public void setFechaDesde2(Date fechaDesde) {
+		this.fechaDesde2 = fechaDesde;
+		if (fechaDesde != null) {
+			this.fechaDesde2.setHours(00);
+			this.fechaDesde2.setMinutes(00);
+			this.fechaDesde2.setSeconds(00);
+		}
+	}
 
 	public Date getFechaHasta() {
 		return fechaHasta;
@@ -753,6 +763,17 @@ public class ReportesFiltros {
 			this.fechaHasta.setHours(23);
 			this.fechaHasta.setMinutes(59);
 			this.fechaHasta.setSeconds(59);
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void setFechaHasta2(Date fechaHasta) {
+		this.fechaHasta2 = fechaHasta;
+
+		if (fechaHasta != null) {
+			this.fechaHasta2.setHours(23);
+			this.fechaHasta2.setMinutes(59);
+			this.fechaHasta2.setSeconds(59);
 		}
 	}
 	
@@ -1477,16 +1498,8 @@ public class ReportesFiltros {
 		return fechaDesde2;
 	}
 
-	public void setFechaDesde2(Date fechaDesde2) {
-		this.fechaDesde2 = fechaDesde2;
-	}
-
 	public Date getFechaHasta2() {
 		return fechaHasta2;
-	}
-
-	public void setFechaHasta2(Date fechaHasta2) {
-		this.fechaHasta2 = fechaHasta2;
 	}
 
 	public boolean isIncluirCHQ_RECH() {
