@@ -132,7 +132,7 @@ public class TesakaParser {
 		// informado..
 		JSONObject informado = new JSONObject();
 		int lengthRuc = compra.getProveedor().getRuc().length();
-		informado.put("situacion", "contribuyente");
+		informado.put("situacion", "CONTRIBUYENTE");
 		informado.put("nombre", compra.getProveedor().getRazonSocial());
 		informado.put("ruc", compra.getProveedor().getRuc().substring(0, lengthRuc - 2));
 		informado.put("dv", compra.getProveedor().getRuc().substring(lengthRuc - 1, lengthRuc));
@@ -208,7 +208,7 @@ public class TesakaParser {
 		// informado..
 		JSONObject informado = new JSONObject();
 		int lengthRuc = gasto.getProveedor().getRuc().length();
-		informado.put("situacion", "contribuyente");
+		informado.put("situacion", "CONTRIBUYENTE");
 		informado.put("nombre", gasto.getProveedor().getRazonSocial());
 		informado.put("ruc", gasto.getProveedor().getRuc().substring(0, lengthRuc - 2));
 		informado.put("dv", gasto.getProveedor().getRuc().substring(lengthRuc - 1, lengthRuc));
