@@ -142,7 +142,8 @@ public class NotaCreditoAssembler extends Assembler {
 class NotaCreditoDetalleAssembler extends Assembler {
 
 	static final String[] ATT_IGUALES = { "cantidad", "costoGs", "montoGs", "montoDs", "importeGs", "importeDs" };
-	static final String[] ATT_VENTA = { "descripcionTipoMovimiento", "numero", "fecha", "tipoMovimiento", "siglaTipoMovimiento", "descripcionCondicion" };	
+	static final String[] ATT_VENTA = { "descripcionTipoMovimiento", "numero", "fecha", "tipoMovimiento",
+			"siglaTipoMovimiento", "descripcionCondicion", "descripcionCliente" };	
 	static final String[] ATT_COMPRA = { "descripcionTipoMovimiento", "numero", "fechaCreacion", "tipoMovimiento" };
 	static final String[] ATT_ARTICULO = { "descripcion", "codigoInterno" };
 	static final String[] ATT_GASTO = { "descripcionTipoMovimiento", "numeroFactura", "fecha", "tipoMovimiento" };

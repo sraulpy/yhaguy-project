@@ -110,7 +110,7 @@ public class NotaCreditoDetalleDTO extends DTO {
 			
 		} else if (isDetalleVenta() == true) {
 			out += Utiles.getDateToString((Date) this.venta.getPos3(), Utiles.DD_MM_YYYY) 
-					+ " - " + this.venta.getPos1() + " - " + this.venta.getPos2() ;
+					+ " - " + this.venta.getPos1() + " - " + this.venta.getPos2() + " - " + this.venta.getPos7() ;
 			
 		} else if (isDetalleGasto() == true) {
 			out += this.gasto.getPos1() + " - " + this.gasto.getPos2();
