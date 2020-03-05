@@ -594,6 +594,13 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return la descripcion del cliente..
+	 */
+	public String getDescripcionCliente() {
+		return this.cliente.getRazonSocial();
+	}
+	
+	/**
 	 * @return las formas de entrega de la venta..
 	 */
 	public static List<String> getFormasEntrega() {
@@ -614,6 +621,9 @@ public class Venta extends Domain {
 	}
 	
 	public void setDescripcionCondicion(String condicion) {
+	}
+	
+	public void setDescripcionCliente(String cliente) {
 	}
 
 	public TipoMovimiento getTipoMovimiento() {
