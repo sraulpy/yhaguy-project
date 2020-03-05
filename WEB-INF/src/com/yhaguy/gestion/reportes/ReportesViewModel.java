@@ -1624,7 +1624,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_CLIENTES_VENDEDOR:
-				this.clientesPorVendedor(mobile);
+				this.clientesPorVendedor(mobile, VENTAS_CLIENTES_VENDEDOR);
 				break;
 				
 			case VENTAS_GENERICO:
@@ -4165,7 +4165,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * VEN-00027
 		 */
-		private void clientesPorVendedor(boolean mobile) {
+		private void clientesPorVendedor(boolean mobile, String codReporte) {
 			try {
 				Funcionario vendedor = filtro.getVendedor();
 				//Cliente cliente = filtro.getCliente();
@@ -4196,7 +4196,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new ClientesVendedorDataSource(emps);
 				params.put("Usuario", getUs().getNombre());
-				params.put("Titulo", "CLIENTES POR VENDEDOR");
+				params.put("Titulo", codReporte + " - CLIENTES POR VENDEDOR");
 				params.put("Vendedor", vendedor_);
 				imprimirJasper(source, params, dataSource, formato);
 			} catch (Exception e) {
