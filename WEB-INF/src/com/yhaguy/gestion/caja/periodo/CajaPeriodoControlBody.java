@@ -987,6 +987,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 		if (b.isClickAceptar()) {
 
 			NotaCreditoDTO nc = (NotaCreditoDTO) b.getSelectedItemDTO();
+			
+			if (!this.validarNotaCredito(nc)) {
+				return;
+			}
+			
 			this.selectedNotaCredito = nc;
 
 			nc.setNumeroNotaCredito(this.getNumeroNotaCredito());
@@ -1028,10 +1033,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * @return true si es una nota de credito valida..
 	 */
 	private boolean validarNotaCredito(NotaCreditoDTO nc) throws Exception {
-		if (nc.isMotivoDevolucion()) {
-			MyArray vta = nc.getVentaAplicada();
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Venta v = (Venta) rr.getObject(Venta.class.getName(), vta.getId());
+		MyArray vta = nc.getVentaAplicada();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Venta v = (Venta) rr.getObject(Venta.class.getName(), vta.getId());
+		long idCliente = nc.getCliente().getId().longValue(); 
+		long idClienteVta = v.getCliente().getId().longValue();
+		if (idCliente != idClienteVta) {
+			Clients.showNotification("La venta aplicada no corresponde al cliente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return false;
 		}
 		return true;
 	}

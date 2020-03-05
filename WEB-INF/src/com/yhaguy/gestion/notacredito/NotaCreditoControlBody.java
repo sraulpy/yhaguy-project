@@ -915,12 +915,32 @@ public class NotaCreditoControlBody extends BodyApp {
 	private void confirmarNC() throws Exception {
 		if(this.mensajeSiNo("Desea confirmar la Nota de Crédito") == false)
 			return;
+		if(!this.validarNotaCredito())
+			return;
 		this.dto.setEstadoComprobante(this.getEstadoComprobanteCerrado());
 		this.dto.setReadonly();
 		this.dto.setActualizarDatos(true);
 		this.dto = (NotaCreditoDTO) this.saveDTO(this.dto);
 		this.setEstadoABMConsulta();
 		Clients.showNotification("Nota de Crédito confirmada..");
+	}
+	
+	/**
+	 * @return true si es una nota de credito valida..
+	 */
+	private boolean validarNotaCredito() throws Exception {
+		if (this.dto.isNotaCreditoVenta()) {
+			MyArray vta = this.dto.getVentaAplicada();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Venta v = (Venta) rr.getObject(Venta.class.getName(), vta.getId());
+			long idCliente = this.dto.getCliente().getId().longValue(); 
+			long idClienteVta = v.getCliente().getId().longValue();
+			if (idCliente != idClienteVta) {
+				Clients.showNotification("La venta aplicada no corresponde al cliente..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return false;
+			}
+		}		
+		return true;
 	}
 	
 	/**
