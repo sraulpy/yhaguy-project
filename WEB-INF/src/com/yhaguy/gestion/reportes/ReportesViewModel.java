@@ -122,6 +122,7 @@ import com.yhaguy.gestion.compras.importacion.BeanImportacion;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ControlArticuloStock;
 import com.yhaguy.gestion.contabilidad.BeanLibroVenta;
+import com.yhaguy.gestion.empresa.ClienteBean;
 import com.yhaguy.gestion.empresa.ctacte.BeanCtaCteEmpresa;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaMovimientoDTO;
@@ -4167,12 +4168,13 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void clientesPorVendedor(boolean mobile) {
 			try {
 				Funcionario vendedor = filtro.getVendedor();
-				Cliente cliente = filtro.getCliente();
+				//Cliente cliente = filtro.getCliente();
+				Object[] formato = filtro.getFormato();
 				
 				String vendedor_ = vendedor == null ? "TODOS.." : vendedor.getRazonSocial();
 				long idVendedor = vendedor == null ? 0 : vendedor.getId();
 				
-				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
+				//String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
 				//long idCliente = cliente == null ? 0 : cliente.getId();
 				
 				if (vendedor == null) {
@@ -4183,20 +4185,20 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> emps = rr.getClientesPorVendedor(idVendedor);
-
-				ReporteClientesVendedor rep = new ReporteClientesVendedor(vendedor_, cliente_);
-				rep.setApaisada();
-				rep.setDatosReporte(emps);
 				
-				if (!mobile) {
-					ViewPdf vp = new ViewPdf();
-					vp.setBotonImprimir(false);
-					vp.setBotonCancelar(false);
-					vp.showReporte(rep, ReportesViewModel.this);
-				} else {
-					rep.ejecutar();
-					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				String format = (String) formato[0];
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CLIENTES_VENDEDOR;
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_CLIENTES_VENDEDOR_;
 				}
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new ClientesVendedorDataSource(emps);
+				params.put("Usuario", getUs().getNombre());
+				params.put("Titulo", "CLIENTES POR VENDEDOR");
+				params.put("Vendedor", vendedor_);
+				imprimirJasper(source, params, dataSource, formato);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -26377,6 +26379,58 @@ class ReportePagos extends ReporteYhaguy {
 				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
+	}
+}
+
+/**
+ * DataSource del listado de clientes por vendedor..
+ */
+class ClientesVendedorDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	Misc misc = new Misc();
+
+	List<ClienteBean> values = new ArrayList<ClienteBean>();
+	List<Object[]> datos;
+
+	public ClientesVendedorDataSource(List<Object[]> datos) {
+		this.datos = datos;
+		this.loadDatos();
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+
+		if ("Clientes".equals(fieldName)) {
+			value = this.values;
+		} 
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < 0) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * carga los datos para el reporte..
+	 */
+	private void loadDatos() {
+		for (Object[] dato : datos) {
+			String ruc = (String) dato[0];
+			String razonSocial = (String) dato[1];
+			String direccion = (String) dato[2];
+			String telefono = (String) dato[3];
+			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono));
+		}
 	}
 }
 
