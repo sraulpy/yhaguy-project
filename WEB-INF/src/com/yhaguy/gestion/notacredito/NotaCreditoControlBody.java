@@ -1088,6 +1088,9 @@ public class NotaCreditoControlBody extends BodyApp {
 		if (this.mensajeSiNo("Esta seguro de aprobar esta Solicitud de Nota de Crédito..") == false) {
 			return;
 		}
+		
+		if(!this.validarNotaCredito())
+			return;
 
 		this.dto.setEstadoComprobante(getDtoUtil()
 				.getEstadoComprobanteAprobado());
