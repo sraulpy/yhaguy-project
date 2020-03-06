@@ -157,6 +157,17 @@ public class Utiles {
 		inicio.setHours(0);inicio.setMinutes(0);inicio.setSeconds(0);
 		return inicio;
 	}
+
+	/**
+	 * @return la fecha de inicio del mes..
+	 */
+	@SuppressWarnings("deprecation")
+	public static Date getFechaActual() {
+		Date out = new Date();
+		out.setHours(0);out.setMinutes(0);out.setSeconds(0);
+		return out;
+	}
+
 	
 	/**
 	 * @return la fecha de fin del mes corriente..
