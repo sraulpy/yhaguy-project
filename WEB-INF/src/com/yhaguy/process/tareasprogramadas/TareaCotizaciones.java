@@ -23,7 +23,7 @@ public class TareaCotizaciones {
 			Double compra = (Double) set.get("compra");
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Tipo moneda = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+			Tipo moneda = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_DOLAR);
 			Tipo tipo = rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_CAMBIO_SET);
 			TipoCambio tc = new TipoCambio();
 			tc.setCompra(compra);
