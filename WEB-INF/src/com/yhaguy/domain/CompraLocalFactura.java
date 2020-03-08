@@ -44,6 +44,17 @@ public class CompraLocalFactura extends Domain {
 	}
 	
 	/**
+	 * recalcula los costos segun cotizacion..
+	 */
+	public void recalcularCotizacion() {
+		for (CompraLocalFacturaDetalle item : this.detalles) {
+			item.setCostoGs(item.getCostoDs() * this.tipoCambio);
+			item.setDescuentoGs(item.getDescuentoDs() * this.tipoCambio);
+		}
+		this.importeGs = this.importeDs * this.tipoCambio;
+	}
+	
+	/**
 	 * @return true si es moneda local..
 	 */
 	public boolean isMonedaLocal() {

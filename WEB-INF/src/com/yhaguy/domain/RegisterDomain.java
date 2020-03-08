@@ -3064,6 +3064,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las compras dolares segun fecha 
+	 */
+	public List<CompraLocalFactura> getComprasDolares(Date desde, Date hasta) throws Exception {
+		String query = "select c from CompraLocalFactura c where c.dbEstado != 'D' "
+				+ " and c.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
+				+ " and (c.tipoMovimiento.sigla = ? or c.tipoMovimiento.sigla = ?)"
+				+ " and c.fechaOriginal between ? and ?";
+		query += " order by c.numero, c.fechaOriginal";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO);
+		listParams.add(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return las ventas segun fecha
 	 */
 	public List<Venta> getVentas(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {

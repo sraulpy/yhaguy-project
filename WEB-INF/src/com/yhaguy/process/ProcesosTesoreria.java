@@ -19,6 +19,7 @@ import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.BancoMovimiento;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2016;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2017;
@@ -1414,6 +1415,28 @@ public class ProcesosTesoreria {
 			rr.saveObject(venta, venta.getUsuarioMod());
 			out.add(new String[] { Utiles.getDateToString(venta.getFecha(), Utiles.DD_MM_YYYY), venta.getNumero(),
 					venta.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(venta.getTipoCambio()) });
+		}
+		return out;
+	}
+	
+	/**
+	 * actualiza las cotizaciones de ventas
+	 * [0]: fecha
+	 * [1]: numero
+	 * [2]: concepto
+	 * [3]: cotizacion
+	 */
+	public static List<String[]> actualizarCotizacionesCompras(Date desde, Date hasta) throws Exception {
+		List<String[]> out = new ArrayList<String[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<CompraLocalFactura> compras = rr.getComprasDolares(desde, hasta);
+		for (CompraLocalFactura compra : compras) {
+			Double tc = rr.getTipoCambioVenta(compra.getFechaOriginal());
+			compra.setTipoCambio(tc);
+			compra.recalcularCotizacion();
+			rr.saveObject(compra, compra.getUsuarioMod());
+			out.add(new String[] { Utiles.getDateToString(compra.getFechaOriginal(), Utiles.DD_MM_YYYY), compra.getNumero(),
+					compra.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(compra.getTipoCambio()) });
 		}
 		return out;
 	}
