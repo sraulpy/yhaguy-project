@@ -121,6 +121,9 @@ public class Gasto extends Domain {
 		double out = 0;
 		for (GastoDetalle det : this.detalles) {
 			out += det.getMontoGs();
+			if (det.isBaseImponible()) {
+				out += det.getMontoIva();
+			}
 		}
 		return out;
 	}

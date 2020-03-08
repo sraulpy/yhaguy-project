@@ -23,6 +23,7 @@ import com.coreweb.domain.Tipo;
 import com.coreweb.extras.csv.CSV;
 import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoCambio;
 import com.yhaguy.process.ProcesosTesoreria;
@@ -50,6 +51,8 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	private Date desde;
 	private Date hasta;
 	
+	private Date fechaCierre;
+	
 	private Window win;
 	
 	List<String[]> actualizados;
@@ -63,6 +66,13 @@ public class CotizacionesViewModel extends SimpleViewModel {
 				this.filterFechaMM = "0" + this.filterFechaMM;
 			}
 			this.inicializar();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<CierreDocumento> cierres = rr.getCierreDocumentos();
+			if (cierres.size() > 0) {
+				this.fechaCierre = cierres.get(0).getFecha();
+			} else {
+				this.fechaCierre = new Date();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -89,6 +99,11 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	@Command 
 	@NotifyChange("*")
 	public void uploadFileCotizaciones(@BindingParam("file") Media file) {
+		if (this.desde.compareTo(this.fechaCierre) <= 0) {
+			Clients.showNotification("La fecha del registro seleccionado ya fue cerrado contablemente.",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		try {
 			Misc misc = new Misc();
 			String name = "cotizaciones_" + Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY);
@@ -111,6 +126,11 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("actualizados")
 	public void actualizarMovimientos() throws Exception {
+		if (this.desde.compareTo(this.fechaCierre) <= 0) {
+			Clients.showNotification("La fecha del registro seleccionado ya fue cerrado contablemente.",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		switch (this.selectedItem) {
 		case VENTAS:
 			this.actualizados = ProcesosTesoreria.actualizarCotizacionesVentas(this.desde, this.hasta);
