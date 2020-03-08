@@ -389,7 +389,7 @@ public class CompraLocalControlBody extends BodyApp {
 		BindUtils.postNotifyChange(null, null, factura, "fechaVencimiento");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioVenta(Utiles.agregarDias(emision, -1));
+		double tc = rr.getTipoCambioVenta(emision, -1);
 		factura.setTipoCambio(tc);
 		this.modificarTC();
 	}
@@ -1128,7 +1128,7 @@ public class CompraLocalControlBody extends BodyApp {
 
 	private void sugerirValores(CompraLocalOrdenDTO nvoDto) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioVenta(Utiles.agregarDias(nvoDto.getFechaCreacion(), -1));
+		double tc = rr.getTipoCambioVenta(nvoDto.getFechaCreacion(), -1);
 		nvoDto.setSucursal(accesosUsuario.getSucursalOperativa());	
 		nvoDto.setTipoMovimiento(utilDto.getTmOrdenCompra());
 		nvoDto.setMoneda(monedaLocal);

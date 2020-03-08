@@ -158,10 +158,10 @@ public class ReciboSimpleControl extends SoloViewModel {
 	public void setTipoCambio_() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		if (this.dato.getReciboDTO().isCobro() || this.dato.getReciboDTO().isAnticipoCobro()) {
-			double tc = rr.getTipoCambioCompra(Utiles.agregarDias(this.dato.getReciboDTO().getFechaEmision(), -1));
+			double tc = rr.getTipoCambioCompra(this.dato.getReciboDTO().getFechaEmision(), -1);
 			this.dato.getReciboDTO().setTipoCambio(tc);
 		} else {
-			double tc = rr.getTipoCambioVenta(Utiles.agregarDias(this.dato.getReciboDTO().getFechaEmision(), -1));
+			double tc = rr.getTipoCambioVenta(this.dato.getReciboDTO().getFechaEmision(), 0);
 			this.dato.getReciboDTO().setTipoCambio(tc);
 		}
 	}

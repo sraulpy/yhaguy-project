@@ -2,14 +2,11 @@ package com.yhaguy.gestion.compras.importacion;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
-import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.gestion.empresa.ProveedorDTO;
 
 @SuppressWarnings("serial")

@@ -9612,8 +9612,8 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return la ultima cotizacion segun fecha..
 	 */
-	public double getTipoCambioVenta(Date fecha) throws Exception {
-		fecha = Utiles.agregarDias(fecha, -1);
+	public double getTipoCambioVenta(Date fecha, int restarDias) throws Exception {
+		fecha = Utiles.agregarDias(fecha, restarDias);
 		String desde = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 00:00:00";
 		String query = "select t.id, t.venta from TipoCambio t where (t.fecha = '" + desde + "')";
 		List<Object[]> list = this.hql(query);
@@ -9623,8 +9623,8 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return la ultima cotizacion..
 	 */
-	public double getTipoCambioCompra(Date fecha) throws Exception {
-		fecha = Utiles.agregarDias(fecha, -1);
+	public double getTipoCambioCompra(Date fecha, int restarDias) throws Exception {
+		fecha = Utiles.agregarDias(fecha, restarDias);
 		String desde = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 00:00:00";
 		String query = "select t.id, t.compra from TipoCambio t where (t.fecha = '" + desde + "')";
 		List<Object[]> list = this.hql(query);

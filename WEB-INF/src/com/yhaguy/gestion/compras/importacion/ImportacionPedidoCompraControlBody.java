@@ -314,6 +314,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		this.nvoGasto.setIdImportacion(this.dto.getId());
 		this.nvoGasto.setFechaCarga(new Date());
 		this.nvoGasto.setNumeroFactura(this.nvoGasto.getNumero());
+		this.nvoGasto.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO));
 		for (GastoDetalle item : this.nvoGasto.getDetalles()) {
 			item.setMontoIva(item.getMontoIva_());
 		}
@@ -745,7 +746,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		if (this.nvoGasto.isTipoCambioSET()) {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			if (this.nvoGasto.getFecha() == null) return;
-			double tc = rr.getTipoCambioVenta(Utiles.agregarDias(this.nvoGasto.getFecha(), -1));
+			double tc = rr.getTipoCambioVenta(this.nvoGasto.getFecha(), -1);
 			this.nvoGasto.setTipoCambio(tc);
 		} else {
 			this.nvoGasto.setTipoCambio(this.dto.getResumenGastosDespacho().getTipoCambio());

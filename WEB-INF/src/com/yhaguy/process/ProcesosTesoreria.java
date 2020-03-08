@@ -1409,7 +1409,7 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Venta> ventas = rr.getVentasDolares(desde, hasta);
 		for (Venta venta : ventas) {
-			Double tc = rr.getTipoCambioCompra(venta.getFecha());
+			Double tc = rr.getTipoCambioCompra(venta.getFecha(), -1);
 			venta.setTipoCambio(tc);
 			venta.recalcularCotizacion();
 			rr.saveObject(venta, venta.getUsuarioMod());
@@ -1431,7 +1431,7 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<CompraLocalFactura> compras = rr.getComprasDolares(desde, hasta);
 		for (CompraLocalFactura compra : compras) {
-			Double tc = rr.getTipoCambioVenta(compra.getFechaOriginal());
+			Double tc = rr.getTipoCambioVenta(compra.getFechaOriginal(), -1);
 			compra.setTipoCambio(tc);
 			compra.recalcularCotizacion();
 			rr.saveObject(compra, compra.getUsuarioMod());
@@ -1454,7 +1454,7 @@ public class ProcesosTesoreria {
 		List<Gasto> gastos = rr.getGastosDolares(desde, hasta);
 		for (Gasto gasto : gastos) {
 			if (!gasto.isGastoImportacion()) {
-				Double tc = rr.getTipoCambioVenta(gasto.getFecha());
+				Double tc = rr.getTipoCambioVenta(gasto.getFecha(), -1);
 				gasto.setTipoCambio(tc);
 				gasto.recalcularCotizacion();
 				rr.saveObject(gasto, gasto.getUsuarioMod());
@@ -1477,7 +1477,7 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<NotaCredito> ncs = rr.getNotasCreditoCompraDolares(desde, hasta);
 		for (NotaCredito nc : ncs) {
-			Double tc = rr.getTipoCambioVenta(nc.getFechaEmision());
+			Double tc = rr.getTipoCambioVenta(nc.getFechaEmision(), -1);
 			nc.setTipoCambio(tc);
 			nc.recalcularCotizacion();
 			rr.saveObject(nc, nc.getUsuarioMod());
@@ -1499,7 +1499,7 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<NotaCredito> ncs = rr.getNotasCreditoVentaDolares(desde, hasta);
 		for (NotaCredito nc : ncs) {
-			Double tc = rr.getTipoCambioCompra(nc.getFechaEmision());
+			Double tc = rr.getTipoCambioCompra(nc.getFechaEmision(), -1);
 			nc.setTipoCambio(tc);
 			nc.recalcularCotizacion();
 			rr.saveObject(nc, nc.getUsuarioMod());

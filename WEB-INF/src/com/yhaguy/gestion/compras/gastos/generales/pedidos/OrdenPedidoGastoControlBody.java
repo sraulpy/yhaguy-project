@@ -569,7 +569,7 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 		this.dtoGasto.setObservacion(this.dto.getDescripcion());
 		if (!this.dtoGasto.isMonedaLocal()) {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			double tc = rr.getTipoCambioVenta(this.dtoGasto.getFecha());
+			double tc = rr.getTipoCambioVenta(this.dtoGasto.getFecha(), -1);
 			this.dtoGasto.setTipoCambio(tc);
 		}
 		this.dtoGasto = (GastoDTO) this.saveDTO(this.dtoGasto, new AssemblerGasto());

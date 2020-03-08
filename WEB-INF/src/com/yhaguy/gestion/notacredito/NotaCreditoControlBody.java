@@ -1270,7 +1270,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	 */
 	private void sugerirValores(NotaCreditoDTO dto) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioVenta(dto.getFechaEmision());
+		double tc = rr.getTipoCambioVenta(dto.getFechaEmision(), -1);
 		MyPair sucursal = this.getAcceso().getSucursalOperativa();
 		
 		dto.setTipoMovimiento(this.tipoMovimiento);
@@ -1296,7 +1296,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	@Command @NotifyChange("*")
 	public void refreshTipoCambio() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		double tc = rr.getTipoCambioVenta(Utiles.agregarDias(dto.getFechaEmision(), -1));
+		double tc = rr.getTipoCambioVenta(dto.getFechaEmision(), -1);
 		this.dto.setTipoCambio(tc);
 	}
 	
