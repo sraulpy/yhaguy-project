@@ -3116,8 +3116,8 @@ public class RegisterDomain extends Register {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' "
 				+ " and n.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
 				+ " and n.tipoMovimiento.sigla = ?"
-				+ " and n.fecha between ? and ?";
-		query += " order by n.fecha";
+				+ " and n.fechaEmision between ? and ?";
+		query += " order by n.fechaEmision";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA);
@@ -3138,8 +3138,8 @@ public class RegisterDomain extends Register {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' "
 				+ " and n.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
 				+ " and n.tipoMovimiento.sigla = ?"
-				+ " and n.fecha between ? and ?";
-		query += " order by n.fecha";
+				+ " and n.fechaEmision between ? and ?";
+		query += " order by n.fechaEmision";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
