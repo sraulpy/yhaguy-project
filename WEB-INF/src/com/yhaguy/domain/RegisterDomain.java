@@ -3108,6 +3108,51 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+
+	/**
+	 * @return las notas de credito compra dolares segun fecha 
+	 */
+	public List<NotaCredito> getNotasCreditoCompraDolares(Date desde, Date hasta) throws Exception {
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' "
+				+ " and n.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
+				+ " and n.tipoMovimiento.sigla = ?"
+				+ " and n.fecha between ? and ?";
+		query += " order by n.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+
+	/**
+	 * @return las notas de credito venta dolares segun fecha 
+	 */
+	public List<NotaCredito> getNotasCreditoVentaDolares(Date desde, Date hasta) throws Exception {
+		String query = "select n from NotaCredito n where n.dbEstado != 'D' "
+				+ " and n.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
+				+ " and n.tipoMovimiento.sigla = ?"
+				+ " and n.fecha between ? and ?";
+		query += " order by n.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
 	
 	/**
 	 * @return las ventas segun fecha

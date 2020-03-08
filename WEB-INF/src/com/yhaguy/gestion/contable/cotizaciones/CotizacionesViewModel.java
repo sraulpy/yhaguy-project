@@ -2,6 +2,7 @@ package com.yhaguy.gestion.contable.cotizaciones;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,15 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	static final String PATH = Configuracion.pathCotizaciones;
 	static final String LIST_ACTUALIZADOS = "/yhaguy/gestion/contabilidad/cotizaciones/actualizados.zul";
 	
+	static final String VENTAS = "VENTAS";
+	static final String COMPRAS = "COMPRAS LOCALES";
+	static final String GASTOS = "GASTOS";
+	static final String NOTASCREDITO_COMPRA = "NOTAS DE CREDITO COMPRA";
+	static final String NOTASCREDITO_VENTA = "NOTAS DE CREDITO VENTA";
+	
 	private TipoCambio nvaCotizacion;
+	
+	private String selectedItem;
 	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
@@ -102,6 +111,23 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("actualizados")
 	public void actualizarMovimientos() throws Exception {
+		switch (this.selectedItem) {
+		case VENTAS:
+			ProcesosTesoreria.actualizarCotizacionesVentas(this.desde, this.hasta);
+			break;
+		case COMPRAS:
+			ProcesosTesoreria.actualizarCotizacionesCompras(this.desde, this.hasta);
+			break;
+		case GASTOS:
+			ProcesosTesoreria.actualizarCotizacionesGastos(this.desde, this.hasta);
+			break;
+		case NOTASCREDITO_COMPRA:
+			ProcesosTesoreria.actualizarCotizacionesNotasCreditoCompra(this.desde, this.hasta);
+			break;
+		case NOTASCREDITO_VENTA:
+			ProcesosTesoreria.actualizarCotizacionesNotasCreditoVenta(this.desde, this.hasta);
+			break;
+		}
 		this.actualizados = ProcesosTesoreria.actualizarCotizacionesGastos(this.desde, this.hasta);
 		this.win = (Window) Executions.createComponents(LIST_ACTUALIZADOS, this.mainComponent, null);
 		this.win.doModal();
@@ -178,6 +204,19 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	@DependsOn("actualizados")
 	public String getFooter() {
 		return this.actualizados.size() + " items";
+	}
+
+	/**
+	 * @return los tipos de movimiento..
+	 */
+	public List<String> getTiposMovimiento() {
+		List<String> out = new ArrayList<String>();
+		out.add(VENTAS);
+		out.add(COMPRAS);
+		out.add(GASTOS);
+		out.add(NOTASCREDITO_COMPRA);
+		out.add(NOTASCREDITO_VENTA);
+		return out;
 	}
 	
 	/**
@@ -265,6 +304,14 @@ public class CotizacionesViewModel extends SimpleViewModel {
 
 	public void setActualizados(List<String[]> actualizados) {
 		this.actualizados = actualizados;
+	}
+
+	public String getSelectedItem() {
+		return selectedItem;
+	}
+
+	public void setSelectedItem(String selectedItem) {
+		this.selectedItem = selectedItem;
 	}
 	
 }

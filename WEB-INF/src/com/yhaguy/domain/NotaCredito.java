@@ -88,6 +88,16 @@ public class NotaCredito extends Domain {
 		return -1;
 	}
 	
+	/**
+	 * recalcula los costos segun cotizacion..
+	 */
+	public void recalcularCotizacion() {
+		for (NotaCreditoDetalle item : this.detalles) {
+			item.setMontoGs(item.getMontoDs() * this.tipoCambio);
+		}
+		this.importeGs = this.importeDs * this.tipoCambio;
+	}
+	
 	public double getImporteGs_() {
 		double out = 0.0;
 		for (NotaCreditoDetalle det : detalles) {

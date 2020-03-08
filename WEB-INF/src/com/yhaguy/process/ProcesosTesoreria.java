@@ -1453,12 +1453,58 @@ public class ProcesosTesoreria {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Gasto> gastos = rr.getGastosDolares(desde, hasta);
 		for (Gasto gasto : gastos) {
-			Double tc = rr.getTipoCambioVenta(gasto.getFecha());
-			gasto.setTipoCambio(tc);
-			gasto.recalcularCotizacion();
-			rr.saveObject(gasto, gasto.getUsuarioMod());
-			out.add(new String[] { Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY), gasto.getNumero(),
-					gasto.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(gasto.getTipoCambio()) });
+			if (!gasto.isGastoImportacion()) {
+				Double tc = rr.getTipoCambioVenta(gasto.getFecha());
+				gasto.setTipoCambio(tc);
+				gasto.recalcularCotizacion();
+				rr.saveObject(gasto, gasto.getUsuarioMod());
+				out.add(new String[] { Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY), gasto.getNumeroFactura(),
+						gasto.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(gasto.getTipoCambio()) });
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * actualiza las cotizaciones de notas de credito compras
+	 * [0]: fecha
+	 * [1]: numero
+	 * [2]: concepto
+	 * [3]: cotizacion
+	 */
+	public static List<String[]> actualizarCotizacionesNotasCreditoCompra(Date desde, Date hasta) throws Exception {
+		List<String[]> out = new ArrayList<String[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<NotaCredito> ncs = rr.getNotasCreditoCompraDolares(desde, hasta);
+		for (NotaCredito nc : ncs) {
+			Double tc = rr.getTipoCambioVenta(nc.getFechaEmision());
+			nc.setTipoCambio(tc);
+			nc.recalcularCotizacion();
+			rr.saveObject(nc, nc.getUsuarioMod());
+			out.add(new String[] { Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YYYY), nc.getNumero(),
+					nc.getTipoMovimiento().getDescripcion(), Utiles.getNumberFormat(nc.getTipoCambio()) });
+		}
+		return out;
+	}
+	
+	/**
+	 * actualiza las cotizaciones de notas de credito compras
+	 * [0]: fecha
+	 * [1]: numero
+	 * [2]: concepto
+	 * [3]: cotizacion
+	 */
+	public static List<String[]> actualizarCotizacionesNotasCreditoVenta(Date desde, Date hasta) throws Exception {
+		List<String[]> out = new ArrayList<String[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<NotaCredito> ncs = rr.getNotasCreditoVentaDolares(desde, hasta);
+		for (NotaCredito nc : ncs) {
+			Double tc = rr.getTipoCambioCompra(nc.getFechaEmision());
+			nc.setTipoCambio(tc);
+			nc.recalcularCotizacion();
+			rr.saveObject(nc, nc.getUsuarioMod());
+			out.add(new String[] { Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YYYY), nc.getNumero(),
+					nc.getTipoMovimiento().getDescripcion(), Utiles.getNumberFormat(nc.getTipoCambio()) });
 		}
 		return out;
 	}

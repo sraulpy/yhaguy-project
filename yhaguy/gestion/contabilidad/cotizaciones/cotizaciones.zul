@@ -89,9 +89,11 @@
 				disabled="@load(vm.desde eq null or vm.hasta eq null)" />
 			<button mold="bs" sclass="btn-sm btn-info" label="Actualizar Movimientos" iconSclass="z-icon-refresh"
 				hflex="true" onClick="@command('actualizarMovimientos')"
-				disabled="@load(vm.desde eq null or vm.hasta eq null)" />
+				disabled="@load(vm.desde eq null or vm.hasta eq null or vm.selectedItem eq null)" />
 		</hlayout>
-		<listbox sclass="small-list" vflex="true" checkmark="true">
+		<listbox sclass="small-list" vflex="true" checkmark="true"
+			model="@load(vm.tiposMovimiento)"
+			selectedItem="@bind(vm.selectedItem)">
 			<auxhead>
 				<auxheader label="Rango de fecha" colspan="2"></auxheader>
 			</auxhead>
@@ -107,46 +109,12 @@
 					</hbox>
 				</listheader>
 			</listhead>
-			<listitem>
-				<listcell></listcell>
-				<listcell>
-					<hlayout>
-						<label>GASTOS</label>
-					</hlayout>
-				</listcell>
-			</listitem>
-			<listitem>
-				<listcell></listcell>
-				<listcell>
-					<hlayout>
-						<label>COMPRAS LOCALES</label>
-					</hlayout>
-				</listcell>
-			</listitem>
-			<listitem>
-				<listcell></listcell>
-				<listcell>
-					<hlayout>
-						<label>VENTAS</label>
-					</hlayout>
-				</listcell>
-			</listitem>
-			<listitem>
-				<listcell></listcell>
-				<listcell>
-					<hlayout>
-						<label>NOTAS DE CRÉDITO - COMPRA</label>
-					</hlayout>
-				</listcell>
-			</listitem>
-			<listitem>
-				<listcell></listcell>
-				<listcell>
-					<hlayout>
-						<label>NOTAS DE CRÉDITO - VENTA</label>
-					</hlayout>
-				</listcell>
-			</listitem>
+			<template name="model">
+				<listitem>
+					<listcell></listcell>
+					<listcell label="@load(each)"></listcell>
+				</listitem>
+			</template>
 			<listfoot>
 				<listfooter label="ítems"></listfooter>
 			</listfoot>
