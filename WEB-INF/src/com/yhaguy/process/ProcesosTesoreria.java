@@ -1420,7 +1420,7 @@ public class ProcesosTesoreria {
 	}
 	
 	/**
-	 * actualiza las cotizaciones de ventas
+	 * actualiza las cotizaciones de compras
 	 * [0]: fecha
 	 * [1]: numero
 	 * [2]: concepto
@@ -1437,6 +1437,28 @@ public class ProcesosTesoreria {
 			rr.saveObject(compra, compra.getUsuarioMod());
 			out.add(new String[] { Utiles.getDateToString(compra.getFechaOriginal(), Utiles.DD_MM_YYYY), compra.getNumero(),
 					compra.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(compra.getTipoCambio()) });
+		}
+		return out;
+	}
+	
+	/**
+	 * actualiza las cotizaciones de compras
+	 * [0]: fecha
+	 * [1]: numero
+	 * [2]: concepto
+	 * [3]: cotizacion
+	 */
+	public static List<String[]> actualizarCotizacionesGastos(Date desde, Date hasta) throws Exception {
+		List<String[]> out = new ArrayList<String[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Gasto> gastos = rr.getGastosDolares(desde, hasta);
+		for (Gasto gasto : gastos) {
+			Double tc = rr.getTipoCambioVenta(gasto.getFecha());
+			gasto.setTipoCambio(tc);
+			gasto.recalcularCotizacion();
+			rr.saveObject(gasto, gasto.getUsuarioMod());
+			out.add(new String[] { Utiles.getDateToString(gasto.getFecha(), Utiles.DD_MM_YYYY), gasto.getNumero(),
+					gasto.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(gasto.getTipoCambio()) });
 		}
 		return out;
 	}
