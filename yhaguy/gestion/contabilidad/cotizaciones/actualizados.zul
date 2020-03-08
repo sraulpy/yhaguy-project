@@ -1,0 +1,26 @@
+<window width="70%" height="70%" closable="true"
+	title="Registros actualizados"
+	border="normal">
+
+	<listbox sclass="small-list"
+		model="@load(vm.actualizados)" vflex="true"
+		emptyMessage="SIN REGISTROS..">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Número"></listheader>
+			<listheader label="Concepto"></listheader>
+			<listheader label="Cotización"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0])"></listcell>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3])"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="@load(vm.footer)"></listfooter>
+		</listfoot>
+	</listbox>
+</window>

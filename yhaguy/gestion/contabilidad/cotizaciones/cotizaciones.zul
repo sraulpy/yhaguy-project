@@ -2,24 +2,28 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.contable.cotizaciones.CotizacionesViewModel')"
 	height="100%">
-
+	
+	<hbox hflex="true" vflex="true" spacing="5px">
+	<vbox hflex="4" vflex="true">
 	<hlayout sclass="button-container">
 		<button mold="bs" sclass="btn-sm btn-info" label="Agregar" iconSclass="z-icon-plus-circle"
 			width="150px" onClick='pop_tc.open(self, "after_start")'></button>
 		<separator orient="vertical" bar="true"></separator>
-		<field value="Cotización Dólar Vigente" />
+		<field value="Cotización Vigente" />
 		<doublebox readonly="true" value="@load(vm.tipoCambioCompra)"
 			style="font-weight:bold;text-align:right" format="###,###,###.00"></doublebox>
-		<label value="Gs. a la compra"></label>
+		<label value="compra"></label>
 		<space></space>
 		<doublebox readonly="true" value="@load(vm.tipoCambioVenta)"
 			style="font-weight:bold;text-align:right" format="###,###,###.00"></doublebox>
-		<label value="Gs. a la venta"></label>
+		<label value="venta"></label>
 		<space></space>
-		<a label=" Link Cotización de la S.E.T." onClick='pop_set.open(self, "after_start")'
+		<a label=" Link Cotización S.E.T." onClick='pop_set.open(self, "after_start")'
 			iconSclass="z-icon-globe"></a>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-info" label=" Especificaciones" iconSclass="z-icon-file-text" 
+			hflex="true"/>
 	</hlayout>
-	<div height="5px"></div>
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="SIN REGISTROS.."
 		model="@load(vm.cotizaciones)">
@@ -74,6 +78,81 @@
 			<listfooter label="ítems"></listfooter>
 		</listfoot>
 	</listbox>
+	</vbox>
+	<vbox hflex="2" vflex="true">
+		<hlayout sclass="button-container">
+			<button mold="bs" upload="true, accept=.csv"
+				onUpload="@command('uploadFileCotizaciones', file=event.media)"
+				hflex="true" height="30px" iconSclass="z-icon-upload"
+				label=" Importar Archivo" style="background:#164D64"
+				sclass="btn-warning btn-sm" 
+				disabled="@load(vm.desde eq null or vm.hasta eq null)" />
+			<button mold="bs" sclass="btn-sm btn-info" label="Actualizar Movimientos" iconSclass="z-icon-refresh"
+				hflex="true" onClick="@command('actualizarMovimientos')"
+				disabled="@load(vm.desde eq null or vm.hasta eq null)" />
+		</hlayout>
+		<listbox sclass="small-list" vflex="true" checkmark="true">
+			<auxhead>
+				<auxheader label="Rango de fecha" colspan="2"></auxheader>
+			</auxhead>
+			<listhead>
+				<listheader width="40px" align="center"></listheader>
+				<listheader>
+					<hbox hflex="true">
+						<datebox hflex="true" placeholder="Desde.."
+							value="@bind(vm.desde)"></datebox>
+						<div width="5px"></div>
+						<datebox hflex="true" placeholder="Hasta.."
+							value="@bind(vm.hasta)"></datebox>
+					</hbox>
+				</listheader>
+			</listhead>
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<hlayout>
+						<label>GASTOS</label>
+					</hlayout>
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<hlayout>
+						<label>COMPRAS LOCALES</label>
+					</hlayout>
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<hlayout>
+						<label>VENTAS</label>
+					</hlayout>
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<hlayout>
+						<label>NOTAS DE CRÉDITO - COMPRA</label>
+					</hlayout>
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell></listcell>
+				<listcell>
+					<hlayout>
+						<label>NOTAS DE CRÉDITO - VENTA</label>
+					</hlayout>
+				</listcell>
+			</listitem>
+			<listfoot>
+				<listfooter label="ítems"></listfooter>
+			</listfoot>
+		</listbox>
+	</vbox>
+	</hbox>
 	<popup id="pop_set" sclass="rounded">
 		<iframe height="600px" width="1000px"
 			src="https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos"></iframe>

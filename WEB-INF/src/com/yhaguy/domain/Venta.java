@@ -573,6 +573,17 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * recalcula los costos segun cotizacion..
+	 */
+	public void recalcularCotizacion() {
+		for (VentaDetalle item : this.detalles) {
+			item.setDescuentoUnitarioGs(item.getDescuentoUnitarioDs() * this.tipoCambio);
+			item.setPrecioGs(item.getPrecioVentaFinalDs() * this.tipoCambio);
+		}
+		this.totalImporteGs = this.totalImporteDs * this.tipoCambio;
+	}
+	
+	/**
 	 * @return la descripcion del tipo de movimiento..
 	 */
 	public String getDescripcionTipoMovimiento(){

@@ -124,7 +124,7 @@ public class NotaCreditoDTO extends DTO {
 		}
 		return null;
 	}
-	
+		
 	/**
 	 * @return el total del iva..
 	 */

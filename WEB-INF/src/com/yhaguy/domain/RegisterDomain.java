@@ -3041,6 +3041,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las ventas dolares segun fecha 
+	 */
+	public List<Venta> getVentasDolares(Date desde, Date hasta) throws Exception {
+		String query = "select v from Venta v where v.dbEstado != 'D' "
+				+ " and v.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
+				+ " and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
+				+ " and v.fecha between ? and ?";
+		query += " order by v.numero, v.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return las ventas segun fecha
 	 */
 	public List<Venta> getVentas(Date desde, Date hasta, long idCliente, long idSucursal) throws Exception {
@@ -9499,6 +9522,7 @@ public class RegisterDomain extends Register {
 	 * @return la ultima cotizacion segun fecha..
 	 */
 	public double getTipoCambioVenta(Date fecha) throws Exception {
+		fecha = Utiles.agregarDias(fecha, -1);
 		String desde = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 00:00:00";
 		String query = "select t.id, t.venta from TipoCambio t where (t.fecha = '" + desde + "')";
 		List<Object[]> list = this.hql(query);
@@ -9509,6 +9533,7 @@ public class RegisterDomain extends Register {
 	 * @return la ultima cotizacion..
 	 */
 	public double getTipoCambioCompra(Date fecha) throws Exception {
+		fecha = Utiles.agregarDias(fecha, -1);
 		String desde = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 00:00:00";
 		String query = "select t.id, t.compra from TipoCambio t where (t.fecha = '" + desde + "')";
 		List<Object[]> list = this.hql(query);
@@ -10953,6 +10978,17 @@ public class RegisterDomain extends Register {
 		String query = "select t from TipoCambio t where cast (t.fecha as string) like '%" + fecha + "%'"
 				+ " order by t.fecha desc";
 		return this.hqlLimit(query, 200);
+	}
+	
+	/**
+	 * @return las cotizaciones..
+	 */
+	public List<TipoCambio> getCotizaciones(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select t from TipoCambio t where " + " (t.fecha >= '" + desde_ + "' and t.fecha <= '" + hasta_
+				+ "')";
+		return this.hql(query);
 	}
 	
 	/**
