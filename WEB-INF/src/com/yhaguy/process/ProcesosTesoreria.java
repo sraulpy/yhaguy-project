@@ -1396,6 +1396,28 @@ public class ProcesosTesoreria {
 		}		
 	}
 	
+	/**
+	 * actualiza las cotizaciones de ventas
+	 * [0]: fecha
+	 * [1]: numero
+	 * [2]: concepto
+	 * [3]: cotizacion
+	 */
+	public static List<String[]> actualizarCotizacionesVentas(Date desde, Date hasta) throws Exception {
+		List<String[]> out = new ArrayList<String[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Venta> ventas = rr.getVentasDolares(desde, hasta);
+		for (Venta venta : ventas) {
+			Double tc = rr.getTipoCambioCompra(venta.getFecha());
+			venta.setTipoCambio(tc);
+			venta.recalcularCotizacion();
+			rr.saveObject(venta, venta.getUsuarioMod());
+			out.add(new String[] { Utiles.getDateToString(venta.getFecha(), Utiles.DD_MM_YYYY), venta.getNumero(),
+					venta.getDescripcionTipoMovimiento(), Utiles.getNumberFormat(venta.getTipoCambio()) });
+		}
+		return out;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
