@@ -113,22 +113,21 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	public void actualizarMovimientos() throws Exception {
 		switch (this.selectedItem) {
 		case VENTAS:
-			ProcesosTesoreria.actualizarCotizacionesVentas(this.desde, this.hasta);
+			this.actualizados = ProcesosTesoreria.actualizarCotizacionesVentas(this.desde, this.hasta);
 			break;
 		case COMPRAS:
-			ProcesosTesoreria.actualizarCotizacionesCompras(this.desde, this.hasta);
+			this.actualizados = ProcesosTesoreria.actualizarCotizacionesCompras(this.desde, this.hasta);
 			break;
 		case GASTOS:
-			ProcesosTesoreria.actualizarCotizacionesGastos(this.desde, this.hasta);
+			this.actualizados = ProcesosTesoreria.actualizarCotizacionesGastos(this.desde, this.hasta);
 			break;
 		case NOTASCREDITO_COMPRA:
-			ProcesosTesoreria.actualizarCotizacionesNotasCreditoCompra(this.desde, this.hasta);
+			this.actualizados = ProcesosTesoreria.actualizarCotizacionesNotasCreditoCompra(this.desde, this.hasta);
 			break;
 		case NOTASCREDITO_VENTA:
-			ProcesosTesoreria.actualizarCotizacionesNotasCreditoVenta(this.desde, this.hasta);
+			this.actualizados = ProcesosTesoreria.actualizarCotizacionesNotasCreditoVenta(this.desde, this.hasta);
 			break;
 		}
-		this.actualizados = ProcesosTesoreria.actualizarCotizacionesGastos(this.desde, this.hasta);
 		this.win = (Window) Executions.createComponents(LIST_ACTUALIZADOS, this.mainComponent, null);
 		this.win.doModal();
 	}
