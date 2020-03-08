@@ -102,7 +102,7 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("actualizados")
 	public void actualizarMovimientos() throws Exception {
-		this.actualizados = ProcesosTesoreria.actualizarCotizacionesVentas(this.desde, this.hasta);
+		this.actualizados = ProcesosTesoreria.actualizarCotizacionesCompras(this.desde, this.hasta);
 		this.win = (Window) Executions.createComponents(LIST_ACTUALIZADOS, this.mainComponent, null);
 		this.win.doModal();
 	}
@@ -128,7 +128,7 @@ public class CotizacionesViewModel extends SimpleViewModel {
 			Tipo set = rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_CAMBIO_SET);
 			String[][] cab = { { "Empresa", CSV.STRING } };
 			String[][] det = { { "FECHA", CSV.STRING }, { "COMPRA", CSV.STRING }, { "VENTA", CSV.STRING } };	
-			CSV csv = new CSV(cab, det, PATH + "cotizaciones_" + Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY) + ".csv", ',');
+			CSV csv = new CSV(cab, det, PATH + "cotizaciones_" + Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY) + ".csv", ';');
 			csv.start();
 			int size = 0;
 			while (csv.hashNext()) {
