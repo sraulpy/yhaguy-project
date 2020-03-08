@@ -3085,6 +3085,29 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+
+	/**
+	 * @return los gastos dolares segun fecha 
+	 */
+	public List<Gasto> getGastosDolares(Date desde, Date hasta) throws Exception {
+		String query = "select g from Gasto g where g.dbEstado != 'D' "
+				+ " and g.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
+				+ " and (g.tipoMovimiento.sigla = ? or g.tipoMovimiento.sigla = ?)"
+				+ " and g.fecha between ? and ?";
+		query += " order by g.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO);
+		listParams.add(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
 	
 	/**
 	 * @return las ventas segun fecha
