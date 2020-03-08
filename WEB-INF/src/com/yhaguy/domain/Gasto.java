@@ -12,6 +12,7 @@ import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class Gasto extends Domain {
@@ -76,6 +77,23 @@ public class Gasto extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	/**
+	 * recalcula los costos segun cotizacion..
+	 */
+	public void recalcularCotizacion() {
+		for (GastoDetalle item : this.detalles) {
+			item.setMontoGs(item.getMontoDs() * this.tipoCambio);
+			if (item.isIva10()) {
+				item.setMontoIva(Utiles.getIVA(item.getMontoGs(), 10));
+			} else if (item.isIva5()) {
+				item.setMontoIva(Utiles.getIVA(item.getMontoGs(), 5));
+			} else {
+				item.setMontoIva(0.0);
+			}
+		}
+		this.importeGs = this.importeDs * this.tipoCambio;
 	}
 	
 	/**

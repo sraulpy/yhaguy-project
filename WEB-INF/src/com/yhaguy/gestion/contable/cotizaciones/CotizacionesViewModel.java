@@ -102,7 +102,7 @@ public class CotizacionesViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("actualizados")
 	public void actualizarMovimientos() throws Exception {
-		this.actualizados = ProcesosTesoreria.actualizarCotizacionesCompras(this.desde, this.hasta);
+		this.actualizados = ProcesosTesoreria.actualizarCotizacionesGastos(this.desde, this.hasta);
 		this.win = (Window) Executions.createComponents(LIST_ACTUALIZADOS, this.mainComponent, null);
 		this.win.doModal();
 	}
