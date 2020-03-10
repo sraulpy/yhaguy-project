@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClientesVendedor" pageWidth="806" pageHeight="963" columnWidth="766" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.9965000000000037"/>
-	<property name="ireport.x" value="408"/>
+	<property name="ireport.x" value="401"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -63,7 +63,7 @@
 	<columnHeader>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Transparent" x="-1" y="1" width="66" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="4425313c-f8ed-4905-9f32-35f5f8a68740"/>
+				<reportElement mode="Transparent" x="-1" y="1" width="65" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="4425313c-f8ed-4905-9f32-35f5f8a68740"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -71,7 +71,7 @@
 				<text><![CDATA[Ruc]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="65" y="1" width="221" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="23574b5c-664d-422b-9e31-e784555a6029"/>
+				<reportElement mode="Transparent" x="64" y="1" width="221" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="23574b5c-664d-422b-9e31-e784555a6029"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -79,7 +79,7 @@
 				<text><![CDATA[Razón Social]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="498" y="1" width="66" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="aad67cb9-ba86-4a0c-ab15-689f6775cf6e"/>
+				<reportElement mode="Transparent" x="497" y="1" width="67" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="aad67cb9-ba86-4a0c-ab15-689f6775cf6e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -87,7 +87,7 @@
 				<text><![CDATA[Teléfono]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="286" y="1" width="212" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="39d8d4cc-1775-4fe6-8a10-7fc6e8e4eebc"/>
+				<reportElement mode="Transparent" x="285" y="1" width="212" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="39d8d4cc-1775-4fe6-8a10-7fc6e8e4eebc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
