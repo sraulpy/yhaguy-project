@@ -8771,10 +8771,19 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los clientes segun vendedor..
+	 * [0]:cliente.ruc
+	 * [1]:cliente.razonsocial
+	 * [2]:cliente.direccion
+	 * [3]:cliente.telefono
+	 * [4]:cliente.vendedor
+	 * [5]:cliente.rubro
+	 * [6]:cliente.limiteCredito
 	 */
 	public List<Object[]> getClientesPorVendedor(long idVendedor) throws Exception {
-		String query = "select e.ruc, e.razonSocial, e.direccion_, e.telefono_, e.vendedor.empresa.razonSocial from Empresa e where e.vendedor.id = " + idVendedor
-				+ " order by e.razonSocial";
+		String query = "select e.ruc, e.razonSocial, e.direccion_, e.telefono_, e.vendedor.empresa.razonSocial,"
+				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id)"
+				+ " from Empresa e where e.vendedor.id = "
+				+ idVendedor + " order by e.razonSocial";
 		return this.hql(query);
 	}
 	

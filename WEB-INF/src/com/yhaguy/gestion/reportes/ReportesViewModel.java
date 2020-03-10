@@ -4168,14 +4168,10 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void clientesPorVendedor(boolean mobile, String codReporte) {
 			try {
 				Funcionario vendedor = filtro.getVendedor();
-				//Cliente cliente = filtro.getCliente();
 				Object[] formato = filtro.getFormato();
 				
 				String vendedor_ = vendedor == null ? "TODOS.." : vendedor.getRazonSocial();
 				long idVendedor = vendedor == null ? 0 : vendedor.getId();
-				
-				//String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
-				//long idCliente = cliente == null ? 0 : cliente.getId();
 				
 				if (vendedor == null) {
 					Clients.showNotification("Debe seleccionar un vendedor..", 
@@ -26429,7 +26425,9 @@ class ClientesVendedorDataSource implements JRDataSource {
 			String razonSocial = (String) dato[1];
 			String direccion = (String) dato[2];
 			String telefono = (String) dato[3];
-			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono));
+			String rubro = (String) dato[5];
+			Double limiteCredito = (Double) dato[6];
+			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro, Utiles.getNumberFormat(limiteCredito)));
 		}
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClientesVendedor" pageWidth="612" pageHeight="963" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClientesVendedor" pageWidth="763" pageHeight="963" columnWidth="723" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.9965000000000037"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="976"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -34,6 +34,8 @@
 		<field name="razonSocial" class="java.lang.String"/>
 		<field name="ruc" class="java.lang.String"/>
 		<field name="telefono" class="java.lang.String"/>
+		<field name="rubro" class="java.lang.String"/>
+		<field name="limiteCredito" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="Empresa" class="java.lang.String"/>
 	<parameter name="Logo" class="java.lang.String"/>
@@ -99,7 +101,9 @@
 			</textField>
 			<textField>
 				<reportElement x="67" y="44" width="304" height="20" uuid="86b06d81-6f67-4ced-90ab-7a2af54db783"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{Vendedor}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -134,7 +138,7 @@
 				<text><![CDATA[Teléfono]]></text>
 			</staticText>
 			<line>
-				<reportElement mode="Opaque" x="0" y="22" width="569" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="bf81f482-2358-4b20-b64e-9e14e09820cf"/>
+				<reportElement mode="Opaque" x="0" y="22" width="723" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="bf81f482-2358-4b20-b64e-9e14e09820cf"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
@@ -147,17 +151,33 @@
 				</textElement>
 				<text><![CDATA[Dirección]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="567" y="1" width="77" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="dcb04008-40e2-4960-aaf5-f5d0b7167ca9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Rubro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="643" y="1" width="80" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="a59e60ad-6490-441f-9b66-9bd1bd7f4129"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Línea Cred.]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="28" splitType="Stretch">
 			<componentElement>
-				<reportElement x="1" y="0" width="568" height="18" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
+				<reportElement x="1" y="0" width="722" height="18" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
-					<datasetRun subDataset="dataset 1" uuid="0483e19f-947d-4510-bb8a-3b41d91c9dd8">
+					<datasetRun subDataset="dataset 1" uuid="848782fc-6712-4d5a-9af7-0941d791ade7">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Clientes})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="18" width="568">
+					<jr:listContents height="18" width="722">
 						<textField>
 							<reportElement x="0" y="3" width="64" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
 							<textElement>
@@ -173,7 +193,7 @@
 							<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="497" y="3" width="67" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
+							<reportElement x="497" y="3" width="69" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
 							<textElement textAlignment="Right">
 								<font fontName="Ubuntu Condensed"/>
 							</textElement>
@@ -185,6 +205,20 @@
 								<font fontName="Ubuntu Condensed"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="567" y="3" width="76" height="12" uuid="81a6811b-7504-4323-94c0-64d4770c096e"/>
+							<textElement textAlignment="Right">
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{rubro}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="642" y="3" width="80" height="12" uuid="14a81bdf-f54b-42b7-be3a-429307272e31"/>
+							<textElement textAlignment="Right">
+								<font fontName="Ubuntu Condensed"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{limiteCredito}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
 				</jr:list>
