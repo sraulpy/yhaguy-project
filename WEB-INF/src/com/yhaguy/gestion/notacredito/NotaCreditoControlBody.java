@@ -743,7 +743,7 @@ public class NotaCreditoControlBody extends BodyApp {
 			out.setGasto(desde);
 		}  else if(importacion) {
 			out.setImportacion(desde);
-			out.setDeposito(this.getDepositoByFacturaCompra(desde.getId()));
+			out.setDeposito(this.getDepositoByFacturaImportacion(desde.getId()));
 			out.setTipoIva(new MyPair(this.getDtoUtil().getTipoIvaExento().getId()));
 		}
 		return out;
@@ -768,6 +768,15 @@ public class NotaCreditoControlBody extends BodyApp {
 	private MyPair getDepositoByFacturaCompra(long idCompra) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Deposito dep = rr.getDepositoByFacturaCompraLocal(idCompra);		
+		return new MyPair(dep.getId(), dep.getDescripcion());
+	}
+	
+	/**
+	 * @return el deposito a partir del id de la compra..
+	 */
+	private MyPair getDepositoByFacturaImportacion(long idCompra) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Deposito dep = rr.getDepositoByFacturaImportacion(idCompra);		
 		return new MyPair(dep.getId(), dep.getDescripcion());
 	}
 	
