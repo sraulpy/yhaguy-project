@@ -74,10 +74,6 @@
 								<textbox value="@load(vm.dtoEmp.ciudad.sigla)" readonly="true" hflex="true" />
 							</row>
 							<row>
-								<field value="Zona:" />
-								<textbox readonly="true" hflex="true" />
-							</row>
-							<row>
 								<field value="Telefono:" />
 								<textbox value="@bind(vm.dtoEmp.telefono_)" hflex="true" />
 							</row>
