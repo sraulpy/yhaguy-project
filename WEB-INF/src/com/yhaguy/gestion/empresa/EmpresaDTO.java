@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.coreweb.domain.Tipo;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -52,6 +53,7 @@ public class EmpresaDTO extends DTO {
 	
 	private MyArray rubro;
 	private EmpresaCartera cartera;
+	private Tipo ciudad;
 
 	private int tipoEmpresa; // 1: Proveedor, 2:Cliente, 3:Cliente/Proveedor
 
@@ -346,5 +348,13 @@ public class EmpresaDTO extends DTO {
 
 	public void setCartera(EmpresaCartera cartera) {
 		this.cartera = cartera;
+	}
+
+	public Tipo getCiudad() {
+		return ciudad;
+	}
+
+	public void setCiudad(Tipo ciudad) {
+		this.ciudad = ciudad;
 	}
 }

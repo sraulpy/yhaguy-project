@@ -58,6 +58,7 @@ public class AssemblerEmpresa extends Assembler {
 		this.hijoDtoToHijoDomain(dto, domain, "ctaCteEmpresa", new AssemblerCtaCteEmpresa(), true);
 		domain.setVendedor(dto.getVendedor());
 		domain.setCartera(dto.getCartera());
+		domain.setCiudad(dto.getCiudad());
 		
 		return domain;
 	}
@@ -83,6 +84,7 @@ public class AssemblerEmpresa extends Assembler {
 		dto.setPais(this.tipoToMyPair(domain.getPais()));
 		dto.setVendedor(domain.getVendedor());
 		dto.setCartera(domain.getCartera());
+		dto.setCiudad(domain.getCiudad());
 		
 		this.listaDomainToListaMyPair(domain, dto, "monedas");
 		this.listaDomainToListaMyPair(domain, dto, "rubroEmpresas");

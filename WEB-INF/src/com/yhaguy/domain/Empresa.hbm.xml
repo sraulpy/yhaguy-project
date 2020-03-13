@@ -62,6 +62,9 @@
 
 		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
 			column="idMoneda" lazy="false" />
+			
+		<many-to-one name="ciudad" class="com.coreweb.domain.Tipo"
+			column="idCiudad" lazy="false" />
 
 		<many-to-one name="ctaCteEmpresa" class="com.yhaguy.domain.CtaCteEmpresa"
 			column="idCtaCteEmpresa" lazy="false" cascade="none" />

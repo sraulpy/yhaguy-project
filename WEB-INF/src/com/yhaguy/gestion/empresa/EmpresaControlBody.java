@@ -624,6 +624,14 @@ public abstract class EmpresaControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getVendedores();
 	}
+	
+	/**
+	 * @return las ciudades..
+	 */
+	public List<Tipo> getCiudades() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos("CIUDADES", "descripcion");
+	}
 
 	public CtaCteEmpresaMovimientoDTO getSelectedMov() {
 		return selectedMov;

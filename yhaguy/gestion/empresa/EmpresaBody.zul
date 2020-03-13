@@ -58,6 +58,26 @@
 								<textbox value="@bind(vm.dtoEmp.direccion_)" hflex="true" />
 							</row>
 							<row>
+								<field value="Ciudad:" />
+								<combobox hflex="true"
+									model="@load(vm.ciudades)"
+									value="@load(vm.dtoEmp.ciudad.descripcion)"
+									selectedItem="@bind(vm.dtoEmp.ciudad)"
+									instant="true">
+									<template name="model">
+										<comboitem label="@load(each.descripcion)"></comboitem>
+									</template>
+								</combobox>
+							</row>
+							<row>
+								<field value="Departamento:" />
+								<textbox value="@load(vm.dtoEmp.ciudad.sigla)" readonly="true" hflex="true" />
+							</row>
+							<row>
+								<field value="Zona:" />
+								<textbox readonly="true" hflex="true" />
+							</row>
+							<row>
 								<field value="Telefono:" />
 								<textbox value="@bind(vm.dtoEmp.telefono_)" hflex="true" />
 							</row>

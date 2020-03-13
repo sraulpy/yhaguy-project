@@ -43,6 +43,7 @@ public class ProcesosVentas {
 	static final String SRC_MIGRACION_VTAS_ANULADOS = "./WEB-INF/docs/migracion/central/MIGRACION_VENTAS_ANULADOS.csv";
 	static final String SRC_CLIENTE_VENDEDOR = "./WEB-INF/docs/migracion/central/CLIENTE_VENDEDOR.csv";
 	static final String SRC_VENTA = "./WEB-INF/docs/procesos/VENTA.csv";
+	static final String SRC_CIUDADES = "./WEB-INF/docs/procesos/CIUDADES.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -480,6 +481,33 @@ public class ProcesosVentas {
 		System.out.println("PEDIDO GENERADO: " + vta.getNumero());
 	}
 	
+	/**
+	 * pobla las ciudades..
+	 */
+	public static void poblarCiudades(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CIUDAD", CSV.STRING }, { "DEPARTAMENTO", CSV.STRING } };
+
+		TipoTipo tt = new TipoTipo();
+		tt.setDescripcion("CIUDADES");
+		rr.saveObject(tt, "sys");
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String ciudad = csv.getDetalleString("CIUDAD");
+			String depmto = csv.getDetalleString("DEPARTAMENTO");
+			Tipo tp = new Tipo();
+			tp.setDescripcion(ciudad);
+			tp.setSigla(depmto);
+			tp.setTipoTipo(tt);
+			rr.saveObject(tp, "sys");
+			System.out.println(tp.getDescripcion());
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosVentas.setNumeroPlanillaCaja(201, 212);
@@ -491,7 +519,8 @@ public class ProcesosVentas {
 			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
 			//ProcesosVentas.migrarVentas();
 			//ProcesosVentas.setClienteVendedor();
-			ProcesosVentas.generarVentas(SRC_VENTA);
+			//ProcesosVentas.generarVentas(SRC_VENTA);
+			ProcesosVentas.poblarCiudades(SRC_CIUDADES);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
