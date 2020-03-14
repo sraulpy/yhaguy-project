@@ -8,14 +8,17 @@ public class ClienteBean {
 	private String telefono;
 	private String rubro;
 	private String limiteCredito;
+	private String ciudad;
 	
-	public ClienteBean(String ruc, String razonSocial, String direccion, String telefono, String rubro, String limiteCredito) {
+	public ClienteBean(String ruc, String razonSocial, String direccion, String telefono, String rubro,
+			String limiteCredito, String ciudad) {
 		this.ruc = ruc;
 		this.razonSocial = razonSocial;
 		this.direccion = direccion;
 		this.telefono = telefono;
 		this.rubro = rubro;
 		this.limiteCredito = limiteCredito;
+		this.ciudad = ciudad;
 	}
 
 	public String getRuc() {
@@ -64,5 +67,13 @@ public class ClienteBean {
 
 	public void setLimiteCredito(String limiteCredito) {
 		this.limiteCredito = limiteCredito;
+	}
+
+	public String getCiudad() {
+		return ciudad;
+	}
+
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
 	}
 }

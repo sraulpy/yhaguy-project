@@ -206,6 +206,19 @@ public class ClienteControlBody extends EmpresaControlBody {
 	}
 	
 	private boolean validarFormulario() {
+		this.mensajeError = "";
+		if (this.getDtoEmp().getRazonSocial().trim().isEmpty()) {
+			this.mensajeError += " Razon Social no puede quedar en blanco..";
+			return false;
+		}
+		if (this.getDtoEmp().getCiudad() == null) {
+			this.mensajeError += " Debe asignar la ciudad..";
+			return false;
+		}
+		if (this.getDtoEmp().getVendedor() == null) {
+			this.mensajeError += " Debe asignar un vendedor..";
+			return false;
+		}
 		return true;
 	}
 	

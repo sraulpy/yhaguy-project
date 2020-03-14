@@ -26427,7 +26427,9 @@ class ClientesVendedorDataSource implements JRDataSource {
 			String telefono = (String) dato[3];
 			String rubro = (String) dato[5];
 			Double limiteCredito = (Double) dato[6];
-			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro, Utiles.getNumberFormat(limiteCredito)));
+			String ciudad = (String) dato[7];
+			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
+					Utiles.getNumberFormat(limiteCredito), ciudad));
 		}
 	}
 }

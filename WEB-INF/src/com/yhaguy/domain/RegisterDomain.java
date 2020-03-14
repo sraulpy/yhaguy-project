@@ -8778,10 +8778,12 @@ public class RegisterDomain extends Register {
 	 * [4]:cliente.vendedor
 	 * [5]:cliente.rubro
 	 * [6]:cliente.limiteCredito
+	 * [7]:cliente.ciudad
 	 */
 	public List<Object[]> getClientesPorVendedor(long idVendedor) throws Exception {
 		String query = "select e.ruc, e.razonSocial, e.direccion_, e.telefono_, e.vendedor.empresa.razonSocial,"
-				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id)"
+				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id),"
+				+ " case when e.ciudad IS NULL then 'SIN CIUDAD' else e.ciudad.descripcion end"	
 				+ " from Empresa e where e.vendedor.id = "
 				+ idVendedor + " order by e.razonSocial";
 		return this.hql(query);
@@ -11377,13 +11379,9 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			Date desde = Utiles.getFecha("20-01-2020 00:00:00");
-			Date hasta = Utiles.getFecha("31-01-2020 23:00:00");
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, 51, true);
-			for (NotaCredito notaCredito : notasCredito) {
-				System.out.println(notaCredito.getNumero());
-			}
+			List<Object[]> list = rr.getClientesPorVendedor(17);
+			System.out.println(list.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
