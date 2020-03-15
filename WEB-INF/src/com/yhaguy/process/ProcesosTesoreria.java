@@ -1509,6 +1509,30 @@ public class ProcesosTesoreria {
 		return out;
 	}
 	
+	/**
+	 * verifica la cotizacion de gastos en ctacte..
+	 */
+	public static void verificarCotizacionGastos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Gasto> gastos = rr.getGastosDolares(Utiles.getFechaInicioOperaciones(), new Date());
+		for (Gasto gasto : gastos) {
+			if (!gasto.isGastoImportacion()) {
+				CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(gasto.getId(),
+						gasto.getTipoMovimiento().getSigla());
+				if (ctacte != null) {
+					if (ctacte.getTipoCambio() <= 0) {
+						double tc = rr.getTipoCambioVenta(gasto.getFecha(), -1);
+						ctacte.setTipoCambio(tc);
+						gasto.setTipoCambio(tc);
+						rr.saveObject(ctacte, "sys");
+						rr.saveObject(gasto, "sys");
+						System.out.println(gasto.getNumeroFactura() + " - " + gasto.getTipoCambio());
+					}
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1551,8 +1575,9 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosNotaCreditoExtracto();
 			//ProcesosTesoreria.depurarSaldosPorCaja(2362);
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
-			ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
+			//ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
 			//ProcesosTesoreria.verificarBancoDepositos();
+			ProcesosTesoreria.verificarCotizacionGastos();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

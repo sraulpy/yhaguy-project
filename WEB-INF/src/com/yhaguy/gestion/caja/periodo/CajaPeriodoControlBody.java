@@ -1200,7 +1200,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	public void showFormGastos(String modo) throws Exception {
 
 		MyArray moneda = this.getDtoUtil().getMonedaGuaraniConSimbolo();
-		double tipoCambio = this.getDtoUtil().getCambioVentaBCP(moneda);
+		double tipoCambio = 0.0;
 
 		if (modo.equals(WindowPopup.NUEVO)) {
 			this.dtoGasto = new GastoDTO();
@@ -1236,6 +1236,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Agrega y guarda el gasto..
 	 */
 	private void addGasto() throws Exception {
+		if (!this.dtoGasto.isMonedaLocal()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			double tc = rr.getTipoCambioVenta(this.dtoGasto.getFecha(), -1);
+			this.dtoGasto.setTipoCambio(tc);
+		}
 		this.dto.getGastos().add(this.dtoGasto);
 		if (this.dtoGasto.isAutoFactura())
 			this.dtoGasto.setNumeroFactura(this.getNumeroAutoFactura());
@@ -2557,7 +2562,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 	}
 
 	public boolean isAbrirCajaDisabled() throws Exception {
-		return this.operacionHabilitada("ReabrirCajaPlanillaABM") == false;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return !rr.isOperacionHabilitada(this.getLoginNombre(), "ReabrirCajaPlanillaABM");
 	}
 
 	@DependsOn("selectedItem")

@@ -268,7 +268,8 @@
 										hflex="true"/>
 								</vlayout>
 								<vlayout spacing="0">
-									<field value="Moneda" />
+									<field value="Moneda / T.cambio" />
+									<hbox hflex="true">
 									<combobox
 										value="@load(vm.dtoGasto.moneda.pos1)" readonly="true" 
 										selectedItem="@bind(vm.dtoGasto.moneda)" instant="true"
@@ -278,6 +279,8 @@
 											<comboitem label="@load(each.pos1)"></comboitem>
 										</template>
 									</combobox>
+									<guaranibox value="@bind(vm.dtoGasto.tipoCambio)" />
+									</hbox>
 								</vlayout>
 								<vlayout spacing="0">
 									<field value="Estado"/>

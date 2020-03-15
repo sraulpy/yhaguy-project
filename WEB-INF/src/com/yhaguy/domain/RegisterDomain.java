@@ -3090,15 +3090,18 @@ public class RegisterDomain extends Register {
 	 * @return los gastos dolares segun fecha 
 	 */
 	public List<Gasto> getGastosDolares(Date desde, Date hasta) throws Exception {
-		String query = "select g from Gasto g where g.dbEstado != 'D' "
-				+ " and g.moneda.sigla = '" + Configuracion.SIGLA_MONEDA_DOLAR + "'"
-				+ " and (g.tipoMovimiento.sigla = ? or g.tipoMovimiento.sigla = ?)"
+		String query = "select g from Gasto g where g.dbEstado != 'D' " + " and g.moneda.sigla = '"
+				+ Configuracion.SIGLA_MONEDA_DOLAR + "'"
+				+ " and (g.tipoMovimiento.sigla = ? or g.tipoMovimiento.sigla = ?"
+				+ " or g.tipoMovimiento.sigla = ? or g.tipoMovimiento.sigla = ?)"
 				+ " and g.fecha between ? and ?";
 		query += " order by g.fecha";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO);
 		listParams.add(Configuracion.SIGLA_TM_FAC_GASTO_CREDITO);
+		listParams.add(Configuracion.SIGLA_TM_OTROS_COMPROBANTES);
+		listParams.add(Configuracion.SIGLA_TM_OTROS_PAGOS);
 		listParams.add(desde);
 		listParams.add(hasta);
 
