@@ -23,6 +23,8 @@
 			<listheader label="Banco Destino"></listheader>
 			<listheader label="Número Operación"></listheader>
 			<listheader label="Importe" align="right"></listheader>
+			<listheader label="Moneda" align="right"></listheader>
+			<listheader label="T.Cambio" align="right"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader>
@@ -48,6 +50,8 @@
 					value="@bind(vm.filter_numero)" instant="true"></textbox>
 			</auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
@@ -56,6 +60,8 @@
 				<listcell label="@load(each.destino.banco.descripcion.toUpperCase())"></listcell>
 				<listcell label="@load(each.numero)"></listcell>
 				<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.moneda.sigla)"></listcell>
+				<listcell label="@load(each.tipoCambio) @converter(vm.cnv.monedaLocal)"></listcell>
 			</listitem>
 		</template>
 		<listfoot>
@@ -82,7 +88,8 @@
 				<row>
 					<field value="Fecha:" />
 					<datebox hflex="true"
-						value="@bind(vm.nva_transferencia.fecha)"></datebox>
+						value="@bind(vm.nva_transferencia.fecha)"
+						onChange="@command('verificarCotizacion')"></datebox>
 				</row>
 				<row>
 					<field value="Banco Origen:" />
@@ -116,11 +123,17 @@
 					<combobox hflex="true"
 						value="@load(vm.nva_transferencia.moneda.descripcion.toUpperCase())"
 						model="@load(vm.monedas)"
-						selectedItem="@bind(vm.nva_transferencia.moneda)">
+						selectedItem="@bind(vm.nva_transferencia.moneda)"
+						onChange="@command('verificarCotizacion')">
 						<template name="model">
 							<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
 						</template>	
 					</combobox>
+				</row>
+				<row>
+					<field value="Tipo Cambio:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nva_transferencia.tipoCambio)" />
 				</row>
 				<row>
 					<field value="Importe:" />
@@ -185,6 +198,12 @@
 						value="@load(vm.selected_transferencia.moneda.descripcion.toUpperCase())"
 						readonly="true">
 					</textbox>
+				</row>
+				<row>
+					<field value="Importe:" />
+					<guaranibox hflex="true" 
+						value="@load(vm.nva_transferencia.importe)" 
+						readonly="true"/>
 				</row>
 				<row>
 					<field value="Importe:" />
