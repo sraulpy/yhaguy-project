@@ -13,6 +13,7 @@
 		<property name="fecha"/>
 		<property name="numero"/>
 		<property name="importe"/>
+		<property name="tipoCambio"/>
 			
 		<many-to-one name="origen" class="com.yhaguy.domain.BancoCta" 
 			column="id_origen" lazy="false"/>

@@ -3,6 +3,7 @@ package com.yhaguy.gestion.bancos.transferencias;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -59,6 +60,14 @@ public class BancoTransferenciasViewModel extends SimpleViewModel {
 		this.inicializarDatos();
 	}
 	
+	@Command
+	public void verificarCotizacion() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double tc = rr.getTipoCambioVenta(this.nva_transferencia.getFecha(), 0);
+		this.nva_transferencia.setTipoCambio(tc);
+		BindUtils.postNotifyChange(null, null, this.nva_transferencia, "tipoCambio");
+	}
+	
 	/**
 	 * @return true si los datos son validos..
 	 */
@@ -73,7 +82,7 @@ public class BancoTransferenciasViewModel extends SimpleViewModel {
 		if (this.nva_transferencia.getMoneda() == null) {
 			out = false;
 		}
-		if (this.nva_transferencia.getImporte() <= 500) {
+		if (this.nva_transferencia.getImporte() <= 001) {
 			out = false;
 		}
 		return out;

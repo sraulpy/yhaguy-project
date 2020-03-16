@@ -11,6 +11,7 @@ public class BancoTransferencia extends Domain {
 	private Date fecha;
 	private String numero;
 	private double importe;
+	private double tipoCambio;
 	
 	private BancoCta origen;
 	private BancoCta destino;
@@ -67,5 +68,13 @@ public class BancoTransferencia extends Domain {
 
 	public void setMoneda(Tipo moneda) {
 		this.moneda = moneda;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
 	}
 }
