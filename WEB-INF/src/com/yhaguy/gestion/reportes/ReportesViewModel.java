@@ -16833,7 +16833,7 @@ class LibroVentasDataSource implements JRDataSource {
 			String fecha = misc.dateToString(nd.getFecha(), "dd-MM-yy");
 			String concepto = "NOT-DEB";
 			String numero = nd.getNumero();
-			String razonSocial = nd.getCliente().getRazonSocial();
+			String razonSocial = nd.isAnulado() ? "ANULADO" : nd.getCliente().getRazonSocial();
 			String ruc = nd.getCliente().getRuc();
 			if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
 			double grav5 = 0.0;

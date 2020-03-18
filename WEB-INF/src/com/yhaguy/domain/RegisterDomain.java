@@ -2819,6 +2819,10 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getArticulos_(String codigoInterno,
 			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen)
 			throws Exception {
+		codigoInterno = codigoInterno.replace("'", ""); codigoOriginal = codigoOriginal.replace("'", "");
+		codigoProveedor = codigoProveedor.replace("'", ""); descripcion = descripcion.replace("'", "");
+		marca = marca.replace("'", ""); familia = familia.replace("'", "");
+		proveedor = proveedor.replace("'", ""); origen = origen.replace("'", "");
 		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
 				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion"
 				+ " from Articulo a"
@@ -10495,7 +10499,8 @@ public class RegisterDomain extends Register {
 	 */
 	public long getStockArticulo(long idArticulo) throws Exception {
 		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.id = " + idArticulo;
-		return (long) this.hql(query).get(0);
+		List<Long> out = this.hql(query);
+		return (long) out.size() > 0 ? out.get(0) : 0;
 	}
 	
 	/**
