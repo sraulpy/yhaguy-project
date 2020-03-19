@@ -10500,7 +10500,7 @@ public class RegisterDomain extends Register {
 	public long getStockArticulo(long idArticulo) throws Exception {
 		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.id = " + idArticulo;
 		List<Long> out = this.hql(query);
-		return (long) out.size() > 0 ? out.get(0) : 0;
+		return out.get(0) != null ? out.get(0) : 0;
 	}
 	
 	/**
