@@ -297,7 +297,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		
 		if (this.filterStock > 0) {
 			for (Object[] art : arts) {
-				long stock = rr.getStockArticulo((long) art[0]);
+				long stock = rr.getStockArticulo((long) art[0]);				
 				if (stock >= this.filterStock) {
 					arts_.add(art);
 				}
