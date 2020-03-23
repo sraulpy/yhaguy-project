@@ -13,13 +13,13 @@
 
 		<!-- ___________________ DATOS DE EMPRESA ___________________ -->
 
-		<tabpanel vflex="true" style="padding:15px">
+		<tabpanel vflex="true" style="padding:5px">
 			<hlayout valign="top">
-				<vlayout hflex="true" style="padding:20px">
+				<vlayout hflex="true" style="padding:5px">
 					<grid sclass="vgrid" width="800px">
 						<columns>
-							<column width="30%" />
-							<column width="70%" />
+							<column width="20%" />
+							<column width="80%" />
 						</columns>
 						<rows>
 							<row>
@@ -27,11 +27,12 @@
 								<textbox
 									value="@bind(vm.dtoEmp.razonSocial)" id="t1"
 									onChange="@command('copiarRazonSocial')" instant="true"
-									hflex="true" />
+									hflex="true" constraint="no empty"/>
 							</row>
 							<row>
 								<field value="Nom. Fantasía:" />
-								<textbox value="@bind(vm.dtoEmp.nombre)" id="copy" hflex="true" />
+								<textbox value="@bind(vm.dtoEmp.nombre)" id="copy" hflex="true" 
+									constraint="no empty"/>
 							</row>
 							<row>
 								<field value="Rubro:" />
@@ -63,7 +64,7 @@
 									model="@load(vm.ciudades)"
 									value="@load(vm.dtoEmp.ciudad.descripcion)"
 									selectedItem="@bind(vm.dtoEmp.ciudad)"
-									instant="true">
+									instant="true" constraint="no empty">
 									<template name="model">
 										<comboitem label="@load(each.descripcion)"></comboitem>
 									</template>
@@ -78,6 +79,11 @@
 								<textbox value="@bind(vm.dtoEmp.telefono_)" hflex="true" />
 							</row>
 							<row>
+								<field value="Correo:" />
+								<textbox value="@bind(vm.dtoEmp.correo_)" hflex="true" 
+									constraint="/.+@.+\.[a-z]+/: Debe ingresar un correo válido"/>
+							</row>
+							<row>
 								<field value="Observación:" />
 								<textbox rows="1"
 									value="@bind(vm.dtoEmp.observacion)" hflex="true" />
@@ -88,7 +94,7 @@
 									value="@bind(vm.dtoEmp.vendedor.razonSocial)" hflex="true" 
 									readonly="true" instant="true"
 									selectedItem="@bind(vm.dtoEmp.vendedor)"
-									model="@load(vm.vendedores)">
+									model="@load(vm.vendedores)" constraint="no empty">
 										<template name="model">
 											<comboitem label="@load(each.razonSocial)"></comboitem>
 										</template>
