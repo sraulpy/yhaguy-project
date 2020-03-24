@@ -2969,6 +2969,15 @@ public class RegisterDomain extends Register {
 		}
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return las transferencias pendientes..
+	 */
+	public List<Transferencia> getTransferenciasPendientes() throws Exception {
+		String query = "select t from Transferencia t where t.dbEstado != 'D' and t.numero like 'PNDTE-%' "
+				+ " order by t.numero";
+		return this.hql(query);
+	}
 
 	/**
 	 * @return las compras locales segun fecha de factura
