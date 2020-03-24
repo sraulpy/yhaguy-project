@@ -75,7 +75,7 @@ public class TareaTransferenciasPendientes {
 			tarea.setDescripcion(TAREA_NOTIFICAR_TRANSFERENCIA);
 
 			EnviarCorreo correo = new EnviarCorreo(tarea);
-			correo.sendMessage(destinatarios, COPIA_OCULTA, asunto, "Auditoria de Stock", "AuditoriaStock.pdf",
+			correo.sendMessage(destinatarios, COPIA_OCULTA, asunto, "Transferencias Pendientes", "TransferenciasPendientes.pdf",
 					directorioReportes + rep.getArchivoSalida());
 
 		} catch (Exception e) {
