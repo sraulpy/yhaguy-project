@@ -9497,7 +9497,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Object[]> data = new ArrayList<Object[]>();
-			List<BancoCheque> cheques = rr.getCheques_("", "", "", "", "", "", true, false, desde, hasta);			
+			List<BancoCheque> cheques = rr.getChequesVencimiento(desde, hasta);			
 			for (BancoCheque cheque : cheques) {
 				if (!cheque.isAnulado()) {
 					data.add(new Object[]{ 
