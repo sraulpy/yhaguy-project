@@ -14,5 +14,17 @@
 			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
 				placeholder="Hasta.." hflex="true" />
 		</row>
+		<row>
+			<field value="Moneda:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.monedas)"
+				selectedItem="@bind(vm.dato.filtro.moneda)"
+				value="@load(vm.dato.filtro.moneda.descripcion)">
+				<template name="model">
+					<comboitem
+						label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
 	</rows>
 </grid>

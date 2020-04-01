@@ -9491,13 +9491,19 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void chequesPropiosAvencer_(boolean mobile) throws Exception {
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			Tipo moneda = filtro.getMoneda();
+			
+			if (moneda.esNuevo()) {
+				Clients.showNotification("DEBE SELECCIONAR UNA MONEDA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
 			
 			if (desde == null) desde = new Date();
 			if (hasta == null) hasta = new Date();
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<Object[]> data = new ArrayList<Object[]>();
-			List<BancoCheque> cheques = rr.getChequesVencimiento(desde, hasta);			
+			List<BancoCheque> cheques = rr.getChequesVencimiento(desde, hasta, moneda.getSigla());			
 			for (BancoCheque cheque : cheques) {
 				if (!cheque.isAnulado()) {
 					data.add(new Object[]{ 

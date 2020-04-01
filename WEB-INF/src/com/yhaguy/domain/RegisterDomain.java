@@ -6069,11 +6069,13 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return los cheques segun parametros (fecha vencimiento)..
 	 */
-	public List<BancoCheque> getChequesVencimiento(Date desde, Date hasta) throws Exception {
+	public List<BancoCheque> getChequesVencimiento(Date desde, Date hasta, String siglaMoneda) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c from BancoCheque c where (c.fechaVencimiento >= '" + desde_ + "' and c.fechaVencimiento <= '" + hasta_ + "') order by c.fechaVencimiento";
-		return this.hqlLimit(query, 1000);
+		String query = "select c from BancoCheque c where (c.fechaVencimiento >= '" + desde_ + "' and c.fechaVencimiento <= '" + hasta_ + "')"
+				+ " and c.moneda.sigla = '" + siglaMoneda + "'"
+				+ " order by c.fechaVencimiento";
+		return this.hql(query);
 	}
 	
 	/**
