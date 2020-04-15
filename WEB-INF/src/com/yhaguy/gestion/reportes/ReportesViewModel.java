@@ -17880,11 +17880,14 @@ class ListadoCobranzasDataSource implements JRDataSource {
 					String numero = recibo.getNumero();
 					String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
 					String ruc = recibo.getCliente().getRuc();
-					String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGsBySucursal(idSucursal));
+					double importeGs = recibo.getTotalImporteGsBySucursal(idSucursal);
+					String importe = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : importeGs);
 					String saldo = FORMATTER.format(recibo.isCobroExterno() ? 0.0 : saldo_);
-					values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
-					this.totalImporte += (recibo.isCobroExterno() ? 0.0 : recibo.getTotalImporteGs());
-					this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+					if (importeGs > 0) {
+						values.add(new BeanRecibo(fecha, numero, razonSocial, ruc, importe, saldo));
+						this.totalImporte += (recibo.isCobroExterno() ? 0.0 : importeGs);
+						this.totalSaldo += (recibo.isCobroExterno() ? 0.0 : saldo_);
+					}					
 				}
 			}
 		} catch (Exception e) {
