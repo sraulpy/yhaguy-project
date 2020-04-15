@@ -17875,6 +17875,7 @@ class ListadoCobranzasDataSource implements JRDataSource {
 		try {
 			for (Recibo recibo : this.recibos) {
 				if (!recibo.isReciboContraCuenta()) {
+					System.out.println("----> " + recibo.getNumero());
 					double saldo_ = recibo.getSaldoCtaCte();
 					String fecha = misc.dateToString(recibo.getFechaEmision(), Misc.DD_MM_YYYY);
 					String numero = recibo.getNumero();
