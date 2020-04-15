@@ -3429,10 +3429,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Funcionario vendedor = filtro.getVendedor();
+				Cliente cliente_ = filtro.getCliente();
 				Tipo rubro = filtro.getRubro();
 				boolean ivaInc = filtro.isIvaIncluido();
 				boolean ncrInc = filtro.isIncluirNCR();
 				Object[] formato = filtro.getFormato();
+				long idCliente = cliente_ != null ? cliente_.getId().longValue() : 0;
 
 				if (desde == null)
 					desde = new Date();
@@ -3441,8 +3443,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					hasta = new Date();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Venta> ventas = rr.getVentas(desde, hasta, 0);
-				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
+				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente);
+				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente);
 				List<Object[]> data = new ArrayList<Object[]>();
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
