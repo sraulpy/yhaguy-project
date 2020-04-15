@@ -15,6 +15,7 @@
 				<datebox value="@bind(vm.dato.filtro.fechaHasta)"
 					format="dd-MM-yyyy" placeholder="Hasta.." hflex="true" />
 			</row>
+			<row>
 			<field value="Cliente:" />
 			<bandbox hflex="true" placeholder="TODOS.."
 				readonly="true" value="@load(vm.dato.filtro.cliente.razonSocial)"
@@ -42,6 +43,7 @@
 					</listbox>
 				</bandpopup>
 			</bandbox>
+			</row>
 			<row>
 				<field value="Vendedor:" />
 				<bandbox hflex="true" placeholder="TODOS.."
