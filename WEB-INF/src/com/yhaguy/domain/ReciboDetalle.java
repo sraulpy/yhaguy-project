@@ -93,6 +93,34 @@ public class ReciboDetalle extends Domain {
 	}
 	
 	/**
+	 * @return el importe segun el proveedor..
+	 */
+	public double getImporteBySucursalGs(long idSucursal) throws Exception {
+		Venta vta = this.getVenta();
+		if (vta != null) {
+			long idSucVta = vta.getSucursal().getId().longValue();
+			if (idSucVta == idSucursal) {
+				return this.getMontoGs();
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * @return el importe segun el proveedor..
+	 */
+	public double getImporteBySucursalDs(long idSucursal) throws Exception {
+		Venta vta = this.getVenta();
+		if (vta != null) {
+			long idSucVta = vta.getSucursal().getId().longValue();
+			if (idSucVta == idSucursal) {
+				return this.getMontoDs();
+			}
+		}
+		return 0;
+	}
+	
+	/**
 	 * @return el importe de la factura de venta aplicada..
 	 */
 	public double getImporteVenta() throws Exception {

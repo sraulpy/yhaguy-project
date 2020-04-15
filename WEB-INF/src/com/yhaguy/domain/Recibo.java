@@ -363,6 +363,20 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return el total de importe por sucursal..
+	 */
+	public double getTotalImporteGsBySucursal(long idSucursal) throws Exception {
+		if (idSucursal == 0) {
+			return this.getTotalImporteGs();
+		}
+		double out = 0;
+		for (ReciboDetalle item : this.detalles) {
+			out += item.getImporteBySucursalGs(idSucursal);
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si el cobro tiene cheque adelantado..
 	 */
 	public boolean isCobroConChequeAdelantado(Date fecha) {

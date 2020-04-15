@@ -20,6 +20,10 @@ public class AjusteCtaCte extends Domain {
 	public int compareTo(Object o) {
 		return -1;
 	}
+	
+	public long getIdSucursalCredito() {
+		return this.credito.getSucursal().getId().longValue();
+	}
 
 	public Date getFecha() {
 		return fecha;
