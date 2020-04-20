@@ -2186,6 +2186,7 @@ class ReporteVenta extends ReporteYhaguy {
 		String condicion = (String) this.venta.getCondicionPago().getPos1();
 		String observacion = (String) this.venta.getObservacion();
 		String direccion = (String) this.venta.getDireccion();
+		String vendedor = this.venta.getVendedor_();
 
 		VerticalListBuilder out = cmp.verticalList();
 
@@ -2193,7 +2194,7 @@ class ReporteVenta extends ReporteYhaguy {
 
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Número", numero))
-				.add(this.textoParValor("Sucursal", origen)));
+				.add(this.textoParValor("Sucursal", origen + " - " + vendedor)));
 
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
@@ -2265,6 +2266,7 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 		String condicion = (String) this.venta.getCondicionPago().getPos1();
 		String moneda = (String) this.venta.getMoneda().getPos1();
 		String direccion = (String) this.venta.getDireccion();
+		String vendedor = this.venta.getVendedor_();
 
 		VerticalListBuilder out = cmp.verticalList();
 
@@ -2274,7 +2276,7 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 				this.textoParValor("Número", numero)));
 
 		out.add(cmp.horizontalFlowList().add(
-				this.textoParValor("Sucursal", origen)));
+				this.textoParValor("Sucursal", origen + " - " + vendedor)));
 
 		out.add(cmp.horizontalFlowList().add(
 				this.textoParValor("Cliente", cliente)));
