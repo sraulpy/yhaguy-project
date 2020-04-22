@@ -12,9 +12,6 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
-import com.yhaguy.domain.HistoricoCobranzaDiaria;
-import com.yhaguy.domain.HistoricoCobranzaVendedor;
-import com.yhaguy.domain.HistoricoVentaDiaria;
 import com.yhaguy.domain.HistoricoVentaVendedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
@@ -57,24 +54,33 @@ public class ChartVentasMetas extends SelectorComposer<Window> {
         Double meta = new Double(0);
         Double dia = new Double(0);
         Double c_dia = new Double(0);
+        Date hoy = new Date();
+        Date inicioMes = Utiles.getFechaInicioMes();
         
         RegisterDomain rr = RegisterDomain.getInstance();
         int anho = Integer.parseInt(Utiles.getAnhoActual());
 		int mes = Integer.parseInt(Utiles.getMesActual());
-        HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0, idSuc);
-        HistoricoVentaDiaria hist_ = rr.getHistoricoVentaDiaria(new Date(), 0);
-        HistoricoCobranzaVendedor c_hist = rr.getHistoricoCobranzaVendedor(anho, mes, 0);
-        HistoricoCobranzaDiaria c_hist_ = rr.getHistoricoCobranzaDiaria(new Date(), 0);
+        HistoricoVentaVendedor hist = rr.getHistoricoVentaVendedor(anho, mes, 0, idSuc);        
         
-        if (hist_ != null) dia = (hist_.getTotal_venta() - hist_.getTotal_notacredito());
-        if (c_hist_ != null) c_dia = (c_hist_.getTotal_cobranza());
+        double diaVtas = (double) rr.getTotalVentas(hoy, hoy)[0];
+    	double diaNcs = (double) rr.getTotalNotasCredito(hoy, hoy)[0];
+    	double diaIva = Utiles.getIVA((diaVtas - diaNcs), 10);
+        dia = (diaVtas - diaNcs) - diaIva;
+        
+        double diaCob = (double) rr.getTotalCobranzas(hoy, hoy)[0];
+        double diaCobIva = Utiles.getIVA(diaCob, 10);
+        c_dia = diaCob - diaCobIva;
         
         if (hist != null) {
-			ventas = (hist.getTotal_venta() - hist.getTotal_notacredito());
+        	double vtas = (double) rr.getTotalVentas(inicioMes, hoy)[0];
+        	double ncs = (double) rr.getTotalNotasCredito(inicioMes, hoy)[0];
+        	double iva = Utiles.getIVA((vtas - ncs), 10);
+        	double cob = (double) rr.getTotalCobranzas(inicioMes, hoy)[0];
+            double cobIva = Utiles.getIVA(cob, 10);
+			ventas = (vtas - ncs) - iva;
+			cobranzas = cob - cobIva;
 			meta = hist.getMeta();
 		}
-        
-        if (c_hist != null) cobranzas = (c_hist.getTotal_cobranza());
         
         CategoryModel model = new DefaultCategoryModel();
         

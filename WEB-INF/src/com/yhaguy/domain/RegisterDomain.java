@@ -11406,11 +11406,73 @@ public class RegisterDomain extends Register {
 		return out.size() > 0 ? out.get(0) : null;
 	}
 	
+	/**
+	 * @return el total de ventas..
+	 */
+	public Object[] getTotalVentas(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum(v.totalImporteGs), sum(v.totalImporteGs) from Venta v "
+				+ "where v.estadoComprobante is null and "
+				+ " v.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "','"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "')"
+				+ "and v.fecha >= '" + desde_ + "' and v.fecha <= '"
+				+ hasta_ + "'";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
+		if (out[0] == null) {
+			out = new Object[] { 0.0, 0.0 };
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total de notas de credito..
+	 */
+	public Object[] getTotalNotasCredito(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum(n.importeGs), sum(n.importeGs) from NotaCredito n where n.estadoComprobante.sigla != '"
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and " + " n.tipoMovimiento.sigla in ('"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')"
+				+ " and n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "'";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
+		if (out[0] == null) {
+			out = new Object[] { 0.0, 0.0 };
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total de ventas..
+	 */
+	public Object[] getTotalCobranzas(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum(r.totalImporteGs), sum(r.totalImporteGs) from Recibo r "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_RECIBO_COBRO + "','"
+				+ Configuracion.SIGLA_TM_ANTICIPO_COBRO + "')"
+				+ " and r.cobroExterno = false"
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
+		if (out[0] == null) {
+			out = new Object[] { 0.0, 0.0 };
+		}
+		return out;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Object[]> list = rr.getClientesPorVendedor(17);
-			System.out.println(list.size());
+			Object[] data = rr.getTotalVentas(Utiles.getFecha("21-04-2020 00:00:00"), Utiles.getFecha("21-04-2020 23:00:00"));
+			System.out.println(Utiles.getNumberFormat((double) data[0]) + "");
+			Object[] nc = rr.getTotalNotasCredito(Utiles.getFecha("01-04-2020 00:00:00"), Utiles.getFecha("15-04-2020 23:00:00"));
+			System.out.println(Utiles.getNumberFormat((double) nc[0]) + "");
+			Object[] cob = rr.getTotalCobranzas(Utiles.getFecha("01-04-2020 00:00:00"), Utiles.getFecha("15-04-2020 23:00:00"));
+			System.out.println(Utiles.getNumberFormat((double) cob[0]) + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
