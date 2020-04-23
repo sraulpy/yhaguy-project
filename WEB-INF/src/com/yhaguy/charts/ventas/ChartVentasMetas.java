@@ -68,17 +68,21 @@ public class ChartVentasMetas extends SelectorComposer<Window> {
         dia = (diaVtas - diaNcs) - diaIva;
         
         double diaCob = (double) rr.getTotalCobranzas(hoy, hoy)[0];
-        double diaCobIva = Utiles.getIVA(diaCob, 10);
-        c_dia = diaCob - diaCobIva;
+        double diaVtasCon = (double) rr.getTotalVentasContado(hoy, hoy)[0];
+    	double diaNcsCon = (double) rr.getTotalNotasCreditoContado(hoy, hoy)[0];
+        double diaCobIva = Utiles.getIVA(diaCob + (diaVtasCon - diaNcsCon), 10);
+        c_dia = (diaCob + (diaVtasCon - diaNcsCon)) - diaCobIva;
         
         if (hist != null) {
         	double vtas = (double) rr.getTotalVentas(inicioMes, hoy)[0];
         	double ncs = (double) rr.getTotalNotasCredito(inicioMes, hoy)[0];
         	double iva = Utiles.getIVA((vtas - ncs), 10);
         	double cob = (double) rr.getTotalCobranzas(inicioMes, hoy)[0];
-            double cobIva = Utiles.getIVA(cob, 10);
+        	double vtasCon = (double) rr.getTotalVentasContado(inicioMes, hoy)[0];
+        	double ncsCon = (double) rr.getTotalNotasCreditoContado(inicioMes, hoy)[0];
+            double cobIva = Utiles.getIVA(cob + (vtasCon - ncsCon), 10);
 			ventas = (vtas - ncs) - iva;
-			cobranzas = cob - cobIva;
+			cobranzas = (cob + (vtasCon - ncsCon)) - cobIva;
 			meta = hist.getMeta();
 		}
         

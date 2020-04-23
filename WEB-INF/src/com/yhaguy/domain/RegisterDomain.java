@@ -11427,6 +11427,25 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el total de ventas contado..
+	 */
+	public Object[] getTotalVentasContado(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum(v.totalImporteGs), sum(v.totalImporteGs) from Venta v "
+				+ "where v.estadoComprobante is null and "
+				+ " v.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "')"
+				+ "and v.fecha >= '" + desde_ + "' and v.fecha <= '"
+				+ hasta_ + "'";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
+		if (out[0] == null) {
+			out = new Object[] { 0.0, 0.0 };
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total de notas de credito..
 	 */
 	public Object[] getTotalNotasCredito(Date desde, Date hasta) throws Exception {
@@ -11435,6 +11454,25 @@ public class RegisterDomain extends Register {
 		String query = "select sum(n.importeGs), sum(n.importeGs) from NotaCredito n where n.estadoComprobante.sigla != '"
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and " + " n.tipoMovimiento.sigla in ('"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')"
+				+ " and n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "'";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
+		if (out[0] == null) {
+			out = new Object[] { 0.0, 0.0 };
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total de notas de credito contado..
+	 */
+	public Object[] getTotalNotasCreditoContado(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum(n.importeGs), sum(n.importeGs) from NotaCredito n where n.estadoComprobante.sigla != '"
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "' and " + " n.tipoMovimiento.sigla in ('"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')"
+				+ " and n.auxi = ('" + NotaCredito.NCR_CONTADO + "')"
 				+ " and n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "'";
 		List<Object[]> list = this.hql(query);
 		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
