@@ -11649,12 +11649,19 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Proveedor prov = filtro.getProveedorExterior();
 				long idProv = prov == null? 0 : prov.getId();
+				boolean fechaDespacho = filtro.isFraccionado();
+				boolean fechaFactura = filtro.isTodos();
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<ImportacionPedidoCompra> compras = rr.getImportaciones(desde, hasta, idProv);
+				List<ImportacionPedidoCompra> compras = new ArrayList<>();
+				if (fechaDespacho) {
+					compras = rr.getImportacionesByFechaDespacho(desde, hasta, idProv);					
+				} else if (fechaFactura) {
+					compras = rr.getImportacionesByFechaFactura(desde, hasta, idProv);
+				}
 
 				String proveedor = prov == null? "TODOS.." : prov.getRazonSocial();
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_IMPORTACIONES;

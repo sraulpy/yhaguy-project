@@ -5,6 +5,14 @@
 	</columns>
 	<rows>
 		<row>
+			<field value="Según fecha despacho" />
+			<checkbox checked="@bind(vm.dato.filtro.fraccionado)" />
+		</row>
+		<row>
+			<field value="Según fecha factura" />
+			<checkbox checked="@bind(vm.dato.filtro.todos)" />
+		</row>
+		<row>
 			<field value="Fecha Desde:" />
 			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
 				placeholder="Desde.." hflex="true" />

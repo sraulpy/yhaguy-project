@@ -155,7 +155,7 @@
 					<font fontName="Ubuntu Condensed" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Fecha Des.]]></text>
+				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="48" y="1" width="50" height="20" forecolor="#736343" backcolor="#FFFFFF" uuid="952adb49-5dbc-4822-9a4b-056b9f039422"/>

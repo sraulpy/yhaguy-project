@@ -8632,10 +8632,33 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las importaciones segun fecha
 	 */
-	public List<ImportacionPedidoCompra> getImportaciones(Date desde, Date hasta, long idProveedor) throws Exception {
+	public List<ImportacionPedidoCompra> getImportacionesByFechaDespacho(Date desde, Date hasta, long idProveedor) throws Exception {
 
 		String query = "select i from ImportacionPedidoCompra i where i.dbEstado != 'D'"
 				+ " and i.resumenGastosDespacho.fechaDespacho between ? and ?";
+		if (idProveedor != 0) {
+			query += "and i.proveedor.id = " + idProveedor;
+		}
+		query += " order by i.numeroPedidoCompra";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}		
+		return this.hql(query, params);
+	}
+	
+	/**
+	 * @return las importaciones segun fecha factura
+	 */
+	public List<ImportacionPedidoCompra> getImportacionesByFechaFactura(Date desde, Date hasta, long idProveedor) throws Exception {
+
+		String query = "select i from ImportacionPedidoCompra i join i.importacionFactura f where i.dbEstado != 'D'"
+				+ " and f.fecha between ? and ?";
 		if (idProveedor != 0) {
 			query += "and i.proveedor.id = " + idProveedor;
 		}
