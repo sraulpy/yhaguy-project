@@ -3436,11 +3436,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Object[] formato = filtro.getFormato();
 				long idCliente = cliente_ != null ? cliente_.getId().longValue() : 0;
 
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente);
@@ -3459,16 +3456,17 @@ public class ReportesViewModel extends SimpleViewModel {
 								String cliente = venta.getCliente().getRazonSocial();
 								String vendedor_ = venta.getVendedor().getRazonSocial();
 								String rubro_ = venta.getCliente().getRubro();
+								Long idEmpresa = venta.getCliente().getEmpresa().getId();
 								Object[] acum = values.get(key);
 								if (acum != null) {
 									double importe = (double) acum[0];
 									double importe_ = ivaInc ? venta.getTotalImporteGs() : venta.getTotalImporteGsSinIva();
 									importe += importe_;
-									values.put(key, new Object[] { importe, mes, cliente, vendedor_, rubro_ });
+									values.put(key, new Object[] { importe, mes, cliente, vendedor_, rubro_, idEmpresa });
 								} else {
 									double importe_ = ivaInc ? venta.getTotalImporteGs() : venta.getTotalImporteGsSinIva();
 									values.put(key,
-											new Object[] { importe_, mes, cliente, vendedor_, rubro_ });
+											new Object[] { importe_, mes, cliente, vendedor_, rubro_, idEmpresa });
 								}
 							}
 						}						
@@ -3486,16 +3484,17 @@ public class ReportesViewModel extends SimpleViewModel {
 									String cliente = ncred.getCliente().getRazonSocial();
 									String vendedor_ = ncred.getVendedor().getRazonSocial();
 									String rubro_ = ncred.getCliente().getRubro();
+									Long idEmpresa = ncred.getCliente().getEmpresa().getId();
 									Object[] acum = values.get(key);
 									if (acum != null) {
 										double importe = (double) acum[0];
 										double importe_ = ivaInc ? ncred.getImporteGs() : ncred.getTotalImporteGsSinIva();
 										importe -= importe_;
-										values.put(key, new Object[] { importe, mes, cliente, vendedor_, rubro_ });
+										values.put(key, new Object[] { importe, mes, cliente, vendedor_, rubro_, idEmpresa });
 									} else {
 										double importe_ = ivaInc ? ncred.getImporteGs() : ncred.getTotalImporteGsSinIva();
 										values.put(key,
-												new Object[] { importe_ * -1, mes, cliente, vendedor_, rubro_ });
+												new Object[] { importe_ * -1, mes, cliente, vendedor_, rubro_, idEmpresa });
 									}
 								}
 							}							
@@ -3510,6 +3509,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String id = (String) value[2];
 					String vend = (String) value[3];
 					String rubro_ = (String) value[4];
+					Long idEmpresa = (Long) value[5];
 					
 					Object[] value_ = values_.get(id);
 					if (value_ != null) {
@@ -3519,7 +3519,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						Object[] datos = new Object[] { (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
-								(double) 0, (double) 0, vend, rubro_ };
+								(double) 0, (double) 0, vend, rubro_, idEmpresa };
 						datos[mes] = importe;
 						values_.put(id, datos);
 					}
@@ -3527,6 +3527,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (String key : values_.keySet()) {
 					Object[] value_ = values_.get(key);
+					long idEmpresa = (long) value_[14];
+					double saldo = (double) rr.getTotalSaldoCtaCte(idEmpresa, Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 31)[1];
+					
 					double total = (double) value_[0] + (double) value_[1]
 							+ (double) value_[2] + (double) value_[3]
 							+ (double) value_[4] + (double) value_[5]
@@ -3536,7 +3539,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					data.add(new Object[] { key.toUpperCase(), value_[0],
 							value_[1], value_[2], value_[3], value_[4],
 							value_[5], value_[6], value_[7], value_[8],
-							value_[9], value_[10], value_[11], total, value_[12], value_[13] });
+							value_[9], value_[10], value_[11], total, value_[12], value_[13], saldo });
 				}
 				String format = (String) formato[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES;
@@ -18372,6 +18375,8 @@ class VentasPorClienteDataSource implements JRDataSource {
 			value = det[15];
 		} else if ("Ult_Vta".equals(fieldName)) {
 			value = det[16];
+		} else if ("Saldo".equals(fieldName)) {
+			value = FORMATTER.format(det[16]);
 		} else if ("Ene".equals(fieldName)) {
 			value = FORMATTER.format(det[1]);
 		} else if ("Feb".equals(fieldName)) {

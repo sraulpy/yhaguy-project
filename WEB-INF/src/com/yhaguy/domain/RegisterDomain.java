@@ -335,14 +335,6 @@ public class RegisterDomain extends Register {
 		return null;
 	}
 
-	public Empresa getEmpresaByRuc(String ruc) throws Exception {
-		// estaba que retornada una lista, pero debería ser una sola
-		// no deberíamos tener dos empresas con el mismo RUC
-
-		Empresa out = (Empresa) getObject(Empresa.class.getName(), "ruc", ruc);
-		return out;
-	}
-
 	public List getEmpresaByRazonSocial(String razonsocial) throws Exception {
 		Vector v = new Vector();
 		v.add(Restrictions.like("razonsocial", razonsocial));
@@ -7807,7 +7799,7 @@ public class RegisterDomain extends Register {
 				+ " and e.saldo > 0 and e.idEmpresa = " + idEmpresa;
 		List<CtaCteEmpresaMovimiento> list = this.hql(query);
 		for (CtaCteEmpresaMovimiento item : list) {
-			out += item.getSaldoFinal();
+			out += item.getSaldo();
 		}
 		return out;
 	}
@@ -11502,15 +11494,38 @@ public class RegisterDomain extends Register {
 		return out;
 	}
 	
+	/**
+	 * @return el total de saldo en ctacte..
+	 */
+	public Object[] getTotalSaldoCtaCte(long idEmpresa, String caracter, long idMoneda) throws Exception {
+		String query = "select sum(c.importeOriginal), sum(c.saldo) from CtaCteEmpresaMovimiento c "
+				+ " where c.idEmpresa = " + idEmpresa
+				+ " and c.anulado = false"
+				+ " and c.tipoCaracterMovimiento.sigla = '" + caracter + "'"
+				+ " and c.moneda.id = " + idMoneda
+				+ " and c.saldo != 0";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : new Object[] { 0.0, 0.0 };
+		if (out[0] == null) {
+			out = new Object[] { 0.0, 0.0 };
+		}
+		return out;
+	}
+	
+	/**
+	 * @return empresa by ruc
+	 */
+	public Empresa getEmpresaByRuc(String ruc) throws Exception {
+		String query = "select e from Empresa e where e.ruc = '" + ruc.trim() + "'";
+		List<Empresa> out = this.hql(query);
+		return out.size() > 0 ? out.get(0) : null;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Object[] data = rr.getTotalVentas(Utiles.getFecha("21-04-2020 00:00:00"), Utiles.getFecha("21-04-2020 23:00:00"));
-			System.out.println(Utiles.getNumberFormat((double) data[0]) + "");
-			Object[] nc = rr.getTotalNotasCredito(Utiles.getFecha("01-04-2020 00:00:00"), Utiles.getFecha("15-04-2020 23:00:00"));
-			System.out.println(Utiles.getNumberFormat((double) nc[0]) + "");
-			Object[] cob = rr.getTotalCobranzas(Utiles.getFecha("01-04-2020 00:00:00"), Utiles.getFecha("15-04-2020 23:00:00"));
-			System.out.println(Utiles.getNumberFormat((double) cob[0]) + "");
+			Object[] saldo = rr.getTotalSaldoCtaCte(12275, Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 31);
+			System.out.println(Utiles.getNumberFormat((double) saldo[1]));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
