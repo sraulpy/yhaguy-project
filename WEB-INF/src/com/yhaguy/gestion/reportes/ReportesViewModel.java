@@ -26263,7 +26263,7 @@ class ListadoImportacionesDataSource implements JRDataSource {
 			String tcamb = Utiles.getNumberFormatDs(imp.getResumenGastosDespacho().getTipoCambio());
 			String obser = imp.getObservacion();
 			values.add(new BeanImportacion(fecha, numero, numeroFactura, cantidad, obser, proveedor, fobgs, fobds,
-					cifgs, cifds, imp.getResumenGastosDespacho().getFechaDespacho(), tcamb));
+					cifgs, cifds, imp.getFechaFactura(), tcamb));
 			this.totalfobgs += imp.getResumenGastosDespacho().getValorFOBgs();
 			this.totalfobds += imp.getResumenGastosDespacho().getValorFOBds();
 			this.totalcifgs += imp.getResumenGastosDespacho().getValorCIFgs();
