@@ -8657,8 +8657,8 @@ public class RegisterDomain extends Register {
 	 */
 	public List<ImportacionPedidoCompra> getImportacionesByFechaFactura(Date desde, Date hasta, long idProveedor) throws Exception {
 
-		String query = "select i from ImportacionPedidoCompra i join i.importacionFactura f where i.dbEstado != 'D'"
-				+ " and f.fechaOriginal between ? and ?";
+		String query = "select i from ImportacionPedidoCompra i where i.dbEstado != 'D'"
+				+ " and i.fechaFactura between ? and ?";
 		if (idProveedor != 0) {
 			query += "and i.proveedor.id = " + idProveedor;
 		}
@@ -11547,8 +11547,10 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Object[] saldo = rr.getTotalSaldoCtaCte(12275, Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE, 31);
-			System.out.println(Utiles.getNumberFormat((double) saldo[1]));
+			List<ImportacionPedidoCompra> list = rr.getImportacionesByFechaFactura(Utiles.getFecha("01-01-2018 00:00:00"), new Date(), 0);
+			for (ImportacionPedidoCompra imp : list) {
+				System.out.println(imp.getNumeroFactura());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
