@@ -989,7 +989,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						}
 					}
 					
-					if (stock != 0) {
+					if (stock > 0) {
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
 					}				
 				}
