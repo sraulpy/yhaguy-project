@@ -981,11 +981,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					String saldo = historial_ != null ? (String) historial_[7] : "0";
 					long stock = historial_ != null ? Long.parseLong(saldo) : (long) 0;
 					double costo  = (double) art[3];
+					long idArticulo_ = (long) art[0];
 					
-					System.out.println("---------> TIPO COSTO: " + tipoCosto);
-					System.out.println("---------> COMPARE: " + ReportesFiltros.COSTO_PROMEDIO);
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						double costoPromedio = rr.getCostoPromedio(idArticulo, hasta);
+						double costoPromedio = rr.getCostoPromedio(idArticulo_, hasta);
 						if (costoPromedio > 0) {
 							costo = costoPromedio;
 						}
