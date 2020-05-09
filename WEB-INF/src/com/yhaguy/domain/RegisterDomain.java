@@ -11547,10 +11547,8 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<ImportacionPedidoCompra> list = rr.getImportacionesByFechaFactura(Utiles.getFecha("01-01-2018 00:00:00"), new Date(), 0);
-			for (ImportacionPedidoCompra imp : list) {
-				System.out.println(imp.getNumeroFactura());
-			}
+			double costo = rr.getCostoPromedio(16562, Utiles.getFecha("31-12-2019 23:00:00"));
+			System.out.println(costo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

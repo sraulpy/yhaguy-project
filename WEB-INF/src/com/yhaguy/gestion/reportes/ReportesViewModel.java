@@ -983,10 +983,13 @@ public class ReportesViewModel extends SimpleViewModel {
 					double costo  = (double) art[3];
 					
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						costo = rr.getCostoPromedio(idArticulo, hasta);
+						double costoPromedio = rr.getCostoPromedio(idArticulo, hasta);
+						if (costoPromedio > 0) {
+							costo = costoPromedio;
+						}
 					}
 					
-					if (stock != 0 && costo > 0) {
+					if (stock != 0) {
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
 					}				
 				}
