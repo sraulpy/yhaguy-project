@@ -5408,6 +5408,16 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return la factura de compra..
+	 */
+	public CompraLocalFactura getCompraLocalFactura(String numero, long idProveedor) throws Exception {
+		String query = "select c from CompraLocalFactura c where c.numero = '" + numero + "'"
+				+ " and c.proveedor.id = " + idProveedor;
+		List<CompraLocalFactura> out = this.hql(query);
+		return out.size() > 0 ? out.get(0) : null;
+	}
+	
+	/**
 	 * @return la orden de compra importacion..
 	 */
 	public ImportacionPedidoCompra getOrdenCompraImportacion(long id) throws Exception {
