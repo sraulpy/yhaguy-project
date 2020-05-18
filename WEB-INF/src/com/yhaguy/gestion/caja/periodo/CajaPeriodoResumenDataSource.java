@@ -46,6 +46,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalTransferenciaCentral = 0;
 	double totalDolares = 0;
 	double totalValoresRepresentaciones = 0;
+	double totalDiferenciaTipoCambio = 0;
 
 	double totalVentaContado = 0;
 	double totalVentaContadoCheque = 0;
@@ -765,6 +766,14 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				this.totalValoresRepresentaciones += fp.getMontoGs();
 				MyArray my = new MyArray(fp.getTipo().getDescripcion(), fp.getDescripcion(), fp.getMontoGs(),
 						"VALORES REPRESENTACIONES", this.totalValoresRepresentaciones);
+				this.values.add(my);
+			}
+			
+			// diferencias por tipo de cambio..
+			for (ReciboFormaPago fp : planilla.getDiferenciasTipoCambio()) {
+				this.totalDiferenciaTipoCambio += fp.getMontoGs();
+				MyArray my = new MyArray(fp.getTipo().getDescripcion(), fp.getDescripcion(), fp.getMontoGs(),
+						"DIFERENCIAS POR TIPO DE CAMBIO", this.totalDiferenciaTipoCambio);
 				this.values.add(my);
 			}
 			
