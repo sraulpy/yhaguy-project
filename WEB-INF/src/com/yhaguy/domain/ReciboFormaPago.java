@@ -219,6 +219,14 @@ public class ReciboFormaPago extends Domain {
 		String sigla = this.tipo.getSigla();
 		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_DIFERENCIA_TC);
 	}
+	
+	/**
+	 * @return true si es otros comprobantes..
+	 */
+	public boolean isOtrosComprobantes() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES);
+	}
 
 	public String getMontoGs_() {
 		NumberFormat FORMATTER = new DecimalFormat("###,###,##0");

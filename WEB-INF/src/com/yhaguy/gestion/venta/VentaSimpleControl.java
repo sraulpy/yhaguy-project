@@ -169,8 +169,9 @@ public class VentaSimpleControl extends SoloViewModel {
 		String siglaFPDB = Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO;
 		String siglaFPRE = Configuracion.SIGLA_FORMA_PAGO_RETENCION;
 		String siglaSFCO = Configuracion.SIGLA_FORMA_PAGO_SALDO_FAVOR_COBRADO;
+		String siglaFPOC = Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES;
 		
-		if(siglaFP.equals(siglaFPTC)){
+		if(siglaFP.equals(siglaFPTC)) {
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
@@ -182,7 +183,7 @@ public class VentaSimpleControl extends SoloViewModel {
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
 			
-		} else if(siglaFP.equals(siglaFPTD)){
+		} else if(siglaFP.equals(siglaFPTD)) {
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
@@ -242,6 +243,18 @@ public class VentaSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			rwSaldoFavorCobrado.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
+			
+		} else if(siglaFP.equals(siglaFPOC)) {
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
+			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
+			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(true); rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false);
+			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());	
 			
 		} else {
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);

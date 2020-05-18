@@ -1001,6 +1001,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		String siglaFPCA = Configuracion.SIGLA_FORMA_PAGO_CHEQUE_AUTOCOBRANZA;
 		String siglaFPDC = Configuracion.SIGLA_FORMA_PAGO_DEBITO_COBRANZA_CENTRAL;
 		String siglaSFCO = Configuracion.SIGLA_FORMA_PAGO_SALDO_FAVOR_COBRADO;
+		String siglaFPOC = Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES;
 		
 		if (siglaFP.compareTo(siglaFPCH) == 0) {
 			showCheque();
@@ -1193,6 +1194,18 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwSaldoFavorCobrado.setVisible(true);
 			rwMontoAplicado.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
+			
+		} else if(siglaFP.equals(siglaFPOC)) {
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
+			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
+			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(true); rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false);
+			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());	
 			
 		} else {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);

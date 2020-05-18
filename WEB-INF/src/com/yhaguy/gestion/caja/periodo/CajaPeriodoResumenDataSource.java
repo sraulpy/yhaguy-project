@@ -47,6 +47,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalDolares = 0;
 	double totalValoresRepresentaciones = 0;
 	double totalDiferenciaTipoCambio = 0;
+	double totalOtrosComprobantes = 0;
 
 	double totalVentaContado = 0;
 	double totalVentaContadoCheque = 0;
@@ -774,6 +775,14 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				this.totalDiferenciaTipoCambio += fp.getMontoGs();
 				MyArray my = new MyArray(fp.getTipo().getDescripcion(), fp.getDescripcion(), fp.getMontoGs(),
 						"DIFERENCIAS POR TIPO DE CAMBIO", this.totalDiferenciaTipoCambio);
+				this.values.add(my);
+			}
+			
+			// otros comprobantes..
+			for (ReciboFormaPago fp : planilla.getOtrosComprobantes()) {
+				this.totalOtrosComprobantes += fp.getMontoGs();
+				MyArray my = new MyArray(fp.getTipo().getDescripcion(), fp.getTarjetaNumeroComprobante(), fp.getMontoGs(),
+						"OTROS COMPROBANTES", this.totalOtrosComprobantes);
 				this.values.add(my);
 			}
 			
