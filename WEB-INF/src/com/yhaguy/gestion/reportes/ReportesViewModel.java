@@ -972,13 +972,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> arts = new ArrayList<Object[]>();
 				
-				Map<Long, Double> ajs = new HashMap<Long, Double>();
-				List<AjusteValorizado> ajs_ = rr.getAjustesValorizados(Utiles.getFecha("01-01-2016 00:00:00"), hasta);
-				for (AjusteValorizado aj : ajs_) {
-					ajs.put(aj.getArticulo().getId(), aj.getCostoGs());
-				}
-				
 				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), true);
+
+				double total = 7340161549.0;
+				double totalDiff = 1883972920.00;
+				double newTotal = 0;
+				int mes = 0;
 				
 				for (Object[] art : arts) {
 					
@@ -1001,13 +1000,25 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 					
 					if (stock > 0) {
-						Double aj = ajs.get(idArticulo_);
-						if (aj != null) {
-							costo = costo + aj;
-						}
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
+						double importe = Utiles.getRedondeo(stock * costo);
+						double porc = Utiles.obtenerPorcentajeDelValor(importe, total);
+						double proc = Utiles.obtenerValorDelPorcentaje(totalDiff, porc) / stock;
+						double newCosto = costo + proc;
+						newTotal += (newCosto * stock);
+						System.out.println(Utiles.getNumberFormat(costo) + " - " + Utiles.getNumberFormat(newCosto));
+						mes ++;
+						if (mes > 12) {
+							mes = 1;
+						}
+						AjusteValorizado aj = new AjusteValorizado();
+						aj.setFecha(Utiles.getFechaFinMes(mes, 2019));
+						aj.setCostoGs(newCosto);
+						aj.setArticulo(rr.getArticuloById(idArticulo_));
+						rr.saveObject(aj, "sys");
 					}										
 				}
+				System.out.println(Utiles.getNumberFormat(newTotal));
 				
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
 				String familia_ = familia.getDescripcion();
