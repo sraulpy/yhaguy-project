@@ -962,7 +962,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					return;
 				}
 				
-				if (hasta == null) hasta = new Date();
+				if (hasta == null) {
+					Clients.showNotification("DEBE INDICAR FECHA HASTA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
@@ -972,7 +975,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta, true);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];
@@ -984,7 +987,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					long idArticulo_ = (long) art[0];
 					
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						double costoPromedio = rr.getCostoPromedio(idArticulo_, hasta);
+						double costoPromedio = rr.getCostoPromedio_(idArticulo_, hasta);
 						if (costoPromedio > 0) {
 							costo = costoPromedio;
 						}
@@ -1001,8 +1004,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String deposito_ = deposito != null ? deposito.getDescripcion() : "TODOS..";
 				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, deposito_);
 				rep.setApaisada();
-				rep.setDatosReporte(data);
-				
+				rep.setDatosReporte(data);				
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
@@ -1135,6 +1137,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Deposito deposito = filtro.getDeposito();
 				long idDeposito = deposito == null? 0 : deposito.getId();
 				String desc_deposito = deposito == null? "TODOS.." : deposito.getDescripcion();
+				String campoFecha = "fechaCreacion";
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
@@ -1152,7 +1155,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, idDeposito, desde, hasta, true);
 				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, idDeposito, desde, hasta, true);
 				List<Object[]> compras = rr.getComprasLocalesPorArticulo_(idArticulo, idDeposito, desde, hasta, true);
-				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, true);
+				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, true, campoFecha);
 				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, true, true);
 				List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, true);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, true);
@@ -1373,8 +1376,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				arts = rr.getArticulos(idArticulo, idProveedor, idFamilia, true);
 
 				for (Object[] art : arts) {
-					System.out.println(art[0]);
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false, hasta);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], (long) 0, idSucursal, false, hasta, true);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					String familia_ = (String) art[4];
 					
@@ -13003,7 +13005,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta);
+					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta, true);
 					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];

@@ -3513,7 +3513,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 						true, this.dto.getDeposito(), Configuracion.OP_SUMA);
 			
 			ControlArticuloCosto.addMovimientoCosto(art.getId(), costoFinalGs,
-							this.dto.getFechaCierre(), this.dto.getId(),
+							new Date(), this.dto.getId(),
 							this.dto.getTipoMovimiento().getId(),
 							this.getLoginNombre());
 		}	

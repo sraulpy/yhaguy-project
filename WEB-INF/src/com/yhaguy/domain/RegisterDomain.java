@@ -4914,10 +4914,10 @@ public class RegisterDomain extends Register {
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:proveedor [6]:deposito
 	 */
 	public List<Object[]> getComprasImportacionPorArticulo(long idArticulo, long idDeposito,
-			Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
+			Date desde, Date hasta, boolean incluirDepositoVirtual, String campoFecha) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c.tipoMovimiento.descripcion, c.fechaCreacion, c.numero, d.cantidad, d.costoGs, "
+		String query = "select c.tipoMovimiento.descripcion, "+ "c." + campoFecha + ", c.numero, d.cantidad, d.costoGs, "
 				+ " c.proveedor.empresa.razonSocial,"
 				+ " (select oc.deposito.descripcion from ImportacionPedidoCompra oc join oc.importacionFactura f where f.id = c.id";
 		if (idDeposito != 0) {
@@ -4936,12 +4936,12 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
 				+ "')"
 				+ " and c.dbEstado = 'R'"
-				+ " and (c.fechaCreacion >= '"
+				+ " and (c." + campoFecha + " >= '"
 				+ desde_
-				+ "' and c.fechaCreacion <= '"
+				+ "' and c." + campoFecha + " <= '"
 				+ hasta_
 				+ "')"
-				+ " order by c.fechaCreacion desc";
+				+ " order by c." + campoFecha + " desc";
 		List<Object[]> list = this.hql(query);
 		List<Object[]> out = new ArrayList<Object[]>();
 		for (Object[] obj : list) {
@@ -7638,6 +7638,26 @@ public class RegisterDomain extends Register {
 		if (list.size() > 0) {
 			double out = 0;
 			for (ArticuloCosto costo : list) {
+				out += costo.getCostoFinalGs();
+			}
+			return Utiles.getRedondeo(out / list.size());
+		
+		} else {
+			return 0.0;
+		}
+	}
+	
+	/**
+	 * @return el costo promedio del articulo..
+	 */
+	public double getCostoPromedio_(long idArticulo, Date fecha) throws Exception {
+		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a from ArticuloCostoPromedio a where a.articulo.id = " + idArticulo
+				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
+		List<ArticuloCostoPromedio> list = this.hql(query);
+		if (list.size() > 0) {
+			double out = 0;
+			for (ArticuloCostoPromedio costo : list) {
 				out += costo.getCostoFinalGs();
 			}
 			return Utiles.getRedondeo(out / list.size());
@@ -11557,8 +11577,17 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			double costo = rr.getCostoPromedio(16562, Utiles.getFecha("31-12-2019 23:00:00"));
-			System.out.println(costo);
+			List<ArticuloCosto> list = rr.getObjects(ArticuloCosto.class.getName());
+			for (ArticuloCosto item : list) {
+				ArticuloCostoPromedio costo = new ArticuloCostoPromedio();
+				costo.setArticulo(item.getArticulo());
+				costo.setCostoFinalGs(item.getCostoFinalGs());
+				costo.setFechaCompra(item.getFechaCompra());
+				costo.setIdMovimiento(item.getIdMovimiento());
+				costo.setTipoMovimiento(item.getTipoMovimiento());
+				rr.saveObject(costo, "sys");
+				System.out.println(item.getArticulo().getCodigoInterno());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

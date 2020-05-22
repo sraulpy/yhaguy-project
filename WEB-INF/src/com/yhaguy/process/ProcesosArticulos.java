@@ -56,6 +56,7 @@ public class ProcesosArticulos {
 	static final String SRC_PRECIOS = "./WEB-INF/docs/procesos/PRECIOS.csv";
 	static final String SRC_MARCAS_FAMILIAS = "./WEB-INF/docs/procesos/MARCA_FAMILIA.csv";
 	static final String SRC_PRECIOS_MRA = "./WEB-INF/docs/procesos/PRECIOS_MRA.csv";
+	static final String SRC_STOCK_MRA = "./WEB-INF/docs/procesos/STOCK_MRA.csv";
 	
 	/**
 	 * asigna familia a los articulos..
@@ -791,7 +792,7 @@ public class ProcesosArticulos {
 			long idArticulo = (long) art[0];
 			for (Deposito dep : rr.getDepositos()) {
 				long idDeposito = dep.getId();
-				List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, true, new Date());
+				List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, true, new Date(), false);
 				String saldo = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
 				ArticuloDeposito adp = rr.getArticuloDeposito(idArticulo, idDeposito);
 				long stock = adp != null ? adp.getStock() : 0;
@@ -803,6 +804,83 @@ public class ProcesosArticulos {
 			}
 		}		
 		return out;
+	}
+	
+	/**
+	 * proceso para unificar articulos mra.
+	 */
+	public static void migrarStockMra(String src) throws Exception {
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "DESCRIPCION", CSV.STRING }, { "STOCK", CSV.STRING },
+				{ "COSTO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING },
+				{ "MARCA", CSV.STRING }, { "FAMILIA", CSV.STRING }};
+		Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), 14);	
+		Proveedor prov = rr.getProveedorById(208);
+		AjusteStock ajuste = new AjusteStock();
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("CODIGO");
+			String descripcion = csv.getDetalleString("DESCRIPCION");
+			String stock = csv.getDetalleString("STOCK");
+			String costo = csv.getDetalleString("COSTO");
+			String mayorista = csv.getDetalleString("MAYORISTA");
+			String minorista = csv.getDetalleString("MINORISTA");
+			String lista = csv.getDetalleString("LISTA");
+			String marca = csv.getDetalleString("MARCA");
+			String familia = csv.getDetalleString("FAMILIA");
+			Articulo art = rr.getArticuloByCodigoInterno(codigo);
+			if (art != null) {
+				ArticuloDeposito ad = new ArticuloDeposito();
+				ad.setDeposito(dep);
+				ad.setArticulo(art);
+				ad.setStock(Long.parseLong(stock));
+				rr.saveObject(ad, "sys");
+				AjusteStockDetalle adet = new AjusteStockDetalle();
+				adet.setArticulo(art);
+				adet.setCantidad(Integer.parseInt(stock));
+				adet.setCostoGs(art.getCostoGs());
+				ajuste.getDetalles().add(adet);
+				System.out.println("FOUND --- " + codigo);
+			} else {				
+				Articulo ar = new Articulo();
+				ar.setAuxi("mra");
+				ar.setObservacion(marca);
+				ar.setIp_pc(familia);
+				ar.setCodigoInterno(codigo);
+				ar.setDescripcion(descripcion);
+				ar.setProveedor(prov);
+				ar.setCostoGs(Double.parseDouble(costo));
+				ar.setPrecioGs(Double.parseDouble(mayorista));
+				ar.setPrecioListaGs(Double.parseDouble(lista));
+				ar.setPrecioMinoristaGs(Double.parseDouble(minorista));
+				rr.saveObject(ar, "sys");
+				ArticuloDeposito ad = new ArticuloDeposito();
+				ad.setDeposito(dep);
+				ad.setArticulo(ar);
+				ad.setStock(Long.parseLong(stock));
+				rr.saveObject(ad, "sys");
+				AjusteStockDetalle adet = new AjusteStockDetalle();
+				adet.setArticulo(ar);
+				adet.setCantidad(Integer.parseInt(stock));
+				adet.setCostoGs(ar.getCostoGs());
+				ajuste.getDetalles().add(adet);
+				System.err.println("ADD --- " + codigo);
+			}
+		}	
+		ajuste.setAutorizadoPor("");
+		ajuste.setDeposito(dep);
+		ajuste.setDescripcion("migración m.r.a.");
+		ajuste.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO));
+		ajuste.setFecha(new Date());
+		ajuste.setNumero("AJT-000100");
+		ajuste.setSucursal(rr.getSucursalAppById(2));
+		ajuste.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO));
+		rr.saveObject(ajuste, "sys");
 	}
 	
 	public static void main(String[] args) {
@@ -825,7 +903,8 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
 			//ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
 			//ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
-			ProcesosArticulos.verificarStock(2, 1);
+			//ProcesosArticulos.verificarStock(2, 1);
+			ProcesosArticulos.migrarStockMra(SRC_STOCK_MRA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

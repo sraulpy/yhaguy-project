@@ -106,7 +106,7 @@ public class ControlArticuloStock {
 	 * recalcula el stock segun deposito..
 	 */
 	public static void recalcularStock(long idArticulo, long idDeposito, String user) throws Exception {
-		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0, true, new Date());
+		List<Object[]> historial = getHistorialMovimientos(idArticulo, idDeposito, 0, true, new Date(), false);
 		String stockHistorial_ = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
 		long stockHistorial = Long.parseLong(stockHistorial_);
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -128,7 +128,8 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
-	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, boolean incluirDepositoVirtual, Date hasta) throws Exception {
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal,
+			boolean incluirDepositoVirtual, Date hasta, boolean valorizado) throws Exception {
 		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			desde = Utiles.getFecha("01-01-2016 00:00:00");
@@ -136,7 +137,9 @@ public class ControlArticuloStock {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA)) {
 			desde = Utiles.getFecha("01-01-2016 00:00:00");
 		}
-		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, hasta, incluirDepositoVirtual);
+		String campoFecha = valorizado ? "fechaOriginal" : "fechaCreacion";
+		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, hasta,
+				incluirDepositoVirtual, campoFecha);
 	}
 	
 	/**
@@ -151,7 +154,8 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
-	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde, Date hasta, boolean incluirDepositoVirtual) throws Exception {
+	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal, Date desde,
+			Date hasta, boolean incluirDepositoVirtual, String campoFecha) throws Exception {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Articulo articulo = rr.getArticuloById(idArticulo);
@@ -165,7 +169,7 @@ public class ControlArticuloStock {
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo_(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
-		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, incluirDepositoVirtual, campoFecha);
 		List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, true, incluirDepositoVirtual);
 		List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, incluirDepositoVirtual);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, incluirDepositoVirtual);

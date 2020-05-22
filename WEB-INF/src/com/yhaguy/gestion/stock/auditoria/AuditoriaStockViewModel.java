@@ -109,7 +109,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 			return new ArrayList<Object[]>();
 		}
 		List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) this.selectedArticulo[0],
-				this.selectedDeposito.getId(), this.getAcceso().getSucursalOperativa().getId(), true, new Date()); 
+				this.selectedDeposito.getId(), this.getAcceso().getSucursalOperativa().getId(), true, new Date(), false); 
 		this.saldo = historial.size() > 0 ? Long.parseLong((String) historial.get(historial.size() - 1)[7]) : 0;
 		BindUtils.postNotifyChange(null, null, this, "saldo");
 		return historial;
@@ -120,7 +120,7 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 	 */
 	private List<Object[]> getHistorial(long idArticulo, long idDeposito) throws Exception {
 		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito,
-				this.getAcceso().getSucursalOperativa().getId(), true, new Date());
+				this.getAcceso().getSucursalOperativa().getId(), true, new Date(), false);
 	}
 	
 	/**

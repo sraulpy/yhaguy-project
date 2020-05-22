@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.coreweb.domain.Tipo;
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AjusteCtaCte;
@@ -35,6 +36,8 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.util.Utiles;
 
@@ -46,6 +49,7 @@ public class ProcesosTesoreria {
 	static final String SRC_CLIENTES_VIVIANA = "./WEB-INF/docs/process/CLIENTES-VIVIANA.csv";
 	static final String SRC_FUNCIONARIOS = "./WEB-INF/docs/procesos/FUNCIONARIOS.csv";
 	static final String SRC_CARTERA = "./WEB-INF/docs/procesos/CARTERA_CLIENTES.csv";
+	static final String SRC_SALDOS_CLIENTES_MRA = "./WEB-INF/docs/procesos/SALDOS_CLIENTES_MRA.csv";
 	
 	/**
 	 * verificacion de facturas anuladas..
@@ -1533,6 +1537,118 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	/**
+	 * Proceso que migra los clientes de mra
+	 */
+	public static void migracionClientesMRA(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		TipoMovimiento tmVentaCredito = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		Tipo moneda = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+		Tipo caracter = rr.getTipoById(98);
+		Tipo ciudad = rr.getTipoPorDescripcion("ASUNCION");
+		Tipo pais = rr.getTipoPorDescripcion("Paraguay");
+		EmpresaCartera cartera = rr.getCartera("CORRIENTE");
+		EmpresaRubro rubro = rr.getRubro("CONSUMIDOR FINAL");
+		SucursalApp suc = rr.getSucursalAppById(1);
+		Funcionario vend = rr.getFuncionarioById(54);
+		
+		String[][] cab = { { "Empresa", CSV.STRING } }; 
+		String[][] det = { { "RUC", CSV.STRING }, { "IMPORTE", CSV.STRING }, { "SALDO", CSV.STRING },
+				{ "EMISION", CSV.STRING }, { "VENCIMIENTO", CSV.STRING }, { "VENDEDOR", CSV.STRING },
+				{ "NROCOMPROBANTE", CSV.STRING }, { "DIRECCION", CSV.STRING }, { "TELEFONO", CSV.STRING } };
+		
+		List<String> noEncontrado = new ArrayList<String>();
+		
+		CSV csv = new CSV(cab, det, src);
+		long idmov = -1;
+
+		csv.start();
+		while (csv.hashNext()) {		
+			String ruc = csv.getDetalleString("RUC");
+			String importe = csv.getDetalleString("IMPORTE");
+			String saldo = csv.getDetalleString("SALDO");
+			String emision = csv.getDetalleString("EMISION");
+			String vencimiento = csv.getDetalleString("VENCIMIENTO");
+			String vendedor = csv.getDetalleString("VENDEDOR");
+			String nroComprobante = csv.getDetalleString("NROCOMPROBANTE");
+			String direccion = csv.getDetalleString("DIRECCION");
+			String telefono = csv.getDetalleString("TELEFONO");
+			idmov --;
+			
+			Empresa emp = rr.getEmpresaByRuc(ruc);
+			if (emp != null) {
+				CtaCteEmpresaMovimiento cm = new CtaCteEmpresaMovimiento();
+				cm.setAnulado(false);
+				cm.setCarteraCliente(cartera);
+				cm.setCliente(rr.getClienteByEmpresa(emp.getId()));
+				cm.setFechaEmision(Utiles.getFecha(emision, Utiles.YYYY_MM_DD_HH_MM_SS));
+				cm.setFechaVencimiento(Utiles.getFecha(vencimiento, Utiles.YYYY_MM_DD_HH_MM_SS));
+				cm.setIdEmpresa(emp.getId());
+				cm.setIdVendedor(0);
+				cm.setImporteOriginal(Double.parseDouble(importe));
+				cm.setMoneda(moneda);
+				cm.setNroComprobante(nroComprobante);
+				cm.setNumeroImportacion("");
+				cm.setObservacion(vendedor);
+				cm.setSaldo(Double.parseDouble(saldo));
+				cm.setSucursal(suc);
+				cm.setTipoCaracterMovimiento(caracter);
+				cm.setTipoMovimiento(tmVentaCredito);
+				cm.setIdMovimientoOriginal(idmov);
+				rr.saveObject(cm, "sys");
+				System.out.println("ADD CTM: " + ruc);
+			} else {
+				String rsocial = rr.getRazonSocialSET(ruc);
+				if (!rsocial.isEmpty()) {
+					emp = new Empresa();
+					emp.setRuc(ruc);
+					emp.setRazonSocial(rsocial);
+					emp.setCartera(cartera);
+					emp.setCi("");
+					emp.setCiudad(ciudad);
+					emp.setDireccion_(direccion);
+					emp.setTelefono_(telefono);
+					emp.setNombre(rsocial);
+					emp.setObservacion("MIGRACION MRA");
+					emp.setPais(pais);
+					emp.setRubro(rubro);
+					emp.setVendedor(vend);
+					rr.saveObject(emp, "sys");
+					Cliente cli = new Cliente();
+					cli.setCartera(cartera.getDescripcion());
+					cli.setEmpresa(emp);
+					rr.saveObject(cli, "sys");
+					
+					CtaCteEmpresaMovimiento cm = new CtaCteEmpresaMovimiento();
+					cm.setAnulado(false);
+					cm.setCarteraCliente(cartera);
+					cm.setCliente(rr.getClienteByEmpresa(emp.getId()));
+					cm.setFechaEmision(Utiles.getFecha(emision, Utiles.DD_MM_YYYY));
+					cm.setFechaVencimiento(Utiles.getFecha(vencimiento, Utiles.DD_MM_YYYY));
+					cm.setIdEmpresa(emp.getId());
+					cm.setIdVendedor(0);
+					cm.setImporteOriginal(Double.parseDouble(importe));
+					cm.setMoneda(moneda);
+					cm.setNroComprobante(nroComprobante);
+					cm.setNumeroImportacion("");
+					cm.setObservacion(vendedor);
+					cm.setSaldo(Double.parseDouble(saldo));
+					cm.setSucursal(suc);
+					cm.setTipoCaracterMovimiento(caracter);
+					cm.setTipoMovimiento(tmVentaCredito);
+					cm.setIdMovimientoOriginal(idmov);
+					rr.saveObject(cm, "sys");
+					System.out.println("ADD CLI: " + ruc);
+				}
+				noEncontrado.add(ruc);
+			}
+		}		
+		System.out.println("- - - - - - - - - REMANENTES - - - - - - - - -");
+		for (String cliente : noEncontrado) {
+			System.err.println(cliente);
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1577,7 +1693,8 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.depurarSaldosPorVenta(59103);
 			//ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
 			//ProcesosTesoreria.verificarBancoDepositos();
-			ProcesosTesoreria.verificarCotizacionGastos();
+			//ProcesosTesoreria.verificarCotizacionGastos();
+			ProcesosTesoreria.migracionClientesMRA(SRC_SALDOS_CLIENTES_MRA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

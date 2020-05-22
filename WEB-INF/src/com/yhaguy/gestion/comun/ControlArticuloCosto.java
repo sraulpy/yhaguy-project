@@ -6,6 +6,7 @@ import java.util.List;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloCosto;
+import com.yhaguy.domain.ArticuloCostoPromedio;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
@@ -18,16 +19,29 @@ public class ControlArticuloCosto {
 	 */
 	public static void addMovimientoCosto(long idArticulo, double costoGs,
 			Date fecha, long idMovimiento, long idTipoMovimiento, String user) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		TipoMovimiento tm = rr.getTipoMovimientoById(idTipoMovimiento);
-		Articulo art = rr.getArticuloById(idArticulo);
-		ArticuloCosto costo = new ArticuloCosto();
-		costo.setArticulo(art);
-		costo.setCostoFinalGs(costoGs);
-		costo.setFechaCompra(fecha);
-		costo.setIdMovimiento(idMovimiento);
-		costo.setTipoMovimiento(tm);
-		rr.saveObject(costo, user);
+		if (fecha == null) {
+			fecha = new Date();
+		}
+		if (costoGs > 10) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			TipoMovimiento tm = rr.getTipoMovimientoById(idTipoMovimiento);
+			Articulo art = rr.getArticuloById(idArticulo);
+			ArticuloCosto costo = new ArticuloCosto();
+			costo.setArticulo(art);
+			costo.setCostoFinalGs(costoGs);
+			costo.setFechaCompra(fecha);
+			costo.setIdMovimiento(idMovimiento);
+			costo.setTipoMovimiento(tm);
+			rr.saveObject(costo, user);
+			
+			ArticuloCostoPromedio prom = new ArticuloCostoPromedio();
+			prom.setArticulo(art);
+			prom.setCostoFinalGs(costoGs);
+			prom.setFechaCompra(fecha);
+			prom.setIdMovimiento(idMovimiento);
+			prom.setTipoMovimiento(tm);
+			rr.saveObject(prom, user);
+		}		
 	}
 	
 	
