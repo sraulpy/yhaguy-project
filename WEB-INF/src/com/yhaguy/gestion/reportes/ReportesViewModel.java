@@ -1003,7 +1003,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (stock > 0) {
 						Double aj = ajs.get(idArticulo_);
 						if (aj != null) {
-							costo = costo + aj;
+							costo = aj;
 						}
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
 					}										
