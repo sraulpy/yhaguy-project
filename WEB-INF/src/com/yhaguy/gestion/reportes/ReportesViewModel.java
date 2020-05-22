@@ -50,6 +50,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.AjusteCtaCte;
 import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.AjusteStockDetalle;
+import com.yhaguy.domain.AjusteValorizado;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloFamilia;
@@ -973,6 +974,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), true);
 
+				double total = 7340161549.0;
+				double totalDiff = 1883972920.00;
+				double newTotal = 0;
+				int mes = 0;
+				
 				for (Object[] art : arts) {
 					
 					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta, true);
@@ -995,8 +1001,22 @@ public class ReportesViewModel extends SimpleViewModel {
 					
 					if (stock > 0) {
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
-					}				
+						double importe = Utiles.getRedondeo(stock * costo);
+						double porc = Utiles.obtenerPorcentajeDelValor(importe, total);
+						double proc = Utiles.obtenerValorDelPorcentaje(totalDiff, porc) / stock;
+						double newCosto = costo + proc;
+						newTotal += (newCosto * stock);
+						System.out.println(Utiles.getNumberFormat(costo) + " - " + Utiles.getNumberFormat(newCosto));
+						mes ++;
+						if (mes > 12) mes = 1;
+						AjusteValorizado aj = new AjusteValorizado();
+						aj.setFecha(Utiles.getFechaFinMes(mes, 2019));
+						aj.setCostoGs(newCosto);
+						aj.setArticulo(articulo);
+						rr.saveObject(aj, "sys");
+					}										
 				}
+				System.out.println(Utiles.getNumberFormat(newTotal));
 				
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
 				String familia_ = familia.getDescripcion();

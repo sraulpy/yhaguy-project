@@ -11576,18 +11576,7 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			List<ArticuloCosto> list = rr.getObjects(ArticuloCosto.class.getName());
-			for (ArticuloCosto item : list) {
-				ArticuloCostoPromedio costo = new ArticuloCostoPromedio();
-				costo.setArticulo(item.getArticulo());
-				costo.setCostoFinalGs(item.getCostoFinalGs());
-				costo.setFechaCompra(item.getFechaCompra());
-				costo.setIdMovimiento(item.getIdMovimiento());
-				costo.setTipoMovimiento(item.getTipoMovimiento());
-				rr.saveObject(costo, "sys");
-				System.out.println(item.getArticulo().getCodigoInterno());
-			}
+			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
