@@ -11574,6 +11574,16 @@ public class RegisterDomain extends Register {
 		return out.size() > 0 ? out.get(0) : null;
 	}
 	
+	/**
+	 * @return los ajustes segun fecha
+	 */
+	public List<AjusteValorizado> getAjustesValorizados(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a from AjusteValorizado a where a.fecha >= '" + desde_ + "' and a.fecha <= '" + hasta_ + "'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));
