@@ -1005,7 +1005,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (aj != null) {
 							costo = costo + aj;
 						}
-						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
+						data.add(new Object[] { codigoInterno, descripcion, stock, Utiles.getRedondeo(costo), Utiles.getRedondeo(stock * costo) });
 					}										
 				}
 				
