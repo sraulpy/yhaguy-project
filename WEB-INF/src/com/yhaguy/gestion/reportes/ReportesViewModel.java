@@ -1008,7 +1008,9 @@ public class ReportesViewModel extends SimpleViewModel {
 						newTotal += (newCosto * stock);
 						System.out.println(Utiles.getNumberFormat(costo) + " - " + Utiles.getNumberFormat(newCosto));
 						mes ++;
-						if (mes > 12) mes = 1;
+						if (mes > 12) {
+							mes = 1;
+						}
 						AjusteValorizado aj = new AjusteValorizado();
 						aj.setFecha(Utiles.getFechaFinMes(mes, 2019));
 						aj.setCostoGs(newCosto);
