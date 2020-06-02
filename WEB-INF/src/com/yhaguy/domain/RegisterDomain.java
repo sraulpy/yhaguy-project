@@ -4917,6 +4917,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean incluirDepositoVirtual, String campoFecha) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		System.out.println("-------> " + campoFecha);
 		String query = "select c.tipoMovimiento.descripcion, "+ "c." + campoFecha + ", c.numero, d.cantidad, d.costoGs, "
 				+ " c.proveedor.empresa.razonSocial,"
 				+ " (select oc.deposito.descripcion from ImportacionPedidoCompra oc join oc.importacionFactura f where f.id = c.id";
