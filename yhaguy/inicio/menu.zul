@@ -9,6 +9,7 @@
 						<zk forEach="${vm.menuItem(self,'Caja')}" />
 						<zk forEach="${vm.menuItem(self,'CajaPlanilla')}" />
 						<zk forEach="${vm.menuItem(self,'CajaPlanillaResumen')}" />
+						<menuitem label="CAJA / AUDITORÍA" disabled="true" iconSclass="z-icon-caret-right" />
 					</menupopup>
 				</menu>	
 				
