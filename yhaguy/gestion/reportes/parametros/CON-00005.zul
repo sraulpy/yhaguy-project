@@ -66,8 +66,8 @@
 			</chosenbox>
 		</row>
 		<row>
-			<hlayout>
 			<field value="Notas Créd./Cont.:" />
+			<hlayout>			
 			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)" />
 			<space></space>
 			<field value="Notas Crédito/Créd.:" />
@@ -75,8 +75,8 @@
 			</hlayout>
 		</row>
 		<row>
-			<hlayout>
 			<field value="Ventas Crédito:" />
+			<hlayout>			
 			<checkbox checked="@bind(vm.dato.filtro.incluirVCR)" />
 			<space></space>
 			<field value="Ventas Contado:" />
