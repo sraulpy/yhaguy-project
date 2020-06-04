@@ -66,24 +66,37 @@
 			</chosenbox>
 		</row>
 		<row>
+			<hlayout>
 			<field value="Notas Créd./Cont.:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)" />
-		</row>
-		<row>
+			<space></space>
 			<field value="Notas Crédito/Créd.:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirNCR_CRED)" />
+			</hlayout>
 		</row>
 		<row>
+			<hlayout>
 			<field value="Ventas Crédito:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirVCR)" />
-		</row>
-		<row>
+			<space></space>
 			<field value="Ventas Contado:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirVCT)" />
+			</hlayout>			
 		</row>
 		<row>
 			<field value="Boca expedición:" />
 			<textbox value="@bind(vm.dato.filtro.expedicion)" hflex="true" placeholder="TODOS.." />
+		</row>
+		<row>
+			<field value="Depósito:" />
+			<combobox hflex="true"
+				model="@load(vm.dato.filtro.depositos_)"
+				selectedItem="@bind(vm.dato.filtro.deposito)"
+				placeholder="TODOS..">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
 		</row>
 	</rows>
 </grid>
