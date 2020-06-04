@@ -3752,6 +3752,9 @@ public class RegisterDomain extends Register {
 		if (idSucursal != 0) {
 			listParams.add(idSucursal);
 		}
+		if (idDeposito != 0) {
+			listParams.add(idDeposito);
+		}
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
