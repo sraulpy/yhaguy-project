@@ -4620,7 +4620,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
 				
-				List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, "");
+				List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, "", 0);
 				for (Venta venta : ventas) {
 					if (!venta.isAnulado()) {
 						for (ArticuloFamilia flia : flias) {
@@ -12686,9 +12686,11 @@ public class ReportesViewModel extends SimpleViewModel {
 				Cliente cliente = filtro.getCliente();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				String expedicion = filtro.getExpedicion();
+				Deposito dep = filtro.getDeposito();
 				String cliente_ = cliente == null ? "TODOS.." : cliente.getRazonSocial();
 				long idCliente = cliente == null ? 0 : cliente.getId();
 				long idSucursal = suc == null ? 0 : suc.getId(); 
+				long idDeposito = dep == null ? 0 : dep.getId();
 				
 				List<ArticuloFamilia> familias = new ArrayList<ArticuloFamilia>();
 				familias.addAll(_familias);
@@ -12709,7 +12711,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalImporte = 0;
 
 				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
-					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal, expedicion);
+					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal, expedicion, idDeposito);
 					for (NotaCredito notacred : ncs) {
 						int length = notacred.getCliente().getRazonSocial()
 								.length();
@@ -12745,7 +12747,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
-					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, expedicion);
+					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, expedicion, idDeposito);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"),
@@ -14127,7 +14129,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalCosto = 0;
 
 				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
-					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal, "");
+					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal, "", 0);
 					for (NotaCredito notacred : ncs) {
 						int length = notacred.getCliente().getRazonSocial().length();
 						int maxlength = length > 25 ? 25 : length;
@@ -14157,7 +14159,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
-					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, "");
+					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, "", 0);
 					for (Venta venta : ventas) {
 						Object[] vta = new Object[] {
 								m.dateToString(venta.getFecha(), "dd-MM-yy"), venta.getNumero(),
