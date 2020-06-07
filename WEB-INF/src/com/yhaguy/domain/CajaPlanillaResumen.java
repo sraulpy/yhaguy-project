@@ -28,6 +28,7 @@ public class CajaPlanillaResumen extends Domain {
 	private Set<BancoBoletaDeposito> depositos_diferidos = new HashSet<BancoBoletaDeposito>();
 	private Set<BancoBoletaDeposito> depositos_generados = new HashSet<BancoBoletaDeposito>();
 	private Set<CajaPeriodo> planillas = new HashSet<CajaPeriodo>();
+	private Set<CajaAuditoria> auditorias = new HashSet<CajaAuditoria>();
 	
 	@Override
 	public int compareTo(Object o) {
@@ -41,6 +42,28 @@ public class CajaPlanillaResumen extends Domain {
 		double out = 0;
 		for (CajaPeriodo planilla : this.planillas) {
 			out += (planilla.getTotalEfectivoIngreso() - planilla.getTotalEfectivoEgreso());
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total en efectivo ingreso..
+	 */
+	public double getResumenEfectivoIngreso() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += (planilla.getTotalEfectivoIngreso());
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total en efectivo egreso..
+	 */
+	public double getResumenEfectivoEgreso() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += (planilla.getTotalEfectivoEgreso());
 		}
 		return out;
 	}
@@ -496,5 +519,13 @@ public class CajaPlanillaResumen extends Domain {
 
 	public void setDepositos_valores_bat(Set<BancoBoletaDeposito> depositos_valores_bat) {
 		this.depositos_valores_bat = depositos_valores_bat;
+	}
+
+	public Set<CajaAuditoria> getAuditorias() {
+		return auditorias;
+	}
+
+	public void setAuditorias(Set<CajaAuditoria> auditorias) {
+		this.auditorias = auditorias;
 	}
 }

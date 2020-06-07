@@ -1,0 +1,120 @@
+<window apply="org.zkoss.bind.BindComposer"
+	height="100%" width="100%">
+
+	<grid sclass="vgrid">
+		<rows>
+			<row>
+				<vlayout spacing="0">
+					<field value="Cajas" />
+					<chosenbox hflex="true" sclass="rounded"
+						style="margin-top:5px"
+						emptyMessage="Seleccione una o más cajas..">
+					</chosenbox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Desde" />
+					<datebox hflex="true" style="background:#eef7fa">
+					</datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Hasta" />
+					<datebox hflex="true" style="background:#eef7fa">
+					</datebox>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="Saldo inicial mensual" />
+					<button label="Registrar saldo inicial" hflex="true" iconSclass="z-icon-check"
+						onClick='pop_saldo_inicial.open(self, "after_end")'/>
+				</vlayout>
+			</row>
+		</rows>
+	</grid>
+	<div height="10px"></div>
+	<listbox sclass="small-list"
+		vflex="true"
+		emptyMessage="SIN MOVIMIENTOS..">
+		<listhead sizable="true">
+			<listheader label="Concepto" width="190px" style="text-align:center" />
+			<listheader label="Fecha" width="100px" style="text-align:center" />
+			<listheader label="Hora" width="100px" style="text-align:center" />
+			<listheader label="Número" width="130px" style="text-align:center" align="right" />
+			<listheader label="Origen" style="text-align:center" />
+			<listheader label="Debe" width="150px"
+				style="text-align:center" align="right" />
+			<listheader label="Haber" width="150px"
+				style="text-align:center" align="right" />
+			<listheader label="Saldo" width="150px"
+				style="text-align:center" align="right" />
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<textbox sclass="filter" hflex="true"
+					placeholder="Concepto.." instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader>
+				<textbox sclass="filter" hflex="true"
+					placeholder="Número.." instant="true"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<listfoot>
+			<listfooter align="left">
+				<field value="ítems" />
+			</listfooter>
+			<listfooter span="4" align="right"></listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" />
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" />
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" />
+			</listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_saldo_inicial" sclass="rounded">
+		<grid sclass="vgrid" width="400px" style="margin:10px">
+			<columns>
+				<column width="25%"></column>
+				<column></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Banco:" />
+					<textbox hflex="true" readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Concepto:" />
+					<textbox hflex="true" readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Año:" />
+					<combobox hflex="true">
+					</combobox>
+				</row>
+				<row>
+					<field value="Mes:" />
+					<combobox hflex="true">
+					</combobox>
+				</row>
+				<row>
+					<field value="Importe Gs.:" />
+					<guaranibox hflex="true"></guaranibox>
+				</row>
+			</rows>
+		</grid>
+		<hbox width="100%" style="margin: 0px 10px 0px 10px">
+			<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-check" hflex="true"></button>
+		</hbox>
+	</popup>
+</window>

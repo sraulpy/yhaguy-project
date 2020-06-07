@@ -41,6 +41,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.CajaAuditoria;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.ReciboFormaPago;
@@ -321,6 +322,38 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.asignarValoresBaterias_();
 		comp.close();
 		Clients.showNotification("Depósito asignado..");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void confirmarRecaudacion(@BindingParam("comp") Popup comp) throws Exception {
+		if (!this.mensajeSiNo("Desea confirmar la recaudación?"))
+			return; 
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		CajaAuditoria efectivo = new CajaAuditoria();
+		efectivo.setConcepto(CajaAuditoria.CONCEPTO_EFECTIVO);
+		efectivo.setFecha(this.selectedResumen_.getFecha());
+		efectivo.setImporte(this.selectedResumen_.getResumenEfectivo());
+		efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		efectivo.setResumen(this.selectedResumen_.getNumero());
+		efectivo.setSupervisor(this.getLoginNombre());
+		this.selectedResumen_.getAuditorias().add(efectivo);
+		
+		for (BancoChequeTercero cheque : this.selectedResumen_.getChequesAlDiaSinPrestamosCC()) {
+			CajaAuditoria chq = new CajaAuditoria();
+			chq.setConcepto(CajaAuditoria.CONCEPTO_CHEQUE);
+			chq.setFecha(this.selectedResumen_.getFecha());
+			chq.setImporte(cheque.getMonto());
+			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			chq.setResumen(this.selectedResumen_.getNumero());
+			chq.setSupervisor(this.getLoginNombre());
+			this.selectedResumen_.getAuditorias().add(chq);
+		}
+		
+		rr.saveObject(this.selectedResumen_, this.getLoginNombre());
+		comp.close();
+		Clients.showNotification("Recaudación confirmada..");
 	}
 	
 	/**

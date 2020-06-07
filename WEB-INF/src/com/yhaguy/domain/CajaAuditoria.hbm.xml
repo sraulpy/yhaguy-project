@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.CajaAuditoria" table="caja_auditoria">
+
+		&hibernate-domain;
+
+		<property name="fecha" />
+		<property name="resumen" />
+		<property name="concepto" />
+		<property name="supervisor" />
+		<property name="importe" />
+
+		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
+			column="idMoneda" not-null="false" lazy="false" />
+
+	</class>
+</hibernate-mapping>

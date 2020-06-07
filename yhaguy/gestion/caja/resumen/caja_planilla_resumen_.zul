@@ -655,26 +655,26 @@
 					</listbox>
 				</hbox>
 				<space></space>				
-				<hlayout sclass="button-container">
+				<hlayout>
+					<button mold="bs" sclass="btn-primary btn-sm"
+						iconSclass="z-icon-check" label="Confirmar Recaudación"
+						width="160px" onClick='pop_recaud.open(self, "before_end")' />
 					<button mold="bs" sclass="btn-success btn-sm"
 						iconSclass="z-icon-plus-circle" label=" Generar Depósito" 
 						width="150px"
 						onClick='pop_add_deposito.open(self, "before_end")'/>
-					<space></space>
 					<button mold="bs" sclass="btn-info btn-sm"
 						iconSclass="z-icon-plus-circle" label=" Depósito Diferidos" 
 						width="150px"
 						onClick='pop_add_deposito_dif.open(self, "before_end")'/>
-					<space></space>
 					<button mold="bs" sclass="btn-warning btn-sm"
 						iconSclass="z-icon-print" label=" Imprimir Resumen" 
-						width="150px" onClick="@command('printResumen')"/>
-					<space></space>
+						width="150px" onClick="@command('printResumen')"/>					
 					<button mold="bs" sclass="btn-primary btn-sm"
-						iconSclass="z-icon-reply" label=" Volver.." 
-						onClick="inc_res.setVisible(false);lst_res.setVisible(true);hl_btn.setVisible(true)"
-						width="150px"/>
+						iconSclass="z-icon-reply"
+						onClick="inc_res.setVisible(false);lst_res.setVisible(true);hl_btn.setVisible(true)" />
 				</hlayout>
+				<div height="5px"></div>
 				<hlayout>
 					<space></space>
 					<field value="RESUMEN " />
@@ -1002,6 +1002,83 @@
 								iconSclass="z-icon-check" width="80px"
 								disabled="@load(vm.nvoDeposito_.numeroBoleta eq null or vm.nvoDeposito_.numeroBoleta.isEmpty())"
 								onClick="@command('generarDepositoDiferido', comp=pop_add_deposito_dif)"/>
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vlayout>
+	</popup>
+	
+	<!-- CONFIRMAR RECAUDACION -->
+	
+	<popup id="pop_recaud" sclass="rounded">
+		<vlayout height="400px" width="650px">
+			<grid sclass="vgrid">
+				<rows>
+					<row>
+						<vlayout spacing="5px" hflex="true">
+							<field value="Total Efectivo" />
+							<hbox hflex="true">
+								<field value="Ingreso:" />
+								<guaranibox hflex="true" readonly="true"
+									value="@load(vm.selectedResumen_.resumenEfectivoIngreso)" />
+								<space></space>
+								<field value="Egreso:" />
+								<guaranibox hflex="true" readonly="true" 
+									value="@load(vm.selectedResumen_.resumenEfectivoEgreso)" />
+								<space></space>
+								<field value="Saldo:" />
+								<guaranibox hflex="true" value="@load(vm.selectedResumen_.resumenEfectivo)"
+									readonly="true" />
+							</hbox>
+						</vlayout>
+					</row>
+				</rows>			
+			</grid>
+			<listbox sclass="small-list" vflex="true" emptyMessage="SIN CHEQUES AL DÍA.."
+				model="@load(vm.selectedResumen_.chequesAlDiaSinPrestamosCC)">
+				<auxhead>
+					<auxheader colspan="4" label="Cheques al día" align="center"></auxheader>
+				</auxhead>
+				<listhead>
+					<listheader label="Fecha"></listheader>
+					<listheader label="Banco"></listheader>
+					<listheader label="Número"></listheader>
+					<listheader label="Monto Gs." align="right"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"/>
+						<listcell label="@load(each.banco.descripcion.toUpperCase())"/>
+						<listcell label="@load(each.numero)"/>
+						<listcell label="@load(each.monto) @converter(vm.cnv.monedaLocal)"/>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter span="4">
+						<hlayout>
+							<field value="Total:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito.totalImporteGs)"/>
+							<space />
+							<field value="Efectivo:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito.totalEfectivo)"/>
+							<space />
+							<field value="Cheque:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" 
+								value="@load(vm.nvoDeposito.totalImporteCheques)"/>
+							<space hflex="true"/>
+							<button mold="bs"
+								sclass="btn-success btn-sm"
+								iconSclass="z-icon-check" width="80px"
+								onClick="@command('confirmarRecaudacion', comp=pop_recaud)"/>
 						</hlayout>
 					</listfooter>
 				</listfoot>
