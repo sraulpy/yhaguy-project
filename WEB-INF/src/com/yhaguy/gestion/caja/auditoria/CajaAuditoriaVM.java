@@ -1,5 +1,7 @@
 package com.yhaguy.gestion.caja.auditoria;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,10 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 	
 	private Date filterDesde;
 	private Date filterHasta;
+	
+	private String filterResumen = "";
+	private String filterConcepto = "";
+	private String filterNumero = "";
 	
 	private double totalDebe = 0;
 	private double totalHaber = 0;
@@ -40,12 +46,23 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 	 * GETS / SETS
 	 */
 	
-	@DependsOn({ "filterDesde", "filterHasta" })
+	@DependsOn({ "filterDesde", "filterHasta", "filterResumen", "filterConcepto", "filterNumero" })
 	public List<CajaAuditoria> getCajaAuditorias() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<CajaAuditoria> out = rr.getCajaAuditorias(this.filterDesde, this.filterHasta);
+		List<CajaAuditoria> out = rr.getCajaAuditorias(this.filterDesde, this.filterHasta, this.filterResumen,
+				this.filterConcepto, this.filterNumero);
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<CajaAuditoria>() {
+			@Override
+			public int compare(CajaAuditoria o1, CajaAuditoria o2) {
+				Date fecha1 = (Date) o1.getFecha();
+				Date fecha2 = (Date) o2.getFecha();
+				return fecha1.compareTo(fecha2);
+			}
+		});
 		this.totalDebe = 0;
 		this.totalHaber = 0;
+		this.totalSaldo = 0;
 		for (CajaAuditoria aud : out) {
 			this.totalDebe += aud.getDebe();
 			this.totalHaber += aud.getHaber();
@@ -95,5 +112,29 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 
 	public void setTotalSaldo(double totalSaldo) {
 		this.totalSaldo = totalSaldo;
+	}
+
+	public String getFilterResumen() {
+		return filterResumen;
+	}
+
+	public void setFilterResumen(String filterResumen) {
+		this.filterResumen = filterResumen;
+	}
+
+	public String getFilterConcepto() {
+		return filterConcepto;
+	}
+
+	public void setFilterConcepto(String filterConcepto) {
+		this.filterConcepto = filterConcepto;
+	}
+
+	public String getFilterNumero() {
+		return filterNumero;
+	}
+
+	public void setFilterNumero(String filterNumero) {
+		this.filterNumero = filterNumero;
 	}
 }

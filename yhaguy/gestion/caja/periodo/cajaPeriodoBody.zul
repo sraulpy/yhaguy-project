@@ -103,16 +103,15 @@
 			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('abrirVentanaRecibo', tipo=1)"
-				disabled="@load(!vm.dto.caja.pago or (vm.dto.tipo ne 'CAJA PAGOS' and vm.dto.tipo ne 'CAJA PAGOS EXTERIOR' 
-					and vm.dto.tipo ne 'CAJA CHICA'))" label=" Pago" />	
+				disabled="@load(!vm.dto.caja.pago)" label=" Pago" />	
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('showFormGastos')"
-				disabled="@load(!vm.dto.caja.gasto or vm.dto.tipo ne 'CAJA CHICA')" label=" Gasto" />
+				disabled="@load(!vm.dto.caja.gasto)" label=" Gasto" />
 			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('abrirVentanaReposicion', tipo=3)"
-				disabled="@load(!vm.dto.caja.egreso or vm.dto.tipo ne 'CAJA CHICA')" label=" Egreso" />	
+				disabled="@load(!vm.dto.caja.egreso)" label=" Egreso" />	
 			<button mold="bs" sclass="btn-warning btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('devolucionConNotaDeCredito')"

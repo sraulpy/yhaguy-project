@@ -11,10 +11,15 @@ public class CajaAuditoria extends Domain {
 	public static final String CONCEPTO_EFECTIVO = "EFECTIVO SALDO";
 	public static final String CONCEPTO_CHEQUE = "CHEQUE AL DÍA";
 	public static final String CONCEPTO_CHEQUE_DIFERIDO = "CHEQUE DIFERIDO";
-
+	
+	public static final String CONCEPTO_DEPOSITO_CHEQUE = "DEPÓSITO CHEQUE";
+	public static final String CONCEPTO_DESCUENTO_CHEQUE = "DESCUENTO CHEQUE";
+	public static final String CONCEPTO_PAGO_CHEQUE = "PAGO CON CHEQUE";
+	
 	private Date fecha;
 	private String resumen;
 	private String concepto;
+	private String numero;
 	private String descripcion;
 	private String supervisor;
 	private double importe;
@@ -43,6 +48,10 @@ public class CajaAuditoria extends Domain {
 	 */
 	public double getHaber() {
 		double out = 0;
+		if (this.concepto.equals(CONCEPTO_DEPOSITO_CHEQUE) || this.concepto.equals(CONCEPTO_DESCUENTO_CHEQUE)
+				|| this.concepto.equals(CONCEPTO_PAGO_CHEQUE)) {
+			out = this.importe;
+		}
 		return out;
 	}
 	
@@ -107,6 +116,14 @@ public class CajaAuditoria extends Domain {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 
 }

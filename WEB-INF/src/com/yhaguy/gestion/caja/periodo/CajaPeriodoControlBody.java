@@ -42,6 +42,7 @@ import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Caja;
+import com.yhaguy.domain.CajaAuditoria;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Funcionario;
@@ -540,6 +541,25 @@ public class CajaPeriodoControlBody extends BodyApp {
 				ProcesosHistoricos.updateHistoricoCobranzaDiaria(new Date(), this.reciboDTO.getTotalImporteGsSinIva());
 				this.imprimirCobro();
 			} else {
+				if (this.reciboDTO.isOrdenPago()) {
+					for (ReciboFormaPagoDTO fp : this.reciboDTO.getFormasPago()) {
+						if (fp.isChequeTerceroAutocobranza()) {
+							RegisterDomain rr = RegisterDomain.getInstance();
+							CajaAuditoria chq = new CajaAuditoria();
+							chq.setConcepto(CajaAuditoria.CONCEPTO_PAGO_CHEQUE);
+							chq.setDescripcion("ORDEN PAGO NRO. " + this.reciboDTO.getNumero() + " - "
+									+ " CHEQUE: " + fp.getChequeNumero() + " - "
+									+ fp.getChequeBancoDescripcion());
+							chq.setFecha(this.reciboDTO.getFechaEmision());
+							chq.setImporte(fp.getMontoGs());
+							chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+							chq.setResumen("- - -");
+							chq.setNumero(fp.getChequeNumero());
+							chq.setSupervisor(this.getNombreUsuario());
+							rr.saveObject(chq, this.getLoginNombre());
+						}
+					}
+				}
 				this.imprimirPago();
 			}
 		} else {

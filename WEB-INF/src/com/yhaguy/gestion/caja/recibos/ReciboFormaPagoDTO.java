@@ -90,6 +90,14 @@ public class ReciboFormaPagoDTO extends DTO {
 	}
 	
 	/**
+	 * @return true si la forma de pago es cheque tercero autocobranza..
+	 */
+	public boolean isChequeTerceroAutocobranza() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_CHEQUE_AUTOCOBRANZA);
+	}
+	
+	/**
 	 * @return true si la forma de pago es cheque propio..
 	 */
 	public boolean isRetencionIVA() {

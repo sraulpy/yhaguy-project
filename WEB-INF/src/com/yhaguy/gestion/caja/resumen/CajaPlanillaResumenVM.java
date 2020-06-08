@@ -265,6 +265,12 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 	}
 	
 	@Command
+	@NotifyChange("nvoDeposito_")
+	public void deleteItems() {
+		this.nvoDeposito_.getCheques().clear();
+	}
+	
+	@Command
 	@NotifyChange("*")
 	public void generarDeposito(@BindingParam("comp") Popup comp) 
 		throws Exception {
@@ -274,6 +280,22 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.nvoDeposito.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito, this.getLoginNombre());
+		
+		// actualiza auditoria de caja..
+		for (BancoChequeTercero cheque : this.nvoDeposito.getCheques()) {
+			CajaAuditoria chq = new CajaAuditoria();
+			chq.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_CHEQUE);
+			chq.setDescripcion("DEPÓSITO NRO. (" + this.nvoDeposito.getNumeroBoleta() + " - "
+					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + ") CHEQUE: " + cheque.getNumero() + " - "
+					+ cheque.getBanco().getDescripcion());
+			chq.setFecha(this.nvoDeposito.getFecha());
+			chq.setImporte(cheque.getMonto());
+			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			chq.setResumen(this.selectedResumen_.getNumero());
+			chq.setNumero(cheque.getNumero());
+			chq.setSupervisor(this.getNombreUsuario());
+			this.selectedResumen_.getAuditorias().add(chq);
+		}
 		
 		this.selectedResumen_.getDepositos_generados().add(this.nvoDeposito);
 		rr.saveObject(this.selectedResumen_, this.getLoginNombre());
@@ -293,6 +315,22 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito_, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito_, this.getLoginNombre());
+		
+		// actualiza auditoria de caja..
+		for (BancoChequeTercero cheque : this.nvoDeposito_.getCheques()) {
+			CajaAuditoria chq = new CajaAuditoria();
+			chq.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_CHEQUE);
+			chq.setDescripcion("DEPÓSITO NRO. (" + this.nvoDeposito_.getNumeroBoleta() + " - "
+					+ this.nvoDeposito_.getNroCuenta().getBancoDescripcion() + ") CHEQUE: " + cheque.getNumero() + " - "
+					+ cheque.getBanco().getDescripcion());
+			chq.setFecha(this.nvoDeposito_.getFecha());
+			chq.setImporte(cheque.getMonto());
+			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			chq.setResumen(this.selectedResumen_.getNumero());
+			chq.setNumero(cheque.getNumero());
+			chq.setSupervisor(this.getNombreUsuario());
+			this.selectedResumen_.getAuditorias().add(chq);
+		}
 		
 		this.selectedResumen_.getDepositos_diferidos().add(this.nvoDeposito_);
 		rr.saveObject(this.selectedResumen_, this.getLoginNombre());
@@ -338,6 +376,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		efectivo.setImporte(this.selectedResumen_.getResumenEfectivo());
 		efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 		efectivo.setResumen(this.selectedResumen_.getNumero());
+		efectivo.setNumero("");
 		efectivo.setSupervisor(this.getNombreUsuario());
 		this.selectedResumen_.getAuditorias().add(efectivo);
 		
@@ -351,6 +390,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 			chq.setImporte(cheque.getMonto());
 			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 			chq.setResumen(this.selectedResumen_.getNumero());
+			chq.setNumero(cheque.getNumero());
 			chq.setSupervisor(this.getNombreUsuario());
 			this.selectedResumen_.getAuditorias().add(chq);
 		}

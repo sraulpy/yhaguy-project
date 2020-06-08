@@ -663,14 +663,17 @@
 					<button mold="bs" sclass="btn-success btn-sm"
 						iconSclass="z-icon-plus-circle" label=" Generar Depósito" 
 						width="150px"
-						onClick='pop_add_deposito.open(self, "before_end")'/>
+						onClick='pop_add_deposito.open(self, "before_end")'
+						disabled="@load(!vm.selectedResumen_.confirmado)" />
 					<button mold="bs" sclass="btn-info btn-sm"
 						iconSclass="z-icon-plus-circle" label=" Depósito Diferidos" 
 						width="150px"
-						onClick='pop_add_deposito_dif.open(self, "before_end")'/>
+						onClick='pop_add_deposito_dif.open(self, "before_end")'
+						disabled="@load(!vm.selectedResumen_.confirmado)" />
 					<button mold="bs" sclass="btn-warning btn-sm"
 						iconSclass="z-icon-print" label=" Imprimir Resumen" 
-						width="150px" onClick="@command('printResumen')"/>					
+						width="150px" onClick="@command('printResumen')"
+						disabled="@load(!vm.selectedResumen_.confirmado)" />					
 					<button mold="bs" sclass="btn-primary btn-sm"
 						iconSclass="z-icon-reply"
 						onClick="inc_res.setVisible(false);lst_res.setVisible(true);hl_btn.setVisible(true)" />
@@ -901,6 +904,8 @@
 					<listheader label="Número"></listheader>
 					<listheader label="Monto Gs." align="right"></listheader>
 					<listheader width="50px" align="center">
+						<a iconSclass="z-icon-times"
+								onClick="@command('deleteItems', item=each)" />
 					</listheader>
 				</listhead>
 				<auxhead>

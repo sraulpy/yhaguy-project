@@ -11600,10 +11600,14 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las cajas auditoria..
 	 */
-	public List<CajaAuditoria> getCajaAuditorias(Date desde, Date hasta) throws Exception {
+	public List<CajaAuditoria> getCajaAuditorias(Date desde, Date hasta, String resumen, String concepto, String numero)
+			throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c from CajaAuditoria c where c.fecha >= '" + desde_ + "' and c.fecha <= '" + hasta_ + "'";
+		String query = "select c from CajaAuditoria c where c.fecha >= '" + desde_ + "' and c.fecha <= '" + hasta_ + "'"
+				+ " and upper(c.resumen) like '%" + resumen.toUpperCase() + "%'" 
+				+ " and upper(c.concepto) like '%" + concepto.toUpperCase() + "%'"
+				+ " and upper(c.numero) like '%" + numero.toUpperCase() + "%'";
 		return this.hql(query);
 	}
 	

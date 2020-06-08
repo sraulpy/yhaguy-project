@@ -13,6 +13,7 @@
 		<property name="fecha" />
 		<property name="resumen" />
 		<property name="concepto" />
+		<property name="numero" />
 		<property name="descripcion" />
 		<property name="supervisor" />
 		<property name="importe" />

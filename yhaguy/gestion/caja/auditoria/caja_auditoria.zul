@@ -39,9 +39,10 @@
 		emptyMessage="SIN MOVIMIENTOS.."
 		model="@load(vm.cajaAuditorias)">
 		<listhead sizable="true">
-			<listheader label="Resumen Nro." width="120px" style="text-align:center" />
-			<listheader label="Concepto" width="190px" style="text-align:center" />
+			<listheader label="Resumen Nro." width="110px" style="text-align:center" />
+			<listheader label="Concepto" width="160px" style="text-align:center" />
 			<listheader label="Fecha" width="100px" style="text-align:center" />
+			<listheader label="Número" width="110px" style="text-align:center" />
 			<listheader label="Origen" style="text-align:center" />
 			<listheader label="Debe" width="150px"
 				style="text-align:center" align="right" />
@@ -53,13 +54,20 @@
 		<auxhead>
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
+					value="@bind(vm.filterResumen)"
 					placeholder="Resumen Nro.." instant="true"></textbox>
 			</auxheader>
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
+					value="@bind(vm.filterConcepto)"
 					placeholder="Concepto.." instant="true"></textbox>
 			</auxheader>
-			<auxheader></auxheader>			
+			<auxheader></auxheader>	
+			<auxheader>
+				<textbox sclass="filter" hflex="true"
+					value="@bind(vm.filterNumero)"
+					placeholder="Concepto.." instant="true"></textbox>
+			</auxheader>			
 			<auxheader></auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
@@ -70,6 +78,7 @@
 				<listcell label="@load(each.resumen)"></listcell>
 				<listcell label="@load(each.concepto)"></listcell>
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.numero)"></listcell>
 				<listcell label="@load(each.descripcion)"></listcell>
 				<listcell label="@load(each.debe) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.haber) @converter(vm.cnv.monedaLocal)"></listcell>
@@ -80,7 +89,7 @@
 			<listfooter align="left">
 				<field value="ítems" />
 			</listfooter>
-			<listfooter span="3" align="right"></listfooter>
+			<listfooter span="4" align="right"></listfooter>
 			<listfooter>
 				<guaranibox readonly="true"
 						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
