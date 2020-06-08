@@ -19,6 +19,8 @@
 		
 		<property name="obs_efectivo_no_depositado"/>
 		<property name="obs_cheque_no_depositado"/>
+		<property name="confirmado"/>
+		<property name="confirmadoPor"/>
 			
 		<set name="depositos_valores_bat" table="bancoboletadeposito"
 			inverse="false" lazy="false" fetch="join"

@@ -18,6 +18,9 @@
 			<listheader label="Fecha" width="200px" />
 			<listheader label="Número" />
 			<listheader label="Planillas" />
+			<listheader width="100px" align="center"
+				label="Confirmado" />
+			<listheader width="150px" label="Confirmado Por" />
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -54,12 +57,18 @@
 						instant="true"/>
 				</hlayout>
 			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
 				<listcell label="@load(each[0]) @converter('formattedDate', format='dd-MM-yyyy')" />
 				<listcell label="@load(each[1])"></listcell>
 				<listcell label="@load(each[2])"></listcell>
+				<listcell iconSclass="@load(each[4] ? 'z-icon-check' : '')"
+					style="@load(each[4] ? 'color:green;font-size:12pt' : '')"
+					tooltiptext="@load(each[4] ? 'confirmado' : '')"></listcell>
+				<listcell label="@load(each[5])"></listcell>
 			</listitem>
 		</template>
 		<listfoot>

@@ -24,6 +24,9 @@ public class CajaPlanillaResumen extends Domain {
 	private String obs_efectivo_no_depositado = "";
 	private String obs_cheque_no_depositado = "";
 	
+	private boolean confirmado;
+	private String confirmadoPor = "";
+	
 	private Set<BancoBoletaDeposito> depositos_valores_bat = new HashSet<BancoBoletaDeposito>(); // reembolso valores baterias..
 	private Set<BancoBoletaDeposito> depositos_diferidos = new HashSet<BancoBoletaDeposito>();
 	private Set<BancoBoletaDeposito> depositos_generados = new HashSet<BancoBoletaDeposito>();
@@ -375,6 +378,16 @@ public class CajaPlanillaResumen extends Domain {
 		return out;
 	}
 	
+	/**
+	 * @return los cheques..
+	 */
+	public List<BancoChequeTercero> getCheques() throws Exception {
+		List<BancoChequeTercero> out = new ArrayList<BancoChequeTercero>();
+		out.addAll(this.getChequesAlDia());
+		out.addAll(this.getChequesDiferidos());
+		return out;
+	}
+	
 	@DependsOn("depositos_generados")
 	public double getTotalDepositosGenerados() {
 		double out = 0;
@@ -398,6 +411,17 @@ public class CajaPlanillaResumen extends Domain {
 		double out = 0;
 		for (BancoBoletaDeposito dep : this.depositos_valores_bat) {
 			out += dep.getTotalImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total de cheques..
+	 */
+	public double getTotalCheques() throws Exception {
+		double out = 0;
+		for (BancoChequeTercero cheque : this.getCheques()) {
+			out += cheque.getMonto();
 		}
 		return out;
 	}
@@ -527,5 +551,21 @@ public class CajaPlanillaResumen extends Domain {
 
 	public void setAuditorias(Set<CajaAuditoria> auditorias) {
 		this.auditorias = auditorias;
+	}
+
+	public boolean isConfirmado() {
+		return confirmado;
+	}
+
+	public void setConfirmado(boolean confirmado) {
+		this.confirmado = confirmado;
+	}
+
+	public String getConfirmadoPor() {
+		return confirmadoPor;
+	}
+
+	public void setConfirmadoPor(String confirmadoPor) {
+		this.confirmadoPor = confirmadoPor;
 	}
 }

@@ -658,7 +658,8 @@
 				<hlayout>
 					<button mold="bs" sclass="btn-primary btn-sm"
 						iconSclass="z-icon-check" label="Confirmar Recaudación"
-						width="160px" onClick='pop_recaud.open(self, "before_end")' />
+						width="160px" onClick='pop_recaud.open(self, "before_end")' 
+						disabled="@load(vm.selectedResumen_.confirmado)" />
 					<button mold="bs" sclass="btn-success btn-sm"
 						iconSclass="z-icon-plus-circle" label=" Generar Depósito" 
 						width="150px"
@@ -1036,9 +1037,9 @@
 				</rows>			
 			</grid>
 			<listbox sclass="small-list" vflex="true" emptyMessage="SIN CHEQUES AL DÍA.."
-				model="@load(vm.selectedResumen_.chequesAlDiaSinPrestamosCC)">
+				model="@load(vm.selectedResumen_.cheques)">
 				<auxhead>
-					<auxheader colspan="4" label="Cheques al día" align="center"></auxheader>
+					<auxheader colspan="4" label="Cheques al día y diferidos" align="center"></auxheader>
 				</auxhead>
 				<listhead>
 					<listheader label="Fecha"></listheader>
@@ -1061,7 +1062,7 @@
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
 								readonly="true" 
-								value="@load(vm.nvoDeposito.totalImporteGs)"/>
+								value="@load(vm.selectedResumen_.resumenEfectivo + vm.selectedResumen_.totalCheques)"/>
 							<space />
 							<field value="Efectivo:" />
 							<guaranibox
@@ -1073,12 +1074,13 @@
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
 								readonly="true" 
-								value="@load(vm.nvoDeposito.totalImporteCheques)"/>
+								value="@load(vm.selectedResumen_.totalCheques)"/>
 							<space hflex="true"/>
 							<button mold="bs"
 								sclass="btn-success btn-sm"
 								iconSclass="z-icon-check" width="80px"
-								onClick="@command('confirmarRecaudacion', comp=pop_recaud)"/>
+								onClick="@command('confirmarRecaudacion', comp=pop_recaud)"
+								disabled="@load(vm.selectedResumen_.confirmado)"/>
 						</hlayout>
 					</listfooter>
 				</listfoot>

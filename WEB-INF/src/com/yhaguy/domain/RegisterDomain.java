@@ -8574,7 +8574,7 @@ public class RegisterDomain extends Register {
 	 * @return los resumenes de caja segun parametros..
 	 */
 	public List<Object[]> getCajaPlanillaResumenes_(String fecha, String numero, String planillas) throws Exception {
-		String query = "select c.fecha, c.numero, c.numeroPlanillas, c.id from CajaPlanillaResumen c where "
+		String query = "select c.fecha, c.numero, c.numeroPlanillas, c.id, c.confirmado, c.confirmadoPor from CajaPlanillaResumen c where "
 				+ " c.numero like '%" + numero + "%'"
 				+ " and cast (c.fecha as string) like '%" + fecha + "%'"
 				+ " and upper(c.numeroPlanillas) like '%" + planillas.toUpperCase() + "%'"
@@ -11594,6 +11594,16 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select a from AjusteValorizado a where a.fecha >= '" + desde_ + "' and a.fecha <= '" + hasta_ + "'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las cajas auditoria..
+	 */
+	public List<CajaAuditoria> getCajaAuditorias(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c from CajaAuditoria c where c.fecha >= '" + desde_ + "' and c.fecha <= '" + hasta_ + "'";
 		return this.hql(query);
 	}
 	

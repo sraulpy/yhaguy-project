@@ -333,24 +333,29 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		
 		CajaAuditoria efectivo = new CajaAuditoria();
 		efectivo.setConcepto(CajaAuditoria.CONCEPTO_EFECTIVO);
+		efectivo.setDescripcion("SALDO EN EFECTIVO RESUMEN CAJA NRO. " + this.selectedResumen_.getNumero());
 		efectivo.setFecha(this.selectedResumen_.getFecha());
 		efectivo.setImporte(this.selectedResumen_.getResumenEfectivo());
 		efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 		efectivo.setResumen(this.selectedResumen_.getNumero());
-		efectivo.setSupervisor(this.getLoginNombre());
+		efectivo.setSupervisor(this.getNombreUsuario());
 		this.selectedResumen_.getAuditorias().add(efectivo);
 		
-		for (BancoChequeTercero cheque : this.selectedResumen_.getChequesAlDiaSinPrestamosCC()) {
+		for (BancoChequeTercero cheque : this.selectedResumen_.getCheques()) {
 			CajaAuditoria chq = new CajaAuditoria();
-			chq.setConcepto(CajaAuditoria.CONCEPTO_CHEQUE);
+			chq.setConcepto(cheque.isChequeAlDia(this.selectedResumen_.getFecha()) ? CajaAuditoria.CONCEPTO_CHEQUE
+					: CajaAuditoria.CONCEPTO_CHEQUE_DIFERIDO);
+			chq.setDescripcion(
+					cheque.getNumero() + " - " + cheque.getBanco().getDescripcion() + " - " + cheque.getLibrado());
 			chq.setFecha(this.selectedResumen_.getFecha());
 			chq.setImporte(cheque.getMonto());
 			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 			chq.setResumen(this.selectedResumen_.getNumero());
-			chq.setSupervisor(this.getLoginNombre());
+			chq.setSupervisor(this.getNombreUsuario());
 			this.selectedResumen_.getAuditorias().add(chq);
 		}
-		
+		this.selectedResumen_.setConfirmado(true);
+		this.selectedResumen_.setConfirmadoPor(this.getNombreUsuario());
 		rr.saveObject(this.selectedResumen_, this.getLoginNombre());
 		comp.close();
 		Clients.showNotification("Recaudación confirmada..");
@@ -736,6 +741,15 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 	public List<BancoCta> getBancoCuentas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getBancosCta();
+	}
+	
+	/**
+	 * @return el nombre de usuario.. 
+	 */
+	private String getNombreUsuario() throws Exception {
+		Session s = Sessions.getCurrent();
+		AccesoDTO acc = (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
+		return (String) acc.getFuncionario().getPos1();
 	}
 	
 	/**
