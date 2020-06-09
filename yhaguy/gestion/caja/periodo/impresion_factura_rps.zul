@@ -132,7 +132,7 @@
 	
 	<!-- PAGINA 2 -->
 	
-	<div height="148px"></div>
+	<div height="157px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -250,7 +250,7 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="145px"></div>
+	<div height="160px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
