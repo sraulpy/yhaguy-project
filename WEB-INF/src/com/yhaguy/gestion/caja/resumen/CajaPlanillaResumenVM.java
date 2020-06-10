@@ -281,6 +281,20 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito, this.getLoginNombre());
 		
+		if (this.nvoDeposito.getTotalEfectivo() > 0) {
+			CajaAuditoria efectivo = new CajaAuditoria();
+			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
+			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito.getNumeroBoleta() + " - "
+					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + "");
+			efectivo.setFecha(this.selectedResumen_.getFecha());
+			efectivo.setImporte(this.nvoDeposito.getTotalEfectivo());
+			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			efectivo.setResumen(this.selectedResumen_.getNumero());
+			efectivo.setNumero("");
+			efectivo.setSupervisor(this.getNombreUsuario());
+			this.selectedResumen_.getAuditorias().add(efectivo);
+		}
+		
 		// actualiza auditoria de caja..
 		for (BancoChequeTercero cheque : this.nvoDeposito.getCheques()) {
 			CajaAuditoria chq = new CajaAuditoria();
@@ -315,6 +329,20 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito_, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito_, this.getLoginNombre());
+		
+		if (this.nvoDeposito_.getTotalEfectivo() > 0) {
+			CajaAuditoria efectivo = new CajaAuditoria();
+			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
+			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito.getNumeroBoleta() + " - "
+					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + "");
+			efectivo.setFecha(this.selectedResumen_.getFecha());
+			efectivo.setImporte(this.nvoDeposito_.getTotalEfectivo());
+			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			efectivo.setResumen(this.selectedResumen_.getNumero());
+			efectivo.setNumero("");
+			efectivo.setSupervisor(this.getNombreUsuario());
+			this.selectedResumen_.getAuditorias().add(efectivo);
+		}
 		
 		// actualiza auditoria de caja..
 		for (BancoChequeTercero cheque : this.nvoDeposito_.getCheques()) {

@@ -13,6 +13,7 @@ public class CajaAuditoria extends Domain {
 	public static final String CONCEPTO_CHEQUE_DIFERIDO = "CHEQUE DIFERIDO";
 	
 	public static final String CONCEPTO_DEPOSITO_CHEQUE = "DEPÓSITO CHEQUE";
+	public static final String CONCEPTO_DEPOSITO_EFECTIVO = "DEPÓSITO EFECTIVO";
 	public static final String CONCEPTO_DESCUENTO_CHEQUE = "DESCUENTO CHEQUE";
 	public static final String CONCEPTO_PAGO_CHEQUE = "PAGO CON CHEQUE";
 	
@@ -49,7 +50,7 @@ public class CajaAuditoria extends Domain {
 	public double getHaber() {
 		double out = 0;
 		if (this.concepto.equals(CONCEPTO_DEPOSITO_CHEQUE) || this.concepto.equals(CONCEPTO_DESCUENTO_CHEQUE)
-				|| this.concepto.equals(CONCEPTO_PAGO_CHEQUE)) {
+				|| this.concepto.equals(CONCEPTO_PAGO_CHEQUE) || this.concepto.equals(CONCEPTO_DEPOSITO_EFECTIVO)) {
 			out = this.importe;
 		}
 		return out;
