@@ -2,7 +2,7 @@
 	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.ruteo.RuteoVendedoresViewModel')"
 	id="win"
 	onCreate="@command('buscarVendedores')">
-
+	
 	<borderlayout id="body">
 		<west width="20%" collapsible="true" open="false"
 			style="text-align:center" title="Parámetros">
@@ -48,9 +48,9 @@
 		<center>
 			<div id="dv_mapa" sclass="rounded" vflex="true" hflex="true"
 				onLater="@command('clearProgress')">
-				<gmaps version="3.26" hflex="true" lat="-25.3054494"
+				<gmaps hflex="true" lat="-25.3054494"
 					lng="-57.5351386" zoom="12" vflex="true" showSmallCtrl="true"
-					children="@load(vm.ruteoVendedores)" protocol="https"
+					children="@load(vm.ruteoVendedores)" version="3.26" protocol="https"
 					onMapDoubleClick="@command('getCoordenadas', map=self, ref=bndCli_)">
 					<template name="children">
 						<gmarker lat="@load(each[2])"
