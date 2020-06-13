@@ -6,13 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
+
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Popup;
@@ -20,8 +29,10 @@ import org.zkoss.zul.Window;
 
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.domain.Usuario;
 import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.AutoNumeroControl;
+import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Cliente;
@@ -31,14 +42,9 @@ import com.yhaguy.domain.ServicioTecnico;
 import com.yhaguy.domain.ServicioTecnicoDetalle;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
+import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
-
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
 
 public class ServicioTecnicoViewModel extends SimpleViewModel {
 	
@@ -63,6 +69,7 @@ public class ServicioTecnicoViewModel extends SimpleViewModel {
 	private String filterTecnico = "";
 	private String filterDiagnosticado = "";
 	private String filterEntregado = "";
+	private String password = "";
 	
 	private Window win;
 	
@@ -171,6 +178,78 @@ public class ServicioTecnicoViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		ServicioTecnico serv = (ServicioTecnico) rr.getObject(ServicioTecnico.class.getName(), (long) this.selectedItem[0]);
 		this.selectedServicio = serv;
+	}
+	
+	@Command
+	@NotifyChange({ "password", "selectedItem", "selectedServicio" })
+	public void openFirma(@BindingParam("item") Object[] item,
+			@BindingParam("comp") Popup comp,
+			@BindingParam("parent") Component parent) throws Exception {
+		this.password = "";
+		this.selectedItem = item;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		ServicioTecnico serv = (ServicioTecnico) rr.getObject(
+				ServicioTecnico.class.getName(), (long) this.selectedItem[0]);
+		this.selectedServicio = serv;
+		comp.open(parent, "after_end");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void firmaTecnico() throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Usuario us = rr.getUsuario(this.getLoginNombre());		
+		Funcionario func = rr.getFuncionarioById(this.getAcceso().getFuncionario().getId());
+		
+		if (func != null) {			
+			if (func.isTecnico()) {
+				String clave = this.m.encriptar(this.password);
+				if (clave.equals(us.getClave())) {
+					this.selectedServicio.setConfirmadoTecnico(true);
+					rr.saveObject(this.selectedServicio, this.getLoginNombre());
+				} else {
+					Clients.showNotification("Clave incorrecta..", Clients.NOTIFICATION_TYPE_ERROR, 
+							null, null, 0);
+				}
+			} else {
+				Clients.showNotification("Debe firmar un tecnico..", Clients.NOTIFICATION_TYPE_ERROR, 
+						null, null, 0);
+			}
+		}
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void firmaSupervisor() throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Usuario us = rr.getUsuario(this.getLoginNombre());		
+		Funcionario func = rr.getFuncionarioById(this.getAcceso().getFuncionario().getId());
+		
+		if (func != null) {			
+			if (func.isAdministrador()) {
+				String clave = this.m.encriptar(this.password);
+				if (clave.equals(us.getClave())) {
+					this.selectedServicio.setConfirmadoSupervisor(true);
+					rr.saveObject(this.selectedServicio, this.getLoginNombre());
+				} else {
+					Clients.showNotification("Clave incorrecta..", Clients.NOTIFICATION_TYPE_ERROR, 
+							null, null, 0);
+				}
+			} else {
+				Clients.showNotification("Debe firmar un supervisor..", Clients.NOTIFICATION_TYPE_ERROR, 
+						null, null, 0);
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		try {
+			Misc m = new Misc();
+			String test = m.encriptar("yhaguysa0985");
+			System.out.println(test);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	/**
@@ -462,6 +541,14 @@ public class ServicioTecnicoViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return el acceso..
+	 */
+	public AccesoDTO getAcceso() {
+		Session s = Sessions.getCurrent();
+		return (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
+	}
+	
+	/**
 	 * @return funcionarios..
 	 */
 	public List<String> getReceptores() throws Exception {
@@ -634,6 +721,14 @@ public class ServicioTecnicoViewModel extends SimpleViewModel {
 
 	public void setSelectedItem(Object[] selectedItem) {
 		this.selectedItem = selectedItem;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
 

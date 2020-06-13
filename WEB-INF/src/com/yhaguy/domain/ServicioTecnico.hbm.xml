@@ -21,6 +21,12 @@
 		<property name="entregado">
 			<column name="entregado" not-null="true" default="false" />
 		</property>
+		<property name="confirmadoTecnico">
+			<column name="confirmadoTecnico" not-null="true" default="false" />
+		</property>
+		<property name="confirmadoSupervisor">
+			<column name="confirmadoSupervisor" not-null="true" default="false" />
+		</property>
 
 		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
 			column="idcliente" lazy="false" />

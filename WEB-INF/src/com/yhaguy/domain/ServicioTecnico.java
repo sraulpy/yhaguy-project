@@ -23,6 +23,8 @@ public class ServicioTecnico extends Domain {
 	private String numeroReclamo;
 	private String numeroReparto;
 	private String choferReparto;
+	private boolean confirmadoTecnico;
+	private boolean confirmadoSupervisor;
 	
 	private Set<Venta> facturas = new HashSet<Venta>();
 	private Set<ServicioTecnicoDetalle> detalles = new HashSet<ServicioTecnicoDetalle>();
@@ -260,5 +262,21 @@ public class ServicioTecnico extends Domain {
 
 	public void setChoferReparto(String choferReparto) {
 		this.choferReparto = choferReparto;
+	}
+
+	public boolean isConfirmadoTecnico() {
+		return confirmadoTecnico;
+	}
+
+	public void setConfirmadoTecnico(boolean confirmadoTecnico) {
+		this.confirmadoTecnico = confirmadoTecnico;
+	}
+
+	public boolean isConfirmadoSupervisor() {
+		return confirmadoSupervisor;
+	}
+
+	public void setConfirmadoSupervisor(boolean confirmadoSupervisor) {
+		this.confirmadoSupervisor = confirmadoSupervisor;
 	}
 }
