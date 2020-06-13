@@ -286,7 +286,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
 			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito.getNumeroBoleta() + " - "
 					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + "");
-			efectivo.setFecha(this.selectedResumen_.getFecha());
+			efectivo.setFecha(this.nvoDeposito.getFecha());
 			efectivo.setImporte(this.nvoDeposito.getTotalEfectivo());
 			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 			efectivo.setResumen(this.selectedResumen_.getNumero());
@@ -326,16 +326,16 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.nvoDeposito_.setDbEstado('R');
 		this.nvoDeposito_.setCerrado(true);
-		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
+		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito_.getTotalImporteGs());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito_, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito_, this.getLoginNombre());
 		
 		if (this.nvoDeposito_.getTotalEfectivo() > 0) {
 			CajaAuditoria efectivo = new CajaAuditoria();
 			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
-			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito.getNumeroBoleta() + " - "
-					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + "");
-			efectivo.setFecha(this.selectedResumen_.getFecha());
+			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito_.getNumeroBoleta() + " - "
+					+ this.nvoDeposito_.getNroCuenta().getBancoDescripcion() + "");
+			efectivo.setFecha(this.nvoDeposito_.getFecha());
 			efectivo.setImporte(this.nvoDeposito_.getTotalEfectivo());
 			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 			efectivo.setResumen(this.selectedResumen_.getNumero());

@@ -43,6 +43,8 @@ public class TareaCerrarCajas {
 				resumen.setChequeNoDepositado(0);
 				resumen.setObs_cheque_no_depositado("");
 				resumen.setObs_efectivo_no_depositado("");
+				resumen.setConfirmado(false);
+				resumen.setConfirmadoPor("");
 				resumen.getPlanillas().addAll(cajas_);
 				String nroPlanillas = "";
 				for (CajaPeriodo planilla : cajas_) {
