@@ -121,6 +121,8 @@ public class ReportesViewModel {
 	public static final String SOURCE_REPARTOS_DETALLADO_ = "/reportes/jasper/RepartosDetallado_.jasper";
 	public static final String SOURCE_CLIENTES_VENDEDOR = "/reportes/jasper/ClientesVendedor.jasper";
 	public static final String SOURCE_CLIENTES_VENDEDOR_ = "/reportes/jasper/ClientesVendedor_.jasper";
+	public static final String SOURCE_SERVICIOS_TECNICOS = "/reportes/jasper/ServicioTecnico.jasper";
+	public static final String SOURCE_SERVICIOS_TECNICOS_ = "/reportes/jasper/ServicioTecnico_.jasper";
 	
 	static final String CONTEXT = Sessions.getCurrent().getWebApp().getRealPath("/");
 	static final String LOGO = CONTEXT + "/logo.png";

@@ -106,6 +106,8 @@ import com.yhaguy.domain.RepartoDetalle;
 import com.yhaguy.domain.RepartoEntrega;
 import com.yhaguy.domain.Reporte;
 import com.yhaguy.domain.ReporteFavoritos;
+import com.yhaguy.domain.ServicioTecnico;
+import com.yhaguy.domain.ServicioTecnicoDetalle;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Transferencia;
@@ -156,12 +158,14 @@ public class ReportesViewModel extends SimpleViewModel {
 	static final int ID_RRHH = 7;
 	static final int ID_SISTEMA = 8;
 	static final int ID_FAVORITOS = 9;
+	static final int ID_SERVICIO_TECNICO = 10;
 
 	static final MyArray TESORERIA = new MyArray("Tesorería", ID_TESORERIA, "z-icon-briefcase");
 	static final MyArray COMPRAS = new MyArray("Abastecimiento", ID_COMPRAS, "z-icon-shopping-cart");
 	static final MyArray VENTAS = new MyArray("Ventas", ID_VENTAS, "z-icon-tags");
 	static final MyArray STOCK = new MyArray("Stock", ID_STOCK, "z-icon-archive");
 	static final MyArray LOGISTICA = new MyArray("Logística", ID_LOGISTICA, "z-icon-truck");
+	static final MyArray SERVICIOS_TECNICOS = new MyArray("Servicio Técnico", ID_SERVICIO_TECNICO, "z-icon-wrench");
 	static final MyArray CONTABILIDAD = new MyArray("Contabilidad", ID_CONTABILIDAD, "z-icon-bar-chart-o");
 	static final MyArray RRHH = new MyArray("Recursos Humanos", ID_RRHH, "z-icon-user");
 	static final MyArray SISTEMA = new MyArray("Sistema", ID_SISTEMA, "z-icon-cog");
@@ -186,6 +190,7 @@ public class ReportesViewModel extends SimpleViewModel {
 	
 	static final String GRUPO_STOCK_ARTICULOS = " ARTICULOS";	
 	static final String GRUPO_LOGISTICA_LOGISTICA = " LOGISTICA";
+	static final String GRUPO_SERVICIO_TECNICO = " SERVICIO-TECNICO";
 	static final String GRUPO_CONTABILIDAD_CONTABILIDAD = " CONTABILIDAD";
 	static final String GRUPO_CONTABILIDAD_CIERRE_PERIODO = " CIERRE-PERIODO";
 	static final String GRUPO_RRHH_RRHH = " RR.HH";
@@ -379,6 +384,10 @@ public class ReportesViewModel extends SimpleViewModel {
 		case ID_LOGISTICA:
 			this.selectedGrupo = GRUPO_LOGISTICA_LOGISTICA;
 			break;
+			
+		case ID_SERVICIO_TECNICO:
+			this.selectedGrupo = GRUPO_SERVICIO_TECNICO;
+			break;
 
 		case ID_CONTABILIDAD:
 			this.selectedGrupo = GRUPO_CONTABILIDAD_CONTABILIDAD;
@@ -436,6 +445,10 @@ public class ReportesViewModel extends SimpleViewModel {
 
 		case ID_LOGISTICA:
 			new ReportesDeLogistica(this.getCodigoReporte(), false);
+			break;
+			
+		case ID_SERVICIO_TECNICO:
+			new ReportesServicioTecnico(this.getCodigoReporte(), false);
 			break;
 
 		case ID_CONTABILIDAD:
@@ -594,6 +607,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		out.add(VENTAS);
 		out.add(STOCK);
 		out.add(LOGISTICA);
+		out.add(SERVICIOS_TECNICOS);
 		out.add(CONTABILIDAD);
 		out.add(RRHH);
 		out.add(SISTEMA);
@@ -636,6 +650,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 		case ID_LOGISTICA:
 			out.add(GRUPO_LOGISTICA_LOGISTICA);
+			break;
+			
+		case ID_SERVICIO_TECNICO:
+			out.add(GRUPO_SERVICIO_TECNICO);
 			break;
 			
 		case ID_CONTABILIDAD:
@@ -12392,6 +12410,58 @@ public class ReportesViewModel extends SimpleViewModel {
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new RepartosDetalladoDataSource(repartos, desde, hasta, pendientes, vendedor_);
 			params.put("Titulo", codReporte + " - REPARTOS DETALLADO");
+			params.put("Usuario", getUs().getNombre());
+			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, formato);
+		}
+
+	}
+	
+	/**
+	 * Reportes de servicio tecnico..
+	 */
+	class ReportesServicioTecnico {
+
+		static final String LISTADO_SERVICIOS_TECNICOS = "STE-00001";
+
+		/**
+		 * procesamiento del reporte..
+		 */
+		public ReportesServicioTecnico(String codigoReporte, boolean mobile) throws Exception {
+			switch (codigoReporte) {
+
+			case LISTADO_SERVICIOS_TECNICOS:
+				this.listadoServiciosTecnicos(mobile, LISTADO_SERVICIOS_TECNICOS);
+				break;
+			}
+		}
+		
+		/**
+		 * listado de servicios tecnicos..
+		 */
+		private void listadoServiciosTecnicos(boolean mobile, String codReporte) throws Exception {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();			
+			Date hasta = filtro.getFechaHasta();
+			Object[] formato = filtro.getFormato();	
+			List<ServicioTecnico> stecnicos = rr.getServiciosTecnicos(desde, hasta);
+			
+			String format = (String) formato[0];
+			String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+			String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SERVICIOS_TECNICOS;
+			if (format.equals(csv) || format.equals(xls)) {
+				source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_SERVICIOS_TECNICOS_;
+			}
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new ServicioTecnicoDataSource(stecnicos, desde, hasta);
+			params.put("Titulo", codReporte + " - SERVICIOS TECNICOS");
 			params.put("Usuario", getUs().getNombre());
 			params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 			params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
@@ -26509,6 +26579,89 @@ class ClientesVendedorDataSource implements JRDataSource {
 			String ciudad = (String) dato[7];
 			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
 					Utiles.getNumberFormat(limiteCredito), ciudad));
+		}
+	}
+}
+
+/**
+ * DataSource del servicio tecnico..
+ */
+class ServicioTecnicoDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	List<Reparto> repartos;
+	List<ServicioTecnico> serviciosTecnicos;
+	Date desde;
+	Date hasta;
+
+	public ServicioTecnicoDataSource(List<ServicioTecnico> serviciosTecnicos, Date desde, Date hasta) {
+		this.serviciosTecnicos = serviciosTecnicos;
+		this.desde = desde;
+		this.hasta = hasta;
+		Collections.sort(this.serviciosTecnicos, new Comparator<ServicioTecnico>() {
+			@Override
+			public int compare(ServicioTecnico o1, ServicioTecnico o2) {
+				Date fecha1 = (Date) o1.getFecha();
+				Date fecha2 = (Date) o2.getFecha();
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		try {
+			this.loadDatos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+
+		if ("TituloDetalle".equals(fieldName)) {
+			value = det[0];
+		} if ("NroFactura".equals(fieldName)) {
+			value = det[1];
+		} if ("Codigo".equals(fieldName)) {
+			value = det[2];
+		} if ("Diagnostico".equals(fieldName)) {
+			value = det[3];
+		} if ("Rep".equals(fieldName)) {
+			value = det[4];
+		} if ("NroServicio".equals(fieldName)) {
+			value = det[5];
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * load datos..
+	 */
+	private void loadDatos() throws Exception {
+		for (ServicioTecnico stec : this.serviciosTecnicos) {
+			for (ServicioTecnicoDetalle stdet : stec.getDetalles()) {
+				String nroSte = stec.getNumero() + " - " + Utiles.getDateToString(stec.getFecha(), Utiles.DD_MM_YYYY);
+				String nroVta = stdet.getNumeroFactura();
+				String codigo = stdet.getArticulo().getCodigoInterno();
+				String reposicion = stdet.isVerifica_reposicion() ? "SI" : "NO";
+				String diagnostico = stdet.getDiagnostico().toUpperCase();
+				String nroServicio = stec.getNumero();
+				this.values.add(new Object[] { nroSte, nroVta, codigo, diagnostico, reposicion, nroServicio  });
+			}
 		}
 	}
 }

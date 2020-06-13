@@ -11611,6 +11611,16 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return los servicios tecnicos segun fecha
+	 */
+	public List<ServicioTecnico> getServiciosTecnicos(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select s from ServicioTecnico s where s.fecha >= '" + desde_ + "' and s.fecha <= '" + hasta_ + "'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));
