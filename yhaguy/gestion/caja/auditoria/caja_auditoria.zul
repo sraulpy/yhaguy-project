@@ -66,9 +66,13 @@
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
 					value="@bind(vm.filterNumero)"
-					placeholder="Concepto.." instant="true"></textbox>
+					placeholder="Número.." instant="true"></textbox>
 			</auxheader>			
-			<auxheader></auxheader>
+			<auxheader>
+				<textbox sclass="filter" hflex="true"
+					value="@bind(vm.filterDescripcion)"
+					placeholder="Descripción.." instant="true"></textbox>
+			</auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>

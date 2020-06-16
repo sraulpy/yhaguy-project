@@ -23,6 +23,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 	private String filterResumen = "";
 	private String filterConcepto = "";
 	private String filterNumero = "";
+	private String filterDescripcion = "";
 	
 	private double totalDebe = 0;
 	private double totalHaber = 0;
@@ -46,11 +47,11 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 	 * GETS / SETS
 	 */
 	
-	@DependsOn({ "filterDesde", "filterHasta", "filterResumen", "filterConcepto", "filterNumero" })
+	@DependsOn({ "filterDesde", "filterHasta", "filterResumen", "filterConcepto", "filterNumero", "filterDescripcion" })
 	public List<CajaAuditoria> getCajaAuditorias() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<CajaAuditoria> out = rr.getCajaAuditorias(this.filterDesde, this.filterHasta, this.filterResumen,
-				this.filterConcepto, this.filterNumero);
+				this.filterConcepto, this.filterNumero, this.filterDescripcion);
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<CajaAuditoria>() {
 			@Override
@@ -136,5 +137,13 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 
 	public void setFilterNumero(String filterNumero) {
 		this.filterNumero = filterNumero;
+	}
+
+	public String getFilterDescripcion() {
+		return filterDescripcion;
+	}
+
+	public void setFilterDescripcion(String filterDescripcion) {
+		this.filterDescripcion = filterDescripcion;
 	}
 }
