@@ -66,6 +66,8 @@ public class TareaCerrarCajasCentral {
 						nroPlanillas += planilla.getNumero() + " - ";
 					}
 					resumen.setNumeroPlanillas(nroPlanillas);
+					resumen.setConfirmado(false);
+					resumen.setConfirmadoPor("");
 					rr.saveObject(resumen, "sys");
 				}
 				
@@ -84,6 +86,8 @@ public class TareaCerrarCajasCentral {
 						nroPlanillas += planilla.getNumero() + " - ";
 					}
 					resumen.setNumeroPlanillas(nroPlanillas);
+					resumen.setConfirmado(false);
+					resumen.setConfirmadoPor("");
 					rr.saveObject(resumen, "sys");
 				}
 				
@@ -114,6 +118,8 @@ public class TareaCerrarCajasCentral {
 						nroPlanillas += planilla.getNumero() + " - ";
 					}
 					resumen.setNumeroPlanillas(nroPlanillas);
+					resumen.setConfirmado(false);
+					resumen.setConfirmadoPor("");
 					rr.saveObject(resumen, "sys");
 				}
 				
