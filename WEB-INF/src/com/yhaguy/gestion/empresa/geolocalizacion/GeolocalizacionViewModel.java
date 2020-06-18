@@ -227,6 +227,7 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 			@BindingParam("comp2") Component comp2) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		rr.saveObject(this.selectedCliente, this.getLoginNombre());
+		rr.saveObject(this.selectedCliente.getEmpresa(), this.getLoginNombre());
 		this.selectedCliente = null;
 		this.razonSocial = "";
 		this.razonSocial_ = "";
