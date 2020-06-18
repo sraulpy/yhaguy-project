@@ -8773,7 +8773,7 @@ public class RegisterDomain extends Register {
 	public List<Empresa> getEmpresasGeolocalizadas(String razonSocial, int limit) throws Exception {
 		String query = "select e from Empresa e where e.latitud != '' and upper(e.razonSocial)"
 				+ " like '%" + razonSocial.toUpperCase() + "%' order by e.razonSocial";
-		return this.hqlLimit(query, limit);
+		return this.hql(query);
 	}
 	
 	/**
