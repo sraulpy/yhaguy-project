@@ -64,6 +64,17 @@ public class Empresa extends Domain {
 	}
 	
 	/**
+	 * @return el icono segun zona
+	 */
+	public String getIconoZona() {
+		String out = "/core/images/map.png";
+		if (this.getZona().contains("ROJA")) {
+			out = "/core/images/map_red.png";
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es una aseguradora..
 	 */
 	public boolean isAseguradora() {

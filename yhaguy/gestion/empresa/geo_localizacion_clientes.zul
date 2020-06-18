@@ -194,7 +194,7 @@
 					<template name="children">
 						<gmarker lat="@load(each.latitud)"
 							lng="@load(each.longitud)" open="@load(vm.selectedEmpresa eq null? 'false':'true')"
-							iconImage="/core/images/map.png" content="@load(each.razonSocial)"
+							iconImage="@load(each.iconoZona)" content="@load(each.razonSocial)"
 							tooltip="@load(each.id)" />
 					</template>
 				</gmaps>
