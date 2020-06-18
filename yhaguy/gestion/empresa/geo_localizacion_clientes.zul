@@ -207,7 +207,7 @@
 									style="border-bottom:solid 1px">
 								</div>
 								<image height="17px"
-									src="/core/images/map.png" />
+									src="/core/images/map_green.png" />
 							</hbox>
 							<div height="5px" />
 							<field value="@load(each.razonSocial)"></field>

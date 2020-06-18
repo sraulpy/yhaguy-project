@@ -67,7 +67,7 @@ public class Empresa extends Domain {
 	 * @return el icono segun zona
 	 */
 	public String getIconoZona() {
-		String out = "/core/images/map.png";
+		String out = "/core/images/map_green.png";
 		if (this.getZona().contains("ROJA")) {
 			out = "/core/images/map_red.png";
 		}
