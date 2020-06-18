@@ -217,6 +217,8 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 		this.registrarUbicacion = false;
 		this.selectedCliente.getEmpresa().setLatitud(String.valueOf(event.getLat()));
 		this.selectedCliente.getEmpresa().setLongitud(String.valueOf(event.getLng()));
+		System.out.println(event.getLat());
+		System.out.println(event.getLng());
 	}
 	
 	@Command
