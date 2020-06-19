@@ -52,6 +52,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalVentaContado = 0;
 	double totalVentaContadoCheque = 0;
 	double totalVentaContadoEfectivo = 0;
+	double totalVentaValeDescuento = 0;
 	double totalVentaCredito = 0;
 	double totalCobranza = 0;
 	double totalCobranzaAlDia = 0;
@@ -132,6 +133,20 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 									fp.getChequeBanco().getDescripcion().toUpperCase() + " - " + fp.getChequeNumero(), 
 									fp.getMontoGs(), "VENTAS CONTADO CON CHEQUE",
 									this.totalVentaContadoCheque);
+							this.values.add(my);
+						}
+					}
+				}
+			}
+			
+			// ventas contado efectivo..
+			for (Venta venta : planilla.getVentasOrdenado()) {
+				if (venta.isVentaContado() && !venta.isAnulado()) {
+					for (ReciboFormaPago fp : venta.getFormasPago()) {
+						if (fp.isValeDescuento() && fp.isMonedaLocal()) {
+							MyArray my = new MyArray(venta.getDescripcionTipoMovimiento(),
+									venta.getNumero() + " - " + venta.getCliente().getRazonSocial().toUpperCase(),
+									fp.getMontoGs(), "VALES DE DESCUENTO", this.totalVentaValeDescuento);
 							this.values.add(my);
 						}
 					}
