@@ -86,6 +86,14 @@ public class ReciboFormaPago extends Domain {
 	}
 	
 	/**
+	 * @return true si es vale..
+	 */
+	public boolean isValeDescuento() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_VALE);
+	}
+	
+	/**
 	 * @return true si es cheque de tercero..
 	 */
 	public boolean isChequeTercero() {
