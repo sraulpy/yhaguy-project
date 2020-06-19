@@ -144,6 +144,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				if (venta.isVentaContado() && !venta.isAnulado()) {
 					for (ReciboFormaPago fp : venta.getFormasPago()) {
 						if (fp.isValeDescuento() && fp.isMonedaLocal()) {
+							this.totalVentaValeDescuento += fp.getMontoGs();
 							MyArray my = new MyArray(venta.getDescripcionTipoMovimiento(),
 									venta.getNumero() + " - " + venta.getCliente().getRazonSocial().toUpperCase(),
 									fp.getMontoGs(), "VALES DE DESCUENTO", this.totalVentaValeDescuento);
