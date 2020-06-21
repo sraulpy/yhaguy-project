@@ -415,7 +415,26 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 						precioGs = formula_;
 						precioGs_ = Utiles.getNumberFormat(formula_);
 					}				
-
+				// formula lista precio transportadora..
+				} else if (item.getId().longValue() == 7 && formula != null) {
+						ArticuloListaPrecio distribuidor = (ArticuloListaPrecio) rr.getObject(ArticuloListaPrecio.class.getName(), 1);
+						ArticuloListaPrecioDetalle precioDet = rr.getListaPrecioDetalle(distribuidor.getId(), codArticulo);
+						if (precioDet != null) {
+							double cont = precioDet.getPrecioGs_contado();
+							double cred = precioDet.getPrecioGs_credito();
+							double formulaCont = cont + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_contado(), 10);
+							double formulaCred = cred + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_credito(), 10);						
+							precioGs = formulaCont;
+							String contado = Utiles.getNumberFormat(precioGs);
+							String credito = Utiles.getNumberFormat(formulaCred);
+							precioGs_ = (precioDet.isCreditoContado()? contado : "CON: " + contado + " - CRE: " + credito);
+						} else {
+							int margen = distribuidor.getMargen();
+							double precio = ControlArticuloCosto.getPrecioVenta(this.getCostoGs(), margen);
+							double formula_ = precio + Utiles.obtenerValorDelPorcentaje(precioGs, 15);
+							precioGs = formula_;
+							precioGs_ = Utiles.getNumberFormat(formula_);
+						}
 				} else {
 					precioGs = this.getPrecioVenta(this.getCostoGs(), (int) item.getPos2());
 					precioGs_ = Utiles.getNumberFormat(precioGs);
