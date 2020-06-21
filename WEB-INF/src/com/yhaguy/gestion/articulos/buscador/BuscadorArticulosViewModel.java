@@ -422,8 +422,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 						if (precioDet != null) {
 							double cont = precioDet.getPrecioGs_contado();
 							double cred = precioDet.getPrecioGs_credito();
-							double formulaCont = cont + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_contado(), 10);
-							double formulaCred = cred + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_credito(), 10);						
+							double formulaCont = cont + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_contado(), 15);
+							double formulaCred = cred + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_credito(), 15);						
 							precioGs = formulaCont;
 							String contado = Utiles.getNumberFormat(precioGs);
 							String credito = Utiles.getNumberFormat(formulaCred);
