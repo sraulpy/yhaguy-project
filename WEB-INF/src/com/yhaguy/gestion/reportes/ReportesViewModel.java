@@ -11358,6 +11358,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, 0, 0, proveedor.getId(), 0, 0, "");
+				List<Object[]> ncreds = rr.getNotasCreditoDetallado_(desde, hasta, 0, 0, proveedor.getId(), 0, 0, "");
 				List<Object[]> data = new ArrayList<Object[]>();
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
@@ -11367,16 +11368,28 @@ public class ReportesViewModel extends SimpleViewModel {
 					String cod = (String) venta[1];
 					String key = cod + "-" + mes;
 					long idArticulo = (long) venta[0];
-					Object[] acum = values.get(key);
-					
-					long stock = rr.getStockArticulo(idArticulo);
-					double costo = (double) rr.getCostoPrecio(cod)[1];
+					Object[] acum = values.get(key);					
 					if (acum != null) {
 						double cant = (double) acum[0];
 						cant += ((double) venta[3]);
-						values.put(key, new Object[] { cant, mes, cod, stock, costo });
+						values.put(key, new Object[] { cant, mes, cod, idArticulo, cod });
 					} else {
-						values.put(key, new Object[] { (double) venta[3], mes, cod, stock, costo });
+						values.put(key, new Object[] { (double) venta[3], mes, cod, idArticulo, cod });
+					}				
+				}
+				
+				for (Object[] ncr : ncreds) {
+					int mes = Utiles.getNumeroMes((Date) ncr[4]) - 1;
+					String cod = (String) ncr[1];
+					String key = cod + "-" + mes;
+					long idArticulo = (long) ncr[0];
+					Object[] acum = values.get(key);
+					if (acum != null) {
+						double cant = (double) acum[0];
+						cant -= ((double) ncr[3]);
+						values.put(key, new Object[] { cant, mes, cod, idArticulo });
+					} else {
+						values.put(key, new Object[] { (((double) ncr[3]) * -1), mes, cod, idArticulo });
 					}				
 				}
 				
@@ -11385,8 +11398,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					String cod = (String) value[2];
 					int mes = (int) value[1];
 					double cant = (double) value[0];
-					long stock = (long) value[3];
-					double costo = (double) value[4];
+					long stock = rr.getStockArticulo((long) value[3]);
+					double costo = (double) rr.getCostoPrecio(cod)[1];
 					Object[] value_ = values_.get(cod);
 					if (value_ != null) {
 						value_[mes] = cant;
