@@ -6320,7 +6320,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					articulos = rr.getArticulos__(idFamilia, idProveedor, medida);
 				}
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida, null);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -6580,7 +6580,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "", null);
 				List<NotaCredito> ncs_ = rr.getNotasCreditoVentaByMotivo(desde, hasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DESCUENTO);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
@@ -6846,7 +6846,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "", null);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -7093,7 +7093,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "");
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, "", null);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -11358,7 +11358,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, 0, 0, proveedor.getId(), 0, 0, "");
-				List<Object[]> ncreds = rr.getNotasCreditoDetallado_(desde, hasta, 0, 0, proveedor.getId(), 0, 0, "");
+				List<Object[]> ncreds = rr.getNotasCreditoDetallado_(desde, hasta, 0, 0, proveedor.getId(), 0, 0, "", Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION);
 				List<Object[]> data = new ArrayList<Object[]>();
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
