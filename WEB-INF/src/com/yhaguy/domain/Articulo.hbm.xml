@@ -27,6 +27,7 @@
 		<property name="precioDs" />
 		<property name="precioMinoristaGs" />
 		<property name="precioListaGs" />
+		<property name="precioTransportadora" />
 		<property name="fechaAlta" />
 		<property name="fechaUltimaCompra" />
 		<property name="cantUltimaCompra" />
