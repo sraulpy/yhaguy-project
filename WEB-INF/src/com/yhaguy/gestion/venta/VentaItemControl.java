@@ -413,7 +413,24 @@ public class VentaItemControl extends SoloViewModel {
 					this.det.setPrecioGs(formula_);
 					this.det.setPrecioMinimoGs(formula_);
 				}
-
+			 // formula lista precio transportadora..
+			} else if (idListaPrecio == 7 && formula != null) {
+				ArticuloListaPrecio distribuidor = (ArticuloListaPrecio) rr.getObject(ArticuloListaPrecio.class.getName(), 1);
+				ArticuloListaPrecioDetalle precioDet = rr.getListaPrecioDetalle(distribuidor.getId(), codArticulo);
+				if (precioDet != null) {
+					double cont = precioDet.getPrecioGs_contado();
+					double cred = precioDet.getPrecioGs_credito();
+					double formulaCont = cont + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_contado(), 15);
+					double formulaCred = cred + Utiles.obtenerValorDelPorcentaje(precioDet.getPrecioGs_credito(), 15);
+					this.det.setPrecioGs(this.dto.isCondicionContado()? formulaCont : formulaCred);
+					this.det.setPrecioMinimoGs(this.det.getPrecioGs());
+				} else {					
+					margen = distribuidor.getMargen();
+					double precioGs = ControlArticuloCosto.getPrecioVenta(costo, margen);
+					double formula_ = precioGs + Utiles.obtenerValorDelPorcentaje(precioGs, 15);
+					this.det.setPrecioGs(formula_);
+					this.det.setPrecioMinimoGs(formula_);
+				}
 			} else {
 				this.det.setPrecioGs(precio);
 				this.det.setPrecioMinimoGs(precio);
