@@ -73,7 +73,7 @@
 			column="id_vehiculo_modelo" lazy="false" />
 		
 		<set name="detalles" table="notacreditodetalle"
-			inverse="false" lazy="false" fetch="join">
+			inverse="false" lazy="false" fetch="join" cascade="all">
 			<key>
 				<column name="idnotacredito" not-null="false"/>
 			</key>
