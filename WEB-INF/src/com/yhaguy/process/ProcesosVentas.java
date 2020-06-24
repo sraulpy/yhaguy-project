@@ -508,6 +508,85 @@ public class ProcesosVentas {
 		}
 	}
 	
+	/**
+	 * genera notas de credito compra..
+	 */
+	public static void generarNotasCredito(String src) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "NUMERO", CSV.STRING }, { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING } };
+		
+		Tipo gs = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+		
+		SucursalApp suc = rr.getSucursalAppById(2);
+		Tipo iva10 = rr.getTipoById(124);
+		Cliente cliente = rr.getClienteById(22133);
+		Funcionario func = rr.getFuncionario_(2);
+		Venta venta = (Venta) rr.getObject(Venta.class.getName(), 10212);
+		HashMap<String, Set<NotaCreditoDetalle>> detalles = new HashMap<String, Set<NotaCreditoDetalle>>();
+		
+		// numeros desde 297 al 326 fecha 25/05
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) { 
+			String numero = csv.getDetalleString("NUMERO");
+			String cantidad = csv.getDetalleString("CANTIDAD");
+			String costo = csv.getDetalleString("COSTO");
+			String codigo = csv.getDetalleString("CODIGO");
+			
+			Set<NotaCreditoDetalle> dets = detalles.get(numero);
+			if (dets == null) {
+				dets = new HashSet<NotaCreditoDetalle>();
+			}
+		
+			Articulo articulo = rr.getArticulo(codigo);	
+			
+			NotaCreditoDetalle item = new NotaCreditoDetalle();
+			item.setArticulo(articulo);
+			item.setCantidad(Integer.parseInt(cantidad));
+			item.setCostoGs(articulo.getCostoGs());
+			item.setMontoGs(Double.parseDouble(costo));
+			item.setImporteGs(item.getMontoGs() * item.getCantidad());
+			item.setTipoIva(iva10);
+			item.setTipoDetalle(rr.getTipoById(214));
+			item.setVenta(venta);
+			dets.add(item);
+			detalles.put(numero, dets);
+			System.out.println(item.getArticulo().getCodigoInterno());
+		}
+		
+		for (String key : detalles.keySet()) {
+			NotaCreditoDetalle item = new NotaCreditoDetalle();
+			item.setArticulo(null);
+			item.setCantidad(1);
+			item.setTipoIva(iva10);
+			item.setTipoDetalle(rr.getTipoById(213));
+			item.setVenta(venta);
+			
+			Set<NotaCreditoDetalle> dets = detalles.get(key);
+			dets.add(item);
+			
+			NotaCredito nc = new NotaCredito();
+			nc.setCliente(cliente);
+			nc.setDeposito((Deposito) rr.getObject(Deposito.class.getName(), 2));
+			nc.setDetalles(dets);
+			nc.setEstadoComprobante(rr.getTipoPorSigla(Configuracion.SIGLA_ESTADO_COMPROBANTE_APROBADO));
+			nc.setFechaEmision(Utiles.getFecha("25-05-2020", Utiles.DD_MM_YYYY));
+			nc.setMoneda(gs);
+			nc.setNumero(key);
+			nc.setObservacion("INVENTARIO GROUPAUTO");
+			nc.setSucursal(suc);
+			nc.setTimbrado_("");
+			nc.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA));
+			nc.setAuxi(NotaCredito.NCR_CREDITO);
+			nc.setVendedor(func);
+			rr.saveObject(nc, "sys");
+			System.out.println("NC GENERADO: " + nc.getNumero());
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosVentas.setNumeroPlanillaCaja(201, 212);
@@ -519,8 +598,8 @@ public class ProcesosVentas {
 			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
 			//ProcesosVentas.migrarVentas();
 			//ProcesosVentas.setClienteVendedor();
-			//ProcesosVentas.generarVentas(SRC_VENTA);
-			ProcesosVentas.poblarCiudades(SRC_CIUDADES);
+			ProcesosVentas.generarVentas(SRC_VENTA);
+			//ProcesosVentas.poblarCiudades(SRC_CIUDADES);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
