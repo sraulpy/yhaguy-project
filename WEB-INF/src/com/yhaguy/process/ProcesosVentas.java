@@ -44,6 +44,7 @@ public class ProcesosVentas {
 	static final String SRC_CLIENTE_VENDEDOR = "./WEB-INF/docs/migracion/central/CLIENTE_VENDEDOR.csv";
 	static final String SRC_VENTA = "./WEB-INF/docs/procesos/VENTA.csv";
 	static final String SRC_CIUDADES = "./WEB-INF/docs/procesos/CIUDADES.csv";
+	static final String SRC_NC_VENTA = "./WEB-INF/docs/procesos/NOTA_CREDITO_VENTA.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -598,8 +599,9 @@ public class ProcesosVentas {
 			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
 			//ProcesosVentas.migrarVentas();
 			//ProcesosVentas.setClienteVendedor();
-			ProcesosVentas.generarVentas(SRC_VENTA);
+			//ProcesosVentas.generarVentas(SRC_VENTA);
 			//ProcesosVentas.poblarCiudades(SRC_CIUDADES);
+			ProcesosVentas.generarNotasCredito(SRC_NC_VENTA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
