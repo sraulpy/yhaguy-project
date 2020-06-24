@@ -44,7 +44,7 @@ public class ProcesosVentas {
 	static final String SRC_CLIENTE_VENDEDOR = "./WEB-INF/docs/migracion/central/CLIENTE_VENDEDOR.csv";
 	static final String SRC_VENTA = "./WEB-INF/docs/procesos/VENTA.csv";
 	static final String SRC_CIUDADES = "./WEB-INF/docs/procesos/CIUDADES.csv";
-	static final String SRC_NC_VENTA = "./WEB-INF/docs/procesos/NOTA_CREDITO_VENTA.csv";
+	static final String SRC_NC_VENTA = "./WEB-INF/docs/procesos/NOTA_CREDITO.csv";
 
 	/**
 	 * setea el numero de planilla de caja 
@@ -425,15 +425,15 @@ public class ProcesosVentas {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		String[][] cab = { { "Empresa", CSV.STRING } };
-		String[][] det = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING }, { "PRECIO", CSV.STRING } };
+		String[][] det = { { "NUMERO", CSV.STRING }, { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING } };
 		
 		Tipo gs = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
 		
 		SucursalApp central = rr.getSucursalAppById(2);
 		Tipo iva10 = rr.getTipoById(124);
-		Cliente cliente = rr.getClienteById(28225);
-		Funcionario func = rr.getFuncionario_(54);
-		Deposito deposito = (Deposito) rr.getObject(Deposito.class.getName(), 7);
+		Cliente cliente = rr.getClienteById(22133);
+		Funcionario func = rr.getFuncionario_(2);
+		Deposito deposito = (Deposito) rr.getObject(Deposito.class.getName(), 2);
 		Set<VentaDetalle> dets = new HashSet<VentaDetalle>();
 		
 		CSV csv = new CSV(cab, det, src);
@@ -471,7 +471,7 @@ public class ProcesosVentas {
 		vta.setFecha(new Date());
 		vta.setMoneda(gs);
 		vta.setNumero("V-PED-" + AutoNumeroControl.getAutoNumero(Configuracion.NRO_VENTA_PEDIDO));
-		vta.setObservacion("INVENTARIO VALVOLINE");
+		vta.setObservacion("INVENTARIO GROUPAUTO");
 		vta.setSucursal(central);
 		vta.setDeposito(deposito);
 		vta.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PEDIDO_VENTA));
@@ -599,9 +599,9 @@ public class ProcesosVentas {
 			//ProcesosVentas.addHistoricoComisiones(Utiles.getFecha("01-03-2017 00:00:00"), Utiles.getFecha("31-03-2017 23:00:00"), 2);
 			//ProcesosVentas.migrarVentas();
 			//ProcesosVentas.setClienteVendedor();
-			//ProcesosVentas.generarVentas(SRC_VENTA);
+			ProcesosVentas.generarVentas(SRC_VENTA);
 			//ProcesosVentas.poblarCiudades(SRC_CIUDADES);
-			ProcesosVentas.generarNotasCredito(SRC_NC_VENTA);
+			//ProcesosVentas.generarNotasCredito(SRC_NC_VENTA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
