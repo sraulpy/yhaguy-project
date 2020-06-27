@@ -3,9 +3,6 @@ package com.yhaguy.gestion.empresa.geolocalizacion;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -42,6 +39,9 @@ import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+
 public class GeolocalizacionViewModel extends SimpleViewModel {
 	
 	private boolean open = false;
@@ -49,6 +49,7 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 	
 	private String razonSocial = "";
 	private String razonSocial_ = "";
+	
 	private Empresa selectedEmpresa;
 	private Cliente selectedCliente;
 	private Tipo selectedZona;
@@ -187,7 +188,7 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 	@NotifyChange("*")
 	public void registrarUbicacion(@BindingParam("comp1") Component comp1, 
 			@BindingParam("comp2") Component comp2) {
-		this.razonSocial = "NO REGISTRADO..";
+		this.razonSocial = "";
 		this.selectedCobrador = null;
 		this.selectedEmpresa = null;
 		this.selectedVendedor = null;
