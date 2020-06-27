@@ -193,6 +193,7 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 		this.selectedEmpresa = null;
 		this.selectedVendedor = null;
 		this.selectedZona = null;
+		this.empresas.clear();
 		this.registrarUbicacion = true;
 		comp1.setVisible(false);
 		comp2.setVisible(true);

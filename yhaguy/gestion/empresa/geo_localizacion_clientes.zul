@@ -175,6 +175,7 @@
 				<textbox value="@bind(vm.selectedCliente.empresa.latitud)" placeholder="LATITUD.." hflex="true"></textbox>
 				<space />
 				<textbox value="@bind(vm.selectedCliente.empresa.longitud)" placeholder="LONGITUD.." hflex="true"></textbox>
+				<space />
 				<hlayout>
 					<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 						iconSclass="z-icon-check" label=" Guardar" 
