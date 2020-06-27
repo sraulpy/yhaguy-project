@@ -231,7 +231,6 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 		rr.saveObject(this.selectedCliente, this.getLoginNombre());
 		rr.saveObject(this.selectedCliente.getEmpresa(), this.getLoginNombre());
 		this.selectedEmpresa = this.selectedCliente.getEmpresa();
-		this.empresas.add(this.selectedEmpresa);
 		this.selectedCliente = null;
 		this.razonSocial = "";
 		this.razonSocial_ = "";
