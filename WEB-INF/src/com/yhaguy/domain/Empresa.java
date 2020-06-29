@@ -77,6 +77,9 @@ public class Empresa extends Domain {
 		if (this.getZona().contains("NEGRA")) {
 			out = "/core/images/map_black.png";
 		}
+		if (this.getZona().contains("NARANJA")) {
+			out = "/core/images/map_orange.png";
+		}
 		return out;
 	}
 	
