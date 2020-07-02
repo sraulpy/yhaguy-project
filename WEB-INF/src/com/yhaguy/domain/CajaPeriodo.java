@@ -356,6 +356,17 @@ public class CajaPeriodo extends Domain {
 	}
 	
 	/**
+	 * @return el total de recaudacion cc ds..
+	 */
+	public double getTotalRecaudacionCCDs() {
+		double out = 0;
+		for (ReciboFormaPago fp : this.getRecaudacionCentral()) {
+			out += fp.getMontoDs();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total de recaudacion casa central..
 	 */
 	public double getTotalRecaudacionCentral() {

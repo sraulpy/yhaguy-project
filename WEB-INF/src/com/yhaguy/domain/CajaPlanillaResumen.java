@@ -205,6 +205,17 @@ public class CajaPlanillaResumen extends Domain {
 	}
 	
 	/**
+	 * @return el total en recaudacion casa central ds..
+	 */
+	public double getResumenRecaudacionCCDs() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += planilla.getTotalRecaudacionCCDs();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total en tarjeta de credito y debito..
 	 */
 	public double getResumenTarjeta() {
@@ -273,7 +284,7 @@ public class CajaPlanillaResumen extends Domain {
 	 */
 	public double getTotalResumenDs() {
 		return this.getResumenEfectivoDs() + this.getResumenChequeAlDiaDs()
-				+ this.getResumenTransferenciasBancariasDs();
+				+ this.getResumenTransferenciasBancariasDs() + this.getResumenRecaudacionCCDs();
 	}
 	
 	/**

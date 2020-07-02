@@ -628,8 +628,12 @@
 								</listcell>							
 							</listitem>
 							<listitem>
-								<listcell></listcell>
-								<listcell></listcell>							
+								<listcell>
+									<label value="Recaudación C.C.:" tooltiptext="Recaudación Casa Central"/>
+								</listcell>
+								<listcell>
+									<label value="@load(vm.selectedResumen_.resumenRecaudacionCCDs) @converter('formattedNumber', format='###,###,##0.00')" />
+								</listcell>							
 							</listitem>
 							<listitem>
 								<listcell>
