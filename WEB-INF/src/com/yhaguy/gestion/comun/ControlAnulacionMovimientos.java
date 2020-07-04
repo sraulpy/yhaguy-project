@@ -232,7 +232,9 @@ public class ControlAnulacionMovimientos {
 		// actualiza el stock del articulo..
 		for (VentaDetalle item : venta.getDetalles()) {
 			ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), venta.getDeposito().getId());
-			ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), user);
+			if (adp != null) {
+				ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), user);
+			}
 		}	
 		
 		// actualiza el historico venta / metas..
