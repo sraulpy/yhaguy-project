@@ -55,7 +55,7 @@
 			<listitem>
 				<listcell label="@load(each.pos1)"></listcell>
 				<listcell>
-					<a label="recalcular" visible="@load(each.pos3 gt -1 and each.pos3 ne each.pos2 and each.id ne 13)"
+					<a label="recalcular" visible="@load(each.pos3 ne each.pos2 and each.id ne 13)"
 						onClick="@command('recalcularStock', item=each)"></a>
 				</listcell>
 				<listcell label="@load(each.pos2)"></listcell>
