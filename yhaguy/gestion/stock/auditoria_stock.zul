@@ -56,7 +56,7 @@
 				<listcell label="@load(each.pos1)"></listcell>
 				<listcell>
 					<a label="recalcular" 
-						visible="@load((each.pos3 ne each.pos2 and each.id ne 13)? ((each.pos3 eq 0 and each.pos2 lt 0)? 'false' : 'true') : 'false')"
+						visible="@load((each.pos3 ne each.pos2 and each.id ne 13)? ((each.pos2 eq 0 and each.pos3 lt 0)? 'false' : 'true') : 'false')"
 						onClick="@command('recalcularStock', item=each)"></a>
 				</listcell>
 				<listcell label="@load(each.pos2)"></listcell>
