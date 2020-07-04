@@ -53,6 +53,9 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 		long stockHistorial = Long.parseLong((String) item.getPos3());
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
+		if (stockHistorial < 0) {
+			stockHistorial = 0;
+		}
 		ArticuloDeposito adp = rr.getArticuloDeposito((long) this.selectedArticulo[0], item.getId());
 		adp.setStock(stockHistorial);
 		rr.saveObject(adp, this.getLoginNombre());
