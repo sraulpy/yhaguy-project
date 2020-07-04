@@ -1905,6 +1905,13 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return true si es empresa groupauto..
+	 */
+	public boolean isGroupauto() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO);
+	}
+	
+	/**
 	 * @return true si los datos del vehiculo son correctos..
 	 */
 	private boolean isDatosVehiculosOK() {
