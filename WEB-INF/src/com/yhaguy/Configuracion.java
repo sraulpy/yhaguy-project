@@ -695,6 +695,7 @@ public class Configuracion extends Config {
 	public static final String SIGLA_FORMA_PAGO_DIFERENCIA_TC = "FP-TIP-DTC";
 	public static final String SIGLA_FORMA_PAGO_OTROS_COMPROBANTES = "FP-TIP-OTR-CMP";
 	public static final String SIGLA_FORMA_PAGO_VALE = "FP-TIP-VAL-DES";
+	public static final String SIGLA_FORMA_PAGO_RECAUDACION_MRA = "FP-TIP-REC-MRA";
 	public static String SIGLA_MONEDA_GUARANI = "Gs.";
 	public static String SIGLA_MONEDA_DOLAR = "U$D";
 	public static String SIGLA_MONEDA_PESO = "$";

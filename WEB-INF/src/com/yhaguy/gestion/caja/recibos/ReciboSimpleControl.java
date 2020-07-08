@@ -1002,6 +1002,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		String siglaFPDC = Configuracion.SIGLA_FORMA_PAGO_DEBITO_COBRANZA_CENTRAL;
 		String siglaSFCO = Configuracion.SIGLA_FORMA_PAGO_SALDO_FAVOR_COBRADO;
 		String siglaFPOC = Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES;
+		String siglaFPRM = Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA;
 		
 		if (siglaFP.compareTo(siglaFPCH) == 0) {
 			showCheque();
@@ -1195,7 +1196,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwMontoAplicado.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			
-		} else if(siglaFP.equals(siglaFPOC)) {
+		} else if (siglaFP.equals(siglaFPOC)) {
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
@@ -1207,6 +1208,25 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());	
 			
+		} else if (siglaFP.equals(siglaFPRM)) {
+			rwBanco.setVisible(false); rwChequera.setVisible(false);
+			rwNroCheque.setVisible(true); rwVencimiento.setVisible(true);
+			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
+			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(true);
+			rwMontoCheque.setVisible(false); rwChequeAutoCobranza.setVisible(false);
+			rwChequeBancoAutoCobro.setVisible(false); rwLibradorAutoCobro.setVisible(false);
+			rwVencimientoAutoCobro.setVisible(false);
+			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+			rwDebitoCobroCentral.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false);
+			rwSaldoFavorCobrado.setVisible(false);
+			rwMontoAplicado.setVisible(true);
+			dbxGs.setReadonly(false); dbxUS.setReadonly(false);	
+			this.nvoFormaPago.setChequeLibrador((String) this.dato.getReciboDTO().getCliente().getPos2());
+		
 		} else {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
