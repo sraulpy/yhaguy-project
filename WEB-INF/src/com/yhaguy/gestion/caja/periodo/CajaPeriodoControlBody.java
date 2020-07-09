@@ -42,7 +42,6 @@ import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Caja;
-import com.yhaguy.domain.CajaAuditoria;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Funcionario;
@@ -544,20 +543,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 			} else {
 				if (this.reciboDTO.isOrdenPago()) {
 					for (ReciboFormaPagoDTO fp : this.reciboDTO.getFormasPago()) {
-						if (fp.isChequeTerceroAutocobranza()) {
-							RegisterDomain rr = RegisterDomain.getInstance();
-							CajaAuditoria chq = new CajaAuditoria();
-							chq.setConcepto(CajaAuditoria.CONCEPTO_PAGO_CHEQUE);
-							chq.setDescripcion("ORDEN PAGO NRO. " + this.reciboDTO.getNumero() + " - "
-									+ " CHEQUE: " + fp.getChequeNumero() + " - "
-									+ fp.getChequeBancoDescripcion());
-							chq.setFecha(this.reciboDTO.getFechaEmision());
-							chq.setImporte(fp.getMontoGs());
-							chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-							chq.setResumen("- - -");
-							chq.setNumero(fp.getChequeNumero());
-							chq.setSupervisor(this.getNombreUsuario());
-							rr.saveObject(chq, this.getLoginNombre());
+						if (fp.isChequeTerceroAutocobranza()) {							
+							ControlCajaAuditoria.addPagoChequeTercero(fp.getChequeNumero(), this.reciboDTO.getNumero(), this.reciboDTO.getFechaEmision(),
+									fp.getMontoGs(), fp.getChequeBancoDescripcion(), this.getLoginNombre());
 						}
 					}
 				}
@@ -1167,6 +1155,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto.getReposiciones().add(this.reposicion);
 		this.dto = (CajaPeriodoDTO) this.saveDTO(dto);
 		
+		this.addMovimientoBanco(formaPago, 0);
+		
 		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
 			if (tipo == ES_REPOSICION) {
 				ControlCajaAuditoria.addReposicionCaja(this.dto.getNumero(), (String) this.reposicion.getPos15(),
@@ -1175,6 +1165,17 @@ public class CajaPeriodoControlBody extends BodyApp {
 		}
 		
 		this.imprimirReposicion();
+	}
+	
+	/**
+	 * Invoca a la API de Banco para agregar los movimientos de banco..
+	 */
+	private void addMovimientoBanco(ReciboFormaPagoDTO formaPago, long idCliente)
+			throws Exception {
+		MyPair sucursal = this.dto.getCaja().getSucursal();
+		Date fecha = new Date();
+		ControlBancoMovimiento ctr = new ControlBancoMovimiento(null);
+		ctr.registrarMovimientoBanco(formaPago, fecha, sucursal, idCliente, "", "", "", "");
 	}
 
 	/************************************************************/
@@ -1581,7 +1582,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 				}
 			}
 			if (totalGastos > 0) {
-				ControlCajaAuditoria.addEgresoEfectivo(this.dto.getNumero(), this.dto.getNumero(),
+				ControlCajaAuditoria.addPagoEfectivo(this.dto.getNumero(), this.dto.getNumero(),
 						new Date(), totalGastos, this.getLoginNombre());
 			}			
 		}
