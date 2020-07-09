@@ -36,6 +36,7 @@ import com.yhaguy.BodyApp;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoChequeTercero;
+import com.yhaguy.domain.CajaAuditoria;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.RecaudacionCentral;
@@ -394,6 +395,46 @@ public class BoletaDepositoViewModel extends BodyApp {
 
 			this.mensajePopupTemporal("Documento Cerrado");
 			this.actualizarDto();
+			this.generarCajaAuditoria();
+		}
+	}
+	
+	/**
+	 * generar caja auditoria..
+	 */
+	private void generarCajaAuditoria() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		BancoBoletaDeposito deposito = (BancoBoletaDeposito) rr.getObject(BancoBoletaDeposito.class.getName(),
+				this.bancoDeposito.getId());
+
+		if (deposito.getTotalEfectivo() > 0) {
+			CajaAuditoria efectivo = new CajaAuditoria();
+			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
+			efectivo.setDescripcion("DEPÓSITO NRO. " + deposito.getNumeroBoleta() + " - "
+					+ deposito.getNroCuenta().getBancoDescripcion() + "");
+			efectivo.setFecha(deposito.getFecha());
+			efectivo.setImporte(deposito.getTotalEfectivo());
+			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			efectivo.setResumen("");
+			efectivo.setNumero(deposito.getNumeroBoleta());
+			efectivo.setSupervisor(this.getLoginNombre());
+			rr.saveObject(efectivo, this.getLoginNombre());
+		}
+
+		// actualiza auditoria de caja..
+		for (BancoChequeTercero cheque : deposito.getCheques()) {
+			CajaAuditoria chq = new CajaAuditoria();
+			chq.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_CHEQUE);
+			chq.setDescripcion("DEPÓSITO NRO. (" + deposito.getNumeroBoleta() + " - "
+					+ deposito.getNroCuenta().getBancoDescripcion() + ") CHEQUE: " + cheque.getNumero() + " - "
+					+ cheque.getBanco().getDescripcion());
+			chq.setFecha(deposito.getFecha());
+			chq.setImporte(cheque.getMonto());
+			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+			chq.setResumen(deposito.getNumeroBoleta());
+			chq.setNumero(cheque.getNumero());
+			chq.setSupervisor(this.getLoginNombre());
+			rr.saveObject(chq, this.getLoginNombre());
 		}
 	}
 
