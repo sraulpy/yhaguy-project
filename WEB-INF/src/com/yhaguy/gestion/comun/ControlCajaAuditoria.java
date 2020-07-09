@@ -47,7 +47,7 @@ public class ControlCajaAuditoria {
 	/**
 	 * add egreso de caja con efectivo..
 	 */
-	public static void addEgresoEfectivo(String numeroCaja, String numeroReposicion, Date fecha, double importe,
+	public static void addPagoEfectivo(String numeroCaja, String numeroReposicion, Date fecha, double importe,
 			String user) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CajaAuditoria ca = new CajaAuditoria();
@@ -62,4 +62,21 @@ public class ControlCajaAuditoria {
 		rr.saveObject(ca, user);
 	}
 	
+	/**
+	 * add pago con cheque tercero..
+	 */
+	public static void addPagoChequeTercero(String numeroCheque, String numeroPago, Date fecha, double importe,
+			String banco, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CajaAuditoria ca = new CajaAuditoria();
+		ca.setConcepto(CajaAuditoria.CONCEPTO_PAGO_CHEQUE);
+		ca.setDescripcion("ORDEN PAGO NRO. " + numeroPago + " - " + " CHEQUE: " + numeroCheque + " - " + banco);
+		ca.setFecha(fecha);
+		ca.setImporte(importe);
+		ca.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		ca.setResumen("- - -");
+		ca.setNumero(numeroCheque);
+		ca.setSupervisor(user);
+		rr.saveObject(ca, user);
+	}
 }
