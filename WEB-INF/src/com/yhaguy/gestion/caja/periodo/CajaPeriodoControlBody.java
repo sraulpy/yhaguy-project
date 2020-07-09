@@ -1573,6 +1573,15 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
 
 		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+			double totalEgreso = 0;
+			for (MyArray rep : this.dto.getReposiciones()) {
+				int tipo = (int) rep.getPos1();
+				if (tipo != ES_REPOSICION) {
+					double importe = (double) rep.getPos5();
+					totalEgreso += importe;
+				}
+			}
+			
 			double totalGastos = 0;
 			for (GastoDTO gasto : this.dto.getGastos()) {
 				for (ReciboFormaPagoDTO fp : gasto.getFormasPago()) {
@@ -1581,9 +1590,15 @@ public class CajaPeriodoControlBody extends BodyApp {
 					}
 				}
 			}
+			
+			if (totalEgreso > 0) {
+				ControlCajaAuditoria.addEgresoCaja(this.dto.getNumero(), this.dto.getNumero(),
+						new Date(), totalGastos, this.getLoginNombre(), " EN CONCEPTO DE EGRESOS");
+			}
+			
 			if (totalGastos > 0) {
-				ControlCajaAuditoria.addPagoEfectivo(this.dto.getNumero(), this.dto.getNumero(),
-						new Date(), totalGastos, this.getLoginNombre());
+				ControlCajaAuditoria.addEgresoCaja(this.dto.getNumero(), this.dto.getNumero(),
+						new Date(), totalGastos, this.getLoginNombre(), " EN CONCEPTO DE GASTOS");
 			}			
 		}
 	}

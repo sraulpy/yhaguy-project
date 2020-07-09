@@ -25,6 +25,7 @@ public class BancoBoletaDepositoDTO extends DTO {
 	private String observacion = "CORRESPONDIENTE A LAS CAJAS ";
 	private String planillaCaja = "";
 	private boolean cerrado = false;
+	private boolean noGenerarCajaAuditoria = false;
 	
 	/**
 	 * @return el total de importe en cheques..
@@ -142,6 +143,14 @@ public class BancoBoletaDepositoDTO extends DTO {
 
 	public void setPlanillaCaja(String planillaCaja) {
 		this.planillaCaja = planillaCaja;
+	}
+
+	public boolean isNoGenerarCajaAuditoria() {
+		return noGenerarCajaAuditoria;
+	}
+
+	public void setNoGenerarCajaAuditoria(boolean noGenerarCajaAuditoria) {
+		this.noGenerarCajaAuditoria = noGenerarCajaAuditoria;
 	}
 
 }

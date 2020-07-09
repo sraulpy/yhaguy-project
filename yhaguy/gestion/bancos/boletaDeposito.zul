@@ -138,6 +138,10 @@
 						onClick="@command('cerrarBoletaDeposito')"
 						label=" Cerrar" 
 						disabled="@load(vm.bancoDeposito.esNuevo() or vm.deshabilitado)"/>
+					<space />
+					<checkbox checked="@bind(vm.bancoDeposito.noGenerarCajaAuditoria)"
+						label="No generar saldo en caja-auditoría"
+						tooltiptext="Para casos como depósitos de vueltos de viáticos (caja chica)"></checkbox>
 				</hlayout>
 
 				<listbox model="@load(vm.bancoDeposito.cheques)"

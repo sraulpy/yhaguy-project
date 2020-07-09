@@ -22,6 +22,10 @@
 		<property name="planillaCaja"/>
 		<property name="cerrado" />
 		<property name="totalImporte_gs" />
+		
+		<property name="noGenerarCajaAuditoria">
+			<column name="noGenerarCajaAuditoria" not-null="true" default="false" />
+		</property>
 			
 		<set name="cheques" table="bancochequetercero" inverse="false" lazy="false"
 			fetch="join" cascade="all">

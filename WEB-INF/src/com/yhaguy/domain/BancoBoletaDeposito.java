@@ -22,6 +22,7 @@ public class BancoBoletaDeposito extends Domain {
 	private String observacion;
 	private String planillaCaja; //nros de planillas separados por ;
 	private boolean cerrado;
+	private boolean noGenerarCajaAuditoria = false;
 	private double totalImporte_gs;
 
 	@Override
@@ -151,4 +152,11 @@ public class BancoBoletaDeposito extends Domain {
 		this.totalImporte_gs = totalImporte_gs;
 	}
 
+	public boolean isNoGenerarCajaAuditoria() {
+		return noGenerarCajaAuditoria;
+	}
+
+	public void setNoGenerarCajaAuditoria(boolean noGenerarCajaAuditoria) {
+		this.noGenerarCajaAuditoria = noGenerarCajaAuditoria;
+	}
 }
