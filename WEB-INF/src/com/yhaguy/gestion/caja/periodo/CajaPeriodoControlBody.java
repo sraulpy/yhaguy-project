@@ -1167,6 +1167,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto.getReposiciones().add(this.reposicion);
 		this.dto = (CajaPeriodoDTO) this.saveDTO(dto);
 		
+		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+			if (tipo == ES_REPOSICION) {
+				ControlCajaAuditoria.addReposicionCaja(this.dto.getNumero(), (String) this.reposicion.getPos15(),
+						new Date(), (double) this.reposicion.getPos5(), this.getLoginNombre());
+			}		
+		}
+		
 		this.imprimirReposicion();
 	}
 
@@ -1565,16 +1572,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
 
 		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
-			for (MyArray rep : this.dto.getReposiciones()) {
-				int tipo = (int) rep.getPos2();
-				if (tipo == ES_REPOSICION) {
-					ControlCajaAuditoria.addReposicionCaja(this.dto.getNumero(), (String) rep.getPos15(),
-							this.dto.getApertura(), (double) rep.getPos5(), this.getLoginNombre());
-				} else {
-					ControlCajaAuditoria.addEgresoCaja(this.dto.getNumero(), (String) rep.getPos15(),
-							this.dto.getApertura(), (double) rep.getPos5(), this.getLoginNombre());
-				}
-			}	
 			double totalGastos = 0;
 			for (GastoDTO gasto : this.dto.getGastos()) {
 				for (ReciboFormaPagoDTO fp : gasto.getFormasPago()) {
@@ -1585,7 +1582,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			}
 			if (totalGastos > 0) {
 				ControlCajaAuditoria.addEgresoEfectivo(this.dto.getNumero(), this.dto.getNumero(),
-						this.dto.getApertura(), totalGastos, this.getLoginNombre());
+						new Date(), totalGastos, this.getLoginNombre());
 			}			
 		}
 	}
