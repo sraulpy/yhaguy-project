@@ -281,11 +281,9 @@ public class CajaPeriodoAssembler extends Assembler {
 			int signo = 1;
 			String tipo_;
 			String sigla = c.getTipo().getSigla();
-			String descripcion = c.getNumero() + " - "
-					+ c.getTipo().getDescripcion();
+			String descripcion = c.getNumero() + " - " + c.getTipo().getDescripcion();
 			String s_monedaExt = c.getMoneda().getSigla();
-			MyPair estadoComprobante = this.tipoToMyPair(c
-					.getEstadoComprobante());
+			MyPair estadoComprobante = this.tipoToMyPair(c.getEstadoComprobante());
 			String numero = c.getNumero();
 
 			if (sigla.compareTo(Configuracion.SIGLA_CAJA_REPOSICION_INGRESO) == 0) {

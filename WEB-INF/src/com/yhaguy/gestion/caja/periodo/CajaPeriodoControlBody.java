@@ -67,6 +67,7 @@ import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.comun.Control;
 import com.yhaguy.gestion.comun.ControlAnulacionMovimientos;
+import com.yhaguy.gestion.comun.ControlCajaAuditoria;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDTO;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDetalleDTO;
@@ -1159,47 +1160,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 		formaPago = (ReciboFormaPagoDTO) this.saveDTO(formaPago, new AssemblerReciboFormaPago(""));
 
-		String key = tipo == ES_REPOSICION ? Configuracion.NRO_CAJA_REPOSICION
-				: Configuracion.NRO_CAJA_EGRESO;
+		String key = tipo == ES_REPOSICION ? Configuracion.NRO_CAJA_REPOSICION : Configuracion.NRO_CAJA_EGRESO;
 
 		this.reposicion.setPos14(formaPago);
 		this.reposicion.setPos15(key + "-" + AutoNumeroControl.getAutoNumero(key, 5));
 		this.dto.getReposiciones().add(this.reposicion);
-
-		this.addEventoAgenda(
-				ControlAgendaEvento.NORMAL,
-				this.dto.getNumero(), 0,
-				"Se registró un movimiento de Egreso: " + this.reposicion.getPos6(), null);
 		this.dto = (CajaPeriodoDTO) this.saveDTO(dto);
-
-		this.addMovimientoBanco(formaPago, 0);
-		if (!(tipo == ES_REPOSICION))
-			this.addMovimientoFuncionario();
+		
 		this.imprimirReposicion();
-	}
-
-	/**
-	 * Invoca a la API de Banco para agregar los movimientos de banco..
-	 */
-	private void addMovimientoBanco(ReciboFormaPagoDTO formaPago, long idCliente)
-			throws Exception {
-		MyPair sucursal = this.dto.getCaja().getSucursal();
-		Date fecha = new Date();
-		ControlBancoMovimiento ctr = new ControlBancoMovimiento(null);
-		ctr.registrarMovimientoBanco(formaPago, fecha, sucursal, idCliente, "", "", "", "");
-	}
-
-	/**
-	 * invoca al register para agregar el movimiento de funcionario..
-	 */
-	private void addMovimientoFuncionario() throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		String numero = (String) this.reposicion.getPos15();
-		MyPair funcionario = (MyPair) this.reposicion.getPos13();
-		MyPair tipoRep = (MyPair) this.reposicion.getPos10();
-		double montoGs = (double) this.reposicion.getPos5();
-		rr.addMovimientoFuncionario(funcionario.getId(), new Date(), numero,
-				tipoRep.getText(), montoGs);
 	}
 
 	/************************************************************/
@@ -1596,8 +1564,30 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
 
-		this.getCtrAgenda().addDetalle(this.getCtrAgendaTipo(),
-				this.getCtrAgendaKey(), 0, "Se cerró la caja..", null);
+		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+			for (MyArray rep : this.dto.getReposiciones()) {
+				int tipo = (int) rep.getPos2();
+				if (tipo == ES_REPOSICION) {
+					ControlCajaAuditoria.addReposicionCaja(this.dto.getNumero(), (String) rep.getPos15(),
+							this.dto.getApertura(), (double) rep.getPos5(), this.getLoginNombre());
+				} else {
+					ControlCajaAuditoria.addEgresoCaja(this.dto.getNumero(), (String) rep.getPos15(),
+							this.dto.getApertura(), (double) rep.getPos5(), this.getLoginNombre());
+				}
+			}	
+			double totalGastos = 0;
+			for (GastoDTO gasto : this.dto.getGastos()) {
+				for (ReciboFormaPagoDTO fp : gasto.getFormasPago()) {
+					if (fp.isEfectivo()) {
+						totalGastos += fp.getMontoGs();
+					}
+				}
+			}
+			if (totalGastos > 0) {
+				ControlCajaAuditoria.addEgresoEfectivo(this.dto.getNumero(), this.dto.getNumero(),
+						this.dto.getApertura(), totalGastos, this.getLoginNombre());
+			}			
+		}
 	}
 
 	/**
