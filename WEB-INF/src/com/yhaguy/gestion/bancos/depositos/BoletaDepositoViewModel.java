@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -47,6 +44,9 @@ import com.yhaguy.gestion.bancos.libro.BancoMovimientoDTO;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
+
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 
 public class BoletaDepositoViewModel extends BodyApp {
 	
@@ -395,7 +395,9 @@ public class BoletaDepositoViewModel extends BodyApp {
 
 			this.mensajePopupTemporal("Documento Cerrado");
 			this.actualizarDto();
-			this.generarCajaAuditoria();
+			if (!this.bancoDeposito.isNoGenerarCajaAuditoria()) {
+				this.generarCajaAuditoria();
+			}			
 		}
 	}
 	

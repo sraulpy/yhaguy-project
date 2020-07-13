@@ -227,7 +227,7 @@ public class PagosViewModel extends SimpleViewModel {
 			Date fechaRecibo = (Date) this.nvoRecibo.getPos2();
 			long idOrdenPago = this.selectedItem.getId();
 			String user = this.getLoginNombre();
-			AssemblerRecibo.registrarReciboPago(numeroRecibo, fechaRecibo, idOrdenPago, user, false);			
+			AssemblerRecibo.registrarReciboPago(numeroRecibo, fechaRecibo, idOrdenPago, user, false, false);			
 			this.selectedItem = null;
 			this.mensajePopupTemporal("Recibo Registrado..", 5000);
 		}

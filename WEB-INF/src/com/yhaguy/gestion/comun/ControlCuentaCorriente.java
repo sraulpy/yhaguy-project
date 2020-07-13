@@ -148,7 +148,10 @@ public class ControlCuentaCorriente {
 	/**
 	 * agregar movimiento recibo de pago..
 	 */
-	public static void addReciboDePago(long idOrdenPago, String user) throws Exception {		
+	public static void addReciboDePago(long idOrdenPago, String user, boolean aCobrar) throws Exception {	
+		if (aCobrar) {
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Recibo pago = rr.getOrdenPagoById(idOrdenPago);
 		
@@ -178,7 +181,10 @@ public class ControlCuentaCorriente {
 	/**
 	 * agregar movimiento recibo de pago (solo cancela los gastos contado)..
 	 */
-	public static void addReciboDePagoGastosContado(long idOrdenPago, String user) throws Exception {		
+	public static void addReciboDePagoGastosContado(long idOrdenPago, String user, boolean saldoAcobrar) throws Exception {		
+		if (saldoAcobrar) {
+			return;
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Recibo pago = rr.getOrdenPagoById(idOrdenPago);
 		
@@ -268,6 +274,29 @@ public class ControlCuentaCorriente {
 	}
 	
 	/**
+	 * agregar movimiento recibo con saldo a cobrar..
+	 */
+	public static void addPagoAcobrar(long idRecibo, String user) throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Recibo cobro = (Recibo) rr.getObject(Recibo.class.getName(), idRecibo);
+		
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(cobro.getTipoMovimiento());
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_CLIENTE)); 
+		ctm.setFechaEmision(cobro.getFechaEmision());
+		ctm.setFechaVencimiento(cobro.getFechaEmision());
+		ctm.setIdEmpresa(cobro.getProveedor().getIdEmpresa());
+		ctm.setIdMovimientoOriginal(cobro.getId());
+		ctm.setIdVendedor(0);
+		ctm.setImporteOriginal(cobro.isMonedaLocal() ? cobro.getTotalImporteGs() : cobro.getTotalImporteDs());
+		ctm.setMoneda(cobro.getMoneda());
+		ctm.setNroComprobante(cobro.getNumero());
+		ctm.setSucursal(cobro.getSucursal());
+		ctm.setSaldo(cobro.isMonedaLocal() ? cobro.getTotalImporteGs() : cobro.getTotalImporteDs());	
+		rr.saveObject(ctm, user);
+	}
+	
+	/**
 	 * agregar movimiento recibo de pago anticipado..
 	 */
 	public static void addReciboDePagoAnticipado(long idOrdenPago, String user, String siglaMoneda) throws Exception {		
@@ -329,6 +358,28 @@ public class ControlCuentaCorriente {
 		ctm.setNroComprobante(cheque.getNumero());
 		ctm.setSucursal(cheque.getSucursalApp());
 		ctm.setSaldo(cheque.getMonto());	
+		rr.saveObject(ctm, user);
+	}
+	
+	/**
+	 * agregar movimiento cheque propio rechazado..
+	 */
+	public static void addChequePropioRechazado(long idCheque, long idEmpresa, String user) throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		BancoCheque cheque = (BancoCheque) rr.getObject(BancoCheque.class.getName(), idCheque);
+		
+		CtaCteEmpresaMovimiento ctm = new CtaCteEmpresaMovimiento();
+		ctm.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_CHEQUE_RECHAZADO));
+		ctm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+		ctm.setFechaEmision(cheque.getFechaEmision());
+		ctm.setIdEmpresa(idEmpresa);
+		ctm.setIdMovimientoOriginal(cheque.getId());
+		ctm.setIdVendedor(0);
+		ctm.setImporteOriginal(cheque.getMonto());
+		ctm.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		ctm.setNroComprobante(cheque.getNumero() + "");
+		ctm.setSucursal(rr.getSucursalAppById(2));
+		ctm.setSaldo(cheque.getMonto() * -1);	
 		rr.saveObject(ctm, user);
 	}
 	

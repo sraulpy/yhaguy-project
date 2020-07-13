@@ -30,6 +30,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoCta;
+import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
@@ -70,6 +71,8 @@ public class ChequesViewModel extends SimpleViewModel {
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
 	private String filterFechaAA = "";
+	
+	private String motivoRechazo = "";
 	
 	private String selectedFiltro = FILTRO_TODOS;
 	private double totalImporteGs = 0;
@@ -136,6 +139,19 @@ public class ChequesViewModel extends SimpleViewModel {
 		this.registrarChequeCobrado(this.selectedItem_, cobrado, this.fechaCobro);
 		comp.close();
 		this.fechaCobro = null;
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void rechazarCheque(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.motivoRechazo.isEmpty()) {
+			Clients.showNotification("Debe ingresar el motivo..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		this.registrarChequeRechazado(this.selectedItem, this.motivoRechazo);
+		comp.close();
+		this.fechaCobro = null;
+		this.motivoRechazo = "";
 	}
 	
 	@Command
@@ -217,6 +233,21 @@ public class ChequesViewModel extends SimpleViewModel {
 		Clients.showNotification("Registro actualizado..!");
 	}
 	
+	/**
+	 * registrar cheque rechazado..
+	 */
+	private void registrarChequeRechazado(MyArray cheque, String motivo) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		String beneficiario = (String) cheque.getPos6();
+		if (beneficiario != null && !beneficiario.isEmpty()) {
+			Empresa emp = rr.getEmpresa(beneficiario);
+			if (emp != null) {
+				ControlBancoMovimiento.rechazarCheque(cheque.getId(), emp.getId(), motivo, this.getLoginNombre());
+				Clients.showNotification("Registro actualizado..!");
+			}			
+		}		
+	}
+	
 	@DependsOn({ "filterNumeroCaja", "filterNumeroOrdenPago", "filterCuenta",
 			"filterBanco", "filterNro", "filterBeneficiario", "selectedFiltro",
 			"filterFechaDD", "filterFechaMM", "filterFechaAA", "filterMonto" })
@@ -254,6 +285,7 @@ public class ChequesViewModel extends SimpleViewModel {
 			my.setPos13(cheque.getFechaCobro());
 			my.setPos14(cheque.getMoneda().getSigla());
 			my.setPos15(cheque.isMonedaLocal());
+			my.setPos16(cheque.isRechazado());
 			if (this.selectedFiltro.equals(FILTRO_AL_DIA) && cheque.isChequeAlDia()) {
 				out.add(my);
 				this.totalImporteGs += cheque.getMonto();
@@ -592,6 +624,14 @@ public class ChequesViewModel extends SimpleViewModel {
 
 	public void setFilterMonto(String filterMonto) {
 		this.filterMonto = filterMonto;
+	}
+
+	public String getMotivoRechazo() {
+		return motivoRechazo;
+	}
+
+	public void setMotivoRechazo(String motivoRechazo) {
+		this.motivoRechazo = motivoRechazo;
 	}
 }
 

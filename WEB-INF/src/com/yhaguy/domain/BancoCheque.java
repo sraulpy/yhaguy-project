@@ -34,6 +34,8 @@ public class BancoCheque extends Domain {
 	private boolean anulado;
 	private boolean cobrado;
 	private Date fechaCobro;
+	private boolean rechazado;
+	private String motivoRechazo = "";
 	
 	/**
 	 * @return true si es cheque al dia..
@@ -208,5 +210,21 @@ public class BancoCheque extends Domain {
 
 	public void setFechaCobro(Date fechaCobro) {
 		this.fechaCobro = fechaCobro;
+	}
+
+	public boolean isRechazado() {
+		return rechazado;
+	}
+
+	public void setRechazado(boolean rechazado) {
+		this.rechazado = rechazado;
+	}
+
+	public String getMotivoRechazo() {
+		return motivoRechazo;
+	}
+
+	public void setMotivoRechazo(String motivoRechazo) {
+		this.motivoRechazo = motivoRechazo;
 	}
 }

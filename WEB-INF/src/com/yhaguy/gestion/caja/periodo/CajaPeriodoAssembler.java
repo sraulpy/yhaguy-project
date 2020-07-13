@@ -428,6 +428,11 @@ public class CajaPeriodoAssembler extends Assembler {
 				if (rec.isImputar() && rec.isAnticipoPago()) {
 					this.actualizarCtaCteRecibo(rec);
 				}
+				
+				// si es pago anticipado..actualiza la ctacte..
+				if (rec.isImputar() && rec.isOrdenPago() && rec.isSaldoAcobrar()) {
+					this.actualizarCtaCteRecibo(rec);
+				}
 			}
 		}
 		
@@ -447,20 +452,21 @@ public class CajaPeriodoAssembler extends Assembler {
 	 */
 	private void actualizarCtaCteRecibo(ReciboDTO rec)
 			throws Exception {		
+		
 		if (rec.isCobro() || rec.isCancelacionChequeRechazado() || rec.isReembolsoPrestamo()) {
 			ControlCuentaCorriente.addReciboDeCobro(rec.getId(), this.getLogin());
 		} 
 		// es una orden de pago de gastos contado (contiene solo facturas contado)
 		if (rec.isOrdenPago() && rec.isOrdenPagoGastosContado_()) {
-			AssemblerRecibo.registrarReciboPago("GASTO CONTADO", new Date(), rec.getId(), this.getLogin(), true);
+			AssemblerRecibo.registrarReciboPago("GASTO CONTADO", new Date(), rec.getId(), this.getLogin(), true, rec.isSaldoAcobrar());
 		}
 		// es una orden de pago de gastos contado (que tambien incluye facturas credito)
 		if (rec.isOrdenPago() && rec.isOrdenPagoGastosContado() && !rec.isOrdenPagoGastosContado_()) {
-			ControlCuentaCorriente.addReciboDePagoGastosContado(rec.getId(), this.getLogin());
+			ControlCuentaCorriente.addReciboDePagoGastosContado(rec.getId(), this.getLogin(), rec.isSaldoAcobrar());
 		}
 		// es una orden de pago anticipado..
 		if (rec.isAnticipoPago()) {
-			AssemblerRecibo.registrarReciboPago("ANTICIPO", new Date(), rec.getId(), this.getLogin(), true);
+			AssemblerRecibo.registrarReciboPago("ANTICIPO", new Date(), rec.getId(), this.getLogin(), true, rec.isSaldoAcobrar());
 			ControlCuentaCorriente.addReciboDePagoAnticipado(rec.getId(), this.getLogin(), (String) rec.getMoneda().getPos2());
 		}
 		// desbloqueo automatico
@@ -470,6 +476,10 @@ public class CajaPeriodoAssembler extends Assembler {
 		// saldo deudor..
 		if (rec.isSaldodeudor()) {
 			ControlCuentaCorriente.addReciboDeudor(rec.getId(), this.getLogin());
+		}
+		// saldo a cobrar..
+		if (rec.isSaldoAcobrar()) {
+			ControlCuentaCorriente.addPagoAcobrar(rec.getId(), this.getLogin());
 		}
 	}
 

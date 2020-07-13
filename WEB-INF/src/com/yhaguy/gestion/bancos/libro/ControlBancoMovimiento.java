@@ -271,6 +271,17 @@ public class ControlBancoMovimiento extends Control {
 		rr.saveObject(cheque, user);
 	}
 	
+	/**
+	 * rechazo de cheques emitidos..
+	 */
+	public static void rechazarCheque(long idCheque, long idEmpresa, String motivo, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		BancoCheque cheque = rr.getChequeById(idCheque);
+		cheque.setRechazado(true);
+		cheque.setMotivoRechazo(motivo);
+		rr.saveObject(cheque, user);
+		ControlCuentaCorriente.addChequePropioRechazado(idCheque, idEmpresa, user);
+	}
 	
 
 	/*********************************/

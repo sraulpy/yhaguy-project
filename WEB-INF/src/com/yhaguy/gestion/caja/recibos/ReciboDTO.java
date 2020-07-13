@@ -58,6 +58,7 @@ public class ReciboDTO extends DTO {
 	private boolean anticipo = false;
 	private boolean imputar = false;
 	private boolean saldodeudor  = false;
+	private boolean saldoAcobrar = false;
 
 	/** los estados de comprobantes **/
 	private List<MyPair> estadosComprobantes;
@@ -601,5 +602,13 @@ public class ReciboDTO extends DTO {
 
 	public void setSaldodeudor(boolean saldodeudor) {
 		this.saldodeudor = saldodeudor;
+	}
+
+	public boolean isSaldoAcobrar() {
+		return saldoAcobrar;
+	}
+
+	public void setSaldoAcobrar(boolean saldoAcobrar) {
+		this.saldoAcobrar = saldoAcobrar;
 	}
 }

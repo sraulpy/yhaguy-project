@@ -20,6 +20,7 @@
 		<property name="numeroCaja" />
 		<property name="numeroOrdenPago" />
 		<property name="fechaCobro" />
+		<property name="motivoRechazo" />
 		
 		<property name="anulado">
 			<column name="anulado" not-null="true" default="false" />
@@ -27,6 +28,10 @@
 		
 		<property name="cobrado">
 			<column name="cobrado" not-null="true" default="false" />
+		</property>
+		
+		<property name="rechazado">
+			<column name="rechazado" not-null="true" default="false" />
 		</property>
 
 		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"

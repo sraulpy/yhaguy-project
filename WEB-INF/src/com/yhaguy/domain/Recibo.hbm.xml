@@ -30,6 +30,10 @@
 			<column name="saldodeudor" default="false" />
 		</property>
 		
+		<property name="saldoAcobrar">
+			<column name="saldoAcobrar" default="false" />
+		</property>
+		
 		<property name="cobroExterno">
 			<column name="cobroExterno" default="false" />
 		</property>

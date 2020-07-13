@@ -25,6 +25,7 @@ public class Recibo extends Domain {
 	private String tesaka;
 	private String cobrador;
 	private boolean saldodeudor;
+	private boolean saldoAcobrar;
 	
 	private double totalImporteGs;
 	private double totalImporteDs;
@@ -885,5 +886,13 @@ public class Recibo extends Domain {
 
 	public void setSaldodeudor(boolean saldodeudor) {
 		this.saldodeudor = saldodeudor;
+	}
+
+	public boolean isSaldoAcobrar() {
+		return saldoAcobrar;
+	}
+
+	public void setSaldoAcobrar(boolean saldoAcobrar) {
+		this.saldoAcobrar = saldoAcobrar;
 	}
 }
