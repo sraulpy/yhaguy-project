@@ -99,7 +99,7 @@
 							onCheck="@command('checkAnticipo', check=self.checked)" />
 					</vlayout>
 					<vlayout spacing="0"
-						visible="@load((vm.dato.cobro) and (!vm.anticipo))">
+						visible="false">
 						<field value="A Cobrar"/>
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.pendienteCobro)"
@@ -120,8 +120,10 @@
 							checked="@bind(vm.dato.reciboDTO.saldodeudor)" />
 					</vlayout>
 					<space></space>
-					<vlayout spacing="0">
-						<field value="Saldo a Cobrar"/>
+					<vlayout spacing="0"
+						visible="@load((!vm.dato.cobro) and (!vm.anticipo))">
+						<field value="Saldo a Cobrar"
+							tooltiptext="Ej: para casos de emisión de cheques contra cuenta (otros deudores)" />
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.saldoAcobrar)" />
 					</vlayout>
