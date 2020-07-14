@@ -2604,6 +2604,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		return importe;
 	}
 	
+	/**
+	 * @return true si es empresa gtsa..
+	 */
+	public boolean isEmpresaGtsa() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);					
+	}
+	
 	public String getRuc() {
 		return ruc;
 	}
