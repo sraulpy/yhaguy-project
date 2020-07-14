@@ -893,7 +893,7 @@
 					<field value="Venta Crédito:" />
 					<checkbox checked="@bind(vm.cliente.pos2)" />
 				</row>
-				<row>
+				<row visible="@load(!vm.empresaGtsa)">
 					<field value="Venta Exenta:" />
 					<checkbox checked="@bind(vm.cliente.pos4)" />
 				</row>
