@@ -75,7 +75,8 @@
 				<button mold="bs"
 					width="80px" iconSclass="z-icon-paperclip"
 					label=" Ejemplo"
-					sclass="btn-warning btn-sm" />
+					sclass="btn-warning btn-sm" 
+					href="/yhaguy/archivos/precios/EJEMPLO.csv" target="_blank" />
 				<space></space>
 				<button mold="bs" sclass="btn-primary btn-sm" 
 					iconSclass="z-icon-print" hflex="true"
