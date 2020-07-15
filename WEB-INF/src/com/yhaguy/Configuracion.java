@@ -41,6 +41,7 @@ public class Configuracion extends Config {
 	public static String pathPresupuestoGasto = "/yhaguy/archivos/presupuestosGastos/";
 	public static String pathReportesJasper = PATH_SESSION + ("/reportes/") + "/";
 	public static String pathCotizaciones = PATH_SESSION + ("/yhaguy/archivos/cotizaciones/") + "/";
+	public static String pathPrecios = PATH_SESSION + ("/yhaguy/archivos/precios/") + "/";
 	
 	public static String URL_IMAGENES_ARTICULOS = "/yhaguy/archivos/articulos/img/";
 	public static String URL_ARCHIVOS_IMAGENES = "/yhaguy/archivos/imagenes/";
@@ -108,6 +109,9 @@ public class Configuracion extends Config {
 					+ "/";
 			pathCotizaciones = Sessions.getCurrent().getWebApp()
 					.getRealPath("/yhaguy/archivos/cotizaciones/")
+					+ "/";
+			pathPrecios = Sessions.getCurrent().getWebApp()
+					.getRealPath("/yhaguy/archivos/precios/")
 					+ "/";
 		} catch (Exception e) {
 			System.err.println("Sin session ......");

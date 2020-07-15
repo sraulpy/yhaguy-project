@@ -1,18 +1,19 @@
 package com.yhaguy.gestion.venta.listaprecio;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
@@ -20,7 +21,9 @@ import org.zkoss.zk.ui.util.Clients;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SimpleViewModel;
+import com.coreweb.extras.csv.CSV;
 import com.coreweb.extras.reporte.DatosColumnas;
+import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
@@ -33,7 +36,14 @@ import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+
 public class VentaListaPrecioViewModel extends SimpleViewModel {
+	
+	static final String PATH = Configuracion.pathPrecios;
+	static final String[][] CAB = { { "Empresa", CSV.STRING } };
+	static final String[][] DET = { { "CODIGO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING } };
 	
 	static final String ZUL_LISTA_PRECIO = "/yhaguy/gestion/venta/editListaPrecio.zul";
 	static final String ZUL_LISTA_DETALLE = "/yhaguy/gestion/venta/editListaPrecioDetalle.zul";
@@ -100,6 +110,24 @@ public class VentaListaPrecioViewModel extends SimpleViewModel {
 	@Command
 	public void imprimir() throws Exception {
 		this.imprimirListaPrecio();
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void uploadFilePrecios(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = Utiles.getDateToString(new Date(), Utiles.YYYY_MM_DD);
+			boolean isText = "text/csv".equals(file.getContentType());
+			InputStream file_ = new ByteArrayInputStream(isText ? file.getStringData().getBytes() : file.getByteData());
+			misc.uploadFile(PATH, name, ".csv", file_);
+			this.csvPrecios();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
 	}
 	
 	/**
@@ -226,6 +254,40 @@ public class VentaListaPrecioViewModel extends SimpleViewModel {
 			Clients.showNotification("Registro modificado..");
 		}
 	}
+	
+	/**
+	 * csv de precios..
+	 */
+	private void csvPrecios() {
+		try {			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			CSV csv = new CSV(CAB, DET, PATH + Utiles.getDateToString(new Date(), Utiles.YYYY_MM_DD) + ".csv", ';');
+			csv.start();
+			while (csv.hashNext()) {
+				String codigo = csv.getDetalleString("CODIGO"); 
+				String mayorista = csv.getDetalleString("MAYORISTA");
+				String minorista = csv.getDetalleString("MINORISTA");
+				String lista = csv.getDetalleString("LISTA");
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					art.setPrecioGs(Double.parseDouble(mayorista));
+					art.setPrecioMinoristaGs(Double.parseDouble(minorista));
+					art.setPrecioListaGs(Double.parseDouble(lista));
+					rr.saveObject(art, this.getLoginNombre());
+				}
+			}	
+			Clients.showNotification("PRECIOS ACTUALIZADOS!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al leer el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
+	
+	/**
+	 * GETTER Y SETTERS
+	 */
 	
 	/**
 	 * @return las listas de precio..
