@@ -395,9 +395,7 @@ public class BoletaDepositoViewModel extends BodyApp {
 
 			this.mensajePopupTemporal("Documento Cerrado");
 			this.actualizarDto();
-			if (!this.bancoDeposito.isNoGenerarCajaAuditoria()) {
-				this.generarCajaAuditoria();
-			}			
+			this.generarCajaAuditoria();			
 		}
 	}
 	
