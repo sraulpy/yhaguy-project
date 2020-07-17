@@ -88,6 +88,7 @@ public class TareaNotificarRuteo {
 
 			ReporteRuteo rep = new ReporteRuteo();
 			rep.setDatosReporte(data);
+			rep.setApaisada();
 			rep.ejecutar(false);
 
 			System.out.println("Reporte: " + directorioReportes + rep.getArchivoSalida());
