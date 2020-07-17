@@ -666,7 +666,7 @@ public class Configuracion extends Config {
 
 	public static final String SIGLA_CAJA_REPOSICION_INGRESO = "CAJ-INGRESO";
 	public static final String SIGLA_CAJA_REPOSICION_EGRESO = "CAJ-EGRESO";
-	public static final String SIGLA_CAJA_REPOSICION_EGRESO_DTO_VIATICO = "CAJ-EGRESO-DTO-VIATICO";
+	public static final String SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE = "CAJ-EGRESO-DTO-VIATICO";
 	public static final String SIGLA_CAJA_REPOSICION_EGRESO_SIN_COMP = "CAJ-EGRESO-SIN-COMPROBANTE";
 	public static final String SIGLA_CAJA_REPOSICION_EGRESO_VALE = "CAJ-EGRESO-VALE";
 	public static final String SIGLA_CAJA_REPOSICION_EGRESO_PRESTAMO = "CAJ-EGRESO-PRESTAMO";
