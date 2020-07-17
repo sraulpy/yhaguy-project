@@ -1575,15 +1575,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
 			double totalExcedente = 0;
 			for (MyArray rep : this.dto.getReposiciones()) {
-				int tipo = (int) rep.getPos1();
-				if (tipo != ES_REPOSICION) {
+				if (rep.getPos10() != null) {
 					MyPair m = (MyPair) rep.getPos10();
 					String sigla = m.getSigla();
 					if (sigla.equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
 						double importe = (double) rep.getPos5();
 						totalExcedente += importe;
-					}					
-				}
+					}
+				}				
 			}
 			
 			double totalGastos = 0;
