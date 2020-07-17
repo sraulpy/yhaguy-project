@@ -38,7 +38,7 @@
 				<space />
 				<button mold="bs" sclass="btn-primary btn-sm"
 					hflex="true" iconSclass="z-icon-print" label=" Imprimir"  
-					disabled="true" />
+					onClick="@command('imprimirRuteo')" />
 				<space />
 				<space></space>
 			</vlayout>

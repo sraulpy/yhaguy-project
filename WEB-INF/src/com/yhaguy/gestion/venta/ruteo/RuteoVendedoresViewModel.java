@@ -21,12 +21,18 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Timer;
 import org.zkoss.zul.Window;
 
+import com.coreweb.componente.ViewPdf;
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.domain.Usuario;
+import com.coreweb.extras.reporte.DatosColumnas;
 import com.yhaguy.domain.AccesoApp;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.util.reporte.ReporteYhaguy;
+
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 
 public class RuteoVendedoresViewModel extends SimpleViewModel {
 	
@@ -92,11 +98,50 @@ public class RuteoVendedoresViewModel extends SimpleViewModel {
 		test.doModal();
 	}
 	
+	@Command
+	public void imprimirRuteo() throws Exception {
+		this.imprimirRuteoVendedores();
+	}
+	
 	/**
 	 * busca los registros de vendedores..
 	 */
 	private void buscarVendedores_() throws Exception {
 		// nada que hacer..
+	}
+	
+	/**
+	 * Impresion del ruteo..
+	 */
+	private void imprimirRuteoVendedores() throws Exception {
+		List<Object[]> data = new ArrayList<Object[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+
+		for (Object[] item : this.getRuteoVendedores()) {
+			String direccion = "";
+			String ciudad = "";
+			Empresa emp = rr.getEmpresa((String) item[1]);
+			if (emp != null) {
+				direccion = emp.getDireccion_();
+				ciudad = emp.getCiudad().getDescripcion();
+			}
+			String vend = (String) item[0];
+			String[] vendedor = vend.split("-");
+			String fecha = vend.replace(vendedor[0] + "-", "");
+			String[] fechaHora = fecha.split(" ");
+			data.add(new Object[] { fechaHora[0], fechaHora[1], vendedor[0].toUpperCase(), item[1], direccion, ciudad,
+					item[2], item[3] });
+		}
+
+		ReporteYhaguy rep = new ReporteRuteo();
+		rep.setTitulo("Ruteo de vendedores");
+		rep.setDatosReporte(data);
+		rep.setApaisada();
+
+		ViewPdf vp = new ViewPdf();
+		vp.setBotonImprimir(false);
+		vp.setBotonCancelar(false);
+		vp.showReporte(rep, this);
 	}
 	
 	/**
@@ -167,5 +212,53 @@ public class RuteoVendedoresViewModel extends SimpleViewModel {
 
 	public void setHasta(Date hasta) {
 		this.hasta = hasta;
+	}
+}
+
+/**
+ * Reporte de ruteo..
+ */
+class ReporteRuteo extends ReporteYhaguy {
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 35);
+	static DatosColumnas col1 = new DatosColumnas("Hora", TIPO_STRING, 25);
+	static DatosColumnas col2 = new DatosColumnas("Vendedor", TIPO_STRING, 40);
+	static DatosColumnas col3 = new DatosColumnas("Cliente", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Direccion", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Ciudad", TIPO_STRING, 40);
+	static DatosColumnas col6 = new DatosColumnas("Latitud", TIPO_STRING, 35);
+	static DatosColumnas col7 = new DatosColumnas("Longitud", TIPO_STRING, 35);
+	
+	public ReporteRuteo() {
+	}
+	
+	static {
+		cols.add(col0);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Ruteo-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();		
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
 	}
 }
