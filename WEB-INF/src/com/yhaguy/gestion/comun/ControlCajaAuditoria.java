@@ -51,7 +51,7 @@ public class ControlCajaAuditoria {
 			String user, String descripcion) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CajaAuditoria ca = new CajaAuditoria();
-		ca.setConcepto(CajaAuditoria.CONCEPTO_EXEDENTE_CAJA);
+		ca.setConcepto(CajaAuditoria.CONCEPTO_EXCEDENTE_CAJA);
 		ca.setDescripcion("EGRESO CAJA NRO. " + numeroCaja + " " + descripcion);
 		ca.setFecha(fecha);
 		ca.setImporte(importe);
