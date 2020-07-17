@@ -960,16 +960,6 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		List<Tipo> cajaReposicionEgresos = rr.getTipos(Configuracion.ID_TIPO_CAJA_REPOSICION_EGRESO);
 		dto.setCajaReposicionEgresos(this.listaTiposToListaMyPair(cajaReposicionEgresos));
 
-		Tipo cajaReposicionEgreso_SinComp = rr
-				.getTipoPorSigla(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_SIN_COMP);
-		Tipo cajaReposicionEgreso_Vale = rr
-				.getTipoPorSigla(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_VALE);
-
-		dto.setCajaReposicionEgreso_SinComprobante(this
-				.tipoToMyPair(cajaReposicionEgreso_SinComp));
-		dto.setCajaReposicionEgreso_Vale(this
-				.tipoToMyPair(cajaReposicionEgreso_Vale));
-
 		// Estados de Importacion
 		List<Tipo> importacionEstados = rr
 				.getTipos(Configuracion.ID_TIPO_IMPORTACION_ESTADO);
