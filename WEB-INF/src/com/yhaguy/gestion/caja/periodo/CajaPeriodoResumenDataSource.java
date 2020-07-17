@@ -587,7 +587,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 					double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
 					this.totalEgresos += rep.getMontoGs();
 					this.totalRepEgresos += rep.getMontoGs();
-					if (rep.getTipoEgreso().getSigla().equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_DTO_VIATICO)) {
+					if (rep.getTipoEgreso().getSigla().equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
 						this.totalRepEgresosDtoViatico += rep.getMontoGs();
 					}
 					MyArray my = new MyArray(rep.getTipoEgreso()

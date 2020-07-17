@@ -1573,12 +1573,16 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
 
 		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
-			double totalEgreso = 0;
+			double totalExcedente = 0;
 			for (MyArray rep : this.dto.getReposiciones()) {
 				int tipo = (int) rep.getPos1();
 				if (tipo != ES_REPOSICION) {
-					double importe = (double) rep.getPos5();
-					totalEgreso += importe;
+					MyPair m = (MyPair) rep.getPos10();
+					String sigla = m.getSigla();
+					if (sigla.equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
+						double importe = (double) rep.getPos5();
+						totalExcedente += importe;
+					}					
 				}
 			}
 			
@@ -1591,9 +1595,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 				}
 			}
 			
-			if (totalEgreso > 0) {
-				ControlCajaAuditoria.addEgresoCaja(this.dto.getNumero(), this.dto.getNumero(),
-						new Date(), totalGastos, this.getLoginNombre(), " EN CONCEPTO DE EGRESOS");
+			if (totalExcedente > 0) {
+				ControlCajaAuditoria.addExcedenteCaja(this.dto.getNumero(), this.dto.getNumero(),
+						new Date(), totalExcedente, this.getLoginNombre(), " EN CONCEPTO DE EXCEDENTE DE CAJA");
 			}
 			
 			if (totalGastos > 0) {
