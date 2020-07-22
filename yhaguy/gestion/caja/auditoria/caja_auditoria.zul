@@ -35,7 +35,8 @@
 	<listbox sclass="small-list"
 		vflex="true"
 		emptyMessage="SIN MOVIMIENTOS.."
-		model="@load(vm.movimientosCaja)">
+		model="@load(vm.movimientosCaja)"
+		mold="paging" pageSize="20">
 		<listhead sizable="true">
 			<listheader label="Fecha" width="80px" style="text-align:center" />
 			<listheader label="Hora" width="50px" style="text-align:center" />
