@@ -11626,6 +11626,306 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoVentas(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
+				+ " v.cliente.empresa.razonSocial"
+				+ " from Venta v join v.formasPago f " + " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
+				+ Configuracion.SIGLA_FORMA_PAGO_EFECTIVO + "' and upper(v.numeroPlanillaCaja) like '%"
+				+ caja.toUpperCase() + "%'" + " and v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoRecibos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
+				+ " r.cliente.empresa.razonSocial"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"
+				+ "'" + Configuracion.SIGLA_TM_RECIBO_COBRO + "', '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_EFECTIVO + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoNotasCredito(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', n.fechaEmision, n.planillaCajaNro, n.importeGs, n.numero, n.tipoMovimiento.descripcion, '',"
+				+ " n.cliente.empresa.razonSocial"
+				+ " from NotaCredito n "
+				+ " where n.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')" 
+				+ " and n.auxi = '" + NotaCredito.NCR_CONTADO + "'" 
+				+ " and n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(n.planillaCajaNro) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoPagos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
+				+ " r.proveedor.empresa.razonSocial"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_PAGO + "',"
+				+ "'" + Configuracion.SIGLA_TM_RECIBO_PAGO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_EFECTIVO + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoGastos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', g.fecha, g.cajaPagoNumero, g.importeGs, g.numeroFactura, g.tipoMovimiento.descripcion, '',"
+				+ " g.proveedor.empresa.razonSocial"
+				+ " from Gasto g "
+				+ " where g.cajaPagoNumero != '- - -'" 
+				+ " and g.fecha >= '" + desde_ + "' and g.fecha <= '"
+				+ hasta_ + "'"
+				+ " and upper(g.cajaPagoNumero) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoExcedenteCaja(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', c.fechaEmision, c.numeroPlanilla, c.montoGs, c.numero, c.tipoEgreso.descripcion, '',"
+				+ " c.observacion"
+				+ " from CajaReposicion c "
+				+ " where c.tipoEgreso.sigla = '" + Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE + "'" 
+				+ " and c.fechaEmision >= '" + desde_ + "' and c.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(c.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getEfectivoDepositos(Date desde, Date hasta, String caja) throws Exception {
+		if (!caja.trim().isEmpty()) {
+			return new ArrayList<Object[]>();
+		}
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', b.fecha, '', b.totalEfectivo, b.numeroBoleta, 'DEPOSITO EFECTIVO', '',"
+				+ " concat(b.nroCuenta.banco.descripcion, ' - ', b.nroCuenta.nroCuenta)"
+				+ " from BancoBoletaDeposito b"
+				+ " where b.totalEfectivo > 0" 
+				+ " and b.fecha >= '" + desde_ + "' and b.fecha <= '"
+				+ hasta_ + "'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getChequeVentas(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'CHEQUE', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, f.chequeNumero,"
+				+ " concat(f.chequeBanco.descripcion, ' - ', f.chequeLibrador)"
+				+ " from Venta v join v.formasPago f "
+				+ " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
+				+ Configuracion.SIGLA_FORMA_PAGO_CHEQUE_TERCERO + "'" + " and v.fecha >= '" + desde_ + "' and v.fecha <= '"
+				+ hasta_ + "'"
+				+ " and upper(v.numeroPlanillaCaja) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getChequeRecibos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'CHEQUE', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, f.chequeNumero,"
+				+ " concat(f.chequeBanco.descripcion, ' - ', f.chequeLibrador)"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"
+				+ "'" + Configuracion.SIGLA_TM_RECIBO_COBRO + "', '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_CHEQUE_TERCERO + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getChequePagos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'CHEQUE', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, f.chequeNumero,"
+				+ " concat(f.chequeBanco.descripcion, ' - ', f.chequeLibrador)"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_PAGO + "',"
+				+ "'" + Configuracion.SIGLA_TM_RECIBO_PAGO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_CHEQUE_AUTOCOBRANZA + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getChequeDepositos(Date desde, Date hasta, String caja) throws Exception {
+		if (!caja.trim().isEmpty()) {
+			return new ArrayList<Object[]>();
+		}
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'CHEQUE', b.fecha, '', c.monto, b.numeroBoleta, 'DEPOSITO CHEQUE', c.numero,"
+				+ " concat(c.banco.descripcion, ' - ', c.librado)"
+				+ " from BancoBoletaDeposito b join b.cheques c where"
+				+ " b.fecha >= '" + desde_ + "' and b.fecha <= '"
+				+ hasta_ + "'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getChequeDescuentos(Date desde, Date hasta, String caja) throws Exception {
+		if (!caja.trim().isEmpty()) {
+			return new ArrayList<Object[]>();
+		}
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'CHEQUE', b.fecha, '', c.monto, concat(b.id, ''), 'DESCUENTO CHEQUE', c.numero,"
+				+ " concat(c.banco.descripcion, ' - ', c.librado)"
+				+ " from BancoDescuentoCheque b join b.cheques c"
+				+ " where b.confirmado = 'TRUE' and"
+				+ " b.fecha >= '" + desde_ + "' and b.fecha <= '"
+				+ hasta_ + "'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));

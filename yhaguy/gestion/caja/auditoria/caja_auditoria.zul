@@ -6,13 +6,6 @@
 		<rows>
 			<row>
 				<vlayout spacing="0">
-					<field value="Resumen de Cajas" />
-					<chosenbox hflex="true" sclass="rounded"
-						style="margin-top:5px"
-						emptyMessage="TODOS..">
-					</chosenbox>
-				</vlayout>
-				<vlayout spacing="0">
 					<field value="Desde" />
 					<datebox hflex="true" style="background:#eef7fa"
 						value="@bind(vm.filterDesde)">
@@ -30,6 +23,11 @@
 						onClick='pop_saldo_inicial.open(self, "after_end")'
 						disabled="true" />
 				</vlayout>
+				<vlayout spacing="0">
+					<field value="Diagrama Flujo" />
+					<button label="Ver Diagrama de flujo" hflex="true" iconSclass="z-icon-exchange"
+						onClick='pop_diagrama.open(self, "after_end")' />
+				</vlayout>
 			</row>
 		</rows>
 	</grid>
@@ -37,63 +35,86 @@
 	<listbox sclass="small-list"
 		vflex="true"
 		emptyMessage="SIN MOVIMIENTOS.."
-		model="@load(vm.cajaAuditorias)">
+		model="@load(vm.movimientosCaja)">
 		<listhead sizable="true">
-			<listheader label="Resumen Nro." width="110px" style="text-align:center" />
+			<listheader label="Fecha" width="80px" style="text-align:center" />
+			<listheader label="Hora" width="50px" style="text-align:center" />
+			<listheader label="Caja" width="80px" style="text-align:center" />
 			<listheader label="Concepto" width="160px" style="text-align:center" />
-			<listheader label="Fecha" width="100px" style="text-align:center" />
-			<listheader label="Número" width="110px" style="text-align:center" />
-			<listheader label="Origen" style="text-align:center" />
-			<listheader label="Debe" width="150px"
+			<listheader label="Número" width="150px" style="text-align:center" />
+			<listheader label="Forma Pago" width="100px" style="text-align:center" />
+			<listheader label="Cheque Nro." width="100px" style="text-align:center" />
+			<listheader label="Descripción" style="text-align:center" />
+			<listheader label="Ingreso" width="120px"
 				style="text-align:center" align="right" />
-			<listheader label="Haber" width="150px"
+			<listheader label="Egreso" width="120px"
 				style="text-align:center" align="right" />
-			<listheader label="Saldo" width="150px"
+			<listheader label="Saldo" width="120px"
 				style="text-align:center" align="right" />
 		</listhead>
 		<auxhead>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
-					value="@bind(vm.filterResumen)"
-					placeholder="Resumen Nro.." instant="true"></textbox>
+					placeholder="Caja.." instant="true"
+					value="@bind(vm.filterCaja)"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 			</auxheader>
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
+					placeholder="Concepto.." instant="true"
 					value="@bind(vm.filterConcepto)"
-					placeholder="Concepto.." instant="true"></textbox>
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 			</auxheader>
-			<auxheader></auxheader>	
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
+					placeholder="Número.." instant="true"
 					value="@bind(vm.filterNumero)"
-					placeholder="Número.." instant="true"></textbox>
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 			</auxheader>			
 			<auxheader>
 				<textbox sclass="filter" hflex="true"
-					value="@bind(vm.filterDescripcion)"
-					placeholder="Descripción.." instant="true"></textbox>
+					placeholder="Forma Pago.." instant="true"
+					value="@bind(vm.filterFormaPago)"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
 			</auxheader>
+			<auxheader>
+				<textbox sclass="filter" hflex="true"
+					placeholder="Cheque Nro.." instant="true"
+					value="@bind(vm.filterChequeNro)"
+					style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;"></textbox>
+			</auxheader>
+			<auxheader></auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
-				<listcell label="@load(each.resumen)"></listcell>
-				<listcell label="@load(each.concepto)"></listcell>
-				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
-				<listcell label="@load(each.numero)"></listcell>
-				<listcell label="@load(each.descripcion)"></listcell>
-				<listcell label="@load(each.debe) @converter(vm.cnv.monedaLocal)"></listcell>
-				<listcell label="@load(each.haber) @converter(vm.cnv.monedaLocal)"></listcell>
-				<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[0])"></listcell>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3])"></listcell>
+				<listcell label="@load(each[4])"></listcell>
+				<listcell label="@load(each[5])"></listcell>
+				<listcell label="@load(each[6])"></listcell>
+				<listcell label="@load(each[7].toString().toUpperCase())"></listcell>
+				<listcell label="@load(each[8])"></listcell>
+				<listcell label="@load(each[9])"></listcell>
+				<listcell label="@load(each[10])"></listcell>
 			</listitem>
 		</template>
 		<listfoot>
 			<listfooter align="left">
 				<field value="ítems" />
 			</listfooter>
-			<listfooter span="4" align="right"></listfooter>
+			<listfooter span="7" align="right"></listfooter>
 			<listfooter>
 				<guaranibox readonly="true"
 						style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
@@ -111,6 +132,10 @@
 			</listfooter>
 		</listfoot>
 	</listbox>
+	
+	<popup id="pop_diagrama" sclass="rounded" height="500px" width="700px">
+		<image src="/yhaguy/archivos/diagramas/caja_auditoria.png" vflex="true" hflex="true"></image>
+	</popup>
 	
 	<popup id="pop_saldo_inicial" sclass="rounded">
 		<grid sclass="vgrid" width="400px" style="margin:10px">

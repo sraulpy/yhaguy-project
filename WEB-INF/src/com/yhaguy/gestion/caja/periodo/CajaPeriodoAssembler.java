@@ -51,7 +51,7 @@ public class CajaPeriodoAssembler extends Assembler {
 	final static String[] ATT_REPOSICION = { "responsable", "funcionario",
 			"fechaEmision", "tipoCambio", "montoGs", "montoDs", "observacion",
 			"tipo", "moneda", "tipoEgreso", "estadoComprobante",
-			"motivoAnulacion", "funcionarioAsignado", "formaPago", "numero" };
+			"motivoAnulacion", "funcionarioAsignado", "formaPago", "numero", "numeroPlanilla" };
 
 	final static String ITEM_DE_PAGO = "PAGO";
 	final static String ITEM_DE_REPOSICION = "REPOSICIÓN";
@@ -80,6 +80,10 @@ public class CajaPeriodoAssembler extends Assembler {
 			if (rec.isOrdenPago() || rec.isAnticipoPago()) {
 				rec.setAuxi("RETENCION");
 			}
+		}
+		
+		for (MyArray rep : dtoC.getReposiciones()) {
+			rep.setPos16(dtoC.getNumero());
 		}
 
 		this.copiarValoresAtributos(dto, domain, ATT_IGUALES);

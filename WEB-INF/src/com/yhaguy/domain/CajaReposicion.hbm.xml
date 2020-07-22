@@ -19,6 +19,7 @@
 		<property name="montoDs" />
 		<property name="observacion" />
 		<property name="motivoAnulacion"/>
+		<property name="numeroPlanilla"/>
 		
 		<many-to-one name="funcionarioAsignado" class="com.yhaguy.domain.Funcionario"
  			column="idFuncionario" lazy="false"/>

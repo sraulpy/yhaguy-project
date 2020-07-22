@@ -18,6 +18,7 @@ public class CajaReposicion extends Domain{
 	private double montoDs;
 	private String observacion;
 	private String motivoAnulacion;
+	private String numeroPlanilla;
 	private Tipo moneda;
 	
 	private Funcionario funcionarioAsignado;
@@ -174,5 +175,13 @@ public class CajaReposicion extends Domain{
 
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+
+	public String getNumeroPlanilla() {
+		return numeroPlanilla;
+	}
+
+	public void setNumeroPlanilla(String numeroPlanilla) {
+		this.numeroPlanilla = numeroPlanilla;
 	}
 }
