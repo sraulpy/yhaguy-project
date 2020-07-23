@@ -9047,10 +9047,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 			}
 
-			ReporteCobranzasFormaPago rep = new ReporteCobranzasFormaPago(
-					desde, hasta, formaPago.isEmpty() ? "TODOS.." : formaPago,
-					recInc ? "SI" : "NO", vtaInc ? "SI" : "NO", ivaInc ? "SI" : "NO",
-					getAcceso().getSucursalOperativa().getText());
+			ReporteCobranzasFormaPago rep = new ReporteCobranzasFormaPago(desde, hasta,
+					formaPago.isEmpty() ? "TODOS.." : formaPago, recInc ? "SI" : "NO", vtaInc ? "SI" : "NO",
+					antInc ? "SI" : "NO", reeInc ? "SI" : "NO", extInc ? "SI" : "NO", ncrInc ? "SI" : "NO",
+					ivaInc ? "SI" : "NO", getAcceso().getSucursalOperativa().getText());
 			rep.setApaisada();
 			rep.setDatosReporte(data);
 			
@@ -19794,6 +19794,10 @@ class ReporteCobranzasFormaPago extends ReporteYhaguy {
 	String sucursal;
 	String recibos;
 	String ventas;
+	String anticipos;
+	String reembolsos;
+	String cobroExterno;
+	String notasCredito;
 	String ivaIncluido;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
@@ -19813,13 +19817,18 @@ class ReporteCobranzasFormaPago extends ReporteYhaguy {
 		cols.add(col5);
 	}
 
-	public ReporteCobranzasFormaPago(Date desde, Date hasta, String formaPago,
-			String recibos, String ventas, String ivaIncluido, String sucursal) {
+	public ReporteCobranzasFormaPago(Date desde, Date hasta, String formaPago, String recibos, String ventas,
+			String anticipos, String reembolsos, String cobroExterno, String notasCredito, String ivaIncluido,
+			String sucursal) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.formaPago = formaPago;
 		this.recibos = recibos;
 		this.ventas = ventas;
+		this.anticipos = anticipos;
+		this.reembolsos = reembolsos;
+		this.cobroExterno = cobroExterno;
+		this.notasCredito = notasCredito;
 		this.ivaIncluido = ivaIncluido;
 		this.sucursal = sucursal;
 	}
@@ -19849,6 +19858,12 @@ class ReporteCobranzasFormaPago extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Recibos", this.recibos))
 				.add(this.textoParValor("Ventas Contado", this.ventas))
+				.add(this.textoParValor("Anticipos", this.anticipos))
+				.add(this.textoParValor("Reembolsos Cheques", this.reembolsos)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Cobranzas (otra Suc)", this.cobroExterno))
+				.add(this.textoParValor("Notas Cred. Contado", this.notasCredito))
 				.add(this.textoParValor("Iva Incluído", this.ivaIncluido))
 				.add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
