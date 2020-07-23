@@ -66,7 +66,6 @@ import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.comun.Control;
 import com.yhaguy.gestion.comun.ControlAnulacionMovimientos;
-import com.yhaguy.gestion.comun.ControlCajaAuditoria;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDTO;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDetalleDTO;
@@ -541,14 +540,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 				ProcesosHistoricos.updateHistoricoCobranzaDiaria(new Date(), this.reciboDTO.getTotalImporteGsSinIva());
 				this.imprimirCobro();
 			} else {
-				if (this.reciboDTO.isOrdenPago()) {
-					for (ReciboFormaPagoDTO fp : this.reciboDTO.getFormasPago()) {
-						if (fp.isChequeTerceroAutocobranza()) {							
-							ControlCajaAuditoria.addPagoChequeTercero(fp.getChequeNumero(), this.reciboDTO.getNumero(), this.reciboDTO.getFechaEmision(),
-									fp.getMontoGs(), fp.getChequeBancoDescripcion(), this.getLoginNombre());
-						}
-					}
-				}
 				this.imprimirPago();
 			}
 		} else {
@@ -1156,14 +1147,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto = (CajaPeriodoDTO) this.saveDTO(dto);
 		
 		this.addMovimientoBanco(formaPago, 0);
-		
-		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
-			if (tipo == ES_REPOSICION) {
-				ControlCajaAuditoria.addReposicionCaja(this.dto.getNumero(), (String) this.reposicion.getPos15(),
-						new Date(), (double) this.reposicion.getPos5(), this.getLoginNombre());
-			}		
-		}
-		
 		this.imprimirReposicion();
 	}
 	
@@ -1571,39 +1554,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto.setEstado(estadoCajaCerrada);
 		this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
-
-		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
-			double totalExcedente = 0;
-			for (MyArray rep : this.dto.getReposiciones()) {
-				if (rep.getPos10() != null) {
-					MyPair m = (MyPair) rep.getPos10();
-					String sigla = m.getSigla();
-					if (sigla.equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
-						double importe = (double) rep.getPos5();
-						totalExcedente += importe;
-					}
-				}				
-			}
-			
-			double totalGastos = 0;
-			for (GastoDTO gasto : this.dto.getGastos()) {
-				for (ReciboFormaPagoDTO fp : gasto.getFormasPago()) {
-					if (fp.isEfectivo()) {
-						totalGastos += fp.getMontoGs();
-					}
-				}
-			}
-			
-			if (totalExcedente > 0) {
-				ControlCajaAuditoria.addExcedenteCaja(this.dto.getNumero(), this.dto.getNumero(),
-						new Date(), totalExcedente, this.getLoginNombre(), " EN CONCEPTO DE EXCEDENTE DE CAJA");
-			}
-			
-			if (totalGastos > 0) {
-				ControlCajaAuditoria.addEgresoCaja(this.dto.getNumero(), this.dto.getNumero(),
-						new Date(), totalGastos, this.getLoginNombre(), " EN CONCEPTO DE GASTOS");
-			}			
-		}
 	}
 
 	/**

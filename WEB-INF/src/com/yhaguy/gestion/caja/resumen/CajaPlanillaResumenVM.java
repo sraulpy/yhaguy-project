@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -41,7 +37,6 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
-import com.yhaguy.domain.CajaAuditoria;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.ReciboFormaPago;
@@ -52,6 +47,10 @@ import com.yhaguy.gestion.caja.periodo.CajaPeriodoResumenDataSource;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 public class CajaPlanillaResumenVM extends SimpleViewModel {
 	
@@ -281,36 +280,6 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito, this.getLoginNombre());
 		
-		if (this.nvoDeposito.getTotalEfectivo() > 0) {
-			CajaAuditoria efectivo = new CajaAuditoria();
-			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
-			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito.getNumeroBoleta() + " - "
-					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + "");
-			efectivo.setFecha(this.nvoDeposito.getFecha());
-			efectivo.setImporte(this.nvoDeposito.getTotalEfectivo());
-			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-			efectivo.setResumen(this.selectedResumen_.getNumero());
-			efectivo.setNumero("");
-			efectivo.setSupervisor(this.getNombreUsuario());
-			this.selectedResumen_.getAuditorias().add(efectivo);
-		}
-		
-		// actualiza auditoria de caja..
-		for (BancoChequeTercero cheque : this.nvoDeposito.getCheques()) {
-			CajaAuditoria chq = new CajaAuditoria();
-			chq.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_CHEQUE);
-			chq.setDescripcion("DEPÓSITO NRO. (" + this.nvoDeposito.getNumeroBoleta() + " - "
-					+ this.nvoDeposito.getNroCuenta().getBancoDescripcion() + ") CHEQUE: " + cheque.getNumero() + " - "
-					+ cheque.getBanco().getDescripcion());
-			chq.setFecha(this.nvoDeposito.getFecha());
-			chq.setImporte(cheque.getMonto());
-			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-			chq.setResumen(this.selectedResumen_.getNumero());
-			chq.setNumero(cheque.getNumero());
-			chq.setSupervisor(this.getNombreUsuario());
-			this.selectedResumen_.getAuditorias().add(chq);
-		}
-		
 		this.selectedResumen_.getDepositos_generados().add(this.nvoDeposito);
 		rr.saveObject(this.selectedResumen_, this.getLoginNombre());
 		this.inicializarDeposito();
@@ -329,36 +298,6 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito_.getTotalImporteGs());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito_, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito_, this.getLoginNombre());
-		
-		if (this.nvoDeposito_.getTotalEfectivo() > 0) {
-			CajaAuditoria efectivo = new CajaAuditoria();
-			efectivo.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_EFECTIVO);
-			efectivo.setDescripcion("DEPÓSITO NRO. " + this.nvoDeposito_.getNumeroBoleta() + " - "
-					+ this.nvoDeposito_.getNroCuenta().getBancoDescripcion() + "");
-			efectivo.setFecha(this.nvoDeposito_.getFecha());
-			efectivo.setImporte(this.nvoDeposito_.getTotalEfectivo());
-			efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-			efectivo.setResumen(this.selectedResumen_.getNumero());
-			efectivo.setNumero("");
-			efectivo.setSupervisor(this.getNombreUsuario());
-			this.selectedResumen_.getAuditorias().add(efectivo);
-		}
-		
-		// actualiza auditoria de caja..
-		for (BancoChequeTercero cheque : this.nvoDeposito_.getCheques()) {
-			CajaAuditoria chq = new CajaAuditoria();
-			chq.setConcepto(CajaAuditoria.CONCEPTO_DEPOSITO_CHEQUE);
-			chq.setDescripcion("DEPÓSITO NRO. (" + this.nvoDeposito_.getNumeroBoleta() + " - "
-					+ this.nvoDeposito_.getNroCuenta().getBancoDescripcion() + ") CHEQUE: " + cheque.getNumero() + " - "
-					+ cheque.getBanco().getDescripcion());
-			chq.setFecha(this.nvoDeposito_.getFecha());
-			chq.setImporte(cheque.getMonto());
-			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-			chq.setResumen(this.selectedResumen_.getNumero());
-			chq.setNumero(cheque.getNumero());
-			chq.setSupervisor(this.getNombreUsuario());
-			this.selectedResumen_.getAuditorias().add(chq);
-		}
 		
 		this.selectedResumen_.getDepositos_diferidos().add(this.nvoDeposito_);
 		rr.saveObject(this.selectedResumen_, this.getLoginNombre());
@@ -395,33 +334,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 	public void confirmarRecaudacion(@BindingParam("comp") Popup comp) throws Exception {
 		if (!this.mensajeSiNo("Desea confirmar la recaudación?"))
 			return; 
-		RegisterDomain rr = RegisterDomain.getInstance();
-		
-		CajaAuditoria efectivo = new CajaAuditoria();
-		efectivo.setConcepto(CajaAuditoria.CONCEPTO_EFECTIVO);
-		efectivo.setDescripcion("SALDO EN EFECTIVO RESUMEN CAJA NRO. " + this.selectedResumen_.getNumero());
-		efectivo.setFecha(this.selectedResumen_.getFecha());
-		efectivo.setImporte(this.selectedResumen_.getResumenEfectivo());
-		efectivo.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-		efectivo.setResumen(this.selectedResumen_.getNumero());
-		efectivo.setNumero("");
-		efectivo.setSupervisor(this.getNombreUsuario());
-		this.selectedResumen_.getAuditorias().add(efectivo);
-		
-		for (BancoChequeTercero cheque : this.selectedResumen_.getCheques()) {
-			CajaAuditoria chq = new CajaAuditoria();
-			chq.setConcepto(cheque.isChequeAlDia(this.selectedResumen_.getFecha()) ? CajaAuditoria.CONCEPTO_CHEQUE
-					: CajaAuditoria.CONCEPTO_CHEQUE_DIFERIDO);
-			chq.setDescripcion(
-					cheque.getNumero() + " - " + cheque.getBanco().getDescripcion() + " - " + cheque.getLibrado());
-			chq.setFecha(this.selectedResumen_.getFecha());
-			chq.setImporte(cheque.getMonto());
-			chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-			chq.setResumen(this.selectedResumen_.getNumero());
-			chq.setNumero(cheque.getNumero());
-			chq.setSupervisor(this.getNombreUsuario());
-			this.selectedResumen_.getAuditorias().add(chq);
-		}
+		RegisterDomain rr = RegisterDomain.getInstance();		
 		this.selectedResumen_.setConfirmado(true);
 		this.selectedResumen_.setConfirmadoPor(this.getNombreUsuario());
 		rr.saveObject(this.selectedResumen_, this.getLoginNombre());

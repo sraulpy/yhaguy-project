@@ -11,8 +11,6 @@ import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
 
 import com.coreweb.Config;
 import com.coreweb.componente.BuscarElemento;
@@ -30,7 +28,6 @@ import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.BancoDescuentoCheque;
-import com.yhaguy.domain.CajaAuditoria;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.RegisterDomain;
@@ -39,7 +36,6 @@ import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
-import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
@@ -310,23 +306,6 @@ public class DescuentoChequesVM extends BodyApp {
 								this.chequeDescuento.getFecha(), prestamo);
 			}
 			
-			// actualiza auditoria de caja..
-			BancoDescuentoCheque dsto = (BancoDescuentoCheque) rr.getObject(BancoDescuentoCheque.class.getName(),
-					this.chequeDescuento.getId());
-			for (BancoChequeTercero cheque : dsto.getCheques()) {
-				CajaAuditoria chq = new CajaAuditoria();
-				chq.setConcepto(CajaAuditoria.CONCEPTO_DESCUENTO_CHEQUE);
-				chq.setDescripcion("DESCUENTO NRO. (" + dsto.getId() + " - " + dsto.getBanco().getBancoDescripcion()
-						+ ") CHEQUE: " + cheque.getNumero() + " - " + cheque.getBanco().getDescripcion());
-				chq.setFecha(dsto.getFecha());
-				chq.setImporte(cheque.getMonto());
-				chq.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-				chq.setResumen("- - -");
-				chq.setNumero(cheque.getNumero());
-				chq.setSupervisor(this.getNombreUsuario());
-				rr.saveObject(chq, this.getLoginNombre());
-			}
-			
 			if (this.tipo.equals(ABM_PRESTAMO_DEUDOR)) {
 				ControlCuentaCorriente.addPrestamoInternoDeudor(this.chequeDescuento.getId(), this.getLoginNombre());
 			}
@@ -480,15 +459,6 @@ public class DescuentoChequesVM extends BodyApp {
 		return rr.getMovimientosConSaldo(Utiles.getFechaInicioOperaciones(), new Date(),
 				Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR, 0, this.selectedEmpresa.getId(),
 				this.chequeDescuento.getMoneda().getId());
-	}
-	
-	/**
-	 * @return el nombre de usuario.. 
-	 */
-	private String getNombreUsuario() throws Exception {
-		Session s = Sessions.getCurrent();
-		AccesoDTO acc = (AccesoDTO) s.getAttribute(Configuracion.ACCESO);
-		return (String) acc.getFuncionario().getPos1();
 	}
 	
 	public String getMensajeError() {
