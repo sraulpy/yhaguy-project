@@ -8494,6 +8494,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			boolean reeInc = filtro.isIncluirCHQ_RECH();
 			boolean antInc = filtro.isIncluirAnticipos();
 			boolean extInc = filtro.isIncluirCobroExterno();
+			boolean ncrInc = filtro.isIncluirNCR();
 			long idCliente = cliente != null? cliente.getId().longValue() : 0;
 			long idSucursal = 0;
 			
@@ -8505,6 +8506,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Recibo> cobranzas = new ArrayList<Recibo>();
 			List<Venta> ventas = new ArrayList<Venta>();
 			List<Recibo> reembolsos = new ArrayList<Recibo>();
+			List<NotaCredito> notasCredito = new ArrayList<NotaCredito>();
 
 			if (recInc) {
 				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, antInc, extInc);
@@ -9013,7 +9015,37 @@ public class ReportesViewModel extends SimpleViewModel {
 									formaPago, total });
 					}
 				}
-			}			
+			}		
+			
+			// Notas de Credito Contado..
+			if (ncrInc && (formaPago.isEmpty() || formaPago.equals(ReportesFiltros.EFECTIVO))) {
+				List<NotaCredito> notasCredito_ = rr.getNotasCreditoVenta(desde, hasta, idCliente, idSucursal, "");
+				for (NotaCredito ncr : notasCredito_) {
+					if (!ncr.isAnulado() && ncr.getAuxi().equals(NotaCredito.NCR_CONTADO)) {
+						notasCredito.add(ncr);
+					}
+				}
+				if (formaPago.isEmpty()) {
+					for (NotaCredito ncr : notasCredito) {
+						double total = ivaInc ? ncr.getImporteGs() : ncr.getTotalImporteGsSinIva();
+						data.add(new Object[] { Utiles.getDateToString(ncr.getFechaEmision(), Utiles.DD_MM_YY),
+								ncr.getNumero(), TipoMovimiento.getAbreviatura(ncr.getTipoMovimiento().getSigla()),
+								ncr.getCliente().getRazonSocial(), "TODOS..",
+								total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.EFECTIVO)) {
+					for (NotaCredito ncr : notasCredito) {
+						double total = ncr.getImporteGs();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] { Utiles.getDateToString(ncr.getFechaEmision(), Utiles.DD_MM_YY),
+									ncr.getNumero(),
+									TipoMovimiento.getAbreviatura(ncr.getTipoMovimiento().getSigla()),
+									ncr.getCliente().getRazonSocial(), formaPago, (total * -1) });
+					}
+				}
+			}
 
 			ReporteCobranzasFormaPago rep = new ReporteCobranzasFormaPago(
 					desde, hasta, formaPago.isEmpty() ? "TODOS.." : formaPago,

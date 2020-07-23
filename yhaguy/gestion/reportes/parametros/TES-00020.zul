@@ -1,6 +1,6 @@
 <grid sclass="vgrid">
 	<columns>
-		<column width="35%" />
+		<column width="50%" />
 		<column />
 	</columns>
 	<rows>
@@ -61,6 +61,22 @@
 		<row>
 			<field value="Ventas Contado:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirVCT)"></checkbox>
+		</row>
+		<row>
+			<field value="Anticipos:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirAnticipos)"></checkbox>
+		</row>
+		<row>
+			<field value="Reembolsos Cheques:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirCHQ_RECH)"></checkbox>
+		</row>		
+		<row>
+			<field value="Cobranzas (otra Suc):" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirCobroExterno)"></checkbox>
+		</row>
+		<row>
+			<field value="Notas de Crédito Contado:" />
+			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)"></checkbox>
 		</row>
 		<row>
 			<field value="Iva Incluído:" />
