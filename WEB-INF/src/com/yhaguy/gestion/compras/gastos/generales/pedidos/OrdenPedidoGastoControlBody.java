@@ -614,7 +614,8 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 
 		} else if (sigla.equals(Configuracion.SIGLA_TM_FAC_GASTO_CONTADO) 
 				|| sigla.equals(Configuracion.SIGLA_TM_BOLETA_VENTA)
-				|| sigla.equals(Configuracion.SIGLA_TM_OTROS_COMPROBANTES)) {
+				|| sigla.equals(Configuracion.SIGLA_TM_OTROS_COMPROBANTES)
+				|| sigla.equals(Configuracion.SIGLA_TM_OTROS_PAGOS)) {
 			
 			ControlCuentaCorriente.addGasto(gasto.getId(), idEmpresa, this.getLoginNombre());
 		}

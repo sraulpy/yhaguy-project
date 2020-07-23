@@ -179,6 +179,8 @@ public class ReportesFiltros {
 	private boolean incluirCOM = true;
 	private boolean incluirBaseImponible = true;
 	private boolean incluirGastos = true;
+	private boolean incluirAnticipos = true;
+	private boolean incluirCobroExterno = true;
 	
 	private Funcionario vendedor;
 	private String razonSocialVendedor = "";
@@ -1656,5 +1658,21 @@ public class ReportesFiltros {
 
 	public void setCartera(EmpresaCartera cartera) {
 		this.cartera = cartera;
+	}
+
+	public boolean isIncluirAnticipos() {
+		return incluirAnticipos;
+	}
+
+	public void setIncluirAnticipos(boolean incluirAnticipos) {
+		this.incluirAnticipos = incluirAnticipos;
+	}
+
+	public boolean isIncluirCobroExterno() {
+		return incluirCobroExterno;
+	}
+
+	public void setIncluirCobroExterno(boolean incluirCobroExterno) {
+		this.incluirCobroExterno = incluirCobroExterno;
 	}
 }

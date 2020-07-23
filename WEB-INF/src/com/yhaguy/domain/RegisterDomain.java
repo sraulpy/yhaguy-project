@@ -5606,24 +5606,25 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las cobranzas segun fecha
 	 */
-	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal, long idCliente, boolean incluirAnticipos)
-			throws Exception {
+	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal, long idCliente, boolean incluirAnticipos,
+			boolean cobrosExternos) throws Exception {
 
 		String query = "select r from Recibo r where r.dbEstado != 'D' and (r.tipoMovimiento.sigla = ? or r.tipoMovimiento.sigla = ?)"
-				+ " and (r.fechaEmision between ? and ?)";
+				+ " and (r.fechaEmision between ? and ?) and r.cobroExterno = " + cobrosExternos;
 
 		if (idSucursal != 0) {
 			query += " and r.sucursal.id = ?";
 		}
-		
+
 		if (idCliente != 0) {
 			query += " and r.cliente.id = " + idCliente;
 		}
-		
+
 		query += " order by r.fechaEmision, r.numero";
-		
-		String anticipo = incluirAnticipos ? Configuracion.SIGLA_TM_ANTICIPO_COBRO : Configuracion.SIGLA_TM_RECIBO_COBRO;
-		
+
+		String anticipo = incluirAnticipos ? Configuracion.SIGLA_TM_ANTICIPO_COBRO
+				: Configuracion.SIGLA_TM_RECIBO_COBRO;
+
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(Configuracion.SIGLA_TM_RECIBO_COBRO);
 		listParams.add(anticipo);
@@ -5677,14 +5678,15 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return los reembolsos de cheques rechazados..
 	 */
-	public List<Recibo> getReembolsosCheques(Date desde, Date hasta, long idSucursal)
+	public List<Recibo> getReembolsosCheques(Date desde, Date hasta, long idSucursal, long idCliente)
 			throws Exception {
-
 		String query = "select r from Recibo r where r.dbEstado != 'D' and r.tipoMovimiento.sigla = ?"
 				+ " and (r.fechaEmision between ? and ?)";
-
 		if (idSucursal != 0) {
 			query += " and r.sucursal.id = ?";
+		}		
+		if (idCliente != 0) {
+			query += " and r.cliente.id = " + idCliente;
 		}
 		query += " order by r.fechaEmision, r.numero";
 
@@ -5742,7 +5744,7 @@ public class RegisterDomain extends Register {
 	 * [4]: idVendedor
 	 */
 	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta, long idVendedor, long idSucursal) throws Exception {
-		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true);
+		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true, true);
 		List<Object[]> out = new ArrayList<Object[]>();
 
 		for (Recibo recibo : cobros) {

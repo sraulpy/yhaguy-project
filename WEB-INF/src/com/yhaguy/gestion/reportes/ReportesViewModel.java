@@ -7785,7 +7785,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				hasta = new Date();
 
 			if (tipoRetencion.equals(ReportesFiltros.RETENCION_RECIBIDAS)) {
-				recibos = rr.getCobranzas(desde, hasta, 0, 0, true);
+				recibos = rr.getCobranzas(desde, hasta, 0, 0, true, true);
 				ventas = rr.getVentasContado(desde, hasta, 0, 0);
 			} else if (tipoRetencion.equals(ReportesFiltros.RETENCION_EMITIDAS)) {
 				recibos = rr.getPagos(desde, hasta);
@@ -8141,7 +8141,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, 0, idCliente, incluirAnticipos);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, 0, idCliente, incluirAnticipos, true);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -8491,6 +8491,9 @@ public class ReportesViewModel extends SimpleViewModel {
 			boolean ivaInc = filtro.isIvaIncluido();
 			boolean recInc = filtro.isIncluirREC();
 			boolean vtaInc = filtro.isIncluirVCT();
+			boolean reeInc = filtro.isIncluirCHQ_RECH();
+			boolean antInc = filtro.isIncluirAnticipos();
+			boolean extInc = filtro.isIncluirCobroExterno();
 			long idCliente = cliente != null? cliente.getId().longValue() : 0;
 			long idSucursal = 0;
 			
@@ -8501,9 +8504,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Object[]> data = new ArrayList<Object[]>();
 			List<Recibo> cobranzas = new ArrayList<Recibo>();
 			List<Venta> ventas = new ArrayList<Venta>();
+			List<Recibo> reembolsos = new ArrayList<Recibo>();
 
 			if (recInc) {
-				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true);
+				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, antInc, extInc);
 				if (formaPago.isEmpty()) {
 					for (Recibo recibo : cobranzas) {
 						data.add(new Object[] {
@@ -8687,6 +8691,205 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}  else if (formaPago.equals(ReportesFiltros.VALORES_REPRESENTACIONES)) {
 					for (Recibo recibo : cobranzas) {
+						double total = recibo.getTotalValoresRepresentaciones();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total != 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				}
+			}
+			
+			if (reeInc) {
+				reembolsos = rr.getReembolsosCheques(desde, hasta, idSucursal, idCliente);
+				if (formaPago.isEmpty()) {
+					for (Recibo recibo : reembolsos) {
+						data.add(new Object[] {
+								m.dateToString(recibo.getFechaEmision(), "dd-MM-yy"),
+								recibo.getNumero(), 
+								TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+								recibo.getCliente().getRazonSocial(), "TODOS..",
+								ivaInc ? recibo.getTotalImporteGs() : recibo.getTotalImporteGsSinIva() });
+					}
+				} else if (formaPago.equals(ReportesFiltros.EFECTIVO)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalEfectivo();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), 
+									recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.RETENCION)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalRetencion();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.CHEQUE_ADELANTADO)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo
+								.getTotalChequeClienteAdelantado(recibo
+										.getFechaEmision());
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.CHEQUE_AL_DIA)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalChequeClienteAldia(recibo.getFechaEmision());
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),			
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.DEPOSITO_BANCARIO)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalDepositoBancario();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.TARJETA_CREDITO)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalTarjetaCredito();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.TARJETA_DEBITO)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalTarjetaDebito();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.DEBITO_COBRANZA_CENTRAL)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalDebitoCobranzaCentral();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.RECAUDACION_CENTRAL)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalRecaudacionCentral();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.TRANSFERENCIA_CENTRAL)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalTransferenciaCentral();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total > 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.SALDO_FAVOR_CLIENTE)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalSaldoFavorCliente();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total != 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				}  else if (formaPago.equals(ReportesFiltros.SALDO_FAVOR_COBRADO)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalSaldoFavorCobrado();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total != 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				} else if (formaPago.equals(ReportesFiltros.CANJE_DOCUMENTOS)) {
+					for (Recibo recibo : reembolsos) {
+						double total = recibo.getTotalCanjeDocumentos();
+						if (!ivaInc)
+							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
+						if (total != 0)
+							data.add(new Object[] {
+									m.dateToString(recibo.getFechaEmision(),
+											"dd-MM-yy"), recibo.getNumero(),
+									TipoMovimiento.getAbreviatura(recibo.getTipoMovimiento().getSigla()),
+									recibo.getCliente().getRazonSocial(),
+									formaPago, total });
+					}
+				}  else if (formaPago.equals(ReportesFiltros.VALORES_REPRESENTACIONES)) {
+					for (Recibo recibo : reembolsos) {
 						double total = recibo.getTotalValoresRepresentaciones();
 						if (!ivaInc)
 							total = total - Utiles.getIVA(total, Configuracion.VALOR_IVA_10);
@@ -9352,7 +9555,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true, true);
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				for (Recibo cobro : cobranzas) {
@@ -10392,7 +10595,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Funcionario> cobradores = filtro.getTeleCobradores();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, true);
+				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, true, true);
 				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
@@ -10479,7 +10682,7 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, true);
+				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, true, true);
 				List<Venta> ventas = rr.getVentasContado(desde, hasta, 0, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
@@ -10942,7 +11145,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			Object[] formato = filtro.getFormato();	
 			
 			long idSucursal = suc != null ? suc.getId() : 0;			
-			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false);
+			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false, true);
 		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_DETALLADO;
 			Map<String, Object> params = new HashMap<String, Object>();
@@ -10971,7 +11174,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			long idSucursal = suc != null ? suc.getId() : 0;
 			
-			List<Recibo> recibos = rr.getReembolsosCheques(desde, hasta, idSucursal);
+			List<Recibo> recibos = rr.getReembolsosCheques(desde, hasta, idSucursal, 0);
 		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_REEMBOLSOS_DETALLADO;
 			Map<String, Object> params = new HashMap<String, Object>();
