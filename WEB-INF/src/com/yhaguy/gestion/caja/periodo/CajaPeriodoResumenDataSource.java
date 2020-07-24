@@ -79,6 +79,8 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalCancelacionCheque = 0;
 	double totalCancelacionChequeEfectivo = 0;
 	double totalCancelacionChequeAldia = 0;
+	double totalAnticipoEfectivo = 0;
+	double totalPagosEfectivo = 0;
 
 	public CajaPeriodoResumenDataSource(CajaPeriodo planilla) {
 		try {
@@ -218,6 +220,24 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 									+ Utiles.getMaxLength(cobro.getCliente().getRazonSocial().toUpperCase(), 45), item[1],
 									"COBRANZAS CON EFECTIVO",
 									this.totalCobranzaEfectivo);
+							this.values.add(my);
+						}
+					}
+				}
+			}
+			
+			// anticipos con efectivo..
+			for (Recibo cobro : planilla.getRecibosOrdenado()) {
+				if (cobro.isCobroAnticipo() && !cobro.isAnulado() && !cobro.isCobroExterno() && !cobro.isCancelacionCheque()) {
+					Object[] efectivo = cobro.getCobranzasConEfectivo();
+					if (efectivo != null) {
+						List<Object[]> items = (List<Object[]>) efectivo[0];
+						this.totalAnticipoEfectivo += (double) efectivo[1];
+						for (Object[] item : items) {
+							MyArray my = new MyArray(cobro.getTipoMovimiento().getDescripcion(),
+									item[0].toString().toUpperCase() + " - " + Utiles
+											.getMaxLength(cobro.getCliente().getRazonSocial().toUpperCase(), 45),
+									item[1], "ANTICIPOS CON EFECTIVO", this.totalAnticipoEfectivo);
 							this.values.add(my);
 						}
 					}
@@ -557,6 +577,24 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 					this.values.add(my);
 				}
 			}
+			
+			// pagos con efectivo..
+			for (Recibo pago : planilla.getRecibosOrdenado()) {
+				if (pago.isPago()) {
+					Object[] efectivo = pago.getPagosConEfectivo();
+					if (efectivo != null) {
+						List<Object[]> items = (List<Object[]>) efectivo[0];
+						this.totalPagosEfectivo += (double) efectivo[1];
+						for (Object[] item : items) {
+							MyArray my = new MyArray(pago.getTipoMovimiento().getDescripcion(),
+									item[0].toString().toUpperCase() + " - " + Utiles
+											.getMaxLength(pago.getProveedor().getRazonSocial().toUpperCase(), 45),
+									item[1], "PAGOS CON EFECTIVO", this.totalPagosEfectivo);
+							this.values.add(my);
+						}
+					}
+				}
+			}
 
 			// gastos..
 			for (Gasto gasto : planilla.getGastosOrdenado()) {
@@ -857,7 +895,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(det.getPos5());
 		} else if ("TotalVtaContado".equals(fieldName)) {
 			value = FORMATTER.format(this.totalVentaContado);
-		}else if ("TotalNotaCredCont".equals(fieldName)) {
+		} else if ("TotalNotaCredCont".equals(fieldName)) {
 			value = FORMATTER.format(this.totalNotaCreditoContado * -1);
 		} else if ("TotalTarjDebito_".equals(fieldName)) {
 			value = FORMATTER.format(this.totalTarjetaDebito * -1);
@@ -891,8 +929,20 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 									+ this.totalTarjetaCredito
 									+ this.totalRepEgresos 
 									+ this.totalPagos));
+		} else if ("TotalVtaContadoEfectivo".equals(fieldName)) {
+			value = FORMATTER.format(this.totalVentaContadoEfectivo);
+		} else if ("TotalAnticipoEfe".equals(fieldName)) {
+			value = FORMATTER.format(this.totalAnticipoEfectivo);
+		} else if ("TotalNcreditoEfe".equals(fieldName)) {
+			value = FORMATTER.format(this.totalNotaCreditoContado * -1);
 		} else if ("TotalPagos".equals(fieldName)) {
 			value = FORMATTER.format(this.totalPagos * -1);
+		} else if ("TotalPagosEfe".equals(fieldName)) {
+			value = FORMATTER.format(this.totalPagosEfectivo * -1);
+		} else if ("TotalChequeAlDia".equals(fieldName)) {
+			value = FORMATTER.format(this.totalChequeTerceroAlDia);
+		} else if ("TotalChequeDiferido".equals(fieldName)) {
+			value = FORMATTER.format(this.totalChequeTerceroAdelantado);
 		} else if ("TotalReposicion".equals(fieldName)) {
 			value = FORMATTER.format(this.totalReposiciones);
 		} else if ("TotalGastos".equals(fieldName)) {
@@ -907,6 +957,11 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER
 					.format((this.totalReposiciones + this.totalRetencionProveedor)
 							- (this.totalPagos + this.totalGastos + this.totalCompras + this.totalRepEgresos));
+		} else if ("TotalIngresoEfe".equals(fieldName)) {
+			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
+					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo);
+		} else if ("TotalEgresoEfe".equals(fieldName)) {
+			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastos + this.totalPagosEfectivo) * -1);
 		}
 		return value;
 	}

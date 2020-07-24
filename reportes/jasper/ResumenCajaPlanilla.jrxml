@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Balance" pageWidth="662" pageHeight="792" columnWidth="622" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.143588810000005"/>
+	<property name="ireport.zoom" value="1.6105100000000068"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="476"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -14,6 +14,7 @@
 	</style>
 	<style name="Row" fontName="Arial" fontSize="8"/>
 	<style name="Resumen" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<subDataset name="Table Dataset 1" uuid="0025e345-6c86-4860-b775-d1d94d2131d6"/>
 	<parameter name="Empresa" class="java.lang.String"/>
 	<parameter name="Periodo" class="java.lang.String"/>
 	<parameter name="NroPlanilla" class="java.lang.String"/>
@@ -62,6 +63,13 @@
 	<field name="TotalReembolsoEfe" class="java.lang.String"/>
 	<field name="TotalReembolsoCheq" class="java.lang.String"/>
 	<field name="ImporteDs" class="java.lang.String"/>
+	<field name="TotalAnticipoEfe" class="java.lang.String"/>
+	<field name="TotalNcreditoEfe" class="java.lang.String"/>
+	<field name="TotalPagosEfe" class="java.lang.String"/>
+	<field name="TotalIngresoEfe" class="java.lang.String"/>
+	<field name="TotalEgresoEfe" class="java.lang.String"/>
+	<field name="TotalChequeAlDia" class="java.lang.String"/>
+	<field name="TotalChequeDiferido" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<group name="totalizadora" keepTogether="true">
 		<groupExpression><![CDATA[$F{TituloDetalle}]]></groupExpression>
@@ -256,4 +264,280 @@
 			</frame>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="234">
+			<staticText>
+				<reportElement x="75" y="5" width="513" height="12" uuid="4a009160-ae17-49a4-b490-37de5b0a0347"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[RESUMEN        ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="31" width="76" height="12" uuid="5c42db37-2dea-4353-928c-0ed744e218f4"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[INGRESOS EFECTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="55" width="76" height="12" uuid="cd37fbad-436c-4788-a41a-40ab7c156429"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[VENTAS CONTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="71" width="76" height="12" uuid="3dada441-6471-4575-8276-cdf4ff939121"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[RECIBOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="87" width="103" height="12" uuid="7c33dfbd-ac3a-4483-8c0a-5d6412f6fb47"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[ANTICIPOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="103" width="103" height="12" uuid="d7e2bc81-c3d8-4e3a-9455-159a6e39dc8a"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[REEMBOLSOS CHEQUES]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="195" y="55" width="73" height="12" uuid="22e93561-66e5-4b20-ae92-4ebda076376c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalVtaContadoEfectivo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="71" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8b676753-e585-4339-95e6-25edecf2ec6b"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalCobranzasEfe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="87" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e72cbd5f-54d1-408c-81c6-711c1c01b6e7"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalAnticipoEfe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="103" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5489d1c4-9f0e-4b27-b28d-2a136b99eab2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalReembolsoEfe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="395" y="31" width="76" height="12" uuid="6bb95b1a-2831-439f-abe0-f8e4545e65ce"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[EGRESOS EFECTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="71" width="76" height="12" uuid="d823faa1-522e-4a7b-918f-156abf8a77ad"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[GASTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="87" width="103" height="12" uuid="638cf65d-8ea6-4b58-8a4d-81b72915e507"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[PAGOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="55" width="103" height="12" uuid="bd9b5b02-cb21-4b7e-9ef0-418a9b55e61f"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[NOTAS CRED. CONTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="103" width="103" height="12" uuid="ae3a901d-f154-473f-8c8c-97c8141d22ad"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[OTROS EGRESOS]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="464" y="56" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0af6bf0c-021a-4c12-b04c-a79e2c4903a2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalNcreditoEfe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="464" y="88" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0ff04956-ab40-4f55-91fb-8c6b84afa3a6"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalPagosEfe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="464" y="72" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9bb2e273-2bbd-4995-abdb-06fd56399968"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalGastos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="464" y="104" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0199326d-1247-4975-bcc4-5a9f2cfb6135"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[0]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="75" y="17" width="462" height="1" uuid="05f05b03-bfc7-46d6-b844-dfa11666cf89"/>
+			</line>
+			<line>
+				<reportElement x="76" y="118" width="192" height="1" uuid="90262029-b71b-42c5-942b-32728fa69fea"/>
+			</line>
+			<line>
+				<reportElement x="342" y="118" width="195" height="1" uuid="3568dfbf-ec95-4ffc-bb10-6de0636a0cf3"/>
+			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="122" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f4843389-3db9-4985-b9f1-cd21c3461ed6"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalIngresoEfe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="464" y="122" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3dd63385-5174-413b-9003-55e6e37d478f"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalEgresoEfe}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="76" y="47" width="192" height="1" uuid="52cf3a45-9163-4b27-af38-b406bb85ce39"/>
+			</line>
+			<line>
+				<reportElement x="342" y="47" width="195" height="1" uuid="1684b23d-f1cc-4354-bb30-bbeb8fa85417"/>
+			</line>
+			<staticText>
+				<reportElement x="76" y="154" width="76" height="12" uuid="1c4216af-f867-4c5a-87a7-62c1481d4dab"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[TOTAL EFECTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="170" width="102" height="12" uuid="eb034813-3645-49ac-85cc-f67fe2dffcd6"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[TOTAL CHEQUE AL DÍA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="186" width="102" height="12" uuid="834fb282-5072-44d1-9259-84303909b0fc"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[TOTAL CHEQUE DIFERIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="202" width="102" height="12" uuid="8978deff-7d64-49a7-a270-480551232b5a"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[TOTAL TARJETA CRÉDITO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="218" width="102" height="12" uuid="e1313f0d-b73a-4886-b8c7-f97f2aadb89f"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[TOTAL TARJETA DÉBITO]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="154" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2eb018ff-eb3e-418c-91a2-0c3000043022"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalEfectivo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="170" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c4964f28-5a23-4c85-8ce4-a0a84669d957"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalChequeAlDia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="186" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a87a2cb3-e940-4526-80a2-57d7122b5dc0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalChequeDiferido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="202" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="73fb1789-01aa-4a7f-a272-d804b7db7036"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalTarjCredito}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="218" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5a6e6384-6a54-46b9-ad85-d2e1d15245bd"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalTarjDebito}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="342" y="218" width="92" height="12" uuid="d26c24d0-4098-4ad1-aa9e-5d0037205db7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[FIRMA DEL CAJERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="218" width="92" height="12" uuid="145a2946-73d9-48af-b969-ca4e3c61fe19"/>
+				<textElement textAlignment="Center">
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[FIRMA SUPERVISOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="342" y="214" width="92" height="1" uuid="2c59f369-3d9c-454f-93aa-b7c3485ff63c"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="445" y="214" width="92" height="1" uuid="6d496649-a4af-4eea-9b89-c0bcd87178aa"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
 </jasperReport>

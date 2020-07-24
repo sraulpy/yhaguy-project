@@ -491,6 +491,27 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return el detalle de pagos con efectivo..
+	 */
+	public Object[] getPagosConEfectivo() {		
+		List<Object[]> out = new ArrayList<Object[]>();
+		double importeGs = 0;
+
+		for (ReciboFormaPago item : this.formasPago) {
+			if (item.isEfectivo()) {
+				String desc = "OP. " + this.getNumero_() + " - "
+						+ item.getDescripcion().toUpperCase();
+				double monto = item.getMontoGs();
+				importeGs += monto;
+				out.add(new Object[] { desc, monto });
+			}
+		}
+		if (out.size() > 0)
+			return new Object[] { out, importeGs };
+		return null;
+	}
+	
+	/**
 	 * @return el detalle de cobranzas con tarjeta de credito..
 	 */
 	public Object[] getCobranzasConTarjetaCredito() {		
