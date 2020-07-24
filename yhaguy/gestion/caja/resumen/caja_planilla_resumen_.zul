@@ -1022,7 +1022,7 @@
 	<!-- CONFIRMAR RECAUDACION -->
 	
 	<popup id="pop_recaud" sclass="rounded">
-		<vlayout height="400px" width="650px">
+		<vlayout height="400px" width="800px">
 			<grid sclass="vgrid">
 				<rows>
 					<row>
@@ -1039,7 +1039,7 @@
 								<space></space>
 								<field value="Saldo:" />
 								<guaranibox hflex="true" value="@load(vm.selectedResumen_.resumenEfectivo)"
-									readonly="true" />
+									readonly="true" />								
 							</hbox>
 						</vlayout>
 					</row>
@@ -1084,7 +1084,12 @@
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
 								readonly="true" 
 								value="@load(vm.selectedResumen_.totalCheques)"/>
-							<space hflex="true"/>
+							<space />
+							<field value="Rec. M.R.A:" />
+							<guaranibox readonly="true"
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								value="@load(vm.selectedResumen_.resumenRecaudacionMra)" />
+							<space hflex="true" />
 							<button mold="bs"
 								sclass="btn-success btn-sm"
 								iconSclass="z-icon-check" width="80px"

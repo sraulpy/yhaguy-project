@@ -81,6 +81,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalCancelacionChequeAldia = 0;
 	double totalAnticipoEfectivo = 0;
 	double totalPagosEfectivo = 0;
+	double totalRecaudacionMra = 0;
 
 	public CajaPeriodoResumenDataSource(CajaPeriodo planilla) {
 		try {
@@ -172,7 +173,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			
 			// cobranzas
 			for (Recibo cobro : planilla.getRecibosOrdenado()) {
-				if (cobro.isCobro() && !cobro.isCancelacionCheque()) {
+				if (cobro.isCobro() && !cobro.isCancelacionCheque() && !cobro.isRecaudacionMra()) {
 					this.totalCobranza += cobro.getTotalImporteGs();
 					String desc = "REC. " + cobro.getNumero_() + " - (" + cobro.getCobrador() + ")";
 					MyArray my = new MyArray(cobro.getTipoMovimiento().getDescripcion(), 
@@ -545,6 +546,25 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 								"REEMBOLSO DE PRESTAMOS",
 								this.totalCancelacionCheque);
 						this.values.add(my);
+					}
+				}
+			}
+			
+			// cobranzas recaudacion mra..
+			for (Recibo cobro : planilla.getRecibosOrdenado()) {
+				if (cobro.isRecaudacionMra()) {
+					Object[] mra = cobro.getRecaudacionMra();
+					if (mra != null) {
+						List<Object[]> items = (List<Object[]>) mra[0];
+						this.totalRecaudacionMra += (double) mra[1];
+						for (Object[] item : items) {
+							MyArray my = new MyArray(cobro.getTipoMovimiento().getDescripcion(),
+									item[0].toString().toUpperCase() + " - "
+											+ Utiles.getMaxLength(cobro.getCliente().getRazonSocial().toUpperCase(),
+													29),
+									item[1], "RECAUDACION M.R.A.", this.totalRecaudacionMra);
+							this.values.add(my);
+						}
 					}
 				}
 			}
@@ -948,7 +968,9 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 		} else if ("TotalGastos".equals(fieldName)) {
 			value = FORMATTER.format(this.totalGastos * -1);
 		} else if ("TotalEgresos".equals(fieldName)) {
-			value = FORMATTER.format(this.totalRepEgresos * -1);
+			value = FORMATTER.format(this.totalRepEgresos);
+		} else if ("TotalRecMra".equals(fieldName)) {
+			value = FORMATTER.format(this.totalRecaudacionMra);
 		} else if ("TotalRetProv".equals(fieldName)) {
 			value = FORMATTER.format(this.totalRetencionProveedor);
 		} else if ("TotalDepBancarios".equals(fieldName)) {
@@ -961,7 +983,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
 					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo);
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
-			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastos + this.totalPagosEfectivo + this.totalRepEgresos) * -1);
+			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastos + this.totalPagosEfectivo - this.totalRepEgresos) * -1);
 		}
 		return value;
 	}

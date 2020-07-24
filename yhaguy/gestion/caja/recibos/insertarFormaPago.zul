@@ -1,6 +1,6 @@
 <window border="normal" title="Forma de Pago" width="600px"
 	position="center, center">
-	<div width="500px">
+	<div width="100%" height="100%" style="padding:5px">
 	
 	<grid hflex="true" sclass="vgrid">
 		<columns>
@@ -12,7 +12,9 @@
 				<field value="Tipo de Pago:"/>
 				<combobox model="@load(vm.formasDePago)" hflex="true"
 					selectedItem="@bind(vm.nvoFormaPago.tipo)"
-					onChange="@command('seleccionarFormaPago')" instant="true">
+					onChange="@command('seleccionarFormaPago')" instant="true"
+					readonly="@load(vm.dato.reciboDTO.recaudacionMra)"
+					buttonVisible="@load(!vm.dato.reciboDTO.recaudacionMra)">
 					<template name="model">
 						<comboitem
 							label="@load(each.text.toUpperCase())" />
@@ -287,6 +289,68 @@
 				</hlayout>
 			</row>
 			
+			<!-- ________________________ Forma Pago Recaudacion mra _________________________ -->
+			
+			<row id="rwRecaudacionMra" visible="false">
+				<field value="Saldos Recaudación M.R.A:" />
+				<hlayout>
+					<bandbox 
+						value="@load(vm.selectedRecaudacionMra.chequeNumero)"
+						placeholder="Seleccione.."
+						readonly="true"
+						id="bndRecMra"
+						hflex="true">
+						<bandpopup>
+							<listbox sclass="small-list" width="600px"
+								height="250px"
+								model="@load(vm.saldoRecaudacionMra)"
+								selectedItem="@bind(vm.selectedRecaudacionMra)"
+								onSelect="@command('setFormaPagoRecaudacionMra')">
+								<listhead>
+									<listheader width="120px" align="right">
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Cheque Nro.." 
+												value="@bind(vm.filterChequeNro)"/>
+										</hlayout>
+									</listheader>
+									<listheader width="120px">
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Banco.." 
+												value="@bind(vm.filterChequeBanco)"/>
+										</hlayout>
+									</listheader>
+									<listheader>
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Librador.." 
+												value="@bind(vm.filterChequeCliente)"/>
+										</hlayout>
+									</listheader>
+									<listheader width="100px" align="right"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.chequeNumero)"></listcell>
+										<listcell label="@load(each.chequeBanco.descripcion.toUpperCase())"></listcell>
+										<listcell label="@load(each.chequeLibrador)"></listcell>
+										<listcell label="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			
 			<row id="rwChequeBancoAutoCobro" visible="false">
 				<field value="Banco:"/>
 				<textbox value="@load(vm.nvoFormaPago.chequeBanco.text.toUpperCase())" readonly="true"
@@ -352,13 +416,13 @@
 	<toolbar align="center" style="margin-top:15px">
 		<hlayout>
 			<button label="ACEPTAR" tooltiptext="Aceptar"
-				iconSclass="z-icon-check" width="150px" onClick="@command('agregarFormaPago')"
-				style="font-weight:bold;padding:7px"
-				dir="normal"/>
+				iconSclass="z-icon-check" onClick="@command('agregarFormaPago')"
+				dir="normal" hflex="true"
+				mold="bs" sclass="btn-sm btn-primary"/>
 			<button id="btnCancel" label="CANCELAR" tooltiptext="Cancelar"
 				iconSclass="z-icon-times" width="150px" onClick="@command('cancelarFormaPago')"
-				style="font-weight:bold;padding:7px"
-				dir="normal"/>
+				dir="normal" hflex="true"
+				mold="bs" sclass="btn-sm btn-primary"/>
 		</hlayout>
 	</toolbar>
 </window>

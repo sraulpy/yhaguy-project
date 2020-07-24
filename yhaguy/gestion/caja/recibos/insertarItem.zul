@@ -1,29 +1,31 @@
-<window height="200px" width="350px" title="Datos del Cobro"
+<window height="180px" width="350px" title="Datos del Cobro"
 	border="normal" id="test">
-	<div style="padding:10px">
-		<grid sclass="vgrid">
-			<columns>
-				<column width="30%" />
-				<column />
-			</columns>
-			<rows>
-				<row>
-					<field value="Descripcion" />
-					<textbox value="@bind(vm.nvoItem.concepto)" hflex="true" />
-				</row>
-				<row>
-					<field value="Importe Gs." />
-					<guaranibox value="@bind(vm.nvoItem.montoGs)"/>
-				</row>
-			</rows>
-		</grid>
-		<hbox width="100%" pack="center" style="margin-top:30px">
-			<button label="Aceptar" width="120px" height="30px"
-				image="/core/images/accept.png"
-				onClick="@command('addDetalle')"/>
-			<button label="Cancelar" width="120px" height="30px" onClick="test.detach()" 
-				image="/core/images/cancel.png"/>
-		</hbox>
-	</div>	
-
+	<div style="padding:5px" hflex="true" vflex="true">
+	<grid sclass="vgrid">
+		<columns>
+			<column width="30%" />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<field value="Descripcion" />
+				<textbox value="@bind(vm.nvoItem.concepto)" hflex="true"
+					readonly="@load(vm.dato.reciboDTO.recaudacionMra)" />
+			</row>
+			<row>
+				<field value="Importe Gs." />
+				<guaranibox value="@bind(vm.nvoItem.montoGs)" hflex="true" />
+			</row>
+		</rows>
+	</grid>
+	<space></space>
+	<hbox width="100%" pack="center">
+		<button label="ACEPTAR" hflex="true" mold="bs"
+			sclass="btn-sm btn-primary" onClick="@command('addDetalle')" 
+			iconSclass="z-icon-check" />
+		<button label="CANCELAR" hflex="true" onClick="test.detach()"
+			mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-times" />
+	</hbox>
+	</div>
 </window>

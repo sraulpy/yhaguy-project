@@ -47,6 +47,7 @@ import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SaldoVale;
@@ -440,13 +441,20 @@ public class CajaPeriodoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void abrirVentanaRecibo(@BindingParam("tipo") int tipo)
 			throws Exception {
-		this.abrirVentanaRecibo(tipo, WindowPopup.NUEVO);
+		this.abrirVentanaRecibo(tipo, WindowPopup.NUEVO, false);
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void abrirVentanaRecaudacionMRA(@BindingParam("tipo") int tipo)
+			throws Exception {
+		this.abrirVentanaRecibo(tipo, WindowPopup.NUEVO, true);
 	}
 
 	/**
 	 * Despliega la ventana del recibo..
 	 */
-	public void abrirVentanaRecibo(int tipo, String modo) throws Exception {
+	private void abrirVentanaRecibo(int tipo, String modo, boolean recaudacionMRA) throws Exception {
 
 		String titulo = null;
 		String tituloDet = null;
@@ -495,6 +503,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.reciboDTO.setTipoMovimiento(tipoMovto);
 			this.reciboDTO.setMoneda(this.monedaLocal);
 			this.reciboDTO.setTipoCambio(tc);
+			if (recaudacionMRA) {
+				this.reciboDTO.setCobroExterno(true);
+				this.reciboDTO.setRecaudacionMra(true);
+				this.reciboDTO.setAuxi(Recibo.RECAUDACION_MRA);
+				this.reciboDTO.setNumero(AutoNumeroControl.getAutoNumeroKey("REC-MRA", 7, true));
+			}
 			if (this.reciboDTO.esNuevo()) {
 				this.reciboDTO.setImputar(true);
 			} 
@@ -1263,11 +1277,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 			break;
 
 		case ES_COBRO:
-			this.abrirVentanaRecibo(ES_COBRO, modo);
+			this.abrirVentanaRecibo(ES_COBRO, modo, false);
 			break;
 
 		case ES_PAGO:
-			this.abrirVentanaRecibo(ES_PAGO, modo);
+			this.abrirVentanaRecibo(ES_PAGO, modo, false);
 			break;
 
 		case ES_GASTO:
@@ -2915,7 +2929,7 @@ class ValidadorAgregarRecibo implements VerificaAceptarCancelar {
 			mensaje += "\n - Debe ingresar el número de recibo..";
 		}
 		
-		if (this.recibo.isCobro() && ((this.recibo.getNumero().length() != 15) || (this.recibo.getNumero().charAt(3) != '-') || (this.recibo.getNumero().charAt(7) != '-')
+		if ((!this.recibo.isRecaudacionMra()) && this.recibo.isCobro() && ((this.recibo.getNumero().length() != 15) || (this.recibo.getNumero().charAt(3) != '-') || (this.recibo.getNumero().charAt(7) != '-')
 				|| !Utiles.validarNumeroFactura(this.recibo.getNumero()))) {
 			out = false;
 			mensaje += "\n - Formato incorrecto de número..";

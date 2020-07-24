@@ -241,7 +241,7 @@ public class CajaPeriodo extends Domain {
 		for (CajaReposicion rep : this.reposiciones) {
 			if (!rep.isIngreso() && !rep.isAnulado()) {
 				if(rep.getFormaPago().isEfectivo())
-					out += rep.getFormaPago().getMontoGs();
+					out -= rep.getFormaPago().getMontoGs();
 			}
 		}
 		for (NotaCredito nc : this.notasCredito) {
@@ -293,6 +293,23 @@ public class CajaPeriodo extends Domain {
 					}
 				}
 			}			
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el importe total de recaudacion mra..
+	 */
+	public double getTotalRecaudacionMra() {
+		double out = 0;
+		for (Recibo rec : this.getRecibos()) {
+			if (rec.isRecaudacionMra()) {
+				for (ReciboFormaPago fp : rec.getFormasPago()) {
+					if (fp.isRecaudacionMra()) {
+						out += fp.getMontoGs();
+					}
+				}
+			}
 		}
 		return out;
 	}

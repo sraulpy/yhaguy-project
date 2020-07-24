@@ -11913,6 +11913,66 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getRecaudacionMra(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'REC-MRA', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, f.chequeNumero,"
+				+ " concat(f.chequeBanco.descripcion, ' - ', f.chequeLibrador)"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_RECIBO_COBRO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getRecaudacionMraPago(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'REC-MRA', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, f.chequeNumero,"
+				+ " concat(f.chequeBanco.descripcion, ' - ', f.chequeLibrador)"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_RECIBO_PAGO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las formas de pago recaudacion mra..
+	 */
+	public List<ReciboFormaPago> getSaldosRecaudacionMra(String chequeNumero) throws Exception {
+		String query = "select f from ReciboFormaPago f where f.tipo.sigla = '"
+				+ Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA + "'"
+			    + " and f.chequeNumero like '%" + chequeNumero + "%'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));

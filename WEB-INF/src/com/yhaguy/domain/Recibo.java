@@ -15,6 +15,7 @@ import com.yhaguy.util.Utiles;
 public class Recibo extends Domain {
 	
 	public static final String CON_RETENCION = "RETENCION"; 
+	public static final String RECAUDACION_MRA = "RECAUDACION M.R.A";
 	
 	private String numero;
 	private long nro;
@@ -73,6 +74,13 @@ public class Recibo extends Domain {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * @return true si es rec mra..
+	 */
+	public boolean isRecaudacionMra() {
+		return this.getAuxi().equals(RECAUDACION_MRA);
 	}
 	
 	/**
@@ -543,6 +551,29 @@ public class Recibo extends Domain {
 			if (item.isTarjetaDebito()) {
 				String desc = "REC. " + this.getNumero_() + " - "
 						+ item.getTarjetaProcesadora().getNombre().toUpperCase() + " - " + item.getTarjetaNumero();
+				double monto = item.getMontoGs();
+				importeGs += monto;
+				out.add(new Object[] { desc, monto });
+			}
+		}
+		if (out.size() > 0)
+			return new Object[] { out, importeGs };
+		return null;
+	}
+	
+	/**
+	 * @return el detalle de recaudacion mra..
+	 */
+	public Object[] getRecaudacionMra() {		
+		List<Object[]> out = new ArrayList<Object[]>();
+		double importeGs = 0;
+
+		for (ReciboFormaPago item : this.formasPago) {
+			if (item.isRecaudacionMra()) {
+				String desc = this.getNumero()
+						+ " - CH." + String.format("%08d", Integer.parseInt(item.getChequeNumero())) + " - "
+						+ item.getChequeVencimiento() + " - "
+						+ "[" + item.getChequeBanco().getDescripcion().toUpperCase().substring(0, 3) + "]";
 				double monto = item.getMontoGs();
 				importeGs += monto;
 				out.add(new Object[] { desc, monto });

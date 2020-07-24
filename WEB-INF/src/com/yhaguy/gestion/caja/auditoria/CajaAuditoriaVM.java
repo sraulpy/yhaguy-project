@@ -76,6 +76,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		List<Object[]> efectivoExcedente = rr.getEfectivoExcedenteCaja(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequeVentas = rr.getChequeVentas(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequeRecibos = rr.getChequeRecibos(this.filterDesde, this.filterHasta, this.filterCaja);
+		List<Object[]> recaudacionMra = rr.getRecaudacionMra(this.filterDesde, this.filterHasta, this.filterCaja);
 		
 		List<Object[]> efectivoNotasCredito = rr.getEfectivoNotasCredito(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> efectivoPagos = rr.getEfectivoPagos(this.filterDesde, this.filterHasta, this.filterCaja);
@@ -84,6 +85,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		List<Object[]> chequePagos = rr.getChequePagos(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequeDepositos = rr.getChequeDepositos(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequeDescuentos = rr.getChequeDescuentos(this.filterDesde, this.filterHasta, this.filterCaja);
+		List<Object[]> recaudacionMraPago = rr.getRecaudacionMraPago(this.filterDesde, this.filterHasta, this.filterCaja);
 		
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
@@ -93,6 +95,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		historicoDEBE.addAll(efectivoExcedente);
 		historicoDEBE.addAll(chequeVentas);
 		historicoDEBE.addAll(chequeRecibos);
+		historicoDEBE.addAll(recaudacionMra);
 		
 		historicoHABER.addAll(efectivoNotasCredito);
 		historicoHABER.addAll(efectivoPagos);
@@ -101,6 +104,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		historicoHABER.addAll(chequePagos);
 		historicoHABER.addAll(chequeDepositos);
 		historicoHABER.addAll(chequeDescuentos);
+		historicoHABER.addAll(recaudacionMraPago);
 		
 		for (Object[] movim : historicoDEBE) {
 			movim[0] = "(+)" + movim[0];

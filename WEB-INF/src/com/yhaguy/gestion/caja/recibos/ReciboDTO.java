@@ -37,6 +37,7 @@ public class ReciboDTO extends DTO {
 	
 	/** Para cobros a otra sucursal **/
 	private boolean cobroExterno = false;
+	private boolean recaudacionMra = false;
 	
 	private boolean entregado = false;
 
@@ -610,5 +611,13 @@ public class ReciboDTO extends DTO {
 
 	public void setSaldoAcobrar(boolean saldoAcobrar) {
 		this.saldoAcobrar = saldoAcobrar;
+	}
+
+	public boolean isRecaudacionMra() {
+		return recaudacionMra;
+	}
+
+	public void setRecaudacionMra(boolean recaudacionMra) {
+		this.recaudacionMra = recaudacionMra;
 	}
 }

@@ -28,6 +28,7 @@ import org.zkoss.zul.Window;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -40,7 +41,9 @@ import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
+import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.cheques.WindowCheque;
@@ -70,6 +73,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	
 	private BancoChequeTercero selectedChequeAutoCobranza;
 	private BancoChequeTercero selectedChequeTercero;
+	private ReciboFormaPago selectedRecaudacionMra;
 	private Object[] selectedCuenta;
 	
 	private Date fechaCierre;
@@ -107,6 +111,9 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.filterNro = "";
 		if (this.dato.getReciboDTO().isCobroExterno()) {
 			this.nvoItem = new ReciboDetalleDTO();
+			if (this.dato.getReciboDTO().isRecaudacionMra()) {
+				this.nvoItem.setConcepto(Recibo.RECAUDACION_MRA);
+			}
 			w = (Window) Executions.createComponents(ADD_ITEM_ZUL, this.mainComponent, null);
 			w.doModal();
 
@@ -574,7 +581,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private MyArray selectedTarjetaCredito = new MyArray("", new ArrayList<MyPair>());
 
 	@Command @NotifyChange("*")
-	public void abrirPopupFormaPago() {
+	public void abrirPopupFormaPago() throws Exception {
 		
 		Object[] validar = this.validarOperacion(OPERACION_INSERTAR_FORMA_PAGO);
 		boolean valido = (boolean) validar[0];
@@ -607,6 +614,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 		w = (Window) Executions.createComponents(Configuracion.RECIBO_ADD_FORMA_PAGO_ZUL, 
 				this.mainComponent, null);
 		Selectors.wireComponents(w, this, false);
+		if (this.dato.getReciboDTO().isRecaudacionMra()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Tipo fp = rr.getTipoPorSigla(Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA);
+			MyPair mp = new MyPair(fp.getId(), fp.getDescripcion(), fp.getSigla());
+			this.nvoFormaPago.setTipo(mp);
+			this.seleccionarFormaPago();
+		}
 		w.doOverlapped();
 	}
 	
@@ -981,11 +995,15 @@ public class ReciboSimpleControl extends SoloViewModel {
 	@Wire
 	private Bandbox bndCheq;
 	@Wire
+	private Bandbox bndRecMra;
+	@Wire
 	private Row rwDebitoCobroCentral;
 	@Wire
 	private Row rwSaldoFavorCobrado;
 	@Wire
 	private Row rwMontoAplicado;
+	@Wire
+	private Row rwRecaudacionMra;
 	
 	@Command @NotifyChange("*")
 	public void seleccionarFormaPago() throws Exception {
@@ -1208,7 +1226,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwTimbradoVencimiento.setVisible(false);
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());	
 			
-		} else if (siglaFP.equals(siglaFPRM)) {
+		} else if (siglaFP.equals(siglaFPRM) && this.dato.getReciboDTO().isCobro()) {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(true); rwVencimiento.setVisible(true);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
@@ -1226,6 +1244,26 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwMontoAplicado.setVisible(true);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);	
 			this.nvoFormaPago.setChequeLibrador((String) this.dato.getReciboDTO().getCliente().getPos2());
+		
+		} else if (siglaFP.equals(siglaFPRM) && !this.dato.getReciboDTO().isCobro()) {
+			rwBanco.setVisible(false); rwChequera.setVisible(false);
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
+			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
+			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwMontoCheque.setVisible(false); rwChequeAutoCobranza.setVisible(false);
+			rwChequeBancoAutoCobro.setVisible(false); rwLibradorAutoCobro.setVisible(false);
+			rwVencimientoAutoCobro.setVisible(false);
+			rwDebitoCobroCentral.setVisible(false);
+			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false); 
+			rwSaldoFavorCobrado.setVisible(false);
+			rwMontoAplicado.setVisible(true);
+			rwRecaudacionMra.setVisible(true);
+			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());		
 		
 		} else {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
@@ -1355,6 +1393,23 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.nvoFormaPago.setChequeFecha(this.selectedChequeAutoCobranza.getFecha());
 		this.nvoFormaPago.setChequeLibrador(this.selectedChequeAutoCobranza.getLibrado());
 		this.nvoFormaPago.setChequeNumero(this.selectedChequeAutoCobranza.getNumero());
+	
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void setFormaPagoRecaudacionMra() {
+		this.bndRecMra.close();
+		this.dbxGs.setReadonly(true);
+		this.dbxUS.setReadonly(true);
+
+		this.nvoFormaPago.setChequeBanco(new MyPair(
+				this.selectedRecaudacionMra.getChequeBanco().getId(),
+				this.selectedRecaudacionMra.getChequeBanco().getDescripcion()));
+		this.nvoFormaPago.setMontoGs(this.selectedRecaudacionMra.getMontoGs());
+		this.nvoFormaPago.setChequeFecha(this.selectedRecaudacionMra.getChequeFecha());
+		this.nvoFormaPago.setChequeLibrador(this.selectedRecaudacionMra.getChequeLibrador());
+		this.nvoFormaPago.setChequeNumero(this.selectedRecaudacionMra.getChequeNumero());
 	
 	}
 	
@@ -1765,6 +1820,12 @@ public class ReciboSimpleControl extends SoloViewModel {
 		return rr.getCuentasContables(this.filterCuenta);
 	}
 	
+	@DependsOn({ "filterChequeNro", "filterChequeBanco", "filterChequeCliente" })
+	public List<ReciboFormaPago> getSaldoRecaudacionMra() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getSaldosRecaudacionMra(this.filterChequeNro);
+	}
+	
 	public CajaPeriodoControlBody getDato() {
 		return dato;
 	}
@@ -1961,5 +2022,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 
 	public void setFechaCierre(Date fechaCierre) {
 		this.fechaCierre = fechaCierre;
+	}
+
+	public ReciboFormaPago getSelectedRecaudacionMra() {
+		return selectedRecaudacionMra;
+	}
+
+	public void setSelectedRecaudacionMra(ReciboFormaPago selectedRecaudacionMra) {
+		this.selectedRecaudacionMra = selectedRecaudacionMra;
 	}
 }

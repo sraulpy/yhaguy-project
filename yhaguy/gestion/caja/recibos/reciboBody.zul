@@ -9,7 +9,7 @@
 					<field value="Número" />
 					<textbox value="@bind(vm.dato.reciboDTO.numero)" 
 						hflex="true" 
-						readonly="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')"
+						readonly="@load((vm.dato.reciboDTO.cobro and !vm.dato.reciboDTO.recaudacionMra) ? 'false' : 'true')"
 						visible="@load(vm.dato.reciboDTO.cobro ? 'true' : 'false')" />
 					<textbox value="@bind(vm.dato.reciboDTO.numero)" 
 						hflex="true" 
@@ -92,7 +92,7 @@
 				</cell>
 				<hlayout valign="top">
 					<vlayout spacing="0"
-						visible="@load(!vm.pendienteCobro)">
+						visible="@load(!vm.pendienteCobro and !vm.dato.reciboDTO.recaudacionMra)">
 						<field value="Anticipo" />
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.anticipo)"
@@ -105,29 +105,30 @@
 							checked="@bind(vm.dato.reciboDTO.pendienteCobro)"
 							onCheck="@command('checkPendienteCobro')" />
 					</vlayout>
-					<space />
+					<space visible="@load(!vm.dato.reciboDTO.recaudacionMra)" />
 					<vlayout spacing="0"
 						visible="@load((vm.dato.cobro) and (!vm.anticipo))">
 						<field value="Otra Suc."/>
 						<checkbox
-							checked="@bind(vm.dato.reciboDTO.cobroExterno)" />
+							checked="@bind(vm.dato.reciboDTO.cobroExterno)" 
+							disabled="@load(vm.dato.reciboDTO.recaudacionMra)" />
 					</vlayout>
 					<space></space>
 					<vlayout spacing="0"
-						visible="@load((vm.dato.cobro) and (!vm.anticipo))">
+						visible="@load((vm.dato.cobro) and (!vm.anticipo) and (!vm.dato.reciboDTO.recaudacionMra))">
 						<field value="Saldo a Pagar"/>
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.saldodeudor)" />
 					</vlayout>
 					<space></space>
 					<vlayout spacing="0"
-						visible="@load((!vm.dato.cobro) and (!vm.anticipo))">
+						visible="@load((!vm.dato.cobro) and (!vm.anticipo) and (!vm.dato.reciboDTO.recaudacionMra))">
 						<field value="Saldo a Cobrar"
 							tooltiptext="Ej: para casos de emisión de cheques contra cuenta (otros deudores)" />
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.saldoAcobrar)" />
 					</vlayout>
-				</hlayout>				
+				</hlayout>			
 				<hlayout>				
 					<label
 						value="@load(vm.dato.reciboDTO.tipoMovimiento.pos1.toUpperCase())"
@@ -176,13 +177,15 @@
 					hflex="true" iconSclass="z-icon-plus-circle"
 					label=" Dif. T.C." tooltiptext="Diferencia por Tipo de Cambio.."
 					onClick="@command('openDiferenciaCambio', comp=pop_dif_tc, parent=self)" 
-					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" />
+					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" 
+					visible="@load(!vm.dato.reciboDTO.recaudacionMra)" />
 				<button mold="bs" sclass="btn-primary btn-sm"
 					hflex="true" iconSclass="z-icon-plus-circle"
 					label=" Cuenta C.T." tooltiptext="Cta Contable.."
 					onClick="@command('openCuentaContable', comp=pop_ct, parent=self)" 
 					disabled="@load(vm.dato.reciboDTO.esNuevo() ? 'false' : 'true')" 
-					visible="@load(vm.dato.reciboDTO.ordenPago ? 'true' : vm.dato.reciboDTO.cobro ? 'true' : 'false')" />
+					visible="@load(vm.dato.reciboDTO.ordenPago ? 'true' : 
+						vm.dato.reciboDTO.cobro ? (vm.dato.reciboDTO.recaudacionMra ? 'false' : 'true') : 'false')" />
 			</hlayout>
 
 			<listbox height="355px"

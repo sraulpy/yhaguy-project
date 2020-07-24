@@ -85,12 +85,12 @@
 			id="botonera">
 			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
-				onClick="@command('abrirVentanaRecibo', tipo=4)"
+				onClick='popCobros.open(self, "after_start")'
 				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Cobro" />
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Reembolsos" 
-				onClick='popReembolso.open(self)'/>
+				onClick='popReembolso.open(self, "after_start")'/>
 			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('abrirVentanaReposicion', tipo=2)"
@@ -249,6 +249,19 @@
 				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 					disabled="@load(!vm.dto.caja.cobro)" label="Préstamos"
 					onClick="@command('abrirVentanaRecibo', tipo=10)" />
+			</vlayout>
+		</popup>
+		
+		<popup id="popCobros" width="200px" sclass="rounded">
+			<vlayout>
+				<button mold="bs" sclass="btn-primary btn-sm"
+					hflex="true" disabled="@load(!vm.dto.caja.cobro)"
+					label="Cobro"
+					onClick="@command('abrirVentanaRecibo', tipo=4)" />
+				<div height="5px"></div>
+				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
+					disabled="@load(!vm.dto.caja.cobro)" label="Recaudación M.R.A"
+					onClick="@command('abrirVentanaRecaudacionMRA', tipo=4)" />
 			</vlayout>
 		</popup>
 

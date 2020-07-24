@@ -94,6 +94,17 @@ public class CajaPlanillaResumen extends Domain {
 	}
 	
 	/**
+	 * @return el total en cheque recaudacion mra..
+	 */
+	public double getResumenRecaudacionMra() {
+		double out = 0;
+		for (CajaPeriodo planilla : this.planillas) {
+			out += planilla.getTotalRecaudacionMra();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return el total en cheque al dia..
 	 */
 	public double getResumenChequeAlDia() {

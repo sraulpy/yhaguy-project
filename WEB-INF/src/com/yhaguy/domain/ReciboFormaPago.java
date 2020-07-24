@@ -189,6 +189,14 @@ public class ReciboFormaPago extends Domain {
 	}
 	
 	/**
+	 * @return true si es recaudacion mra..
+	 */
+	public boolean isRecaudacionMra() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA);
+	}
+	
+	/**
 	 * @return true si es transferencia casa central..
 	 */
 	public boolean isTransferenciaCentral() {
