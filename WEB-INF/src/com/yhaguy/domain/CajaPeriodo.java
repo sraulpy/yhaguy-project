@@ -163,6 +163,14 @@ public class CajaPeriodo extends Domain {
 				}
 			}			
 		}
+		for (Recibo cobro : this.recibos) {
+			if(cobro.isCobroAnticipo() && !cobro.isAnulado()) {
+				for (ReciboFormaPago fp : cobro.getFormasPago()) {
+					if(fp.isEfectivo() && fp.isMonedaLocal())
+						out += fp.getMontoGs();
+				}
+			}			
+		}
 		for (CajaReposicion rep : this.reposiciones) {
 			if(rep.isIngreso() && !rep.isAnulado()) {
 				if(rep.getFormaPago().isEfectivo())
@@ -201,6 +209,14 @@ public class CajaPeriodo extends Domain {
 				}
 			}			
 		}
+		for (Recibo cobro : this.recibos) {
+			if(cobro.isCobroAnticipo() && !cobro.isAnulado()) {
+				for (ReciboFormaPago fp : cobro.getFormasPago()) {
+					if(fp.isEfectivo() && !fp.isMonedaLocal())
+						out += fp.getMontoDs();
+				}
+			}			
+		}
 		return out;
 	}
 	
@@ -225,7 +241,7 @@ public class CajaPeriodo extends Domain {
 		for (CajaReposicion rep : this.reposiciones) {
 			if (!rep.isIngreso() && !rep.isAnulado()) {
 				if(rep.getFormaPago().isEfectivo())
-					out -= rep.getFormaPago().getMontoGs();
+					out += rep.getFormaPago().getMontoGs();
 			}
 		}
 		for (NotaCredito nc : this.notasCredito) {
