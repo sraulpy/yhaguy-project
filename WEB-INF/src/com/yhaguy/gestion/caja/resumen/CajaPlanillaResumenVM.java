@@ -559,9 +559,9 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 				for (BancoChequeTercero cheque : dep.getCheques()) {
 					int length = cheque.getBanco().getDescripcion().length();
 					this.dets.add(new MyArray("DEPÓSITOS DIFERIDOS",
-							"DEP.NRO." + dep.getNumeroBoleta() + " - CH.NRO." + cheque.getNumero() + " " + Utiles.getDateToString(cheque.getFecha(), "dd/MM/yy")
+							"DEP.NRO." + dep.getNumeroBoleta() + " " + dep.getNroCuenta().getBancoDescripcion() + " - CH.NRO." + cheque.getNumero() + " " + Utiles.getDateToString(cheque.getFecha(), "dd/MM/yy")
 							+ " " + cheque.getBanco().getDescripcion().toUpperCase().substring(0, length >= 6 ? 6 : length) + ".. "
-							+ " REC." + cheque.getNumeroRecibo().replace("001-001-", "")
+							+ " REC." + cheque.getNumeroRecibo().replace("001-001-", "").replace("002-002-", "")
 							+ " CAJ." + cheque.getNumeroPlanilla().substring(0, 9).replace("CJP-", ""), 
 							cheque.getMonto(),
 							resumen.getTotalDepositosDiferidos()));

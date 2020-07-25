@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumenCajaPlanilla" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.4641000000000033"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="4"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -136,7 +136,7 @@
 		<band height="15" splitType="Stretch">
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="466" height="15" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
-				<textField isStretchWithOverflow="true">
+				<textField>
 					<reportElement style="Detail" x="0" y="0" width="466" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
 					<textElement verticalAlignment="Middle">
 						<font size="8" pdfFontName="Courier" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
