@@ -456,6 +456,9 @@
 			
 				<hbox hflex="true">
 				<vbox hflex="2">
+				
+				<hlayout>
+				<vlayout>
 				<div
 					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<a sclass="title" onClick='pop_val_bat.open(self, "after_start"); tx_filter_val_bat.focus()'>REEMBOLSOS VALORES BATERÍAS</a>
@@ -485,11 +488,12 @@
 					<space></space>
 					<field>Gs.</field>
 					<field value="@load(vm.selectedResumen_.totalDepositosValoresBat) @converter('formattedNumber', format='###,###,##0')" />
-				</hlayout>
+				</hlayout>				
+				</vlayout>
 				
-				
+				<vlayout>
 				<div
-					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					style="margin:8px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<label sclass="title">PRESTAMOS CASA CENTRAL (CHEQUE AL DÍA)</label>
 				</div>
 				<hlayout visible="@load(vm.selectedResumen_.chequesAlDiaPrestamoCC.size() eq 0)">
@@ -511,16 +515,20 @@
 						</hlayout>
 					</template>
 				</vlayout>
+				</vlayout>
+				</hlayout>
 				
+				<hlayout valign="top">
+				<vlayout>
 				<div
-					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					style="margin:5px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<label sclass="title">DEPÓSITOS CHEQUES DIFERIDOS</label>
 				</div>
 				<hlayout visible="@load(vm.selectedResumen_.depositos_diferidos.size() eq 0)">
 					<space></space>
 					<label style="font-style:italic">...</label>
 				</hlayout>
-				<vlayout children="@load(vm.selectedResumen_.depositos_diferidos)" spacing="0">
+				<vlayout children="@load(vm.selectedResumen_.depositos_diferidos)" spacing="0" vflex="true" style="overflow:auto">
 					<template name="children">
 						<hlayout>
 							<space></space>
@@ -541,8 +549,10 @@
 					<space></space>
 					<field>Gs.</field>
 					<field value="@load(vm.selectedResumen_.totalDepositosDiferidos) @converter('formattedNumber', format='###,###,##0')" />
-				</hlayout>		
+				</hlayout>	
+				</vlayout>	
 				
+				<vlayout>
 				<div
 					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<label sclass="title">DEPÓSITOS GENERADOS</label>
@@ -551,7 +561,7 @@
 					<space></space>
 					<label style="font-style:italic">...</label>
 				</hlayout>				
-				<vlayout children="@load(vm.selectedResumen_.depositos_generados)" spacing="0">
+				<vlayout children="@load(vm.selectedResumen_.depositos_generados)" spacing="0" vflex="true" style="overflow:auto">
 					<template name="children">
 						<hlayout>
 							<space></space>
@@ -587,6 +597,8 @@
 						+ vm.selectedResumen_.resumenTransferenciasBancarias
 						+ vm.selectedResumen_.resumenChequeAlDiaPrestamoCC
 						+ vm.selectedResumen_.totalDepositosDiferidos) @converter('formattedNumber', format='###,###,##0')" />
+				</hlayout>
+				</vlayout>
 				</hlayout>
 				</vbox>
 				<listbox sclass="small-list" hflex="1"
