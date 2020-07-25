@@ -1081,11 +1081,11 @@
 				<listfoot>
 					<listfooter span="5">
 						<hlayout>
-							<field value="Total:" />
+							<field value="Total Gs:" />
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
 								readonly="true" hflex="true"
-								value="@load(vm.selectedResumen_.resumenEfectivo + vm.selectedResumen_.totalCheques)"/>
+								value="@load(vm.selectedResumen_.resumenEfectivo + vm.selectedResumen_.totalChequesGs)"/>
 							<space />
 							<field value="Efectivo:" />
 							<guaranibox
@@ -1099,7 +1099,7 @@
 								readonly="true" hflex="true"
 								value="@load(vm.selectedResumen_.totalChequesGs)"/>
 							<space />
-							<field value="Cheque U$s:" />
+							<field value="Cheque U$D:" />
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
 								readonly="true" hflex="true" 
