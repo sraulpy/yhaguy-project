@@ -135,7 +135,7 @@
 	</listbox>
 	
 	<popup id="pop_diagrama" sclass="rounded" height="500px" width="700px">
-		<image src="/yhaguy/archivos/diagramas/caja_auditoria_v3.png" vflex="true" hflex="true"></image>
+		<image src="/yhaguy/archivos/diagramas/caja_auditoria_v4.png" vflex="true" hflex="true"></image>
 	</popup>
 	
 	<popup id="pop_saldo_inicial" sclass="rounded">
