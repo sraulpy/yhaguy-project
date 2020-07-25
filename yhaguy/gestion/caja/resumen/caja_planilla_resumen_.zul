@@ -493,7 +493,7 @@
 				
 				<vlayout>
 				<div
-					style="margin:8px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					style="margin:6px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<label sclass="title">PRESTAMOS CASA CENTRAL (CHEQUE AL DÍA)</label>
 				</div>
 				<hlayout visible="@load(vm.selectedResumen_.chequesAlDiaPrestamoCC.size() eq 0)">
@@ -554,7 +554,7 @@
 				
 				<vlayout>
 				<div
-					style="margin:10px 10px 5px 10px;border-bottom: solid 1px #428bca">
+					style="margin:6px 10px 5px 10px;border-bottom: solid 1px #428bca">
 					<label sclass="title">DEPÓSITOS GENERADOS</label>
 				</div>
 				<hlayout visible="@load(vm.selectedResumen_.depositos_generados.size() eq 0)">
