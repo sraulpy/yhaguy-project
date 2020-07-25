@@ -11729,7 +11729,7 @@ public class RegisterDomain extends Register {
 		String query = "select 'EFECTIVO', g.fecha, g.cajaPagoNumero, g.importeGs, g.numeroFactura, g.tipoMovimiento.descripcion, '',"
 				+ " g.proveedor.empresa.razonSocial"
 				+ " from Gasto g "
-				+ " where g.cajaPagoNumero != '- - -'" 
+				+ " where g.cajaPagoNumero != '- - -' and g.numeroOrdenPago = '- - -'" 
 				+ " and g.fecha >= '" + desde_ + "' and g.fecha <= '"
 				+ hasta_ + "'"
 				+ " and upper(g.cajaPagoNumero) like '%" + caja.toUpperCase() + "%'";
