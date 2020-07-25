@@ -11796,9 +11796,6 @@ public class RegisterDomain extends Register {
 	 * [7]: descripcion
 	 */
 	public List<Object[]> getEfectivoDepositos(Date desde, Date hasta, String caja) throws Exception {
-		if (!caja.trim().isEmpty()) {
-			return new ArrayList<Object[]>();
-		}
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select 'EFECTIVO', b.fecha, b.planillaCaja, b.totalEfectivo, b.numeroBoleta, 'DEPOSITO EFECTIVO', '',"
@@ -11899,9 +11896,6 @@ public class RegisterDomain extends Register {
 	 * [7]: descripcion
 	 */
 	public List<Object[]> getChequeDepositos(Date desde, Date hasta, String caja) throws Exception {
-		if (!caja.trim().isEmpty()) {
-			return new ArrayList<Object[]>();
-		}
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select 'CHEQUE', b.fecha, b.planillaCaja, c.monto, b.numeroBoleta, 'DEPOSITO CHEQUE', c.numero,"
