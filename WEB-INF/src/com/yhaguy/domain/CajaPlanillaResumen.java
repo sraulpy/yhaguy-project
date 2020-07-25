@@ -448,6 +448,32 @@ public class CajaPlanillaResumen extends Domain {
 	}
 	
 	/**
+	 * @return el total de cheques gs..
+	 */
+	public double getTotalChequesGs() throws Exception {
+		double out = 0;
+		for (BancoChequeTercero cheque : this.getCheques()) {
+			if (cheque.isMonedaLocal()) {
+				out += cheque.getMonto();
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * @return el total de cheques ds..
+	 */
+	public double getTotalChequesDs() throws Exception {
+		double out = 0;
+		for (BancoChequeTercero cheque : this.getCheques()) {
+			if (!cheque.isMonedaLocal()) {
+				out += cheque.getMonto();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return las transferencias bancarias..
 	 */
 	public List<ReciboFormaPago> getTransferenciasBancarias() {

@@ -1034,7 +1034,7 @@
 	<!-- CONFIRMAR RECAUDACION -->
 	
 	<popup id="pop_recaud" sclass="rounded">
-		<vlayout height="400px" width="800px">
+		<vlayout height="400px" width="900px">
 			<grid sclass="vgrid">
 				<rows>
 					<row>
@@ -1060,13 +1060,14 @@
 			<listbox sclass="small-list" vflex="true" emptyMessage="SIN CHEQUES AL DÍA.."
 				model="@load(vm.selectedResumen_.cheques)">
 				<auxhead>
-					<auxheader colspan="4" label="Cheques al día y diferidos" align="center"></auxheader>
+					<auxheader colspan="5" label="Cheques al día y diferidos" align="center"></auxheader>
 				</auxhead>
 				<listhead>
 					<listheader label="Fecha"></listheader>
 					<listheader label="Banco"></listheader>
 					<listheader label="Número"></listheader>
-					<listheader label="Monto Gs." align="right"></listheader>
+					<listheader label="Monto" align="right"></listheader>
+					<listheader label="Mon." width="50px" align="center"></listheader>
 				</listhead>
 				<template name="model">
 					<listitem>
@@ -1074,37 +1075,44 @@
 						<listcell label="@load(each.banco.descripcion.toUpperCase())"/>
 						<listcell label="@load(each.numero)"/>
 						<listcell label="@load(each.monto) @converter(vm.cnv.monedaLocal)"/>
+						<listcell label="@load(each.moneda.sigla)"/>
 					</listitem>
 				</template>
 				<listfoot>
-					<listfooter span="4">
+					<listfooter span="5">
 						<hlayout>
 							<field value="Total:" />
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
-								readonly="true" 
+								readonly="true" hflex="true"
 								value="@load(vm.selectedResumen_.resumenEfectivo + vm.selectedResumen_.totalCheques)"/>
 							<space />
 							<field value="Efectivo:" />
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
-								readonly="true" 
+								readonly="true" hflex="true"
 								value="@load(vm.nvoDeposito.totalEfectivo)"/>
 							<space />
-							<field value="Cheque:" />
+							<field value="Cheque Gs:" />
 							<guaranibox
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
-								readonly="true" 
-								value="@load(vm.selectedResumen_.totalCheques)"/>
+								readonly="true" hflex="true"
+								value="@load(vm.selectedResumen_.totalChequesGs)"/>
 							<space />
-							<field value="Rec. M.R.A:" />
-							<guaranibox readonly="true"
+							<field value="Cheque U$s:" />
+							<guaranibox
+								style="background:#EEF7FA;text-align:right;font-weight:bold"
+								readonly="true" hflex="true" 
+								value="@load(vm.selectedResumen_.totalChequesDs)"/>
+							<space />
+							<field value="Rec.MRA:" />
+							<guaranibox readonly="true" hflex="true"
 								style="background:#EEF7FA;text-align:right;font-weight:bold"
 								value="@load(vm.selectedResumen_.resumenRecaudacionMra)" />
-							<space hflex="true" />
+							<space />
 							<button mold="bs"
 								sclass="btn-success btn-sm"
-								iconSclass="z-icon-check" width="80px"
+								iconSclass="z-icon-check" hflex="true"
 								onClick="@command('confirmarRecaudacion', comp=pop_recaud)"
 								disabled="@load(vm.selectedResumen_.confirmado)"/>
 						</hlayout>
