@@ -11801,7 +11801,7 @@ public class RegisterDomain extends Register {
 		}
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select 'EFECTIVO', b.fecha, '', b.totalEfectivo, b.numeroBoleta, 'DEPOSITO EFECTIVO', '',"
+		String query = "select 'EFECTIVO', b.fecha, b.planillaCaja, b.totalEfectivo, b.numeroBoleta, 'DEPOSITO EFECTIVO', '',"
 				+ " concat(b.nroCuenta.banco.descripcion, ' - ', b.nroCuenta.nroCuenta)"
 				+ " from BancoBoletaDeposito b"
 				+ " where b.totalEfectivo > 0" 
@@ -11903,7 +11903,7 @@ public class RegisterDomain extends Register {
 		}
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select 'CHEQUE', b.fecha, '', c.monto, b.numeroBoleta, 'DEPOSITO CHEQUE', c.numero,"
+		String query = "select 'CHEQUE', b.fecha, b.planillaCaja, c.monto, b.numeroBoleta, 'DEPOSITO CHEQUE', c.numero,"
 				+ " concat(c.banco.descripcion, ' - ', c.librado)"
 				+ " from BancoBoletaDeposito b join b.cheques c where"
 				+ " b.fecha >= '" + desde_ + "' and b.fecha <= '"
