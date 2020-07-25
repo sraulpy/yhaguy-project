@@ -11806,7 +11806,8 @@ public class RegisterDomain extends Register {
 				+ " from BancoBoletaDeposito b"
 				+ " where b.totalEfectivo > 0" 
 				+ " and b.fecha >= '" + desde_ + "' and b.fecha <= '"
-				+ hasta_ + "'";
+				+ hasta_ + "'"
+				+ " and upper(b.planillaCaja) like '%" + caja.toUpperCase() + "%'";
 		return this.hql(query);
 	}
 	
@@ -11907,7 +11908,8 @@ public class RegisterDomain extends Register {
 				+ " concat(c.banco.descripcion, ' - ', c.librado)"
 				+ " from BancoBoletaDeposito b join b.cheques c where"
 				+ " b.fecha >= '" + desde_ + "' and b.fecha <= '"
-				+ hasta_ + "'";
+				+ hasta_ + "'"
+				+ " and upper(b.planillaCaja) like '%" + caja.toUpperCase() + "%'";
 		return this.hql(query);
 	}
 	
