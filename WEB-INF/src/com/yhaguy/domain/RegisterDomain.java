@@ -11771,6 +11771,30 @@ public class RegisterDomain extends Register {
 	 * [6]: chequeNro
 	 * [7]: descripcion
 	 */
+	public List<Object[]> getReposicionCajaChica(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', c.fechaEmision, c.numeroPlanilla, c.montoGs, c.numero, 'REPOSICION C.CHICA', '',"
+				+ " c.observacion"
+				+ " from CajaReposicion c "
+				+ " where c.tipo.sigla = '" + Configuracion.SIGLA_CAJA_REPOSICION_INGRESO + "'" 
+				+ " and c.fechaEmision >= '" + desde_ + "' and c.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(c.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
 	public List<Object[]> getEfectivoDepositos(Date desde, Date hasta, String caja) throws Exception {
 		if (!caja.trim().isEmpty()) {
 			return new ArrayList<Object[]>();
