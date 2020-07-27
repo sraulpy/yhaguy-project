@@ -8141,7 +8141,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, 0, idCliente, incluirAnticipos, true);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, 0, idCliente, incluirAnticipos, false);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LISTADO_COBRANZAS;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -11177,7 +11177,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			Object[] formato = filtro.getFormato();	
 			
 			long idSucursal = suc != null ? suc.getId() : 0;			
-			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false, true);
+			List<Recibo> recibos = rr.getCobranzas(desde, hasta, idSucursal, 0, false, false);
 		
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_DETALLADO;
 			Map<String, Object> params = new HashMap<String, Object>();

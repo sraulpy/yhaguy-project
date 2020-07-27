@@ -138,7 +138,7 @@
 		<image src="/yhaguy/archivos/diagramas/caja_auditoria_v5.png" vflex="true" hflex="true"></image>
 	</popup>
 	
-	<popup id="pop_saldo_inicial" sclass="rounded" >
+	<popup id="pop_saldo_inicial" sclass="rounded">
 		<grid sclass="vgrid" width="400px" style="margin:10px">
 			<columns>
 				<column width="25%"></column>
