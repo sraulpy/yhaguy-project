@@ -20,7 +20,6 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.CierreDocumento;
-import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.RegisterDomain;
@@ -93,7 +92,8 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		}
 
 		if (this.isNotaCreditoVenta()) {
-			this.buscarNotasCredito(filtro, posFiltro);
+			Clients.showNotification("Favor consultar con Sistemas anulaciones de Notas de Crédito..");
+			//this.buscarNotasCredito(filtro, posFiltro);
 		}
 
 		if (this.isNotaRemision()) {
@@ -164,6 +164,7 @@ public class AnulacionesViewModel extends SimpleViewModel {
 	/**
 	 * busqueda de las notas de credito..
 	 */
+	/**
 	private void buscarNotasCredito(String filtro, int posFiltro) throws Exception {
 		BuscarElemento b = new BuscarElemento();
 		b.setClase(NotaCredito.class);
@@ -180,7 +181,7 @@ public class AnulacionesViewModel extends SimpleViewModel {
 		if (b.isClickAceptar()) {
 			this.selectedMovimiento = b.getSelectedItem();
 		}
-	}
+	}**/
 
 	/**
 	 * busqueda de las transferencias..
