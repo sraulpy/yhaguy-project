@@ -1266,7 +1266,9 @@ public class CajaPeriodo extends Domain {
 		Collections.sort(out, new Comparator<Gasto>() {
 			@Override
 			public int compare(Gasto o1, Gasto o2) {
-				return o1.getNumeroFactura().compareTo(o2.getNumeroFactura());
+				Date fecha1 = o1.getFecha();
+				Date fecha2 = o2.getFecha();
+				return fecha1.compareTo(fecha2);
 			}
 		});
 		return out;
