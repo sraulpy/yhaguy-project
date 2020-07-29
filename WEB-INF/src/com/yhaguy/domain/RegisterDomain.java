@@ -5744,7 +5744,7 @@ public class RegisterDomain extends Register {
 	 * [4]: idVendedor
 	 */
 	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta, long idVendedor, long idSucursal) throws Exception {
-		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true, true);
+		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true, false);
 		List<Object[]> out = new ArrayList<Object[]>();
 
 		for (Recibo recibo : cobros) {
