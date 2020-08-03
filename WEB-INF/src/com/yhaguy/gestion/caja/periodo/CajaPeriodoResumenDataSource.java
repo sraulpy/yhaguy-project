@@ -82,6 +82,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalAnticipoEfectivo = 0;
 	double totalPagosEfectivo = 0;
 	double totalRecaudacionMra = 0;
+	double totalCanjeDocumentos = 0;
 
 	public CajaPeriodoResumenDataSource(CajaPeriodo planilla) {
 		try {
@@ -565,6 +566,19 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 									item[1], "RECAUDACION M.R.A.", this.totalRecaudacionMra);
 							this.values.add(my);
 						}
+					}
+				}
+			}
+			
+			// cobranzas canje documentos..
+			for (Recibo cobro : planilla.getRecibosOrdenado()) {
+				for (ReciboFormaPago rfp : cobro.getFormasPago()) {
+					if (rfp.isCanjeDocumentos()) {
+						this.totalCanjeDocumentos += rfp.getMontoGs();
+						MyArray my = new MyArray(cobro.getTipoMovimiento().getDescripcion(),
+								rfp.getDescripcion().toUpperCase(), rfp.getMontoGs(),
+								"CANJE DE DOCUMENTOS", this.totalCanjeDocumentos);
+						this.values.add(my);
 					}
 				}
 			}
