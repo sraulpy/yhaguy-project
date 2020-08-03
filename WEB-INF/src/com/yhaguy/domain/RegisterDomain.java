@@ -11691,7 +11691,8 @@ public class RegisterDomain extends Register {
 				+ " n.cliente.empresa.razonSocial"
 				+ " from NotaCredito n "
 				+ " where n.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')" 
-				+ " and n.auxi = '" + NotaCredito.NCR_CONTADO + "'" 
+				+ " and n.auxi = '" + NotaCredito.NCR_CONTADO + "'"
+				+ " and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'" 
 				+ " and n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '"
 				+ hasta_ + "'"
 				+ " and upper(n.planillaCajaNro) like '%" + caja.toUpperCase() + "%'";
