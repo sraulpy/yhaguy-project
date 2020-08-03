@@ -673,13 +673,11 @@ public class Utiles {
     }
 	
 	public static void main(String[] args) {
-		Date hoy = new Date();
-		Date test;
-		try {
-			test = Utiles.getFecha("01-08-2019 00:00:00");
-			System.out.println(Utiles.diasEntreFechas(test, hoy));	
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
+		double total = 7172728403.0;
+		double uno = 712902;
+		double porc = Utiles.obtenerPorcentajeDelValor(uno, total);
+		System.out.println(porc);
+		System.out.println(Utiles.obtenerValorDelPorcentaje(3700000000.0, porc));
+	
 	}
 }

@@ -14,6 +14,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.gmaps.Gmaps;
 import org.zkoss.gmaps.Gmarker;
+import org.zkoss.gmaps.Gpolygon;
 import org.zkoss.gmaps.event.MapMouseEvent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -46,6 +47,7 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 	
 	private boolean open = false;
 	private boolean registrarUbicacion = false;
+	private boolean poligono = false;
 	
 	private String razonSocial = "";
 	private String razonSocial_ = "";
@@ -285,6 +287,35 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * renderiza el poligono..
+	 */
+	@Command
+	public void poligono(@BindingParam("map") Gmaps map) {
+		if (this.poligono == true) {
+			return;			
+		}
+		Gpolygon myPoly = new Gpolygon();
+		myPoly.setPath(
+				"-25.19335,-57.462371,-25.393613,-57.304321,-25.505043,-57.359938,-25.503765,-57.444267,-25.495857,-57.551365,-25.429733,-57.535202,-25.3427201,-57.4889505,-25.287446,-57.530675,-25.19335,-57.462371");
+		myPoly.setColor("#2b83b2");
+		myPoly.setFillColor("#aacde0");
+		Gpolygon myPoly2 = new Gpolygon();
+		myPoly2.setPath(
+				"-25.287446,-57.530675,-25.3427201,-57.4889505,-25.429733,-57.535202,-25.429898,-57.556581,-25.415241,-57.579975,-25.363719,-57.628265,-25.287446,-57.530675");
+
+		Gpolygon myPoly3 = new Gpolygon();
+		myPoly3.setPath(
+				"-25.19335,-57.462371,-25.287446,-57.530675,-25.363719,-57.628265,-25.295694,-57.661256,-25.252336,-57.591658,-25.107872,-57.496147,-25.19335,-57.462371");
+		myPoly3.setColor("#ff0000");
+		myPoly3.setFillColor("#ff9999");
+
+		map.appendChild(myPoly);
+		map.appendChild(myPoly2);
+		map.appendChild(myPoly3);
+		this.poligono = true;
+	}
+	
+	/**
 	 * genera el reporte de clientes pendientes de localizar..
 	 */
 	private void reportePendientesLocalizacion() throws Exception {
@@ -501,6 +532,14 @@ public class GeolocalizacionViewModel extends SimpleViewModel {
 
 	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
+	}
+
+	public boolean isPoligono() {
+		return poligono;
+	}
+
+	public void setPoligono(boolean poligono) {
+		this.poligono = poligono;
 	}
 }
 

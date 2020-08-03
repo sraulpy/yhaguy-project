@@ -191,15 +191,16 @@
 		<center>
 			<div id="dv_mapa" sclass="rounded" vflex="true" hflex="true"
 				onLater="@command('clearProgress')">
-				<gmaps version="3.26" hflex="true" lat="-25.3054494"
+				<gmaps id="map" version="3.26" hflex="true" lat="-25.3054494"
 					lng="-57.5351386" zoom="12" vflex="true" showSmallCtrl="true"
 					children="@load(vm.empresas_)" protocol="https"
-					onMapDoubleClick="@command('getCoordenadas', map=self, ref=bndCli_)">
+					onMapDoubleClick="@command('getCoordenadas', map=self, ref=bndCli_)"					
+					onMapClick="@command('poligono', map=self)">
 					<template name="children">
 						<gmarker lat="@load(each.latitud)"
 							lng="@load(each.longitud)" open="@load(vm.selectedEmpresa eq null? 'false':'true')"
 							iconImage="@load(each.iconoZona)" content="@load(each.razonSocial)"
-							tooltip="@load(each.id)" />
+							tooltip="@load(each.id)" />						
 					</template>
 				</gmaps>
 				<vlayout children="@load(vm.empresas_)">

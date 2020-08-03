@@ -7648,7 +7648,11 @@ public class RegisterDomain extends Register {
 	public double getCostoPromedio(long idArticulo, Date fecha) throws Exception {
 		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select a from ArticuloCosto a where a.articulo.id = " + idArticulo
-				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
+				+ " and a.fechaCompra <= '" + fecha_ + "'";
+		if (fecha.after(Utiles.getFecha("01-07-2020 00:00:00"))) {
+			query += " and a.costoFinalGs > 0";
+		}
+				query += " order by a.fechaCompra desc";
 		List<ArticuloCosto> list = this.hql(query);
 		if (list.size() > 0) {
 			double out = 0;
@@ -8214,7 +8218,11 @@ public class RegisterDomain extends Register {
 	public List<ArticuloCosto> getArticuloCostos(long idArticulo, Date fecha) throws Exception {
 		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select a from ArticuloCosto a where a.articulo.id = " + idArticulo
-				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
+				+ " and a.fechaCompra <= '" + fecha_ + "'";
+		if (fecha.after(Utiles.getFecha("01-07-2020 00:00:00"))) {
+			query += " and a.costoFinalGs > 0";
+		}
+				query += " order by a.fechaCompra desc";
 		List<ArticuloCosto> list = this.hql(query);
 		return list;
 	}
@@ -8227,7 +8235,11 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getArticuloCostos_(long idArticulo, Date fecha) throws Exception {
 		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select a.id, a.costoFinalGs from ArticuloCosto a where a.articulo.id = " + idArticulo
-				+ " and a.fechaCompra <= '" + fecha_ + "' order by a.fechaCompra desc";
+				+ " and a.fechaCompra <= '" + fecha_ + "'";
+				if (fecha.after(Utiles.getFecha("01-07-2020 00:00:00"))) {
+					query += " and a.costoFinalGs > 0";
+				}
+				query += " order by a.fechaCompra desc";
 		List<Object[]> list = this.hql(query);
 		return list;
 	}
