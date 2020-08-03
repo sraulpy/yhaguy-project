@@ -462,7 +462,7 @@
 						<listcell />
 						<listcell>
 							<label
-								value="@load(vm.concat(each.articulo.pos1, each.articulo.pos2))"
+								value="@load(each.articulo.pos2)"
 								tooltiptext="@load(vm.concat(each.articulo.pos1, each.articulo.pos2))"
 								maxlength="45" />
 						</listcell>
