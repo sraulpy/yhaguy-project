@@ -3523,11 +3523,13 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			double mayoristaGs = item.getPrecioFinalGs();
 			double minoristaGs = item.getMinoristaGs();
 			double listaGs = item.getListaGs();
+			double transportadoraGs = item.getTransportadoraGs();
 			Articulo art = rr.getArticuloById(idArticulo);
 			art.setFechaUltimaCompra(new Date());
 			art.setCantUltimaCompra(item.getCantidad());
 			rr.saveObject(art, this.getLoginNombre());
-			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, this.getLoginNombre());
+			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, transportadoraGs,
+					this.getLoginNombre());
 		}
 		
 		this.actualizarCtaCte();

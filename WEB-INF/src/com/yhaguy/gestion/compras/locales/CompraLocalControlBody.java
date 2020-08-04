@@ -982,7 +982,7 @@ public class CompraLocalControlBody extends BodyApp {
 			art.setFechaUltimaCompra(this.dto.getFactura().getFechaOriginal());
 			art.setCantUltimaCompra(item.getCantidad());
 			rr.saveObject(art, this.getLoginNombre());
-			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, this.getLoginNombre());
+			ControlArticuloCosto.actualizarPrecio(idArticulo, mayoristaGs, minoristaGs, listaGs, 0.0, this.getLoginNombre());
 		}
 	}
 	

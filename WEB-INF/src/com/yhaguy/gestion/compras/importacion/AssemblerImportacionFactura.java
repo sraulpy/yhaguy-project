@@ -52,22 +52,21 @@ public class AssemblerImportacionFactura extends Assembler {
 
 class AssemblerImportacionFacturaDetalle extends Assembler {
 
-	private static String[] attIgualesImportacionFacturaDetalle = { 
-			"costoGs", "costoDs", "costoSinProrrateoGs", "costoSinProrrateoDs",
-			"textoDescuento", "descuentoGs", "descuentoDs", 
-			 "importeGastoDescuentoGs", "importeGastoDescuentoDs", "gastoDescuento", 
-			 "valorProrrateo", "cantidad", "cantidadRecibida", "precioFinalGs", "minoristaGs", "listaGs",
-			 "verificado", "conteo1", "conteo2", "conteo3", "cantidad_acum" };
-	
-	static final String[] ATT_ARTICULO = { "codigoInterno", "codigoProveedor",
-			"codigoOriginal", "descripcion", "servicio" };
+	private static String[] attIgualesImportacionFacturaDetalle = { "costoGs", "costoDs", "costoSinProrrateoGs",
+			"costoSinProrrateoDs", "textoDescuento", "descuentoGs", "descuentoDs", "importeGastoDescuentoGs",
+			"importeGastoDescuentoDs", "gastoDescuento", "valorProrrateo", "cantidad", "cantidadRecibida",
+			"precioFinalGs", "minoristaGs", "listaGs", "transportadoraGs", "verificado", "conteo1", "conteo2",
+			"conteo3", "cantidad_acum" };
+
+	static final String[] ATT_ARTICULO = { "codigoInterno", "codigoProveedor", "codigoOriginal", "descripcion",
+			"servicio" };
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {
 
 		ImportacionFacturaDetalle domain = (ImportacionFacturaDetalle) getDomain(dto, ImportacionFacturaDetalle.class);
 
-		this.copiarValoresAtributos(dto, domain,attIgualesImportacionFacturaDetalle);	
+		this.copiarValoresAtributos(dto, domain, attIgualesImportacionFacturaDetalle);
 		this.myPairToDomain(dto, domain, "tipoGastoDescuento");
 		this.myArrayToDomain(dto, domain, "articulo");
 
@@ -77,12 +76,14 @@ class AssemblerImportacionFacturaDetalle extends Assembler {
 	@Override
 	public DTO domainToDto(Domain domain) throws Exception {
 		ImportacionFacturaDetalle domain_ = (ImportacionFacturaDetalle) domain;
-		ImportacionFacturaDetalleDTO dto = (ImportacionFacturaDetalleDTO) getDTO(domain, ImportacionFacturaDetalleDTO.class);
+		ImportacionFacturaDetalleDTO dto = (ImportacionFacturaDetalleDTO) getDTO(domain,
+				ImportacionFacturaDetalleDTO.class);
 
 		this.copiarValoresAtributos(domain, dto, attIgualesImportacionFacturaDetalle);
 		this.domainToMyPair(domain, dto, "tipoGastoDescuento");
 		this.domainToMyArray(domain, dto, "articulo", ATT_ARTICULO);
-		String desc = domain_.getArticulo() != null? domain_.getArticulo().getFamilia().getDescripcion() : ArticuloFamilia.CONTABILIDAD;
+		String desc = domain_.getArticulo() != null ? domain_.getArticulo().getFamilia().getDescripcion()
+				: ArticuloFamilia.CONTABILIDAD;
 		dto.getArticulo().setPos6(desc);
 
 		return dto;

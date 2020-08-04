@@ -1338,6 +1338,9 @@
 								<listcell>
 									<guaranibox value="@bind(each.listaGs)" hflex="true" vflex="true" />
 								</listcell>
+								<listcell>
+									<guaranibox value="@bind(each.transportadoraGs)" hflex="true" vflex="true" />
+								</listcell>
 							</listitem>
 						</template>
 						<listfoot>

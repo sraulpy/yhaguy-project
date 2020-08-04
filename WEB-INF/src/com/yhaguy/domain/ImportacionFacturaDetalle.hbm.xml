@@ -27,6 +27,7 @@
 		<property name="cantidadRecibida" />
 		<property name="precioFinalGs" />
 		<property name="minoristaGs" />
+		<property name="transportadoraGs" />
 		<property name="listaGs" />
 		<property name="conteo1" />
 		<property name="conteo2" />

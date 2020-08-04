@@ -30,6 +30,7 @@ public class ImportacionFacturaDetalle extends Domain {
 	private double precioFinalGs;
 	private double minoristaGs;
 	private double listaGs;
+	private double transportadoraGs;
 	
 	private boolean verificado;
 	
@@ -260,5 +261,13 @@ public class ImportacionFacturaDetalle extends Domain {
 
 	public void setCantidad_acum(int cantidad_acum) {
 		this.cantidad_acum = cantidad_acum;
+	}
+
+	public double getTransportadoraGs() {
+		return transportadoraGs;
+	}
+
+	public void setTransportadoraGs(double transportadoraGs) {
+		this.transportadoraGs = transportadoraGs;
 	}
 }

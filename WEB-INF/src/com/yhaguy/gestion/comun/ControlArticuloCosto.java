@@ -114,13 +114,14 @@ public class ControlArticuloCosto {
 	 * actualiza el precio del articulo..
 	 */
 	public static void actualizarPrecio(long idArticulo, double mayoristaGs, double minoristaGs, double listaGs,
-			String user) throws Exception {
+			double transportadoraGs, String user) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Articulo art = rr.getArticuloById(idArticulo);
 		if (art != null) {
 			art.setPrecioGs(mayoristaGs);
 			art.setPrecioMinoristaGs(minoristaGs);
 			art.setPrecioListaGs(listaGs);
+			art.setPrecioTransportadora(transportadoraGs);
 			rr.saveObject(art, user);
 		}
 	}

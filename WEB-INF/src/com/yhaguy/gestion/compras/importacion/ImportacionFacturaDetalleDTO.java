@@ -36,6 +36,7 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 	private double precioFinalGs = 0;
 	private double minoristaGs = 0;
 	private double listaGs = 0;
+	private double transportadoraGs = 0;
 	
 	private boolean verificado = false;
 	
@@ -315,5 +316,13 @@ public class ImportacionFacturaDetalleDTO extends DTO{
 
 	public void setArticulo(MyArray articulo) {
 		this.articulo = articulo;
+	}
+
+	public double getTransportadoraGs() {
+		return transportadoraGs;
+	}
+
+	public void setTransportadoraGs(double transportadoraGs) {
+		this.transportadoraGs = transportadoraGs;
 	}
 }
