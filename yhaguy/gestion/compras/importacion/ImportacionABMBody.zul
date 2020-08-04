@@ -1321,6 +1321,7 @@
 							<listheader label="Margen %" style="text-align:center" align="right" width="100px" />
 							<listheader label="Minorista Gs." style="text-align:center" align="right" width="200px" />
 							<listheader label="Lista Gs." style="text-align:center" align="right" width="200px" />
+							<listheader label="Transportadora Gs." style="text-align:center" align="right" width="200px" />
 						</listhead>
 						<template name="model">
 							<listitem>
