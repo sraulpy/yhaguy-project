@@ -3316,8 +3316,13 @@ public class ReportesViewModel extends SimpleViewModel {
 									|| (fabrica != null && item.getArticulo().isProveedor(fabrica.getId().longValue()))) {
 								MyArray art = acum.get(item.getArticulo().getCodigoInterno());
 								if (art != null) {
-									long cantn = (long) art.getPos2();
-									art.setPos2(cantn + item.getCantidad());
+									if (art.getPos2() instanceof Integer) {
+										int cantn = (int) art.getPos2();
+										art.setPos2(cantn + item.getCantidad());
+									} else {
+										long cantn = (long) art.getPos2();
+										art.setPos2(cantn + item.getCantidad());
+									}									
 								} else {
 									art = new MyArray();
 									art.setPos1((long) 0);
