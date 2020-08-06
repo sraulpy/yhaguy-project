@@ -497,6 +497,12 @@
 								label=" ver documento" href="@load(vm.dto.auxi)"
 								target="_blank" 
 								style="font-size:10pt" />
+							<space></space>
+							<checkbox checked="@bind(vm.dto.factura.saldoAnticipadoCtaCte)"
+								disabled="@load(vm.dto.readonly or vm.dto.factura.saldoAnticipadoCtaCte)"
+								onCheck="@command('generarCtaCte')"></checkbox>
+							<label value="Generar saldo en Cta.Cte."
+								tooltiptext="Ej: Facturas que se deben pagar anticipadamente.."></label>
 							<space hflex="true"></space>
 						<field>Caja:</field>
 						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="200px" disabled="@load(!vm.siempreHabilitado)"

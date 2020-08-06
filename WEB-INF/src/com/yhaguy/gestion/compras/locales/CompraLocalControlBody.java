@@ -476,6 +476,12 @@ public class CompraLocalControlBody extends BodyApp {
 		this.sugerirPrecios_();
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void generarCtaCte() throws Exception {
+		this.generarSaldoCtaCte();
+	}
+	
 	/**
 	 * modificar el tipo de cambio..
 	 */
@@ -840,6 +846,24 @@ public class CompraLocalControlBody extends BodyApp {
 	}	
 	
 	/**
+	 * genera el saldo en cta cte..
+	 */
+	private void generarSaldoCtaCte() throws Exception {
+		CompraLocalFacturaDTO fac = this.dto.getFactura();
+		if (fac.getNumero().isEmpty() || !(fac.getDetalles().size() > 0)) {
+			this.dto.getFactura().setSaldoAnticipadoCtaCte(false);
+			Clients.showNotification("Debe completar los datos de la factura..", Clients.NOTIFICATION_TYPE_ERROR, null,
+					null, 0);
+			return;
+		}
+		if (this.mensajeSiNo("Desea generar el saldo en cta. cte.")) {
+			this.actualizarCtaCte();
+			this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
+			Clients.showNotification("Datos actualizados..!");
+		}
+	}
+	
+	/**
 	 * @return los costos finales..
 	 */
 	public List<MyArray> getItemsCostoFinal() {
@@ -947,7 +971,9 @@ public class CompraLocalControlBody extends BodyApp {
 	 */
 	private void volcarCompra() throws Exception{		
 		this.volcarStock_Costos();
-		this.actualizarCtaCte();		
+		if (!this.dto.getFactura().isSaldoAnticipadoCtaCte()) {
+			this.actualizarCtaCte();
+		}				
 	}	
 	
 	/**

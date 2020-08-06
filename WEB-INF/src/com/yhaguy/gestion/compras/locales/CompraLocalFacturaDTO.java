@@ -29,6 +29,7 @@ public class CompraLocalFacturaDTO extends DTO{
 	private double totalAsignadoDs = 0;
 	private boolean recepcionConfirmada = false;
 	private String cajaPagoNumero = "";
+	private boolean saldoAnticipadoCtaCte = false;
 	
 	private ProveedorDTO proveedor = new ProveedorDTO();
 	private MyArray condicionPago = new MyArray();
@@ -316,5 +317,13 @@ public class CompraLocalFacturaDTO extends DTO{
 
 	public void setCajaPagoNumero(String cajaPagoNumero) {
 		this.cajaPagoNumero = cajaPagoNumero;
+	}
+
+	public boolean isSaldoAnticipadoCtaCte() {
+		return saldoAnticipadoCtaCte;
+	}
+
+	public void setSaldoAnticipadoCtaCte(boolean saldoAnticipadoCtaCte) {
+		this.saldoAnticipadoCtaCte = saldoAnticipadoCtaCte;
 	}
 }
