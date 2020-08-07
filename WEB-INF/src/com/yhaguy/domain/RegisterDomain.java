@@ -12020,7 +12020,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getTarjetaCreditoVentas(Date desde, Date hasta, String caja) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select 'TARJETA CRED.', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
+		String query = "select 'TARJETA CRE.', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
 				+ " f.descripcion"
 				+ " from Venta v join v.formasPago f " + " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
 				+ Configuracion.SIGLA_FORMA_PAGO_TARJETA_CREDITO + "' and upper(v.numeroPlanillaCaja) like '%"
@@ -12042,7 +12042,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getTarjetaCreditoRecibos(Date desde, Date hasta, String caja) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select 'TARJETA CRED.', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
+		String query = "select 'TARJETA CRE.', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
 				+ " f.descripcion"
 				+ " from Recibo r join r.formasPago f "
 				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"

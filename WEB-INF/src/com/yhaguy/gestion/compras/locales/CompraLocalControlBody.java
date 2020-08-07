@@ -942,8 +942,16 @@ public class CompraLocalControlBody extends BodyApp {
 	/**
 	 * cierre de la compra..
 	 */
-	private void cerrarCompra() throws Exception {		
-		if(this.mensajeSiNo("Desea cerrar la compra..") == false)
+	private void cerrarCompra() throws Exception {
+		if (!this.dto.getFactura().isMonedaLocal()) {
+			if (this.dto.getFactura().getTipoCambio() < 5000) {
+				Clients.showNotification("DEBE INGRESAR LA COTIZACION DEL DOLAR", Clients.NOTIFICATION_TYPE_ERROR, null,
+						null, 0);
+				return;
+			}
+		}
+
+		if (this.mensajeSiNo("Desea cerrar la compra..") == false)
 			return;
 		this.dto.setReadonly();
 		this.dto.setCerrado(true);
