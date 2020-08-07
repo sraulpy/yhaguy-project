@@ -79,7 +79,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		List<Object[]> recaudacionMra = rr.getRecaudacionMra(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> reposicionCajaChica = rr.getReposicionCajaChica(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> tarjetaCreditoVentas = rr.getTarjetaCreditoVentas(this.filterDesde, this.filterHasta, this.filterCaja);
-		List<Object[]> tarjetaDebitoVentas = rr.getTarjetaCreditoVentas(this.filterDesde, this.filterHasta, this.filterCaja);
+		List<Object[]> tarjetaDebitoVentas = rr.getTarjetaDebitoVentas(this.filterDesde, this.filterHasta, this.filterCaja);
 		
 		List<Object[]> efectivoNotasCredito = rr.getEfectivoNotasCredito(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> efectivoPagos = rr.getEfectivoPagos(this.filterDesde, this.filterHasta, this.filterCaja);
