@@ -42,8 +42,8 @@
 			<listheader label="Hora" width="50px" style="text-align:center" />
 			<listheader label="Caja" width="80px" style="text-align:center" />
 			<listheader label="Concepto" width="160px" style="text-align:center" />
-			<listheader label="Número" width="150px" style="text-align:center" />
-			<listheader label="Forma Pago" width="100px" style="text-align:center" />
+			<listheader label="Número" width="130px" style="text-align:center" />
+			<listheader label="Forma Pago" width="120px" style="text-align:center" />
 			<listheader label="Cheque Nro." width="100px" style="text-align:center" />
 			<listheader label="Descripción" style="text-align:center" />
 			<listheader label="Ingreso" width="120px"
