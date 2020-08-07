@@ -12021,7 +12021,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select 'TARJETA CRED.', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
-				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " f.descripcion"
 				+ " from Venta v join v.formasPago f " + " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
 				+ Configuracion.SIGLA_FORMA_PAGO_TARJETA_CREDITO + "' and upper(v.numeroPlanillaCaja) like '%"
 				+ caja.toUpperCase() + "%'" + " and v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "'";
@@ -12043,7 +12043,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select 'TARJETA CRED.', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
-				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " f.descripcion"
 				+ " from Recibo r join r.formasPago f "
 				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"
 				+ "'" + Configuracion.SIGLA_TM_RECIBO_COBRO + "', '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "')" 
@@ -12069,7 +12069,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select 'TARJETA DEB.', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
-				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " f.descripcion"
 				+ " from Venta v join v.formasPago f " + " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
 				+ Configuracion.SIGLA_FORMA_PAGO_TARJETA_DEBITO + "' and upper(v.numeroPlanillaCaja) like '%"
 				+ caja.toUpperCase() + "%'" + " and v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "'";
@@ -12091,7 +12091,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select 'TARJETA DEB.', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
-				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " f.descripcion"
 				+ " from Recibo r join r.formasPago f "
 				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"
 				+ "'" + Configuracion.SIGLA_TM_RECIBO_COBRO + "', '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "')" 
