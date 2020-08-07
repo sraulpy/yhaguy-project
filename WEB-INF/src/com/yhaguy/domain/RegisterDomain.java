@@ -12006,6 +12006,102 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getTarjetaCreditoVentas(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'TARJETA CRED.', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
+				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " from Venta v join v.formasPago f " + " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
+				+ Configuracion.SIGLA_FORMA_PAGO_TARJETA_CREDITO + "' and upper(v.numeroPlanillaCaja) like '%"
+				+ caja.toUpperCase() + "%'" + " and v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getTarjetaCreditoRecibos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'TARJETA CRED.', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
+				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"
+				+ "'" + Configuracion.SIGLA_TM_RECIBO_COBRO + "', '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_TARJETA_CREDITO + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getTarjetaDebitoVentas(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'TARJETA DEB.', v.fecha, v.numeroPlanillaCaja, f.montoGs, v.numero, v.tipoMovimiento.descripcion, '',"
+				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " from Venta v join v.formasPago f " + " where v.estadoComprobante is null" + " and f.tipo.sigla = '"
+				+ Configuracion.SIGLA_FORMA_PAGO_TARJETA_DEBITO + "' and upper(v.numeroPlanillaCaja) like '%"
+				+ caja.toUpperCase() + "%'" + " and v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: planilla
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
+	public List<Object[]> getTarjetaDebitoRecibos(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'TARJETA DEB.', r.fechaEmision, r.numeroPlanilla, f.montoGs, r.numero, r.tipoMovimiento.descripcion, '',"
+				+ " concat(f.tarjetaTipo.descripcion, ' - ', f.tarjetaNumero)"
+				+ " from Recibo r join r.formasPago f "
+				+ " where r.tipoMovimiento.sigla in ('" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "',"
+				+ "'" + Configuracion.SIGLA_TM_RECIBO_COBRO + "', '" + Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO + "')" 
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_TARJETA_DEBITO + "'" 
+				+ " and r.fechaEmision >= '" + desde_ + "' and r.fechaEmision <= '"
+				+ hasta_ + "'"
+				+ " and upper(r.numeroPlanilla) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));
