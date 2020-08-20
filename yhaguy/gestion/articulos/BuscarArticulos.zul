@@ -190,9 +190,12 @@
 				<listheader width="60px" align="right"/>
 			</listhead>
 			<template name="model">
-				<listitem>
-					<listcell label="@load(each.pos1.toString().toUpperCase())" />
-					<listcell label="@load(each.pos2) @converter('formattedNumber', format='###,###,###')"/>
+				<listitem
+					style="@load(each.pos2 > 0? 'font-weight:bold;background:#357ebd;color:white' : '')">
+					<listcell label="@load(each.pos1.toString().toUpperCase())" 
+						style="@load(each.pos2 > 0? 'font-weight:bold;background:#357ebd;color:white' : '')" />
+					<listcell label="@load(each.pos2) @converter('formattedNumber', format='###,###,###')"
+						style="@load(each.pos2 > 0? 'font-weight:bold;background:#357ebd;color:white' : '')" />
 				</listitem>
 			</template>
 		</listbox>
