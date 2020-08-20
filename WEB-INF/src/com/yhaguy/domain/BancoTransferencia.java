@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class BancoTransferencia extends Domain {
@@ -20,6 +21,13 @@ public class BancoTransferencia extends Domain {
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
+	}
+	
+	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
 	}
 
 	public Date getFecha() {

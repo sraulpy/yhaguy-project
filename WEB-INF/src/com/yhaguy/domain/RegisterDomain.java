@@ -9173,7 +9173,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('TRANSFERENCIA BANCARIA'), "
-				+ " b.fecha, b.numero, b.importe, b.origen.banco.descripcion, concat('TRANSFERENCIA ENVIADA A BANCO: ', b.destino.banco.descripcion)"
+				+ " b.fecha, b.numero, (case when b.moneda.id = 31 then (b.importe) else (b.importe * b.tipoCambio) end), b.origen.banco.descripcion, concat('TRANSFERENCIA ENVIADA A BANCO: ', b.destino.banco.descripcion)"
 				+ " from BancoTransferencia b where"
 				+ " b.origen.id = " + idBanco
 				+ " and (b.fecha >= '"

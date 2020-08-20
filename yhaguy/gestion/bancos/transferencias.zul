@@ -18,13 +18,13 @@
 		model="@load(vm.transferencias)"
 		selectedItem="@bind(vm.selected_transferencia)">
 		<listhead>
-			<listheader label="Fecha"></listheader>
+			<listheader label="Fecha" width="130px"></listheader>
 			<listheader label="Banco Origen"></listheader>
 			<listheader label="Banco Destino"></listheader>
 			<listheader label="Número Operación"></listheader>
-			<listheader label="Importe" align="right"></listheader>
-			<listheader label="Moneda" align="right"></listheader>
-			<listheader label="T.Cambio" align="right"></listheader>
+			<listheader label="Importe" align="right" width="120px"></listheader>
+			<listheader label="Moneda" align="right" width="120px"></listheader>
+			<listheader label="T.Cambio" align="right" width="120px"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader>
@@ -56,8 +56,8 @@
 		<template name="model">
 			<listitem>
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
-				<listcell label="@load(each.origen.banco.descripcion.toUpperCase())"></listcell>
-				<listcell label="@load(each.destino.banco.descripcion.toUpperCase())"></listcell>
+				<listcell label="@load(each.origen.descripcion.toUpperCase())"></listcell>
+				<listcell label="@load(each.destino.descripcion.toUpperCase())"></listcell>
 				<listcell label="@load(each.numero)"></listcell>
 				<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.moneda.sigla)"></listcell>
@@ -107,7 +107,8 @@
 					<combobox hflex="true"
 						value="@load(vm.nva_transferencia.destino.descripcion.toUpperCase())"
 						model="@load(vm.bancos)"
-						selectedItem="@bind(vm.nva_transferencia.destino)" instant="true">
+						selectedItem="@bind(vm.nva_transferencia.destino)" instant="true"
+						onSelect="@command('selectMoneda')">
 						<template name="model">
 							<comboitem label="@load(each.descripcion.toUpperCase())" />
 						</template>	

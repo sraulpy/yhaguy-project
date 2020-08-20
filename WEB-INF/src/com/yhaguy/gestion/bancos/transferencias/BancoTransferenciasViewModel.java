@@ -68,6 +68,13 @@ public class BancoTransferenciasViewModel extends SimpleViewModel {
 		BindUtils.postNotifyChange(null, null, this.nva_transferencia, "tipoCambio");
 	}
 	
+	@Command
+	public void selectMoneda() throws Exception {
+		this.nva_transferencia.setMoneda(this.nva_transferencia.getDestino().getMoneda());
+		BindUtils.postNotifyChange(null, null, this.nva_transferencia, "moneda");
+		this.verificarCotizacion();		
+	}
+	
 	/**
 	 * @return true si los datos son validos..
 	 */
@@ -83,6 +90,10 @@ public class BancoTransferenciasViewModel extends SimpleViewModel {
 			out = false;
 		}
 		if (this.nva_transferencia.getImporte() <= 001) {
+			out = false;
+		}
+		if ((!this.nva_transferencia.isMonedaLocal()) && 
+				this.nva_transferencia.getTipoCambio() <= 1) {
 			out = false;
 		}
 		return out;
