@@ -12102,6 +12102,21 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return venta lazy
+	 * [0]: id
+	 * [1]: cliente.razonSocial
+	 * [2]: cliente.ruc
+	 * [3]: sucursal.id
+	 */
+	public Object[] getVentaLazy(long idVenta) throws Exception {
+		String query = "select v.id, v.cliente.empresa.razonSocial, v.cliente.empresa.ruc, v.sucursal.id from Venta v where v.id = "
+				+ idVenta;
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : null;
+		return out;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));

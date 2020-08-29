@@ -8,10 +8,12 @@ import com.coreweb.domain.Domain;
 public class AjusteCtaCte extends Domain {
 
 	public static final String ANTICIPOS = "ANTICIPO";
+	public static final String ANTICIPOS_PAGOS = "ANTICIPO PAGO";
 	
 	private Date fecha;
 	private String descripcion;
-	private double importe;
+	private double importe; // siempre almacena el importe en gs.
+	private double tipoCambio = 1; // si la moneda es gs el tipoCambio = 1
 	
 	private CtaCteEmpresaMovimiento debito;
 	private CtaCteEmpresaMovimiento credito;
@@ -63,6 +65,14 @@ public class AjusteCtaCte extends Domain {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
 	}
 
 }

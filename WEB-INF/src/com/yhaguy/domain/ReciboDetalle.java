@@ -49,6 +49,22 @@ public class ReciboDetalle extends Domain {
 	}
 	
 	/**
+	 * @return venta.sucursal.id
+	 */
+	public long getIdSucursalVenta() throws Exception {
+		if (this.movimiento == null) {
+			return 0;
+		}
+		if (this.venta != null) {
+			return venta.getSucursal().getId();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Object[] vta = rr.getVentaLazy(this.movimiento.getIdMovimientoOriginal());
+		long out = vta != null ? (long) vta[3] : 0;
+		return out;
+	}
+	
+	/**
 	 * @return los codigos de items de venta migrada.. 
 	 */
 	public List<Object[]> getDetalleVentaMigracion() throws Exception {
@@ -93,31 +109,25 @@ public class ReciboDetalle extends Domain {
 	}
 	
 	/**
-	 * @return el importe segun el proveedor..
+	 * @return el importe segun sucursal..
 	 */
 	public double getImporteBySucursalGs(long idSucursal) throws Exception {
-		Venta vta = this.getVenta();
-		if (vta != null) {
-			long idSucVta = vta.getSucursal().getId().longValue();
-			if (idSucVta == idSucursal) {
-				return this.getMontoGs();
-			}
+		long idSucVta = this.getIdSucursalVenta();
+		if (idSucVta == idSucursal) {
+			return this.getMontoGs();
 		}
 		return 0;
 	}
 	
 	/**
-	 * @return el importe segun el proveedor..
+	 * @return el importe segun sucursal..
 	 */
 	public double getImporteBySucursalDs(long idSucursal) throws Exception {
-		Venta vta = this.getVenta();
-		if (vta != null) {
-			long idSucVta = vta.getSucursal().getId().longValue();
-			if (idSucVta == idSucursal) {
-				return this.getMontoDs();
-			}
+		long idSucVta = this.getIdSucursalVenta();
+		if (idSucVta == idSucursal) {
+			return this.getMontoDs();
 		}
-		return 0;
+		return 0;	
 	}
 	
 	/**

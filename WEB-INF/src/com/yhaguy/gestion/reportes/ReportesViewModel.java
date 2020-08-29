@@ -424,7 +424,8 @@ public class ReportesViewModel extends SimpleViewModel {
 	 * despliega el reporte..
 	 */
 	private void imprimirReporte_() throws Exception {
-
+		System.out.println("-- " + getLoginNombre() + " - " + this.getCodigoReporte());
+		
 		switch (this.getIdModulo()) {
 
 		case ID_TESORERIA:
@@ -7477,7 +7478,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		public ReportesTesoreria(String codigoReporte, ReportesViewModel vm, boolean mobile)
 				throws Exception {
 			switch (codigoReporte) {
-
+			
 			case PAGOS_FECHA:
 				this.pagosPorFecha(mobile);
 				break;
@@ -12944,6 +12945,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Date desde = filtro.getFechaDesde();
 			Date hasta = filtro.getFechaHasta();
+			Date inicio = Utiles.getFechaInicioOperaciones();
 			boolean incluirNC = filtro.isIncluirNCR();
 			boolean incluirCO = filtro.isIncluirCOM();
 			boolean incluirGA = filtro.isIncluirGastos();
@@ -12953,16 +12955,16 @@ public class ReportesViewModel extends SimpleViewModel {
 			if (incluirNC) ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
 			List<CompraLocalFactura> compras = new ArrayList<>();
 			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0);
-			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, desde, new Date());
+			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, inicio, new Date());
 			List<Gasto> gastos = new ArrayList<Gasto>();
 			if (incluirGA) {
-				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, desde, new Date(), 0);
-				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, desde, new Date(), 0);
+				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, inicio, new Date(), 0);
+				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
 				gastos.addAll(gastosIndistinto);
 				gastos.addAll(gastosDespacho);	
 			}
 			if (incluirBI && !incluirGA) {
-				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, desde, new Date(), 0);
+				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
 				gastos.addAll(gastosDespacho);
 			}
 			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones, incluirBI, incluirGA);
@@ -18173,7 +18175,7 @@ class ListadoCobranzasDataSource implements JRDataSource {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.sucursal = sucursal;
-		this.loadDatos(idSucursal);	
+		this.loadDatos(idSucursal, anticipos);	
 		if (!anticipos) {
 			this.loadAplicacionesAnticipos(idSucursal);
 		}
@@ -18223,12 +18225,14 @@ class ListadoCobranzasDataSource implements JRDataSource {
 	/**
 	 * carga los datos para el reporte..
 	 */
-	private void loadDatos(long idSucursal) {
+	private void loadDatos(long idSucursal, boolean anticipo) {
 		try {
 			for (Recibo recibo : this.recibos) {
-				if (!recibo.isReciboContraCuenta()) {
-					System.out.println("----> " + recibo.getNumero());
-					double saldo_ = recibo.getSaldoCtaCte();
+				if (!recibo.isReciboContraCuenta()) {					
+					double saldo_ = 0;
+					if (anticipo) {
+						saldo_ = recibo.getSaldoCtaCte();
+					}
 					String fecha = misc.dateToString(recibo.getFechaEmision(), Misc.DD_MM_YYYY);
 					String numero = recibo.getNumero();
 					String razonSocial = recibo.isAnulado() ? "ANULADO.." : recibo.getCliente().getRazonSocial();
