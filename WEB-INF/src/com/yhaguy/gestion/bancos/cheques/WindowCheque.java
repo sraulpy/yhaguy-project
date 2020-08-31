@@ -259,12 +259,6 @@ class ValidadorWindowCheque implements VerificaAceptarCancelar {
 			out = false;
 		}
 		
-		if (this.windowCheque.isChequeManual() == false) {
-			if (cheque.getMonto() > this.windowCheque.getMontoRecibo()) {
-				this.mensaje += "\n - El monto no puede ser mayor al recibo..";
-				out = false;
-			}
-		}			
 		return out;
 	}
 
