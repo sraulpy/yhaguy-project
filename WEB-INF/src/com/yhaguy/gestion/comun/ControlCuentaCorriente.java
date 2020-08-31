@@ -103,7 +103,7 @@ public class ControlCuentaCorriente {
 		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
 		ctm.setSaldo(0);
 		
-		recalcularSaldoCtaCte(ctmVenta);
+		recalcularSaldoCtaCte(ctmVenta, 0, 0);
 		rr.saveObject(ctm, user);
 	}
 	
@@ -312,6 +312,7 @@ public class ControlCuentaCorriente {
 		ctm.setIdVendedor(0);
 		ctm.setImporteOriginal(pago.isMonedaLocal() ? pago.getTotalImporteGs() : pago.getTotalImporteDs());
 		ctm.setMoneda(rr.getTipoPorSigla(siglaMoneda));
+		ctm.setTipoCambio(pago.getTipoCambio());
 		ctm.setNroComprobante(pago.getNumero());
 		ctm.setSucursal(pago.getSucursal());
 		ctm.setSaldo((pago.isMonedaLocal() ? pago.getTotalImporteGs() : pago.getTotalImporteDs()) * -1);	
@@ -717,7 +718,7 @@ public class ControlCuentaCorriente {
 	/**
 	 * recalcula el saldo en cta cte.
 	 */
-	public static void recalcularSaldoCtaCte(CtaCteEmpresaMovimiento ctacte) throws Exception {
+	public static void recalcularSaldoCtaCte(CtaCteEmpresaMovimiento ctacte, double aplicadoGs, double aplicadoDs) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		if (ctacte.isVentaCredito()) {
 			Venta venta = (Venta) rr.getObject(Venta.class.getName(), ctacte.getIdMovimientoOriginal());
@@ -735,6 +736,26 @@ public class ControlCuentaCorriente {
 			Recibo anticipo = (Recibo) rr.getObject(Recibo.class.getName(), ctacte.getIdMovimientoOriginal());
 			if (anticipo != null) {
 				recalcularSaldoAnticipo(anticipo);
+			}
+		}
+		if (ctacte.isAnticipoPago()) {
+			Recibo anticipo = (Recibo) rr.getObject(Recibo.class.getName(), ctacte.getIdMovimientoOriginal());
+			if (anticipo != null) {
+				if (anticipo.isMonedaLocal()) {
+					aplicarSaldoAnticipoPagoGs(anticipo, aplicadoGs);
+				} else {
+					aplicarSaldoAnticipoPagoDs(anticipo, aplicadoDs);
+				}				
+			}
+		}
+		if (ctacte.isGasto()) {
+			Gasto gasto = (Gasto) rr.getObject(Gasto.class.getName(), ctacte.getIdMovimientoOriginal()); 
+			if (gasto != null) {
+				if (gasto.isMonedaLocal()) {
+					aplicarSaldoGastoGs(gasto, aplicadoGs);
+				} else {
+					aplicarSaldoGastoDs(gasto, aplicadoDs);
+				}
 			}
 		}
 	}
@@ -843,7 +864,7 @@ public class ControlCuentaCorriente {
 	}
 	
 	/**
-	 * recalcula los saldos por venta credito..
+	 * recalcula los saldos por anticipo de cobro..
 	 */
 	public static void recalcularSaldoAnticipo(Recibo anticipo) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -866,6 +887,46 @@ public class ControlCuentaCorriente {
 				rr.saveObject(ctacte, ctacte.getUsuarioMod());				
 			}
 		}
+	}
+	
+	/**
+	 * aplica los saldos por anticipo pago..
+	 */
+	public static void aplicarSaldoAnticipoPagoGs(Recibo anticipo, double aplicadoGs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(anticipo.getId(), anticipo.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() + aplicadoGs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * aplica los saldos por anticipo pago..
+	 */
+	public static void aplicarSaldoAnticipoPagoDs(Recibo anticipo, double aplicadoDs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(anticipo.getId(), anticipo.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() + aplicadoDs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por gasto..
+	 */
+	public static void aplicarSaldoGastoGs(Gasto gasto, double aplicadoGs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(gasto.getId(), gasto.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() - aplicadoGs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por gasto..
+	 */
+	public static void aplicarSaldoGastoDs(Gasto gasto, double aplicadoDs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(gasto.getId(), gasto.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() - aplicadoDs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
 	}
 	
 	/**
