@@ -578,10 +578,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	public void aplicacionDeSaldos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
-		double saldo1 = (double) this.selectedItem_.getPos6();
-		if (saldo1 < 0) saldo1 = saldo1 * -1;
-		double saldo2 = (double) this.selectedAplicacion.getPos6(); 
-		double importe = (saldo1 - saldo2) > 0 ? saldo2 : saldo1;
+		double importe = this.getSaldoAplicar();
 		
 		CtaCteEmpresaMovimiento deb = rr.getCtaCteEmpresaMovimientoById(this.selectedItem_.getId().longValue());
 		CtaCteEmpresaMovimiento cre = rr.getCtaCteEmpresaMovimientoById(this.selectedAplicacion.getId().longValue());
@@ -592,15 +589,28 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			ajuste.setOrden(deb.getNroComprobante());
 			ajuste.setIp_pc(deb.getEmpresa().getRuc());
 		}
+		if (deb.isAnticipoPago()) {
+			ajuste.setAuxi(AjusteCtaCte.ANTICIPOS_PAGOS);
+			ajuste.setOrden(deb.getNroComprobante());
+			ajuste.setIp_pc(deb.getEmpresa().getRuc());
+		}
 		ajuste.setDescripcion(deb.getEmpresa().getRazonSocial());
 		ajuste.setFecha(new Date());
 		ajuste.setDebito(deb);
 		ajuste.setCredito(cre);
 		ajuste.setImporte(importe);
+		if (!(boolean) this.selectedItem_.getPos14()) {
+			ajuste.setTipoCambio(deb.getTipoCambio());
+		}
 		rr.saveObject(ajuste, this.getLoginNombre());
 		
-		ControlCuentaCorriente.recalcularSaldoCtaCte(deb);
-		ControlCuentaCorriente.recalcularSaldoCtaCte(cre);
+		double importeDs = 0;
+		if (!(boolean) this.selectedItem_.getPos14()) {
+			importeDs = importe / ajuste.getTipoCambio();
+		}
+		
+		ControlCuentaCorriente.recalcularSaldoCtaCte(deb, importe, importeDs);
+		ControlCuentaCorriente.recalcularSaldoCtaCte(cre, importe, importeDs);
 		
 		Clients.showNotification("SALDO APLICADO..");
 		
@@ -614,7 +624,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		String sigla = (String) item.getPos8();
 		if (this.isVenta(sigla)) {
 			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteEmpresaMovimientoById(item.getId().longValue());
-			ControlCuentaCorriente.recalcularSaldoCtaCte(ctacte);
+			ControlCuentaCorriente.recalcularSaldoCtaCte(ctacte, 0, 0);
 		}	
 		Clients.showNotification("SALDOS ACTUALIZADOS..");
 	}
@@ -2052,6 +2062,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			my.setPos10(mov.getNumeroImportacion().isEmpty() ? "- - -" : mov.getNumeroImportacion());
 			my.setPos11(mov.getObservacion());
 			my.setPos12(mov.getCarteraCliente());
+			my.setPos13(mov.getTipoCambio());
+			my.setPos14(mov.isMonedaLocal());
 			if (this.isTodos()) {
 				out.add(my);
 			} else if (this.isPendientes()) {
@@ -2563,6 +2575,11 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		return out;
 	}
 	
+	@DependsOn("selectedMoneda")
+	public String getSelectedMoneda_() {
+		return this.selectedMoneda.replace("Cta. ", "");
+	}
+	
 	/**
 	 * @return los telecobradores..
 	 */
@@ -2598,6 +2615,12 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	public double getSaldoAplicar() {
 		if (this.selectedItem_ == null || this.selectedAplicacion == null) return 0.0;
 		double saldo1 = (double) this.selectedItem_.getPos6();
+		boolean monedaLocal = (boolean) this.selectedItem_.getPos14();
+		if (this.selectedMoneda.equals(CTA_GS)
+				&& !monedaLocal) {
+			double tc = (double) this.selectedItem_.getPos13();
+			saldo1 = saldo1 * tc;
+		}
 		if (saldo1 < 0) saldo1 = saldo1 * -1;
 		double saldo2 = (double) this.selectedAplicacion.getPos6(); 
 		double importe = (saldo1 - saldo2) > 0 ? saldo2 : saldo1;

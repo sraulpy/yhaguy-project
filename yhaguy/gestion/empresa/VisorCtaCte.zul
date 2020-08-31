@@ -358,8 +358,21 @@
 					<separator orient="vertical" bar="true"></separator>
 					<label value="SALDO A APLICAR:"></label>
 					<space></space>
-					<label value="Gs."></label>
+					<label value="@load(vm.selectedMoneda_)"></label>
 					<label value="@load(vm.saldoAplicar) @converter('formattedNumber', format='###,###,###')"></label>
+					<space></space>
+					<label value="Moneda:"></label>
+					<combobox model="@load(vm.monedas)"
+						value="@load(vm.selectedMoneda)"
+						selectedItem="@bind(vm.selectedMoneda)"
+						hflex="min">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+					<space></space>
+					<label value="Cotización:"></label>
+					<label value="@load(vm.selectedItem_.pos13) @converter('formattedNumber', format='###,###,###')"></label>
 				</hlayout>
 				<hlayout>
 					<a label="" iconSclass="z-icon-arrow-right" style="cursor:default;color:#4cae4c" />
