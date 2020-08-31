@@ -8,15 +8,11 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zk.ui.util.Clients;
 
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
 import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
-import com.yhaguy.domain.CtaCteEmpresaMovimiento;
-import com.yhaguy.domain.RegisterDomain;
-import com.yhaguy.gestion.bancos.libro.BancoControlBody;
 import com.yhaguy.gestion.empresa.EmpresaControlBody;
 
 public class CtaCteEmpresaMovimientoSimpleControl extends SoloViewModel {

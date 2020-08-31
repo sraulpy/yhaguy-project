@@ -158,6 +158,15 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	}
 	
 	/**
+	 * @return true si es anticipo de pago..
+	 */
+	public boolean isAnticipoPago() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(
+				Configuracion.SIGLA_TM_ANTICIPO_PAGO);
+	}
+	
+	/**
 	 * @return true si es gasto..
 	 */
 	public boolean isGasto() {
