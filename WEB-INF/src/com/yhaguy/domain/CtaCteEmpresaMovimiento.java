@@ -192,6 +192,15 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	}
 	
 	/**
+	 * @return true si es compra..
+	 */
+	public boolean isCompra() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO)
+				|| this.tipoMovimiento.getSigla().equals(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO);
+	}
+	
+	/**
 	 * @return el importe..
 	 */
 	public double getImporteOriginalFinal() {
