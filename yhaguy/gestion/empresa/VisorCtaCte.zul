@@ -116,8 +116,8 @@
 			<checkbox checked="@bind(vm.fraccionado)"
 				label=" Ver fraccionado en cuotas.." />
 			<space />
-			<checkbox checked="@bind(vm.aplicaciones)" 
-				label=" Ver aplicaciones.." />
+			<a label=" Ver aplicaciones.." 
+				onClick='popAplicaciones.open(self, "after_end")' />
 			<space />
 		</hlayout>
 
@@ -1103,6 +1103,26 @@
 			onSelect="@command('saveCartera')">
 			<template name="model">
 				<listitem label="@load(each.descripcion)"></listitem>
+			</template>
+		</listbox>
+	</popup>
+	
+	<popup id="popAplicaciones" sclass="rounded">
+		<listbox sclass="small-list" width="250px" height="100px"
+			model="@load(vm.ajustesCtaCte)">
+			<listhead>
+				<listheader></listheader>
+				<listheader width="40px" align="center"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.descripcion_)"></listcell>
+					<listcell>
+						<a iconSclass="z-icon-link"
+							href="@load(each.url_)" target="_blank">
+						</a>
+					</listcell>
+				</listitem>
 			</template>
 		</listbox>
 	</popup>

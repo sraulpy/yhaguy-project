@@ -3,6 +3,7 @@ package com.yhaguy.domain;
 import java.util.Date;
 
 import com.coreweb.domain.Domain;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class AjusteCtaCte extends Domain {
@@ -14,6 +15,7 @@ public class AjusteCtaCte extends Domain {
 	private String descripcion;
 	private double importe; // siempre almacena el importe en gs.
 	private double tipoCambio = 1; // si la moneda es gs el tipoCambio = 1
+	private String url;
 	
 	private CtaCteEmpresaMovimiento debito;
 	private CtaCteEmpresaMovimiento credito;
@@ -21,6 +23,19 @@ public class AjusteCtaCte extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	public String getUrl_() {
+		return "/reportes/aplicaciones" + this.url;
+	}
+	
+	public String getDescripcion_() {
+		String fecha = Utiles.getDateToString(this.fecha, Utiles.DD_MM_YYYY);
+		String usuario = this.getUsuarioMod().toUpperCase();
+		String importe = Utiles.getNumberFormat(this.importe);
+		String deb = this.debito.getNroComprobante();
+		String cre = this.credito.getNroComprobante();
+		return fecha + " - " + usuario + " - " + deb + " - " + cre + " - " + importe;
 	}
 	
 	public long getIdSucursalCredito() {
@@ -73,6 +88,14 @@ public class AjusteCtaCte extends Domain {
 
 	public void setTipoCambio(double tipoCambio) {
 		this.tipoCambio = tipoCambio;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

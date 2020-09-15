@@ -605,16 +605,55 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		rr.saveObject(ajuste, this.getLoginNombre());
 		
 		double importeDs = 0;
+		double importeAplicado = importe;
 		if (!(boolean) this.selectedItem_.getPos14()) {
 			importeDs = importe / ajuste.getTipoCambio();
+			importeAplicado = importeDs;
 		}
 		
 		ControlCuentaCorriente.recalcularSaldoCtaCte(deb, importe, importeDs);
 		ControlCuentaCorriente.recalcularSaldoCtaCte(cre, importe, importeDs);
 		
-		Clients.showNotification("SALDO APLICADO..");
-		
 		this.popSaldos.close();	
+		this.selectedItem_ = null;
+		this.selectedAplicacion = null;			 
+		
+		this.imprimirAplicacion(deb, cre, ajuste, importeAplicado);
+	}
+	
+	/**
+	 * impresion de la aplicacion..
+	 */
+	private void imprimirAplicacion(CtaCteEmpresaMovimiento debito, CtaCteEmpresaMovimiento credito,
+			AjusteCtaCte ajuste, double aplicado) throws Exception {
+		List<Object[]> data = new ArrayList<Object[]>();
+
+		String concepto = debito.getTipoMovimiento().getDescripcion();
+		String comprobante = debito.getNroComprobante();
+		double saldo = debito.getSaldo();
+		Object[] deb = new Object[] { concepto, comprobante, saldo, aplicado };
+
+		String conceptoCre = credito.getTipoMovimiento().getDescripcion();
+		String comprobanteCre = credito.getNroComprobante();
+		double saldoCre = credito.getSaldo();
+		Object[] cre = new Object[] { conceptoCre, comprobanteCre, saldoCre, aplicado * -1 };
+
+		data.add(deb);
+		data.add(cre);
+
+		ReporteYhaguy rep = new ReporteAplicacionSaldo(Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY_HH_MM_SS),
+				this.getUs().getNombre());
+		rep.setDatosReporte(data);
+		rep.setBorrarDespuesDeVer(false);
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		ajuste.setUrl(rep.getArchivoSalida());
+		rr.saveObject(ajuste, this.getLoginNombre());
+
+		ViewPdf vp = new ViewPdf();
+		vp.setBotonImprimir(false);
+		vp.setBotonCancelar(false);
+		vp.showReporte(rep, this);
 	}
 	
 	@Command
@@ -2005,6 +2044,15 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	@DependsOn("selectedItem")
+	public List<AjusteCtaCte> getAjustesCtaCte() throws Exception {
+		if (this.selectedItem == null) {
+			return new ArrayList<AjusteCtaCte>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getAjustesCtaCte(this.selectedItem.getId());
+	}
+	
+	@DependsOn("selectedItem")
 	public List<MyArray> getChequesPendientes() throws Exception {
 		this.totalCheques = 0;
 		List<MyArray> out = new ArrayList<MyArray>();
@@ -3267,5 +3315,57 @@ class CtaCteSaldosDHSDataSource_ implements JRDataSource {
 			return true;
 		}
 		return false;
+	}
+}
+
+/**
+ * Reporte de aplicacion de saldos..
+ */
+class ReporteAplicacionSaldo extends ReporteYhaguy {
+	
+	String fecha;
+	String usuario;
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Concepto", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Comprobante", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Saldo", TIPO_DOUBLE, 35, false); 
+	static DatosColumnas col4 = new DatosColumnas("Aplicado", TIPO_DOUBLE, 35, false); 
+	
+	public ReporteAplicacionSaldo(String fecha, String usuario) {
+		this.fecha = fecha;
+		this.usuario = usuario;
+	}
+	
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Aplicación de Saldos");
+		this.setDirectorio("aplicaciones");
+		this.setNombreArchivo("");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Usuario", this.usuario))
+				.add(this.textoParValor("Fecha aplicación", this.fecha)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
 	}
 }

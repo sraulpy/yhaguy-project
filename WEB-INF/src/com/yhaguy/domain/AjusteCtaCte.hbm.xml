@@ -14,6 +14,7 @@
 		<property name="descripcion"/>
 		<property name="importe"/>
 		<property name="tipoCambio"/>
+		<property name="url"/>
 		
 		<many-to-one name="debito" class="com.yhaguy.domain.CtaCteEmpresaMovimiento"
 			column="id_debito" not-null="true" lazy="false" />

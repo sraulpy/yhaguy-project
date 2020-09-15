@@ -15,6 +15,7 @@ import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.BancoPrestamo;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Gasto;
@@ -758,6 +759,23 @@ public class ControlCuentaCorriente {
 				}
 			}
 		}
+		if (ctacte.isCompra()) {
+			CompraLocalFactura fac = (CompraLocalFactura) rr.getObject(CompraLocalFactura.class.getName(), ctacte.getIdMovimientoOriginal()); 
+			if (fac != null) {
+				if (fac.isMonedaLocal()) {
+					aplicarSaldoCompraGs(fac, aplicadoGs);
+				} else {
+					aplicarSaldoCompraDs(fac, aplicadoDs);
+				}
+			}
+		}
+		if (ctacte.isPrestamoInterno()) {
+			if (ctacte.isMonedaLocal()) {
+				aplicarSaldoPrestamoInternoGs(ctacte, aplicadoGs);
+			} else {
+				aplicarSaldoPrestamoInternoDs(ctacte, aplicadoDs);
+			}
+		}
 	}
 	
 	/**
@@ -927,6 +945,46 @@ public class ControlCuentaCorriente {
 		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(gasto.getId(), gasto.getTipoMovimiento().getSigla());
 		ctacte.setSaldo(ctacte.getSaldo() - aplicadoDs);	
 		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por compra..
+	 */
+	public static void aplicarSaldoCompraGs(CompraLocalFactura compra, double aplicadoGs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(compra.getId(), compra.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() - aplicadoGs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por compra..
+	 */
+	public static void aplicarSaldoCompraDs(CompraLocalFactura compra, double aplicadoDs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(compra.getId(), compra.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() - aplicadoDs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por prestamo..
+	 */
+	public static void aplicarSaldoPrestamoInternoGs(CtaCteEmpresaMovimiento ctacte, double aplicadoGs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte_ = (CtaCteEmpresaMovimiento) rr.getObject(CtaCteEmpresaMovimiento.class.getName(), ctacte.getId());
+		ctacte_.setSaldo(ctacte_.getSaldo() - aplicadoGs);	
+		rr.saveObject(ctacte_, ctacte_.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por prestamo..
+	 */
+	public static void aplicarSaldoPrestamoInternoDs(CtaCteEmpresaMovimiento ctacte, double aplicadoDs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte_ = (CtaCteEmpresaMovimiento) rr.getObject(CtaCteEmpresaMovimiento.class.getName(), ctacte.getId());
+		ctacte_.setSaldo(ctacte_.getSaldo() - aplicadoDs);	
+		rr.saveObject(ctacte_, ctacte_.getUsuarioMod());
 	}
 	
 	/**
