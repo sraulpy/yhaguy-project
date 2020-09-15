@@ -636,12 +636,12 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		String concepto = debito.getTipoMovimiento().getDescripcion();
 		String comprobante = debito.getNroComprobante();
 		double importe = Utiles.getRedondeo(debito.getImporteOriginal());
-		Object[] deb = new Object[] { concepto, comprobante, importe, aplicado };
+		Object[] deb = new Object[] { concepto, comprobante, importe, Utiles.getRedondeo(aplicado) };
 
 		String conceptoCre = credito.getTipoMovimiento().getDescripcion();
 		String comprobanteCre = credito.getNroComprobante();
 		double importeCre = Utiles.getRedondeo(credito.getImporteOriginal());
-		Object[] cre = new Object[] { conceptoCre, comprobanteCre, importeCre, aplicado * -1 };
+		Object[] cre = new Object[] { conceptoCre, comprobanteCre, importeCre, Utiles.getRedondeo(aplicado * -1) };
 
 		data.add(deb);
 		data.add(cre);
