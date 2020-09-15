@@ -98,7 +98,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	static final String[][] CAB = { { "Empresa", CSV.STRING } };
 	static final String[][] DET = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING } };
 	static final String[][] DET_PROFORMA = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "COSTO", CSV.STRING } };
-	static final String[][] DET_PRECIOS = { { "CODIGO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING } };
+	static final String[][] DET_PRECIOS = { { "CODIGO", CSV.STRING }, { "MAYORISTA", CSV.STRING }, { "MINORISTA", CSV.STRING }, { "LISTA", CSV.STRING }, { "TRANSPORTADORA", CSV.STRING } };
 
 	private ImportacionPedidoCompraDTO dto = new ImportacionPedidoCompraDTO();	
 	
@@ -902,10 +902,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				String mayorista = csv.getDetalleString("MAYORISTA");
 				String minorista = csv.getDetalleString("MINORISTA");
 				String lista = csv.getDetalleString("LISTA");
+				String transp = csv.getDetalleString("TRANSPORTADORA");
 			 	double mayorista_ =  Double.parseDouble(mayorista.replace(".", "").replace(",", "."));
 			 	double minorista_ =  Double.parseDouble(minorista.replace(".", "").replace(",", "."));
 			 	double lista_ =  Double.parseDouble(lista.replace(".", "").replace(",", "."));
-				Object[] precio = new Object[] { mayorista_, minorista_, lista_ };
+			 	double transp_ =  Double.parseDouble(transp.replace(".", "").replace(",", "."));
+				Object[] precio = new Object[] { mayorista_, minorista_, lista_, transp_ };
 				precios.put(codigo, precio);								
 			}
 			for (ImportacionFacturaDetalleDTO item : this.dto.getImportacionFactura().get(0).getDetalles()) {
@@ -914,9 +916,11 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					double may = (double) precio[0];
 					double min = (double) precio[1];
 					double lis = (double) precio[2];
+					double tra = (double) precio[3];
 					item.setPrecioFinalGs(may);
 					item.setMinoristaGs(min);
 					item.setListaGs(lis);
+					item.setTransportadoraGs(tra);
 				} else {
 					noEncontrado += " \n - " + item.getArticulo().getPos1();
 				}
