@@ -621,6 +621,11 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		this.imprimirAplicacion(deb, cre, ajuste, importeAplicado);
 	}
 	
+	@Command
+	public void imprimirAplicacion(@BindingParam("item") AjusteCtaCte item) throws Exception {		
+		this.imprimirAplicacion(item.getDebito(), item.getCredito(), item, item.getImporte());
+	}
+	
 	/**
 	 * impresion de la aplicacion..
 	 */
@@ -630,25 +635,21 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 
 		String concepto = debito.getTipoMovimiento().getDescripcion();
 		String comprobante = debito.getNroComprobante();
-		double saldo = debito.getSaldo();
-		Object[] deb = new Object[] { concepto, comprobante, saldo, aplicado };
+		double importe = Utiles.getRedondeo(debito.getImporteOriginal());
+		Object[] deb = new Object[] { concepto, comprobante, importe, aplicado };
 
 		String conceptoCre = credito.getTipoMovimiento().getDescripcion();
 		String comprobanteCre = credito.getNroComprobante();
-		double saldoCre = credito.getSaldo();
-		Object[] cre = new Object[] { conceptoCre, comprobanteCre, saldoCre, aplicado * -1 };
+		double importeCre = Utiles.getRedondeo(credito.getImporteOriginal());
+		Object[] cre = new Object[] { conceptoCre, comprobanteCre, importeCre, aplicado * -1 };
 
 		data.add(deb);
 		data.add(cre);
 
-		ReporteYhaguy rep = new ReporteAplicacionSaldo(Utiles.getDateToString(new Date(), Utiles.DD_MM_YYYY_HH_MM_SS),
-				this.getUs().getNombre());
+		ReporteYhaguy rep = new ReporteAplicacionSaldo(Utiles.getDateToString(ajuste.getFecha(), Utiles.DD_MM_YYYY_HH_MM_SS),
+				ajuste.getUsuarioMod().toUpperCase());
 		rep.setDatosReporte(data);
 		rep.setBorrarDespuesDeVer(false);
-		
-		RegisterDomain rr = RegisterDomain.getInstance();
-		ajuste.setUrl(rep.getArchivoSalida());
-		rr.saveObject(ajuste, this.getLoginNombre());
 
 		ViewPdf vp = new ViewPdf();
 		vp.setBotonImprimir(false);
@@ -3329,7 +3330,7 @@ class ReporteAplicacionSaldo extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Concepto", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Comprobante", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Saldo", TIPO_DOUBLE, 35, false); 
+	static DatosColumnas col3 = new DatosColumnas("Importe", TIPO_DOUBLE, 35, false); 
 	static DatosColumnas col4 = new DatosColumnas("Aplicado", TIPO_DOUBLE, 35, false); 
 	
 	public ReporteAplicacionSaldo(String fecha, String usuario) {

@@ -10795,7 +10795,7 @@ public class RegisterDomain extends Register {
 	 * @return los ajustes ctacte..
 	 */
 	public List<AjusteCtaCte> getAjustesCtaCte(long idEmpresa) throws Exception {
-		String query = "select a from AjusteCtaCte a where a.credito.idEmpresa = " + idEmpresa;
+		String query = "select a from AjusteCtaCte a where a.credito.idEmpresa = " + idEmpresa + " order by a.fecha";
 		List<AjusteCtaCte> list = this.hql(query);
 		return list;
 	}

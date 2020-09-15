@@ -1118,8 +1118,8 @@
 				<listitem>
 					<listcell label="@load(each.descripcion_)"></listcell>
 					<listcell>
-						<a iconSclass="z-icon-link"
-							href="@load(each.url_)" target="_blank">
+						<a iconSclass="z-icon-print"
+							onClick="@command('imprimirAplicacion', item=each)">
 						</a>
 					</listcell>
 				</listitem>
