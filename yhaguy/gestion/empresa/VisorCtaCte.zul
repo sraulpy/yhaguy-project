@@ -1108,7 +1108,7 @@
 	</popup>
 	
 	<popup id="popAplicaciones" sclass="rounded">
-		<listbox sclass="small-list" width="250px" height="100px"
+		<listbox sclass="small-list" width="600px" height="300px"
 			model="@load(vm.ajustesCtaCte)">
 			<listhead>
 				<listheader></listheader>
