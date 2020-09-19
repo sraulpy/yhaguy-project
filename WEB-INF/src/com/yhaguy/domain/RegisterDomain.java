@@ -11849,6 +11849,7 @@ public class RegisterDomain extends Register {
 				+ " from CompraLocalFactura c"
 				+ " where c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '"
 				+ hasta_ + "'"
+				+ " and c.cajaPagoNumero != ''"
 				+ " and upper(c.cajaPagoNumero) like '%" + caja.toUpperCase() + "%'";
 		return this.hql(query);
 	}
