@@ -11841,6 +11841,29 @@ public class RegisterDomain extends Register {
 	 * [6]: chequeNro
 	 * [7]: descripcion
 	 */
+	public List<Object[]> getEfectivoCompras(Date desde, Date hasta, String caja) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'EFECTIVO', c.fechaOriginal, c.cajaPagoNumero, c.importeGs, c.numero, c.tipoMovimiento.descripcion, '',"
+				+ " c.proveedor.empresa.razonSocial"
+				+ " from CompraLocalFactura c"
+				+ " where c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '"
+				+ hasta_ + "'"
+				+ " and upper(c.cajaPagoNumero) like '%" + caja.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: concepto
+	 * [1]: fecha
+	 * [2]: caja
+	 * [3]: montoGs
+	 * [4]: numero
+	 * [5]: tipoMovimiento
+	 * [6]: chequeNro
+	 * [7]: descripcion
+	 */
 	public List<Object[]> getChequeVentas(Date desde, Date hasta, String caja) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";

@@ -85,6 +85,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		List<Object[]> efectivoPagos = rr.getEfectivoPagos(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> efectivoGastos = rr.getEfectivoGastos(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> efectivoDepositos = rr.getEfectivoDepositos(this.filterDesde, this.filterHasta, this.filterCaja);
+		List<Object[]> efectivoCompras = rr.getEfectivoCompras(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequePagos = rr.getChequePagos(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequeDepositos = rr.getChequeDepositos(this.filterDesde, this.filterHasta, this.filterCaja);
 		List<Object[]> chequeDescuentos = rr.getChequeDescuentos(this.filterDesde, this.filterHasta, this.filterCaja);
@@ -107,6 +108,7 @@ public class CajaAuditoriaVM extends SimpleViewModel {
 		historicoHABER.addAll(efectivoPagos);
 		historicoHABER.addAll(efectivoGastos);
 		historicoHABER.addAll(efectivoDepositos);
+		historicoHABER.addAll(efectivoCompras);
 		historicoHABER.addAll(chequePagos);
 		historicoHABER.addAll(chequeDepositos);
 		historicoHABER.addAll(chequeDescuentos);
