@@ -12,14 +12,14 @@
 		emptyMessage="SIN REGISTROS DE PAGARES.."
 		model="@load(vm.pagares)">
 		<listhead>
-			<listheader label="Fecha"></listheader>
-			<listheader label="Número"></listheader>
+			<listheader label="Vencimiento" width="120px"></listheader>
+			<listheader label="Número" width="120px"></listheader>
 			<listheader label="Firmante"></listheader>
 			<listheader label="Beneficiario"></listheader>		
 			<listheader label="Descripción"></listheader>	
-			<listheader label="Importe" align="right"></listheader>
-			<listheader label="Moneda" align="right"></listheader>
-			<listheader label="T.Cambio" align="right"></listheader>
+			<listheader label="Importe" align="right" width="120px"></listheader>
+			<listheader label="Moneda" align="right" width="120px"></listheader>
+			<listheader label="Cotización" align="right" width="120px"></listheader>
 		</listhead>
 		<template name="model">
 			<listitem>
@@ -55,7 +55,7 @@
 			</columns>
 			<rows>
 				<row>
-					<field value="Fecha:" />
+					<field value="Vencimiento:" />
 					<datebox hflex="true"
 						value="@bind(vm.nvo_pagare.fecha)"></datebox>
 				</row>
