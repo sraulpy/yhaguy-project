@@ -10,6 +10,7 @@
 						<zk forEach="${vm.menuItem(self,'CajaPlanilla')}" />
 						<zk forEach="${vm.menuItem(self,'CajaPlanillaResumen')}" />
 						<zk forEach="${vm.menuItem(self,'CajaAuditoria')}" />
+						<zk forEach="${vm.menuItem(self,'Pagares')}" />
 					</menupopup>
 				</menu>	
 				

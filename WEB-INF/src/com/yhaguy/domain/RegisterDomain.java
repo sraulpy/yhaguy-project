@@ -12150,6 +12150,14 @@ public class RegisterDomain extends Register {
 		return out;
 	}
 	
+	/**
+	 * @return los pagares..
+	 */
+	public List<Pagare> getPagares() throws Exception {
+		String query = "select p from Pagare p order by p.fecha";
+		return this.hqlLimit(query, 500);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));

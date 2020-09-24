@@ -1,0 +1,141 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.pagares.PagaresViewModel')">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick='pop_pagare.open(self, "after_start")'></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE PAGARES.."
+		model="@load(vm.pagares)">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Número"></listheader>
+			<listheader label="Firmante"></listheader>
+			<listheader label="Beneficiario"></listheader>		
+			<listheader label="Descripción"></listheader>	
+			<listheader label="Importe" align="right"></listheader>
+			<listheader label="Moneda" align="right"></listheader>
+			<listheader label="T.Cambio" align="right"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.numero)"></listcell>
+				<listcell label="@load(each.firmante.razonSocial)"></listcell>
+				<listcell label="@load(each.beneficiario.razonSocial)"></listcell>		
+				<listcell label="@load(each.descripcion)"></listcell>		
+				<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.moneda.sigla)"></listcell>
+				<listcell label="@load(each.tipoCambio) @converter(vm.cnv.monedaLocal)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_pagare" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE PAGARÉ" />
+			</hbox>
+			<button onClick="pop_pagare.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox hflex="true"
+						value="@bind(vm.nvo_pagare.fecha)"></datebox>
+				</row>
+				<row>
+					<field value="Número:" />
+					<textbox hflex="true"
+						value="@bind(vm.nvo_pagare.numero)"></textbox>
+				</row>
+				<row>
+					<field value="Firmante:" />
+					<bandbox hflex="true" placeholder="Cta.Cte. Firmante.."
+						readonly="true" value="@load(vm.nvo_pagare.firmante.razonSocial)"
+						id="bnd_ctacte">
+						<bandpopup>
+							<listbox sclass="small-list" width="400px"
+								height="200px" model="@load(vm.empresas)"
+								selectedItem="@bind(vm.nvo_pagare.firmante)"
+								onSelect="bnd_ctacte.close()">
+								<listhead>
+									<listheader width="100px">
+										<textbox hflex="true"
+												value="@bind(vm.filter_ruc)" instant="true"
+												placeholder="Ruc.." />
+									</listheader>
+									<listheader>
+										<textbox hflex="true"
+												value="@bind(vm.filter_razonSocial)" instant="true"
+												placeholder="Razón Social.." />
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.ruc)"></listcell>
+										<listcell label="@load(each.razonSocial)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>
+				<row>
+					<field value="Beneficiario:" />
+					<textbox hflex="true" readonly="true"
+						value="@load(vm.nvo_pagare.beneficiario.razonSocial)">
+					</textbox>
+				</row>	
+				<row>
+					<field value="Descripción:" />
+					<textbox hflex="true"
+						value="@bind(vm.nvo_pagare.descripcion)"></textbox>
+				</row>			
+				<row>
+					<field value="Moneda:" />
+					<combobox hflex="true"
+						value="@load(vm.nvo_pagare.moneda.descripcion.toUpperCase())"
+						model="@load(vm.monedas)"
+						selectedItem="@bind(vm.nvo_pagare.moneda)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion.toUpperCase())"></comboitem>
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Tipo Cambio:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_pagare.tipoCambio)" />
+				</row>
+				<row>
+					<field value="Importe:" />
+					<guaranibox hflex="true" 
+						value="@bind(vm.nvo_pagare.importe)" />
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addPagare', comp=pop_pagare)"></button>
+		</hbox>
+	</popup>
+	
+</window>

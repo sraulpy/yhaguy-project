@@ -21,6 +21,7 @@ public class Configuracion extends Config {
 	public static final String EMPRESA_YRPS = "Yhaguy Representaciones S.A.";
 	public static final String EMPRESA_GRUPAUTO = "Groupauto Paraguay S.A.";
 	public static final String USER_MOBILE = "sergio";
+	public static final long ID_EMPRESA_YRPS = 29336;
 	
 	public static final String URL_IMAGES_PUBLIC_MRA = "http://mra.yhaguyrepuestos.com.py/images/";
 	public static final String URL_IMAGES_PUBLIC_BAT = "http://gestion.gtsa.com.py/images/";

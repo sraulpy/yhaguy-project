@@ -8,8 +8,7 @@
 
 		<!-- Postgres -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5433/repre</property>
-
+		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguy_central</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">yrsa0985</property>
 
@@ -129,6 +128,7 @@
 		<mapping resource="com/yhaguy/domain/Retencion.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RetencionIva.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RetencionIvaDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Pagare.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/CentroCosto.hbm.xml" />
 
