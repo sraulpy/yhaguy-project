@@ -900,8 +900,13 @@ public class VentaControlBody extends BodyApp {
 			data.add(imprimirPrecio ? obj1 : obj2);
 		}
 
-		ReporteYhaguy rep = imprimirPrecio ? new ReporteVenta(this.dto)
-				: new ReporteVentaSinPrecio(this.dto);
+		ReporteYhaguy rep = null;
+		if (this.dto.isPresupuesto()) {
+			rep = new ReporteVentaPresupuesto(this.dto);
+		} else {
+			rep = imprimirPrecio ? new ReporteVenta(this.dto)
+					: new ReporteVentaSinPrecio(this.dto);
+		}
 		rep.setTitulo((String) this.dto.getTipoMovimiento().getPos1());
 		rep.setDatosReporte(data);
 		rep.setBorrarDespuesDeVer(true);
@@ -2298,6 +2303,87 @@ class ReporteVentaSinPrecio extends ReporteYhaguy {
 				.add(this.textoParValor("Dirección", direccion))
 				.add(this.textoParValor("Generado", Utiles.getDateToString(this.venta.getFecha(), "dd-MM-yyyy HH:mm:ss"))));
 		
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de Presupuesto de Venta..
+ */
+class ReporteVentaPresupuesto extends ReporteYhaguy {
+	
+	private VentaDTO venta;
+	
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 50);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 30, false);
+	static DatosColumnas col4 = new DatosColumnas("Precio", TIPO_DOUBLE, 30, false);
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
+	
+	public ReporteVentaPresupuesto(VentaDTO venta) {
+		this.venta = venta;
+	}
+	
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Venta-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+		this.setBorrarDespuesDeVer(true);
+	}
+	
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		String numero = this.venta.getNumero();
+		String origen = this.venta.getSucursal().getText();
+		String cliente = (String) this.venta.getCliente().getPos2();
+		String condicion = (String) this.venta.getCondicionPago().getPos1();
+		String observacion = (String) this.venta.getObservacion();
+		String direccion = (String) this.venta.getDireccion();
+		String vendedor = this.venta.getVendedor_();
+
+		VerticalListBuilder out = cmp.verticalList();
+
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Número", numero))
+				.add(this.textoParValor("Sucursal", origen + " - " + vendedor)));
+
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Cliente", cliente))
+				.add(this.textoParValor("Condición", condicion)));
+
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Observación", observacion))
+				.add(this.venta.isPresupuesto() ? this.textoParValor("Válido por", this.venta.getValidez() + " Días") : this.texto("")));
+		
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Dirección", direccion))
+				.add(this.textoParValor("Generado", Utiles.getDateToString(this.venta.getFecha(), "dd-MM-yyyy HH:mm:ss"))));
+
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
