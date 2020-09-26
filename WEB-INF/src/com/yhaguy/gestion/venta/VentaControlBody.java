@@ -885,19 +885,27 @@ public class VentaControlBody extends BodyApp {
 		List<Object[]> data = new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 
-		for (VentaDetalleDTO item : this.dto.getDetalles()) {
-			long stock = rr.getStockDisponible(item.getArticulo().getId(), this.dto.getDeposito().getId());
-			List<ArticuloUbicacion> ubicacion = rr.getUbicacion(item.getArticulo().getId());
-			String ubicacion_ = "";
-			for (ArticuloUbicacion ubic : ubicacion) {
-				ubicacion_ += ubic.getEstante().substring(0, 2) + " - " + ubic.getFila() + " ";
+		if (this.dto.isPresupuesto()) {
+			for (VentaDetalleDTO item : this.dto.getDetalles()) {
+				Object[] obj1 = new Object[] { item.getArticulo().getPos1(), item.getArticulo().getPos4(),
+						item.getCantidad(), item.getPrecioGs(), item.getImporteGs() };
+				data.add(obj1);
 			}
-			Object[] obj1 = new Object[] {
-					item.getArticulo().getPos1(), item.getArticulo().getPos4(), ubicacion_,
-					item.getCantidad(), stock, item.getPrecioGs(), item.getImporteGs() };
-			Object[] obj2 = new Object[] { item.getArticulo().getPos1(),
-					item.getArticulo().getPos4(), ubicacion_, item.getCantidad(), stock };
-			data.add(imprimirPrecio ? obj1 : obj2);
+		} else {
+			for (VentaDetalleDTO item : this.dto.getDetalles()) {
+				long stock = rr.getStockDisponible(item.getArticulo().getId(), this.dto.getDeposito().getId());
+				List<ArticuloUbicacion> ubicacion = rr.getUbicacion(item.getArticulo().getId());
+				String ubicacion_ = "";
+				for (ArticuloUbicacion ubic : ubicacion) {
+					ubicacion_ += ubic.getEstante().substring(0, 2) + " - " + ubic.getFila() + " ";
+				}
+				Object[] obj1 = new Object[] {
+						item.getArticulo().getPos1(), item.getArticulo().getPos4(), ubicacion_,
+						item.getCantidad(), stock, item.getPrecioGs(), item.getImporteGs() };
+				Object[] obj2 = new Object[] { item.getArticulo().getPos1(),
+						item.getArticulo().getPos4(), ubicacion_, item.getCantidad(), stock };
+				data.add(imprimirPrecio ? obj1 : obj2);
+			}		
 		}
 
 		ReporteYhaguy rep = null;
