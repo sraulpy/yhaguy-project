@@ -109,6 +109,28 @@
 			<menupopup sclass="rounded">
 				<zk forEach="${vm.menuItem(self,'Cliente')}" />
 				<zk forEach="${vm.menuItem(self,'GeoLocalizacionClientes')}" />
+				<menu label="	CATÁLOGOS EN LÍNEA"
+					iconSclass="z-icon-caret-right" style="font-size:12px">
+					<menupopup>
+						<menuitem label="TECFIL"
+							iconSclass="z-icon-caret-right"
+							href="https://tecfil-catalago.gruposofape.com.br/CatalogoTecfil/CatalogoGlobal/es-py/index.xhtml"
+							target="_blank" />
+						<menuitem label="RÍO SULENSE"
+							iconSclass="z-icon-caret-right"
+							href="https://catalogo.riosulense.com.br/pt/home/"
+							target="_blank" />
+						<menuitem label="KNORR-BREMSE"
+							iconSclass="z-icon-caret-right"
+							href="https://www.knorr-bremsecvs.com/es/products_1/productsearch/productsearch_1.jsp"
+							target="_blank" />
+						<menuitem label="VETORE"
+							iconSclass="z-icon-caret-right"
+							href="/yhaguy/archivos/catalogos/vetore.pdf"
+							target="_blank" />
+					</menupopup>
+					
+				</menu>
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'VentaPresupuesto','tipo=presupuesto')}" />
 				<zk forEach="${vm.menuItem(self,'VentaPedido','tipo=pedido')}" />
@@ -204,6 +226,7 @@
 			visibility: hidden;
 		}
 		.z-menu-content, .z-menuitem-content {color:black;margin-left:5px}
+		.z-menu-text {margin-left:5px}
 		.z-menuitem-text {margin-left:5px}
 		.z-menu, .z-menuitem { margin: 5px}
 		.z-textbox:focus, .z-doublebox:focus, .z-intbox:focus, .z-longbox:focus, .z-spinner-input:focus, .z-combobox-input:focus {
