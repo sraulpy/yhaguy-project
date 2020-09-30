@@ -70,6 +70,9 @@ public class ReciboFormaPago extends Domain {
 	/** Pagos con debito por cobranza central **/
 	private String reciboDebitoNro;
 	
+	private String pagareNumero;
+	private String pagareFirmante;
+	
 	/**
 	 * @return true si es moneda local..
 	 */
@@ -242,6 +245,14 @@ public class ReciboFormaPago extends Domain {
 	public boolean isOtrosComprobantes() {
 		String sigla = this.tipo.getSigla();
 		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES);
+	}
+	
+	/**
+	 * @return true si es pagare..
+	 */
+	public boolean isPagare() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_PAGARE);
 	}
 
 	public String getMontoGs_() {
@@ -488,5 +499,21 @@ public class ReciboFormaPago extends Domain {
 
 	public void setImporteAcreditado(double importeAcreditado) {
 		this.importeAcreditado = importeAcreditado;
+	}
+
+	public String getPagareFirmante() {
+		return pagareFirmante;
+	}
+
+	public void setPagareFirmante(String pagareFirmante) {
+		this.pagareFirmante = pagareFirmante;
+	}
+
+	public String getPagareNumero() {
+		return pagareNumero;
+	}
+
+	public void setPagareNumero(String pagareNumero) {
+		this.pagareNumero = pagareNumero;
 	}
 }

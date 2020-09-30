@@ -15,6 +15,11 @@
 		<property name="descripcion"/>
 		<property name="importe"/>
 		<property name="tipoCambio"/>
+		<property name="numeroPago"/>
+		
+		<property name="pagado">
+			<column name="pagado" not-null="true" default="false" />
+		</property>
 		
 		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
 			column="idMoneda" lazy="false" />

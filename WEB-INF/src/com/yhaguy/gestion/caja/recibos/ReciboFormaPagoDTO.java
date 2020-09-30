@@ -10,6 +10,7 @@ import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Pagare;
 import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
 
@@ -64,6 +65,10 @@ public class ReciboFormaPagoDTO extends DTO {
 	private MyArray ctaCteSaldoFavor;	
 	
 	private Date fechaOperacion = new Date();
+	
+	private String pagareNumero = "";
+	private String pagareFirmante = "";
+	private Pagare selectedPagare;
 	
 	/**
 	 * @return true si la venta es en moneda local..
@@ -147,6 +152,14 @@ public class ReciboFormaPagoDTO extends DTO {
 	 */
 	public boolean isChequeAdelantado(Date fecha) {
 		return (this.isChequeTercero()) && (this.isChequeAlDia(fecha) == false);
+	}
+	
+	/**
+	 * @return true si la forma de pago es pagare..
+	 */
+	public boolean isPagare() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_PAGARE);
 	}
 	
 	public void setChequePropio(BancoChequeDTO bch, String banco) {		
@@ -377,5 +390,29 @@ public class ReciboFormaPagoDTO extends DTO {
 
 	public void setFechaOperacion(Date fechaOperacion) {
 		this.fechaOperacion = fechaOperacion;
+	}
+
+	public String getPagareNumero() {
+		return pagareNumero;
+	}
+
+	public void setPagareNumero(String pagareNumero) {
+		this.pagareNumero = pagareNumero;
+	}
+
+	public String getPagareFirmante() {
+		return pagareFirmante;
+	}
+
+	public void setPagareFirmante(String pagareFirmante) {
+		this.pagareFirmante = pagareFirmante;
+	}
+
+	public Pagare getSelectedPagare() {
+		return selectedPagare;
+	}
+
+	public void setSelectedPagare(Pagare selectedPagare) {
+		this.selectedPagare = selectedPagare;
 	}	
 }

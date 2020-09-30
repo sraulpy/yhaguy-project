@@ -12158,6 +12158,19 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 500);
 	}
 	
+	/**
+	 * @return los pagares..
+	 */
+	public List<Pagare> getPagaresPendientes(String numero, String firmante)
+			throws Exception {
+		String query = "select p from Pagare p where"
+				+ " p.numero like '%" + numero + "%'"
+				+ " and upper(p.firmante.razonSocial) like '%" + firmante.toUpperCase() + "%'"
+				+ " and p.pagado = 'false'"
+				+ " order by p.fecha";
+		return this.hqlLimit(query, 500);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));

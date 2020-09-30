@@ -397,6 +397,56 @@
 				</hlayout>
 			</row>
 			
+			<!-- ________________________ Forma Pago Pagares _________________________ -->
+			
+			<row id="rwPagares" visible="false">
+				<field value="Pagaré:" />
+				<hlayout>
+					<bandbox placeholder="Pagaré Nro.."
+						readonly="true" value="@load(vm.nvoFormaPago.selectedPagare.numero)"
+						id="bndPagare"
+						hflex="true">
+						<bandpopup>
+							<listbox sclass="small-list" width="600px"
+								height="250px"
+								onSelect="@command('setFormaPagoPagare')"
+								model="@load(vm.pagares)"
+								selectedItem="@bind(vm.nvoFormaPago.selectedPagare)">
+								<listhead>
+									<listheader width="120px" align="right">
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Pagaré Nro.." 
+												value="@bind(vm.filterNro)"/>
+										</hlayout>
+									</listheader>
+									<listheader>
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												instant="true" placeholder="Firmante.." 
+												value="@bind(vm.filterFirmante)"/>
+										</hlayout>
+									</listheader>
+									<listheader width="110px" align="right"></listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.numero)"></listcell>
+										<listcell label="@load(each.firmante.razonSocial.toUpperCase())"></listcell>
+										<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+					<labelConstrain />
+				</hlayout>
+			</row>
+			
 			<row id="rwMontoAplicado">
 				<field value="Importe:"/>
 				<hlayout>

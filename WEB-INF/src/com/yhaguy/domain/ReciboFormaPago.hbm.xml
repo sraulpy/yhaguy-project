@@ -34,6 +34,8 @@
 		<property name="fechaOperacion" />
 		<property name="idSucursal" />
 		<property name="importeAcreditado" />
+		<property name="pagareNumero" />
+		<property name="pagareFirmante" />
 		
 		<property name="acreditado">
 			<column name="acreditado" not-null="true" default="false" />

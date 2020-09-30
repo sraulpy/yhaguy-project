@@ -550,8 +550,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 			}
 			this.saveRecibo();
 			if (this.reciboDTO.isCobro()) {
-				ProcesosHistoricos.updateHistoricoCobranzaMeta(this.reciboDTO.getTotalImporteGsSinIva());
-				ProcesosHistoricos.updateHistoricoCobranzaDiaria(new Date(), this.reciboDTO.getTotalImporteGsSinIva());
 				this.imprimirCobro();
 			} else {
 				this.imprimirPago();
@@ -608,8 +606,17 @@ public class CajaPeriodoControlBody extends BodyApp {
 						rfp.setOrden("1");
 						rr.saveObject(rfp, rfp.getUsuarioMod());
 					}					
+				}				
+			}	
+			for (ReciboFormaPagoDTO fp : this.reciboDTO.getFormasPago()) {
+				if (fp.isPagare()) {
+					if (fp.getSelectedPagare() != null) {
+						fp.getSelectedPagare().setPagado(true);
+						fp.getSelectedPagare().setNumeroPago(this.reciboDTO.getNumero());
+						rr.saveObject(fp.getSelectedPagare(), this.getLoginNombre());
+					}
 				}
-			}			
+			}
 			
 			this.asignarNumeros();
 

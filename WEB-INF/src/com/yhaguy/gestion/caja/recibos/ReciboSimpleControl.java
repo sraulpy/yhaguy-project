@@ -41,6 +41,7 @@ import com.yhaguy.domain.BancoDescuentoCheque;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.Pagare;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
@@ -70,6 +71,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private String filterCuenta = "";
 	
 	private String filterNro = "";
+	private String filterFirmante = "";
 	
 	private BancoChequeTercero selectedChequeAutoCobranza;
 	private BancoChequeTercero selectedChequeTercero;
@@ -995,6 +997,8 @@ public class ReciboSimpleControl extends SoloViewModel {
 	@Wire
 	private Bandbox bndCheq;
 	@Wire
+	private Bandbox bndPagare;
+	@Wire
 	private Bandbox bndRecMra;
 	@Wire
 	private Row rwDebitoCobroCentral;
@@ -1004,6 +1008,8 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private Row rwMontoAplicado;
 	@Wire
 	private Row rwRecaudacionMra;
+	@Wire
+	private Row rwPagares;
 	
 	@Command @NotifyChange("*")
 	public void seleccionarFormaPago() throws Exception {
@@ -1021,6 +1027,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		String siglaSFCO = Configuracion.SIGLA_FORMA_PAGO_SALDO_FAVOR_COBRADO;
 		String siglaFPOC = Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES;
 		String siglaFPRM = Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA;
+		String siglaFPPG = Configuracion.SIGLA_FORMA_PAGO_PAGARE;
 		
 		if (siglaFP.compareTo(siglaFPCH) == 0) {
 			showCheque();
@@ -1041,7 +1048,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			dbxGs.setReadonly(true); dbxUS.setReadonly(true);
 			rwMontoAplicado.setVisible(true);
 			
-		} else if(siglaFP.compareTo(siglaFPTC) == 0){
+		} else if(siglaFP.compareTo(siglaFPTC) == 0) {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
@@ -1060,7 +1067,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwMontoAplicado.setVisible(true);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 			
-		} else if(siglaFP.compareTo(siglaFPTD) == 0){
+		} else if(siglaFP.compareTo(siglaFPTD) == 0) {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
@@ -1079,7 +1086,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwMontoAplicado.setVisible(true);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 			
-		} else if(siglaFP.compareTo(siglaFPDB) == 0){
+		} else if(siglaFP.compareTo(siglaFPDB) == 0) {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
@@ -1098,7 +1105,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwMontoAplicado.setVisible(true);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());
 		
-		} else if(siglaFP.compareTo(siglaFPDE) == 0){
+		} else if(siglaFP.compareTo(siglaFPDE) == 0) {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
@@ -1265,6 +1272,27 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwRecaudacionMra.setVisible(true);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());		
 		
+		} else if (siglaFP.equals(siglaFPPG) && !this.dato.getReciboDTO().isCobro()) {
+			rwBanco.setVisible(false); rwChequera.setVisible(false);
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
+			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
+			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwMontoCheque.setVisible(false); rwChequeAutoCobranza.setVisible(false);
+			rwChequeBancoAutoCobro.setVisible(false); rwLibradorAutoCobro.setVisible(false);
+			rwVencimientoAutoCobro.setVisible(false);
+			rwDebitoCobroCentral.setVisible(false);
+			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false); 
+			rwSaldoFavorCobrado.setVisible(false);
+			rwPagares.setVisible(true);
+			rwMontoAplicado.setVisible(true);
+			rwRecaudacionMra.setVisible(false);
+			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());		
+		
 		} else {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
@@ -1394,6 +1422,18 @@ public class ReciboSimpleControl extends SoloViewModel {
 		this.nvoFormaPago.setChequeLibrador(this.selectedChequeAutoCobranza.getLibrado());
 		this.nvoFormaPago.setChequeNumero(this.selectedChequeAutoCobranza.getNumero());
 	
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void setFormaPagoPagare() {
+		this.bndPagare.close();
+		this.dbxGs.setReadonly(false);
+		this.dbxUS.setReadonly(false);
+		this.nvoFormaPago.setPagareNumero(this.nvoFormaPago.getSelectedPagare().getNumero());
+		this.nvoFormaPago.setPagareFirmante(this.nvoFormaPago.getSelectedPagare().getFirmante().getRazonSocial());
+		this.nvoFormaPago.setMontoGs(this.nvoFormaPago.getSelectedPagare().getImporte());
+		this.nvoFormaPago.setMontoDs(this.nvoFormaPago.getSelectedPagare().getImporte());
 	}
 	
 	@Command
@@ -1656,7 +1696,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	 * [2]:total formaPago en moneda local
 	 * [3]:total formaPago en moneda extranjera
 	 */
-	public Object[] getDatosMovimientosApagar(){
+	public Object[] getDatosMovimientosApagar() {
 		double totalGs = 0;
 		double totalDs = 0;
 		double totalFormaPagoGs = 0;
@@ -1672,13 +1712,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 			totalFormaPagoDs += opfp.getMontoDs();
 		}
 		
-		return new Object[]{totalGs, totalDs, totalFormaPagoGs, totalFormaPagoDs};
+		return new Object[] { totalGs, totalDs, totalFormaPagoGs, totalFormaPagoDs };
 	}
 	
 	/**
 	 * Arma una descripcion de la forma de pago segun el tipo seleccionado..
 	 */
-	private String getDescripcion(){
+	private String getDescripcion() {
 		String out = this.nvoFormaPago.getTipo().getText();
 		
 		String siglaFP = this.nvoFormaPago.getTipo().getSigla();
@@ -1689,6 +1729,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		String siglaFPCA = Configuracion.SIGLA_FORMA_PAGO_CHEQUE_AUTOCOBRANZA;
 		String siglaFPDC = Configuracion.SIGLA_FORMA_PAGO_DEBITO_COBRANZA_CENTRAL;
 		String siglaFPSF = Configuracion.SIGLA_FORMA_PAGO_SALDO_FAVOR_COBRADO;
+		String siglaFPPG = Configuracion.SIGLA_FORMA_PAGO_PAGARE;
 		
 		if (siglaFP.equals(siglaFPCH)) {
 			out += " - " + this.nvoFormaPago.getBancoCta().getBancoDescripcion();
@@ -1712,6 +1753,10 @@ public class ReciboSimpleControl extends SoloViewModel {
 		
 		} else if (siglaFP.equals(siglaFPSF)) {
 			out = this.nvoFormaPago.getDescripcion();		
+		
+		} else if (siglaFP.equals(siglaFPPG)) {
+			out = this.nvoFormaPago.getDescripcion() + " - " + this.nvoFormaPago.getPagareNumero() + " - FIRMANTE: "
+					+ this.nvoFormaPago.getPagareFirmante();
 		}		
 		return out;
 	}
@@ -1824,6 +1869,12 @@ public class ReciboSimpleControl extends SoloViewModel {
 	public List<ReciboFormaPago> getSaldoRecaudacionMra() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getSaldosRecaudacionMra(this.filterChequeNro);
+	}
+	
+	@DependsOn({ "filterNro", "filterFirmante" })
+	public List<Pagare> getPagares() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getPagaresPendientes(this.filterNro, this.filterFirmante);
 	}
 	
 	public CajaPeriodoControlBody getDato() {
@@ -2030,5 +2081,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 
 	public void setSelectedRecaudacionMra(ReciboFormaPago selectedRecaudacionMra) {
 		this.selectedRecaudacionMra = selectedRecaudacionMra;
+	}
+
+	public String getFilterFirmante() {
+		return filterFirmante;
+	}
+
+	public void setFilterFirmante(String filterFirmante) {
+		this.filterFirmante = filterFirmante;
 	}
 }

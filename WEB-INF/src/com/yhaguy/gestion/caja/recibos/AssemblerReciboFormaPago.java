@@ -19,7 +19,7 @@ public class AssemblerReciboFormaPago extends Assembler {
 	private static String[] ATT_IGUALES_FORMA_PAGO = { "montoGs", "montoDs", "montoChequeGs", "descripcion",
 			"tarjetaNumero", "tarjetaNumeroComprobante", "tarjetaCuotas", "chequeFecha", "chequeNumero",
 			"chequeLibrador", "depositoNroReferencia", "retencionNumero", "retencionTimbrado", "retencionVencimiento",
-			"chequeBancoDescripcion", "reciboDebitoNro", "fechaOperacion" };
+			"chequeBancoDescripcion", "reciboDebitoNro", "fechaOperacion", "pagareNumero", "pagareFirmante" };
 	
 	private static String[] ATT_DEPOSITO_BCO_CTA = { "descripcion" };
 	

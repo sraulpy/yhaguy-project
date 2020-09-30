@@ -13,6 +13,8 @@ public class Pagare extends Domain {
 	private String descripcion;
 	private double importe;
 	private double tipoCambio;
+	private String numeroPago = "";
+	private boolean pagado;
 	
 	private Tipo moneda;
 	private Empresa firmante;
@@ -85,6 +87,22 @@ public class Pagare extends Domain {
 
 	public void setMoneda(Tipo moneda) {
 		this.moneda = moneda;
+	}
+
+	public String getNumeroPago() {
+		return numeroPago;
+	}
+
+	public void setNumeroPago(String numeroPago) {
+		this.numeroPago = numeroPago;
+	}
+
+	public boolean isPagado() {
+		return pagado;
+	}
+
+	public void setPagado(boolean pagado) {
+		this.pagado = pagado;
 	}
 
 }
