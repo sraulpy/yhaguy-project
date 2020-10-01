@@ -253,6 +253,19 @@ public class Gasto extends Domain {
 	}
 	
 	/**
+	 * @return total efectivo
+	 */
+	public double getTotalEfectivoGs() {
+		double out = 0;
+		for (ReciboFormaPago fp : this.formasPago) {
+			if (fp.isEfectivo()) {
+				out += fp.getMontoGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return la url de la imagen..
 	 */
 	public String getUrlImagen() {

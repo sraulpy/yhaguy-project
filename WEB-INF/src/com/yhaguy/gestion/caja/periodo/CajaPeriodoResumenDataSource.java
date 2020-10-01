@@ -68,6 +68,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalReposiciones = 0;
 	double totalPagos = 0;
 	double totalGastos = 0;
+	double totalGastosEfectivo = 0;
 	double totalCompras = 0;
 	double totalRepEgresos = 0;
 	double totalRepEgresosDtoViatico = 0;
@@ -642,6 +643,18 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				this.values.add(my);
 			}
 			
+			// gastos en efectivo..
+			for (Gasto gasto : planilla.getGastosOrdenado()) {
+				double importe = gasto.isAnulado() ? 0.0 : gasto.getTotalEfectivoGs();
+				this.totalGastosEfectivo += importe;
+				MyArray my = new MyArray(gasto.getTipoMovimiento().getDescripcion(),
+						gasto.getNumeroFactura() + " - "
+								+ Utiles.getMaxLength(gasto.getProveedor().getRazonSocial(), 20) + " - "
+								+ gasto.getDescripcionCuenta(),
+						importe, "GASTOS DE CAJA CHICA EN EFECTIVO", this.totalGastosEfectivo);
+				this.values.add(my);
+			}
+			
 			// compras..
 			for (CompraLocalFactura compra : planilla.getCompras()) {
 				double importe = compra.getImporteGs();
@@ -981,6 +994,8 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalReposiciones);
 		} else if ("TotalGastos".equals(fieldName)) {
 			value = FORMATTER.format(this.totalGastos * -1);
+		} else if ("TotalGastosEfe".equals(fieldName)) {
+			value = FORMATTER.format(this.totalGastosEfectivo * -1);
 		} else if ("TotalEgresos".equals(fieldName)) {
 			value = FORMATTER.format(this.totalRepEgresos);
 		} else if ("TotalRecMra".equals(fieldName)) {
@@ -997,7 +1012,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
 					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo);
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
-			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastos + this.totalPagosEfectivo - this.totalRepEgresos) * -1);
+			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo - this.totalRepEgresos) * -1);
 		}
 		return value;
 	}
