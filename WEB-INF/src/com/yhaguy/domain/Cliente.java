@@ -12,11 +12,16 @@ import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class Cliente extends Domain {
+	
+	public static final int PLAZO_30 = 30;
+	public static final int PLAZO_60 = 60;
+	public static final int PLAZO_90 = 90;
 
 	private String idPersonaJedi = "";	
 	private long prioridad = 0;
 	private boolean completo = false;
 	private String observaciones = "";
+	private int plazoVencimiento = PLAZO_30;
 	
 	private boolean ventaCredito;
 	private boolean ventaExenta;
@@ -356,5 +361,13 @@ public class Cliente extends Domain {
 
 	public void setVentaExenta(boolean ventaExenta) {
 		this.ventaExenta = ventaExenta;
+	}
+
+	public int getPlazoVencimiento() {
+		return plazoVencimiento;
+	}
+
+	public void setPlazoVencimiento(int plazoVencimiento) {
+		this.plazoVencimiento = plazoVencimiento;
 	}
 }

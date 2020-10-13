@@ -443,6 +443,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			cli.setVentaCredito((boolean) this.cliente.getPos2());
 			cli.setCobrador((Funcionario) this.cliente.getPos3());
 			cli.setVentaExenta((boolean) this.cliente.getPos4());
+			cli.setPlazoVencimiento((int) this.cliente.getPos5());
 			rr.saveObject(cli, this.getLoginNombre());
 			Empresa emp = rr.getEmpresaById(this.selectedItem.getId());
 			emp.setCartera((EmpresaCartera) this.selectedItem.getPos13());
@@ -708,6 +709,7 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		out.setPos2(cliente.isVentaCredito());
 		out.setPos3(cliente.getCobrador());
 		out.setPos4(cliente.isVentaExenta());
+		out.setPos5(cliente.getPlazoVencimiento());
 		return out;
 	}
 	
@@ -2621,6 +2623,17 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		List<String> out = new ArrayList<String>();
 		out.add(CTA_GS);
 		out.add(CTA_DS);
+		return out;
+	}
+	
+	/**
+	 * @return los plazos..
+	 */
+	public List<Integer> getPlazos() {
+		List<Integer> out = new ArrayList<Integer>();
+		out.add(Cliente.PLAZO_30);
+		out.add(Cliente.PLAZO_60);
+		out.add(Cliente.PLAZO_90);
 		return out;
 	}
 	

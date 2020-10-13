@@ -910,6 +910,17 @@
 					<field value="Venta Exenta:" />
 					<checkbox checked="@bind(vm.cliente.pos4)" />
 				</row>
+				<row>
+					<field value="Plazo Vencimiento:" />
+					<combobox hflex="true"
+						model="@load(vm.plazos)"
+						value="@load(vm.cliente.pos5)"
+						selectedItem="@bind(vm.cliente.pos5)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+				</row>
 			</rows>
 		</grid>
 		<button width="100%" label="Actualizar Datos.."
