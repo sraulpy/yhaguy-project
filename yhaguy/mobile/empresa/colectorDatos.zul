@@ -24,7 +24,6 @@
 		<textbox hflex="true" value="@bind(vm.colector.nroDocumento)"/>
 		<space></space>
 		<label value="Tipo de Documento" sclass="mobile" />
-		<textbox hflex="true" value="@bind(vm.colector.tipoDocumento)"/>
 		<combobox hflex="true" 
 					model="@load(vm.tiposDocumentos)"
 					selectedItem="@bind(vm.colector.tipoDocumento)"
