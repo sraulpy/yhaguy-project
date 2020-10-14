@@ -4,19 +4,44 @@
 
 	<vlayout height="100%">
 
-		
-		<space></space>
-		<label value="Empresa" sclass="mobile" />
-		<textbox hflex="true" value="@bind(vm.colector.razonSocialEmpresa)"/>
-		<space></space>
-		
-		
-		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+	<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
 			iconSclass="z-icon-check"
 			label=" ENVIAR" height="150px" style="font-size:30pt"
 			dir="normal" 
 			onClick="@command('enviar')" />
 		
+		<space></space>
+		<label value="Empresa" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.razonSocialEmpresa)"/>
+		<space></space>
+		<label value="Ruc de la Empresa" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.rucEmpresa)"/>
+		<space></space>
+		<label value="Nombre y Apellido" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.nombreApellido)"/>
+		<space></space>
+		<label value="Nro. de Documento" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.nroDocumento)"/>
+		<space></space>
+		<label value="Tipo de Documento" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.tipoDocumento)"/>
+		<combobox hflex="true" 
+					model="@load(vm.tiposDocumentos)"
+					selectedItem="@bind(vm.colector.tipoDocumento)"
+					value="@load(vm.colector.tipoDocumento)">
+					<template name="model">
+						<comboitem label="@load(each)"/>
+					</template>
+				</combobox>
+		<space></space>
+		<label value="Cargo" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.cargo)"/>
+		<space></space>
+		<label value="Teléfono" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.telefono)"/>
+		<space></space>
+		<label value="Correo" sclass="mobile" />
+		<textbox hflex="true" value="@bind(vm.colector.correo)"/>		
 	</vlayout>
 
 	<style>

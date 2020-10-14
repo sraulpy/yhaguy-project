@@ -1,5 +1,8 @@
 package com.yhaguy.gestion.mobile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -31,12 +34,20 @@ public class ColectorDatosMobileVM extends SimpleViewModel {
 	public void enviar() throws Exception{
 		RegisterDomain rr = RegisterDomain.getInstance();
 		rr.saveObject(this.colector, "mobile");
+		this.colector = new ColectorDatos();
 		Clients.showNotification("ENVIADO");
 	}
 
 	/**
 	 * GETTER / SETTER
 	 */
+	
+	public List<String> getTiposDocumentos() {
+		List<String> out = new ArrayList<String>();
+		out.add("CEDULA");
+		out.add("RUC");
+		return out;
+	}
 	
 	public ColectorDatos getColector() {
 		return colector;
