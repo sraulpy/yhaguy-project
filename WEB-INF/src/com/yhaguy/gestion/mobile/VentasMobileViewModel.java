@@ -103,7 +103,11 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	@Command
 	@NotifyChange("selectedDetalle")
 	public void selectPrecio() throws Exception {
-		this.setPrecioVentaBaterias();
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
+			this.setPrecioVentaBaterias();
+		} else {
+			this.setPrecioVenta();
+		}		
 	}
 	
 	@Command
@@ -220,6 +224,33 @@ public class VentasMobileViewModel extends SimpleViewModel {
 				rem.getDetalles().add(det);
 			}
 			rr.saveObject(rem, "mobile");
+		}
+	}
+	
+	/**
+	 * set precio de venta..
+	 */
+	private void setPrecioVenta() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Cliente cli = rr.getClienteByEmpresa(this.selectedEmpresa.getId());
+		Object[] art = rr.getArticulo_(this.selectedDetalle.getArticulo().getId());
+		double precio = 0;
+		long idListaPrecio = this.selectedDetalle.getListaPrecio().getId();
+		if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) precio = (double) art[2];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MINORISTA) precio = (double) art[3];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) precio = (double) art[4];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precio = (double) art[5];
+		if (idListaPrecio == ArticuloListaPrecio.ID_TRANSPORTADORA) precio = (double) art[7];
+		if (this.selectedDetalle.isExenta()) {
+			precio = precio - Utiles.getIVA(precio, 10);
+		}
+		this.selectedDetalle.setPrecioGs(precio);
+		double dto_mayorista = cli.getDescuentoMayorista();
+		double porcentajeDescuento = (double) art[6];
+		this.selectedDetalle.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.selectedDetalle.getPrecioGs() * this.selectedDetalle.getCantidad()), porcentajeDescuento));
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) {
+			double descuento = porcentajeDescuento > dto_mayorista ? porcentajeDescuento : dto_mayorista;
+			this.selectedDetalle.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.selectedDetalle.getPrecioGs() * this.selectedDetalle.getCantidad()), descuento));
 		}
 	}
 	
@@ -408,21 +439,8 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	 */
 	@DependsOn("selectedEmpresa")
 	public List<ArticuloListaPrecio> getListaPrecio() throws Exception {
-		if (this.selectedEmpresa == null) {
-			return new ArrayList<ArticuloListaPrecio>();
-		}
-		List<ArticuloListaPrecio> out = new ArrayList<ArticuloListaPrecio>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Cliente cli = rr.getClienteByEmpresa(this.selectedEmpresa.getId());
-		if (cli.getListaPrecio() != null) {
-			out.add(cli.getListaPrecio());
-		} else {
-			ArticuloListaPrecio lp = rr.getListaDePrecio(2);
-			if (lp != null) {
-				out.add(lp);
-			}
-		}
-		return out;
+		return rr.getListasDePrecio();
 	}
 	
 	/**
