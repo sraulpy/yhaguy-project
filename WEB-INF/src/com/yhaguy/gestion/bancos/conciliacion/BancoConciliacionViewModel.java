@@ -465,6 +465,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> historicoHABER;
 
 		long idBanco = this.dto.getBanco().getId();
+		boolean guaranies = (this.dto.getBanco().getMoneda().getId() == Configuracion.ID_MONEDA_GUARANIES);
 
 		List<Object[]> depositos = rr.getDepositosPorBanco(idBanco, desde, hasta);
 		List<Object[]> descuentos = rr.getDescuentosPorBanco(idBanco, desde, hasta);
@@ -477,9 +478,9 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> chequesRechazados_ = rr.getChequesRechazadosPorBancoPorDescuento(idBanco, desde, hasta);
 		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta, true);
 		List<Object[]> debitosDesglosados = rr.getGastosBancariosDebitoDesglosadoPorBanco(idBanco, desde, hasta);
-		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta);
+		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
-		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta);
+		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();

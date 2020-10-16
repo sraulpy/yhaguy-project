@@ -9286,11 +9286,11 @@ public class RegisterDomain extends Register {
 	 * [3]:totalImporteGs 
 	 * [4]:banco 
 	 */
-	public List<Object[]> getFormasPagoDebitoBancarioPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getFormasPagoDebitoBancarioPorBanco(long idBanco, Date desde, Date hasta, boolean gs) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('DEBITO CTA. BANCARIA'), "
-				+ " r.fechaEmision, r.numero, f.montoGs, f.depositoBancoCta.banco.descripcion, concat(r.numero, ' - ', r.proveedor.empresa.razonSocial)"
+				+ " r.fechaEmision, r.numero, " + ( gs ? "f.montoGs" : "f.montoDs") + ", f.depositoBancoCta.banco.descripcion, concat(r.numero, ' - ', r.proveedor.empresa.razonSocial)"
 				+ " from Recibo r join r.formasPago f where f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA + "'"
 				+ " and f.depositoBancoCta.id = " + idBanco
 				+ " and (r.fechaEmision >= '"
@@ -9334,11 +9334,11 @@ public class RegisterDomain extends Register {
 	 * [3]:totalImporteGs 
 	 * [4]:banco 
 	 */
-	public List<Object[]> getFormasPagoDepositoBancarioEnVentasPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getFormasPagoDepositoBancarioEnVentasPorBanco(long idBanco, Date desde, Date hasta, boolean gs) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('DEPOSITO CTA. BANCARIA'), "
-				+ " f.fechaOperacion, f.depositoNroReferencia, f.montoGs, f.depositoBancoCta.banco.descripcion, concat('VENTA NRO. ', v.numero, ' - ', v.cliente.empresa.razonSocial)"
+				+ " f.fechaOperacion, f.depositoNroReferencia," + ( gs ? "f.montoGs" : "f.montoDs") + ", f.depositoBancoCta.banco.descripcion, concat('VENTA NRO. ', v.numero, ' - ', v.cliente.empresa.razonSocial)"
 				+ " from Venta v join v.formasPago f where f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
 				+ " and v.estadoComprobante is null"
 				+ " and f.depositoBancoCta.id = " + idBanco
