@@ -384,7 +384,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	 */
 	public List<Deposito> getDepositos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getDepositosPorSucursal((long) 2);
+		return rr.getDepositos();
 	}
 	
 	/**
