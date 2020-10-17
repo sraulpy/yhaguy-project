@@ -149,7 +149,7 @@ public class CajaPeriodo extends Domain {
 			}			
 		}		
 		for (Recibo cobro : this.recibos) {
-			if(cobro.isCobro() && !cobro.isAnulado() && !cobro.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_RECIBO_COBRO)) {
+			if(cobro.isCobro() && !cobro.isAnulado() && !cobro.getTipoMovimiento().getSigla().equals(Configuracion.SIGLA_TM_ANTICIPO_COBRO)) {
 				for (ReciboFormaPago fp : cobro.getFormasPago()) {
 					if(fp.isEfectivo() && fp.isMonedaLocal())
 						out += fp.getMontoGs();
