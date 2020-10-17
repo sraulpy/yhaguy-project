@@ -211,7 +211,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			// cobranzas con efectivo..
 			for (Recibo cobro : planilla.getRecibosOrdenado()) {
 				if (cobro.isCobro() && !cobro.isAnulado()
-						&& !cobro.isCobroExterno() && !cobro.isCancelacionCheque()) {
+						&& !cobro.isCobroExterno() && !cobro.isCancelacionCheque() && !cobro.isCobroAnticipo()) {
 					Object[] aldia = cobro.getCobranzasConEfectivo();
 					if (aldia != null) {
 						List<Object[]> items = (List<Object[]>) aldia[0];
