@@ -197,14 +197,14 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setPreparadoPor("");
 		venta.setPuntoPartida("");
 		venta.setRepartidor("");
-		venta.setReparto(true);
+		venta.setReparto(false);
 		venta.setSucursal(rr.getSucursalAppById(2));
 		venta.setTipoCambio(0);
 		venta.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PEDIDO_VENTA));
 		venta.setTotalImporteGs(venta.getImporteGs());
 		venta.setValidez(0);
 		venta.setVencimiento(new Date());
-		venta.setFormaEntrega(Venta.FORMA_ENTREGA_REPARTO);
+		venta.setFormaEntrega(Venta.FORMA_ENTREGA_EMPAQUE);
 		rr.saveObject(venta, "mobile");
 		this.numero = venta.getNumero();
 		
@@ -422,7 +422,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		List<CondicionPago> out = new ArrayList<CondicionPago>();
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CondicionPago contado = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CONTADO);
-		CondicionPago credito = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_90);
+		CondicionPago credito = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_30);
 		out.add(contado); 
 		// verifica si el cliente esta habilitado para credito..
 		if (this.selectedEmpresa != null && !this.selectedEmpresa.isCuentaBloqueada()) {
