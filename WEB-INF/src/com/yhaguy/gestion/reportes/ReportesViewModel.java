@@ -11518,7 +11518,7 @@ public class ReportesViewModel extends SimpleViewModel {
 									"NC-" + nc.getCompraAplicada().getCondicionPago().getDescripcion().toUpperCase().substring(0, 3),
 									nc.getSucursal().getDescripcion(),
 									nc.getProveedor().getRazonSocial(),
-									Utiles.getRedondeo(nc.getImporteGs()) };
+									Utiles.getRedondeo(nc.getImporteGs() * -1) };
 							data.add(cmp);
 						}					
 					}
