@@ -381,7 +381,7 @@ public class ControlCuentaCorriente {
 		ctm.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 		ctm.setNroComprobante(cheque.getNumero() + "");
 		ctm.setSucursal(rr.getSucursalAppById(2));
-		ctm.setSaldo(cheque.getMonto() * -1);	
+		ctm.setSaldo(cheque.getMonto());	
 		rr.saveObject(ctm, user);
 	}
 	
