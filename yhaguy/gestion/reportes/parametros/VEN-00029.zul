@@ -16,8 +16,8 @@
 		</row>
 		<row>
 			<field value="Familia:" />
-			<combobox model="@load(vm.dato.filtro.familias)"
-				selectedItem="@bind(vm.dato.filtro.familia)" hflex="true"
+			<combobox model="@load(vm.dato.filtro.familias_)"
+				selectedItem="@bind(vm.dato.filtro.familia_)" hflex="true"
 				placeholder="TODOS..">
 				<template name="model">
 					<comboitem label="@load(each.descripcion)" />
