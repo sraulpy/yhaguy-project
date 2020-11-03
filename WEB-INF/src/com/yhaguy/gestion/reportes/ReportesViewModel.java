@@ -2966,7 +2966,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			}
 			
 			try {
-				Tipo familia = filtro.getFamilia();
+				ArticuloFamilia familia = filtro.getFamilia_();
 				Object[] formato = filtro.getFormato();
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();

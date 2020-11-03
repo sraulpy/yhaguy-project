@@ -7236,7 +7236,7 @@ public class RegisterDomain extends Register {
 				+ hasta_
 				+ "')"; 
 				if (idFamilia != 0) {
-					query += " and d.articulo.articuloFamilia.id = " + idFamilia;
+					query += " and d.articulo.familia.id = " + idFamilia;
 				}
 				query += " order by d.articulo.id, v.fecha desc";
 
@@ -7253,7 +7253,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, d.cantidad, d.montoGs, d.articulo.codigoInterno,"
-				+ " d.articulo.descripcion, d.articulo.id from NotaCredito n join n.detalles d where d.articulo.articuloFamilia.id = "
+				+ " d.articulo.descripcion, d.articulo.id from NotaCredito n join n.detalles d where d.articulo.familia.id = "
 				+ idFamilia
 				+ " and (n.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA
