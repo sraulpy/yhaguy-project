@@ -11630,6 +11630,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LISTADO_IMPORTACIONES = "COM-00006";
 		static final String MOVIMIENTOS_ARTICULOS = "COM-00007";
 		static final String MATRIZ_COMPRAS_LOCALES = "COM-00008";
+		static final String COMPRAS_LOCALES_ARTICULO = "COM-00009";
 
 		/**
 		 * procesamiento del reporte..
@@ -11667,6 +11668,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			case MATRIZ_COMPRAS_LOCALES:
 				this.comprasArticuloMes(false, MATRIZ_COMPRAS_LOCALES);
+				break;
+				
+			case COMPRAS_LOCALES_ARTICULO:
+				this.comprasLocalesPorArticulo(COMPRAS_LOCALES_ARTICULO);
 				break;
 			}
 		}
@@ -12797,6 +12802,61 @@ public class ReportesViewModel extends SimpleViewModel {
 				JRDataSource dataSource = new VentasClienteArticulo(list, rango);
 				imprimirJasper(source, params, dataSource, formato);
 				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * compras locales por articulo..
+		 */
+		private void comprasLocalesPorArticulo(String codigo) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				List<Deposito> depositos = filtro.getSelectedDepositos();
+				
+				long idFamilia = flia != null ? flia.getId() : 0; 
+
+				if (depositos.size() > 2) {
+					Clients.showNotification("MÁXIMO HASTA 2 DEPÓSITOS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+				
+				Deposito dep1 = depositos.size() > 0 ? depositos.get(0) : null;
+				Deposito dep2 = depositos.size() > 1 ? depositos.get(1) : null;
+				
+				long idDeposito1 = dep1 != null? dep1.getId() : 0;
+				long idDeposito2 = dep2 != null? dep2.getId() : 0;
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> compras = rr.getComprasLocalesArticuloDetallado(desde, hasta, idFamilia, idDeposito1, idDeposito2);
+				long cero = 0;
+				for (Object[] cmp : compras) {
+					Object[] obj = new Object[] { cmp[1], cmp[2], cmp[3], cmp[4], cmp[5],
+							(cmp[6] != null ? Long.parseLong(cmp[6] + "") : cero),
+							(cmp[7] != null ? Long.parseLong(cmp[7] + "") : cero) };
+					data.add(obj);
+				}
+				
+				String stock1 = dep1 != null? dep1.getDescripcion() : "- - -";
+				String stock2 = dep2 != null? dep2.getDescripcion() : "- - -";
+				
+				ReporteComprasPorArticulo rep = new ReporteComprasPorArticulo(desde, hasta, stock1, stock2);
+				rep.setDatosReporte(data);
+				rep.setTitulo(codigo + " - Compras locales por Artículo");
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -15948,6 +16008,70 @@ class ReporteComprasImportacion extends ReporteYhaguy {
 				.add(this.textoParValor("Proveedor", this.proveedor))
 				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte de Compras por Articulo COM-00009..
+ */
+class ReporteComprasPorArticulo extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+	private String stock1 = "";
+	private String stock2 = "";
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col2 = new DatosColumnas("Familia", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 25);
+	static DatosColumnas col4 = new DatosColumnas("Cant. Ult.Compra", TIPO_INTEGER, 25);
+	static DatosColumnas col5 = new DatosColumnas("Fecha Ult.Compra", TIPO_STRING, 25);
+	static DatosColumnas col6 = new DatosColumnas("Stock 1", TIPO_LONG, 25);
+	static DatosColumnas col7 = new DatosColumnas("Stock 2", TIPO_LONG, 25);
+
+	public ReporteComprasPorArticulo(Date desde, Date hasta, String stock1, String stock2) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.stock1 = stock1;
+		this.stock2 = stock2;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("compras");
+		this.setNombreArchivo("CompraArticulo-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList()
+				.add(this.texto(""))
+				.add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Stock 1", this.stock1.toUpperCase()))
+				.add(this.textoParValor("Stock 2", this.stock2.toUpperCase())));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}

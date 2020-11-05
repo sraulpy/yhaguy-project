@@ -12171,6 +12171,35 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 500);
 	}
 	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.familia
+	 * [3]:cantidad
+	 * [4]:cantUltimaCompra
+	 * [5]:fechaUltimaCompra
+	 * [6]:stock 1
+	 * [7]:stock 2
+	 */
+	public List<Object[]> getComprasLocalesArticuloDetallado(Date desde, Date hasta, long idFamilia, long idDeposito1, long idDeposito2) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.familia.descripcion, sum(d.cantidad), d.articulo.cantUltimaCompra,"
+				+ " to_char(d.articulo.fechaUltimaCompra, 'dd-MM-yyyy'),"
+				+ "	(select CASE WHEN ad.stock IS NULL THEN 0 ELSE ad.stock END from ArticuloDeposito ad where ad.articulo.id = d.articulo.id and ad.deposito.id = " + idDeposito1 + "),"
+				+ "	(select CASE WHEN ad.stock IS NULL THEN 0 ELSE ad.stock END from ArticuloDeposito ad where ad.articulo.id = d.articulo.id and ad.deposito.id = " + idDeposito2 + ")"
+				+ " from CompraLocalFactura c join c.detalles d where (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')" + " and (c.fechaOriginal >= '" + desde_
+				+ "' and c.fechaOriginal <= '" + hasta_ + "')";
+		if (idFamilia > 0) {
+			query += " and d.articulo.familia.id = " + idFamilia;
+		}
+		query += " group by 1, 2, 3, 5, 6, 7, 8";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));
