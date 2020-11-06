@@ -15,7 +15,7 @@
 
 		<tabpanel vflex="true" style="padding:5px">
 			<hlayout valign="top">
-				<vlayout hflex="true" style="padding:5px">
+				<vlayout hflex="2" style="padding:5px">
 					<grid sclass="vgrid" width="800px">
 						<columns>
 							<column width="20%" />
@@ -103,6 +103,21 @@
 						</rows>
 					</grid>
 				</vlayout>
+				<groupbox title="Foto del Cliente" mold="3d" hflex="1"
+					vflex="true" style="text-align:center">
+					<html>
+						<![CDATA[ <img id="foto" style ="height:100%;
+						width:100%;" alt=""
+						onerror="this.src='http://mra.yhaguyrepuestos.com.py/images/default.png'"
+						></img> ]]>
+						
+    				</html>
+				</groupbox>
+				<script>
+					function setImage(url) { 
+						var imagen = document.getElementById("foto"); imagen.src = url; 
+					}
+				</script>
 			</hlayout>
 		</tabpanel>
 
