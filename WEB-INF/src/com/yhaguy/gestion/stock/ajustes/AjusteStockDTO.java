@@ -44,6 +44,9 @@ public class AjusteStockDTO extends DTO {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "ajustes/" + this.getId() + ".png";
 		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return Configuracion.URL_IMAGES_PUBLIC_RPS + "ajustes/" + this.getId() + ".png";
+		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "ajustes/" + this.getId() + ".png";
 	}
 	

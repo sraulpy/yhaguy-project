@@ -137,7 +137,7 @@
 	<groupbox title="Documento Respaldo" mold="3d" hflex="3" vflex="true" style="text-align:center">
 		<html><![CDATA[
         		<img id="foto" style ="height:100%; width:100%;" alt="" 
-        			onerror="this.src='http://190.211.240.30/images/default.png'" ></img> ]]>
+        			onerror="this.src='http://mra.yhaguyrepuestos.com.py/images/default.png'" ></img> ]]>
     	</html>
 	</groupbox>
 	</hbox>
