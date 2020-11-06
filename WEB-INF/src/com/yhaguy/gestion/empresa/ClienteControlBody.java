@@ -7,6 +7,7 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ListModelList;
@@ -58,6 +59,7 @@ public class ClienteControlBody extends EmpresaControlBody {
 	public void setDTOCorriente(DTO dto) {
 		this.dto = (ClienteDTO) dto;
 		this.setDtoEmp(this.dto.getEmpresa());
+		Clients.evalJavaScript("setImage('" + this.dto.getUrlImagen() + "')");
 	}
 
 	@Override

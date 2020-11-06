@@ -6,6 +6,7 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class ClienteDTO extends DTO {
@@ -33,6 +34,19 @@ public class ClienteDTO extends DTO {
 	 */
 	public boolean isCuentaBloqueada() {
 		return this.empresa.isCuentaBloqueada();
+	}
+	
+	/**
+	 * @return la url de la imagen..
+	 */
+	public String getUrlImagen() {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
+			return Configuracion.URL_IMAGES_PUBLIC_MRA + "clientes/" + this.getEmpresa().getId() + ".png";
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return Configuracion.URL_IMAGES_PUBLIC_RPS + "clientes/" + this.getEmpresa().getId() + ".png";
+		}
+		return Configuracion.URL_IMAGES_PUBLIC_BAT + "clientes/" + this.getEmpresa().getId() + ".png";
 	}
 
 	public String getIdPersonaJedi() {

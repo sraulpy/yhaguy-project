@@ -6,6 +6,5 @@
 		<include src="/yhaguy/gestion/empresa/EmpresaRUC.zul" />
 		<space />
 		<include src="/yhaguy/gestion/empresa/EmpresaBody.zul" />
-
 	</window>
 </zk>
