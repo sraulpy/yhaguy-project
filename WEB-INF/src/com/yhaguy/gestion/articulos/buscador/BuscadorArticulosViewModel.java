@@ -221,9 +221,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	 */
 	private String getUrlImagen() {
 		if (this.selectedItem == null)
-			return "http://190.211.240.30/images/default.png";
+			return "http://mra.yhaguyrepuestos.com.py/images/default.png";
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "articulos/" + this.selectedItem.getId() + ".png";
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return Configuracion.URL_IMAGES_PUBLIC_RPS + "articulos/" + this.selectedItem.getId() + ".png";
 		}
 		return Configuracion.URL_IMAGES_PUBLIC_BAT + "articulos/" + this.selectedItem.getId() + ".png";
 	}
