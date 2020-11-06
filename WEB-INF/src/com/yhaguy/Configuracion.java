@@ -25,6 +25,7 @@ public class Configuracion extends Config {
 	
 	public static final String URL_IMAGES_PUBLIC_MRA = "http://mra.yhaguyrepuestos.com.py/images/";
 	public static final String URL_IMAGES_PUBLIC_BAT = "http://gestion.gtsa.com.py/images/";
+	public static final String URL_IMAGES_PUBLIC_RPS = "http://mra.yhaguyrepuestos.com.py/representaciones/images/";
 
 	public static String pathProforma = PATH_SESSION + ("/yhaguy/archivos/proformas/") + "/";
 	public static String pathProformaGenerico = "/yhaguy/archivos/proformas/";
