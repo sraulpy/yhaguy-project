@@ -6483,9 +6483,12 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (impDiciembre == null) impDiciembre = 0.0;
 						
 						Object[] costoPrecio = rr.getCostoPrecio(codigo);
-						long stock1 = rr.getStock(codigo, deps1);
-						long stock2 = rr.getStock(codigo, deps2);
-						long stock3 = rr.getStock(codigo, deps3);
+						Long stock1 = rr.getStock(codigo, deps1);
+						Long stock2 = rr.getStock(codigo, deps2);
+						Long stock3 = rr.getStock(codigo, deps3);
+						long stock1_ = stock1 != null? stock1 : 0;
+						long stock2_ = stock2 != null? stock2 : 0;
+						long stock3_ = stock3 != null? stock3 : 0;
 						Double volumen = volumens.get(codigo);
 						HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 						hist.setDescripcion(codigo);
@@ -6494,7 +6497,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.setMarca(marca);
 						hist.setCodigoOriginal(medida_);
 						hist.setLitraje(cantidad);
-						hist.setCoeficiente(volumen != null ? (volumen * (stock1 + stock2 + stock3)) : 0.0);
+						hist.setCoeficiente(volumen != null ? (volumen * (stock1_ + stock2_ + stock3_)) : 0.0);
 						hist.setEnero_(cantEnero);
 						hist.setFebrero_(cantFebrero);
 						hist.setMarzo_(cantMarzo);
