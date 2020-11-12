@@ -10617,6 +10617,14 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las presentaciones..
+	 */
+	public List<ArticuloPresentacion> getPresentaciones() throws Exception {
+		String query = "select a from ArticuloPresentacion a order by a.descripcion";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return los articulos..
 	 * [0]:articulo.id
 	 * [1]:articulo.codigoInterno

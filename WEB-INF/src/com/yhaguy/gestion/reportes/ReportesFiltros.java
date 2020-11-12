@@ -17,6 +17,7 @@ import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloGasto;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloMarca;
+import com.yhaguy.domain.ArticuloPresentacion;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CajaPeriodo;
@@ -130,6 +131,7 @@ public class ReportesFiltros {
 	private String expedicion = "";
 	
 	private Articulo articulo;
+	private ArticuloPresentacion presentacion;
 	private String codigoArticulo = "";
 	private String tipoSaldoMigracion = TODOS;
 	private String tipoRentabilidad = TODOS;
@@ -419,6 +421,14 @@ public class ReportesFiltros {
 			return rr.getMarcasPorFamilia(this.familia_.getDescripcion());
 		}
 		return rr.getMarcas();
+	}
+	
+	/**
+	 * @return las marcas..
+	 */
+	public List<ArticuloPresentacion> getPresentaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getPresentaciones();
 	}
 	
 	/**
@@ -1674,5 +1684,13 @@ public class ReportesFiltros {
 
 	public void setIncluirCobroExterno(boolean incluirCobroExterno) {
 		this.incluirCobroExterno = incluirCobroExterno;
+	}
+
+	public ArticuloPresentacion getPresentacion() {
+		return presentacion;
+	}
+
+	public void setPresentacion(ArticuloPresentacion presentacion) {
+		this.presentacion = presentacion;
 	}
 }

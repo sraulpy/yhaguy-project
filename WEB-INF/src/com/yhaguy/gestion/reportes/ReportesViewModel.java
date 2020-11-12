@@ -60,6 +60,7 @@ import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
+import com.yhaguy.domain.ArticuloPresentacion;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
@@ -3863,6 +3864,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Articulo art = filtro.getArticulo();
+				ArticuloPresentacion pres = filtro.getPresentacion();
 				Cliente cliente = filtro.getCliente();
 				Object[] formato = filtro.getFormato();
 				Funcionario vendedor = filtro.getVendedor();
@@ -3890,6 +3892,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idFamilia = familia == null ? 0 : familia.getId().longValue();
 				long idMarca = marca == null ? 0 : marca.getId().longValue();
 				long idProveedor = proveedor == null ? 0 : proveedor.getId().longValue();
+				long idPresentacion = pres == null ? 0 : pres.getId().longValue();
 
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "", null);
 				for (NotaCredito notacred : ncs) {
@@ -3919,7 +3922,9 @@ public class ReportesViewModel extends SimpleViewModel {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
 										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
-											data.add(nc);
+											if (pres == null || (item.getArticulo().getPresentacion() != null && idPresentacion == item.getArticulo().getPresentacion().getId().longValue())) {
+												data.add(nc);
+											}											
 										}										
 									}															
 								}
@@ -3976,7 +3981,9 @@ public class ReportesViewModel extends SimpleViewModel {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
 										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
-											data.add(vta);
+											if (pres == null || (item.getArticulo().getPresentacion() != null && idPresentacion == item.getArticulo().getPresentacion().getId().longValue())) {
+												data.add(vta);
+											}											
 										}									
 									}
 								}
@@ -21734,7 +21741,7 @@ class ReporteTotalVentas extends ReporteYhaguy {
 	public void informacionReporte() {
 		this.setTitulo("Total ventas contado / credito por vendedor");
 		this.setDirectorio("ventas");
-		this.setNombreArchivo("Cobro-");
+		this.setNombreArchivo("Ventas-");
 		this.setTitulosColumnas(cols);
 		this.setBody(this.getCuerpo());
 	}
