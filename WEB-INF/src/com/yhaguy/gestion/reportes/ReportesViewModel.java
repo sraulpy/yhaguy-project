@@ -3874,6 +3874,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				ArticuloMarca marca = filtro.getMarca_();
 				Proveedor proveedor = filtro.getProveedor();
 				
+				long totalCantidad = 0;
 				double totalImporte = 0;
 				double totalCosto = 0;
 				
@@ -3910,7 +3911,7 @@ public class ReportesViewModel extends SimpleViewModel {
 									item.getArticulo().getMarca().getDescripcion().toUpperCase(),
 									item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
 									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoGs() * -1,
-									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? (long) 0 : Long.parseLong(item.getCantidad() + ""),
+									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? (long) 0 : Long.parseLong((item.getCantidad() * -1) + ""),
 									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoTotalGsSinIva() * -1,
 									notacred.isAnulado() ? 0.0 : item.getImporteGsSinIva() * -1,
 									notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
@@ -3992,8 +3993,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					}					
 				}
 				for (Object[] obj : data) {
+					long cant = (long) obj[10];
 					double costo = (double) obj[11];
 					double importe = (double) obj[12];
+					totalCantidad += cant;
 					totalCosto += costo;
 					totalImporte += importe;
 				}
@@ -4020,6 +4023,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					params.put("TOT_UTILIDAD", Utiles.getNumberFormat((totalImporte - totalCosto)));
 					params.put("TOT_MARGEN_VTA", Utiles.getNumberFormat(promedioSobreVenta));
 					params.put("TOT_MARGEN_COSTO", Utiles.getNumberFormat(promedioSobreCosto));
+					params.put("TOT_CANTIDAD", Utiles.getNumberFormat(totalCantidad));
 					imprimirJasper(source, params, dataSource, formato);
 					
 				} else {
