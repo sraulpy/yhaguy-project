@@ -3930,7 +3930,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								}
 							}
 						}
-						if (art == null && familia == null && marca == null && proveedor == null && notacred.isMotivoDescuento()) {
+						if (art == null && familia == null && marca == null && proveedor == null && pres == null && notacred.isMotivoDescuento()) {
 							Object[] nc = new Object[] {
 									Utiles.getDateToString(notacred.getFechaEmision(), "dd-MM-yyyy"),
 									notacred.getNumero(),
