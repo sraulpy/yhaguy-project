@@ -18258,9 +18258,8 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 			String timbrado = compra.getTimbrado().getNumero();
 			String proveedor = compra.getProveedor().getRazonSocial();
 			String ruc = compra.getProveedor().getRuc();
-			double importe = redondear(compra.getImporteGs());
-			double iva10 = redondear(misc.calcularIVA(importe, 10));
-			double gravada10 = redondear(importe - iva10);
+			double iva10 = compra.getIva10();
+			double gravada10 = compra.getGravada10();
 			double gravada5 = compra.getGravada5();
 			double exenta = compra.getExenta();
 			double iva5 = compra.getIva5();
