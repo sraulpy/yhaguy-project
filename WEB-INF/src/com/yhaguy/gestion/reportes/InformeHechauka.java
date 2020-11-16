@@ -277,19 +277,19 @@ public class InformeHechauka {
 			String col5 = "1";
 			String nro = compra.getNumero();
 			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
-			double importe = redondear(compra.getImporteGs());
-			double iva10 = redondear(misc.calcularIVA(importe, 10));
-			double gravada = redondear(importe - iva10);
-			long col10 = 0;
-			long col11 = 0;
-			long col12 = 0;
+			double iva10 = redondear(compra.getIva10());
+			double gravada10 = redondear(compra.getGravada10());
+			double exenta = redondear(compra.getExenta());
+			double gravada5 = redondear(compra.getGravada5());
+			double iva5 = redondear(compra.getIva5());
+			double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
 			String col13 = "0";
 			long col14 = compra.isContado() ? 1 : 2;
 			long col15 = compra.isContado() ? 0 : 1;
 			String object = col1 + " \t" + col2 + " \t" + dv + " \t" + rSocial + " \t" + timbrado + " \t" + col5 + " \t" + nro + " \t"
-					+ fecha + " \t" + FORMATTER.format(gravada) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
-					+ FORMATTER.format(col10) + "" + "\t" + FORMATTER.format(col11) + "" + "\t"
-					+ FORMATTER.format(col12) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
+					+ fecha + " \t" + FORMATTER.format(gravada10) + "" + " \t" + FORMATTER.format(iva10) + "" + "\t"
+					+ FORMATTER.format(gravada5) + "" + "\t" + FORMATTER.format(iva5) + "" + "\t"
+					+ FORMATTER.format(exenta) + "" + "\t" + col13 + "\t" + col14 + "" + "\t"
 					+ col15 + "" + "\r\n";
 			objects.add(object);
 			registros++;
