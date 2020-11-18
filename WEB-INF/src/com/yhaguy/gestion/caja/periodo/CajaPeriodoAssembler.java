@@ -471,7 +471,7 @@ public class CajaPeriodoAssembler extends Assembler {
 		// es una orden de pago anticipado..
 		if (rec.isAnticipoPago()) {
 			AssemblerRecibo.registrarReciboPago("ANTICIPO", new Date(), rec.getId(), this.getLogin(), true, rec.isSaldoAcobrar());
-			ControlCuentaCorriente.addReciboDePagoAnticipado(rec.getId(), this.getLogin(), (String) rec.getMoneda().getPos2());
+			ControlCuentaCorriente.addReciboDePagoAnticipado(rec.getId(), this.getLogin(), (String) rec.getMoneda().getPos2(), rec.getNumeroImportacion());
 		}
 		// desbloqueo automatico
 		if (rec.isCobro()) {

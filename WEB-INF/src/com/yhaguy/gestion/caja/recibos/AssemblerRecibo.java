@@ -18,11 +18,10 @@ import com.yhaguy.gestion.empresa.ctacte.AssemblerCtaCteEmpresaMovimiento;
 
 public class AssemblerRecibo extends Assembler {
 
-	private static String[] attIguales = { "numero", "idUsuarioCarga",
-			"nombreUsuarioCarga", "fechaEmision", "totalImporteGs",
-			"totalImporteDs", "tipoCambio", "movimientoBancoActualizado",
-			"motivoAnulacion", "cobroExterno", "tesaka", "numeroPlanilla", 
-			"entregado", "numeroRecibo", "fechaRecibo", "nro", "cobrador", "saldodeudor", "saldoAcobrar" };
+	private static String[] attIguales = { "numero", "idUsuarioCarga", "nombreUsuarioCarga", "fechaEmision",
+			"totalImporteGs", "totalImporteDs", "tipoCambio", "movimientoBancoActualizado", "motivoAnulacion",
+			"cobroExterno", "tesaka", "numeroPlanilla", "entregado", "numeroRecibo", "fechaRecibo", "nro", "cobrador",
+			"saldodeudor", "saldoAcobrar", "numeroImportacion" };
 	
 	private static String[] attEmpresa = { "codigoEmpresa", "razonSocial", "ruc", "idEmpresa" };	
 	
@@ -32,7 +31,8 @@ public class AssemblerRecibo extends Assembler {
 	/**
 	 * registra el recibo de pago..
 	 */
-	public static void registrarReciboPago(String numeroRecibo, Date fechaRecibo, long idOrdenPago, String user, boolean contado, boolean aCobrar) 
+	public static void registrarReciboPago(String numeroRecibo, Date fechaRecibo, long idOrdenPago, String user,
+			boolean contado, boolean aCobrar) 
 		throws Exception {
 		
 		if (aCobrar) {
@@ -46,11 +46,13 @@ public class AssemblerRecibo extends Assembler {
 		pago.setEntregado(true);
 		rr.saveObject(pago, user);
 		
-		if (contado) {
-			ControlCuentaCorriente.addReciboDePagoGastosContado(idOrdenPago, user, aCobrar);
-		} else {
-			ControlCuentaCorriente.addReciboDePago(idOrdenPago, user, aCobrar);
-		}		
+		if (!pago.isAnticipoPago()) {
+			if (contado) {
+				ControlCuentaCorriente.addReciboDePagoGastosContado(idOrdenPago, user, aCobrar);
+			} else {
+				ControlCuentaCorriente.addReciboDePago(idOrdenPago, user, aCobrar);
+			}
+		}				
 	}
 	
 	@Override

@@ -128,6 +128,12 @@
 						<checkbox
 							checked="@bind(vm.dato.reciboDTO.saldoAcobrar)" />
 					</vlayout>
+					<vlayout spacing="0"
+						visible="@load((!vm.dato.cobro) and (vm.anticipo))">
+						<field value="Importación Nro."/>
+						<textbox placeholder="Importación Nro." hflex="true" vflex="true"
+							value="@bind(vm.dato.reciboDTO.numeroImportacion)"></textbox>
+					</vlayout>					
 				</hlayout>			
 				<hlayout>				
 					<label

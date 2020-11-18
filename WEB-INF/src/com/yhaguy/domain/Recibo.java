@@ -34,6 +34,7 @@ public class Recibo extends Domain {
 	
 	private String numeroPlanilla;
 	private String numeroRecibo;
+	private String numeroImportacion;
 	private Date fechaRecibo;
 	
 	/** Para saber si requiere actualizar el movimiento de banco **/
@@ -143,6 +144,15 @@ public class Recibo extends Domain {
 		boolean pago = sigla.equals(Configuracion.SIGLA_TM_RECIBO_PAGO);
 		boolean anticipoPago = sigla.equals(Configuracion.SIGLA_TM_ANTICIPO_PAGO);
 		return pago || anticipoPago;
+	}
+	
+	/**
+	 * @return true si es un anticipo pago..
+	 */
+	public boolean isAnticipoPago() {
+		String sigla = (String) this.tipoMovimiento.getSigla();
+		boolean anticipoPago = sigla.equals(Configuracion.SIGLA_TM_ANTICIPO_PAGO);
+		return anticipoPago;
 	}
 
 	
@@ -946,5 +956,13 @@ public class Recibo extends Domain {
 
 	public void setSaldoAcobrar(boolean saldoAcobrar) {
 		this.saldoAcobrar = saldoAcobrar;
+	}
+
+	public String getNumeroImportacion() {
+		return numeroImportacion;
+	}
+
+	public void setNumeroImportacion(String numeroImportacion) {
+		this.numeroImportacion = numeroImportacion;
 	}
 }

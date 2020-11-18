@@ -25,6 +25,7 @@
 		<property name="numeroPlanilla"/>
 		<property name="numeroRecibo"/>
 		<property name="fechaRecibo"/>
+		<property name="numeroImportacion"/>
 		
 		<property name="saldodeudor">
 			<column name="saldodeudor" default="false" />

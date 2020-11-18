@@ -32,6 +32,7 @@ public class ReciboDTO extends DTO {
 	private String numeroRecibo = "";
 	private String cobrador = "";
 	private Date fechaRecibo;
+	private String numeroImportacion = "";
 
 	private boolean movimientoBancoActualizado = false;
 	
@@ -619,5 +620,13 @@ public class ReciboDTO extends DTO {
 
 	public void setRecaudacionMra(boolean recaudacionMra) {
 		this.recaudacionMra = recaudacionMra;
+	}
+
+	public String getNumeroImportacion() {
+		return numeroImportacion;
+	}
+
+	public void setNumeroImportacion(String numeroImportacion) {
+		this.numeroImportacion = numeroImportacion;
 	}
 }

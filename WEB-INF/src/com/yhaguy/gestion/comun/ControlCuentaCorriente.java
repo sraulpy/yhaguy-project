@@ -300,7 +300,7 @@ public class ControlCuentaCorriente {
 	/**
 	 * agregar movimiento recibo de pago anticipado..
 	 */
-	public static void addReciboDePagoAnticipado(long idOrdenPago, String user, String siglaMoneda) throws Exception {		
+	public static void addReciboDePagoAnticipado(long idOrdenPago, String user, String siglaMoneda, String nroImportacion) throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Recibo pago = rr.getOrdenPagoById(idOrdenPago);
 		
@@ -317,6 +317,7 @@ public class ControlCuentaCorriente {
 		ctm.setNroComprobante(pago.getNumero());
 		ctm.setSucursal(pago.getSucursal());
 		ctm.setSaldo((pago.isMonedaLocal() ? pago.getTotalImporteGs() : pago.getTotalImporteDs()) * -1);	
+		ctm.setNumeroImportacion(nroImportacion);
 		rr.saveObject(ctm, user);
 	}
 	
