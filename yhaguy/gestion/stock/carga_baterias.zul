@@ -5,7 +5,7 @@
 	<hlayout sclass="button-container" width="100%">
 		<button mold="bs" sclass="btn-primary btn-sm" label="Registrar Carga" 
 			iconSclass="z-icon-plus"
-			onClick='pop_registrar.open(self, "after_end")'/>
+			onClick='pop_registrar.open(self, "after_end")' />
 	</hlayout>
 	
 	<listbox sclass="small-list"

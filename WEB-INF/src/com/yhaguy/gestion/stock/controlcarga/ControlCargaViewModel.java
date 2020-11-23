@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
@@ -40,7 +41,7 @@ public class ControlCargaViewModel extends SimpleViewModel {
 		}
 	}
 	
-	@Init(superclass = true)
+	@AfterCompose(superclass = true)
 	public void afterCompose() {
 	}
 	
