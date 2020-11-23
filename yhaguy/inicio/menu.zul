@@ -163,6 +163,7 @@
 				<zk forEach="${vm.menuItem(self,'AuditoriaStock')}" />
 				<zk forEach="${vm.menuItem(self,'Inventario')}" />
 				<zk forEach="${vm.menuItem(self,'RecalculoStock')}" />
+				<zk forEach="${vm.menuItem(self,'ControlCargaBaterias')}" />
 				<zk forEach="${vm.menuItem(self,'StockDefiniciones')}" />
 			</menupopup>
 		</menu>
