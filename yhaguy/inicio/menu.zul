@@ -152,7 +152,7 @@
 			</menupopup>
 		</menu>
 
-		<menu label="Stock" iconSclass="z-icon-archive">
+		<menu label="Stock" iconSclass="z-icon-archive" >
 			<menupopup sclass="rounded">
 				<zk forEach="${vm.menuItem(self,'TransferenciaInterna')}" />
 				<zk forEach="${vm.menuItem(self,'TransferenciaExterna')}" />
