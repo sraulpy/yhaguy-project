@@ -1,0 +1,129 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.controlcarga.ControlCargaViewModel')">
+	
+	<hlayout sclass="button-container" width="100%">
+		<button mold="bs" sclass="btn-primary btn-sm" label="Registrar Carga" 
+			iconSclass="z-icon-plus"
+			onClick='pop_registrar.open(self, "after_end")'/>
+	</hlayout>
+	
+	<listbox sclass="small-list"
+		emptyMessage="SIN REGISTROS.." hflex="true" vflex="true"
+		model="@load(vm.controles)">
+		<listhead>
+			<listheader label="Fecha" width="150px"></listheader>
+			<listheader label="Código" width="150px"></listheader>
+			<listheader label="Descripción"></listheader>
+			<listheader label="Cantidad" width="150px"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaDD)"/>
+					<textbox hflex="true"  
+						placeholder="Mes"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaMM)"/>
+					<textbox hflex="true"  
+						placeholder="Año"
+						sclass="filter" instant="true"
+						value="@bind(vm.filterFechaAA)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Código.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterCodigo)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Descripción.."
+						sclass="filter"
+						instant="true"
+						value="@bind(vm.filterDescripcion)"/>
+				</hlayout>
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[2])"></listcell>
+				<listcell label="@load(each[3])"></listcell>
+				<listcell label="@load(each[4])"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter>
+				<field value="ítems" />
+			</listfooter>
+		</listfoot>
+	</listbox>
+
+	<popup id="pop_registrar" sclass="rounded" width="300px" height="300px">
+		<grid sclass="vgrid">
+			<rows>
+				<row>
+					<field value="Fecha" />
+					<textbox readonly="true" value="@load(vm.nvoControl.fecha)"></textbox>
+				</row>
+				<row>
+					<field value="Artículo" />
+					<bandbox hflex="true" readonly="true"
+						placeholder="ARTICULO.." id="bndArt"
+						value="@load(vm.selectedArticulo[1])" onOpen='tx_cod.focus()'>
+						<bandpopup>
+							<listbox sclass="small-list" width="600px"
+								height="300px" emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+								model="@load(vm.articulos)"
+								selectedItem="@bind(vm.selectedArticulo)"
+								onSelect='bndArt.close()'>
+								<listhead>
+									<listheader width="150px">
+										<textbox placeholder="Código.."
+											sclass="filter" hflex="true" value="@bind(vm.filterCodigo)"
+											instant="true" id="tx_cod">
+										</textbox>
+									</listheader>
+									<listheader>
+										<textbox
+											placeholder="Descripción.." sclass="filter" hflex="true"
+											value="@bind(vm.filterDescripcion)" instant="true">
+										</textbox>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each[1])">
+										</listcell>
+										<listcell
+											label="@load(each[2])">
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>
+				<row>
+					<field value="Cantidad" />
+					<spinner value="@load(vm.nvoControl.cantidad)"></spinner>
+				</row>
+			</rows>
+		</grid>
+		<button sclass="btn-primary btn-sm" hflex="true"
+			label="Registrar Carga" iconSclass="z-icon-check"
+			onClick="@command('addControlCarga', comp=pop_registrar)"></button>
+	</popup>
+
+</window>
