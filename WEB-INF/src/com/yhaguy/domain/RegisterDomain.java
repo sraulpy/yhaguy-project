@@ -12208,9 +12208,37 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return
+	 * [0]: id
+	 * [1]: fecha
+	 * [2]: articulo.codigo
+	 * [3]: articulo.descripcion
+	 * [4]: cantidad
+	 */
+	public List<Object[]> getArticuloControlCargas(String fecha, String codigo, String descripcion) throws Exception {
+		String query = "select c.id, c.fecha, c.articulo.codigoInterno, c.articulo.descripcion, c.cantidad from ArticuloControlCarga c where"
+				+ " cast (c.fecha as string) like '%" + fecha + "%'"
+				+ " and c.articulo.codigoInterno like '%" + codigo + "%'"
+				+ " and c.articulo.descripcion like '%" + descripcion + "%'"
+				+ " order by c.fecha";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
-			System.out.println(Utiles.obtenerPorcentajeDelValor(18, 100));
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Recibo> pagos = rr.getPagos(Utiles.getFechaInicioOperaciones(), new Date());
+			for (Recibo pago : pagos) {
+				for (ReciboDetalle item : pago.getDetalles()) {
+					Gasto gasto = item.getGasto();
+					if (gasto != null) {
+						item.setConcepto(gasto.getDescripcionCuenta1());
+						rr.saveObject(item, item.getUsuarioMod());
+						System.out.println(item.getConcepto());
+					}
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
