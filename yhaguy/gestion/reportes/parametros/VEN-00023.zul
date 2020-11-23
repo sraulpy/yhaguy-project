@@ -47,7 +47,7 @@
 			</combobox>
 		</row>
 		<row>
-			<field value="Presentación:" />
+			<field value="Presentación:"/>
 			<combobox hflex="true"
 				model="@load(vm.dato.filtro.presentaciones)"
 				selectedItem="@bind(vm.dato.filtro.presentacion)"
