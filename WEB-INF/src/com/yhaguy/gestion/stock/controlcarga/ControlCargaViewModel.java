@@ -23,6 +23,9 @@ public class ControlCargaViewModel extends SimpleViewModel {
 	private String filterCodigo = "";
 	private String filterDescripcion = "";
 	
+	private String filterCodigo_ = "";
+	private String filterDescripcion_ = "";
+	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
 	private String filterFechaAA = "";
@@ -65,7 +68,7 @@ public class ControlCargaViewModel extends SimpleViewModel {
 	 * GET'S AND SET'S
 	 */
 	
-	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA", "filterCodigo", "filterDescripcion" })
+	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA", "filterCodigo_", "filterDescripcion_" })
 	public List<Object[]> getControles() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getArticuloControlCargas(this.getFilterFecha(), this.filterCodigo, this.filterDescripcion);
@@ -149,5 +152,21 @@ public class ControlCargaViewModel extends SimpleViewModel {
 
 	public void setFilterFechaAA(String filterFechaAA) {
 		this.filterFechaAA = filterFechaAA;
+	}
+
+	public String getFilterCodigo_() {
+		return filterCodigo_;
+	}
+
+	public void setFilterCodigo_(String filterCodigo_) {
+		this.filterCodigo_ = filterCodigo_;
+	}
+
+	public String getFilterDescripcion_() {
+		return filterDescripcion_;
+	}
+
+	public void setFilterDescripcion_(String filterDescripcion_) {
+		this.filterDescripcion_ = filterDescripcion_;
 	}
 }
