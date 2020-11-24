@@ -25681,9 +25681,9 @@ class ReporteArticuloControlCarga extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 20);
-	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_INTEGER, true);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_INTEGER, 20, true);
 
 	public ReporteArticuloControlCarga(Date desde, Date hasta) {
 		this.desde = desde;
