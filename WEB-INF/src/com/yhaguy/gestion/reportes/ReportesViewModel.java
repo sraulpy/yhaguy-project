@@ -843,6 +843,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String EXISTENCIA_ARTICULOS = "STK-00009";
 		static final String STOCK_VALORIZADO = "STK-00010";
 		static final String REMISION_CLIENTES = "STK-00011";
+		static final String CONTROL_CONSUMO_CARGA = "STK-00012";
 
 		/**
 		 * procesamiento del reporte..
@@ -892,6 +893,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case REMISION_CLIENTES:
 				this.listadoRemisiones();
+				break;
+				
+			case CONTROL_CONSUMO_CARGA:
+				this.consumoCarga();
 				break;
 			}
 		}
@@ -1476,6 +1481,38 @@ public class ReportesViewModel extends SimpleViewModel {
 				ReporteRemisiones rep = new ReporteRemisiones(desde, hasta);
 				rep.setDatosReporte(data);
 				
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte STK-00012
+		 */
+		private void consumoCarga() throws Exception {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Articulo art = filtro.getArticulo();
+				long idArticulo = art != null? art.getId() : 0;
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				
+				List<Object[]> cargas = rr.getArticuloControlCargas(desde, hasta, idArticulo);
+				
+				for (Object[] carga : cargas) {
+					data.add(new Object[]{ Utiles.getDateToString((Date) carga[4], Utiles.DD_MM_YY), carga[1], carga[2], carga[3] });
+				}
+				
+				ReporteArticuloControlCarga rep = new ReporteArticuloControlCarga(desde, hasta);
+				rep.setDatosReporte(data);				
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
@@ -25616,6 +25653,55 @@ class ReporteRemisiones extends ReporteYhaguy {
 		this.setTitulo("Listado de remisiones a clientes");
 		this.setDirectorio("Articulos");
 		this.setNombreArchivo("Remisiones-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte de control articulo carga..
+ */
+class ReporteArticuloControlCarga extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 20);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_INTEGER, true);
+
+	public ReporteArticuloControlCarga(Date desde, Date hasta) {
+		this.desde = desde;
+		this.hasta = hasta;
+	}
+
+	static {
+		cols.add(col0);
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Listado de control de consumo de carga");
+		this.setDirectorio("Articulos");
+		this.setNombreArchivo("Articulo-");
 		this.setTitulosColumnas(cols);
 		this.setBody(this.getCuerpo());
 	}

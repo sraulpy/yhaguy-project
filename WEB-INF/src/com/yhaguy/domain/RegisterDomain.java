@@ -12225,6 +12225,27 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return consumo de carga..
+	 * [0]:id
+	 * [1]:articulo.codigo
+	 * [2]:articulo.descripcion
+	 * [3]:cantidad
+	 * [4]:fecha
+	 */
+	public List<Object[]> getArticuloControlCargas(Date desde, Date hasta, long idArticulo) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c.id, c.articulo.codigoInterno, c.articulo.descripcion, c.cantidad,"
+				+ " c.fecha from ArticuloControlCarga c where "
+				+ " (c.fecha >= '" + desde_ + "' and c.fecha <= '" + hasta_ + "')";
+		if (idArticulo > 0) {
+			query += " and c.articulo.id = " + idArticulo;
+		}
+			query += " order by c.fecha";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
