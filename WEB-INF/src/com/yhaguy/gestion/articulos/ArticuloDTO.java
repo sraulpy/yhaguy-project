@@ -67,6 +67,7 @@ public class ArticuloDTO extends DTO {
 	private String medida = "";
 	private String pisada = "";
 	private int unidadesCaja = 0;
+	private double consumoCarga = 0;
 	
 	private MyPair articuloEstado = new MyPair();
 	private MyPair articuloFamilia = new MyPair();
@@ -704,5 +705,13 @@ public class ArticuloDTO extends DTO {
 
 	public void setPrecioTransportadora(double precioTransportadora) {
 		this.precioTransportadora = precioTransportadora;
+	}
+
+	public double getConsumoCarga() {
+		return consumoCarga;
+	}
+
+	public void setConsumoCarga(double consumoCarga) {
+		this.consumoCarga = consumoCarga;
 	}
 }

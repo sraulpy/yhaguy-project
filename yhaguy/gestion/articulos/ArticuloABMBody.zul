@@ -369,6 +369,10 @@
 												</combobox>
 											</vlayout>
 											<vlayout spacing="0">
+												<field
+													value="Consumo de Carga" />
+												<spinner hflex="true" style="color:#999;font-weight:bold"
+													value="@bind(vm.dto.consumoCarga)"></spinner>
 											</vlayout>
 										</row>
 									</rows>

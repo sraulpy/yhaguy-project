@@ -60,6 +60,7 @@ public class Articulo extends Domain {
 	private int unidadesCaja;
 	private double alto;
 	private double aro;
+	private double consumoCarga;
 	private String medida;
 	private String pisada;
 	
@@ -683,5 +684,13 @@ public class Articulo extends Domain {
 
 	public void setPrecioTransportadora(double precioTransportadora) {
 		this.precioTransportadora = precioTransportadora;
+	}
+
+	public double getConsumoCarga() {
+		return consumoCarga;
+	}
+
+	public void setConsumoCarga(double consumoCarga) {
+		this.consumoCarga = consumoCarga;
 	}
 }
