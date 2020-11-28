@@ -7446,6 +7446,57 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return los cheques de terceros..
 	 */
+	public List<BancoChequeTercero> getChequesTerceroCliente(String planilla,
+			String recibo, String venta, String reembolso, String deposito, String descuento,
+			String razonSocial, String ruc, String banco, String numero,
+			String librador, String vendedor, String depositado, String descontado, 
+			String rechazado, String rechazoInterno, Date desde, Date hasta, Date emisionDesde, Date emisionHasta, 
+			String fecha, String importeGs, boolean limit, long idEmpresa)
+			throws Exception {
+		String query = "select c from BancoChequeTercero c where c.dbEstado != 'D'"
+				+ " and c.anulado = 'FALSE'"
+				+ " and upper(c.numeroPlanilla) like '%" + planilla.toUpperCase() + "%'"
+				+ " and upper(c.numeroRecibo) like '%" + recibo.toUpperCase() + "%'"
+				+ " and upper(c.numeroVenta) like '%" + venta.toUpperCase() + "%'"
+				+ " and upper(c.numeroReembolso) like '%" + reembolso.toUpperCase() + "%'"
+				+ " and upper(c.numeroDeposito) like '%" + deposito.toUpperCase() + "%'"
+				+ " and upper(c.numeroDescuento) like '%" + descuento.toUpperCase() + "%'"
+				+ " and c.cliente.empresa.id = " + idEmpresa + ""
+				+ " and upper(c.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
+				+ " and upper(c.numero) like '%" + numero.toUpperCase() + "%'"
+				+ " and cast (c.fecha as string) like '%" + fecha + "%'"
+				+ " and cast (c.monto as string) like '%" + importeGs + "%'"
+				+ " and upper(c.librado) like '%" + librador.toUpperCase() + "%'"
+				+ " and upper(c.vendedor) like '%" + vendedor.toUpperCase() + "%'";
+				if (depositado != null) {
+					query += " and c.depositado = '" + depositado + "'";
+				}
+				if (descontado != null) {
+					query += " and c.descontado = '" + descontado + "'";
+				}
+				if (rechazado != null) {
+					query += " and c.rechazado = '" + rechazado + "'";
+				}
+				if (rechazoInterno != null) {
+					query += " and c.rechazoInterno = '" + rechazoInterno + "'";
+				}
+				if (desde != null && hasta != null) {
+					String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+					String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+					query += " and (c.fecha >= '" + desde_ + "' and c.fecha <= '" + hasta_ + "')";
+				}
+				if (emisionDesde != null && emisionHasta != null) {
+					String emiDesde_ = Utiles.getDateToString(emisionDesde, Misc.YYYY_MM_DD) + " 00:00:00";
+					String emiHasta_ = Utiles.getDateToString(emisionHasta, Misc.YYYY_MM_DD) + " 23:59:00";
+					query += " and (c.emision >= '" + emiDesde_ + "' and c.emision <= '" + emiHasta_ + "')";
+				}
+				query += " order by c.fecha, c.emision";
+		return limit ? this.hqlLimit(query, 300) : this.hql(query);
+	}
+	
+	/**
+	 * @return los cheques de terceros..
+	 */
 	public List<BancoChequeTercero> getChequesDescontados(Date descuentoDesde, Date descuentoHasta, Date vencimientoDesde, Date vencimientoHasta)
 			throws Exception {
 		String dtoDesde = Utiles.getDateToString(descuentoDesde, Misc.YYYY_MM_DD) + " 00:00:00";

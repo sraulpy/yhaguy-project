@@ -2061,10 +2061,10 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		List<MyArray> out = new ArrayList<MyArray>();
 		if (this.isTipoCliente() && this.selectedItem != null) {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<BancoChequeTercero> cheques = rr.getChequesTercero("",
+			List<BancoChequeTercero> cheques = rr.getChequesTerceroCliente("",
 					"", "", "", "", "",
 					(String) this.selectedItem.getPos3(), "", "", "", "",
-					"", "FALSE", null, "FALSE", "FALSE", null, null, null, null, "", "", true);
+					"", "FALSE", null, "FALSE", "FALSE", null, null, null, null, "", "", true, this.selectedItem.getId());
 			for (BancoChequeTercero cheque : cheques) {
 				if (cheque.getFecha().compareTo(new Date()) > 0) {
 					MyArray my = new MyArray();
