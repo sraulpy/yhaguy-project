@@ -24279,6 +24279,9 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 			long idEmpresa = (long) value[14];
 			String razonSocial = (String) value[10];
 			String cartera = (String) value[16];
+			String vendedor = (String) value[19];
+			boolean cuentaBloqueada = (boolean) value[18];
+			String bloqueado = cuentaBloqueada ? "BLOQUEADA" : "HABILITADA";
 			Date emision = (Date) value[6];
 			double saldo = (double) value[9];
 			double linea = (double) value[17];
@@ -24290,14 +24293,14 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 				if (acum != null) {
 					acum[index] = ((double) acum[index]) + saldo;
 				} else {
-					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera, linea };
+					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera, linea, vendedor, bloqueado };
 					acum[index] = saldo;
 				} 
 				data.put(idCartera + "-" + idEmpresa, acum);
 			} else {
 				Object[] acum = data.get(idCartera + "-" + idEmpresa);
 				if (acum == null) {
-					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera, linea };
+					acum = new Object[] { razonSocial, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, this.saldo.get(idCartera + "-" + idEmpresa), cartera, linea, vendedor, bloqueado };
 				}
 				data.put(idCartera + "-" + idEmpresa, acum);			
 			}			
@@ -24367,6 +24370,10 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 			value = FORMATTER.format(det[13]);
 		} else if ("lineaCredito".equals(fieldName)) {
 			value = Utiles.getNumberFormat((double) det[15]);
+		} else if ("Vendedor".equals(fieldName)) {
+			value = det[16];
+		} else if ("Cuenta".equals(fieldName)) {
+			value = det[17];
 		}
 		return value;
 	}
