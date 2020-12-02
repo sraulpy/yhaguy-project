@@ -203,7 +203,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PEDIDO_VENTA));
 		venta.setTotalImporteGs(venta.getImporteGs());
 		venta.setValidez(0);
-		venta.setVencimiento(new Date());
+		venta.setVencimiento(this.selectedCondicion.getId().longValue() > 1? Utiles.agregarDias(new Date(), 30) : new Date());
 		venta.setFormaEntrega(Venta.FORMA_ENTREGA_EMPAQUE);
 		rr.saveObject(venta, "mobile");
 		this.numero = venta.getNumero();

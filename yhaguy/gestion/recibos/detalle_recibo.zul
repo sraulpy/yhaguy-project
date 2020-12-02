@@ -1,5 +1,5 @@
 <window title="Recibo" border="normal" closable="true"
-	position="center, center" width="70%" height="60%">
+	position="center, center" width="80%" height="60%">
 	<grid sclass="vgrid">
 		<rows>
 			<row>				
@@ -79,23 +79,29 @@
 		</listbox>
 		
 		<listbox vflex="true" sclass="small-list"
-			model="@load(vm.detalle.formasPago)" hflex="2">
+			model="@load(vm.detalle.formasPago)" hflex="3">
 			<auxhead>
-				<auxheader label="Formas de Pago" colspan="2"/>
+				<auxheader label="Formas de Pago" colspan="5"/>
 			</auxhead>
 			<listhead style="text-align:center">
-				<listheader label="Descripción" />
+				<listheader label="Concepto" />
+				<listheader label="Emisión" />
+				<listheader label="Vencimiento" />
+				<listheader label="Banco" />
 				<listheader label="Importe Gs." width="100px" align="right"
 					style="text-align:center" />
 			</listhead>
 			<template name="model">
 				<listitem>
 					<listcell label="@load(each.pos1.toString().toUpperCase())" />
+					<listcell label="@load(each.pos3.toString().toUpperCase())" />
+					<listcell label="@load(each.pos4.toString().toUpperCase())" />
+					<listcell label="@load(each.pos5.toString().toUpperCase())" />
 					<listcell label="@load(each.pos2) @converter(vm.cnv.monedaLocal)" />
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter span="2">
+				<listfooter span="5">
 					<hlayout hflex="true">
 						<field value="@load(vm.detalle.formasPago.size())" />
 						<field value="ítems" />

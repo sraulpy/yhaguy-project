@@ -305,7 +305,14 @@ public class RecibosViewModel extends SimpleViewModel {
 				}				
 			}
 			for (ReciboFormaPago fp : recibo.getFormasPago()) {
-				fpgs.add(new MyArray(fp.getDescripcion(), fp.getMontoGs()));
+				MyArray fmp = new MyArray(fp.getDescripcion(), fp.getMontoGs(), "", "", "");
+				if (fp.isChequeTercero()) {
+					fmp = new MyArray(fp.getDescripcion(), fp.getMontoGs(),
+							Utiles.getDateToString(fp.getFechaOperacion(), Utiles.DD_MM_YYYY),
+							Utiles.getDateToString(fp.getChequeFecha(), Utiles.DD_MM_YYYY),
+							fp.getChequeBanco().getDescripcion());
+				}
+				fpgs.add(fmp);
 			}
 			my.setPos8(dets);
 			my.setPos9(fpgs);
