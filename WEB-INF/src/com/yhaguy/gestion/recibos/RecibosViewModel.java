@@ -312,6 +312,12 @@ public class RecibosViewModel extends SimpleViewModel {
 							Utiles.getDateToString(fp.getChequeFecha(), Utiles.DD_MM_YYYY),
 							fp.getChequeBanco().getDescripcion());
 				}
+				if (fp.isDepositoBancario()) {
+					fmp = new MyArray(fp.getDescripcion(), fp.getMontoGs(),
+							Utiles.getDateToString(fp.getFechaOperacion(), Utiles.DD_MM_YYYY),
+							"",
+							fp.getDepositoBancoCta().getBancoDescripcion());
+				}
 				fpgs.add(fmp);
 			}
 			my.setPos8(dets);
