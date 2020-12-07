@@ -12306,7 +12306,7 @@ public class RegisterDomain extends Register {
 	 * [2]: auxi
 	 */
 	public Object[] getUltimaMarcacion() throws Exception {
-		String query = "select p.id, p.usuarioMod, p.auxi from Ping p where p.id = (select max(aux.id) from Ping aux)";
+		String query = "select m.id, m.usuario, m.descripcion from RRHHMarcaciones m where m.id = (select max(aux.id) from RRHHMarcaciones aux)";
 		List<Object[]> list = this.hql(query);
 		Object[] out = list.size() > 0 ? list.get(0) : null;
 		return out;
