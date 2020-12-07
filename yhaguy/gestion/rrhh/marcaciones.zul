@@ -1,0 +1,53 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.MarcacionesViewModel')"
+	hflex="true" vflex="true">
+	
+	<vbox hflex="true" vflex="true"
+		pack="center" align="center" style="padding:50px">
+		
+		<hlayout hflex="true" vflex="true">
+			<button mold="bs" sclass="btn-lg btn-primary"
+				label="Entrada" hflex="true" vflex="true"
+				iconSclass="z-icon-sign-in"
+				style="font-size:20pt;background:#164D64"
+				onClick="@command('openCodigo', tipo=1)"></button>
+			<space></space>
+			<button mold="bs" sclass="btn-lg btn-warning"
+				label="Salida" hflex="true" vflex="true"
+				iconSclass="z-icon-sign-out"
+				style="font-size:20pt;background:#d9534f"
+				onClick="@command('openCodigo', tipo=3)"></button>
+		</hlayout>
+		<space></space>
+		<hlayout hflex="true" vflex="true">
+			<button mold="bs" sclass="btn-lg btn-primary"
+				label="Entrada Interna" hflex="true" vflex="true"
+				style="font-size:20pt;background:#5cb85c"
+				iconSclass="z-icon-sign-in"
+				onClick="@command('openCodigo', tipo=2)"></button>
+			<space></space>
+			<button mold="bs" sclass="btn-lg btn-warning"
+				label="Salida Interna" hflex="true" vflex="true"
+				style="font-size:20pt;background:#f0ad4e"
+				iconSclass="z-icon-sign-out"
+				onClick="@command('openCodigo', tipo=4)"></button>
+		</hlayout>
+
+		<window apply="com.yhaguy.gestion.rrhh.ClockComposer">
+			<charts id="chart" type="gauge" plotBackgroundColor=""
+				plotBackgroundImage="" plotBorderWidth="0" plotShadow="false"
+				height="400" title="@load(vm.empresaDescripcion)" />
+			<timer id="timer" delay="1000" running="true"
+				repeats="true" />
+		</window>
+
+		<hlayout hflex="true" style="text-align:center">
+			<label style="font-weight:bold;font-size:16pt">ÚLTIMA MARCACIÓN: </label>
+			<label style="font-weight:bold;font-size:16pt" value="@load(vm.descripcion)"></label>
+		</hlayout>
+
+	</vbox>
+	
+</window>
+</zk>

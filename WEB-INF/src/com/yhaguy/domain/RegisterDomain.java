@@ -12299,20 +12299,24 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return
+	 * [0]: id
+	 * [1]: usuarioMod
+	 * [2]: auxi
+	 */
+	public Object[] getUltimaMarcacion() throws Exception {
+		String query = "select p.id, p.usuarioMod, p.auxi from Ping p where p.id = (select max(aux.id) from Ping aux)";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : null;
+		return out;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Recibo> pagos = rr.getPagos(Utiles.getFechaInicioOperaciones(), new Date());
-			for (Recibo pago : pagos) {
-				for (ReciboDetalle item : pago.getDetalles()) {
-					Gasto gasto = item.getGasto();
-					if (gasto != null) {
-						item.setConcepto(gasto.getDescripcionCuenta1());
-						rr.saveObject(item, item.getUsuarioMod());
-						System.out.println(item.getConcepto());
-					}
-				}
-			}
+			Object[] test = rr.getUltimaMarcacion();
+			System.out.println(test);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

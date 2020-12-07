@@ -190,6 +190,7 @@
 					onClick='Clients.showNotification("LA CONFIGURACIÓN PREVIA AÚN ESTÁ PENDIENTE")'/>
 				<zk forEach="${vm.menuItem(self,'LiquidacionSalarios')}" />
 				<zk forEach="${vm.menuItem(self,'PlanillaSalarios')}" />
+				<zk forEach="${vm.menuItem(self,'Marcaciones')}" />
 				<zk forEach="${vm.menuItem(self,'GeolocalizacionRRHH')}" />
 			</menupopup>
 		</menu>
