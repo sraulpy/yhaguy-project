@@ -59,7 +59,7 @@ public class MarcacionesViewModel extends SimpleViewModel {
 	public String getDescripcion() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Object[] marcacion = rr.getUltimaMarcacion();
-		return marcacion[1] + " - " + marcacion[2];
+		return marcacion[1] + " - " + marcacion[2].toString().replace("_", " ");
 	}
 	
 	/**

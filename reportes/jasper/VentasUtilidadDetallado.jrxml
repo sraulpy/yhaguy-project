@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2353" pageHeight="595" orientation="Landscape" columnWidth="2313" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.1435888100000136"/>
-	<property name="ireport.x" value="3515"/>
+	<property name="ireport.zoom" value="1.4641000000000088"/>
+	<property name="ireport.x" value="2124"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -410,17 +410,17 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement style="Detail" x="587" y="0" width="164" height="15" uuid="cbb74dbd-d329-4bf0-8d88-4cbda35e5107"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TipoCliente}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement style="Detail" x="1027" y="0" width="164" height="15" uuid="f1f1bee2-ee3d-4be9-806a-9aee226e0969"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement style="Detail" x="1623" y="0" width="82" height="15" uuid="4b161ca1-a455-439c-af5c-68692cbb639e"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Marca}]]></textFieldExpression>
@@ -430,7 +430,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Vendedor}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement style="Detail" x="1707" y="0" width="86" height="15" uuid="72deddba-b120-4d9b-a57e-0c1c2415ccd6"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Familia}]]></textFieldExpression>

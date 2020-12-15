@@ -12312,6 +12312,21 @@ public class RegisterDomain extends Register {
 		return out;
 	}
 	
+	/**
+	 * @return marcaciones..
+	 * [0]:id
+	 * [1]:descripcion
+	 * [2]:usuario
+	 * [3]:modificado
+	 */
+	public List<Object[]> getMarcaciones(String fecha, String funcionario) throws Exception {
+		String query = "select m.id, m.descripcion, m.usuario, m.modificado, '', '' from RRHHMarcaciones m"
+				+ " where cast (m.modificado as string) like '%" + fecha + "%'"
+				+ " and upper(m.usuario) like '%"+ funcionario.toUpperCase() +"%'";
+		query += " order by m.modificado";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
