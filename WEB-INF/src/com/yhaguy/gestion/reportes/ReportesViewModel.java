@@ -3525,11 +3525,13 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object[]> values = new HashMap<String, Object[]>();
 				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
 				
+				double vtas = 0;
 				for (Venta venta : ventas) {
 					int mes = Utiles.getNumeroMes(venta.getFecha()) - 1;
 					if (vendedor == null || vendedor.getId().longValue() == venta.getVendedor().getId().longValue()) {
 						if (rubro == null || rubro.getDescripcion().equals(venta.getCliente().getRubro())) {
 							if (!venta.isAnulado()) {
+								vtas += venta.getTotalImporteGsSinIva();
 								String id = venta.getCliente().getId() + "";
 								String key = id + "-" + mes;
 								String cliente = venta.getCliente().getRazonSocial();
@@ -3539,11 +3541,11 @@ public class ReportesViewModel extends SimpleViewModel {
 								Object[] acum = values.get(key);
 								if (acum != null) {
 									double importe = (double) acum[0];
-									double importe_ = ivaInc ? venta.getTotalImporteGs() : venta.getTotalImporteGsSinIva();
+									double importe_ = ivaInc ? venta.getTotalImporteGs_() : venta.getTotalImporteGsSinIva();
 									importe += importe_;
 									values.put(key, new Object[] { importe, mes, cliente, vendedor_, rubro_, idEmpresa });
 								} else {
-									double importe_ = ivaInc ? venta.getTotalImporteGs() : venta.getTotalImporteGsSinIva();
+									double importe_ = ivaInc ? venta.getTotalImporteGs_() : venta.getTotalImporteGsSinIva();
 									values.put(key,
 											new Object[] { importe_, mes, cliente, vendedor_, rubro_, idEmpresa });
 								}
@@ -3552,12 +3554,14 @@ public class ReportesViewModel extends SimpleViewModel {
 					}					
 				}
 				
-				if (ncrInc) {
+				double ncrs = 0;
+				if (ncrInc) {					
 					for (NotaCredito ncred : ncs) {
 						int mes = Utiles.getNumeroMes(ncred.getFechaEmision()) - 1;
 						if (vendedor == null || vendedor.getId().longValue() == ncred.getVendedor().getId().longValue()) {
 							if (rubro == null || rubro.getDescripcion().equals(ncred.getCliente().getRubro())) {
 								if (!ncred.isAnulado()) {
+									ncrs += ncred.getTotalImporteGsSinIva();
 									String id = ncred.getCliente().getId() + "";
 									String key = id + "-" + mes;
 									String cliente = ncred.getCliente().getRazonSocial();
@@ -3579,7 +3583,11 @@ public class ReportesViewModel extends SimpleViewModel {
 							}							
 						}						
 					}
-				}				
+				}		
+				
+				System.out.println("--TOTAL VTAS: " + Utiles.getNumberFormat(vtas));
+				System.out.println("--TOTAL NCRS: " + Utiles.getNumberFormat(ncrs));
+				System.out.println("--TOTAL VTNC: " + Utiles.getNumberFormat(vtas - ncrs));
 				
 				for (String key : values.keySet()) {
 					Object[] value = values.get(key);
@@ -18351,23 +18359,17 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 		}
 		
 		for (CompraLocalFactura compra : creditos) {
-			double importe = redondear(compra.getImporteGs());
-			double iva10 = redondear(misc.calcularIVA(importe, 10));
-			double gravada10 = redondear(importe - iva10);
-			cred_gravada10 += gravada10;
+			cred_gravada10 += compra.getGravada10();
 			cred_gravada5 += compra.getGravada5();
-			cred_iva10 += iva10;
+			cred_iva10 += compra.getIva10();
 			cred_iva5 += compra.getIva5();
 			cred_exenta += compra.getExenta();
 		}
 		
 		for (CompraLocalFactura compra : contado) {
-			double importe = redondear(compra.getImporteGs());
-			double iva10 = redondear(misc.calcularIVA(importe, 10));
-			double gravada10 = redondear(importe - iva10);
-			cont_gravada10 += gravada10;
+			cont_gravada10 += compra.getGravada10();
 			cont_gravada5 += compra.getGravada5();
-			cont_iva10 += iva10;
+			cont_iva10 += compra.getIva10();
 			cont_iva5 += compra.getIva5();
 			cont_exenta += compra.getExenta();
 		}
@@ -18382,13 +18384,6 @@ class LibroComprasLocalesDataSource implements JRDataSource {
 			}
 		});
     }
-	
-	/**
-	 * @return el monto redondeado..
-	 */
-	private static double redondear(double monto) {
-		return Math.rint(monto * 1) / 1;
-	}
 	
 	private int index = -1;
 
