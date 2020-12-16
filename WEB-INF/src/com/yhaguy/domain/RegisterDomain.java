@@ -8674,7 +8674,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<VentaPerdida> getVentasPerdidas(Date desde, Date hasta) throws Exception {
 		String query = "select v from VentaPerdida v where v.fecha between ? and ?";		
-		query += " order by v.numero";
+		query += " order by v.fecha";
 
 		List<Object> listParams = new ArrayList<Object>();
 		listParams.add(desde);
