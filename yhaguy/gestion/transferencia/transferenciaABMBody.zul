@@ -274,13 +274,11 @@
 					<listcell
 						label="@load(each.cantidad) @converter('formattedNumber', format='###,###,##0')" />
 					<listcell
-						label="@load(each.cantidadRecibida) @converter('formattedNumber', format='###,###,##0')" 
-						style="@load(each.styleRecibida)"/>
+						label="@load(each.cantidadRecibida) @converter('formattedNumber', format='###,###,##0')" />
 					<listcell label="@load(each.costo) @converter('formattedNumber', format='###,###,##0')"  />
 					<listcell label="@load(each.costoTotal) @converter('formattedNumber', format='###,###,##0')" />
 					<listcell
-						label="@load(each.editado? 'Modificado' : each.getEstado(vm.transferenciaInterna))"
-						style="@load(each.style)" />
+						label="@load(each.editado? 'Modificado' : each.getEstado(vm.transferenciaInterna))" />
 					<listcell>
 						<a label="Editar"
 							style="text-decoration:underline"
