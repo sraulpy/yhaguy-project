@@ -1,0 +1,25 @@
+<zk>
+<?page title="${param.title}"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/icono-tab.ico"?>
+<?link rel="icon" type="image/x-icon" href="/icono-tab.ico"?>
+
+	<window id="templateInicio" viewModel="@id('vm') @init('com.coreweb.login.ControlSinLogin')"
+		apply="org.zkoss.bind.BindComposer"
+		border="none" vflex="true" hflex="true">
+
+		<label id="nombreFormulario" value=" " multiline="false"
+			maxlength="26" visible="false" />
+			
+		<div fulfill="self.onCreate" vflex="true" hflex="true"> 
+		
+			<include aliasForm="Marcaciones" usuario="admin" clave="admin"
+				src="/yhaguy/gestion/rrhh/marcaciones.zul" height="100%" width="100%"/>
+
+			<menubar id="menubarFoot2">
+				<menuitem id="carita" />
+			</menubar>
+
+
+		</div>
+	</window>
+</zk>
