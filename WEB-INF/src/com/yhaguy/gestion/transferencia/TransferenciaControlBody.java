@@ -702,7 +702,12 @@ public class TransferenciaControlBody extends BodyApp {
 		List<Deposito> deps = rr.getDepositosPorSucursal(id);
 		for (Deposito deposito : deps) {
 			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
-			out.add(dep);		
+			if (!deposito.getDescripcion().startsWith("YB-C1")) {				
+				out.add(dep);
+			} else if(deposito.getDescripcion().startsWith("YB-C1")
+					&& this.getLoginNombre().equals("natalia")) {
+				out.add(dep);
+			}					
 		}
 		return out;
 	}

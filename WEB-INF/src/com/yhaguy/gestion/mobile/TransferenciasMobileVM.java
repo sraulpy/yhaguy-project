@@ -168,6 +168,15 @@ public class TransferenciasMobileVM extends SimpleViewModel {
 	public List<Deposito> getDepositosOrigen() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Deposito> out = rr.getDepositosPorSucursal((long) 2);
+		int index = -1;
+		for (int i = 0; i < out.size(); i++) {
+			if (out.get(i).getDescripcion().startsWith("YB-C1")) {
+				index = i;
+			}		
+		}
+		if (index >= 0) {
+			out.remove(index);
+		}
 		return out;
 	}
 	
@@ -176,15 +185,22 @@ public class TransferenciasMobileVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Deposito> out = rr.getDepositosPorSucursal((long) 2);
 		int index = -1;
+		int index_ = -1;
 		for (int i = 0; i < out.size(); i++) {
 			if (this.transferencia.getDepositoSalida() != null) {
 				if (out.get(i).getDescripcion().equals(this.transferencia.getDepositoSalida().getDescripcion())) {
 					index = i;
 				}
-			}		
+			}	
+			if (out.get(i).getDescripcion().startsWith("YB-C1")) {
+				index_ = i;
+			}
 		}
 		if (index >= 0) {
 			out.remove(index);
+		}
+		if (index_ >= 0) {
+			out.remove(index_);
 		}
 		return out;
 	}
