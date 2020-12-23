@@ -507,7 +507,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 				this.reciboDTO.setCobroExterno(true);
 				this.reciboDTO.setRecaudacionMra(true);
 				this.reciboDTO.setAuxi(Recibo.RECAUDACION_MRA);
-				this.reciboDTO.setNumero(AutoNumeroControl.getAutoNumeroKey("REC-MRA", 7, true));
+				this.reciboDTO.setNumero(AutoNumeroControl.getAutoNumeroKey(this.isEmpresaMRA()? "REC-CEN":"REC-MRA", 7, true));
 			}
 			if (this.reciboDTO.esNuevo()) {
 				this.reciboDTO.setImputar(true);

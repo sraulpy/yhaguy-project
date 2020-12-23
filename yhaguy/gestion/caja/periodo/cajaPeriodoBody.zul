@@ -260,7 +260,7 @@
 					onClick="@command('abrirVentanaRecibo', tipo=4)" />
 				<div height="5px"></div>
 				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
-					disabled="@load(!vm.dto.caja.cobro)" label="Recaudación M.R.A"
+					disabled="@load(!vm.dto.caja.cobro)" label="@load(vm.empresaMRA ? 'Recaudación M.R.A':'Recaudación Central')"
 					onClick="@command('abrirVentanaRecaudacionMRA', tipo=4)" />
 			</vlayout>
 		</popup>
