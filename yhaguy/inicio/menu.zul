@@ -42,6 +42,7 @@
 						<zk forEach="${vm.menuItem(self,'BancoTarjetas') }" />
 						<zk forEach="${vm.menuItem(self,'BancoTarjetasExplorador') }" />
 						<zk forEach="${vm.menuItem(self,'BancoDescuentoCheque', 'tipo=descuento') }" />	
+						<zk forEach="${vm.menuItem(self,'BancoEnvioCheques', 'tipo=envio') }" />	
 						<zk forEach="${vm.menuItem(self,'BancoAnticipoUtilidad', 'tipo=anticipo') }" />		
 						<zk forEach="${vm.menuItem(self,'BancoPrestamos') }" />	
 						<zk forEach="${vm.menuItem(self,'BancoPrestamoCheque', 'tipo=prestamo') }" />
