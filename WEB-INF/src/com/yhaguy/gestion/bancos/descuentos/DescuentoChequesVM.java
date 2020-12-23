@@ -401,7 +401,7 @@ public class DescuentoChequesVM extends BodyApp {
 	private void imprimir() {
 		String titulo = this.tipo.equals(ABM_ANTICIPO) ? "Anticipo de Utilidad"
 				: ( (this.tipo.equals(ABM_PRESTAMO_DEUDOR) || this.tipo.equals(ABM_PRESTAMO_ACREEDOR) ) ? "Préstamos Internos" : 
-					(this.tipo.equals(ABM_ENVIO) ? "Envio de Cheques a Casa Central" : "Descuento de Cheques"));
+					(this.tipo.equals(ABM_ENVIO) ? this.getAliasFormularioCorriente() : "Descuento de Cheques"));
 		ReporteYhaguy rep = new BancoDescuentoChequeReporte(this.chequeDescuento, titulo);
 		rep.setOficio();
 		rep.setBorrarDespuesDeVer(true);

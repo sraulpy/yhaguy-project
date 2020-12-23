@@ -6,7 +6,7 @@
 		<columns>
 			<column width="150px"></column>
 			<column width="150px"></column>
-			<column width="150px"></column>
+			<column width="150px" visible="@load(vm.tipo ne 'envio')"></column>
 			<column visible="@load(vm.tipo eq 'prestamo' or vm.tipo eq 'prestamo_acreedor')"></column>
 			<column width="150px"></column>
 			<column width="150px"></column>
@@ -28,7 +28,8 @@
 						hflex="true" 
 						format="dd-MM-yyyy" />
 				</vlayout>
-				<vlayout spacing="0" hflex="true" style="padding:2px">
+				<vlayout spacing="0" hflex="true" style="padding:2px"
+					visible="@load(vm.tipo ne 'envio')">
 					<field value="Banco" />
 					<combobox hflex="true"
 						value="@load(vm.chequeDescuento.banco.pos1.text)"
