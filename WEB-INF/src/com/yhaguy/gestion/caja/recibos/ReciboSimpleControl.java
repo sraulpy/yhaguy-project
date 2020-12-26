@@ -114,7 +114,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 		if (this.dato.getReciboDTO().isCobroExterno()) {
 			this.nvoItem = new ReciboDetalleDTO();
 			if (this.dato.getReciboDTO().isRecaudacionMra()) {
-				this.nvoItem.setConcepto(Recibo.RECAUDACION_MRA);
+				this.nvoItem.setConcepto(this.dato.isEmpresaMRA() ? "RECAUDACION CENTRAL" : Recibo.RECAUDACION_MRA);
 			}
 			w = (Window) Executions.createComponents(ADD_ITEM_ZUL, this.mainComponent, null);
 			w.doModal();
