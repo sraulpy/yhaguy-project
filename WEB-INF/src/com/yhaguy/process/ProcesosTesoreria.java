@@ -1649,6 +1649,31 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	/**
+	 * verifica los gastos de caja chica..
+	 */
+	public static void verificarGastosCajaChica() throws Exception {
+		Date desde = Utiles.getFecha("01-01-2020 00:00:00");
+		Date hasta = new Date();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Gasto> gastos = rr.getGastos(desde, hasta);
+		for (Gasto gasto : gastos) {
+			if (gasto.isFondoFijo()) {
+				if (gasto.getFormasPago().size() == 0) {
+					//ReciboFormaPago fp = new ReciboFormaPago();
+					//fp.setTipo(rr.getTipoById(83));
+					//fp.setFechaOperacion(gasto.getFecha());
+					//fp.setMoneda(gasto.getMoneda());
+					//fp.setMontoGs(gasto.getImporteGs());
+					//fp.setNroComprobanteAsociado(gasto.getNumeroFactura());
+					//gasto.getFormasPago().add(fp);
+					//rr.saveObject(gasto, gasto.getUsuarioMod());
+					System.out.println("--- " + gasto.getNumeroFactura());
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosTesoreria.verificarVentasAnuladas();
@@ -1694,7 +1719,8 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.asignacionDeCartera(SRC_CARTERA);
 			//ProcesosTesoreria.verificarBancoDepositos();
 			//ProcesosTesoreria.verificarCotizacionGastos();
-			ProcesosTesoreria.migracionClientesMRA(SRC_SALDOS_CLIENTES_MRA);
+			//ProcesosTesoreria.migracionClientesMRA(SRC_SALDOS_CLIENTES_MRA);
+			ProcesosTesoreria.verificarGastosCajaChica();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
