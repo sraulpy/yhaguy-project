@@ -1272,7 +1272,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			rwRecaudacionMra.setVisible(true);
 			this.nvoFormaPago.setDescripcion(this.nvoFormaPago.getTipo().getText());		
 		
-		} else if (siglaFP.equals(siglaFPPG) && !this.dato.getReciboDTO().isCobro()) {
+		} else if (siglaFP.equals(siglaFPPG)) {
 			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
