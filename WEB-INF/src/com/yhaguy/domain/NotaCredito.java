@@ -321,8 +321,18 @@ public class NotaCredito extends Domain {
 	 * @return el importe total sin iva..
 	 */
 	public double getTotalImporteGsSinIva() {
+		double out = 0;
+		if (this.isMotivoDescuento()) {
+			for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
+				out += item.getImporteGsSinIva();
+			}
+		} else {
+			for (NotaCreditoDetalle item : this.getDetallesArticulos()) {
+				out += item.getImporteGsSinIva();
+			}
+		}
 		if (this.isExenta()) return this.getImporteGs();
-		return this.getImporteGs() - this.getTotalIva10();
+		return out;
 	}
 	
 	/**

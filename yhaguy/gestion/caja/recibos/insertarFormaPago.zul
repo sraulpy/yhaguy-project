@@ -12,9 +12,7 @@
 				<field value="Tipo de Pago:"/>
 				<combobox model="@load(vm.formasDePago)" hflex="true"
 					selectedItem="@bind(vm.nvoFormaPago.tipo)"
-					onChange="@command('seleccionarFormaPago')" instant="true"
-					readonly="@load(vm.dato.reciboDTO.recaudacionMra)"
-					buttonVisible="@load(!vm.dato.reciboDTO.recaudacionMra)">
+					onChange="@command('seleccionarFormaPago')" instant="true">
 					<template name="model">
 						<comboitem
 							label="@load(each.text.toUpperCase())" />

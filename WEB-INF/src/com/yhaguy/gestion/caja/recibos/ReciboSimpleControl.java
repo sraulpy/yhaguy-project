@@ -28,7 +28,6 @@ import org.zkoss.zul.Window;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
-import com.coreweb.domain.Tipo;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -79,7 +78,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private Object[] selectedCuenta;
 	
 	private Date fechaCierre;
-
+            
 	@Init(superclass=true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) CajaPeriodoControlBody dato) {
 		this.dato = dato;
@@ -613,17 +612,10 @@ public class ReciboSimpleControl extends SoloViewModel {
 			this.guaranizarFormaPago();
 		}
 		
-		w = (Window) Executions.createComponents(Configuracion.RECIBO_ADD_FORMA_PAGO_ZUL, 
+		this.w = (Window) Executions.createComponents(Configuracion.RECIBO_ADD_FORMA_PAGO_ZUL, 
 				this.mainComponent, null);
 		Selectors.wireComponents(w, this, false);
-		if (this.dato.getReciboDTO().isRecaudacionMra()) {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Tipo fp = rr.getTipoPorSigla(Configuracion.SIGLA_FORMA_PAGO_RECAUDACION_MRA);
-			MyPair mp = new MyPair(fp.getId(), fp.getDescripcion(), fp.getSigla());
-			this.nvoFormaPago.setTipo(mp);
-			this.seleccionarFormaPago();
-		}
-		w.doOverlapped();
+		this.w.doOverlapped();
 	}
 	
 	@Command @NotifyChange("*")
