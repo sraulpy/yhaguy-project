@@ -295,25 +295,51 @@ public class NotaCredito extends Domain {
 	 * @return el total iva 10..
 	 */
 	public double getTotalIva10() {
-		if (this.isExenta()) return 0.0;
+		if (this.isExenta() && !this.isGravada()) return 0.0;
 		Misc misc = new Misc();	
-		return Math.rint(misc.calcularIVA(this.getImporteGs(), 10) * 1) / 1;
+		double out = 0;
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.isDetalleFactura()) {
+				if (!item.isExenta()) {
+					out += item.getImporteGs();
+				}
+			}
+		}
+		return Math.rint(misc.calcularIVA(out, 10) * 1) / 1;
 	}
 	
 	/**
 	 * @return el total gravado 10..
 	 */
 	public double getTotalGravado10() {
-		if (this.isExenta()) return 0.0;
+		if (this.isExenta() && !this.isGravada()) return 0.0;
 		Misc misc = new Misc();	
-		return Math.rint(misc.calcularGravado(this.getImporteGs(), 10) * 1) / 1;
+		double out = 0;
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.isDetalleFactura()) {
+				if (!item.isExenta()) {
+					out += item.getImporteGs();
+				}
+			}
+		}
+		return Math.rint(misc.calcularGravado(out, 10) * 1) / 1;
 	}
 	
 	/**
 	 * @return el total exenta..
 	 */
 	public double getTotalExenta() {
-		if (this.isExenta()) return this.getImporteGs();
+		if (this.isExenta()) {
+			double out = 0;
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (item.isDetalleFactura()) {
+					if (item.isExenta()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+			return out;
+		}
 		return 0.0;
 	}
 	
@@ -354,6 +380,18 @@ public class NotaCredito extends Domain {
 	public boolean isExenta() {
 		for (NotaCreditoDetalle item : this.detalles) {
 			if (item.getTipoIva().getSigla().equals(Configuracion.SIGLA_IVA_EXENTO)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return true si es gravada..
+	 */
+	public boolean isGravada() {
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (!item.getTipoIva().getSigla().equals(Configuracion.SIGLA_IVA_EXENTO)) {
 				return true;
 			}
 		}
