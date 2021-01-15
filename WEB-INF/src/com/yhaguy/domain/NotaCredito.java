@@ -298,13 +298,23 @@ public class NotaCredito extends Domain {
 		if (this.isExenta() && !this.isGravada()) return 0.0;
 		Misc misc = new Misc();	
 		double out = 0;
-		for (NotaCreditoDetalle item : this.detalles) {
-			if (item.isDetalleFactura()) {
-				if (!item.isExenta()) {
-					out += item.getImporteGs();
+		if (this.isMotivoDescuento()) {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (item.isDetalleFactura()) {
+					if (!item.isExenta()) {
+						out += item.getImporteGs();
+					}
 				}
 			}
-		}
+		} else {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (!item.isDetalleFactura()) {
+					if (!item.isExenta()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+		}		
 		return Math.rint(misc.calcularIVA(out, 10) * 1) / 1;
 	}
 	
@@ -315,13 +325,23 @@ public class NotaCredito extends Domain {
 		if (this.isExenta() && !this.isGravada()) return 0.0;
 		Misc misc = new Misc();	
 		double out = 0;
-		for (NotaCreditoDetalle item : this.detalles) {
-			if (item.isDetalleFactura()) {
-				if (!item.isExenta()) {
-					out += item.getImporteGs();
+		if (this.isMotivoDescuento()) {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (item.isDetalleFactura()) {
+					if (!item.isExenta()) {
+						out += item.getImporteGs();
+					}
 				}
 			}
-		}
+		} else {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (!item.isDetalleFactura()) {
+					if (!item.isExenta()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+		}		
 		return Math.rint(misc.calcularGravado(out, 10) * 1) / 1;
 	}
 	
@@ -331,13 +351,23 @@ public class NotaCredito extends Domain {
 	public double getTotalExenta() {
 		if (this.isExenta()) {
 			double out = 0;
-			for (NotaCreditoDetalle item : this.detalles) {
-				if (item.isDetalleFactura()) {
-					if (item.isExenta()) {
-						out += item.getImporteGs();
+			if (this.isMotivoDescuento()) {
+				for (NotaCreditoDetalle item : this.detalles) {
+					if (item.isDetalleFactura()) {
+						if (item.isExenta()) {
+							out += item.getImporteGs();
+						}
 					}
 				}
-			}
+			} else {
+				for (NotaCreditoDetalle item : this.detalles) {
+					if (!item.isDetalleFactura()) {
+						if (item.isExenta()) {
+							out += item.getImporteGs();
+						}
+					}
+				}
+			}			
 			return out;
 		}
 		return 0.0;
