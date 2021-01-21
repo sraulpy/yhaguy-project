@@ -11715,7 +11715,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> marcaciones = rr.getMarcaciones(desde, hasta, funcionario);
 				for (Object[] item : marcaciones) {
 					Date fecha_ = Utiles.getFecha(((String) item[0]).replaceAll("entrada_", "")
-							.replaceAll("salida_", "").replaceAll("interna_", "").replaceAll("interna", ""));
+							.replaceAll("salida_", "").replaceAll("interna_", "").replaceAll("interna", ""), "dd-MM-yyyy HH:mm:ss");
 					String fecha = Utiles.getDateToString(fecha_, Utiles.DD_MM_YYYY);
 					String tipo = this.getTipo((String) item[0]);
 					String marcacion = Utiles.getDateToString(fecha_, "HH:mm:ss");
