@@ -8,6 +8,7 @@ public class RRHHMarcaciones extends Domain {
 	
 	public static final String ENTRADA = "07:30:00";
 	public static final String SALIDA = "17:30:00";
+	public static final String SALIDA_SABADO = "12:00:00";
 	
 	private String tipo;
 	private String descripcion;

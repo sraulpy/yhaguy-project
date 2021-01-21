@@ -240,6 +240,32 @@ public class Utiles {
 	}
 	
 	/**
+	 * @return el dia segun fecha..
+	 */
+	public static String getDia(Date fecha) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(fecha);
+		int day = c.get(Calendar.DAY_OF_WEEK);
+		switch (day) {
+		case 1:
+			return "DOMINGO";
+		case 2:
+			return "LUNES";
+		case 3:
+			return "MARTES";
+		case 4:
+			return "MIERCOLES";
+		case 5:
+			return "JUEVES";
+		case 6:
+			return "VIERNES";
+		case 7:
+			return "SABADO";
+		}
+		return "";
+	}
+	
+	/**
 	 * @return
 	 * [0]:horas
 	 * [1]:minutos

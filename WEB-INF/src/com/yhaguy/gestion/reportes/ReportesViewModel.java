@@ -11719,23 +11719,25 @@ public class ReportesViewModel extends SimpleViewModel {
 					String fecha = Utiles.getDateToString(fecha_, Utiles.DD_MM_YYYY);
 					String tipo = this.getTipo((String) item[0]);
 					String marcacion = Utiles.getDateToString(fecha_, "HH:mm:ss");
+					String dia = Utiles.getDia(fecha_);
 					
-					if (tipo.equals("ENTRADA")) {
+					if (tipo.equals("ENTRADA")) { 
 						Date horario = Utiles.getFecha(fecha + " " + RRHHMarcaciones.ENTRADA, "dd-MM-yyyy HH:mm:ss");
 						Object[] retraso_ = Utiles.diferenciaTiempo(fecha_, horario);
 						String retraso = retraso_[0] + ":" + retraso_[1] + ":" + retraso_[2];
 						if(((long)retraso_[0]) < 0 || ((long)retraso_[1]) < 0 || ((long)retraso_[2]) < 0) retraso = "";
-						data.add(new Object[] { fecha, tipo, marcacion, retraso, "", item[1] });
+						data.add(new Object[] { fecha, dia, tipo, marcacion, retraso, "", item[1] });
 
 					} else if (tipo.equals("SALIDA")) {
-						Date horario = Utiles.getFecha(fecha + " " + RRHHMarcaciones.SALIDA, "dd-MM-yyyy HH:mm:ss");
+						String key = dia.equals("SABADO") ? RRHHMarcaciones.SALIDA_SABADO : RRHHMarcaciones.SALIDA;
+						Date horario = Utiles.getFecha(fecha + " " + key, "dd-MM-yyyy HH:mm:ss");
 						Object[] adelanto_ = Utiles.diferenciaTiempo(horario, fecha_);
 						String adelanto = adelanto_[0] + ":" + adelanto_[1] + ":" + adelanto_[2];
 						if(((long)adelanto_[0]) < 0 || ((long)adelanto_[1]) < 0 || ((long)adelanto_[2]) < 0) adelanto = "";
-						data.add(new Object[] { fecha, tipo, marcacion, "", adelanto, item[1] });
+						data.add(new Object[] { fecha, dia, tipo, marcacion, "", adelanto, item[1] });
 
 					} else {
-						data.add(new Object[] { fecha, tipo, marcacion, "", "", item[1] });
+						data.add(new Object[] { fecha, dia, tipo, marcacion, "", "", item[1] });
 					}
 				}
 
@@ -27471,12 +27473,13 @@ class ReporteMarcaciones extends ReporteYhaguy {
 	String codigoReporte;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 15);
-	static DatosColumnas col2 = new DatosColumnas("Tipo", TIPO_STRING, 25);
-	static DatosColumnas col3 = new DatosColumnas("Marcación", TIPO_STRING, 15);
-	static DatosColumnas col4 = new DatosColumnas("Retraso", TIPO_STRING, 15);
-	static DatosColumnas col5 = new DatosColumnas("Adelanto", TIPO_STRING, 15);
-	static DatosColumnas col6 = new DatosColumnas("Funcionario", TIPO_STRING);	
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 20);
+	static DatosColumnas col2 = new DatosColumnas("Día", TIPO_STRING, 30);
+	static DatosColumnas col3 = new DatosColumnas("Tipo", TIPO_STRING, 30);
+	static DatosColumnas col4 = new DatosColumnas("Marcación", TIPO_STRING, 20);
+	static DatosColumnas col5 = new DatosColumnas("Retraso", TIPO_STRING, 20);
+	static DatosColumnas col6 = new DatosColumnas("Adelanto", TIPO_STRING, 20);
+	static DatosColumnas col7 = new DatosColumnas("Funcionario", TIPO_STRING);	
 
 	public ReporteMarcaciones(Date desde, Date hasta, String codigoReporte) {
 		this.desde = desde;
@@ -27491,6 +27494,7 @@ class ReporteMarcaciones extends ReporteYhaguy {
 		cols.add(col4);	
 		cols.add(col5);
 		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override
