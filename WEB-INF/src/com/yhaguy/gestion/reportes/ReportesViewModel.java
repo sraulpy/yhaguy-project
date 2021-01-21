@@ -97,6 +97,7 @@ import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.Proveedor;
+import com.yhaguy.domain.RRHHMarcaciones;
 import com.yhaguy.domain.RecaudacionCentral;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
@@ -455,6 +456,10 @@ public class ReportesViewModel extends SimpleViewModel {
 
 		case ID_CONTABILIDAD:
 			new ReportesDeContabilidad(this.getCodigoReporte(), false);
+			break;
+			
+		case ID_RRHH:
+			new ReportesRRHH(this.getCodigoReporte());
 			break;
 			
 		case ID_SISTEMA:
@@ -11675,6 +11680,100 @@ public class ReportesViewModel extends SimpleViewModel {
 			}
 		}
 	}
+	
+	/**
+	 * Reportes de rrhh..
+	 */
+	class ReportesRRHH {
+		
+		static final String MARCACIONES = "RRHH-00001";
+		
+		public ReportesRRHH(String codigoReporte) {
+			switch (codigoReporte) {
+			
+			case MARCACIONES:
+				this.listadoMarcaciones(MARCACIONES);
+				break;
+			}
+		}
+		
+		/**
+		 * marcaciones..
+		 */
+		private void listadoMarcaciones(String codigoReporte) {
+
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				String funcionario = filtro.getFuncionarioMarcacion();
+
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> marcaciones = rr.getMarcaciones(desde, hasta, funcionario);
+				for (Object[] item : marcaciones) {
+					Date fecha_ = Utiles.getFecha(((String) item[0]).replaceAll("entrada_", "")
+							.replaceAll("salida_", "").replaceAll("interna_", "").replaceAll("interna", ""));
+					String fecha = Utiles.getDateToString(fecha_, Utiles.DD_MM_YYYY);
+					String tipo = this.getTipo((String) item[0]);
+					String marcacion = Utiles.getDateToString(fecha_, "HH:mm:ss");
+					
+					if (tipo.equals("ENTRADA")) {
+						Date horario = Utiles.getFecha(fecha + " " + RRHHMarcaciones.ENTRADA, "dd-MM-yyyy HH:mm:ss");
+						Object[] retraso_ = Utiles.diferenciaTiempo(fecha_, horario);
+						String retraso = retraso_[0] + ":" + retraso_[1] + ":" + retraso_[2];
+						if(((long)retraso_[0]) < 0 || ((long)retraso_[1]) < 0 || ((long)retraso_[2]) < 0) retraso = "";
+						data.add(new Object[] { fecha, tipo, marcacion, retraso, "", item[1] });
+
+					} else if (tipo.equals("SALIDA")) {
+						Date horario = Utiles.getFecha(fecha + " " + RRHHMarcaciones.SALIDA, "dd-MM-yyyy HH:mm:ss");
+						Object[] adelanto_ = Utiles.diferenciaTiempo(horario, fecha_);
+						String adelanto = adelanto_[0] + ":" + adelanto_[1] + ":" + adelanto_[2];
+						if(((long)adelanto_[0]) < 0 || ((long)adelanto_[1]) < 0 || ((long)adelanto_[2]) < 0) adelanto = "";
+						data.add(new Object[] { fecha, tipo, marcacion, "", adelanto, item[1] });
+
+					} else {
+						data.add(new Object[] { fecha, tipo, marcacion, "", "", item[1] });
+					}
+				}
+
+				ReporteMarcaciones rep = new ReporteMarcaciones(desde, hasta, codigoReporte);
+				rep.setApaisada();
+				rep.setDatosReporte(data);			
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * @return el tipo
+		 */
+		private String getTipo(String descripcion) {
+			String out = "";
+			if (descripcion.startsWith("entrada")) {
+				out = "ENTRADA";
+			}
+			if (descripcion.startsWith("entrada_interna")) {
+				out = "ENTRADA INTERNA";
+			}
+			if (descripcion.startsWith("salida")) {
+				out = "SALIDA";
+			}
+			if (descripcion.startsWith("salida_interna")) {
+				out = "SALIDA INTERNA";
+			}
+			return out;
+		}
+	}
+	
 
 	/**
 	 * Reportes de compras..
@@ -27359,6 +27458,63 @@ class ServicioTecnicoDataSource implements JRDataSource {
 				this.values.add(new Object[] { nroSte, nroVta, codigo, diagnostico, reposicion, nroServicio  });
 			}
 		}
+	}
+}
+
+/**
+ * Reporte de marcaciones..
+ */
+class ReporteMarcaciones extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+	String codigoReporte;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 15);
+	static DatosColumnas col2 = new DatosColumnas("Tipo", TIPO_STRING, 25);
+	static DatosColumnas col3 = new DatosColumnas("Marcación", TIPO_STRING, 15);
+	static DatosColumnas col4 = new DatosColumnas("Retraso", TIPO_STRING, 15);
+	static DatosColumnas col5 = new DatosColumnas("Adelanto", TIPO_STRING, 15);
+	static DatosColumnas col6 = new DatosColumnas("Funcionario", TIPO_STRING);	
+
+	public ReporteMarcaciones(Date desde, Date hasta, String codigoReporte) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.codigoReporte = codigoReporte;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);		
+		cols.add(col4);	
+		cols.add(col5);
+		cols.add(col6);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo(this.codigoReporte + " - Listado de Marcaciones");
+		this.setDirectorio("funcionarios");
+		this.setNombreArchivo("rrhh-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Horario Entrada", RRHHMarcaciones.ENTRADA))
+				.add(this.textoParValor("Horario Salida", RRHHMarcaciones.SALIDA))
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
 	}
 }
 

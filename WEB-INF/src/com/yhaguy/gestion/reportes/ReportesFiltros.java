@@ -224,6 +224,8 @@ public class ReportesFiltros {
 	private String nombreUsuario = "";
 	
 	private int stockMayorIgual = 1;
+	
+	private String funcionarioMarcacion = "";
 
 	/**
 	 * GET / SET
@@ -737,6 +739,11 @@ public class ReportesFiltros {
 	public List<Usuario> getUsuarios() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getUsuarios("", this.nombreUsuario);
+	}
+	
+	public List<String> getFuncionariosMarcaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getFuncionariosMarcaciones();
 	}
 
 	public Date getFechaDesde() {
@@ -1692,5 +1699,13 @@ public class ReportesFiltros {
 
 	public void setPresentacion(ArticuloPresentacion presentacion) {
 		this.presentacion = presentacion;
+	}
+
+	public String getFuncionarioMarcacion() {
+		return funcionarioMarcacion;
+	}
+
+	public void setFuncionarioMarcacion(String funcionarioMarcacion) {
+		this.funcionarioMarcacion = funcionarioMarcacion;
 	}
 }

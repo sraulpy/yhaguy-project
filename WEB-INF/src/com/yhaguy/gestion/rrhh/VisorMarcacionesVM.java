@@ -47,7 +47,7 @@ public class VisorMarcacionesVM extends SimpleViewModel {
 		List<Object[]> out = rr.getMarcaciones(this.getFilterFecha(), this.filterFuncionario);
 		for (Object[] item : out) {
 			item[4] = this.getTipo((String) item[1]);
-			item[5] = Utiles.getFecha(((String) item[1]).replaceAll("entrada_", "").replaceAll("salida_", "").replaceAll("interna_", ""));
+			item[5] = Utiles.getFecha(((String) item[1]).replaceAll("entrada_", "").replaceAll("salida_", "").replaceAll("interna_", "").replaceAll("interna", ""));
 		}
 		return out;
 	}

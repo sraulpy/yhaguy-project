@@ -240,6 +240,22 @@ public class Utiles {
 	}
 	
 	/**
+	 * @return
+	 * [0]:horas
+	 * [1]:minutos
+	 * [2]:segundos
+	 */
+	public static Object[] diferenciaTiempo(Date fecha1, Date fecha2) {
+		long uno = fecha1.getTime();
+		long dos = fecha2.getTime();
+		long diferencia = uno - dos;
+		long segundos = (diferencia / 1000) % 60;
+		long minutos = (diferencia / (1000 * 60)) % 60;
+		long horas = (diferencia / (1000 * 60 * 60)) % 24;
+		return new Object[] { horas, minutos, segundos };
+	}
+	
+	/**
 	 * @return el numero de meses entre dos fechas..
 	 */
 	public static int getNumeroMeses(Date fecha1, Date fecha2) {
@@ -673,11 +689,13 @@ public class Utiles {
     }
 	
 	public static void main(String[] args) {
-		double total = 7172728403.0;
-		double uno = 712902;
-		double porc = Utiles.obtenerPorcentajeDelValor(uno, total);
-		System.out.println(porc);
-		System.out.println(Utiles.obtenerValorDelPorcentaje(3700000000.0, porc));
-	
+		Date fecha1;
+		try {
+			fecha1 = Utiles.getFecha("20-01-2021 19:15:00", "dd-MM-yyyy HH:mm:ss");
+			Utiles.diferenciaTiempo(new Date(), fecha1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
 	}
 }

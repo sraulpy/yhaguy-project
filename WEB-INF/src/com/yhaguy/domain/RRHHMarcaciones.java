@@ -6,6 +6,9 @@ import com.coreweb.domain.Domain;
 @SuppressWarnings("serial")
 public class RRHHMarcaciones extends Domain {
 	
+	public static final String ENTRADA = "07:30:00";
+	public static final String SALIDA = "17:30:00";
+	
 	private String tipo;
 	private String descripcion;
 	private String usuario;
