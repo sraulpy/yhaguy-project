@@ -106,7 +106,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	private MyArray selectedItem;
 	private String selectedDenominacion;
 	private Date fechaDesde = new Date();
-	private Date fechaHasta = new Date();
+	private Date fechaHasta = new Date();//El importe de las Formas de
 
 	private Window win;
 	
@@ -616,6 +616,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 						rr.saveObject(fp.getSelectedPagare(), this.getLoginNombre());
 					}
 				}
+			}
+			if (this.reciboDTO.isRecaudacionMra()) {
+				this.reciboDTO.setNumero(AutoNumeroControl.getAutoNumeroKey(this.isEmpresaMRA()? "REC-CEN":"REC-MRA", 7));
 			}
 			
 			this.asignarNumeros();
@@ -3230,7 +3233,6 @@ class ValidadorFormaPagoVenta implements VerificaAceptarCancelar {
 		}
 
 		if ((totalVT != totalFP)) {
-			valido = false;
 			this.mensaje += "\n - El importe de las Formas de Pago debe ser: "
 					+ totalVT_ + venta.getMoneda().getPos1();
 		}
