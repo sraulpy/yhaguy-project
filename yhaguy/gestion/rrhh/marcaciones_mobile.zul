@@ -32,14 +32,6 @@
 				onClick="@command('openCodigo', tipo=4)">
 		</button>
 
-		<window apply="com.yhaguy.gestion.rrhh.ClockComposer">
-			<charts id="chart" type="gauge" plotBackgroundColor=""
-				plotBackgroundImage="" plotBorderWidth="0" plotShadow="false"
-				height="400" title="@load(vm.empresaDescripcion)" />
-			<timer id="timer" delay="1000" running="true"
-				repeats="true" />
-		</window>
-
 		<hlayout hflex="true" style="text-align:center">
 			<label style="font-weight:bold;font-size:16pt">ÚLTIMA MARCACIÓN: </label>
 			<label style="font-weight:bold;font-size:16pt" value="@load(vm.descripcion)"></label>
