@@ -36,8 +36,7 @@
 		<space></space>
 
 		<hlayout hflex="true" style="text-align:center">
-			<label style="font-weight:bold;font-size:30pt">ÚLTIMA MARCACIÓN: </label>
-			<label style="font-weight:bold;font-size:30pt" value="@load(vm.descripcion)"></label>
+			<label style="font-size:30pt" value="@load(vm.descripcion)"></label>
 		</hlayout>
 
 	</vbox>
