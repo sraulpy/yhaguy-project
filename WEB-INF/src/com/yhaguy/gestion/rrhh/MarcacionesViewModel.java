@@ -19,6 +19,7 @@ public class MarcacionesViewModel extends SimpleViewModel {
 	
 	static final String API = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=";
 	static final String ZUL_QR = "/yhaguy/gestion/rrhh/marcaciones_qr.zul";
+	static final String ZUL_QR_MOBILE = "/yhaguy/gestion/rrhh/marcaciones_qr_mobile.zul";
 	static final String ZUL_NOTIFICACION = "/yhaguy/gestion/rrhh/notificacion.zul";
 	
 	private String link;
@@ -50,6 +51,28 @@ public class MarcacionesViewModel extends SimpleViewModel {
 		}
 		
 		Window win = (Window) Executions.createComponents(ZUL_QR, this.mainComponent, null);
+		win.doModal();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void openCodigo_(@BindingParam("tipo") int tipo) throws Exception {
+		switch (tipo) {
+		case 1:
+			this.link = this.getEntrada();
+			break;
+		case 2:
+			this.link = this.getEntradaInterna();
+			break;
+		case 3:
+			this.link = this.getSalida();
+			break;
+		case 4:
+			this.link = this.getSalidaInterna();
+			break;
+		}
+		
+		Window win = (Window) Executions.createComponents(ZUL_QR_MOBILE, this.mainComponent, null);
 		win.doModal();
 	}
 	

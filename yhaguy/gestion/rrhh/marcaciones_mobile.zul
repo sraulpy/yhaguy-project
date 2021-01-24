@@ -12,26 +12,26 @@
 				label="Entrada" hflex="true" vflex="true"
 				iconSclass="z-icon-sign-in"
 				style="font-size:40pt;background:#164D64"
-				onClick="@command('openCodigo', tipo=1)"></button>
+				onClick="@command('openCodigo_', tipo=1)"></button>
 			<space></space>
 			<button mold="bs" sclass="btn-lg btn-warning"
 				label="Salida" hflex="true" vflex="true"
 				iconSclass="z-icon-sign-out"
 				style="font-size:40pt;background:#d9534f"
-				onClick="@command('openCodigo', tipo=3)"></button>
+				onClick="@command('openCodigo_', tipo=3)"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-lg btn-primary"
 				label="Entrada Interna" hflex="true" vflex="true"
 				style="font-size:40pt;background:#5cb85c"
 				iconSclass="z-icon-sign-in"
-				onClick="@command('openCodigo', tipo=2)">
+				onClick="@command('openCodigo_', tipo=2)">
 		</button>
 		<space></space>
 		<button mold="bs" sclass="btn-lg btn-warning"
 				label="Salida Interna" hflex="true" vflex="true"
 				style="font-size:40pt;background:#f0ad4e"
 				iconSclass="z-icon-sign-out"
-				onClick="@command('openCodigo', tipo=4)">
+				onClick="@command('openCodigo_', tipo=4)">
 		</button>
 		<space></space>
 

@@ -1,0 +1,14 @@
+<zk>
+<window
+	id="win_qr"
+	hflex="true" vflex="true">
+	
+	<timer delay="15000" onTimer="win_qr.detach()"></timer>
+	
+	<vbox hflex="true" vflex="true" pack="center" align="center">
+	<image src="@load(vm.link)"
+		width="80%" height="50%"></image>
+	</vbox>
+	
+</window>
+</zk>
