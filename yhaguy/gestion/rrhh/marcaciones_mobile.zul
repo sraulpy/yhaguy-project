@@ -6,35 +6,38 @@
 	<vbox hflex="true" vflex="true"
 		pack="center" align="center" style="padding:50px">
 		
+		<include src="/yhaguy/gestion/rrhh/reloj.zul" />
+		<space></space>
 		<button mold="bs" sclass="btn-lg btn-primary"
 				label="Entrada" hflex="true" vflex="true"
 				iconSclass="z-icon-sign-in"
-				style="font-size:20pt;background:#164D64"
+				style="font-size:40pt;background:#164D64"
 				onClick="@command('openCodigo', tipo=1)"></button>
 			<space></space>
 			<button mold="bs" sclass="btn-lg btn-warning"
 				label="Salida" hflex="true" vflex="true"
 				iconSclass="z-icon-sign-out"
-				style="font-size:20pt;background:#d9534f"
+				style="font-size:40pt;background:#d9534f"
 				onClick="@command('openCodigo', tipo=3)"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-lg btn-primary"
 				label="Entrada Interna" hflex="true" vflex="true"
-				style="font-size:20pt;background:#5cb85c"
+				style="font-size:40pt;background:#5cb85c"
 				iconSclass="z-icon-sign-in"
 				onClick="@command('openCodigo', tipo=2)">
 		</button>
 		<space></space>
 		<button mold="bs" sclass="btn-lg btn-warning"
 				label="Salida Interna" hflex="true" vflex="true"
-				style="font-size:20pt;background:#f0ad4e"
+				style="font-size:40pt;background:#f0ad4e"
 				iconSclass="z-icon-sign-out"
 				onClick="@command('openCodigo', tipo=4)">
 		</button>
+		<space></space>
 
 		<hlayout hflex="true" style="text-align:center">
-			<label style="font-weight:bold;font-size:16pt">ÚLTIMA MARCACIÓN: </label>
-			<label style="font-weight:bold;font-size:16pt" value="@load(vm.descripcion)"></label>
+			<label style="font-weight:bold;font-size:30pt">ÚLTIMA MARCACIÓN: </label>
+			<label style="font-weight:bold;font-size:30pt" value="@load(vm.descripcion)"></label>
 		</hlayout>
 
 	</vbox>

@@ -1,0 +1,49 @@
+<div>
+	<script>
+		<![CDATA[ 
+		var currentmillis; 
+		var fid;
+
+		function updateClock(){ 
+			currentmillis = currentmillis + 1000;
+			var currentTime = new Date (currentmillis);
+
+			var currentHours = currentTime.getHours ( ); 
+			var currentMinutes = currentTime.getMinutes ( ); 
+			var currentSeconds = currentTime.getSeconds ( );
+
+			currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes; 
+			currentSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
+
+			var timeOfDay = ( currentHours < 12 ) ? " AM " : " PM ";
+
+			currentHours = ( currentHours > 12 ) ? currentHours - 12 :
+			currentHours; currentHours = ( currentHours == 0 ) ? 12 :
+			currentHours;
+
+			var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+
+			document.getElementById(fid).value = currentTimeString;
+			setTimeout("updateClock()", 1000 ); }
+
+			function callClock(cm, ffid){				
+				currentmillis = cm; 
+				fid = ffid;
+				updateClock(); 
+				} 
+			]]>
+	</script>
+
+	<textbox id="now" 
+		readonly="true" style="background:transparent;border:none;font-size:40pt;text-align:center"
+		hflex="true"/>
+
+	
+	<zscript>
+		<![CDATA[
+			Clients.evalJavaScript("callClock("
+				+ java.util.Calendar.getInstance().getTimeInMillis() + ", \""
+				+ now.getUuid() + "\")");
+		]]>
+	</zscript>
+</div>
