@@ -13,7 +13,7 @@
 		<div fulfill="self.onCreate" vflex="true" hflex="true"> 
 		
 			<include aliasForm="Marcaciones" usuario="admin" clave="admin"
-				src="/yhaguy/gestion/rrhh/marcaciones.zul" height="100%" width="100%"/>
+				src="/yhaguy/gestion/rrhh/marcaciones_mobile.zul" height="100%" width="100%"/>
 
 			<menubar id="menubarFoot2">
 				<menuitem id="carita" />
