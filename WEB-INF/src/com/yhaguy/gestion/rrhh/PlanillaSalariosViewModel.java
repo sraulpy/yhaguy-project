@@ -35,6 +35,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	private String selectedAnho = "";
 	private String selectedTipo = "";
 	
+	private Object[] selectedFormato;
+	
 	private RRHHPlanillaSalarios selectedPlanilla;
 	
 	private List<Object[]> selectedFuncionarios;
@@ -94,7 +96,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	
 	@Command
 	public void imprimirPlanilla() throws Exception {
-		this.imprimirPlanilla_();
+		this.imprimirPlanilla_(this.selectedFormato);
 	}
 	
 	/**
@@ -117,14 +119,15 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	/**
 	 * Despliega el Reporte de planilla de salario..
 	 */
-	private void imprimirPlanilla_() throws Exception {		
-		String source = ReportesViewModel.SOURCE_PLANILLA_SALARIOS;
+	private void imprimirPlanilla_(Object[] formato) throws Exception {		
+		String pdf = (String) formato[1];
+		String source = pdf.equals(ReportesViewModel.FORMAT_PDF[1]) ? ReportesViewModel.SOURCE_PLANILLA_SALARIOS : ReportesViewModel.SOURCE_PLANILLA_SALARIOS_;
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new PlanillaSalariosDataSource(this.planillas, this.getTotales());
 		params.put("Periodo", this.getSelectedMes() + " " +  this.getSelectedAnho() + " - " + this.selectedTipo);
 		params.put("Usuario", getUs().getNombre());
 		params.put("Titulo", "Planilla de Salarios");
-		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+		this.imprimirComprobante(source, params, dataSource, formato);
 	}
 	
 	/**
@@ -592,6 +595,16 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return los formatos
+	 */
+	public List<Object[]> getFormatos() {
+		List<Object[]> out = new ArrayList<>();
+		out.add(ReportesViewModel.FORMAT_PDF);
+		out.add(ReportesViewModel.FORMAT_XLS);
+		return out;
+	}
+	
+	/**
 	 * @return las planillas..
 	 */
 	public List<RRHHPlanillaSalarios> getPlanillas_() throws Exception {
@@ -676,5 +689,13 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 
 	public void setSelectedTipo(String selectedTipo) {
 		this.selectedTipo = selectedTipo;
+	}
+
+	public Object[] getSelectedFormato() {
+		return selectedFormato;
+	}
+
+	public void setSelectedFormato(Object[] selectedFormato) {
+		this.selectedFormato = selectedFormato;
 	}
 }

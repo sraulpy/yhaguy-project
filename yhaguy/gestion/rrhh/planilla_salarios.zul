@@ -28,7 +28,7 @@
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Planilla"
 			iconSclass="z-icon-print"
-			onClick="@command('imprimirPlanilla')"></button>
+			onClick='formato.open(self, "after_end")'></button>
 	</hlayout>
 	<listbox sclass="small-list" vflex="true"
 		model="@load(vm.planillas)"
@@ -397,6 +397,23 @@
 		<button mold="bs" sclass="btn-sm btn-success" iconSclass="z-icon-check" hflex="true"
 			onClick="@command('generarPlanilla', comp=pop_procesar)"></button>
 		</vbox>
+	</popup>
+	<popup id="formato" sclass="rounded">
+		<vlayout width="250px" style="padding:10px">
+			<combobox hflex="true"
+				model="@load(vm.formatos)"
+				selectedItem="@bind(vm.selectedFormato)"
+				placeholder="Seleccione un formato..">
+				<template name="model">
+					<comboitem label="@load(each[1].toString().toUpperCase())"></comboitem>
+				</template>
+			</combobox>
+			<space></space>
+			<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Planilla"
+				iconSclass="z-icon-print"
+				onClick="@command('imprimirPlanilla')"
+				disabled="@load(vm.selectedFormato eq null)"></button>
+		</vlayout>
 	</popup>
 	
 	<style>
