@@ -6653,7 +6653,7 @@ public class RegisterDomain extends Register {
 		String query = "select c.idMovimientoOriginal, c.tipoMovimiento.id, c.nroComprobante, c.tipoMovimiento.descripcion, e.telefono_, e.direccion_, c.fechaEmision, c.fechaVencimiento, c.importeOriginal, "
 				+ " (select sum(saldo) from CtaCteEmpresaMovimiento m where m.idMovimientoOriginal = c.idMovimientoOriginal and m.tipoMovimiento.id = c.tipoMovimiento.id ),"
 				+ " e.razonSocial, e.ruc, c.saldo, c.tipoMovimiento.sigla, e.id, c.carteraCliente.id, c.carteraCliente.descripcion,"
-				+ " (select cl.limiteCredito from Cliente cl where cl.empresa.id = e.id), e.cuentaBloqueada, e.vendedor.razonSocial"
+				+ " (select cl.limiteCredito from Cliente cl where cl.empresa.id = e.id), e.cuentaBloqueada, e.vendedor.nombreEmpresa"
 				+ " from CtaCteEmpresaMovimiento c, Empresa e"
 				+ " where c.idEmpresa = e.id and c.anulado = 'FALSE' and c.saldo > 0 and"
 				+ " c.tipoCaracterMovimiento.sigla = '"

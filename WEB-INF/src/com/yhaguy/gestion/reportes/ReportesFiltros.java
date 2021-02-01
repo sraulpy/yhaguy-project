@@ -549,6 +549,8 @@ public class ReportesFiltros {
 		out.add(Utiles.ANHO_2018);
 		out.add(Utiles.ANHO_2019);
 		out.add(Utiles.ANHO_2020);
+		out.add(Utiles.ANHO_2021);
+		out.add(Utiles.ANHO_2022);
 		return out;
 	}
 	
