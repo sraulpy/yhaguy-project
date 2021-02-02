@@ -355,7 +355,7 @@ public class ProcesosArticulos {
 			}			
 		}
 		
-		for (long i = 2; i <= 16; i++) {
+		for (long i = 2; i <= 18; i++) {
 			if (i != idDepositoControl ) {
 				List<ArticuloDeposito> adps_ = new ArrayList<ArticuloDeposito>();
 				if (idArticulo <= 0) {
