@@ -2,21 +2,49 @@
 	width="400px"
 	apply="org.zkoss.bind.BindComposer"
 	position="center, center"
-	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.misventas.VentasPerdidasViewModel')">
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.ReposicionViewModel')"
+	id="winRep">
 	<caption iconSclass="z-icon-minus-circle"></caption>
 	
 	<vlayout vflex="true"
 		style="padding:10px" spacing="10px">
 		
-		<bandbox hflex="true" placeholder="Artículo"></bandbox>
+		<bandbox hflex="true" placeholder="Artículo.."
+				readonly="true" value="@load(vm.reposicion.articulo.codigoInterno)"
+				id="bndArti">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.articulos)"
+						selectedItem="@bind(vm.reposicion.articulo)"
+						onSelect="bndArti.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.codigoArticulo)" instant="true"
+										placeholder="Buscar por Código.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.codigoInterno.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+		</bandbox>
 		
-		<spinner placeholder="Cantidad" hflex="true"></spinner>
+		<spinner placeholder="Cantidad" hflex="true"
+			value="@bind(vm.reposicion.cantidad)"></spinner>
 		
-		<textbox hflex="true" placeholder="Observación" rows="2"></textbox>
+		<textbox hflex="true" placeholder="Observación" rows="2"
+			value="@bind(vm.reposicion.observacion)"></textbox>
 		
 		<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 						iconSclass="z-icon-check" 
-						onClick="@command('addVentaPerdida')"/>
+						onClick="@command('addReposicion', win=winRep)"/>
 	
 	</vlayout>
 </window>
