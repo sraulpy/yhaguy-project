@@ -1,0 +1,22 @@
+<window title=" Solicitud para reposición" border="normal" closable="true"
+	width="400px"
+	apply="org.zkoss.bind.BindComposer"
+	position="center, center"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.misventas.VentasPerdidasViewModel')">
+	<caption iconSclass="z-icon-minus-circle"></caption>
+	
+	<vlayout vflex="true"
+		style="padding:10px" spacing="10px">
+		
+		<bandbox hflex="true" placeholder="Artículo"></bandbox>
+		
+		<spinner placeholder="Cantidad" hflex="true"></spinner>
+		
+		<textbox hflex="true" placeholder="Observación" rows="2"></textbox>
+		
+		<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
+						iconSclass="z-icon-check" 
+						onClick="@command('addVentaPerdida')"/>
+	
+	</vlayout>
+</window>

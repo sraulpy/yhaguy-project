@@ -1,11 +1,7 @@
 	package com.yhaguy.inicio;
 
-import java.util.Date;
-import java.util.List;
-
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.util.Clients;
 
 import com.coreweb.Config;
 import com.coreweb.SistemaPropiedad;
@@ -13,14 +9,10 @@ import com.coreweb.control.Control;
 import com.coreweb.login.LoginUsuarioDTO;
 import com.yhaguy.AssemblerUtil;
 import com.yhaguy.Configuracion;
-import com.yhaguy.domain.BancoCheque;
-import com.yhaguy.domain.Funcionario;
-import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulos;
+import com.yhaguy.gestion.compras.locales.Reposicion;
 import com.yhaguy.gestion.empresa.ctacte.visor.VisorCtaCte;
-import com.yhaguy.gestion.venta.misventas.MisVentas;
 import com.yhaguy.gestion.venta.misventas.VentasPerdidas;
-import com.yhaguy.util.Utiles;
 
 public class Inicio {
 
@@ -59,8 +51,8 @@ public class Inicio {
 		s.setAttribute(Config.CONTROLADOR_BUSCADOR_PRODUCTOS, ctr);
 		
 		// guarda en la session el controlador de la vista mis ventas..
-		MisVentas ctrvtas = new MisVentas();
-		s.setAttribute(Config.CONTROLADOR_MIS_VENTAS, ctrvtas);
+		// MisVentas ctrvtas = new MisVentas();
+		// s.setAttribute(Config.CONTROLADOR_MIS_VENTAS, ctrvtas);
 		
 		// guarda en la session el controlador de ventas perdidas..
 		VentasPerdidas ctrvtasPerdidas = new VentasPerdidas();
@@ -69,6 +61,10 @@ public class Inicio {
 		// guarda en la session el controlador del buscador de articulos..
 		VisorCtaCte ctrVisorCtaCte = new VisorCtaCte();
 		s.setAttribute(Config.CONTROLADOR_VISOR_CTACTE, ctrVisorCtaCte);
+		
+		// guarda en la session el controlador de reposicion..
+		Reposicion ctrReposicion = new Reposicion();
+		s.setAttribute(Config.CONTROLADOR_MIS_VENTAS, ctrReposicion);
 		
 		/**
 		// notifica la meta del vendedor y venta del mes..
