@@ -1,0 +1,81 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.SolicitudReposicionVM')"
+	height="100%">
+	
+	<vbox hflex="true" vflex="true" spacing="0px">
+	
+	<hlayout hflex="true" sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-primary" label="Generar Orden de Compra" iconSclass="z-icon-shopping-cart"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.reposiciones)" multiple="true" checkmark="true">
+		<listhead>
+			<listheader width="50px" align="center"></listheader>
+			<listheader label="Fecha" width="150px"></listheader>
+			<listheader label="Código" width="200px"></listheader>
+			<listheader label="Cantidad" width="100px"></listheader>			
+			<listheader label="Solicitado por" width="200px"></listheader>
+			<listheader label="Observación"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader></auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true"  
+						placeholder="Día"
+						value="@bind(vm.filterFechaDD)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+					<textbox hflex="true"  
+						placeholder="Mes"
+						value="@bind(vm.filterFechaMM)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+					<textbox hflex="true"  
+						placeholder="Año"
+						value="@bind(vm.filterFechaYY)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>			
+			<auxheader>
+				<textbox hflex="true"  
+						placeholder="Código.."
+						value="@bind(vm.filterCodigo)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader>
+				<textbox hflex="true"  
+						placeholder="Funcionario.."
+						value="@bind(vm.filterFuncionario)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+			</auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell></listcell>
+				<listcell label="@load(each[3]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each[1])"></listcell>
+				<listcell label="@load(each[5])"></listcell>
+				<listcell label="@load(each[6])"></listcell>
+				<listcell label="@load(each[4].toString().toUpperCase())"></listcell>				
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="ítems"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	</vbox>
+</window>
