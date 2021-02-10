@@ -17,6 +17,8 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 	private String filterFechaYY = "";
 	private String filterCodigo = "";
 	private String filterFuncionario = "";
+	
+	private List<Object[]> selectedItems;
 
 	@Init(superclass = true)
 	public void init() {
@@ -97,5 +99,13 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 
 	public void setFilterFuncionario(String filterFuncionario) {
 		this.filterFuncionario = filterFuncionario;
+	}
+
+	public List<Object[]> getSelectedItems() {
+		return selectedItems;
+	}
+
+	public void setSelectedItems(List<Object[]> selectedItems) {
+		this.selectedItems = selectedItems;
 	}
 }

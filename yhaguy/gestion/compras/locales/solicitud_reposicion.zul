@@ -10,7 +10,8 @@
 	
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
-		model="@load(vm.reposiciones)" multiple="true" checkmark="true">
+		model="@load(vm.reposiciones)" multiple="true" checkmark="true"
+		selectedItems="@bind(vm.selectedItems)">
 		<listhead>
 			<listheader width="50px" align="center"></listheader>
 			<listheader label="Fecha" width="150px"></listheader>
