@@ -51,6 +51,13 @@ public class ReposicionViewModel extends SimpleViewModel {
 		return rr.getArticulos(this.codigoArticulo, 30);
 	}
 	
+	@DependsOn({ "reposicion.articulo", "reposicion.cantidad", "reposicion.observacion" })
+	public boolean isAgregarDisabled() {
+		return this.reposicion.getArticulo() == null || this.reposicion.getCantidad() <= 0
+				|| this.reposicion.getObservacion() == null
+				|| this.reposicion.getObservacion().trim().isEmpty();
+	}
+	
 	/**
 	 * @return el acceso..
 	 */

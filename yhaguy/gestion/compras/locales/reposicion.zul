@@ -11,7 +11,8 @@
 		
 		<bandbox hflex="true" placeholder="Artículo.."
 				readonly="true" value="@load(vm.reposicion.articulo.codigoInterno)"
-				id="bndArti">
+				id="bndArti"
+				onOpen="codArt.focus()">
 				<bandpopup>
 					<listbox sclass="small-list" width="400px"
 						height="200px" model="@load(vm.articulos)"
@@ -24,7 +25,8 @@
 										iconSclass="z-icon-filter" disabled="true" />
 									<textbox hflex="true"
 										value="@bind(vm.codigoArticulo)" instant="true"
-										placeholder="Buscar por Código.." />
+										placeholder="Buscar por Código.." 
+										id="codArt"/>
 								</hlayout>
 							</listheader>
 						</listhead>
@@ -42,9 +44,12 @@
 		<textbox hflex="true" placeholder="Observación" rows="2"
 			value="@bind(vm.reposicion.observacion)"></textbox>
 		
+		<div height="5px"></div>
+		
 		<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 						iconSclass="z-icon-check" 
-						onClick="@command('addReposicion', win=winRep)"/>
+						onClick="@command('addReposicion', win=winRep)"
+						disabled="@load(vm.agregarDisabled)" />
 	
 	</vlayout>
 </window>
