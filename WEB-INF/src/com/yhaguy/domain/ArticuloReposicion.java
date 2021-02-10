@@ -7,12 +7,16 @@ import com.coreweb.domain.Domain;
 @SuppressWarnings("serial")
 public class ArticuloReposicion extends Domain {
 	
+	public static final String ESTADO_PENDIENTE = "PENDIENTE";
+	public static final String ESTADO_GENERADO = "GENERADO";
+	public static final String ESTADO_CERRADO = "CERRADO";
+	
 	private Date fecha;
 	private String observacion;
 	private String solicitante;
 	private int cantidad = 1;	
 	private String numeroOrdenCompra;
-	private String estado;
+	private String estado = ESTADO_PENDIENTE;
 	
 	private Articulo articulo;
 	

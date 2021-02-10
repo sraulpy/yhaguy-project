@@ -5,7 +5,9 @@
 	<vbox hflex="true" vflex="true" spacing="0px">
 	
 	<hlayout hflex="true" sclass="button-container">
-		<button mold="bs" sclass="btn-sm btn-primary" label="Generar Orden de Compra" iconSclass="z-icon-shopping-cart"></button>
+		<button mold="bs" sclass="btn-sm btn-primary" label="Generar Orden de Compra" iconSclass="z-icon-shopping-cart"
+			disabled="@load(vm.selectedItems eq null or vm.selectedItems.size() eq 0)"
+			onClick="@command('prepararSolicitud', parent=self, popup=pop_oc)"></button>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
@@ -19,6 +21,8 @@
 			<listheader label="Cantidad" width="100px"></listheader>			
 			<listheader label="Solicitado por" width="200px"></listheader>
 			<listheader label="Observación"></listheader>
+			<listheader label="Estado" width="150px"></listheader>
+			<listheader label="Nro. O.C." width="150px"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader></auxheader>
@@ -62,6 +66,8 @@
 								no-repeat; background-position: 98%; background-size: 10px;" />
 			</auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
@@ -70,13 +76,71 @@
 				<listcell label="@load(each[1])"></listcell>
 				<listcell label="@load(each[5])"></listcell>
 				<listcell label="@load(each[6])"></listcell>
-				<listcell label="@load(each[4].toString().toUpperCase())"></listcell>				
+				<listcell label="@load(each[4].toString().toUpperCase())"></listcell>
+				<listcell label="@load(each[8])"></listcell>
+				<listcell label="@load(each[9])"></listcell>				
 			</listitem>
 		</template>
 		<listfoot>
 			<listfooter label="ítems"></listfooter>
 		</listfoot>
 	</listbox>
+	
+	<popup id="pop_oc" sclass="rounded">
+		<vlayout width="450px" height="450px" style="padding:10px">
+			<bandbox hflex="true" placeholder="Proveedor.."
+				readonly="true" value="@load(vm.proveedor.razonSocial)"
+				id="bndProv"
+				onOpen="rs.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.proveedores)"
+						selectedItem="@bind(vm.proveedor)"
+						onSelect="bndProv.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.filterProveedor)" instant="true"
+										placeholder="Buscar por Razón Social.." 
+										id="rs"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+			<div height="5px"></div>
+			<listbox hflex="true" vflex="true"
+				model="@load(vm.detalles)" sclass="rounded">
+				<listhead>
+					<listheader label="Código"></listheader>
+					<listheader label="Cantidad" width="100px"></listheader>
+					<listheader label="Precio Gs." width="100px"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+						<listcell>
+							<intbox value="@bind(each.cantidad)" hflex="true"></intbox>
+						</listcell>
+						<listcell>
+							<guaranibox value="@bind(each.costoGs)" hflex="true"></guaranibox>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<div height="5px"></div>
+			<button mold="bs" sclass="btn-sm btn-primary" hflex="true" iconSclass="z-icon-check"
+				onClick="@command('generarOrdenCompra', popup=pop_oc)"></button>
+		</vlayout>
+	</popup>
 	
 	</vbox>
 </window>
