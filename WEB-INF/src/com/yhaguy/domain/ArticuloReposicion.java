@@ -6,11 +6,13 @@ import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
 public class ArticuloReposicion extends Domain {
-
+	
 	private Date fecha;
 	private String observacion;
 	private String solicitante;
 	private int cantidad = 1;	
+	private String numeroOrdenCompra;
+	private String estado;
 	
 	private Articulo articulo;
 	
@@ -57,5 +59,21 @@ public class ArticuloReposicion extends Domain {
 
 	public void setSolicitante(String solicitante) {
 		this.solicitante = solicitante;
+	}
+
+	public String getNumeroOrdenCompra() {
+		return numeroOrdenCompra;
+	}
+
+	public void setNumeroOrdenCompra(String numeroOrdenCompra) {
+		this.numeroOrdenCompra = numeroOrdenCompra;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 }
