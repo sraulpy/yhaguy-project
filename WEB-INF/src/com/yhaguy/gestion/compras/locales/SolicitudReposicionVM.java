@@ -38,6 +38,7 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 	private String filterCodigo = "";
 	private String filterFuncionario = "";
 	private String filterProveedor = "";
+	private String filterEstado = "";
 	
 	private List<Object[]> selectedItems;
 	private List<CompraLocalOrdenDetalle> detalles;
@@ -118,10 +119,10 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 	/**
 	 * GETS AND SETS
 	 */
-	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaYY", "filterCodigo", "filterFuncionario" })
+	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaYY", "filterCodigo", "filterFuncionario", "filterEstado" })
 	public List<Object[]> getReposiciones() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getArticuloReposiciones(this.getFilterFecha(), this.filterCodigo, this.filterFuncionario);
+		return rr.getArticuloReposiciones(this.getFilterFecha(), this.filterCodigo, this.filterFuncionario, this.filterEstado);
 	}
 	
 	@DependsOn("filterProveedor")
@@ -223,5 +224,13 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 
 	public void setDetalles(List<CompraLocalOrdenDetalle> detalles) {
 		this.detalles = detalles;
+	}
+
+	public String getFilterEstado() {
+		return filterEstado;
+	}
+
+	public void setFilterEstado(String filterEstado) {
+		this.filterEstado = filterEstado;
 	}
 }

@@ -4,7 +4,7 @@
 	position="center, center"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.ReposicionViewModel')"
 	id="winRep">
-	<caption iconSclass="z-icon-minus-circle"></caption>
+	<caption iconSclass="z-icon-shopping-cart"></caption>
 	
 	<vlayout vflex="true"
 		style="padding:10px" spacing="10px">
