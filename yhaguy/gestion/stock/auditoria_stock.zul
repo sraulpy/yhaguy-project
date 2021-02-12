@@ -81,7 +81,8 @@
 	<div height="5px"></div>
 	<listbox sclass="small-list"
 		emptyMessage="SIN DATOS.."
-		vflex="true" model="@load(vm.historial)">
+		vflex="true" model="@load(vm.historial)"
+		mold="paging" pageSize="10">
 		<listhead>
 			<listheader label="Fecha"></listheader>
 			<listheader label="Concepto"></listheader>
