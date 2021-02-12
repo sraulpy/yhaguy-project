@@ -6,8 +6,14 @@
 	
 	<hlayout hflex="true" sclass="button-container">
 		<button mold="bs" sclass="btn-sm btn-primary" label="Generar Orden de Compra" iconSclass="z-icon-shopping-cart"
-			disabled="@load(vm.selectedItems eq null or vm.selectedItems.size() eq 0)"
-			onClick="@command('prepararSolicitud', parent=self, popup=pop_oc)"></button>
+			disabled="@load(vm.generarDisabled)"
+			onClick="@command('prepararSolicitud', parent=self, popup=pop_oc)" hflex="true"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" label="Anular Solicitud" iconSclass="z-icon-times"
+			disabled="@load(vm.anularDisabled)"
+			onClick='pop_anular.open(self, "after_start");' hflex="true"></button>
+		<space hflex="true"></space>
+		<space hflex="true"></space>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
@@ -17,12 +23,13 @@
 		<listhead>
 			<listheader width="50px" align="center"></listheader>
 			<listheader label="Fecha" width="150px"></listheader>
-			<listheader label="Código" width="200px"></listheader>
-			<listheader label="Cantidad" width="100px"></listheader>			
+			<listheader label="Código" width="150px"></listheader>
+			<listheader label="Cant." width="60px"></listheader>			
 			<listheader label="Solicitado por" width="250px"></listheader>
 			<listheader label="Observación"></listheader>
-			<listheader label="Estado" width="150px"></listheader>
-			<listheader label="Nro. O.C." width="150px"></listheader>
+			<listheader label="Estado" width="120px"></listheader>
+			<listheader label="Nro. O.C." width="100px"></listheader>
+			<listheader label="Cierre" width="90px"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader></auxheader>
@@ -75,9 +82,11 @@
 								no-repeat; background-position: 98%; background-size: 10px;" />
 			</auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
-			<listitem>
+			<listitem
+				style="@load(each[8] eq 'ANULADO'? 'text-decoration:line-through; color:#d43f3a' : '')">
 				<listcell></listcell>
 				<listcell label="@load(each[3]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 				<listcell label="@load(each[1])"></listcell>
@@ -86,10 +95,13 @@
 				<listcell label="@load(each[4].toString().toUpperCase())"></listcell>
 				<listcell label="@load(each[8])"
 					iconSclass="@load(each[8] eq 'PENDIENTE' ? 'z-icon-exclamation-circle':
-						(each[8] eq 'GENERADO' ? 'z-icon-check': ''))"
-					style="@load(each[8] eq 'PENDIENTE' ? 'color:red':
-						(each[8] eq 'GENERADO' ? 'color:green': ''))"></listcell>
-				<listcell label="@load(each[9])"></listcell>				
+						(each[8] eq 'GENERADO' ? 'z-icon-check': (each[8] eq 'CERRADO' ? 'z-icon-check-circle': (each[8] eq 'ANULADO' ? 'z-icon-times': ''))))"
+					style="@load(each[8] eq 'PENDIENTE' ? 'color:#357ebd':
+						(each[8] eq 'GENERADO' ? 'color:#eea236'
+							: (each[8] eq 'CERRADO' ? 'color:#4cae4c': (each[8] eq 'ANULADO' ? 'color:#d43f3a': ''))))"
+					tooltiptext="@load(each[10])"></listcell>
+				<listcell label="@load(each[9])"></listcell>		
+				<listcell label="@load(each[11]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>		
 			</listitem>
 		</template>
 		<listfoot>
@@ -149,7 +161,19 @@
 			</listbox>
 			<div height="5px"></div>
 			<button mold="bs" sclass="btn-sm btn-primary" hflex="true" iconSclass="z-icon-check"
-				onClick="@command('generarOrdenCompra', popup=pop_oc)"></button>
+				onClick="@command('generarOrdenCompra', popup=pop_oc)"
+				disabled="@load(vm.proveedor eq null)"></button>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_anular" sclass="rounded">
+		<vlayout width="350px" style="padding:10px">
+			<textbox hflex="true" rows="3" placeholder="MOTIVO DE ANULACION.."
+				value="@bind(vm.motivoAnulacion)"></textbox>
+			<div height="5px"></div>
+			<button mold="bs" sclass="btn-sm btn-primary" hflex="true" iconSclass="z-icon-check"
+				onClick="@command('anularSolicitud', popup=pop_anular)"
+				disabled="@load(vm.motivoAnulacion eq '')"></button>
 		</vlayout>
 	</popup>
 	

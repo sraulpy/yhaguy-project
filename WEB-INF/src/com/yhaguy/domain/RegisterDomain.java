@@ -12364,10 +12364,12 @@ public class RegisterDomain extends Register {
 	 * [7]:id
 	 * [8]:estado
 	 * [9]:numeroOrdenCompra
+	 * [10]:motivoAnulacion
+	 * [11]:fechaCierre
 	 */
 	public List<Object[]> getArticuloReposiciones(String fecha, String codigo, String solicitante, String estado) throws Exception {
 		String query = "select r.articulo.id, r.articulo.codigoInterno, r.articulo.descripcion, r.fecha, r.observacion, "
-				+ " r.cantidad, r.solicitante, r.id, r.estado, r.numeroOrdenCompra"
+				+ " r.cantidad, r.solicitante, r.id, r.estado, r.numeroOrdenCompra, concat('Motivo: ', r.motivoAnulacion), r.fechaCierre"
 				+ " from ArticuloReposicion r"
 				+ " where cast (r.fecha as string) like '%" + fecha + "%'"
 				+ " and upper(r.articulo.codigoInterno) like '%" + codigo.toUpperCase() + "%'"

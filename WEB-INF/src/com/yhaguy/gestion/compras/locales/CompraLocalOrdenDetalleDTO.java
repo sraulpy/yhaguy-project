@@ -105,6 +105,13 @@ public class CompraLocalOrdenDetalleDTO extends DTO {
 		return 0.0;
 	}
 	
+	/**
+	 * @return true si es reposicion..
+	 */
+	public boolean isReposicion() {
+		return this.getAuxi().startsWith("REP-");
+	}
+	
 	public double getCostoGs() {
 		return costoGs;
 	}

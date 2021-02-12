@@ -44,6 +44,7 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 	private List<CompraLocalOrdenDetalle> detalles;
 	
 	private Proveedor proveedor;
+	private String motivoAnulacion = "";
 
 	@Init(superclass = true)
 	public void init() {
@@ -78,12 +79,15 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 			det.setCostoGs(0);
 			det.setCostoDs(0);
 			det.setOrdenCompra(true);
+			det.setIva(rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10));
+			det.setAuxi("REP-" + art[7] + "");
 			this.detalles.add(det);
 		}
 		popup.open(parent, "after_start");
 	}
 	
 	@Command
+	@NotifyChange("*")
 	public void generarOrdenCompra(@BindingParam("popup") Popup popup) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CompraLocalOrden oc = new CompraLocalOrden();
@@ -112,7 +116,23 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 			rr.saveObject(rep, this.getLoginNombre());
 		}
 		rr.saveObject(oc, this.getLoginNombre());
+		this.selectedItems = new ArrayList<Object[]>();
 		Clients.showNotification("ORDEN COMPRA GENERADA NRO. " + oc.getNumero());
+		popup.close();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void anularSolicitud(@BindingParam("popup") Popup popup) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (Object[] item : this.selectedItems) {
+			long id = (long) item[7];
+			ArticuloReposicion rep = (ArticuloReposicion) rr.getObject(ArticuloReposicion.class.getName(), id);
+			rep.setEstado(ArticuloReposicion.ESTADO_ANULADO);
+			rep.setMotivoAnulacion(this.motivoAnulacion);
+			rr.saveObject(rep, this.getLoginNombre());
+		}
+		this.selectedItems = new ArrayList<Object[]>();
 		popup.close();
 	}
 	
@@ -129,6 +149,35 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 	public List<Proveedor> getProveedores() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getProveedores(this.filterProveedor);
+	}
+	
+	@DependsOn("selectedItems")
+	public boolean isAnularDisabled() {
+		if (this.selectedItems == null || this.selectedItems.size() == 0) {
+			return true;
+		}
+		for (Object[] item : this.selectedItems) {
+			String estado = (String) item[8];
+			if (estado.equals(ArticuloReposicion.ESTADO_CERRADO)
+					|| estado.equals(ArticuloReposicion.ESTADO_ANULADO)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@DependsOn("selectedItems")
+	public boolean isGenerarDisabled() {
+		if (this.selectedItems == null || this.selectedItems.size() == 0) {
+			return true;
+		}
+		for (Object[] item : this.selectedItems) {
+			String estado = (String) item[8];
+			if (!estado.equals(ArticuloReposicion.ESTADO_PENDIENTE)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -232,5 +281,13 @@ public class SolicitudReposicionVM extends SimpleViewModel {
 
 	public void setFilterEstado(String filterEstado) {
 		this.filterEstado = filterEstado;
+	}
+
+	public String getMotivoAnulacion() {
+		return motivoAnulacion;
+	}
+
+	public void setMotivoAnulacion(String motivoAnulacion) {
+		this.motivoAnulacion = motivoAnulacion;
 	}
 }

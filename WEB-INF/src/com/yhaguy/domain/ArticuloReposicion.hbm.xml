@@ -11,11 +11,13 @@
 		&hibernate-domain;
 
 		<property name="fecha" />
+		<property name="fechaCierre" />
 		<property name="observacion" />
 		<property name="solicitante" />
 		<property name="cantidad" />
 		<property name="numeroOrdenCompra" />
 		<property name="estado" />
+		<property name="motivoAnulacion" />
 
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
 			column="idarticulo" not-null="false" lazy="false" />

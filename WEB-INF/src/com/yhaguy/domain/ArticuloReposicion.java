@@ -10,13 +10,16 @@ public class ArticuloReposicion extends Domain {
 	public static final String ESTADO_PENDIENTE = "PENDIENTE";
 	public static final String ESTADO_GENERADO = "GENERADO";
 	public static final String ESTADO_CERRADO = "CERRADO";
+	public static final String ESTADO_ANULADO = "ANULADO";
 	
 	private Date fecha;
+	private Date fechaCierre;
 	private String observacion;
 	private String solicitante;
 	private int cantidad = 1;	
 	private String numeroOrdenCompra;
 	private String estado = ESTADO_PENDIENTE;
+	private String motivoAnulacion = "";
 	
 	private Articulo articulo;
 	
@@ -79,5 +82,21 @@ public class ArticuloReposicion extends Domain {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getMotivoAnulacion() {
+		return motivoAnulacion;
+	}
+
+	public void setMotivoAnulacion(String motivoAnulacion) {
+		this.motivoAnulacion = motivoAnulacion;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 }

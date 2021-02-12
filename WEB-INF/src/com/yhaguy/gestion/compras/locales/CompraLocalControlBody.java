@@ -53,6 +53,7 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.ArticuloReposicion;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CompraLocalFactura;
@@ -960,8 +961,25 @@ public class CompraLocalControlBody extends BodyApp {
 		this.dto.getFactura().setSucursal(this.dto.getSucursal());
 		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
 		this.volcarCompra();
+		this.actualizarReposiciones();
 		this.setEstadoABMConsulta();
 		Clients.showNotification("Compra correctamente cerrada..");
+	}
+	
+	/**
+	 * actualiza las reposiciones..
+	 */
+	private void actualizarReposiciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (CompraLocalOrdenDetalleDTO det : this.dto.getDetallesOrdenCompra()) {
+			if (det.isReposicion()) {
+				long idRep = Long.parseLong(det.getAuxi().replace("REP-", ""));
+				ArticuloReposicion rep = (ArticuloReposicion) rr.getObject(ArticuloReposicion.class.getName(), idRep);
+				rep.setEstado(ArticuloReposicion.ESTADO_CERRADO);
+				rep.setFechaCierre(new Date());
+				rr.saveObject(rep, this.getLoginNombre());
+			}
+		}
 	}
 	
 	/**
