@@ -990,11 +990,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idDeposito = deposito != null ? deposito.getId() : (long) 0;
 				long idFamilia = familia != null ? familia.getId() : (long) 0;
 				
-				if (familia == null) {
-					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-					return;
-				}
-				
 				if (hasta == null) {
 					Clients.showNotification("DEBE INDICAR FECHA HASTA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 					return;
