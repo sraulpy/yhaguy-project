@@ -420,7 +420,11 @@ public class Venta extends Domain {
 	 * @return el importe total sin iva..
 	 */
 	public double getTotalImporteGsSinIva() {
-		return this.getTotalImporteGs() - this.getTotalIva10();
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			out += item.getImporteGsSinIva();
+		}
+		return out;
 	}
 	
 	/**

@@ -73,6 +73,7 @@ import com.yhaguy.domain.CajaPlanillaResumen;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.CompraLocalFacturaDetalle;
 import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.ContableAsiento;
 import com.yhaguy.domain.ContableAsientoDetalle;
@@ -1587,6 +1588,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_PROVEEDOR_CLIENTE_MES = "VEN-00049";
 		static final String VENTAS_PROVEEDOR_MES = "VEN-00050";
 		static final String VENTAS_PROVEEDOR_CLIENTE_MES_CANT = "VEN-00051";
+		static final String VENTAS_DETALLE = "VEN-00052";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1800,6 +1802,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_PROVEEDOR_CLIENTE_MES_CANT:
 				this.ventasProveedorClientePorMes_(mobile, VENTAS_PROVEEDOR_CLIENTE_MES_CANT);
+				break;
+				
+			case VENTAS_DETALLE:
+				this.ventasDetalle(mobile, VENTAS_DETALLE);
 				break;
 			}
 		}
@@ -7383,6 +7389,120 @@ public class ReportesViewModel extends SimpleViewModel {
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * reporte VEN-00052..
+		 */
+		private void ventasDetalle(boolean mobile, String codReporte) {
+			if (mobile) {
+				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
+				return;
+			}			
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Articulo art = filtro.getArticulo();
+				ArticuloPresentacion pres = filtro.getPresentacion();
+				Cliente cliente = filtro.getCliente();
+				Object[] formato = filtro.getFormato();
+				Funcionario vendedor = filtro.getVendedor();
+				SucursalApp suc = filtro.getSelectedSucursal();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				EmpresaRubro rubro = filtro.getRubro_();
+				ArticuloMarca marca = filtro.getMarca_();
+				Proveedor proveedor = filtro.getProveedor();
+				boolean soloDescuentos = filtro.isFraccionado();
+				
+				double totalSubtotal = 0;
+				double totalDescuento = 0;
+				double totalImporte = 0;
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				long idCliente = cliente == null ? 0 : cliente.getId().longValue();
+				long idRubro = rubro == null ? 0 : rubro.getId().longValue();
+				long idSucursal = suc == null ? 0 : suc.getId().longValue();
+				long idVendedor = vendedor == null ? 0 : vendedor.getId().longValue();
+				long idFamilia = familia == null ? 0 : familia.getId().longValue();
+				long idMarca = marca == null ? 0 : marca.getId().longValue();
+				long idProveedor = proveedor == null ? 0 : proveedor.getId().longValue();
+				long idPresentacion = pres == null ? 0 : pres.getId().longValue();
+
+				List<Venta> ventas = rr.getVentas(desde, hasta, idCliente, idRubro, idSucursal, idVendedor);
+				for (Venta venta : ventas) {
+					if (!venta.isAnulado()) {
+						for (VentaDetalle item : venta.getDetalles()) {
+							Object[] vta = new Object[] {
+									Utiles.getDateToString(venta.getFecha(), "dd-MM-yyyy"),
+									venta.getNumero(),
+									"FAC. " + venta.getCondicionPago().getDescripcion().substring(0, 3).toUpperCase(),
+									venta.getCliente().getRazonSocial().toUpperCase(),
+									venta.getCliente().getRubro().toUpperCase(),
+									venta.getVendedor().getRazonSocial().toUpperCase(),
+									item.getArticulo().getCodigoInterno(),
+									item.getArticulo().getMarca().getDescripcion().toUpperCase(),
+									item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
+									venta.isAnulado() ? 0.0 : item.getPrecioGs(),
+									venta.isAnulado() ? (long) 0 : item.getCantidad(),
+									venta.isAnulado() ? 0.0 : item.getDescuentoUnitarioGs() * -1,
+									venta.isAnulado() ? 0.0 : item.getImporteGs(),
+									venta.isAnulado() ? 0.0 : (item.getPrecioGs() * item.getCantidad()),
+									item.getArticulo().getDescripcion(),
+									venta.isAnulado() ? 0.0 : item.getPorcentajeDescuento(),
+									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()),
+									venta.getAtendido().getNombreEmpresa() };
+							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
+								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
+									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
+										if (proveedor == null || (item.getArticulo().getProveedor() != null && idProveedor == item.getArticulo().getProveedor().getId().longValue())) {
+											if (pres == null || (item.getArticulo().getPresentacion() != null && idPresentacion == item.getArticulo().getPresentacion().getId().longValue())) {
+												if (soloDescuentos == false || (soloDescuentos && item.getDescuentoUnitarioGs() > 0)) {
+													data.add(vta);
+												}
+											}											
+										}									
+									}
+								}
+							}
+						}
+					}					
+				}
+				for (Object[] obj : data) {
+					double subtotal = (double) obj[13];
+					double descuento = (double) obj[11];
+					double importe = (double) obj[12];
+					totalSubtotal += subtotal;
+					totalDescuento += descuento;
+					totalImporte += importe;
+				}
+				double utilidad = totalImporte - totalDescuento;
+				double promedioSobreCosto = Utiles.obtenerPorcentajeDelValor(utilidad, totalDescuento);
+				double promedioSobreVenta = Utiles.obtenerPorcentajeDelValor(utilidad, totalImporte);
+				promedioSobreCosto = Utiles.getRedondeo(promedioSobreCosto);
+				promedioSobreVenta = Utiles.getRedondeo(promedioSobreVenta);				
+
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_DETALLADO;
+				if (!formato[0].equals("PDF")) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_DETALLADO_SIN_CAB;
+				}
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new VentasDetalle(data);
+				params.put("Titulo", codReporte + " - Detalle de Ventas y Descuentos");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("TOT_SUBTOTAL", Utiles.getNumberFormat(totalSubtotal));
+				params.put("TOT_DESCUENTO", Utiles.getNumberFormat(totalDescuento));
+				params.put("TOT_IMPORTE", Utiles.getNumberFormat(totalImporte));
+				imprimirJasper(source, params, dataSource, formato);							
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
@@ -11791,6 +11911,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String MOVIMIENTOS_ARTICULOS = "COM-00007";
 		static final String MATRIZ_COMPRAS_LOCALES = "COM-00008";
 		static final String COMPRAS_LOCALES_ARTICULO = "COM-00009";
+		static final String DETALLE_COMPRAS_LOCALES = "COM-00010";
 
 		/**
 		 * procesamiento del reporte..
@@ -11832,6 +11953,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case COMPRAS_LOCALES_ARTICULO:
 				this.comprasLocalesPorArticulo(COMPRAS_LOCALES_ARTICULO);
+				break;
+				
+			case DETALLE_COMPRAS_LOCALES:
+				this.detalleComprasLocales(DETALLE_COMPRAS_LOCALES);
 				break;
 			}
 		}
@@ -13010,6 +13135,64 @@ public class ReportesViewModel extends SimpleViewModel {
 				ReporteComprasPorArticulo rep = new ReporteComprasPorArticulo(desde, hasta, stock1, stock2);
 				rep.setDatosReporte(data);
 				rep.setTitulo(codigo + " - Compras locales por Artículo");
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * detalle de compras locales..
+		 */
+		private void detalleComprasLocales(String codigo) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				Proveedor prov = filtro.getProveedor();
+				
+				long idFamilia = flia != null ? flia.getId().longValue() : 0; 
+				long idProveedor = prov != null ? prov.getId().longValue() : 0; 
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, 0, idProveedor, 0);
+				
+				for (CompraLocalFactura factura : compras) {
+					for (CompraLocalFacturaDetalle item : factura.getDetalles()) {
+						boolean add = true;
+						if (idFamilia > 0) {
+							long idFlia = item.getArticulo().getFamilia().getId().longValue();
+							if (idFlia != idFamilia) {
+								add = false;
+							}
+						}						
+						if (add) {
+							data.add(new Object[] {
+									Utiles.getDateToString(factura.getFechaOriginal(), Utiles.DD_MM_YYYY),
+									factura.getNumero(),
+									item.getArticulo().getCodigoInterno(),
+									item.getArticulo().getFamilia().getDescripcion(), item.getCantidad(),
+									Utiles.getRedondeo(item.getCostoGs()), Utiles.getRedondeo(item.getDescuentoGs()),
+									Utiles.getRedondeo(item.getImporteGs()) });
+						}						
+					}
+				}
+				
+				String proveedor = prov != null ? prov.getRazonSocial() : "TODOS..";
+				String familia = flia != null ? flia.getDescripcion() : "TODOS..";
+				ReporteDetalleComprasLocales rep = new ReporteDetalleComprasLocales(desde, hasta, proveedor, familia);
+				rep.setDatosReporte(data);
+				rep.setTitulo(codigo + " - Detalle de Compras locales");
 				rep.setApaisada();
 
 				ViewPdf vp = new ViewPdf();
@@ -16238,6 +16421,70 @@ class ReporteComprasPorArticulo extends ReporteYhaguy {
 }
 
 /**
+ * Reporte de Compras por Articulo COM-00010..
+ */
+class ReporteDetalleComprasLocales extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+	private String proveedor;
+	private String familia;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
+	static DatosColumnas col2 = new DatosColumnas("Factura", TIPO_STRING, 45);
+	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Familia", TIPO_STRING, 40);
+	static DatosColumnas col5 = new DatosColumnas("Cant.", TIPO_INTEGER, 20);
+	static DatosColumnas col6 = new DatosColumnas("Precio", TIPO_DOUBLE, 35);
+	static DatosColumnas col7 = new DatosColumnas("Dscto.", TIPO_DOUBLE, 25);
+	static DatosColumnas col8 = new DatosColumnas("Importe", TIPO_DOUBLE, 40, true);
+
+	public ReporteDetalleComprasLocales(Date desde, Date hasta, String proveedor, String familia) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.proveedor = proveedor;
+		this.familia = familia;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("compras");
+		this.setNombreArchivo("CompraDetalle-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Proveedor", this.proveedor))
+				.add(this.textoParValor("Familia", this.familia)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
  * Reporte de Cobranzas TES-00016..
  */
 class ReporteCobranzas extends ReporteYhaguy {
@@ -19321,6 +19568,77 @@ class VentasUtilidadDetallado implements JRDataSource {
 		} else if ("Ganancia".equals(fieldName)) {
 			value = FORMATTER.format(det[16]);
 		}  else if ("Tecnico".equals(fieldName)) {
+			value = det[17];
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de Ventas Detalle..
+ */
+class VentasDetalle implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	
+	public VentasDetalle(List<Object[]> values) {
+		this.values = values;
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+
+		if ("Fecha".equals(fieldName)) {
+			value = det[0];
+		} else if ("Numero".equals(fieldName)) {
+			value = det[1];
+		} else if ("Concepto".equals(fieldName)) {
+			value = det[2];
+		} else if ("Cliente".equals(fieldName)) {
+			value = det[3];
+		} else if ("TipoCliente".equals(fieldName)) {
+			value = det[4];
+		} else if ("Vendedor".equals(fieldName)) {
+			value = det[5];
+		} else if ("Codigo".equals(fieldName)) {
+			value = det[6];
+		} else if ("Marca".equals(fieldName)) {
+			value = det[7];
+		} else if ("Familia".equals(fieldName)) {
+			value = det[8];
+		} else if ("CostoUnit".equals(fieldName)) {
+			value = FORMATTER.format(det[9]);
+		} else if ("Cant".equals(fieldName)) {
+			value = FORMATTER.format(det[10]);
+		} else if ("CostoTotal".equals(fieldName)) {
+			value = FORMATTER.format(det[11]);
+		} else if ("Importe".equals(fieldName)) {
+			value = FORMATTER.format(det[12]);
+		} else if ("SubTotal".equals(fieldName)) {
+			value = FORMATTER.format(det[13]);
+		} else if ("Descripcion".equals(fieldName)) {
+			value = det[14];
+		} else if ("PorcDescuento".equals(fieldName)) {
+			value = FORMATTER.format(det[15]);
+		} else if ("Ganancia".equals(fieldName)) {
+			value = FORMATTER.format(det[16]);
+		}  else if ("Usuario".equals(fieldName)) {
 			value = det[17];
 		}
 		return value;

@@ -131,6 +131,16 @@ public class VentaDetalle extends Domain {
 	}
 	
 	/**
+	 * @return el porcentaje descontado..
+	 */
+	public double getPorcentajeDescuento() {
+		double subtotal = this.getPrecioGs() * this.getCantidad();
+		if (this.descuentoUnitarioGs <= 0) return 0.0;
+		double out = Utiles.obtenerPorcentajeDelValor(this.descuentoUnitarioGs, subtotal);
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
 	 * @return true si el item es del proveedor que recibe como parametro..
 	 */
 	public boolean isProveedor(long idProveedor) {
