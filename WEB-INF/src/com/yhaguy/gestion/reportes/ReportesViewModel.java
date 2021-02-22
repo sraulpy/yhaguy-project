@@ -1037,7 +1037,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
-				String familia_ = familia.getDescripcion();
+				String familia_ = familia != null ? familia.getDescripcion() : "TODOS..";
 				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
 				String deposito_ = deposito != null ? deposito.getDescripcion() : "TODOS..";
 				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, deposito_);
@@ -6353,6 +6353,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Cliente cli = filtro.getCliente();
 				ArticuloFamilia familia = filtro.getFamilia_();
 				Proveedor proveedor = filtro.getProveedor();
+				Funcionario vendedor = filtro.getVendedor();
 				List<Deposito> depositos = filtro.getSelectedDepositos();
 				SucursalApp sucursal = filtro.getSelectedSucursal();
 				String medida = filtro.getExpedicion();
@@ -6363,6 +6364,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idFamilia = familia != null ? familia.getId().longValue() : 0;
 				long idProveedor = proveedor != null ? proveedor.getId().longValue() : 0;
 				long idSucursal = sucursal != null ? sucursal.getId().longValue() : 0;
+				long idVendedor = vendedor != null ? vendedor.getId().longValue() : 0;
 				int mes1 = Utiles.getNumeroMes(desde) - 1;
 				int mes2 = Utiles.getNumeroMes(hasta);
 				int rango = mes2 - mes1;
@@ -6388,8 +6390,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (todos) {
 					articulos = rr.getArticulos__(idFamilia, idProveedor, medida);
 				}
-				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida);
-				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, 0, idSucursal, medida, null);
+				List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, medida);
+				List<Object[]> ncs = rr.getNotasCreditoDetallado_(desde, hasta, idCliente, idFamilia, idProveedor, idVendedor, idSucursal, medida, null);
 				
 				List<HistoricoMovimientoArticulo> list = new ArrayList<HistoricoMovimientoArticulo>();
 				Map<String, Double> cants = new HashMap<String, Double>();
@@ -8698,6 +8700,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, antInc, false);
 				if (formaPago.isEmpty()) {
 					for (Recibo recibo : cobranzas) {
+						System.out.println("--- " + recibo.getNumero());
 						data.add(new Object[] {
 								m.dateToString(recibo.getFechaEmision(), "dd-MM-yy"),
 								recibo.getNumero(), 
@@ -9972,7 +9975,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String sucursal_ = sucursal == null ? "TODOS.." : sucursal.getDescripcion();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
-				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true, true);
+				List<Recibo> cobranzas = rr.getCobranzas(desde, hasta, idSucursal, idCliente, true, false);
 				List<Object[]> data = new ArrayList<Object[]>();
 
 				for (Recibo cobro : cobranzas) {
@@ -27687,6 +27690,9 @@ class ClientesVendedorDataSource implements JRDataSource {
 			String telefono = (String) dato[3];
 			String rubro = (String) dato[5];
 			Double limiteCredito = (Double) dato[6];
+			if (limiteCredito == null) {
+				limiteCredito = (double) 0;				
+			}
 			String ciudad = (String) dato[7];
 			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
 					Utiles.getNumberFormat(limiteCredito), ciudad));
