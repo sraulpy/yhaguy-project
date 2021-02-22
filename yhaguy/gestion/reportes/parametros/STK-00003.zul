@@ -107,7 +107,7 @@
 			<combobox hflex="true" sclass="rounded" style="margin-top:5px"
 				model="@load(vm.dato.filtro.familias_)"
 				selectedItem="@bind(vm.dato.filtro.familia_)"
-				placeholder="Seleccione una familia..">
+				placeholder="TODOS..">
 				<template name="model">
 					<comboitem label="@load(each.descripcion)" />
 				</template>

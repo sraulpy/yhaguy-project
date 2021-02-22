@@ -988,6 +988,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idSucursal = sucursal != null ? sucursal.getId() : (long) 0;
 				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
 				long idDeposito = deposito != null ? deposito.getId() : (long) 0;
+				long idFamilia = familia != null ? familia.getId() : (long) 0;
 				
 				if (familia == null) {
 					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -1009,7 +1010,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					ajs.put(aj.getArticulo().getId(), aj.getCostoGs());
 				}
 				
-				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), true);
+				arts = rr.getArticulos(idArticulo, idProveedor, idFamilia, true);
 				
 				for (Object[] art : arts) {
 					
