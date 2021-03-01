@@ -32,6 +32,7 @@
 		<property name="conteo1" />
 		<property name="conteo2" />
 		<property name="conteo3" />
+		<property name="costoFinalGs" />
 		
 		<property name="verificado">
 			<column name="verificado" default="false"></column>

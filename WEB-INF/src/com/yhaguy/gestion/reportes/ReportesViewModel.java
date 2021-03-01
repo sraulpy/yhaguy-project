@@ -1035,7 +1035,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						data.add(new Object[] { codigoInterno, descripcion, stock, Utiles.getRedondeo(costo), Utiles.getRedondeo(stock * costo) });
 					}										
 				}
-				
+								
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
 				String familia_ = familia != null ? familia.getDescripcion() : "TODOS..";
 				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
@@ -13165,6 +13165,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, 0, idProveedor, 0);
+				List<NotaCredito> ncs = rr.getNotasCreditoCompra(desde, hasta, 0);
 				
 				for (CompraLocalFactura factura : compras) {
 					for (CompraLocalFacturaDetalle item : factura.getDetalles()) {
@@ -13183,6 +13184,29 @@ public class ReportesViewModel extends SimpleViewModel {
 									item.getArticulo().getFamilia().getDescripcion(), item.getCantidad(),
 									Utiles.getRedondeo(item.getCostoGs()), Utiles.getRedondeo(item.getDescuentoGs()),
 									Utiles.getRedondeo(item.getImporteGs()) });
+						}						
+					}
+				}
+				
+				for (NotaCredito nc : ncs) {
+					for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
+						boolean add = true;
+						if (idFamilia > 0) {
+							long idFlia = item.getArticulo().getFamilia().getId().longValue();
+							if (idFlia != idFamilia) {
+								add = false;
+							}
+						}						
+						if (add) {
+							data.add(new Object[] {
+									Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YYYY),
+									nc.getNumero(),
+									item.getArticulo().getCodigoInterno(),
+									item.getArticulo().getFamilia().getDescripcion(), 
+									item.getCantidad() * -1,
+									Utiles.getRedondeo(item.getMontoGs()), 
+									Utiles.getRedondeo(0),
+									Utiles.getRedondeo(item.getImporteGs() * -1)});
 						}						
 					}
 				}

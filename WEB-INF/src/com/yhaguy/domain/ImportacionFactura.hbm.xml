@@ -29,6 +29,9 @@
    				<property name="recepcionConfirmada" />
    				<property name="coeficiente"/>
    				<property name="tipoCambio"/>
+   				<property name="fechaDespacho" />
+   				<property name="totalGastosFlete"/>
+   				<property name="totalGastosDespacho"/>
    				
    				<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"
    					lazy="false"/>

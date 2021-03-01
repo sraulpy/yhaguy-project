@@ -32,6 +32,7 @@
 		<property name="totalImporteDs"/>
 		<property name="tipoCambio" />	
 		<property name="formaEntrega" />
+		<property name="costoPromedioGs"/>
 		
 		<property name="validez">
 			<column name="validez" default="0" />

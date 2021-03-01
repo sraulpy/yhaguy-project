@@ -102,6 +102,7 @@ public class Venta extends Domain {
 	private double totalImporteGs;
 	private double totalImporteDs;
 	private double tipoCambio; 
+	private double costoPromedioGs;
 	
 	/** Los numeros de los Documentos que integran la Venta */
 	private String numeroPresupuesto;
@@ -1068,5 +1069,13 @@ public class Venta extends Domain {
 
 	public void setNumeroReparto(String numeroReparto) {
 		this.numeroReparto = numeroReparto;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double totalCostoPromedioGs) {
+		this.costoPromedioGs = totalCostoPromedioGs;
 	}
 }

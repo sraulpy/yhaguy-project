@@ -5,7 +5,7 @@
 	<window id="win_chart" width="99%" height="98%"
 		apply="com.yhaguy.charts.ventas.ChartVentasMetas" sclass="rounded">
 		<space></space>
-		<charts id="chart" type="column" vflex="true" title="Yhaguy Baterías S.A." style="font-size:24pt" />
+		<charts id="chart" type="column" vflex="true" title="Grupo Toyo S.A." style="font-size:24pt" />
 		<vbox hflex="true" pack="center" align="start" height="450px">
 			<label id="lbl_cob_mes" style="font-size: 30pt" class="label label-primary"></label>
 			<space></space><space></space>

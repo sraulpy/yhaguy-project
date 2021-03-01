@@ -33,6 +33,7 @@ public class ImportacionFacturaDetalle extends Domain {
 	private double transportadoraGs;
 	
 	private boolean verificado;
+	private double costoFinalGs;
 	
 	private Articulo articulo;
 	
@@ -269,5 +270,13 @@ public class ImportacionFacturaDetalle extends Domain {
 
 	public void setTransportadoraGs(double transportadoraGs) {
 		this.transportadoraGs = transportadoraGs;
+	}
+
+	public double getCostoFinalGs() {
+		return costoFinalGs;
+	}
+
+	public void setCostoFinalGs(double costoFinalGs) {
+		this.costoFinalGs = costoFinalGs;
 	}
 }

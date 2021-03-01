@@ -969,6 +969,7 @@ public class Configuracion extends Config {
 	public final static String SIGLA_TM_AJUSTE_POSITIVO = "MOV-AJU-POS";
 	public final static String SIGLA_TM_AJUSTE_NEGATIVO = "MOV-AJU-NEG";
 	public final static String SIGLA_TM_INVENTARIO_MERCADERIAS = "MOV-INV";
+	public final static String SIGLA_TM_SALDO_INICIAL_STOCK_VALORIZADO = "MOV-STK-VAL-SAL";
 	
 	// Siglas de movimientos de Ajuste en Cta. Cte.
 	public final static String SIGLA_TM_CTA_CTE_SALDO_FAVOR = "MOV-CTA-CTE-POS";

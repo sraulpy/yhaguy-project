@@ -4900,7 +4900,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select c.tipoMovimiento.descripcion, c.fechaCreacion, c.numero, d.cantidad, ((d.costoDs * c.tipoCambio) + ((d.costoDs * c.tipoCambio) * c.coeficiente)), "
+		String query = "select c.tipoMovimiento.descripcion, c.fechaDespacho, c.numero, d.cantidad, d.costoFinalGs, "
 				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', 'CENTRAL'"
 				+ " from ImportacionFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -4911,12 +4911,12 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
 				+ "')"
 				+ " and c.dbEstado = 'R'"
-				+ " and (c.fechaCreacion >= '"
+				+ " and (c.fechaDespacho >= '"
 				+ desde_
-				+ "' and c.fechaCreacion <= '"
+				+ "' and c.fechaDespacho <= '"
 				+ hasta_
 				+ "')"
-				+ " order by c.fechaCreacion desc";
+				+ " order by c.fechaDespacho desc";
 		List<Object[]> list = this.hql(query);
 		return list;
 	}
@@ -5023,6 +5023,47 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los ajustes donde esta contenida el articulo..
+	 * [0]:tipoMovimiento.descripcion
+	 * [1]:fecha 
+	 * [2]:numero
+	 * [3]:cantidad
+	 * [4]:sucursal.descripcion
+	 * [5]:costoGs 
+	 * [6]:deposito.descripcion
+	 */
+	public List<Object[]> getAjustesPorArticuloStockValorizado(long idArticulo, Date desde,
+			Date hasta, long idSucursal, String tipo) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "";
+		if (tipo.equals(Configuracion.SIGLA_TM_SALDO_INICIAL_STOCK_VALORIZADO)) {
+			query = "select a.tipoMovimiento.descripcion, a.fecha, a.numero, d.cantidad, a.sucursal.descripcion, d.costoGs, a.deposito.descripcion, '--', '--', '--', '--', '--', a.sucursal.descripcion"
+					+ " from AjusteStock a join a.detalles d where a.dbEstado != 'D' and d.articulo.id = "
+					+ idArticulo
+					+ " and a.tipoMovimiento.sigla = '"
+					+ tipo
+					+ "' and a.sucursal.id = "
+					+ idSucursal
+					+ " and a.estadoComprobante.sigla = '"
+					+ Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO
+					+ "'"
+					+ " and (a.fecha >= '"
+					+ desde_
+					+ "' and a.fecha <= '"
+					+ hasta_ + "')" + " order by a.fecha desc";
+		} 
+		List<Object[]> out = this.hql(query);
+		List<Object[]> out2 = new ArrayList<Object[]>();
+		for (Object[] obj : out) {
+			Object[] item = new Object[] { obj[0], obj[1], obj[2], obj[3],
+					obj[5] == null ? 0.0 : obj[5], obj[4], obj[6], obj[7], obj[8], obj[9], obj[10], obj[11], obj[12] };
+			out2.add(item);
+		}
+		return out2;
+	}
+	
+	/**
+	 * @return los ajustes donde esta contenida el articulo..
 	 */
 	public List<Object[]> getAjustesPorArticulo(long idArticulo, long idDeposito, Date desde,
 			Date hasta, long idSucursal, String tipo, boolean incluirDepositoVirtual) throws Exception {
@@ -5075,7 +5116,86 @@ public class RegisterDomain extends Register {
 		}
 		return out2;
 	}
+	
+	/**
+	 * @return las compras importacion donde esta contenida el articulo.. [0]:concepto
+	 *         [1]:fecha [2]:numero [3]:totalAsignadoGs 
+	 */
+	public List<Object[]> getImportaciones(Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c.tipoMovimiento.descripcion, c.fechaDespacho, c.numero, c.totalAsignadoGs, c.proveedor.empresa.razonSocial,"
+				+ " c.totalGastosFlete, c.totalGastosDespacho from ImportacionFactura c where c.dbEstado != 'D'"
+				+ " and (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO
+				+ "' or "
+				+ " c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
+				+ "')"
+				+ " and c.dbEstado = 'R'"
+				+ " and (c.fechaDespacho >= '"
+				+ desde_
+				+ "' and c.fechaDespacho <= '"
+				+ hasta_
+				+ "')"
+				+ " order by c.fechaDespacho";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return las ventas.. 
+	 * [0]:concepto
+	 * [1]:fecha
+	 * [2]:numero
+	 * [3]:costoPromedio
+	 * [4]:cliente
+	 */
+	public List<Object[]> getVentas(Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, v.costoPromedioGs, v.cliente.empresa.razonSocial,"
+				+ " 0.0, 0.0 from Venta v where v.estadoComprobante is null"
+				+ " and (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO
+				+ "' or "
+				+ " v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
+				+ "')"
+				+ " and (v.fecha >= '"
+				+ desde_
+				+ "' and v.fecha <= '"
+				+ hasta_
+				+ "')"
+				+ " order by v.fecha";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return las notas de credito.. 
+	 * [0]:concepto
+	 * [1]:fecha
+	 * [2]:numero
+	 * [3]:costoPromedio
+	 * [4]:cliente
+	 */
+	public List<Object[]> getNotasCredito(Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, n.costoPromedioGs, n.cliente.empresa.razonSocial,"
+				+ " 0.0, 0.0 from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'" 
+				+ " and n.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "'" 
+				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_+ "')"
+				+ " order by n.fechaEmision";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
 
+	/**
+	 * @return stock de articulos
+	 */
 	public List<Object[]> getArticulosStock(long idDeposito) throws Exception {
 		String query = "select a.id, a.codigoInterno, ad.stock"
 				+ " from ArticuloDeposito ad join ad.articulo a where ad.deposito.id = "
@@ -9672,13 +9792,29 @@ public class RegisterDomain extends Register {
 	 * [0]:id
 	 * [1]:codigoInterno
 	 * [2]:descripcion
+	 * [3]:costo
 	 */
 	public List<Object[]> getArticulos(String codigoInterno, String descripcion) throws Exception {
-		String query = "select a.id, a.codigoInterno, a.descripcion from Articulo a where "
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs from Articulo a where "
 				+ "upper(a.codigoInterno) like '%" + codigoInterno.toUpperCase() + "%' and "
 				+ "upper(a.descripcion) like '%" + descripcion.toUpperCase() + "%' "
 				+ "and a.codigoInterno not like '@%'";
 		return this.hqlLimit(query, 300);
+	}
+	
+	/**
+	 * @return los articulos..
+	 * [0]:id
+	 * [1]:codigoInterno
+	 * [2]:descripcion
+	 * [3]:costo
+	 */
+	public List<Object[]> getArticulosMercaderias(String codigoInterno, String descripcion, String familias) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs from Articulo a where "
+				+ "upper(a.codigoInterno) like '%" + codigoInterno.toUpperCase() + "%' and "
+				+ "upper(a.descripcion) like '%" + descripcion.toUpperCase() + "%' and "
+				+ "a.familia.descripcion IN ('" + familias + "', '') order by a.codigoInterno";
+		return this.hql(query);
 	}
 	
 	/**
@@ -12381,11 +12517,18 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<String> test = rr.getFuncionariosMarcaciones();
-			for (String item : test) {
-				System.out.println(item);
+			List<ImportacionPedidoCompra> imps = rr.getObjects(ImportacionPedidoCompra.class.getName());
+			for (ImportacionPedidoCompra imp : imps) {
+				ImportacionFactura fac = imp.getImportacionFactura_().get(0);
+				if (fac != null) {
+					fac.setFechaDespacho(imp.getResumenGastosDespacho().getFechaDespacho());
+					fac.setTotalAsignadoGs(imp.getResumenGastosDespacho().getValorFOBgs());
+					fac.setTotalGastosFlete(imp.getResumenGastosDespacho().getValorFleteGs());
+					fac.setTotalGastosDespacho(imp.getResumenGastosDespacho().getTotalGastosGs());
+					rr.saveObject(fac, fac.getUsuarioMod());
+					System.out.println(fac.getNumero());
+				}
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

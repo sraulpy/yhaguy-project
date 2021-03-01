@@ -28,6 +28,9 @@ public class ImportacionFactura extends Domain {
 	private double tipoCambio;
 	private boolean facturaVerificada;
 	private boolean recepcionConfirmada;
+	private Date fechaDespacho;
+	private double totalGastosFlete;
+	private double totalGastosDespacho;
 	
 	private Proveedor proveedor;
 	private TipoMovimiento tipoMovimiento;	
@@ -291,5 +294,29 @@ public class ImportacionFactura extends Domain {
 
 	public void setTipoCambio(double tipoCambio) {
 		this.tipoCambio = tipoCambio;
+	}
+
+	public Date getFechaDespacho() {
+		return fechaDespacho;
+	}
+
+	public void setFechaDespacho(Date fechaDespacho) {
+		this.fechaDespacho = fechaDespacho;
+	}
+
+	public double getTotalGastosFlete() {
+		return totalGastosFlete;
+	}
+
+	public void setTotalGastosFlete(double totalGastosFlete) {
+		this.totalGastosFlete = totalGastosFlete;
+	}
+
+	public double getTotalGastosDespacho() {
+		return totalGastosDespacho;
+	}
+
+	public void setTotalGastosDespacho(double totalGastosDespacho) {
+		this.totalGastosDespacho = totalGastosDespacho;
 	}
 }
