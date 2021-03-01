@@ -65,6 +65,7 @@ import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.GastoDetalle;
+import com.yhaguy.domain.ImportacionFacturaDetalle;
 import com.yhaguy.domain.ImportacionPedidoCompra;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
@@ -3356,6 +3357,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public List<MyArray> getItemsCostoFinal(){
 		List<MyArray> out = new ArrayList<MyArray>();	
 		
+		RegisterDomain rr = RegisterDomain.getInstance();
 		for (ImportacionFacturaDTO f : this.dto.getImportacionFactura()) {
 			
 			double coefAutomatico = this.getCoeficienteGasto();
@@ -3393,6 +3395,17 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					mr.setPos6(costoGs);
 					mr.setPos7(costoDs);
 					out.add(mr);
+					
+					try {
+						ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());
+						if (det != null) {
+							det.setCostoFinalGs(costoFinal);
+							rr.saveObject(det, det.getUsuarioMod());
+							System.out.println("--- " + det.getArticulo().getCodigoInterno());
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}			
 			}			
 		}	
@@ -3902,7 +3915,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		for (ImportacionAplicacionAnticipoDTO anticipo : this.dto.getAplicacionAnticipos()) {
 			Recibo ant = rr.getOrdenPagoById(anticipo.getMovimiento().getIdMovimientoOriginal());
-			dif += (ant.getTotalImporteGs() - totalFacGs);
+			if (ant != null) {
+				dif += (ant.getTotalImporteGs() - totalFacGs);
+			}
 		}		
 		return dif;
 	}
