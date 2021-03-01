@@ -61,6 +61,10 @@
 								<guaranibox value="@load(vm.totalFlete)" readonly="true" hflex="true"></guaranibox>
 							</row>
 							<row>
+								<label>Seguro:</label>
+								<guaranibox value="@load(vm.totalSeguro)" readonly="true" hflex="true"></guaranibox>
+							</row>
+							<row>
 								<label>Gastos de despacho:</label>
 								<guaranibox value="@load(vm.totalGastos)" readonly="true" hflex="true"></guaranibox>
 							</row>
@@ -70,7 +74,7 @@
 							</row>
 							<row>
 								<label style="font-weight:bold">Total valorizado:</label>
-								<guaranibox value="@load((vm.saldoInicialValores + vm.totalImportaciones + vm.totalFlete + vm.totalGastos) - vm.totalCostoVentas)" 
+								<guaranibox value="@load((vm.saldoInicialValores + vm.totalImportaciones + vm.totalFlete + vm.totalGastos + vm.totalSeguro) - vm.totalCostoVentas)" 
 									readonly="true" hflex="true"
 									style="font-weight:bold;text-align:right"></guaranibox>
 							</row>
@@ -99,10 +103,13 @@
 										align="right" width="120px">
 									</listheader>
 									<listheader label="Flete"
-										align="right" width="120px">
+										align="right" width="110px">
+									</listheader>
+									<listheader label="Seguro"
+										align="right" width="110px">
 									</listheader>
 									<listheader label="Gastos"
-										align="right" width="120px">
+										align="right" width="110px">
 									</listheader>
 								</listhead>
 								<template name="model">
@@ -123,6 +130,9 @@
 											label="@load(each[5]) @converter('formattedNumber', format = '###,###,###,###')">
 										</listcell>
 										<listcell
+											label="@load(each[7]) @converter('formattedNumber', format = '###,###,###,###')">
+										</listcell>
+										<listcell
 											label="@load(each[6]) @converter('formattedNumber', format = '###,###,###,###')">
 										</listcell>
 									</listitem>
@@ -138,6 +148,12 @@
 									<listfooter>
 										<guaranibox readonly="true"
 											hflex="true" value="@load(vm.totalFlete)"
+											style="font-weight:bold;text-align:right">
+										</guaranibox>
+									</listfooter>
+									<listfooter>
+										<guaranibox readonly="true"
+											hflex="true" value="@load(vm.totalSeguro)"
 											style="font-weight:bold;text-align:right">
 										</guaranibox>
 									</listfooter>

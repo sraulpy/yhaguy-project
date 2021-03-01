@@ -31,8 +31,9 @@ public class StockValorizadoVM extends SimpleViewModel {
 	private long saldoInicial = 0;
 	private double saldoInicialValores = 0;
 	private double totalImportaciones = 0;
-	private double totalFlete;
-	private double totalGastos;
+	private double totalFlete = 0;
+	private double totalGastos = 0;
+	private double totalSeguro = 0;
 	private double totalCostoVentas = 0;
 	
 	@Init(superclass = true)
@@ -270,10 +271,12 @@ public class StockValorizadoVM extends SimpleViewModel {
 			this.totalImportaciones += ((double) item[3]);
 			this.totalFlete += ((double) item[5]);
 			this.totalGastos += ((double) item[6]);
+			this.totalSeguro += ((double) item[7]);
 		}
 		BindUtils.postNotifyChange(null, null, this, "totalImportaciones");
 		BindUtils.postNotifyChange(null, null, this, "totalFlete");
 		BindUtils.postNotifyChange(null, null, this, "totalGastos");
+		BindUtils.postNotifyChange(null, null, this, "totalSeguro");
 		return out;
 	}
 	
@@ -416,5 +419,13 @@ public class StockValorizadoVM extends SimpleViewModel {
 
 	public double getTotalCostoVentas() {
 		return totalCostoVentas;
+	}
+
+	public double getTotalSeguro() {
+		return totalSeguro;
+	}
+
+	public void setTotalSeguro(double totalSeguro) {
+		this.totalSeguro = totalSeguro;
 	}
 }

@@ -5118,14 +5118,21 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
-	 * @return las compras importacion donde esta contenida el articulo.. [0]:concepto
-	 *         [1]:fecha [2]:numero [3]:totalAsignadoGs 
+	 * @return las compras importacion donde esta contenida el articulo.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalAsignadoGs 
+	 * [4]:proveedor
+	 * [5]:flete
+	 * [6]:gastos
+	 * [7]:seguro
 	 */
 	public List<Object[]> getImportaciones(Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c.tipoMovimiento.descripcion, c.fechaDespacho, c.numero, c.totalAsignadoGs, c.proveedor.empresa.razonSocial,"
-				+ " c.totalGastosFlete, c.totalGastosDespacho from ImportacionFactura c where c.dbEstado != 'D'"
+				+ " c.totalGastosFlete, c.totalGastosDespacho, c.totalSeguro from ImportacionFactura c where c.dbEstado != 'D'"
 				+ " and (c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO
 				+ "' or "

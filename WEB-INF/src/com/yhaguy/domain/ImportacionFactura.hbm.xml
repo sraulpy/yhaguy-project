@@ -32,6 +32,7 @@
    				<property name="fechaDespacho" />
    				<property name="totalGastosFlete"/>
    				<property name="totalGastosDespacho"/>
+   				<property name="totalSeguro"/>
    				
    				<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"
    					lazy="false"/>

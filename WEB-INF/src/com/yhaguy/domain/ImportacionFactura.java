@@ -31,6 +31,7 @@ public class ImportacionFactura extends Domain {
 	private Date fechaDespacho;
 	private double totalGastosFlete;
 	private double totalGastosDespacho;
+	private double totalSeguro;
 	
 	private Proveedor proveedor;
 	private TipoMovimiento tipoMovimiento;	
@@ -318,5 +319,13 @@ public class ImportacionFactura extends Domain {
 
 	public void setTotalGastosDespacho(double totalGastosDespacho) {
 		this.totalGastosDespacho = totalGastosDespacho;
+	}
+
+	public double getTotalSeguro() {
+		return totalSeguro;
+	}
+
+	public void setTotalSeguro(double totalSeguro) {
+		this.totalSeguro = totalSeguro;
 	}
 }
