@@ -88,11 +88,6 @@
 							<listbox sclass="small-list" vflex="true"
 								model="@load(vm.importaciones)" emptyMessage="SIN REGISTROS.."
 								hflex="3">
-								<auxhead>
-									<auxheader label="Importaciones"
-										colspan="6">
-									</auxheader>
-								</auxhead>
 								<listhead>
 									<listheader label="Fecha"
 										width="90px">
@@ -159,11 +154,6 @@
 							<listbox sclass="small-list" vflex="true"
 								model="@load(vm.costoVentas)" emptyMessage="SIN REGISTROS.."
 								hflex="3" mold="paging" pageSize="20">
-								<auxhead>
-									<auxheader label="Costo de Ventas"
-										colspan="4">
-									</auxheader>
-								</auxhead>
 								<listhead>
 									<listheader label="Fecha" width="100px"></listheader>
 									<listheader label="Concepto"></listheader>
