@@ -54,6 +54,10 @@ public class StockValorizadoVM extends SimpleViewModel {
 		List<Object[]> out = new ArrayList<Object[]>();
 		this.totalPromedio = 0.0;
 		this.totalStock = 0;
+		this.totalIngresos = 0;
+		this.totalEgresos = 0;
+		this.saldoInicial = 0;
+		this.saldoInicialValores = 0.0;
 		if (this.fechaHasta == null) {
 			return out;
 		}
@@ -262,6 +266,9 @@ public class StockValorizadoVM extends SimpleViewModel {
 	@DependsOn("fechaHasta")
 	public List<Object[]> getImportaciones() throws Exception {
 		this.totalImportaciones = 0;
+		this.totalFlete = 0;
+		this.totalGastos = 0;
+		this.totalSeguro = 0;
 		if (this.fechaHasta == null) {
 			return new ArrayList<Object[]>();
 		}

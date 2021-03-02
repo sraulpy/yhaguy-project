@@ -2695,7 +2695,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							numero, 
 							"FAC. " + TipoMovimiento.getAbreviatura(sigla),
 							Utiles.getRedondeo(costo) };
-					data.add(vta);
+					data.add(vta);					
 				}
 				String sucursal = getAcceso().getSucursalOperativa().getText();
 
