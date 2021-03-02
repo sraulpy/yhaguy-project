@@ -4076,6 +4076,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					params.put("TOT_MARGEN_VTA", Utiles.getNumberFormat(promedioSobreVenta));
 					params.put("TOT_MARGEN_COSTO", Utiles.getNumberFormat(promedioSobreCosto));
 					params.put("TOT_CANTIDAD", Utiles.getNumberFormat(totalCantidad));
+					params.put("TIPO_COSTO", "ÚLTIMO COSTO");
 					imprimirJasper(source, params, dataSource, formato);
 					
 				} else {
