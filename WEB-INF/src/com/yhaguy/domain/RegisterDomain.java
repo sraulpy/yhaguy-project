@@ -3883,9 +3883,10 @@ public class RegisterDomain extends Register {
 	 * [2]:fechaemision
 	 * [3]:motivo.descripcion
 	 * [4]:motivo.sigla
+	 * [5]:costo promedio
 	 */
 	public List<Object[]> getNotasCreditoVenta_(Date desde, Date hasta, long idCliente) throws Exception {
-		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla from"
+		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, n.costoPromedioGs from"
 				+ " NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and n.tipoMovimiento.sigla = ?"
@@ -3918,9 +3919,10 @@ public class RegisterDomain extends Register {
 	 * [2]:fechaemision
 	 * [3]:tipomovimiento.descripcion
 	 * [4]:tipomovimiento.sigla
+	 * [5]:costopromedio
 	 */
 	public List<Object[]> getVentas_(Date desde, Date hasta, long idCliente) throws Exception {
-		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla from"
+		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, v.costoPromedioGs from"
 				+ " Venta v where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
 				+ " and v.estadoComprobante is null"
 				+ " and v.fecha between ? and ?";
@@ -8425,6 +8427,20 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return la lista de costos de la tabla ArticuloCosto..
+	 * [0]:id
+	 * [1]:costo final gs..
+	 */
+	public List<Object[]> getArticuloCostosPromedio(long idArticulo, Date fecha) throws Exception {
+		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a.id, a.costoFinalGs from ArticuloCosto a where a.articulo.id = " + idArticulo
+				+ " and a.fechaCompra <= '" + fecha_ + "'";
+				query += " order by a.fechaCompra desc";
+		List<Object[]> list = this.hqlLimit(query, 3);
+		return list;
+	}
+	
+	/**
 	 * @return el id, el nro de importacion segun parametro..
 	 */
 	public List<Object[]> getImportaciones(String numero) throws Exception {
@@ -12521,7 +12537,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
-	public static void main(String[] args) {
+	public static void main_(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<ImportacionPedidoCompra> imps = rr.getObjects(ImportacionPedidoCompra.class.getName());
