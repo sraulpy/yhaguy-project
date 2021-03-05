@@ -2621,11 +2621,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				String tipoCosto = filtro.getTipoCosto();
 				
-				if (desde == null)
-					desde = new Date();
-
-				if (hasta == null)
-					hasta = new Date();
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
@@ -2637,25 +2634,30 @@ public class ReportesViewModel extends SimpleViewModel {
 					Date fecha = (Date) notacred[2];
 					String descrMotivo = (String) notacred[3];
 					String siglaMotivo = (String) notacred[4];
+					double costoPromedio = (double) notacred[5];
 					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
 						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
-						List<Object[]> dets = rr.getNotaCreditoDetalles(idNcred);
 						double costo = 0;
-						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-							for (Object[] det : dets) {
-								double cost = (double) det[0];
-								int cant = (int) det[1];
-								costo += (cost * cant);
+						if (costoPromedio == 0) {
+							List<Object[]> dets = rr.getNotaCreditoDetalles(idNcred);
+							if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+								for (Object[] det : dets) {
+									double cost = (double) det[0];
+									int cant = (int) det[1];
+									costo += (cost * cant);
+								}
 							}
-						}
-						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							for (Object[] det : dets) {
-								long idArt = (long) det[2];
-								double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
-								if(cost == 0) cost = (double) det[0];
-								int cant = (int) det[1];
-								costo += (cost * cant);
+							if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+								for (Object[] det : dets) {
+									long idArt = (long) det[2];								
+									double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
+									if(cost == 0) cost = (double) det[0];
+									int cant = (int) det[1];
+									costo += (cost * cant);
+								}
 							}
+						} else {
+							costo = costoPromedio;
 						}
 						Object[] nc = new Object[] {
 								Utiles.getDateToString(fecha, "dd-MM-yy"),
@@ -2672,30 +2674,36 @@ public class ReportesViewModel extends SimpleViewModel {
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
 					String sigla = (String) venta[4];
-					List<Object[]> dets = rr.getVentaDetalles(idvta);
-					double costo = 0;
-					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-						for (Object[] det : dets) {
-							double cost = (double) det[0];
-							long cant = (long) det[1];
-							costo += (cost * cant);
+					double costoPromedio = (double) venta[5];
+					double costo = 0;					
+					if (costoPromedio == 0) {
+						List<Object[]> dets = rr.getVentaDetalles(idvta);
+						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+							for (Object[] det : dets) {
+								double cost = (double) det[0];
+								long cant = (long) det[1];
+								costo += (cost * cant);
+							}
 						}
-					}
-					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						for (Object[] det : dets) {
-							long idArt = (long) det[2];
-							double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
-							if(cost == 0) cost = (double) det[0];
-							long cant = (long) det[1];
-							costo += (cost * cant);
+						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+							for (Object[] det : dets) {
+								long idArt = (long) det[2];
+								double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
+								if (cost == 0)
+									cost = (double) det[0];
+								long cant = (long) det[1];
+								costo += (cost * cant);
+							}
 						}
+					} else {
+						costo = costoPromedio;
 					}
 					Object[] vta = new Object[] { 
 							Utiles.getDateToString(fecha, "dd-MM-yy"), 
 							numero, 
 							"FAC. " + TipoMovimiento.getAbreviatura(sigla),
 							Utiles.getRedondeo(costo) };
-					data.add(vta);					
+					data.add(vta);
 				}
 				String sucursal = getAcceso().getSucursalOperativa().getText();
 
