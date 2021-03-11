@@ -20,6 +20,7 @@ public class VentaDetalle extends Domain {
 
 	/** el costo por unidad, sin iva */
 	private double costoUnitarioGs;
+	private double costoPromedioGs;
 
 	/** el precio por unidad, iva incluido y sin ningún descuento */
 	private double precioVentaUnitarioGs;
@@ -413,5 +414,13 @@ public class VentaDetalle extends Domain {
 
 	public void setMarca(String marca) {
 		this.marca = marca;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
 	}
 }

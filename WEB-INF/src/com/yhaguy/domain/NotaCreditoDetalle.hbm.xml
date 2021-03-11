@@ -14,6 +14,7 @@
 		<property name="montoGs" />
 		<property name="montoDs" />
 		<property name="costoGs" />
+		<property name="costoPromedioGs" />
 		<property name="importeGs" />
 		<property name="importeDs" />
 		

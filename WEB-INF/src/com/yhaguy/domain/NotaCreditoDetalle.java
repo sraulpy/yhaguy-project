@@ -14,6 +14,7 @@ public class NotaCreditoDetalle extends Domain{
 	private double montoGs;
 	private double montoDs;
 	private double costoGs;
+	private double costoPromedioGs;
 	
 	private double importeGs;
 	private double importeDs;
@@ -244,5 +245,13 @@ public class NotaCreditoDetalle extends Domain{
 
 	public void setDescuentoUnitarioGs(double descuentoUnitarioGs) {
 		this.descuentoUnitarioGs = descuentoUnitarioGs;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
 	}
 }

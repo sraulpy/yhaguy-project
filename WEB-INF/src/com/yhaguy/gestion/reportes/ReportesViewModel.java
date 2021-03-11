@@ -7544,28 +7544,34 @@ public class ReportesViewModel extends SimpleViewModel {
 						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
 							for (Object[] det : dets) {
 								double cost = (double) det[0];
-								int cant = (int) det[1];
+								String cant_ = det[1] + "";
+								int cant = Integer.parseInt(cant_);
+								double costo = Utiles.getRedondeo(cost * -1);
 								String codigo = (String) det[4];
 								Object[] nc = new Object[] {
 										Utiles.getDateToString(fecha, "dd-MM-yy"),
 										numero,
 										"NCR " + motivo,
 										codigo,
-										Utiles.getRedondeo(cost * -1) };					
+										costo,
+										(costo * cant)};					
 								data.add(nc);
 							}
 						}
 						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
 							for (Object[] det : dets) {
 								double cost = (double) det[3];
-								int cant = (int) det[1];
+								String cant_ = det[1] + "";
+								int cant = Integer.parseInt(cant_);
+								double costo = Utiles.getRedondeo(cost * -1);
 								String codigo = (String) det[4];
 								Object[] nc = new Object[] {
 										Utiles.getDateToString(fecha, "dd-MM-yy"),
 										numero,
 										"NCR " + motivo,
 										codigo,
-										Utiles.getRedondeo(cost * -1) };					
+										costo,
+										(costo * cant)};					
 								data.add(nc);
 							}
 						}
@@ -7583,28 +7589,34 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
 						for (Object[] det : dets) {
 							double cost = (double) det[0];
-							int cant = (int) det[1];
+							String cant_ = det[1] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost);
 							String codigo = (String) det[4];
 							Object[] vta = new Object[] { 
 									Utiles.getDateToString(fecha, "dd-MM-yy"), 
 									numero, 
 									"FAC. " + TipoMovimiento.getAbreviatura(sigla),
 									codigo,
-									Utiles.getRedondeo(cost) };
+									costo,
+									(costo * cant)};
 							data.add(vta);
 						}
 					}
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
 						for (Object[] det : dets) {
 							double cost = (double) det[3];
-							int cant = (int) det[1];
+							String cant_ = det[1] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost);
 							String codigo = (String) det[4];
 							Object[] vta = new Object[] { 
 									Utiles.getDateToString(fecha, "dd-MM-yy"), 
 									numero, 
 									"FAC. " + TipoMovimiento.getAbreviatura(sigla),
 									codigo,
-									Utiles.getRedondeo(cost) };
+									costo,
+									(costo * cant)};
 							data.add(vta);
 						}
 					}
@@ -17235,8 +17247,9 @@ class ReporteCostoVentasDetallado extends ReporteYhaguy {
 	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 50);
 	static DatosColumnas col3 = new DatosColumnas("Concepto", TIPO_STRING, 50);
 	static DatosColumnas col4 = new DatosColumnas("Codigo", TIPO_STRING, 50);
-	static DatosColumnas col5 = new DatosColumnas("Costo S/iva", TIPO_DOUBLE, 35, true);
-
+	static DatosColumnas col5 = new DatosColumnas("Costo unit. S/iva", TIPO_DOUBLE, 35);
+	static DatosColumnas col6 = new DatosColumnas("Total S/iva", TIPO_DOUBLE, 35, true);
+	
 	public ReporteCostoVentasDetallado(Date desde, Date hasta, String sucursal, String tipoCosto) {
 		this.desde = desde;
 		this.hasta = hasta;
@@ -17250,6 +17263,7 @@ class ReporteCostoVentasDetallado extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override

@@ -11,7 +11,6 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 
-import com.coreweb.control.SimpleViewModel;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.NotaCredito;
@@ -21,7 +20,7 @@ import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
 
-public class StockValorizadoVM extends SimpleViewModel {
+public class StockValorizadoVM {
 	
 	public static final long ID_SUC_PRINCIPAL = 2;
 	public static final long ID_DEP_1 = Configuracion.ID_DEPOSITO_PRINCIPAL;
@@ -62,8 +61,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 	
 	@SuppressWarnings("unchecked")
 	private void test() throws Exception {
-		Date desde = Utiles.getFecha("17-08-2020 00:00:00");
-		this.fechaHasta = Utiles.getFecha("04-03-2021 23:00:00");
+		Date desde = Utiles.getFecha("01-01-2020 00:00:00");
+		this.fechaHasta = Utiles.getFecha("31-12-2020 23:00:00");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Venta> ventas = rr.getVentas(desde, this.fechaHasta, 0);
@@ -79,6 +78,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 					List<Object[]> compras = (List<Object[]>) ent[2];
 					long stock = totalEntradas - totalSalidas;
 					double promedio = this.getCostoPromedio(stock, compras, item.getCostoUnitarioGs(), null);
+					item.setCostoPromedioGs(promedio);
 					totalCostoPromedio += (promedio * item.getCantidad());
 				}
 				venta.setCostoPromedioGs(totalCostoPromedio);
@@ -90,8 +90,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 	
 	@SuppressWarnings("unchecked")
 	private void testnc() throws Exception {
-		Date desde = Utiles.getFecha("31-03-2020 00:00:00");
-		this.fechaHasta = Utiles.getFecha("31-03-2021 23:00:00");
+		Date desde = Utiles.getFecha("01-01-2020 00:00:00");
+		this.fechaHasta = Utiles.getFecha("31-12-2020 23:00:00");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<NotaCredito> ncs = rr.getNotasCreditoVentaByMotivo(desde, this.fechaHasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION);
@@ -107,6 +107,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 					List<Object[]> compras = (List<Object[]>) ent[2];
 					long stock = totalEntradas - totalSalidas;
 					double promedio = this.getCostoPromedio(stock, compras, item.getCostoGs(), null);
+					item.setCostoPromedioGs(promedio);
 					totalCostoPromedio += (promedio * item.getCantidad());
 				}
 				nc.setCostoPromedioGs(totalCostoPromedio);

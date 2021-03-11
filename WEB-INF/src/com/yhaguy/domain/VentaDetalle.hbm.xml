@@ -16,6 +16,7 @@
 			
 		<property name="descripcion" />
 		<property name="costoUnitarioGs" />
+		<property name="costoPromedioGs" />
 		<property name="precioVentaUnitarioGs" />
 		<property name="precioVentaUnitarioDs" />
 		<property name="cantidad" />
