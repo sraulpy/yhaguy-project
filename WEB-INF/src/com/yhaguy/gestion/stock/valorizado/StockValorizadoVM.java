@@ -61,8 +61,8 @@ public class StockValorizadoVM {
 	
 	@SuppressWarnings("unchecked")
 	private void test() throws Exception {
-		Date desde = Utiles.getFecha("01-01-2020 00:00:00");
-		this.fechaHasta = Utiles.getFecha("31-12-2020 23:00:00");
+		Date desde = Utiles.getFecha("01-01-2017 00:00:00");
+		this.fechaHasta = Utiles.getFecha("31-12-2017 23:00:00");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Venta> ventas = rr.getVentas(desde, this.fechaHasta, 0);
@@ -90,8 +90,8 @@ public class StockValorizadoVM {
 	
 	@SuppressWarnings("unchecked")
 	private void testnc() throws Exception {
-		Date desde = Utiles.getFecha("01-01-2020 00:00:00");
-		this.fechaHasta = Utiles.getFecha("31-12-2020 23:00:00");
+		Date desde = Utiles.getFecha("01-01-2017 00:00:00");
+		this.fechaHasta = Utiles.getFecha("31-12-2017 23:00:00");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<NotaCredito> ncs = rr.getNotasCreditoVentaByMotivo(desde, this.fechaHasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION);
@@ -376,7 +376,7 @@ public class StockValorizadoVM {
 	}
 	
 	public Date getFechaDesde() throws Exception {
-		return Utiles.getFecha("01-01-2020 00:00:00");
+		return Utiles.getFecha("01-08-2016 00:00:00");
 	}
 	
 	/**
