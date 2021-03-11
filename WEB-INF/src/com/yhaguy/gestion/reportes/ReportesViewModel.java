@@ -1585,6 +1585,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_PROVEEDOR_MES = "VEN-00050";
 		static final String VENTAS_PROVEEDOR_CLIENTE_MES_CANT = "VEN-00051";
 		static final String VENTAS_DETALLE = "VEN-00052";
+		static final String VENTAS_COSTO_DETALLADO = "VEN-00053";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1802,6 +1803,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_DETALLE:
 				this.ventasDetalle(mobile, VENTAS_DETALLE);
+				break;
+				
+			case VENTAS_COSTO_DETALLADO:
+				this.costoDeVentasDetallado(mobile);
 				break;
 			}
 		}
@@ -7505,6 +7510,120 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("TOT_DESCUENTO", Utiles.getNumberFormat(totalDescuento));
 				params.put("TOT_IMPORTE", Utiles.getNumberFormat(totalImporte));
 				imprimirJasper(source, params, dataSource, formato);							
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte VEN-
+		 */
+		private void costoDeVentasDetallado(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				String tipoCosto = filtro.getTipoCosto();
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+
+				List<Object[]> ncs = rr.getNotasCreditoVenta_(desde, hasta, 0);
+				for (Object[] notacred : ncs) {
+					long idNcred = (long) notacred[0];
+					String numero = (String) notacred[1];
+					Date fecha = (Date) notacred[2];
+					String descrMotivo = (String) notacred[3];
+					String siglaMotivo = (String) notacred[4];
+					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
+						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
+						List<Object[]> dets = rr.getNotaCreditoDetalles(idNcred);
+						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+							for (Object[] det : dets) {
+								double cost = (double) det[0];
+								int cant = (int) det[1];
+								String codigo = (String) det[4];
+								Object[] nc = new Object[] {
+										Utiles.getDateToString(fecha, "dd-MM-yy"),
+										numero,
+										"NCR " + motivo,
+										codigo,
+										Utiles.getRedondeo(cost * -1) };					
+								data.add(nc);
+							}
+						}
+						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+							for (Object[] det : dets) {
+								double cost = (double) det[3];
+								int cant = (int) det[1];
+								String codigo = (String) det[4];
+								Object[] nc = new Object[] {
+										Utiles.getDateToString(fecha, "dd-MM-yy"),
+										numero,
+										"NCR " + motivo,
+										codigo,
+										Utiles.getRedondeo(cost * -1) };					
+								data.add(nc);
+							}
+						}
+					}
+				}
+
+				List<Object[]> ventas = rr.getVentas_(desde, hasta, 0);
+				for (Object[] venta : ventas) {
+					long idvta = (long) venta[0];
+					String numero = (String) venta[1];
+					Date fecha = (Date) venta[2];
+					String sigla = (String) venta[4];
+					
+					List<Object[]> dets = rr.getVentaDetalles(idvta);
+					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+						for (Object[] det : dets) {
+							double cost = (double) det[0];
+							int cant = (int) det[1];
+							String codigo = (String) det[4];
+							Object[] vta = new Object[] { 
+									Utiles.getDateToString(fecha, "dd-MM-yy"), 
+									numero, 
+									"FAC. " + TipoMovimiento.getAbreviatura(sigla),
+									codigo,
+									Utiles.getRedondeo(cost) };
+							data.add(vta);
+						}
+					}
+					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+						for (Object[] det : dets) {
+							double cost = (double) det[3];
+							int cant = (int) det[1];
+							String codigo = (String) det[4];
+							Object[] vta = new Object[] { 
+									Utiles.getDateToString(fecha, "dd-MM-yy"), 
+									numero, 
+									"FAC. " + TipoMovimiento.getAbreviatura(sigla),
+									codigo,
+									Utiles.getRedondeo(cost) };
+							data.add(vta);
+						}
+					}
+				}
+				String sucursal = getAcceso().getSucursalOperativa().getText();
+
+				ReporteCostoVentasDetallado rep = new ReporteCostoVentasDetallado(desde, hasta, sucursal, tipoCosto);
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -17073,6 +17192,69 @@ class ReporteCostoVentas extends ReporteYhaguy {
 	@Override
 	public void informacionReporte() {
 		this.setTitulo("Costo de Ventas por Factura");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Venta-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp
+				.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Tipo Costo", this.tipoCosto))
+				.add(this.textoParValor("Sucursal", this.sucursal)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte de Costo de Ventas VEN-..
+ */
+class ReporteCostoVentasDetallado extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	
+	private Date desde;
+	private Date hasta;
+	private String sucursal;
+	private String tipoCosto;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
+	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 50);
+	static DatosColumnas col3 = new DatosColumnas("Concepto", TIPO_STRING, 50);
+	static DatosColumnas col4 = new DatosColumnas("Codigo", TIPO_STRING, 50);
+	static DatosColumnas col5 = new DatosColumnas("Costo S/iva", TIPO_DOUBLE, 35, true);
+
+	public ReporteCostoVentasDetallado(Date desde, Date hasta, String sucursal, String tipoCosto) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.sucursal = sucursal;
+		this.tipoCosto = tipoCosto;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Costo de Ventas por Factura Detallado");
 		this.setDirectorio("ventas");
 		this.setNombreArchivo("Venta-");
 		this.setTitulosColumnas(cols);

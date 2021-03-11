@@ -9186,9 +9186,11 @@ public class RegisterDomain extends Register {
 	 * [0]:costoGs
 	 * [1]:cantidad
 	 * [2]:articulo.id
+	 * [3]:costoPromedioGs
+	 * [4]:articulo.codigo
 	 */
 	public List<Object[]> getNotaCreditoDetalles(long idNotaCredito) throws Exception {
-		String query = "select d.costoGs, d.cantidad, d.articulo.id from NotaCredito n join n.detalles d where n.id = " + idNotaCredito
+		String query = "select d.costoGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno from NotaCredito n join n.detalles d where n.id = " + idNotaCredito
 				+ " and d.articulo is not null ";
 		return this.hql(query);
 	}
@@ -9198,9 +9200,11 @@ public class RegisterDomain extends Register {
 	 * [0]:costoUnitarioGs
 	 * [1]:cantidad
 	 * [2]:articulo.id
+	 * [3]:costoPromedioGs
+	 * [4]:articulo.codigo
 	 */
 	public List<Object[]> getVentaDetalles(long idVenta) throws Exception {
-		String query = "select d.costoUnitarioGs, d.cantidad, d.articulo.id from Venta v join v.detalles d where v.id = " + idVenta;
+		String query = "select d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno from Venta v join v.detalles d where v.id = " + idVenta;
 		return this.hql(query);
 	}
 	
