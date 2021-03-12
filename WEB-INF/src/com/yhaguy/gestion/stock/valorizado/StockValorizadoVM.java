@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.stock.valorizado;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.zkoss.bind.annotation.Init;
 
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
+import com.yhaguy.domain.ArticuloCostoPromediogs;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.RegisterDomain;
@@ -51,9 +53,9 @@ public class StockValorizadoVM {
 	public static void main(String[] args) {
 		try {
 			StockValorizadoVM st = new StockValorizadoVM();
-			st.test();
-			st.testnc();
-			
+			//st.test();
+			//st.testnc();
+			st.testCostoPromedio();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,6 +116,50 @@ public class StockValorizadoVM {
 				rr.saveObject(nc, nc.getUsuarioMod());
 				System.out.println(nc.getNumero() + " - " + Utiles.getNumberFormat(totalCostoPromedio));
 			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void testCostoPromedio() throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> arts = rr.getArticulosMercaderias("", "", "BATERIAS");
+		
+		for (Object[] art : arts) {
+			Date current = Utiles.getFecha("01-02-2018 00:00:00");
+			Date end = Utiles.getFecha("31-12-2018 23:00:00");
+			this.fechaHasta = end;
+			
+			long idArticulo = (long) art[0];
+			String codigo = (String) art[1];
+			Articulo articulo = rr.getArticuloById(idArticulo);
+			
+			while (current.before(end)) {
+		        System.out.println(current);
+		        
+		        Object[] ent = this.getHistoricoEntrada(idArticulo, codigo, current);
+				List<Object[]> compras = (List<Object[]>) ent[2];
+				long totalEntradas = (long) ent[1];
+				Object[] sal = this.getHistoricoSalida(idArticulo, codigo, current);
+				long totalSalidas = (long) sal[1];
+				long stock = (totalEntradas - totalSalidas);
+				double ultCosto = this.getCostoUltimo(compras, (double) art[3]);
+				double prmCosto = this.getCostoPromedio(stock, compras, ultCosto, null);
+		        
+				if (prmCosto > 0 || ultCosto > 0) {
+					ArticuloCostoPromediogs ar = new ArticuloCostoPromediogs();
+					ar.setCostoPromedio(prmCosto);
+					ar.setUltimoCosto(ultCosto);
+					ar.setArticulo(articulo);
+					ar.setFecha(current);
+					rr.saveObject(ar, "sys");
+				}				
+				System.out.println(codigo + " - " + prmCosto);
+		        
+		        Calendar calendar = Calendar.getInstance();
+		        calendar.setTime(current);
+		        calendar.add(Calendar.DATE, 1);
+		        current = calendar.getTime();
+		    }		
 		}
 	}
 	
