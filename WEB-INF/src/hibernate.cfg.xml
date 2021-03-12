@@ -8,9 +8,9 @@
 
 		<!-- Postgres -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5432/yhaguy_central</property>
+		<property name="connection.url">jdbc:postgresql://10.25.5.250:5432/yhaguy_testing</property>
 		<property name="connection.username">postgres</property>
-		<property name="connection.password">yrsa0985</property>
+		<property name="connection.password">ybsa0985</property>
 
 		<!-- Fin Postgres -->
 
@@ -95,6 +95,7 @@
 		<mapping resource="com/yhaguy/domain/ArticuloPivot.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloPivotDetalle.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ArticuloReposicion.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/ArticuloCostoPromediogs.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/ProveedorArticulo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/Proveedor.hbm.xml" />
