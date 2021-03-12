@@ -500,6 +500,12 @@ public class RegisterDomain extends Register {
 		return (ImportacionFacturaDetalle) getObject(
 				com.yhaguy.domain.ImportacionFacturaDetalle.class.getName(), id);
 	}
+	
+	public CompraLocalFacturaDetalle getCompraLocalFacturaDetalleById(long id)
+			throws Exception {
+		return (CompraLocalFacturaDetalle) getObject(
+				com.yhaguy.domain.CompraLocalFacturaDetalle.class.getName(), id);
+	}
 
 	public ImportacionResumenGastosDespacho getImportacionGastosDespachoById(
 			long id) throws Exception {
@@ -9196,6 +9202,49 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las notas de credito de venta segun fecha
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:fechaemision
+	 * [3]:motivo.descripcion
+	 * [4]:motivo.sigla
+	 * [5]:costo promedio
+	 * [6]:costoGs
+	 * [7]:cantidad
+	 * [8]:articulo.id
+	 * [9]:costoPromedioGs
+	 * [10]:articulo.codigo
+	 */
+	public List<Object[]> getNotasCreditoVentaDetalles(Date desde, Date hasta, long idCliente) throws Exception {
+		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, n.costoPromedioGs,"
+				+ " d.costoGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
+				+ " from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
+				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and n.tipoMovimiento.sigla = ?"
+				+ " and (n.fechaEmision between ? and ?)"
+				+ " and d.articulo is not null";
+
+		if (idCliente != 0) {
+			query += " and n.cliente.id = ?";
+		}
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return los detalles de la nota de credito..
 	 * [0]:costoUnitarioGs
 	 * [1]:cantidad
@@ -9206,6 +9255,46 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getVentaDetalles(long idVenta) throws Exception {
 		String query = "select d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno from Venta v join v.detalles d where v.id = " + idVenta;
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return las ventas segun fecha
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:fechaemision
+	 * [3]:tipomovimiento.descripcion
+	 * [4]:tipomovimiento.sigla
+	 * [5]:costopromedio
+	 * [6]:costoUnitarioGs
+	 * [7]:cantidad
+	 * [8]:articulo.id
+	 * [9]:costoPromedioGs
+	 * [10]:articulo.codigo
+	 */
+	public List<Object[]> getVentasDetalles(Date desde, Date hasta, long idCliente) throws Exception {
+		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, v.costoPromedioGs, "
+				+ " d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
+				+ " from Venta v where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
+				+ " and v.estadoComprobante is null"
+				+ " and v.fecha between ? and ?";
+		if (idCliente != 0) {
+			query += " and v.cliente.id = ?";
+		}
+		query += " order by v.numero, v.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
+		listParams.add(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
 	}
 	
 	/**

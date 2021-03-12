@@ -7531,94 +7531,83 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 
-				List<Object[]> ncs = rr.getNotasCreditoVenta_(desde, hasta, 0);
+				List<Object[]> ncs = rr.getNotasCreditoVentaDetalles(desde, hasta, 0);
 				for (Object[] notacred : ncs) {
-					long idNcred = (long) notacred[0];
 					String numero = (String) notacred[1];
 					Date fecha = (Date) notacred[2];
 					String descrMotivo = (String) notacred[3];
 					String siglaMotivo = (String) notacred[4];
 					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
 						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
-						List<Object[]> dets = rr.getNotaCreditoDetalles(idNcred);
 						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-							for (Object[] det : dets) {
-								double cost = (double) det[0];
-								String cant_ = det[1] + "";
-								int cant = Integer.parseInt(cant_);
-								double costo = Utiles.getRedondeo(cost * -1);
-								String codigo = (String) det[4];
-								Object[] nc = new Object[] {
-										Utiles.getDateToString(fecha, "dd-MM-yy"),
-										numero,
-										"NCR " + motivo,
-										codigo,
-										costo,
-										(costo * cant)};					
-								data.add(nc);
-							}
+							double cost = (double) notacred[6];
+							String cant_ = notacred[7] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost * -1);
+							String codigo = (String) notacred[10];
+							Object[] nc = new Object[] {
+									Utiles.getDateToString(fecha, "dd-MM-yy"),
+									numero,
+									"NCR " + motivo,
+									codigo,
+									costo,
+									(costo * cant)};					
+							data.add(nc);
 						}
 						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							for (Object[] det : dets) {
-								double cost = (double) det[3];
-								String cant_ = det[1] + "";
-								int cant = Integer.parseInt(cant_);
-								double costo = Utiles.getRedondeo(cost * -1);
-								String codigo = (String) det[4];
-								Object[] nc = new Object[] {
-										Utiles.getDateToString(fecha, "dd-MM-yy"),
-										numero,
-										"NCR " + motivo,
-										codigo,
-										costo,
-										(costo * cant)};					
-								data.add(nc);
-							}
+							double cost = (double) notacred[9];
+							String cant_ = notacred[7] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost * -1);
+							String codigo = (String) notacred[10];
+							Object[] nc = new Object[] {
+									Utiles.getDateToString(fecha, "dd-MM-yy"),
+									numero,
+									"NCR " + motivo,
+									codigo,
+									costo,
+									(costo * cant)};					
+							data.add(nc);						
 						}
 					}
 				}
 
-				List<Object[]> ventas = rr.getVentas_(desde, hasta, 0);
+				List<Object[]> ventas = rr.getVentasDetalles(desde, hasta, 0);
 				for (Object[] venta : ventas) {
-					long idvta = (long) venta[0];
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
 					String sigla = (String) venta[4];
 					
-					List<Object[]> dets = rr.getVentaDetalles(idvta);
 					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-						for (Object[] det : dets) {
-							double cost = (double) det[0];
-							String cant_ = det[1] + "";
-							int cant = Integer.parseInt(cant_);
-							double costo = Utiles.getRedondeo(cost);
-							String codigo = (String) det[4];
-							Object[] vta = new Object[] { 
-									Utiles.getDateToString(fecha, "dd-MM-yy"), 
-									numero, 
-									"FAC. " + TipoMovimiento.getAbreviatura(sigla),
-									codigo,
-									costo,
-									(costo * cant)};
-							data.add(vta);
-						}
+						double cost = (double) venta[6];
+						String cant_ = venta[7] + "";
+						int cant = Integer.parseInt(cant_);
+						double costo = Utiles.getRedondeo(cost);
+						String codigo = (String) venta[10];
+						Object[] vta = new Object[] { 
+								Utiles.getDateToString(fecha, "dd-MM-yy"), 
+								numero, 
+								"FAC. " + TipoMovimiento.getAbreviatura(sigla),
+								codigo,
+								costo,
+								(costo * cant)};
+						data.add(vta);					
 					}
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						for (Object[] det : dets) {
-							double cost = (double) det[3];
-							String cant_ = det[1] + "";
-							int cant = Integer.parseInt(cant_);
-							double costo = Utiles.getRedondeo(cost);
-							String codigo = (String) det[4];
-							Object[] vta = new Object[] { 
-									Utiles.getDateToString(fecha, "dd-MM-yy"), 
-									numero, 
-									"FAC. " + TipoMovimiento.getAbreviatura(sigla),
-									codigo,
-									costo,
-									(costo * cant)};
-							data.add(vta);
-						}
+						double cost = (double) venta[9];
+						String cant_ = venta[7] + "";
+						int cant = Integer.parseInt(cant_);
+						double costo = Utiles.getRedondeo(cost);
+						String codigo = (String) venta[10];
+						Object[] vta = new Object[] { 
+								Utiles.getDateToString(fecha, "dd-MM-yy"), 
+								numero, 
+								"FAC. " + TipoMovimiento.getAbreviatura(sigla),
+								codigo,
+								costo,
+								(costo * cant)};
+						data.add(vta);
+					
 					}
 				}
 				String sucursal = getAcceso().getSucursalOperativa().getText();
