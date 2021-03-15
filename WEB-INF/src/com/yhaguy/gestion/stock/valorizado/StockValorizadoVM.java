@@ -139,10 +139,8 @@ public class StockValorizadoVM {
 		double acum = 0;
 		for (int i = compras.size() - 1; i >= 0; i--) {
 			Object[] compra = compras.get(i);
-			long cantCompra = Long.parseLong(compra[3] + "");
-			if (stock <= cantCompra) {
-				return (double) compra[4];
-			}		
+			//System.out.println(compra[2] + "");
+			long cantCompra = Long.parseLong(compra[3] + "");	
 			double costo = (double) compra[4];
 			if (saldo > cantCompra) {
 				acum += (cantCompra * costo);
@@ -515,26 +513,25 @@ public class StockValorizadoVM {
 		List<ImportacionPedidoCompra> imps = rr.getImportacionPedidosCompra();
 		for (ImportacionPedidoCompra imp : imps) {
 			ImportacionFactura fac = imp.getImportacionFactura_().get(0);
-			Date fecha = DateUtils.addMinutes(fac.getFechaVolcado(), 1);
 			for (ImportacionFacturaDetalle item : fac.getDetalles()) {
 				Articulo art = item.getArticulo();
-				Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), fecha);
-				Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), fecha);
+				Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), fac.getFechaVolcado());
+				Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), fac.getFechaVolcado());
 				long totalEntradas = (long) ent[1];
 				long totalSalidas = (long) sal[1];
-				List<Object[]> compras = (List<Object[]>) ent[2];
-				long stock = totalEntradas - totalSalidas;
+				List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(fac.getFechaVolcado(), 1));
+				long stock = (totalEntradas + item.getCantidad_()) - totalSalidas;
 				double promedio = this.getCostoPromedioCalculado(stock, compras, item.getCostoFinalGs(), null);
 				item.setCostoPromedioGs(promedio);
 				rr.saveObject(item, item.getUsuarioMod());			
-				System.out.println(fac.getFechaVolcado() + " - " + art.getCodigoInterno() + " - " + stock + " - " + promedio);
+				System.out.println(fac.getNumero() + " - " + fac.getFechaVolcado() + " - " + art.getCodigoInterno() + " - " + stock + " - " + promedio);
 			}
-		}
+		}		
 	}
 	
 	private void test() throws Exception {
-		Date desde = Utiles.getFecha("01-01-2020 00:00:00");
-		this.fechaHasta = Utiles.getFecha("31-12-2020 23:00:00");
+		Date desde = Utiles.getFecha("01-01-2018 00:00:00");
+		this.fechaHasta = Utiles.getFecha("31-12-2018 23:00:00");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Venta> ventas = rr.getVentas(desde, this.fechaHasta, 0);
