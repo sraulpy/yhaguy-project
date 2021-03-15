@@ -9389,6 +9389,9 @@ public class RegisterDomain extends Register {
 		if (idCliente != 0) {
 			listParams.add(idCliente);
 		}
+		if (idArticulo != 0) {
+			listParams.add(idArticulo);
+		}
 
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
@@ -9434,7 +9437,7 @@ public class RegisterDomain extends Register {
 			query += " and v.cliente.id = ?";
 		}
 		if (idArticulo != 0) {
-			query += " and d.articulo.id = " + idArticulo;
+			query += " and d.articulo.id = ?";
 		}
 		query += " order by v.numero, v.fecha";
 
@@ -9445,6 +9448,9 @@ public class RegisterDomain extends Register {
 		listParams.add(hasta);
 		if (idCliente != 0) {
 			listParams.add(idCliente);
+		}
+		if (idArticulo != 0) {
+			listParams.add(idArticulo);
 		}
 		Object[] params = new Object[listParams.size()];
 		for (int i = 0; i < listParams.size(); i++) {
