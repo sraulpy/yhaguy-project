@@ -9365,7 +9365,7 @@ public class RegisterDomain extends Register {
 	 * [9]:costoPromedioGs
 	 * [10]:articulo.codigo
 	 */
-	public List<Object[]> getNotasCreditoVentaDetalles(Date desde, Date hasta, long idCliente) throws Exception {
+	public List<Object[]> getNotasCreditoVentaDetalles(Date desde, Date hasta, long idCliente, long idArticulo) throws Exception {
 		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, n.costoPromedioGs,"
 				+ " d.costoGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
 				+ " from NotaCredito n join n.detalles d where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
@@ -9376,6 +9376,9 @@ public class RegisterDomain extends Register {
 
 		if (idCliente != 0) {
 			query += " and n.cliente.id = ?";
+		}
+		if (idArticulo != 0) {
+			query += " and d.articulo.id = " + idArticulo;
 		}
 		query += " order by n.numero";
 
@@ -9421,7 +9424,7 @@ public class RegisterDomain extends Register {
 	 * [9]:costoPromedioGs
 	 * [10]:articulo.codigo
 	 */
-	public List<Object[]> getVentasDetalles(Date desde, Date hasta, long idCliente) throws Exception {
+	public List<Object[]> getVentasDetalles(Date desde, Date hasta, long idCliente, long idArticulo) throws Exception {
 		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, v.costoPromedioGs, "
 				+ " d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
 				+ " from Venta v join v.detalles d where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
@@ -9429,6 +9432,9 @@ public class RegisterDomain extends Register {
 				+ " and v.fecha between ? and ?";
 		if (idCliente != 0) {
 			query += " and v.cliente.id = ?";
+		}
+		if (idArticulo != 0) {
+			query += " and d.articulo.id = " + idArticulo;
 		}
 		query += " order by v.numero, v.fecha";
 

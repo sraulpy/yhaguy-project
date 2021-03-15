@@ -7493,6 +7493,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				String tipoCosto = filtro.getTipoCosto();
+				Articulo art = filtro.getArticulo();
+				long idArticulo = art != null ? art.getId().longValue() : 0;
 				
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
@@ -7500,7 +7502,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 
-				List<Object[]> ncs = rr.getNotasCreditoVentaDetalles(desde, hasta, 0);
+				List<Object[]> ncs = rr.getNotasCreditoVentaDetalles(desde, hasta, 0, idArticulo);
 				for (Object[] notacred : ncs) {
 					String numero = (String) notacred[1];
 					Date fecha = (Date) notacred[2];
@@ -7541,7 +7543,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				}
 
-				List<Object[]> ventas = rr.getVentasDetalles(desde, hasta, 0);
+				List<Object[]> ventas = rr.getVentasDetalles(desde, hasta, 0, idArticulo);
 				for (Object[] venta : ventas) {
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
