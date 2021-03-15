@@ -4,7 +4,7 @@
 	<tabbox hflex="true" vflex="true">
 		<tabs>
 			<tab label="Resumen" width="150px"></tab>
-			<tab label="Detalle" width="150px" disabled="true"></tab>
+			<tab label="Detalle" width="150px"></tab>
 		</tabs>
 		<tabpanels>			
 			<tabpanel>		
@@ -19,8 +19,11 @@
 						<space></space>
 						<field value="Hasta:" />
 						<datebox value="@bind(vm.fechaHasta)"></datebox>
+						<timebox value="@bind(vm.fechaHasta)"></timebox>
+						<a label=" Procesar" iconSclass="z-icon-check"
+							onClick="@command('procesar')" autodisable="true"></a>
 				</hlayout>
-				<groupbox mold="3d" style="border-radius:6px">
+				<groupbox mold="3d" style="border-radius:6px" open="false">
 					<caption label=" En Cantidades"></caption>
 					<grid>
 						<rows>
@@ -45,7 +48,7 @@
 					</grid>
 				</groupbox>
 				<div height="5px"></div>
-				<groupbox mold="3d" style="border-radius:6px" title=" En Valores">
+				<groupbox mold="3d" style="border-radius:6px" title=" En Valores" open="false">
 					<grid>
 						<rows>
 							<row>
@@ -226,11 +229,14 @@
 								<listheader label="Stock" width="90px"
 									align="right">
 								</listheader>
+								<listheader label="Costo Ult."
+									width="110px" align="right">
+								</listheader>
 								<listheader label="Costo Prom."
-									width="120px" align="right">
+									width="110px" align="right">
 								</listheader>
 								<listheader label="Costo Total"
-									width="120px" align="right">
+									width="110px" align="right">
 								</listheader>
 							</listhead>
 							<template name="model">
@@ -239,6 +245,9 @@
 									<listcell label="@load(each[6])"></listcell>
 									<listcell label="@load(each[8])"></listcell>
 									<listcell label="@load(each[9])"></listcell>
+									<listcell
+										label="@load(each[3]) @converter(vm.cnv.monedaLocal)">
+									</listcell>
 									<listcell
 										label="@load(each[4]) @converter(vm.cnv.monedaLocal)">
 									</listcell>
@@ -262,6 +271,7 @@
 										value="@load(vm.totalStock)" hflex="true" readonly="true" />
 								</listfooter>
 								<listfooter></listfooter>
+								<listfooter></listfooter>
 								<listfooter>
 									<guaranibox
 										value="@load(vm.totalPromedio)" hflex="true" readonly="true" />
@@ -279,8 +289,8 @@
 										vflex="true" hflex="5" model="@load(vm.selectedItem[5])"
 										emptyMessage="SIN REGISTROS..">
 										<listhead>
-											<listheader label="Fecha"
-												width="100px">
+											<listheader label="Fecha volcado"
+												width="130px">
 											</listheader>
 											<listheader
 												label="Concepto">
@@ -298,7 +308,7 @@
 										<template name="model">
 											<listitem>
 												<listcell
-													label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
+													label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy HH:mm:ss')">
 												</listcell>
 												<listcell
 													label="@load(each[0])">
@@ -335,7 +345,7 @@
 										vflex="true" hflex="5" model="@load(vm.selectedItem[7])">
 										<listhead>
 											<listheader label="Fecha"
-												width="100px">
+												width="130px">
 											</listheader>
 											<listheader
 												label="Concepto">
@@ -353,7 +363,7 @@
 										<template name="model">
 											<listitem>
 												<listcell
-													label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
+													label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy HH:mm:ss')">
 												</listcell>
 												<listcell
 													label="@load(each[0])">
