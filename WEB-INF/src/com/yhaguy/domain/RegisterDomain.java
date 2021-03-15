@@ -9378,7 +9378,7 @@ public class RegisterDomain extends Register {
 			query += " and n.cliente.id = ?";
 		}
 		if (idArticulo != 0) {
-			query += " and d.articulo.id = " + idArticulo;
+			query += " and d.articulo.id = ?";
 		}
 		query += " order by n.numero";
 
