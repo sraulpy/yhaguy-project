@@ -29,6 +29,7 @@ public class ImportacionFactura extends Domain {
 	private boolean facturaVerificada;
 	private boolean recepcionConfirmada;
 	private Date fechaDespacho;
+	private Date fechaVolcado;
 	private double totalGastosFlete;
 	private double totalGastosDespacho;
 	private double totalSeguro;
@@ -327,5 +328,13 @@ public class ImportacionFactura extends Domain {
 
 	public void setTotalSeguro(double totalSeguro) {
 		this.totalSeguro = totalSeguro;
+	}
+
+	public Date getFechaVolcado() {
+		return fechaVolcado;
+	}
+
+	public void setFechaVolcado(Date fechaVolcado) {
+		this.fechaVolcado = fechaVolcado;
 	}
 }

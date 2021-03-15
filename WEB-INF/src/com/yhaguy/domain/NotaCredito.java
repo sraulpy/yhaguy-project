@@ -30,6 +30,7 @@ public class NotaCredito extends Domain {
 	private double importeDs;
 	private double importeIva;
 	private double costoPromedioGs;
+	private double costoUltimoGs;
 	
 	private double tipoCambio;
 	private boolean promocion;
@@ -874,5 +875,13 @@ public class NotaCredito extends Domain {
 
 	public void setCostoPromedioGs(double costoPromedioGs) {
 		this.costoPromedioGs = costoPromedioGs;
+	}
+
+	public double getCostoUltimoGs() {
+		return costoUltimoGs;
+	}
+
+	public void setCostoUltimoGs(double costoUltimoGs) {
+		this.costoUltimoGs = costoUltimoGs;
 	}
 }
