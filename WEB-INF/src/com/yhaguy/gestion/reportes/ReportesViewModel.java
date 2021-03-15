@@ -2634,34 +2634,19 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				List<Object[]> ncs = rr.getNotasCreditoVenta_(desde, hasta, 0);
 				for (Object[] notacred : ncs) {
-					long idNcred = (long) notacred[0];
 					String numero = (String) notacred[1];
 					Date fecha = (Date) notacred[2];
 					String descrMotivo = (String) notacred[3];
 					String siglaMotivo = (String) notacred[4];
 					double costoPromedio = (double) notacred[5];
+					double costoUltimo = (double) notacred[6];
 					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
 						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
 						double costo = 0;
-						if (costoPromedio == 0) {
-							List<Object[]> dets = rr.getNotaCreditoDetalles(idNcred);
-							if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-								for (Object[] det : dets) {
-									double cost = (double) det[0];
-									int cant = (int) det[1];
-									costo += (cost * cant);
-								}
-							}
-							if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-								for (Object[] det : dets) {
-									long idArt = (long) det[2];								
-									double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
-									if(cost == 0) cost = (double) det[0];
-									int cant = (int) det[1];
-									costo += (cost * cant);
-								}
-							}
-						} else {
+						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+							costo = costoUltimo;
+						}
+						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
 							costo = costoPromedio;
 						}
 						Object[] nc = new Object[] {
@@ -2675,32 +2660,16 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				List<Object[]> ventas = rr.getVentas_(desde, hasta, 0);
 				for (Object[] venta : ventas) {
-					long idvta = (long) venta[0];
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
 					String sigla = (String) venta[4];
 					double costoPromedio = (double) venta[5];
+					double costoUltimo = (double) venta[6];
 					double costo = 0;					
-					if (costoPromedio == 0) {
-						List<Object[]> dets = rr.getVentaDetalles(idvta);
-						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-							for (Object[] det : dets) {
-								double cost = (double) det[0];
-								long cant = (long) det[1];
-								costo += (cost * cant);
-							}
-						}
-						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							for (Object[] det : dets) {
-								long idArt = (long) det[2];
-								double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
-								if (cost == 0)
-									cost = (double) det[0];
-								long cant = (long) det[1];
-								costo += (cost * cant);
-							}
-						}
-					} else {
+					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+						costo = costoUltimo;
+					}
+					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
 						costo = costoPromedio;
 					}
 					Object[] vta = new Object[] { 
@@ -7546,7 +7515,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							double costo = Utiles.getRedondeo(cost * -1);
 							String codigo = (String) notacred[10];
 							Object[] nc = new Object[] {
-									Utiles.getDateToString(fecha, "dd-MM-yy"),
+									Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"),
 									numero,
 									"NCR " + motivo,
 									codigo,
@@ -7561,7 +7530,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							double costo = Utiles.getRedondeo(cost * -1);
 							String codigo = (String) notacred[10];
 							Object[] nc = new Object[] {
-									Utiles.getDateToString(fecha, "dd-MM-yy"),
+									Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"),
 									numero,
 									"NCR " + motivo,
 									codigo,
@@ -7585,7 +7554,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						double costo = Utiles.getRedondeo(cost);
 						String codigo = (String) venta[10];
 						Object[] vta = new Object[] { 
-								Utiles.getDateToString(fecha, "dd-MM-yy"), 
+								Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), 
 								numero, 
 								"FAC. " + TipoMovimiento.getAbreviatura(sigla),
 								codigo,
@@ -7600,7 +7569,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						double costo = Utiles.getRedondeo(cost);
 						String codigo = (String) venta[10];
 						Object[] vta = new Object[] { 
-								Utiles.getDateToString(fecha, "dd-MM-yy"), 
+								Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), 
 								numero, 
 								"FAC. " + TipoMovimiento.getAbreviatura(sigla),
 								codigo,
@@ -14871,34 +14840,19 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				List<Object[]> ncs = rr.getNotasCreditoVenta_(desde, hasta, 0);
 				for (Object[] notacred : ncs) {
-					long idNcred = (long) notacred[0];
 					String numero = (String) notacred[1];
 					Date fecha = (Date) notacred[2];
 					String descrMotivo = (String) notacred[3];
 					String siglaMotivo = (String) notacred[4];
 					double costoPromedio = (double) notacred[5];
+					double costoUltimo = (double) notacred[6];
 					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
 						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
 						double costo = 0;
-						if (costoPromedio == 0) {
-							List<Object[]> dets = rr.getNotaCreditoDetalles(idNcred);
-							if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-								for (Object[] det : dets) {
-									double cost = (double) det[0];
-									int cant = (int) det[1];
-									costo += (cost * cant);
-								}
-							}
-							if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-								for (Object[] det : dets) {
-									long idArt = (long) det[2];								
-									double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
-									if(cost == 0) cost = (double) det[0];
-									int cant = (int) det[1];
-									costo += (cost * cant);
-								}
-							}
-						} else {
+						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+							costo = costoUltimo;
+						}
+						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
 							costo = costoPromedio;
 						}
 						Object[] nc = new Object[] {
@@ -14912,32 +14866,16 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				List<Object[]> ventas = rr.getVentas_(desde, hasta, 0);
 				for (Object[] venta : ventas) {
-					long idvta = (long) venta[0];
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
 					String sigla = (String) venta[4];
 					double costoPromedio = (double) venta[5];
+					double costoUltimo = (double) venta[6];
 					double costo = 0;					
-					if (costoPromedio == 0) {
-						List<Object[]> dets = rr.getVentaDetalles(idvta);
-						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-							for (Object[] det : dets) {
-								double cost = (double) det[0];
-								long cant = (long) det[1];
-								costo += (cost * cant);
-							}
-						}
-						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							for (Object[] det : dets) {
-								long idArt = (long) det[2];
-								double cost = ControlArticuloCosto.getCostoPromedio(idArt, hasta);
-								if (cost == 0)
-									cost = (double) det[0];
-								long cant = (long) det[1];
-								costo += (cost * cant);
-							}
-						}
-					} else {
+					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+						costo = costoUltimo;
+					}
+					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
 						costo = costoPromedio;
 					}
 					Object[] vta = new Object[] { 
