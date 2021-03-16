@@ -29,7 +29,7 @@ import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
 
-public class StockValorizadoVM {
+public class StockValorizadoVM extends SimpleViewModel {
 	
 	public static final long ID_SUC_PRINCIPAL = 2;
 	public static final long ID_DEP_1 = Configuracion.ID_DEPOSITO_PRINCIPAL;
