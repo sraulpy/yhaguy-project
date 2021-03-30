@@ -50,7 +50,6 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.AjusteCtaCte;
 import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.AjusteStockDetalle;
-import com.yhaguy.domain.AjusteValorizado;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloFamilia;
@@ -999,12 +998,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> arts = new ArrayList<Object[]>();
 				
-				Map<Long, Double> ajs = new HashMap<Long, Double>();
-				List<AjusteValorizado> ajs_ = rr.getAjustesValorizados(Utiles.getFecha("01-01-2016 00:00:00"), hasta);
-				for (AjusteValorizado aj : ajs_) {
-					ajs.put(aj.getArticulo().getId(), aj.getCostoGs());
-				}
-				
 				arts = rr.getArticulos(idArticulo, idProveedor, idFamilia, true);
 				
 				for (Object[] art : arts) {
@@ -1017,23 +1010,19 @@ public class ReportesViewModel extends SimpleViewModel {
 					
 					String saldo = historial_ != null ? (String) historial_[7] : "0";
 					long stock = historial_ != null ? Long.parseLong(saldo) : (long) 0;
-					double costo  = (double) art[3];
+					double costo  = 0;
 					long idArticulo_ = (long) art[0];
 					
-					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						double costoPromedio = rr.getCostoPromedio_(idArticulo_, hasta);
-						if (costoPromedio > 0) {
-							costo = costoPromedio;
+					if (stock > 0) {
+						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+							double costoPromedio = rr.getCostoPromedio(idArticulo_, hasta);
+							if (costoPromedio > 0) {
+								costo = costoPromedio;
+							}
 						}
+						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (costo * stock) });
 					}
 					
-					if (stock > 0) {
-						Double aj = ajs.get(idArticulo_);
-						if (aj != null) {
-							costo = costo + aj;
-						}
-						data.add(new Object[] { codigoInterno, descripcion, stock, Utiles.getRedondeo(costo), Utiles.getRedondeo(stock * costo) });
-					}										
 				}
 								
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";

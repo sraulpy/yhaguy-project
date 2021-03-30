@@ -10,6 +10,7 @@ public class ArticuloCostoPromediogs extends Domain {
 	private Date fecha;
 	private double costoPromedio;
 	private double ultimoCosto;
+	private String descripcion;
 	private Articulo articulo;
 
 	@Override
@@ -47,6 +48,14 @@ public class ArticuloCostoPromediogs extends Domain {
 
 	public void setUltimoCosto(double ultimoCosto) {
 		this.ultimoCosto = ultimoCosto;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 }

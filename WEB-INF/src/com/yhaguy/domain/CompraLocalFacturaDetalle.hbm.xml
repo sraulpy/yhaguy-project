@@ -28,6 +28,8 @@
 		<property name="precioFinalGs" />
 		<property name="minoristaGs" />
 		<property name="listaGs" />
+		<property name="costoFinalGs"/>
+		<property name="costoPromedioGs"/>
 
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
 			column="idArticulo" lazy="false"/>

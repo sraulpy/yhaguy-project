@@ -8,6 +8,7 @@ public class AjusteStockDetalle extends Domain {
 	private int cantidad;	
 	private int cantidadSistema;
 	private double costoGs;
+	private double costoPromedioGs;
 	private Articulo articulo;
 
 	@Override
@@ -45,5 +46,13 @@ public class AjusteStockDetalle extends Domain {
 
 	public void setCantidadSistema(int cantidadSistema) {
 		this.cantidadSistema = cantidadSistema;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
 	}
 }

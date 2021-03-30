@@ -132,12 +132,12 @@ public class ControlArticuloStock {
 			boolean incluirDepositoVirtual, Date hasta, boolean valorizado) throws Exception {
 		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
-			desde = Utiles.getFecha("01-01-2016 00:00:00");
+			desde = Utiles.getFecha("01-08-2016 00:00:00");
 		}
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA)) {
 			desde = Utiles.getFecha("01-01-2016 00:00:00");
 		}
-		String campoFecha = valorizado ? "fechaOriginal" : "fechaCreacion";
+		String campoFecha = "fechaVolcado";
 		return ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, desde, hasta,
 				incluirDepositoVirtual, campoFecha);
 	}
@@ -230,6 +230,7 @@ public class ControlArticuloStock {
 			String dep = (String) hist[6];
 			saldo += ent ? Long.parseLong(hist[3] + "") :  Long.parseLong(hist[3] + "") * -1;
 			data.add(new Object[] { fecha, hora, numero, concepto, dep, entrada, salida, saldo + "", importe });
+			System.out.println("--- " + concepto + " " + numero);
 		}	
 		return data;
 	}

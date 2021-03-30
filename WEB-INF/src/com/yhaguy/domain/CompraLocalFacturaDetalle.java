@@ -27,6 +27,8 @@ public class CompraLocalFacturaDetalle extends Domain {
 	private double precioFinalGs;
 	private double minoristaGs;
 	private double listaGs;
+	private double costoFinalGs;
+	private double costoPromedioGs;
 	
 	private Articulo articulo;	
 	private Tipo iva;
@@ -241,5 +243,21 @@ public class CompraLocalFacturaDetalle extends Domain {
 
 	public void setListaGs(double listaGs) {
 		this.listaGs = listaGs;
+	}
+
+	public double getCostoFinalGs() {
+		return costoFinalGs;
+	}
+
+	public void setCostoFinalGs(double costoFinalGs) {
+		this.costoFinalGs = costoFinalGs;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
 	}
 }

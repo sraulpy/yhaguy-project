@@ -14,6 +14,7 @@
 		<property name="fecha"  />
 		<property name="costoPromedio" />
 		<property name="ultimoCosto" />
+		<property name="descripcion" />
 			
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
 			column="idarticulo" lazy="false" />		

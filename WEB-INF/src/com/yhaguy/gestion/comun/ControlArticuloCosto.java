@@ -101,6 +101,22 @@ public class ControlArticuloCosto {
 	}
 	
 	/**
+	 * el costo promedio del articulo..
+	 */
+	public static double getCostoPromedio_(long idArticulo, Date fecha) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> costos = rr.getArticuloCostosPromedio(idArticulo, fecha);		
+		double suma = 0; 
+		double cant = 0;		
+		for (Object[] costo : costos) {
+			double costoFinalGs = (double) costo[1];
+			suma += costoFinalGs;
+			cant ++;
+		}
+		return suma == 0 ? 0 : Utiles.getRedondeo(suma / cant);
+	}
+	
+	/**
 	 * el costo ultimo del articulo..
 	 */
 	public static double getCostoUltimo(long idArticulo, Date fecha) throws Exception {

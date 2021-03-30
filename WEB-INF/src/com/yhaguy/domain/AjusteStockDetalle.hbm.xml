@@ -13,6 +13,7 @@
 		<property name="cantidad" />
 		<property name="cantidadSistema" />
 		<property name="costoGs" />
+		<property name="costoPromedioGs" />
 
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
 			column="idarticulo" not-null="false" lazy="false" />

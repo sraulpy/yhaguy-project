@@ -57,6 +57,7 @@ import com.yhaguy.domain.ArticuloReposicion;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.CompraLocalFacturaDetalle;
 import com.yhaguy.domain.CompraLocalOrden;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
@@ -869,6 +870,7 @@ public class CompraLocalControlBody extends BodyApp {
 	 */
 	public List<MyArray> getItemsCostoFinal() {
 		
+		RegisterDomain rr = RegisterDomain.getInstance();
 		List<MyArray> out = new ArrayList<MyArray>();
 		Hashtable<Long, MyArray> items = new Hashtable<>();
 		CompraLocalFacturaDTO f = this.dto.getFactura() == null? new CompraLocalFacturaDTO() : this.dto.getFactura();
@@ -919,6 +921,17 @@ public class CompraLocalControlBody extends BodyApp {
 						mr.setPos7(d.getCostoDs());
 						mr.setPos8(d.getOrden());
 						items.put(d.getArticulo().getId(), mr);
+						
+						try {
+							CompraLocalFacturaDetalle det = rr.getCompraLocalFacturaDetalleById(d.getId());
+							if (det != null) {
+								det.setCostoFinalGs(costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10));
+								rr.saveObject(det, det.getUsuarioMod());
+								System.out.println("--- " + det.getArticulo().getCodigoInterno());
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
