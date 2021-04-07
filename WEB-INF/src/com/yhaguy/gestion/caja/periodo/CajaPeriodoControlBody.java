@@ -106,7 +106,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	private MyArray selectedItem;
 	private String selectedDenominacion;
 	private Date fechaDesde = new Date();
-	private Date fechaHasta = new Date();//El importe de las Formas de
+	private Date fechaHasta = new Date();
 
 	private Window win;
 	
