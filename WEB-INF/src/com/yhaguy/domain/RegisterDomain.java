@@ -10932,6 +10932,23 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return datos de ultima compra local..
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:proveedor
+	 * [3]:costoGs
+	 * [4]:costoDs
+	 * [5]:precioGs
+	 */
+	public Object[] getUltimaCompraLocal(String codigoInterno) throws Exception {
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs, d.costoGs"
+				+ " from CompraLocalFactura c join c.detalles d where d.articulo.codigoInterno = '" + codigoInterno + "'"
+				+ " order by c.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
 	 * @return datos de ultima venta..
 	 * [0]:cantidad
 	 * [1]:fecha
@@ -10958,6 +10975,22 @@ public class RegisterDomain extends Register {
 	public Object[] getUltimaCompraImportacion(long idArticulo) throws Exception {
 		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
 				+ " from ImportacionFactura c join c.detalles d where d.articulo.id = " + idArticulo
+				+ " order by c.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	/**
+	 * @return datos de ultima compra importacion..
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:proveedor
+	 * [3]:costoGs
+	 * [4]:costoDs
+	 */
+	public Object[] getUltimaCompraImportacion(String codigoInterno) throws Exception {
+		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
+				+ " from ImportacionFactura c join c.detalles d where d.articulo.codigoInterno = '" + codigoInterno + "'"
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
 		return list.size() > 0 ? list.get(0) : null;
@@ -12970,6 +13003,20 @@ public class RegisterDomain extends Register {
 				+ " and upper(r.solicitante) like '%" + solicitante.toUpperCase() + "%'"
 				+ " and upper(r.estado) like '%" + estado.toUpperCase() + "%'";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return
+	 * [0]: id
+	 * [1]: mayoristags
+	 * [2]: minoristags
+	 */
+	public Object[] getArticuloPrecios(String codigoInterno) throws Exception {
+		String query = "select a.id, a.precioGs, a.precioMinoristaGs, a.precioListaGs from Articulo a"
+				+ " where a.codigoInterno = '" + codigoInterno + "'";
+		List<Object[]> list = this.hql(query);
+		Object[] out = list.size() > 0 ? list.get(0) : null;
+		return out;
 	}
 	
 	public static void main_(String[] args) {

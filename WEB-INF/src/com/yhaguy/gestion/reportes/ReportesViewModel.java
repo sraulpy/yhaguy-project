@@ -12744,7 +12744,28 @@ public class ReportesViewModel extends SimpleViewModel {
 					for (Object[] art : articulos) {
 						long idArt = (long) art[0];
 						if (arts_.get(idArt) == null) {
-							Object[] ultCompra = rr.getUltimaCompraLocalMovimientosArticulos((String) art[1]);
+							Object[] ultCompra = null;
+							Object[] compraLocal = rr.getUltimaCompraLocal((String) art[1]);
+							Object[] compraImpor = rr.getUltimaCompraImportacion((String) art[1]);
+							
+							if (compraLocal == null && compraImpor == null) {
+								compraLocal = rr.getUltimaCompraLocalMovimientosArticulos((String) art[1]);
+							}
+							
+							if (compraLocal == null) compraLocal = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
+							if (compraImpor == null) compraImpor = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
+
+							Date fcl = null;
+							if (compraLocal[1] instanceof Date) {
+								fcl = (Date) compraLocal[1];
+							}
+							Date fcI = (Date) compraImpor[1];
+							if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
+								ultCompra = compraLocal;
+							} else {
+								ultCompra = compraImpor;
+							}
+							
 							values.add(new Object[] { art[0], art[1], art[2], art[3], art[4], art[5], art[6], art[7],
 									art[8], art[9], art[10], art[11], art[12], art[13], art[14], art[15], art[16], art[17],
 									null, null, null, art[18], art[19], art[20], (long) 0, art[21], art[22], art[23], art[24], 
@@ -12787,6 +12808,12 @@ public class ReportesViewModel extends SimpleViewModel {
 					String proveedoUltimaCompra = (String) det[32];
 					double costoFobGs = (double) det[33];
 					double costoFobDs = (double) det[34];
+					double mayoristags = 0;
+					
+					Object[] precios = rr.getArticuloPrecios(cod);
+					if (precios != null) {
+						mayoristags = (double) precios[1];
+					}
 					
 					Object[] st = stock1.get(det[0]);
 					String dep_1 = st != null ? st[1] + "" : "0";
@@ -12905,7 +12932,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setCoeficiente(0);
 					hist.setTipoCambio(0);
 					hist.setCostoGs(0);
-					hist.setMayoristaGs(0);
+					hist.setMayoristaGs(mayoristags);
 					hist.setClienteGral(0);
 					hist.setClienteMesVigente(0);
 					hist.setEnero(Long.parseLong(enero));
@@ -25547,6 +25574,8 @@ class MovimientoArticulos implements JRDataSource {
 			value = det.getCantCliente() + "";
 		} else if ("CantClienteVig".equals(fieldName)) {
 			value = det.getCantClienteVigente() + "";
+		} else if ("MayoristaGs".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.getMayoristaGs()) + "";
 		}
 		return value;
 	}
