@@ -142,6 +142,27 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return true si corresponde a la factura..
+	 */
+	public boolean isVentaAplicadaCorrecta() {		
+		Venta vta = this.getVentaAplicada();
+		if (vta != null) {
+			for (NotaCreditoDetalle det : this.getDetallesArticulos() ) {
+				boolean existe = false;
+				for (VentaDetalle item : vta.getDetalles()) {
+					if (det.getArticulo().getId().longValue() == item.getArticulo().getId().longValue()) {
+						existe = true;
+					}
+				}
+				if (!existe) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * @return el importe segun familias..
 	 */
 	public double getImporteGs(List<ArticuloFamilia> familias) {

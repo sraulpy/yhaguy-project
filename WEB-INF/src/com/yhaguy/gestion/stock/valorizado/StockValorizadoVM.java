@@ -28,6 +28,7 @@ import com.yhaguy.domain.ImportacionPedidoCompra;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
@@ -39,6 +40,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 
 	private Date fechaHasta;
 	private Object[] selectedItem;
+	private SucursalApp selectedSucursal;
 	
 	private double totalPromedio = 0.0;
 	private long totalStock = 0;
@@ -52,6 +54,9 @@ public class StockValorizadoVM extends SimpleViewModel {
 	private double totalComprasLocales = 0;
 	private double totalNotasCreditoCompra = 0;
 	private double totalCostoVentas = 0;
+	
+	private Object[] selectedArticulo;
+	private String filterCodigo = "";
 	
 	@Init(superclass = true)
 	public void init() {
@@ -71,18 +76,23 @@ public class StockValorizadoVM extends SimpleViewModel {
 	 */
 	
 	@SuppressWarnings("unchecked")
+	@DependsOn({ "selectedArticulo", "fechaHasta", "selectedSucursal" })
 	public List<Object[]> getArticulos() throws Exception {
 		List<Object[]> out = new ArrayList<Object[]>();
+		
 		this.totalPromedio = 0.0;
 		this.totalStock = 0;
 		this.totalIngresos = 0;
 		this.totalEgresos = 0;
 		this.saldoInicial = 0;
-		if (this.fechaHasta == null) {
-			return out;
-		}
+		
+		if (this.selectedArticulo == null) return out;
+		if (this.fechaHasta == null) return out;
+		if (this.selectedSucursal == null) return out;
+		
+		String codigoInterno = (String) this.selectedArticulo[1];
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> arts = rr.getArticulosMercaderias("", "", "BATERIAS");
+		List<Object[]> arts = rr.getArticulosMercaderias(codigoInterno, "", "");
 		for (Object[] art : arts) {
 			long idArticulo = (long) art[0];
 			String codigo = (String) art[1];
@@ -103,14 +113,16 @@ public class StockValorizadoVM extends SimpleViewModel {
 			this.totalIngresos += totalEntradas;
 			this.totalEgresos += totalSalidas;
 			out.add(new Object[] { idArticulo, codigo, stock, ultCosto, prmCosto, entradas, totalEntradas, salidas,
-					totalSalidas, stock, prmTotal, descripcion });		
+					totalSalidas, stock, prmTotal, descripcion });	
 		}
+		if(out.size() > 0) this.selectedItem = out.get(0);
 		
 		BindUtils.postNotifyChange(null, null, this, "totalPromedio");
 		BindUtils.postNotifyChange(null, null, this, "totalStock");
 		BindUtils.postNotifyChange(null, null, this, "totalIngresos");
 		BindUtils.postNotifyChange(null, null, this, "totalEgresos");
 		BindUtils.postNotifyChange(null, null, this, "saldoInicial");
+		BindUtils.postNotifyChange(null, null, this, "selectedItem");
 		return out;
 	}
 	
@@ -179,20 +191,21 @@ public class StockValorizadoVM extends SimpleViewModel {
 		long total = 0;
 		Date desde = this.getFechaDesde();
 		boolean fechaHora = true;
+		long idSucursal = this.selectedSucursal.getId();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> transfsMra = rr.getTransferenciasPorArticuloMRAentrada(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
-		List<Object[]> migracion = rr.getMigracionPorArticulo(codigo, desde, hasta, 0);
+		List<Object[]> transfsMra = rr.getTransferenciasPorArticuloMRAingreso(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta, idSucursal);
 		
 		out.addAll(migracion);
 		out.addAll(ajustStockPost);		
 		out.addAll(ntcsv);
 		out.addAll(compras);
 		out.addAll(importaciones);
-		if (this.isEmpresaMRA()) out.addAll(transfsMra);
+		if (!this.isEmpresaMRA()) out.addAll(transfsMra);
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -202,7 +215,11 @@ public class StockValorizadoVM extends SimpleViewModel {
 					&& !concepto.equals("FAC. IMPORTACIÓN CRÉDITO")
 					&& !concepto.equals("FAC. IMPORTACIÓN CONTADO")
 					&& !concepto.equals("NOTA DE CRÉDITO-VENTA")
-					&& !(concepto.equals("AJUSTE STOCK POSITIVO"))) {
+					&& !(concepto.equals("AJUSTE STOCK POSITIVO"))
+					&& !(concepto.equals("MIGRACION"))
+					&& !concepto.equals("FAC. IMPORTACIÓN CRE.")
+					&& !concepto.equals("FAC. IMPORTACIÓN CON.")
+					&& !(concepto.equals("TRANSF. EXTERNA"))) {
 				item[4] = 0.0;
 			}
 			total += Long.parseLong(item[3] + "");
@@ -228,12 +245,13 @@ public class StockValorizadoVM extends SimpleViewModel {
 		long total = 0;
 		Date desde = this.getFechaDesde();
 		boolean fechaHora = true;
+		long idSucursal = this.selectedSucursal.getId();
 		RegisterDomain rr = RegisterDomain.getInstance();		
-		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> transfsMra_ = rr.getTransferenciasPorArticuloMRAsalida(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
+		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
 		
 		for (Object[] item : ajustStockNeg) {
 			item[3] = (Long.parseLong(item[3] + "") * -1);
@@ -268,11 +286,12 @@ public class StockValorizadoVM extends SimpleViewModel {
 		List<Object[]> out = new ArrayList<Object[]>();
 		Date desde = this.getFechaDesde();
 		boolean fechaHora = true;
+		long idSucursal = this.selectedSucursal.getId();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora);
-		List<Object[]> ajustes = rr.getAjustesPorArticulo(idArticulo, desde, hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> ajustes = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
@@ -409,6 +428,34 @@ public class StockValorizadoVM extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return los articulos..
+	 */
+	@DependsOn("filterCodigo")
+	public List<Object[]> getListaArticulos() throws Exception {
+		if (this.filterCodigo.trim().isEmpty()) {
+			return new ArrayList<Object[]>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getArticulos(this.filterCodigo, "");
+	}
+	
+	/**
+	 * @return las sucursales..
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SucursalApp> getSucursales() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<SucursalApp> list = rr.getObjects(SucursalApp.class.getName());
+		List<SucursalApp> out = new ArrayList<SucursalApp>();
+		for (SucursalApp suc : list) {
+			if (!suc.getAuxi().equals("V")) {
+				out.add(suc);
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return saldo inicial valores
 	 */
 	public double getSaldoInicialValores() {
@@ -416,7 +463,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 	}
 	
 	public Date getFechaDesde() throws Exception {
-		return Utiles.getFecha("01-08-2016 00:00:00");
+		return Utiles.getFechaInicioOperaciones();
 	}
 	
 	/**
@@ -590,8 +637,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 	}
 	
 	private void testnc() throws Exception {
-		Date desde = Utiles.getFecha("01-08-2016 00:00:00");
-		Date hasta = Utiles.getFecha("31-12-2016 23:00:00");
+		Date desde = Utiles.getFecha("01-11-2019 00:00:00");
+		Date hasta = Utiles.getFecha("31-12-2021 23:00:00");
 		
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<NotaCredito> ncs = rr.getNotasCreditoVentaByMotivo(desde, hasta, Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION);
@@ -601,19 +648,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 					Venta vta = nc.getVentaAplicada();
 					for (VentaDetalle det : vta.getDetalles()) {
 						if (det.getArticulo().getId().longValue() == item.getArticulo().getId().longValue()) {						
-							Articulo art = item.getArticulo();
-							Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
-							Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
-							long totalEntradas = (long) ent[1];
-							long totalSalidas = (long) sal[1];
-							long stock = (totalEntradas) - totalSalidas;
-							if (stock < 0) stock = 0;
-							List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(nc.getFechaEmision(), -1));
-							List<Object[]> comprasFechaVta = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(vta.getFecha(), -1));
-							double promedioVta = this.getCostoPromedio(comprasFechaVta, det.getCostoUnitarioGs());
-							double ultPromedio = this.getCostoPromedio(compras, det.getCostoUnitarioGs());
-							double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, promedioVta);
-							item.setCostoPromedioGs(promedio);
+							item.setCostoGs(det.getCostoUnitarioGs());
 							rr.saveObject(item, item.getUsuarioMod());
 						}
 					}
@@ -645,10 +680,11 @@ public class StockValorizadoVM extends SimpleViewModel {
 	
 	
 	private void testCostoPromedio() throws Exception {		
-		Date desde = Utiles.getFecha("01-01-2021 00:00:00");
-		Date hasta = Utiles.getFecha("30-03-2021 23:00:00");
+		Date desde = Utiles.getFecha("01-11-2019 00:00:00");
+		Date hasta = Utiles.getFecha("31-04-2021 23:00:00");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
+		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 		List<Object[]> entradas = this.getHistoricoCompras(desde, hasta);
 		
 		for (Object[] compra : entradas) {
@@ -662,40 +698,73 @@ public class StockValorizadoVM extends SimpleViewModel {
 			
 			if (tipo.equals("NOTA DE CRÉDITO-VENTA")) {
 				NotaCredito nc = rr.getNotaCredito(id);
-				for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
-					Venta vta = nc.getVentaAplicada();
-					for (VentaDetalle det : vta.getDetalles()) {
-						if (det.getArticulo().getId().longValue() == item.getArticulo().getId().longValue()) {						
-							Articulo art = item.getArticulo();
-							Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
-							Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
-							long totalEntradas = (long) ent[1];
-							long totalSalidas = (long) sal[1];
-							long stock = (totalEntradas) - totalSalidas;
-							if (stock < 0) stock = 0;
-							List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(nc.getFechaEmision(), -1));
-							List<Object[]> comprasFechaVta = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(vta.getFecha(), -1));
-							double promedioVta = this.getCostoPromedio(comprasFechaVta, det.getCostoUnitarioGs());
-							double ultPromedio = this.getCostoPromedio(compras, det.getCostoUnitarioGs());
-							double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, promedioVta);
-							item.setCostoPromedioGs(promedio);
-							rr.saveObject(item, item.getUsuarioMod());
-							
-							costoPromedio = promedio;
-							fecha = nc.getFechaEmision();
-							descripcion = "NOTA CREDITO:" + " " + nc.getNumero();
-							
-							ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
-							prm.setArticulo(art);
-							prm.setCostoPromedio(costoPromedio);
-							prm.setUltimoCosto(costoUltimo);
-							prm.setDescripcion(descripcion);
-							prm.setFecha(fecha);
-							rr.saveObject(prm, "sys");
-							System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+				if (nc.isVentaAplicadaCorrecta()) {
+					for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
+						Venta vta = nc.getVentaAplicada();					
+						for (VentaDetalle det : vta.getDetalles()) {
+							if (det.getArticulo().getId().longValue() == item.getArticulo().getId().longValue()) {						
+								Articulo art = item.getArticulo();
+								Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
+								Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
+								long totalEntradas = (long) ent[1];
+								long totalSalidas = (long) sal[1];
+								long stock = (totalEntradas) - totalSalidas;
+								if (stock < 0) stock = 0;
+								List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(nc.getFechaEmision(), -1));
+								List<Object[]> comprasFechaVta = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(vta.getFecha(), -1));
+								double promedioVta = this.getCostoPromedio(comprasFechaVta, det.getCostoUnitarioGs());
+								double ultPromedio = this.getCostoPromedio(compras, det.getCostoUnitarioGs());
+								double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, promedioVta);
+								item.setCostoPromedioGs(promedio);
+								rr.saveObject(item, item.getUsuarioMod());
+								
+								costoPromedio = promedio;
+								fecha = nc.getFechaEmision();
+								descripcion = "NOTA CREDITO:" + " " + nc.getNumero();
+								
+								ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
+								prm.setArticulo(art);
+								prm.setCostoPromedio(costoPromedio);
+								prm.setUltimoCosto(costoUltimo);
+								prm.setDescripcion(descripcion);
+								prm.setFecha(fecha);
+								rr.saveObject(prm, "sys");
+								System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+							}
 						}
 					}
-				}
+				} else {
+					// venta aplicada no correspondiente..
+					for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {						
+						Articulo art = item.getArticulo();
+						Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
+						Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), nc.getFechaEmision());
+						long totalEntradas = (long) ent[1];
+						long totalSalidas = (long) sal[1];
+						long stock = (totalEntradas) - totalSalidas;
+						if (stock < 0) stock = 0;
+						List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(nc.getFechaEmision(), -1));
+						List<Object[]> comprasFechaVta = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(nc.getFechaEmision(), -1));
+						double promedioVta = this.getCostoPromedio(comprasFechaVta, item.getCostoGs());
+						double ultPromedio = this.getCostoPromedio(compras, item.getCostoGs());
+						double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, promedioVta);
+						item.setCostoPromedioGs(promedio);
+						rr.saveObject(item, item.getUsuarioMod());
+						
+						costoPromedio = promedio;
+						fecha = nc.getFechaEmision();
+						descripcion = "NOTA CREDITO:" + " " + nc.getNumero();
+						
+						ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
+						prm.setArticulo(art);
+						prm.setCostoPromedio(costoPromedio);
+						prm.setUltimoCosto(costoUltimo);
+						prm.setDescripcion(descripcion);
+						prm.setFecha(fecha);
+						rr.saveObject(prm, "sys");
+						System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);					
+					}				
+				}				
 			}
 			
 			if (tipo.equals("FAC.COMPRA CREDITO") || tipo.equals("FAC.COMPRA CONTADO")) {
@@ -729,7 +798,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 				}
 			}
 			
-			if (tipo.equals("FAC. IMPORTACIÓN CRÉDITO") || tipo.equals("FAC. IMPORTACIÓN CONTADO")) {
+			if ((tipo.equals("FAC. IMPORTACIÓN CRÉDITO") || tipo.equals("FAC. IMPORTACIÓN CONTADO"))
+					|| (tipo.equals("FAC. IMPORTACIÓN CRE.") || tipo.equals("FAC. IMPORTACIÓN CON."))) {
 				ImportacionFactura cf = rr.getImportacionFacturaById(id);
 				for (ImportacionFacturaDetalle item : cf.getDetalles()) {						
 					Articulo art = item.getArticulo();
@@ -763,7 +833,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 			if (tipo.equals("AJUSTE STOCK POSITIVO")) {
 				AjusteStock aj = (AjusteStock) rr.getObject(AjusteStock.class.getName(), id);
 				for (AjusteStockDetalle item : aj.getDetalles()) {
-					if (item.getCostoGs() > 0 && aj.getFecha().before(Utiles.getFecha("31-12-2016 23:00:00"))) {
+					if (item.getCostoGs() > 0) {
 						Articulo art = item.getArticulo();
 						Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), aj.getFecha());
 						Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), aj.getFecha());
@@ -809,5 +879,29 @@ public class StockValorizadoVM extends SimpleViewModel {
 
 	public void setTotalNotasCreditoCompra(double totalNotasCreditoCompra) {
 		this.totalNotasCreditoCompra = totalNotasCreditoCompra;
+	}
+
+	public String getFilterCodigo() {
+		return filterCodigo;
+	}
+
+	public void setFilterCodigo(String filterCodigo) {
+		this.filterCodigo = filterCodigo;
+	}
+
+	public Object[] getSelectedArticulo() {
+		return selectedArticulo;
+	}
+
+	public void setSelectedArticulo(Object[] selectedArticulo) {
+		this.selectedArticulo = selectedArticulo;
+	}
+
+	public SucursalApp getSelectedSucursal() {
+		return selectedSucursal;
+	}
+
+	public void setSelectedSucursal(SucursalApp selectedSucursal) {
+		this.selectedSucursal = selectedSucursal;
 	}
 }

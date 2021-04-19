@@ -12724,10 +12724,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 					Date fcI = (Date) compraImpor[1];
 					if (fcI == null || (fcl != null && fcl.compareTo(fcI) >= 0)) {
+						double costoGs = (double) compraLocal[3];
 						venta[30] = compraLocal[0];
 						venta[31] = compraLocal[1];
 						venta[32] = compraLocal[2];
-						venta[33] = compraLocal[3];
+						venta[33] = costoGs - Utiles.getIVA(costoGs, 10);
 						venta[34] = compraLocal[4];
 					} else {
 						venta[30] = compraImpor[0];

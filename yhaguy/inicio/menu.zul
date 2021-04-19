@@ -74,7 +74,6 @@
 						<zk forEach="${vm.menuItem(self,'TesakaRetenciones')}" />
 						<zk forEach="${vm.menuItem(self,'Cotizaciones')}" />
 						<zk forEach="${vm.menuItem(self,'CierreDocumentos')}" />
-						<zk forEach="${vm.menuItem(self,'StockValorizado')}" />
 						<menuitem label="ASIENTOS" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO DIARIO" disabled="true" iconSclass="z-icon-caret-right" />
 						<menuitem label="LIBRO MAYOR" disabled="true" iconSclass="z-icon-caret-right" />
@@ -142,6 +141,7 @@
 					href="/yhaguy/archivos/formularios/solicitud_ajuste.pdf" target="_blank" />
 				<zk forEach="${vm.menuItem(self,'AjusteStock')}" />
 				<zk forEach="${vm.menuItem(self,'AuditoriaStock')}" />
+				<zk forEach="${vm.menuItem(self,'StockValorizado')}" />
 				<zk forEach="${vm.menuItem(self,'Inventario')}" />
 				<zk forEach="${vm.menuItem(self,'RecalculoStock')}" />
 				<zk forEach="${vm.menuItem(self,'ControlCargaBaterias')}" />

@@ -63,6 +63,32 @@ public class CompraLocalFactura extends Domain {
 	}
 	
 	/**
+	 * @return el total descuento..
+	 */
+	public double getTotalDescuento() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : this.detalles) {
+			if (det.isDescuento()) {
+				out += det.getImporteGs();
+			}
+		}
+		return out;	
+	}
+	
+	/**
+	 * @return total importe sin descuento..
+	 */
+	public double getTotalImporteSinDescuento() {
+		double out = 0;
+		for (CompraLocalFacturaDetalle det : this.detalles) {
+			if (!det.isDescuento()) {
+				out += det.getImporteGs();
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return gravada 10%
 	 */
 	public double getGravada10() {

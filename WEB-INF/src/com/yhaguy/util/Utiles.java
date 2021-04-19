@@ -213,7 +213,7 @@ public class Utiles {
 	 */
 	public static Date getFechaInicioOperaciones() throws Exception {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
-			return Utiles.getFecha("01-01-2016 00:00:00");
+			return Utiles.getFecha("01-08-2016 00:00:00");
 		}
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA)) {
 			return Utiles.getFecha("01-01-2016 00:00:00");

@@ -1,16 +1,16 @@
 <window width="100%" height="100%" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.stock.valorizado.StockValorizadoVM')">
 
-	<tabbox hflex="true" vflex="true">
-		<tabs>
-			<tab label="Resumen" width="150px"></tab>
-			<tab label="Detalle" width="150px"></tab>
-		</tabs>
-		<tabpanels>			
-			<tabpanel>		
-			<hbox vflex="true" hflex="true">
-				<vlayout hflex="2" vflex="true" style="padding:10px" spacing="10px">
-				<hlayout sclass="button-container" width="100%">
+		<vbox vflex="true" spacing="0">	
+					<hlayout sclass="button-container" width="100%">
+						<combobox placeholder="Sucursal.."
+							model="@load(vm.sucursales)"
+							selectedItem="@bind(vm.selectedSucursal)">
+							<template name="model">
+								<comboitem label="@load(each.descripcion)"></comboitem>
+							</template>
+						</combobox>
+						<space></space>
 						<field value="Desde:" />
 						<textbox readonly="true"
 							value="@load(vm.fechaDesde) @converter('formattedDate', format='dd-MM-yyyy')"
@@ -19,299 +19,40 @@
 						<space></space>
 						<field value="Hasta:" />
 						<datebox value="@bind(vm.fechaHasta)"></datebox>
-						<timebox value="@bind(vm.fechaHasta)"></timebox>
-						<a label=" Procesar" iconSclass="z-icon-check"
-							onClick="@command('procesar')" autodisable="true"></a>
-				</hlayout>
-				<groupbox mold="3d" style="border-radius:6px">
-					<caption label=" En Cantidades"></caption>
-					<grid>
-						<rows>
-							<row>
-								<label>Total Ingresos:</label>
-								<longbox value="@load(vm.totalIngreso)" readonly="true" hflex="true"></longbox>
-							</row>
-							<row>
-								<label>Total Egresos:</label>
-								<longbox value="@load(vm.totalEgresos)" readonly="true" hflex="true"></longbox>
-							</row>
-							<row>
-								<label style="font-weight:bold">Saldo en unidades:</label>
-								<longbox value="@load(vm.saldoCantidad)" readonly="true" hflex="true"
-									style="font-weight:bold;text-align:right"></longbox>
-							</row>
-						</rows>
-					</grid>
-				</groupbox>
-				<div height="5px"></div>
-				<groupbox mold="3d" style="border-radius:6px" title=" En Valores">
-					<grid>
-						<rows>
-							<row>
-								<label>Saldo Inicial:</label>
-								<guaranibox value="@load(vm.saldoInicialValores)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Importaciones:</label>
-								<guaranibox value="@load(vm.totalImportaciones)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Gastos de flete:</label>
-								<guaranibox value="@load(vm.totalFlete)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Seguro:</label>
-								<guaranibox value="@load(vm.totalSeguro)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Gastos de despacho:</label>
-								<guaranibox value="@load(vm.totalGastos)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Compras locales:</label>
-								<guaranibox value="@load(vm.totalComprasLocales)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Notas de Crédito - Compra:</label>
-								<guaranibox value="@load(vm.totalNotasCreditoCompra)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label>Costo de ventas:</label>
-								<guaranibox value="@load(vm.totalCostoVentas)" readonly="true" hflex="true"></guaranibox>
-							</row>
-							<row>
-								<label style="font-weight:bold">Total valorizado:</label>
-								<guaranibox value="@load((vm.saldoInicialValores + vm.totalImportaciones + vm.totalFlete + vm.totalGastos + vm.totalSeguro + vm.totalComprasLocales) - (vm.totalCostoVentas + vm.totalNotasCreditoCompra))" 
-									readonly="true" hflex="true"
-									style="font-weight:bold;text-align:right"></guaranibox>
-							</row>
-						</rows>
-					</grid>
-				</groupbox>
-				</vlayout>
-				<tabbox vflex="true" hflex="3">
-					<tabs>
-						<tab label="Importaciones" width="150px"></tab>
-						<tab label="Compras Locales" width="150px"></tab>
-						<tab label="Notas Créd.Compra" width="150px"></tab>
-						<tab label="Costo de Ventas" width="150px"></tab>
-					</tabs>
-					<tabpanels>
-						<tabpanel>
-							<listbox sclass="small-list" vflex="true"
-								model="@load(vm.importaciones)" emptyMessage="SIN REGISTROS.."
-								hflex="3">
-								<listhead>
-									<listheader label="Fecha"
-										width="90px">
-									</listheader>
-									<listheader label="Concepto"></listheader>
-									<listheader label="Número" width="100px">
-									</listheader>
-									<listheader label="Valor FOB"
-										align="right" width="120px">
-									</listheader>
-									<listheader label="Flete"
-										align="right" width="110px">
-									</listheader>
-									<listheader label="Seguro"
-										align="right" width="110px">
-									</listheader>
-									<listheader label="Gastos"
-										align="right" width="110px">
-									</listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell
-											label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each[0])">
-										</listcell>
-										<listcell
-											label="@load(each[2])">
-										</listcell>
-										<listcell
-											label="@load(each[3]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-										<listcell
-											label="@load(each[5]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-										<listcell
-											label="@load(each[7]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-										<listcell
-											label="@load(each[6]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-									</listitem>
-								</template>
-								<listfoot>
-									<listfooter span="3"></listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalImportaciones)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalFlete)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalSeguro)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalGastos)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-								</listfoot>
-							</listbox>
-						</tabpanel>
-						<tabpanel>
-							<listbox sclass="small-list" vflex="true"
-								model="@load(vm.comprasLocales)" emptyMessage="SIN REGISTROS.."
-								hflex="3">
-								<listhead>
-									<listheader label="Fecha"
-										width="90px">
-									</listheader>
-									<listheader label="Concepto"></listheader>
-									<listheader label="Número"></listheader>
-									<listheader label="Importe"
-										align="right" width="110px">
-									</listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell
-											label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each[0])">
-										</listcell>
-										<listcell
-											label="@load(each[2])">
-										</listcell>
-										<listcell
-											label="@load(each[3]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-									</listitem>
-								</template>
-								<listfoot>
-									<listfooter span="3"></listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalComprasLocales)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-								</listfoot>
-							</listbox>
-						</tabpanel>
-						<tabpanel>
-							<listbox sclass="small-list" vflex="true"
-								model="@load(vm.notasCreditoCompra)" emptyMessage="SIN REGISTROS.."
-								hflex="3">
-								<listhead>
-									<listheader label="Fecha"
-										width="90px">
-									</listheader>
-									<listheader label="Concepto"></listheader>
-									<listheader label="Número"></listheader>
-									<listheader label="Proveedor"></listheader>
-									<listheader label="Importe"
-										align="right" width="110px">
-									</listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell
-											label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each[0])">
-										</listcell>
-										<listcell
-											label="@load(each[2])">
-										</listcell>
-										<listcell
-											label="@load(each[4])">
-										</listcell>
-										<listcell
-											label="@load(each[3]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-									</listitem>
-								</template>
-								<listfoot>
-									<listfooter span="4"></listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalNotasCreditoCompra)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-								</listfoot>
-							</listbox>
-						</tabpanel>
-						<tabpanel>
-							<listbox sclass="small-list" vflex="true"
-								model="@load(vm.costoVentas)" emptyMessage="SIN REGISTROS.."
-								hflex="3" mold="paging" pageSize="20">
-								<listhead>
-									<listheader label="Fecha" width="100px"></listheader>
-									<listheader label="Concepto"></listheader>
-									<listheader label="Número"></listheader>
-									<listheader label="Costo Promedio" align="right"></listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell
-											label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each[0])">
-										</listcell>
-										<listcell
-											label="@load(each[2])">
-										</listcell>
-										<listcell
-											label="@load(each[3]) @converter('formattedNumber', format = '###,###,###,###')">
-										</listcell>
-									</listitem>
-								</template>
-								<listfoot>
-									<listfooter span="3"></listfooter>
-									<listfooter>
-										<guaranibox readonly="true"
-											hflex="true" value="@load(vm.totalCostoVentas)"
-											style="font-weight:bold;text-align:right">
-										</guaranibox>
-									</listfooter>
-								</listfoot>
-							</listbox>
-						</tabpanel>
-					</tabpanels>
-				</tabbox>
-			</hbox>
-			</tabpanel>
-			<tabpanel>
-				<vbox vflex="true" spacing="0">					
+						<timebox placeholder="hora" value="@bind(vm.fechaHasta)"></timebox>
+						<space></space>
+						<bandbox placeholder="Artículo.."
+							readonly="true" id="bndArti"
+							onOpen='txcod.focus()'
+							value="@load(vm.selectedArticulo[1])">
+							<bandpopup>
+								<listbox sclass="small-list" width="400px"
+									height="200px" model="@load(vm.listaArticulos)"
+									selectedItem="@bind(vm.selectedArticulo)"
+									onSelect="bndArti.close()">
+									<listhead>
+										<listheader>
+											<textbox id="txcod" hflex="true"
+												value="@bind(vm.filterCodigo)" instant="true"
+												placeholder="Buscar por Código.." />
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem label="@load(each[1])" />
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+						<space></space>
+						<label value="@load(vm.selectedArticulo[2])"></label>
+					</hlayout>				
 					<hbox vflex="true">
 						<listbox sclass="small-list" vflex="true"
-							hflex="true" model="@load(vm.articulos)"
+							model="@load(vm.articulos)"
 							selectedItem="@bind(vm.selectedItem)" mold="paging"
-							pageSize="20"
+							pageSize="20" hflex="3"
 							emptyMessage="SIN REGISTROS..">
 							<listhead>
-								<listheader label="Código"></listheader>
 								<listheader label="Entrada" width="90px"
 									align="right">
 								</listheader>
@@ -321,25 +62,14 @@
 								<listheader label="Stock" width="90px"
 									align="right">
 								</listheader>
-								<listheader label="Costo Ult."
-									width="110px" align="right">
-								</listheader>
-								<listheader label="Costo Prom."
-									width="110px" align="right">
-								</listheader>
-								<listheader label="Costo Total"
-									width="110px" align="right">
-								</listheader>
+								<listheader label="Costo Prom." align="right"></listheader>
+								<listheader label="Costo Total" align="right"></listheader>
 							</listhead>
 							<template name="model">
 								<listitem>
-									<listcell label="@load(each[1])"></listcell>
 									<listcell label="@load(each[6])"></listcell>
 									<listcell label="@load(each[8])"></listcell>
 									<listcell label="@load(each[9])"></listcell>
-									<listcell
-										label="@load(each[3]) @converter(vm.cnv.monedaLocal)">
-									</listcell>
 									<listcell
 										label="@load(each[4]) @converter(vm.cnv.monedaLocal)">
 									</listcell>
@@ -349,7 +79,6 @@
 								</listitem>
 							</template>
 							<listfoot>
-								<listfooter></listfooter>
 								<listfooter>
 									<longbox
 										value="@load(vm.totalIngresos)" hflex="true" readonly="true" />
@@ -363,14 +92,13 @@
 										value="@load(vm.totalStock)" hflex="true" readonly="true" />
 								</listfooter>
 								<listfooter></listfooter>
-								<listfooter></listfooter>
 								<listfooter>
 									<guaranibox
 										value="@load(vm.totalPromedio)" hflex="true" readonly="true" />
 								</listfooter>
 							</listfoot>
 						</listbox>
-						<tabbox hflex="true" vflex="true">
+						<tabbox hflex="5" vflex="true">
 							<tabs hflex="true">
 								<tab label="Entrada" width="120px"></tab>
 								<tab label="Salida" width="120px"></tab>
@@ -378,6 +106,7 @@
 							<tabpanels>
 								<tabpanel>
 									<listbox sclass="small-list"
+										mold="paging" pageSize="20"
 										vflex="true" hflex="5" model="@load(vm.selectedItem[5])"
 										emptyMessage="SIN REGISTROS..">
 										<listhead>
@@ -444,6 +173,7 @@
 								</tabpanel>
 								<tabpanel>
 									<listbox sclass="small-list"
+										mold="paging" pageSize="20"
 										vflex="true" hflex="5" model="@load(vm.selectedItem[7])">
 										<listhead>
 											<listheader label="Fecha"
@@ -454,9 +184,6 @@
 											</listheader>
 											<listheader
 												label="Número">
-											</listheader>
-											<listheader label="Costo"
-												width="100px" align="right">
 											</listheader>
 											<listheader label="Cantidad"
 												width="100px" align="right">
@@ -474,15 +201,12 @@
 													label="@load(each[2])">
 												</listcell>
 												<listcell
-													label="@load(each[4]) @converter(vm.cnv.monedaLocal)">
-												</listcell>
-												<listcell
 													label="@load(each[3])">
 												</listcell>
 											</listitem>
 										</template>
 										<listfoot>
-											<listfooter span="4">
+											<listfooter span="3">
 												<field value="ítems" />
 											</listfooter>
 											<listfooter>
@@ -497,8 +221,5 @@
 						</tabbox>
 					</hbox>
 				</vbox>
-			</tabpanel>
-		</tabpanels>
-	</tabbox>
 
 </window>
