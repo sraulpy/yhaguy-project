@@ -78,6 +78,32 @@ public class Recibo extends Domain {
 	}
 	
 	/**
+	 * @return true si es recibo contra cuenta exenta..
+	 */
+	public boolean isReciboContraCuentaExenta() {
+		for (ReciboDetalle det : this.detalles) {
+			if (det.getAuxi().equals(ReciboDetalle.TIPO_CTA_CONTABLE)) {
+				if (det.getConcepto().toUpperCase().contains("EXENTA")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return true si es recibo contra cuenta..
+	 */
+	public String getReciboContraCuentaDescripcion() {
+		for (ReciboDetalle det : this.detalles) {
+			if (det.getAuxi().equals(ReciboDetalle.TIPO_CTA_CONTABLE)) {
+				return det.getConcepto();
+			}
+		}
+		return "";
+	}
+	
+	/**
 	 * @return true si es rec mra..
 	 */
 	public boolean isRecaudacionMra() {

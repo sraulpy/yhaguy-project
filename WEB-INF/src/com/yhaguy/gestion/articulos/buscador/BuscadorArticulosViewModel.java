@@ -690,6 +690,16 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	@DependsOn("selectedItem")
+	public double getCostoPromedioGs() throws Exception {
+		if (this.selectedItem == null) {
+			return 0.0;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		double out = rr.getCostoPromedioGs(this.selectedItem.getId());
+		return out > 0.0 ? out : this.getCostoGs();
+	}
+	
+	@DependsOn("selectedItem")
 	public String getUrlBarcode() {
 		if (this.selectedItem == null) return "";
 		String codigo = (String) this.selectedItem.getPos1();

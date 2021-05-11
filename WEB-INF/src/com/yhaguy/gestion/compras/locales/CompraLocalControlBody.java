@@ -67,6 +67,7 @@ import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
 import com.yhaguy.gestion.caja.periodo.CajaUtil;
 import com.yhaguy.gestion.compras.timbrado.WindowTimbrado;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
+import com.yhaguy.gestion.comun.ControlArticuloCostoPromedio;
 import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.inicio.AccesoDTO;
@@ -1008,11 +1009,13 @@ public class CompraLocalControlBody extends BodyApp {
 	/**
 	 * volcar compra..
 	 */
-	private void volcarCompra() throws Exception{		
+	private void volcarCompra() throws Exception {		
 		this.volcarStock_Costos();
 		if (!this.dto.getFactura().isSaldoAnticipadoCtaCte()) {
 			this.actualizarCtaCte();
-		}				
+		}		
+		ControlArticuloCostoPromedio cprom = new ControlArticuloCostoPromedio();
+		cprom.addCostoPromedioCompralocal(this.dto.getFactura().getId().longValue());
 	}	
 	
 	/**

@@ -365,6 +365,11 @@
 			<label value="@load(vm.costoGs) @converter(vm.cnv.monedaLocal)" 
 				visible="@load(vm.isOperacionHabilitada('verCostos'))"/>
 			<space />
+			<field value = "Costo Prom. Gs.:" 
+				visible="@load(vm.isOperacionHabilitada('verCostos'))" />
+			<label value="@load(vm.costoPromedioGs) @converter(vm.cnv.monedaLocal)" 
+				visible="@load(vm.isOperacionHabilitada('verCostos'))"/>
+			<space />
 			<field value="Desde:" />
 			<datebox value="@bind(vm.desde)"
 				onChange="@command('refreshHistorico')"/>

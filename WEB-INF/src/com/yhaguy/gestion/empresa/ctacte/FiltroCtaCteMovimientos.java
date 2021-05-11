@@ -1,7 +1,5 @@
 package com.yhaguy.gestion.empresa.ctacte;
 
-import java.util.Date;
-
 public class FiltroCtaCteMovimientos {
 
 	private String comprobanteNro = "", tipoMovimiento = "", moneda = "";

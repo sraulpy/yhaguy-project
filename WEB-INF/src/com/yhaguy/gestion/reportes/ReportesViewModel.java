@@ -14215,11 +14215,13 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Gasto> gastos = new ArrayList<Gasto>();
 			List<Object[]> dets = new ArrayList<Object[]>();
 			List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
+			List<Recibo> pagos = new ArrayList<Recibo>();
 			if (otrosComprobantes) {
 				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal);
 			} else {
 				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal);
 				notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal);
+				pagos = rr.getPagos(desde, hasta);
 			}
 
 			for (Gasto gasto : gastos) {
@@ -14248,7 +14250,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_GASTOS_POR_CUENTA_CONTABLE;
 			Map<String, Object> params = new HashMap<String, Object>();
-			JRDataSource dataSource = new GastosPorCuentaContableDataSource(dets, notascredito);
+			JRDataSource dataSource = new GastosPorCuentaContableDataSource(dets, notascredito, pagos);
 			params.put("Usuario", getUs().getNombre());
 			params.put("periodo", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY) 
 					+ " a " + Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
@@ -24480,6 +24482,7 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");		
 	static final String KEY_NC = "DESCUENTOS OBTENIDOS";
+	static final String KEY_PG = "PAGOS A PROVEEDORES";
 	
 	List<Object[]> values = new ArrayList<Object[]>();
 	Map<String, Double> totales = new HashMap<String, Double>();
@@ -24489,7 +24492,7 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 	Map<String, Double> totalesIva5 = new HashMap<String, Double>();
 	Map<String, Double> totalesExenta = new HashMap<String, Double>();
 
-	public GastosPorCuentaContableDataSource(List<Object[]> values, List<NotaCredito> notasCredito) {
+	public GastosPorCuentaContableDataSource(List<Object[]> values, List<NotaCredito> notasCredito, List<Recibo> pagos) {
 		this.values = values;
 		for (Object[] value : values) {
 			GastoDetalle det = (GastoDetalle) value[0];
@@ -24557,7 +24560,47 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 					totalesIva5.put(key, iva5);
 					totalesExenta.put(key, exenta);
 				}
-				this.values.add(new Object[] { null, nc });
+				this.values.add(new Object[] { null, nc, null });
+			}
+		}
+		for (Recibo pg : pagos) {
+			if (pg.isReciboContraCuenta()) {
+				String key = pg.getReciboContraCuentaDescripcion();
+				boolean exta = pg.isReciboContraCuentaExenta();
+				double gravada10 = exta ? 0.0 : (pg.getTotalImporteGs() / 1.1);
+				double gravada5 = 0.0;
+				double exenta = exta ? pg.getTotalImporteGs() : 0.0;
+				double iva10 = exta ? 0.0 : (pg.getTotalImporteGs() / 11);
+				double iva5 = 0.0;
+				double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
+				Double total = totales.get(key);
+				Double totalGravada10 = totalesGravada10.get(key);
+				Double totalIva10 = totalesIva10.get(key);
+				Double totalGravada5 = totalesGravada5.get(key);
+				Double totalIva5 = totalesIva5.get(key);
+				Double totalExenta = totalesExenta.get(key);
+				if (total != null) {
+					total += importe;
+					totalGravada10 += gravada10;
+					totalIva10 += iva10;
+					totalGravada5 += gravada5;
+					totalIva5 += iva5;
+					totalExenta += exenta;
+					totales.put(key, total);
+					totalesGravada10.put(key, totalGravada10);
+					totalesIva10.put(key, totalIva10);
+					totalesGravada5.put(key, totalGravada5);
+					totalesIva5.put(key, totalIva5);
+					totalesExenta.put(key, totalExenta);
+				} else {
+					totales.put(key, importe);
+					totalesGravada10.put(key, gravada10);
+					totalesIva10.put(key, iva10);
+					totalesGravada5.put(key, gravada5);
+					totalesIva5.put(key, iva5);
+					totalesExenta.put(key, exenta);
+				}
+				this.values.add(new Object[] { null, null, pg });
 			}
 		}
 	}
@@ -24610,7 +24653,7 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 			} else if ("TotalImporte".equals(fieldName)) {
 				value = Utiles.getNumberFormat(totales.get(det.getArticuloGasto().getDescripcion()));
 			}
-		} else {
+		} else if (obj[1] != null) {
 			NotaCredito nc = (NotaCredito) obj[1];	
 			double gravada10 = nc.getTotalGravado10() * -1;
 			double gravada5 = 0.0;
@@ -24654,8 +24697,55 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 				value = Utiles.getNumberFormat(totalesExenta.get(KEY_NC));
 			} else if ("TotalImporte".equals(fieldName)) {
 				value = Utiles.getNumberFormat(totales.get(KEY_NC));
-			}
-		}		
+			}			
+		} else if(obj[2] != null) {			
+			Recibo pg = (Recibo) obj[2];
+			boolean exta = pg.isReciboContraCuentaExenta();
+			String key = pg.getReciboContraCuentaDescripcion();
+			double gravada10 = exta ? 0.0 : (pg.getTotalImporteGs() / 1.1);
+			double gravada5 = 0.0;
+			double exenta = exta ? pg.getTotalImporteGs() : 0.0;
+			double iva10 = exta ? 0.0 : (pg.getTotalImporteGs() / 11);
+			double iva5 = 0.0;
+			double importe = gravada10 + gravada5 + exenta + iva10 + iva5;
+			if ("TituloDetalle".equals(fieldName)) {
+				value = key.toUpperCase();
+			} else if ("Emision".equals(fieldName)) {
+				value = Utiles.getDateToString(pg.getFechaEmision(), Utiles.DD_MM_YY);
+			} else if ("Concepto".equals(fieldName)) {
+				value = pg.getTipoMovimiento().getDescripcion();
+			} else if ("Numero".equals(fieldName)) {
+				value = pg.getNumero();
+			} else if ("RazonSocial".equals(fieldName)) {
+				value = pg.getProveedor().getRazonSocial();
+			} else if ("Ruc".equals(fieldName)) {
+				value = pg.getProveedor().getRuc();
+			} else if ("Iva10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(iva10);
+			} else if ("Gravada10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(gravada10);
+			} else if ("Iva5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(iva5);
+			} else if ("Gravada5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(gravada5);
+			} else if ("Exenta".equals(fieldName)) {
+				value = Utiles.getNumberFormat(exenta);
+			} else if ("Importe".equals(fieldName)) {
+				value = Utiles.getNumberFormat(importe);
+			} else if ("TotalGravada10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesGravada10.get(key));
+			} else if ("TotalIva10".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva10.get(key));
+			} else if ("TotalGravada5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesGravada5.get(key));
+			} else if ("TotalIva5".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesIva5.get(key));
+			} else if ("TotalExenta".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totalesExenta.get(key));
+			} else if ("TotalImporte".equals(fieldName)) {
+				value = Utiles.getNumberFormat(totales.get(key));
+			}		
+		}
 		return value;
 	}
 

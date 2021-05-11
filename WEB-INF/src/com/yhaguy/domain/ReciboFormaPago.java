@@ -281,6 +281,7 @@ public class ReciboFormaPago extends Domain {
 	 */
 	public String getDescripcion() {
 		String formaPago = this.tipo.getDescripcion();
+		if(this.descripcion == null) return formaPago;
 		return this.descripcion.isEmpty() ? formaPago : this.descripcion;
 	}
 	

@@ -67,6 +67,7 @@ import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.compras.gastos.subdiario.GastoDTO;
 import com.yhaguy.gestion.comun.Control;
 import com.yhaguy.gestion.comun.ControlAnulacionMovimientos;
+import com.yhaguy.gestion.comun.ControlArticuloCostoPromedio;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDTO;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDetalleDTO;
@@ -1033,6 +1034,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 			notaCredito.setId(notaCred.getId());
 			this.dto.getNotasCredito().add(notaCredito);
 			this.dto.setNotaCredito_a_imputar(notaCred);
+			
+			if (notaCred.isMotivoDevolucion()) {
+				ControlArticuloCostoPromedio ctprom = new ControlArticuloCostoPromedio();
+				ctprom.addCostoPromedioNotaCredito(notaCred.getId());
+			}			
 			
 			// actualiza el historico venta / meta..
 			double tot_nc = notaCred.getTotalImporteGsSinIva();
