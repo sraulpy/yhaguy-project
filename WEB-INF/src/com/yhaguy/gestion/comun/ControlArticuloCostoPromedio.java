@@ -133,6 +133,7 @@ public class ControlArticuloCostoPromedio {
 	public void addCostoPromedioCompralocal(long id) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
+			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
 			double costoUltimo = 0;
 			String descripcion = "";
@@ -177,6 +178,7 @@ public class ControlArticuloCostoPromedio {
 	public void addCostoPromedioNotaCredito(long id) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
+			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
 			double costoUltimo = 0;
 			String descripcion = "";
