@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.stock.ajustes;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
@@ -29,6 +30,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.gestion.comun.ControlArticuloCostoPromedio;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 public class AjusteStockViewModel extends BodyApp {
@@ -195,8 +197,15 @@ public class AjusteStockViewModel extends BodyApp {
 		this.dto.setEstadoComprobante(this.getEstadoComprobanteCerrado());
 		this.dto.setActualizarStock(true);
 		this.dto.setAutorizadoPor(this.getUs().getNombre());
+		this.dto.setFecha(new Date());
 		this.dto.setReadonly();
 		this.dto = (AjusteStockDTO) this.saveDTO(this.dto);
+		
+		if (this.dto.isAjustePositivo()) {
+			ControlArticuloCostoPromedio cprom = new ControlArticuloCostoPromedio();
+			cprom.addCostoPromedioAjuste(this.dto.getId());
+		}
+		
 		this.setEstadoABMConsulta();
 		Clients.showNotification("Ajuste Confirmado..");
 	}

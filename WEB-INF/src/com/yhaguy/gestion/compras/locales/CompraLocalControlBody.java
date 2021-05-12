@@ -973,6 +973,7 @@ public class CompraLocalControlBody extends BodyApp {
 		this.setTimbrado();
 		this.dto.getFactura().setReadonly();
 		this.dto.getFactura().setSucursal(this.dto.getSucursal());
+		this.dto.getFactura().setFechaCreacion(new Date());
 		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
 		this.volcarCompra();
 		this.actualizarReposiciones();

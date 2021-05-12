@@ -75,6 +75,7 @@ import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Timbrado;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
+import com.yhaguy.gestion.comun.ControlArticuloCostoPromedio;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
 import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.empresa.ctacte.AssemblerCtaCteEmpresaMovimiento;
@@ -3495,12 +3496,20 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					fac.setReadonly();
 					fac.setTotalAsignadoDs(fac.getTotalImporteDs());
 					fac.setTotalAsignadoGs(fac.getTotalImporteGs());
+					fac.setFechaVolcado(new Date());
 				}
 				this.dto.setFechaCierre(new Date());
 				this.dto.setImportacionConfirmada(true);
 				this.dto.setPedidoConfirmado(true);
 				this.dto.getImportacionFactura().get(0).setFechaOriginal(this.dto.getResumenGastosDespacho().getFechaDespacho());
 				this.setDto((ImportacionPedidoCompraDTO) this.saveDTO(this.dto));
+				
+				ImportacionFacturaDTO fac = this.dto.getImportacionFactura().get(0);
+				if (fac != null) {
+					ControlArticuloCostoPromedio cprom = new ControlArticuloCostoPromedio();
+					cprom.addCostoPromedioImportacion(fac.getId());
+				}				
+				
 				this.addEventoAgendaLink("Se confirmó la Importación..", linkReporteFinal); 
 				this.mensajePopupTemporal("La Importación fue correctamente confirmada..");	
 				this.setEstadoABMConsulta();

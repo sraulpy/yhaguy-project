@@ -5100,6 +5100,31 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:id 
+	 * [1]:tipomovimiento 
+	 * [2]:fecha 
+	 * [3]:numero 
+	 */
+	public List<Object[]> getTransferenciasPorArticuloOrigenMRA(Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.id, t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision "
+				+ " from Transferencia t where t.dbEstado != 'D' "
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.sucursal.id = " + SucursalApp.ID_MRA
+				+ " and t.sucursalDestino.id IN (" + SucursalApp.ID_CENTRAL + ", " + SucursalApp.ID_GAM + ", " + SucursalApp.ID_MCAL + ") "
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
 	 * [0]:concepto 
 	 * [1]:fecha 
 	 * [2]:numero 
@@ -5293,6 +5318,10 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return las compras
+	 * [0]: id
+	 * [0]: tipomovimiento
+	 * [0]: fecha
+	 * [0]: numero
 	 */
 	public List<Object[]> getComprasLocalesPorArticulo(Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";

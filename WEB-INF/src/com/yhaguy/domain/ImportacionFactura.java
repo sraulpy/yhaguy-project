@@ -33,7 +33,6 @@ public class ImportacionFactura extends Domain {
 	private double totalGastosFlete;
 	private double totalGastosDespacho;
 	private double totalSeguro;
-	private long idSucursal;
 	
 	private Proveedor proveedor;
 	private TipoMovimiento tipoMovimiento;	
@@ -337,13 +336,5 @@ public class ImportacionFactura extends Domain {
 
 	public void setFechaVolcado(Date fechaVolcado) {
 		this.fechaVolcado = fechaVolcado;
-	}
-
-	public long getIdSucursal() {
-		return idSucursal;
-	}
-
-	public void setIdSucursal(long idSucursal) {
-		this.idSucursal = idSucursal;
 	}
 }

@@ -10,6 +10,7 @@ public class TransferenciaDetalle extends Domain {
 	private long cantidadEnviada;
 	private long cantidadRecibida;
 	private double costo;
+	private double costoPromedioGs;
 	private String estado;
 	private Articulo articulo;
 	
@@ -76,6 +77,14 @@ public class TransferenciaDetalle extends Domain {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
 	}
 
 }

@@ -14,6 +14,7 @@ public class ImportacionFacturaDTO extends DTO{
 		
 	private String numero = "";	
 	private Date fechaOriginal;
+	private Date fechaVolcado;
 	private Date fechaCreacion = new Date();	
 	private String observacion = "";	
 	private boolean confirmadoImportacion = false;
@@ -227,5 +228,13 @@ public class ImportacionFacturaDTO extends DTO{
 
 	public void setPorcProrrateo(double porcProrrateo) {
 		this.porcProrrateo = porcProrrateo;
+	}
+
+	public Date getFechaVolcado() {
+		return fechaVolcado;
+	}
+
+	public void setFechaVolcado(Date fechaVolcado) {
+		this.fechaVolcado = fechaVolcado;
 	}
 }

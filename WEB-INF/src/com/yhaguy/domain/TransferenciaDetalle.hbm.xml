@@ -16,6 +16,7 @@
 		<property name="cantidadEnviada"/>
 		<property name="cantidadRecibida"/>
 		<property name="costo"/>
+		<property name="costoPromedioGs"/>
 		<property name="estado"/>
 		
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"

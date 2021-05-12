@@ -14,7 +14,7 @@ public class AssemblerImportacionFactura extends Assembler {
 	private static String[] attIguales = {"numero", "fechaOriginal", "fechaCreacion", "observacion", "confirmadoImportacion",
 					"confirmadoAuditoria", "confirmadoVentas", "confirmadoAdministracion", "propietarioActual", "descuentoGs",
 					"descuentoDs", "totalAsignadoGs", "totalAsignadoDs", "porcProrrateo", "facturaVerificada", 
-					"recepcionConfirmada"};
+					"recepcionConfirmada", "fechaVolcado"};
 	private static String[] attTipoMovimiento = { "descripcion" };
 	private static String[] attCondicion = { "descripcion", "plazo" };
 	private static String[] attMoneda = { "descripcion", "sigla" };

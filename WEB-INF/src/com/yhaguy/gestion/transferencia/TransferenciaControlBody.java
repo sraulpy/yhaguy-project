@@ -44,6 +44,7 @@ import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Transferencia;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
+import com.yhaguy.gestion.comun.ControlArticuloCostoPromedio;
 import com.yhaguy.gestion.comun.ControlArticuloStock;
 import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.comun.ReservaDTO;
@@ -241,7 +242,7 @@ public class TransferenciaControlBody extends BodyApp {
 			this.confirmarTransferenciaExterna();
 		}
 		this.addEventoAgenda("Se confirmó la transferencia.");
-		this.grabarEventosAgenda();
+		this.grabarEventosAgenda();		
 		Clients.showNotification("Transferencia confirmada..");
 	}
 
@@ -292,9 +293,12 @@ public class TransferenciaControlBody extends BodyApp {
 		this.setNumero(this.dto);
 		this.dto.setTransferenciaEstado(estado);
 		this.dto.setReadonly();
+		this.dto.setFechaCreacion(new Date());
 		this.dto = (TransferenciaDTO) this.saveDTO(this.dto);
 		this.transferirStock(true);
 		if (!this.isTransferenciaInterna()) {
+			ControlArticuloCostoPromedio cprom = new ControlArticuloCostoPromedio();
+			cprom.addCostoPromedioTransferencia(this.dto.getId());			
 			this.actualizarCtaCte();
 		}
 		this.setEstadoABMConsulta();
@@ -780,6 +784,15 @@ public class TransferenciaControlBody extends BodyApp {
 				ID.F_TRANSFERENCIA_INTERNA_ABM);
 	}
 
+	
+	/**
+	 * @return true si es transferencia interna..
+	 */
+	public boolean isTransferenciaExterna() {
+		return this.getAliasFormularioCorriente().equals(
+				ID.F_TRANSFERENCIA_EXTERNA_ABM);
+	}
+	
 	@DependsOn({ "deshabilitado", "selectedItems" })
 	public boolean isEliminarItemDisabled() {
 		return (this.isDeshabilitado() == true) || (this.selectedItems == null)

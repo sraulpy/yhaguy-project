@@ -21,6 +21,8 @@ import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.Transferencia;
+import com.yhaguy.domain.TransferenciaDetalle;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
@@ -34,8 +36,8 @@ public class ControlArticuloCostoPromedio {
 
 	@SuppressWarnings("unused")
 	private void testCostoPromedio() throws Exception {		
-		Date desde = Utiles.getFecha("09-05-2021 00:00:00");
-		Date hasta = Utiles.getFecha("31-05-2021 23:00:00");
+		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
+		Date hasta = Utiles.getFecha("30-05-2021 23:00:00");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
@@ -54,75 +56,21 @@ public class ControlArticuloCostoPromedio {
 				this.addCostoPromedioNotaCredito(id);
 			}
 			
+			if (tipo.equals("TRANSF. EXTERNA")) {
+				this.addCostoPromedioTransferencia(id);
+			}
+			
 			if (tipo.equals("FAC.COMPRA CREDITO") || tipo.equals("FAC.COMPRA CONTADO")) {
 				this.addCostoPromedioCompralocal(id);
 			}
 			
 			if ((tipo.equals("FAC. IMPORTACIÓN CRÉDITO") || tipo.equals("FAC. IMPORTACIÓN CONTADO"))
 					|| (tipo.equals("FAC. IMPORTACIÓN CRE.") || tipo.equals("FAC. IMPORTACIÓN CON."))) {
-				ImportacionFactura cf = rr.getImportacionFacturaById(id);
-				for (ImportacionFacturaDetalle item : cf.getDetalles()) {						
-					Articulo art = item.getArticulo();
-					if (art != null) {
-						Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), cf.getFechaVolcado());
-						Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), cf.getFechaVolcado());
-						long totalEntradas = (long) ent[1];
-						long totalSalidas = (long) sal[1];
-						long stock = (totalEntradas) - totalSalidas;
-						if (stock < 0) stock = 0;
-						List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(cf.getFechaVolcado(), -1));
-						double ultPromedio = this.getCostoPromedio(compras, item.getCostoFinalGs());
-						double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, item.getCostoFinalGs());
-						item.setCostoPromedioGs(promedio);
-						rr.saveObject(item, item.getUsuarioMod());	
-						
-						costoPromedio = promedio;
-						fecha = cf.getFechaVolcado();
-						descripcion = "IMPORTACION:" + " " + cf.getNumero();
-						
-						ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
-						prm.setArticulo(art);
-						prm.setCostoPromedio(costoPromedio);
-						prm.setUltimoCosto(costoUltimo);
-						prm.setDescripcion(descripcion);
-						prm.setFecha(fecha);
-						rr.saveObject(prm, "sys");
-						System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
-					}					
-				}
+				this.addCostoPromedioImportacion(id);
 			}
 			
 			if (tipo.equals("AJUSTE STOCK POSITIVO")) {
-				AjusteStock aj = (AjusteStock) rr.getObject(AjusteStock.class.getName(), id);
-				for (AjusteStockDetalle item : aj.getDetalles()) {
-					if (item.getCostoGs() > 0) {
-						Articulo art = item.getArticulo();
-						Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), aj.getFecha());
-						Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), aj.getFecha());
-						long totalEntradas = (long) ent[1];
-						long totalSalidas = (long) sal[1];
-						long stock = (totalEntradas) - totalSalidas;
-						if (stock < 0) stock = 0;
-						List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(aj.getFecha(), -1));
-						double ultPromedio = this.getCostoPromedio(compras, item.getCostoGs());
-						double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, item.getCostoGs());
-						item.setCostoPromedioGs(promedio);
-						rr.saveObject(item, item.getUsuarioMod());	
-						
-						costoPromedio = promedio;
-						fecha = aj.getFecha();
-						descripcion = "AJUSTE:" + " " + aj.getNumero();
-						
-						ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
-						prm.setArticulo(art);
-						prm.setCostoPromedio(costoPromedio);
-						prm.setUltimoCosto(costoUltimo);
-						prm.setDescripcion(descripcion);
-						prm.setFecha(fecha);
-						rr.saveObject(prm, "sys");
-						System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
-					}					
-				}
+				this.addCostoPromedioAjuste(id);
 			}
 		}
 	}
@@ -165,6 +113,53 @@ public class ControlArticuloCostoPromedio {
 				prm.setFecha(fecha);
 				rr.saveObject(prm, "sys");
 				System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * add costo promedio importacion
+	 */
+	public void addCostoPromedioImportacion(long id) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
+			double costoPromedio = 0;
+			double costoUltimo = 0;
+			String descripcion = "";
+			Date fecha = null;
+			ImportacionFactura cf = rr.getImportacionFacturaById(id);
+			for (ImportacionFacturaDetalle item : cf.getDetalles()) {						
+				Articulo art = item.getArticulo();
+				if (art != null) {
+					Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), cf.getFechaVolcado());
+					Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), cf.getFechaVolcado());
+					long totalEntradas = (long) ent[1];
+					long totalSalidas = (long) sal[1];
+					long stock = (totalEntradas) - totalSalidas;
+					if (stock < 0) stock = 0;
+					List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(cf.getFechaVolcado(), -1));
+					double ultPromedio = this.getCostoPromedio(compras, item.getCostoFinalGs());
+					double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, item.getCostoFinalGs());
+					item.setCostoPromedioGs(promedio);
+					rr.saveObject(item, item.getUsuarioMod());	
+					
+					costoPromedio = promedio;
+					fecha = cf.getFechaVolcado();
+					descripcion = "IMPORTACION:" + " " + cf.getNumero();
+					
+					ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
+					prm.setArticulo(art);
+					prm.setCostoPromedio(costoPromedio);
+					prm.setUltimoCosto(costoUltimo);
+					prm.setDescripcion(descripcion);
+					prm.setFecha(fecha);
+					rr.saveObject(prm, "sys");
+					System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+				}					
 			}
 		
 		} catch (Exception e) {
@@ -256,6 +251,98 @@ public class ControlArticuloCostoPromedio {
 		}					
 	}
 	
+	public void addCostoPromedioAjuste(long id) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
+			double costoPromedio = 0;
+			double costoUltimo = 0;
+			String descripcion = "";
+			Date fecha = null;
+			AjusteStock aj = (AjusteStock) rr.getObject(AjusteStock.class.getName(), id);
+			for (AjusteStockDetalle item : aj.getDetalles()) {
+				if (item.getCostoGs() > 0) {
+					Articulo art = item.getArticulo();
+					Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), aj.getFecha());
+					Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), aj.getFecha());
+					long totalEntradas = (long) ent[1];
+					long totalSalidas = (long) sal[1];
+					long stock = (totalEntradas) - totalSalidas;
+					if (stock < 0) stock = 0;
+					List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(aj.getFecha(), -1));
+					double ultPromedio = this.getCostoPromedio(compras, item.getCostoGs());
+					double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, item.getCostoGs());
+					item.setCostoPromedioGs(promedio);
+					rr.saveObject(item, item.getUsuarioMod());	
+					
+					costoPromedio = promedio;
+					fecha = aj.getFecha();
+					descripcion = "AJUSTE:" + " " + aj.getNumero();
+					
+					ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
+					prm.setArticulo(art);
+					prm.setCostoPromedio(costoPromedio);
+					prm.setUltimoCosto(costoUltimo);
+					prm.setDescripcion(descripcion);
+					prm.setFecha(fecha);
+					rr.saveObject(prm, "sys");
+					System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+				}					
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * add costo promedio transferencia
+	 */
+	public void addCostoPromedioTransferencia(long id) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
+			double costoPromedio = 0;
+			double costoUltimo = 0;
+			String descripcion = "";
+			Date fecha = null;
+			Transferencia tr = rr.getTransferencia(id);
+			for (TransferenciaDetalle item : tr.getDetalles()) {
+				Articulo art = item.getArticulo();
+				Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), tr.getFechaCreacion());
+				Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), tr.getFechaCreacion());
+				long totalEntradas = (long) ent[1];
+				long totalSalidas = (long) sal[1];
+				long stock = (totalEntradas) - totalSalidas;
+				if (stock < 0)
+					stock = 0;
+				List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(),
+						DateUtils.addMinutes(tr.getFechaCreacion(), -1));
+				double ultPromedio = this.getCostoPromedio(compras, item.getCosto());
+				double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, item.getCosto());
+				item.setCostoPromedioGs(promedio);
+				rr.saveObject(item, item.getUsuarioMod());
+
+				costoPromedio = promedio;
+				fecha = tr.getFechaCreacion();
+				descripcion = "TRANSFERENCIA EXT.:" + " " + tr.getNumeroRemision();
+
+				ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
+				prm.setArticulo(art);
+				prm.setCostoPromedio(costoPromedio);
+				prm.setUltimoCosto(costoUltimo);
+				prm.setDescripcion(descripcion);
+				prm.setFecha(fecha);
+				rr.saveObject(prm, "sys");
+				System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @return el costo promedio..
 	 */
@@ -300,11 +387,13 @@ public class ControlArticuloCostoPromedio {
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(desde, hasta, fechaHora);
 		List<Object[]> ajustes = rr.getAjustesPorArticulo(desde, hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> transferenciasOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(desde, hasta, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
+		out.addAll(transferenciasOrigenMRA);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -332,11 +421,13 @@ public class ControlArticuloCostoPromedio {
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustes = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> transferenciasOrigenMra = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
+		out.addAll(transferenciasOrigenMra);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -446,5 +537,14 @@ public class ControlArticuloCostoPromedio {
 	
 	public Date getFechaDesde() throws Exception {
 		return Utiles.getFechaInicioOperaciones();
+	}
+	
+	public static void main(String[] args) {
+		try {
+			ControlArticuloCostoPromedio ctr = new ControlArticuloCostoPromedio();
+			ctr.testCostoPromedio();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
