@@ -537,6 +537,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> transfsMra = rr.getTransferenciasPorArticuloMRAentrada(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> transfsMra_ = rr.getTransferenciasPorArticuloMRAsalida(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
@@ -550,6 +551,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(ntcsv);
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
+		if (!this.isEmpresaMRA()) this.historicoEntrada.addAll(transfsOrigenMRA);
 		if (this.isEmpresaMRA()) this.historicoEntrada.addAll(transfsMra);
 		
 		this.historicoSalida = new ArrayList<Object[]>();
