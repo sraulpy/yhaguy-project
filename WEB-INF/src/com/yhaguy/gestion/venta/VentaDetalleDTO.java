@@ -35,6 +35,7 @@ public class VentaDetalleDTO extends DTO {
 	private boolean costoIvaIncluido = false;
 	private long 	stockDisponible = 0;
 	private String 	nombreRegla = "";
+	private double costoPromedioGs = 0;
 	
 	private double precioMinimoGs = 0;
 	private double precioGs = 0;
@@ -495,5 +496,13 @@ public class VentaDetalleDTO extends DTO {
 
 	public void setMarca(String marca) {
 		this.marca = marca;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
 	}
 }

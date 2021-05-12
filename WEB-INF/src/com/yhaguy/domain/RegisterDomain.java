@@ -5405,7 +5405,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select c.tipoMovimiento.descripcion, c.fechaDespacho, c.numero, d.cantidad, d.costoFinalGs, "
+		String query = "select c.tipoMovimiento.descripcion, c.fechaVolcado, c.numero, d.cantidad, d.costoFinalGs, "
 				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', 'CENTRAL'"
 				+ " from ImportacionFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5416,12 +5416,12 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO
 				+ "')"
 				+ " and c.dbEstado = 'R'"
-				+ " and (c.fechaDespacho >= '"
+				+ " and (c.fechaVolcado >= '"
 				+ desde_
-				+ "' and c.fechaDespacho <= '"
+				+ "' and c.fechaVolcado <= '"
 				+ hasta_
 				+ "')"
-				+ " order by c.fechaDespacho desc";
+				+ " order by c.fechaVolcado desc";
 		List<Object[]> list = this.hql(query);
 		return list;
 	}
@@ -13386,6 +13386,18 @@ public class RegisterDomain extends Register {
 	public double getCostoPromedioGs(long idArticulo) throws Exception {
 		String query = "select a.id, a.costoPromedio from ArticuloCostoPromediogs a"
 				+ " where a.articulo.id = " + idArticulo + " order by a.fecha desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		Object[] out = list.size() > 0 ? list.get(0) : null;
+		return out != null ? (double) out[1] : 0.0;
+	}
+	
+	/**
+	 * @return costoPromedio..
+	 */
+	public double getCostoPromedioGs(long idArticulo, Date fecha) throws Exception {
+		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD_HORA_MIN_SEG);
+		String query = "select a.id, a.costoPromedio from ArticuloCostoPromediogs a"
+				+ " where a.articulo.id = " + idArticulo + " and a.fecha <= '" + fecha_ + "' order by a.fecha desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
 		Object[] out = list.size() > 0 ? list.get(0) : null;
 		return out != null ? (double) out[1] : 0.0;

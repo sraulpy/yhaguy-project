@@ -646,11 +646,16 @@ public class VentaControlBody extends BodyApp {
 			if (art.getCodigoInterno().startsWith("@")) {
 				costoGs = 0;
 			}
+			double costoPromedioGs = rr.getCostoPromedioGs(item.getArticulo().getId());
+			if (costoPromedioGs <= 0.0) {
+				costoPromedioGs = costoGs;
+			}
 			VentaDetalleDTO nvo = new VentaDetalleDTO();
 			nvo.setArticulo(item.getArticulo());
 			nvo.setDescripcion(item.getDescripcion());
 			nvo.setCantidad(item.getCantidad());
 			nvo.setCostoUnitarioGs(costoGs);
+			nvo.setCostoPromedioGs(costoPromedioGs);
 			nvo.setCostoUnitarioDs(item.getCostoUnitarioDs());
 			nvo.setDescuentoUnitarioGs(item.getDescuentoUnitarioGs());
 			nvo.setDescuentoUnitarioDs(item.getDescuentoUnitarioDs());
