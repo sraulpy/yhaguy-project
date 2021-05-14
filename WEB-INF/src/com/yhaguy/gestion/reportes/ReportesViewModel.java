@@ -5781,10 +5781,10 @@ public class ReportesViewModel extends SimpleViewModel {
 						long may = art[7] != null ? (long) art[7] : (long) 0;
 						long mcl = art[8] != null ? (long) art[8] : (long) 0;
 						if (min > 0 || may > 0 || mcl > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
+							data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[12] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[7], art[8], art[3], art[4], art[5] });
+						data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[12] });
 					}					
 				}
 				
@@ -26085,14 +26085,13 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 	private String proveedor;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
-	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
-	static DatosColumnas col5 = new DatosColumnas("Mcl.", TIPO_LONG, 15);
-	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
-	static DatosColumnas col7 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 20);
-	static DatosColumnas col8 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 20);
+	static DatosColumnas col4 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col5 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col6 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col7 = new DatosColumnas("Tra.Gs.", TIPO_DOUBLE_GS, 18);
 
 	public ReporteListaPrecioPorDeposito(String proveedor) {
 		this.proveedor = proveedor;
@@ -26106,7 +26105,6 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 		cols.add(col5);
 		cols.add(col6);
 		cols.add(col7);
-		cols.add(col8);
 	}
 
 	@Override
