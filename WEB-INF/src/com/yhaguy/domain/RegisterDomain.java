@@ -11726,6 +11726,7 @@ public class RegisterDomain extends Register {
 	 * [9]:costo gs
 	 * [10]:articulo.familia
 	 * [11]:stock mayorista central
+	 * [12]:transportadora
 	 */
 	public List<Object[]> getArticulos(long idProveedor, long idMarca, long idFamilia, String test) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.descripcion, a.precioGs, a.precioMinoristaGs, a.precioListaGs, "
@@ -11733,7 +11734,8 @@ public class RegisterDomain extends Register {
 				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MAYORISTA + "),"
 				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MCAL_LOPEZ + "),"
 				+ " a.costoGs, a.familia.descripcion,"
-				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MAYORISTA_CENTRAL + ")"
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MAYORISTA_CENTRAL + "),"
+				+ " a.precioTransportadora"
 				+ " from Articulo a where a.dbEstado != 'D'";
 		if (idProveedor > 0) {
 			query += " and a.proveedor.id = " + idProveedor;
@@ -13403,21 +13405,11 @@ public class RegisterDomain extends Register {
 		return out != null ? (double) out[1] : 0.0;
 	}
 	
-	public static void main_(String[] args) {
+	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<ImportacionPedidoCompra> imps = rr.getObjects(ImportacionPedidoCompra.class.getName());
-			for (ImportacionPedidoCompra imp : imps) {
-				ImportacionFactura fac = imp.getImportacionFactura_().get(0);
-				if (fac != null) {
-					fac.setFechaDespacho(imp.getResumenGastosDespacho().getFechaDespacho());
-					fac.setTotalAsignadoGs(imp.getResumenGastosDespacho().getValorFOBgs());
-					fac.setTotalGastosFlete(imp.getResumenGastosDespacho().getValorFleteGs());
-					fac.setTotalGastosDespacho(imp.getResumenGastosDespacho().getTotalGastosGs());
-					rr.saveObject(fac, fac.getUsuarioMod());
-					System.out.println(fac.getNumero());
-				}
-			}
+			double test = rr.getCostoPromedioGs(7075);
+			System.out.println(test + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
