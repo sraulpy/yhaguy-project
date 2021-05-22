@@ -2632,7 +2632,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		MyPair tipoCIF = utilDto.getTipoImportacionCIF();
 		double cambio = this.dto.getResumenGastosDespacho().getTipoCambio();
 		
-		if (tipo.compareTo(tipoCIF) == 0) {
+		if (tipo.compareTo(tipoCIF) == 0
+				|| tipo.getText().equals(ImportacionPedidoCompra.TIPO_CPT)) {
 			double valor = this.getValorSeguroDs();
 			return valor * cambio;
 		} else {
@@ -2677,7 +2678,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		MyPair tipo = this.dto.getTipo();
 		MyPair tipoCIF = utilDto.getTipoImportacionCIF();
 		
-		if (tipo.compareTo(tipoCIF) == 0) {
+		if (tipo.compareTo(tipoCIF) == 0
+				|| tipo.getText().equals(ImportacionPedidoCompra.TIPO_CPT)) {
 			return this.getValoresFromFacturas()[7];
 		} else {
 			return this.getValorCIFdsCalculado();
@@ -2730,7 +2732,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			
 			for (ImportacionFacturaDetalleDTO item : fac.getDetalles()) {
-				if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CIF)) {
+				if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CIF)
+						|| this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CPT)) {
 					if (!item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {					
 						valorFOBgs += item.getImporteGsCalculado();
 						valorFOBds += item.getImporteDsCalculado();
