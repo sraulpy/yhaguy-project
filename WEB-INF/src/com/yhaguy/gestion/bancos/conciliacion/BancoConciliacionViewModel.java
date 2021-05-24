@@ -470,8 +470,8 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> depositos = rr.getDepositosPorBanco(idBanco, desde, hasta);
 		List<Object[]> descuentos = rr.getDescuentosPorBanco(idBanco, desde, hasta);
 		List<Object[]> prestamosInternos = rr.getPrestamosInternosPorBanco(idBanco, desde, hasta);
-		List<Object[]> transferenciasEnviadas = rr.getTransferenciasOrigenPorBanco(idBanco, desde, hasta);
-		List<Object[]> transferenciasRecibidas = rr.getTransferenciasDestinoPorBanco(idBanco, desde, hasta);
+		List<Object[]> transferenciasEnviadas = rr.getTransferenciasOrigenPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
+		List<Object[]> transferenciasRecibidas = rr.getTransferenciasDestinoPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
 		List<Object[]> prestamosBancarios = rr.getPrestamosBancariosPorBanco(idBanco, desde, hasta);
 		List<Object[]> cheques = rr.getChequesPropiosPorBanco(idBanco, desde, hasta);
 		List<Object[]> chequesRechazados = rr.getChequesRechazadosPorBancoPorDeposito(idBanco, desde, hasta);

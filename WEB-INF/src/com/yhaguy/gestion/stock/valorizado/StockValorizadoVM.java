@@ -248,7 +248,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
-		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		//List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
 		
 		for (Object[] item : ajustStockNeg) {
@@ -256,7 +256,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 		}
 		out.addAll(ventas);
 		out.addAll(ntcsc);		
-		out.addAll(transfsDestinoMRA);
+		//out.addAll(transfsDestinoMRA);
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {
@@ -288,11 +288,13 @@ public class StockValorizadoVM extends SimpleViewModel {
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustes = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> transferenciasOrigenMra = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
+		out.addAll(transferenciasOrigenMra);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -318,11 +320,13 @@ public class StockValorizadoVM extends SimpleViewModel {
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(desde, hasta, fechaHora);
 		List<Object[]> ajustes = rr.getAjustesPorArticulo(desde, hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> transferenciasOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(desde, hasta, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
+		out.addAll(transferenciasOrigenMRA);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -591,7 +595,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 	
 	
 	private void testCostoPromedio() throws Exception {		
-		Date desde = Utiles.getFecha("09-05-2021 00:00:00");
+		Date desde = Utiles.getFecha("28-04-2021 00:00:00");
 		Date hasta = Utiles.getFecha("31-05-2021 23:00:00");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		

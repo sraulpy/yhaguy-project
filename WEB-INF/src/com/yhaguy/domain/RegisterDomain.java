@@ -3893,7 +3893,7 @@ public class RegisterDomain extends Register {
 	 * [6]:costo ultimo
 	 */
 	public List<Object[]> getNotasCreditoVenta_(Date desde, Date hasta, long idCliente) throws Exception {
-		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, n.costoPromedioGs, n.costoUltimoGs from"
+		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, 0, 0 from"
 				+ " NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and n.tipoMovimiento.sigla = ?"
@@ -3930,7 +3930,7 @@ public class RegisterDomain extends Register {
 	 * [6]:costoultimo
 	 */
 	public List<Object[]> getVentas_(Date desde, Date hasta, long idCliente) throws Exception {
-		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, v.costoPromedioGs, v.costoUltimoGs from"
+		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, 0.0, 0.0 from"
 				+ " Venta v where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
 				+ " and v.estadoComprobante is null"
 				+ " and v.fecha between ? and ?";
@@ -5823,7 +5823,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getVentas(Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, v.costoPromedioGs, v.cliente.empresa.razonSocial,"
+		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, 0.0, v.cliente.empresa.razonSocial,"
 				+ " 0.0, 0.0 from Venta v where v.estadoComprobante is null"
 				+ " and (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO
@@ -5852,7 +5852,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getNotasCredito(Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, n.costoPromedioGs, n.cliente.empresa.razonSocial,"
+		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, 0.0, n.cliente.empresa.razonSocial,"
 				+ " 0.0, 0.0 from NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'" 
 				+ " and n.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "'" 
@@ -9907,7 +9907,7 @@ public class RegisterDomain extends Register {
 	 * [10]:articulo.codigo
 	 */
 	public List<Object[]> getNotasCreditoVentaDetalles(Date desde, Date hasta, long idCliente, long idArticulo) throws Exception {
-		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, n.costoPromedioGs,"
+		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, 0.0,"
 				+ " d.costoGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
 				+ " from NotaCredito n join n.detalles d where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
@@ -9969,7 +9969,7 @@ public class RegisterDomain extends Register {
 	 * [10]:articulo.codigo
 	 */
 	public List<Object[]> getVentasDetalles(Date desde, Date hasta, long idCliente, long idArticulo) throws Exception {
-		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, v.costoPromedioGs, "
+		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, 0.0, "
 				+ " d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
 				+ " from Venta v join v.detalles d where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
 				+ " and v.estadoComprobante is null"
@@ -10161,11 +10161,11 @@ public class RegisterDomain extends Register {
 	 * [3]:totalImporteGs 
 	 * [4]:banco 
 	 */
-	public List<Object[]> getTransferenciasOrigenPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getTransferenciasOrigenPorBanco(long idBanco, Date desde, Date hasta, long idMonedaBanco) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('TRANSFERENCIA BANCARIA'), "
-				+ " b.fecha, b.numero, (case when b.moneda.id = 31 then (b.importe) else (b.importe * b.tipoCambio) end), b.origen.banco.descripcion, concat('TRANSFERENCIA ENVIADA A BANCO: ', b.destino.banco.descripcion)"
+				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.origen.banco.descripcion, concat('TRANSFERENCIA ENVIADA A BANCO: ', b.destino.banco.descripcion)"
 				+ " from BancoTransferencia b where"
 				+ " b.origen.id = " + idBanco
 				+ " and (b.fecha >= '"
@@ -10184,11 +10184,11 @@ public class RegisterDomain extends Register {
 	 * [3]:totalImporteGs 
 	 * [4]:banco 
 	 */
-	public List<Object[]> getTransferenciasDestinoPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getTransferenciasDestinoPorBanco(long idBanco, Date desde, Date hasta, long idMonedabanco) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('TRANSFERENCIA BANCARIA'), "
-				+ " b.fecha, b.numero, b.importe, b.destino.banco.descripcion, concat('TRANSFERENCIA RECIBIDA DE BANCO: ', b.origen.banco.descripcion)"
+				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedabanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.destino.banco.descripcion, concat('TRANSFERENCIA RECIBIDA DE BANCO: ', b.origen.banco.descripcion)"
 				+ " from BancoTransferencia b where"
 				+ " b.destino.id = " + idBanco
 				+ " and (b.fecha >= '"

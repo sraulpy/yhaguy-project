@@ -3111,6 +3111,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		double totalGastos = 0;
 		double totalCostoFinal = 0;
 		
+		double totalCostoCTDs = 0;
+		double totalCostoCTGs = 0;
+		
 		for (ImportacionFacturaDTO f : this.dto.getImportacionFactura()) {
 			
 			double coefAutomatico = this.getCoeficienteGasto();
@@ -3151,15 +3154,19 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					mr.setPos12(0.0);
 					mr.setPos13(0.0);
 					mr.setPos14(costoFinalGs);
+					mr.setPos15(d.getArticulo().getPos6().toString());
 					out.add(mr);
-					totalCant += cant;
-					totalCostoDs += (costoDs * cant);
-					totalCostoGs += (costoGs * cant);
+					if (!mr.getPos15().equals(ArticuloFamilia.CONTABILIDAD)) {
+						totalCant += cant;
+						totalCostoDs += (costoDs * cant);
+						totalCostoGs += (costoGs * cant);
+					}					
 				}			
 			}
 		}	
 		for (MyArray mr : out) {
 			int cantidad = (int) mr.getPos3();
+			double importeDs = (double) mr.getPos6();
 			double importeGs = (double) mr.getPos7();
 			double porcentaje = (importeGs * 100) / totalCostoGs;
 			double fleteSeguro = (despachoFleteSeguro * porcentaje) / 100;
@@ -3167,6 +3174,18 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			double gastos = (despachoGastos * porcentaje) / 100;
 			double costoFinal = costoCIF + gastos;
 			double costoFinalUnd = costoFinal / cantidad;
+			
+			if (mr.getPos15().equals(ArticuloFamilia.CONTABILIDAD)) {
+				porcentaje = 0.0;
+				fleteSeguro = 0.0;
+				costoCIF = 0.0;
+				gastos = 0.0;
+				costoFinal = 0.0;
+				costoFinalUnd = 0.0;
+				totalCostoCTDs += importeDs;
+				totalCostoCTGs += importeGs;
+			}
+			
 			mr.setPos8(porcentaje);
 			mr.setPos9(fleteSeguro);
 			mr.setPos10(costoCIF);
@@ -3179,6 +3198,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			totalCIF += costoCIF;
 			totalCostoFinal += costoFinal;
 		}
+		totalCostoDs += totalCostoCTDs;
+		totalCostoGs += totalCostoCTGs;
 		this.totalesCostoFinal = new MyArray(totalCant, totalCostoDs, totalCostoGs, totalPorcentaje, totalFleteSeguro, totalCIF, totalGastos, totalCostoFinal);
 		BindUtils.postNotifyChange(null, null, this, "totalesCostoFinal");
 		return out;
