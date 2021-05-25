@@ -6382,7 +6382,7 @@ public class RegisterDomain extends Register {
 				+ " and r.numeroPlanilla like '%" + caja + "%'"
 				+ " and r.numeroRecibo like '%" + numeroRecibo + "%'"
 				+ " order by r.fechaEmision, r.numero";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 500);
 	}
 
 	
