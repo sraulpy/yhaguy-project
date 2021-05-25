@@ -196,16 +196,17 @@ public class ControlCuentaCorriente {
 		ctm.setIdEmpresa(pago.getProveedor().getIdEmpresa());
 		ctm.setIdMovimientoOriginal(pago.getId());
 		ctm.setIdVendedor(0);
-		ctm.setImporteOriginal(pago.getTotalImporteGs());
-		ctm.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		ctm.setImporteOriginal(pago.isMonedaLocal() ? pago.getTotalImporteGs() : pago.getTotalImporteDs());
+		ctm.setMoneda(pago.getMoneda());
 		ctm.setNroComprobante(pago.getNumero());
 		ctm.setSucursal(pago.getSucursal());
 		ctm.setSaldo(0);
 		
 		for (ReciboDetalle det : pago.getDetalles()) {
 			if (det.getMovimiento() != null && !det.getMovimiento().isGastoCredito()) {
+				double monto = pago.isMonedaLocal() ? det.getMontoGs() : det.getMontoDs();
 				CtaCteEmpresaMovimiento ctmCompra = det.getMovimiento();
-				ctmCompra.setSaldo(ctmCompra.getSaldo() - det.getMontoGs());
+				ctmCompra.setSaldo(ctmCompra.getSaldo() - monto);
 				rr.saveObject(ctmCompra, user);
 			}
 		}	
