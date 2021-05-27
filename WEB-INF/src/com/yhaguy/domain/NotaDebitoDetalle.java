@@ -9,6 +9,7 @@ public class NotaDebitoDetalle extends Domain {
 	
 	private String descripcion;
 	private double importeGs;
+	private double importeDs;
 
 	private Tipo tipoIva;
 	
@@ -51,5 +52,13 @@ public class NotaDebitoDetalle extends Domain {
 
 	public void setImporteGs(double importeGs) {
 		this.importeGs = importeGs;
+	}
+
+	public double getImporteDs() {
+		return importeDs;
+	}
+
+	public void setImporteDs(double importeDs) {
+		this.importeDs = importeDs;
 	}
 }
