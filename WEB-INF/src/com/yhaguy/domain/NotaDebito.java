@@ -17,7 +17,10 @@ public class NotaDebito extends Domain {
 	private Date fecha;
 	private String numeroFactura;	
 	private double importeGs;
+	private double importeDs;
+	private double tipoCambio;
 
+	private Tipo moneda;
 	private SucursalApp sucursal;
 	private TipoMovimiento tipoMovimiento;
 	private Tipo estadoComprobante;
@@ -167,5 +170,29 @@ public class NotaDebito extends Domain {
 
 	public void setImporteGs(double importeGs) {
 		this.importeGs = importeGs;
+	}
+
+	public double getImporteDs() {
+		return importeDs;
+	}
+
+	public void setImporteDs(double importeDs) {
+		this.importeDs = importeDs;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public Tipo getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(Tipo moneda) {
+		this.moneda = moneda;
 	}
 }

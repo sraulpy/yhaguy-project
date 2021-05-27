@@ -24,10 +24,16 @@
 					</combobox>
 				</hlayout>
 			</row>
-			<row>
+			<row visible="@load(vm.dato.dto.monedaLocal)">
 				<field value="Importe Gs.:" />
 				<guaranibox 
 					value="@bind(vm.dato.nvoDetalle.importeGs)"/>
+			</row>
+			<row visible="@load(!vm.dato.dto.monedaLocal)">
+				<field value="Importe U$D:" />
+				<guaranibox 
+					value="@bind(vm.dato.nvoDetalle.importeDs)"
+					onChange="@command('guaranizarImporte')" />
 			</row>
 		</rows>
 	</grid>

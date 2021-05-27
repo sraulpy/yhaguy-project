@@ -29,6 +29,23 @@
 						hflex="true"/>
 				</vlayout>
 				<vlayout spacing="0">
+					<field value="Moneda" />
+					<hlayout>
+						<combobox model="@load(vm.monedas)"
+							value="@load(vm.dto.moneda.text)"
+							selectedItem="@bind(vm.dto.moneda)"
+							hflex="true">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+					</hlayout>
+				</vlayout>
+				<vlayout spacing="0">
+					<field value="T.Cambio" />
+					<guaranibox value="@bind(vm.dto.tipoCambio)" hflex="true" />
+				</vlayout>
+				<vlayout spacing="0">
 					<field value="Sucursal" />
 					<textbox value="@load(vm.dto.sucursal.text.toString().toUpperCase())" readonly="true"
 						hflex="true"/>
@@ -100,8 +117,8 @@
 			<listheader width="40px" align="center"/>
 			<listheader label="Descripción" />
 			<listheader label="Tipo Iva" width="150px"/>
-			<listheader label="Importe Gs." width="150px"
-				align="right"/>
+			<listheader label="Importe Gs." width="150px" align="right"/>
+			<listheader label="Importe U$D." width="150px" align="right"/>
 		</listhead>
 		<template name="model">
 			<listitem>
@@ -109,16 +126,22 @@
 				<listcell label="@load(each.descripcion)" />
 				<listcell label="@load(each.tipoIva.text)" />
 				<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)" />
+				<listcell label="@load(each.importeDs) @converter(vm.cnv.monedaLocal)" />
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="4" align="left">
+			<listfooter span="5" align="left">
 				<hlayout>
 					<field value="@load(vm.dto.detalles.size())" />
 					<field value="ítems" />
 					<space hflex="true"></space>
 					<field value="Total Gs." />
 					<doublebox value="@load(vm.dto.totalImporteGs)"
+						format="###,###,##0" 
+						style="background:#EEF7FA; text-align:right; font-weight:bold" />
+					<space></space>
+					<field value="Total U$D" />
+					<doublebox value="@load(vm.dto.totalImporteDs)"
 						format="###,###,##0" 
 						style="background:#EEF7FA; text-align:right; font-weight:bold" />
 				</hlayout>

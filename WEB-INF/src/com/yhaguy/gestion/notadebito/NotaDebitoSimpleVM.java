@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 
 import com.coreweb.Config;
 import com.coreweb.control.SoloViewModel;
@@ -24,6 +26,14 @@ public class NotaDebitoSimpleVM extends SoloViewModel {
 	
 	@AfterCompose(superclass = true)
 	public void afterCompose() {
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void guaranizarImporte() {
+		double tc = this.dato.getDto().getTipoCambio();
+		double importeDs = this.dato.getNvoDetalle().getImporteDs();
+		this.dato.getNvoDetalle().setImporteGs(importeDs * tc);
 	}
 	
 	/**

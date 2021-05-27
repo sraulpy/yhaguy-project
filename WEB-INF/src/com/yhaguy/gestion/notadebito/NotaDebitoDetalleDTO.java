@@ -8,6 +8,7 @@ public class NotaDebitoDetalleDTO extends DTO {
 
 	private String descripcion = "";
 	private double importeGs = 0;
+	private double importeDs = 0;
 
 	private MyPair tipoIva;
 
@@ -33,5 +34,13 @@ public class NotaDebitoDetalleDTO extends DTO {
 
 	public void setTipoIva(MyPair tipoIva) {
 		this.tipoIva = tipoIva;
+	}
+
+	public double getImporteDs() {
+		return importeDs;
+	}
+
+	public void setImporteDs(double importeDs) {
+		this.importeDs = importeDs;
 	}	
 }

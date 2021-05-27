@@ -7,6 +7,7 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.Configuracion;
 import com.yhaguy.gestion.empresa.ClienteDTO;
 
 @SuppressWarnings("serial")
@@ -16,7 +17,9 @@ public class NotaDebitoDTO extends DTO {
 	private String timbrado = "";
 	private Date fecha = new Date();
 	private String numeroFactura = "";
+	private double tipoCambio = 1;
 
+	private MyPair moneda = new MyPair();
 	private MyPair sucursal = new MyPair();
 	private MyArray tipoMovimiento = new MyArray();
 	private MyPair estadoComprobante = new MyPair();
@@ -32,6 +35,24 @@ public class NotaDebitoDTO extends DTO {
 			out += item.getImporteGs();
 		}
 		return out;
+	}
+	
+	/**
+	 * @return el importe total
+	 */
+	public double getTotalImporteDs() {
+		double out = 0;
+		for (NotaDebitoDetalleDTO item : this.detalles) {
+			out += item.getImporteDs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return true si es moneda local..
+	 */
+	public boolean isMonedaLocal() {
+		return this.moneda.getId().longValue() == Configuracion.ID_MONEDA_GUARANIES;
 	}
 
 	public String getNumero() {
@@ -104,5 +125,21 @@ public class NotaDebitoDTO extends DTO {
 
 	public void setTimbrado(String timbrado) {
 		this.timbrado = timbrado;
+	}
+
+	public MyPair getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(MyPair moneda) {
+		this.moneda = moneda;
+	}
+
+	public double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(double tipoCambio) {
+		this.tipoCambio = tipoCambio;
 	}
 }

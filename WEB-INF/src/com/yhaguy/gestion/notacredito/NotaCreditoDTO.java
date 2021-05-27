@@ -26,7 +26,7 @@ public class NotaCreditoDTO extends DTO {
 	
 	private double importeDs = 0;
 	
-	private double tipoCambio = 0;
+	private double tipoCambio = 1;
 	private boolean promocion = false;
 	
 	private String cajaNro = "";

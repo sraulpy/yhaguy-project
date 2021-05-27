@@ -219,6 +219,11 @@ public class NotaDebitoControlBody extends BodyApp {
 				this.mensaje += "\n - Debe ingresar la descripcion..";
 			}
 			
+			if (dto.isMonedaLocal() && dto.getTipoCambio() <= 0.0) {
+				out = false;
+				this.mensaje += "\n - Debe ingresar el tipo de cambio..";
+			}
+			
 			if (nvoDetalle.getImporteGs() == 0) {
 				out = false;
 				this.mensaje += "\n - Debe ingresar el importe..";
@@ -332,6 +337,16 @@ public class NotaDebitoControlBody extends BodyApp {
 				&& (this.dto.getDetalles().size() == 0)) {
 			out = true;
 		}
+		return out;
+	}
+	
+	/**
+	 * @return las monedas..
+	 */
+	public List<MyPair> getMonedas() {
+		List<MyPair> out = new ArrayList<MyPair>();
+		out.add(this.getDtoUtil().getMonedaGuarani());
+		out.add(new MyPair(Configuracion.ID_MONEDA_DOLARES, "DOLARES"));
 		return out;
 	}
 	

@@ -234,6 +234,7 @@ public class Configuracion extends Config {
 	public static long ID_TIPO_GASTO_IMPORTACION = 1;
 	public static long ID_TIPO_GASTO_GENERAL = 2;
 	public static long ID_MONEDA_GUARANIES = 31;
+	public static long ID_MONEDA_DOLARES = 32;
 	public static String ID_TIPO_GASTO_COMPRA_LOCAL = "Gastos Compras Locales";
 
 	public static final String ID_TIPO_MONEDA = "Moneda";
