@@ -12,6 +12,7 @@
 
 		<property name="descripcion" />
 		<property name="importeGs" />
+		<property name="importeDs" />
 
 		<many-to-one name="tipoIva" class="com.coreweb.domain.Tipo"
 			column="idtipoiva" lazy="false"/>	

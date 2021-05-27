@@ -9,7 +9,7 @@ import com.yhaguy.gestion.empresa.AssemblerCliente;
 
 public class NotaDebitoAssembler extends Assembler {
 	
-	static String[] attIguales = { "numero", "timbrado", "fecha", "numeroFactura" };	
+	static String[] attIguales = { "numero", "timbrado", "fecha", "numeroFactura", "tipoCambio" };	
 	static String[] attTipoMovimiento = { "descripcion", "sigla", "clase", "tipoIva" };	
 	static String[] attTipos = { "descripcion", "sigla" };	
 
@@ -19,6 +19,7 @@ public class NotaDebitoAssembler extends Assembler {
 		
 		this.copiarValoresAtributos(dto, domain, attIguales);
 		this.myPairToDomain(dto, domain, "sucursal");
+		this.myPairToDomain(dto, domain, "moneda");
 		this.myPairToDomain(dto, domain, "estadoComprobante");
 		this.myArrayToDomain(dto, domain, "tipoMovimiento");
 		
@@ -49,7 +50,7 @@ public class NotaDebitoAssembler extends Assembler {
 // Assembler del detalle..
 class NotaDebitoDetalleAssembler extends Assembler {
 	
-	static String[] attIguales = { "descripcion", "importeGs" };
+	static String[] attIguales = { "descripcion", "importeGs", "importeDs" };
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {
