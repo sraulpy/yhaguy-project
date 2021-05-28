@@ -536,11 +536,12 @@ public class ControlCuentaCorriente {
 		ctm.setIdEmpresa(dto.getCliente().getEmpresa().getId());
 		ctm.setIdMovimientoOriginal(dto.getId());
 		ctm.setIdVendedor(0);
-		ctm.setImporteOriginal(dto.getTotalImporteGs());
-		ctm.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
+		ctm.setImporteOriginal(dto.isMonedaLocal() ? dto.getTotalImporteGs() : dto.getTotalImporteDs());
+		ctm.setTipoCambio(dto.getTipoCambio());
+		ctm.setMoneda(rr.getTipoById(dto.getMoneda().getId()));
 		ctm.setNroComprobante(dto.getNumero());
 		ctm.setSucursal(rr.getSucursalAppById(dto.getSucursal().getId()));
-		ctm.setSaldo(dto.getTotalImporteGs());
+		ctm.setSaldo(dto.isMonedaLocal() ? dto.getTotalImporteGs() : dto.getTotalImporteDs());
 		rr.saveObject(ctm, user);
 	}
 	

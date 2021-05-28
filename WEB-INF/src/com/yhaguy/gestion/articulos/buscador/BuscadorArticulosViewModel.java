@@ -503,6 +503,11 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 						out.remove(mprecio);
 					}
 				}
+				if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_BATERIAS)) {
+					if (precio.getDescripcion().contains("BATERIAS")) {
+						out.remove(mprecio);
+					}
+				}
 			}
 		}
 		return out;

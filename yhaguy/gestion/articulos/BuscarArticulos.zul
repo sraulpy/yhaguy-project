@@ -356,7 +356,7 @@
 		</button>
 	</popup>
 	
-	<popup id="historial" sclass="rounded">
+	<popup id="historial" sclass="rounded" width="90%">
 		<hlayout sclass="button-container">
 			<field value="@load(vm.selectedItem.pos4)" />
 			<space hflex="true"/>
@@ -383,7 +383,7 @@
 				<label value="Entrada a Stock : " style="margin-left:5px;font-style:italic;color:green"/>
 				<label value="@load(vm.stockEntrada)" style="margin-left:5px;font-style:italic;color:green"/>
 			</div>
-			<listbox sclass="small-list" width="1000px" height="250px"
+			<listbox sclass="small-list" hflex="true" height="250px"
 				model="@load(vm.historicoEntrada)"
 				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
 				<listhead>
@@ -415,7 +415,7 @@
 				<label value="Salida de Stock : " style="margin-left:5px;font-style:italic;color:red"/>
 				<label value="@load(vm.stockSalida)" style="margin-left:5px;font-style:italic;color:red"/>
 			</div>
-			<listbox sclass="small-list" width="1000px" height="220px"
+			<listbox sclass="small-list" hflex="true" height="220px"
 				model="@load(vm.historicoSalida)"
 				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
 			<listhead>

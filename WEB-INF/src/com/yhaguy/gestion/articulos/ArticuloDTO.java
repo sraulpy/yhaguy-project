@@ -59,6 +59,7 @@ public class ArticuloDTO extends DTO {
 	private double precioMinoristaGs = 0; // minorista
 	private double precioListaGs = 0;	// autocentro
 	private double precioTransportadora = 0;
+	private double precioBaterias = 0;
 	
 	private String disenho = "";
 	private int ancho = 0;
@@ -713,5 +714,13 @@ public class ArticuloDTO extends DTO {
 
 	public void setConsumoCarga(double consumoCarga) {
 		this.consumoCarga = consumoCarga;
+	}
+
+	public double getPrecioBaterias() {
+		return precioBaterias;
+	}
+
+	public void setPrecioBaterias(double precioBaterias) {
+		this.precioBaterias = precioBaterias;
 	}
 }

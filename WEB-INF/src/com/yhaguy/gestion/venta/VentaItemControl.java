@@ -340,6 +340,7 @@ public class VentaItemControl extends SoloViewModel {
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) precio = (double) art[4];
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precio = (double) art[5];
 		if (idListaPrecio == ArticuloListaPrecio.ID_TRANSPORTADORA) precio = (double) art[7];
+		if (idListaPrecio == ArticuloListaPrecio.ID_IMP_BATERIAS) precio = (double) art[8];
 		if (this.det.isExenta()) {
 			precio = precio - Utiles.getIVA(precio, 10);
 		}
@@ -752,6 +753,11 @@ public class VentaItemControl extends SoloViewModel {
 			out.add(mprecio);
 			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_MAYORISTA)) {
 				if (precio.getDescripcion().contains("MAYORISTA")) {
+					out.remove(mprecio);
+				}
+			}
+			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_BATERIAS)) {
+				if (precio.getDescripcion().contains("BATERIAS")) {
 					out.remove(mprecio);
 				}
 			}
