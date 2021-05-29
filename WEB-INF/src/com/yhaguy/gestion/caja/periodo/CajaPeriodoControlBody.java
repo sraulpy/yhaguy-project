@@ -456,6 +456,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Despliega la ventana del recibo..
 	 */
 	private void abrirVentanaRecibo(int tipo, String modo, boolean recaudacionMRA) throws Exception {
+		
+		if (tipo == ES_PAGO) {
+			if (this.dto.getDetalles().size() > 14) {
+				Clients.showNotification("PARA PAGOS, MAXIMO 15 REGISTROS");
+				return;
+			}
+		}
 
 		String titulo = null;
 		String tituloDet = null;

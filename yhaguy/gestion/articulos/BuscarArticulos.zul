@@ -28,7 +28,7 @@
 				<html>
 					<i class="fas fa-trash-alt fa-lg"></i>
 				</html>
-			</a>
+		</a>
 		<hlayout visible="false">
 			<hlayout id="hl_stock" visible="false"></hlayout>
 			<spinner id="int_box" visible="false"></spinner>
