@@ -152,6 +152,7 @@ public class NotaDebitoControlBody extends BodyApp {
 		dto.setTipoMovimiento(this.getDtoUtil().getTmNotaDebitoVenta());
 		dto.setSucursal(this.getSucursal());
 		dto.setEstadoComprobante(this.getEstadoComprobantePendiente());
+		dto.setMoneda(this.getDtoUtil().getMonedaGuarani());
 	}
 	
 	/**

@@ -48,6 +48,7 @@
 						<zk forEach="${vm.menuItem(self,'BancoPrestamoCheque', 'tipo=prestamo') }" />
 						<zk forEach="${vm.menuItem(self,'BancoPrestamoChequeAcreedor', 'tipo=prestamo_acreedor') }" />	
 						<zk forEach="${vm.menuItem(self,'BancoTransferencias') }" />
+						<zk forEach="${vm.menuItem(self,'BancoExtracciones') }" />
 						<zk forEach="${vm.menuItem(self,'BancoConciliacion') }" />
 						<zk forEach="${vm.menuItem(self,'LibroBanco')}" />
 					</menupopup>

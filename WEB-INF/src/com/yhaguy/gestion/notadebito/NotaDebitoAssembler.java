@@ -36,6 +36,7 @@ public class NotaDebitoAssembler extends Assembler {
 		
 		this.copiarValoresAtributos(domain, dto, attIguales);
 		this.domainToMyPair(domain, dto, "sucursal");
+		this.domainToMyPair(domain, dto, "moneda");
 		this.domainToMyPair(domain, dto, "estadoComprobante");
 		this.domainToMyArray(domain, dto, "tipoMovimiento", attTipoMovimiento);
 		

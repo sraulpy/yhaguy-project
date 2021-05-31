@@ -10036,6 +10036,18 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las extracciones bancarias..
+	 */
+	public List<BancoExtraccion> getBancoExtracciones(String fecha, String banco, String numero) throws Exception {
+		String query = "select b from BancoExtraccion b where "
+				+ " upper(b.numero) like '%" + numero.toUpperCase() + "%'"
+				+ " and cast (b.fecha as string) like '%" + fecha + "%'"
+				+ " and upper(b.origen.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
+				+ " order by b.fecha";
+		return this.hqlLimit(query, 200);
+	}
+	
+	/**
 	 * @return empresas segun ruc..
 	 */
 	public List<Empresa> getEmpresasByRuc(String ruc) throws Exception {
