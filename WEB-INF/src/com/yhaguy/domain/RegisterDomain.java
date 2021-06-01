@@ -10042,7 +10042,7 @@ public class RegisterDomain extends Register {
 		String query = "select b from BancoExtraccion b where "
 				+ " upper(b.numero) like '%" + numero.toUpperCase() + "%'"
 				+ " and cast (b.fecha as string) like '%" + fecha + "%'"
-				+ " and upper(b.origen.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
+				+ " and upper(b.banco.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
 				+ " order by b.fecha";
 		return this.hqlLimit(query, 200);
 	}
