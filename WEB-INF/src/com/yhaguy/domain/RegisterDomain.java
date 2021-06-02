@@ -13430,7 +13430,7 @@ public class RegisterDomain extends Register {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('EXTRACCION BANCARIA'), "
-				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('EXTRACCION BANCARIA: ', b.destino.banco.descripcion)"
+				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('EXTRACCION BANCARIA: ', b.banco.banco.descripcion)"
 				+ " from BancoExtraccion b where"
 				+ " b.origen.id = " + idBanco
 				+ " and (b.fecha >= '"
