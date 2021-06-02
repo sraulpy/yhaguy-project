@@ -241,6 +241,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
+		List<Object[]> extracciones = rr.getExtraccionesPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
@@ -262,6 +263,7 @@ public class BancoControlBody extends BodyApp {
 		historicoHABER.addAll(gastos);
 		historicoHABER.addAll(debitosDesglosados);
 		historicoHABER.addAll(formasPagoDebito);
+		historicoHABER.addAll(extracciones);
 
 		for (Object[] movim : historicoDEBE) {
 			movim[0] = "(+)" + movim[0];
