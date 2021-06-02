@@ -13432,7 +13432,7 @@ public class RegisterDomain extends Register {
 		String query = "select ('EXTRACCION BANCARIA'), "
 				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('EXTRACCION BANCARIA: ', b.banco.banco.descripcion)"
 				+ " from BancoExtraccion b where"
-				+ " b.origen.id = " + idBanco
+				+ " b.banco.id = " + idBanco
 				+ " and (b.fecha >= '"
 				+ desde_
 				+ "' and b.fecha <= '"
