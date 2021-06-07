@@ -128,6 +128,24 @@ public class ControlArticuloStock {
 	 * [7]: saldo
 	 * [8]: importe 
 	 */
+	public static List<Object[]> getHistorialMovimientosGenerico(long idArticulo, long idSucursal, Date hasta) throws Exception {		
+		String campoFecha = "fechaVolcado";		
+		Date desde = Utiles.getFechaInicioOperaciones();
+		return ControlArticuloStock.getHistorialMovimientosGenerico(idArticulo, idSucursal, desde, hasta, campoFecha);
+	}
+	
+	/**
+	 * @return historial de movimientos del articulo..
+	 * [0]: fecha
+	 * [1]: hora
+	 * [2]: numero
+	 * [3]: concepto
+	 * [4]: dep
+	 * [5]: entrada
+	 * [6]: salida
+	 * [7]: saldo
+	 * [8]: importe 
+	 */
 	public static List<Object[]> getHistorialMovimientos(long idArticulo, long idDeposito, long idSucursal,
 			boolean incluirDepositoVirtual, Date hasta, boolean valorizado) throws Exception {
 		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
@@ -216,7 +234,7 @@ public class ControlArticuloStock {
 				return fecha1.compareTo(fecha2);
 			}
 		});
-		
+				
 		long saldo = 0;
 		for (Object[] hist : historico) {
 			boolean ent = ((String) hist[0]).startsWith("(+)");
@@ -230,8 +248,160 @@ public class ControlArticuloStock {
 			String dep = (String) hist[6];
 			saldo += ent ? Long.parseLong(hist[3] + "") :  Long.parseLong(hist[3] + "") * -1;
 			data.add(new Object[] { fecha, hora, numero, concepto, dep, entrada, salida, saldo + "", importe });
+		}	
+		return data;
+	}
+	
+	/**
+	 * @return historial de movimientos del articulo..
+	 * [0]: fecha
+	 * [1]: hora
+	 * [2]: numero
+	 * [3]: concepto
+	 * [4]: dep
+	 * [5]: entrada
+	 * [6]: salida
+	 * [7]: saldo
+	 * [8]: importe 
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Object[]> getHistorialMovimientosGenerico(long idArticulo, long idSucursal, Date desde,
+			Date hasta, String campoFecha) throws Exception {
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Articulo articulo = rr.getArticuloById(idArticulo);
+		String codigo = articulo.getCodigoInterno();
+
+		List<Object[]> data = new ArrayList<Object[]>();
+		List<Object[]> historico;
+		List<Object[]> historicoEntrada;
+		List<Object[]> historicoSalida;
+		
+		historicoEntrada = (List<Object[]>) getHistoricoEntrada(idArticulo, codigo, desde, hasta, idSucursal)[0];
+		historicoSalida = (List<Object[]>) getHistoricoSalida(idArticulo, codigo, desde, hasta, idSucursal)[0];
+
+		for (Object[] movim : historicoEntrada) {
+			movim[0] = "(+)" + movim[0];
+		}
+
+		historico = new ArrayList<Object[]>();
+		historico.addAll(historicoEntrada);
+		historico.addAll(historicoSalida);
+
+		// ordena la lista segun fecha..
+		Collections.sort(historico, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		long saldo = 0;
+		for (Object[] hist : historico) {
+			boolean ent = ((String) hist[0]).startsWith("(+)");
+			String fecha = Utiles.getDateToString((Date) hist[1], Utiles.DD_MM_YY);
+			String hora = Utiles.getDateToString((Date) hist[1], "hh:mm");
+			String numero = (String) hist[2];
+			String concepto = ((String) hist[0]).replace("(+)", "");
+			String entrada = ent ? hist[3] + "" : "";
+			String salida = ent ? "" : hist[3] + "";
+			String importe = Utiles.getNumberFormat((double) hist[4]);
+			String dep = "";
+			saldo += ent ? Long.parseLong(hist[3] + "") :  Long.parseLong(hist[3] + "") * -1;
+			data.add(new Object[] { fecha, hora, numero, concepto, dep, entrada, salida, saldo + "", importe });
 			System.out.println("--- " + concepto + " " + numero);
 		}	
 		return data;
+	}
+	
+	/**
+	 * recupera el historico de movimientos del articulo..
+	 */
+	public static Object[] getHistoricoEntrada(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		long total = 0;
+		boolean fechaHora = true;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta);
+		
+		out.addAll(migracion);
+		out.addAll(ajustStockPost);		
+		out.addAll(ntcsv);
+		out.addAll(compras);
+		out.addAll(importaciones);
+		out.addAll(transfsOrigenMRA);
+		Object[] cierre = null;
+		
+		for (Object[] item : out) {
+			String concepto = (String) item[0];
+			if (!concepto.equals("FAC.COMPRA CREDITO")
+					&& !concepto.equals("FAC.COMPRA CONTADO")
+					&& !concepto.equals("FAC. IMPORTACIÓN CRÉDITO")
+					&& !concepto.equals("FAC. IMPORTACIÓN CONTADO")
+					&& !concepto.equals("NOTA DE CRÉDITO-VENTA")
+					&& !(concepto.equals("AJUSTE STOCK POSITIVO"))
+					&& !(concepto.equals("MIGRACION"))
+					&& !concepto.equals("FAC. IMPORTACIÓN CRE.")
+					&& !concepto.equals("FAC. IMPORTACIÓN CON.")
+					&& !(concepto.equals("TRANSF. EXTERNA"))) {
+				item[4] = 0.0;
+			}
+			total += Long.parseLong(item[3] + "");
+		}
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		return new Object[] { out, total, importaciones, cierre };
+	}
+	
+	/**
+	 * recupera el historico de movimientos del articulo..
+	 */
+	public static Object[] getHistoricoSalida(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		long total = 0;
+		boolean fechaHora = true;
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
+		
+		for (Object[] item : ajustStockNeg) {
+			item[3] = (Long.parseLong(item[3] + "") * -1);
+		}
+		out.addAll(ventas);
+		out.addAll(ntcsc);		
+		out.addAll(transfsDestinoMRA);
+		out.addAll(ajustStockNeg);
+		
+		for (Object[] item : out) {
+			total += Long.parseLong(item[3] + "");
+		}
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		return new Object[] { out, total };
 	}
 }

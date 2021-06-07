@@ -5136,6 +5136,39 @@ public class RegisterDomain extends Register {
 	 * [8]:id entrada
 	 * [12]:sucursal
 	 */
+	public List<Object[]> getTransferenciasPorArticuloDestinoDiferenciaInv2019(long idArticulo,
+			Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_INTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.depositoEntrada.id = " + Deposito.ID_DIFERENCIA_INV_2019
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
 	public List<Object[]> getTransferenciasPorArticuloOrigenMRA(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -5932,6 +5965,21 @@ public class RegisterDomain extends Register {
 		String query = "select 'MIGRACION', a.fechaAlta, '--', a.stock, a.costo, '--', a.id ,'--', '--', '--', '--', '--', '--', a.costo, a.id"
 				+ " from ArticuloHistorialMigracion a where a.dbEstado != 'D' and a.codigoInterno = '" + codigoArticulo
 				+ "'";
+		if (desde != null) {
+			query += " and (a.fechaAlta >= '" + desde_ + "' and a.fechaAlta <= '" + hasta_ + "')";
+		}
+		List<Object[]> out = this.hql(query);
+		return out;
+	}
+	
+	/**
+	 * migracion del articulo [0]:id [1]:concepto [2]:fecha [3]:numero
+	 */
+	public List<Object[]> getMigraciones(Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a.id, 'MIGRACION', a.fechaAlta, '--'"
+				+ " from ArticuloHistorialMigracion a where a.dbEstado != 'D'";
 		if (desde != null) {
 			query += " and (a.fechaAlta >= '" + desde_ + "' and a.fechaAlta <= '" + hasta_ + "')";
 		}
@@ -8534,6 +8582,22 @@ public class RegisterDomain extends Register {
 		List<ArticuloCostoPromediogs> list = this.hqlLimit(query, 1);
 		if (list.size() > 0) {
 			double out = list.get(0).getCostoPromedio();
+			return Utiles.getRedondeo(out / list.size());		
+		} else {
+			return 0.0;
+		}
+	}
+	
+	/**
+	 * @return el costo promedio del articulo..
+	 */
+	public double getCostoUltimo(long idArticulo, Date fecha) throws Exception {
+		String fecha_ = Utiles.getDateToString(fecha, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select a from ArticuloCostoPromediogs a where a.articulo.id = " + idArticulo
+				+ " and a.fecha <= '" + fecha_ + "' order by a.fecha desc";
+		List<ArticuloCostoPromediogs> list = this.hqlLimit(query, 1);
+		if (list.size() > 0) {
+			double out = list.get(0).getUltimoCosto();
 			return Utiles.getRedondeo(out / list.size());		
 		} else {
 			return 0.0;

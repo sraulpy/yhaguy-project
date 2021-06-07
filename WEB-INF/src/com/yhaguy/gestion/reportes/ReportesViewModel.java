@@ -1015,14 +1015,24 @@ public class ReportesViewModel extends SimpleViewModel {
 					
 					if (stock > 0) {
 						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							double costoPromedio = rr.getCostoPromedio(idArticulo_, hasta);
+							double costoPromedio = ControlArticuloCosto.getCostoPromedioGs(idArticulo_, hasta);
 							if (costoPromedio > 0) {
 								costo = costoPromedio;
+							} else {
+								costo = ControlArticuloCosto.getCostoUltimoGs(idArticulo_, hasta);
 							}
 						}
+						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+							double costoUltimo = ControlArticuloCosto.getCostoUltimoGs(idArticulo_, hasta);
+							if (costoUltimo > 0) {
+								costo = costoUltimo;
+							} 
+						}
+						if (costo <= 0) {
+							costo = (double) art[3];
+						}
 						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (costo * stock) });
-					}
-					
+					}					
 				}
 								
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";

@@ -356,7 +356,7 @@
 		</button>
 	</popup>
 	
-	<popup id="historial" sclass="rounded" width="90%">
+	<popup id="historial" sclass="rounded" width="90%" height="95%">
 		<hlayout sclass="button-container">
 			<field value="@load(vm.selectedItem.pos4)" />
 			<space hflex="true"/>
@@ -378,16 +378,16 @@
 			<datebox value="@bind(vm.hasta)"
 				onChange="@command('refreshHistorico')"/>
 		</hlayout>
-		<vlayout>
+		<vbox vflex="true">
 			<div>
 				<label value="Entrada a Stock : " style="margin-left:5px;font-style:italic;color:green"/>
 				<label value="@load(vm.stockEntrada)" style="margin-left:5px;font-style:italic;color:green"/>
 			</div>
-			<listbox sclass="small-list" hflex="true" height="250px"
+			<listbox sclass="small-list" hflex="true" vflex="true"
 				model="@load(vm.historicoEntrada)"
-				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
+				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA.." mold="paging" pageSize="9">
 				<listhead>
-					<listheader label="Concepto" width="160px" />
+					<listheader label="Concepto" width="165px" />
 					<listheader label="Empresa" />
 					<listheader label="Fecha" width="100px" />
 					<listheader label="Número" width="120px" />
@@ -415,11 +415,11 @@
 				<label value="Salida de Stock : " style="margin-left:5px;font-style:italic;color:red"/>
 				<label value="@load(vm.stockSalida)" style="margin-left:5px;font-style:italic;color:red"/>
 			</div>
-			<listbox sclass="small-list" hflex="true" height="220px"
+			<listbox sclass="small-list" hflex="true" vflex="true"
 				model="@load(vm.historicoSalida)"
-				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA..">
+				emptyMessage="SIN MOVIMIENTOS EN ESTE RANGO DE FECHA.." mold="paging" pageSize="9">
 			<listhead>
-				<listheader label="Concepto" width="160px" />
+				<listheader label="Concepto" width="165px" />
 				<listheader label="Empresa" />
 				<listheader label="Fecha" width="100px" />
 				<listheader label="Número" width="120px" />
@@ -442,7 +442,7 @@
 				</listitem>
 			</template>
 		</listbox>
-		</vlayout>
+		</vbox>
 	</popup>
 	
 	<popup id="importaciones" sclass="rounded">

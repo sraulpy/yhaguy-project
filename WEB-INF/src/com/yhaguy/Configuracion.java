@@ -301,6 +301,7 @@ public class Configuracion extends Config {
 	public static String ID_TIPO_VENTA_REPARTO = "VTA-REP"; // 27;
 	public static String ID_ESTADO_REPARTO_PENDIENTE = "MOV-REP-PEN"; // 78;
 	public static String ID_TIPO_TRANSFERENCIA_EXTERNA = "TRF-EXT"; // 2;
+	public static String ID_TIPO_TRANSFERENCIA_INTERNA = "TRF-INT"; // 2;
 	public static String ID_ESTADO_PEDIDO_TRF_CONFIRMADO = "TRF-CONF"; // 5;
 
 	public static String ID_TIPO_ESTADO_CLIENTE = "Estado Cliente";

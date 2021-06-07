@@ -3,6 +3,8 @@ package com.yhaguy.gestion.articulos.buscador;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Spinner;
+import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.util.Misc;
@@ -96,6 +99,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	@Wire
 	private Popup pop_barcode;
 	
+	@Wire
+	private Window findArt;
+	
 	@Init
 	public void init() {
 		try {
@@ -155,7 +161,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	@Command
 	public void loadHistorico() throws Exception {
 		this.loadHistorico_();
-		this.historial.open(listArt, "overlap");
+		this.historial.open(findArt, "overlap");
 	}
 	
 	@Command
@@ -539,10 +545,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> ventas = rr.getVentasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> transfs = rr.getTransferenciasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> transfsMra = rr.getTransferenciasPorArticuloMRAentrada(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> transfsMra_ = rr.getTransferenciasPorArticuloMRAsalida(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
@@ -556,26 +561,37 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(ntcsv);
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
-		if (!this.isEmpresaMRA()) this.historicoEntrada.addAll(transfsOrigenMRA);
-		if (this.isEmpresaMRA()) this.historicoEntrada.addAll(transfsMra);
+		this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsDestinoMRA : transfsOrigenMRA);
 		
 		this.historicoSalida = new ArrayList<Object[]>();
 		this.historicoSalida.addAll(ajustStockNeg);
 		this.historicoSalida.addAll(ventas);
 		this.historicoSalida.addAll(ntcsc);
-		this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsMra_ : transfs);
-		
-		/** for (Object[] transf : transfs) {
-			long idsuc = (long) transf[6];
-			if(idsuc == ID_SUC_PRINCIPAL) {
-				
-			} else {				
-				this.historicoEntrada.add(transf);
-			}
-		} **/
+		this.historicoSalida.addAll(transfsDestinoDifInventario);
+		this.historicoSalida.addAll(this.isEmpresaMRA() ?  transfsOrigenMRA : transfsDestinoMRA);
 		
 		this.actualizarTotal(this.historicoEntrada, true);
 		this.actualizarTotal(this.historicoSalida, false);
+		
+		// ordena la lista segun fecha..
+		Collections.sort(this.historicoEntrada, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		// ordena la lista segun fecha..
+		Collections.sort(this.historicoSalida, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
 		
 		BindUtils.postNotifyChange(null, null, this, "historicoEntrada");
 		BindUtils.postNotifyChange(null, null, this, "historicoSalida");

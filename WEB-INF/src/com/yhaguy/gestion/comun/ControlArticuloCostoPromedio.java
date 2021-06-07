@@ -13,6 +13,7 @@ import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.AjusteStockDetalle;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloCostoPromediogs;
+import com.yhaguy.domain.ArticuloHistorialMigracion;
 import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CompraLocalFacturaDetalle;
 import com.yhaguy.domain.ImportacionFactura;
@@ -41,6 +42,14 @@ public class ControlArticuloCostoPromedio {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
+
+		/**
+		List<Object[]> migraciones = rr.getMigraciones(desde, hasta);
+		for (Object[] migracion : migraciones) {
+			long id = (long) migracion[0];
+			this.addCostoPromedioMigracion(id);
+		}**/
+		
 		List<Object[]> entradas = this.getHistoricoCompras(desde, hasta);
 		
 		for (Object[] compra : entradas) {
@@ -76,6 +85,47 @@ public class ControlArticuloCostoPromedio {
 	}
 	
 	/**
+	 * add costo promedio migracion
+	 */
+	public void addCostoPromedioMigracion(long id) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
+			String descripcion = "";
+			Date fecha = null;
+			ArticuloHistorialMigracion mg = (ArticuloHistorialMigracion) rr.getObject(ArticuloHistorialMigracion.class.getName(), id);			
+			Articulo art = rr.getArticulo(mg.getCodigoInterno());
+			if (art != null) {
+				Object[] ent = this.getHistoricoEntrada(art.getId(), art.getCodigoInterno(), mg.getFechaAlta());
+				Object[] sal = this.getHistoricoSalida(art.getId(), art.getCodigoInterno(), mg.getFechaAlta());
+				long totalEntradas = (long) ent[1];
+				long totalSalidas = (long) sal[1];
+				long stock = (totalEntradas) - totalSalidas;
+				if (stock < 0) stock = 0;
+				List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(mg.getFechaAlta(), -1));
+				double ultPromedio = this.getCostoPromedio(compras, mg.getCosto());
+				double ultCosto = this.getCostoUltimo(compras, mg.getCosto());
+				double promedio = this.getCostoPromedioCalculado(stock, mg.getStock(), ultPromedio, mg.getCosto());				
+				double costoPromedio = promedio;
+				fecha = mg.getFechaAlta();
+				descripcion = "MIGRACION:" + mg.getCodigoInterno();
+				
+				ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
+				prm.setArticulo(art);
+				prm.setCostoPromedio(costoPromedio);
+				prm.setUltimoCosto(ultCosto);
+				prm.setDescripcion(descripcion);
+				prm.setFecha(fecha);
+				rr.saveObject(prm, "sys");
+				System.out.println(art.getCodigoInterno() + " " + costoPromedio + " " + descripcion + " " + fecha);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * add costo promedio compra local
 	 */
 	public void addCostoPromedioCompralocal(long id) {
@@ -83,7 +133,6 @@ public class ControlArticuloCostoPromedio {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
-			double costoUltimo = 0;
 			String descripcion = "";
 			Date fecha = null;
 			CompraLocalFactura cf = rr.getCompraLocalFactura(id);
@@ -108,7 +157,7 @@ public class ControlArticuloCostoPromedio {
 				ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
 				prm.setArticulo(art);
 				prm.setCostoPromedio(costoPromedio);
-				prm.setUltimoCosto(costoUltimo);
+				prm.setUltimoCosto(item.getCostoFinalGs());
 				prm.setDescripcion(descripcion);
 				prm.setFecha(fecha);
 				rr.saveObject(prm, "sys");
@@ -128,7 +177,6 @@ public class ControlArticuloCostoPromedio {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
-			double costoUltimo = 0;
 			String descripcion = "";
 			Date fecha = null;
 			ImportacionFactura cf = rr.getImportacionFacturaById(id);
@@ -154,7 +202,7 @@ public class ControlArticuloCostoPromedio {
 					ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
 					prm.setArticulo(art);
 					prm.setCostoPromedio(costoPromedio);
-					prm.setUltimoCosto(costoUltimo);
+					prm.setUltimoCosto(item.getCostoFinalGs());
 					prm.setDescripcion(descripcion);
 					prm.setFecha(fecha);
 					rr.saveObject(prm, "sys");
@@ -175,7 +223,6 @@ public class ControlArticuloCostoPromedio {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
-			double costoUltimo = 0;
 			String descripcion = "";
 			Date fecha = null;
 			NotaCredito nc = rr.getNotaCredito(id);
@@ -195,6 +242,7 @@ public class ControlArticuloCostoPromedio {
 							List<Object[]> comprasFechaVta = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(vta.getFecha(), -1));
 							double promedioVta = this.getCostoPromedio(comprasFechaVta, det.getCostoUnitarioGs());
 							double ultPromedio = this.getCostoPromedio(compras, det.getCostoUnitarioGs());
+							double ultCosto = this.getCostoUltimo(compras, det.getCostoUnitarioGs());
 							double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, promedioVta);
 							item.setCostoPromedioGs(promedio);
 							rr.saveObject(item, item.getUsuarioMod());
@@ -206,7 +254,7 @@ public class ControlArticuloCostoPromedio {
 							ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
 							prm.setArticulo(art);
 							prm.setCostoPromedio(costoPromedio);
-							prm.setUltimoCosto(costoUltimo);
+							prm.setUltimoCosto(ultCosto);
 							prm.setDescripcion(descripcion);
 							prm.setFecha(fecha);
 							rr.saveObject(prm, "sys");
@@ -228,6 +276,7 @@ public class ControlArticuloCostoPromedio {
 					List<Object[]> comprasFechaVta = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(nc.getFechaEmision(), -1));
 					double promedioVta = this.getCostoPromedio(comprasFechaVta, item.getCostoGs());
 					double ultPromedio = this.getCostoPromedio(compras, item.getCostoGs());
+					double ultCosto = this.getCostoUltimo(compras, item.getCostoGs());
 					double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, promedioVta);
 					item.setCostoPromedioGs(promedio);
 					rr.saveObject(item, item.getUsuarioMod());
@@ -239,7 +288,7 @@ public class ControlArticuloCostoPromedio {
 					ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
 					prm.setArticulo(art);
 					prm.setCostoPromedio(costoPromedio);
-					prm.setUltimoCosto(costoUltimo);
+					prm.setUltimoCosto(ultCosto);
 					prm.setDescripcion(descripcion);
 					prm.setFecha(fecha);
 					rr.saveObject(prm, "sys");
@@ -256,7 +305,6 @@ public class ControlArticuloCostoPromedio {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
-			double costoUltimo = 0;
 			String descripcion = "";
 			Date fecha = null;
 			AjusteStock aj = (AjusteStock) rr.getObject(AjusteStock.class.getName(), id);
@@ -271,6 +319,7 @@ public class ControlArticuloCostoPromedio {
 					if (stock < 0) stock = 0;
 					List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), DateUtils.addMinutes(aj.getFecha(), -1));
 					double ultPromedio = this.getCostoPromedio(compras, item.getCostoGs());
+					double ultCosto = this.getCostoUltimo(compras, item.getCostoGs());
 					double promedio = this.getCostoPromedioCalculado(stock, item.getCantidad(), ultPromedio, item.getCostoGs());
 					item.setCostoPromedioGs(promedio);
 					rr.saveObject(item, item.getUsuarioMod());	
@@ -282,7 +331,7 @@ public class ControlArticuloCostoPromedio {
 					ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
 					prm.setArticulo(art);
 					prm.setCostoPromedio(costoPromedio);
-					prm.setUltimoCosto(costoUltimo);
+					prm.setUltimoCosto(ultCosto);
 					prm.setDescripcion(descripcion);
 					prm.setFecha(fecha);
 					rr.saveObject(prm, "sys");
@@ -303,7 +352,6 @@ public class ControlArticuloCostoPromedio {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 			double costoPromedio = 0;
-			double costoUltimo = 0;
 			String descripcion = "";
 			Date fecha = null;
 			Transferencia tr = rr.getTransferencia(id);
@@ -330,7 +378,7 @@ public class ControlArticuloCostoPromedio {
 				ArticuloCostoPromediogs prm = new ArticuloCostoPromediogs();
 				prm.setArticulo(art);
 				prm.setCostoPromedio(costoPromedio);
-				prm.setUltimoCosto(costoUltimo);
+				prm.setUltimoCosto(item.getCosto());
 				prm.setDescripcion(descripcion);
 				prm.setFecha(fecha);
 				rr.saveObject(prm, "sys");
@@ -372,6 +420,30 @@ public class ControlArticuloCostoPromedio {
 			Object[] compra = compras.get(i);
 			double costo = (double) compra[13];
 			return costo > 0 ? costo : (double) compra[4];
+		}
+		return 0.0;
+	}
+	
+	/**
+	 * @return el costo ultimo..
+	 */
+	@SuppressWarnings("unused")
+	private double getCostoUltimo(List<Object[]> compras, double ultCosto) {
+		if (compras.size() == 0) {
+			return ultCosto;
+		}
+		// ordena la lista segun fecha..
+		Collections.sort(compras, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		for (int i = compras.size() - 1; i >= 0; i--) {
+			Object[] compra = compras.get(i);
+			return (double) compra[4];
 		}
 		return 0.0;
 	}

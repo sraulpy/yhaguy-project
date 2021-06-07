@@ -248,7 +248,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
-		//List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
 		
 		for (Object[] item : ajustStockNeg) {
@@ -256,7 +257,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 		}
 		out.addAll(ventas);
 		out.addAll(ntcsc);		
-		//out.addAll(transfsDestinoMRA);
+		out.addAll(transfsDestinoMRA);
+		out.addAll(transfsDestinoDifInventario);
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {

@@ -120,11 +120,17 @@ public class ControlArticuloCosto {
 	/**
 	 * el costo ultimo del articulo..
 	 */
-	public static double getCostoUltimo(long idArticulo, Date fecha) throws Exception {
+	public static double getCostoUltimoGs(long idArticulo, Date fecha) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> costos = rr.getArticuloCostos_(idArticulo, fecha);
-		double costo = costos.size() > 0? (double) costos.get(costos.size() - 1)[1] : 0.0;
-		return Utiles.getRedondeo(costo);
+		return Utiles.getRedondeo(rr.getCostoUltimo(idArticulo, fecha));
+	}
+	
+	/**
+	 * el costo ultimo del articulo..
+	 */
+	public static double getCostoPromedioGs(long idArticulo, Date fecha) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return Utiles.getRedondeo(rr.getCostoPromedio(idArticulo, fecha));
 	}
 	
 	/**
