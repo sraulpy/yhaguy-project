@@ -579,7 +579,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			public int compare(Object[] o1, Object[] o2) {
 				Date fecha1 = (Date) o1[1];
 				Date fecha2 = (Date) o2[1];
-				return fecha1.compareTo(fecha2);
+				return fecha2.compareTo(fecha1);
 			}
 		});
 		
@@ -589,7 +589,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			public int compare(Object[] o1, Object[] o2) {
 				Date fecha1 = (Date) o1[1];
 				Date fecha2 = (Date) o2[1];
-				return fecha1.compareTo(fecha2);
+				return fecha2.compareTo(fecha1);
 			}
 		});
 		
