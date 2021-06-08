@@ -729,7 +729,7 @@ public class RegisterDomain extends Register {
 	public List<Deposito> getDepositosPorSucursal(Long id) throws Exception {
 		List<Deposito> list = null;
 		String queryDepositos = "" + " select d from SucursalApp s join s.depositos d"
-				+ " where s.id = ? order by d.descripcion";
+				+ " where s.id = ? and d.dbEstado != '" + Deposito.VIRTUAL + "' order by d.descripcion";
 		list = this.hql(queryDepositos, id);
 		return list;
 	}
@@ -5140,8 +5140,8 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
-				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, 'INVENTARIO 2019', t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
@@ -5152,6 +5152,39 @@ public class RegisterDomain extends Register {
 				+ "' and t.fechaCreacion <= '"
 				+ hasta_
 				+ "') and t.depositoEntrada.id = " + Deposito.ID_DIFERENCIA_INV_2019
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
+	public List<Object[]> getTransferenciasPorArticuloOrigenDiferenciaInv2019(long idArticulo,
+			Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, 'INVENTARIO 2019', t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_INTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.depositoSalida.id = " + Deposito.ID_DIFERENCIA_INV_2019
 				+ " order by t.fechaCreacion desc";
 		return this.hql(query);
 	}
@@ -5586,15 +5619,17 @@ public class RegisterDomain extends Register {
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
 					+ tipo
-					+ "' and a.sucursal.id = "
-					+ idSucursal
-					+ " and a.estadoComprobante.sigla = '"
+					+ "' and a.estadoComprobante.sigla = '"
 					+ Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO
 					+ "'"
 					+ " and (a.fecha >= '"
 					+ desde_
 					+ "' and a.fecha <= '"
-					+ hasta_ + "')" + " order by a.fecha desc";
+					+ hasta_ + "')";
+			if (idSucursal > 0) {
+				query +=" and a.sucursal.id = " + idSucursal;
+			}
+					query += " order by a.fecha desc";
 		} else if (tipo.equals(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO)) {
 			query = "select a.tipoMovimiento.descripcion, a.fecha, a.numero, d.cantidad, a.sucursal.descripcion, d.costoGs, a.deposito.descripcion,"
 					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs"
@@ -5602,15 +5637,17 @@ public class RegisterDomain extends Register {
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
 					+ tipo
-					+ "' and a.sucursal.id = "
-					+ idSucursal
-					+ " and a.estadoComprobante.sigla = '"
+					+ "' and a.estadoComprobante.sigla = '"
 					+ Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO
 					+ "'"
 					+ " and (a.fecha >= '"
 					+ desde_
 					+ "' and a.fecha <= '"
-					+ hasta_ + "')" + "order by a.fecha desc";
+					+ hasta_ + "')";
+			if (idSucursal > 0) {
+				query +=" and a.sucursal.id = " + idSucursal;
+			}
+					query += " order by a.fecha desc";
 		}
 		List<Object[]> out = this.hql(query);
 		List<Object[]> out2 = new ArrayList<Object[]>();

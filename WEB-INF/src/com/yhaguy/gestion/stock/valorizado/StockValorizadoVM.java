@@ -197,6 +197,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
 		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsOrigenDifInventario = rr.getTransferenciasPorArticuloOrigenDiferenciaInv2019(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta);
 		
 		out.addAll(migracion);
@@ -205,6 +206,7 @@ public class StockValorizadoVM extends SimpleViewModel {
 		out.addAll(compras);
 		out.addAll(importaciones);
 		out.addAll(transfsOrigenMRA);
+		out.addAll(transfsOrigenDifInventario);
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -218,7 +220,8 @@ public class StockValorizadoVM extends SimpleViewModel {
 					&& !(concepto.equals("MIGRACION"))
 					&& !concepto.equals("FAC. IMPORTACIÓN CRE.")
 					&& !concepto.equals("FAC. IMPORTACIÓN CON.")
-					&& !(concepto.equals("TRANSF. EXTERNA"))) {
+					&& !(concepto.equals("TRANSF. EXTERNA"))
+					&& !(concepto.equals("TRANSF. INTERNA"))) {
 				item[4] = 0.0;
 			}
 			total += Long.parseLong(item[3] + "");

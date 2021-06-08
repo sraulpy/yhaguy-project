@@ -324,11 +324,13 @@ public class ControlArticuloStock {
 		long total = 0;
 		boolean fechaHora = true;
 		RegisterDomain rr = RegisterDomain.getInstance();
+		
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
 		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsOrigenDifInventario = rr.getTransferenciasPorArticuloOrigenDiferenciaInv2019(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta);
 		
 		out.addAll(migracion);
@@ -337,6 +339,7 @@ public class ControlArticuloStock {
 		out.addAll(compras);
 		out.addAll(importaciones);
 		out.addAll(transfsOrigenMRA);
+		out.addAll(transfsOrigenDifInventario);
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -350,7 +353,8 @@ public class ControlArticuloStock {
 					&& !(concepto.equals("MIGRACION"))
 					&& !concepto.equals("FAC. IMPORTACIÓN CRE.")
 					&& !concepto.equals("FAC. IMPORTACIÓN CON.")
-					&& !(concepto.equals("TRANSF. EXTERNA"))) {
+					&& !(concepto.equals("TRANSF. EXTERNA"))
+					&& !(concepto.equals("TRANSF. INTERNA"))) {
 				item[4] = 0.0;
 			}
 			total += Long.parseLong(item[3] + "");
@@ -379,6 +383,7 @@ public class ControlArticuloStock {
 		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
 		
 		for (Object[] item : ajustStockNeg) {
@@ -387,6 +392,7 @@ public class ControlArticuloStock {
 		out.addAll(ventas);
 		out.addAll(ntcsc);		
 		out.addAll(transfsDestinoMRA);
+		out.addAll(transfsDestinoDifInventario);
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {

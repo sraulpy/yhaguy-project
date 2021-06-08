@@ -977,6 +977,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		private void listadoStockValorizado(String codReporte) {
 			try {
 				Proveedor proveedor = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
+				Date desde = Utiles.getFechaInicioOperaciones();
 				Date hasta = filtro.getFechaHasta();
 				Articulo articulo = filtro.getArticulo();
 				String tipoCosto = filtro.getTipoCosto();
@@ -986,7 +987,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idProveedor = proveedor != null ? proveedor.getId() : (long) 0;
 				long idSucursal = sucursal != null ? sucursal.getId() : (long) 0;
 				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
-				long idDeposito = deposito != null ? deposito.getId() : (long) 0;
 				long idFamilia = familia != null ? familia.getId() : (long) 0;
 				
 				if (hasta == null) {
@@ -1002,14 +1002,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (Object[] art : arts) {
 					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta, true);
-					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
-					
 					String codigoInterno = (String) art[1];
 					String descripcion = (String) art[2];
 					
-					String saldo = historial_ != null ? (String) historial_[7] : "0";
-					long stock = historial_ != null ? Long.parseLong(saldo) : (long) 0;
+					long entradas = (long) ControlArticuloStock.getHistoricoEntrada((long) art[0], codigoInterno, desde, hasta, idSucursal)[1];
+					long salidas = (long) ControlArticuloStock.getHistoricoSalida((long) art[0], codigoInterno, desde, hasta, idSucursal)[1];
+					
+					System.out.println("---" + codigoInterno + " + "  + entradas);
+					System.out.println("---" + codigoInterno + " - " + salidas);					
+					
+					long stock = entradas - salidas;
 					double costo  = 0;
 					long idArticulo_ = (long) art[0];
 					
