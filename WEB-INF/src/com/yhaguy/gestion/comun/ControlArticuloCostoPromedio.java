@@ -37,18 +37,11 @@ public class ControlArticuloCostoPromedio {
 
 	@SuppressWarnings("unused")
 	private void testCostoPromedio() throws Exception {		
-		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
-		Date hasta = Utiles.getFecha("30-05-2021 23:00:00");
+		Date desde = Utiles.getFecha("11-05-2021 00:00:00");
+		Date hasta = Utiles.getFecha("30-06-2021 23:00:00");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
-
-		/**
-		List<Object[]> migraciones = rr.getMigraciones(desde, hasta);
-		for (Object[] migracion : migraciones) {
-			long id = (long) migracion[0];
-			this.addCostoPromedioMigracion(id);
-		}**/
 		
 		List<Object[]> entradas = this.getHistoricoCompras(desde, hasta);
 		
@@ -459,13 +452,13 @@ public class ControlArticuloCostoPromedio {
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(desde, hasta, fechaHora);
 		List<Object[]> ajustes = rr.getAjustesPorArticulo(desde, hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
-		List<Object[]> transferenciasOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(desde, hasta, fechaHora);
+		//List<Object[]> transferenciasOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(desde, hasta, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
-		out.addAll(transferenciasOrigenMRA);
+		//out.addAll(transferenciasOrigenMRA);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -493,13 +486,13 @@ public class ControlArticuloCostoPromedio {
 		List<Object[]> notasCredito = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustes = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
-		List<Object[]> transferenciasOrigenMra = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
+		//List<Object[]> transferenciasOrigenMra = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
 		
 		out.addAll(importaciones);
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
-		out.addAll(transferenciasOrigenMra);
+		//out.addAll(transferenciasOrigenMra);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -528,7 +521,7 @@ public class ControlArticuloCostoPromedio {
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
-		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
+		//List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta);
 		
 		out.addAll(migracion);
@@ -536,7 +529,7 @@ public class ControlArticuloCostoPromedio {
 		out.addAll(ntcsv);
 		out.addAll(compras);
 		out.addAll(importaciones);
-		out.addAll(transfsOrigenMRA);
+		//out.addAll(transfsOrigenMRA);
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -580,7 +573,7 @@ public class ControlArticuloCostoPromedio {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
-		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		//List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
 		
 		for (Object[] item : ajustStockNeg) {
@@ -588,7 +581,7 @@ public class ControlArticuloCostoPromedio {
 		}
 		out.addAll(ventas);
 		out.addAll(ntcsc);		
-		out.addAll(transfsDestinoMRA);
+		//out.addAll(transfsDestinoMRA);
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {
