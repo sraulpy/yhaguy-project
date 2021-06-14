@@ -1088,7 +1088,7 @@ public class CompraLocalControlBody extends BodyApp {
 						(int) fac.getCondicionPago().getPos2(), 1,
 						importeOriginal, 0, importeOriginal, moneda,
 						tipoMovimiento, this.caracterMovimientoPrv, sucursal, "",
-						fac.getTipoCambio(), "");
+						fac.getTipoCambio(), "", 0);
 			}
 
 			// si es nota de credito
