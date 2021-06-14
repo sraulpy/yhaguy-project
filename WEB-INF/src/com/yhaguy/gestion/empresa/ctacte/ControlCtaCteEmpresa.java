@@ -579,7 +579,7 @@ public class ControlCtaCteEmpresa extends Control {
 	public void addCtaCteEmpresaMovimientoFacturaCredito(IiD empresa, long idMovimientoOriginal, String nroComprobante,
 			Date fechaEmision, int diasEntreVencimientos, int cuotasVencimiento, double importeOriginal,
 			double entregaInicial, double saldo, MyPair moneda, MyArray tipoMovimiento, MyPair tipoCaracterMovimiento,
-			MyArray sucursal, String numeroImportacion, double tipoCambio, String cartera) throws Exception {
+			MyArray sucursal, String numeroImportacion, double tipoCambio, String cartera, long idVendedor) throws Exception {
 		cuotasVencimiento = 1;
 
 		CtaCteEmpresaMovimientoDTO nuevoMovimientoDTO = new CtaCteEmpresaMovimientoDTO();
@@ -593,6 +593,7 @@ public class ControlCtaCteEmpresa extends Control {
 		nuevoMovimientoDTO.setTipoCaracterMovimiento(tipoCaracterMovimiento);
 		nuevoMovimientoDTO.setSucursal(sucursal);
 		nuevoMovimientoDTO.setNumeroImportacion(numeroImportacion);
+		nuevoMovimientoDTO.setIdVendedor(idVendedor);
 
 		if (entregaInicial > 0) {
 
