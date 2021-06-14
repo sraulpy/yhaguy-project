@@ -426,6 +426,19 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return el costo total en Gs..
+	 */
+	public double getTotalCostoPromedioGsSinIva() {
+		double out = 0;
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.getArticulo() != null) {
+				out += item.getCostoPromedioTotalGsSinIva();
+			}
+		}
+		return Math.rint(out * 1) / 1;
+	}
+	
+	/**
 	 * @return true si es exenta..
 	 */
 	public boolean isExenta() {
@@ -468,6 +481,22 @@ public class NotaCredito extends Domain {
 	/**
 	 * @return la rentabilidad de la nota de credito..
 	 */
+	public double getRentabilidadPromedio() {
+		if (!this.isMotivoDevolucion()) {
+			double vta = this.getVentaAplicada().getTotalImporteGsSinIva();
+			double nc = this.getTotalImporteGsSinIva();
+			double porc = Utiles.obtenerPorcentajeDelValor(nc, vta);
+			double rentVta = this.getVentaAplicada().getRentabilidadPromedio();			
+			return (rentVta * porc) / 100;
+		}		
+		double ganancia = this.getTotalImporteGsSinIva() - this.getTotalCostoPromedioGsSinIva();	
+		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getTotalCostoPromedioGsSinIva());
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
+	 * @return la rentabilidad de la nota de credito..
+	 */
 	public double getRentabilidadVenta() {
 		if (!this.isMotivoDevolucion()) {
 			double vta = this.getVentaAplicada().getTotalImporteGsSinIva();
@@ -477,6 +506,22 @@ public class NotaCredito extends Domain {
 			return (rentVta * porc) / 100;
 		}		
 		double ganancia = this.getTotalImporteGsSinIva() - this.getTotalCostoGsSinIva();	
+		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getTotalImporteGsSinIva());
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
+	 * @return la rentabilidad de la nota de credito..
+	 */
+	public double getRentabilidadVentaPromedio() {
+		if (!this.isMotivoDevolucion()) {
+			double vta = this.getVentaAplicada().getTotalImporteGsSinIva();
+			double nc = this.getTotalImporteGsSinIva();
+			double porc = Utiles.obtenerPorcentajeDelValor(nc, vta);
+			double rentVta = this.getVentaAplicada().getRentabilidadPromedio();		
+			return (rentVta * porc) / 100;
+		}		
+		double ganancia = this.getTotalImporteGsSinIva() - this.getTotalCostoPromedioGsSinIva();
 		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getTotalImporteGsSinIva());
 		return Utiles.redondeoDosDecimales(out);
 	}

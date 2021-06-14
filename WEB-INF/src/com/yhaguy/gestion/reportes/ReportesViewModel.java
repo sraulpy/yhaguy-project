@@ -3908,6 +3908,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				EmpresaRubro rubro = filtro.getRubro_();
 				ArticuloMarca marca = filtro.getMarca_();
 				Proveedor proveedor = filtro.getProveedor();
+				String tipoCosto = filtro.getTipoCosto();
 				
 				long totalCantidad = 0;
 				double totalImporte = 0;
@@ -3929,6 +3930,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idMarca = marca == null ? 0 : marca.getId().longValue();
 				long idProveedor = proveedor == null ? 0 : proveedor.getId().longValue();
 				long idPresentacion = pres == null ? 0 : pres.getId().longValue();
+				
+				boolean costoPromedio = tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO);
 
 				List<NotaCredito> ncs = rr.getNotasCreditoVenta(desde, hasta, idCliente, idRubro, idSucursal, idVendedor, "", null);
 				for (NotaCredito notacred : ncs) {
@@ -3945,11 +3948,11 @@ public class ReportesViewModel extends SimpleViewModel {
 									item.getArticulo().getCodigoInterno(),
 									item.getArticulo().getMarca().getDescripcion().toUpperCase(),
 									item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
-									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoGs() * -1,
+									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : (costoPromedio ? item.getCostoPromedioGs() : item.getCostoGs()) * -1,
 									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? (long) 0 : Long.parseLong((item.getCantidad() * -1) + ""),
-									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : item.getCostoTotalGsSinIva() * -1,
+									notacred.isAnulado() || !notacred.isMotivoDevolucion() ? 0.0 : (costoPromedio ? item.getCostoPromedioTotalGsSinIva() : item.getCostoTotalGsSinIva()) * -1,
 									notacred.isAnulado() ? 0.0 : item.getImporteGsSinIva() * -1,
-									notacred.isAnulado() ? 0.0 : item.getRentabilidad() * -1,
+									notacred.isAnulado() ? 0.0 : (costoPromedio ? item.getRentabilidadPromedio() : item.getRentabilidad()) * -1,
 									item.getArticulo().getDescripcion(),
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
 									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1,
@@ -3980,9 +3983,9 @@ public class ReportesViewModel extends SimpleViewModel {
 									(long) 0,
 									0.0,
 									notacred.isAnulado() ? 0.0 : notacred.getTotalImporteGsSinIva() * -1,
-									notacred.isAnulado() ? 0.0 : notacred.getRentabilidad() * -1,
+									notacred.isAnulado() ? 0.0 : (costoPromedio ? notacred.getRentabilidadPromedio() : notacred.getRentabilidad()) * -1,
 									"DESCUENTO CONCEDIDO",
-									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
+									notacred.isAnulado() ? 0.0 : (costoPromedio ? notacred.getRentabilidadVentaPromedio() : notacred.getRentabilidadVenta()) * -1,
 									notacred.isAnulado() ? 0.0 : 0.0,
 									notacred.getVentaAplicada().getNombreTecnico() };
 							data.add(nc);
@@ -4004,14 +4007,14 @@ public class ReportesViewModel extends SimpleViewModel {
 									item.getArticulo().getCodigoInterno(),
 									item.getArticulo().getMarca().getDescripcion().toUpperCase(),
 									item.getArticulo().getFamilia().getDescripcion().toUpperCase(),
-									venta.isAnulado() ? 0.0 : item.getCostoUnitarioGs(),
+									venta.isAnulado() ? 0.0 : (costoPromedio ? item.getCostoPromedioGs() : item.getCostoUnitarioGs()),
 									venta.isAnulado() ? (long) 0 : item.getCantidad(),
-									venta.isAnulado() ? 0.0 : item.getCostoTotalGsSinIva(),
+									venta.isAnulado() ? 0.0 : (costoPromedio ? item.getCostoPromedioTotalGsSinIva() : item.getCostoTotalGsSinIva()),
 									venta.isAnulado() ? 0.0 : item.getImporteGsSinIva(),
-									venta.isAnulado() ? 0.0 : item.getRentabilidad(),
+									venta.isAnulado() ? 0.0 : (costoPromedio ? item.getRentabilidadPromedio() : item.getRentabilidad()),
 									item.getArticulo().getDescripcion(),
-									venta.isAnulado() ? 0.0 : item.getRentabilidadVenta(),
-									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()),
+									venta.isAnulado() ? 0.0 : (costoPromedio ? item.getRentabilidadVentaPromedio() : item.getRentabilidadVenta()),
+									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - (costoPromedio ? item.getCostoPromedioTotalGsSinIva() : item.getCostoTotalGsSinIva())),
 									venta.getNombreTecnico() };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
@@ -4059,7 +4062,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					params.put("TOT_MARGEN_VTA", Utiles.getNumberFormat(promedioSobreVenta));
 					params.put("TOT_MARGEN_COSTO", Utiles.getNumberFormat(promedioSobreCosto));
 					params.put("TOT_CANTIDAD", Utiles.getNumberFormat(totalCantidad));
-					params.put("TIPO_COSTO", "ÚLTIMO COSTO");
+					params.put("TIPO_COSTO", tipoCosto);
 					imprimirJasper(source, params, dataSource, formato);
 					
 				} else {

@@ -419,6 +419,17 @@ public class Venta extends Domain {
 	}
 	
 	/**
+	 * @return el costo total de la venta sin iva..
+	 */
+	public double getTotalCostoPromedioGsSinIva() {
+		double out = 0;
+		for (VentaDetalle item : this.detalles) {
+			out += item.getCostoPromedioTotalGsSinIva();
+		}
+		return Math.rint(out * 1) / 1;
+	}
+	
+	/**
 	 * @return el importe total sin iva..
 	 */
 	public double getTotalImporteGsSinIva() {
@@ -523,6 +534,15 @@ public class Venta extends Domain {
 	 * @return la rentabilidad del articulo..
 	 */
 	public double getRentabilidad() {
+		double ganancia = this.getTotalImporteGsSinIva() - this.getTotalCostoGsSinIva();
+		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getTotalCostoGsSinIva());
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
+	 * @return la rentabilidad del articulo..
+	 */
+	public double getRentabilidadPromedio() {
 		double ganancia = this.getTotalImporteGsSinIva() - this.getTotalCostoGsSinIva();
 		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getTotalCostoGsSinIva());
 		return Utiles.redondeoDosDecimales(out);

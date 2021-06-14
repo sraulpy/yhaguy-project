@@ -14,6 +14,16 @@
 			</hlayout>
 		</row>
 		<row>
+			<field value="Tipo de Costo:" />
+			<combobox model="@load(vm.dato.filtro.tiposDeCosto)" hflex="true"
+				value="@load(vm.dato.filtro.tipoCosto)"
+				selectedItem="@bind(vm.dato.filtro.tipoCosto)" instant="true">
+				<template name="model">
+					<comboitem label="@load(each)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Sucursal:" />
 			<combobox hflex="true"
 				model="@load(vm.dato.filtro.sucursales)"

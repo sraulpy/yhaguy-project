@@ -1,6 +1,6 @@
 <window id="win_rep" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.reportes.ReportesSimpleVM')"
-	height="475px" width="450px" title="Parámetros del Reporte"
+	height="500px" width="450px" title="Parámetros del Reporte"
 	style="padding:8px" closable="true">
 	
 	<borderlayout>

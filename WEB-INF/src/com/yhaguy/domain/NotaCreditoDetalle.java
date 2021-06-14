@@ -93,6 +93,15 @@ public class NotaCreditoDetalle extends Domain{
 	}
 	
 	/**
+	 * @return la rentabilidad del articulo..
+	 */
+	public double getRentabilidadPromedio() {
+		double ganancia = this.getImporteGsSinIva() - this.getCostoTotalGsSinIva();		
+		double out = Utiles.obtenerPorcentajeDelValor(ganancia, this.getCostoPromedioTotalGsSinIva());
+		return Utiles.redondeoDosDecimales(out);
+	}
+	
+	/**
 	 * @return el precio sin iva..
 	 */
 	public double getPrecioGsSinIva() {
@@ -117,6 +126,13 @@ public class NotaCreditoDetalle extends Domain{
 	 */
 	public double getCostoTotalGsSinIva() {
 		return this.getCostoGs() * this.cantidad;
+	}
+	
+	/**
+	 * @return el costo total del item sin iva..
+	 */
+	public double getCostoPromedioTotalGsSinIva() {
+		return this.getCostoPromedioGs() * this.cantidad;
 	}
 	
 	/**
