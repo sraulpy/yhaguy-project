@@ -116,6 +116,7 @@ public class ReportesFiltros {
 	private Tipo bancoTercero;
 	private BancoCta bancoCta;
 	private Deposito deposito;
+	private Deposito deposito2;
 	private List<Deposito> selectedDepositos = new ArrayList<Deposito>();
 	private ArticuloGasto articuloGasto;
 	private String descripcionArticuloGasto = "";
@@ -1709,5 +1710,13 @@ public class ReportesFiltros {
 
 	public void setFuncionarioMarcacion(String funcionarioMarcacion) {
 		this.funcionarioMarcacion = funcionarioMarcacion;
+	}
+
+	public Deposito getDeposito2() {
+		return deposito2;
+	}
+
+	public void setDeposito2(Deposito deposito2) {
+		this.deposito2 = deposito2;
 	}
 }

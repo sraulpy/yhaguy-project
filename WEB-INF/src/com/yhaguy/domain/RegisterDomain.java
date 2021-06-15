@@ -4884,7 +4884,8 @@ public class RegisterDomain extends Register {
 	 * [4]:origen 
 	 * [5]:destino
 	 */
-	public List<Object[]> getTransferenciasPorArticuloGenerico(long idArticulo, long idFamilia, Date desde, Date hasta) throws Exception {
+	public List<Object[]> getTransferenciasPorArticuloGenerico(long idArticulo, long idFamilia, long idOrigen, long idDestino, 
+			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select TO_CHAR(t.fechaCreacion,'dd-MM-yyyy'), t.numero, d.articulo.codigoInterno, d.cantidad,"
@@ -4895,6 +4896,12 @@ public class RegisterDomain extends Register {
 		}
 		if (idFamilia > 0) {
 			query += " and d.articulo.familia.id = " + idFamilia;
+		}
+		if (idOrigen > 0) {
+			query += " and t.depositoSalida.id = " + idOrigen;
+		}
+		if (idDestino > 0) {
+			query += " and t.depositoEntrada.id = " + idDestino;
 		}
 			query += " and (t.fechaCreacion >= '"
 				+ desde_

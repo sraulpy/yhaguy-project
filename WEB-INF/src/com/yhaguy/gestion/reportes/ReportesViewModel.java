@@ -1541,8 +1541,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Articulo articulo = filtro.getArticulo();
 				ArticuloFamilia familia = filtro.getFamilia_();
+				Deposito origen = filtro.getDeposito();
+				Deposito destino = filtro.getDeposito2();
 				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
 				long idFamilia = familia != null ? familia.getId() : (long) 0;
+				long idOrigen = origen != null ? origen.getId() : (long) 0;
+				long idDestino = destino != null ? destino.getId() : (long) 0;
 				
 				if (hasta == null) {
 					Clients.showNotification("DEBE INDICAR FECHA HASTA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -1551,7 +1555,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
-				data = rr.getTransferenciasPorArticuloGenerico(idArticulo, idFamilia, desde, hasta);	
+				data = rr.getTransferenciasPorArticuloGenerico(idArticulo, idFamilia, idOrigen, idDestino, desde, hasta);	
 								
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
 				String familia_ = familia != null ? familia.getDescripcion() : "TODOS..";

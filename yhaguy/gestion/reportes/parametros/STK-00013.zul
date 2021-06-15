@@ -50,5 +50,27 @@
 				</template>
 			</combobox>
 		</row>
+		<row>
+			<field value="Depósito origen:" />
+			<combobox hflex="true" placeholder="TODOS.."
+				model="@load(vm.dato.filtro.depositos_)"
+				instant="true"
+				selectedItem="@bind(vm.dato.filtro.deposito)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
+			<field value="Depósito destino:" />
+			<combobox hflex="true" placeholder="TODOS.."
+				model="@load(vm.dato.filtro.depositos_)"
+				instant="true"
+				selectedItem="@bind(vm.dato.filtro.deposito2)">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
 	</rows>
 </grid>
