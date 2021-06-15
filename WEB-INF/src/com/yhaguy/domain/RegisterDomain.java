@@ -4877,6 +4877,35 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:fecha
+	 * [1]:numero 
+	 * [2]:articulo.codigo
+	 * [3]:cantidad  
+	 * [4]:origen 
+	 * [5]:destino
+	 */
+	public List<Object[]> getTransferenciasPorArticuloGenerico(long idArticulo, long idFamilia, Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select TO_CHAR(t.fechaCreacion,'dd-MM-yyyy'), t.numero, d.articulo.codigoInterno, d.cantidad,"
+				+ " t.depositoSalida.descripcion, t.depositoEntrada.descripcion"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D'";
+		if (idArticulo > 0) {
+			query += " and d.articulo.id = " + idArticulo;
+		}
+		if (idFamilia > 0) {
+			query += " and d.articulo.familia.id = " + idFamilia;
+		}
+			query += " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') order by t.fechaCreacion";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
 	 */
 	public List<Object[]> getTransferenciasPorArticuloMRAentrada(long idArticulo,
 			Date desde, Date hasta) throws Exception {

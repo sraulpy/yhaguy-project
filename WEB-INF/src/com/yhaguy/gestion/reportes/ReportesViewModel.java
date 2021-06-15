@@ -849,6 +849,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String STOCK_VALORIZADO = "STK-00010";
 		static final String REMISION_CLIENTES = "STK-00011";
 		static final String CONTROL_CONSUMO_CARGA = "STK-00012";
+		static final String TRANSFERENCIAS_POR_ARTICULO = "STK-00013";
 
 		/**
 		 * procesamiento del reporte..
@@ -902,6 +903,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case CONTROL_CONSUMO_CARGA:
 				this.consumoCarga();
+				break;
+				
+			case TRANSFERENCIAS_POR_ARTICULO:
+				this.transferenciasPorArticulo();
 				break;
 			}
 		}
@@ -1525,6 +1530,43 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/**
+		 * reporte STK-00013
+		 */
+		private void transferenciasPorArticulo() {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Articulo articulo = filtro.getArticulo();
+				ArticuloFamilia familia = filtro.getFamilia_();
+				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
+				long idFamilia = familia != null ? familia.getId() : (long) 0;
+				
+				if (hasta == null) {
+					Clients.showNotification("DEBE INDICAR FECHA HASTA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				data = rr.getTransferenciasPorArticuloGenerico(idArticulo, idFamilia, desde, hasta);	
+								
+				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
+				String familia_ = familia != null ? familia.getDescripcion() : "TODOS..";
+				ReporteTransferenciaArticulo rep = new ReporteTransferenciaArticulo(desde, hasta, desc, familia_);
+				rep.setApaisada();
+				rep.setDatosReporte(data);				
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}		
 		}
 	}
 
@@ -28125,6 +28167,75 @@ class ReporteMarcaciones extends ReporteYhaguy {
 				.add(this.textoParValor("Horario Salida", RRHHMarcaciones.SALIDA))
 				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte codigo STK-00013
+ */
+class ReporteTransferenciaArticulo extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+	private String articulo;
+	private String familia;
+	
+	public ReporteTransferenciaArticulo(Date desde, Date hasta, String articulo, String familia) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.articulo = articulo;
+		this.familia = familia;
+	}
+
+	/**
+	 * [0]:fecha
+	 * [1]:concepto 
+	 * [2]:numero 
+	 * [3]:cantidad  
+	 * [4]:origen 
+	 * [5]:destino
+	 */
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 40);
+	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 60);
+	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Cant.", TIPO_INTEGER, 30);
+	static DatosColumnas col5 = new DatosColumnas("Origen", TIPO_STRING);
+	static DatosColumnas col6 = new DatosColumnas("Destino", TIPO_STRING);
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("TRANSFERENCIAS POR ARTICULO");
+		this.setDirectorio("Articulos");
+		this.setNombreArchivo("stock-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Familia", this.familia))
+				.add(this.textoParValor("Articulo", this.articulo)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}
