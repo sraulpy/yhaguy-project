@@ -15,6 +15,7 @@ public class SucursalApp extends Domain {
 
 	public static final long ID_MRA_CENTRAL = 1;
 	public static final long ID_MRA_MRA = 2;
+	public static final long ID_MRA_MCAL = 3;
 	
 	private String nombre;
 	private String descripcion;

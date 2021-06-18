@@ -4936,7 +4936,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, 0.0"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -4969,7 +4969,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora, long idSucursalDestino) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, 0.0"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5011,7 +5011,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5052,7 +5052,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5085,7 +5085,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora, long idSucursal) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5118,7 +5118,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5136,6 +5136,39 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
+	public List<Object[]> getTransferenciasPorArticuloDestinoCentral(long idArticulo,
+			Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.sucursalDestino.id IN (" + SucursalApp.ID_MRA_CENTRAL + ", " + SucursalApp.ID_MRA_MCAL + ")"
+				+ " and t.sucursal.id = " + SucursalApp.ID_MRA_MRA + " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
 	 * [0]:id 
 	 * [1]:tipomovimiento 
 	 * [2]:fecha 
@@ -5144,7 +5177,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getTransferenciasPorArticuloOrigenMRA(Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.id, t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision "
+		String query = "select t.id, t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero "
 				+ " from Transferencia t where t.dbEstado != 'D' "
 				+ " and (t.transferenciaTipo.sigla = '"
 				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
@@ -5155,6 +5188,31 @@ public class RegisterDomain extends Register {
 				+ hasta_
 				+ "') and t.sucursal.id = " + SucursalApp.ID_MRA
 				+ " and t.sucursalDestino.id IN (" + SucursalApp.ID_CENTRAL + ", " + SucursalApp.ID_GAM + ", " + SucursalApp.ID_MCAL + ") "
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:id 
+	 * [1]:tipomovimiento 
+	 * [2]:fecha 
+	 * [3]:numero 
+	 */
+	public List<Object[]> getTransferenciasPorArticuloOrigenCentral(Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.id, t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero "
+				+ " from Transferencia t where t.dbEstado != 'D' "
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.sucursal.id IN (" + SucursalApp.ID_MRA_CENTRAL + ", " + SucursalApp.ID_MRA_MCAL + ")"
+				+ " and t.sucursalDestino.id = " + SucursalApp.ID_MRA_MRA + " "
 				+ " order by t.fechaCreacion desc";
 		return this.hql(query);
 	}
@@ -5205,6 +5263,39 @@ public class RegisterDomain extends Register {
 	 * [8]:id entrada
 	 * [12]:sucursal
 	 */
+	public List<Object[]> getTransferenciasPorArticuloDestinoDiferenciaInvMRA2019(long idArticulo,
+			Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, 'INVENTARIO 2019', t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_INTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.depositoEntrada.id = " + Deposito.ID_DIFERENCIA_INV_MRA_2019
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
 	public List<Object[]> getTransferenciasPorArticuloOrigenDiferenciaInv2019(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -5238,11 +5329,44 @@ public class RegisterDomain extends Register {
 	 * [8]:id entrada
 	 * [12]:sucursal
 	 */
+	public List<Object[]> getTransferenciasPorArticuloOrigenDiferenciaInvMRA2019(long idArticulo,
+			Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, 'INVENTARIO 2019', t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_INTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.depositoSalida.id = " + Deposito.ID_DIFERENCIA_INV_MRA_2019
+				+ " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
 	public List<Object[]> getTransferenciasPorArticuloOrigenMRA(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5271,11 +5395,44 @@ public class RegisterDomain extends Register {
 	 * [8]:id entrada
 	 * [12]:sucursal
 	 */
+	public List<Object[]> getTransferenciasPorArticuloOrigenCentral(long idArticulo,
+			Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id"
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
+				+ idArticulo
+				+ " and (t.transferenciaTipo.sigla = '"
+				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
+				+ "')"
+				+ " and (t.fechaCreacion >= '"
+				+ desde_
+				+ "' and t.fechaCreacion <= '"
+				+ hasta_
+				+ "') and t.sucursal.id IN (" + SucursalApp.ID_MRA_CENTRAL + ", " + SucursalApp.ID_MRA_MCAL + ")"
+				+ " and t.sucursalDestino.id = " + SucursalApp.ID_MRA_MRA + " order by t.fechaCreacion desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las transferencias donde esta contenida el articulo..
+	 * [0]:concepto 
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:costo
+	 * [5]:destino 
+	 * [6]:idsuc 
+	 * [7]:id salida 
+	 * [8]:id entrada
+	 * [12]:sucursal
+	 */
 	public List<Object[]> getTransferenciasPorArticulo(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora, long idSucursalOrigen, long idSucursalDestino) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo, t.id"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5298,7 +5455,7 @@ public class RegisterDomain extends Register {
 	 *         [12]:sucursal
 	 */
 	public Object[] getUltimaTransferenciaPorArticulo(long idArticulo) throws Exception {
-		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numeroRemision, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
+		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
@@ -5623,6 +5780,31 @@ public class RegisterDomain extends Register {
 			}
 		}
 		return out;
+	}
+	
+	/**
+	 * @return las ventas..
+	 */
+	public List<Object[]> getVentasArticulo(Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select v.id, v.tipoMovimiento.descripcion, v.fecha, v.numero"
+				+ " from Venta v where v.dbEstado != 'D'"
+				+ " and (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO
+				+ "' or "
+				+ " v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
+				+ "')"
+				+ " and v.dbEstado = 'R' and v.estadoComprobante is null"
+				+ " and (v.fecha >= '"
+				+ desde_
+				+ "' and v.fecha <= '"
+				+ hasta_
+				+ "')"
+				+ " order by v.fecha desc";
+		List<Object[]> list = this.hql(query);
+		return list;
 	}
 
 	/**
@@ -13581,8 +13763,12 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			double test = rr.getCostoPromedioGs(7075);
-			System.out.println(test + "");
+			Date desde = Utiles.getFechaInicioOperaciones();
+			List<Object[]> test = rr.getMigracionesPorArticulo("TEC PL-366", desde, new Date());
+			System.out.println(desde);
+			for (Object[] t : test) {
+				System.out.println(t[4]);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

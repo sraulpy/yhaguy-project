@@ -546,8 +546,12 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<Object[]> ventas = rr.getVentasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsOrigenCentral = rr.getTransferenciasPorArticuloOrigenCentral(this.selectedItem.getId(), this.desde, this.hasta, false);
 		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
-		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);
+		List<Object[]> transfsDestinoCentral = rr.getTransferenciasPorArticuloDestinoCentral(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsOrigenDifInventarioMRA = rr.getTransferenciasPorArticuloOrigenDiferenciaInvMRA2019(this.selectedItem.getId(), desde, hasta, false);
+		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);	
+		List<Object[]> transfsDestinoDifInventarioMRA = rr.getTransferenciasPorArticuloDestinoDiferenciaInvMRA2019(this.selectedItem.getId(), desde, hasta, false);
 		List<Object[]> transfsOrigenDifInventario = rr.getTransferenciasPorArticuloOrigenDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
@@ -562,15 +566,15 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(ntcsv);
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
-		this.historicoEntrada.addAll(transfsOrigenDifInventario);
-		this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsDestinoMRA : transfsOrigenMRA);
+		this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
+		this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
 		
 		this.historicoSalida = new ArrayList<Object[]>();
 		this.historicoSalida.addAll(ajustStockNeg);
 		this.historicoSalida.addAll(ventas);
 		this.historicoSalida.addAll(ntcsc);
-		this.historicoSalida.addAll(transfsDestinoDifInventario);
-		this.historicoSalida.addAll(this.isEmpresaMRA() ?  transfsOrigenMRA : transfsDestinoMRA);
+		this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
 		
 		this.actualizarTotal(this.historicoEntrada, true);
 		this.actualizarTotal(this.historicoSalida, false);
