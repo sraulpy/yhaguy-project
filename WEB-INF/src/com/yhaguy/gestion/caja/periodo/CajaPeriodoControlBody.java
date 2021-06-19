@@ -53,7 +53,6 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SaldoVale;
 import com.yhaguy.domain.Talonario;
 import com.yhaguy.domain.Venta;
-import com.yhaguy.domain.VentaVale;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.principal.AssemblerCaja;
 import com.yhaguy.gestion.caja.principal.CajaDTO;
@@ -816,9 +815,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 		double total_vtas = 0;
 		boolean servicio = false;
 		for (VentaDTO ventaDTO : ventas) {
-			this.generarValeFacturacionMinima(ventaDTO);
-			this.generarValeFacturacionPorcentaje(ventaDTO);
-			total_vtas += ventaDTO.getTotalImporteGsSinIva();
 			if (ventaDTO.getVendedor_().toUpperCase().equals("SERVICIO")) {
 				servicio = true;
 			}
@@ -892,46 +888,6 @@ public class CajaPeriodoControlBody extends BodyApp {
 		wp.setTitulo(titulo);
 		wp.setSoloBotonCerrar();
 		wp.show(Configuracion.CAJA_VENTA_ZUL);
-	}
-	
-	/**
-	 * genera los vales si corresponde..
-	 */
-	private void generarValeFacturacionMinima(VentaDTO venta) throws Exception {
-		double generado = venta.getValeGeneradoFacturacionMinima();
-		if (generado > 0) {
-			SaldoVale saldo = new SaldoVale();
-			saldo.setIdCliente(venta.getCliente().getId());
-			saldo.setIdVenta(venta.getId());
-			saldo.setImporte(generado);
-			saldo.setSaldo(generado);
-			RegisterDomain rr = RegisterDomain.getInstance();
-			VentaVale vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 1);
-			saldo.setValidoHasta(vale.getVigenciaEfectivizacion());
-			rr.saveObject(saldo, this.getLoginNombre());
-			venta.getValesGenerados().add(saldo);
-		}
-	}
-	
-	/**
-	 * genera los vales por facturacion porcentaje si corresponde..
-	 */
-	private void generarValeFacturacionPorcentaje(VentaDTO venta) throws Exception {
-		double generado = venta.getValeGeneradoFacturacionPorcentaje();
-		if (generado > 0) {
-			SaldoVale saldo = new SaldoVale();
-			saldo.setIdCliente(venta.getCliente().getId());
-			saldo.setIdVenta(venta.getId());
-			saldo.setImporte(generado);
-			saldo.setSaldo(generado);
-			RegisterDomain rr = RegisterDomain.getInstance();
-			VentaVale vale = (VentaVale) rr.getObject(VentaVale.class.getName(), 2);
-			if (vale != null) {
-				saldo.setValidoHasta(vale.getVigenciaEfectivizacion());
-			}			
-			rr.saveObject(saldo, this.getLoginNombre());
-			venta.getValesGenerados().add(saldo);
-		}
 	}
 
 	/**

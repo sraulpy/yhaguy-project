@@ -43,15 +43,6 @@ public class ControlArticuloCostoPromedio {
 		
 		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
 		
-		/**
-		List<Object[]> ventas = this.getHistoricoVentas(desde, hasta);
-		
-		for (Object[] vta : ventas) {
-			String tipo = (String) vta[1];
-			long id = (long) vta[0];
-			this.addCostoVentas(id);
-		}**/
-		
 		List<Object[]> entradas = this.getHistoricoCompras(desde, hasta);
 		
 		for (Object[] compra : entradas) {
@@ -394,28 +385,6 @@ public class ControlArticuloCostoPromedio {
 	}
 	
 	/**
-	 * add costo venta..
-	 */
-	private void addCostoVentas(long id) {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
-			String descripcion = "";
-			Venta vta = (Venta) rr.getObject(Venta.class.getName(), id);
-			for (VentaDetalle item : vta.getDetalles()) {
-				Articulo art = item.getArticulo();
-				List<Object[]> compras = this.getHistoricoCompras(art.getId(), art.getCodigoInterno(), vta.getFecha());
-				double ultCosto = this.getCostoUltimo(compras, item.getCostoUnitarioGs());				
-				item.setCostoUnitarioGs(ultCosto);
-				rr.saveObject(item, item.getUsuarioMod());
-				System.out.println(art.getCodigoInterno() + " " + ultCosto + " " + descripcion);
-			}		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * @return el costo promedio..
 	 */
 	private double getCostoPromedioCalculado(long stock, long cantidad, double ultCostoPromedio, double costoFinal) {
@@ -494,29 +463,6 @@ public class ControlArticuloCostoPromedio {
 		out.addAll(compras);
 		out.addAll(ajustes);
 		out.addAll(this.isEmpresaMRA() ? transferenciasOrigenCentral : transferenciasOrigenMRA);
-		
-		// ordena la lista segun fecha..
-		Collections.sort(out, new Comparator<Object[]>() {
-			@Override
-			public int compare(Object[] o1, Object[] o2) {
-				Date fecha1 = (Date) o1[2];
-				Date fecha2 = (Date) o2[2];
-				return fecha1.compareTo(fecha2);
-			}
-		});
-		
-		return out;
-	}
-	
-	/**
-	 * recupera el historico de movimientos del articulo..
-	 */
-	private List<Object[]> getHistoricoVentas(Date desde, Date hasta) throws Exception {
-		List<Object[]> out = new ArrayList<Object[]>();
-		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> ventas = rr.getVentasArticulo(desde, hasta);
-		
-		out.addAll(ventas);
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {

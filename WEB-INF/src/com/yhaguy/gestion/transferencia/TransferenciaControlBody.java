@@ -719,6 +719,20 @@ public class TransferenciaControlBody extends BodyApp {
 	/**
 	 * @return los depositos segun la sucursal..
 	 */
+	public List<MyPair> getDepositosBySucursal_(Long id) throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Deposito> deps = rr.getDepositosPorSucursal_(id);
+		for (Deposito deposito : deps) {
+			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
+			out.add(dep);					
+		}
+		return out;
+	}
+	
+	/**
+	 * @return los depositos segun la sucursal..
+	 */
 	public List<MyPair> getDepositosTemporalesBySucursal(Long id) throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -737,6 +751,9 @@ public class TransferenciaControlBody extends BodyApp {
 	 */
 	public List<MyPair> getDepositos() throws Exception {
 		MyPair suc = this.getAcceso().getSucursalOperativa();
+		if (this.isEmpresaMRA()) {
+			return this.getDepositosBySucursal_(suc.getId());
+		}
 		return this.getDepositosBySucursal(suc.getId());
 	}
 

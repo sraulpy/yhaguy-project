@@ -733,6 +733,14 @@ public class RegisterDomain extends Register {
 		list = this.hql(queryDepositos, id);
 		return list;
 	}
+	
+	public List<Deposito> getDepositosPorSucursal_(Long id) throws Exception {
+		List<Deposito> list = null;
+		String queryDepositos = "" + " select d from SucursalApp s join s.depositos d"
+				+ " where s.id = ? order by d.descripcion";
+		list = this.hql(queryDepositos, id);
+		return list;
+	}
 
 	public List<Deposito> getAllDepositos() throws Exception {
 		List l = getObjects(com.yhaguy.domain.Deposito.class.getName(),
