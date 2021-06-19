@@ -457,7 +457,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 */
 	private void abrirVentanaRecibo(int tipo, String modo, boolean recaudacionMRA) throws Exception {
 		
-		if (tipo == ES_PAGO) {
+		if (tipo == ES_PAGO && (this.dto.getTipo().equals(CajaPeriodo.TIPO_PAGOS)
+				|| this.dto.getTipo().equals(CajaPeriodo.TIPO_PAGOS_EXTERIOR))) {
 			if (this.dto.getDetalles().size() > 19) {
 				Clients.showNotification("PARA PAGOS, MAXIMO 20 REGISTROS");
 				return;
