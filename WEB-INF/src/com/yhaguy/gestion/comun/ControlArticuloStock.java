@@ -323,6 +323,7 @@ public class ControlArticuloStock {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		boolean fechaHora = true;
+		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
@@ -330,7 +331,9 @@ public class ControlArticuloStock {
 		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
 		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsOrigenCentral = rr.getTransferenciasPorArticuloOrigenCentral(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> transfsOrigenDifInventario = rr.getTransferenciasPorArticuloOrigenDiferenciaInv2019(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsOrigenDifInventarioMRA = rr.getTransferenciasPorArticuloOrigenDiferenciaInvMRA2019(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta);
 		
 		out.addAll(migracion);
@@ -338,8 +341,8 @@ public class ControlArticuloStock {
 		out.addAll(ntcsv);
 		out.addAll(compras);
 		out.addAll(importaciones);
-		out.addAll(transfsOrigenMRA);
-		out.addAll(transfsOrigenDifInventario);
+		out.addAll(mra ? transfsOrigenCentral : transfsOrigenMRA);
+		out.addAll(mra ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -379,11 +382,14 @@ public class ControlArticuloStock {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		boolean fechaHora = true;
+		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsDestinoCentral = rr.getTransferenciasPorArticuloDestinoCentral(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> transfsDestinoDifInventarioMRA = rr.getTransferenciasPorArticuloDestinoDiferenciaInvMRA2019(idArticulo, desde, hasta, fechaHora);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
 		
 		for (Object[] item : ajustStockNeg) {
@@ -391,8 +397,8 @@ public class ControlArticuloStock {
 		}
 		out.addAll(ventas);
 		out.addAll(ntcsc);		
-		out.addAll(transfsDestinoMRA);
-		out.addAll(transfsDestinoDifInventario);
+		out.addAll(mra ? transfsDestinoCentral : transfsDestinoMRA);
+		out.addAll(mra ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {
