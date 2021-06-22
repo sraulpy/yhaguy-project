@@ -12,6 +12,7 @@ import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloStock;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.util.Utiles;
 
@@ -324,6 +325,7 @@ public class ControlArticuloStock {
 		long total = 0;
 		boolean fechaHora = true;
 		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+		if (mra) idSucursal = SucursalApp.ID_MRA_MRA ;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
@@ -383,6 +385,7 @@ public class ControlArticuloStock {
 		long total = 0;
 		boolean fechaHora = true;
 		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+		if (mra) idSucursal = SucursalApp.ID_MRA_MRA ;
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);

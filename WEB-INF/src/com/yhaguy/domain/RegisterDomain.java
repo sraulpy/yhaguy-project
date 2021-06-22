@@ -5419,7 +5419,8 @@ public class RegisterDomain extends Register {
 				+ "' and t.fechaCreacion <= '"
 				+ hasta_
 				+ "') and t.sucursal.id IN (" + SucursalApp.ID_MRA_CENTRAL + ", " + SucursalApp.ID_MRA_MCAL + ")"
-				+ " and t.sucursalDestino.id = " + SucursalApp.ID_MRA_MRA + " order by t.fechaCreacion desc";
+				+ " and t.sucursalDestino.id = " + SucursalApp.ID_MRA_MRA + " "
+				+ " and t.depositoEntrada IS NOT NULL order by t.fechaCreacion desc";
 		return this.hql(query);
 	}
 	
