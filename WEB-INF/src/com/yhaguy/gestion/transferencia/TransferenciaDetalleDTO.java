@@ -21,6 +21,7 @@ public class TransferenciaDetalleDTO extends DTO {
 	private double costo = 0;
 	
 	private String estado = ESTADO_PENDIENTE;
+	private String origen = "";
 	private MyArray articulo = new MyArray();
 	
 	private boolean editado = false;
@@ -146,5 +147,13 @@ public class TransferenciaDetalleDTO extends DTO {
 
 	public void setEditado(boolean editado) {
 		this.editado = editado;
+	}
+
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
 	}	
 }

@@ -18,6 +18,7 @@
 		<property name="costo"/>
 		<property name="costoPromedioGs"/>
 		<property name="estado"/>
+		<property name="origen"/>
 		
 		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
 			column="idarticulo"

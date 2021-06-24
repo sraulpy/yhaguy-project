@@ -8,7 +8,7 @@ import com.yhaguy.domain.TransferenciaDetalle;
 public class AssemblerTransferenciaDetalle extends Assembler {
 	
 	static String[] attIguales = { "cantidad", "cantidadPedida",
-			"cantidadEnviada", "cantidadRecibida", "costo", "estado" };
+			"cantidadEnviada", "cantidadRecibida", "costo", "estado", "origen" };
 
 	@Override
 	public Domain dtoToDomain(DTO dtoD) throws Exception {

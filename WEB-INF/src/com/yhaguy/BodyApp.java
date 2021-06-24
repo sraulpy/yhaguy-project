@@ -242,4 +242,11 @@ public abstract class BodyApp extends Body {
 	public boolean isEmpresaMRA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 	}
+	
+	/**
+	 * @return true si es Central..
+	 */
+	public boolean isEmpresaCentral() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
+	}
 }

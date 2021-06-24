@@ -12,6 +12,7 @@ public class TransferenciaDetalle extends Domain {
 	private double costo;
 	private double costoPromedioGs;
 	private String estado;
+	private String origen;
 	private Articulo articulo;
 	
 	@Override
@@ -85,6 +86,14 @@ public class TransferenciaDetalle extends Domain {
 
 	public void setCostoPromedioGs(double costoPromedioGs) {
 		this.costoPromedioGs = costoPromedioGs;
+	}
+
+	public String getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(String origen) {
+		this.origen = origen;
 	}
 
 }

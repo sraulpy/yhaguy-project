@@ -231,19 +231,20 @@
 		<!-- ___________________ DETALLE ___________________ -->
 
 
-		<listbox sclass="small-list" model="@load(vm.dto.detalles)"
+		<listbox model="@load(vm.dto.detalles)"
 			vflex="true" checkmark="@load(vm.checkmarkVisible)" multiple="true"
 			visible="@load(vm.transferenciaInterna? vm.detalleVisible : vm.detalleVisibleExt)"
 			selectedItems="@bind(vm.selectedItems)">
 			<auxhead style="text-align:center"
 				visible="@load(!vm.transferenciaInterna)">
-				<auxheader colspan="4" label="Artículo"/>
+				<auxheader colspan="@load(vm.dto.auxi eq 'MRA' ? '5':'4')" label="Artículo"/>
 				<auxheader colspan="2" label="Cantidad"/>
 				<auxheader colspan="2" label="Valores"/>
 				<auxheader label=""/>
 			</auxhead>
 			<listhead style="text-align:center">
 				<listheader width="40px" align="center" />
+				<listheader label="Cod.Origen" width="180px" visible="@load(vm.dto.auxi eq 'MRA')" />
 				<listheader label="Código" width="180px" />
 				<listheader label="Descripción" />
 				<listheader label="U.Medida" width="100px" />
@@ -268,7 +269,30 @@
 			<template name="model">
 				<listitem>
 					<listcell />
-					<listcell label="@load(each.articulo.pos1)" />
+					<listcell label="@load(each.origen)" visible="@load(vm.dto.auxi eq 'MRA')" style="color:blue"/>
+					<listcell label="@load(each.articulo.pos1)">
+						<bandbox hflex="true" placeholder="Buscar.."
+								readonly="true" visible="@load(each.articulo.esNuevo())">
+								<bandpopup>
+									<listbox sclass="small-list"
+										width="400px" height="200px"
+										model="@load(vm.articulos)"
+										selectedItem="@bind(each.articulo)">
+										<listhead>
+											<listheader>
+												<textbox
+														hflex="true" value="@bind(vm.filterCodigo)"
+														instant="true" placeholder="Buscar por Código.." />
+											</listheader>
+										</listhead>
+										<template name="model">
+											<listitem
+												label="@load(each.pos1)" />
+										</template>
+									</listbox>
+								</bandpopup>
+							</bandbox>
+					</listcell>
 					<listcell label="@load(each.articulo.pos2)" />
 					<listcell label="UND." />
 					<listcell
@@ -287,7 +311,7 @@
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter span="6" align="left">
+				<listfooter span="7" align="left">
 					<hlayout>
 						<field value="@load(vm.dto.detalles.size())" />
 						<field value="ítems" />

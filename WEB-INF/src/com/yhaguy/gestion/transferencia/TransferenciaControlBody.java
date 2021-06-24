@@ -6,12 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -50,7 +44,15 @@ import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
+import com.yhaguy.util.ConnectDBCentral;
+import com.yhaguy.util.ConnectDBMRA;
 import com.yhaguy.util.reporte.ReporteYhaguy;
+
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 public class TransferenciaControlBody extends BodyApp {
 
@@ -72,6 +74,8 @@ public class TransferenciaControlBody extends BodyApp {
 
 	private Window selectPrint;
 	private Window win;	
+	
+	private String filterCodigo = "";
 
 	/**************************************************/
 
@@ -223,7 +227,7 @@ public class TransferenciaControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void confirmarTransferencia() throws Exception {
 
-		if (this.verificarStock() == false) {
+		if ((this.verificarStock() == false) && !this.dto.getAuxi().equals("MRA")) {
 			this.mensajeError("Verificar Stock..");
 			return;
 		}
@@ -301,8 +305,36 @@ public class TransferenciaControlBody extends BodyApp {
 			cprom.addCostoPromedioTransferencia(this.dto.getId());			
 			this.actualizarCtaCte();
 		}
+		if (this.isEmpresaMRA() && this.dto.getSucursalDestino().getId().longValue() == SucursalApp.ID_MRA_CENTRAL) {
+			this.transferirCentral();
+		}
+		if (this.isEmpresaCentral() && this.dto.getSucursalDestino().getId().longValue() == SucursalApp.ID_MRA) {
+			this.transferirMra();
+		}
 		this.setEstadoABMConsulta();
 		Clients.showNotification("Transferencia Confirmada..");
+	}
+	
+	/**
+	 * transferencia..
+	 */
+	private void transferirMra() {
+		ConnectDBMRA conn = ConnectDBMRA.getInstance();
+		conn.addTransferencia(this.getLoginNombre(), this.dto.getNumero(), this.dto.getNumeroRemision(), this.dto.getObservacion());
+		for (TransferenciaDetalleDTO det : this.dto.getDetalles()) {
+			conn.addTransferenciaDetalle((String) det.getArticulo().getPos1(), det.getCantidad(), det.getCosto());
+		}
+	}
+	
+	/**
+	 * transferencia..
+	 */
+	private void transferirCentral() {
+		ConnectDBCentral conn = ConnectDBCentral.getInstance();
+		conn.addTransferencia(this.getLoginNombre(), this.dto.getNumero(), this.dto.getNumeroRemision(), this.dto.getObservacion());
+		for (TransferenciaDetalleDTO det : this.dto.getDetalles()) {
+			conn.addTransferenciaDetalle((String) det.getArticulo().getPos1(), det.getCantidad(), det.getCosto());
+		}
 	}
 
 	/**
@@ -678,8 +710,25 @@ public class TransferenciaControlBody extends BodyApp {
 
 	}
 
-	/********************* GET/SET *********************/
-
+	/**
+	 * GET / SET
+	 */
+	@DependsOn("filterCodigo")
+	public List<MyArray> getArticulos() throws Exception {
+		if (this.filterCodigo.trim().isEmpty()) {
+			return new ArrayList<MyArray>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<MyArray> out = new ArrayList<MyArray>();
+		List<Object[]> arts = rr.getArticulos(this.filterCodigo.toUpperCase(), "");
+		for (Object[] art : arts) {
+			MyArray my = new MyArray(art[1], art[2]);
+			my.setId((Long) art[0]);
+			out.add(my);
+		}
+		return out;
+	}
+	
 	public ControlAlertas getCtrAlertas() {
 		return ctrAlertas;
 	}
@@ -736,7 +785,7 @@ public class TransferenciaControlBody extends BodyApp {
 	public List<MyPair> getDepositosTemporalesBySucursal(Long id) throws Exception {
 		List<MyPair> out = new ArrayList<MyPair>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Deposito> deps = rr.getDepositosPorSucursal(id);
+		List<Deposito> deps = rr.getDepositosPorSucursal_(id);
 		for (Deposito deposito : deps) {
 			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
 			if (deposito.isTemporal()) {
@@ -1003,6 +1052,14 @@ public class TransferenciaControlBody extends BodyApp {
 			}
 			return false;
 		}
+	}
+
+	public String getFilterCodigo() {
+		return filterCodigo;
+	}
+
+	public void setFilterCodigo(String filterCodigo) {
+		this.filterCodigo = filterCodigo;
 	}
 }
 
