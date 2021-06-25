@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class ConnectDBCentral {
 
-	final static String DB_CONNECTION = "jdbc:postgresql://localhost:5433/yhaguy_central";
+	final static String DB_CONNECTION = "jdbc:postgresql://10.25.1.250:5432/yhaguy_central";
 	final static String DB_USER = "postgres";
 	final static String DB_PASS = "yrsa0985";
 	
