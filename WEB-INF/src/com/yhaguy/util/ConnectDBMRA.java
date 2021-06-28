@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class ConnectDBMRA {
 
-	final static String DB_CONNECTION = "jdbc:postgresql://10.25.2.250:5432/yhaguydb";
+	final static String DB_CONNECTION = "jdbc:postgresql://localhost:5433/mra";
 	final static String DB_USER = "postgres";
 	final static String DB_PASS = "yrsa0985";
 	
@@ -59,7 +59,7 @@ public class ConnectDBMRA {
 				"iddepositosalida, " + 
 				"iddepositoentrada, observacion, idsucursal, " + 
 				"idsucursaldestino, ip_pc, numeroremision) " + 
-				"VALUES (nextval('transferencia_seq'), '', NOW(), '" + usuario + "', 'MRA', '', '" + numero + "', NOW(), NOW(), " + 
+				"VALUES ((select max(id) from transferencia) + 1, '', NOW(), '" + usuario + "', 'MRA', '', '" + numero + "', NOW(), NOW(), " + 
 				"NOW(), 7, 3, 4, " + 
 				"1, 11, " + 
 				"'" + observacion + "', 1, 2, " + 
@@ -89,9 +89,9 @@ public class ConnectDBMRA {
 					"id, dbestado, modificado, usuariomod, auxi, orden, cantidad, " + 
 					"cantidadpedida, cantidadenviada, cantidadrecibida, costo, estado, " + 
 					"idarticulo, idtransferencia, ip_pc, costopromediogs, origen) " + 
-					"VALUES (nextval('transferenciadetalle_seq'), '', NOW(), '', '', '', " + cantidad + ", " + 
+					"VALUES ((select max(id) from transferenciadetalle) + 1, '', NOW(), '', '', '', " + cantidad + ", " + 
 					"" + cantidad + ", " + cantidad + ", " + cantidad + ", " + costo + ", 'Pendiente', " + 
-					"" + idArticulo + ", (select last_value from transferencia_seq), '', 0, '"+ codigo +"');";
+					"" + idArticulo + ", (select max(id) from transferencia), '', 0, '"+ codigo +"');";
 			System.out.println(sql);
 			
 			Statement statement = connection.createStatement();

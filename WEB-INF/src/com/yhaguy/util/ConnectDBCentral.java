@@ -59,7 +59,7 @@ public class ConnectDBCentral {
 				"iddepositosalida, " + 
 				"iddepositoentrada, observacion, idsucursal, " + 
 				"idsucursaldestino, ip_pc, numeroremision) " + 
-				"VALUES (nextval('transferencia_seq'), '', NOW(), '" + usuario + "', 'MRA', '', '" + numero + "', NOW(), NOW(), " + 
+				"VALUES ((select max(id) from transferencia) + 1, '', NOW(), '" + usuario + "', 'MRA', '', '" + numero + "', NOW(), NOW(), " + 
 				"NOW(), 7, 3, 65, " + 
 				"9, 2, " + 
 				"'" + observacion + "', 1, 2, " + 
@@ -89,9 +89,9 @@ public class ConnectDBCentral {
 					"id, dbestado, modificado, usuariomod, auxi, orden, cantidad, " + 
 					"cantidadpedida, cantidadenviada, cantidadrecibida, costo, estado, " + 
 					"idarticulo, idtransferencia, ip_pc, costopromediogs, origen) " + 
-					"VALUES (nextval('transferenciadetalle_seq'), '', NOW(), '', '', '', " + cantidad + ", " + 
+					"VALUES ((select max(id) from transferenciadetalle) + 1, '', NOW(), '', '', '', " + cantidad + ", " + 
 					"" + cantidad + ", " + cantidad + ", " + cantidad + ", " + costo + ", 'Pendiente', " + 
-					"" + idArticulo + ", (select last_value from transferencia_seq), '', 0, '"+ codigo +"');";
+					"" + idArticulo + ", (select max(id) from transferencia), '', 0, '"+ codigo +"');";
 			System.out.println(sql);
 			
 			Statement statement = connection.createStatement();
