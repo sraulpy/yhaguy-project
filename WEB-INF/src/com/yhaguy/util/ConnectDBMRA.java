@@ -61,7 +61,7 @@ public class ConnectDBMRA {
 				"idsucursaldestino, ip_pc, numeroremision) " + 
 				"VALUES ((select max(id) from transferencia) + 1, '', NOW(), '" + usuario + "', 'MRA', '', '" + numero + "', NOW(), NOW(), " + 
 				"NOW(), 7, 3, 4, " + 
-				"1, 11, " + 
+				"1, 2, " + 
 				"'" + observacion + "', 1, 2, " + 
 				"'', '"+ numeroRemision +"');";
 		System.out.println(sql);
