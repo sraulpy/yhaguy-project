@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.TransferenciaMraDetalle" table="transferenciaMraDetalle">
+
+		&hibernate-domain; 
+
+		<property name="cantidad"/>
+		<property name="cantidadPedida"/>
+		<property name="cantidadEnviada"/>
+		<property name="cantidadRecibida"/>
+		<property name="costo"/>
+		<property name="costoPromedioGs"/>
+		<property name="estado"/>
+		<property name="origen"/>
+		
+		<many-to-one name="articulo" class="com.yhaguy.domain.Articulo"
+			column="idarticulo"
+			lazy="false"/>
+
+	</class>
+</hibernate-mapping>

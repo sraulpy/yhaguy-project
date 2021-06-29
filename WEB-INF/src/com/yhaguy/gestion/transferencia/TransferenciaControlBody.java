@@ -3,6 +3,7 @@ package com.yhaguy.gestion.transferencia;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,9 @@ import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Transferencia;
+import com.yhaguy.domain.TransferenciaDetalle;
+import com.yhaguy.domain.TransferenciaMra;
+import com.yhaguy.domain.TransferenciaMraDetalle;
 import com.yhaguy.gestion.articulos.buscador.BuscadorArticulosViewModel;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ControlArticuloCostoPromedio;
@@ -82,6 +86,11 @@ public class TransferenciaControlBody extends BodyApp {
 	@Init(superclass = true)
 	public void init() {
 		this.setSucursales(this.getDtoUtil().getSucursalesMyPair()); 
+		try {
+			this.transferenciasMra();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@AfterCompose(superclass = true)
@@ -294,7 +303,9 @@ public class TransferenciaControlBody extends BodyApp {
 	 */
 	private void confirmarTransferenciaExterna() throws Exception {
 		MyPair estado = this.getDtoUtil().getEstadoTransferenciaConfirmada();
-		this.setNumero(this.dto);
+		if (!this.dto.getAuxi().equals("MRA")) {
+			this.setNumero(this.dto);
+		}
 		this.dto.setTransferenciaEstado(estado);
 		this.dto.setReadonly();
 		this.dto.setFechaCreacion(new Date());
@@ -522,6 +533,51 @@ public class TransferenciaControlBody extends BodyApp {
 		vp.setBotonImprimir(false);
 		vp.setBotonCancelar(false);
 		vp.showReporte(rep, this);
+	}
+	
+	/**
+	 * verifica transferencias mra pendientes..
+	 */
+	private void transferenciasMra() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<TransferenciaMra> list = rr.getTransferenciasMra();
+		for (TransferenciaMra tm : list) {
+			Transferencia t = new Transferencia();
+			t.setAuxi(tm.getAuxi());
+			t.setDepositoEntrada(tm.getDepositoEntrada());
+			t.setDepositoSalida(tm.getDepositoSalida());
+			t.setFechaCreacion(tm.getFechaCreacion());
+			t.setFechaEnvio(tm.getFechaEnvio());
+			t.setFechaRecepcion(tm.getFechaRecepcion());
+			t.setFuncionarioCreador(tm.getFuncionarioCreador());
+			t.setFuncionarioEnvio(tm.getFuncionarioEnvio());
+			t.setFuncionarioReceptor(tm.getFuncionarioReceptor());
+			t.setNumero(tm.getNumero());
+			t.setNumeroRemision(tm.getNumeroRemision());
+			t.setObservacion(tm.getObservacion());
+			t.setSucursal(tm.getSucursal());
+			t.setSucursalDestino(tm.getSucursalDestino());
+			t.setTransferenciaEstado(tm.getTransferenciaEstado());
+			t.setTransferenciaTipo(tm.getTransferenciaTipo());
+			t.setTransporte(tm.getTransporte());
+			t.setUsuarioMod(tm.getUsuarioMod());
+			t.setDetalles(new HashSet<TransferenciaDetalle>());
+			for (TransferenciaMraDetalle det : tm.getDetalles()) {
+				TransferenciaDetalle d = new TransferenciaDetalle();
+				d.setArticulo(det.getArticulo());
+				d.setCantidad(det.getCantidad());
+				d.setCantidadEnviada(det.getCantidadEnviada());
+				d.setCantidadPedida(det.getCantidadPedida());
+				d.setCantidadRecibida(det.getCantidadRecibida());
+				d.setCosto(det.getCosto());
+				d.setEstado(det.getEstado());
+				d.setOrigen(det.getOrigen());
+				t.getDetalles().add(d);
+			}
+			tm.setAuxi("OK");
+			rr.saveObject(t, t.getUsuarioMod());
+			rr.saveObject(tm, tm.getUsuarioMod());
+		}
 	}
 
 	/**

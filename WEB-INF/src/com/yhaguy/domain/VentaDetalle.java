@@ -206,6 +206,39 @@ public class VentaDetalle extends Domain {
 	}
 	
 	/**
+	 * @return gravada 10..
+	 */
+	public double getGravada10() {
+		if (this.isExenta()) {
+			return 0.0;
+		}
+		Misc misc = new Misc();
+		double out = misc.calcularGravado(this.getImporteGs(), 10);
+		return out;
+	}
+	
+	/**
+	 * @return gravada 10..
+	 */
+	public double getGravada10Unitario() {
+		if (this.isExenta()) {
+			return 0.0;
+		}
+		return this.getGravada10() / this.cantidad;
+	}
+	
+	/**
+	 * @return el iva 10..
+	 */
+	public double getIva10() {
+		if (this.isExenta()) {
+			return 0.0;
+		}
+		double iva = Utiles.getIVA(this.getImporteGs(), 10);
+		return iva;
+	}
+	
+	/**
 	 * @return el costo total del item..
 	 */
 	public double getCostoTotalGs() {

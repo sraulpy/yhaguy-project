@@ -141,6 +141,8 @@
 
 		<mapping resource="com/yhaguy/domain/Transferencia.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/TransferenciaDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/TransferenciaMra.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/TransferenciaMraDetalle.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Transporte.hbm.xml" />
 

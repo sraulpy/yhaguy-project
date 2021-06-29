@@ -692,6 +692,32 @@ public class NotaCredito extends Domain {
 		}		
 		return out;
 	}
+	
+	/**
+	 * @return los detalles que son de tipo articulo..
+	 */
+	public List<NotaCreditoDetalle> getDetallesArticulos_() {
+		List<NotaCreditoDetalle> out = new ArrayList<NotaCreditoDetalle>();
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.isDetalleFactura() == false) {
+				out.add(item);
+			}
+		}	
+		try {
+			if (this.isMotivoDescuento()) {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				NotaCreditoDetalle d = new NotaCreditoDetalle();
+				d.setArticulo(rr.getArticulo("@DESCUENTO"));
+				d.setCantidad(1);
+				d.setTipoIva(rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10));
+				d.setImporteGs(this.getImporteGs());
+				out.add(d);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
 
 	public String getNumero() {
 		return numero;

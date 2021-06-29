@@ -13769,15 +13769,18 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return las transferencias externas segun fecha..
+	 */
+	public List<TransferenciaMra> getTransferenciasMra() throws Exception {
+		String query = "select t from TransferenciaMra t where t.auxi = 'MRA'";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			Date desde = Utiles.getFechaInicioOperaciones();
-			List<Object[]> test = rr.getMigracionesPorArticulo("TEC PL-366", desde, new Date());
-			System.out.println(desde);
-			for (Object[] t : test) {
-				System.out.println(t[4]);
-			}
+			//RegisterDomain rr = RegisterDomain.getInstance();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

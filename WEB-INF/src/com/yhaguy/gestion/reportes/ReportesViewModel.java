@@ -127,6 +127,7 @@ import com.yhaguy.gestion.compras.importacion.BeanImportacion;
 import com.yhaguy.gestion.comun.ControlArticuloCosto;
 import com.yhaguy.gestion.comun.ControlArticuloStock;
 import com.yhaguy.gestion.contabilidad.BeanLibroVenta;
+import com.yhaguy.gestion.contabilidad.BeanLibroVentaDetallado;
 import com.yhaguy.gestion.empresa.ClienteBean;
 import com.yhaguy.gestion.empresa.ctacte.BeanCtaCteEmpresa;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
@@ -13568,6 +13569,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_GENERICO_COSTOS = "CON-00038";
 		static final String LIBRO_COMPRAS_MATRICIAL = "CON-00040";
 		static final String LIBRO_VENTAS_MATRICIAL = "CON-00041";
+		static final String LIBRO_VENTAS_DETALLADO = "CON-00042";
 		
 		/**
 		 * procesamiento del reporte..
@@ -13717,6 +13719,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case LIBRO_MAYOR:
 				this.libroMayor();
+				break;
+				
+			case LIBRO_VENTAS_DETALLADO:
+				this.libroVentasDetallado();
 				break;
 			}
 		}
@@ -15438,6 +15444,33 @@ public class ReportesViewModel extends SimpleViewModel {
 			JRDataSource dataSource = new LibroMayorDataSource(desde, hasta);
 			params.put("Usuario", getUs().getNombre());
 			params.put("periodo", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY) + " a " + Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+			imprimirJasper(source, params, dataSource, formato);
+		}
+		
+		/**
+		 * Libro de Ventas..
+		 */
+		private void libroVentasDetallado() throws Exception {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();
+			Date hasta = filtro.getFechaHasta();
+			SucursalApp suc = filtro.getSelectedSucursal();
+			Cliente cli = filtro.getCliente();
+			long idSuc = suc != null ? suc.getId() : 0;
+			long idCli = cli != null ? cli.getId() : 0;
+			String suc_ = suc != null ? suc.getDescripcion() : "TODOS..";
+			Object[] formato = filtro.getFormato();
+			List<Venta> ventas = rr.getVentas(desde, hasta, idCli, idSuc);
+			List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde,	hasta, idCli, idSuc, "");
+			List<NotaDebito> notasDebito = rr.getNotasDebito(desde,	hasta, idCli, idSuc);
+			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_DETALLADO;
+			if (formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS)) {
+				source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_VENTAS_DETALLADO_;
+			}			
+			Map<String, Object> params = new HashMap<String, Object>();
+			JRDataSource dataSource = new LibroVentasDetalladoDataSource(ventas, notasCredito, notasDebito, desde, hasta);
+			params.put("Usuario", getUs().getNombre());
+			params.put("Sucursal", suc_);
 			imprimirJasper(source, params, dataSource, formato);
 		}
 	}
@@ -18238,6 +18271,204 @@ class LibroVentasDataSource implements JRDataSource {
 				} else {
 					this.totalCredito += (importe);
 				}
+			}
+		}
+	}
+	
+	/**
+	 * @return el monto redondeado..
+	 */
+	private static double redondear(double monto) {
+		return Math.rint(monto * 1) / 1;
+	}
+}
+
+/**
+ * DataSource de Libro Ventas detallado..
+ */
+class LibroVentasDetalladoDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	Misc misc = new Misc();
+
+	List<Venta> ventas;
+	List<NotaCredito> notasCredito;
+	List<NotaDebito> notasDebito;
+	List<BeanLibroVentaDetallado> values = new ArrayList<BeanLibroVentaDetallado>();
+	Date desde;
+	Date hasta;
+
+	double totalContado = 0;
+	double totalCredito = 0;
+	double totalNCContado = 0;
+	double totalNCCredito = 0;
+	double totalNDebito = 0;
+
+	double totalGravada = 0;
+	double totalGravada5 = 0;
+	double totalImpuesto = 0;
+	double totalImpuesto5 = 0;
+	double totalImporte = 0;
+	double totalExenta = 0;
+
+	public LibroVentasDetalladoDataSource(List<Venta> ventas,
+			List<NotaCredito> notasCredito, List<NotaDebito> notasDebito, Date desde, Date hasta) {
+		this.notasCredito = notasCredito;
+		this.ventas = ventas;
+		this.notasDebito = notasDebito;
+		this.desde = desde;
+		this.hasta = hasta;
+		this.loadDatos();
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+
+		if ("Ventas".equals(fieldName)) {
+			value = values;
+		} else if ("Desde".equals(fieldName)) {
+			value = misc.dateToString(this.desde, Misc.DD_MM_YYYY);
+		} else if ("Hasta".equals(fieldName)) {
+			value = misc.dateToString(this.hasta, Misc.DD_MM_YYYY);
+		} else if ("RucEmpresa".equals(fieldName)) {
+			value = "Ruc: " + com.yhaguy.gestion.reportes.formularios.ReportesViewModel.getRucEmpresa();
+		} else if ("Periodo".equals(fieldName)) {
+			value = "Correspondiente al " + misc.dateToString(this.desde, "MM/yyyy");
+		} else if ("DireccionEmpresa".equals(fieldName)) {
+			value = "Direccion: " + com.yhaguy.gestion.reportes.formularios.ReportesViewModel.getDireccionEmpresa();
+		} else if ("TotalContado".equals(fieldName)) {
+			value = FORMATTER.format(this.totalContado);
+		} else if ("TotalCredito".equals(fieldName)) {
+			value = FORMATTER.format(this.totalCredito);
+		} else if ("TotalNCContado".equals(fieldName)) {
+			value = FORMATTER.format(this.totalNCContado);
+		} else if ("TotalNCCredito".equals(fieldName)) {
+			value = FORMATTER.format(this.totalNCCredito);
+		} else if ("TotalGravada".equals(fieldName)) {
+			value = FORMATTER.format(this.totalGravada);
+		} else if ("TotalGravada5".equals(fieldName)) {
+			value = FORMATTER.format(this.totalGravada5);
+		} else if ("TotalImpuesto".equals(fieldName)) {
+			value = FORMATTER.format(this.totalImpuesto);
+		} else if ("TotalImpuesto5".equals(fieldName)) {
+			value = FORMATTER.format(this.totalImpuesto5);
+		} else if ("TotalImporte".equals(fieldName)) {
+			value = FORMATTER.format(this.totalImporte);
+		} else if ("TotalExenta".equals(fieldName)) {
+			value = FORMATTER.format(this.totalExenta);
+		} else if ("TotalExenta".equals(fieldName)) {
+			value = FORMATTER.format(this.totalExenta);
+		} else if ("TotalNDebito".equals(fieldName)) {
+			value = FORMATTER.format(this.totalNDebito);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < 0) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * carga los datos para el reporte..
+	 */
+	private void loadDatos() {
+		for (NotaDebito nd : this.notasDebito) {
+			String fecha = misc.dateToString(nd.getFecha(), "dd-MM-yy");
+			String concepto = "NOT-DEB";
+			String numero = nd.getNumero();
+			String razonSocial = nd.isAnulado() ? "ANULADO" : nd.getCliente().getRazonSocial();
+			String ruc = nd.getCliente().getRuc();
+			if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
+			double grav5 = 0.0;
+			double grav10 = nd.getTotalGravado10();
+			double iva5 = 0.0;
+			double iva10 = nd.getTotalIva10();
+			double total = nd.getTotalImporteGs();
+			values.add(new BeanLibroVentaDetallado(fecha, concepto, numero, razonSocial, ruc, grav10, iva10, grav5, iva5, total, 0.0, nd.getFecha(), "", "", 0, 0));
+			this.totalGravada += (nd.getTotalGravado10());
+			this.totalImpuesto += (nd.getTotalIva10());
+			this.totalImporte += (nd.getTotalImporteGs());
+			this.totalNDebito += (nd.getTotalImporteGs());
+		}
+		for (NotaCredito ncred : this.notasCredito) {
+			for (NotaCreditoDetalle det : ncred.getDetallesArticulos_()) {
+				String fecha = misc.dateToString(ncred.getFechaEmision(), "dd-MM-yy");
+				String concepto = TipoMovimiento.getAbreviatura(ncred.getTipoMovimiento().getSigla());
+				String numero = ncred.getNumero();
+				String razonSocial = ncred.isAnulado() ? "ANULADO" : ncred.getCliente().getRazonSocial();
+				String ruc = ncred.getCliente().getRuc();
+				String codigo = det.getArticulo().getCodigoInterno().replace("@", "");
+				String descripcion = det.getArticulo().getDescripcion();
+				int cantidad = det.getCantidad();
+				if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
+				double gravadaUnd = ncred.isAnulado() ? 0.0 : redondear(det.getGravada10Unitario()) * -1;
+				double gravada = ncred.isAnulado() ? 0.0 : redondear(det.getGravada10()) * -1;
+				double iva10 = ncred.isAnulado() ? 0.0 : redondear(det.getIva10()) * -1;		
+				double exenta = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalExenta()) * -1;
+				double importe = (iva10 + gravada + exenta);
+				values.add(new BeanLibroVentaDetallado(fecha, concepto, numero, razonSocial,
+						ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, exenta,
+						ncred.getFechaEmision(), codigo, descripcion, cantidad, gravadaUnd));
+				if (ncred.isAnulado() == false) {
+					this.totalGravada -= (ncred.getTotalGravado10());
+					this.totalImpuesto -= (ncred.getTotalIva10());
+					this.totalImporte -= (ncred.getTotalIva10() + ncred.getTotalGravado10() + ncred.getTotalExenta());
+					this.totalExenta -= ncred.getTotalExenta();
+					if (ncred.isNotaCreditoVentaContado()) {
+						this.totalNCContado -= (ncred.getTotalIva10() + ncred.getTotalGravado10()
+								+ ncred.getTotalExenta());
+					} else {
+						this.totalNCCredito -= (ncred.getTotalIva10() + ncred.getTotalGravado10()
+								+ ncred.getTotalExenta());
+					}
+				}			
+			}
+		}
+
+		for (Venta vta : this.ventas) {
+			for (VentaDetalle det : vta.getDetalles()) {
+				String fecha = misc.dateToString(vta.getFecha(), "dd-MM-yy");
+				String concepto = TipoMovimiento.getAbreviatura(vta.getTipoMovimiento().getSigla());
+				String numero = vta.getNumero();
+				String razonSocial = vta.isAnulado() ? "ANULADO" : vta.getDenominacion();
+				if (razonSocial == null) razonSocial = vta.getCliente().getRazonSocial();
+				String ruc = vta.getCliente().getRuc();
+				String codigo = det.getArticulo().getCodigoInterno().replace("@", "");
+				String descripcion = det.getArticulo().getDescripcion();
+				int cantidad = Integer.parseInt(det.getCantidad() + "");
+				if (ruc.isEmpty()) ruc = Configuracion.RUC_EMPRESA_LOCAL;
+				double gravada10und = vta.isAnulado() ? 0.0 : redondear(det.getGravada10Unitario());
+				double gravada10 = vta.isAnulado() ? 0.0 : redondear(det.getGravada10());
+				double iva10 = vta.isAnulado() ? 0.0 : redondear(det.getIva10());				
+				double iva5 = vta.isAnulado() ? 0.0 : redondear(0.0);
+				double gravada5 = vta.isAnulado() ? 0.0 : redondear(vta.getTotalGravado5());
+				double exenta = vta.isAnulado() ? 0.0 : redondear(vta.getTotalExenta());
+				double importe = vta.isAnulado() ? 0.0 : (iva10 + gravada10 + iva5 + gravada5 + exenta);
+				values.add(new BeanLibroVentaDetallado(fecha, concepto, numero, razonSocial, vta.isAnulado() ? "" : ruc,
+						gravada10, iva10, gravada5, iva5, importe, exenta, vta.getFecha(), codigo, descripcion,
+						cantidad, gravada10und));
+				if (vta.isAnulado() == false) {
+					this.totalGravada += (vta.getTotalGravado10());
+					this.totalGravada5 += (vta.getTotalGravado5());
+					this.totalImpuesto += (vta.getTotalIva10());
+					this.totalImpuesto5 += (vta.getTotalIva5());
+					this.totalImporte += importe;
+					this.totalExenta += vta.getTotalExenta();
+					if (vta.isVentaContado()) {
+						this.totalContado += (importe);
+					} else {
+						this.totalCredito += (importe);
+					}
+				}			
 			}
 		}
 	}
