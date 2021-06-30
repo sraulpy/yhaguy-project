@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class ConnectDBMRA {
 
-	final static String DB_CONNECTION = "jdbc:postgresql://10.25.2.250:5433/yhaguydb";
+	final static String DB_CONNECTION = "jdbc:postgresql://10.25.2.250:5432/yhaguydb";
 	final static String DB_USER = "postgres";
 	final static String DB_PASS = "yrsa0985";
 	
