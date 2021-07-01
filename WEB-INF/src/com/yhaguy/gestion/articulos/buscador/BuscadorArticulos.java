@@ -6,7 +6,7 @@ import org.zkoss.zul.Window;
 
 public class BuscadorArticulos {
 	
-	static final String ZUL_BUSCADOR_ART = "/yhaguy/gestion/articulos/BuscarArticulos.zul";
+	static final String ZUL_BUSCADOR_ART = "/yhaguy/gestion/articulos/BuscadorArticulos.zul";
 	
 	@Command
 	public void buscarArticulos() {		
