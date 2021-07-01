@@ -1,7 +1,7 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.articulos.BuscarArticuloControl')">
 
-	<!-- ================================== LISTADO DETALLES ============================== -->
+	<!-- ================================== LISTADO DETALLES -->
 	<div id="buscarArticulo">
 		<listbox height="500px" model="@load(vm.articulosDeposito)"
 			selectedItem="@bind(vm.selectedArticulo)" emptyMessage="@bind(vm.mensaje)">
