@@ -6180,12 +6180,13 @@ public class ReportesViewModel extends SimpleViewModel {
 					long min = art[6] != null ? (long) art[6] : (long) 0;
 					long may = art[7] != null ? (long) art[7] : (long) 0;
 					long mac = art[11] != null ? (long) art[11] : (long) 0;
+					long bat = art[14] != null ? (long) art[14] : (long) 0;
 					if (stock) {						
 						if (min > 0 || may > 0 || mac > 0) {
-							data.add(new Object[] { art[1], art[2], min, may, mac, art[3] });
+							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), min, may, mac, bat, art[3], art[13] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], min, may, mac, art[3] });
+						data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), min, may, mac, bat, art[3], art[13] });
 					}					
 				}
 				
@@ -26434,10 +26435,12 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 13);
-	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 13);
-	static DatosColumnas col5 = new DatosColumnas("May.Cen.", TIPO_LONG, 15);
-	static DatosColumnas col6 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 20);
+	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
+	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
+	static DatosColumnas col5 = new DatosColumnas("May.Cen.", TIPO_LONG, 17);
+	static DatosColumnas col6 = new DatosColumnas("Imp.Bat.", TIPO_LONG, 17);
+	static DatosColumnas col7 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 30);
+	static DatosColumnas col8 = new DatosColumnas("Bat.Gs.", TIPO_DOUBLE_GS, 30);
 
 	public ReporteListaPrecioPorDeposito_(String proveedor) {
 		this.proveedor = proveedor;
@@ -26450,6 +26453,8 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 		cols.add(col4);
 		cols.add(col5);
 		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override
