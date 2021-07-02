@@ -26437,8 +26437,8 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
 	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
-	static DatosColumnas col5 = new DatosColumnas("May.Cen.", TIPO_LONG, 17);
-	static DatosColumnas col6 = new DatosColumnas("Imp.Bat.", TIPO_LONG, 17);
+	static DatosColumnas col5 = new DatosColumnas("May.Cen.", TIPO_LONG, 20);
+	static DatosColumnas col6 = new DatosColumnas("Imp.Bat.", TIPO_LONG, 20);
 	static DatosColumnas col7 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 30);
 	static DatosColumnas col8 = new DatosColumnas("Bat.Gs.", TIPO_DOUBLE_GS, 30);
 
