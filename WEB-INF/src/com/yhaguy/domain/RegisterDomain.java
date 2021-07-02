@@ -12068,6 +12068,8 @@ public class RegisterDomain extends Register {
 	 * [10]:articulo.familia
 	 * [11]:stock mayorista central
 	 * [12]:transportadora
+	 * [13]:precioBaterias
+	 * [14]:stock imp baterias
 	 */
 	public List<Object[]> getArticulos(long idProveedor, long idMarca, long idFamilia, String test) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.descripcion, a.precioGs, a.precioMinoristaGs, a.precioListaGs, "
@@ -12076,7 +12078,8 @@ public class RegisterDomain extends Register {
 				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MCAL_LOPEZ + "),"
 				+ " a.costoGs, a.familia.descripcion,"
 				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MAYORISTA_CENTRAL + "),"
-				+ " a.precioTransportadora"
+				+ " a.precioTransportadora, a.precioBaterias,"
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_IMP_BATERIAS + ")"
 				+ " from Articulo a where a.dbEstado != 'D'";
 		if (idProveedor > 0) {
 			query += " and a.proveedor.id = " + idProveedor;
