@@ -1271,8 +1271,6 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 				Configuracion.ID_TIPO_ARTICULO_MARCA));
 		dto.setReglaArticuloFamilia(this.getTipo(Configuracion.REGLA_PRECIO,
 				Configuracion.ID_TIPO_ARTICULO_FAMILIA));
-		dto.setReglaArticuloParte(this.getTipo(Configuracion.REGLA_PRECIO,
-				Configuracion.ID_TIPO_ARTICULO_PARTE));
 		dto.setReglaArticuloRubro(this.getTipo(Configuracion.REGLA_PRECIO,
 				Configuracion.ID_TIPO_ARTICULO_LINEA));// rubro
 
