@@ -19993,7 +19993,7 @@ class VentasPorClienteDataSource implements JRDataSource {
  */
 class VentasUtilidadDetallado implements JRDataSource {
 
-	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	static final NumberFormat FORMATTER = new DecimalFormat("########0");
 
 	List<Object[]> values = new ArrayList<Object[]>();
 	
