@@ -3901,7 +3901,7 @@ public class RegisterDomain extends Register {
 	 * [6]:costo ultimo
 	 */
 	public List<Object[]> getNotasCreditoVenta_(Date desde, Date hasta, long idCliente) throws Exception {
-		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, 0, 0 from"
+		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, 0.0, 0.0 from"
 				+ " NotaCredito n where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and n.tipoMovimiento.sigla = ?"
