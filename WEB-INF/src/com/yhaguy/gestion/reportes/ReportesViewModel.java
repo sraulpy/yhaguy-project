@@ -2673,60 +2673,109 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				String tipoCosto = filtro.getTipoCosto();
+				Articulo art = filtro.getArticulo();
+				long idArticulo = art != null ? art.getId().longValue() : 0;
 				
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
+				
+				Map<String, Object[]> mapNcs = new HashMap<String, Object[]>();
+				Map<String, Object[]> mapVts = new HashMap<String, Object[]>();
 
-				List<Object[]> ncs = rr.getNotasCreditoVenta_(desde, hasta, 0);
+				List<Object[]> ncs = rr.getNotasCreditoVentaDetalles(desde, hasta, 0, idArticulo);
 				for (Object[] notacred : ncs) {
 					String numero = (String) notacred[1];
 					Date fecha = (Date) notacred[2];
 					String descrMotivo = (String) notacred[3];
 					String siglaMotivo = (String) notacred[4];
-					double costoPromedio = (double) notacred[5];
-					double costoUltimo = (double) notacred[6];
 					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
 						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
-						double costo = 0;
 						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-							costo = costoUltimo;
+							double cost = (double) notacred[6];
+							String cant_ = notacred[7] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost * -1);												
+							Object[] mapNc = mapNcs.get(numero);
+							if (mapNc != null) {
+								double acum = (double) mapNc[3];
+								acum += (costo * cant);
+								mapNc[3] = acum;
+							} else {
+								mapNc = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero, ("NCR " + motivo), (costo * cant) };
+							}
+							mapNcs.put(numero, mapNc);
 						}
 						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							costo = costoPromedio;
+							double cost = (double) notacred[9];
+							String cant_ = notacred[7] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost * -1);					
+							Object[] mapNc = mapNcs.get(numero);
+							if (mapNc != null) {
+								double acum = (double) mapNc[3];
+								acum += (costo * cant);
+								mapNc[3] = acum;
+							} else {
+								mapNc = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero, ("NCR " + motivo), (costo * cant) };
+							}
+							mapNcs.put(numero, mapNc);					
 						}
-						Object[] nc = new Object[] {
-								Utiles.getDateToString(fecha, "dd-MM-yy"),
-								numero,
-								"NCR " + motivo,
-								Utiles.getRedondeo(costo * -1) };					
-						data.add(nc);
 					}
 				}
 
-				List<Object[]> ventas = rr.getVentas_(desde, hasta, 0);
+				List<Object[]> ventas = rr.getVentasDetalles(desde, hasta, 0, idArticulo);
 				for (Object[] venta : ventas) {
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
 					String sigla = (String) venta[4];
-					double costoPromedio = (double) venta[5];
-					double costoUltimo = (double) venta[6];
-					double costo = 0;					
+					
 					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-						costo = costoUltimo;
+						double cost = (double) venta[6];
+						String cant_ = venta[7] + "";
+						int cant = Integer.parseInt(cant_);
+						double costo = Utiles.getRedondeo(cost);
+						Object[] mapVt = mapVts.get(numero);
+						if (mapVt != null) {
+							double acum = (double) mapVt[3];
+							acum += (costo * cant);
+							mapVt[3] = acum;
+						} else {
+							mapVt = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero,
+									("FAC. " + TipoMovimiento.getAbreviatura(sigla)), (costo * cant) };
+						}
+						mapVts.put(numero, mapVt);
 					}
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						costo = costoPromedio;
+						double cost = (double) venta[9];
+						String cant_ = venta[7] + "";
+						int cant = Integer.parseInt(cant_);
+						double costo = Utiles.getRedondeo(cost);
+						Object[] mapVt = mapVts.get(numero);
+						if (mapVt != null) {
+							double acum = (double) mapVt[3];
+							acum += (costo * cant);
+							mapVt[3] = acum;
+						} else {
+							mapVt = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero,
+									("FAC. " + TipoMovimiento.getAbreviatura(sigla)), (costo * cant) };
+						}
+						mapVts.put(numero, mapVt);
 					}
-					Object[] vta = new Object[] { 
-							Utiles.getDateToString(fecha, "dd-MM-yy"), 
-							numero, 
-							"FAC. " + TipoMovimiento.getAbreviatura(sigla),
-							Utiles.getRedondeo(costo) };
-					data.add(vta);
 				}
+				
+				for (String key : mapNcs.keySet()) {
+					Object[] nc = mapNcs.get(key);
+					data.add(nc);
+				}
+				
+				for (String key : mapVts.keySet()) {
+					Object[] vt = mapVts.get(key);
+					data.add(vt);
+				}
+				
 				String sucursal = getAcceso().getSucursalOperativa().getText();
 
 				ReporteCostoVentas rep = new ReporteCostoVentas(desde, hasta, sucursal, tipoCosto);
@@ -14920,60 +14969,109 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				String tipoCosto = filtro.getTipoCosto();
+				Articulo art = filtro.getArticulo();
+				long idArticulo = art != null ? art.getId().longValue() : 0;
 				
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
+				
+				Map<String, Object[]> mapNcs = new HashMap<String, Object[]>();
+				Map<String, Object[]> mapVts = new HashMap<String, Object[]>();
 
-				List<Object[]> ncs = rr.getNotasCreditoVenta_(desde, hasta, 0);
+				List<Object[]> ncs = rr.getNotasCreditoVentaDetalles(desde, hasta, 0, idArticulo);
 				for (Object[] notacred : ncs) {
 					String numero = (String) notacred[1];
 					Date fecha = (Date) notacred[2];
 					String descrMotivo = (String) notacred[3];
 					String siglaMotivo = (String) notacred[4];
-					double costoPromedio = (double) notacred[5];
-					double costoUltimo = (double) notacred[6];
 					if (siglaMotivo.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION)) {
 						String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
-						double costo = 0;
 						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-							costo = costoUltimo;
+							double cost = (double) notacred[6];
+							String cant_ = notacred[7] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost * -1);												
+							Object[] mapNc = mapNcs.get(numero);
+							if (mapNc != null) {
+								double acum = (double) mapNc[3];
+								acum += (costo * cant);
+								mapNc[3] = acum;
+							} else {
+								mapNc = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero, ("NCR " + motivo), (costo * cant) };
+							}
+							mapNcs.put(numero, mapNc);
 						}
 						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-							costo = costoPromedio;
+							double cost = (double) notacred[9];
+							String cant_ = notacred[7] + "";
+							int cant = Integer.parseInt(cant_);
+							double costo = Utiles.getRedondeo(cost * -1);					
+							Object[] mapNc = mapNcs.get(numero);
+							if (mapNc != null) {
+								double acum = (double) mapNc[3];
+								acum += (costo * cant);
+								mapNc[3] = acum;
+							} else {
+								mapNc = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero, ("NCR " + motivo), (costo * cant) };
+							}
+							mapNcs.put(numero, mapNc);					
 						}
-						Object[] nc = new Object[] {
-								Utiles.getDateToString(fecha, "dd-MM-yy"),
-								numero,
-								"NCR " + motivo,
-								Utiles.getRedondeo(costo * -1) };					
-						data.add(nc);
 					}
 				}
 
-				List<Object[]> ventas = rr.getVentas_(desde, hasta, 0);
+				List<Object[]> ventas = rr.getVentasDetalles(desde, hasta, 0, idArticulo);
 				for (Object[] venta : ventas) {
 					String numero = (String) venta[1];
 					Date fecha = (Date) venta[2];
 					String sigla = (String) venta[4];
-					double costoPromedio = (double) venta[5];
-					double costoUltimo = (double) venta[6];
-					double costo = 0;					
+					
 					if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
-						costo = costoUltimo;
+						double cost = (double) venta[6];
+						String cant_ = venta[7] + "";
+						int cant = Integer.parseInt(cant_);
+						double costo = Utiles.getRedondeo(cost);
+						Object[] mapVt = mapVts.get(numero);
+						if (mapVt != null) {
+							double acum = (double) mapVt[3];
+							acum += (costo * cant);
+							mapVt[3] = acum;
+						} else {
+							mapVt = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero,
+									("FAC. " + TipoMovimiento.getAbreviatura(sigla)), (costo * cant) };
+						}
+						mapVts.put(numero, mapVt);
 					}
 					if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
-						costo = costoPromedio;
+						double cost = (double) venta[9];
+						String cant_ = venta[7] + "";
+						int cant = Integer.parseInt(cant_);
+						double costo = Utiles.getRedondeo(cost);
+						Object[] mapVt = mapVts.get(numero);
+						if (mapVt != null) {
+							double acum = (double) mapVt[3];
+							acum += (costo * cant);
+							mapVt[3] = acum;
+						} else {
+							mapVt = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy HH:mm:ss"), numero,
+									("FAC. " + TipoMovimiento.getAbreviatura(sigla)), (costo * cant) };
+						}
+						mapVts.put(numero, mapVt);
 					}
-					Object[] vta = new Object[] { 
-							Utiles.getDateToString(fecha, "dd-MM-yy"), 
-							numero, 
-							"FAC. " + TipoMovimiento.getAbreviatura(sigla),
-							Utiles.getRedondeo(costo) };
-					data.add(vta);
 				}
+				
+				for (String key : mapNcs.keySet()) {
+					Object[] nc = mapNcs.get(key);
+					data.add(nc);
+				}
+				
+				for (String key : mapVts.keySet()) {
+					Object[] vt = mapVts.get(key);
+					data.add(vt);
+				}
+				
 				String sucursal = getAcceso().getSucursalOperativa().getText();
 
 				ReporteCostoVentas rep = new ReporteCostoVentas(desde, hasta, sucursal, tipoCosto);
