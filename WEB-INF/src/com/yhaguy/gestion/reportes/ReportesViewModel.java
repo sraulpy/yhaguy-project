@@ -2776,6 +2776,22 @@ public class ReportesViewModel extends SimpleViewModel {
 					data.add(vt);
 				}
 				
+				// ordena la lista segun fecha..
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						Date fecha1 = null;
+						Date fecha2 = null;
+						try {
+							fecha1 = Utiles.getFecha(o1[0] + "", "dd-MM-yy HH:mm:ss");
+							fecha2 = Utiles.getFecha(o2[0] + "", "dd-MM-yy HH:mm:ss");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return fecha1.compareTo(fecha2);
+					}
+				});
+				
 				String sucursal = getAcceso().getSucursalOperativa().getText();
 
 				ReporteCostoVentas rep = new ReporteCostoVentas(desde, hasta, sucursal, tipoCosto);
