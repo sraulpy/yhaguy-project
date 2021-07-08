@@ -1634,6 +1634,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_PROVEEDOR_CLIENTE_MES_CANT = "VEN-00051";
 		static final String VENTAS_DETALLE = "VEN-00052";
 		static final String VENTAS_COSTO_DETALLADO = "VEN-00053";
+		static final String VENTAS_PRESUPUESTOS_DETALLADO = "VEN-00054";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1855,6 +1856,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_COSTO_DETALLADO:
 				this.costoDeVentasDetallado(mobile);
+				break;
+				
+			case VENTAS_PRESUPUESTOS_DETALLADO:
+				this.presupuestosDetallado(mobile);
 				break;
 			}
 		}
@@ -7698,9 +7703,97 @@ public class ReportesViewModel extends SimpleViewModel {
 					
 					}
 				}
+				// ordena la lista segun fecha..
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						Date fecha1 = null;
+						Date fecha2 = null;
+						try {
+							fecha1 = Utiles.getFecha(o1[0] + "", "dd-MM-yy HH:mm:ss");
+							fecha2 = Utiles.getFecha(o2[0] + "", "dd-MM-yy HH:mm:ss");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return fecha1.compareTo(fecha2);
+					}
+				});
 				String sucursal = getAcceso().getSucursalOperativa().getText();
 
 				ReporteCostoVentasDetallado rep = new ReporteCostoVentasDetallado(desde, hasta, sucursal, tipoCosto);
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte VEN-
+		 */
+		private void presupuestosDetallado(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Articulo art = filtro.getArticulo();
+				Cliente cli = filtro.getCliente();
+				Funcionario ven = filtro.getVendedor();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				
+				long idArticulo = art != null ? art.getId().longValue() : 0;
+				long idCliente = cli != null ? cli.getId().longValue() : 0;
+				long idVendedor = ven != null ? ven.getId().longValue() : 0;
+				long idFamilia = flia != null ? flia.getId().longValue() : 0;
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+
+				List<Object[]> presupuestos = rr.getPresupuestosDetalles(desde, hasta, idCliente, idArticulo, idVendedor, idFamilia);
+				for (Object[] presup : presupuestos) {
+					String numero = (String) presup[1];
+					Date fecha = (Date) presup[2];
+					double precio = (double) presup[5];
+					String cant_ = presup[4] + "";
+					int cant = Integer.parseInt(cant_);
+					String codigo = (String) presup[3];
+					String cliente = (String) presup[6];
+					String vendedor = (String) presup[7];
+					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
+							Utiles.getMaxLength(cliente, 37), Utiles.getMaxLength(vendedor, 25), codigo, cant, precio };
+					data.add(vta);
+				}
+				// ordena la lista segun fecha..
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						Date fecha1 = null;
+						Date fecha2 = null;
+						try {
+							fecha1 = Utiles.getFecha(o1[0] + "", "dd-MM-yy");
+							fecha2 = Utiles.getFecha(o2[0] + "", "dd-MM-yy");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return fecha1.compareTo(fecha2);
+					}
+				});
+				String sucursal = getAcceso().getSucursalOperativa().getText();
+
+				ReportePresupuestosDetallado rep = new ReportePresupuestosDetallado(desde, hasta, sucursal);
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 
@@ -28591,6 +28684,70 @@ class ReporteTransferenciaArticulo extends ReporteYhaguy {
 				.add(this.textoParValor("Familia", this.familia))
 				.add(this.textoParValor("Articulo", this.articulo)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte de Costo de Ventas VEN-..
+ */
+class ReportePresupuestosDetallado extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	
+	private Date desde;
+	private Date hasta;
+	private String sucursal;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
+	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 40);
+	static DatosColumnas col3 = new DatosColumnas("Cliente", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Vendedor", TIPO_STRING, 60);
+	static DatosColumnas col5 = new DatosColumnas("Codigo", TIPO_STRING, 50);
+	static DatosColumnas col6 = new DatosColumnas("Cant.", TIPO_INTEGER, 15);
+	static DatosColumnas col7 = new DatosColumnas("Precio", TIPO_DOUBLE, 30);
+	
+	public ReportePresupuestosDetallado(Date desde, Date hasta, String sucursal) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.sucursal = sucursal;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Listado de Presupuestos Detallado");
+		this.setDirectorio("ventas");
+		this.setNombreArchivo("Venta-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp
+				.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Sucursal", this.sucursal)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
 		return out;
 	}
 }
