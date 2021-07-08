@@ -13780,6 +13780,59 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return las ventas segun fecha
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:fecha
+	 * [3]:articulo.codigo
+	 * [4]:cantidad
+	 * [5]:precio
+	 * [6]:cliente
+	 * [7]:vendedor
+	 */
+	public List<Object[]> getPresupuestosDetalles(Date desde, Date hasta, long idCliente, long idArticulo, long idVendedor, long idFamilia) throws Exception {
+		String query = "select v.id, v.numero, v.fecha, d.articulo.codigoInterno, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial, v.vendedor.empresa.razonSocial"
+				+ " from Venta v join v.detalles d where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ?)"
+				+ " and v.estadoComprobante is null"
+				+ " and v.fecha between ? and ?";
+		if (idCliente != 0) {
+			query += " and v.cliente.id = ?";
+		}
+		if (idArticulo != 0) {
+			query += " and d.articulo.id = ?";
+		}
+		if (idVendedor != 0) {
+			query += " and v.vendedor.id = ?";
+		}
+		if (idFamilia != 0) {
+			query += " and d.articulo.familia.id = ?";
+		}
+		query += " order by v.numero, v.fecha";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_PRESUPUESTO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+		if (idCliente != 0) {
+			listParams.add(idCliente);
+		}
+		if (idArticulo != 0) {
+			listParams.add(idArticulo);
+		}
+		if (idVendedor != 0) {
+			listParams.add(idVendedor);
+		}
+		if (idFamilia != 0) {
+			listParams.add(idFamilia);
+		}
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//RegisterDomain rr = RegisterDomain.getInstance();
