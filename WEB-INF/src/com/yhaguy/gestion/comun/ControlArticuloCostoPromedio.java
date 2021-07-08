@@ -37,8 +37,8 @@ public class ControlArticuloCostoPromedio {
 
 	@SuppressWarnings("unused")
 	private void testCostoPromedio() throws Exception {		
-		Date desde = Utiles.getFecha("01-01-2016 00:00:00");
-		Date hasta = Utiles.getFecha("30-06-2021 23:00:00");
+		Date desde = Utiles.getFecha("02-06-2021 00:00:00");
+		Date hasta = Utiles.getFecha("30-07-2021 23:00:00");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);
@@ -420,7 +420,6 @@ public class ControlArticuloCostoPromedio {
 	/**
 	 * @return el costo ultimo..
 	 */
-	@SuppressWarnings("unused")
 	private double getCostoUltimo(List<Object[]> compras, double ultCosto) {
 		if (compras.size() == 0) {
 			return ultCosto;
@@ -462,7 +461,9 @@ public class ControlArticuloCostoPromedio {
 		out.addAll(notasCredito);
 		out.addAll(compras);
 		out.addAll(ajustes);
-		out.addAll(this.isEmpresaMRA() ? transferenciasOrigenCentral : transferenciasOrigenMRA);
+		if (!this.isEmpresaGTSA()) {
+			out.addAll(this.isEmpresaMRA() ? transferenciasOrigenCentral : transferenciasOrigenMRA);
+		}		
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -499,7 +500,9 @@ public class ControlArticuloCostoPromedio {
 		out.addAll(compras);
 		out.addAll(ajustes);
 		out.addAll(migraciones);
-		out.addAll(this.isEmpresaMRA() ? transferenciasOrigenCentral : transferenciasOrigenMra);
+		if (!this.isEmpresaGTSA()) {
+			out.addAll(this.isEmpresaMRA() ? transferenciasOrigenCentral : transferenciasOrigenMra);
+		}
 		
 		// ordena la lista segun fecha..
 		Collections.sort(out, new Comparator<Object[]>() {
@@ -539,8 +542,11 @@ public class ControlArticuloCostoPromedio {
 		out.addAll(ntcsv);
 		out.addAll(compras);
 		out.addAll(importaciones);
-		out.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
-		out.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		if (!this.isEmpresaGTSA()) {
+			out.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
+			out.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		}
+		
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -595,10 +601,12 @@ public class ControlArticuloCostoPromedio {
 			item[3] = (Long.parseLong(item[3] + "") * -1);
 		}
 		out.addAll(ventas);
-		out.addAll(ntcsc);		
-		out.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
-		out.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		out.addAll(ntcsc);	
 		out.addAll(ajustStockNeg);
+		if (!this.isEmpresaGTSA()) {
+			out.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
+			out.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		}			
 		
 		for (Object[] item : out) {
 			total += Long.parseLong(item[3] + "");
@@ -625,6 +633,13 @@ public class ControlArticuloCostoPromedio {
 	 */
 	public boolean isEmpresaMRA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+	}
+	
+	/**
+	 * @return true si es gtsa..
+	 */
+	public boolean isEmpresaGTSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 	
 	public static void main(String[] args) {
