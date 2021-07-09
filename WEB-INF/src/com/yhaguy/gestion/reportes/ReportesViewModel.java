@@ -7773,7 +7773,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String cliente = (String) presup[6];
 					String vendedor = (String) presup[7];
 					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
-							Utiles.getMaxLength(cliente, 37), Utiles.getMaxLength(vendedor, 25), codigo, cant, precio };
+							Utiles.getMaxLength(cliente, 37), Utiles.getMaxLength(vendedor, 20), codigo, cant, precio };
 					data.add(vta);
 				}
 				// ordena la lista segun fecha..
