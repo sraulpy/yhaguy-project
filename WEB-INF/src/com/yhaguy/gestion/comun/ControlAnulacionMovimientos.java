@@ -262,7 +262,7 @@ public class ControlAnulacionMovimientos {
 		//actualiza el stock del articulo..
 		for (AjusteStockDetalle item : ajuste.getDetalles()) {
 			ControlArticuloStock.actualizarStock(item.getArticulo().getId(),
-					ajuste.getDeposito().getId(), item.getCantidad() * -1, user);
+					ajuste.getDeposito().getId(), item.getCantidad() * -1, user, true);
 		}
 	}
 	
