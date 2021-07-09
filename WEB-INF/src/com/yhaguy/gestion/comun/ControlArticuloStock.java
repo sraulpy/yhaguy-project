@@ -65,7 +65,8 @@ public class ControlArticuloStock {
 	 * actualiza el stock del articulo segun deposito..
 	 */
 	public static void actualizarStock(long idArticulo, long idDeposito,
-			long cantidad, String user) throws Exception {
+			long cantidad, String user, boolean actualizar) throws Exception {
+		if (!actualizar) return;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		ArticuloDeposito art = rr.getArticuloDeposito(idArticulo, idDeposito);
 		if (art == null) {
