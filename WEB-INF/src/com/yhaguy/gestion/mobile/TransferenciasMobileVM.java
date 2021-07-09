@@ -131,11 +131,11 @@ public class TransferenciasMobileVM extends SimpleViewModel {
 		
 		ControlArticuloStock.actualizarStock(item.getArticulo().getId(),
 				this.transferencia.getDepositoSalida().getId(),
-				(item.getCantidad() * -1), this.getLoginNombre());
+				(item.getCantidad() * -1), this.getLoginNombre(), true);
 
 		ControlArticuloStock.actualizarStock(item.getArticulo().getId(),
 				this.transferencia.getDepositoEntrada().getId(), item.getCantidad(),
-				this.getLoginNombre());
+				this.getLoginNombre(), true);
 	}
 
 	/**
