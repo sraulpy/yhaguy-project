@@ -414,16 +414,23 @@ public class TransferenciaControlBody extends BodyApp {
 	/**
 	 * actualiza el stock..resta al deposito origen y suma al deposito destino..
 	 */
-	private void actualizarStock(TransferenciaDetalleDTO item) throws Exception {
+	private void actualizarStock(TransferenciaDetalleDTO item) throws Exception {		
+		
+		boolean actualizarDestino = true;
+		if (this.isEmpresaCentral() && (this.dto.getSucursalDestino().getId().longValue() == SucursalApp.ID_MRA)) {
+			actualizarDestino = false;
+		}
+		if (this.isEmpresaMRA() && (this.dto.getSucursalDestino().getId().longValue() == SucursalApp.ID_MRA_CENTRAL)) {
+			actualizarDestino = false;
+		}
 		
 		ControlArticuloStock.actualizarStock(item.getArticulo().getId(),
 				this.dto.getDepositoSalida().getId(),
-				(item.getCantidad() * -1), this.getLoginNombre());
-
-		ControlArticuloStock.actualizarStock(item.getArticulo().getId(),
-				this.dto.getDepositoEntrada().getId(), item.getCantidad(),
-				this.getLoginNombre());
-
+				(item.getCantidad() * -1), this.getLoginNombre(), true);
+		
+		ControlArticuloStock.actualizarStock(item.getArticulo().getId(), this.dto.getDepositoEntrada().getId(),
+				item.getCantidad(), this.getLoginNombre(), actualizarDestino);
+		
 		ControlArticuloStock.addMovimientoStock(this.dto.getId(), this
 				.getDtoUtil().getTmTransferenciaMercaderia().getId(), (item
 				.getCantidad() * -1), item.getArticulo().getId(), this.dto
