@@ -23,9 +23,7 @@ import org.zkoss.zul.Window;
 
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.control.SimpleViewModel;
-import com.coreweb.domain.Usuario;
 import com.coreweb.extras.reporte.DatosColumnas;
-import com.yhaguy.domain.AccesoApp;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
@@ -163,30 +161,13 @@ public class RuteoVendedoresViewModel extends SimpleViewModel {
 	public List<Object[]> getRuteoVendedores() throws Exception {
 		List<Object[]> out = new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Object[]> list = rr.getRuteoVendedores(this.desde, this.hasta);
-		if (this.selectedVendedor == null) {
-			out.addAll(list);
+		List<Object[]> list = null;
+		if (this.selectedVendedor != null) {
+			list = rr.getRuteoVendedores(this.desde, this.hasta, this.selectedVendedor.getAuxi());
 		} else {
-			for (Object[] ruteo : list) {
-				String vendedor = (String) ruteo[0];
-				String vendedor_ = vendedor.substring(0, vendedor.indexOf('-'));
-				List<AccesoApp> accs = new ArrayList<AccesoApp>();
-				accs.addAll(this.selectedVendedor.getAccesos());
-				if (accs.size() > 0) {
-					Usuario user = accs.get(0).getUsuario();
-					if (user != null) {
-						String login = user.getLogin();
-						if (login.equals(vendedor_)) {
-							out.add(ruteo);
-						}
-					}				
-				}
-			}
+			list = rr.getRuteoVendedores(this.desde, this.hasta);
 		}
-		
-		for (Object[] obj : out) {
-			System.out.println(obj[0]);
-		}
+		out.addAll(list);
 		return out;
 	}
 

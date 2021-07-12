@@ -9026,6 +9026,7 @@ public class RegisterDomain extends Register {
 		List<Deposito> deps = this.getDepositos();
 		for (long i = 2; i <= deps.size(); i++) {
 			ArticuloDeposito adp = this.getArticuloDeposito(idarticulo, i);
+			System.out.println("--> i= " + i);
 			if (adp != null) {
 				stock += adp.getStock();				
 			}			
@@ -10787,6 +10788,21 @@ public class RegisterDomain extends Register {
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select r.usuarioMod, r.auxi, r.orden, r.echo from Ping r where"
 				+ " (r.modificado > '" + desde_ + "' and r.modificado < '" + hasta_ + "')";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el ruteo de vendedores..
+	 * [0]:vendedor
+	 * [1]:cliente
+	 * [2]:latitud
+	 * [3]:longitud
+	 */
+	public List<Object[]> getRuteoVendedores(Date desde, Date hasta, String vendedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select r.usuarioMod, r.auxi, r.orden, r.echo from Ping r where"
+				+ " (r.modificado > '" + desde_ + "' and r.modificado < '" + hasta_ + "') and r.usuarioMod like '" + vendedor + "%'";
 		return this.hql(query);
 	}
 	

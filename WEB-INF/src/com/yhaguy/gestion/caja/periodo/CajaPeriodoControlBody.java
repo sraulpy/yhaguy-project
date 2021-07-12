@@ -458,8 +458,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		
 		if (tipo == ES_PAGO && (this.dto.getTipo().equals(CajaPeriodo.TIPO_PAGOS)
 				|| this.dto.getTipo().equals(CajaPeriodo.TIPO_PAGOS_EXTERIOR))) {
-			if (this.dto.getDetalles().size() > 19) {
-				Clients.showNotification("PARA PAGOS, MAXIMO 20 REGISTROS");
+			if (this.dto.getDetalles().size() > 29) {
+				Clients.showNotification("PARA PAGOS, MAXIMO 30 REGISTROS");
 				return;
 			}
 		}
