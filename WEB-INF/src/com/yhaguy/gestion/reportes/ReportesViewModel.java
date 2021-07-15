@@ -12926,7 +12926,6 @@ public class ReportesViewModel extends SimpleViewModel {
 					stock10.put(idArticulo, st10); deps.put(10, d10 != null ? d10.getObservacion() : "NO DEF.");
 				}
 				
-				Date hoy = new Date();
 				for (Object[] venta : ventas) {
 					Object[] compraLocal = rr.getUltimaCompraLocal((long) venta[0]);
 					Object[] compraImpor = rr.getUltimaCompraImportacion((long) venta[0]);
@@ -12941,7 +12940,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					venta = Arrays.copyOf(venta, venta.length + 8);
 					
 					double ultCostoGs = rr.getCostoGs((long) venta[0]);
-					double costPromGs = rr.getCostoPromedio((long) venta[0], hoy);
+					double costPromGs = rr.getCostoPromedioGs((long) venta[0]);
 					
 					venta[30] = compraLocal[0];
 					venta[31] = compraLocal[1];
