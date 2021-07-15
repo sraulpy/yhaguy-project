@@ -12940,7 +12940,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					
 					venta = Arrays.copyOf(venta, venta.length + 8);
 					
-					double ultCostoGs = rr.getCostoUltimo((long) venta[0], hoy);
+					double ultCostoGs = rr.getCostoGs((long) venta[0]);
 					double costPromGs = rr.getCostoPromedio((long) venta[0], hoy);
 					
 					venta[30] = compraLocal[0];
@@ -12971,8 +12971,8 @@ public class ReportesViewModel extends SimpleViewModel {
 							if (compraImpor == null) compraImpor = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 							
 							
-							double ultCostoGs = rr.getCostoUltimo(idArt, hoy);
-							double costPromGs = rr.getCostoPromedio(idArt, hoy);
+							double ultCostoGs = (double) art[20];
+							double costPromGs = rr.getCostoPromedioGs(idArt);
 														
 							values.add(new Object[] { art[0], art[1], art[2], art[3], art[4], art[5], art[6], art[7],
 									art[8], art[9], art[10], art[11], art[12], art[13], art[14], art[15], art[16],

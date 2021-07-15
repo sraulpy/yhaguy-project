@@ -8892,8 +8892,8 @@ public class RegisterDomain extends Register {
 	 * @return el costo del articulo..
 	 */
 	public double getCostoGs(long idarticulo) throws Exception {
-		Articulo art = this.getArticuloById(idarticulo);
-		return art.getCostoGs();
+		Object[] art = this.getArticulo(idarticulo);
+		return (double) art[3];
 	}
 	
 	/**
@@ -11642,7 +11642,7 @@ public class RegisterDomain extends Register {
 	 * [5]:precioGs
 	 */
 	public Object[] getUltimaCompraLocal(long idArticulo) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs, d.costoGs"
+		String query = "select d.cantidad, c.fechaCreacion, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs, d.costoGs"
 				+ " from CompraLocalFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
@@ -11659,7 +11659,7 @@ public class RegisterDomain extends Register {
 	 * [5]:precioGs
 	 */
 	public Object[] getUltimaCompraLocal(String codigoInterno) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs, d.costoGs"
+		String query = "select d.cantidad, c.fechaCreacion, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs, d.costoGs"
 				+ " from CompraLocalFactura c join c.detalles d where d.articulo.codigoInterno = '" + codigoInterno + "'"
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
