@@ -41,7 +41,7 @@
 		<property name="stockGral" />
 		<property name="stockMinimo" />
 		<property name="stockMaximo" />
-		<property name="fechaUltimaCompra" />
+		<property name="fechaUltimaCompraLocal" />
 		<property name="fechaUltimaVenta" />
 		<property name="proveedorUltimaCompra" />
 		<property name="costoFob" />

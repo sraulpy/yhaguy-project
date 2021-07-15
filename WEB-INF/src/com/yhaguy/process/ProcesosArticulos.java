@@ -660,7 +660,7 @@ public class ProcesosArticulos {
 			HistoricoMovimientoArticulo hist = new HistoricoMovimientoArticulo();
 			hist.setCodigo(codigo);
 			hist.setCantidad(Long.parseLong(cantidad));
-			hist.setFechaUltimaCompra(fecha);
+			hist.setFechaUltimaCompraLocal(fecha);
 			hist.setProveedor(proveedor);
 			hist.setCostoFob(Double.parseDouble(costods));
 			hist.setCostoGs(Double.parseDouble(costogs));

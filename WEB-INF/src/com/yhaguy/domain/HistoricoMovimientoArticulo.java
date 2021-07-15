@@ -33,6 +33,7 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private String procedencia;
 	private int unidadesCaja;
 	private long cantidad;
+	private long cantidadImportacion;
 	private long stock1;
 	private long stock2;
 	private long stock3;
@@ -46,9 +47,11 @@ public class HistoricoMovimientoArticulo extends Domain {
 	private long stockGral;
 	private long stockMinimo;
 	private long stockMaximo;
-	private String fechaUltimaCompra;
+	private String fechaUltimaImport;
+	private String fechaUltimaCompraLocal;
 	private String fechaUltimaVenta;
 	private String proveedorUltimaCompra;
+	private String proveedorUltimaImport;
 	private double costoFob;
 	private double coeficiente;
 	private double tipoCambio;
@@ -107,7 +110,25 @@ public class HistoricoMovimientoArticulo extends Domain {
 	
 	private double costoFobGs;
 	private double costoFobDs;
+	private double ultimoCostoGs;
+	private double costoPromedioGs;
 	
+	public double getUltimoCostoGs() {
+		return ultimoCostoGs;
+	}
+
+	public void setUltimoCostoGs(double ultimoCostoGs) {
+		this.ultimoCostoGs = ultimoCostoGs;
+	}
+
+	public double getCostoPromedioGs() {
+		return costoPromedioGs;
+	}
+
+	public void setCostoPromedioGs(double costoPromedioGs) {
+		this.costoPromedioGs = costoPromedioGs;
+	}
+
 	private double precioMinorista;
 	private double precioLista;
 	
@@ -335,14 +356,6 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setStockMaximo(long stockMaximo) {
 		this.stockMaximo = stockMaximo;
-	}
-
-	public String getFechaUltimaCompra() {
-		return fechaUltimaCompra;
-	}
-
-	public void setFechaUltimaCompra(String fechaUltimaCompra) {
-		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 
 	public String getFechaUltimaVenta() {
@@ -911,5 +924,37 @@ public class HistoricoMovimientoArticulo extends Domain {
 
 	public void setPrecioLista(double precioLista) {
 		this.precioLista = precioLista;
+	}
+
+	public String getFechaUltimaCompraLocal() {
+		return fechaUltimaCompraLocal;
+	}
+
+	public void setFechaUltimaCompraLocal(String fechaUltimaCompraLocal) {
+		this.fechaUltimaCompraLocal = fechaUltimaCompraLocal;
+	}
+
+	public long getCantidadImportacion() {
+		return cantidadImportacion;
+	}
+
+	public void setCantidadImportacion(long cantidadImportacion) {
+		this.cantidadImportacion = cantidadImportacion;
+	}
+
+	public String getProveedorUltimaImport() {
+		return proveedorUltimaImport;
+	}
+
+	public void setProveedorUltimaImport(String proveedorUltimaImport) {
+		this.proveedorUltimaImport = proveedorUltimaImport;
+	}
+
+	public String getFechaUltimaImport() {
+		return fechaUltimaImport;
+	}
+
+	public void setFechaUltimaImport(String fechaUltimaImport) {
+		this.fechaUltimaImport = fechaUltimaImport;
 	}
 }

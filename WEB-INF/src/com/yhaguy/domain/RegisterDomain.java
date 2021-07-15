@@ -11691,7 +11691,7 @@ public class RegisterDomain extends Register {
 	 * [4]:costoDs
 	 */
 	public Object[] getUltimaCompraImportacion(long idArticulo) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
+		String query = "select d.cantidad, c.fechaVolcado, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
 				+ " from ImportacionFactura c join c.detalles d where d.articulo.id = " + idArticulo
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
@@ -11707,7 +11707,7 @@ public class RegisterDomain extends Register {
 	 * [4]:costoDs
 	 */
 	public Object[] getUltimaCompraImportacion(String codigoInterno) throws Exception {
-		String query = "select d.cantidad, c.fechaOriginal, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
+		String query = "select d.cantidad, c.fechaVolcado, c.proveedor.empresa.razonSocial, d.articulo.costoGs, d.costoDs"
 				+ " from ImportacionFactura c join c.detalles d where d.articulo.codigoInterno = '" + codigoInterno + "'"
 				+ " order by c.id desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
@@ -11723,7 +11723,7 @@ public class RegisterDomain extends Register {
 	 * [4]:costoDs
 	 */
 	public Object[] getUltimaCompraLocalMovimientosArticulos(String codigoInterno) throws Exception {
-		String query = "select h.cantidad, h.fechaUltimaCompra, h.proveedor, h.costoGs, h.costoFob"
+		String query = "select h.cantidad, h.fechaUltimaCompraLocal, h.proveedor, h.costoGs, h.costoFob"
 				+ " from HistoricoMovimientoArticulo h where h.codigo = '" + codigoInterno + "'"
 				+ " order by h.codigo desc";
 		List<Object[]> list = this.hqlLimit(query, 1);
@@ -13851,7 +13851,11 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			//RegisterDomain rr = RegisterDomain.getInstance();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Funcionario> list = rr.getFuncionarios();
+			for (Funcionario f : list) {
+				System.out.println(f.getNombreEmpresa());
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

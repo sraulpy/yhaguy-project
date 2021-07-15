@@ -13,7 +13,7 @@ public class Configuracion extends Config {
 	/********************************************************************************************/
 	public static String PATH_SESSION = ".";
 
-	public static String empresa = "Yhaguy Repuestos S.A. MRA";
+	public static String empresa = "Grupo Toyo S.A.";
 	
 	public static final String EMPRESA_GTSA = "Grupo Toyo S.A.";
 	public static final String EMPRESA_YRSA = "Yhaguy Repuestos S.A.";

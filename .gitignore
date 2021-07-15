@@ -1,2 +1,11 @@
 
 yhaguy/gestion/articulos/BuscarArticulos.zul
+/bin/
+/core/
+.classpath
+.project
+WEB-INF/classes/*
+/reportes/ventas/*
+/reportes/Articulos/*
+logo.png
+logo.png
