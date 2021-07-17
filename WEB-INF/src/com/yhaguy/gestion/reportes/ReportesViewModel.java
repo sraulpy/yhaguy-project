@@ -1635,6 +1635,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_DETALLE = "VEN-00052";
 		static final String VENTAS_COSTO_DETALLADO = "VEN-00053";
 		static final String VENTAS_PRESUPUESTOS_DETALLADO = "VEN-00054";
+		static final String VENTAS_PEDIDOS_DETALLADO = "VEN-00055";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1860,6 +1861,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_PRESUPUESTOS_DETALLADO:
 				this.presupuestosDetallado(mobile);
+				break;
+			
+			case VENTAS_PEDIDOS_DETALLADO:
+				this.pedidosDetallado(mobile);
 				break;
 			}
 		}
@@ -7792,8 +7797,83 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 				});
 				String sucursal = getAcceso().getSucursalOperativa().getText();
+				String titulo = "Listado de Presupuestos Detallado";
 
-				ReportePresupuestosDetallado rep = new ReportePresupuestosDetallado(desde, hasta, sucursal);
+				ReportePresupuestosDetallado rep = new ReportePresupuestosDetallado(desde, hasta, sucursal, titulo);
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * reporte VEN-
+		 */
+		private void pedidosDetallado(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Articulo art = filtro.getArticulo();
+				Cliente cli = filtro.getCliente();
+				Funcionario ven = filtro.getVendedor();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				
+				long idArticulo = art != null ? art.getId().longValue() : 0;
+				long idCliente = cli != null ? cli.getId().longValue() : 0;
+				long idVendedor = ven != null ? ven.getId().longValue() : 0;
+				long idFamilia = flia != null ? flia.getId().longValue() : 0;
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+
+				List<Object[]> pedidos = rr.getPedidosDetalles(desde, hasta, idCliente, idArticulo, idVendedor, idFamilia);
+				for (Object[] pedido : pedidos) {
+					String numero = (String) pedido[1];
+					Date fecha = (Date) pedido[2];
+					double precio = (double) pedido[5];
+					String cant_ = pedido[4] + "";
+					int cant = Integer.parseInt(cant_);
+					String codigo = (String) pedido[3];
+					String cliente = (String) pedido[6];
+					String vendedor = (String) pedido[7];
+					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
+							Utiles.getMaxLength(cliente, 37), Utiles.getMaxLength(vendedor, 20), codigo, cant, precio };
+					data.add(vta);
+				}
+				// ordena la lista segun fecha..
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						Date fecha1 = null;
+						Date fecha2 = null;
+						try {
+							fecha1 = Utiles.getFecha(o1[0] + "", "dd-MM-yy");
+							fecha2 = Utiles.getFecha(o2[0] + "", "dd-MM-yy");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return fecha1.compareTo(fecha2);
+					}
+				});
+				String sucursal = getAcceso().getSucursalOperativa().getText();
+				String titulo = "Listado de Pedidos Detallado";
+
+				ReportePresupuestosDetallado rep = new ReportePresupuestosDetallado(desde, hasta, sucursal, titulo);
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 
@@ -28697,6 +28777,7 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 	private Date desde;
 	private Date hasta;
 	private String sucursal;
+	private String titulo;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
@@ -28707,10 +28788,11 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 	static DatosColumnas col6 = new DatosColumnas("Cant.", TIPO_INTEGER, 15);
 	static DatosColumnas col7 = new DatosColumnas("Precio", TIPO_DOUBLE, 30);
 	
-	public ReportePresupuestosDetallado(Date desde, Date hasta, String sucursal) {
+	public ReportePresupuestosDetallado(Date desde, Date hasta, String sucursal, String titulo) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.sucursal = sucursal;
+		this.titulo = titulo;
 	}
 
 	static {
@@ -28725,7 +28807,7 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Listado de Presupuestos Detallado");
+		this.setTitulo(this.titulo);
 		this.setDirectorio("ventas");
 		this.setNombreArchivo("Venta-");
 		this.setTitulosColumnas(cols);

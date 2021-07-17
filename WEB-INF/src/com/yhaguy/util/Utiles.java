@@ -714,14 +714,7 @@ public class Utiles {
         return out.replaceFirst(first, first.toUpperCase());
     }
 	
-	public static void main(String[] args) {
-		Date fecha1;
-		try {
-			fecha1 = Utiles.getFecha("20-01-2021 19:15:00", "dd-MM-yyyy HH:mm:ss");
-			Utiles.diferenciaTiempo(new Date(), fecha1);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-			
+	public static void main(String[] args) {		
+		
 	}
 }
