@@ -277,7 +277,7 @@ public class ChequesViewModel extends SimpleViewModel {
 			my.setPos5(cheque.getFechaVencimiento());
 			my.setPos6(cheque.getBeneficiario());
 			my.setPos7(cheque.getMonto());
-			my.setPos8(false);
+			my.setPos8(cheque.getFechaEmision().compareTo(cheque.getFechaVencimiento()) >= 0);
 			my.setPos9(cheque.getNumeroCaja());
 			my.setPos10(cheque.getNumeroOrdenPago());
 			my.setPos11(cheque.isCobrado());
