@@ -11,6 +11,7 @@ import com.coreweb.domain.Tipo;
 public class BancoDescuentoCheque extends Domain {
 
 	public static final String PRESTAMO = "prestamo";
+	public static final String PRESTAMO_ACREEDOR = "prestamo_acreedor";
 	public static final String ANTICIPO_UTILIDAD = "anticipo";
 	
 	private Date fecha;

@@ -10459,6 +10459,7 @@ public class RegisterDomain extends Register {
 				+ " b.dbEstado = 'R'"
 				+ " and b.banco.id = " + idBanco
 				+ " and auxi != '" + BancoDescuentoCheque.PRESTAMO + "'"
+				+ " and auxi != '" + BancoDescuentoCheque.PRESTAMO_ACREEDOR + "'"
 				+ " and auxi != '" + BancoDescuentoCheque.ANTICIPO_UTILIDAD + "'"
 				+ " and (b.fecha >= '"
 				+ desde_
@@ -10477,6 +10478,32 @@ public class RegisterDomain extends Register {
 	 * [4]:banco 
 	 */
 	public List<Object[]> getPrestamosInternosPorBanco(long idBanco, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select ('PRESTAMOS INTERNOS'), "
+				+ " b.fecha, cast(b.id as string), b.totalImporte_gs, b.banco.banco.descripcion, b.observacion"
+				+ " from BancoDescuentoCheque b join b.formasPago f where"
+				+ " b.dbEstado = 'R'"
+				+ " and b.banco.id = " + idBanco
+				+ " and b.auxi = '" + BancoDescuentoCheque.PRESTAMO_ACREEDOR + "'"
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
+				+ " and (b.fecha >= '"
+				+ desde_
+				+ "' and b.fecha <= '"
+				+ hasta_
+				+ "')" + " order by b.fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los descuentos que son prestamos internos segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs 
+	 * [4]:banco 
+	 */
+	public List<Object[]> getPrestamosInternosApagar(long idBanco, Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select ('PRESTAMOS INTERNOS'), "
