@@ -10485,8 +10485,8 @@ public class RegisterDomain extends Register {
 				+ " from BancoDescuentoCheque b join b.formasPago f where"
 				+ " b.dbEstado = 'R'"
 				+ " and b.banco.id = " + idBanco
-				+ " and b.auxi = '" + BancoDescuentoCheque.PRESTAMO_ACREEDOR + "'"
-				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
+				+ " and b.auxi = '" + BancoDescuentoCheque.PRESTAMO + "'"
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA + "'"
 				+ " and (b.fecha >= '"
 				+ desde_
 				+ "' and b.fecha <= '"
@@ -10511,8 +10511,8 @@ public class RegisterDomain extends Register {
 				+ " from BancoDescuentoCheque b join b.formasPago f where"
 				+ " b.dbEstado = 'R'"
 				+ " and b.banco.id = " + idBanco
-				+ " and b.auxi = '" + BancoDescuentoCheque.PRESTAMO + "'"
-				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA + "'"
+				+ " and b.auxi = '" + BancoDescuentoCheque.PRESTAMO_ACREEDOR + "'"
+				+ " and f.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO + "'"
 				+ " and (b.fecha >= '"
 				+ desde_
 				+ "' and b.fecha <= '"
