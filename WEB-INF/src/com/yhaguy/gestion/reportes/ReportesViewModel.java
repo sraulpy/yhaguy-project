@@ -24182,7 +24182,8 @@ class PlanillasCajaDataSource implements JRDataSource {
 						this.totalReposiciones += importe;
 						MyArray my = new MyArray(
 								"REPOSICION DE CAJA",
-								(rep.getNumero() + " - " + rep.getFormaPago().getDescripcion().toUpperCase()),
+								(rep.getNumero() + " - " + rep.getFormaPago().getDescripcion().toUpperCase() + " - " +
+								rep.getObservacion().toUpperCase()),
 								importe, "REPOSICIONES DE CAJA",
 								this.totalReposiciones);
 						this.values.add(my);
