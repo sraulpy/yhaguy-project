@@ -229,7 +229,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> depositos = rr.getDepositosPorBanco(idBanco, desde, hasta);
 		List<Object[]> descuentos = rr.getDescuentosPorBanco(idBanco, desde, hasta);
 		List<Object[]> prestamosInternos = rr.getPrestamosInternosPorBanco(idBanco, desde, hasta);
-		List<Object[]> prestamosInternosApagar = rr.getPrestamosInternosPorBanco(idBanco, desde, hasta);
+		List<Object[]> prestamosInternosApagar = rr.getPrestamosInternosApagar(idBanco, desde, hasta);
 		List<Object[]> transferenciasEnviadas = rr.getTransferenciasOrigenPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
 		List<Object[]> transferenciasRecibidas = rr.getTransferenciasDestinoPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
 		List<Object[]> prestamosBancarios = rr.getPrestamosBancariosPorBanco(idBanco, desde, hasta);
