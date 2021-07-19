@@ -846,7 +846,7 @@
 											<listheader label="Dif." width="120px" visible="${vm.operacionHabilitada('VerImportacion')}"></listheader>
 										</listhead>
 										<template name="model">
-											<listitem visible="@load(each.auxi eq 'DUPLICADO' ? 'false':'true')">
+											<listitem>
 												<listcell label="@load(each.articulo.pos1)"></listcell>
 												<listcell label="@load(each.articulo.pos4)"></listcell>
 												<listcell>

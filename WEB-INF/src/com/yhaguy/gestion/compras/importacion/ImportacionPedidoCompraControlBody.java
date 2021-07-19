@@ -3340,7 +3340,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	}
 	
 	/**
-	 * agrupa las cantidades de items repetidos..
+	 * agrupa las cantidades acumuladas..
 	 */
 	private void agruparCantidades() {
 		Map<String, ImportacionFacturaDetalleDTO> map = new HashMap<String, ImportacionFacturaDetalleDTO>();
@@ -3348,25 +3348,19 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			for (ImportacionFacturaDetalleDTO det : fac.getDetalles()) {	
 				det.setDuplicado(false);
-				ImportacionFacturaDetalleDTO item = map.get(det.getArticulo().getPos1());
-				if ((!det.getAuxi().equals("DUPLICADO")) && item != null) {
-					det.setAuxi("DUPLICADO");
-				} else if (!det.getAuxi().equals("DUPLICADO")) {
-					map.put((String) det.getArticulo().getPos1(), det);
-				}
-				
-				Integer acum = cants.get(det.getArticulo().getPos1());
+				map.put((String) det.getArticulo().getPos1(), det);				
+				Integer acum = cants.get(det.getId() + "");
 				if (acum != null) {
 					acum += det.getCantidad();
 				} else {
 					acum = det.getCantidad();					
 				}
-				cants.put((String) det.getArticulo().getPos1(), acum);
+				cants.put(det.getId() + "", acum);
 			}
 		}
 		for (ImportacionFacturaDTO fac : this.dto.getImportacionFactura()) {
 			for (ImportacionFacturaDetalleDTO det : fac.getDetalles()) {
-				det.setCantidad_acum(cants.get(det.getArticulo().getPos1()));
+				det.setCantidad_acum(cants.get(det.getId() + ""));
 			}
 		}
 	}
