@@ -13802,6 +13802,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LIBRO_COMPRAS_MATRICIAL = "CON-00040";
 		static final String LIBRO_VENTAS_MATRICIAL = "CON-00041";
 		static final String LIBRO_VENTAS_DETALLADO = "CON-00042";
+		static final String INGRESO_EGRESO_POR_CUENTA = "CON-00043";
 		
 		/**
 		 * procesamiento del reporte..
@@ -13955,6 +13956,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case LIBRO_VENTAS_DETALLADO:
 				this.libroVentasDetallado();
+				break;
+				
+			case INGRESO_EGRESO_POR_CUENTA:
+				this.ingresoEgresoPorCuenta(mobile);
 				break;
 			}
 		}
@@ -15753,6 +15758,86 @@ public class ReportesViewModel extends SimpleViewModel {
 			params.put("Usuario", getUs().getNombre());
 			params.put("Sucursal", suc_);
 			imprimirJasper(source, params, dataSource, formato);
+		}
+		
+		/**
+		 * reporte VEN-
+		 */
+		private void ingresoEgresoPorCuenta(boolean mobile) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				Articulo art = filtro.getArticulo();
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+				
+				if (art == null) {
+					Clients.showNotification("DEBE SELECCIONAR LA CUENTA C.T.", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+
+				List<Object[]> ncs = rr.getNotasCreditoVentaDetalles(desde, hasta, 0, art.getId());
+				for (Object[] notacred : ncs) {
+					String numero = (String) notacred[1];
+					Date fecha = (Date) notacred[2];
+					String descrMotivo = (String) notacred[3];
+					String motivo = descrMotivo.substring(0, 3).toUpperCase() + ".";
+					double importe = (double) notacred[12];
+					String obs = (String) notacred[11];
+					Object[] nc = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
+							"NCR " + motivo, obs.toUpperCase(), Utiles.getRedondeo(importe * -1)};					
+					data.add(nc);				
+				}
+
+				List<Object[]> ventas = rr.getVentasDetalles(desde, hasta, 0, art.getId());
+				for (Object[] venta : ventas) {
+					String numero = (String) venta[1];
+					Date fecha = (Date) venta[2];
+					String sigla = (String) venta[4];
+					double importe = (double) venta[12];
+					String obs = (String) venta[11];
+					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
+							"FAC. " + TipoMovimiento.getAbreviatura(sigla), obs.toUpperCase(), Utiles.getRedondeo(importe)};
+					data.add(vta);					
+				}
+				// ordena la lista segun fecha..
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						Date fecha1 = null;
+						Date fecha2 = null;
+						try {
+							fecha1 = Utiles.getFecha(o1[0] + "", "dd-MM-yy");
+							fecha2 = Utiles.getFecha(o2[0] + "", "dd-MM-yy");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return fecha1.compareTo(fecha2);
+					}
+				});
+				String cuenta = art.getCodigoInterno() + " - " + art.getDescripcion();
+
+				ReporteIngresoEgresoPorCuenta rep = new ReporteIngresoEgresoPorCuenta(desde, hasta, cuenta);
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				if (!mobile) {
+					ViewPdf vp = new ViewPdf();
+					vp.setBotonImprimir(false);
+					vp.setBotonCancelar(false);
+					vp.showReporte(rep, ReportesViewModel.this);
+				} else {
+					rep.ejecutar();
+					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -28828,6 +28913,65 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Sucursal", this.sucursal)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+
+		return out;
+	}
+}
+
+/**
+ * Reporte CON-00043..
+ */
+class ReporteIngresoEgresoPorCuenta extends ReporteYhaguy {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+	
+	private Date desde;
+	private Date hasta;
+	private String cuenta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 15);
+	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 23);
+	static DatosColumnas col3 = new DatosColumnas("Concepto", TIPO_STRING, 20);
+	static DatosColumnas col4 = new DatosColumnas("Observación", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 20, true);
+	
+	public ReporteIngresoEgresoPorCuenta(Date desde, Date hasta, String cuenta) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.cuenta = cuenta;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Ingreso / Egreso por Cuenta C.T.");
+		this.setDirectorio("Articulos");
+		this.setNombreArchivo("CT-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Cuenta", this.cuenta.toUpperCase())));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

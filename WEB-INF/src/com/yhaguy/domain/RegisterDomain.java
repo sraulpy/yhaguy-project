@@ -7396,6 +7396,17 @@ public class RegisterDomain extends Register {
 				+ " order by a.codigoInterno";
 		return this.hqlLimit(query, limit);
 	}
+	
+	/**
+	 * @return la lista de articulos segun codigo..
+	 */
+	public List<Articulo> getArticulosCT(String codigoInterno, int limit) throws Exception {
+		String query = "select a from Articulo a where lower(a.codigoInterno) like '%"
+				+ codigoInterno.toLowerCase() + "%'"
+				+ " and a.familia.descripcion = '" + ArticuloFamilia.CONTABILIDAD + "'"
+				+ " order by a.codigoInterno";
+		return this.hqlLimit(query, limit);
+	}
 
 	/**
 	 * @return los bancos..
@@ -10234,10 +10245,12 @@ public class RegisterDomain extends Register {
 	 * [8]:articulo.id
 	 * [9]:costoPromedioGs
 	 * [10]:articulo.codigo
+	 * [11]:observacion
+	 * [12]:importegs
 	 */
 	public List<Object[]> getNotasCreditoVentaDetalles(Date desde, Date hasta, long idCliente, long idArticulo) throws Exception {
 		String query = "select n.id, n.numero, n.fechaEmision, n.motivo.descripcion, n.motivo.sigla, 0.0,"
-				+ " d.costoGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
+				+ " d.costoGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno, n.observacion, d.importeGs"
 				+ " from NotaCredito n join n.detalles d where n.dbEstado != 'D' and n.estadoComprobante.sigla != '" 
 				+ Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and n.tipoMovimiento.sigla = ?"
@@ -10296,10 +10309,13 @@ public class RegisterDomain extends Register {
 	 * [8]:articulo.id
 	 * [9]:costoPromedioGs
 	 * [10]:articulo.codigo
+	 * [11]:observacion
+	 * [12]:importeGs
 	 */
 	public List<Object[]> getVentasDetalles(Date desde, Date hasta, long idCliente, long idArticulo) throws Exception {
 		String query = "select v.id, v.numero, v.fecha, v.tipoMovimiento.descripcion, v.tipoMovimiento.sigla, 0.0, "
-				+ " d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno"
+				+ " d.costoUnitarioGs, d.cantidad, d.articulo.id, d.costoPromedioGs, d.articulo.codigoInterno, v.observacion,"
+				+ " ((d.precioGs * d.cantidad) - d.descuentoUnitarioGs)"
 				+ " from Venta v join v.detalles d where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ? or v.tipoMovimiento.sigla = ?)"
 				+ " and v.estadoComprobante is null"
 				+ " and v.fecha between ? and ?";

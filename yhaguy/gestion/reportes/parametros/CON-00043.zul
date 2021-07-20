@@ -1,0 +1,49 @@
+<grid sclass="vgrid">
+	<columns>
+		<column width="35%" />
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="Fecha Desde:" />
+			<datebox value="@bind(vm.dato.filtro.fechaDesde)"
+				placeholder="Desde.." hflex="true" />
+		</row>
+		<row>
+			<field value="Fecha Hasta:" />
+			<datebox value="@bind(vm.dato.filtro.fechaHasta)"
+				placeholder="Hasta.." hflex="true" />
+		</row>
+		<row>
+			<field value="Cuenta C.T." />
+			<bandbox hflex="true" placeholder="Seleccione.."
+				readonly="true" value="@load(vm.dato.filtro.articulo.codigoInterno)"
+				id="bndArti">
+				<bandpopup>
+					<listbox sclass="small-list" width="60rem"
+						height="200px" model="@load(vm.dato.filtro.articulosCT)"
+						selectedItem="@bind(vm.dato.filtro.articulo)"
+						onSelect="bndArti.close()">
+						<auxhead>
+							<auxheader colspan="2">
+								<textbox hflex="true"
+										value="@bind(vm.dato.filtro.codigoArticulo)" instant="true"
+										placeholder="Buscar por Código.." />
+							</auxheader>
+						</auxhead>
+						<listhead>
+							<listheader width="40%"/>
+							<listheader/>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.codigoInterno.toUpperCase())"></listcell>
+								<listcell label="@load(each.descripcion.toUpperCase())"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+	</rows>
+</grid>

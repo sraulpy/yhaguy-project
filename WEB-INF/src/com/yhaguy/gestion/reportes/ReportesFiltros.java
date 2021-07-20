@@ -695,6 +695,12 @@ public class ReportesFiltros {
 		return rr.getArticulosGastos(this.descripcionArticuloGasto, 30);
 	}
 	
+	@DependsOn("codigoArticulo")
+	public List<Articulo> getArticulosCT() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getArticulosCT(this.codigoArticulo, 30);
+	}
+	
 	@DependsOn("numeroRecibo")
 	public List<Recibo> getRecibos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
