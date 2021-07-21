@@ -7777,7 +7777,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					String codigo = (String) presup[3];
 					String cliente = (String) presup[6];
 					String vendedor = (String) presup[7];
-					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
+					String factura = (String) presup[8];
+					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero.replace("V-PRE-", ""), factura,
 							Utiles.getMaxLength(cliente, 37), Utiles.getMaxLength(vendedor, 20), codigo, cant, precio };
 					data.add(vta);
 				}
@@ -7851,7 +7852,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					String codigo = (String) pedido[3];
 					String cliente = (String) pedido[6];
 					String vendedor = (String) pedido[7];
-					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero,
+					String factura = (String) pedido[8];
+					Object[] vta = new Object[] { Utiles.getDateToString(fecha, "dd-MM-yy"), numero.replace("V-PED-", ""), factura,
 							Utiles.getMaxLength(cliente, 37), Utiles.getMaxLength(vendedor, 20), codigo, cant, precio };
 					data.add(vta);
 				}
@@ -28866,13 +28868,14 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 	private String titulo;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
-	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 40);
-	static DatosColumnas col3 = new DatosColumnas("Cliente", TIPO_STRING);
-	static DatosColumnas col4 = new DatosColumnas("Vendedor", TIPO_STRING, 60);
-	static DatosColumnas col5 = new DatosColumnas("Codigo", TIPO_STRING, 50);
-	static DatosColumnas col6 = new DatosColumnas("Cant.", TIPO_INTEGER, 15);
-	static DatosColumnas col7 = new DatosColumnas("Precio", TIPO_DOUBLE, 30);
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 20);
+	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 30);
+	static DatosColumnas col3 = new DatosColumnas("Factura", TIPO_STRING, 40);
+	static DatosColumnas col4 = new DatosColumnas("Cliente", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Vendedor", TIPO_STRING, 60);
+	static DatosColumnas col6 = new DatosColumnas("Codigo", TIPO_STRING, 35);
+	static DatosColumnas col7 = new DatosColumnas("Cant.", TIPO_INTEGER, 15);
+	static DatosColumnas col8 = new DatosColumnas("Precio", TIPO_DOUBLE, 30);
 	
 	public ReportePresupuestosDetallado(Date desde, Date hasta, String sucursal, String titulo) {
 		this.desde = desde;
@@ -28889,6 +28892,7 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 		cols.add(col5);
 		cols.add(col6);
 		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override

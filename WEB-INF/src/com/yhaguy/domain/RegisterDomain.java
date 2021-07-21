@@ -13851,7 +13851,7 @@ public class RegisterDomain extends Register {
 	 * [7]:vendedor
 	 */
 	public List<Object[]> getPresupuestosDetalles(Date desde, Date hasta, long idCliente, long idArticulo, long idVendedor, long idFamilia) throws Exception {
-		String query = "select v.id, v.numero, v.fecha, d.articulo.codigoInterno, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial, v.vendedor.empresa.razonSocial"
+		String query = "select v.id, v.numero, v.fecha, d.articulo.codigoInterno, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial, v.vendedor.empresa.razonSocial, v.numeroFactura"
 				+ " from Venta v join v.detalles d where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ?)"
 				+ " and v.estadoComprobante is null"
 				+ " and v.fecha between ? and ?";
@@ -13902,9 +13902,10 @@ public class RegisterDomain extends Register {
 	 * [5]:precio
 	 * [6]:cliente
 	 * [7]:vendedor
+	 * [8]:numeroFactura
 	 */
 	public List<Object[]> getPedidosDetalles(Date desde, Date hasta, long idCliente, long idArticulo, long idVendedor, long idFamilia) throws Exception {
-		String query = "select v.id, v.numero, v.fecha, d.articulo.codigoInterno, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial, v.vendedor.empresa.razonSocial"
+		String query = "select v.id, v.numero, v.fecha, d.articulo.codigoInterno, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial, v.vendedor.empresa.razonSocial, v.numeroFactura"
 				+ " from Venta v join v.detalles d where v.dbEstado != 'D' and (v.tipoMovimiento.sigla = ?)"
 				+ " and v.estadoComprobante is null"
 				+ " and v.fecha between ? and ?";
