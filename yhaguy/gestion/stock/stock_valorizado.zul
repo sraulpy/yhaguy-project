@@ -119,6 +119,9 @@
 											<listheader label="Número"
 												width="120px">
 											</listheader>
+											<listheader label="Precio Iva Inc."
+												width="110px" align="right">
+											</listheader>
 											<listheader label="Costo Ult."
 												width="100px" align="right">
 											</listheader>
@@ -141,12 +144,15 @@
 													label="@load(each[2])">
 												</listcell>
 												<listcell
+													label="@load(each[15]) @converter(vm.cnv.monedaLocal)">
+												</listcell>
+												<listcell
 													label="@load(each[4]) @converter(vm.cnv.monedaLocal)"
 													visible="@load(each[4] gt 0 ? true : false)">
 												</listcell>
 												<listcell label=""
 													visible="@load(each[4] gt 0 ? false : true)">
-												</listcell>
+												</listcell>												
 												<listcell
 													label="@load(each[13]) @converter(vm.cnv.monedaLocal)"
 													visible="@load(each[13] gt 0 ? true : false)">

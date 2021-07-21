@@ -4645,7 +4645,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, d.cantidad, d.costoGs, n.cliente.empresa.razonSocial,"
 				+ " (select descripcion from Deposito where id = " + Deposito.ID_DEPOSITO_PRINCIPAL + "), '--', '--', '--', '--', '--', n.sucursal.descripcion,"
-				+ " d.costoPromedioGs, n.id"
+				+ " d.costoPromedioGs, n.id, d.montoGs"
 				+ " from NotaCredito n join n.detalles d where n.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (n.tipoMovimiento.sigla = '"
@@ -5309,7 +5309,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, 'INVENTARIO 2019', t.sucursal.id,"
-				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id, d.costo"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
@@ -5342,7 +5342,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, 'INVENTARIO 2019', t.sucursal.id,"
-				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costo"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id, d.costo"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
@@ -5375,7 +5375,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
-				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id, d.costo"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
@@ -5408,7 +5408,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
-				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id"
+				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id, d.costo"
 				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
@@ -5559,13 +5559,14 @@ public class RegisterDomain extends Register {
 	 * [12]:sucursal 
 	 * [13]:costoPromedio 
 	 * [14]:id
+	 * [15]:precio
 	 */
 	public List<Object[]> getComprasLocalesPorArticulo(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora, long idSucursal) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select c.tipoMovimiento.descripcion, c.fechaCreacion, c.numero, d.cantidad, d.costoFinalGs, "
-				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', c.sucursal.descripcion, d.costoPromedioGs, c.id"
+				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', c.sucursal.descripcion, d.costoPromedioGs, c.id, d.costoGs"
 				+ " from CompraLocalFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (c.tipoMovimiento.sigla = '"
@@ -5697,14 +5698,14 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las compras importacion donde esta contenida el articulo.. [0]:concepto
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:proveedor [6]:id
-	 *         [12]:sucursal [13]:costopromediogs [14]:id
+	 *         [12]:sucursal [13]:costopromediogs [14]:id [15]:precio
 	 */
 	public List<Object[]> getComprasImportacionPorArticuloFechaCierre(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora, long idSucursal) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select c.tipoMovimiento.descripcion, c.fechaVolcado, c.numero, d.cantidad, d.costoFinalGs, "
-				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', 'CENTRAL', d.costoPromedioGs, c.id"
+				+ " c.proveedor.empresa.razonSocial, c.id, '--', '--', '--', '--', '--', 'CENTRAL', d.costoPromedioGs, c.id, d.costoGs"
 				+ " from ImportacionFactura c join c.detalles d where c.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (c.tipoMovimiento.sigla = '"
@@ -5841,7 +5842,7 @@ public class RegisterDomain extends Register {
 		String query = "";
 		if (tipo.equals(Configuracion.SIGLA_TM_AJUSTE_POSITIVO)) {
 			query = "select a.tipoMovimiento.descripcion, a.fecha, a.numero, d.cantidad, a.sucursal.descripcion, d.costoGs, a.deposito.descripcion,"
-					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs"
+					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs, d.costoGs"
 					+ " from AjusteStock a join a.detalles d where a.dbEstado != 'D' and d.articulo.id = "
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
@@ -6226,7 +6227,7 @@ public class RegisterDomain extends Register {
 			Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select 'MIGRACION', a.fechaAlta, '--', a.stock, a.costo, '--', a.id ,'--', '--', '--', '--', '--', '--', a.costo, a.id"
+		String query = "select 'MIGRACION', a.fechaAlta, '--', a.stock, a.costo, '--', a.id ,'--', '--', '--', '--', '--', '--', a.costo, a.id, a.costo"
 				+ " from ArticuloHistorialMigracion a where a.dbEstado != 'D' and a.codigoInterno = '" + codigoArticulo
 				+ "'";
 		if (desde != null) {
