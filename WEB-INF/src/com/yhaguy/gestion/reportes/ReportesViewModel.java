@@ -28868,7 +28868,7 @@ class ReportePresupuestosDetallado extends ReporteYhaguy {
 	private String titulo;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 20);
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Número", TIPO_STRING, 30);
 	static DatosColumnas col3 = new DatosColumnas("Factura", TIPO_STRING, 40);
 	static DatosColumnas col4 = new DatosColumnas("Cliente", TIPO_STRING);
