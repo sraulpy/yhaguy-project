@@ -40,7 +40,7 @@
 			</auxhead>
 			<listhead>
 				<listheader label="C.Identidad" width="80px"></listheader>
-				<listheader label="Nombre y Apellido"></listheader>
+				<listheader label="Nombre y Apellido" width="170px"></listheader>
 				<listheader label="Cargo" width="120px"></listheader>
 				<listheader label="Días T." width="70px"
 					tooltiptext="Días trabajados">
