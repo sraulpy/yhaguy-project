@@ -13947,6 +13947,17 @@ public class RegisterDomain extends Register {
 		return this.hql(query, params);
 	}
 	
+	/**
+	 * @return ultimoCostoFob..
+	 */
+	public double getUltimoCostoFob(long idArticulo) throws Exception {
+		String query = "select d.id, d.costoDs from ImportacionFacturaDetalle d"
+				+ " where d.articulo.id = " + idArticulo + " order by d.id desc";
+		List<Object[]> list = this.hqlLimit(query, 1);
+		Object[] out = list.size() > 0 ? list.get(0) : null;
+		return out != null ? (double) out[1] : 0.0;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

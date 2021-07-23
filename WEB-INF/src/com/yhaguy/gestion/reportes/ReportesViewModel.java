@@ -13019,7 +13019,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (compraLocal == null) compraLocal = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 					if (compraImpor == null) compraImpor = new Object[] { 0, null, null, (double) 0.0, (double) 0.0 };
 					
-					venta = Arrays.copyOf(venta, venta.length + 8);
+					venta = Arrays.copyOf(venta, venta.length + 9);
 					
 					double ultCostoGs = rr.getCostoGs((long) venta[0]);
 					double costPromGs = rr.getCostoPromedioGs((long) venta[0]);
@@ -13033,6 +13033,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					venta[35] = compraImpor[0];
 					venta[36] = compraImpor[1];
 					venta[37] = compraImpor[2];
+					venta[38] = compraImpor[4];
 								
 					values.add(venta);
 				}
@@ -13054,12 +13055,13 @@ public class ReportesViewModel extends SimpleViewModel {
 							
 							double ultCostoGs = (double) art[20];
 							double costPromGs = rr.getCostoPromedioGs(idArt);
+							double ultCostoFb = rr.getUltimoCostoFob(idArt);
 														
 							values.add(new Object[] { art[0], art[1], art[2], art[3], art[4], art[5], art[6], art[7],
 									art[8], art[9], art[10], art[11], art[12], art[13], art[14], art[15], art[16],
 									art[17], null, null, null, art[18], art[19], art[20], (long) 0, art[21], art[22],
 									art[23], art[24], art[25], compraLocal[0], compraLocal[1], compraLocal[2],
-									ultCostoGs, costPromGs, compraImpor[0], compraImpor[1], compraImpor[2] });
+									ultCostoGs, costPromGs, compraImpor[0], compraImpor[1], compraImpor[2], ultCostoFb });
 						}
 					}
 				}
@@ -13102,6 +13104,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String fechaUltimaImport = det[36] != null ? det[31] + "" : "";
 					if (det[36] instanceof Date) fechaUltimaImport = Utiles.getDateToString((Date) det[36], Utiles.DD_MM_YYYY);
 					String proveedorUltimaImport = det[37] != null ? (String) det[37] : "";
+					double costoFobDs = (double) det[38];
 					double mayoristags = 0;
 					
 					Object[] precios = rr.getArticuloPrecios(cod);
@@ -13225,7 +13228,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					hist.setProveedorUltimaCompra(proveedoUltimaCompra);
 					hist.setProveedorUltimaImport(proveedorUltimaImport);
 					hist.setFechaUltimaVenta("");
-					hist.setCostoFob(0);
+					hist.setCostoFob(costoFobDs);
 					hist.setCoeficiente(0);
 					hist.setTipoCambio(0);
 					hist.setCostoGs(0);
@@ -26282,6 +26285,8 @@ class MovimientoArticulos implements JRDataSource {
 			value = Utiles.getRedondeo(det.getUltimoCostoGs()) + "";
 		} else if ("CostoPromedioGs".equals(fieldName)) {
 			value = Utiles.getRedondeo(det.getCostoPromedioGs()) + "";
+		} else if ("FobDs".equals(fieldName)) {
+			value = Utiles.getRedondeo(det.getCostoFob()) + "";
 		} else if ("Dep_1".equals(fieldName)) {
 			value = det.getStock1() + "";			
 		} else if ("Dep_2".equals(fieldName)) {
