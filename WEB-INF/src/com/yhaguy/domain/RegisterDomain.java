@@ -7930,6 +7930,54 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return los movimientos con saldo acumulado el saldo..
+	 * [0]:idMovimientoOriginal 
+	 * [1]:tipoMovimiento.id
+	 * [2]:nrocomprobante 
+	 * [3]:tipoMovimiento.descripcion
+	 * [4]:telefono 
+	 * [5]:direccion
+	 * [6]:emision 
+	 * [7]:vencimiento
+	 * [8]:importe 
+	 * [9]:saldo acum
+	 * [10]:razonSocial 
+	 * [11]:ruc
+	 * [12]:saldo 
+	 * [13]:siglaTipomovimiento
+	 * [14]:idempresa
+	 */
+	public List<Object[]> getSaldosAnticipos(Date desde, Date hasta, String caracter, long idVendedor, long idEmpresa, 
+			long idMoneda, boolean incluirChequesrechazados, boolean incluirPrestamos, long idRubro) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c.idMovimientoOriginal, c.tipoMovimiento.id, c.nroComprobante, c.tipoMovimiento.descripcion, e.telefono_, e.direccion_, c.fechaEmision, c.fechaVencimiento, c.importeOriginal, "
+				+ " (select sum(saldo) from CtaCteEmpresaMovimiento m where m.idMovimientoOriginal = c.idMovimientoOriginal and m.tipoMovimiento.id = c.tipoMovimiento.id ),"
+				+ " e.razonSocial, e.ruc, c.saldo, c.tipoMovimiento.sigla, e.id"
+				+ " from CtaCteEmpresaMovimiento c, Empresa e"
+				+ " where c.idEmpresa = e.id and c.anulado = 'FALSE' and c.saldo < 0"
+				+ "	and c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_ANTICIPO_COBRO + "'"
+				+ " and c.tipoCaracterMovimiento.sigla = '"
+				+ caracter + "'"
+				+ " and c.moneda.id = " + idMoneda;
+				query += " and (c.fechaEmision >= '"
+				+ desde_
+				+ "' and c.fechaEmision <= '" + hasta_ + "')";
+		if (idVendedor != 0) {
+			query += " and c.idVendedor = " + idVendedor;
+		}
+		if (idEmpresa != 0) {
+			query += " and c.idEmpresa = " + idEmpresa;
+		}
+		if (idRubro != 0) {
+			query += " and c.cliente.empresa.rubro.id = " + idRubro;
+		}
+		query += " order by c.fechaEmision";
+		List<Object[]> saldos = this.hql(query);
+		return saldos;
+	}
+	
+	/**
+	 * @return los movimientos con saldo acumulado el saldo..
 	 * [0]:idMovimientoOriginal [1]:tipoMovimiento.id
 	 * [2]:nrocomprobante [3]:tipoMovimiento.descripcion
 	 * [4]:telefono [5]:direccion

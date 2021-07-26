@@ -8561,11 +8561,19 @@ public class ReportesViewModel extends SimpleViewModel {
 			}	
 			List<Object[]> movims = new ArrayList<Object[]>();
 			List<Object[]> movimientos = new ArrayList<Object[]>();
+			List<Object[]> anticipos = new ArrayList<Object[]>();
 			List<Object[]> aux = new ArrayList<Object[]>();
 			Map<String, Object[]> data = new HashMap<String, Object[]>();			
 
 			movims = rr.getSaldos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(), incluirChequesRechazados, incluirPrestamos, idRubro);	
 			for (Object[] movim : movims) {
+				long id_mov = (long) movim[0];
+				long id_tmv = (long) movim[1];
+				data.put(id_mov + "-" + id_tmv, movim);
+				movimientos.add(movim);					
+			}
+			anticipos = rr.getSaldosAnticipos(desde_, hasta_, caracter, idVendedor, idEmpresa, moneda.getId(), incluirChequesRechazados, incluirPrestamos, idRubro);	
+			for (Object[] movim : anticipos) {
 				long id_mov = (long) movim[0];
 				long id_tmv = (long) movim[1];
 				data.put(id_mov + "-" + id_tmv, movim);
