@@ -4637,7 +4637,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las notasCredito donde esta contenida el articulo.. [0]:concepto
 	 *         [1]:fecha [2]:numero [3]:cantidad [4]:precio [5]:cliente [6]:deposito
-	 *         [12]:sucursal [13]:id
+	 *         [12]:sucursal [13]:costopromedio
 	 */
 	public List<Object[]> getNotasCreditoVtaPorArticuloCosto(long idArticulo,
 			Date desde, Date hasta, boolean fechaHora, long idSucursal) throws Exception {
@@ -5842,7 +5842,7 @@ public class RegisterDomain extends Register {
 		String query = "";
 		if (tipo.equals(Configuracion.SIGLA_TM_AJUSTE_POSITIVO)) {
 			query = "select a.tipoMovimiento.descripcion, a.fecha, a.numero, d.cantidad, a.sucursal.descripcion, d.costoGs, a.deposito.descripcion,"
-					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs, d.costoGs"
+					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs, a.id, d.costoGs"
 					+ " from AjusteStock a join a.detalles d where a.dbEstado != 'D' and d.articulo.id = "
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
@@ -5860,7 +5860,7 @@ public class RegisterDomain extends Register {
 					query += " order by a.fecha desc";
 		} else if (tipo.equals(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO)) {
 			query = "select a.tipoMovimiento.descripcion, a.fecha, a.numero, d.cantidad, a.sucursal.descripcion, d.costoGs, a.deposito.descripcion,"
-					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs"
+					+ " '--', '--', '--', '--', '--', a.sucursal.descripcion, d.costoPromedioGs, a.id, d.costoGs"
 					+ " from AjusteStock a join a.detalles d where a.dbEstado != 'D' and d.articulo.id = "
 					+ idArticulo
 					+ " and a.tipoMovimiento.sigla = '"
@@ -5881,7 +5881,7 @@ public class RegisterDomain extends Register {
 		List<Object[]> out2 = new ArrayList<Object[]>();
 		for (Object[] obj : out) {
 			Object[] item = new Object[] { obj[0], obj[1], obj[2], obj[3],
-					obj[5] == null ? 0.0 : obj[5], obj[4], obj[6], obj[7], obj[8], obj[9], obj[10], obj[11], obj[12], obj[13] };
+					obj[5] == null ? 0.0 : obj[5], obj[4], obj[6], obj[7], obj[8], obj[9], obj[10], obj[11], obj[12], obj[13], obj[14], obj[15] };
 			out2.add(item);
 		}
 		return out2;
