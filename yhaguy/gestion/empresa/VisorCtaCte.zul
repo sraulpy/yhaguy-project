@@ -628,7 +628,7 @@
 		</listbox>
 	</popup>
 
-	<popup id="popDetalleRecibo" width="900px" sclass="rounded">
+	<popup id="popDetalleRecibo" width="80%" sclass="rounded">
 		<hbox align="end" pack="end" width="100%">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
 				style="border-bottom:solid 1px silver">
@@ -657,8 +657,8 @@
 						<field value="Planilla de Caja:" />
 						<label value="@load(vm.detalle.numeroPlanilla)" />
 					</hlayout>
-					<hbox hflex="true">
-						<vbox>
+					<hbox width="100%">
+						<vbox hflex="true">
 							<div style="margin:0px 5px 0px 5px; border-bottom: solid 1px silver">
 								<field>
 									Facturas
@@ -702,7 +702,7 @@
 								</listfoot>
 							</listbox>
 						</vbox>
-						<vbox>
+						<vbox hflex="true">
 							<div style="margin:0px 5px 0px 5px; border-bottom: solid 1px silver">
 								<field>
 									Formas de Pago
@@ -1141,5 +1141,6 @@
 	
 	<style>
 		.z-doublebox { min-height:20px }
+		.z-tabpanel { border: none }
 	</style>	
 </window>

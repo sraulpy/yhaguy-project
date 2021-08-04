@@ -37,8 +37,8 @@ public class ControlArticuloCostoPromedio {
 
 	@SuppressWarnings("unused")
 	private void testCostoPromedio() throws Exception {		
-		Date desde = Utiles.getFecha("02-06-2021 00:00:00");
-		Date hasta = Utiles.getFecha("30-07-2021 23:00:00");
+		Date desde = Utiles.getFecha("06-07-2021 00:00:00");
+		Date hasta = Utiles.getFecha("30-08-2021 23:00:00");
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
 		this.selectedSucursal = rr.getSucursalAppById(ID_SUC_PRINCIPAL);

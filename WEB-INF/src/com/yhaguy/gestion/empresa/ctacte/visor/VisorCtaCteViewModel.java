@@ -971,33 +971,35 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 							}
 							out.add(det);
 						}
-						List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
-						for (AjusteCtaCte ajuste : ajustes) {
-							DetalleMovimiento det = new DetalleMovimiento();
-							det.setEmision(ajuste.getFecha());
-							det.setNumero(ajuste.getDebito().getNroComprobante());
-							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
-							det.setTipoMovimiento("CREDITO CTA.CTE.");
-							det.setTipoMovimiento_(det.getTipoMovimiento());
-							det.setImporteGs(ajuste.getImporte());
-							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
-							det.setIdMovimiento(ajuste.getId());
-							out.add(det);			
-						}
-						
-						List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
-						for (AjusteCtaCte ajuste : ajustes_) {
-							DetalleMovimiento det = new DetalleMovimiento();
-							det.setEmision(ajuste.getFecha());
-							det.setNumero(ajuste.getCredito().getNroComprobante());
-							det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
-							det.setTipoMovimiento("DEBITO CTA.CTE.");
-							det.setTipoMovimiento_(det.getTipoMovimiento());
-							det.setImporteGs(ajuste.getImporte());
-							det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
-							det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
-							out.add(det);			
-						}
+						if (vta != null) {
+							List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+							for (AjusteCtaCte ajuste : ajustes) {
+								DetalleMovimiento det = new DetalleMovimiento();
+								det.setEmision(ajuste.getFecha());
+								det.setNumero(ajuste.getDebito().getNroComprobante());
+								det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+								det.setTipoMovimiento("CREDITO CTA.CTE.");
+								det.setTipoMovimiento_(det.getTipoMovimiento());
+								det.setImporteGs(ajuste.getImporte());
+								det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+								det.setIdMovimiento(ajuste.getId());
+								out.add(det);			
+							}
+							
+							List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+							for (AjusteCtaCte ajuste : ajustes_) {
+								DetalleMovimiento det = new DetalleMovimiento();
+								det.setEmision(ajuste.getFecha());
+								det.setNumero(ajuste.getCredito().getNroComprobante());
+								det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+								det.setTipoMovimiento("DEBITO CTA.CTE.");
+								det.setTipoMovimiento_(det.getTipoMovimiento());
+								det.setImporteGs(ajuste.getImporte());
+								det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+								det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+								out.add(det);			
+							}
+						}						
 					}					
 				}
 			}
