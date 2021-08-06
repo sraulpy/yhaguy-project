@@ -105,10 +105,10 @@ public class AssemblerCompraLocalFactura extends Assembler {
  */
 class AssemblerCompraLocalFacturaDetalle extends Assembler{
 
-	private static String[] attIguales = {"costoGs", "costoDs", "importeExentaGs", "importeExentaDs", "importeGravadaGs", 
-											"importeGravadaDs", "descuentoGs", "descuentoDs", "cantidad", "cantidadRecibida",
-											"textoDescuento", "importeDescuentoGs", "importeDescuentoDs", "descuento",
-											"precioFinalGs", "minoristaGs", "listaGs"};
+	private static String[] attIguales = { "costoGs", "costoDs", "importeExentaGs", "importeExentaDs",
+			"importeGravadaGs", "importeGravadaDs", "descuentoGs", "descuentoDs", "cantidad", "cantidadRecibida",
+			"textoDescuento", "importeDescuentoGs", "importeDescuentoDs", "descuento", "precioFinalGs", "minoristaGs",
+			"listaGs", "ignorarDescuento" };
 	private static String[] attArticulo = { "codigoInterno", "codigoProveedor", "codigoOriginal", "descripcion" };
 	
 	@Override

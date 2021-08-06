@@ -561,6 +561,7 @@
 									style="text-align:center" width="130px" align="right"
 									sort="auto(importeDs)" visible="@load(!vm.dto.monedaLocal)" />
 								<listheader label="IVA" width="60px"/>	
+								<listheader label="Costeo" width="70px" align="center" />	
 							</listhead>
 							<template name="model">
 								<listitem
@@ -605,6 +606,9 @@
 											value="@load(each.importeDs) @converter('formattedNumber', format='###,###,##0.00')" />
 									</listcell>
 									<listcell label="@load(each.iva.text)"/>
+									<listcell iconSclass="@load(each.ignorarDescuento ? '' : 'z-icon-check')"
+										style="color:green">
+									</listcell>
 								</listitem>
 							</template>
 							<listfoot>

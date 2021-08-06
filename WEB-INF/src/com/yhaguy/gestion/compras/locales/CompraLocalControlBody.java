@@ -775,7 +775,7 @@ public class CompraLocalControlBody extends BodyApp {
 		this.nvoItem.setArticulo(this.getItemDescuento());
 		this.nvoItem.setCantidad(1);
 		this.nvoItem.setDescuento(true);
-		this.nvoItem.setIva(this.getTipoIvaExenta());
+		this.nvoItem.setIva(this.getTipoIva10());
 		
 		WindowPopup w = new WindowPopup();
 		w.setDato(this);
@@ -878,35 +878,29 @@ public class CompraLocalControlBody extends BodyApp {
 
 			Object[] datos = this.datosFactura(f);
 			double dctoGlobal = (double) datos[0];
-			double importeFactura = (double) datos[1]; // Importe sin
-														// Descuento..
+			double importeFactura = (double) datos[1]; // Importe sin Descuento..
 			double coefGasto = this.getCoeficienteGasto(importeFactura);
-			double coefDescuento = this.getCoeficienteDescuento(dctoGlobal,
-					importeFactura);
+			double coefDescuento = this.getCoeficienteDescuento(dctoGlobal, importeFactura);
 
 			for (CompraLocalFacturaDetalleDTO d : f.getDetalles()) {
 
 				double costoGravado = d.getCostoGs();
 				double valorGasto = coefGasto * costoGravado;
-				double valorDescuento = (coefDescuento * costoGravado)
-						+ d.getDescuentoGs();
-				double costoFinal = this.getCostoFinal(costoGravado,
-						valorGasto, valorDescuento);
+				double valorDescuento = (coefDescuento * costoGravado) + d.getDescuentoGs();
+				if (d.isIgnorarDescuento()) {
+					valorDescuento = 0;
+				}
+				double costoFinal = this.getCostoFinal(costoGravado, valorGasto, valorDescuento);
 
 				if (items.get(d.getArticulo().getId()) != null) {
-					Integer cantAnterior = (int) items.get(
-							d.getArticulo().getId()).getPos5();
-					double costoFinalAnterior = (double) items.get(
-							d.getArticulo().getId()).getPos3();
+					Integer cantAnterior = (int) items.get(d.getArticulo().getId()).getPos5();
+					double costoFinalAnterior = (double) items.get(d.getArticulo().getId()).getPos3();
 					if (costoFinal > costoFinalAnterior) {
 						items.get(d.getArticulo().getId()).setPos3(costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10));
-						items.get(d.getArticulo().getId()).setPos6(
-								d.getCostoGs());
-						items.get(d.getArticulo().getId()).setPos7(
-								d.getCostoDs());
+						items.get(d.getArticulo().getId()).setPos6(d.getCostoGs());
+						items.get(d.getArticulo().getId()).setPos7(d.getCostoDs());
 					}
-					items.get(d.getArticulo().getId()).setPos5(
-							cantAnterior + d.getCantidad());
+					items.get(d.getArticulo().getId()).setPos5(cantAnterior + d.getCantidad());
 				} else {
 					if (d.isDescuento() == false) {
 						MyArray mr = new MyArray();
@@ -914,21 +908,18 @@ public class CompraLocalControlBody extends BodyApp {
 						mr.setPos1(d.getArticulo().getPos1());
 						mr.setPos2(d.getArticulo().getPos4());
 						mr.setPos3(costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10));
-						mr.setPos4(m.redondeoCuatroDecimales(
-								(costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10))
-								/ this.dto.getTipoCambio()));
+						mr.setPos4(m.redondeoCuatroDecimales((costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10)) / this.dto.getTipoCambio()));
 						mr.setPos5(new Integer(d.getCantidad()));
 						mr.setPos6(d.getCostoGs());
 						mr.setPos7(d.getCostoDs());
 						mr.setPos8(d.getOrden());
 						items.put(d.getArticulo().getId(), mr);
-						
+
 						try {
 							CompraLocalFacturaDetalle det = rr.getCompraLocalFacturaDetalleById(d.getId());
 							if (det != null) {
 								det.setCostoFinalGs(costoFinal - Utiles.getIVA(costoFinal, Configuracion.VALOR_IVA_10));
 								rr.saveObject(det, det.getUsuarioMod());
-								System.out.println("--- " + det.getArticulo().getCodigoInterno());
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -1231,7 +1222,7 @@ public class CompraLocalControlBody extends BodyApp {
 		
 		for (CompraLocalFacturaDetalleDTO d : factura.getDetalles()) {
 			
-			if (d.isDescuento() == true) {
+			if (d.isDescuento() == true && !d.isIgnorarDescuento()) {
 				dtoConcedido += d.getImporteGs();
 			} else {
 				importeGravGs += d.getImporteGs();
@@ -1942,10 +1933,10 @@ public class CompraLocalControlBody extends BodyApp {
 	}
 	
 	/**
-	 * @return tipo de iva exenta..
+	 * @return tipo de iva 10..
 	 */
-	private MyPair getTipoIvaExenta() {
-		MyArray iva = this.getDtoUtil().getTipoIvaExento();
+	private MyPair getTipoIva10() {
+		MyArray iva = this.getDtoUtil().getTipoIva10();
 		MyPair out = new MyPair();
 		out.setId(iva.getId());
 		out.setText((String) iva.getPos1());

@@ -39,5 +39,10 @@
 			
 		<many-to-one name="iva" class="com.coreweb.domain.Tipo" 
 			column="idTipoIva" lazy="false"/>
+			
+		<property name="ignorarDescuento">
+			<column name="ignorarDescuento" not-null="true" default="false" />
+		</property>
+		
 	</class>
 </hibernate-mapping>

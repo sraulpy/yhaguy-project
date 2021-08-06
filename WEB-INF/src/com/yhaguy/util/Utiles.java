@@ -1,5 +1,8 @@
 package com.yhaguy.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -20,6 +23,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.time.DateUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
@@ -715,6 +722,30 @@ public class Utiles {
     }
 	
 	public static void main(String[] args) {		
-		
+		JSONParser parser = new JSONParser();
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			Object obj = parser.parse(new FileReader("C:\\Users\\Sergio Raul\\Desktop\\010206022021.json"));
+			JSONObject jsonObject = (JSONObject) obj;
+			JSONObject data = (JSONObject) jsonObject.get("data");
+			JSONArray list = (JSONArray) data.get("listaRemesaNacional");
+			for (Object item : list) {
+				JSONObject ob = (JSONObject) item;
+				String cod = ob.get("sucursalDestino") + "";
+				map.put(cod, cod);
+			}
+			for (String key : map.keySet()) {
+				System.out.println(key);
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

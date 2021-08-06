@@ -143,8 +143,13 @@
 												<listcell
 													label="@load(each[2])">
 												</listcell>
-												<listcell
-													label="@load(each[15]) @converter(vm.cnv.monedaLocal)">
+												<listcell >
+													<hlayout>
+														<label visible="@load((each[0].toString().contains('AJUSTE') or each[0].toString().contains('TRANSF')) ? false : true)"
+															value="@load(each[15]) @converter(vm.cnv.monedaLocal)"></label>
+														<label visible="@load(each[0].toString().contains('AJUSTE') ? true : false)"
+															value=" - - - "></label>
+													</hlayout>
 												</listcell>
 												<listcell
 													label="@load(each[4]) @converter(vm.cnv.monedaLocal)"

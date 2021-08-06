@@ -36,6 +36,12 @@
 					<label value="Gs." style="font-size:11px" />
 				</hlayout>
 			</row>
+			<row>				
+				<field value="Ignorar Costeo:" />
+				<hlayout sclass="z-valign-middle">
+					<checkbox checked="@bind(vm.dato.nvoItem.ignorarDescuento)"></checkbox>
+				</hlayout>
+			</row>
 		</rows>
 	</grid>
 </div>

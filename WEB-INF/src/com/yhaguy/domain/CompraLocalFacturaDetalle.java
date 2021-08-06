@@ -29,6 +29,7 @@ public class CompraLocalFacturaDetalle extends Domain {
 	private double listaGs;
 	private double costoFinalGs;
 	private double costoPromedioGs;
+	private boolean ignorarDescuento;
 	
 	private Articulo articulo;	
 	private Tipo iva;
@@ -259,5 +260,13 @@ public class CompraLocalFacturaDetalle extends Domain {
 
 	public void setCostoPromedioGs(double costoPromedioGs) {
 		this.costoPromedioGs = costoPromedioGs;
+	}
+
+	public boolean isIgnorarDescuento() {
+		return ignorarDescuento;
+	}
+
+	public void setIgnorarDescuento(boolean ignorarDescuento) {
+		this.ignorarDescuento = ignorarDescuento;
 	}
 }

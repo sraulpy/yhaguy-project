@@ -32,6 +32,8 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 	private double minoristaGs = 0;
 	private double listaGs = 0;
 	
+	private boolean ignorarDescuento = false;
+	
 	private MyArray articulo = new MyArray();	
 	private MyPair iva;
 	
@@ -276,5 +278,13 @@ public class CompraLocalFacturaDetalleDTO extends DTO {
 
 	public void setListaGs(double listaGs) {
 		this.listaGs = listaGs;
+	}
+
+	public boolean isIgnorarDescuento() {
+		return ignorarDescuento;
+	}
+
+	public void setIgnorarDescuento(boolean ignorarDescuento) {
+		this.ignorarDescuento = ignorarDescuento;
 	}	
 }
