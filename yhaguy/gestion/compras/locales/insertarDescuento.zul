@@ -38,12 +38,11 @@
 			</row>
 			<row>				
 				<field value="Ignorar Costeo:" />
-				<hlayout sclass="z-valign-middle">
+				<hlayout valign="middle">
 					<checkbox
-						checked="@bind(vm.dato.nvoItem.ignorarDescuento)"
-						label="Marcar para los casos en que el descuento no debe afectar el costo final."
-						style="font-style:italic;color:red">
+						checked="@bind(vm.dato.nvoItem.ignorarDescuento)">
 					</checkbox>
+					<label value="Marcar para los casos en que el descuento no debe afectar el costo final."></label>
 				</hlayout>
 			</row>
 		</rows>
