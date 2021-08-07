@@ -39,7 +39,14 @@
 			<row>				
 				<field value="Ignorar Costeo:" />
 				<hlayout sclass="z-valign-middle">
-					<checkbox checked="@bind(vm.dato.nvoItem.ignorarDescuento)"></checkbox>
+					<checkbox
+						checked="@bind(vm.dato.nvoItem.ignorarDescuento)">
+					</checkbox>
+					<label style="font-style:italic">
+						Marcar la casilla para los casos en que el
+						descuento no debe afectar el costo de los
+						artículos.
+					</label>
 				</hlayout>
 			</row>
 		</rows>
