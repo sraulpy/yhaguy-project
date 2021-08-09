@@ -18,7 +18,7 @@ import com.yhaguy.domain.Venta;
 
 public class AssemblerReparto extends Assembler {
 
-	static String[] attIgualesReparto = { "numero", "fechaCreacion", "fechaRecepcion", "observaciones", "costo" };
+	static String[] attIgualesReparto = { "numero", "fechaCreacion", "fechaRecepcion", "observaciones", "costo", "zona" };
 	
 	static String[] attServicioTecnico = { "numero" };
 

@@ -17,7 +17,7 @@
 		<property name="fechaRecepcion"/>
 		<property name="observaciones"/>
 		<property name="costo"/>
-
+		<property name="zona"/>
 			
 		<many-to-one name="estadoReparto" class="com.coreweb.domain.Tipo"
 			column="idestadoReparto"

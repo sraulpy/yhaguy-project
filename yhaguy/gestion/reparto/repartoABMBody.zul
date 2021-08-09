@@ -49,18 +49,16 @@
 					</cell>
 					<cell colspan="2">
 						<vlayout style="margin-top:6px">
-							<field value="Recepción" />
-							<hlayout>
-								<textbox
-									value="@load(vm.dto.fechaRecepcion) @converter('formattedDate', format='dd-MM-yyyy')"
-									readonly="true" 
-									width="100px"
-									placeholder="Fecha.."/>
-								<textbox
-									value="@load(vm.dto.receptor.pos1)" readonly="true" 
-									placeholder="Receptor.."
-									hflex="true"/>
-							</hlayout>
+							<field value="Zona" />
+							<combobox hflex="true"
+								model="@load(vm.zonas)"
+								value="@load(vm.dto.zona)"
+								selectedItem="@bind(vm.dto.zona)" instant="true"
+								placeholder="Zona..">
+								<template name="model">
+									<comboitem label="@load(each)"></comboitem>
+								</template>
+							</combobox>
 						</vlayout>
 					</cell>
 				</row>
@@ -227,6 +225,7 @@
 				<listheader label="Fecha" width="100px" align="center" />
 				<listheader label="Número" width="120px" />
 				<listheader label="Tipo" width="180px" />
+				<listheader label="Entrega" width="120px" />
 				<listheader label="Ciente" />
 				<listheader label="Observación" />
 				<listheader label="Importe Gs." width="110px" align="right" />
@@ -249,6 +248,11 @@
 					<listcell>
 						<label
 							value="@load(each.tipoMovimiento.pos1.toUpperCase())" />
+					</listcell>
+					<listcell
+						style="@load(each.detalle.pos13 eq 'EMPAQUE' ? 'background:lightgreen': 
+							(each.detalle.pos13 eq 'REPARTO' ? 'background:lightblue': ''))">
+						<label value="@load(each.detalle.pos13)" />
 					</listcell>
 					<listcell>
 						<label value="@load(each.detalle.pos4)" />

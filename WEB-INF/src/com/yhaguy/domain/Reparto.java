@@ -15,6 +15,7 @@ public class Reparto extends Domain {
 	private Date fechaRecepcion;
 	private String observaciones = "";
 	private double costo;
+	private String zona = "";
 	private Tipo estadoReparto;
 	private Tipo tipoReparto;
 	private Vehiculo vehiculo;
@@ -152,6 +153,14 @@ public class Reparto extends Domain {
 
 	public void setServiciosTecnicos(Set<ServicioTecnico> serviciosTecnicos) {
 		this.serviciosTecnicos = serviciosTecnicos;
+	}
+
+	public String getZona() {
+		return zona;
+	}
+
+	public void setZona(String zona) {
+		this.zona = zona;
 	}
 
 }

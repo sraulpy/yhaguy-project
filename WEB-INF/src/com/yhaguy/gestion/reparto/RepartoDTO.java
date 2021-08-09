@@ -19,6 +19,7 @@ public class RepartoDTO extends DTO {
 	private Date fechaRecepcion;
 	private String observaciones = "Sin obs..";
 	private double costo = 0;
+	private String zona = "";
 	private MyPair estadoReparto = new MyPair();
 	private MyPair tipoReparto = new MyPair();
 	private MyArray vehiculo = new MyArray();
@@ -238,5 +239,13 @@ public class RepartoDTO extends DTO {
 
 	public void setServiciosTecnicos(List<MyArray> serviciosTecnicos) {
 		this.serviciosTecnicos = serviciosTecnicos;
+	}
+
+	public String getZona() {
+		return zona;
+	}
+
+	public void setZona(String zona) {
+		this.zona = zona;
 	}
 }

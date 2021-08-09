@@ -300,13 +300,14 @@ public class RepartoViewModel extends BodyApp {
 		List<Object[]> data = new ArrayList<>();
 
 		for (RepartoDetalleDTO d : this.dto.getDetalles()) {
-			Object[] obj = new Object[5];
+			Object[] obj = new Object[6];
 			String nro = (String) d.getDetalle().getPos2();
-			obj[0] = nro.length() > 10? nro.substring(8, nro.length()) : nro;
-			obj[1] = TipoMovimiento.getAbreviatura((String) d.getTipoMovimiento().getPos2());
-			obj[2] = Utiles.getMaxLength((String) d.getDetalle().getPos4(), 25);
-			obj[3] = d.getDetalle().getPos10().toString().toLowerCase();
-			obj[4] = Utiles.getRedondeo(d.getImporteGs());
+			obj[0] = (nro.length() > 10? nro.substring(8, nro.length()) : nro).toLowerCase();
+			obj[1] = TipoMovimiento.getAbreviatura((String) d.getTipoMovimiento().getPos2()).toLowerCase();
+			obj[2] = d.getDetalle().getPos13().toString().toLowerCase();
+			obj[3] = Utiles.getMaxLength((String) d.getDetalle().getPos4(), 25).toLowerCase();
+			obj[4] = d.getDetalle().getPos10().toString().toLowerCase();
+			obj[5] = Utiles.getRedondeo(d.getImporteGs());
 			data.add(obj);
 		}
 
@@ -529,6 +530,11 @@ public class RepartoViewModel extends BodyApp {
 		this.mensajeValidacion = "No se puede realizar la operación debido a \n";
 
 		try {
+			
+			if (this.dto.getZona().trim().isEmpty()) {
+				out = false;
+				this.mensajeValidacion += "\n - Debe ingresar la zona..";
+			}
 
 			if (this.dto.getDetalles().size() == 0) {
 				out = false;
@@ -609,6 +615,16 @@ public class RepartoViewModel extends BodyApp {
 			my.setId(id);
 			out.add(my);
 		}
+		return out;
+	}
+	
+	/**
+	 * @return las zonas de reparto..
+	 */
+	public List<String> getZonas() {
+		List<String> out = new ArrayList<String>();
+		out.add("CAPITAL");
+		out.add("INTERIOR");
 		return out;
 	}
 
@@ -903,9 +919,10 @@ class ReporteReparto extends ReporteYhaguy {
 	// Columnas del Reporte
 	static DatosColumnas col1 = new DatosColumnas("Nro.", TIPO_STRING, 25);
 	static DatosColumnas col2 = new DatosColumnas("Tipo", TIPO_STRING, 25);
-	static DatosColumnas col3 = new DatosColumnas("Cliente", TIPO_STRING, 65);
-	static DatosColumnas col4 = new DatosColumnas("Dirección", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true);
+	static DatosColumnas col3 = new DatosColumnas("Ent.", TIPO_STRING, 25);
+	static DatosColumnas col4 = new DatosColumnas("Cliente", TIPO_STRING, 60);
+	static DatosColumnas col5 = new DatosColumnas("Dirección", TIPO_STRING);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 25, true);
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 
@@ -921,6 +938,7 @@ class ReporteReparto extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
 	};
 
 	@Override
@@ -939,11 +957,14 @@ class ReporteReparto extends ReporteYhaguy {
 		String nro = this.reparto.getNumero();
 		String vehiculo = (String) this.reparto.getVehiculo().getPos1();
 		String repartidor = this.reparto.getRepartidor().getText();
+		String zona = this.reparto.getZona();
 
 		VerticalListBuilder out = null;
 		out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList().add(this.textoParValor("Número", nro))
-				.add(this.textoParValor("Vehículo", vehiculo.toUpperCase()))
+				.add(this.textoParValor("Vehículo", vehiculo.toUpperCase())));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Zona", zona))
 				.add(this.textoParValor("Chofer", repartidor.toUpperCase())));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 

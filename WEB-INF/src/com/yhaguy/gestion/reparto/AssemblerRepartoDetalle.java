@@ -136,6 +136,7 @@ public class AssemblerRepartoDetalle extends Assembler {
 		out.setPos9(tipoMovimiento);
 		out.setPos10(venta.getCliente().getDireccion());
 		out.setPos11(venta.getPesoTotal());
+		out.setPos13(venta.getFormaEntrega());
 		
 		return out;
 	}
@@ -166,6 +167,7 @@ public class AssemblerRepartoDetalle extends Assembler {
 		out.setPos9(tipoMovimiento);
 		out.setPos10("");
 		out.setPos11(0.0);
+		out.setPos13("");
 		
 		return out;
 	}
@@ -219,6 +221,7 @@ public class AssemblerRepartoDetalle extends Assembler {
 		out.setPos8(detalles[2]);
 		out.setPos9(tipoMovimiento);
 		out.setPos11(0.0);
+		out.setPos13("");
 		return out;
 	}
 	
