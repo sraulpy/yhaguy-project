@@ -43,6 +43,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	private String observacion = "";
 	private String numero = "";
 	private String vehiculo = "";
+	private String formaEntrega = Venta.FORMA_ENTREGA_EMPAQUE;
 	
 	private Empresa selectedEmpresa;
 	private Funcionario selectedVendedor;
@@ -204,7 +205,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setTotalImporteGs(venta.getImporteGs());
 		venta.setValidez(0);
 		venta.setVencimiento(this.selectedCondicion.getId().longValue() > 1? Utiles.agregarDias(new Date(), 30) : new Date());
-		venta.setFormaEntrega(Venta.FORMA_ENTREGA_EMPAQUE);
+		venta.setFormaEntrega(this.getFormaEntrega());
 		rr.saveObject(venta, "mobile");
 		this.numero = venta.getNumero();
 		
@@ -444,6 +445,13 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return las formas de entrega..
+	 */
+	public List<String> getFormasEntrega() {
+		return Venta.getFormasEntrega();
+	}
+	
+	/**
 	 * @return el importe en gs.
 	 */
 	private double getTotalImporteGs() {
@@ -574,5 +582,13 @@ public class VentasMobileViewModel extends SimpleViewModel {
 
 	public void setVehiculo(String vehiculo) {
 		this.vehiculo = vehiculo;
+	}
+
+	public String getFormaEntrega() {
+		return formaEntrega;
+	}
+
+	public void setFormaEntrega(String formaEntrega) {
+		this.formaEntrega = formaEntrega;
 	}
 }

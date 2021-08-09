@@ -160,7 +160,17 @@
 		</vlayout>
 		
 		<vlayout id="vl_observacion" vflex="true" visible="false" style="padding:30px">
-			
+		
+			<label value="Forma de Entrega" sclass="mobile" />
+			<combobox hflex="true"
+				model="@load(vm.formasEntrega)"
+				selectedItem="@bind(vm.formaEntrega)"
+				value="@load(vm.formaEntrega)">
+				<template name="model">
+					<comboitem label="@load(each)"/>
+				</template>
+			</combobox>
+			<space></space>
 			<div style="border-bottom:solid 1px">
 				<hlayout>
 					<label value="OBSERVACIÓN DEL PEDIDO"
