@@ -409,7 +409,8 @@
 							value="@bind(each.precioGs)"
 							format="###,###,###,##0"
 							readonly="${!vm.operacionHabilitada('ModificarPrecioVenta')}"
-							visible="@load(vm.ventaMonedaLocal)">
+							visible="@load(vm.ventaMonedaLocal)"
+							onChange="@command('refresh')" >
 						</doublebox>						
 					</hbox>
 					</listcell>
