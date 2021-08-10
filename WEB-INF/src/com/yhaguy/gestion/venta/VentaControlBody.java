@@ -422,6 +422,12 @@ public class VentaControlBody extends BodyApp {
 		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void refresh() {	
+		//
+	}
+	
 	/***************************************************************/
 	
 	
