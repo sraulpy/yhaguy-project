@@ -349,6 +349,7 @@ public class RepartoViewModel extends BodyApp {
 				this.getDtoDetalle().setDetalle(item);
 				this.getDtoDetalle().setImporteGs((double) item.getPos12());
 				this.getDtoDetalle().addEntregas();
+				this.getDtoDetalle().setObservacion((String) item.getPos14());
 
 				this.dto.getDetalles().add(this.getDtoDetalle());
 

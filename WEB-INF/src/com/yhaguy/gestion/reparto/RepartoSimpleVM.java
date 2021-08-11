@@ -206,6 +206,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		out.setPos11(venta.getPesoTotal());
 		out.setPos12(venta.getTotalImporteGs_());
 		out.setPos13(venta.getFormaEntrega());
+		out.setPos14(venta.getObservacion().toUpperCase());
 		
 		return out;
 	}
@@ -237,6 +238,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		out.setPos11(0.0);
 		out.setPos12(remision[6]);
 		out.setPos13("");
+		out.setPos14(remision[8]);
 		
 		return out;
 	}
@@ -274,6 +276,7 @@ public class RepartoSimpleVM extends SoloViewModel {
 		out.setPos11(0.0);
 		out.setPos12(transf.getImporteGs());
 		out.setPos13("");
+		out.setPos14(transf.getObservacion().toUpperCase());
 		return out;
 	}
 	

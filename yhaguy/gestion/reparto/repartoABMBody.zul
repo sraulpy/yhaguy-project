@@ -222,11 +222,11 @@
 			visible="@load(vm.detalleVisible)">
 			<listhead style="text-align:center">
 				<listheader width="40px" align="center" />
-				<listheader label="Fecha" width="100px" align="center" />
-				<listheader label="Número" width="120px" />
-				<listheader label="Tipo" width="180px" />
+				<listheader label="Fecha" width="80px" />
+				<listheader label="Número" width="110px" />
+				<listheader label="Tipo" width="160px" />
 				<listheader label="Entrega" width="120px" />
-				<listheader label="Ciente" />
+				<listheader label="Ciente" width="180px" />
 				<listheader label="Observación" />
 				<listheader label="Importe Gs." width="110px" align="right" />
 				<listheader label="Peso Kg." width="80px" align="right"/>
@@ -251,13 +251,13 @@
 					</listcell>
 					<listcell
 						style="@load(each.detalle.pos13 eq 'EMPAQUE' ? 'background:lightgreen': 
-							(each.detalle.pos13 eq 'REPARTO' ? 'background:lightblue': ''))">
+							(each.detalle.pos13 eq 'REPARTO' ? 'background:lightblue': 'background:lightyellow'))">
 						<label value="@load(each.detalle.pos13)" />
 					</listcell>
 					<listcell>
 						<label value="@load(each.detalle.pos4)" />
 					</listcell>
-					<listcell>
+					<listcell tooltiptext="@load(each.observacion)">
 						<label value="@load(each.observacion)"/>
 					</listcell>
 					<listcell>
