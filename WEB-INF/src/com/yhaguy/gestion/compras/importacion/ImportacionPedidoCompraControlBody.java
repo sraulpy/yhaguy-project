@@ -1490,8 +1490,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	private boolean prorrateado = false;	
 	
 	@Command @NotifyChange("*")
-	public void asignarTipoImportacion(){
-		if (this.operacionValidaPedido(MODIFICAR_TIPO_IMPORTACION) == false) {			
+	public void asignarTipoImportacion() {
+		if (this.operacionValidaPedido(MODIFICAR_TIPO_IMPORTACION) == false) {
 			this.tipoSelected = new MyPair();
 			return;
 		}
@@ -2633,7 +2633,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		double cambio = this.dto.getResumenGastosDespacho().getTipoCambio();
 		
 		if (tipo.compareTo(tipoCIF) == 0
-				|| tipo.getText().equals(ImportacionPedidoCompra.TIPO_CPT)) {
+				|| tipo.getText().equals(ImportacionPedidoCompra.TIPO_CPT)
+				|| tipo.getText().equals(ImportacionPedidoCompra.TIPO_CIP)) {
 			double valor = this.getValorSeguroDs();
 			return valor * cambio;
 		} else {
@@ -2651,7 +2652,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		MyPair tipo = this.dto.getTipo();
 		MyPair tipoCIF = utilDto.getTipoImportacionCIF();
 		
-		if (tipo.compareTo(tipoCIF) == 0) {
+		if (tipo.compareTo(tipoCIF) == 0
+				|| tipo.getText().equals(ImportacionPedidoCompra.TIPO_CIP)) {
 			return this.getValoresFromFacturas()[3];
 		} else {
 			return valorSeguroDs;
@@ -2744,6 +2746,27 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					}
 					valorCIFgs += item.getImporteGsCalculado();
 					valorCIFds += item.getImporteDsCalculado();
+					
+				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_CIP)) {
+					
+					// CIP desglosa el flete y el seguro contenidos dentro de la factura..
+					
+					if (!item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {					
+						valorFOBgs += item.getImporteGsCalculado();
+						valorFOBds += item.getImporteDsCalculado();
+					}
+					if (item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {
+						if (item.getArticulo().getPos4().toString().contains("FLETE")) {
+							valorFleteGs += item.getImporteGsCalculado();
+							valorFleteDs += item.getImporteDsCalculado();
+						}
+						if (item.getArticulo().getPos4().toString().contains("SEGURO")) {
+							valorSeguroGs += item.getImporteGsCalculado();
+							valorSeguroDs += item.getImporteDsCalculado();
+						}
+					}
+					valorCIFgs += item.getImporteGsCalculado();
+					valorCIFds += item.getImporteDsCalculado();				
 					
 				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)) {
 					valorFOBgs += item.getImporteGsCalculado();
@@ -3420,7 +3443,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 						if (det != null) {
 							det.setCostoFinalGs(costoFinal);
 							rr.saveObject(det, det.getUsuarioMod());
-							System.out.println("--- " + det.getArticulo().getCodigoInterno());
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

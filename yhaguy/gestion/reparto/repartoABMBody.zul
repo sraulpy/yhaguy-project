@@ -225,8 +225,8 @@
 				<listheader label="Fecha" width="80px" />
 				<listheader label="Número" width="110px" />
 				<listheader label="Tipo" width="160px" />
-				<listheader label="Entrega" width="120px" />
-				<listheader label="Ciente" width="180px" />
+				<listheader label="Entrega" width="140px" />
+				<listheader label="Ciente" width="200px" />
 				<listheader label="Observación" />
 				<listheader label="Importe Gs." width="110px" align="right" />
 				<listheader label="Peso Kg." width="80px" align="right"/>
@@ -278,7 +278,7 @@
 			</template>
 
 			<listfoot>
-				<listfooter span="6" align="left">
+				<listfooter span="7" align="left">
 					<hlayout>
 						<field value="@load(vm.dto.detalles.size())" />
 						<field value="ítems" />						
