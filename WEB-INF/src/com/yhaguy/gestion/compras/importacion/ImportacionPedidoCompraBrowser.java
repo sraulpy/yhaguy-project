@@ -79,11 +79,10 @@ public class ImportacionPedidoCompraBrowser extends Browser{
 		col5.setWidthColumna("60px");
 		col5.setEstilo("text-align:center");
 		
-		col6.setCampo("propietarioActual");
-		col6.setTitulo("Propietario");
-		col6.setWidthColumna("95px");
-		col6.setComponente("getPropietarioComp");
-		col6.setVisible(false);
+		col6.setCampo("tipo.descripcion");
+		col6.setTitulo("Tipo");
+		col6.setWidthColumna("60px");
+		col6.setEstilo("text-align:center");
 		
 		col7.setCampo("confirmadoImportacion"); 	
 		col7.setTitulo("Imp.");
