@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]
+        >
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.DebitoGroupautoDetalle" table="debitoGroupautoDetalle">
+
+		&hibernate-domain; 
+
+		<property name="cantidad"/>
+		<property name="costoGs"/>
+		<property name="precioGs"/>
+		<property name="codigo"/>
+		<property name="descripcion"/>
+		
+		<many-to-one name="familia" class="com.yhaguy.domain.ArticuloFamilia"
+			column="idfamilia"
+			lazy="false"/>
+
+	</class>
+</hibernate-mapping>

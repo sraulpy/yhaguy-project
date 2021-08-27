@@ -225,6 +225,10 @@
 						<field
 							value="@load(vm.dto.detallesOrdenado.size())" />
 						<field value="ítems" />
+						<space></space>
+						<a label="Actualizar" iconSclass="z-icon-refresh"
+							onClick="@command('actualizarDebitoGroupauto')"
+							visible="@load(vm.dto.tipo eq ('CAJA DEBITOS CENTRAL'))"></a>
 						<space hflex="true" />
 						<label value="Saldo en Efectivo Gs."
 							sclass="label-moneda-footer" />

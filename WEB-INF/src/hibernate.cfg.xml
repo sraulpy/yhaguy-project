@@ -212,6 +212,9 @@
 		<mapping resource="com/yhaguy/domain/Remision.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RemisionDetalle.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ColectorDatos.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/DebitoGroupauto.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/DebitoGroupautoDetalle.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/DebitoGroupautoFormaPago.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/ArticuloGasto.hbm.xml" />
 

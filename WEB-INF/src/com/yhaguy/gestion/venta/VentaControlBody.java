@@ -66,6 +66,7 @@ import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.comun.ReservaDetalleDTO;
 import com.yhaguy.gestion.empresa.ClienteDTO;
+import com.yhaguy.util.ConnectDBGroupauto;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
@@ -545,11 +546,17 @@ public class VentaControlBody extends BodyApp {
 			boolean grabar, int desglose, String numeroPlanillaCaja, String timbrado) throws Exception {
 
 		VentaDTO out = new VentaDTO();
-		out.setCliente(desde.getCliente());
+		out.setObservacion(desde.getObservacion());
+		out.setCliente(desde.isDebitoGroupauto() ? this.getClienteGroupauto() : desde.getCliente());
+		if (desde.isDebitoGroupauto()) {
+			out.setAuxi(desde.getCliente().getPos2() + "");
+			out.setObservacion(desde.getCliente().getPos3() + "");
+		}
 		out.setCondicionPago(desde.getCondicionPago());
 		out.setDeposito(desde.getDeposito());
 		out.setVendedor(desde.getVendedor());
 		out.setTecnico(desde.getTecnico());
+		out.setDebitoGroupauto(desde.isDebitoGroupauto());
 		out.setDetalles(this.crearDetalleDesde(desde.getDetallesDesglose(desglose)));
 		out.setEstado(estado);
 		out.setFecha(new Date());
@@ -567,10 +574,9 @@ public class VentaControlBody extends BodyApp {
 		out.setCedulaRepartidor(desde.getCedulaRepartidor());
 		out.setMarcaVehiculo(desde.getMarcaVehiculo());
 		out.setChapaVehiculo(desde.getChapaVehiculo());
-		out.setDenominacion(desde.getDenominacion());
+		out.setDenominacion(desde.isDebitoGroupauto() ? out.getCliente().getPos2() + "" : desde.getDenominacion());
 		out.setNumeroPlanillaCaja(numeroPlanillaCaja);
 		out.setPreparadoPor(desde.getPreparadoPor());
-		out.setObservacion(desde.getObservacion());
 		out.setTimbrado(timbrado);
 		out.setVehiculoTipo(desde.getVehiculoTipo());
 		out.setVehiculoMarca(desde.getVehiculoMarca());
@@ -619,9 +625,9 @@ public class VentaControlBody extends BodyApp {
 			desde.setIdEnlaceSiguiente(out.getId());
 			desde = (VentaDTO) this.saveDTO(desde, new AssemblerVenta());
 			
-			if (crearPedido == false) {
+			if (crearPedido == false) {				
+				RegisterDomain rr = RegisterDomain.getInstance();
 				for (VentaDetalleDTO item : out.getDetalles()) {
-					RegisterDomain rr = RegisterDomain.getInstance();
 					Articulo art = rr.getArticuloById(item.getArticulo().getId());
 					if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
 						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), desde.getDeposito().getId());
@@ -629,6 +635,31 @@ public class VentaControlBody extends BodyApp {
 						ControlArticuloStock.addMovimientoStock(out.getId(), out
 								.getTipoMovimiento().getId(), item.getCantidad()
 								* -1, adp.getId(), this.getLoginNombre());
+					}
+				}
+				
+				if (out.isDebitoGroupauto()) {
+					ConnectDBGroupauto db = ConnectDBGroupauto.getInstance();
+					db.addDebitoGroupauto(this.getLoginNombre(), out.getNumero(), out.getObservacion(), out.getAuxi());
+
+					for (VentaDetalleDTO det : out.getDetalles()) {
+						Articulo art = rr.getArticuloById(det.getArticulo().getId());
+						db.addDebitoGroupautoDetalle(art.getCodigoInterno(), art.getDescripcion(),
+								art.getFamilia().getId(), det.getCantidad(), det.getImporteGs());
+					}
+					
+					for (ReciboFormaPagoDTO fp : out.getFormasPago()) {
+						double montoGs = fp.getMontoGs();
+						String tarjetaNumero = fp.getTarjetaNumero();
+						String tarjetanumerocomprobante = fp.getTarjetaNumeroComprobante();
+						String depositonroreferencia = fp.getDepositoNroReferencia();
+						String retencionnumero = fp.getRetencionNumero();
+						String nrocomprobanteasociado = out.getNumero();
+						long idTipo = fp.getTipo().getId();
+						long idMoneda = fp.getMoneda().getId();						
+						db.addDebitoGroupautoFormaPago(montoGs, tarjetaNumero, tarjetanumerocomprobante,
+								depositonroreferencia, retencionnumero, "", nrocomprobanteasociado,
+								idTipo, idMoneda);
 					}
 				}
 			}
@@ -1899,7 +1930,9 @@ public class VentaControlBody extends BodyApp {
 	/***************************************************************/
 	
 	
-	/************************ GETTER/SETTER ************************/
+	/**
+	 * GETTER/SETTER
+	 */
 	
 	@DependsOn({ "dto.cliente", "dto.vendedor", "dto.deposito", "dto.formaEntrega", "dto.vehiculoTipo", "dto.vehiculoMarca", "dto.vehiculoModelo", "dto.tecnico" })
 	public boolean isDetalleVisible() {
@@ -2095,6 +2128,32 @@ public class VentaControlBody extends BodyApp {
 	 */
 	public List<MyPair> getDepositos() {
 		return this.getDtoUtil().getDepositosMyPair();
+	}
+	
+	/**
+	 * @return cliente debito groupauto..
+	 */
+	private MyArray getClienteGroupauto() throws Exception {
+		MyArray out = new MyArray();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Cliente cl = rr.getClienteByObservacion("#DEBITO GROUPAUTO");
+		out.setId(cl.getId());
+		out.setPos1(cl.getCodigoEmpresa());
+		out.setPos2(cl.getRazonSocial());
+		out.setPos3(cl.getRuc());
+		out.setPos4(cl.getIdEmpresa());
+		out.setPos5(cl.getTipoCliente());
+		out.setPos6(cl.getDireccion());
+		out.setPos7(cl.getEmpresa().getTelefono_());
+		out.setPos8(cl.getNombreFantasia());
+		out.setPos9(cl.isCuentaBloqueada());
+		out.setPos10(cl.getNombre());
+		out.setPos11(cl.isVentaCredito());
+		out.setPos12(cl.getLimiteCredito());
+		out.setPos13(cl.getDescuentoMayorista());
+		out.setPos14(cl.getCartera());
+		out.setPos15(cl.isVentaExenta());
+		return out;
 	}
 	
 	public VentaDTO getDto() {

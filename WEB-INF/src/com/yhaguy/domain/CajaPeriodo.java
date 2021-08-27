@@ -24,6 +24,7 @@ public class CajaPeriodo extends Domain {
 	public static final String TIPO_PAGOS_EXTERIOR = "CAJA PAGOS EXTERIOR";
 	public static final String TIPO_COBROS_MOBILE_INT = "CAJA COBRANZAS MOVILES INTERIOR";
 	public static final String TIPO_COMPRAS_NEUMATICOS = "CAJA COMPRAS NEUMATICOS";
+	public static final String TIPO_DEBITOS_CENTRAL = "CAJA DEBITOS CENTRAL";
 
 	private String numero;
 	private Date apertura;
@@ -86,6 +87,7 @@ public class CajaPeriodo extends Domain {
 		out.add(TIPO_PAGOS_EXTERIOR);
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
 			out.add(TIPO_COMPRAS_NEUMATICOS);
+			out.add(TIPO_DEBITOS_CENTRAL);
 		}
 		return out;
 	}

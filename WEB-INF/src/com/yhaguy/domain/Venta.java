@@ -74,6 +74,7 @@ public class Venta extends Domain {
 	
 	/** Si la venta fue cobrada **/
 	private boolean cobrado;
+	private boolean debitoGroupauto;
 	
 	/** Datos que van en la impresion de la factura remision **/
 	private String puntoPartida;
@@ -1106,5 +1107,13 @@ public class Venta extends Domain {
 
 	public void setCostoUltimoGs(double costoUltimoGs) {
 		this.costoUltimoGs = costoUltimoGs;
+	}
+
+	public boolean isDebitoGroupauto() {
+		return debitoGroupauto;
+	}
+
+	public void setDebitoGroupauto(boolean debitoGroupauto) {
+		this.debitoGroupauto = debitoGroupauto;
 	}
 }

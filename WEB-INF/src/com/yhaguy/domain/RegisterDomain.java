@@ -1170,8 +1170,7 @@ public class RegisterDomain extends Register {
 	 * Retorna la Razon Social correspondiente al ruc segun la BD del SET
 	 */
 	public String getRazonSocialSET(String ruc) throws Exception {
-		RucSet set = (RucSet) this.getObject(RucSet.class.getName(), "ruc",
-				ruc.trim());
+		RucSet set = (RucSet) this.getObject(RucSet.class.getName(), "ruc", ruc.trim());
 		if (set == null) {
 			return "";
 		}
@@ -2370,6 +2369,18 @@ public class RegisterDomain extends Register {
 				+ codigo + "'";
 		List<Cliente> out = this.hql(query);
 		if (out.size() == 1) {
+			return out.get(0);
+		}
+		return null;
+	}
+	
+	/**
+	 * @return el Cliente segun la observacion..
+	 */
+	public Cliente getClienteByObservacion(String obs) throws Exception {
+		String query = "Select c from Cliente c where c.empresa.observacion = '" + obs + "'";
+		List<Cliente> out = this.hql(query);
+		if (out.size() > 0) {
 			return out.get(0);
 		}
 		return null;
@@ -6908,7 +6919,7 @@ public class RegisterDomain extends Register {
 		}
 		return out;
 	}
-
+	
 	/**
 	 * @return las empresas segun parametros..
 	 */
@@ -6919,6 +6930,34 @@ public class RegisterDomain extends Register {
 				+ cedula.toLowerCase() + "%' and lower(e.razonSocial) like'%"
 				+ razonSocial.toLowerCase() + "%' and lower(e.nombre) like '%"
 				+ nombreFantasia.toLowerCase() + "%' order by e.razonSocial";
+		return this.hqlLimit(query, 50);
+	}
+
+	/**
+	 * @return las empresas segun parametros..
+	 */
+	public List<Empresa> getEmpresasClientes(String ruc, String cedula,
+			String razonSocial, String nombreFantasia) throws Exception {
+		String query = "select e from Empresa e where lower(e.ruc) like '%"
+				+ ruc.toLowerCase() + "%' and lower(e.ci) like '%"
+				+ cedula.toLowerCase() + "%' and lower(e.razonSocial) like'%"
+				+ razonSocial.toLowerCase() + "%' and lower(e.nombre) like '%"
+				+ nombreFantasia.toLowerCase() + "%'"
+				+ " and e.cliente = 'TRUE' order by e.razonSocial";
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
+	 * @return las empresas segun parametros..
+	 */
+	public List<Empresa> getEmpresasProveedores(String ruc, String cedula,
+			String razonSocial, String nombreFantasia) throws Exception {
+		String query = "select e from Empresa e where lower(e.ruc) like '%"
+				+ ruc.toLowerCase() + "%' and lower(e.ci) like '%"
+				+ cedula.toLowerCase() + "%' and lower(e.razonSocial) like'%"
+				+ razonSocial.toLowerCase() + "%' and lower(e.nombre) like '%"
+				+ nombreFantasia.toLowerCase() + "%'"
+				+ " and e.proveedor = 'TRUE' order by e.razonSocial";
 		return this.hqlLimit(query, 50);
 	}
 	
@@ -7334,6 +7373,42 @@ public class RegisterDomain extends Register {
 		String query = "select c from Cliente c where c.empresa.ruc like '%"
 				+ ruc + "%'";
 		return this.hqlLimit(query, 100);
+	}
+	
+	/**
+	 * @return la lista de proveedores segun ruc..
+	 */
+	public Proveedor getProveedorByRuc(String ruc) throws Exception {
+		String query = "select p from Proveedor p where p.empresa.ruc = '"+ ruc + "'";
+		List<Proveedor> list = this.hqlLimit(query, 100);
+		return list.size() > 0? list.get(0) : null;
+	}
+	
+	/**
+	 * @return la lista de proveedores segun ci..
+	 */
+	public Proveedor getProveedorByRucInicial(String ci) throws Exception {		
+		String query = "select p from Proveedor p where p.empresa.ruc like '"+ ci + "%'";
+		List<Proveedor> list = this.hqlLimit(query, 100);
+		return list.size() > 0? list.get(0) : null;
+	}
+	
+	/**
+	 * @return la lista de ruc segun ci..
+	 */
+	public RucSet getRucInicialSET(String ci) throws Exception {		
+		String query = "select r from RucSet r where r.ruc like '"+ ci + "%'";
+		List<RucSet> list = this.hqlLimit(query, 100);
+		return list.size() > 0? list.get(0) : null;
+	}
+
+	/**
+	 * @return la lista de proveedores segun ci..
+	 */
+	public Proveedor getProveedorByCI(String ci) throws Exception {
+		String query = "select p from Proveedor p where p.empresa.ci = '"+ ci + "'";
+		List<Proveedor> list = this.hqlLimit(query, 100);
+		return list.size() > 0? list.get(0) : null;
 	}
 
 	/**
@@ -9387,6 +9462,37 @@ public class RegisterDomain extends Register {
 	public List<NotaCredito> getNotaCreditosByVenta(long idVenta) throws Exception {
 		String query = "select n from NotaCredito n join n.detalles d where d.venta.id = " + idVenta
 				+ " and n.tipoMovimiento.sigla = '"+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA +"'"
+				+ " and d.articulo is null";
+		List<NotaCredito> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return los pagos de la compra..
+	 */
+	public List<Object[]> getPagosByCompra(long idCompra, long idTipoMovimiento) throws Exception {
+		String query = "select r, d from Recibo r join r.detalles d where d.movimiento.idMovimientoOriginal = " + idCompra
+				+ " and d.movimiento.tipoMovimiento.id = " + idTipoMovimiento;
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return los pagos del gasto..
+	 */
+	public List<Object[]> getPagosByGasto(long idGasto, long idTipoMovimiento) throws Exception {
+		String query = "select r, d from Recibo r join r.detalles d where d.movimiento.idMovimientoOriginal = " + idGasto
+				+ " and d.movimiento.tipoMovimiento.id = " + idTipoMovimiento;
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return las notas de credito de la compra..
+	 */
+	public List<NotaCredito> getNotaCreditosByCompra(long idCompra) throws Exception {
+		String query = "select n from NotaCredito n join n.detalles d where d.compra.id = " + idCompra
+				+ " and n.tipoMovimiento.sigla = '"+ Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA +"'"
 				+ " and d.articulo is null";
 		List<NotaCredito> list = this.hql(query);
 		return list;
@@ -14005,6 +14111,97 @@ public class RegisterDomain extends Register {
 		List<Object[]> list = this.hqlLimit(query, 1);
 		Object[] out = list.size() > 0 ? list.get(0) : null;
 		return out != null ? (double) out[1] : 0.0;
+	}
+	
+	/**
+	 * @return gastos por proveedor..
+	 */
+	public List<Gasto> getGastos(long idProveedor) throws Exception {
+		String query = "select g from Gasto g where g.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return orden de gastos por proveedor..
+	 */
+	public List<OrdenPedidoGasto> getOrdenPedidoGastos(long idProveedor) throws Exception {
+		String query = "select g from OrdenPedidoGasto g where g.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return pagos por proveedor..
+	 */
+	public List<Recibo> getPagos(long idProveedor) throws Exception {
+		String query = "select p from Recibo p where p.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return notas de creditos por proveedor..
+	 */
+	public List<NotaCredito> getNotasCreditos(long idProveedor) throws Exception {
+		String query = "select n from NotaCredito n where n.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return compras por proveedor..
+	 */
+	public List<CompraLocalFactura> getCompraLocalFacturas(long idProveedor) throws Exception {
+		String query = "select c from CompraLocalFactura c where c.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return ordenes de compra por proveedor..
+	 */
+	public List<CompraLocalOrden> getCompraLocalOrdenes(long idProveedor) throws Exception {
+		String query = "select c from CompraLocalOrden c where c.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return ordenes de compra por proveedor..
+	 */
+	public List<OrdenCompra> getOrdenesCompra(long idProveedor) throws Exception {
+		String query = "select c from OrdenCompra c where c.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return articulos por proveedor..
+	 */
+	public List<Articulo> getArticulos(long idProveedor) throws Exception {
+		String query = "select a from Articulo a where a.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return timbrados por proveedor..
+	 */
+	public List<Timbrado> getTimbrados(long idProveedor) throws Exception {
+		String query = "select t from Timbrado t where t.proveedor.id = " + idProveedor;
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los movimientos de cta cte. de una empresa
+	 */
+	public List<CtaCteEmpresaMovimiento> getCtaCteMovimientos(long idEmpresa, long idCaracter) throws Exception {
+		String query = "select c from CtaCteEmpresaMovimiento c where "
+				+ " c.tipoCaracterMovimiento.id = " + idCaracter
+				+ " and c.idEmpresa = " + idEmpresa;
+		List<CtaCteEmpresaMovimiento> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return los debitos groupauto..
+	 */
+	public List<DebitoGroupauto> getDebitosGroupauto() throws Exception {
+		String query = "select d from DebitoGroupauto d where d.auxi = 'PENDIENTE'";
+		return this.hql(query);
 	}
 	
 	public static void main(String[] args) {

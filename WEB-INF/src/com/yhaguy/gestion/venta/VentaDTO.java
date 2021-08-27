@@ -63,6 +63,7 @@ public class VentaDTO extends DTO {
 	
 	/** para la impresion de la factura **/
 	private String denominacion = "";
+	private boolean debitoGroupauto = false;
 	
 	private double tipoCambio;
 	private int validez = 3;
@@ -1033,5 +1034,13 @@ public class VentaDTO extends DTO {
 
 	public void setValesGenerados(List<SaldoVale> valesGenerados) {
 		this.valesGenerados = valesGenerados;
+	}
+
+	public boolean isDebitoGroupauto() {
+		return debitoGroupauto;
+	}
+
+	public void setDebitoGroupauto(boolean debitoGroupauto) {
+		this.debitoGroupauto = debitoGroupauto;
 	}
 }

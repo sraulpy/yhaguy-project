@@ -5,8 +5,10 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -44,15 +46,30 @@ import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Caja;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CajaReposicion;
+import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.CompraLocalFacturaDetalle;
+import com.yhaguy.domain.CompraLocalOrden;
+import com.yhaguy.domain.CompraLocalOrdenDetalle;
+import com.yhaguy.domain.CondicionPago;
+import com.yhaguy.domain.DebitoGroupauto;
+import com.yhaguy.domain.DebitoGroupautoDetalle;
+import com.yhaguy.domain.DebitoGroupautoFormaPago;
+import com.yhaguy.domain.Deposito;
+import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SaldoVale;
+import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Talonario;
+import com.yhaguy.domain.Tecnico;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.caja.principal.AssemblerCaja;
 import com.yhaguy.gestion.caja.principal.CajaDTO;
@@ -268,6 +285,194 @@ public class CajaPeriodoControlBody extends BodyApp {
 	public void desbloquear() {
 		this.getPagina().getTool().mainComponent.detach();
 		CajaUtil.CAJAS_ABIERTAS.remove(this.dto.getNumero());
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void actualizarDebitoGroupauto() throws Exception {
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Funcionario func = rr.getFuncionario("ADMINISTRACION");
+		Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), 2);
+		CondicionPago cond = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CONTADO);
+		Tipo moneda = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
+		Proveedor prov = rr.getProveedorById(18);
+		Tipo iva = rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10);
+		SucursalApp suc = rr.getSucursalAppById(2);
+		Date fecha = new Date();
+		
+		List<DebitoGroupauto> list = rr.getDebitosGroupauto();
+		for (DebitoGroupauto dbg : list) {
+			
+			CompraLocalFactura fac = new CompraLocalFactura();
+			fac.setCondicionPago(cond);
+			fac.setFechaCreacion(fecha);
+			fac.setFechaOriginal(fecha);
+			fac.setFechaVencimiento(fecha);
+			fac.setImporteGs(dbg.getTotalImporteGs());
+			fac.setMoneda(moneda);
+			fac.setNumero(dbg.getOrigen());
+			fac.setProveedor(prov);
+			fac.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO));
+			fac.setSucursal(suc);
+			fac.setDbEstado('R');
+			Set<CompraLocalFacturaDetalle> facdets = new HashSet<CompraLocalFacturaDetalle>();
+			for (DebitoGroupautoDetalle item : dbg.getDetalles()) {
+				CompraLocalFacturaDetalle det = new CompraLocalFacturaDetalle();
+				det.setArticulo(this.getArticulo(item.getCodigo(), item.getDescripcion(), item.getFamilia().getId()));
+				det.setCantidad(Integer.parseInt(item.getCantidad() + ""));
+				det.setCostoFinalGs(item.getCostoGs());
+				det.setCostoPromedioGs(item.getCostoGs());
+				det.setCostoGs(item.getCostoGs());
+				det.setIva(iva);
+				facdets.add(det);
+			}
+			fac.setDetalles(facdets);
+			rr.saveObject(fac, this.getLoginNombre());
+			
+			CompraLocalOrden oc = new CompraLocalOrden();
+			oc.setFechaCreacion(fecha);
+			oc.setAutorizado(true);
+			oc.setAutorizadoPor("ADMINISTRACION");
+			oc.setCerrado(true);
+			oc.setDeposito(dep);
+			oc.setCondicionPago(cond);
+			oc.setMoneda(moneda);
+			oc.setNumero("OCL-" + AutoNumeroControl.getAutoNumero("OCL", 5));
+			oc.setObservacion("DEBITOS GROUPAUTO");
+			oc.setNumeroFactura(dbg.getOrigen());
+			oc.setProveedor(prov);
+			oc.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_ORDEN_COMPRA));
+			oc.setFactura(fac);
+			oc.setSucursal(suc);
+			oc.setDbEstado('R');
+			Set<CompraLocalOrdenDetalle> ocdets = new HashSet<CompraLocalOrdenDetalle>();
+			for (DebitoGroupautoDetalle item : dbg.getDetalles()) {
+				CompraLocalOrdenDetalle det = new CompraLocalOrdenDetalle();
+				det.setArticulo(this.getArticulo(item.getCodigo(), item.getDescripcion(), item.getFamilia().getId()));
+				det.setCantidad(Integer.parseInt(item.getCantidad() + ""));
+				det.setCostoGs(item.getCostoGs());
+				det.setIva(iva);
+				det.setUltCostoGs(item.getCostoGs());
+				ocdets.add(det);
+			}
+			oc.setDetalles(ocdets);
+			rr.saveObject(oc, this.getLoginNombre());
+			
+			Venta vta = new Venta();
+			vta.setAtendido(func);
+			vta.setCartera("OTROS");
+			vta.setCliente(this.getCliente(dbg.getRuc(), dbg.getRazonSocial()));
+			vta.setCondicionPago(cond);
+			vta.setDenominacion(dbg.getRazonSocial());
+			vta.setDeposito(dep);
+			vta.setEstado(rr.getTipoPorSigla(Configuracion.SIGLA_VENTA_ESTADO_FACTURADO));
+			vta.setFecha(new Date());
+			vta.setVencimiento(new Date());
+			vta.setFormaEntrega(Venta.FORMA_ENTREGA_EMPAQUE);
+			vta.setFormasPago(null);
+			vta.setTipoCambio(1);
+			vta.setModoVenta(rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_MODO_VENTA_MOSTRADOR));
+			vta.setMoneda(moneda);
+			vta.setNumero(this.getNumeroVenta());
+			vta.setNumeroPlanillaCaja(this.dto.getNumero());
+			vta.setTecnico(func);
+			vta.setTecnico_((Tecnico) rr.getObject(Tecnico.class.getName(), 1));
+			vta.setTimbrado(this.dto.getCaja().getTalonarioVentas().getPos1() + "");
+			vta.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO));
+			vta.setTotalImporteGs(dbg.getTotalImporteGs());
+			vta.setVendedor(func);
+			vta.setSucursal(suc);
+			Set<VentaDetalle> dets = new HashSet<VentaDetalle>();
+			for (DebitoGroupautoDetalle item : dbg.getDetalles()) {
+				VentaDetalle det = new VentaDetalle();
+				det.setArticulo(this.getArticulo(item.getCodigo(), item.getDescripcion(), item.getFamilia().getId()));
+				det.setCantidad(item.getCantidad());
+				det.setCostoPromedioGs(item.getCostoGs());
+				det.setCostoUnitarioGs(item.getCostoGs());
+				det.setDescripcion(item.getDescripcion());
+				det.setListaPrecio(rr.getListaDePrecio(1));
+				det.setPrecioGs(item.getPrecioGs());
+				det.setTipoIVA(iva);
+				dets.add(det);
+			}
+			Set<ReciboFormaPago> fps = new HashSet<ReciboFormaPago>();
+			for (DebitoGroupautoFormaPago item : dbg.getFormasPago()) {
+				ReciboFormaPago fp = new ReciboFormaPago();
+				fp.setDepositoBancoCta(item.getDepositoBancoCta());
+				fp.setDepositoNroReferencia(item.getDepositoNroReferencia());
+				fp.setDescripcion(item.getDescripcion());
+				fp.setFechaOperacion(fecha);
+				fp.setIdSucursal(suc.getId());
+				fp.setImporteAcreditado(item.getMontoGs());
+				fp.setMoneda(moneda);
+				fp.setMontoChequeGs(item.getMontoChequeGs());
+				fp.setMontoGs(item.getMontoGs());
+				fp.setNroComprobanteAsociado(item.getNroComprobanteAsociado());
+				fp.setRetencionNumero(item.getRetencionNumero());
+				fp.setTarjetaNumero(item.getTarjetaNumero());
+				fp.setTarjetaNumeroComprobante(item.getTarjetaNumeroComprobante());
+				fp.setTarjetaProcesadora(item.getTarjetaProcesadora());
+				fp.setTarjetaTipo(item.getTarjetaTipo());
+				fp.setTipo(item.getTipo());
+				fps.add(fp);
+			}
+			vta.setDetalles(dets);
+			vta.setFormasPago(fps);
+			rr.saveObject(vta, this.getLoginNombre());
+			
+			dbg.setAuxi("OK");
+			rr.saveObject(dbg, this.getLoginNombre());
+			
+			CajaPeriodo planilla = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), this.dto.getId());
+			planilla.getVentas().add(vta);
+			rr.saveObject(planilla, this.getLoginNombre());
+			
+			this.dto = (CajaPeriodoDTO) this.getDTOById(CajaPeriodo.class.getName(), this.dto.getId());
+		}
+	}
+	
+	/**
+	 * @return cliente by ruc..
+	 */
+	private Cliente getCliente(String ruc, String razonSocial) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Cliente cl = rr.getClienteByRuc(ruc);
+		if (cl != null) {
+			return cl;
+		}
+		
+		Empresa emp = new Empresa();
+		emp.setRuc(ruc);
+		emp.setRazonSocial(razonSocial);
+		emp.setNombre(razonSocial);
+		rr.saveObject(emp, this.getLoginNombre());
+		
+		Cliente out = new Cliente();
+		out.setCartera("OTROS");
+		out.setVentaCredito(false);
+		out.setEmpresa(emp);
+		rr.saveObject(out, this.getLoginNombre());
+		return out;
+	}
+	
+	/**
+	 * @return articulo by codigo..
+	 */
+	private Articulo getArticulo(String codigo, String descripcion, long idFamilia) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Articulo art = rr.getArticuloByCodigoInterno(codigo);
+		if (art != null) {
+			return art;
+		}
+		
+		Articulo out = new Articulo();
+		out.setFamilia((ArticuloFamilia) rr.getObject(ArticuloFamilia.class.getName(), idFamilia));
+		out.setCodigoInterno(codigo);
+		out.setDescripcion(descripcion);
+		rr.saveObject(out, this.getLoginNombre());
+		
+		return out;
 	}
 
 	/************************************************************/
@@ -731,6 +936,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 		if (b.isClickAceptar() == true) {
 			VentaDTO venta = (VentaDTO) b.getSelectedItemDTO();
 			this.selectedVenta = venta;
+			
+			if ((!venta.isCondicionContado())
+					&& venta.isDebitoGroupauto()) {
+				Clients.showNotification("SOLO VENTAS CONTADO PARA DEBITO GROUPAUTO..", Clients.NOTIFICATION_TYPE_ERROR, null, 0, 0, 0);
+				return;
+			}
 
 			if (venta.isCondicionContado() == true) {
 				this.asignarFormaPago(venta);
@@ -750,6 +961,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * Genera la factura de venta..
 	 */
 	private void generarFacturaVenta(VentaDTO pedido) throws Exception {
+		
+		if (!pedido.isCondicionContado()
+				&& pedido.isDebitoGroupauto()) {
+			Clients.showNotification("SOLO VENTAS CONTADO PARA DEBITOS GROUPAUTO..", 
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		
 		if (!this.isStockDisponible(pedido)) {
 			Clients.showNotification("STOCK INSUFICIENTE..FAVOR VERIFIQUE EL PEDIDO", 
@@ -1781,13 +1999,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 		params.put("CantidadTotal", FORMATTER.format(venta.getTotalCantidad()));
 		params.put("Items", venta.getDetalles());
 
-		params.put("PuntoPartida", venta.getPuntoPartida().toLowerCase());
-		params.put("FechaTraslado", venta.getFechaTraslado());
-		params.put("FechaFinTraslado", venta.getFechaFinTraslado());
-		params.put("Repartidor", venta.getRepartidor().toLowerCase());
-		params.put("CedulaRepartidor", venta.getCedulaRepartidor());
-		params.put("MarcaVehiculo", venta.getMarcaVehiculo().toLowerCase());
-		params.put("ChapaVehiculo", venta.getChapaVehiculo().toLowerCase());
+		params.put("PuntoPartida", "");
+		params.put("FechaTraslado", "");
+		params.put("FechaFinTraslado", "");
+		params.put("Repartidor", "");
+		params.put("CedulaRepartidor", "");
+		params.put("MarcaVehiculo", "");
+		params.put("ChapaVehiculo", "");
 		
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			this.win = (Window) Executions.createComponents(ZUL_IMPRESION_FACTURA_BAT, this.mainComponent, params);

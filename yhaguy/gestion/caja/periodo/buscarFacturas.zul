@@ -8,6 +8,9 @@
 		<space/>
 		<field value="Hasta:" />
 		<datebox value="@bind(vm.fechaHasta)" instant="true"></datebox>
+		<space hflex="true"></space>
+		<checkbox checked="@bind(vm.selectedVenta.debitoGroupauto)"></checkbox>
+		<label>Débito Groupauto</label>
 	</hlayout>
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="SIN PEDIDOS PENDIENTES.."
