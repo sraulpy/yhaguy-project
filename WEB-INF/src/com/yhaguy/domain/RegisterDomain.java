@@ -12310,6 +12310,38 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los articulos..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.descripcion
+	 * [3]:mayorista gs
+	 * [4]:minorista gs
+	 * [5]:lista gs
+	 * [6]:stock deposito
+	 * [7]:costo gs
+	 * [8]:articulo.familia
+	 * [9]:transportadora
+	 * [10]:precioBaterias
+	 */
+	public List<Object[]> getArticulos(long idProveedor, long idMarca, long idFamilia, long idDeposito) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.precioGs, a.precioMinoristaGs, a.precioListaGs, "
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + idDeposito + "),"
+				+ " a.costoGs, a.familia.descripcion, a.precioTransportadora, a.precioBaterias"
+				+ " from Articulo a where a.dbEstado != 'D'";
+		if (idProveedor > 0) {
+			query += " and a.proveedor.id = " + idProveedor;
+		}
+		if (idMarca > 0) {
+			query += " and a.marca.id = " + idMarca;
+		}
+		if (idFamilia > 0) {
+			query += " and a.familia.id = " + idFamilia;
+		}
+		query += " order by a.codigoInterno";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return
 	 * [0]:articulo.id
 	 * [1]:articulo.codigoInterno

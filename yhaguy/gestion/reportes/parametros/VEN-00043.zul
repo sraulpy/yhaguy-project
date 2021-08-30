@@ -5,6 +5,16 @@
 	</columns>
 	<rows>
 		<row>
+			<field value="Depósito:" />
+			<combobox
+				model="@load(vm.dato.filtro.getDepositos(vm.dato.acceso.sucursalOperativa.id))"
+				selectedItem="@bind(vm.dato.filtro.deposito)" hflex="true">
+				<template name="model">
+					<comboitem label="@load(each.descripcion)" />
+				</template>
+			</combobox>
+		</row>
+		<row>
 			<field value="Proveedor:" />
 			<bandbox hflex="true" placeholder="TODOS.."
 				readonly="true" value="@load(vm.dato.filtro.proveedorExterior.razonSocial)"

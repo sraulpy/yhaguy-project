@@ -5902,32 +5902,35 @@ public class ReportesViewModel extends SimpleViewModel {
 				Proveedor proveedor = filtro.getProveedorExterior();
 				ArticuloFamilia flia = filtro.getFamilia_();
 				ArticuloMarca marca = filtro.getMarca_();
+				Deposito deposito = filtro.getDeposito();
 				boolean stock = filtro.isFraccionado();
 				
 				long idProveedor = proveedor != null ? proveedor.getId() : 0;
 				long idFamilia = flia != null ? flia.getId() : 0;
 				long idMarca = marca != null ? marca.getId() : 0;
+				long idDeposito = deposito != null ? deposito.getId() : 0;
+				
+				if (idDeposito == 0) {
+					Clients.showNotification("DEBE SELECCIONAR UN DEPÓSITO..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 
-				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
+				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, idDeposito);
 				for (Object[] art : arts) {					
 					if (stock) {	
 						long min = art[6] != null ? (long) art[6] : (long) 0;
-						long may = art[7] != null ? (long) art[7] : (long) 0;
-						long mcl = art[8] != null ? (long) art[8] : (long) 0;
-						if (min > 0 || may > 0 || mcl > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[12] });
+						if (min > 0) {
+							data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[12] });
+						data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9] });
 					}					
 				}
 				
-				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
-				
-				ReporteListaPrecioPorDeposito rep = new ReporteListaPrecioPorDeposito(proveedor_);
+				ReporteListaPrecioPorDeposito rep = new ReporteListaPrecioPorDeposito(deposito.getDescripcion());
 				rep.setDatosReporte(data);
 				rep.setApaisada();
 				
@@ -26762,19 +26765,19 @@ class ReportePromoValvoline extends ReporteYhaguy {
 class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
-	private String proveedor;
+	private String deposito;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
+	static DatosColumnas col3 = new DatosColumnas("Stock", TIPO_LONG, 15);
 	static DatosColumnas col4 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 18);
 	static DatosColumnas col5 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 18);
 	static DatosColumnas col6 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 18);
 	static DatosColumnas col7 = new DatosColumnas("Tra.Gs.", TIPO_DOUBLE_GS, 18);
 
-	public ReporteListaPrecioPorDeposito(String proveedor) {
-		this.proveedor = proveedor;
+	public ReporteListaPrecioPorDeposito(String deposito) {
+		this.deposito = deposito;
 	}
 
 	static {
@@ -26804,7 +26807,7 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 
 		VerticalListBuilder out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
-		out.add(cmp.horizontalFlowList().add(this.textoParValor("Proveedor", this.proveedor)));
+		out.add(cmp.horizontalFlowList().add(this.textoParValor("Depósito", this.deposito)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
