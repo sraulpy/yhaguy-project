@@ -456,7 +456,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 */
 	private Cliente getCliente(String ruc, String razonSocial) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Cliente cl = ruc.equals(Configuracion.SIGLA_RUBRO_EMPRESA_CONSUMIDOR_FINAL)
+		Cliente cl = ruc.equals(Configuracion.RUC_EMPRESA_LOCAL)
 				? rr.getClienteByRazonSocial("CONSUMIDOR FINAL")
 				: rr.getClienteByRuc(ruc);
 		if (cl != null) {
