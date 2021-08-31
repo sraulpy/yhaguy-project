@@ -19,6 +19,7 @@ import com.yhaguy.domain.CajaPeriodoArqueo;
 import com.yhaguy.domain.CajaReposicion;
 import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
+import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
@@ -501,6 +502,13 @@ public class CajaPeriodoAssembler extends Assembler {
 		sucursal.setId(venta.getSucursal().getId());
 
 		long idEmpresa = (long) venta.getCliente().getPos4();
+		if (venta.isDebitoGroupauto()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Empresa emp = rr.getEmpresaByCodigo("#DEBITO_GROUPAUTO");
+			if (emp != null) {
+				idEmpresa = emp.getId();
+			}
+		}
 		MyPair empresa = new MyPair(idEmpresa, "");
 
 		long idMoneda = venta.getMoneda().getId();

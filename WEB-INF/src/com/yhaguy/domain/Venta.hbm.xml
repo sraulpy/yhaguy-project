@@ -51,6 +51,10 @@
 			<column name="cobrado" default="false" />
 		</property>
 		
+		<property name="debitoGroupauto">
+			<column name="debitoGroupauto" default="false" />
+		</property>
+		
 		<property name="puntoPartida"/>
 		<property name="fechaTraslado"/>
 		<property name="fechaFinTraslado"/>

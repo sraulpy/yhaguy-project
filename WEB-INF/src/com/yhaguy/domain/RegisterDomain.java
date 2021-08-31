@@ -13257,6 +13257,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return empresa by codigo
+	 */
+	public Empresa getEmpresaByCodigo(String codigo) throws Exception {
+		String query = "select e from Empresa e where e.codigoEmpresa = '" + codigo.trim() + "'";
+		List<Empresa> out = this.hql(query);
+		return out.size() > 0 ? out.get(0) : null;
+	}
+	
+	/**
 	 * @return los ajustes segun fecha
 	 */
 	public List<AjusteValorizado> getAjustesValorizados(Date desde, Date hasta) throws Exception {

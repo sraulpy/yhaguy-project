@@ -48,12 +48,14 @@ import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Cliente;
+import com.yhaguy.domain.CondicionPago;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.VehiculoMarca;
 import com.yhaguy.domain.VehiculoModelo;
 import com.yhaguy.domain.VehiculoTipo;
@@ -552,7 +554,7 @@ public class VentaControlBody extends BodyApp {
 			out.setAuxi(desde.getCliente().getPos2() + "");
 			out.setObservacion(desde.getCliente().getPos3() + "");
 		}
-		out.setCondicionPago(desde.getCondicionPago());
+		out.setCondicionPago(desde.isDebitoGroupauto() ? this.getCondicionCredito() : desde.getCondicionPago());
 		out.setDeposito(desde.getDeposito());
 		out.setVendedor(desde.getVendedor());
 		out.setTecnico(desde.getTecnico());
@@ -562,7 +564,7 @@ public class VentaControlBody extends BodyApp {
 		out.setFecha(new Date());
 		out.setMoneda(desde.getMoneda());
 		out.setTipoCambio(desde.getTipoCambio());
-		out.setTipoMovimiento(tipoMovimiento);
+		out.setTipoMovimiento(desde.isDebitoGroupauto() ? this.getTipoMovimientoCredito() : tipoMovimiento);
 		out.setSucursal(desde.getSucursal());
 		out.setVencimiento(desde.getVencimiento());
 		out.setModoVenta(desde.getModoVenta());
@@ -2153,6 +2155,30 @@ public class VentaControlBody extends BodyApp {
 		out.setPos13(cl.getDescuentoMayorista());
 		out.setPos14(cl.getCartera());
 		out.setPos15(cl.isVentaExenta());
+		return out;
+	}
+	
+	/**
+	 * @return la condicion..
+	 */
+	private MyArray getCondicionCredito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CondicionPago cond = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_30);
+		MyArray out = new MyArray();
+		out.setId(cond.getId());
+		out.setPos1(cond.getDescripcion());
+		return out;
+	}
+	
+	/**
+	 * @return el tipo de movimiento..
+	 */
+	private MyArray getTipoMovimientoCredito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		TipoMovimiento tm = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		MyArray out = new MyArray();
+		out.setId(tm.getId());
+		out.setPos1(tm.getDescripcion());
 		return out;
 	}
 	

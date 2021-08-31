@@ -52,6 +52,7 @@ import com.yhaguy.domain.CompraLocalFacturaDetalle;
 import com.yhaguy.domain.CompraLocalOrden;
 import com.yhaguy.domain.CompraLocalOrdenDetalle;
 import com.yhaguy.domain.CondicionPago;
+import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.DebitoGroupauto;
 import com.yhaguy.domain.DebitoGroupautoDetalle;
 import com.yhaguy.domain.DebitoGroupautoFormaPago;
@@ -294,7 +295,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Funcionario func = rr.getFuncionario("ADMINISTRACION");
 		Deposito dep = (Deposito) rr.getObject(Deposito.class.getName(), 2);
-		CondicionPago cond = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CONTADO);
+		CondicionPago cond = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_30);
 		Tipo moneda = rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI);
 		Proveedor prov = rr.getProveedorById(18);
 		Tipo iva = rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10);
@@ -313,7 +314,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			fac.setMoneda(moneda);
 			fac.setNumero(dbg.getOrigen());
 			fac.setProveedor(prov);
-			fac.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO));
+			fac.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO));
 			fac.setSucursal(suc);
 			fac.setDbEstado('R');
 			Set<CompraLocalFacturaDetalle> facdets = new HashSet<CompraLocalFacturaDetalle>();
@@ -359,11 +360,29 @@ public class CajaPeriodoControlBody extends BodyApp {
 			oc.setDetalles(ocdets);
 			rr.saveObject(oc, this.getLoginNombre());
 			
+			Empresa emp = rr.getEmpresaByCodigo("#DEBITO_GROUPAUTO");
+			CtaCteEmpresaMovimiento cm = new CtaCteEmpresaMovimiento();
+			cm.setCarteraCliente(rr.getCartera("OTROS"));
+			cm.setFechaEmision(new Date());
+			cm.setFechaVencimiento(Utiles.agregarDias(new Date(), 30));
+			cm.setIdEmpresa(emp.getId());
+			cm.setIdMovimientoOriginal(fac.getId());
+			cm.setIdVendedor(0);
+			cm.setImporteOriginal(fac.getImporteGs());
+			cm.setMoneda(moneda);
+			cm.setNroComprobante(fac.getNumero());
+			cm.setSaldo(fac.getImporteGs());
+			cm.setSucursal(fac.getSucursal());
+			cm.setTipoCambio(fac.getTipoCambio());
+			cm.setTipoCaracterMovimiento(rr.getTipoPorSigla(Configuracion.SIGLA_CTA_CTE_CARACTER_MOV_PROVEEDOR));
+			cm.setTipoMovimiento(fac.getTipoMovimiento());
+			rr.saveObject(cm, this.getLoginNombre());
+			
 			Venta vta = new Venta();
 			vta.setAtendido(func);
 			vta.setCartera("OTROS");
 			vta.setCliente(this.getCliente(dbg.getRuc(), dbg.getRazonSocial()));
-			vta.setCondicionPago(cond);
+			vta.setCondicionPago(rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CONTADO));
 			vta.setDenominacion(dbg.getRazonSocial());
 			vta.setDeposito(dep);
 			vta.setEstado(rr.getTipoPorSigla(Configuracion.SIGLA_VENTA_ESTADO_FACTURADO));
@@ -437,7 +456,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 */
 	private Cliente getCliente(String ruc, String razonSocial) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Cliente cl = rr.getClienteByRuc(ruc);
+		Cliente cl = ruc.equals(Configuracion.SIGLA_RUBRO_EMPRESA_CONSUMIDOR_FINAL)
+				? rr.getClienteByRazonSocial("CONSUMIDOR FINAL")
+				: rr.getClienteByRuc(ruc);
 		if (cl != null) {
 			return cl;
 		}
