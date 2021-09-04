@@ -468,6 +468,9 @@ public class StockValorizadoVM extends SimpleViewModel {
 		} else if (Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA)) {
 			SucursalApp suc = rr.getSucursalAppById(SucursalApp.ID_MRA_MRA);
 			out.add(suc);
+		}  else if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
+			SucursalApp suc = rr.getSucursalAppById(SucursalApp.ID_CENTRAL);
+			out.add(suc);
 		} else {
 			for (SucursalApp suc : list) {
 				if (!suc.getAuxi().equals("V")) {
