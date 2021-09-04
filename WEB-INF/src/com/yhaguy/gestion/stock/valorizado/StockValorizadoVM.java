@@ -207,8 +207,11 @@ public class StockValorizadoVM extends SimpleViewModel {
 		out.addAll(ntcsv);
 		out.addAll(compras);
 		out.addAll(importaciones);
-		out.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
-		out.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		if (!this.isEmpresaGTSA()) {
+			out.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
+			out.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		}
+		
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -264,8 +267,11 @@ public class StockValorizadoVM extends SimpleViewModel {
 		}
 		out.addAll(ventas);
 		out.addAll(ntcsc);		
-		out.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
-		out.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		
+		if (!this.isEmpresaGTSA()) {
+			out.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
+			out.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		}		
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {
@@ -488,6 +494,13 @@ public class StockValorizadoVM extends SimpleViewModel {
 	 */
 	public boolean isEmpresaMRA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+	}
+	
+	/**
+	 * @return true si es gtsa..
+	 */
+	public boolean isEmpresaGTSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 	}
 	
 	@DependsOn({ "saldoInicial", "totalIngresos" })
