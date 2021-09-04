@@ -566,15 +566,19 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(ntcsv);
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
-		this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
-		this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		if (!this.isEmpresaGTSA()) {
+			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
+			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		}		
 		
 		this.historicoSalida = new ArrayList<Object[]>();
 		this.historicoSalida.addAll(ajustStockNeg);
 		this.historicoSalida.addAll(ventas);
 		this.historicoSalida.addAll(ntcsc);
-		this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
-		this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
+		if (!this.isEmpresaGTSA()) {
+			this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+			this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
+		}
 		
 		this.actualizarTotal(this.historicoEntrada, true);
 		this.actualizarTotal(this.historicoSalida, false);
