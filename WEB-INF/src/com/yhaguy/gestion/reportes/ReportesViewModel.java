@@ -1672,7 +1672,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 
 			case VENTAS_COSTO_DE_VTA:
-				this.costoDeVentas(mobile);
+				this.costoDeVentasDetallado(mobile);
 				break;
 
 			case VENTAS_POR_MARCA:
