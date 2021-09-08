@@ -14379,6 +14379,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		public void stockMercaderiaAunaFecha(String codReporte) throws Exception {
 			try {
 				Proveedor proveedor = filtro.getProveedorExterior() != null ? filtro.getProveedorExterior() : filtro.getProveedorLocal();
+				Date desde = Utiles.getFechaInicioOperaciones();
 				Date hasta = filtro.getFechaHasta();
 				Articulo articulo = filtro.getArticulo();
 				String tipoCosto = filtro.getTipoCosto();
@@ -14388,47 +14389,63 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idProveedor = proveedor != null ? proveedor.getId() : (long) 0;
 				long idSucursal = sucursal != null ? sucursal.getId() : (long) 0;
 				long idArticulo = articulo != null ? articulo.getId() : (long) 0;
-				long idDeposito = deposito != null ? deposito.getId() : (long) 0;
+				long idFamilia = familia != null ? familia.getId() : (long) 0;
 				
-				if (familia == null) {
-					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				if (hasta == null) {
+					Clients.showNotification("DEBE INDICAR FECHA HASTA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 					return;
 				}
-				
-				if (hasta == null) hasta = new Date();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> arts = new ArrayList<Object[]>();
 				
-				arts = rr.getArticulos(idArticulo, idProveedor, familia.getId(), true);
-
+				arts = rr.getArticulos(idArticulo, idProveedor, idFamilia, true);
+				
 				for (Object[] art : arts) {
-					
-					List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos((long) art[0], idDeposito, idSucursal, false, hasta, true);
-					Object[] historial_ = historial.size() > 0 ? historial.get(historial.size() - 1) : null;
 					
 					String codigoInterno = (String) art[1];
 					String descripcion = (String) art[2];
 					
-					String saldo = historial_ != null ? (String) historial_[7] : "0";
-					long stock = historial_ != null ? Long.parseLong(saldo) : (long) 0;
-					double costo  = (double) art[3];
+					long entradas = (long) ControlArticuloStock.getHistoricoEntrada((long) art[0], codigoInterno, desde, hasta, idSucursal)[1];
+					long salidas = (long) ControlArticuloStock.getHistoricoSalida((long) art[0], codigoInterno, desde, hasta, idSucursal)[1];
 					
-					if (stock != 0 && costo > 0) {
-						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (stock * costo) });
-					}				
+					System.out.println("---" + codigoInterno + " + "  + entradas);
+					System.out.println("---" + codigoInterno + " - " + salidas);					
+					
+					long stock = entradas - salidas;
+					double costo  = 0;
+					long idArticulo_ = (long) art[0];
+					
+					if (stock > 0) {
+						if (tipoCosto.equals(ReportesFiltros.COSTO_PROMEDIO)) {
+							double costoPromedio = ControlArticuloCosto.getCostoPromedioGs(idArticulo_, hasta);
+							if (costoPromedio > 0) {
+								costo = costoPromedio;
+							} else {
+								costo = ControlArticuloCosto.getCostoUltimoGs(idArticulo_, hasta);
+							}
+						}
+						if (tipoCosto.equals(ReportesFiltros.COSTO_ULTIMO)) {
+							double costoUltimo = ControlArticuloCosto.getCostoUltimoGs(idArticulo_, hasta);
+							if (costoUltimo > 0) {
+								costo = costoUltimo;
+							} 
+						}
+						if (costo <= 0) {
+							costo = (double) art[3];
+						}
+						data.add(new Object[] { codigoInterno, descripcion, stock, costo, (costo * stock) });
+					}					
 				}
-				
+								
 				String desc = articulo != null ? articulo.getCodigoInterno() : "TODOS..";
-				String familia_ = familia.getDescripcion();
+				String familia_ = familia != null ? familia.getDescripcion() : "TODOS..";
 				String proveedor_ = proveedor != null ? proveedor.getRazonSocial() : "TODOS..";
 				String deposito_ = deposito != null ? deposito.getDescripcion() : "TODOS..";
 				ReporteStockValorizadoAunaFecha rep = new ReporteStockValorizadoAunaFecha(hasta, desc, tipoCosto, familia_, proveedor_, deposito_);
-				rep.setTitulo(codReporte + "STOCK VALORIZADO (A UNA FECHA)");
 				rep.setApaisada();
-				rep.setDatosReporte(data);
-				
+				rep.setDatosReporte(data);				
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
