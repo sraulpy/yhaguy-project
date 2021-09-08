@@ -325,6 +325,7 @@ public class ControlArticuloStock {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		boolean fechaHora = true;
+		boolean gtsa = Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 		if (mra) idSucursal = SucursalApp.ID_MRA_MRA ;
 		RegisterDomain rr = RegisterDomain.getInstance();
@@ -344,8 +345,11 @@ public class ControlArticuloStock {
 		out.addAll(ntcsv);
 		out.addAll(compras);
 		out.addAll(importaciones);
-		out.addAll(mra ? transfsOrigenCentral : transfsOrigenMRA);
-		out.addAll(mra ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		if (!gtsa) {
+			out.addAll(mra ? transfsOrigenCentral : transfsOrigenMRA);
+			out.addAll(mra ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		}
+		
 		Object[] cierre = null;
 		
 		for (Object[] item : out) {
@@ -385,6 +389,7 @@ public class ControlArticuloStock {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		boolean fechaHora = true;
+		boolean gtsa = Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
 		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 		if (mra) idSucursal = SucursalApp.ID_MRA_MRA ;
 		RegisterDomain rr = RegisterDomain.getInstance();		
@@ -400,9 +405,11 @@ public class ControlArticuloStock {
 			item[3] = (Long.parseLong(item[3] + "") * -1);
 		}
 		out.addAll(ventas);
-		out.addAll(ntcsc);		
-		out.addAll(mra ? transfsDestinoCentral : transfsDestinoMRA);
-		out.addAll(mra ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		out.addAll(ntcsc);
+		if (!gtsa) {
+			out.addAll(mra ? transfsDestinoCentral : transfsDestinoMRA);
+			out.addAll(mra ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+		}		
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {
