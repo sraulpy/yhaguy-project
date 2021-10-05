@@ -18,7 +18,7 @@ public class ReportesForward extends SimpleViewModel {
 	
 	static final String URL_REPORTE_REPUESTOS = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 	static final String URL_REPORTE_GTSA = "https://reporte.gtsa.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
-	static final String URL_REPORTE_REPRESENTACIONES = "https://reporte.yhaguyrepuestos.com.py:8081/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
+	static final String URL_REPORTE_REPRESENTACIONES = "https://repre.yhaguyrepuestos.com.py:8083/yhaguy/yhaguy/gestion/reportes/reportes_.zul";
 	
 	@Wire
 	private Iframe if_rep;
