@@ -133,6 +133,22 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return total importe efectivo..
+	 */
+	public double getTotalImporteEfectivo() {
+		double out = 0;
+		Venta v = this.getVentaAplicada();
+		if (v != null) {
+			for (ReciboFormaPago fp : v.getFormasPago()) {
+				if (fp.isEfectivo()) {
+					out += fp.getMontoGs();
+				}
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return true si es moneda local..
 	 */
 	public boolean isMonedaLocal() {

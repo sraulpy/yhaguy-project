@@ -73,6 +73,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalRepEgresos = 0;
 	double totalRepEgresosDtoViatico = 0;
 	double totalNotaCreditoContado = 0;
+	double totalNotaCreditoContadoEfectivo = 0;
 	double totalNotaCreditoCredito = 0;
 	double totalNotaCreditoCompra = 0;
 	double totalSaldoFavorClienteGenerado = 0;
@@ -702,14 +703,14 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 					this.totalEgresos += importe;
 					if (nc.isNotaCreditoVentaContado()) {
 						this.totalNotaCreditoContado += importe;
+						this.totalNotaCreditoContadoEfectivo += nc.getTotalImporteEfectivo();
 						MyArray my = new MyArray(nc.getTipoMovimiento()
 								.getDescripcion(), nc.getNumero() + " - " 
 							  + nc.getCliente().getRazonSocial().toUpperCase(), importe,
 								"NOTAS DE CRÉDITO - (CONTADO)",
 								this.totalNotaCreditoContado);
 						this.values.add(my);
-					}
-				
+					}				
 				}
 			}
 
@@ -982,7 +983,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 		} else if ("TotalAnticipoEfe".equals(fieldName)) {
 			value = FORMATTER.format(this.totalAnticipoEfectivo);
 		} else if ("TotalNcreditoEfe".equals(fieldName)) {
-			value = FORMATTER.format(this.totalNotaCreditoContado * -1);
+			value = FORMATTER.format(this.totalNotaCreditoContadoEfectivo * -1);
 		} else if ("TotalPagos".equals(fieldName)) {
 			value = FORMATTER.format(this.totalPagos * -1);
 		} else if ("TotalPagosEfe".equals(fieldName)) {
