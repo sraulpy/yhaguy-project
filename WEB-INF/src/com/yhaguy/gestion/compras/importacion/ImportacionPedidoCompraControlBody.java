@@ -3448,7 +3448,43 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 						e.printStackTrace();
 					}
 				}			
-			}			
+			}	
+			
+			//verificacion duplicados..
+			Map<String, Double> items = new HashMap<String, Double>();
+			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {				
+				if (d.isGastoDescuento() == false) {
+					try {
+						ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());
+						if (det != null) {							
+							Double cf = items.get(det.getArticulo().getCodigoInterno());
+							if (cf != null) {
+								if (cf.doubleValue() < det.getCostoFinalGs()) {
+									items.put(det.getArticulo().getCodigoInterno(), det.getCostoFinalGs());
+								}
+							} else {
+								items.put(det.getArticulo().getCodigoInterno(), det.getCostoFinalGs());
+							}							
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}	
+			
+			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {
+				if (d.isGastoDescuento() == false) {
+					try {
+						ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());
+						if (det != null) {
+							det.setCostoFinalGs(items.get(det.getArticulo().getCodigoInterno()));
+							rr.saveObject(det, det.getUsuarioMod());
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}	
 		}	
 		
 		return out;
