@@ -3412,6 +3412,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				coefGasto = coefAutomatico;
 			}			
 			
+			Map<String, Double> items = new HashMap<String, Double>();
 			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {				
 				
 				double costoGs = d.getCostoGs();
@@ -3443,20 +3444,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 						if (det != null) {
 							det.setCostoFinalGs(costoFinal);
 							rr.saveObject(det, det.getUsuarioMod());
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}			
-			}	
-			
-			//verificacion duplicados..
-			Map<String, Double> items = new HashMap<String, Double>();
-			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {				
-				if (d.isGastoDescuento() == false) {
-					try {
-						ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());
-						if (det != null) {							
+							
 							Double cf = items.get(det.getArticulo().getCodigoInterno());
 							if (cf != null) {
 								if (cf.doubleValue() < det.getCostoFinalGs()) {
@@ -3469,8 +3457,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
-			}	
+				}			
+			}		
 			
 			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {
 				if (d.isGastoDescuento() == false) {
@@ -3601,14 +3589,28 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		ControlLogica ctr = new ControlLogica(null);
 		RegisterDomain rr = RegisterDomain.getInstance();
 		
-		for (MyArray m : this.getItemsCostoFinal()) {
+		List<MyArray> itemsCostoFinal = this.getItemsCostoFinal();
+		
+		Map<String, Double> items = new HashMap<String, Double>();
+		for (MyArray m : itemsCostoFinal) {
+			Double cf = items.get(m.getPos1());
+			if (cf != null) {
+				if (cf.doubleValue() < ((double) m.getPos3())) {
+					items.put(((String) m.getPos1()), ((double) m.getPos3()));
+				}
+			} else {
+				items.put(((String) m.getPos1()), ((double) m.getPos3()));
+			}
+		}
+		
+		for (MyArray m : itemsCostoFinal) {
 			
 			MyArray art = new MyArray();
 			art.setId(m.getId());
 			art.setPos1(m.getPos1());
 			
 			Integer cant = (Integer) m.getPos5();
-			double costoFinalGs = (double) m.getPos3();
+			double costoFinalGs = items.get(m.getPos1());
 			
 			ctr.actualizarArticuloDepositoCompra(this.dto.getId(), this.dto.getTipoMovimiento(), 
 					art, cant.longValue(), costoFinalGs, 
