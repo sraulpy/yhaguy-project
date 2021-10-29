@@ -554,7 +554,7 @@ public class VentaItemControl extends SoloViewModel {
 	
 	@Command @NotifyChange("*") 
 	public void validarDescuento(@BindingParam("cmp") Component cmp) throws Exception {
-		if (this.getLoginNombre().equals("natalia") || this.getLoginNombre().equals("raquel")) {
+		if (this.getLoginNombre().equals("milva")) {
 			return;
 		}
 		if (this.getAcceso().getSucursalOperativa().getId().equals(SucursalApp.ID_MCAL)
