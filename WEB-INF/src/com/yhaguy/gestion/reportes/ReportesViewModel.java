@@ -18524,6 +18524,16 @@ class LibroVentasDataSource implements JRDataSource {
 				}
 			}
 		}
+		
+		Collections.sort(this.values, new Comparator<BeanLibroVenta>() {
+			@Override
+			public int compare(BeanLibroVenta o1, BeanLibroVenta o2) {
+				Date fecha1 = (Date) o1.getFecha_();
+				Date fecha2 = (Date) o2.getFecha_();
+				int dateCompare = fecha1.compareTo(fecha2);
+				return dateCompare;
+			}
+		});
 	}
 	
 	/**
