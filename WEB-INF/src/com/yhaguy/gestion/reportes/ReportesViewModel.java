@@ -18530,8 +18530,14 @@ class LibroVentasDataSource implements JRDataSource {
 			public int compare(BeanLibroVenta o1, BeanLibroVenta o2) {
 				Date fecha1 = (Date) o1.getFecha_();
 				Date fecha2 = (Date) o2.getFecha_();
-				int dateCompare = fecha1.compareTo(fecha2);
-				return dateCompare;
+				
+				int nameCompare = o1.getConcepto().compareTo(o2.getConcepto());
+				if (nameCompare != 0) {
+					return nameCompare;
+				} else {
+					int dateCompare = fecha1.compareTo(fecha2);
+					return dateCompare;
+				}				
 			}
 		});
 	}
