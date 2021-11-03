@@ -25557,6 +25557,13 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 			this.values.add(value);
 		}
 		
+		for (Object[] det : this.values) {
+			double total = (double) det[1] + (double) det[2] + (double) det[3] + (double) det[4] +
+					(double) det[5] + (double) det[6] + (double) det[7] + (double) det[8] +
+					(double) det[9] + (double) det[10] + (double) det[11] + (double) det[12];
+			this.total += total;
+		}
+		
 		// ordena la lista segun fecha..
 		Collections.sort(this.values, new Comparator<Object[]>() {
 			@Override
@@ -25578,7 +25585,6 @@ class SaldosCtaCteDesglosado implements JRDataSource {
 		double total = (double) det[1] + (double) det[2] + (double) det[3] + (double) det[4] +
 				(double) det[5] + (double) det[6] + (double) det[7] + (double) det[8] +
 				(double) det[9] + (double) det[10] + (double) det[11] + (double) det[12];
-		this.total += total;
 
 		if ("Cliente".equals(fieldName)) {
 			value = det[0];
