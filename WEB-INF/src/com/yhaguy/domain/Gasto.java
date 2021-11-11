@@ -414,6 +414,11 @@ public class Gasto extends Domain {
 
 	public String getObservacion() {
 		if (this.observacion == null || this.observacion.isEmpty()) {
+			for (GastoDetalle det : this.detalles) {
+				if (det.getObservacion() != null && !det.getObservacion().isEmpty()) {
+					return det.getObservacion();
+				}
+			}
 			return "- - -";
 		}
 		return observacion;
