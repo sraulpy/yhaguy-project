@@ -25188,6 +25188,8 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 				value = gasto.getProveedor().getRazonSocial();
 			} else if ("Ruc".equals(fieldName)) {
 				value = gasto.getProveedor().getRuc();
+			} else if ("Descripcion".equals(fieldName)) {
+				value = gasto.getObservacion();
 			} else if ("Iva10".equals(fieldName)) {
 				value = Utiles.getNumberFormat(det.getIva10());
 			} else if ("Gravada10".equals(fieldName)) {
