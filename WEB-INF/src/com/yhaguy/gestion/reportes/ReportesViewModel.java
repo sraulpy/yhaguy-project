@@ -25235,6 +25235,8 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 				value = nc.getProveedor().getRazonSocial();
 			} else if ("Ruc".equals(fieldName)) {
 				value = nc.getProveedor().getRuc();
+			} else if ("Descripcion".equals(fieldName)) {
+				value = nc.getObservacion();
 			} else if ("Iva10".equals(fieldName)) {
 				value = Utiles.getNumberFormat(iva10);
 			} else if ("Gravada10".equals(fieldName)) {
@@ -25282,6 +25284,8 @@ class GastosPorCuentaContableDataSource implements JRDataSource {
 				value = pg.getProveedor().getRazonSocial();
 			} else if ("Ruc".equals(fieldName)) {
 				value = pg.getProveedor().getRuc();
+			} else if ("Descripcion".equals(fieldName)) {
+				value = "- - -";
 			} else if ("Iva10".equals(fieldName)) {
 				value = Utiles.getNumberFormat(iva10);
 			} else if ("Gravada10".equals(fieldName)) {
