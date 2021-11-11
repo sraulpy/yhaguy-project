@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GastosPorCuentas" pageWidth="1584" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1544" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb640a0-1440-4d07-a15c-6c29172128a9">
-	<property name="ireport.zoom" value="0.6830134553650731"/>
-	<property name="ireport.x" value="76"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GastosPorCuentas" pageWidth="1538" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1498" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb640a0-1440-4d07-a15c-6c29172128a9">
+	<property name="ireport.zoom" value="0.9090909090909125"/>
+	<property name="ireport.x" value="410"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -60,7 +60,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 		<groupHeader>
 			<band height="37">
 				<frame>
-					<reportElement mode="Opaque" x="1" y="0" width="1542" height="24" forecolor="#B89F7D" backcolor="#E2F0ED" uuid="8e78ff16-1216-4c97-b960-cf5401c9dec2"/>
+					<reportElement mode="Opaque" x="1" y="0" width="1498" height="24" forecolor="#B89F7D" backcolor="#E2F0ED" uuid="8e78ff16-1216-4c97-b960-cf5401c9dec2"/>
 					<textField pattern="" isBlankWhenNull="false">
 						<reportElement style="SubTitle" mode="Transparent" x="207" y="0" width="1068" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="3896af39-5035-4733-bdd8-2c3320f55d32"/>
 						<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -89,7 +89,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					</graphicElement>
 				</line>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="1446" y="3" width="97" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="d5de0df9-2044-4484-b740-51f7d8660f1a"/>
+					<reportElement mode="Transparent" x="1402" y="3" width="97" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="d5de0df9-2044-4484-b740-51f7d8660f1a"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -97,7 +97,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{TotalImporte}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="1346" y="3" width="99" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="45db880b-750e-45f5-a5da-ab571260e8bc"/>
+					<reportElement mode="Transparent" x="1302" y="3" width="99" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="45db880b-750e-45f5-a5da-ab571260e8bc"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -105,7 +105,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{TotalExenta}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="1248" y="3" width="98" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a653d912-38ce-432f-82d1-782492c2b714"/>
+					<reportElement mode="Transparent" x="1204" y="3" width="98" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a653d912-38ce-432f-82d1-782492c2b714"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -113,7 +113,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{TotalIva5}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="1147" y="3" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b8b73c70-f40e-4bf5-9009-0c7947e2328f"/>
+					<reportElement mode="Transparent" x="1103" y="3" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b8b73c70-f40e-4bf5-9009-0c7947e2328f"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -121,7 +121,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{TotalGravada5}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="1049" y="3" width="98" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b774b37d-7832-472b-aa2d-e2d1c21be007"/>
+					<reportElement mode="Transparent" x="1005" y="3" width="98" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b774b37d-7832-472b-aa2d-e2d1c21be007"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -129,7 +129,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{TotalIva10}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement mode="Transparent" x="951" y="3" width="99" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="419ba295-0302-46ae-abd6-3129aa63971c"/>
+					<reportElement mode="Transparent" x="907" y="3" width="99" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="419ba295-0302-46ae-abd6-3129aa63971c"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -162,14 +162,14 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 				<imageExpression><![CDATA[$P{Logo}.toString()]]></imageExpression>
 			</image>
 			<line>
-				<reportElement x="11" y="42" width="1228" height="1" uuid="e7bdd6c4-1d70-4885-8eb1-7530859d3592"/>
+				<reportElement x="11" y="42" width="1483" height="1" uuid="e7bdd6c4-1d70-4885-8eb1-7530859d3592"/>
 			</line>
 			<textField>
 				<reportElement x="89" y="11" width="140" height="12" uuid="860e5a09-3624-4bcc-9dc7-2fafbf993e53"/>
 				<textFieldExpression><![CDATA[$P{Empresa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1076" y="29" width="162" height="12" uuid="27d116dc-4b69-4a19-af46-7903d927cd1b"/>
+				<reportElement x="1330" y="28" width="162" height="12" uuid="27d116dc-4b69-4a19-af46-7903d927cd1b"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Generado: " + $P{Generado}]]></textFieldExpression>
 			</textField>
@@ -182,7 +182,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 				<text><![CDATA[GASTOS POR CUENTAS CONTABLES]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="1076" y="10" width="162" height="12" uuid="c62a02fd-bf03-4ad5-bef4-c3481eb94989"/>
+				<reportElement x="1330" y="9" width="162" height="12" uuid="c62a02fd-bf03-4ad5-bef4-c3481eb94989"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Usuario: " + $P{Usuario}]]></textFieldExpression>
 			</textField>
@@ -235,49 +235,49 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 				<text><![CDATA[Número]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="1348" y="0" width="99" height="15" forecolor="#736343" uuid="8faf218e-4526-4c51-915f-6e2e1830f29a"/>
+				<reportElement style="Column header" x="1304" y="0" width="99" height="15" forecolor="#736343" uuid="8faf218e-4526-4c51-915f-6e2e1830f29a"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Exenta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="952" y="0" width="98" height="15" forecolor="#736343" uuid="19edb040-82ba-4252-9230-bdc6fe74bc95"/>
+				<reportElement style="Column header" x="908" y="0" width="98" height="15" forecolor="#736343" uuid="19edb040-82ba-4252-9230-bdc6fe74bc95"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Gravada 10]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="1050" y="0" width="98" height="15" forecolor="#736343" uuid="4d032b34-9da4-4c01-9152-bc7f04f32336"/>
+				<reportElement style="Column header" x="1006" y="0" width="98" height="15" forecolor="#736343" uuid="4d032b34-9da4-4c01-9152-bc7f04f32336"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Iva 10]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="1148" y="0" width="98" height="15" forecolor="#736343" uuid="10f4cb28-27a4-49a5-8d0b-bc698d1dccdd"/>
+				<reportElement style="Column header" x="1104" y="0" width="98" height="15" forecolor="#736343" uuid="10f4cb28-27a4-49a5-8d0b-bc698d1dccdd"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Gravada 5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="1246" y="0" width="100" height="15" forecolor="#736343" uuid="32e05ebd-a295-443c-b752-a1c78518cbcd"/>
+				<reportElement style="Column header" x="1202" y="0" width="100" height="15" forecolor="#736343" uuid="32e05ebd-a295-443c-b752-a1c78518cbcd"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Iva 5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="1447" y="0" width="96" height="15" forecolor="#736343" uuid="64e9748c-916c-473b-b2f5-5da75fdefb1b"/>
+				<reportElement style="Column header" x="1403" y="0" width="96" height="15" forecolor="#736343" uuid="64e9748c-916c-473b-b2f5-5da75fdefb1b"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Importe Gs.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="610" y="0" width="342" height="15" forecolor="#736343" uuid="da1c322a-e77e-41ca-afd8-6e8cc8c5457a"/>
+				<reportElement style="Column header" x="610" y="0" width="297" height="15" forecolor="#736343" uuid="da1c322a-e77e-41ca-afd8-6e8cc8c5457a"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
@@ -288,7 +288,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 	<detail>
 		<band height="15" splitType="Stretch">
 			<frame>
-				<reportElement style="Row" mode="Transparent" x="0" y="0" width="1544" height="15" uuid="c598aab8-e20d-4f76-a474-1237f3c1b469"/>
+				<reportElement style="Row" mode="Transparent" x="0" y="0" width="1499" height="15" uuid="c598aab8-e20d-4f76-a474-1237f3c1b469"/>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" x="296" y="0" width="251" height="15" uuid="f84a108f-7e6e-4898-b3c0-98479ec7346f"/>
 					<textFieldExpression><![CDATA[$F{RazonSocial}]]></textFieldExpression>
@@ -318,37 +318,37 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1246" y="0" width="99" height="15" uuid="b5e9bc6c-7401-4dbd-9daa-397c8b2dec3a"/>
+					<reportElement style="Detail" x="1202" y="0" width="99" height="15" uuid="b5e9bc6c-7401-4dbd-9daa-397c8b2dec3a"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Iva5}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1147" y="0" width="99" height="15" uuid="02228c43-2dd5-4072-8eb8-c29c7c0c613c"/>
+					<reportElement style="Detail" x="1103" y="0" width="99" height="15" uuid="02228c43-2dd5-4072-8eb8-c29c7c0c613c"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Gravada5}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1049" y="0" width="99" height="15" uuid="15b7e4e7-dfde-4e19-82ee-a21610f7e043"/>
+					<reportElement style="Detail" x="1005" y="0" width="99" height="15" uuid="15b7e4e7-dfde-4e19-82ee-a21610f7e043"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Iva10}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="951" y="0" width="99" height="15" uuid="d2e76528-d9b1-454a-ab6a-5c178ec0a279"/>
+					<reportElement style="Detail" x="907" y="0" width="99" height="15" uuid="d2e76528-d9b1-454a-ab6a-5c178ec0a279"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Gravada10}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1345" y="0" width="99" height="15" uuid="fa4e9850-7953-42c1-8118-7aa537f45e15"/>
+					<reportElement style="Detail" x="1301" y="0" width="99" height="15" uuid="fa4e9850-7953-42c1-8118-7aa537f45e15"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Exenta}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1443" y="0" width="99" height="15" uuid="aafb2b4a-3219-4afd-afbb-849409c480ef"/>
+					<reportElement style="Detail" x="1399" y="0" width="99" height="15" uuid="aafb2b4a-3219-4afd-afbb-849409c480ef"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="618" y="0" width="333" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
+					<reportElement style="Detail" x="618" y="0" width="288" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
 					<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 				</textField>
 			</frame>
@@ -360,27 +360,27 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 	<pageFooter>
 		<band height="25" splitType="Stretch">
 			<textField evaluationTime="Report">
-				<reportElement style="Column header" x="1494" y="2" width="40" height="20" forecolor="#736343" uuid="49d5bff5-5867-4838-9734-16666264b9b6"/>
+				<reportElement style="Column header" x="1454" y="2" width="40" height="20" forecolor="#736343" uuid="49d5bff5-5867-4838-9734-16666264b9b6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement style="Column header" x="1414" y="2" width="80" height="20" forecolor="#736343" uuid="354e889f-905b-4098-87e1-c0f6d3e1022d"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
 			<frame>
-				<reportElement mode="Opaque" x="1" y="0" width="1541" height="24" forecolor="#D0B48E" backcolor="#E2F0ED" uuid="a61a1466-d03a-45f8-bb8e-c79cdd6ad16c"/>
+				<reportElement mode="Opaque" x="1" y="0" width="1498" height="24" forecolor="#D0B48E" backcolor="#E2F0ED" uuid="a61a1466-d03a-45f8-bb8e-c79cdd6ad16c"/>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement style="Column header" x="22" y="3" width="197" height="20" forecolor="#736343" uuid="fe97339d-52ad-414e-a0af-22b3a6d25b2d"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="1414" y="2" width="80" height="20" forecolor="#736343" uuid="354e889f-905b-4098-87e1-c0f6d3e1022d"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -391,7 +391,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 	<noData>
 		<band height="50">
 			<staticText>
-				<reportElement mode="Opaque" x="-194" y="16" width="1736" height="20" forecolor="#000000" backcolor="#E2F0ED" uuid="e8375425-b71b-451a-81b5-064b2faf0b69"/>
+				<reportElement mode="Opaque" x="-194" y="16" width="1693" height="20" forecolor="#000000" backcolor="#E2F0ED" uuid="e8375425-b71b-451a-81b5-064b2faf0b69"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[NO SE ENCONTRARON DATOS..]]></text>
 			</staticText>
