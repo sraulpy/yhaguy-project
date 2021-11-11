@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GastosPorCuentas" pageWidth="1584" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1544" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb640a0-1440-4d07-a15c-6c29172128a9">
-	<property name="ireport.zoom" value="1.210000000000003"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="46"/>
+	<property name="ireport.zoom" value="0.6830134553650731"/>
+	<property name="ireport.x" value="76"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -83,7 +83,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 		<groupFooter>
 			<band height="42">
 				<line>
-					<reportElement positionType="FixRelativeToBottom" x="1" y="2" width="1237" height="1" uuid="fd70a18a-56e6-4bdc-a744-ecc2bcced920"/>
+					<reportElement positionType="FixRelativeToBottom" x="1" y="2" width="1541" height="1" uuid="fd70a18a-56e6-4bdc-a744-ecc2bcced920"/>
 					<graphicElement>
 						<pen lineWidth="0.5" lineColor="#999999"/>
 					</graphicElement>
@@ -348,7 +348,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="610" y="0" width="342" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
+					<reportElement style="Detail" x="618" y="0" width="333" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
 					<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 				</textField>
 			</frame>
