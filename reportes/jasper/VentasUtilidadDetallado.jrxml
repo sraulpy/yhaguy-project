@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2353" pageHeight="595" orientation="Landscape" columnWidth="2313" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.000000000000006"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.9487171000000127"/>
+	<property name="ireport.x" value="2520"/>
+	<property name="ireport.y" value="71"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -140,7 +140,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="1623" y="73" width="82" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="6538ac7f-6bf1-4b0d-b059-35a9e4a3a612"/>
+				<reportElement style="Column header" mode="Transparent" x="1586" y="73" width="82" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="6538ac7f-6bf1-4b0d-b059-35a9e4a3a612"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -209,7 +209,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$P{Hasta}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="1707" y="73" width="86" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="6ad222a0-e5b3-4daf-a8f8-d911a251370f"/>
+				<reportElement style="Column header" mode="Transparent" x="1668" y="73" width="125" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="6ad222a0-e5b3-4daf-a8f8-d911a251370f"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -276,7 +276,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$P{Promedio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="1191" y="73" width="432" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="f71fc4d0-6fe8-4611-ad12-1977965411c5"/>
+				<reportElement style="Column header" mode="Transparent" x="1191" y="73" width="396" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="f71fc4d0-6fe8-4611-ad12-1977965411c5"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -438,7 +438,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1623" y="0" width="82" height="15" uuid="4b161ca1-a455-439c-af5c-68692cbb639e"/>
+				<reportElement style="Detail" x="1586" y="0" width="82" height="15" uuid="4b161ca1-a455-439c-af5c-68692cbb639e"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Marca}]]></textFieldExpression>
 			</textField>
@@ -448,7 +448,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Vendedor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1707" y="0" width="86" height="15" uuid="72deddba-b120-4d9b-a57e-0c1c2415ccd6"/>
+				<reportElement style="Detail" x="1668" y="0" width="125" height="15" uuid="72deddba-b120-4d9b-a57e-0c1c2415ccd6"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Familia}]]></textFieldExpression>
 			</textField>
@@ -478,7 +478,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Rent}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1191" y="0" width="432" height="15" uuid="b8d00447-22d4-42bf-b401-350407e078a1"/>
+				<reportElement style="Detail" x="1191" y="0" width="396" height="15" uuid="b8d00447-22d4-42bf-b401-350407e078a1"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
