@@ -22,6 +22,7 @@ public class Configuracion extends Config {
 	public static final String EMPRESA_GRUPAUTO = "Groupauto Paraguay S.A.";
 	public static final String USER_MOBILE = "sergio";
 	public static final long ID_EMPRESA_YRPS = 29336;
+	public static final long ID_EMPRESA_YRSA = 21360;
 	
 	public static final String URL_IMAGES_PUBLIC_MRA = "http://mra.yhaguyrepuestos.com.py/images/";
 	public static final String URL_IMAGES_PUBLIC_BAT = "http://gestion.gtsa.com.py/images/";
@@ -716,7 +717,7 @@ public class Configuracion extends Config {
 	public static String SIGLA_REGIMEN_TRIB_NO_EXENTA = "REG-NO-EXENTA";
 	public static String SIGLA_TIPO_PERSONA_JURIDICA = "PJ";
 	public static String SIGLA_TIPO_PERSONA_FISICA = "PF";
-	public static String SIGLA_PAIS_PARAGUAY = "PRY";
+	public static String SIGLA_PAIS_PARAGUAY = "PY";
 	public static String SIGLA_PAIS_NO_DEFINIDO = "SIN-PAIS";
 
 	public static String SIGLA_TIPO_VENTA_MOSTRADOR = "VTA-MOS";
