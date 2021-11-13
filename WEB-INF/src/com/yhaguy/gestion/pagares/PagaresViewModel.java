@@ -122,6 +122,10 @@ public class PagaresViewModel extends SimpleViewModel {
 			Empresa emp = rr.getEmpresaById(Configuracion.ID_EMPRESA_YRPS);
 			return emp;
 		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			Empresa emp = rr.getEmpresaById(Configuracion.ID_EMPRESA_YRSA);
+			return emp;
+		}
 		return null;
 	}
 
