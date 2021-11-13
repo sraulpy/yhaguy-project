@@ -717,7 +717,7 @@ public class Configuracion extends Config {
 	public static String SIGLA_REGIMEN_TRIB_NO_EXENTA = "REG-NO-EXENTA";
 	public static String SIGLA_TIPO_PERSONA_JURIDICA = "PJ";
 	public static String SIGLA_TIPO_PERSONA_FISICA = "PF";
-	public static String SIGLA_PAIS_PARAGUAY = "PY";
+	public static String SIGLA_PAIS_PARAGUAY = "PRY";
 	public static String SIGLA_PAIS_NO_DEFINIDO = "SIN-PAIS";
 
 	public static String SIGLA_TIPO_VENTA_MOSTRADOR = "VTA-MOS";
