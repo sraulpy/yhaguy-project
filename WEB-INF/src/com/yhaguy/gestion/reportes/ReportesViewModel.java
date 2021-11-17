@@ -6113,11 +6113,11 @@ public class ReportesViewModel extends SimpleViewModel {
 					long bat = art[14] != null ? (long) art[14] : (long) 0;
 					if (stock) {
 						if (min > 0 || may > 0 || mac > 0) {
-							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), art[15], min, may,
+							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 40), art[15], min, may,
 									bat, Utiles.getRedondeo((double) art[3]), Utiles.getRedondeo((double) art[13]) });
 						}
 					} else {
-						data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), art[15], min, may,
+						data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 40), art[15], min, may,
 								bat, Utiles.getRedondeo((double) art[3]), Utiles.getRedondeo((double) art[13]) });
 					}
 				}
