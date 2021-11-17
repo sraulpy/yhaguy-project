@@ -6113,10 +6113,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					long bat = art[14] != null ? (long) art[14] : (long) 0;
 					if (stock) {						
 						if (min > 0 || may > 0 || mac > 0) {
-							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), min, may, mac, bat, art[3], art[13] });
+							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), art[15], min, may, bat, art[3], art[13] });
 						}
 					} else {
-						data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), min, may, mac, bat, art[3], art[13] });
+						data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 50), art[15], min, may, bat, art[3], art[13] });
 					}					
 				}
 				
@@ -26722,12 +26722,12 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Min.", TIPO_LONG, 15);
-	static DatosColumnas col4 = new DatosColumnas("May.", TIPO_LONG, 15);
-	static DatosColumnas col5 = new DatosColumnas("May.Cen.", TIPO_LONG, 20);
+	static DatosColumnas col3 = new DatosColumnas("Línea", TIPO_STRING, 30);
+	static DatosColumnas col4 = new DatosColumnas("Min.", TIPO_LONG, 15);
+	static DatosColumnas col5 = new DatosColumnas("May.", TIPO_LONG, 15);	
 	static DatosColumnas col6 = new DatosColumnas("Imp.Bat.", TIPO_LONG, 20);
-	static DatosColumnas col7 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 30);
-	static DatosColumnas col8 = new DatosColumnas("Bat.Gs.", TIPO_DOUBLE_GS, 30);
+	static DatosColumnas col7 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 25);
+	static DatosColumnas col8 = new DatosColumnas("Bat.Gs.", TIPO_DOUBLE_GS, 25);
 
 	public ReporteListaPrecioPorDeposito_(String proveedor) {
 		this.proveedor = proveedor;
