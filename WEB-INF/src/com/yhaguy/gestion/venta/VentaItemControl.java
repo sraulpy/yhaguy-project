@@ -341,6 +341,7 @@ public class VentaItemControl extends SoloViewModel {
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precio = (double) art[5];
 		if (idListaPrecio == ArticuloListaPrecio.ID_TRANSPORTADORA) precio = (double) art[7];
 		if (idListaPrecio == ArticuloListaPrecio.ID_IMP_BATERIAS) precio = (double) art[8];
+		if (idListaPrecio == ArticuloListaPrecio.ID_PROMOCION) precio = (double) art[9];
 		if (this.det.isExenta()) {
 			precio = precio - Utiles.getIVA(precio, 10);
 		}

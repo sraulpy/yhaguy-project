@@ -81,6 +81,7 @@ public class ControlArticuloCosto {
 			if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) out = (double) art[5];
 			if (idListaPrecio == ArticuloListaPrecio.ID_TRANSPORTADORA) out = (double) art[7];
 			if (idListaPrecio == ArticuloListaPrecio.ID_IMP_BATERIAS) out = (double) art[8];
+			if (idListaPrecio == ArticuloListaPrecio.ID_PROMOCION) out = (double) art[9];
 		}
 		return out;
 	}

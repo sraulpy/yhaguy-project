@@ -634,6 +634,12 @@
 												readonly="@load(!vm.isOperacionHabilitada('VerImportacion'))"></doublebox>
 										</row>
 										<row>
+											<field value="Promoción:" />
+											<doublebox hflex="true" vflex="true"
+												value="@bind(vm.dto.precioPromocion)" format="###,###,##0"
+												readonly="@load(!vm.isOperacionHabilitada('VerImportacion'))"></doublebox>
+										</row>
+										<row>
 											<field value="Restringir Costo:" />
 											<checkbox checked="@bind(vm.dto.restriccionCosto)"></checkbox>
 										</row>

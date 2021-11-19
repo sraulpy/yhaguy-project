@@ -15,6 +15,7 @@ public class ArticuloListaPrecio extends Domain {
 	public final static long ID_MAYORISTA_DS = 4;
 	public final static long ID_TRANSPORTADORA = 5;
 	public final static long ID_IMP_BATERIAS = 6;
+	public final static long ID_PROMOCION = 7;
 	
 	private String descripcion;
 	private String formula;

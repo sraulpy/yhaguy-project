@@ -11239,10 +11239,11 @@ public class RegisterDomain extends Register {
 	 * [6]: porcentajeDescuento
 	 * [7]: precio transportadora
 	 * [8]: precio imp baterias
+	 * [9]: precio promocion
 	 */
 	public Object[] getArticulo_(long idArticulo) throws Exception {
 		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs, "
-				+ "a.porcentajeDescuento, a.precioTransportadora, a.precioBaterias from Articulo a where a.id = " + idArticulo + "";
+				+ "a.porcentajeDescuento, a.precioTransportadora, a.precioBaterias, a.precioPromocion from Articulo a where a.id = " + idArticulo + "";
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}
