@@ -570,7 +570,10 @@ public class VentaItemControl extends SoloViewModel {
 		double precio = this.dto.isMonedaLocal() ? this.det.getPrecioGs() : this.det.getPrecioVentaFinalDs();
 		double descuentoGs = this.det.getDescuentoUnitarioGs();
 		double porc = Utiles.obtenerPorcentajeDelValor(descuentoGs, (precio * this.det.getCantidad()));
-		int maxDescuento = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
+		int maxDescuento = Integer.parseInt(this.det.getDescuentoPorcentaje() + "");
+		if (maxDescuento == 0) {
+			maxDescuento = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
+		}
 		if (!(desctoCliente > 0)) {
 			if (porc > maxDescuento) {
 				this.det.setDescuentoUnitarioGs(0);
