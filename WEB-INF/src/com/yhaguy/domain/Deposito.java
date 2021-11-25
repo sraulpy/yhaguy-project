@@ -39,6 +39,7 @@ public class Deposito extends Domain {
 	public static final Character VIRTUAL = 'V';
 	
 	private String observacion;
+	
 	private String descripcion;	
 	
 	@Override
