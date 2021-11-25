@@ -44,6 +44,7 @@ public class VentaDetalleDTO extends DTO {
 	private MyPair tipoIVA;
 	
 	private boolean impresionDescuento = false;
+	private double descuentoPorcentajeMax = 0.0;
 	
 	private String ubicacion = "SIN UBICACIÓN..";
 	
@@ -504,5 +505,13 @@ public class VentaDetalleDTO extends DTO {
 
 	public void setCostoPromedioGs(double costoPromedioGs) {
 		this.costoPromedioGs = costoPromedioGs;
+	}
+
+	public double getDescuentoPorcentajeMax() {
+		return descuentoPorcentajeMax;
+	}
+
+	public void setDescuentoPorcentajeMax(double descuentoPorcentajeMax) {
+		this.descuentoPorcentajeMax = descuentoPorcentajeMax;
 	}
 }

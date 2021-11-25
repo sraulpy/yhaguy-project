@@ -143,6 +143,12 @@
 						onChange="@command('descontarPorcentaje', cmp=self)"
 						onOK="@command('descontarPorcentaje', cmp=self)" />
 					<label value="%" sclass="label-moneda" />
+					<space></space>
+					<label value="% Máximo:" sclass="label-moneda" />
+					<dolarbox
+						value="@load(vm.det.descuentoPorcentajeMax)"
+						width="50px" format="###,##0.00"
+						sclass="label-red" readonly="true" />
 				</hlayout>
 			</row>
 			<row visible="@load(vm.det.cantidad eq 0? 'false':'true')">

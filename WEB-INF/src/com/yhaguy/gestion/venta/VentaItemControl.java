@@ -353,13 +353,17 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setPrecioMinimoGs(precio);
 		}
 		double dto_mayorista = this.dto.getDescuentoMayorista();
-		double porcentajeDescuento = (double) art[6];
-		this.det.setDescuentoPorcentaje(porcentajeDescuento);
-		this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), porcentajeDescuento));
+		int porcentajeDescuento = (int) art[6];
+		int maxDescuentoLista = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
+		double maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
+		this.det.setDescuentoPorcentajeMax(maxDescuento);
+		//this.det.setDescuentoPorcentaje(porcentajeDescuento);
+		//this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), porcentajeDescuento));
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) {
-			double descuento = porcentajeDescuento > dto_mayorista ? porcentajeDescuento : dto_mayorista;
-			this.det.setDescuentoPorcentaje(descuento);
-			this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), descuento));
+			if (dto_mayorista > 0) {
+				this.det.setDescuentoPorcentaje(dto_mayorista);
+				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), dto_mayorista));
+			}			
 		}
 	}
 	
@@ -570,10 +574,7 @@ public class VentaItemControl extends SoloViewModel {
 		double precio = this.dto.isMonedaLocal() ? this.det.getPrecioGs() : this.det.getPrecioVentaFinalDs();
 		double descuentoGs = this.det.getDescuentoUnitarioGs();
 		double porc = Utiles.obtenerPorcentajeDelValor(descuentoGs, (precio * this.det.getCantidad()));
-		int maxDescuento = (int) this.det.getDescuentoPorcentaje();
-		if (maxDescuento == 0) {
-			maxDescuento = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
-		}
+		int maxDescuento = (int) this.det.getDescuentoPorcentajeMax();
 		if (!(desctoCliente > 0)) {
 			if (porc > maxDescuento) {
 				this.det.setDescuentoUnitarioGs(0);
