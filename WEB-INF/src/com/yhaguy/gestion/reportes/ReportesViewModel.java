@@ -12835,7 +12835,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					long id2 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AUXILIO : Deposito.ID_CENTRAL_TEMPORAL;
 					long id3 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_AVERIADOS : Deposito.ID_CENTRAL_RECLAMOS;
 					long id4 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_CONTROL : Deposito.ID_CENTRAL_REPOSICION;
-					long id5 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_FALLADOS : Deposito.ID_MCAL_LOPEZ;
+					long id5 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_FALLADOS : Deposito.ID_IMP_BATERIAS;
 					long id6 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRODUCCION : Deposito.ID_MCAL_TEMPORAL;
 					long id7 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_RECLAMOS : Deposito.ID_MAYORISTA;
 					long id8 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SECAS : Deposito.ID_MAYORISTA_TEMPORAL;
