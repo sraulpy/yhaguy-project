@@ -1170,6 +1170,7 @@ public class RegisterDomain extends Register {
 	 * Retorna la Razon Social correspondiente al ruc segun la BD del SET
 	 */
 	public String getRazonSocialSET(String ruc) throws Exception {
+		System.out.println(ruc);
 		RucSet set = (RucSet) this.getObject(RucSet.class.getName(), "ruc", ruc.trim());
 		if (set == null) {
 			return "";
@@ -11788,6 +11789,7 @@ public class RegisterDomain extends Register {
 	 * [15]:articulo.proveedor.empresa.razonSocial
 	 * [16]:articulo.marca.descripcion
 	 * [17]:articulo.codigoOriginal
+	 * [18]:articulo.familia.descripcion
 	 */
 	public List<Object[]> getComprasLocalesDetallado(Date desde, Date hasta, long idFamilia, long idProveedor, long idSucursal) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -11800,7 +11802,7 @@ public class RegisterDomain extends Register {
 				+ " '',"
 				+ " d.articulo.proveedor.empresa.razonSocial,"
 				+ " d.articulo.marca.descripcion,"
-				+ " d.articulo.codigoOriginal"
+				+ " d.articulo.codigoOriginal, d.articulo.familia.descripcion"
 				+ " from CompraLocalFactura c join c.detalles d where (c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')"
@@ -14251,8 +14253,8 @@ public class RegisterDomain extends Register {
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			double cp = rr.getCostoPromedioGs(9583);
-			System.out.println(cp);
+			AccesoApp test = rr.getAccesoAppById(1);
+			System.out.println(test.getId());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
