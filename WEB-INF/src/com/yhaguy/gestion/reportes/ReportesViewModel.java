@@ -13188,7 +13188,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					String des = (String) compra[8];
 					String prove = (String) compra[15];
 					String marca = (String) compra[16];
-					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + mes;
+					String flia = (String) compra[18];
+					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + mes + ";" + flia;
 					Double acum = cants.get(key);
 					if (acum != null) {
 						acum += ((Double) compra[3]);
@@ -13215,7 +13216,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					String descripcion = key.split(";")[1];
 					String proveedor_ = key.split(";")[2];
 					String marca = key.split(";")[3];
-					String key_ = codigo + ";" + descripcion + ";" + proveedor_ + ";" + marca;
+					String flia = key.split(";")[5];
+					String key_ = codigo + ";" + descripcion + ";" + proveedor_ + ";" + marca + ";" + flia;
 					
 					if (keys.get(key_) == null) {
 						Double cantidad = cants.get(key);
@@ -13302,6 +13304,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						hist.setReferencia(descripcion);
 						hist.setProveedor(proveedor_);
 						hist.setMarca(marca);
+						hist.setFamilia(flia);
 						hist.setCodigoOriginal("");
 						hist.setLitraje(cantidad);
 						hist.setCoeficiente(volumen != null ? (volumen * (stock1 + stock2 + stock3)) : 0.0);
