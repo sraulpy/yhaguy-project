@@ -16840,8 +16840,8 @@ class ReporteComprasPorArticulo extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Familia", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Cant.", TIPO_LONG, 20);
-	static DatosColumnas col4 = new DatosColumnas("Cant.Ult.Compra", TIPO_INTEGER, 25);
-	static DatosColumnas col5 = new DatosColumnas("Fech.Ult.Compra", TIPO_STRING, 25);
+	static DatosColumnas col4 = new DatosColumnas("Cant.Ult.Compra", TIPO_INTEGER, 30);
+	static DatosColumnas col5 = new DatosColumnas("Fech.Ult.Compra", TIPO_STRING, 30);
 	static DatosColumnas col6 = new DatosColumnas("Stock 1", TIPO_LONG, 25);
 	static DatosColumnas col7 = new DatosColumnas("Stock 2", TIPO_LONG, 25);
 	static DatosColumnas col8 = new DatosColumnas("Ult.Costo", TIPO_DOUBLE, 30);
