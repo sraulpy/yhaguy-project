@@ -1,0 +1,200 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.rrhh.PermisosViewModel')">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick='pop_permiso.open(self, "after_start")'></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-list" label="Ver Detalle" width="150px"
+			onClick='pop_selected.open(self, "after_start")'
+			disabled="@load(vm.selected_permiso eq null ? 'true':'false')"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-print" label="Imprimir" width="150px"
+			onClick="@command('imprimir')"
+			disabled="@load(vm.selected_permiso eq null ? 'true':'false')"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE PERMISOS.."
+		model="@load(vm.permisos)"
+		selectedItem="@bind(vm.selected_permiso)">
+		<listhead>
+			<listheader label="Fecha" width="130px"></listheader>
+			<listheader label="Funcionario"></listheader>
+			<listheader label="Supervisor"></listheader>
+			<listheader label="Salida"></listheader>
+			<listheader label="Regreso"></listheader>
+			<listheader label="Motivo"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" sclass="filter" placeholder="Día.."
+						value="@bind(vm.filterFechaDD)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Mes.."
+						value="@bind(vm.filterFechaMM)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Año.."
+						value="@bind(vm.filterFechaAA)" instant="true"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<textbox hflex="true" sclass="filter" placeholder="Funcionario.."></textbox>
+			</auxheader>
+			<auxheader>
+			</auxheader>
+			<auxheader>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.funcionario.razonSocial)"></listcell>
+				<listcell label="@load(each.supervisor.razonSocial)"></listcell>
+				<listcell label="@load(each.salida) @converter('formattedDate', format='dd-MM-yyyy HH:mm:ss')"></listcell>
+				<listcell label="@load(each.regreso) @converter('formattedDate', format='dd-MM-yyyy HH:mm:ss')"></listcell>
+				<listcell label="@load(each.motivo)"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_permiso" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE PERMISO" />
+			</hbox>
+			<button onClick="pop_permiso.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox hflex="true"
+						value="@bind(vm.nvo_permiso.fecha)" readonly="true"></datebox>
+				</row>
+				<row>
+					<field value="Funcionario:" />
+					<textbox hflex="true"
+						value="@bind(vm.nvo_permiso.funcionario.razonSocial)"></textbox>
+				</row>
+				<row>
+					<field value="Cargo:" />
+					<textbox hflex="true"
+						value="@bind(vm.nvo_permiso.cargo)"></textbox>
+				</row>
+				<row>
+					<field value="Supervisor:" />
+					<combobox hflex="true"
+						value="@load(vm.nvo_permiso.supervisor.razonSocial)"
+						model="@load(vm.funcionarios)"
+						selectedItem="@bind(vm.nvo_permiso.supervisor)" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.razonSocial)" />
+						</template>	
+					</combobox>
+				</row>
+				<row>
+					<field value="Fecha Hora Salida:" />
+					<hlayout>
+					<datebox hflex="true"
+						value="@bind(vm.nvo_permiso.salida)"></datebox>
+					<timebox hflex="true"
+						value="@bind(vm.nvo_permiso.salida)" format="HH:mm:ss"></timebox>
+					</hlayout>
+				</row>
+				<row>
+					<field value="Fecha Hora Regreso:" />
+					<hlayout>
+					<datebox hflex="true"
+						value="@bind(vm.nvo_permiso.regreso)"></datebox>
+					<timebox hflex="true"
+						value="@bind(vm.nvo_permiso.regreso)" format="HH:mm:ss"></timebox>
+					</hlayout>
+				</row>
+				<row>
+					<field value="Motivo:" />
+					<textbox hflex="true" rows="2"
+						value="@bind(vm.nvo_permiso.motivo)"></textbox>
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addPermiso', comp=pop_permiso)"></button>
+		</hbox>
+	</popup>
+	
+	<popup id="pop_selected" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="CONSULTA REGISTRO DE PERMISO" />
+			</hbox>
+			<button onClick="pop_selected.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Fecha:" />
+					<datebox hflex="true"
+						value="@bind(vm.selected_permiso.fecha)" readonly="true"></datebox>
+				</row>
+				<row>
+					<field value="Funcionario:" />
+					<textbox hflex="true"
+						value="@bind(vm.selected_permiso.funcionario.razonSocial)" readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Cargo:" />
+					<textbox hflex="true"
+						value="@bind(vm.selected_permiso.cargo)" readonly="true"></textbox>
+				</row>
+				<row>
+					<field value="Supervisor:" />
+					<textbox hflex="true"
+						value="@load(vm.selected_permiso.supervisor.razonSocial)" readonly="true">
+					</textbox>
+				</row>
+				<row>
+					<field value="Fecha Hora Salida:" />
+					<datebox hflex="true"
+						value="@bind(vm.nvo_permiso.salida)" readonly="true"></datebox>
+				</row>
+				<row>
+					<field value="Fecha Hora Regreso:" />
+					<datebox hflex="true"
+						value="@bind(vm.nvo_permiso.regreso)" readonly="true"></datebox>
+				</row>
+				<row>
+					<field value="Motivo:" />
+					<textbox hflex="true" rows="2"
+						value="@bind(vm.nvo_permiso.motivo)" readonly="true"></textbox>
+				</row>
+			</rows>
+		</grid>
+	</popup>
+	
+</window>

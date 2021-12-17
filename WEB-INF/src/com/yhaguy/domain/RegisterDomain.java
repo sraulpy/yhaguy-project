@@ -14253,6 +14253,16 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return los permisos..
+	 */
+	public List<RRHHPermiso> getRRHHpermisos(String fecha) throws Exception {
+		String query = "select r from RRHHPermiso r where "
+				+ " cast (r.fecha as string) like '%" + fecha + "%'"
+				+ " order by r.fecha";
+		return this.hqlLimit(query, 500);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
