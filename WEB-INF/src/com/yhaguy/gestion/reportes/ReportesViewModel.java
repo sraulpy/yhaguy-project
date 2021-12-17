@@ -13408,7 +13408,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] cmp : compras) {
 					Object[] obj = new Object[] { cmp[1], cmp[2], cmp[3], cmp[4], cmp[5],
 							(cmp[6] != null ? Long.parseLong(cmp[6] + "") : cero),
-							(cmp[7] != null ? Long.parseLong(cmp[7] + "") : cero) };
+							(cmp[7] != null ? Long.parseLong(cmp[7] + "") : cero),
+							Utiles.getRedondeo((double) cmp[8]), Utiles.getRedondeo((double) cmp[9]) };
 					data.add(obj);
 				}
 				
@@ -16838,11 +16839,13 @@ class ReporteComprasPorArticulo extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Familia", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 25);
-	static DatosColumnas col4 = new DatosColumnas("Cant. Ult.Compra", TIPO_INTEGER, 25);
-	static DatosColumnas col5 = new DatosColumnas("Fecha Ult.Compra", TIPO_STRING, 25);
+	static DatosColumnas col3 = new DatosColumnas("Cant.", TIPO_LONG, 20);
+	static DatosColumnas col4 = new DatosColumnas("Cant.Ult.Compra", TIPO_INTEGER, 25);
+	static DatosColumnas col5 = new DatosColumnas("Fech.Ult.Compra", TIPO_STRING, 25);
 	static DatosColumnas col6 = new DatosColumnas("Stock 1", TIPO_LONG, 25);
 	static DatosColumnas col7 = new DatosColumnas("Stock 2", TIPO_LONG, 25);
+	static DatosColumnas col8 = new DatosColumnas("Ult.Costo", TIPO_DOUBLE, 30);
+	static DatosColumnas col9 = new DatosColumnas("Mayorista Gs", TIPO_DOUBLE, 30);
 
 	public ReporteComprasPorArticulo(Date desde, Date hasta, String stock1, String stock2) {
 		this.desde = desde;
@@ -16859,6 +16862,8 @@ class ReporteComprasPorArticulo extends ReporteYhaguy {
 		cols.add(col5);
 		cols.add(col6);
 		cols.add(col7);
+		cols.add(col8);
+		cols.add(col9);
 	}
 
 	@Override

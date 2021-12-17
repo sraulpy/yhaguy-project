@@ -13837,14 +13837,17 @@ public class RegisterDomain extends Register {
 	 * [5]:fechaUltimaCompra
 	 * [6]:stock 1
 	 * [7]:stock 2
+	 * [8]:costoGs
+	 * [9]:precio mayorista
 	 */
 	public List<Object[]> getComprasLocalesArticuloDetallado(Date desde, Date hasta, long idFamilia, long idDeposito1, long idDeposito2) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, d.articulo.familia.descripcion, sum(d.cantidad), d.articulo.cantUltimaCompra,"
-				+ " to_char(d.articulo.fechaUltimaCompra, 'dd-MM-yyyy'),"
+				+ " to_char(d.articulo.fechaUltimaCompra, 'dd-MM-yy'),"
 				+ "	(select CASE WHEN ad.stock IS NULL THEN 0 ELSE ad.stock END from ArticuloDeposito ad where ad.articulo.id = d.articulo.id and ad.deposito.id = " + idDeposito1 + "),"
-				+ "	(select CASE WHEN ad.stock IS NULL THEN 0 ELSE ad.stock END from ArticuloDeposito ad where ad.articulo.id = d.articulo.id and ad.deposito.id = " + idDeposito2 + ")"
+				+ "	(select CASE WHEN ad.stock IS NULL THEN 0 ELSE ad.stock END from ArticuloDeposito ad where ad.articulo.id = d.articulo.id and ad.deposito.id = " + idDeposito2 + "),"
+				+ " d.articulo.costoGs, d.articulo.precioGs"
 				+ " from CompraLocalFactura c join c.detalles d where (c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')" + " and (c.fechaOriginal >= '" + desde_
@@ -13852,7 +13855,7 @@ public class RegisterDomain extends Register {
 		if (idFamilia > 0) {
 			query += " and d.articulo.familia.id = " + idFamilia;
 		}
-		query += " group by 1, 2, 3, 5, 6, 7, 8";
+		query += " group by 1, 2, 3, 5, 6, 7, 8, 9, 10";
 		return this.hql(query);
 	}
 	
