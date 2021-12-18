@@ -13,6 +13,11 @@
 			disabled="@load(vm.selected_permiso eq null ? 'true':'false')"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-check" label="Aprobar" width="150px"
+			onClick="@command('aprobar')"
+			disabled="@load(vm.selected_permiso eq null ? 'true':'false')"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
 			iconSclass="z-icon-print" label="Imprimir" width="150px"
 			onClick="@command('imprimir')"
 			disabled="@load(vm.selected_permiso eq null ? 'true':'false')"></button>
@@ -29,6 +34,7 @@
 			<listheader label="Salida"></listheader>
 			<listheader label="Regreso"></listheader>
 			<listheader label="Motivo"></listheader>
+			<listheader width="50px" align="center"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader>
@@ -50,6 +56,7 @@
 			</auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
@@ -59,6 +66,10 @@
 				<listcell label="@load(each.salida) @converter('formattedDate', format='dd-MM-yyyy HH:mm:ss')"></listcell>
 				<listcell label="@load(each.regreso) @converter('formattedDate', format='dd-MM-yyyy HH:mm:ss')"></listcell>
 				<listcell label="@load(each.motivo)"></listcell>
+				<listcell>
+					<image vflex="true" src="@load(each.aprobado ? '/core/images/tick.png' : '/core/images/exclamation.png')"
+						tooltiptext="@load(each.aprobado ? 'Aprobado' : 'Pendiente' )"></image>
+				</listcell>
 			</listitem>
 		</template>
 		<listfoot>
@@ -89,8 +100,14 @@
 				</row>
 				<row>
 					<field value="Funcionario:" />
-					<textbox hflex="true"
-						value="@bind(vm.nvo_permiso.funcionario.razonSocial)"></textbox>
+					<combobox hflex="true"
+						value="@load(vm.nvo_permiso.funcionario.razonSocial)"
+						model="@load(vm.funcionarios)"
+						selectedItem="@bind(vm.nvo_permiso.funcionario)" instant="true">
+						<template name="model">
+							<comboitem label="@load(each.razonSocial)" />
+						</template>	
+					</combobox>
 				</row>
 				<row>
 					<field value="Cargo:" />

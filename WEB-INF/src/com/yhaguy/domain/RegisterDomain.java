@@ -81,13 +81,6 @@ public class RegisterDomain extends Register {
 		return out;
 	}
 
-	public List<Funcionario> getFuncionarios() throws Exception {
-		List out = super.getObjects(
-				com.yhaguy.domain.Funcionario.class.getName(), new Vector(),
-				new Vector());
-		return out;
-	}
-
 	public List getSucursales() throws Exception {
 		List out = super.getObjects(com.yhaguy.domain.Sucursal.class.getName(),
 				new Vector(), new Vector());
@@ -14261,6 +14254,16 @@ public class RegisterDomain extends Register {
 				+ " cast (r.fecha as string) like '%" + fecha + "%'"
 				+ " order by r.fecha";
 		return this.hqlLimit(query, 500);
+	}
+	
+	/**
+	 * @return los funcionarios activos
+	 */
+	public List<Funcionario> getFuncionarios() throws Exception {
+		String query = "select f from Funcionario f where "
+				+ " f.funcionarioEstado.sigla = '" + Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'"
+				+ " order by f.nombreEmpresa";
+		return this.hql(query);
 	}
 	
 	public static void main(String[] args) {

@@ -74,6 +74,15 @@ public class PermisosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	@NotifyChange("*")
+	public void aprobar() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.selected_permiso.setAprobado(true);
+		rr.saveObject(this.selected_permiso, this.getLoginNombre());
+		Clients.showNotification("PERMISO APROBADO..");
+	}
+	
+	@Command
 	public void imprimir() throws Exception {
 		this.imprimirPermiso(this.selected_permiso);
 	}
@@ -120,7 +129,7 @@ public class PermisosViewModel extends SimpleViewModel {
 		String source = ReportesViewModel.SOURCE_PERMISO;
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new PermisoDataSource(permiso);
-		params.put("title", "Solicitud de Permiso");
+		params.put("title", "SOLICITUD DE PERMISO");
 		params.put("Fecha", Utiles.getDateToString(permiso.getFecha(), Utiles.DD_MM_YYYY));
 		params.put("Usuario", getUs().getNombre());
 		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
