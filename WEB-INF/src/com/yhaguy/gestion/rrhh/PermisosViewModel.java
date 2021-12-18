@@ -119,7 +119,7 @@ public class PermisosViewModel extends SimpleViewModel {
 		this.nvo_permiso.setFecha(new Date());
 		this.nvo_permiso.setSalida(new Date());
 		this.nvo_permiso.setRegreso(new Date());
-		this.nvo_permiso.setFuncionario(rr.getFuncionario(this.getAcceso().getFuncionario().getId()));
+		this.nvo_permiso.setFuncionario(rr.getFuncionarioById(this.getAcceso().getFuncionario().getId()));
 	}
 	
 	/**

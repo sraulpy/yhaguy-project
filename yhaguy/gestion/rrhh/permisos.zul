@@ -198,17 +198,17 @@
 				<row>
 					<field value="Fecha Hora Salida:" />
 					<datebox hflex="true"
-						value="@bind(vm.nvo_permiso.salida)" readonly="true"></datebox>
+						value="@bind(vm.selected_permiso.salida)" readonly="true"></datebox>
 				</row>
 				<row>
 					<field value="Fecha Hora Regreso:" />
 					<datebox hflex="true"
-						value="@bind(vm.nvo_permiso.regreso)" readonly="true"></datebox>
+						value="@bind(vm.selected_permiso.regreso)" readonly="true"></datebox>
 				</row>
 				<row>
 					<field value="Motivo:" />
 					<textbox hflex="true" rows="2"
-						value="@bind(vm.nvo_permiso.motivo)" readonly="true"></textbox>
+						value="@bind(vm.selected_permiso.motivo)" readonly="true"></textbox> 
 				</row>
 			</rows>
 		</grid>
