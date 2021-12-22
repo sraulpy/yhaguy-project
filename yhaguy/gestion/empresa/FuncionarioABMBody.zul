@@ -9,6 +9,7 @@
 				<tab label="Geolocalización" width="170px" vflex="true"/>
 				<tab label="Documentos" width="170px" vflex="true"/>
 				<tab label="Sanciones" width="170px" vflex="true" />
+				<tab label="Vacaciones" width="170px" vflex="true" />
 				<tab label="Configuración" width="170px" vflex="true"/>
 			</tabs>
 			
@@ -226,7 +227,7 @@
 								<hlayout sclass="button-container">
 									<button mold="bs" sclass="btn-sm btn-success" 
 										iconSclass="z-icon-plus-circle" label="Agregar"
-										width="150px"></button>
+										width="150px" disabled="@load(vm.dto.esNuevo)"></button>
 								</hlayout>
 								<listbox sclass="small-list" hflex="true" vflex="true">
 									<listhead>
@@ -236,6 +237,53 @@
 								</listbox>
 							</vbox>
 						</hlayout>
+					</div>
+				</tabpanel>
+				
+				<!-- _____________________ VACACIONES _____________________ -->
+				
+				<tabpanel vflex="true" hflex="true">
+					
+					<div style="padding:20px 0px 0px 50px">
+						<field value="PERIODOS DE VACACIONES DEL FUNCIONARIO" />
+					</div>
+					
+					<div style="padding:5px 0px 10px 50px" vflex="true" width="70%">
+					<div width="100%" style="color:#B5D5ED;border-bottom:solid 1px;"></div>
+						<vbox width="100%" vflex="true" spacing="0">
+								<hlayout sclass="button-container">
+									<button mold="bs" sclass="btn-sm btn-success" 
+										iconSclass="z-icon-plus-circle" label="Agregar"
+										width="150px"
+										onClick='pop_periodo.open(self, "after_start")'></button>
+								</hlayout>
+								<listbox sclass="small-list" hflex="true" vflex="true"
+									model="@load(vm.dto.periodos)">
+									<listhead>
+										<listheader label="Días Vacaciones" align="right"></listheader>
+										<listheader label="Saldo Anterior (Días)" align="right"></listheader>
+										<listheader label="Días Usados" align="right"></listheader>
+										<listheader label="Saldo Disponible (Días)" align="right"></listheader>
+										<listheader label="Vigencia" align="right"></listheader>
+										<listheader width="70px" label="Vigente" align="center"></listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.diasVacaciones)"></listcell>
+											<listcell label="@load(each.saldoAnterior)"></listcell>
+											<listcell label="@load(each.diasUsados)"></listcell>
+											<listcell label="@load(each.saldo)"></listcell>
+											<listcell label="@load(each.vigencia) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+											<listcell>
+												<image vflex="true"
+													src="@load(each.vigente ? '/core/images/tick.png' : '/core/images/exclamation.png')"
+													tooltiptext="@load(each.vigente ? 'Vigente' : 'Vencido' )">
+												</image>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vbox>
 					</div>
 				</tabpanel>
 				
@@ -331,6 +379,56 @@
 				</tabpanel>
 
 			</tabpanels>			
-		</tabbox>		
+		</tabbox>
+		
+		<popup id="pop_periodo" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE PERIODOS" />
+			</hbox>
+			<button onClick="pop_periodo.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Días Vacaciones:" /> 
+					<spinner value="@bind(vm.nvoPeriodo.diasVacaciones)"></spinner>	
+				</row>
+				<row>
+					<field value="Saldo Anterior:" /> 
+					<spinner value="@bind(vm.nvoPeriodo.saldoAnterior)"></spinner>	
+				</row>
+				<row>
+					<field value="Días Usados:" /> 
+					<spinner value="@bind(vm.nvoPeriodo.diasUsados)"></spinner>	
+				</row>
+				<row>
+					<field value="Saldo Disponible:" /> 
+					<intbox value="@load(vm.nvoPeriodo.saldo)"
+						readonly="true"></intbox>	
+				</row>
+				<row>
+					<field value="Vigencia:" />
+					<hlayout>
+					<datebox hflex="true" value="@bind(vm.nvoPeriodo.vigencia)"></datebox>
+					</hlayout>
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('addPeriodo', comp=pop_periodo)"></button>
+		</hbox>
+	</popup>
+				
 	</window>
 </zk>

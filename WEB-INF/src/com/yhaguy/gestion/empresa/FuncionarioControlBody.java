@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Popup;
 
 import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.WindowPopup;
@@ -19,6 +22,7 @@ import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaDTO;
 import com.yhaguy.inicio.AccesoDTO;
@@ -27,9 +31,12 @@ public class FuncionarioControlBody extends Body {
 
 	private FuncionarioDTO dto = new FuncionarioDTO();
 	private String msjErr = "";
+	
+	private FuncionarioPeriodoVacaciones nvoPeriodo;
 
 	@Init(superclass = true)
 	public void initFuncionarioControlBody() {
+		this.nvoPeriodo = new FuncionarioPeriodoVacaciones();
 	}
 
 	@AfterCompose(superclass = true)
@@ -216,6 +223,24 @@ public class FuncionarioControlBody extends Body {
 
 		}
 	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addPeriodo(@BindingParam("comp") Popup comp) throws Exception {
+		for (FuncionarioPeriodoVacaciones p : this.dto.getPeriodos()) {
+			if (p.isVigente()) {
+				Clients.showNotification("YA EXISTE UN PERIODO VIGENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
+		f.getPeriodos().add(this.nvoPeriodo);
+		rr.saveObject(f, this.getLoginNombre());
+		comp.close();
+		
+		this.dto = (FuncionarioDTO) this.getDTOById(Funcionario.class.getName(), f.getId());
+	}
 
 	List<MyArray> users = new ArrayList<MyArray>();
 	MyArray selectedUser = null;
@@ -385,6 +410,14 @@ public class FuncionarioControlBody extends Body {
 	@Override
 	public String textoErrorVerificarGrabar() {
 		return this.msjErr;
+	}
+
+	public FuncionarioPeriodoVacaciones getNvoPeriodo() {
+		return nvoPeriodo;
+	}
+
+	public void setNvoPeriodo(FuncionarioPeriodoVacaciones nvoPeriodo) {
+		this.nvoPeriodo = nvoPeriodo;
 	}
 
 }

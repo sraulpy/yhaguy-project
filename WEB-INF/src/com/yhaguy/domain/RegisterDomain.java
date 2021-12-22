@@ -14249,9 +14249,9 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return los permisos..
 	 */
-	public List<RRHHPermiso> getRRHHpermisos(String fecha) throws Exception {
+	public List<RRHHPermiso> getRRHHpermisos(String fecha, String tipo) throws Exception {
 		String query = "select r from RRHHPermiso r where "
-				+ " cast (r.fecha as string) like '%" + fecha + "%'"
+				+ " cast (r.fecha as string) like '%" + fecha + "%' and r.tipo = '" + tipo + "'"
 				+ " order by r.fecha";
 		return this.hqlLimit(query, 500);
 	}

@@ -175,6 +175,7 @@
 				<zk forEach="${vm.menuItem(self,'Marcaciones')}" />
 				<zk forEach="${vm.menuItem(self,'VisorMarcaciones')}" />
 				<zk forEach="${vm.menuItem(self,'RRHHPermisos')}" />
+				<zk forEach="${vm.menuItem(self,'RRHHVacaciones')}" />
 				<zk forEach="${vm.menuItem(self,'GeolocalizacionRRHH')}" />
 			</menupopup>
 		</menu>

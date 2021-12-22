@@ -17,12 +17,21 @@
 		<property name="salida" />
 		<property name="regreso" />
 		<property name="aprobado" />
+		<property name="cedula" />
+		<property name="departamento" />
+		<property name="observacion" />
+		<property name="reincorporacion" />
+		<property name="dias" />
+		<property name="tipo" />
 		
 		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
 			column="id_funcionario" lazy="false" />
 			
 		<many-to-one name="supervisor" class="com.yhaguy.domain.Funcionario"
 			column="id_supervisor" lazy="false" />
+			
+		<many-to-one name="reemplazante" class="com.yhaguy.domain.Funcionario"
+			column="id_reemplazante" lazy="false" />
 
 	</class>
 </hibernate-mapping>

@@ -8,7 +8,9 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
-import com.yhaguy.gestion.empresa.EmpresaDTO;
+import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
 
 @SuppressWarnings("serial")
@@ -32,6 +34,20 @@ public class FuncionarioDTO extends DTO {
 		this.datoSuc.setDatos(new MyArray());
 		this.empresa = new EmpresaDTO();
 
+	}
+	
+	/**
+	 * @return los periodos..
+	 */
+	public List<FuncionarioPeriodoVacaciones> getPeriodos() throws Exception {
+		List<FuncionarioPeriodoVacaciones> out = new ArrayList<FuncionarioPeriodoVacaciones>();
+		if (this.isEsNuevo()) {
+			return out;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Funcionario f = rr.getFuncionarioById(this.getId());
+		out.addAll(f.getPeriodos());
+		return out;
 	}
 
 	public String toString() {
@@ -189,7 +205,6 @@ public class FuncionarioDTO extends DTO {
 		}
 
 	}
-
 }
 
 

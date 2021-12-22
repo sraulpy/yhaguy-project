@@ -31,7 +31,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
-public class PermisosViewModel extends SimpleViewModel {
+public class VacacionesViewModel extends SimpleViewModel {
 	
 	private RRHHPermiso nvo_permiso;
 	private RRHHPermiso selected_permiso;
@@ -79,7 +79,7 @@ public class PermisosViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.selected_permiso.setAprobado(true);
 		rr.saveObject(this.selected_permiso, this.getLoginNombre());
-		Clients.showNotification("PERMISO APROBADO..");
+		Clients.showNotification("SOLICITUD APROBADA..");
 	}
 	
 	@Command
@@ -116,10 +116,11 @@ public class PermisosViewModel extends SimpleViewModel {
 	private void inicializarDatos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.nvo_permiso = new RRHHPermiso();
-		this.nvo_permiso.setTipo(RRHHPermiso.TIPO_PERMISO);
+		this.nvo_permiso.setTipo(RRHHPermiso.TIPO_VACACIONES);
 		this.nvo_permiso.setFecha(new Date());
 		this.nvo_permiso.setSalida(new Date());
 		this.nvo_permiso.setRegreso(new Date());
+		this.nvo_permiso.setReincorporacion(new Date());
 		this.nvo_permiso.setFuncionario(rr.getFuncionarioById(this.getAcceso().getFuncionario().getId()));
 	}
 	
@@ -130,7 +131,7 @@ public class PermisosViewModel extends SimpleViewModel {
 		String source = ReportesViewModel.SOURCE_PERMISO;
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new PermisoDataSource(permiso);
-		params.put("title", "SOLICITUD DE PERMISO");
+		params.put("title", "SOLICITUD DE USUFRUCTO VACACIONES");
 		params.put("Fecha", Utiles.getDateToString(permiso.getFecha(), Utiles.DD_MM_YYYY));
 		params.put("Usuario", getUs().getNombre());
 		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
@@ -204,7 +205,7 @@ public class PermisosViewModel extends SimpleViewModel {
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA" })
 	public List<RRHHPermiso> getPermisos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getRRHHpermisos(this.getFilterFecha(), RRHHPermiso.TIPO_PERMISO);
+		return rr.getRRHHpermisos(this.getFilterFecha(), RRHHPermiso.TIPO_VACACIONES);
 	}
 	
 	/**

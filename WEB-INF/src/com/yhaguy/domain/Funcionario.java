@@ -37,6 +37,7 @@ public class Funcionario extends Domain {
 	private Tecnico tecnico_;
 	private Set<AccesoApp> accesos = new HashSet<AccesoApp>();
 	private Set<VentaMeta> metas = new HashSet<VentaMeta>();
+	private Set<FuncionarioPeriodoVacaciones> periodos = new HashSet<FuncionarioPeriodoVacaciones>();
 	
 	@Override
 	public int compareTo(Object o) {
@@ -355,5 +356,13 @@ public class Funcionario extends Domain {
 
 	public void setCobradorInterior(boolean cobradorInterior) {
 		this.cobradorInterior = cobradorInterior;
+	}
+
+	public Set<FuncionarioPeriodoVacaciones> getPeriodos() {
+		return periodos;
+	}
+
+	public void setPeriodos(Set<FuncionarioPeriodoVacaciones> periodos) {
+		this.periodos = periodos;
 	}
 }

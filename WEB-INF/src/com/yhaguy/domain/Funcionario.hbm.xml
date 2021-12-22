@@ -79,6 +79,14 @@
 			</key>
 			<one-to-many class="com.yhaguy.domain.VentaMeta" />
 		</set>
+		
+		<set name="periodos" table="funcionario_periodo_vacaciones" inverse="false" lazy="false"
+			fetch="join" cascade="all">
+			<key>
+				<column name="idfuncionario" not-null="false" />
+			</key>
+			<one-to-many class="com.yhaguy.domain.FuncionarioPeriodoVacaciones" />
+		</set>
 
 	</class>
 </hibernate-mapping>
