@@ -10,6 +10,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.CompraLocalFacturaDetalle;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.VentaDetalle;
@@ -190,17 +191,21 @@ public class NotaCreditoDetalleDTO extends DTO {
 		List<VentaDetalle> items = rr.getDetallesVenta(this.venta.getId());
 		
 		for (VentaDetalle item : items) {
-			MyArray art = new MyArray();
-			art.setId(item.getArticulo().getId());
-			art.setPos1(item.getArticulo().getCodigoInterno());
-			art.setPos2(item.getArticulo().getDescripcion());
-			art.setPos3((int) item.getCantidad());
-			art.setPos4(item.getPrecioGs());
-			art.setPos5(item.getPrecioVentaFinalDs());
-			art.setPos6((int) 0);
-			art.setPos7((double) 0);
-			art.setPos8(item.getDescuentoUnitarioGs());
-			out.add(art);
+			if (!item.getArticulo().getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
+					|| !item.getArticulo().getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
+					|| !item.getArticulo().getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)) {
+				MyArray art = new MyArray();
+				art.setId(item.getArticulo().getId());
+				art.setPos1(item.getArticulo().getCodigoInterno());
+				art.setPos2(item.getArticulo().getDescripcion());
+				art.setPos3((int) item.getCantidad());
+				art.setPos4(item.getPrecioGs());
+				art.setPos5(item.getPrecioVentaFinalDs());
+				art.setPos6((int) 0);
+				art.setPos7((double) 0);
+				art.setPos8(item.getDescuentoUnitarioGs());
+				out.add(art);
+			}			
 		}
 		
 		return out;
