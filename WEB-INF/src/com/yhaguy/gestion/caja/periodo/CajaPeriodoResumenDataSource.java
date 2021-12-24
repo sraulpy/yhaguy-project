@@ -1014,7 +1014,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
 					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo);
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
-			value = FORMATTER.format((this.totalNotaCreditoContadoEfectivo + this.totalGastosEfectivo + this.totalPagosEfectivo - this.totalRepEgresos) * -1);
+			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo - this.totalRepEgresos) * -1);
 		}
 		return value;
 	}
