@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GastosPorCuentas" pageWidth="1824" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1784" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb640a0-1440-4d07-a15c-6c29172128a9">
+	<property name="ireport.zoom" value="0.9090909090909131"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12" isUnderline="false"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#DDDDDD"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="Generado" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select '01/01/2015 al 31/01/2015' "Periodo", '1' "Asiento", 'Compras de Mercaderias de fecha 02/01/2015' "Descripcion", 02/01/2015 "Fecha",
+'3310001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta",
+100000 "Debe",  0 "Haber", 100000 "Saldo",   100000 "totDebe", 100000 "totHaber", 100000 "totSaldo" from plancuenta where nivel = '1'
+
+union all
+
+select '01/01/2015 al 31/01/2015' "Periodo", '2' "Asiento", 'Compras de Mercaderias de fecha 02/01/2015' "Descripcion", 02/01/2015 "Fecha",
+'4330001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta",
+0 "Debe",  150500 "Haber", 100000 "Saldo",   100000 "totDebe", 100000 "totHaber", 100000 "totSaldo" from plancuenta where nivel = '1'
+
+union all
+
+select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercaderias de fecha 02/01/2015' "Descripcion", 02/01/2015 "Fecha",
+'5350001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta",
+300000 "Debe",  0 "Haber", 100000 "Saldo" ,   100000 "totDebe", 100000 "totHaber", 100000 "totSaldo"  from plancuenta where nivel = '1']]>
+	</queryString>
+	<field name="Concepto" class="java.lang.String"/>
+	<field name="Numero" class="java.lang.String"/>
+	<field name="Emision" class="java.lang.String"/>
+	<field name="TituloDetalle" class="java.lang.String"/>
+	<field name="RazonSocial" class="java.lang.String"/>
+	<field name="Ruc" class="java.lang.String"/>
+	<field name="Importe" class="java.lang.String"/>
+	<field name="Saldo" class="java.lang.String"/>
+	<field name="TotalImporte" class="java.lang.String"/>
+	<field name="Gravada10" class="java.lang.String"/>
+	<field name="Iva10" class="java.lang.String"/>
+	<field name="Gravada5" class="java.lang.String"/>
+	<field name="Iva5" class="java.lang.String"/>
+	<field name="Exenta" class="java.lang.String"/>
+	<field name="TotalGravada10" class="java.lang.String"/>
+	<field name="TotalIva10" class="java.lang.String"/>
+	<field name="TotalGravada5" class="java.lang.String"/>
+	<field name="TotalIva5" class="java.lang.String"/>
+	<field name="TotalExenta" class="java.lang.String"/>
+	<field name="Descripcion" class="java.lang.String"/>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Transparent" x="0" y="0" width="1784" height="15" uuid="c598aab8-e20d-4f76-a474-1237f3c1b469"/>
+				<textField>
+					<reportElement style="Detail" x="296" y="0" width="251" height="15" uuid="f84a108f-7e6e-4898-b3c0-98479ec7346f"/>
+					<textFieldExpression><![CDATA[$F{RazonSocial}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement style="Detail" mode="Transparent" x="54" y="0" width="140" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="44341720-9c4f-45a1-96e8-69306e2216b1"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Concepto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="547" y="0" width="63" height="15" uuid="91239dc0-041a-4196-af15-dea70b864bcd"/>
+					<textFieldExpression><![CDATA[$F{Ruc}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="0" y="0" width="54" height="15" uuid="498e766b-0827-4f83-b613-c90c3f631dfc"/>
+					<textFieldExpression><![CDATA[$F{Emision}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+					<reportElement style="Detail" mode="Transparent" x="194" y="0" width="102" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="404f7edb-ff5c-403b-8854-9d7c2da2febd"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="1485" y="0" width="99" height="15" uuid="b5e9bc6c-7401-4dbd-9daa-397c8b2dec3a"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{Iva5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="1386" y="0" width="99" height="15" uuid="02228c43-2dd5-4072-8eb8-c29c7c0c613c"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{Gravada5}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="1288" y="0" width="99" height="15" uuid="15b7e4e7-dfde-4e19-82ee-a21610f7e043"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{Iva10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="1189" y="0" width="100" height="15" uuid="d2e76528-d9b1-454a-ab6a-5c178ec0a279"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{Gravada10}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="1584" y="0" width="99" height="15" uuid="fa4e9850-7953-42c1-8118-7aa537f45e15"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{Exenta}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="1682" y="0" width="99" height="15" uuid="aafb2b4a-3219-4afd-afbb-849409c480ef"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="898" y="0" width="291" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
+					<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="610" y="0" width="288" height="15" uuid="5fde148a-2430-4d9d-9fdc-ec9611b7cc99"/>
+					<textFieldExpression><![CDATA[$F{TituloDetalle}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>

@@ -85,6 +85,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_INFORME_TECNICO = "/reportes/jasper/InformeTecnico.jasper";
 	public static final String SOURCE_ORDEN_COMPRA = "/reportes/jasper/OrdenCompra.jasper";
 	public static final String SOURCE_GASTOS_POR_CUENTA_CONTABLE = "/reportes/jasper/GastosPorCuentaContable.jasper";
+	public static final String SOURCE_GASTOS_POR_CUENTA_CONTABLE_SIN_CAB = "/reportes/jasper/GastosPorCuentaContable_sin_cabecera.jasper";
 	public static final String SOURCE_VENTAS_DESGLOSADO = "/reportes/jasper/VentasDesglosado.jasper";
 	public static final String SOURCE_CONSTANCIA_ENTREGA = "/reportes/jasper/ConstanciaEntrega.jasper";
 	public static final String SOURCE_SOLICITUD_NC = "/reportes/jasper/SolicitudNotaCredito.jasper";

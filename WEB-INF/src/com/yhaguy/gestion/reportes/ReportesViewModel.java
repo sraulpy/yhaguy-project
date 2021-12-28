@@ -14444,6 +14444,9 @@ public class ReportesViewModel extends SimpleViewModel {
 			});			
 			
 			String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_GASTOS_POR_CUENTA_CONTABLE;
+			if (formato.equals(com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS)) {
+				source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_GASTOS_POR_CUENTA_CONTABLE_SIN_CAB;
+			}
 			Map<String, Object> params = new HashMap<String, Object>();
 			JRDataSource dataSource = new GastosPorCuentaContableDataSource(dets, notascredito, pagos);
 			params.put("Usuario", getUs().getNombre());
