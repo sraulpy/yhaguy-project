@@ -13183,13 +13183,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object[]> datos = new HashMap<String, Object[]>();
 				
 				for (Object[] compra : locales) {
+					
 					int mes = Utiles.getNumeroMes((Date) compra[4]);
 					String cod = (String) compra[1];
 					String des = (String) compra[8];
 					String prove = (String) compra[15];
 					String marca = (String) compra[16];
 					String flia = (String) compra[18];
-					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + mes + ";" + flia;
+					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + flia + ";" + mes;
 					Double acum = cants.get(key);
 					if (acum != null) {
 						acum += ((Double) compra[3]);
@@ -13216,7 +13217,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String descripcion = key.split(";")[1];
 					String proveedor_ = key.split(";")[2];
 					String marca = key.split(";")[3];
-					String flia = key.split(";")[5];
+					String flia = key.split(";")[4];
 					String key_ = codigo + ";" + descripcion + ";" + proveedor_ + ";" + marca + ";" + flia;
 					
 					if (keys.get(key_) == null) {
