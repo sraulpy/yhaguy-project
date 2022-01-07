@@ -20018,14 +20018,14 @@ class ReporteHistorialMovimientosArticulo_ extends ReporteYhaguy {
 	private Date hasta;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 25);
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 20);
 	static DatosColumnas col3 = new DatosColumnas("Número", TIPO_STRING, 40);
-	static DatosColumnas col4 = new DatosColumnas("Concepto", TIPO_STRING, 50);
+	static DatosColumnas col4 = new DatosColumnas("Concepto", TIPO_STRING, 45);
 	static DatosColumnas col5 = new DatosColumnas("Empresa", TIPO_STRING);
-	static DatosColumnas col6 = new DatosColumnas("Entrada", TIPO_STRING, 30);
-	static DatosColumnas col7 = new DatosColumnas("Salida", TIPO_STRING, 30);
-	static DatosColumnas col8 = new DatosColumnas("Saldo", TIPO_STRING, 30);
-	static DatosColumnas col9 = new DatosColumnas("Precio Gs.", TIPO_STRING, 40);
+	static DatosColumnas col6 = new DatosColumnas("Entrada", TIPO_STRING, 25);
+	static DatosColumnas col7 = new DatosColumnas("Salida", TIPO_STRING, 25);
+	static DatosColumnas col8 = new DatosColumnas("Saldo", TIPO_STRING, 25);
+	static DatosColumnas col9 = new DatosColumnas("Precio Gs.", TIPO_STRING, 35);
 
 	public ReporteHistorialMovimientosArticulo_(Date desde, Date hasta, String articulo, String deposito) {
 		this.desde = desde;
