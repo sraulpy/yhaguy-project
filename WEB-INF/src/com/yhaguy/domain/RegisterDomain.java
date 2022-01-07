@@ -10756,6 +10756,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+		
 	/**
 	 * @return los gastos bancarios segun banco.. 
 	 * [0]:concepto
@@ -10875,6 +10876,7 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+		
 	/**
 	 * @return los cheques emitidos segun banco.. 
 	 * [0]:concepto

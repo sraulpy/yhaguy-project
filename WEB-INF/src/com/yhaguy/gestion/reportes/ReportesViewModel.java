@@ -142,6 +142,7 @@ import com.yhaguy.util.reporte.ReporteYhaguy;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.HorizontalListBuilder;
 import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -851,6 +852,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String REMISION_CLIENTES = "STK-00011";
 		static final String CONTROL_CONSUMO_CARGA = "STK-00012";
 		static final String TRANSFERENCIAS_POR_ARTICULO = "STK-00013";
+		static final String HISTORIAL_MOVIMIENTOS_ARTICULO_ = "STK-00014";
 
 		/**
 		 * procesamiento del reporte..
@@ -908,6 +910,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case TRANSFERENCIAS_POR_ARTICULO:
 				this.transferenciasPorArticulo();
+				break;
+				
+			case HISTORIAL_MOVIMIENTOS_ARTICULO_:
+				this.historialMovimientosArticulo_();
 				break;
 			}
 		}
@@ -1264,8 +1270,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				ReporteHistorialMovimientosArticulo rep = new ReporteHistorialMovimientosArticulo(desde, hasta, articulo.getCodigoInterno(), desc_deposito);
+				rep.setDatosReporte(data);			
 				rep.setApaisada();
-				rep.setDatosReporte(data);				
+				rep.setTipoPagina(PageType.LEDGER);
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
@@ -1572,6 +1579,112 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}		
+		}
+		
+		
+		/**
+		 * reporte STK-00014
+		 */
+		private void historialMovimientosArticulo_() {
+			try {
+				Date desde = filtro.getFechaInicioOperaciones();
+				Date hasta = filtro.getFechaHasta();
+				Articulo articulo = filtro.getArticulo();
+				Deposito deposito = filtro.getDeposito();
+				long idDeposito = deposito == null? 0 : deposito.getId();
+				String desc_deposito = deposito == null? "TODOS.." : deposito.getDescripcion();
+				String campoFecha = "fechaCreacion";
+
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<Object[]> historico;
+				List<Object[]> historicoEntrada;
+				List<Object[]> historicoSalida;
+
+				long idArticulo = articulo.getId();
+				long idSucursal = getAcceso().getSucursalOperativa().getId();
+
+				List<Object[]> ventas = rr.getVentasPorArticulo(idArticulo, idDeposito, desde, hasta, true);
+				List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(idArticulo, idDeposito, desde, hasta, true);
+				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, idDeposito, desde, hasta, true);
+				List<Object[]> compras = rr.getComprasLocalesPorArticulo_(idArticulo, idDeposito, desde, hasta, true);
+				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, true, campoFecha);
+				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, true, true);
+				List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, true);
+				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, true);
+				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, true);
+				List<Object[]> migracion = rr.getMigracionPorArticulo(articulo.getCodigoInterno(), desde, hasta, idSucursal);
+
+				historicoEntrada = new ArrayList<Object[]>();
+				historicoSalida = new ArrayList<Object[]>();
+				
+				historicoEntrada.addAll(migracion);
+				historicoEntrada.addAll(ajustStockPost);
+				historicoEntrada.addAll(ntcsv);
+				historicoEntrada.addAll(compras);
+				historicoEntrada.addAll(importaciones);
+				
+				for (Object[] movim : ajustStockNeg) {
+					movim[3] = (int) movim[3] * -1;
+				}
+				
+				historicoSalida.addAll(ajustStockNeg);
+				historicoSalida.addAll(ventas);
+				historicoSalida.addAll(ntcsc);
+				historicoSalida.addAll(transfs_);
+
+				for (Object[] movim : historicoEntrada) {
+					movim[0] = "(+)" + movim[0];
+				}
+				
+				for (Object[] movim : transfs) {
+					movim[0] = "(+)" + movim[0];
+				}
+
+				historico = new ArrayList<Object[]>();
+				historico.addAll(historicoEntrada);
+				historico.addAll(historicoSalida);
+				historico.addAll(transfs);
+
+				// ordena la lista segun fecha..
+				Collections.sort(historico, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						Date fecha1 = (Date) o1[1];
+						Date fecha2 = (Date) o2[1];
+						return fecha1.compareTo(fecha2);
+					}
+				});
+				
+				long saldo = 0;
+				for (Object[] hist : historico) {
+					boolean ent = ((String) hist[0]).startsWith("(+)");
+					String fecha = Utiles.getDateToString((Date) hist[1], Utiles.DD_MM_YY);
+					String numero = (String) hist[2];
+					String concepto = ((String) hist[0]).replace("(+)", "");
+					String entrada = ent ? hist[3] + "" : "";
+					String salida = ent ? "" : hist[3] + "";
+					String importe = Utiles.getNumberFormat((double) hist[4]);;
+					String emp = (String) hist[5];
+					saldo += ent ? Long.parseLong(hist[3] + "") :  Long.parseLong(hist[3] + "") * -1;
+					data.add(new Object[] { fecha, numero, concepto, emp, entrada, salida, saldo + "", importe });
+				}
+				
+				ReporteHistorialMovimientosArticulo_ rep = new ReporteHistorialMovimientosArticulo_(desde, hasta, articulo.getCodigoInterno(), desc_deposito);
+				rep.setDatosReporte(data);			
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -19875,6 +19988,75 @@ class ReporteHistorialMovimientosArticulo extends ReporteYhaguy {
 		this.setNombreArchivo("HistorialMovimientos-");
 		this.setTitulosColumnas(cols);
 		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Artículo", this.articulo))
+				.add(this.textoParValor("Depósito", this.deposito)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+
+/**
+ * Reporte de Historial Movimientos por Articulo STK-00014..
+ */
+class ReporteHistorialMovimientosArticulo_ extends ReporteYhaguy {
+	
+	private String articulo;
+	private String deposito;
+	private Date desde;
+	private Date hasta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 25);
+	static DatosColumnas col3 = new DatosColumnas("Número", TIPO_STRING, 40);
+	static DatosColumnas col4 = new DatosColumnas("Concepto", TIPO_STRING, 50);
+	static DatosColumnas col5 = new DatosColumnas("Empresa", TIPO_STRING);
+	static DatosColumnas col6 = new DatosColumnas("Entrada", TIPO_STRING, 30);
+	static DatosColumnas col7 = new DatosColumnas("Salida", TIPO_STRING, 30);
+	static DatosColumnas col8 = new DatosColumnas("Saldo", TIPO_STRING, 30);
+	static DatosColumnas col9 = new DatosColumnas("Precio Gs.", TIPO_STRING, 40);
+
+	public ReporteHistorialMovimientosArticulo_(Date desde, Date hasta, String articulo, String deposito) {
+		this.desde = desde;
+		this.hasta = hasta;
+		this.articulo = articulo;
+		this.deposito = deposito;
+	}
+
+	static {
+		col6.setAlineacionColuman(COLUMNA_ALINEADA_DERECHA);
+		col7.setAlineacionColuman(COLUMNA_ALINEADA_DERECHA);
+		col8.setAlineacionColuman(COLUMNA_ALINEADA_DERECHA);
+		col9.setAlineacionColuman(COLUMNA_ALINEADA_DERECHA);
+		cols.add(col1);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
+		cols.add(col8);
+		cols.add(col9);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setTitulo("Historial de movimientos por artículo");
+		this.setDirectorio("Articulos");
+		this.setNombreArchivo("HistorialMovimientos-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+		this.setOficio();
 	}
 
 	/**
