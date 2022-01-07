@@ -373,6 +373,11 @@ public class VentaItemControl extends SoloViewModel {
 				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), 10));
 				this.det.setDescuentoPorcentajeMax(10);
 			}
+			if (this.det.getCantidad() < 24) {
+				this.det.setDescuentoPorcentaje(0);
+				this.det.setDescuentoUnitarioGs(0.0);
+				this.det.setDescuentoPorcentajeMax(maxDescuento);
+			}
 		}
 		
 		//this.det.setDescuentoPorcentaje(porcentajeDescuento);
