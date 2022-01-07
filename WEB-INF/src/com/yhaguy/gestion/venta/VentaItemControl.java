@@ -359,9 +359,10 @@ public class VentaItemControl extends SoloViewModel {
 		double maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
 		this.det.setDescuentoPorcentajeMax(maxDescuento);
 		
-		// promocion yrsa
-		if (this.det.getCodigoInterno().equals("CON C-0053")
-				|| this.det.getCodigoInterno().equals("CON C-0054")) {
+		// promocion yrsa ymra
+		if ((this.det.getCodigoInterno().equals("CON C-0053")
+				|| this.det.getCodigoInterno().equals("CON C-0054"))
+				&& (this.isEmpresaYRSA() || this.isEmpresaYMRA())) {
 			if (this.det.getCantidad() >= 24) {
 				this.det.setDescuentoPorcentaje(8.0);
 				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), 8.0));
@@ -833,6 +834,14 @@ public class VentaItemControl extends SoloViewModel {
 	
 	public boolean isEmpresaBaterias() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
+	}
+	
+	public boolean isEmpresaYRSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
+	}
+	
+	public boolean isEmpresaYMRA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 	}
 	
 	public UtilDTO getUtilDto(){
