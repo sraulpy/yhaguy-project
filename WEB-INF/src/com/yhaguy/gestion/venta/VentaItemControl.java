@@ -358,6 +358,22 @@ public class VentaItemControl extends SoloViewModel {
 		Double maxDescuentoLista = Double.valueOf(maxDescuentoLista_);
 		double maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
 		this.det.setDescuentoPorcentajeMax(maxDescuento);
+		
+		// promocion yrsa
+		if (this.det.getCodigoInterno().equals("CON C-0053")
+				|| this.det.getCodigoInterno().equals("CON C-0054")) {
+			if (this.det.getCantidad() >= 24) {
+				this.det.setDescuentoPorcentaje(8.0);
+				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), 8.0));
+				this.det.setDescuentoPorcentajeMax(8.0);
+			}
+			if (this.det.getCantidad() >= 36) {
+				this.det.setDescuentoPorcentaje(10);
+				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), 10));
+				this.det.setDescuentoPorcentajeMax(10);
+			}
+		}
+		
 		//this.det.setDescuentoPorcentaje(porcentajeDescuento);
 		//this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), porcentajeDescuento));
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) {
