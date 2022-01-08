@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="2650" pageHeight="595" orientation="Landscape" columnWidth="2610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.1435888100000136"/>
-	<property name="ireport.x" value="2928"/>
+	<property name="ireport.zoom" value="1.9487171000000123"/>
+	<property name="ireport.x" value="1538"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -102,7 +102,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[RUBRO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="852" y="0" width="167" height="15" uuid="36ea64ef-f2ad-4e06-834c-9ffb4f67f7ad"/>
+				<reportElement x="852" y="0" width="359" height="15" uuid="36ea64ef-f2ad-4e06-834c-9ffb4f67f7ad"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[VENDEDOR]]></text>
 			</staticText>
@@ -156,11 +156,6 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[RENT]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="1019" y="0" width="192" height="15" uuid="50409b46-e728-4ef9-9336-d009c3cfe9bf"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[TECNICO]]></text>
-			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
@@ -196,7 +191,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="852" y="0" width="167" height="15" uuid="b79eaf3a-9c8c-4f1a-8bd5-447ac2be908c"/>
+				<reportElement style="Detail" x="852" y="0" width="359" height="15" uuid="b79eaf3a-9c8c-4f1a-8bd5-447ac2be908c"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Vendedor}]]></textFieldExpression>
 			</textField>
@@ -247,11 +242,6 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement style="Detail" x="2386" y="0" width="93" height="15" uuid="0e6ffd68-4385-4905-bb9c-45d4640d89fe"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Ganancia}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="Detail" x="1019" y="0" width="192" height="15" uuid="36b3912b-0419-4b9e-a584-da284e908cde"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{Tecnico}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
