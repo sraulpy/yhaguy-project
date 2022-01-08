@@ -1211,7 +1211,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, true);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, true);
 				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, true);
-				List<Object[]> migracion = rr.getMigracionPorArticulo(articulo.getCodigoInterno(), desde, hasta, idSucursal);
+				List<Object[]> migracion = rr.getMigracionesPorArticulo(articulo.getCodigoInterno(), desde, hasta, idSucursal);
 
 				historicoEntrada = new ArrayList<Object[]>();
 				historicoSalida = new ArrayList<Object[]>();
@@ -1616,7 +1616,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, true);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, true);
 				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, true);
-				List<Object[]> migracion = rr.getMigracionPorArticulo(articulo.getCodigoInterno(), desde, hasta, idSucursal);
+				List<Object[]> migracion = rr.getMigracionesPorArticulo(articulo.getCodigoInterno(), desde, hasta, idSucursal);
 
 				historicoEntrada = new ArrayList<Object[]>();
 				historicoSalida = new ArrayList<Object[]>();
