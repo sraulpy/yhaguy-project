@@ -1673,7 +1673,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					data.add(new Object[] { fecha, numero, concepto, emp, entrada, salida, saldo + "", importe });
 				}
 				
-				ReporteHistorialMovimientosArticulo_ rep = new ReporteHistorialMovimientosArticulo_(desde, hasta, articulo.getCodigoInterno(), desc_deposito);
+				long stock = rr.getStockArticulo(idArticulo);
+				
+				ReporteHistorialMovimientosArticulo_ rep = new ReporteHistorialMovimientosArticulo_(desde, hasta, articulo.getCodigoInterno(), desc_deposito, (stock + ""));
 				rep.setDatosReporte(data);			
 				rep.setApaisada();
 
@@ -20016,6 +20018,7 @@ class ReporteHistorialMovimientosArticulo_ extends ReporteYhaguy {
 	private String deposito;
 	private Date desde;
 	private Date hasta;
+	private String stock;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 20);
@@ -20027,11 +20030,12 @@ class ReporteHistorialMovimientosArticulo_ extends ReporteYhaguy {
 	static DatosColumnas col8 = new DatosColumnas("Saldo", TIPO_STRING, 25);
 	static DatosColumnas col9 = new DatosColumnas("Precio Gs.", TIPO_STRING, 35);
 
-	public ReporteHistorialMovimientosArticulo_(Date desde, Date hasta, String articulo, String deposito) {
+	public ReporteHistorialMovimientosArticulo_(Date desde, Date hasta, String articulo, String deposito, String stock) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.articulo = articulo;
 		this.deposito = deposito;
+		this.stock = stock;
 	}
 
 	static {
@@ -20069,6 +20073,7 @@ class ReporteHistorialMovimientosArticulo_ extends ReporteYhaguy {
 				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Artículo", this.articulo))
+				.add(this.textoParValor("Stock Actual", this.stock))
 				.add(this.textoParValor("Depósito", this.deposito)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
