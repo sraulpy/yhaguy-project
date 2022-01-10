@@ -497,6 +497,11 @@ public class VentaItemControl extends SoloViewModel {
 		double precioMinimo = this.det.getPrecioMinimoGs();
 		double costoGs = this.getCostoArticulo();
 		
+		if ((this.isEmpresaYRSA() || this.isEmpresaYMRA())
+				&& this.dto.getDeposito().getText().equals("BATERIAS AVERIADAS")) {
+			return;
+		}
+		
 		if ((precio - costoGs) >= costoGs) {
 			Clients.showNotification("Utilidad mayor al 100 %..",
 					Clients.NOTIFICATION_TYPE_ERROR, comp, null, 2000);

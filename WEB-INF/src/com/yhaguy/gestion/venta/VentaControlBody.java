@@ -1843,22 +1843,26 @@ public class VentaControlBody extends BodyApp {
 		}
 		
 		// verificacion de costo y servicio..
-		for (VentaDetalleDTO item : this.dto.getDetalles()) {
-			Articulo art = rr.getArticuloById(item.getArticulo().getId());
-			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MARKETING)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.RETAIL_SHOP)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)
-					&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL) {
-				double costoGs = art.getCostoGs();
-				double importeGs = item.getImporteGsSinIva();
-				if ((importeGs <= costoGs) && art.isRestriccionCosto()) {
-					out = false;
-					mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
+		boolean averiados = this.dto.getDeposito().getText().equals("BATERIAS AVERIADAS")
+				&& (this.isEmpresaMRA() || this.isEmpresaCentral());
+		if (!averiados) {
+			for (VentaDetalleDTO item : this.dto.getDetalles()) {
+				Articulo art = rr.getArticuloById(item.getArticulo().getId());
+				if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
+						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MARKETING)
+						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.RETAIL_SHOP)
+						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
+						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)
+						&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL) {
+					double costoGs = art.getCostoGs();
+					double importeGs = item.getImporteGsSinIva();
+					if ((importeGs <= costoGs) && art.isRestriccionCosto()) {
+						out = false;
+						mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
+					}
 				}
 			}
-		}		
+		}				
 		
 		// si es Pedido verifica si se pueden reservar los items.
 		if ((this.isPresupuesto() == false) && this.dto.esNuevo() == true) {
