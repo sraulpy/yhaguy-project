@@ -69,7 +69,7 @@
 		vflex="true" visible="@load(vm.tabsVisible)"
 		emptyMessage="SIN MOVIMIENTOS..">
 		<listhead sizable="true">
-			<listheader label="Concepto" width="190px" style="text-align:center" />
+			<listheader label="Concepto" width="205px" style="text-align:center" />
 			<listheader label="Fecha" width="100px" style="text-align:center" />
 			<listheader label="Hora" width="100px" style="text-align:center" />
 			<listheader label="Número" width="130px" style="text-align:center" align="right" />
