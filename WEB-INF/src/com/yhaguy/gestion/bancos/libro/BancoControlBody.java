@@ -245,10 +245,12 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
 		List<Object[]> extracciones = rr.getExtraccionesPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
 		List<Object[]> depositosMRA = new ArrayList<Object[]>();
+		List<Object[]> depositosMRA_ = new ArrayList<Object[]>();
 		
 		if (this.isEmpresaCentral() && this.dto.getId() == 25) {
 			ConnectDBMRA conn = ConnectDBMRA.getInstance();
-			depositosMRA = conn.getDepositosBancarios(desde, hasta);
+			depositosMRA = conn.getDepositosBancariosRecibos(desde, hasta);
+			depositosMRA_ = conn.getDepositosBancariosVentas(desde, hasta);
 		}
 
 		historicoDEBE = new ArrayList<Object[]>();
@@ -264,6 +266,7 @@ public class BancoControlBody extends BodyApp {
 		historicoDEBE.addAll(formasPagoTarjeta);
 		historicoDEBE.addAll(prestamosInternosApagar);
 		historicoDEBE.addAll(depositosMRA);
+		historicoDEBE.addAll(depositosMRA_);
 		
 		historicoHABER.addAll(cheques);
 		historicoHABER.addAll(chequesRechazados);

@@ -124,15 +124,45 @@ public class ConnectDBMRA {
 	}
 	
 	/**
-	 * Stock de articulos..
+	 * depositos bancarios mra..
 	 */
-	public List<Object[]> getDepositosBancarios(Date desde, Date hasta) {
+	public List<Object[]> getDepositosBancariosRecibos(Date desde, Date hasta) {
 		List<Object[]> out = new ArrayList<Object[]>();
 		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
-		//String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
-		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), fechaoperacion, depositoNroReferencia, montoGs, 'ATLAS', descripcion "
-			+ "FROM reciboformapago "
-			+ "WHERE idtipo = 89 and fechaoperacion >= '" + desde_ + "'";	                   	
+		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
+		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), f.fechaoperacion, f.depositoNroReferencia, f.montoGs, 'ATLAS',"
+				+ " concat('RECIBO NRO. ', r.numero, ' - ', e.razonSocial) "
+			+ " FROM reciboformapago f inner join recibo r on f.idrecibo = r.id "
+			+ " inner join cliente c on r.idcliente = c.id"
+			+ " inner join empresa e on c.idempresa = e.id"
+			+ " WHERE f.idtipo = 89 and f.fechaoperacion >= '" + desde_ + "' and f.fechaoperacion <= '" + hasta_ + "'";	                   	
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while (result.next()) {
+				Object[] data = new Object[] { result.getObject(1), result.getObject(2), result.getObject(3),
+						result.getObject(4), result.getObject(5), result.getObject(6) };
+				out.add(data);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return out;
+	}
+	
+	/**
+	 * depositos bancarios mra..
+	 */
+	public List<Object[]> getDepositosBancariosVentas(Date desde, Date hasta) {
+		List<Object[]> out = new ArrayList<Object[]>();
+		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
+		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
+		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), f.fechaoperacion, f.depositoNroReferencia, f.montoGs, 'ATLAS',"
+				+ " concat('VENTA NRO. ', r.numero, ' - ', e.razonSocial) "
+			+ " FROM reciboformapago f inner join venta v on f.venta = v.id "
+			+ " inner join cliente c on v.idcliente = c.id"
+			+ " inner join empresa e on c.idempresa = e.id"
+			+ " WHERE f.idtipo = 89 and f.fechaoperacion >= '" + desde_ + "' and f.fechaoperacion <= '" + hasta_ + "'";	                   	
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
