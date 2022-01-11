@@ -130,7 +130,7 @@ public class ConnectDBMRA {
 		List<Object[]> out = new ArrayList<Object[]>();
 		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
 		//String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
-		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), fechaoperacion, nroreferencia, monto, 'ATLAS', descripcion "
+		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), fechaoperacion, depositoNroReferencia, monto, 'ATLAS', descripcion "
 			+ "FROM reciboformapago "
 			+ "WHERE idtipo = 89 and fechaoperacion >= '" + desde_ + "'";	                   	
 		try {
