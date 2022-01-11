@@ -158,7 +158,7 @@ public class ConnectDBMRA {
 		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
 		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
 		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), f.fechaoperacion, f.depositoNroReferencia, f.montoGs, 'ATLAS',"
-				+ " concat('VENTA NRO. ', r.numero, ' - ', e.razonSocial) "
+				+ " concat('VENTA NRO. ', v.numero, ' - ', e.razonSocial) "
 			+ " FROM reciboformapago f inner join venta v on f.venta = v.id "
 			+ " inner join cliente c on v.idcliente = c.id"
 			+ " inner join empresa e on c.idempresa = e.id"
