@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ConnectDBMRA {
 
@@ -118,6 +121,30 @@ public class ConnectDBMRA {
 			e.printStackTrace();
 		}	
 		return null;
+	}
+	
+	/**
+	 * Stock de articulos..
+	 */
+	public List<Object[]> getDepositosBancarios(Date desde, Date hasta) {
+		List<Object[]> out = new ArrayList<Object[]>();
+		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
+		//String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
+		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), fecha, nroreferencia, monto, 'ATLAS', descripcion "
+			+ "FROM reciboformapago "
+			+ "WHERE idtipo = 89 and fechaoperacion >= '" + desde_ + "'";	                   	
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while (result.next()) {
+				Object[] data = new Object[] { result.getObject(1), result.getObject(2), result.getObject(3),
+						result.getObject(4), result.getObject(5), result.getObject(6) };
+				out.add(data);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return out;
 	}
 	
 	public static void main(String[] args) {

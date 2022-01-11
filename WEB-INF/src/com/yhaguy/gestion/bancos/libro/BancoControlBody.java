@@ -28,6 +28,7 @@ import com.yhaguy.domain.BancoMovimiento;
 import com.yhaguy.domain.CuentaContable;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
+import com.yhaguy.util.ConnectDBMRA;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
@@ -243,6 +244,12 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
 		List<Object[]> extracciones = rr.getExtraccionesPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
+		List<Object[]> depositosMRA = new ArrayList<Object[]>();
+		
+		if (this.isEmpresaCentral() && this.dto.getId() == 25) {
+			ConnectDBMRA conn = ConnectDBMRA.getInstance();
+			depositosMRA = conn.getDepositosBancarios(desde, hasta);
+		}
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
@@ -256,6 +263,7 @@ public class BancoControlBody extends BodyApp {
 		historicoDEBE.addAll(formasPagoDeposito_);
 		historicoDEBE.addAll(formasPagoTarjeta);
 		historicoDEBE.addAll(prestamosInternosApagar);
+		historicoDEBE.addAll(depositosMRA);
 		
 		historicoHABER.addAll(cheques);
 		historicoHABER.addAll(chequesRechazados);
