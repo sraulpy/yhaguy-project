@@ -37,6 +37,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.CierreDocumento;
 import com.yhaguy.domain.Cliente;
@@ -1378,6 +1379,7 @@ public class NotaCreditoControlBody extends BodyApp {
 		out.setDetalles(this.crearDetalleDesde(desde.getDetalles(), desde));
 		out.setNumero(desde.getNumeroNotaCredito());
 		out.setTimbrado_(desde.getTimbrado_());
+		out.setFamilia(desde.getFamilia());
 		out.setAuxi(out.isNotaCreditoVentaContado() ? TipoMovimiento.NC_CONTADO : TipoMovimiento.NC_CREDITO);
 		for (MyArray serv : desde.getServiciosTecnicos()) {
 			out.getServiciosTecnicos().add(serv);
@@ -1690,10 +1692,12 @@ public class NotaCreditoControlBody extends BodyApp {
 				.getNumero().isEmpty();
 		boolean timbradoOK = this.dto.isNotaCreditoVenta() ? true
 				: !((String) this.dto.getTimbrado().getPos1()).isEmpty();
+		boolean familiaOK = this.dto.isNotaCreditoCompra() ? true
+				: (this.dto.isMotivoDescuento() && !this.dto.getFamilia().isEmpty());
 		return ((newPersona == false)
 				&& (this.dto.getMotivo().esNuevo() == false)
 				&& (numeroOK == true) && (timbradoOK == true)
-				&& this.dto.getDeposito() != null);
+				&& this.dto.getDeposito() != null && familiaOK);
 	}
 	
 	@DependsOn("detalleVisible")
@@ -1809,6 +1813,17 @@ public class NotaCreditoControlBody extends BodyApp {
 		out.remove(this.utilDto.getMotivoNotaCreditoDifPrecio());
 		if (!Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			out.remove(this.utilDto.getMotivoNotaCreditoReclamo());
+		}
+		return out;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getFamilias() throws Exception {
+		List<String> out = new ArrayList<String>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<ArticuloFamilia> list = rr.getObjects(ArticuloFamilia.class.getName());
+		for (ArticuloFamilia f : list) {
+			out.add(f.getDescripcion());
 		}
 		return out;
 	}

@@ -21,6 +21,7 @@ public class NotaCreditoDTO extends DTO {
 	private String observacion = "";
 	private String enlace = "";
 	private String numeroNotaCredito = "";
+	private String familia = "";
 	
 	private Date fechaEmision = new Date();
 	
@@ -593,5 +594,13 @@ public class NotaCreditoDTO extends DTO {
 
 	public void setPromocion(boolean promocion) {
 		this.promocion = promocion;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(String familia) {
+		this.familia = familia;
 	}
 }

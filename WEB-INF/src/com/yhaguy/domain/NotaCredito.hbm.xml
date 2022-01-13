@@ -22,6 +22,7 @@
 		<property name="cajaNro"/>
 		<property name="planillaCajaNro"/>
 		<property name="cajero"/>
+		<property name="familia"/>
 				
 		<property name="promocion">
 			<column name="promocion" not-null="true" default="false" />

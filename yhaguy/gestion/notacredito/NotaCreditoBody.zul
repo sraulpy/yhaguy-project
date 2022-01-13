@@ -135,13 +135,13 @@
 					</hlayout>
 				</vlayout>
 				<vlayout spacing="0">
-					<field value="Servicio Técnico" />
-					<hlayout>
-						<textbox hflex="true" readonly="true"
-							value="@load(vm.dto.serviciosTecnicos_)"></textbox>
-						<button iconSclass="z-icon-search" visible="@load(vm.dto.motivoReclamo)"
-							onClick='pop_serv_tec.open(self, "after_start"); tx_servtec.focus()' />
-					</hlayout>					
+					<field value="Familia" />
+					<combobox model="@load(vm.familias)" hflex="true"
+						selectedItem="@bind(vm.dto.familia)" value="@load(vm.dto.familia)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>					
 				</vlayout>
 				<cell colspan="2">
 					<vlayout style="margin-top:6px">

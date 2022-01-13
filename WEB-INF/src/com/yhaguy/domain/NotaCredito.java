@@ -23,6 +23,7 @@ public class NotaCredito extends Domain {
 	private String numero;
 	private String timbrado_;
 	private String observacion;
+	private String familia;
 	
 	private Date fechaEmision;
 	
@@ -976,5 +977,13 @@ public class NotaCredito extends Domain {
 
 	public void setPromocion(boolean promocion) {
 		this.promocion = promocion;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(String familia) {
+		this.familia = familia;
 	}
 }
