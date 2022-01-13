@@ -870,7 +870,7 @@ public class VentaControlBody extends BodyApp {
 		b.setAnchoColumnas(new String[]{"110px", ""});
 		b.setTitulo("Ítems de Servicio");
 		b.setWidth("600px");
-		b.addWhere("servicio = 'TRUE'");
+		b.addWhere("servicio = 'TRUE' and estado = 'TRUE'");
 		b.setContinuaSiHayUnElemento(false);
 		b.show("%");
 		if (b.isClickAceptar()) {
@@ -893,7 +893,7 @@ public class VentaControlBody extends BodyApp {
 		b.setAnchoColumnas(new String[]{"110px", ""});
 		b.setTitulo("Ítems de Contabilidad");
 		b.setWidth("600px");
-		b.addWhere("familia.descripcion = '" + ArticuloFamilia.CONTABILIDAD + "'");
+		b.addWhere("familia.descripcion = '" + ArticuloFamilia.CONTABILIDAD + "' and estado = 'TRUE'");
 		b.setContinuaSiHayUnElemento(false);
 		b.show("%");
 		if (b.isClickAceptar()) {

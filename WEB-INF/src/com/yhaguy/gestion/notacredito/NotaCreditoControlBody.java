@@ -1693,11 +1693,11 @@ public class NotaCreditoControlBody extends BodyApp {
 		boolean timbradoOK = this.dto.isNotaCreditoVenta() ? true
 				: !((String) this.dto.getTimbrado().getPos1()).isEmpty();
 		boolean familiaOK = this.dto.isNotaCreditoCompra() ? true
-				: (this.dto.isMotivoDescuento() && !this.dto.getFamilia().isEmpty());
+				: !this.dto.getFamilia().isEmpty();
 		return ((newPersona == false)
 				&& (this.dto.getMotivo().esNuevo() == false)
 				&& (numeroOK == true) && (timbradoOK == true)
-				&& this.dto.getDeposito() != null && familiaOK);
+				&& this.dto.getDeposito() != null && (familiaOK == true));
 	}
 	
 	@DependsOn("detalleVisible")
