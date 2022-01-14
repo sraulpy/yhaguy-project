@@ -687,6 +687,13 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return true si es nota credito compra CPT..
+	 */
+	public boolean isNotaCreditoCompraCPT() {
+		return this.getAuxi().equals("NCR-CPT");	
+	}
+	
+	/**
 	 * @return los detalles que son de tipo factura..
 	 */
 	public List<NotaCreditoDetalle> getDetallesFacturas() {
