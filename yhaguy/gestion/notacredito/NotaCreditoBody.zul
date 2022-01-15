@@ -137,7 +137,8 @@
 				<vlayout spacing="0">
 					<field value="Familia" />
 					<combobox model="@load(vm.familias)" hflex="true"
-						selectedItem="@bind(vm.dto.familia)" value="@load(vm.dto.familia)">
+						selectedItem="@bind(vm.dto.familia)" value="@load(vm.dto.familia)"
+						onChange="@command('refresh')" instant="true">
 						<template name="model">
 							<comboitem label="@load(each)"></comboitem>
 						</template>
