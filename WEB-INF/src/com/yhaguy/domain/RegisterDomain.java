@@ -4107,6 +4107,26 @@ public class RegisterDomain extends Register {
 
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return las notas de credito segun fecha
+	 */
+	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta) throws Exception {
+
+		String query = "select n from NotaCredito n where n.tipoMovimiento.sigla = ?"
+				+ " and n.fechaEmision between ? and ?" + " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA);
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
 
 	/**
 	 * @return las notas de credito segun fecha

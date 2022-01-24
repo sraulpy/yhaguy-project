@@ -7,11 +7,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.coreweb.domain.Tipo;
 import com.coreweb.extras.csv.CSV;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AjusteCtaCte;
+import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
@@ -21,6 +23,7 @@ import com.yhaguy.domain.BancoMovimiento;
 import com.yhaguy.domain.CajaPeriodo;
 import com.yhaguy.domain.Cliente;
 import com.yhaguy.domain.CompraLocalFactura;
+import com.yhaguy.domain.CompraLocalOrden;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2016;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento_2017;
@@ -30,15 +33,19 @@ import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.NotaCredito;
+import com.yhaguy.domain.OrdenCompra;
 import com.yhaguy.domain.OrdenPedidoGasto;
+import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RecaudacionCentral;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.domain.Timbrado;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.gestion.empresa.ctacte.visor.VisorCtaCteViewModel.DetalleMovimiento;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("unchecked")
@@ -611,6 +618,86 @@ public class ProcesosTesoreria {
 	}
 	
 	/**
+	 * verificar proveedores duplicados..
+	 */
+	public static void unificarProveedor(long idProveedor1, long idProveedor2) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Proveedor p1 = (Proveedor) rr.getObject(Proveedor.class.getName(), idProveedor1);
+		Proveedor p2 = (Proveedor) rr.getObject(Proveedor.class.getName(), idProveedor2);
+		
+		List<Gasto> gastos = rr.getGastos(idProveedor2);
+		for (Gasto gasto : gastos) {
+			gasto.setProveedor(p1);
+			rr.saveObject(gasto, "depuracion_proveedores");
+			System.out.println("gasto:" + gasto.getNumeroFactura());
+		}
+		
+		List<OrdenPedidoGasto> ordenes = rr.getOrdenPedidoGastos(idProveedor2);
+		for (OrdenPedidoGasto ord : ordenes) {
+			ord.setProveedor(p1);
+			rr.saveObject(ord, "depuracion_proveedores");
+			System.out.println("orden_gasto:" + ord.getNumero());
+		}
+		
+		Set<Timbrado> timbrados = p2.getTimbrados();
+		p2.getTimbrados().removeAll(timbrados);
+		rr.saveObject(p2, "");
+		System.out.println("timbrados removidos");
+		
+		List<Recibo> pagos = rr.getPagos(idProveedor2);
+		for (Recibo pago : pagos) {
+			pago.setProveedor(p1);
+			rr.saveObject(pago, "depuracion_proveedores");
+			System.out.println("pago:" + pago.getNumero());
+		}
+		
+		List<NotaCredito> notasCredito = rr.getNotasCreditos(idProveedor2);
+		for (NotaCredito nc : notasCredito) {
+			nc.setProveedor(p1);
+			rr.saveObject(nc, "depuracion_proveedores");
+			System.out.println("notacredito:" + nc.getNumero());
+		}
+		
+		List<CompraLocalFactura> compras = rr.getCompraLocalFacturas(idProveedor2);
+		for (CompraLocalFactura cm : compras) {
+			cm.setProveedor(p1);
+			rr.saveObject(cm, "depuracion_proveedores");
+			System.out.println("compra_factura:" + cm.getNumero());
+		}
+		
+		List<CompraLocalOrden> clordenes = rr.getCompraLocalOrdenes(idProveedor2);
+		for (CompraLocalOrden cl : clordenes) {
+			cl.setProveedor(p1);
+			rr.saveObject(cl, "depuracion_proveedores");
+			System.out.println("compra_orden:" + cl.getNumero());
+		}
+		
+		List<OrdenCompra> ordencompras = rr.getOrdenesCompra(idProveedor2);
+		for (OrdenCompra cl : ordencompras) {
+			cl.setProveedor(p1);
+			rr.saveObject(cl, "depuracion_proveedores");
+			System.out.println("compra_orden:" + cl.getNumero());
+		}
+		
+		List<Articulo> articulos = rr.getArticulos(idProveedor2);
+		for (Articulo cl : articulos) {
+			cl.setProveedor(p1);
+			rr.saveObject(cl, "depuracion_proveedores");
+			System.out.println("articulo:" + cl.getCodigoInterno());
+		}
+		
+		List<CtaCteEmpresaMovimiento> ctactes = rr.getCtaCteMovimientos(p2.getIdEmpresa(), 99);
+		for (CtaCteEmpresaMovimiento ctacte : ctactes) {
+			ctacte.setIdEmpresa(p1.getIdEmpresa());
+			rr.saveObject(ctacte, "depuracion_proveedores");
+			System.out.println("ctacte:" + ctacte.getNroComprobante());
+		}
+		
+		rr.deleteObject(p2);
+		System.out.println("proveedor unificado");
+	}
+	
+	/**
 	 * agrega recaudaciones central..
 	 */
 	public static void addRecaudacionesCentral() throws Exception {
@@ -1087,23 +1174,48 @@ public class ProcesosTesoreria {
 	/**
 	 * depura los saldos por nota de credito..
 	 */
-	public static void depurarSaldosNotaCredito() throws Exception {
+	public static void depurarSaldosNotaCredito(Date desde, Date hasta) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<NotaCredito> ncs = rr.getObjects(NotaCredito.class.getName());
-		for (NotaCredito nc : ncs) {
-			if (nc.isNotaCreditoVenta() && (!nc.isNotaCreditoVentaContado())) {
-				Venta vta = nc.getVentaAplicada();
+		List<NotaCredito> ncs_ = rr.getNotasCreditoVenta(desde, hasta);
+		for (NotaCredito ncr : ncs_) {
+			if (ncr.isNotaCreditoVenta() && (!ncr.isNotaCreditoVentaContado())) {
+				Venta vta = ncr.getVentaAplicada();
 				CtaCteEmpresaMovimiento ctacteVta = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
-				CtaCteEmpresaMovimiento ctacteNcr = rr.getCtaCteMovimientoByIdMovimiento(nc.getId(), nc.getTipoMovimiento().getSigla());
+				//CtaCteEmpresaMovimiento ctacteNcr = rr.getCtaCteMovimientoByIdMovimiento(ncr.getId(), ncr.getTipoMovimiento().getSigla());
 				
-				if (ctacteNcr != null && ctacteNcr.getSaldo() > 0) {
-					double saldoVta = ctacteVta!= null ? ctacteVta.getSaldo() : 0.0;
-					System.out.println();
-					System.out.println("-------- N.C.: " + nc.getNumero() + " - " + nc.getCliente().getRazonSocial() + " -------------");
-					System.out.println("CT.CT.VTA: " + Utiles.getNumberFormat(saldoVta));
-					System.out.println("CT.CT.NCR: " + Utiles.getNumberFormat(ctacteNcr.getSaldo()));
-					System.out.println("----------------------------------------------------");
+				double totalNCR = 0;
+				double totalREC = 0;
+				double totalCRE = 0;
+				double totalDEB = 0;
+				
+				if (vta != null) {
+					List<NotaCredito> ncs = rr.getNotaCreditosByVenta(vta.getId());
+					for (NotaCredito nc : ncs) {
+						if (!nc.isAnulado()) {
+							totalNCR += nc.getImporteGs();
+						}				
+					}
+					List<Object[]> recs = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+					for (Object[] rec : recs) {
+						ReciboDetalle rdet = (ReciboDetalle) rec[1];
+						totalREC += rdet.getMontoGs();
+					}
+					
+					List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+					for (AjusteCtaCte ajuste : ajustes) {
+						totalCRE += ajuste.getImporte();			
+					}
+					
+					List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+					for (AjusteCtaCte ajuste : ajustes_) {
+						totalDEB += ajuste.getImporte();	
+					}
 				}
+				
+				double aplicaciones = (vta.getImporteGs() + totalDEB) - (totalNCR + totalREC + totalCRE);
+				
+				System.out.println(ncr.getNumero() + " saldo: " + Utiles.getNumberFormat(ctacteVta.getSaldo()) + " aplic: " + Utiles.getNumberFormat(aplicaciones));				
+				
 			}
 		}
 	}
@@ -1720,7 +1832,9 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.verificarBancoDepositos();
 			//ProcesosTesoreria.verificarCotizacionGastos();
 			//ProcesosTesoreria.migracionClientesMRA(SRC_SALDOS_CLIENTES_MRA);
-			ProcesosTesoreria.verificarGastosCajaChica();
+			//ProcesosTesoreria.verificarGastosCajaChica();
+			//ProcesosTesoreria.unificarProveedor(265, 348);
+			ProcesosTesoreria.depurarSaldosNotaCredito(Utiles.getFecha("01-06-2021 00:00:00"), new Date());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
