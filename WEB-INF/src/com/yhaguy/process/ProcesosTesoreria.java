@@ -1220,6 +1220,50 @@ public class ProcesosTesoreria {
 		}
 	}
 	
+	public static void depurarSaldosVentasCredito(Date desde, Date hasta) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Venta> vtas = rr.getVentasCredito(desde, hasta, 0);
+		for (Venta vta : vtas) {
+				CtaCteEmpresaMovimiento ctacteVta = rr.getCtaCteMovimientoByIdMovimiento(vta.getId(), vta.getTipoMovimiento().getSigla());
+				//CtaCteEmpresaMovimiento ctacteNcr = rr.getCtaCteMovimientoByIdMovimiento(ncr.getId(), ncr.getTipoMovimiento().getSigla());
+				
+				double totalNCR = 0;
+				double totalREC = 0;
+				double totalCRE = 0;
+				double totalDEB = 0;
+				
+				if (vta != null) {
+					List<NotaCredito> ncs = rr.getNotaCreditosByVenta(vta.getId());
+					for (NotaCredito nc : ncs) {
+						if (!nc.isAnulado()) {
+							totalNCR += nc.getImporteGs();
+						}				
+					}
+					List<Object[]> recs = rr.getRecibosByVenta(vta.getId(), vta.getTipoMovimiento().getId());
+					for (Object[] rec : recs) {
+						ReciboDetalle rdet = (ReciboDetalle) rec[1];
+						totalREC += rdet.getMontoGs();
+					}
+					
+					List<AjusteCtaCte> ajustes = rr.getAjustesCredito(vta.getId(), vta.getTipoMovimiento().getId());
+					for (AjusteCtaCte ajuste : ajustes) {
+						totalCRE += ajuste.getImporte();			
+					}
+					
+					List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(vta.getId(), vta.getTipoMovimiento().getId());
+					for (AjusteCtaCte ajuste : ajustes_) {
+						totalDEB += ajuste.getImporte();	
+					}
+				}
+				
+				double aplicaciones = (vta.getImporteGs() + totalDEB) - (totalNCR + totalREC + totalCRE);
+				
+				System.out.println(vta.getNumero() + " saldo: " + Utiles.getNumberFormat(ctacteVta.getSaldo()) + " aplic: " + Utiles.getNumberFormat(aplicaciones));				
+				
+			}		
+	}
+
+	
 	/**
 	 * depura los saldos por nota de credito..
 	 */
@@ -1834,7 +1878,8 @@ public class ProcesosTesoreria {
 			//ProcesosTesoreria.migracionClientesMRA(SRC_SALDOS_CLIENTES_MRA);
 			//ProcesosTesoreria.verificarGastosCajaChica();
 			//ProcesosTesoreria.unificarProveedor(265, 348);
-			ProcesosTesoreria.depurarSaldosNotaCredito(Utiles.getFecha("01-06-2021 00:00:00"), new Date());
+			//ProcesosTesoreria.depurarSaldosNotaCredito(Utiles.getFecha("01-06-2021 00:00:00"), new Date());
+			ProcesosTesoreria.depurarSaldosVentasCredito(Utiles.getFecha("01-12-2021 00:00:00"), new Date());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
