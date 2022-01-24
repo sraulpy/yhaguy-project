@@ -633,6 +633,13 @@ public class VentaControlBody extends BodyApp {
 					Articulo art = rr.getArticuloById(item.getArticulo().getId());
 					if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
 						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), desde.getDeposito().getId());
+						if (adp == null) {
+							adp = new ArticuloDeposito();
+							adp.setArticulo(rr.getArticuloById(item.getArticulo().getId()));
+							adp.setDeposito((Deposito) rr.getObject(Deposito.class.getName(), desde.getDeposito().getId()));
+							adp.setStock(0);
+							rr.saveObject(adp, this.getLoginNombre());
+						}
 						ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad() * -1, this.getLoginNombre());
 						ControlArticuloStock.addMovimientoStock(out.getId(), out
 								.getTipoMovimiento().getId(), item.getCantidad()

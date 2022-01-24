@@ -159,14 +159,18 @@ public class ControlAnulacionMovimientos {
 			throw new Exception("La venta tiene un Recibo de cobro aplicado: "
 					+ venta.getNumeroReciboCobro());
 		}		
-		rr.saveObject(venta, user);
-		
+				
 		// actualiza el stock del articulo..
 		for (VentaDetalle item : venta.getDetalles()) {
-			ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo()
-					.getId(), venta.getDeposito().getId());
-			ControlArticuloStock.actualizarStock(adp.getId(),
-					item.getCantidad(), user);
+			ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), venta.getDeposito().getId());
+			if (adp == null) {
+				adp = new ArticuloDeposito();
+				adp.setArticulo(item.getArticulo());
+				adp.setDeposito(venta.getDeposito());
+				adp.setStock(0);
+				rr.saveObject(adp, user);
+			}
+			ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), user);
 		}
 		
 		// actualizar cta cte..
@@ -177,6 +181,8 @@ public class ControlAnulacionMovimientos {
 			ctacte.setAnulado(true);
 			rr.saveObject(ctacte, user);
 		}
+		
+		rr.saveObject(venta, user);
 		
 		// actualiza el historico venta / metas..
 		double tot_vta = venta.getTotalImporteGsSinIva();
@@ -232,6 +238,13 @@ public class ControlAnulacionMovimientos {
 		// actualiza el stock del articulo..
 		for (VentaDetalle item : venta.getDetalles()) {
 			ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), venta.getDeposito().getId());
+			if (adp == null) {
+				adp = new ArticuloDeposito();
+				adp.setArticulo(item.getArticulo());
+				adp.setDeposito(venta.getDeposito());
+				adp.setStock(0);
+				rr.saveObject(adp, user);
+			}
 			if (adp != null) {
 				ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), user);
 			}
@@ -342,6 +355,13 @@ public class ControlAnulacionMovimientos {
 		if (nc.isMotivoDevolucion()) {
 			for (NotaCreditoDetalle item : nc.getDetallesArticulos()) {
 				ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), nc.getVentaAplicada().getDeposito().getId());
+				if (adp == null) {
+					adp = new ArticuloDeposito();
+					adp.setArticulo(item.getArticulo());
+					adp.setDeposito(nc.getVentaAplicada().getDeposito());
+					adp.setStock(0);
+					rr.saveObject(adp, user);
+				}
 				ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad() * -1, user);
 			}
 		}		

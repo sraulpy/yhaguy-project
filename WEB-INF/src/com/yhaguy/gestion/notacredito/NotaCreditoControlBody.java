@@ -1402,6 +1402,13 @@ public class NotaCreditoControlBody extends BodyApp {
 				if (this.dto.isMotivoDevolucion()) {					
 					for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
 						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
+						if (adp == null) {
+							adp = new ArticuloDeposito();
+							adp.setArticulo(rr.getArticuloById(item.getArticulo().getId()));
+							adp.setDeposito(out.getDeposito());
+							adp.setStock(0);
+							rr.saveObject(adp, this.getLoginNombre());
+						}
 						ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), this.getLoginNombre());
 						ControlArticuloStock.addMovimientoStock(out.getId(), out
 								.getTipoMovimiento().getId(), item.getCantidad(), adp
@@ -1412,6 +1419,13 @@ public class NotaCreditoControlBody extends BodyApp {
 			} else {				
 				for (NotaCreditoDetalleDTO item : out.getDetallesArticulos()) {
 					ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), out.getDeposito().getId());
+					if (adp == null) {
+						adp = new ArticuloDeposito();
+						adp.setArticulo(rr.getArticuloById(item.getArticulo().getId()));
+						adp.setDeposito(out.getDeposito());
+						adp.setStock(0);
+						rr.saveObject(adp, this.getLoginNombre());
+					}
 					ControlArticuloStock.actualizarStock(adp.getId(), item.getCantidad(), this.getLoginNombre());
 					ControlArticuloStock.addMovimientoStock(out.getId(), out
 						.getTipoMovimiento().getId(), item.getCantidad(), adp
