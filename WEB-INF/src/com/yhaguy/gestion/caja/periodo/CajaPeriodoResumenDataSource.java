@@ -703,7 +703,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 					this.totalEgresos += importe;
 					if (nc.isNotaCreditoVentaContado()) {
 						this.totalNotaCreditoContado += importe;
-						this.totalNotaCreditoContadoEfectivo += nc.getTotalImporteEfectivo();
+						this.totalNotaCreditoContadoEfectivo += importe;
 						MyArray my = new MyArray(nc.getTipoMovimiento()
 								.getDescripcion(), nc.getNumero() + " - " 
 							  + nc.getCliente().getRazonSocial().toUpperCase(), importe,
