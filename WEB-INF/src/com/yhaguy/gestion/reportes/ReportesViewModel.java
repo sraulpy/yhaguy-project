@@ -1587,7 +1587,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		 */
 		private void historialMovimientosArticulo_() {
 			try {
-				Date desde = filtro.getFechaInicioOperaciones();
+				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
 				Articulo articulo = filtro.getArticulo();
 				Deposito deposito = filtro.getDeposito();
