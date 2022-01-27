@@ -625,6 +625,18 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return el gasto aplicada..
+	 */
+	public Gasto getGastoAplicado() {
+		for (NotaCreditoDetalle item : this.detalles) {
+			if (item.getGasto() != null) {
+				return item.getGasto();
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @return el vendedor de la factura aplicada..
 	 */
 	public Funcionario getVendedor_() {

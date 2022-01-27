@@ -13793,6 +13793,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LIBRO_VENTAS_MATRICIAL = "CON-00041";
 		static final String LIBRO_VENTAS_DETALLADO = "CON-00042";
 		static final String INGRESO_EGRESO_POR_CUENTA = "CON-00043";
+		static final String VENTAS_RG90 = "CON-00044";
 		
 		/**
 		 * procesamiento del reporte..
@@ -13951,6 +13952,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			case INGRESO_EGRESO_POR_CUENTA:
 				this.ingresoEgresoPorCuenta(mobile);
 				break;
+				
+			case VENTAS_RG90:
+				this.ventasHechaukaV2();
+				break;
 			}
 		}
 
@@ -13972,6 +13977,26 @@ public class ReportesViewModel extends SimpleViewModel {
 			notasDebito = rr.getNotasDebito(desde, hasta, 0, 0);
 			InformeHechauka.generarInformeHechauka(ventas, notasCredito, notasDebito);
 			Clients.showNotification("Informe Hechauka generado..");
+		}
+		
+		/**
+		 * Hechauka de ventas..
+		 */
+		private void ventasHechaukaV2() throws Exception {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();
+			Date hasta = filtro.getFechaHasta();
+			boolean incluirVTA = filtro.isIncluirVCT();
+			boolean incluirNCR = filtro.isIncluirNCR();
+
+			List<Venta> ventas = new ArrayList<>();
+			if (incluirVTA) ventas = rr.getVentas(desde, hasta, 0, 0);
+			List<NotaCredito> notasCredito = new ArrayList<NotaCredito>();
+			if (incluirNCR) notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0);
+			List<NotaDebito> notasDebito = new ArrayList<NotaDebito>();
+			notasDebito = rr.getNotasDebito(desde, hasta, 0, 0);
+			InformeHechaukaV2.generarInformeHechauka(ventas, notasCredito, notasDebito);
+			Clients.showNotification("Informe RG NRO. 90 generado..");
 		}
 
 		/**
