@@ -44,7 +44,7 @@ public class InformeHechaukaV2 {
 				String doc = venta.getCliente().getRuc();
 				String ced = venta.getCliente().getEmpresa().getCi();
 				String tipoDoc = "11";
-				if (doc.isEmpty() || doc == null || doc.length() < 3) {
+				if (doc.isEmpty() || doc == null || doc.length() < 3 || doc.equals(Configuracion.RUC_EMPRESA_LOCAL)) {
 					if (ced != null && ced.length() > 3) {
 						doc = ced;
 						tipoDoc = "12";
@@ -172,7 +172,7 @@ public class InformeHechaukaV2 {
 				String doc = nc.getProveedor().getRuc();
 				String ced = nc.getProveedor().getEmpresa().getCi();
 				String tipoDoc = "11";
-				if (doc.isEmpty() || doc == null || doc.length() < 3) {
+				if (doc.isEmpty() || doc == null || doc.length() < 3 || doc.equals(Configuracion.RUC_EMPRESA_LOCAL)) {
 					if (ced != null && ced.length() > 3) {
 						doc = ced;
 						tipoDoc = "12";
