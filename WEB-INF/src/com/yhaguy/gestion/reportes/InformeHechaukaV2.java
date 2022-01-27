@@ -91,7 +91,7 @@ public class InformeHechaukaV2 {
 
 				String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 						+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
-						+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + col18 + "" + "\t"
+						+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
 						+ col19 + "" + "\r\n";
 				objects.add(object);
 				registros++;
@@ -142,7 +142,7 @@ public class InformeHechaukaV2 {
 						+ " \t" + col11 + " \t" + col12 + " \t" + col13
 						+ " \t" + col14 + " \t" + col15 + " \t" + col16
 						+ " \t" + col17
-						+ col18 + "" + "\t" + col19 + "" + "\r\n";
+						+ " \t" + col18 + "" + "\t" + col19 + "" + "\r\n";
 				
 				objects.add(object);
 				registros++;
@@ -222,7 +222,7 @@ public class InformeHechaukaV2 {
 						+ " \t" + col11 + " \t" + col12 + " \t" + col13
 						+ " \t" + col14 + " \t" + col15 + " \t" + col16
 						+ " \t" + col17
-						+ col18 + "" + "\t" + col19 + "" + "\r\n";
+						+ " \t" + col18 + "" + "\t" + col19 + "" + "\r\n";
 				
 				objects.add(object);
 				registros++;
