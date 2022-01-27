@@ -236,7 +236,7 @@ public class InformeHechaukaV2 {
 		saveArchivo(
 				objects,
 				cabecera,
-				"HechaukaVentas-"
+				"InformeRG90_Ventas-"
 						+ misc.dateToString(new Date(), Misc.DD_MM_YYYY));
 	}
 	
