@@ -13794,6 +13794,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LIBRO_VENTAS_DETALLADO = "CON-00042";
 		static final String INGRESO_EGRESO_POR_CUENTA = "CON-00043";
 		static final String VENTAS_RG90 = "CON-00044";
+		static final String COMPRAS_RG90 = "CON-00045";
 		
 		/**
 		 * procesamiento del reporte..
@@ -13956,6 +13957,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			case VENTAS_RG90:
 				this.ventasHechaukaV2();
 				break;
+				
+			case COMPRAS_RG90:
+				this.notasCreditoHechaukaV2();
+				break;
 			}
 		}
 
@@ -14030,6 +14035,39 @@ public class ReportesViewModel extends SimpleViewModel {
 			}
 			InformeHechauka.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones, incluirBI, incluirGA);
 			Clients.showNotification("Informe Hechauka generado..");
+		}
+		
+		/**
+		 * Hechauka de notas de credito..
+		 */
+		private void notasCreditoHechaukaV2() throws Exception {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Date desde = filtro.getFechaDesde();
+			Date hasta = filtro.getFechaHasta();
+			Date inicio = Utiles.getFechaInicioOperaciones();
+			boolean incluirNC = filtro.isIncluirNCR();
+			boolean incluirCO = filtro.isIncluirCOM();
+			boolean incluirGA = filtro.isIncluirGastos();
+			boolean incluirBI = filtro.isIncluirBaseImponible();
+
+			List<NotaCredito> ncs = new ArrayList<NotaCredito>();
+			if (incluirNC) ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
+			List<CompraLocalFactura> compras = new ArrayList<>();
+			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0);
+			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, inicio, new Date());
+			List<Gasto> gastos = new ArrayList<Gasto>();
+			if (incluirGA) {
+				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, inicio, new Date(), 0);
+				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
+				gastos.addAll(gastosIndistinto);
+				gastos.addAll(gastosDespacho);	
+			}
+			if (incluirBI && !incluirGA) {
+				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
+				gastos.addAll(gastosDespacho);
+			}
+			InformeHechaukaV2.generarInformeHechaukaCompras(ncs, compras, gastos, importaciones, incluirBI, incluirGA);
+			Clients.showNotification("Informe RG90 Compras generado..");
 		}
 
 		/**
