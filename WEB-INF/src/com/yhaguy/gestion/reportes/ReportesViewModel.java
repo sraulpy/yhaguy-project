@@ -1594,6 +1594,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				long idDeposito = deposito == null? 0 : deposito.getId();
 				String desc_deposito = deposito == null? "TODOS.." : deposito.getDescripcion();
 				String campoFecha = "fechaCreacion";
+				boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
@@ -1612,8 +1613,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, idDeposito, desde, hasta, true);
 				List<Object[]> compras = rr.getComprasLocalesPorArticulo_(idArticulo, idDeposito, desde, hasta, true);
 				List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(idArticulo, idDeposito, desde, hasta, true, campoFecha);
-				List<Object[]> transfs = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, true, true);
-				List<Object[]> transfs_ = rr.getTransferenciasPorArticulo(idArticulo, idDeposito, desde, hasta, false, true);
+				List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(idArticulo, desde, hasta, false);
+				List<Object[]> transfsOrigenCentral = rr.getTransferenciasPorArticuloOrigenCentral(idArticulo, desde, hasta, false);
+				List<Object[]> transfsOrigenDifInventario = rr.getTransferenciasPorArticuloOrigenDiferenciaInv2019(idArticulo, desde, hasta, false);
+				List<Object[]> transfsOrigenDifInventarioMRA = rr.getTransferenciasPorArticuloOrigenDiferenciaInvMRA2019(idArticulo, desde, hasta, false);
+				List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(idArticulo, desde, hasta, false);
+				List<Object[]> transfsDestinoCentral = rr.getTransferenciasPorArticuloDestinoCentral(idArticulo, desde, hasta, false);
+				List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(idArticulo, desde, hasta, false);
+				List<Object[]> transfsDestinoDifInventarioMRA = rr.getTransferenciasPorArticuloDestinoDiferenciaInvMRA2019(idArticulo, desde, hasta, false);
 				List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, true);
 				List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, true);
 				List<Object[]> migracion = rr.getMigracionesPorArticulo(articulo.getCodigoInterno(), desde, hasta, idSucursal);
@@ -1626,6 +1633,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				historicoEntrada.addAll(ntcsv);
 				historicoEntrada.addAll(compras);
 				historicoEntrada.addAll(importaciones);
+				historicoEntrada.addAll(mra ? transfsOrigenCentral : transfsOrigenMRA);
+				historicoEntrada.addAll(mra ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
 				
 				for (Object[] movim : ajustStockNeg) {
 					movim[3] = (int) movim[3] * -1;
@@ -1634,20 +1643,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				historicoSalida.addAll(ajustStockNeg);
 				historicoSalida.addAll(ventas);
 				historicoSalida.addAll(ntcsc);
-				historicoSalida.addAll(transfs_);
+				historicoSalida.addAll(mra ? transfsDestinoCentral : transfsDestinoMRA);
+				historicoSalida.addAll(mra ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
 
 				for (Object[] movim : historicoEntrada) {
-					movim[0] = "(+)" + movim[0];
-				}
-				
-				for (Object[] movim : transfs) {
 					movim[0] = "(+)" + movim[0];
 				}
 
 				historico = new ArrayList<Object[]>();
 				historico.addAll(historicoEntrada);
 				historico.addAll(historicoSalida);
-				historico.addAll(transfs);
 
 				// ordena la lista segun fecha..
 				Collections.sort(historico, new Comparator<Object[]>() {
