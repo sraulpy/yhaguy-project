@@ -901,10 +901,15 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 				MyArray saldo_ = new MyArray("SALDO", "SALDO EN CAJA", saldo, "RESUMEN", saldo);
 				this.values.add(saldo_);
 			}
-
+			
+			double ingresos = planilla.getTotalEfectivoIngreso();
+			double egresos = planilla.getTotalEfectivoEgreso();
+			
+			System.out.println("--- ingresos: " + ingresos);
+			System.out.println("--- egresos: " + egresos);
+			
 			// total efectivo..
-			this.totalEfectivo = planilla.getTotalEfectivoIngreso()
-					- planilla.getTotalEfectivoEgreso();
+			this.totalEfectivo = ingresos - egresos;
 
 		} catch (Exception e) {
 			e.printStackTrace();
