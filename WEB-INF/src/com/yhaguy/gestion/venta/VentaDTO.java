@@ -298,10 +298,10 @@ public class VentaDTO extends DTO {
 	private double getChequesPendientes() throws Exception{
 		double out = 0;
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<BancoChequeTercero> cheques = rr.getChequesTercero("",
+		List<BancoChequeTercero> cheques = rr.getChequesTerceroCliente("",
 				"", "", "", "", "",
-				(String) this.cliente.getPos2(), "", "", "", "",
-				"", "FALSE", null, "FALSE", "FALSE", null, null, null, null, "", "", true);
+				"", "", "", "", "",
+				"", "FALSE", "FALSE", "FALSE", "FALSE", null, null, null, null, "", "", true, ((long) this.cliente.getPos4()));
 		for (BancoChequeTercero cheque : cheques) {
 			if (cheque.getFecha().compareTo(new Date()) > 0) {				
 				out += cheque.getMonto();
