@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="1117" pageHeight="612" orientation="Landscape" columnWidth="1077" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<property name="ireport.zoom" value="1.5000000000000018"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="424"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -234,60 +234,63 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="43" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<componentElement>
-				<reportElement x="1" y="0" width="1076" height="18" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
+				<reportElement x="1" y="2" width="1073" height="18" uuid="6390ba3a-25f9-4ce2-9119-de6ee450fd92"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset 1" uuid="dfc99092-153a-4a8c-8013-69dcf11d3085">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Ventas})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="18" width="1076">
-						<textField>
+					<jr:listContents height="18" width="1073">
+						<textField isStretchWithOverflow="true">
 							<reportElement x="0" y="3" width="66" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
+							<textElement>
+								<font fontName="SansSerif" pdfFontName="Helvetica"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="66" y="3" width="79" height="12" uuid="530e20be-7124-40a8-97e9-8c751d26187c"/>
 							<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="146" y="3" width="114" height="12" uuid="dc95d3d7-0576-4708-bdb4-a1c17ee0917b"/>
 							<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="262" y="3" width="301" height="12" uuid="4f571979-6a8e-45a4-a569-7daa67773db0"/>
 							<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="564" y="3" width="66" height="12" uuid="7aa8ea60-873b-4a83-bb59-e74472508281"/>
 							<textFieldExpression><![CDATA[$F{ruc}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="713" y="3" width="65" height="12" uuid="dd909d89-0bb0-4498-96cc-516a30e6fdcd"/>
 							<textElement textAlignment="Right"/>
 							<textFieldExpression><![CDATA[$F{gravado10}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="844" y="3" width="65" height="12" uuid="90e52218-ac76-450b-837b-d3a2479345e5"/>
 							<textElement textAlignment="Right"/>
 							<textFieldExpression><![CDATA[$F{iva10}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="909" y="3" width="79" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
 							<textElement textAlignment="Right"/>
 							<textFieldExpression><![CDATA[$F{exenta}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="779" y="3" width="65" height="12" uuid="794d632d-2190-4d32-95e3-cd9034c491d4"/>
 							<textElement textAlignment="Right"/>
 							<textFieldExpression><![CDATA[$F{iva5}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="647" y="3" width="65" height="12" uuid="e2b8a319-e473-4a51-8910-886b70ec7c2b"/>
 							<textElement textAlignment="Right"/>
 							<textFieldExpression><![CDATA[$F{gravado5}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="988" y="3" width="85" height="12" uuid="0fd619b3-5acf-4a98-9164-44153fabb848"/>
 							<textElement textAlignment="Right"/>
 							<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>

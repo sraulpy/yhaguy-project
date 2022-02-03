@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="804" pageHeight="842" columnWidth="796" leftMargin="4" rightMargin="4" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
-	<property name="ireport.zoom" value="1.6500000000000106"/>
-	<property name="ireport.x" value="245"/>
+	<property name="ireport.zoom" value="1.3636363636363722"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -215,70 +215,70 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Ventas})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="18" width="795">
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="0" y="3" width="60" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="60" y="3" width="96" height="12" uuid="dc95d3d7-0576-4708-bdb4-a1c17ee0917b"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="156" y="3" width="143" height="12" uuid="4f571979-6a8e-45a4-a569-7daa67773db0"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="299" y="3" width="65" height="12" uuid="7aa8ea60-873b-4a83-bb59-e74472508281"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{ruc}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="364" y="3" width="60" height="12" uuid="dd909d89-0bb0-4498-96cc-516a30e6fdcd"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{gravado5}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="556" y="3" width="72" height="12" uuid="90e52218-ac76-450b-837b-d3a2479345e5"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{iva10}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="713" y="3" width="81" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="629" y="3" width="84" height="12" uuid="53713ae5-298d-435d-a53b-8ffa9de2d0aa"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{exenta}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="501" y="3" width="55" height="12" uuid="4b001392-5984-46a0-94e3-2aaff045e761"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{iva5}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="424" y="3" width="77" height="12" uuid="bb3545ff-a4c8-4876-9d0f-6efd28383faa"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
