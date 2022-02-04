@@ -2828,7 +2828,7 @@ public class RegisterDomain extends Register {
 	 * [8]:proveedor.origen
 	 */
 	public List<Object[]> getArticulos_(String codigoInterno,
-			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen)
+			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen, String estado)
 			throws Exception {
 		codigoInterno = codigoInterno.replace("'", ""); codigoOriginal = codigoOriginal.replace("'", "");
 		codigoProveedor = codigoProveedor.replace("'", ""); descripcion = descripcion.replace("'", "");
@@ -2837,7 +2837,7 @@ public class RegisterDomain extends Register {
 		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
 				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion"
 				+ " from Articulo a"
-				+ " where lower(a.codigoInterno) like '%"
+				+ " where a.estado = '" + estado + "' and lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
 				+ codigoOriginal.toLowerCase()
