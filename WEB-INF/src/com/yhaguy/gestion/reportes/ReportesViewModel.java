@@ -60,6 +60,7 @@ import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloPresentacion;
+import com.yhaguy.domain.ArticuloReposicion;
 import com.yhaguy.domain.BancoBoletaDeposito;
 import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
@@ -12288,6 +12289,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String MATRIZ_COMPRAS_LOCALES = "COM-00008";
 		static final String COMPRAS_LOCALES_ARTICULO = "COM-00009";
 		static final String DETALLE_COMPRAS_LOCALES = "COM-00010";
+		static final String SOLICITUDES_REPOSICION = "COM-00011";
 
 		/**
 		 * procesamiento del reporte..
@@ -12333,6 +12335,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case DETALLE_COMPRAS_LOCALES:
 				this.detalleComprasLocales(DETALLE_COMPRAS_LOCALES);
+				break;
+				
+			case SOLICITUDES_REPOSICION:
+				this.solicitudesReposicion(SOLICITUDES_REPOSICION);
 				break;
 			}
 		}
@@ -13632,6 +13638,43 @@ public class ReportesViewModel extends SimpleViewModel {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		/**
+		 * solicitudes de reposicion..
+		 */
+		private void solicitudesReposicion(String codReporte) {
+
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = new ArrayList<Object[]>();
+				List<ArticuloReposicion> solicitudes = rr.getSolicitudesReposicion(desde, hasta);
+				
+				for (ArticuloReposicion rep : solicitudes) {
+					data.add(new Object[] { Utiles.getDateToString(rep.getFecha(), "dd-MM-yyyy"), rep.getSolicitante(),
+							rep.getArticulo().getDescripcion(), rep.getCantidad(), rep.getEstado() });
+				}
+				
+				ReporteSolicitudesReposicion rep = new ReporteSolicitudesReposicion(desde, hasta);
+				rep.setDatosReporte(data);
+				rep.setTitulo(codReporte + " - Solicitudes de Reposición");
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
 		}
 	}
 
@@ -17140,6 +17183,56 @@ class ReporteDetalleComprasLocales extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Proveedor", this.proveedor))
 				.add(this.textoParValor("Familia", this.familia)));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte de solicitudes de reposicion COM-00011..
+ */
+class ReporteSolicitudesReposicion extends ReporteYhaguy {
+	
+	private Date desde;
+	private Date hasta;
+
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
+	static DatosColumnas col2 = new DatosColumnas("Solicitante", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Cantidad", TIPO_INTEGER, 20);
+	static DatosColumnas col5 = new DatosColumnas("Estado", TIPO_STRING, 30);
+
+	public ReporteSolicitudesReposicion(Date desde, Date hasta) {
+		this.desde = desde;
+		this.hasta = hasta;
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("compras");
+		this.setNombreArchivo("SolicitudReposicion-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}

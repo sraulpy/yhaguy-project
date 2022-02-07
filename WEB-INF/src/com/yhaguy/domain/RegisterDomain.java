@@ -14288,6 +14288,19 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+
+	/**
+	 * @return solicitudes de reposicion..
+	 */
+	public List<ArticuloReposicion> getSolicitudesReposicion(Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c from ArticuloReposicion c where "
+				+ " (c.fecha >= '" + desde_ + "' and c.fecha <= '" + hasta_ + "')";
+			query += " order by c.fecha";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
