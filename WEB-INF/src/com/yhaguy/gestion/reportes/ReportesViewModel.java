@@ -13658,12 +13658,13 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (ArticuloReposicion rep : solicitudes) {
 					data.add(new Object[] { Utiles.getDateToString(rep.getFecha(), "dd-MM-yyyy"), rep.getSolicitante(),
-							rep.getArticulo().getDescripcion(), rep.getCantidad(), rep.getEstado() });
+							rep.getArticulo().getCodigoInterno(), rep.getObservacion().toUpperCase(), rep.getCantidad(), rep.getEstado() });
 				}
 				
 				ReporteSolicitudesReposicion rep = new ReporteSolicitudesReposicion(desde, hasta);
 				rep.setDatosReporte(data);
 				rep.setTitulo(codReporte + " - Solicitudes de Reposición");
+				rep.setLegal();
 				rep.setApaisada();
 
 				ViewPdf vp = new ViewPdf();
@@ -17199,9 +17200,10 @@ class ReporteSolicitudesReposicion extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Solicitante", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING);
-	static DatosColumnas col4 = new DatosColumnas("Cantidad", TIPO_INTEGER, 20);
-	static DatosColumnas col5 = new DatosColumnas("Estado", TIPO_STRING, 30);
+	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING, 40);
+	static DatosColumnas col4 = new DatosColumnas("Observación", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Cantidad", TIPO_INTEGER, 20);
+	static DatosColumnas col6 = new DatosColumnas("Estado", TIPO_STRING, 30);
 
 	public ReporteSolicitudesReposicion(Date desde, Date hasta) {
 		this.desde = desde;
@@ -17214,6 +17216,7 @@ class ReporteSolicitudesReposicion extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override
