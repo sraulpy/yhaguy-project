@@ -17200,9 +17200,9 @@ class ReporteSolicitudesReposicion extends ReporteYhaguy {
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Fecha", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Solicitante", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING, 40);
+	static DatosColumnas col3 = new DatosColumnas("Código", TIPO_STRING, 50);
 	static DatosColumnas col4 = new DatosColumnas("Observación", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Cantidad", TIPO_INTEGER, 20);
+	static DatosColumnas col5 = new DatosColumnas("Cant.", TIPO_INTEGER, 20);
 	static DatosColumnas col6 = new DatosColumnas("Estado", TIPO_STRING, 30);
 
 	public ReporteSolicitudesReposicion(Date desde, Date hasta) {
