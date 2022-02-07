@@ -234,7 +234,10 @@ public class CajaPeriodo extends Domain {
 		double out = 0;
 		for (Gasto gasto : this.gastos) {
 			if (!gasto.isAnulado()) {
-				out += gasto.getImporteGs();
+				for (ReciboFormaPago fp : gasto.getFormasPago()) {
+					if(fp.isEfectivo())
+						out += fp.getMontoGs();
+				}
 			}						
 		}		
 		for (Recibo pago : this.recibos) {
