@@ -359,7 +359,7 @@ public class InformeHechaukaV2 {
 				if (ruc.equals(Proveedor.RUC_DIR_NAC_ADUANAS)) {				
 					ruc = Configuracion.RUC_EMPRESA_EXTERIOR;
 
-					String rSocial = "PROVEEDORES DEL EXTERIOR";
+					String rSocial = "DIRECCIÓN GENERAL DE ADUANAS";
 					String timbrado = "0";
 					String nro = gasto.getNumeroFactura();
 					String fecha = misc.dateToString(gasto.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
@@ -375,7 +375,7 @@ public class InformeHechaukaV2 {
 					String col2 = "11";
 					String col3 = ruc.substring(0, ruc.length() - 2);
 					String col4 = rSocial;
-					String col5 = "109";
+					String col5 = "107";
 					String col6 = fecha;
 					String col7 = timbrado;
 					String col8 = nro;
@@ -426,8 +426,8 @@ public class InformeHechaukaV2 {
 			String col8 = nro;
 			String col9 = FORMATTER.format(0.0) + "";
 			String col10 = FORMATTER.format(0.0) + "";
-			String col11 = FORMATTER.format(0.0) + "";
-			String col12 = FORMATTER.format(0.0) + "";
+			String col11 = FORMATTER.format(importe) + "";
+			String col12 = FORMATTER.format(importe) + "";
 			String col13 = cond + "";
 			String col14 = "S";
 			String col15 = "S";
