@@ -372,7 +372,7 @@ public class InformeHechaukaV2 {
 					long cond = 2;
 					
 					String col1 = "2";
-					String col2 = "11";
+					String col2 = "17";
 					String col3 = ruc.substring(0, ruc.length() - 2);
 					String col4 = rSocial;
 					String col5 = "107";
@@ -417,7 +417,7 @@ public class InformeHechaukaV2 {
 			long cond = 2;
 			
 			String col1 = "2";
-			String col2 = "11";
+			String col2 = "17";
 			String col3 = ruc.substring(0, ruc.length() - 2);
 			String col4 = rSocial;
 			String col5 = "107";

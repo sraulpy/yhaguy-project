@@ -278,6 +278,9 @@ public class VentaDTO extends DTO {
 		if (!this.cliente.esNuevo()) {
 			double lineaTemporal = this.getLineaCreditoTemporal();
 			double lineaCredito = lineaTemporal > 0 ? lineaTemporal : this.getLimiteCredito();
+			System.out.println("--- linea: " + lineaCredito);
+			System.out.println("--- saldoctacte: " + this.getSaldoCtaCte());
+			System.out.println("--- cheques: " + this.getChequesPendientes());
 			return (lineaCredito + Utiles.obtenerValorDelPorcentaje(lineaCredito, Venta.MARGEN_LINEA_CREDITO)) - this.getSaldoCtaCte();
 		}
 		return 0;
@@ -295,13 +298,13 @@ public class VentaDTO extends DTO {
 	/**
 	 * @return los cheques pendientes..
 	 */
-	private double getChequesPendientes() throws Exception{
+	private double getChequesPendientes() throws Exception {
 		double out = 0;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<BancoChequeTercero> cheques = rr.getChequesTerceroCliente("",
 				"", "", "", "", "",
 				"", "", "", "", "",
-				"", "FALSE", "FALSE", "FALSE", "FALSE", null, null, null, null, "", "", true, ((long) this.cliente.getPos4()));
+				"", "FALSE", null, "FALSE", "FALSE", null, null, null, null, "", "", true, ((long) this.cliente.getPos4()));
 		for (BancoChequeTercero cheque : cheques) {
 			if (cheque.getFecha().compareTo(new Date()) > 0) {				
 				out += cheque.getMonto();

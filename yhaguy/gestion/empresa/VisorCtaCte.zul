@@ -5,7 +5,8 @@
 	onCreate="tbox_cod.focus()" id="visorCtaCte">
 	<caption image="/core/images/client_account_template.png"></caption>
 
-	<hlayout id="cab" style="margin:5px">
+	<div vflex="true" style="padding:5px">
+	<hlayout id="cab" style="margin-bottom:5px">
 		<navbar mold="bs-pills">
 			<navitem label=" CLIENTE" selected="true"
 				onClick="@command('selectTipo', tipo=1)" width="200px"
@@ -82,7 +83,7 @@
 
 	<!-- _______________ ESTADO DE CUENTA _______________ -->
 
-	<vlayout height="100%" id="estCta" visible="false" spacing="0">
+	<vbox height="100%" id="estCta" visible="false" spacing="0">
 		<hlayout style="margin-left:10px">
 			<image
 				src="@load(vm.selectedItem.pos5 eq 'true'? '/core/images/exclamation.png' : (vm.selectedItem.pos9 eq 'true'? '/core/images/tick_.png' : '/core/images/tick.png'))"
@@ -183,7 +184,8 @@
 			emptyMessage="NO SE ENCONTRARON MOVIMIENTOS PARA ESTA CUENTA.."
 			model="@load(vm.movimientos)"
 			visible="@load(!vm.aplicaciones)"
-			selectedItem="@bind(vm.selectedItem_)">
+			selectedItem="@bind(vm.selectedItem_)"
+			mold="paging" pageSize="18">
 			<listhead>
 				<listheader label="Emisión" sort="auto(pos1)" />
 				<listheader label="Vencimiento" sort="auto(pos2)" />
@@ -330,7 +332,7 @@
 			</listfoot>
 		</listbox>
 		
-	</vlayout>
+	</vbox>
 
 	<style>
 		input[type="radio"], input[type="checkbox"] { margin:0px 3px 0px
@@ -568,6 +570,156 @@
 									format="###,###,###,##0" 
 									value="@load(vm.detalle.totalSaldo)"/>
 								</hlayout>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</popup>
+	
+	<popup id="popDetalleProveedores" width="70%" height="60%" sclass="rounded"
+		style="padding:10px">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="@load(vm.detalle.tipoMovimiento.toUpperCase())" />
+			</hbox>
+			<button onClick="popDetalleProveedores.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="3px"></div>
+		<tabbox vflex="true">
+			<tabs>
+				<tab label="@load(vm.detalle.notaCredito ? 'Nota de Crédito' : 'Factura')" width="150px" id="tabFacP"></tab>
+				<tab label="Aplicaciones" width="150px"
+					visible="@load(vm.detalle.ventaCredito or vm.detalle.notaCredito or vm.detalle.anticipoCobro or vm.detalle.compra or vm.detalle.gasto)"
+					onClick="@command('verAplicacionesProveedor')"></tab>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<hlayout sclass="button-container" visible="@load(!vm.detalle.notaCredito)">
+						<field value="Emisión:" />
+						<label
+							value="@load(vm.detalle.emision) @converter('formattedDate', format='dd-MM-yyyy')" />
+						<space />
+						<field value="Vencimiento:" />
+						<label
+							value="@load(vm.detalle.vencimiento) @converter('formattedDate', format='dd-MM-yyyy')" />
+						<space />
+						<field value="Número:" />
+						<label value="@load(vm.detalle.numero)" />
+					</hlayout>
+					<hlayout sclass="button-container" visible="@load(vm.detalle.notaCredito)">
+						<field value="Emisión:" />
+						<label
+							value="@load(vm.detalle.emision) @converter('formattedDate', format='dd-MM-yyyy')" />
+						<space />
+						<field value="Nro.:" />
+						<label value="@load(vm.detalle.numero)" />
+						<space />
+						<field value="Fac.Aplicada:" />
+						<label value="@load(vm.detalle.facturaAplicada)" />
+						<space/>
+						<field value="Motivo:" />
+						<label value="@load(vm.detalle.motivo)" />
+						<space/>
+						<field value="Caja:" />
+						<label value="@load(vm.detalle.numeroPlanilla)" />
+					</hlayout>
+					<listbox vflex="true" sclass="small-list"
+						model="@load(vm.detalle.detalles)"
+						emptyMessage="DETALLE SIN ÍTEMS..">
+						<listhead style="text-align:center">
+							<listheader label="Código" width="120px" />
+							<listheader label="Descripción" />
+							<listheader label="Cant." width="60px"
+								align="right" style="text-align:center" />
+							<listheader label="Precio Gs." width="100px"
+								align="right" style="text-align:center" />
+							<listheader label="Importe Gs."
+								width="100px" align="right" style="text-align:center" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.pos1)" />
+								<listcell label="@load(each.pos2)" />
+								<listcell label="@load(each.pos3)" />
+								<listcell
+									label="@load(each.pos4) @converter(vm.cnv.monedaLocal)" />
+								<listcell
+									label="@load(each.pos5) @converter(vm.cnv.monedaLocal)" />
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter span="3">
+								<hlayout>
+									<field
+										value="@load(vm.detalle.detalles.size())" />
+									<field value="ítems" />
+								</hlayout>
+							</listfooter>
+							<listfooter span="2">
+								<hbox pack="end" align="end"
+									hflex="true">
+									<field value="Total Gs.:" />
+									<div width="5px" />
+									<field
+										value="@load(vm.detalle.totalImporteGs) @converter(vm.cnv.monedaLocal)" />
+								</hbox>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</tabpanel>
+				<tabpanel>
+					<listbox vflex="true" sclass="small-list"
+						model="@load(vm.detalle.aplicaciones)"
+						id="listAplicacionesP"
+						onLater="@command('clearProgressProv')"
+						selectedItem="@bind(vm.detalle_)">
+						<listhead>
+							<listheader width="40px" align="center"></listheader>
+							<listheader label="Fecha" width="80px"></listheader>
+							<listheader label="Número" width="140px"></listheader>
+							<listheader label="Concepto"></listheader>
+							<listheader label="Nro. Recibo" width="120px"></listheader>
+							<listheader label="Debe" width="100px" align="right" style="text-align:center"></listheader>
+							<listheader label="Haber" width="100px" align="right" style="text-align:center"></listheader>
+							<listheader label="Saldo" width="100px" align="right" style="text-align:center"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell>
+									<a iconSclass="z-icon-list" onClick="@command('verAplicaciones_', parent=self)"
+										visible="@load(each.sigla eq 'MOV-AJU-POS' ? 'true' : (each.sigla eq 'MOV-AJU-NEG' ? 'true' : 'false'))"></a>
+								</listcell>
+								<listcell label="@load(each.emision) @converter('formattedDate', format='dd-MM-yyyy')" 
+									style="@load(each.self? 'color:blue' : '')"/>
+								<listcell label="@load(each.numero)" 
+									style="@load(each.self? 'color:blue' : '')"/>
+								<listcell label="@load(each.tipoMovimiento)"
+									style="@load(each.self? 'color:blue' : (each.entregado? 'color:green' : ''))"
+									iconSclass="@load(each.entregado? 'z-icon-check' : '')" />
+								<listcell label="@load(each.numeroRecibo)"
+									style="@load(each.self? 'color:blue' : '')" />
+								<listcell label="@load(each.debe) @converter(vm.cnv.monedaLocal)" 
+									style="@load(each.self? 'color:blue' : '')" />
+								<listcell label="@load(each.haber) @converter(vm.cnv.monedaLocal)" 
+									style="@load(each.self? 'color:blue' : '')" />
+								<listcell label="@load(each.saldo) @converter(vm.cnv.monedaLocal)"
+									style="@load(each.self? 'color:blue' : '')" />
+							</listitem>
+						</template>
+						<listfoot>
+							<listfooter span="8">
+								<hbox hflex="true" pack="end">
+									<field value="Saldo Gs." />
+									<doublebox
+									style="background:#EEF7FA;text-align:right;font-weight:bold"
+									format="###,###,###,##0" 
+									value="@load(vm.detalle.totalSaldo)"/>
+								</hbox>
 							</listfooter>
 						</listfoot>
 					</listbox>
@@ -1139,6 +1291,7 @@
 		</listbox>
 	</popup>
 	
+	</div>
 	<style>
 		.z-doublebox { min-height:20px }
 		.z-tabpanel { border: none }
