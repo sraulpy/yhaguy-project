@@ -128,8 +128,8 @@ public class ConnectDBMRA {
 	 */
 	public List<Object[]> getDepositosBancariosRecibos(Date desde, Date hasta) {
 		List<Object[]> out = new ArrayList<Object[]>();
-		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
-		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
+		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy 00:00:00");
+		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy 23:59:00");
 		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), f.fechaoperacion, f.depositoNroReferencia, f.montoGs, 'ATLAS',"
 				+ " concat('RECIBO NRO. ', r.numero, ' - ', e.razonSocial) "
 			+ " FROM reciboformapago f inner join recibo r on f.idrecibo = r.id "
@@ -155,8 +155,8 @@ public class ConnectDBMRA {
 	 */
 	public List<Object[]> getDepositosBancariosVentas(Date desde, Date hasta) {
 		List<Object[]> out = new ArrayList<Object[]>();
-		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy hh:mm:ss");
-		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy hh:mm:ss");
+		String desde_ = Utiles.getDateToString(desde, "dd-MM-yyyy 00:00:00");
+		String hasta_ = Utiles.getDateToString(hasta, "dd-MM-yyyy 23:59:00");
 		String sql = "SELECT ('DEPOSITO CTA. BANCARIA - MRA'), f.fechaoperacion, f.depositoNroReferencia, f.montoGs, 'ATLAS',"
 				+ " concat('VENTA NRO. ', v.numero, ' - ', e.razonSocial) "
 			+ " FROM reciboformapago f inner join venta v on f.venta = v.id "
