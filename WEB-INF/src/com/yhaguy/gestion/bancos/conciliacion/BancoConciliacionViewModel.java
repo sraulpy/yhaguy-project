@@ -36,6 +36,7 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.AssemblerBancoCtaCte;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
+import com.yhaguy.util.ConnectDBMRA;
 import com.yhaguy.util.Utiles;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -481,6 +482,17 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
+		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
+		List<Object[]> extracciones = rr.getExtraccionesPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
+		
+		List<Object[]> depositosMRA = new ArrayList<Object[]>();
+		List<Object[]> depositosMRA_ = new ArrayList<Object[]>();
+		
+		if (this.isEmpresaCentral() && idBanco == 25) {
+			ConnectDBMRA conn = ConnectDBMRA.getInstance();
+			depositosMRA = conn.getDepositosBancariosRecibos(desde, hasta);
+			depositosMRA_ = conn.getDepositosBancariosVentas(desde, hasta);
+		}
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
@@ -491,6 +503,9 @@ public class BancoConciliacionViewModel extends BodyApp {
 		historicoDEBE.addAll(prestamosBancarios);
 		historicoDEBE.addAll(formasPagoDeposito);
 		historicoDEBE.addAll(formasPagoDeposito_);
+		historicoDEBE.addAll(formasPagoTarjeta);
+		historicoDEBE.addAll(depositosMRA);
+		historicoDEBE.addAll(depositosMRA_);
 		
 		historicoHABER.addAll(cheques);
 		historicoHABER.addAll(chequesRechazados);
@@ -500,6 +515,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		historicoHABER.addAll(gastos);
 		historicoHABER.addAll(debitosDesglosados);
 		historicoHABER.addAll(formasPagoDebito);
+		historicoHABER.addAll(extracciones);
 
 		for (Object[] movim : historicoDEBE) {
 			movim[0] = "(+)" + movim[0];
