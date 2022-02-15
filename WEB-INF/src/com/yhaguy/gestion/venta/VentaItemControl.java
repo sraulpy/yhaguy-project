@@ -592,7 +592,7 @@ public class VentaItemControl extends SoloViewModel {
 		}
 		if (this.getAcceso().getSucursalOperativa().getId().equals(SucursalApp.ID_MCAL)
 				|| this.getLoginNombre().equals("servicio")
-				|| this.getLoginNombre().equals("marlene") 
+				|| this.getLoginNombre().equals("valezcav") 
 				|| this.getLoginNombre().equals("josem")) {
 			return;
 		}
