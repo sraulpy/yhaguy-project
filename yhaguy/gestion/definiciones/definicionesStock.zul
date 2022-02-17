@@ -1,10 +1,52 @@
+<zk>
 <tabbox height="100%">
 	<tabs>
-		<tab label="Artículos" />
+		<tab label="Ubicaciones" />
 	</tabs>
 	<tabpanels>
 		<tabpanel>
-			DEFINICIONES DE ARTICULOS..
+			<hlayout sclass="button-container">
+				<button mold="bs" sclass="btn-primary btn-sm"
+					width="130px" iconSclass="z-icon-plus" label=" Agregar" 
+					onClick='pop_add_ubic.open(self, "after_start")'/>
+			</hlayout>
+			<listbox vflex="true" sclass="small-list"
+				emptyMessage="SIN UBICACIONES.."
+				model="@load(vm.ubicaciones)" mold="paging" pageSize="20">
+				<listhead>
+					<listheader label="Estante"/>	
+					<listheader label="Fila"/>
+					<listheader label="Columna"/>						
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.estante)"></listcell>
+						<listcell label="@load(each.fila)"></listcell>
+						<listcell label="@load(each.columna)"></listcell>
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter>
+						<hlayout>
+							<field value="ítems" />
+						</hlayout>
+					</listfooter>
+				</listfoot>
+			</listbox>
 		</tabpanel>
 	</tabpanels>
 </tabbox>
+<popup id="pop_add_ubic" width="400px" sclass="rounded">
+	<hlayout>
+		<textbox hflex="true" placeholder="Estante.."
+			value="@bind(vm.nuevaUbicacion.estante)"></textbox>
+		<textbox hflex="true" placeholder="Fila.."
+			value="@bind(vm.nuevaUbicacion.fila)"></textbox>
+		<textbox hflex="true" placeholder="Columna.."
+			value="@bind(vm.nuevaUbicacion.columna)"></textbox>
+		<button mold="bs" sclass="btn-success btn-xs"
+					width="50px" iconSclass="z-icon-check" vflex="true"
+					onClick="@command('addUbicaciones', comp=pop_add_ubic)" />
+	</hlayout>
+</popup>
+</zk>

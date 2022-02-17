@@ -31,6 +31,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.AssemblerUtil;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
+import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Banco;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.CtaCteLineaCredito;
@@ -120,6 +121,8 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	
 	private EmpresaCartera selectedCartera;
 	private EmpresaCartera nuevaCartera = new EmpresaCartera();
+	
+	private ArticuloUbicacion nuevaUbicacion = new ArticuloUbicacion();
 
 	@Init(superclass = true)
 	public void init() {
@@ -689,6 +692,28 @@ public class DefinicionesViewModel extends SimpleViewModel {
 		com.setPorc_comision(vendedor.getPorc_comision());
 		com.setPorc_comision_cobros(vendedor.getPorc_comision_cobros());
 		rr.saveObject(com, this.getLoginNombre());
+	}
+	
+	@Command
+	@NotifyChange({ "ubicaciones", "nuevaUbicacion" })
+	public void addUbicaciones(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaUbicacion.getEstante() == null || this.nuevaUbicacion.getEstante().trim().isEmpty()) {
+			return;
+		}
+		if (this.nuevaUbicacion.getFila() == null || this.nuevaUbicacion.getFila().trim().isEmpty()) {
+			return;
+		}
+		if (this.nuevaUbicacion.getColumna() == null || this.nuevaUbicacion.getColumna().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaUbicacion.setEstante(this.nuevaUbicacion.getEstante().toUpperCase());
+		this.nuevaUbicacion.setFila(this.nuevaUbicacion.getFila().toUpperCase());
+		this.nuevaUbicacion.setColumna(this.nuevaUbicacion.getColumna().toUpperCase());
+		rr.saveObject(this.nuevaUbicacion, this.getLoginNombre());
+		this.nuevaUbicacion = new ArticuloUbicacion();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
 	}
 
 	/**
@@ -1495,6 +1520,14 @@ public class DefinicionesViewModel extends SimpleViewModel {
 		}
 		return out;
 	}
+	
+	/**
+	 * @return las ubicaciones..
+	 */
+	public List<ArticuloUbicacion> getUbicaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(ArticuloUbicacion.class.getName());
+	}
 
 	@DependsOn("selectedTalonario")
 	public boolean isEditTalonarioDisabled() {
@@ -1930,5 +1963,13 @@ public class DefinicionesViewModel extends SimpleViewModel {
 
 	public void setNuevaCartera(EmpresaCartera nuevaCartera) {
 		this.nuevaCartera = nuevaCartera;
+	}
+
+	public ArticuloUbicacion getNuevaUbicacion() {
+		return nuevaUbicacion;
+	}
+
+	public void setNuevaUbicacion(ArticuloUbicacion nuevaUbicacion) {
+		this.nuevaUbicacion = nuevaUbicacion;
 	}
 }
