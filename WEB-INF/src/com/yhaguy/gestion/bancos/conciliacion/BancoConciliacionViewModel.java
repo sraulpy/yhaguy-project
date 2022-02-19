@@ -246,7 +246,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 			this.confirmarConciliacion();
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.mensajePopupTemporalWarning("Hubo un error al confirmar", 5000);
+			this.mensajePopupTemporalWarning("Hubo un error al confirmar.", 5000);
 		}
 	}
 	

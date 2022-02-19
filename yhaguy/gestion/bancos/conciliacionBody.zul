@@ -14,11 +14,11 @@
 					<vlayout spacing="0">
 						<field value="Cuenta" />
 						<combobox hflex="true"
-							value="@load(vm.dto.banco.banco.pos1.toString().toUpperCase())"
+							value="@load(vm.dto.banco.descripcion.toString().toUpperCase())"
 							model="@load(vm.bancos)"
 							selectedItem="@bind(vm.dto.banco)" instant="true">
 							<template name="model">
-								<comboitem label="@load(each.banco.pos1.toString().toUpperCase())"></comboitem>
+								<comboitem label="@load(each.descripcion.toString().toUpperCase())"></comboitem>
 							</template>
 						</combobox>
 					</vlayout>
