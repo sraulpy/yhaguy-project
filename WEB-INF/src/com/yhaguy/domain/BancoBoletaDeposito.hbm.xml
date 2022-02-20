@@ -15,6 +15,7 @@
 			column="idBancoCta" lazy="false" />
 
 		<property name="fecha" />
+		<property name="fechaAcreditacion" />
 		<property name="monto" />
 		<property name="totalEfectivo" />
 		<property name="numeroBoleta" />

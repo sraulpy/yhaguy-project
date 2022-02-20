@@ -468,7 +468,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		long idBanco = this.dto.getBanco().getId();
 		boolean guaranies = (this.dto.getBanco().getMoneda().getId() == Configuracion.ID_MONEDA_GUARANIES);
 
-		List<Object[]> depositos = rr.getDepositosPorBanco(idBanco, desde, hasta);
+		List<Object[]> depositos = rr.getDepositosPorBancoByFechaAcreditacion(idBanco, desde, hasta);
 		List<Object[]> descuentos = rr.getDescuentosPorBanco(idBanco, desde, hasta);
 		List<Object[]> prestamosInternos = rr.getPrestamosInternosPorBanco(idBanco, desde, hasta);
 		List<Object[]> transferenciasEnviadas = rr.getTransferenciasOrigenPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());

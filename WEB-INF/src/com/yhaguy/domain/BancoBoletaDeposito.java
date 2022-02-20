@@ -13,6 +13,7 @@ public class BancoBoletaDeposito extends Domain {
 
 	private BancoCta nroCuenta; // donde se hace el depósito
 	private Date fecha;
+	private Date fechaAcreditacion;
 	private String numeroBoleta;
 	private double monto; // total de la suma de cheques
 	private double totalEfectivo = 0;
@@ -158,5 +159,13 @@ public class BancoBoletaDeposito extends Domain {
 
 	public void setNoGenerarCajaAuditoria(boolean noGenerarCajaAuditoria) {
 		this.noGenerarCajaAuditoria = noGenerarCajaAuditoria;
+	}
+
+	public Date getFechaAcreditacion() {
+		return fechaAcreditacion;
+	}
+
+	public void setFechaAcreditacion(Date fechaAcreditacion) {
+		this.fechaAcreditacion = fechaAcreditacion;
 	}
 }

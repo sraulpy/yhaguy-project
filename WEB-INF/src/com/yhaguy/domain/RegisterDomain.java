@@ -10627,6 +10627,30 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los depositos segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs 
+	 * [4]:banco 
+	 */
+	public List<Object[]> getDepositosPorBancoByFechaAcreditacion(long idBanco, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select (select descripcion from TipoMovimiento where sigla = '" + Configuracion.SIGLA_TM_DEPOSITO_BANCARIO + "'), "
+				+ " b.fecha, b.numeroBoleta, b.totalImporte_gs, b.nroCuenta.banco.descripcion, b.observacion"
+				+ " from BancoBoletaDeposito b where"
+				+ " b.dbEstado != 'D'"
+				+ " and b.nroCuenta.id = " + idBanco
+				+ " and (b.fechaAcreditacion >= '"
+				+ desde_
+				+ "' and b.fechaAcreditacion <= '"
+				+ hasta_
+				+ "')" + " order by b.fechaAcreditacion desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return los descuentos segun banco.. 
 	 * [0]:concepto
 	 * [1]:fecha 
