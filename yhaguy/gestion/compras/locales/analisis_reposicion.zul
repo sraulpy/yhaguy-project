@@ -19,6 +19,7 @@
 		<listhead>
 			<listheader label="Fecha"></listheader>
 			<listheader label="Proveedor"></listheader>
+			<listheader label="Marca"></listheader>
 			<listheader label="Ranking"></listheader>
 			<listheader label="Desde"></listheader>
 			<listheader label="Hasta"></listheader>
@@ -43,6 +44,7 @@
 			<listitem>
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 				<listcell label="@load(each.proveedor.razonSocial)"></listcell>
+				<listcell label="@load(each.marca.descripcion)"></listcell>
 				<listcell label="@load(each.tipoRanking)"></listcell>
 				<listcell label="@load(each.desde) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 				<listcell label="@load(each.hasta) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
