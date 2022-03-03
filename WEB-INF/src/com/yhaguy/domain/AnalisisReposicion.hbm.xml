@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//hibernate/hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd"
+        [ <!ENTITY hibernate-domain SYSTEM "classpath://com/coreweb/hibernate-domain.hbm.xml"> ]>
+
+<hibernate-mapping>
+
+	<class name="com.yhaguy.domain.AnalisisReposicion" table="analisis_reposicion">
+
+		&hibernate-domain; 
+
+		<property name="fecha"/>
+		<property name="desde"/>
+		<property name="hasta"/>
+		<property name="tipoRanking"/>
+		<property name="incluirDevoluciones"/>
+		
+		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
+			column="idproveedor" lazy="false"/>			
+		
+		<set name="detalles" table="analisis_reposicion_detalle"
+			inverse="false" lazy="false" fetch="join"
+			cascade="all">
+			<key>
+				<column name="idanalisis" not-null="false"/>
+			</key>
+			<one-to-many entity-name="com.yhaguy.domain.AnalisisReposicionDetalle"/>
+		</set>
+				
+	</class>
+</hibernate-mapping>

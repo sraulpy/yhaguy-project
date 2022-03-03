@@ -14391,6 +14391,16 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return los analisis rep..
+	 */
+	public List<AnalisisReposicion> getAnalisisReposicion(String fecha) throws Exception {
+		String query = "select a from AnalisisReposicion a where "
+				+ " cast (a.fecha as string) like '%" + fecha + "%'"
+				+ " order by a.fecha";
+		return this.hqlLimit(query, 500);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

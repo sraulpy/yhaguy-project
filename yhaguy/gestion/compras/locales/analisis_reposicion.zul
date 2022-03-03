@@ -8,14 +8,14 @@
 			onClick='pop_params.open(self, "after_start")'></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" 
-			iconSclass="z-icon-list" label="Ver Detalle" width="150px"></button>
-		<space></space>
-		<button mold="bs" sclass="btn-sm btn-primary" 
-			iconSclass="z-icon-print" label="Imprimir" width="150px"></button>
+			iconSclass="z-icon-print" label="Imprimir" width="150px"
+			disabled="@load(vm.selectedAnalisis eq null)"
+			onClick="@command('imprimirSeleccionado')"></button>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
-		emptyMessage="SIN REGISTROS DE PERMISOS..">
+		emptyMessage="SIN REGISTROS DE ANÁLISIS.."
+		model="@load(vm.listaAnalisis)" selectedItem="@bind(vm.selectedAnalisis)">
 		<listhead>
 			<listheader label="Fecha"></listheader>
 			<listheader label="Proveedor"></listheader>
@@ -41,6 +41,11 @@
 		</auxhead>
 		<template name="model">
 			<listitem>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.proveedor.razonSocial)"></listcell>
+				<listcell label="@load(each.tipoRanking)"></listcell>
+				<listcell label="@load(each.desde) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.hasta) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 			</listitem>
 		</template>
 		<listfoot>

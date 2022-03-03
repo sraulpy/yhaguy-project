@@ -12,6 +12,7 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -44,6 +45,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	private String filterFechaYY = "";
 	
 	private AnalisisReposicion analisis;
+	private AnalisisReposicion selectedAnalisis;
 	private String razonSocialProveedor = "";
 	
 	private Window win;
@@ -51,9 +53,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	@Init(superclass = true)
 	public void init() {
 		try {
-			this.analisis = new AnalisisReposicion();
-			this.analisis.setTipoRanking(AnalisisReposicion.POR_UNIDADES);
-			this.analisis.setIncluirDevoluciones(false);
+			this.inicializar();
 			this.filterFechaMM = "" + Utiles.getNumeroMesCorriente();
 			this.filterFechaYY = Utiles.getAnhoActual();
 			if (this.filterFechaMM.length() == 1) {
@@ -143,20 +143,38 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	}
 	
 	@Command
-	public void confirmar() {
-		Date desde = this.analisis.getDesde();
-		Date hasta = this.analisis.getHasta();
-		
-		List<Object[]> data = new ArrayList<Object[]>();
-		for (AnalisisReposicionDetalle item : this.analisis.getDetallesOrdenado()) {
-			data.add(new Object[] { item.getRanking(), item.getCodigoInterno(), item.getVentasUnidades(),
-					item.getPedidoReposicion(), item.getComprasUnidades(), item.getSugerido(), item.getObservacion() });
-		}
+	@NotifyChange("*")
+	public void confirmar() throws Exception {		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		rr.saveObject(this.analisis, this.getLoginNombre());
 		
 		this.win.detach();
 		
+		this.imprimir(this.analisis);		
+		this.inicializar();
+	}
+	
+	@Command
+	public void imprimirSeleccionado() throws Exception {				
+		this.imprimir(this.selectedAnalisis);		
+	}
+	
+	/**
+	 * print
+	 */
+	private void imprimir(AnalisisReposicion item) {
+		Date desde = item.getDesde();
+		Date hasta = item.getHasta();
+		
+		List<Object[]> data = new ArrayList<Object[]>();
+		
+		for (AnalisisReposicionDetalle det : item.getDetallesOrdenado()) {
+			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getVentasUnidades(),
+					det.getPedidoReposicion(), det.getComprasUnidades(), det.getSugerido(), det.getObservacion() });
+		}
+		
 		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
-				hasta, this.analisis.getProveedor().getRazonSocial(), this.analisis.getTipoRanking());
+				hasta, item.getProveedor().getRazonSocial(), item.getTipoRanking());
 		rep.setDatosReporte(data);
 		rep.setApaisada();
 		rep.setLegal();
@@ -168,6 +186,16 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	}
 
 	/**
+	 * inicializar
+	 */
+	private void inicializar() {
+		this.analisis = new AnalisisReposicion();
+		this.analisis.setTipoRanking(AnalisisReposicion.POR_UNIDADES);
+		this.analisis.setIncluirDevoluciones(false);
+		this.analisis.setFecha(new Date());
+	}
+	
+	/**
 	 * GETS AND SETS
 	 */
 	
@@ -175,6 +203,27 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	public List<Proveedor> getProveedores() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getProveedores(this.razonSocialProveedor);
+	}
+	
+	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaYY" })
+	public List<AnalisisReposicion> getListaAnalisis() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getAnalisisReposicion(this.getFilterFecha());
+	}
+	
+	/**
+	 * @return el filtro de fecha..
+	 */
+	private String getFilterFecha() {
+		if (this.filterFechaYY.isEmpty() && this.filterFechaDD.isEmpty() && this.filterFechaMM.isEmpty())
+			return "";
+		if (this.filterFechaYY.isEmpty())
+			return this.filterFechaMM + "-" + this.filterFechaDD;
+		if (this.filterFechaMM.isEmpty())
+			return this.filterFechaYY;
+		if (this.filterFechaMM.isEmpty() && this.filterFechaDD.isEmpty())
+			return this.filterFechaYY;
+		return this.filterFechaYY + "-" + this.filterFechaMM + "-" + this.filterFechaDD;
 	}
 	
 	public AccesoDTO getAcceso() {
@@ -230,6 +279,14 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 
 	public void setRazonSocialProveedor(String razonSocialProveedor) {
 		this.razonSocialProveedor = razonSocialProveedor;
+	}
+
+	public AnalisisReposicion getSelectedAnalisis() {
+		return selectedAnalisis;
+	}
+
+	public void setSelectedAnalisis(AnalisisReposicion selectedAnalisis) {
+		this.selectedAnalisis = selectedAnalisis;
 	}
 	
 }
