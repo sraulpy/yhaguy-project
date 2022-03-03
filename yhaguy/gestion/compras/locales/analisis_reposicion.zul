@@ -109,7 +109,14 @@
 				</row>	
 				<row>
 					<field value="Ranking por:" />
-					<textbox value="@load(vm.analisis.tipoRanking)" readonly="true"></textbox>
+					<combobox hflex="true"
+						value="@load(vm.analisis.tipoRanking)"
+						selectedItem="@bind(vm.analisis.tipoRanking)"
+						model="@load(vm.tipos)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
 				</row>	
 				<row>
 					<field value="Incluir devoluciones:" />

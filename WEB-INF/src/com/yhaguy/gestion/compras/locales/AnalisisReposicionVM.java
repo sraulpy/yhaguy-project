@@ -91,10 +91,12 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		}
 		
 		this.analisis.getDetalles().clear();
+		
+		int order = this.analisis.getTipoRanking().equals(AnalisisReposicion.POR_UNIDADES) ? 3 : 4;
 
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> data = new ArrayList<Object[]>();
-		List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, prov.getId());
+		List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, prov.getId(), order);
 		List<Object[]> repos = rr.getArticuloReposicionesDetallado(desde, hasta, prov.getId());
 		List<Object[]> compras = rr.getComprasLocalesDetallado_(desde, hasta, prov.getId());
 		Map<String, Double> mapRepos = new HashMap<String, Double>();
@@ -122,7 +124,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			if (com == null) {
 				com = 0.0;
 			}
-			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com });
+			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3] });
 		}
 		
 		for (Object[] item : data) {
@@ -130,7 +132,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			det.setRanking((int) item[0]);
 			det.setCodigoInterno((String) item[1]);
 			det.setVentasUnidades((double) item[2]);
-			det.setVentasImporte(0.0);
+			det.setVentasImporte((double) item[5]);
 			det.setPedidoReposicion((double) item[3]);
 			det.setComprasUnidades((double) item[4]);
 			det.setSugerido(0.0);
@@ -170,7 +172,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		
 		for (AnalisisReposicionDetalle det : item.getDetallesOrdenado()) {
 			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getVentasUnidades(),
-					det.getPedidoReposicion(), det.getComprasUnidades(), det.getSugerido(), det.getObservacion() });
+					det.getPedidoReposicion(), det.getComprasUnidades(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
 		}
 		
 		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
@@ -224,6 +226,16 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		if (this.filterFechaMM.isEmpty() && this.filterFechaDD.isEmpty())
 			return this.filterFechaYY;
 		return this.filterFechaYY + "-" + this.filterFechaMM + "-" + this.filterFechaDD;
+	}
+	
+	/**
+	 * @return los tipos
+	 */
+	public List<String> getTipos() {
+		List<String> out = new ArrayList<String>();
+		out.add(AnalisisReposicion.POR_UNIDADES);
+		out.add(AnalisisReposicion.POR_IMPORTE);
+		return out;
 	}
 	
 	public AccesoDTO getAcceso() {
@@ -309,7 +321,8 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	static DatosColumnas col4 = new DatosColumnas("Ped.Rep.", TIPO_DOUBLE, 20);
 	static DatosColumnas col5 = new DatosColumnas("Compras", TIPO_DOUBLE, 20);
 	static DatosColumnas col6 = new DatosColumnas("Sugerido", TIPO_DOUBLE, 20);
-	static DatosColumnas col7 = new DatosColumnas("Observación", TIPO_STRING);
+	static DatosColumnas col7 = new DatosColumnas("Importe Vtas", TIPO_DOUBLE, 35);
+	static DatosColumnas col8 = new DatosColumnas("Observación", TIPO_STRING);
 
 	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking) {
 		this.desde = desde;
@@ -326,6 +339,7 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 		cols.add(col5);
 		cols.add(col6);
 		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override

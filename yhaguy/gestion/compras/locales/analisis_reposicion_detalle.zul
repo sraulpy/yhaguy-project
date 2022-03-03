@@ -11,6 +11,7 @@
 			<listheader label="Ped. Reposición" align="right" width="120px"></listheader>
 			<listheader label="Compras" align="right" width="100px"></listheader>
 			<listheader label="Sugerido" align="right" width="100px"></listheader>
+			<listheader label="Importe Vtas" align="right" width="120px"></listheader>
 			<listheader label="Observación"></listheader>
 		</listhead>
 		<template name="model">
@@ -23,6 +24,7 @@
 				<listcell>
 					<guaranibox value="@bind(each.sugerido)" hflex="true" />
 				</listcell>
+				<listcell label="@load(each.ventasImporte) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell>
 					<textbox value="@bind(each.observacion)" hflex="true"></textbox>
 				</listcell>

@@ -11678,7 +11678,7 @@ public class RegisterDomain extends Register {
 	 * [2]:cantidad
 	 * [3]:importe
 	 */
-	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor) throws Exception {
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, int order) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs)"
@@ -11690,7 +11690,7 @@ public class RegisterDomain extends Register {
 					query += " and d.articulo.proveedor.id = " + idProveedor;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
-				query += " order by 3 desc";
+				query += " order by " + order + " desc";
 		return this.hql(query);
 	}
 	
