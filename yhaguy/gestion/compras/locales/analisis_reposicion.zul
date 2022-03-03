@@ -1,0 +1,123 @@
+<window width="100%" height="100%"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.locales.AnalisisReposicionVM')">
+	
+	<hlayout sclass="button-container">
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			onClick='pop_params.open(self, "after_start")'></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-list" label="Ver Detalle" width="150px"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-print" label="Imprimir" width="150px"></button>
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="SIN REGISTROS DE PERMISOS..">
+		<listhead>
+			<listheader label="Fecha"></listheader>
+			<listheader label="Proveedor"></listheader>
+			<listheader label="Ranking"></listheader>
+			<listheader label="Desde"></listheader>
+			<listheader label="Hasta"></listheader>
+		</listhead>
+		<auxhead>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" sclass="filter" placeholder="Día.."
+						value="@bind(vm.filterFechaDD)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Mes.."
+						value="@bind(vm.filterFechaMM)" instant="true"></textbox>
+					<textbox hflex="true" sclass="filter" placeholder="Año.."
+						value="@bind(vm.filterFechaYY)" instant="true"></textbox>
+				</hlayout>
+			</auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+			<auxheader></auxheader>
+		</auxhead>
+		<template name="model">
+			<listitem>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter label="items"></listfooter>
+		</listfoot>
+	</listbox>
+	
+	<popup id="pop_params" sclass="rounded">
+		<hbox align="end" pack="end" width="100%">
+			<hbox pack="start" align="center" hflex="true" vflex="true"
+				style="border-bottom:solid 1px silver">
+				<field value="AGREGAR REGISTRO DE ANÁLISIS" />
+			</hbox>
+			<button onClick="pop_params.close()"
+				iconSclass="z-icon-times">
+			</button>
+		</hbox>
+		<div height="15px"></div>
+		<grid sclass="vgrid" width="500px" style="margin:10px">
+			<columns>
+				<column width="35%"></column>
+			</columns>
+			<rows>
+				<row>
+					<field value="Desde:" />
+					<datebox hflex="true" value="@bind(vm.analisis.desde)"></datebox>
+				</row>	
+				<row>
+					<field value="Hasta:" />
+					<datebox hflex="true" value="@bind(vm.analisis.hasta)"></datebox>
+				</row>	
+				<row>
+					<field value="Proveedor:" />
+					<bandbox hflex="true" placeholder="TODOS.."
+						readonly="true"
+						value="@load(vm.analisis.proveedor.razonSocial)"
+						id="bndProv">
+						<bandpopup>
+							<listbox sclass="small-list" width="400px"
+								height="200px" model="@load(vm.proveedores)"
+								selectedItem="@bind(vm.analisis.proveedor)"
+								onSelect="bndProv.close()">
+								<listhead>
+									<listheader>
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												value="@bind(vm.razonSocialProveedor)"
+												instant="true" placeholder="Buscar.." />
+										</hlayout>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem
+										label="@load(each.razonSocial.toUpperCase())" />
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</row>	
+				<row>
+					<field value="Ranking por:" />
+					<combobox hflex="true"></combobox>
+				</row>	
+				<row>
+					<field value="Incluir devoluciones:" />
+					<combobox hflex="true"></combobox>
+				</row>
+			</rows>
+		</grid>
+		<div height="10px"></div>
+		<hbox width="100%" pack="end">
+			<button mold="bs" sclass="btn-sm btn-success" 
+				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+				onClick="@command('ejecutar')"></button>
+		</hbox>
+	</popup>
+	
+</window>

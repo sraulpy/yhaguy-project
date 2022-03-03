@@ -11672,6 +11672,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:cantidad
+	 * [3]:importe
+	 */
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs)"
+				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno";
+				query += " order by 3 desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return el detalle de movimientos de notas de credito segun fecha..
 	 * [0]:articulo.id
 	 * [1]:articulo.codigoInterno
@@ -11855,6 +11878,29 @@ public class RegisterDomain extends Register {
 				if (idSucursal > 0) {
 					query += " and c.sucursal.id = " + idSucursal;
 				}
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:cantidad
+	 * [3]:importe
+	 */
+	public List<Object[]> getComprasLocalesDetallado_(Date desde, Date hasta, long idProveedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.costoGs * d.cantidad) - d.descuentoGs)"
+				+ " from CompraLocalFactura c join c.detalles d where (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')"
+				+ " and (c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno";
+				query += " order by 3 desc";
 		return this.hql(query);
 	}
 	
@@ -14012,6 +14058,26 @@ public class RegisterDomain extends Register {
 				+ " and upper(r.articulo.codigoInterno) like '%" + codigo.toUpperCase() + "%'"
 				+ " and upper(r.solicitante) like '%" + solicitante.toUpperCase() + "%'"
 				+ " and upper(r.estado) like '%" + estado.toUpperCase() + "%'";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:cantidad
+	 */
+	public List<Object[]> getArticuloReposicionesDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0)"
+				+ " from ArticuloReposicion d"
+				+ " where (d.fecha >= '" + desde_ + "' and d.fecha <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno";
+				query += " order by 3 desc";
 		return this.hql(query);
 	}
 	

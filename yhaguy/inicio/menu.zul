@@ -93,6 +93,7 @@
 				<zk forEach="${vm.menuItem(self,'Proveedor')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'SolicitudReposicion')}" />
+				<zk forEach="${vm.menuItem(self,'AnalisisReposicion')}" />
 				<zk forEach="${vm.menuItem(self,'CompraLocal')}" />
 				<zk forEach="${vm.menuItem(self,'Importacion')}" />
 				<zk
