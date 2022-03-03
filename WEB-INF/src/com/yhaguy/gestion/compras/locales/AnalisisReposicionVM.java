@@ -12,8 +12,11 @@ import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Window;
 
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.control.SimpleViewModel;
@@ -21,6 +24,7 @@ import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AnalisisReposicion;
+import com.yhaguy.domain.AnalisisReposicionDetalle;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
@@ -33,17 +37,23 @@ import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 
 public class AnalisisReposicionVM extends SimpleViewModel {
 	
+	static final String ZUL_DETALLE = "/yhaguy/gestion/compras/locales/analisis_reposicion_detalle.zul";
+	
 	private String filterFechaDD = "";
 	private String filterFechaMM = "";
 	private String filterFechaYY = "";
 	
 	private AnalisisReposicion analisis;
 	private String razonSocialProveedor = "";
+	
+	private Window win;
 
 	@Init(superclass = true)
 	public void init() {
 		try {
 			this.analisis = new AnalisisReposicion();
+			this.analisis.setTipoRanking(AnalisisReposicion.POR_UNIDADES);
+			this.analisis.setIncluirDevoluciones(false);
 			this.filterFechaMM = "" + Utiles.getNumeroMesCorriente();
 			this.filterFechaYY = Utiles.getAnhoActual();
 			if (this.filterFechaMM.length() == 1) {
@@ -74,6 +84,13 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		Date desde = this.analisis.getDesde();
 		Date hasta = this.analisis.getHasta();
 		Proveedor prov = this.analisis.getProveedor();
+		
+		if (desde == null || hasta == null || prov == null) {
+			Clients.showNotification("DEBE COMPLETAR LOS PARÁMETROS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
+		this.analisis.getDetalles().clear();
 
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> data = new ArrayList<Object[]>();
@@ -107,9 +124,39 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			}
 			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com });
 		}
-
+		
+		for (Object[] item : data) {
+			AnalisisReposicionDetalle det = new AnalisisReposicionDetalle();
+			det.setRanking((int) item[0]);
+			det.setCodigoInterno((String) item[1]);
+			det.setVentasUnidades((double) item[2]);
+			det.setVentasImporte(0.0);
+			det.setPedidoReposicion((double) item[3]);
+			det.setComprasUnidades((double) item[4]);
+			det.setSugerido(0.0);
+			det.setObservacion("");
+			this.analisis.getDetalles().add(det);
+		}
+		
+		this.win = (Window) Executions.createComponents(ZUL_DETALLE, this.mainComponent, null);
+		win.doModal();
+	}
+	
+	@Command
+	public void confirmar() {
+		Date desde = this.analisis.getDesde();
+		Date hasta = this.analisis.getHasta();
+		
+		List<Object[]> data = new ArrayList<Object[]>();
+		for (AnalisisReposicionDetalle item : this.analisis.getDetallesOrdenado()) {
+			data.add(new Object[] { item.getRanking(), item.getCodigoInterno(), item.getVentasUnidades(),
+					item.getPedidoReposicion(), item.getComprasUnidades(), item.getSugerido(), item.getObservacion() });
+		}
+		
+		this.win.detach();
+		
 		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
-				hasta, getAcceso().getSucursalOperativa().getText());
+				hasta, this.analisis.getProveedor().getRazonSocial(), this.analisis.getTipoRanking());
 		rep.setDatosReporte(data);
 		rep.setApaisada();
 		rep.setLegal();
@@ -195,19 +242,23 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
 	private Date desde;
 	private Date hasta;
-	private String sucursal;
+	private String proveedor;
+	private String tipoRanking;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Nro.", TIPO_INTEGER, 20);
+	static DatosColumnas col1 = new DatosColumnas("Ranking", TIPO_INTEGER, 25);
 	static DatosColumnas col2 = new DatosColumnas("Código", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Ventas", TIPO_DOUBLE);
-	static DatosColumnas col4 = new DatosColumnas("Ped. Reposicion", TIPO_DOUBLE);
-	static DatosColumnas col5 = new DatosColumnas("Compras", TIPO_DOUBLE);
+	static DatosColumnas col3 = new DatosColumnas("Ventas", TIPO_DOUBLE, 20);
+	static DatosColumnas col4 = new DatosColumnas("Ped.Rep.", TIPO_DOUBLE, 20);
+	static DatosColumnas col5 = new DatosColumnas("Compras", TIPO_DOUBLE, 20);
+	static DatosColumnas col6 = new DatosColumnas("Sugerido", TIPO_DOUBLE, 20);
+	static DatosColumnas col7 = new DatosColumnas("Observación", TIPO_STRING);
 
-	public ReporteAnalisisReposicion(Date desde, Date hasta, String sucursal) {
+	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking) {
 		this.desde = desde;
 		this.hasta = hasta;
-		this.sucursal = sucursal;
+		this.proveedor = proveedor;
+		this.tipoRanking = tipoRanking;
 	}
 
 	static {
@@ -216,6 +267,8 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override
@@ -240,8 +293,10 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 				.add(this.textoParValor("Desde",
 						m.dateToString(this.desde, Misc.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta",
-						m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
-				.add(this.textoParValor("Sucursal", this.sucursal)));
+						m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+		out.add(cmp
+				.horizontalFlowList()
+				.add(this.textoParValor("Proveedor", this.proveedor)).add(this.textoParValor("Ranking", this.tipoRanking)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

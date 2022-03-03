@@ -1,0 +1,39 @@
+<window height="80%" width="90%" closable="true"
+	title="Análisis de Reposición"
+	border="normal">
+
+	<listbox model="@load(vm.analisis.detallesOrdenado)" vflex="true"
+		mold="paging">
+		<listhead>
+			<listheader label="Ranking" align="right" width="100px"></listheader>
+			<listheader label="Código"></listheader>
+			<listheader label="Ventas" align="right" width="100px"></listheader>
+			<listheader label="Ped. Reposición" align="right" width="120px"></listheader>
+			<listheader label="Compras" align="right" width="100px"></listheader>
+			<listheader label="Sugerido" align="right" width="100px"></listheader>
+			<listheader label="Observación"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.ranking)"></listcell>
+				<listcell label="@load(each.codigoInterno)"></listcell>
+				<listcell label="@load(each.ventasUnidades) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.pedidoReposicion) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.comprasUnidades) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell>
+					<guaranibox value="@bind(each.sugerido)" hflex="true" />
+				</listcell>
+				<listcell>
+					<textbox value="@bind(each.observacion)" hflex="true"></textbox>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<div height="5px"></div>
+	<hbox width="100%" pack="end">
+		<button mold="bs" sclass="btn-sm btn-success"
+			iconSclass="z-icon-check" width="150px" style="margin-right:5px"
+			onClick="@command('confirmar')">
+		</button>
+	</hbox>
+</window>

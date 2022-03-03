@@ -104,11 +104,11 @@
 				</row>	
 				<row>
 					<field value="Ranking por:" />
-					<combobox hflex="true"></combobox>
+					<textbox value="@load(vm.analisis.tipoRanking)" readonly="true"></textbox>
 				</row>	
 				<row>
 					<field value="Incluir devoluciones:" />
-					<combobox hflex="true"></combobox>
+					<textbox value="@load(vm.analisis.incluirDevoluciones ? 'SI' : 'NO')" readonly="true"></textbox>
 				</row>
 			</rows>
 		</grid>
