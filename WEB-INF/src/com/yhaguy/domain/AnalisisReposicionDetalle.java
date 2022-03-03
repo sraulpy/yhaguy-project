@@ -7,10 +7,12 @@ public class AnalisisReposicionDetalle extends Domain {
 	
 	private int ranking;
 	private String codigoInterno;
+	private String descripcion;
 	private double ventasUnidades;
 	private double ventasImporte;
 	private double pedidoReposicion;
 	private double comprasUnidades;
+	private double importacionUnidades;
 	private double sugerido;
 	private String observacion;
 
@@ -81,5 +83,21 @@ public class AnalisisReposicionDetalle extends Domain {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public double getImportacionUnidades() {
+		return importacionUnidades;
+	}
+
+	public void setImportacionUnidades(double importacionUnidades) {
+		this.importacionUnidades = importacionUnidades;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 }

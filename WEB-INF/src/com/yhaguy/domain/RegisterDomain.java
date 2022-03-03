@@ -11677,11 +11677,13 @@ public class RegisterDomain extends Register {
 	 * [1]:articulo.codigoInterno
 	 * [2]:cantidad
 	 * [3]:importe
+	 * [4]:articulo.descripcion
 	 */
-	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, int order) throws Exception {
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, int order) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs)"
+		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), "
+				+ " d.articulo.descripcion"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -11689,7 +11691,10 @@ public class RegisterDomain extends Register {
 				if (idProveedor > 0) {
 					query += " and d.articulo.proveedor.id = " + idProveedor;
 				}
-				query += " group by d.articulo.id, d.articulo.codigoInterno";
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.descripcion";
 				query += " order by " + order + " desc";
 		return this.hql(query);
 	}
@@ -11888,7 +11893,7 @@ public class RegisterDomain extends Register {
 	 * [2]:cantidad
 	 * [3]:importe
 	 */
-	public List<Object[]> getComprasLocalesDetallado_(Date desde, Date hasta, long idProveedor) throws Exception {
+	public List<Object[]> getComprasLocalesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.costoGs * d.cantidad) - d.descuentoGs)"
@@ -11897,7 +11902,36 @@ public class RegisterDomain extends Register {
 				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')"
 				+ " and (c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')";
 				if (idProveedor > 0) {
-					query += " and d.articulo.proveedor.id = " + idProveedor;
+					query += " and c.proveedor.id = " + idProveedor;
+				}
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno";
+				query += " order by 3 desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:cantidad
+	 * [3]:importe
+	 */
+	public List<Object[]> getImportacionesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.costoGs * d.cantidad))"
+				+ " from ImportacionFactura c join c.detalles d where (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO + "' or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO + "')"
+				+ " and (c.fechaCreacion >= '" + desde_ + "' and c.fechaCreacion <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and c.proveedor.id = " + idProveedor;
+				}
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
 				query += " order by 3 desc";
@@ -14067,7 +14101,7 @@ public class RegisterDomain extends Register {
 	 * [1]:articulo.codigoInterno
 	 * [2]:cantidad
 	 */
-	public List<Object[]> getArticuloReposicionesDetallado(Date desde, Date hasta, long idProveedor) throws Exception {
+	public List<Object[]> getArticuloReposicionesDetallado(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0)"
@@ -14075,6 +14109,9 @@ public class RegisterDomain extends Register {
 				+ " where (d.fecha >= '" + desde_ + "' and d.fecha <= '" + hasta_ + "')";
 				if (idProveedor > 0) {
 					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
 				query += " order by 3 desc";
@@ -14399,6 +14436,15 @@ public class RegisterDomain extends Register {
 				+ " cast (a.fecha as string) like '%" + fecha + "%'"
 				+ " order by a.fecha";
 		return this.hqlLimit(query, 500);
+	}
+	
+	/**
+	 * @return la lista de marcas..
+	 */
+	public List<ArticuloMarca> getMarcas(String desc) throws Exception {
+		String query = "select m from ArticuloMarca m where lower(m.descripcion) like '%"
+				+ desc.toLowerCase() + "%'";
+		return this.hqlLimit(query, 50);
 	}
 	
 	public static void main(String[] args) {

@@ -23,6 +23,7 @@ public class AnalisisReposicion extends Domain {
 	private boolean incluirDevoluciones;
 	
 	private Proveedor proveedor;
+	private ArticuloMarca marca;
 	
 	private Set<AnalisisReposicionDetalle> detalles = new HashSet<AnalisisReposicionDetalle>();
 
@@ -101,6 +102,14 @@ public class AnalisisReposicion extends Domain {
 
 	public void setIncluirDevoluciones(boolean incluirDevoluciones) {
 		this.incluirDevoluciones = incluirDevoluciones;
+	}
+
+	public ArticuloMarca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(ArticuloMarca marca) {
+		this.marca = marca;
 	}
 
 }

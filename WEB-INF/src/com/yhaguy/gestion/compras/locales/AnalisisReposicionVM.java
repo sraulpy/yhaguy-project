@@ -26,6 +26,7 @@ import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AnalisisReposicion;
 import com.yhaguy.domain.AnalisisReposicionDetalle;
+import com.yhaguy.domain.ArticuloMarca;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
@@ -47,6 +48,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	private AnalisisReposicion analisis;
 	private AnalisisReposicion selectedAnalisis;
 	private String razonSocialProveedor = "";
+	private String descripcionMarca = "";
 	
 	private Window win;
 
@@ -84,8 +86,11 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		Date desde = this.analisis.getDesde();
 		Date hasta = this.analisis.getHasta();
 		Proveedor prov = this.analisis.getProveedor();
+		ArticuloMarca marca = this.analisis.getMarca();
+		long idProv = prov != null ? prov.getId() : 0;
+		long idMarca = marca != null ? marca.getId() : 0;
 		
-		if (desde == null || hasta == null || prov == null) {
+		if (desde == null || hasta == null || (prov == null && marca == null)) {
 			Clients.showNotification("DEBE COMPLETAR LOS PARÁMETROS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
@@ -96,11 +101,13 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> data = new ArrayList<Object[]>();
-		List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, prov.getId(), order);
-		List<Object[]> repos = rr.getArticuloReposicionesDetallado(desde, hasta, prov.getId());
-		List<Object[]> compras = rr.getComprasLocalesDetallado_(desde, hasta, prov.getId());
+		List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idProv, idMarca, order);
+		List<Object[]> repos = rr.getArticuloReposicionesDetallado(desde, hasta, idProv, idMarca);
+		List<Object[]> compras = rr.getComprasLocalesDetallado_(desde, hasta, idProv, idMarca);
+		List<Object[]> imports = rr.getImportacionesDetallado_(desde, hasta, idProv, idMarca);
 		Map<String, Double> mapRepos = new HashMap<String, Double>();
 		Map<String, Double> mapCompras = new HashMap<String, Double>();
+		Map<String, Double> mapImports = new HashMap<String, Double>();
 		
 		for (Object[] obj : repos) {
 			String key = (String) obj[1];
@@ -113,6 +120,12 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			Double value = (Double) obj[2];
 			mapCompras.put(key, value);
 		}
+		
+		for (Object[] obj : imports) {
+			String key = (String) obj[1];
+			Double value = (Double) obj[2];
+			mapImports.put(key, value);
+		}
 
 		for (int i = 0; i < ventas.size(); i++) {
 			Object[] venta = ventas.get(i);
@@ -124,17 +137,23 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			if (com == null) {
 				com = 0.0;
 			}
-			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3] });
+			Double imp = mapImports.get(venta[1]);
+			if (imp == null) {
+				imp = 0.0;
+			}
+			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3], imp, venta[4] });
 		}
 		
 		for (Object[] item : data) {
 			AnalisisReposicionDetalle det = new AnalisisReposicionDetalle();
 			det.setRanking((int) item[0]);
 			det.setCodigoInterno((String) item[1]);
+			det.setDescripcion((String) item[7]);
 			det.setVentasUnidades((double) item[2]);
 			det.setVentasImporte((double) item[5]);
 			det.setPedidoReposicion((double) item[3]);
 			det.setComprasUnidades((double) item[4]);
+			det.setImportacionUnidades((double) item[6]);
 			det.setSugerido(0.0);
 			det.setObservacion("");
 			this.analisis.getDetalles().add(det);
@@ -171,12 +190,15 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		List<Object[]> data = new ArrayList<Object[]>();
 		
 		for (AnalisisReposicionDetalle det : item.getDetallesOrdenado()) {
-			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getVentasUnidades(),
-					det.getPedidoReposicion(), det.getComprasUnidades(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
+			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getDescripcion(),
+					det.getVentasUnidades(), det.getPedidoReposicion(), det.getComprasUnidades(),
+					det.getImportacionUnidades(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
 		}
 		
+		String prov = item.getProveedor() != null ? item.getProveedor().getRazonSocial() : "TODOS..";
+		String marc = item.getMarca() != null ? item.getMarca().getDescripcion() : "TODOS..";
 		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
-				hasta, item.getProveedor().getRazonSocial(), item.getTipoRanking());
+				hasta, prov, item.getTipoRanking(), marc);
 		rep.setDatosReporte(data);
 		rep.setApaisada();
 		rep.setLegal();
@@ -211,6 +233,12 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	public List<AnalisisReposicion> getListaAnalisis() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getAnalisisReposicion(this.getFilterFecha());
+	}
+	
+	@DependsOn("descripcionMarca")
+	public List<ArticuloMarca> getMarcas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getMarcas(this.descripcionMarca);
 	}
 	
 	/**
@@ -300,6 +328,14 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	public void setSelectedAnalisis(AnalisisReposicion selectedAnalisis) {
 		this.selectedAnalisis = selectedAnalisis;
 	}
+
+	public String getDescripcionMarca() {
+		return descripcionMarca;
+	}
+
+	public void setDescripcionMarca(String descripcionMarca) {
+		this.descripcionMarca = descripcionMarca;
+	}
 	
 }
 
@@ -313,22 +349,26 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	private Date hasta;
 	private String proveedor;
 	private String tipoRanking;
+	private String marca;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Ranking", TIPO_INTEGER, 25);
+	static DatosColumnas col1 = new DatosColumnas("Ranking", TIPO_INTEGER, 30);
 	static DatosColumnas col2 = new DatosColumnas("Código", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Ventas", TIPO_DOUBLE, 20);
-	static DatosColumnas col4 = new DatosColumnas("Ped.Rep.", TIPO_DOUBLE, 20);
-	static DatosColumnas col5 = new DatosColumnas("Compras", TIPO_DOUBLE, 20);
-	static DatosColumnas col6 = new DatosColumnas("Sugerido", TIPO_DOUBLE, 20);
-	static DatosColumnas col7 = new DatosColumnas("Importe Vtas", TIPO_DOUBLE, 35);
-	static DatosColumnas col8 = new DatosColumnas("Observación", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col4 = new DatosColumnas("Ventas", TIPO_DOUBLE, 30);
+	static DatosColumnas col5 = new DatosColumnas("Ped.Rep.", TIPO_DOUBLE, 30);
+	static DatosColumnas col6 = new DatosColumnas("Compras", TIPO_DOUBLE, 30);
+	static DatosColumnas col7 = new DatosColumnas("Import.", TIPO_DOUBLE, 30);
+	static DatosColumnas col8 = new DatosColumnas("Sugerido", TIPO_DOUBLE, 30);
+	static DatosColumnas col9 = new DatosColumnas("Importe Vtas", TIPO_DOUBLE, 35);
+	static DatosColumnas col10 = new DatosColumnas("Observación", TIPO_STRING);
 
-	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking) {
+	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking, String marca) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.proveedor = proveedor;
 		this.tipoRanking = tipoRanking;
+		this.marca = marca;
 	}
 
 	static {
@@ -340,6 +380,8 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 		cols.add(col6);
 		cols.add(col7);
 		cols.add(col8);
+		cols.add(col9);
+		cols.add(col10);
 	}
 
 	@Override
@@ -367,7 +409,9 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 						m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
 		out.add(cmp
 				.horizontalFlowList()
-				.add(this.textoParValor("Proveedor", this.proveedor)).add(this.textoParValor("Ranking", this.tipoRanking)));
+				.add(this.textoParValor("Proveedor", this.proveedor))
+				.add(this.textoParValor("Marca", this.marca))
+				.add(this.textoParValor("Ranking", this.tipoRanking)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

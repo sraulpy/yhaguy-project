@@ -106,6 +106,36 @@
 							</listbox>
 						</bandpopup>
 					</bandbox>
+				</row>
+				<row>
+					<field value="Marca:" />
+					<bandbox hflex="true" placeholder="TODOS.."
+						readonly="true"
+						value="@load(vm.analisis.marca.descripcion)"
+						id="bndMarca">
+						<bandpopup>
+							<listbox sclass="small-list" width="400px"
+								height="200px" model="@load(vm.marcas)"
+								selectedItem="@bind(vm.analisis.marca)"
+								onSelect="bndMarca.close()">
+								<listhead>
+									<listheader>
+										<hlayout>
+											<toolbarbutton
+												iconSclass="z-icon-filter" disabled="true" />
+											<textbox hflex="true"
+												value="@bind(vm.descripcionMarca)"
+												instant="true" placeholder="Buscar.." />
+										</hlayout>
+									</listheader>
+								</listhead>
+								<template name="model">
+									<listitem
+										label="@load(each.descripcion.toUpperCase())" />
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
 				</row>	
 				<row>
 					<field value="Ranking por:" />

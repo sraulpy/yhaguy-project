@@ -12,10 +12,12 @@
 
 		<property name="ranking" />
 		<property name="codigoInterno" />
+		<property name="descripcion" />
 		<property name="ventasUnidades" />
 		<property name="ventasImporte" />
 		<property name="pedidoReposicion" />
 		<property name="comprasUnidades" />
+		<property name="importacionUnidades" />
 		<property name="sugerido" />
 		<property name="observacion" />
 
