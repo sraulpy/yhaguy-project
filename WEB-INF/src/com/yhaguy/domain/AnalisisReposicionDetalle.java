@@ -13,7 +13,9 @@ public class AnalisisReposicionDetalle extends Domain {
 	private double pedidoReposicion;
 	private double comprasUnidades;
 	private double importacionUnidades;
+	private double devoluciones;
 	private double sugerido;
+	private long stock;
 	private String observacion;
 
 	@Override
@@ -99,5 +101,21 @@ public class AnalisisReposicionDetalle extends Domain {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public long getStock() {
+		return stock;
+	}
+
+	public void setStock(long stock) {
+		this.stock = stock;
+	}
+
+	public double getDevoluciones() {
+		return devoluciones;
+	}
+
+	public void setDevoluciones(double devoluciones) {
+		this.devoluciones = devoluciones;
 	}
 }

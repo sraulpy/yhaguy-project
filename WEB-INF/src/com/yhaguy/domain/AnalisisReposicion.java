@@ -21,6 +21,7 @@ public class AnalisisReposicion extends Domain {
 	private Date hasta;
 	private String tipoRanking;
 	private boolean incluirDevoluciones;
+	private String incluirDevoluciones_;
 	
 	private Proveedor proveedor;
 	private ArticuloMarca marca;
@@ -110,6 +111,18 @@ public class AnalisisReposicion extends Domain {
 
 	public void setMarca(ArticuloMarca marca) {
 		this.marca = marca;
+	}
+
+	public String getIncluirDevoluciones_() {
+		if (this.incluirDevoluciones_ == null) {
+			return this.incluirDevoluciones ? "SI" : "NO";
+		}
+		return incluirDevoluciones_;
+	}
+
+	public void setIncluirDevoluciones_(String incluirDevoluciones_) {
+		this.incluirDevoluciones_ = incluirDevoluciones_;
+		this.incluirDevoluciones = incluirDevoluciones_.equals("SI");
 	}
 
 }

@@ -10453,6 +10453,33 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
+	 * [2]:cantidad
+	 * [3]:importe
+	 */
+	public List<Object[]> getNotasCreditoVentaDetallado_(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum(d.costoGs * d.cantidad)"
+				+ " from NotaCredito n join n.detalles d where (n.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "' or n.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')"
+				+ " and n.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (n.fechaEmision >= '" + desde_ + "' and n.fechaEmision <= '" + hasta_ + "')";
+				if (idProveedor > 0) {
+					query += " and d.articulo.proveedor.id = " + idProveedor;
+				}
+				if (idMarca > 0) {
+					query += " and d.articulo.marca.id = " + idMarca;
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno";
+				query += " order by 3 desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return los detalles de la nota de credito..
 	 * [0]:costoUnitarioGs
 	 * [1]:cantidad
@@ -12315,6 +12342,16 @@ public class RegisterDomain extends Register {
 	 */
 	public long getStockArticulo(long idArticulo) throws Exception {
 		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.id = " + idArticulo;
+		List<Long> out = this.hql(query);
+		return out.get(0) != null ? out.get(0) : 0;
+	}
+	
+	/**
+	 * @return el stock del articulo..
+	 */
+	public long getStockArticulo(String codigoInterno) throws Exception {
+		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.codigoInterno = '" + codigoInterno
+				+ "' and a.deposito.auxi != 'V' and a.deposito.descripcion != 'TEMPORAL M.R.A.'";
 		List<Long> out = this.hql(query);
 		return out.get(0) != null ? out.get(0) : 0;
 	}

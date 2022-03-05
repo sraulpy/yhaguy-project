@@ -18,6 +18,8 @@
 		<property name="pedidoReposicion" />
 		<property name="comprasUnidades" />
 		<property name="importacionUnidades" />
+		<property name="devoluciones" />
+		<property name="stock" />
 		<property name="sugerido" />
 		<property name="observacion" />
 

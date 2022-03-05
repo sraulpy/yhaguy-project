@@ -152,7 +152,14 @@
 				</row>	
 				<row>
 					<field value="Incluir devoluciones:" />
-					<textbox value="@load(vm.analisis.incluirDevoluciones ? 'SI' : 'NO')" readonly="true"></textbox>
+					<combobox hflex="true"
+						value="@load(vm.analisis.incluirDevoluciones_)"
+						selectedItem="@bind(vm.analisis.incluirDevoluciones_)"
+						model="@load(vm.listaSN)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
 				</row>
 			</rows>
 		</grid>

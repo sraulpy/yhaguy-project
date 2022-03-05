@@ -108,6 +108,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		Map<String, Double> mapRepos = new HashMap<String, Double>();
 		Map<String, Double> mapCompras = new HashMap<String, Double>();
 		Map<String, Double> mapImports = new HashMap<String, Double>();
+		Map<String, Double> mapNcreds = new HashMap<String, Double>();
 		
 		for (Object[] obj : repos) {
 			String key = (String) obj[1];
@@ -126,6 +127,15 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			Double value = (Double) obj[2];
 			mapImports.put(key, value);
 		}
+		
+		if (this.analisis.isIncluirDevoluciones()) {
+			List<Object[]> ncreds = rr.getNotasCreditoVentaDetallado_(desde, hasta, idProv, idMarca);
+			for (Object[] obj : ncreds) {
+				String key = (String) obj[1];
+				Double value = (Double) obj[2];
+				mapNcreds.put(key, value);
+			}
+		}
 
 		for (int i = 0; i < ventas.size(); i++) {
 			Object[] venta = ventas.get(i);
@@ -141,19 +151,26 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			if (imp == null) {
 				imp = 0.0;
 			}
-			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3], imp, venta[4] });
+			Double ncs = mapNcreds.get(venta[1]);
+			if (ncs == null) {
+				ncs = 0.0;
+			}
+			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3], imp, venta[4], ncs });
 		}
 		
 		for (Object[] item : data) {
+			long stock = rr.getStockArticulo((String) item[1]);
 			AnalisisReposicionDetalle det = new AnalisisReposicionDetalle();
 			det.setRanking((int) item[0]);
 			det.setCodigoInterno((String) item[1]);
 			det.setDescripcion((String) item[7]);
 			det.setVentasUnidades((double) item[2]);
+			det.setDevoluciones((double) item[8]);
 			det.setVentasImporte((double) item[5]);
 			det.setPedidoReposicion((double) item[3]);
 			det.setComprasUnidades((double) item[4]);
 			det.setImportacionUnidades((double) item[6]);
+			det.setStock(stock);
 			det.setSugerido(0.0);
 			det.setObservacion("");
 			this.analisis.getDetalles().add(det);
@@ -191,14 +208,14 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		
 		for (AnalisisReposicionDetalle det : item.getDetallesOrdenado()) {
 			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getDescripcion(),
-					det.getVentasUnidades(), det.getPedidoReposicion(), det.getComprasUnidades(),
-					det.getImportacionUnidades(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
+					det.getVentasUnidades(), det.getDevoluciones(), det.getPedidoReposicion(), det.getComprasUnidades(),
+					det.getImportacionUnidades(), det.getStock(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
 		}
 		
 		String prov = item.getProveedor() != null ? item.getProveedor().getRazonSocial() : "TODOS..";
 		String marc = item.getMarca() != null ? item.getMarca().getDescripcion() : "TODOS..";
 		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
-				hasta, prov, item.getTipoRanking(), marc);
+				hasta, prov, item.getTipoRanking(), marc, item.getIncluirDevoluciones_());
 		rep.setDatosReporte(data);
 		rep.setApaisada();
 		rep.setLegal();
@@ -215,7 +232,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	private void inicializar() {
 		this.analisis = new AnalisisReposicion();
 		this.analisis.setTipoRanking(AnalisisReposicion.POR_UNIDADES);
-		this.analisis.setIncluirDevoluciones(false);
+		this.analisis.setIncluirDevoluciones_("NO");
 		this.analisis.setFecha(new Date());
 	}
 	
@@ -263,6 +280,16 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		List<String> out = new ArrayList<String>();
 		out.add(AnalisisReposicion.POR_UNIDADES);
 		out.add(AnalisisReposicion.POR_IMPORTE);
+		return out;
+	}
+	
+	/**
+	 * @return los tipos
+	 */
+	public List<String> getListaSN() {
+		List<String> out = new ArrayList<String>();
+		out.add("SI");
+		out.add("NO");
 		return out;
 	}
 	
@@ -350,25 +377,29 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	private String proveedor;
 	private String tipoRanking;
 	private String marca;
+	private String devoluciones;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Ranking", TIPO_INTEGER, 30);
+	static DatosColumnas col1 = new DatosColumnas("Ran.", TIPO_INTEGER, 20);
 	static DatosColumnas col2 = new DatosColumnas("Código", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col4 = new DatosColumnas("Ventas", TIPO_DOUBLE, 30);
-	static DatosColumnas col5 = new DatosColumnas("Ped.Rep.", TIPO_DOUBLE, 30);
-	static DatosColumnas col6 = new DatosColumnas("Compras", TIPO_DOUBLE, 30);
-	static DatosColumnas col7 = new DatosColumnas("Import.", TIPO_DOUBLE, 30);
-	static DatosColumnas col8 = new DatosColumnas("Sugerido", TIPO_DOUBLE, 30);
-	static DatosColumnas col9 = new DatosColumnas("Importe Vtas", TIPO_DOUBLE, 35);
-	static DatosColumnas col10 = new DatosColumnas("Observación", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("N.Créd", TIPO_DOUBLE, 30);
+	static DatosColumnas col6 = new DatosColumnas("P.Rep.", TIPO_DOUBLE, 30);
+	static DatosColumnas col7 = new DatosColumnas("Compr.", TIPO_DOUBLE, 30);
+	static DatosColumnas col8 = new DatosColumnas("Impor.", TIPO_DOUBLE, 30);
+	static DatosColumnas col9 = new DatosColumnas("Stock", TIPO_LONG, 30);
+	static DatosColumnas col10 = new DatosColumnas("Sug.", TIPO_DOUBLE, 30);
+	static DatosColumnas col11 = new DatosColumnas("Imp.Vtas", TIPO_DOUBLE, 50);
+	static DatosColumnas col12 = new DatosColumnas("Observación", TIPO_STRING);
 
-	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking, String marca) {
+	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking, String marca, String devoluciones) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.proveedor = proveedor;
 		this.tipoRanking = tipoRanking;
 		this.marca = marca;
+		this.devoluciones = devoluciones;
 	}
 
 	static {
@@ -382,6 +413,8 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 		cols.add(col8);
 		cols.add(col9);
 		cols.add(col10);
+		cols.add(col11);
+		cols.add(col12);
 	}
 
 	@Override
@@ -403,10 +436,9 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		out.add(cmp
 				.horizontalFlowList()
-				.add(this.textoParValor("Desde",
-						m.dateToString(this.desde, Misc.DD_MM_YYYY)))
-				.add(this.textoParValor("Hasta",
-						m.dateToString(this.hasta, Misc.DD_MM_YYYY))));
+				.add(this.textoParValor("Desde", m.dateToString(this.desde, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Hasta", m.dateToString(this.hasta, Misc.DD_MM_YYYY)))
+				.add(this.textoParValor("Devoluciones", this.devoluciones)));
 		out.add(cmp
 				.horizontalFlowList()
 				.add(this.textoParValor("Proveedor", this.proveedor))
