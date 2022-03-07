@@ -73,12 +73,19 @@
 			<rows>
 				<row>
 					<field value="Desde:" />
-					<datebox hflex="true" value="@bind(vm.analisis.desde)"></datebox>
+					<datebox hflex="true" value="@bind(vm.analisis.desde)"
+						onChange="@command('updateMeses')"></datebox>
 				</row>	
 				<row>
 					<field value="Hasta:" />
-					<datebox hflex="true" value="@bind(vm.analisis.hasta)"></datebox>
+					<datebox hflex="true" value="@bind(vm.analisis.hasta)"
+						onChange="@command('updateMeses')"></datebox>
 				</row>	
+				<row>
+					<field value="Total Meses (p/ promediar)" />
+					<spinner hflex="true" readonly="true"
+						value="@bind(vm.analisis.cantidadMeses)"></spinner>
+				</row>
 				<row>
 					<field value="Proveedor:" />
 					<bandbox hflex="true" placeholder="TODOS.."

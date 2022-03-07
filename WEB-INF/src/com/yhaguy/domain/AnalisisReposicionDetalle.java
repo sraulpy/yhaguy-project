@@ -17,6 +17,7 @@ public class AnalisisReposicionDetalle extends Domain {
 	private double sugerido;
 	private long stock;
 	private String observacion;
+	private double promedio;
 
 	@Override
 	public int compareTo(Object arg0) {
@@ -117,5 +118,13 @@ public class AnalisisReposicionDetalle extends Domain {
 
 	public void setDevoluciones(double devoluciones) {
 		this.devoluciones = devoluciones;
+	}
+
+	public double getPromedio() {
+		return promedio;
+	}
+
+	public void setPromedio(double promedio) {
+		this.promedio = promedio;
 	}
 }

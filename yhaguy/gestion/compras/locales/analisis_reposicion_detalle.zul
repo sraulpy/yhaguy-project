@@ -9,6 +9,7 @@
 			<listheader label="Código" width="130px"></listheader>
 			<listheader label="Descripción"></listheader>
 			<listheader label="Ventas" align="right" width="80px"></listheader>
+			<listheader label="Promed." align="right" width="80px"></listheader>
 			<listheader label="N.Crédito" align="right" width="80px"
 				visible="@load(vm.analisis.incluirDevoluciones)"></listheader>
 			<listheader label="Ped.Rep." align="right" width="80px" tooltiptext="Pedido Reposición"></listheader>
@@ -26,6 +27,7 @@
 				<listcell label="@load(each.descripcion)" style="font-size:11px;color:black;text-overflow: ellipsis;
     white-space: nowrap;"></listcell>
 				<listcell label="@load(each.ventasUnidades) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.promedio) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.devoluciones) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.pedidoReposicion) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.comprasUnidades) @converter(vm.cnv.monedaLocal)"></listcell>

@@ -13,6 +13,7 @@
 		<property name="fecha"/>
 		<property name="desde"/>
 		<property name="hasta"/>
+		<property name="cantidadMeses"/>
 		<property name="tipoRanking"/>
 		<property name="incluirDevoluciones"/>
 		

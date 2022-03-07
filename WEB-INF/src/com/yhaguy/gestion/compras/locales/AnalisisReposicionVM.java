@@ -79,6 +79,14 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange("analisis")
+	public void updateMeses() {
+		if (this.analisis.getDesde() != null && this.analisis.getHasta() != null) {
+			this.analisis.setCantidadMeses(Utiles.getNumeroMeses(this.analisis.getDesde(), this.analisis.getHasta()));
+		}
+	}
+	
 	/**
 	 * generacion del informe..
 	 */
@@ -92,6 +100,11 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		
 		if (desde == null || hasta == null || (prov == null && marca == null)) {
 			Clients.showNotification("DEBE COMPLETAR LOS PARÁMETROS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
+		if (this.analisis.getCantidadMeses() <= 0) {
+			Clients.showNotification("CANTIDAD MESES DEBE SER MAYOR A CERO..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
 		
@@ -173,6 +186,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			det.setStock(stock);
 			det.setSugerido(0.0);
 			det.setObservacion("");
+			det.setPromedio(det.getVentasUnidades() / this.analisis.getCantidadMeses());
 			this.analisis.getDetalles().add(det);
 		}
 		
@@ -208,7 +222,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		
 		for (AnalisisReposicionDetalle det : item.getDetallesOrdenado()) {
 			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getDescripcion(),
-					det.getVentasUnidades(), det.getDevoluciones(), det.getPedidoReposicion(), det.getComprasUnidades(),
+					det.getVentasUnidades(), det.getPromedio(), det.getDevoluciones(), det.getPedidoReposicion(), det.getComprasUnidades(),
 					det.getImportacionUnidades(), det.getStock(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
 		}
 		
@@ -384,14 +398,15 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	static DatosColumnas col2 = new DatosColumnas("Código", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col4 = new DatosColumnas("Ventas", TIPO_DOUBLE, 30);
-	static DatosColumnas col5 = new DatosColumnas("N.Créd", TIPO_DOUBLE, 30);
-	static DatosColumnas col6 = new DatosColumnas("P.Rep.", TIPO_DOUBLE, 30);
-	static DatosColumnas col7 = new DatosColumnas("Compr.", TIPO_DOUBLE, 30);
-	static DatosColumnas col8 = new DatosColumnas("Impor.", TIPO_DOUBLE, 30);
-	static DatosColumnas col9 = new DatosColumnas("Stock", TIPO_LONG, 30);
-	static DatosColumnas col10 = new DatosColumnas("Sug.", TIPO_DOUBLE, 30);
-	static DatosColumnas col11 = new DatosColumnas("Imp.Vtas", TIPO_DOUBLE, 50);
-	static DatosColumnas col12 = new DatosColumnas("Observación", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Prom.", TIPO_DOUBLE, 30);
+	static DatosColumnas col6 = new DatosColumnas("N.Créd", TIPO_DOUBLE, 30);
+	static DatosColumnas col7 = new DatosColumnas("P.Rep.", TIPO_DOUBLE, 30);
+	static DatosColumnas col8 = new DatosColumnas("Compr.", TIPO_DOUBLE, 30);
+	static DatosColumnas col9 = new DatosColumnas("Impor.", TIPO_DOUBLE, 30);
+	static DatosColumnas col10 = new DatosColumnas("Stock", TIPO_LONG, 30);
+	static DatosColumnas col11 = new DatosColumnas("Sug.", TIPO_DOUBLE, 30);
+	static DatosColumnas col12 = new DatosColumnas("Imp.Vtas", TIPO_DOUBLE, 50);
+	static DatosColumnas col13 = new DatosColumnas("Observación", TIPO_STRING);
 
 	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking, String marca, String devoluciones) {
 		this.desde = desde;
@@ -415,6 +430,7 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 		cols.add(col10);
 		cols.add(col11);
 		cols.add(col12);
+		cols.add(col13);
 	}
 
 	@Override

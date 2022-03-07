@@ -8,7 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.zkoss.bind.annotation.DependsOn;
+
 import com.coreweb.domain.Domain;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class AnalisisReposicion extends Domain {
@@ -19,6 +22,7 @@ public class AnalisisReposicion extends Domain {
 	private Date fecha;
 	private Date desde;
 	private Date hasta;
+	private double cantidadMeses;
 	private String tipoRanking;
 	private boolean incluirDevoluciones;
 	private String incluirDevoluciones_;
@@ -31,6 +35,14 @@ public class AnalisisReposicion extends Domain {
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
+	}
+	
+	@DependsOn({"desde", "hasta"})
+	public int getTotalMeses() {
+		if (this.desde != null && this.hasta != null) {
+			return Utiles.getNumeroMeses(this.desde, this.hasta);
+		}
+		return 0;
 	}
 	
 	/**
@@ -125,4 +137,11 @@ public class AnalisisReposicion extends Domain {
 		this.incluirDevoluciones = incluirDevoluciones_.equals("SI");
 	}
 
+	public double getCantidadMeses() {
+		return cantidadMeses;
+	}
+
+	public void setCantidadMeses(double cantidadMeses) {
+		this.cantidadMeses = cantidadMeses;
+	}
 }

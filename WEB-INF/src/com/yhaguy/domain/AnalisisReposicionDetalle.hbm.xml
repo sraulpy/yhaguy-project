@@ -22,6 +22,7 @@
 		<property name="stock" />
 		<property name="sugerido" />
 		<property name="observacion" />
+		<property name="promedio" />
 
 	</class>
 </hibernate-mapping>
