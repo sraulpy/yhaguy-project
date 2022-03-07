@@ -8,6 +8,11 @@
 			onClick='pop_params.open(self, "after_start")'></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-edit" label="Modificar" width="150px"
+			disabled="@load(vm.selectedAnalisis eq null)"
+			onClick="@command('modificar')"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
 			iconSclass="z-icon-print" label="Imprimir" width="150px"
 			disabled="@load(vm.selectedAnalisis eq null)"
 			onClick="@command('imprimirSeleccionado')"></button>

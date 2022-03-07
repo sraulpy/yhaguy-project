@@ -87,6 +87,14 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange("analisis")
+	public void modificar() {
+		this.analisis = this.selectedAnalisis;
+		this.win = (Window) Executions.createComponents(ZUL_DETALLE, this.mainComponent, null);
+		this.win.doModal();
+	}
+	
 	/**
 	 * generacion del informe..
 	 */
