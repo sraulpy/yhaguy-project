@@ -12351,7 +12351,7 @@ public class RegisterDomain extends Register {
 	 */
 	public long getStockArticulo(String codigoInterno) throws Exception {
 		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.codigoInterno = '" + codigoInterno
-				+ "' and a.deposito.auxi != 'V' and a.deposito.descripcion != 'TEMPORAL M.R.A.'";
+				+ "' and (a.deposito.auxi != 'V' or a.deposito.descripcion != 'TEMPORAL M.R.A.')";
 		List<Long> out = this.hql(query);
 		return out.get(0) != null ? out.get(0) : 0;
 	}
