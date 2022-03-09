@@ -1937,7 +1937,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				break;
 				
 			case VENTAS_LISTA_PRECIO_DEPOSITO:
-				this.listaPrecioPorDeposito(mobile);
+				this.listaPrecioPorDeposito(mobile, VENTAS_LISTA_PRECIO_DEPOSITO);
 				break;
 				
 			case VENTAS_LISTA_PRECIO_FAMILIA:
@@ -5866,7 +5866,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		/**
 		 * VEN-00043
 		 */
-		private void listaPrecioPorDeposito(boolean mobile) {
+		private void listaPrecioPorDeposito(boolean mobile, String codReporte) {
 			if (mobile) {
 				Clients.showNotification("AUN NO DISPONIBLE EN VERSION MOVIL..");
 				return;
@@ -5896,15 +5896,16 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (stock) {	
 						long min = art[6] != null ? (long) art[6] : (long) 0;
 						if (min > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9] });
+							data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9], art[11] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9] });
+						data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9], art[11] });
 					}					
 				}
 				
 				ReporteListaPrecioPorDeposito rep = new ReporteListaPrecioPorDeposito(deposito.getDescripcion());
 				rep.setDatosReporte(data);
+				rep.setTitulo(codReporte + " - Lista de precios por depósito");
 				rep.setApaisada();
 				
 
@@ -27037,6 +27038,7 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 	static DatosColumnas col5 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 18);
 	static DatosColumnas col6 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 18);
 	static DatosColumnas col7 = new DatosColumnas("Tra.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col8 = new DatosColumnas("Pro.Gs.", TIPO_DOUBLE_GS, 18);
 
 	public ReporteListaPrecioPorDeposito(String deposito) {
 		this.deposito = deposito;
@@ -27050,11 +27052,11 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 		cols.add(col5);
 		cols.add(col6);
 		cols.add(col7);
+		cols.add(col8);
 	}
 
 	@Override
 	public void informacionReporte() {
-		this.setTitulo("Lista de precios por depósito");
 		this.setDirectorio("ventas");
 		this.setNombreArchivo("Precios-");
 		this.setTitulosColumnas(cols);
