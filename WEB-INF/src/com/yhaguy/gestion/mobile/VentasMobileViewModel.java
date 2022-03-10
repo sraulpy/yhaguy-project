@@ -242,6 +242,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_GS) precio = (double) art[4];
 		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_DS) precio = (double) art[5];
 		if (idListaPrecio == ArticuloListaPrecio.ID_TRANSPORTADORA) precio = (double) art[7];
+		if (idListaPrecio == ArticuloListaPrecio.ID_PROMOCION) precio = (double) art[9];
 		if (this.selectedDetalle.isExenta()) {
 			precio = precio - Utiles.getIVA(precio, 10);
 		}
