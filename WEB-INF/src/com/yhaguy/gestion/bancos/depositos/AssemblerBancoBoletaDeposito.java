@@ -17,7 +17,7 @@ import com.yhaguy.gestion.bancos.libro.AssemblerBancoMovimiento;
 public class AssemblerBancoBoletaDeposito extends Assembler {
 
 	private static String[] attIguales = { "fecha", "numeroBoleta", "monto",
-			"totalEfectivo", "observacion", "planillaCaja", "cerrado", "noGenerarCajaAuditoria" };
+			"totalEfectivo", "observacion", "planillaCaja", "cerrado", "noGenerarCajaAuditoria", "fechaAcreditacion" };
 	
 	private static String[] attCheques = { "fecha", "banco", "numero",
 			"librado", "moneda", "monto", "depositado", "sucursalApp", "cliente", "recaudacionesCentral" };

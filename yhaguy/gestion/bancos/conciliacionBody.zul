@@ -44,6 +44,19 @@
 							value="@load(vm.dto.sucursal.text.toUpperCase())">
 						</textbox>
 					</vlayout>
+					<vlayout spacing="0">
+						<field value="Saldo Inicial" />
+						<guaranibox hflex="true"
+							value="@bind(vm.dto.saldoInicial)">
+						</guaranibox>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Resumen" />
+						<button
+							hflex="true" iconSclass="z-icon-print"
+							disabled="@load(!vm.siempreHabilitado)"
+							onClick="@command('resumen')" label=" Ver Resumen" />
+					</vlayout>
 				</row>
 			</rows>
 		</grid>
@@ -65,16 +78,22 @@
 					<field value="Registros Internos" />
 					<separator orient="vertical" bar="true"></separator>
 					<button mold="bs" sclass="btn-primary btn-sm"
-						width="170px" iconSclass="z-icon-check-circle"
+						hflex="true" iconSclass="z-icon-check-circle"
 						disabled="@load(!vm.conciliarEnable)"
 						onClick="@command('conciliar')"
 						label=" Conciliar Movimiento" />
-					<space />
+					<space />					
 					<button mold="bs" sclass="btn-info btn-sm"
-						width="170px" iconSclass="z-icon-print"
+						hflex="true" iconSclass="z-icon-list"
 						disabled="@load(!vm.siempreHabilitado)"
-						onClick="@command('resumen')"
-						label=" Ver Resumen" />
+						onClick='pop_cheques.open(self, "after_end")'
+						label=" Cheques a Cobrar" />
+					<space />					
+					<button mold="bs" sclass="btn-info btn-sm"
+						hflex="true" iconSclass="z-icon-list"
+						disabled="@load(!vm.siempreHabilitado)"
+						onClick='pop_deps.open(self, "after_end")'
+						label=" Depósitos a Confirmar" />
 				</hlayout>
 				<listbox model="@load(vm.movimientosBanco)" visible="false"></listbox>
 				<listbox sclass="small-list" vflex="true"
@@ -114,13 +133,13 @@
 						</listitem>
 					</template>
 					<listfoot>
-						<listfooter span="7" align="left">
-							<hbox width="100%" align="center">
-								<field value="ítems" />
-								<space hflex="true"/>
-								<label value="@load(vm.selectedItems1.size())" style="color:blue"></label>
-								<label value="coincidencias" style="color:blue"></label>
-								<space hflex="true"/>
+						<listfooter span="7" align="right">
+							<hlayout hflex="true">
+								<field value="Saldo In.:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.saldoInicial)"/>
+								<space></space>
 								<field value="Debe:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
@@ -134,8 +153,8 @@
 								<field value="Saldo:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.totalDebe - vm.totalHaber)"/>
-							</hbox>
+									value="@load((vm.totalDebe + vm.dto.saldoInicial) - vm.totalHaber)"/>
+							</hlayout>
 						</listfooter>
 					</listfoot>
 				</listbox>
@@ -201,13 +220,12 @@
 					</template>
 					<listfoot>
 						<listfooter span="7" align="left">
-							<hbox width="100%" align="center">
-								<field value="@load(vm.dto.detalles2.size())" />
-								<field value="ítems" />
-								<space hflex="true"/>
-								<label value="@load(vm.selectedItems2.size())" style="color:blue"></label>
-								<label value="coincidencias" style="color:blue"></label>
-								<space hflex="true"></space>
+							<hlayout hflex="true">
+								<field value="Saldo In.:" />
+								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.saldoInicial)"/>
+								<space></space>
 								<field value="Debe:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
@@ -221,13 +239,57 @@
 								<field value="Saldo:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.dto.totalHaber - vm.dto.totalDebe)"/>
-							</hbox>
+									value="@load((vm.dto.totalHaber + vm.dto.saldoInicial) - vm.dto.totalDebe)"/>
+							</hlayout>
 						</listfooter>
 					</listfoot>
 				</listbox>
 			</vbox>
 		</hbox>
+		
+		<popup id="pop_deps" sclass="rounded">
+			<listbox sclass="small-list" width="300px" height="250px"
+				model="@load(vm.dto.depositosAconfirmar)"
+				emptyMessage="SIN DEPOSITOS A CONFIRMAR..">
+				<listhead>
+					<listheader label="Fecha"></listheader>
+					<listheader label="Número"></listheader>
+					<listheader label="Importe" align="right"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+						<listcell label="@load(each[2])"></listcell>
+						<listcell label="@load(each[3]) @converter(vm.cnv.monedaLocal)"></listcell>
+					</listitem>					
+				</template>
+				<listfoot>
+					<listfooter span="3" align="right">
+						<guaranibox
+							style="background:#EEF7FA; text-align:right; font-weight:bold"
+							readonly="true" value="@load(vm.dto.totalDepositosAconfirmar)" />
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</popup>
+		
+		<popup id="pop_cheques" sclass="rounded">
+			<listbox sclass="small-list" width="300px" height="250px"
+				emptyMessage="SIN CHEQUES A COBRAR..">
+				<listhead>
+					<listheader label="Fecha"></listheader>
+					<listheader label="Número"></listheader>
+					<listheader label="Importe" align="right"></listheader>
+				</listhead>
+				<listfoot>
+					<listfooter span="3" align="right">
+						<guaranibox
+							style="background:#EEF7FA; text-align:right; font-weight:bold"
+							readonly="true" />
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</popup>
 		
 	</window>
 </zk>

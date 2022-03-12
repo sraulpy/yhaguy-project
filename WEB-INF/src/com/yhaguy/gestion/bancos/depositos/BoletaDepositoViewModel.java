@@ -535,6 +535,14 @@ public class BoletaDepositoViewModel extends BodyApp {
 
 	}
 	
+	@Command
+	public void saveFechaAcreditacion() throws Exception {
+		if (!this.bancoDeposito.esNuevo()) {
+			this.saveDTO(this.bancoDeposito);
+			Clients.showNotification("REGISTRO GUARDADO..");
+		}
+	}
+	
 	/**
 	 * GETS / SETS
 	 */		

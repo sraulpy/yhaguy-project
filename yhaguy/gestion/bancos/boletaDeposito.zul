@@ -47,8 +47,7 @@
 						<textbox
 							value="@load(vm.bancoDeposito.sucursalApp)" readonly="true"
 							tooltiptext="Sucursal operativa del usuario." hflex="true" />
-					</vlayout>
-
+					</vlayout>					
 				</row>
 				<row>
 					<vlayout spacing="0">
@@ -70,6 +69,16 @@
 								tooltiptext="@load(vm.bancoDeposito.observacion)" hflex="true" />
 						</vlayout>
 					</cell>
+					<vlayout spacing="0">
+						<field value="Fecha Acreditación" />
+						<hlayout hflex="true">
+						<datebox value="@bind(vm.bancoDeposito.fechaAcreditacion)" hflex="true" id="dtbx"
+							onChange="@command('saveFechaAcreditacion')"/>
+						<button mold="bs" id="btn_edit_TC" iconSclass="z-icon-pencil" disabled="@load(!vm.siempreHabilitado)"
+								onClick="dtbx.setReadonly(false); dtbx.focus(); dtbx.setButtonVisible(true); self.setVisible(false)"
+								sclass="btn-xs btn-info" width="30px"></button>
+						</hlayout>
+					</vlayout>
 				</row>
 			</rows>
 		</grid>

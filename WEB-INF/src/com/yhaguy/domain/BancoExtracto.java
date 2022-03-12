@@ -14,6 +14,7 @@ public class BancoExtracto extends Domain {
 	private Date hasta;
 	private Set<BancoExtractoDetalle> detalles2 = new HashSet<BancoExtractoDetalle>();
 	private boolean cerrado;	
+	private double saldoInicial;
 
 	private BancoCta banco;
 	private SucursalApp sucursal;
@@ -77,5 +78,13 @@ public class BancoExtracto extends Domain {
 
 	public void setDetalles2(Set<BancoExtractoDetalle> detalles2) {
 		this.detalles2 = detalles2;
+	}
+
+	public double getSaldoInicial() {
+		return saldoInicial;
+	}
+
+	public void setSaldoInicial(double saldoInicial) {
+		this.saldoInicial = saldoInicial;
 	}
 }

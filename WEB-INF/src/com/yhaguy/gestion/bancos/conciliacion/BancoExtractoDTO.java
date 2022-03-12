@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyPair;
+import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
 
 @SuppressWarnings("serial")
@@ -19,6 +21,8 @@ public class BancoExtractoDTO extends DTO {
 	private Date desde;
 	private Date hasta;
 	private boolean cerrado;
+	private double saldoInicial;
+	private double totalDepositosAconfirmar;
 	
 	private List<BancoExtractoDetalleDTO> detalles2 = new ArrayList<BancoExtractoDetalleDTO>();
 	private MyPair sucursal;
@@ -57,6 +61,21 @@ public class BancoExtractoDTO extends DTO {
 			out += item.getHaber();
 		}
 		return out;
+	}
+	
+	@DependsOn({ "banco", "desde", "hasta" })
+	public List<Object[]> getDepositosAconfirmar() throws Exception {
+		this.totalDepositosAconfirmar = 0;
+		if (this.banco != null && this.desde != null && this.hasta != null) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Object[]> out = rr.getDepositosPorBancoAconfirmar(this.banco.getId(), this.desde, this.hasta);
+			for (Object[] obj : out) {
+				this.totalDepositosAconfirmar += ((double) obj[3]);
+			}
+			return out;
+		}
+		BindUtils.postNotifyChange(null, null, this, "totalDepositosAconfirmar");
+		return new ArrayList<Object[]>();
 	}
 	
 	public String getNumero() {
@@ -113,5 +132,21 @@ public class BancoExtractoDTO extends DTO {
 
 	public void setDetalles2(List<BancoExtractoDetalleDTO> detalles2) {
 		this.detalles2 = detalles2;
+	}
+
+	public double getSaldoInicial() {
+		return saldoInicial;
+	}
+
+	public void setSaldoInicial(double saldoInicial) {
+		this.saldoInicial = saldoInicial;
+	}
+
+	public double getTotalDepositosAconfirmar() {
+		return totalDepositosAconfirmar;
+	}
+
+	public void setTotalDepositosAconfirmar(double totalDepositosAconfirmar) {
+		this.totalDepositosAconfirmar = totalDepositosAconfirmar;
 	}
 }

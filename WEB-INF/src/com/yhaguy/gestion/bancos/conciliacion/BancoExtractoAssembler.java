@@ -10,7 +10,7 @@ import com.yhaguy.gestion.bancos.libro.AssemblerBancoMovimiento;
 
 public class BancoExtractoAssembler extends Assembler {
 
-	static String[] attIguales = new String[] { "numero", "desde", "hasta", "cerrado" };
+	static String[] attIguales = new String[] { "numero", "desde", "hasta", "cerrado", "saldoInicial" };
 
 	@Override
 	public Domain dtoToDomain(DTO dto) throws Exception {

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
+
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -16,6 +18,7 @@ public class BancoBoletaDepositoDTO extends DTO {
 
 	private BancoCtaDTO nroCuenta = new BancoCtaDTO();
 	private Date fecha;
+	private Date fechaAcreditacion;
 	private String numeroBoleta = "";
 	private double monto = 0;
 	private double totalEfectivo = 0;
@@ -71,6 +74,8 @@ public class BancoBoletaDepositoDTO extends DTO {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+		this.fechaAcreditacion = fecha;
+		BindUtils.postNotifyChange(null, null, this, "fechaAcreditacion");
 	}
 
 	public String getNumeroBoleta() {
@@ -151,6 +156,14 @@ public class BancoBoletaDepositoDTO extends DTO {
 
 	public void setNoGenerarCajaAuditoria(boolean noGenerarCajaAuditoria) {
 		this.noGenerarCajaAuditoria = noGenerarCajaAuditoria;
+	}
+
+	public Date getFechaAcreditacion() {
+		return fechaAcreditacion;
+	}
+
+	public void setFechaAcreditacion(Date fechaAcreditacion) {
+		this.fechaAcreditacion = fechaAcreditacion;
 	}
 
 }

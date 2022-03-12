@@ -44,7 +44,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 public class BancoConciliacionViewModel extends BodyApp {
-	
+	//siempreHabilitado
 	static final String PATH = Configuracion.pathConciliaciones;
 	final static String KEY_NRO = "CONCI";
 
@@ -386,12 +386,16 @@ public class BancoConciliacionViewModel extends BodyApp {
 	private void resumenConciliacion() {		
 		String source = ReportesViewModel.SOURCE_RESUMEN_CONCILIACION;
 		Map<String, Object> params = new HashMap<String, Object>();
-		JRDataSource dataSource = new ResumenConciliacioDataSource(this.dto, this.movimientosBanco_);
+		JRDataSource dataSource = new ResumenConciliacioDataSource(this.dto, this.movimientosBanco_, this.getTotalDebe(), this.getTotalHaber());
 		params.put("Usuario", getUs().getNombre());
 		params.put("ConciliacionNro", this.dto.getNumero());
 		params.put("Banco", this.dto.getBanco().getBanco().getPos1());
 		params.put("Desde", Utiles.getDateToString(this.dto.getDesde(), Utiles.DD_MM_YY));
 		params.put("Hasta", Utiles.getDateToString(this.dto.getHasta(), Utiles.DD_MM_YY));
+		params.put("SaldoInicial", Utiles.getNumberFormat(this.dto.getSaldoInicial()));
+		params.put("Ingresos", Utiles.getNumberFormat(this.getTotalDebe()));
+		params.put("Egresos", Utiles.getNumberFormat(this.getTotalHaber()));
+		params.put("SaldoFinal", Utiles.getNumberFormat((this.dto.getSaldoInicial() + this.getTotalDebe()) - this.getTotalHaber()));
 		imprimirJasper(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
 	}
 	
@@ -577,7 +581,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 				boolean conciliado = this.detalles2.get(numero) != null;
 				data.add(new Object[] { fecha, hora, numero, concepto, entrada, salida, saldo_, banco,
 						(Date) hist[1], ent ? "" : "", origen.replace("REC-PAG-", "ORDEN PAGO ")
-								.replace("CJP-", "CAJA ").replace("CAJAS:", "").toUpperCase(), entrada_, salida_, saldo, ent, conciliado, debe, haber, false });
+								.replace("CJP-", "CAJA ").replace("CAJAS:", "").toUpperCase(), entrada_, salida_, saldo, ent, conciliado, debe, haber, false, hist[1] });
 				this.detalles1.put(numero, numero);
 			}
 		}
@@ -722,73 +726,43 @@ public class BancoConciliacionViewModel extends BodyApp {
  */
 class ResumenConciliacioDataSource implements JRDataSource {
 	
-	private BancoExtractoDTO dto;
 	private List<Object[]> items = new ArrayList<>();
-	private Map<String, Double> totales1 = new HashMap<>();
-	private Map<String, Double> totales2 = new HashMap<>();
+	private double ingresos = 0;
+	private double egresos = 0;
+	private double totalDepositosConfirmar = 0;
 	
-	public ResumenConciliacioDataSource(BancoExtractoDTO dto, List<Object[]> movimientosBanco) {
-		this.dto = dto;
+	public ResumenConciliacioDataSource(BancoExtractoDTO dto, List<Object[]> movimientosBanco, double ingresos, double egresos) {
+		
+		this.ingresos = ingresos;
+		this.egresos = egresos;
+		this.totalDepositosConfirmar = dto.getTotalDepositosAconfirmar();
+		
 		for (Object[] item : movimientosBanco) {
 			item[6] = item[2];
 			item[7] = item[3];
-			item[8] = true;
+			item[8] = false;	
+			item[9] = "MOVIMIENTOS BANCARIOS";
 			this.items.add(item);
-			String key = (String) item[3];
-			double importe = (double) item[16];
-			if (importe == 0) importe = (double) item[17];
-			Double acum = this.totales1.get(key);
-			if (acum == null) {
-				this.totales1.put(key, importe);
-			} else {
-				acum += importe;
-				this.totales1.put(key, acum);
+		}
+		
+		try {
+			for (Object[] dep : dto.getDepositosAconfirmar()) {
+				Object[] obj = new Object[] { null, null, dep[2], dep[0], null, null, null, null, true, "DEPOSITOS A CONFIRMAR", null,
+						null, null, null, null, null, 0.0, dep[3], null, dep[6] };
+				this.items.add(obj);
 			}
-			this.machear((String) item[2], (String) item[3]);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		Collections.sort(this.items, new Comparator<Object[]>() {
 			@Override
 			public int compare(Object[] o1, Object[] o2) {
-				String val1 = (String) o1[7];
-				String val2 = (String) o2[7];
-				int compare = val1.compareTo(val2);
-				if (compare == 0) {
-					String concepto1 = (String) o1[6];
-					String concepto2 = (String) o2[6];
-					return concepto1.compareTo(concepto2);
-				} else {
-					return compare;
-				}
+				Date val1 = (Date) o1[19];
+				Date val2 = (Date) o2[19];
+				return val1.compareTo(val2);
 			}
 		});
-	}
-	
-	/**
-	 * machear items..
-	 */
-	private void machear(String nro, String concepto) {
-		for (BancoExtractoDetalleDTO item : this.dto.getDetalles2()) {
-			String nro2 = item.getNumero();
-			String[] nro2_ = item.getAuxi().split(";");
-			for (int i = 0; i < nro2_.length; i++) {
-				if (nro.equals(nro2) || nro.equals(nro2_[i])) {
-					this.items.add(new Object[] { 
-							Utiles.getDateToString(item.getFecha(), Utiles.DD_MM_YYYY), "",
-							item.getNumero(), item.getDescripcion(), Utiles.getNumberFormat(item.getDebe()),
-							Utiles.getNumberFormat(item.getHaber()), nro, concepto, false });
-					
-					double importe = item.getDebe() == 0 ? item.getHaber() : item.getDebe();					
-					Double acum = this.totales2.get(concepto);
-					if (acum == null) {
-						this.totales2.put(concepto, importe);
-					} else {
-						acum += importe;
-						this.totales2.put(concepto, acum);
-					}
-				}
-			}
-		}
 	}
 
 	private int index = -1;
@@ -799,7 +773,6 @@ class ResumenConciliacioDataSource implements JRDataSource {
 		String fieldName = field.getName();
 		Object[] det = this.items.get(index);
 		boolean interno = (boolean) det[8];
-		String key = (String) det[7];
 
 		if ("Numero".equals(fieldName)) {
 			String nro = (String) det[2];
@@ -808,19 +781,17 @@ class ResumenConciliacioDataSource implements JRDataSource {
 			String concepto = ((String) det[3]).toLowerCase();
 			value = concepto;
 		} else if ("Importe".equals(fieldName)) {
-			String val = (String) det[4];
-			value = interno ? (val.equals("0") ? (String) det[5] : val) : "";
+			double val = (double) det[16];
+			value = Utiles.getNumberFormat(val);
 		}  else if ("Importe_".equals(fieldName)) {
-			String val = (String) det[4];
-			value = interno ? "" : val.equals("0") ? (String) det[5] : val;
+			double val = (double) det[17];
+			value = Utiles.getNumberFormat(val);
 		} else if ("TituloDetalle".equals(fieldName)) {
-			value = (String) det[7];
+			value = det[9];
 		} else if ("TotalImporte".equals(fieldName)) {
-			Double total = this.totales1.get(key);
-			value = Utiles.getNumberFormat(total);
+			value = interno? Utiles.getNumberFormat(0.0) : Utiles.getNumberFormat(this.ingresos);
 		} else if ("TotalImporte_".equals(fieldName)) {
-			Double total_ = this.totales2.get(key);
-			value = Utiles.getNumberFormat(total_);
+			value = interno? Utiles.getNumberFormat(this.totalDepositosConfirmar) : Utiles.getNumberFormat(this.egresos);
 		} else if ("Interno".equals(fieldName)) {
 			value = interno ? "1" : "2";
 		}
