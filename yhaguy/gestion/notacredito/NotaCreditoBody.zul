@@ -334,37 +334,43 @@
 		width="@load(vm.detalleArticuloVisible? '100%':'100.5%')"
 		visible="@load(vm.detalleVisible)">
 
-		<vbox hflex="@load(vm.detalleArticuloVisible? '35%':'1')"
+		<vbox hflex="@load(vm.detalleArticuloVisible? '40%':'1')"
 			vflex="true" spacing="0">
 
 			<hlayout sclass="button-container">
 				<button mold="bs" sclass="btn-danger btn-sm"
-					width="120px" iconSclass="z-icon-times-circle"
+					width="10rem" iconSclass="z-icon-times-circle"
 					onClick="@command('eliminarItemFac')"
 					disabled="@load(vm.deleteFacturaDisabled)" label=" Eliminar" />
 				<space />
 				<button mold="bs" sclass="btn-success btn-sm"
-					width="120px" iconSclass="z-icon-plus-circle"
+					width="10rem" iconSclass="z-icon-plus-circle"
 					onClick="@command('buscarFacturas')" label=" Insertar" 
 					disabled="@load(vm.dto.detallesFacturas.size() gt 0)" 
 					visible="@load(vm.dto.notaCreditoVenta)" />
 				<space visible="@load(vm.dto.notaCreditoVenta)"/>
 				<button mold="bs" sclass="btn-success btn-sm"
-					width="120px" iconSclass="z-icon-plus-circle"
+					width="10rem" iconSclass="z-icon-plus-circle"
 					onClick='pop_tipos.open(self, "after_start")' label=" Insertar" 
 					disabled="@load(vm.dto.detallesFacturas.size() gt 0)" 
 					visible="@load(!vm.dto.notaCreditoVenta)" />
 				<button mold="bs" sclass="btn-primary btn-sm"
-					width="120px" iconSclass="z-icon-check"
+					width="10rem" iconSclass="z-icon-check"
 					disabled="@load(!vm.aprobarEnabled)"
 					visible="@load(vm.dto.notaCreditoVenta)"
 					onClick="@command('aprobarSolicitud')" label=" Aprobar" />			
 				<space />
 				<button mold="bs" sclass="btn-primary btn-sm"
-					width="120px" iconSclass="z-icon-check"
+					width="10rem" iconSclass="z-icon-check"
 					disabled="@load(vm.confirmarDisabled)"
 					visible="@load(vm.dto.notaCreditoCompra)"
-					onClick="@command('confirmar')" label=" Confirmar" />	
+					onClick="@command('confirmar')" label=" Confirmar" />
+				
+				<button mold="bs" sclass="btn-success btn-sm"
+					width="12rem" iconSclass="z-icon-exchange"
+					onClick="@command('buscarFacturas')" label=" Aplicar Importe" 
+					disabled="@load(vm.dto.detallesArticulos.size() > 0 ? 'false':'true')" 
+					visible="@load(vm.dto.notaCreditoVenta and vm.dto.motivoDevolucion)"/>
 			</hlayout>
 
 			<listbox vflex="true" sclass="small-list"
