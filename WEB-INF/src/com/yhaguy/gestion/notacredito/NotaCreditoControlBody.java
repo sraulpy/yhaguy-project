@@ -457,7 +457,10 @@ public class NotaCreditoControlBody extends BodyApp {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
 
 			} else {
-				this.dto.getDetalles().removeAll(this.dto.getDetallesFacturas());
+				List<NotaCreditoDetalleDTO> list = new ArrayList<NotaCreditoDetalleDTO>();
+				list.addAll(this.dto.getDetallesArticulos());
+				this.dto.getDetalles().clear();
+				this.dto.getDetalles().addAll(list);
 				this.dto.getDetalles().add(this.nvoItem);
 			}
 		}
