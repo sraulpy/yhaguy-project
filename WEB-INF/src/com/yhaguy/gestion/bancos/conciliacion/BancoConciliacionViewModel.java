@@ -301,9 +301,8 @@ public class BancoConciliacionViewModel extends BodyApp {
 				String debe = csv.getDetalleString("DEBE");
 				String haber = csv.getDetalleString("HABER");
 				String fecha = csv.getDetalleString("FECHA");
-				Date fecha_ = Utiles.getFecha(fecha + "/" + Utiles.getDateToString(this.dto.getDesde(), "yyyy"), "dd/MMM/yyyy");
+				Date fecha_ = Utiles.getFecha(fecha + "/" + Utiles.getDateToString(this.dto.getDesde(), "yyyy"), "dd/MM/yyyy");
 				
-				String[] numero_ = numero.split(" ");
 				double importe; 
 				double debe_ = 0; 
 				double haber_ = 0;
@@ -316,13 +315,13 @@ public class BancoConciliacionViewModel extends BodyApp {
 				}
 				
 				BancoExtractoDetalleDTO det = new BancoExtractoDetalleDTO();
-				det.setNumero(numero_[1]);
+				det.setNumero(numero);
 				det.setDescripcion(descripcion);
 				det.setFecha(fecha_);
 				det.setDebe(debe_);
 				det.setHaber(haber_);
 				det.setConciliado(false);
-				det.setNumero_(Double.parseDouble(numero_[1]));
+				det.setNumero_(Double.parseDouble(numero));
 				det.setImporte_(importe);
 				det.setConciliado(this.detalles1.get(det.getNumero()) != null);
 				list.add(det);
