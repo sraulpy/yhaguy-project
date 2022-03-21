@@ -14511,11 +14511,22 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 50);
 	}
 	
+	/**
+	 * @return las cajas chicas con saldo..
+	 */
+	public List<Object[]> getSaldosCajaChica() throws Exception {
+		String query = "" + " select c.id, c.numero, c.saldoCajaChica " + " from CajaPeriodo c "
+				+ " where c.saldoCajaChica > 0 and (c.saldoCajaChicaAplicado is null or length(c.saldoCajaChicaAplicado) = 0)";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			AccesoApp test = rr.getAccesoAppById(1);
-			System.out.println(test.getId());
+			for (Object[] it : rr.getSaldosCajaChica()) {
+				System.out.println(it[1]);
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -88,6 +88,14 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange("*")
+	public void setMontoGs() {
+		this.dato.getReposicion().setPos5(this.dato.getSelectedCajaChica()[2]);
+		this.dato.getReposicion().setPos6((double) 0);
+		this.dato.getReposicion().setPos7("SALDO DE CAJA CHICA ANTERIOR: " + this.dato.getSelectedCajaChica()[1]);
+	}
+	
 	/*******************************************************************************/
 	
 	

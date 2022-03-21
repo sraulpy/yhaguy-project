@@ -31,6 +31,9 @@ public class CajaPeriodo extends Domain {
 	private Date cierre;
 	private String tipo;
 	private boolean controlRendicion;
+	
+	private double saldoCajaChica;
+	private String saldoCajaChicaAplicado;
 
 	/**
 	 * estados de la planilla: abierta - cerrada - procesada (tiene una caja de
@@ -1410,5 +1413,21 @@ public class CajaPeriodo extends Domain {
 
 	public void setControlRendicion(boolean controlRendicion) {
 		this.controlRendicion = controlRendicion;
+	}
+
+	public double getSaldoCajaChica() {
+		return saldoCajaChica;
+	}
+
+	public void setSaldoCajaChica(double saldoCajaChica) {
+		this.saldoCajaChica = saldoCajaChica;
+	}
+
+	public String getSaldoCajaChicaAplicado() {
+		return saldoCajaChicaAplicado;
+	}
+
+	public void setSaldoCajaChicaAplicado(String saldoCajaChicaAplicado) {
+		this.saldoCajaChicaAplicado = saldoCajaChicaAplicado;
 	}
 }

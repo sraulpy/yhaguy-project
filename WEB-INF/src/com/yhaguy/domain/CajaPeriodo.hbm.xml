@@ -14,6 +14,8 @@
 		<property name="apertura"/>
 		<property name="cierre" />
 		<property name="tipo" />
+		<property name="saldoCajaChica" />
+		<property name="saldoCajaChicaAplicado" />
 		
 		<property name="controlRendicion">
 			<column name="controlRendicion" not-null="true" default="false" />

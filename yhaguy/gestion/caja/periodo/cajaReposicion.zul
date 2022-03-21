@@ -1,6 +1,6 @@
 <div apply="org.zkoss.bind.BindComposer" 
 	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')"
-	style="padding: 10px">
+	>
 	
 	<grid sclass="vgrid">
 		<columns>
@@ -22,7 +22,32 @@
 						</template>
 					</combobox>
 				</hlayout>
-			</row>			
+			</row>	
+			<row visible="@load(vm.dato.reposicion.pos18)">
+				<field value="Tipo:"/>
+				<label value="IMPORTAR SALDO CAJA CHICA"></label>
+			</row>	
+			<row visible="@load(vm.dato.reposicion.pos18)">
+				<field value="Origen:"/>
+				<bandbox hflex="true" placeholder="SELECCIONAR CAJA.."
+				readonly="true" value="@load(vm.dato.selectedCajaChica[1])"
+				id="bndFF">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px" style="border:none"
+						height="200px" model="@load(vm.dato.saldosCajaChica)"
+						onSelect="@command('setMontoGs')"
+						selectedItem="@bind(vm.dato.selectedCajaChica)">
+						<attribute name="onSelect">bndFF.close();</attribute>						
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each[1])"></listcell>
+								<listcell label="@load(each[2]) @converter(vm.cnv.monedaLocal)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+			</row>	
 			<row>
 				<field value="@load(vm.labelFuncionario)"/>
 				<hlayout>
@@ -40,7 +65,7 @@
 						value="@load(vm.dato.reposicion.pos13.text.toUpperCase().replace('-',' '))"/>
 				</hlayout>
 			</row>
-			<row>
+			<row visible="@load(!vm.dato.reposicion.pos18)">
 				<field value="Moneda:"/>
 				<combobox value="@load(vm.dato.reposicion.pos9.text)"
 					model="@load(vm.dato.dtoUtil.monedas)"
@@ -53,6 +78,10 @@
 					</template>
 				</combobox>
 			</row>
+			<row visible="@load(vm.dato.reposicion.pos18)">
+				<field value="Moneda:"/>
+				<textbox readonly="true" value="@load(vm.dato.reposicion.pos9.text)" hflex="true"></textbox>
+			</row>
 			<row>
 				<field value="Tipo de Cambio:"/>
 				<hlayout sclass="z-valign-middle">
@@ -61,7 +90,7 @@
 						sclass="label-moneda"/>
 				</hlayout>
 			</row>		
-			<row>
+			<row visible="@load(!vm.dato.reposicion.pos18)">
 				<field value="Monto:"/>
 				<hlayout>
 					<guaranibox value="@bind(vm.dato.reposicion.pos5)"
@@ -78,8 +107,17 @@
 						sclass="label-moneda"
 						visible="@load(!vm.dato.reposicionMonedaLocal)"/>
 				</hlayout>
-			</row>
-			<row>
+			</row>	
+			<row visible="@load(vm.dato.reposicion.pos18)">
+				<field value="Monto:"/>
+				<hlayout>
+					<guaranibox value="@bind(vm.dato.reposicion.pos5)"
+						readonly="true"/>
+					<label value="@load(vm.dato.dtoUtil.simboloMonedaLocal)" 
+						sclass="label-moneda"/>	
+				</hlayout>
+			</row>		
+			<row visible="@load(!vm.dato.reposicion.pos18)">
 				<field value="Tipo de Pago:"/>
 				<hlayout>
 					<combobox
@@ -96,12 +134,24 @@
 					</combobox>
 				</hlayout>
 			</row>	
-			<row>
+			<row visible="@load(vm.dato.reposicion.pos18)">
+				<field value="Tipo de Pago:"/>
+				<textbox value="@load(vm.dato.reposicion.pos14.tipo.text.toUpperCase())" hflex="true" readonly="true"></textbox>
+			</row>
+			<row visible="@load(!vm.dato.reposicion.pos18)">
 				<field value="Observación:"/>
 				<hlayout valign="top">
 					<textbox value="@bind(vm.dato.reposicion.pos7)" 
 						hflex="true" rows="2"
 						readonly="@load(!vm.dato.reposicion.esNuevo())"/>
+				</hlayout>
+			</row>
+			<row visible="@load(vm.dato.reposicion.pos18)">
+				<field value="Observación:"/>
+				<hlayout valign="top">
+					<textbox value="@bind(vm.dato.reposicion.pos7)" 
+						hflex="true" rows="2"
+						readonly="true"/>
 				</hlayout>
 			</row>
 		</rows>

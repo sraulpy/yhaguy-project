@@ -24,6 +24,9 @@ public class CajaPeriodoDTO extends DTO {
 	private String tipo = "";
 	private boolean controlRendicion = false;
 	
+	private double saldoCajaChica;
+	private String saldoCajaChicaAplicado;
+	
 	private MyArray verificador = new MyArray();
 	private MyArray responsable = new MyArray();
 	private MyArray funcionario = new MyArray();
@@ -240,6 +243,22 @@ public class CajaPeriodoDTO extends DTO {
 
 	public void setControlRendicion(boolean controlRendicion) {
 		this.controlRendicion = controlRendicion;
+	}
+
+	public double getSaldoCajaChica() {
+		return saldoCajaChica;
+	}
+
+	public void setSaldoCajaChica(double saldoCajaChica) {
+		this.saldoCajaChica = saldoCajaChica;
+	}
+
+	public String getSaldoCajaChicaAplicado() {
+		return saldoCajaChicaAplicado;
+	}
+
+	public void setSaldoCajaChicaAplicado(String saldoCajaChicaAplicado) {
+		this.saldoCajaChicaAplicado = saldoCajaChicaAplicado;
 	}
 }
 

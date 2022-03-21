@@ -19,6 +19,8 @@ public class CajaReposicion extends Domain{
 	private String observacion;
 	private String motivoAnulacion;
 	private String numeroPlanilla;
+	private String numeroPlanillaOrigen;
+	private boolean saldoCajaChica = false;
 	private Tipo moneda;
 	
 	private Funcionario funcionarioAsignado;
@@ -183,5 +185,21 @@ public class CajaReposicion extends Domain{
 
 	public void setNumeroPlanilla(String numeroPlanilla) {
 		this.numeroPlanilla = numeroPlanilla;
+	}
+
+	public boolean isSaldoCajaChica() {
+		return saldoCajaChica;
+	}
+
+	public void setSaldoCajaChica(boolean saldoCajaChica) {
+		this.saldoCajaChica = saldoCajaChica;
+	}
+
+	public String getNumeroPlanillaOrigen() {
+		return numeroPlanillaOrigen;
+	}
+
+	public void setNumeroPlanillaOrigen(String numeroPlanillaOrigen) {
+		this.numeroPlanillaOrigen = numeroPlanillaOrigen;
 	}
 }

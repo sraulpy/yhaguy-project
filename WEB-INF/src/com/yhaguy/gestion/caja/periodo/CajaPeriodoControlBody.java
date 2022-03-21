@@ -125,6 +125,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	private String selectedDenominacion;
 	private Date fechaDesde = new Date();
 	private Date fechaHasta = new Date();
+	private Object[] selectedCajaChica;
 
 	private Window win;
 	
@@ -157,6 +158,19 @@ public class CajaPeriodoControlBody extends BodyApp {
 	@Override
 	public void setDTOCorriente(DTO dto) {
 		this.dto = (CajaPeriodoDTO) dto;
+		
+		if (this.isEmpresaCentral() || this.isEmpresaGroupauto()) {
+			if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+				if (this.dto.getDetalles().size() == 0) {
+					try {
+						this.abrirVentanaSaldoCajaChica(ES_REPOSICION, WindowPopup.NUEVO);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}		
+		
 		if (!this.isEmpresaGTSA()) {
 			if (!this.dto.esReadonly() && !this.dto.esNuevo()) {
 				if (CajaUtil.CAJAS_ABIERTAS.get(this.dto.getNumero()) != null) {
@@ -1303,7 +1317,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	public void abrirVentanaReposicion(@BindingParam("tipo") int tipo)
 			throws Exception {
 		this.abrirVentanaReposicion(tipo, WindowPopup.NUEVO);
-	};
+	};	
 
 	/**
 	 * Despliega el popup del item de reposicion..
@@ -1335,6 +1349,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.reposicion.setPos14(this.nvoFormaPago);
 		}
 		this.reposicion.setPos16((tipo == ES_REPOSICION) ? true : false);
+		this.reposicion.setPos17("");
+		this.reposicion.setPos18(false);
 
 		String titulo = (tipo == ES_REPOSICION) ? "Ingreso de Caja" : "Egreso de Caja";
 
@@ -1355,6 +1371,71 @@ public class CajaPeriodoControlBody extends BodyApp {
 			if ((idRepEgreso == idRepSinComp)) {
 				this.reposicion.setPos11(this.estadoComprobantePendiente);
 			}
+			this.addReposicion(tipo);
+		}
+	}
+	
+	/**
+	 * Despliega el popup del item de reposicion..
+	 */
+	private void abrirVentanaSaldoCajaChica(int tipo, String modo) throws Exception {
+
+		if (modo.equals(WindowPopup.NUEVO)) {
+
+			double tc = utilDto.getCambioCompraBCP(this.monedaLocal);
+			this.selectedItem = null;
+			this.nvoFormaPago = new ReciboFormaPagoDTO();
+			this.nvoFormaPago.setTipo(this.getDtoUtil().getFormaPagoEfectivo());
+
+			this.reposicion = new MyArray();
+			this.reposicion.setPos1(tipo == ES_REPOSICION ? this.getLoginFuncionario().toMyPair().getText() : "");
+			this.reposicion.setPos2(false);
+			this.reposicion.setPos3(new Date());
+			this.reposicion.setPos4(tc);
+			this.reposicion.setPos5((double) 0);
+			this.reposicion.setPos6((double) 0);
+			this.reposicion.setPos7("SIN SALDO CAJA CHICA ANTERIOR");
+			this.reposicion.setPos8((tipo == ES_REPOSICION) ? this.cajaReposicionIngreso
+							: this.cajaReposicionEgreso);
+			this.reposicion.setPos9(this.monedaLocal_);
+			this.reposicion.setPos10(new MyPair());
+			this.reposicion.setPos11(this.estadoComprobanteConfeccionado);
+			this.reposicion.setPos12("");
+			this.reposicion.setPos13(tipo == ES_REPOSICION ? this
+					.getLoginFuncionario().toMyPair() : new MyPair());
+			this.reposicion.setPos14(this.nvoFormaPago);
+		}
+		this.reposicion.setPos16((tipo == ES_REPOSICION) ? true : false);
+		this.reposicion.setPos17("");
+		this.reposicion.setPos18(true);
+
+		String titulo = "SALDO CAJA CHICA ANTERIOR";
+
+		WindowPopup w = new WindowPopup();
+		w.setModo(modo);
+		w.setDato(this);
+		w.setTitulo(titulo);
+		w.setWidth("450px");
+		w.setHigth((tipo == ES_REPOSICION) ? "400px" : "400px");
+		//w.setCheckAC(new ValidadorEgreso(this.reposicion));
+		if (modo.equals(WindowPopup.SOLO_LECTURA))
+			w.setSoloBotonCerrar();
+		w.show(Configuracion.CAJA_REPOSICION_ZUL);
+		if (w.isClickAceptar()) {
+			MyPair tipoRepEgreso = (MyPair) this.reposicion.getPos10();
+			long idRepEgreso = tipoRepEgreso.getId().longValue();
+			long idRepSinComp = this.egresoSinComp.getId().longValue();
+			if ((idRepEgreso == idRepSinComp)) {
+				this.reposicion.setPos11(this.estadoComprobantePendiente);
+			}
+			
+			if (this.selectedCajaChica != null) {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				CajaPeriodo cp = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), (long) this.selectedCajaChica[0]);
+				cp.setSaldoCajaChicaAplicado(this.dto.getNumero());
+				rr.saveObject(cp, this.getLoginNombre());
+			}
+			this.selectedCajaChica = null;			
 			this.addReposicion(tipo);
 		}
 	}
@@ -1785,6 +1866,61 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto.setCierre(new Date());
 		this.dto.setReadonly();
 		this.dto.setEstado(estadoCajaCerrada);
+		
+		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+			double totalEgresos = 0;
+			double totalNotaCreditoCompra = 0;
+			double totalRepEgresos = 0;
+			double totalRepEgresosDtoViatico = 0;
+			double totalReposiciones = 0;
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			CajaPeriodo planilla = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), this.dto.getId());
+			
+			for (CompraLocalFactura compra : planilla.getCompras()) {
+				double importe = compra.getImporteGs();
+				totalEgresos += importe;
+			}
+			
+			for (Gasto gasto : planilla.getGastosOrdenado()) {
+				double importe = gasto.isAnulado() ? 0.0 : gasto.getImporteGs();
+				totalEgresos += importe;
+			}
+			
+			for (Recibo pago : planilla.getRecibosOrdenado()) {
+				if (pago.isPago()) {
+					double importe = pago.isAnulado() ? 0.0 : pago.getTotalImporteGs();
+					totalEgresos += importe;
+				}
+			}
+			
+			for (CajaReposicion rep : planilla.getReposiciones()) {
+				if (!rep.isIngreso()) {
+					totalRepEgresos += rep.getMontoGs();
+					if (rep.getTipoEgreso().getSigla().equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
+						totalRepEgresosDtoViatico += rep.getMontoGs();
+					}
+				}
+			}
+			
+			for (NotaCredito nc : planilla.getNotasCredito()) {
+				if (nc.isNotaCreditoCompra()) {
+					double importe = nc.isAnulado() ? 0.0 : nc.getImporteGs();
+					totalNotaCreditoCompra += importe;				
+				}				
+			}
+			
+			for (CajaReposicion rep : planilla.getReposiciones()) {
+				if (rep.isIngreso()) {
+					double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
+					totalReposiciones += importe;
+				}
+			}			
+			double saldo = totalReposiciones - ((totalEgresos - totalRepEgresosDtoViatico - totalNotaCreditoCompra) + (totalRepEgresos - totalRepEgresosDtoViatico));
+			this.dto.setSaldoCajaChica(saldo);
+			this.dto.setSaldoCajaChicaAplicado(null);
+		}
+		
 		this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
 	}
@@ -1920,6 +2056,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 		MyPair tipoEgreso = (MyPair) this.reposicion.getPos10();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("title", tipoEgreso.esNuevo() ? "Reposición de Caja" : tipoEgreso.getText());
+		if ((boolean) this.reposicion.getPos18()) {
+			params.put("title", "APLICACIÓN DE SALDO ANTERIOR");
+		}
 		params.put("ImporteEnLetra", this.m.numberToLetter(this.reposicion.getPos5()));
 		params.put("Usuario", this.getUs().getNombre());
 		params.put("NroRecibo", this.reposicion.getPos5());
@@ -2502,7 +2641,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 				double importe = item.getFormaPago().getMontoGs();
 				value = Utiles.getNumberFormat(importe);
 			} else if ("TipoDetalle".equals(fieldName)) {
-				value = "DATOS DEL CHEQUE";
+				value = "DETALLE";
 			} else if ("observacion".equals(fieldName)) {
 				value = this.rep.getObservacion();
 			}
@@ -2915,6 +3054,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return saldos caja chica
+	 */
+	public List<Object[]> getSaldosCajaChica() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getSaldosCajaChica();
+	}
+	
+	/**
 	 * @return las monedas..
 	 */
 	public List<MyArray> getMonedas() {
@@ -3086,6 +3233,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 	public void setTotalPedidosPendientes(int totalPedidosPendientes) {
 		this.totalPedidosPendientes = totalPedidosPendientes;
+	}
+
+	public Object[] getSelectedCajaChica() {
+		return selectedCajaChica;
+	}
+
+	public void setSelectedCajaChica(Object[] selectedCajaChica) {
+		this.selectedCajaChica = selectedCajaChica;
 	}
 
 }
