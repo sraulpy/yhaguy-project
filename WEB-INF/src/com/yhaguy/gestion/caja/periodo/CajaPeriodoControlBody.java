@@ -1873,6 +1873,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			double totalRepEgresos = 0;
 			double totalRepEgresosDtoViatico = 0;
 			double totalReposiciones = 0;
+			double totalRetencionProveedor = 0;
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			CajaPeriodo planilla = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), this.dto.getId());
@@ -1915,8 +1916,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 					double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
 					totalReposiciones += importe;
 				}
-			}			
-			double saldo = totalReposiciones - ((totalEgresos - totalRepEgresosDtoViatico - totalNotaCreditoCompra) + (totalRepEgresos - totalRepEgresosDtoViatico));
+			}	
+			
+			for (ReciboFormaPago fp : planilla.getRetencionesProveedor()) {
+				totalRetencionProveedor += fp.getMontoGs();
+			}
+			
+			double saldo = (totalReposiciones + totalRetencionProveedor) - ((totalEgresos - totalRepEgresosDtoViatico - totalNotaCreditoCompra) + (totalRepEgresos - totalRepEgresosDtoViatico));
 			this.dto.setSaldoCajaChica(saldo);
 			this.dto.setSaldoCajaChicaAplicado(null);
 		}

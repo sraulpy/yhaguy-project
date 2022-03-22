@@ -891,13 +891,15 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			
 			// resumen caja chica..
 			if (planilla.isCajaChica()) {
-				double saldo = this.totalReposiciones - ((this.totalCompras + this.totalGastos + this.totalPagos - this.totalRepEgresosDtoViatico - this.totalNotaCreditoCompra) + (this.totalRepEgresos - this.totalRepEgresosDtoViatico));
+				double saldo = (this.totalReposiciones + this.totalRetencionProveedor) - ((this.totalCompras + this.totalGastos + this.totalPagos - this.totalRepEgresosDtoViatico - this.totalNotaCreditoCompra) + (this.totalRepEgresos - this.totalRepEgresosDtoViatico));
 				MyArray rep = new MyArray("INGRESO", "INGRESO POR REPOSICION DE CAJA", this.totalReposiciones, "RESUMEN", saldo);
 				this.values.add(rep);
 				MyArray facs = new MyArray("EGRESO", "EGRESOS POR FACTURAS DE GASTO - DESCUENTOS", ((this.totalCompras + this.totalGastos + this.totalPagos) - this.totalRepEgresosDtoViatico - this.totalNotaCreditoCompra), "RESUMEN", saldo);
 				this.values.add(facs);
 				MyArray vuelto = new MyArray("EGRESO", "EGRESOS POR VUELTOS", this.totalRepEgresos - this.totalRepEgresosDtoViatico, "RESUMEN", saldo);
 				this.values.add(vuelto);
+				MyArray rets = new MyArray("INGRESO", "INGRESO POR RETENCIONES", this.totalRetencionProveedor, "RESUMEN", saldo);
+				this.values.add(rets);
 				MyArray saldo_ = new MyArray("SALDO", "SALDO EN CAJA", saldo, "RESUMEN", saldo);
 				this.values.add(saldo_);
 			}
