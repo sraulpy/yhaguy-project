@@ -19372,7 +19372,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 			total_baseimponible += gasto.getBaseImponible();
 		}		
 		for (NotaCredito nc : notasCredito) {
-			if ((nc.isNotaCreditoCompraAcreedor() && !despacho && !nc.isNotaCreditoCompraCPT()) || (despacho && nc.isNotaCreditoGastoDespacho())) {
+			if ((nc.isNotaCreditoCompraAcreedor() && !despacho && !nc.isNotaCreditoCompraCPT() && !nc.isNotaCreditoGastoDespacho()) || (despacho && nc.isNotaCreditoGastoDespacho())) {
 				Date fecha_ = nc.getFechaEmision();
 				String fechaCarga = Utiles.getDateToString(nc.getModificado(), Utiles.DD_MM_YYYY);
 				String fecha = Utiles.getDateToString(nc.getFechaEmision(), Utiles.DD_MM_YYYY);
