@@ -325,6 +325,9 @@ public class NotaCredito extends Domain {
 			if (item.getGasto() != null && item.getGasto().isGastoImportacion()) {
 				return true;
 			}
+			if (item.getImportacion() != null) {
+				return true;
+			}
 			if (this.getAuxi().equals("NCR-CPT")) {
 				return true;
 			}
