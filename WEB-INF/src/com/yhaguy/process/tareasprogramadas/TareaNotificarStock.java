@@ -39,8 +39,7 @@ public class TareaNotificarStock {
 			"nataliac@gtsa.com.py", "dianaa@gtsa.com.py",
 			"silviap@gtsa.com.py" };
 	
-	static final String[] DESTINATARIOS_CEN = new String[] { "soniat@yhaguyrepuestos.com.py",
-			"oscarv@yhaguyrepuestos.com.py", "jorgeo@yhaguyrepuestos.com.py", "andream@yhaguyrepuestos.com.py" };
+	static final String[] DESTINATARIOS_CEN = new String[] { "sacevedo@yhaguyrepuestos.com.py" };
 	
 	static final String[] DESTINATARIOS_RPS = new String[] { "milvam@yhaguyrepuestos.com.py",
 			"rosanag@yhaguyrepuestos.com.py", "oscarv@yhaguyrepuestos.com.py", "soniat@yhaguyrepuestos.com.py" };
@@ -66,17 +65,17 @@ public class TareaNotificarStock {
 			System.out.println("Generando el Reporte..." + new Date());
 			
 			List<Object[]> filtros = ProcesosArticulos.verificarStock(2, 1);
-			List<Object[]> lubricantes = ProcesosArticulos.verificarStock(2, 2);
-			List<Object[]> cubiertas = ProcesosArticulos.verificarStock(2, 3);
-			List<Object[]> repuestos = ProcesosArticulos.verificarStock(2, 4);
-			List<Object[]> baterias = ProcesosArticulos.verificarStock(2, 5);
+			//List<Object[]> lubricantes = ProcesosArticulos.verificarStock(2, 2);
+			//List<Object[]> cubiertas = ProcesosArticulos.verificarStock(2, 3);
+			//List<Object[]> repuestos = ProcesosArticulos.verificarStock(2, 4);
+			//List<Object[]> baterias = ProcesosArticulos.verificarStock(2, 5);
 			
 			List<Object[]> data = new ArrayList<Object[]>();
 			data.addAll(filtros);
-			data.addAll(lubricantes);
-			data.addAll(cubiertas);
-			data.addAll(repuestos);
-			data.addAll(baterias);
+			//data.addAll(lubricantes);
+			//data.addAll(cubiertas);
+			//data.addAll(repuestos);
+			//data.addAll(baterias);
 
 			Config.DIRECTORIO_REAL_REPORTES = directorioReportes;
 			Config.DIRECTORIO_BASE_REAL = directorioBase;
@@ -85,12 +84,7 @@ public class TareaNotificarStock {
 			rep.setDatosReporte(data);
 			rep.ejecutar(false);
 			
-			System.out.println("Reporte: " + directorioReportes + rep.getArchivoSalida());			
-			
-			if (rr.getTarea_Programada(TAREA_NOTIFICAR_STOCK, new Date()) != null) {
-				System.out.println("TAREA YA REALIZADA: " + TAREA_NOTIFICAR_STOCK);
-				return;
-			}
+			System.out.println("Reporte: " + directorioReportes + rep.getArchivoSalida());
 			
 			System.out.println("enviando email..." + new Date());
 			Tarea_Programada tarea = new Tarea_Programada();
@@ -99,7 +93,7 @@ public class TareaNotificarStock {
 			
 			EnviarCorreo correo = new EnviarCorreo(tarea);
 			correo.sendMessage(destinatarios, COPIA_OCULTA, asunto,
-					"Auditoria de Stock", "AuditoriaStock.pdf", directorioReportes + rep.getArchivoSalida());
+					"Auditoria de Stock - Filtros", "AuditoriaStock.pdf", directorioReportes + rep.getArchivoSalida());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,8 +101,8 @@ public class TareaNotificarStock {
 	}	
 	
 	public static void main(String[] args) {
-		//TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
-		TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA_RPS, DIRECTORIO_REPORTES_RPS, DIRECTORIO_BASE_RPS, DESTINATARIOS_RPS, ASUNTO_RPS);
+		TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA, DIRECTORIO_REPORTES_CEN, DIRECTORIO_BASE_CEN, DESTINATARIOS_CEN, ASUNTO);
+		//TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA_RPS, DIRECTORIO_REPORTES_RPS, DIRECTORIO_BASE_RPS, DESTINATARIOS_RPS, ASUNTO_RPS);
 		//TareaNotificarStock.enviarCorreoAuditoriaStock(EMPRESA_BAT, DIRECTORIO_REPORTES_BAT, DIRECTORIO_BASE_BAT, DESTINATARIOS_BAT, ASUNTO_BAT);
 	}
 }
@@ -120,7 +114,6 @@ class ReporteAuditoriaStock extends ReporteYhaguy {
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col0 = new DatosColumnas("Código", TIPO_STRING);
-	static DatosColumnas col1 = new DatosColumnas("Depósito", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Stock", TIPO_LONG, 25);
 	static DatosColumnas col3 = new DatosColumnas("Historial", TIPO_LONG, 25);
 
@@ -129,7 +122,6 @@ class ReporteAuditoriaStock extends ReporteYhaguy {
 
 	static {
 		cols.add(col0);
-		cols.add(col1);
 		cols.add(col2);
 		cols.add(col3);
 	}

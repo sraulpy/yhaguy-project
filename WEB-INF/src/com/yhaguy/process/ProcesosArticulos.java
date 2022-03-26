@@ -510,7 +510,7 @@ public class ProcesosArticulos {
 	 */
 	public static void generarBarcodes() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		List<Articulo> arts = rr.getArticulos();
+		List<Articulo> arts = rr.getArticulos(11, 0, 0);
 		for (Articulo art : arts) {
 			Barcode.generarBarcode(art.getCodigoInterno(), art.getDescripcion());
 			System.out.println(art.getCodigoInterno());		
@@ -786,22 +786,22 @@ public class ProcesosArticulos {
 	 * [3]: historial.saldo
 	 */
 	public static List<Object[]> verificarStock(long idSucursal, long idFamilia) throws Exception {
+		Date desde = Utiles.getFecha("05-10-2018 00:00:00");
 		List<Object[]> out = new ArrayList<Object[]>();
 		RegisterDomain rr = RegisterDomain.getInstance();
+		
 		for (Object[] art : rr.getArticulos(0, idFamilia)) {
 			long idArticulo = (long) art[0];
-			for (Deposito dep : rr.getDepositos()) {
-				long idDeposito = dep.getId();
-				List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos(idArticulo, idDeposito, idSucursal, true, new Date(), false);
-				String saldo = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
-				ArticuloDeposito adp = rr.getArticuloDeposito(idArticulo, idDeposito);
-				long stock = adp != null ? adp.getStock() : 0;
-				long stock_ = Long.parseLong(saldo);
-				if (stock != stock_) {
-					out.add(new Object[] { art[1], dep.getDescripcion(), stock, stock_ });
-				}
-				System.out.println(art[1]);
-			}
+			Object[] ent = ControlArticuloStock.getHistoricoEntrada(idArticulo, (String) art[1], desde, new Date(), idSucursal);
+			Object[] sal = ControlArticuloStock.getHistoricoSalida(idArticulo, (String) art[1], desde, new Date(), idSucursal);
+			long saldo = ((long) ent[1] - (long) sal[1]);
+			
+			long stock = rr.getStockArticulo((String) art[1]);
+			
+			if (saldo != stock) {
+				System.out.println("---> ITEM: " + art[1] + " SALDO: " + ((long) ent[1] - (long) sal[1]) + " STOCK: " + stock);
+				out.add(new Object[] { art[1], stock, saldo });
+			}			
 		}		
 		return out;
 	}
@@ -903,8 +903,8 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
 			//ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
 			//ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
-			//ProcesosArticulos.verificarStock(2, 1);
-			ProcesosArticulos.migrarStockMra(SRC_STOCK_MRA);
+			ProcesosArticulos.verificarStock(2, 1);
+			//ProcesosArticulos.migrarStockMra(SRC_STOCK_MRA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
