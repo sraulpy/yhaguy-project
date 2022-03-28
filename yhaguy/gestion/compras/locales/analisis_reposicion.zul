@@ -152,6 +152,17 @@
 					</bandbox>
 				</row>	
 				<row>
+					<field value="Familia:" />
+					<combobox hflex="true"
+						value="@load(vm.analisis.familia.descripcion)"
+						selectedItem="@bind(vm.analisis.familia)"
+						model="@load(vm.familias)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+				</row>	
+				<row>
 					<field value="Ranking por:" />
 					<combobox hflex="true"
 						value="@load(vm.analisis.tipoRanking)"
@@ -172,6 +183,17 @@
 							<comboitem label="@load(each)"></comboitem>
 						</template>
 					</combobox>
+				</row>
+				<row>
+					<field value="Depósitos:" />
+					<chosenbox hflex="true" sclass="rounded"
+						style="margin-top:5px" model="@load(vm.depositos)"
+						emptyMessage="Seleccione uno o más depósitos.."
+						selectedObjects="@save(vm.selectedDepositos)">
+						<template name="model">
+							<label value="@load(each.descripcion)"></label>
+						</template>
+					</chosenbox>
 				</row>
 			</rows>
 		</grid>

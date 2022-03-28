@@ -1,5 +1,5 @@
 <window height="90%" width="95%" closable="true"
-	title="Análisis de Reposición"
+	title="@load(vm.analisis.title)"
 	border="normal">
 
 	<listbox model="@load(vm.analisis.detallesOrdenado)" vflex="true"

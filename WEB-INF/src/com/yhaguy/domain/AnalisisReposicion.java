@@ -26,9 +26,11 @@ public class AnalisisReposicion extends Domain {
 	private String tipoRanking;
 	private boolean incluirDevoluciones;
 	private String incluirDevoluciones_;
+	private String depositos = "";
 	
 	private Proveedor proveedor;
 	private ArticuloMarca marca;
+	private ArticuloFamilia familia;
 	
 	private Set<AnalisisReposicionDetalle> detalles = new HashSet<AnalisisReposicionDetalle>();
 
@@ -43,6 +45,13 @@ public class AnalisisReposicion extends Domain {
 			return Utiles.getNumeroMeses(this.desde, this.hasta);
 		}
 		return 0;
+	}
+	
+	/**
+	 * @return title
+	 */
+	public String getTitle() {
+		return "Análisis de Reposición - Stock: " + this.depositos;
 	}
 	
 	/**
@@ -143,5 +152,21 @@ public class AnalisisReposicion extends Domain {
 
 	public void setCantidadMeses(double cantidadMeses) {
 		this.cantidadMeses = cantidadMeses;
+	}
+
+	public String getDepositos() {
+		return depositos;
+	}
+
+	public void setDepositos(String depositos) {
+		this.depositos = depositos;
+	}
+
+	public ArticuloFamilia getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(ArticuloFamilia familia) {
+		this.familia = familia;
 	}
 }

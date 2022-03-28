@@ -26,7 +26,9 @@ import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.AnalisisReposicion;
 import com.yhaguy.domain.AnalisisReposicionDetalle;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloMarca;
+import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
@@ -49,6 +51,8 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	private AnalisisReposicion selectedAnalisis;
 	private String razonSocialProveedor = "";
 	private String descripcionMarca = "";
+	
+	private List<Deposito> selectedDepositos = new ArrayList<Deposito>();
 	
 	private Window win;
 
@@ -103,10 +107,12 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		Date hasta = this.analisis.getHasta();
 		Proveedor prov = this.analisis.getProveedor();
 		ArticuloMarca marca = this.analisis.getMarca();
+		ArticuloFamilia flia = this.analisis.getFamilia();
 		long idProv = prov != null ? prov.getId() : 0;
 		long idMarca = marca != null ? marca.getId() : 0;
+		long idFlia = flia != null ? flia.getId() : 0;
 		
-		if (desde == null || hasta == null || (prov == null && marca == null)) {
+		if (desde == null || hasta == null || (prov == null && marca == null && flia == null) || this.selectedDepositos.size() == 0) {
 			Clients.showNotification("DEBE COMPLETAR LOS PARÁMETROS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
@@ -117,15 +123,20 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		}
 		
 		this.analisis.getDetalles().clear();
+		this.analisis.setDepositos("");
 		
 		int order = this.analisis.getTipoRanking().equals(AnalisisReposicion.POR_UNIDADES) ? 3 : 4;
+		
+		for (Deposito d : this.selectedDepositos) {
+			this.analisis.setDepositos(this.analisis.getDepositos() + d.getDescripcion() + " - ");
+		}
 
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> data = new ArrayList<Object[]>();
-		List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idProv, idMarca, order);
-		List<Object[]> repos = rr.getArticuloReposicionesDetallado(desde, hasta, idProv, idMarca);
-		List<Object[]> compras = rr.getComprasLocalesDetallado_(desde, hasta, idProv, idMarca);
-		List<Object[]> imports = rr.getImportacionesDetallado_(desde, hasta, idProv, idMarca);
+		List<Object[]> ventas = rr.getVentasDetallado_(desde, hasta, idProv, idMarca, idFlia, order);
+		List<Object[]> repos = rr.getArticuloReposicionesDetallado(desde, hasta, idProv, idMarca, idFlia);
+		List<Object[]> compras = rr.getComprasLocalesDetallado_(desde, hasta, idProv, idMarca, idFlia);
+		List<Object[]> imports = rr.getImportacionesDetallado_(desde, hasta, idProv, idMarca, idFlia);
 		Map<String, Double> mapRepos = new HashMap<String, Double>();
 		Map<String, Double> mapCompras = new HashMap<String, Double>();
 		Map<String, Double> mapImports = new HashMap<String, Double>();
@@ -180,7 +191,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		}
 		
 		for (Object[] item : data) {
-			long stock = rr.getStockArticulo((String) item[1]);
+			long stock = rr.getStockArticulo((String) item[1], this.selectedDepositos);
 			AnalisisReposicionDetalle det = new AnalisisReposicionDetalle();
 			det.setRanking((int) item[0]);
 			det.setCodigoInterno((String) item[1]);
@@ -236,8 +247,9 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		
 		String prov = item.getProveedor() != null ? item.getProveedor().getRazonSocial() : "TODOS..";
 		String marc = item.getMarca() != null ? item.getMarca().getDescripcion() : "TODOS..";
+		String flia = item.getFamilia() != null ? item.getFamilia().getDescripcion() : "TODOS..";
 		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
-				hasta, prov, item.getTipoRanking(), marc, item.getIncluirDevoluciones_());
+				hasta, prov, item.getTipoRanking(), marc, item.getIncluirDevoluciones_(), item.getDepositos(), flia);
 		rep.setDatosReporte(data);
 		rep.setApaisada();
 		rep.setLegal();
@@ -278,6 +290,29 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	public List<ArticuloMarca> getMarcas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getMarcas(this.descripcionMarca);
+	}
+	
+	/**
+	 * @return familias
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ArticuloMarca> getFamilias() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getObjects(ArticuloFamilia.class.getName());
+	}
+	
+	/**
+	 * @return los depositos..
+	 */
+	public List<Deposito> getDepositos() {
+		List<Deposito> out = new ArrayList<Deposito>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		try {
+			out = rr.getDepositos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
 	}
 	
 	/**
@@ -385,6 +420,14 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	public void setDescripcionMarca(String descripcionMarca) {
 		this.descripcionMarca = descripcionMarca;
 	}
+
+	public List<Deposito> getSelectedDepositos() {
+		return selectedDepositos;
+	}
+
+	public void setSelectedDepositos(List<Deposito> selectedDepositos) {
+		this.selectedDepositos = selectedDepositos;
+	}
 	
 }
 
@@ -400,6 +443,8 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	private String tipoRanking;
 	private String marca;
 	private String devoluciones;
+	private String depositos;
+	private String familia;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Ran.", TIPO_INTEGER, 20);
@@ -416,13 +461,15 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 	static DatosColumnas col12 = new DatosColumnas("Imp.Vtas", TIPO_DOUBLE, 50);
 	static DatosColumnas col13 = new DatosColumnas("Observación", TIPO_STRING);
 
-	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking, String marca, String devoluciones) {
+	public ReporteAnalisisReposicion(Date desde, Date hasta, String proveedor, String tipoRanking, String marca, String devoluciones, String depositos, String familia) {
 		this.desde = desde;
 		this.hasta = hasta;
 		this.proveedor = proveedor;
 		this.tipoRanking = tipoRanking;
 		this.marca = marca;
 		this.devoluciones = devoluciones;
+		this.depositos = depositos;
+		this.familia = familia;
 	}
 
 	static {
@@ -468,6 +515,11 @@ class ReporteAnalisisReposicion extends ReporteYhaguy {
 				.add(this.textoParValor("Proveedor", this.proveedor))
 				.add(this.textoParValor("Marca", this.marca))
 				.add(this.textoParValor("Ranking", this.tipoRanking)));
+		out.add(cmp
+				.horizontalFlowList()
+				.add(this.textoParValor("Familia", this.familia))
+				.add(this.textoParValor("Depósitos", this.depositos))
+				.add(this.texto("")));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;

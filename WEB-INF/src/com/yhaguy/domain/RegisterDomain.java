@@ -11732,7 +11732,7 @@ public class RegisterDomain extends Register {
 	 * [3]:importe
 	 * [4]:articulo.descripcion
 	 */
-	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, int order) throws Exception {
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia, int order) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), "
@@ -11746,6 +11746,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idMarca > 0) {
 					query += " and d.articulo.marca.id = " + idMarca;
+				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.descripcion";
 				query += " order by " + order + " desc";
@@ -11946,7 +11949,7 @@ public class RegisterDomain extends Register {
 	 * [2]:cantidad
 	 * [3]:importe
 	 */
-	public List<Object[]> getComprasLocalesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
+	public List<Object[]> getComprasLocalesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.costoGs * d.cantidad) - d.descuentoGs)"
@@ -11960,6 +11963,9 @@ public class RegisterDomain extends Register {
 				if (idMarca > 0) {
 					query += " and d.articulo.marca.id = " + idMarca;
 				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
+				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
 				query += " order by 3 desc";
 		return this.hql(query);
@@ -11972,7 +11978,7 @@ public class RegisterDomain extends Register {
 	 * [2]:cantidad
 	 * [3]:importe
 	 */
-	public List<Object[]> getImportacionesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
+	public List<Object[]> getImportacionesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.costoGs * d.cantidad))"
@@ -11985,6 +11991,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idMarca > 0) {
 					query += " and d.articulo.marca.id = " + idMarca;
+				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
 				query += " order by 3 desc";
@@ -12378,6 +12387,22 @@ public class RegisterDomain extends Register {
 	public long getStockArticulo(String codigoInterno) throws Exception {
 		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.codigoInterno = '" + codigoInterno
 				+ "' and (a.deposito.dbEstado != 'V' and a.deposito.descripcion != 'TEMPORAL M.R.A.')";
+		List<Long> out = this.hql(query);
+		return out.get(0) != null ? out.get(0) : 0;
+	}
+	
+	/**
+	 * @return el stock del articulo..
+	 */
+	public long getStockArticulo(String codigoInterno, List<Deposito> depositos) throws Exception {
+		String deps = "(";
+		for (Deposito d : depositos) {
+			deps += d.getId() + ",";
+		}
+		deps += ")";
+		deps = deps.replace(",)", ")");
+		String query = "select sum(stock) from ArticuloDeposito a where a.articulo.codigoInterno = '" + codigoInterno
+				+ "' and a.deposito.id IN " + deps;
 		List<Long> out = this.hql(query);
 		return out.get(0) != null ? out.get(0) : 0;
 	}
@@ -14165,7 +14190,7 @@ public class RegisterDomain extends Register {
 	 * [1]:articulo.codigoInterno
 	 * [2]:cantidad
 	 */
-	public List<Object[]> getArticuloReposicionesDetallado(Date desde, Date hasta, long idProveedor, long idMarca) throws Exception {
+	public List<Object[]> getArticuloReposicionesDetallado(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0)"
@@ -14176,6 +14201,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idMarca > 0) {
 					query += " and d.articulo.marca.id = " + idMarca;
+				}
+				if (idFamilia > 0) {
+					query += " and d.articulo.familia.id = " + idFamilia;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
 				query += " order by 3 desc";

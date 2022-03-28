@@ -16,12 +16,16 @@
 		<property name="cantidadMeses"/>
 		<property name="tipoRanking"/>
 		<property name="incluirDevoluciones"/>
+		<property name="depositos"/>
 		
 		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
 			column="idproveedor" lazy="false"/>	
 			
 		<many-to-one name="marca" class="com.yhaguy.domain.ArticuloMarca"
 			column="idmarca" lazy="false"/>			
+			
+		<many-to-one name="familia" class="com.yhaguy.domain.ArticuloFamilia"
+			column="idfamilia" lazy="false"/>	
 		
 		<set name="detalles" table="analisis_reposicion_detalle"
 			inverse="false" lazy="false" fetch="join"
