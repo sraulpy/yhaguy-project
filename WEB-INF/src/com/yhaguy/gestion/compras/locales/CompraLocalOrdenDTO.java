@@ -205,6 +205,9 @@ public class CompraLocalOrdenDTO extends DTO{
 	
 	public void setProveedor(ProveedorDTO proveedor) {
 		this.proveedor = proveedor;
+		if (this.factura != null) {
+			this.factura.setProveedor(proveedor);
+		}		
 	}
 	
 	public MyArray getCondicionPago() {
