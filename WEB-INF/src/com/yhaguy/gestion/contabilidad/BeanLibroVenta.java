@@ -16,10 +16,11 @@ public class BeanLibroVenta {
 	private Double iva10;
 	private Double total;
 	private Double exenta;
+	private String clase;
 
 	public BeanLibroVenta(String fecha, String concepto, String numero,
 			String razonSocial, String ruc, double gravado10, double iva10,
-			double gravado5, double iva5, double total, double exenta, Date fecha_) {
+			double gravado5, double iva5, double total, double exenta, Date fecha_, String clase) {
 		this.fecha_ = fecha_;
 		this.fecha = fecha;
 		this.concepto = concepto;
@@ -32,6 +33,12 @@ public class BeanLibroVenta {
 		this.iva5 = iva5;
 		this.total = total;
 		this.exenta = exenta;
+		this.clase = clase;
+	}
+	
+	public int getNumero_() {
+		String nro = this.numero.substring(8);
+		return Integer.parseInt(nro);
 	}
 
 	public String getFecha() {
@@ -128,5 +135,13 @@ public class BeanLibroVenta {
 
 	public void setFecha_(Date fecha_) {
 		this.fecha_ = fecha_;
+	}
+
+	public String getClase() {
+		return clase;
+	}
+
+	public void setClase(String clase) {
+		this.clase = clase;
 	}
 }

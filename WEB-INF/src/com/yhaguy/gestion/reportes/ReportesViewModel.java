@@ -18756,7 +18756,7 @@ class LibroVentasDataSource implements JRDataSource {
 			double iva5 = 0.0;
 			double iva10 = nd.getTotalIva10();
 			double total = nd.getTotalImporteGs();
-			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial, ruc, grav10, iva10, grav5, iva5, total, 0.0, nd.getFecha()));
+			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial, ruc, grav10, iva10, grav5, iva5, total, 0.0, nd.getFecha(), "NotaDebito"));
 			this.totalGravada += (nd.getTotalGravado10());
 			this.totalImpuesto += (nd.getTotalIva10());
 			this.totalImporte += (nd.getTotalImporteGs());
@@ -18774,7 +18774,7 @@ class LibroVentasDataSource implements JRDataSource {
 			double exenta = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalExenta()) * -1;
 			double importe = (iva10 + gravada + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, exenta, ncred.getFechaEmision()));
+					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, exenta, ncred.getFechaEmision(), "NotaCredito"));
 			if (ncred.isAnulado() == false) {
 				this.totalGravada -= (ncred.getTotalGravado10());
 				this.totalImpuesto -= (ncred.getTotalIva10());
@@ -18803,7 +18803,7 @@ class LibroVentasDataSource implements JRDataSource {
 			double exenta = vta.isAnulado() ? 0.0 : redondear(vta.getTotalExenta());
 			double importe = vta.isAnulado() ? 0.0 : (iva10 + gravada10 + iva5 + gravada5 + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					vta.isAnulado() ? "" : ruc, gravada10, iva10, gravada5, iva5, importe, exenta, vta.getFecha()));
+					vta.isAnulado() ? "" : ruc, gravada10, iva10, gravada5, iva5, importe, exenta, vta.getFecha(), "Venta"));
 			if (vta.isAnulado() == false) {
 				this.totalGravada += (vta.getTotalGravado10());
 				this.totalGravada5 += (vta.getTotalGravado5());
@@ -18822,15 +18822,13 @@ class LibroVentasDataSource implements JRDataSource {
 		Collections.sort(this.values, new Comparator<BeanLibroVenta>() {
 			@Override
 			public int compare(BeanLibroVenta o1, BeanLibroVenta o2) {
-				Date fecha1 = (Date) o1.getFecha_();
-				Date fecha2 = (Date) o2.getFecha_();
+				int nroCompare = o1.getNumero_() - o2.getNumero_();
 				
-				int nameCompare = o1.getConcepto().compareTo(o2.getConcepto());
+				int nameCompare = o1.getClase().compareTo(o2.getClase());
 				if (nameCompare != 0) {
 					return nameCompare;
 				} else {
-					int dateCompare = fecha1.compareTo(fecha2);
-					return dateCompare;
+					return nroCompare;
 				}				
 			}
 		});
@@ -27772,7 +27770,7 @@ class LibroVentasMatricial implements JRDataSource {
 			double iva5 = 0.0;
 			double iva10 = nd.getTotalIva10();
 			double total = nd.getTotalImporteGs();
-			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial, ruc, grav10, iva10, grav5, iva5, total, 0.0, nd.getFecha()));
+			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial, ruc, grav10, iva10, grav5, iva5, total, 0.0, nd.getFecha(), "NotaDebito"));
 			this.totalGravada += (nd.getTotalGravado10());
 			this.totalImpuesto += (nd.getTotalIva10());
 			this.totalImporte += (nd.getTotalImporteGs());
@@ -27790,7 +27788,7 @@ class LibroVentasMatricial implements JRDataSource {
 			double exenta = ncred.isAnulado() ? 0.0 : redondear(ncred.getTotalExenta()) * -1;
 			double importe = (iva10 + gravada + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, exenta, ncred.getFechaEmision()));
+					ncred.isAnulado() ? "" : ruc, gravada, iva10, 0.0, 0.0, importe, exenta, ncred.getFechaEmision(), "NotaCredito"));
 			if (ncred.isAnulado() == false) {
 				this.totalGravada -= (ncred.getTotalGravado10());
 				this.totalImpuesto -= (ncred.getTotalIva10());
@@ -27819,7 +27817,7 @@ class LibroVentasMatricial implements JRDataSource {
 			double exenta = vta.isAnulado() ? 0.0 : redondear(vta.getTotalExenta());
 			double importe = vta.isAnulado() ? 0.0 : (iva10 + gravada10 + iva5 + gravada5 + exenta);
 			values.add(new BeanLibroVenta(fecha, concepto, numero, razonSocial,
-					vta.isAnulado() ? "" : ruc, gravada10, iva10, gravada5, iva5, importe, exenta, vta.getFecha()));
+					vta.isAnulado() ? "" : ruc, gravada10, iva10, gravada5, iva5, importe, exenta, vta.getFecha(), "Venta"));
 			if (vta.isAnulado() == false) {
 				this.totalGravada += (vta.getTotalGravado10());
 				this.totalImpuesto += (vta.getTotalIva10());
