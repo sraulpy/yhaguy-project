@@ -30,11 +30,6 @@
 				</html>
 		</a>
 		<space></space>
-		<radiogroup model="@load(vm.estados)" selectedItem="@bind(vm.estado)">
-			<template name="model">
-				<radio label="@load(each)" style="margin-right:10px"></radio>
-			</template>
-		</radiogroup>
 		<hlayout visible="false">
 			<hlayout id="hl_stock" visible="false"></hlayout>
 			<spinner id="int_box" visible="false"></spinner>
@@ -57,6 +52,7 @@
 			<listheader width="150px"/>
 			<listheader width="150px"/>
 			<listheader width="150px"/>
+			<listheader width="80px"/>
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -130,6 +126,7 @@
 								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>				
 			</auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem onClick="@command('obtenerValores')"
@@ -141,6 +138,7 @@
 				<listcell label="@load(each.pos6)" />
 				<listcell label="@load(each.pos7)" />
 				<listcell label="@load(each.pos8)" />
+				<listcell label="@load(each.pos9)" style="@load(each.pos9 eq 'ACTIVO'? 'color:green':'color:red')"/>
 			</listitem>
 		</template>
 		<listfoot>
@@ -151,7 +149,7 @@
 					<label value="@load(vm.selectedItem.pos4)" style="font-weight:bold; margin-left:10px"/>
 				</hlayout>
 			</listfooter>
-			<listfooter span="4">
+			<listfooter span="5">
 			<hbox hflex="true" align="center">
 				<hbox tooltiptext="@load(vm.ultimaCompra)"
 					visible="@load(vm.isOperacionHabilitada('verCostos'))" hflex="true">

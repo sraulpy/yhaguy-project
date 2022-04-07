@@ -418,7 +418,7 @@ public class ArticuloPivotViewModel extends SimpleViewModel {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
-				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor, this.origen, "TRUE");
+				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor, this.origen);
 		
 		List<Object[]> arts_ = new ArrayList<>();
 		

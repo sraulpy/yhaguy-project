@@ -2826,18 +2826,19 @@ public class RegisterDomain extends Register {
 	 * [6]:familia.descripcion
 	 * [7]:proveedor.razonSocial
 	 * [8]:proveedor.origen
+	 * [9]:estado
 	 */
 	public List<Object[]> getArticulos_(String codigoInterno,
-			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen, String estado)
+			String codigoOriginal, String codigoProveedor, String descripcion, String marca, String familia, String proveedor, String origen)
 			throws Exception {
 		codigoInterno = codigoInterno.replace("'", ""); codigoOriginal = codigoOriginal.replace("'", "");
 		codigoProveedor = codigoProveedor.replace("'", ""); descripcion = descripcion.replace("'", "");
 		marca = marca.replace("'", ""); familia = familia.replace("'", "");
 		proveedor = proveedor.replace("'", ""); origen = origen.replace("'", "");
 		String query = "select a.id, a.codigoInterno, a.codigoOriginal, a.codigoProveedor, a.descripcion,"
-				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion"
+				+ " a.marca.descripcion, a.familia.descripcion, a.proveedor.empresa.razonSocial, a.proveedor.tipoProveedor.descripcion, a.estado"
 				+ " from Articulo a"
-				+ " where a.estado = '" + estado + "' and lower(a.codigoInterno) like '%"
+				+ " where lower(a.codigoInterno) like '%"
 				+ codigoInterno.toLowerCase()
 				+ "%' and lower(a.codigoOriginal) like '%"
 				+ codigoOriginal.toLowerCase()

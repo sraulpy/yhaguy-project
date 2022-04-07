@@ -68,8 +68,6 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private String filter_razonsocial = "";
 	private String filter_ruc = "";
 	
-	private String estado = "ACTIVO";
-	
 	private List<ArticuloUbicacion> ubicaciones = new ArrayList<ArticuloUbicacion>();
 	
 	private MyArray selectedItem;	
@@ -290,7 +288,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.ubicaciones = list;
 	}
 	
-	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock", "familia", "proveedor", "estado" })
+	@DependsOn({ "codInterno", "codOriginal", "codProveedor", "descripcion", "marca", "filterStock", "familia", "proveedor" })
 	public List<MyArray> getArticulos() throws Exception {
 		
 		if (this.codInterno.trim().isEmpty() && this.codOriginal.trim().isEmpty() && this.codProveedor.trim().isEmpty()
@@ -300,11 +298,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			return new ArrayList<MyArray>();
 		}
 		
-		String estado = this.estado.equals("ACTIVO") ? "TRUE" : "FALSE";
-		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> arts = rr.getArticulos_(this.codInterno,
-				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor, "", estado);
+				this.codOriginal, this.codProveedor, this.descripcion, this.marca, this.familia, this.proveedor, "");
 		
 		List<Object[]> arts_ = new ArrayList<>();
 		
@@ -342,6 +338,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 			my.setPos6(art[5]);
 			my.setPos7(art[6]);
 			my.setPos8(art[7]);
+			my.setPos9((boolean) art[9] ? "ACTIVO" : "INACTIVO");
 			List<MyArray> ubics = new ArrayList<MyArray>();
 			my.setPos5(ubics);
 			out.add(my);
@@ -1023,13 +1020,5 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setProveedor(String proveedor) {
 		this.proveedor = proveedor;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
 	}
 }
