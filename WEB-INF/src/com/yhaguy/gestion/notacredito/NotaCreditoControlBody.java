@@ -268,6 +268,17 @@ public class NotaCreditoControlBody extends BodyApp {
 		}
 	}
 	
+	/**
+	 * Busqueda de las facturas de Venta con saldo..
+	 */
+	@Command
+	@NotifyChange("*")
+	public void buscarFacturasConSaldo() throws Exception {
+		if (this.dto.isNotaCreditoVenta()) {
+			this.buscarVentasConSaldo();
+		} 
+	}
+	
 	@Command
 	@NotifyChange("*")
 	public void buscarFacturasCompra() throws Exception {
@@ -452,6 +463,65 @@ public class NotaCreditoControlBody extends BodyApp {
 			}
 
 			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false, false);
+
+			if (this.dto.isMotivoDescuento()) {
+				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
+
+			} else {
+				List<NotaCreditoDetalleDTO> list = new ArrayList<NotaCreditoDetalleDTO>();
+				list.addAll(this.dto.getDetallesArticulos());
+				this.dto.getDetalles().clear();
+				this.dto.getDetalles().addAll(list);
+				this.dto.getDetalles().add(this.nvoItem);
+			}
+		}
+	}
+	
+	/**
+	 * Busca las ventas..
+	 */
+	private void buscarVentasConSaldo() throws Exception {
+
+		String[] atributos = new String[] { "tipoMovimiento.descripcion",
+				"nroComprobante", "fechaEmision", "saldo" };
+
+		String[] columnas = new String[] { "Tipo Movimiento", "Número",
+				"Fecha", "Saldo " + this.dto.getMoneda().getSigla() };
+
+		String[] tipos = new String[] { Config.TIPO_STRING, Config.TIPO_STRING,
+				Config.TIPO_DATE, Config.TIPO_NUMERICO };
+
+		long idEmpresa = (long) this.dto.getCliente().getPos4();
+
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(CtaCteEmpresaMovimiento.class);
+		b.setTitulo("Facturas de Venta con Saldo - Cliente: "
+				+ this.dto.getCliente().getPos2() + " en Moneda: "
+				+ this.dto.getMoneda().getSigla());
+		b.setAtributos(atributos);
+		b.setNombresColumnas(columnas);
+		tipos[3] = this.dto.isMonedaLocal() ? "GS" : "DS";
+		b.setTipos(tipos);
+		b.setTipos(tipos);
+		b.setWidth("980px");
+		b.addOrden("fechaEmision desc");
+		b.addWhere("c.idEmpresa = " + idEmpresa + " and "
+				+ "(c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "' "
+				+ " or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
+				+ "') and c.moneda.id = " + this.dto.getMoneda().getId()
+				+ " and c.saldo > 0");
+		b.setContinuaSiHayUnElemento(false);
+		b.show("%");
+
+		if (b.isClickAceptar()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			CtaCteEmpresaMovimiento cm = rr.getCtaCteEmpresaMovimientoById(b.getSelectedItem().getId());
+			
+			MyArray vta = new MyArray(cm.getTipoMovimiento().getDescripcion(), cm.getNroComprobante(), cm.getFechaEmision(), "", cm.getSaldo()); 
+			vta.setId(cm.getIdMovimientoOriginal());
+			this.nvoItem = this.crearDetalleDesde(vta, true, false, false, false);
 
 			if (this.dto.isMotivoDescuento()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);

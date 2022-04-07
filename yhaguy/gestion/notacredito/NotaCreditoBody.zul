@@ -368,7 +368,7 @@
 				
 				<button mold="bs" sclass="btn-success btn-sm"
 					width="12rem" iconSclass="z-icon-exchange"
-					onClick="@command('buscarFacturas')" label=" Aplicar Importe" 
+					onClick="@command('buscarFacturasConSaldo')" label=" Aplicar Importe" 
 					disabled="@load(vm.dto.detallesArticulos.size() > 0 ? 'false':'true')" 
 					visible="@load(vm.dto.notaCreditoVenta and vm.dto.motivoDevolucion)"/>
 			</hlayout>
