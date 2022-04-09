@@ -9401,6 +9401,14 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los funcionarios marcados como vendedor..
+	 */
+	public List<Funcionario> getVendedoresRuteo() throws Exception {
+		String query = "select f from Funcionario f where f.vendedor = 'TRUE' and f.orden = 'RUTEO' order by f.empresa.razonSocial";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las importaciones marcadas como en curso..
 	 */
 	public List<ImportacionPedidoCompra> getImportacionesPendientes() throws Exception {

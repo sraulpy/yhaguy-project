@@ -151,7 +151,7 @@ public class RuteoVendedoresViewModel extends SimpleViewModel {
 	 */
 	public List<Funcionario> getVendedores() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getVendedores();
+		return rr.getVendedoresRuteo();
 	}
 	
 	/**
