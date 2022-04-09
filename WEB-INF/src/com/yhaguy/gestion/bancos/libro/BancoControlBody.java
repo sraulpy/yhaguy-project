@@ -227,7 +227,7 @@ public class BancoControlBody extends BodyApp {
 		boolean guaranies = (this.dto.getMoneda().getId() == Configuracion.ID_MONEDA_GUARANIES);
 
 		List<Object[]> saldosIniciales = rr.getSaldosInicialesPorBanco(idBanco, desde, hasta);
-		List<Object[]> depositos = rr.getDepositosPorBanco(idBanco, desde, hasta);
+		List<Object[]> depositos = rr.getDepositosPorBancoByFechaAcreditacion(idBanco, desde, hasta);
 		List<Object[]> descuentos = rr.getDescuentosPorBanco(idBanco, desde, hasta);
 		List<Object[]> prestamosInternos = rr.getPrestamosInternosPorBanco(idBanco, desde, hasta);
 		List<Object[]> prestamosInternosApagar = rr.getPrestamosInternosApagar(idBanco, desde, hasta);
