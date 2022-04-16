@@ -3,14 +3,30 @@
 	vflex="true">
 
 	<vlayout height="100%">
-		
+	
+		<vlayout id="vl_tipo" vflex="true" style="padding:30px">
+			<button id="btn_pedidos" mold="bs"
+				sclass="btn-primary btn-lg" hflex="true" iconSclass="z-icon-check"
+				label=" PEDIDO DE VENTA" height="150px" style="font-size:30pt"
+				dir="normal" visible="false"
+				onClick="@command('selectTipo', comp1=vl_tipo, comp2=lstClientes, comp3=btn_clientes, tipo='PEDIDO')"  />
+			<space></space>
+			<space></space>
+			<button id="btn_presupuestos" mold="bs"
+				sclass="btn-primary btn-lg" hflex="true" iconSclass="z-icon-check"
+				label=" PRESUPUESTO DE VENTA" height="150px" style="font-size:30pt"
+				dir="normal" visible="false"
+				onClick="@command('selectTipo', comp1=vl_tipo, comp2=lstClientes, comp3=btn_clientes, tipo='PRESUPUESTO')" />
+		</vlayout>
+
 		<!-- SELECCION DE CLIENTE -->
 		
 		<listbox 
 			id="lstClientes"
 			emptyMessage="BUSQUE UN CLIENTE.."
 			style="overflow:auto" vflex="1"
-			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedEmpresa)">
+			model="@load(vm.empresas)" selectedItem="@bind(vm.selectedEmpresa)"
+			visible="false">
 			<listhead>
 				<listheader />
 			</listhead>
@@ -200,7 +216,7 @@
 			iconSclass="z-icon-check"
 			disabled="@load(vm.selectedEmpresa eq null? 'true':'false')"
 			label=" SIGUIENTE PASO" height="150px" style="font-size:30pt"
-			dir="normal"
+			dir="normal" visible="false"
 			onClick="lstVendedores.setVisible(true); lstClientes.setVisible(false); btn_vendedores.setVisible(true); self.setVisible(false)"/>
 			
 		<button id="btn_vendedores" mold="bs" sclass="btn-info btn-lg" hflex="true"

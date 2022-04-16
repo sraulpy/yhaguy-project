@@ -29,6 +29,7 @@ import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.RemisionDetalle;
+import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.Vehiculo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
@@ -51,6 +52,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	private CondicionPago selectedCondicion;
 	private Articulo selectedArticulo;
 	private ArticuloListaPrecio selectedPrecio;
+	private String tipo;
 	
 	private List<VentaDetalle> detalles = new ArrayList<VentaDetalle>();
 	private VentaDetalle selectedDetalle;
@@ -61,6 +63,16 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	
 	@AfterCompose(superclass = true)
 	public void afterCompose() {
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void selectTipo(@BindingParam("comp1") Component comp1, @BindingParam("comp2") Component comp2,
+			@BindingParam("comp3") Component comp3, @BindingParam("tipo") String tipo) {
+		this.tipo = tipo;
+		comp1.setVisible(false);
+		comp2.setVisible(true);
+		comp3.setVisible(true);
 	}
 	
 	@Command
@@ -179,15 +191,16 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setDenominacion(venta.getCliente().getRazonSocial());
 		venta.setDeposito(this.selectedDeposito);
 		venta.getDetalles().addAll(this.detalles);
-		venta.setEstado(rr.getTipoPorSigla(Configuracion.SIGLA_VENTA_ESTADO_SOLO_PEDIDO));
+		String estado = this.tipo.equals("PEDIDO") ? Configuracion.SIGLA_VENTA_ESTADO_SOLO_PEDIDO : Configuracion.SIGLA_VENTA_ESTADO_SOLO_PRESUPUESTO;
+		venta.setEstado(rr.getTipoPorSigla(estado));
 		venta.setFecha(new Date());
 		venta.setFechaFinTraslado("");
 		venta.setFechaTraslado("");
 		venta.setMarcaVehiculo("");
 		venta.setModoVenta(rr.getTipoPorSigla(Configuracion.SIGLA_TIPO_VENTA_MOSTRADOR));
 		venta.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
-		venta.setNumero(Configuracion.NRO_VENTA_PEDIDO + "-" + 
-				AutoNumeroControl.getAutoNumero(Configuracion.NRO_VENTA_PEDIDO, 7));
+		String key = this.tipo.equals("PEDIDO") ? Configuracion.NRO_VENTA_PEDIDO : Configuracion.NRO_VENTA_PRESUPUESTO;
+		venta.setNumero(key + "-" + AutoNumeroControl.getAutoNumero(key, 7));
 		venta.setNumeroFactura("");
 		venta.setNumeroNotaCredito("");
 		venta.setNumeroPedido("");
@@ -201,7 +214,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		venta.setReparto(false);
 		venta.setSucursal(rr.getSucursalAppById(2));
 		venta.setTipoCambio(0);
-		venta.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_PEDIDO_VENTA));
+		venta.setTipoMovimiento(this.getTipoMovimiento());
 		venta.setTotalImporteGs(venta.getImporteGs());
 		venta.setValidez(0);
 		venta.setVencimiento(this.selectedCondicion.getId().longValue() > 1? Utiles.agregarDias(new Date(), 30) : new Date());
@@ -471,6 +484,14 @@ public class VentasMobileViewModel extends SimpleViewModel {
 		Cliente cli = rr.getClienteByEmpresa(this.selectedEmpresa.getId());
 		double saldo = rr.getSaldoCtaCte(this.selectedEmpresa.getId());
 		return (cli.getLimiteCredito() + Utiles.obtenerValorDelPorcentaje(cli.getLimiteCredito(), Venta.MARGEN_LINEA_CREDITO)) - saldo;
+	}
+	
+	/**
+	 * @return el tipo de movimiento
+	 */
+	private TipoMovimiento getTipoMovimiento() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipoMovimientoBySigla(this.tipo.equals("PEDIDO") ? Configuracion.SIGLA_TM_PEDIDO_VENTA : Configuracion.SIGLA_TM_PRESUPUESTO_VENTA);
 	}
 
 	public String getRazonSocial() {
