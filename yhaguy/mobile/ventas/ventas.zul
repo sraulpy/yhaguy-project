@@ -5,18 +5,20 @@
 	<vlayout height="100%">
 	
 		<vlayout id="vl_tipo" vflex="true" style="padding:30px">
+			<space vflex="true"></space>
 			<button id="btn_pedidos" mold="bs"
 				sclass="btn-primary btn-lg" hflex="true" iconSclass="z-icon-check"
-				label=" PEDIDO DE VENTA" height="150px" style="font-size:30pt"
+				label=" PEDIDO" height="150px" style="font-size:30pt"
 				dir="normal"
 				onClick="@command('selectTipo', comp1=vl_tipo, comp2=lstClientes, comp3=btn_clientes, tipo='PEDIDO')"  />
 			<space></space>
 			<space></space>
 			<button id="btn_presupuestos" mold="bs"
 				sclass="btn-primary btn-lg" hflex="true" iconSclass="z-icon-check"
-				label=" PRESUPUESTO DE VENTA" height="150px" style="font-size:30pt"
+				label=" PRESUPUESTO" height="150px" style="font-size:30pt"
 				dir="normal"
 				onClick="@command('selectTipo', comp1=vl_tipo, comp2=lstClientes, comp3=btn_clientes, tipo='PRESUPUESTO')" />
+			<space vflex="true"></space>
 		</vlayout>
 
 		<!-- SELECCION DE CLIENTE -->
