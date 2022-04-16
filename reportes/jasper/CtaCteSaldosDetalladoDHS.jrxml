@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CtaCteSaldos" pageWidth="754" pageHeight="878" whenNoDataType="NoDataSection" columnWidth="714" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.6105100000000039"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.3579476910000063"/>
+	<property name="ireport.x" value="291"/>
+	<property name="ireport.y" value="613"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -57,6 +57,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="TotalReembolsosCheques" class="java.lang.String"/>
 	<field name="TotalMigracion" class="java.lang.String"/>
 	<field name="TotalMigracionCh" class="java.lang.String"/>
+	<field name="TotalPagares" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<group name="totalizadora" keepTogether="true">
 		<groupExpression><![CDATA[$F{TituloDetalle}]]></groupExpression>
@@ -326,7 +327,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="213" splitType="Stretch">
+		<band height="224" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="357" y="28" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="9a00b6ac-f46d-4e8d-8973-322f83029c47"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
@@ -466,7 +467,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{TotalChequesRech}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="219" y="189" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="2d6df9d2-7531-4c9f-a45d-2fa268c85f74"/>
+				<reportElement mode="Transparent" x="219" y="202" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="2d6df9d2-7531-4c9f-a45d-2fa268c85f74"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -474,7 +475,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Total Saldo:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="357" y="189" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8875b4b5-8f43-4c61-9ad7-fe03a10579a3"/>
+				<reportElement mode="Transparent" x="357" y="202" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8875b4b5-8f43-4c61-9ad7-fe03a10579a3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -482,8 +483,24 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{TotalSaldo}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="219" y="183" width="271" height="1" uuid="24a361ae-bf1d-42ae-b690-49e4c9481b9d"/>
+				<reportElement x="219" y="198" width="271" height="1" uuid="24a361ae-bf1d-42ae-b690-49e4c9481b9d"/>
 			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="219" y="179" width="138" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="240bc349-bac2-47db-ba0b-0eabe74cb817"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Pagarés:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="357" y="179" width="133" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="437b554f-acdb-4ab2-bf48-b3ef626417a4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalPagares}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 	<noData>

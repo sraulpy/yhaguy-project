@@ -11100,7 +11100,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -11213,7 +11213,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES EXTERIOR RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES EXTERIOR DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaDs());
@@ -11372,7 +11372,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, totalVentas,
 						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
-						totalReembolsosCheques);
+						totalReembolsosCheques, totalPagares);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -14918,8 +14918,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalRecibos = 0;
 				double totalNotasDebito = 0;
 				double totalReembolsosCheques = 0;
+				double totalPagares = 0;
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
+				long idFirmante = cliente != null ? cliente.getEmpresa().getId() : 0;
 
 				List<Object[]> ventas = rr.getVentasPorCliente_(idCliente, desde, hasta);
 				List<Object[]> cheques_rechazados = rr.getChequesRechazadosPorCliente(idCliente, desde, hasta);
@@ -14928,6 +14930,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> recibos = rr.getRecibosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
+				List<Object[]> pagares = rr.getPagaresPorFirmante(idFirmante, desde, hasta);
 				
 				for (Object[] venta : ventas) {
 					totalVentas += ((double) venta[3]);
@@ -14948,11 +14951,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] reemb : reembolsos_cheques_rechazados) {
 					totalReembolsosCheques -= ((double) reemb[3]);
 				}
+				
+				for (Object[] pagare : pagares) {
+					totalPagares += ((double) pagare[3]);
+				}
 
 				historicoDEBE = new ArrayList<Object[]>();
 				historicoHABER = new ArrayList<Object[]>();
 				
-				historicoDEBE.addAll(ventas);				
+				historicoDEBE.addAll(ventas);	
+				historicoDEBE.addAll(pagares);
 				if (incluirChequesRechazados) historicoDEBE.addAll(cheques_rechazados);
 				if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);				
 				
@@ -15025,7 +15033,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, totalVentas,
 						totalChequesRechazados, totalNotasCredito, totalRecibos, totalNotasDebito,
-						totalReembolsosCheques);
+						totalReembolsosCheques, totalPagares);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -15139,7 +15147,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaGs());
@@ -15511,7 +15519,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				String source = consolidado? sourceConsolidado : sourceDetallado;
 				String titulo = consolidado ? "SALDOS DE PROVEEDORES EXTERIOR RESUMIDO (A UNA FECHA)" : "SALDOS DE PROVEEDORES EXTERIOR DETALLADO (A UNA FECHA)";
 				Map<String, Object> params = new HashMap<String, Object>();
-				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+				JRDataSource dataSource = new CtaCteSaldosDHSDataSource(data, cli, totalSaldo, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 				params.put("Titulo", titulo);
 				params.put("Usuario", getUs().getNombre());
 				params.put("Moneda", filtro.getMonedaDs());
@@ -18098,6 +18106,7 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 	double totalRecibos = 0;
 	double totalNotasDebito = 0;
 	double totalReembolsosCheques = 0;
+	double totalPagares = 0;
 	
 	/**
 	 * [0]:emision
@@ -18112,7 +18121,7 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 	 */
 	public CtaCteSaldosDHSDataSource(List<Object[]> values, String cliente, Map<String, String> totalSaldo,
 			double totalVentas, double totalChequesRechazados, double totalNotasCredito, double totalRecibos,
-			double totalNotasDebito, double totalReembolsosCheques) {
+			double totalNotasDebito, double totalReembolsosCheques, double totalPagares) {
 		this.values = values;
 		this.totalSaldo = totalSaldo;
 		for (String key : this.totalSaldo.keySet()) {
@@ -18125,6 +18134,7 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 		this.totalRecibos = totalRecibos;
 		this.totalNotasDebito = totalNotasDebito;
 		this.totalReembolsosCheques = totalReembolsosCheques;
+		this.totalPagares = totalPagares;
 	}
 
 	private int index = -1;
@@ -18179,6 +18189,8 @@ class CtaCteSaldosDHSDataSource implements JRDataSource {
 			value = Utiles.getNumberFormat(0.0);
 		} else if ("TotalMigracionCh".equals(fieldName)) {
 			value = Utiles.getNumberFormat(0.0);
+		} else if ("TotalPagares".equals(fieldName)) {
+			value = Utiles.getNumberFormat(this.totalPagares);
 		}
 		return value;
 	}
