@@ -6380,7 +6380,7 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getNotasDebitoPorCliente(long idCliente, Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "SELECT nd.tipoMovimiento.descripcion, nd.fecha, nd.numero, nd.importeGs" +   
+		String query = "SELECT nd.tipoMovimiento.descripcion, nd.fecha, nd.numero, nd.importeGs, nd.cliente.empresa.razonSocial" +   
 				"	FROM NotaDebito nd" +
 				"	WHERE (nd.fecha >= '" + desde_ + "' and nd.fecha <= '" + hasta_ + "')" + 
 				"      AND nd.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'";
