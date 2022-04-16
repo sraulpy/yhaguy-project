@@ -79,7 +79,7 @@ public class VentasMobileViewModel extends SimpleViewModel {
 	@NotifyChange("*")
 	public void crearDetalle(@BindingParam("comp1") Component comp1, @BindingParam("comp2") Component comp2,
 			@BindingParam("comp3") Component comp3, @BindingParam("comp4") Component comp4) throws Exception {
-		if (this.selectedArticulo.getStock() <= 0) {
+		if (this.tipo.equals("PEDIDO") && this.selectedArticulo.getStock() <= 0) {
 			Clients.showNotification("STOCK INSUFICIENTE..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
@@ -612,5 +612,13 @@ public class VentasMobileViewModel extends SimpleViewModel {
 
 	public void setFormaEntrega(String formaEntrega) {
 		this.formaEntrega = formaEntrega;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 }

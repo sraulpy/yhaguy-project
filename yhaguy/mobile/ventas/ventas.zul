@@ -257,7 +257,7 @@
 				onClick="@command('addDetalle', comp1=vl_articulo, comp2=lstArticulos, comp3=btn_articulos, comp4=hl_gen_venta)"/>
 			<button mold="bs" sclass="btn-success btn-lg" hflex="true"
 				iconSclass="z-icon-check"
-				label=" Generar Pedido" height="150px" style="font-size:30pt"
+				label="@load(vm.tipo eq 'PEDIDO' ? 'Generar Pedido' : 'Generar Presupuesto')" height="150px" style="font-size:30pt"
 				dir="normal" 
 				onClick="@command('addDetalle', comp1=vl_articulo, comp2=vl_observacion, comp3=btn_generarpedido, comp4=hl_gen_venta)" />
 		</hlayout>
