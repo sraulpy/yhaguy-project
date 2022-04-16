@@ -9,7 +9,7 @@ import com.yhaguy.gestion.empresa.AssemblerCliente;
 
 public class NotaDebitoAssembler extends Assembler {
 	
-	static String[] attIguales = { "numero", "timbrado", "fecha", "numeroFactura", "tipoCambio" };	
+	static String[] attIguales = { "numero", "timbrado", "fecha", "numeroFactura", "tipoCambio", "importeGs", "importeDs" };	
 	static String[] attTipoMovimiento = { "descripcion", "sigla", "clase", "tipoIva" };	
 	static String[] attTipos = { "descripcion", "sigla" };	
 

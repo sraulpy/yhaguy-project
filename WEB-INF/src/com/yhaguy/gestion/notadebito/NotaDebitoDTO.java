@@ -18,6 +18,8 @@ public class NotaDebitoDTO extends DTO {
 	private Date fecha = new Date();
 	private String numeroFactura = "";
 	private double tipoCambio = 1;
+	private double importeGs = 0;
+	private double importeDs = 0;
 
 	private MyPair moneda = new MyPair();
 	private MyPair sucursal = new MyPair();
@@ -141,5 +143,21 @@ public class NotaDebitoDTO extends DTO {
 
 	public void setTipoCambio(double tipoCambio) {
 		this.tipoCambio = tipoCambio;
+	}
+
+	public double getImporteGs() {
+		return importeGs;
+	}
+
+	public void setImporteGs(double importeGs) {
+		this.importeGs = importeGs;
+	}
+
+	public double getImporteDs() {
+		return importeDs;
+	}
+
+	public void setImporteDs(double importeDs) {
+		this.importeDs = importeDs;
 	}
 }

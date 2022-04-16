@@ -163,6 +163,8 @@ public class NotaDebitoControlBody extends BodyApp {
 			return;
 		}
 		try {
+			this.dto.setImporteGs(this.dto.getTotalImporteGs());
+			this.dto.setImporteDs(this.dto.getTotalImporteDs());
 			this.dto.setEstadoComprobante(getEstadoComprobanteCerrado());
 			this.dto.setReadonly();
 			this.dto = (NotaDebitoDTO) this.saveDTO(this.dto);

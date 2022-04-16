@@ -65,6 +65,7 @@ public class CajaPeriodoAssembler extends Assembler {
 	final static String ITEM_DE_NOTA_CREDITO_COMPRA = "NOTA-CRÉDITO-COMPRA";
 	final static String ITEM_DE_GASTO = "GASTO";
 	final static String ITEM_DE_COMPRA = "COMPRA";
+	final static String ITEM_DE_DEVOLUCION_ANTICIPO = "DEVOLUCIÓN ANTICIPO";
 
 	final static int ES_VENTA_CONTADO = CajaPeriodoControlBody.ES_VENTA_CONTADO;
 	final static int ES_VENTA_CREDITO = CajaPeriodoControlBody.ES_VENTA_CREDITO;
@@ -188,6 +189,11 @@ public class CajaPeriodoAssembler extends Assembler {
 				tipo = CajaPeriodoControlBody.ES_REEMBOLSO_PRESTAMO;
 				razonSocial = rec.getCliente().getRazonSocial() + " (" + rec.getCobrador() + ")";
 				tipo_ = ITEM_DE_COBRO;
+
+			} else if (isDevolucionAnticipo(rec.getTipoMovimiento().getSigla())) {
+				tipo = CajaPeriodoControlBody.ES_DEVOLUCION_ANTICIPO;
+				razonSocial = rec.getProveedor().getRazonSocial() + " (" + rec.getCobrador() + ")";
+				tipo_ = ITEM_DE_DEVOLUCION_ANTICIPO;
 
 			} else {
 				signo = -1;
@@ -618,6 +624,13 @@ public class CajaPeriodoAssembler extends Assembler {
 	 */
 	private boolean isReembolsoPrestamo(String sigla_tm) {
 		return sigla_tm.equals(Configuracion.SIGLA_TM_REEMBOLSO_PRESTAMO);
+	}
+	
+	/**
+	 * Indica si es una devolucion anticipo..
+	 */
+	private boolean isDevolucionAnticipo(String sigla_tm) {
+		return sigla_tm.equals(Configuracion.SIGLA_TM_DEVOLUCION_ANTICIPO);
 	}
 
 	/**
