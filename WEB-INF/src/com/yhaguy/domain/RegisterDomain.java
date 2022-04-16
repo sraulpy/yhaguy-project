@@ -6350,7 +6350,7 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
-	 * @return los recibos segun firmante.. 
+	 * @return los pagares segun firmante.. 
 	 * [0]:concepto
 	 * [1]:fecha 
 	 * [2]:numero 
@@ -6367,6 +6367,26 @@ public class RegisterDomain extends Register {
 				query += " and (p.fecha >= '"
 				+ desde_
 				+ "' and p.fecha <= '" + hasta_ + "')";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las notasdebito segun cliente.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs
+	 */
+	public List<Object[]> getNotasDebitoPorCliente(long idCliente, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "SELECT nd.tipoMovimiento.descripcion, nd.fecha, nd.numero, nd.importeGs" +   
+				"	FROM NotaDebito nd" +
+				"	WHERE (nd.fecha >= '" + desde_ + "' and nd.fecha <= '" + hasta_ + "')" + 
+				"      AND nd.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'";
+		if (idCliente > 0) {
+			query += " AND nd.cliente.id = " + idCliente;
+		}
 		return this.hql(query);
 	}
 	

@@ -11270,6 +11270,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
 				List<Object[]> pagares = rr.getPagaresPorFirmante(idFirmante, desde, hasta);
+				List<Object[]> notasDebito = rr.getNotasDebitoPorCliente(idCliente, desde, hasta);
 				
 				for (Object[] venta : ventas) {
 					totalVentas += ((double) venta[3]);
@@ -11294,12 +11295,17 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] pagare : pagares) {
 					totalPagares += ((double) pagare[3]);
 				}
+				
+				for (Object[] notaDebito : notasDebito) {
+					totalNotasDebito += ((double) notaDebito[3]);
+				}
 
 				historicoDEBE = new ArrayList<Object[]>();
 				historicoHABER = new ArrayList<Object[]>();
 				
 				historicoDEBE.addAll(ventas);
 				historicoDEBE.addAll(pagares);	
+				historicoDEBE.addAll(notasDebito);
 				if (incluirChequesRechazados) historicoDEBE.addAll(cheques_rechazados);
 				if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);				
 				
