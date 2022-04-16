@@ -13,7 +13,7 @@ public class Configuracion extends Config {
 	/********************************************************************************************/
 	public static String PATH_SESSION = ".";
 
-	public static String empresa = "Grupo Toyo S.A.";
+	public static String empresa = Configuracion.EMPRESA_YRSA;
 	
 	public static final String EMPRESA_GTSA = "Grupo Toyo S.A.";
 	public static final String EMPRESA_YRSA = "Yhaguy Repuestos S.A.";
@@ -963,6 +963,7 @@ public class Configuracion extends Config {
 	public final static String SIGLA_TM_ANTICIPO_COBRO = "MOV-CBR-ANT";
 	public final static String SIGLA_TM_CANCELACION_CHEQ_RECHAZADO = "MOV-CBR-CCR";
 	public final static String SIGLA_TM_REEMBOLSO_PRESTAMO = "MOV-CBR-RPCC";
+	public final static String SIGLA_TM_DEVOLUCION_ANTICIPO = "MOV-CBR-DEVANT";
 
 	// Siglas de movimientos de Remision
 	public final static String SIGLA_TM_NOTA_REMISION = "MOV-TRF-REM";
@@ -984,6 +985,7 @@ public class Configuracion extends Config {
 	public final static String SIGLA_TM_DEBITO_BANCARIO = "MOV-BAN-OTR-DEB";
 	public final static String SIGLA_TM_CHEQUE_RECHAZADO = "MOV-BAN-CHT-REC";
 	public final static String SIGLA_TM_PRESTAMO_BANCARIO = "MOV-BAN-PRE";
+	public final static String SIGLA_TM_DEPOSITO_BANCARIO_CLIENTE = "MOV-BAN-DEF-HAB-CLI";
 
 	// Siglas de tipos de documentos
 	public static String SIGLA_DOC_FAC_CONTADO = "DOC-FAC-CON";
