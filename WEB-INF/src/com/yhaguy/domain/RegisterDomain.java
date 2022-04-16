@@ -6350,6 +6350,27 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los recibos segun firmante.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs
+	 */
+	public List<Object[]> getPagaresPorFirmante(long idFirmante, Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select 'PAGARÉ', p.fecha, p.numero, p.importe, p.firmante.razonSocial"
+				+ " from Pagare p where p.dbEstado != 'D'";
+				if (idFirmante != 0) {
+					query += " and p.firmante.id = " + idFirmante;
+				}
+				query += " and (p.fecha >= '"
+				+ desde_
+				+ "' and p.fecha <= '" + hasta_ + "')";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return los pagos segun proveedor.. 
 	 * [0]:concepto
 	 * [1]:fecha 

@@ -11257,8 +11257,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalRecibos = 0;
 				double totalNotasDebito = 0;
 				double totalReembolsosCheques = 0;
+				double totalPagares = 0;
 
 				long idCliente = cliente != null ? cliente.getId() : 0;
+				long idFirmante = cliente != null ? cliente.getEmpresa().getId() : 0;
 
 				List<Object[]> ventas = rr.getVentasPorCliente_(idCliente, desde, hasta);
 				List<Object[]> cheques_rechazados = rr.getChequesRechazadosPorCliente(idCliente, desde, hasta);
@@ -11267,6 +11269,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> recibos = rr.getRecibosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_cheques_rechazados = rr.getReembolsosChequesRechazadosPorCliente(idCliente, desde, hasta);
 				List<Object[]> reembolsos_prestamos_cc = rr.getReembolsosPrestamosCC(idCliente, desde, hasta);
+				List<Object[]> pagares = rr.getPagaresPorFirmante(idFirmante, desde, hasta);
 				
 				for (Object[] venta : ventas) {
 					totalVentas += ((double) venta[3]);
@@ -11287,11 +11290,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] reemb : reembolsos_cheques_rechazados) {
 					totalReembolsosCheques -= ((double) reemb[3]);
 				}
+				
+				for (Object[] pagare : pagares) {
+					totalPagares += ((double) pagare[3]);
+				}
 
 				historicoDEBE = new ArrayList<Object[]>();
 				historicoHABER = new ArrayList<Object[]>();
 				
-				historicoDEBE.addAll(ventas);				
+				historicoDEBE.addAll(ventas);
+				historicoDEBE.addAll(pagares);	
 				if (incluirChequesRechazados) historicoDEBE.addAll(cheques_rechazados);
 				if (incluirPrestamos) historicoDEBE.addAll(prestamos_cc);				
 				
