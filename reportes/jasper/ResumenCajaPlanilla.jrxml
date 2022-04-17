@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Balance" pageWidth="662" pageHeight="792" columnWidth="622" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.14358881000001"/>
+	<property name="ireport.zoom" value="1.7715610000000082"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="675"/>
+	<property name="ireport.y" value="476"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -270,7 +270,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="308">
+		<band height="311">
 			<staticText>
 				<reportElement x="75" y="5" width="513" height="12" uuid="4a009160-ae17-49a4-b490-37de5b0a0347"/>
 				<textElement>
@@ -544,7 +544,7 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="75" y="304" width="462" height="1" uuid="e14925d5-689d-41b8-99e2-d43bf83eb677"/>
+				<reportElement x="75" y="308" width="462" height="1" uuid="e14925d5-689d-41b8-99e2-d43bf83eb677"/>
 			</line>
 			<staticText>
 				<reportElement x="76" y="234" width="119" height="12" uuid="0c720271-81e8-45b8-af69-a5143a93c746"/>
