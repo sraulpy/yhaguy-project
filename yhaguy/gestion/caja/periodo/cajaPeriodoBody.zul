@@ -278,7 +278,7 @@
 				<button mold="bs" sclass="btn-success btn-sm"
 					hflex="true" iconSclass="z-icon-plus-circle"
 					onClick="@command('abrirVentanaSaldoCajaChica')"
-					label=" Saldo Inicial" disabled="@load(!vm.siempreHabilitado)" />
+					label=" Importar Saldo Caja" disabled="@load(!vm.siempreHabilitado)" />
 			</vlayout>
 		</popup>
 
