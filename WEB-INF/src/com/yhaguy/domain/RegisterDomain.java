@@ -14592,22 +14592,11 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las cajas chicas con saldo..
 	 */
-	public List<Object[]> getSaldosCajaChica() throws Exception {
+	public List<Object[]> getSaldosCajaChica(String nroPlanilla) throws Exception {
 		String query = "" + " select c.id, c.numero, c.saldoCajaChica " + " from CajaPeriodo c "
-				+ " where c.saldoCajaChica > 0 and (c.saldoCajaChicaAplicado is null or length(c.saldoCajaChicaAplicado) = 0)";
+				+ " where c.saldoCajaChica > 0 and (c.saldoCajaChicaAplicado is null or length(c.saldoCajaChicaAplicado) = 0) and lower(c.numero) like '%"
+				+ nroPlanilla + "%'";
 		List<Object[]> list = this.hql(query);
 		return list;
-	}
-	
-	public static void main(String[] args) {
-		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			for (Object[] it : rr.getSaldosCajaChica()) {
-				System.out.println(it[1]);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

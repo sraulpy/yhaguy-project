@@ -233,6 +233,9 @@
 		.z-listitem.z-listitem-selected>.z-listcell>.z-listcell-content {
     		color: #357ebd;
 		}
+		.z-grid-header-border {
+			border: transparent;
+		}
 	</style>
 	<include src="/core/css/style.zul"></include>
 </zk>

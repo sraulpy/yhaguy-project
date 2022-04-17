@@ -1286,6 +1286,123 @@ public class CajaPeriodo extends Domain {
 		});
 		return out;
 	}
+	
+	/**
+	 * @return saldo de caja..
+	 */
+	public double getSaldoCaja() throws Exception {
+		CajaPeriodo planilla = this;
+
+		double totalReposiciones = 0;
+		double totalVentaContadoEfectivo = 0;
+		double totalCobranzaEfectivo = 0;
+		double totalAnticipoEfectivo = 0;
+		double totalCancelacionChequeEfectivo = 0;
+
+		double totalNotaCreditoContado = 0;
+		double totalGastosEfectivo = 0;
+		double totalPagosEfectivo = 0;
+
+		// reposiciones..
+		for (CajaReposicion rep : planilla.getReposiciones()) {
+			if (rep.isIngreso()) {
+				if (rep.getFormaPago().isEfectivo()) {
+					double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
+					totalReposiciones += importe;
+				}
+			}
+		}
+
+		// ventas contado..
+		for (Venta venta : planilla.getVentasOrdenado()) {
+			if (venta.isVentaContado()) {
+				for (ReciboFormaPago fp : venta.getFormasPago()) {
+					if (fp.isEfectivo() && fp.isMonedaLocal()) {
+						double montoEf = venta.isAnulado() ? 0.0 : fp.getMontoGs();
+						totalVentaContadoEfectivo += montoEf;
+					}
+				}
+			}
+		}
+
+		// cobranzas con efectivo..
+		for (Recibo cobro : planilla.getRecibosOrdenado()) {
+			if (cobro.isCobro() && !cobro.isAnulado() && !cobro.isCobroExterno() && !cobro.isCancelacionCheque()
+					&& !cobro.isCobroAnticipo()) {
+				Object[] aldia = cobro.getCobranzasConEfectivo();
+				if (aldia != null) {
+					totalCobranzaEfectivo += (double) aldia[1];
+				}
+			}
+		}
+
+		// anticipos con efectivo..
+		for (Recibo cobro : planilla.getRecibosOrdenado()) {
+			if (cobro.isCobroAnticipo() && !cobro.isAnulado() && !cobro.isCobroExterno()
+					&& !cobro.isCancelacionCheque()) {
+				Object[] efectivo = cobro.getCobranzasConEfectivo();
+				if (efectivo != null) {
+					totalAnticipoEfectivo += (double) efectivo[1];
+				}
+			}
+		}
+
+		// reembolso de cheques rechazados..
+		for (Recibo cobro : planilla.getRecibosOrdenado()) {
+			if (cobro.isCancelacionCheque() && !cobro.isCancelacionChequeRechazadoInterno() && !cobro.isAnulado()
+					&& !cobro.isCobroExterno()) {
+				for (ReciboFormaPago rfp : cobro.getFormasPago()) {
+					if (rfp.isEfectivo()) {
+						totalCancelacionChequeEfectivo += rfp.getMontoGs();
+					}
+				}
+			}
+		}
+
+		// reembolso de cheques rechazados internos..
+		for (Recibo cobro : planilla.getRecibosOrdenado()) {
+			if (cobro.isCancelacionCheque() && cobro.isCancelacionChequeRechazadoInterno() && !cobro.isAnulado()
+					&& !cobro.isCobroExterno()) {
+				for (ReciboFormaPago rfp : cobro.getFormasPago()) {
+					if (rfp.isEfectivo()) {
+						totalCancelacionChequeEfectivo += rfp.getMontoGs();
+					}
+				}
+			}
+		}
+
+		// notas de credito contra contado..
+		for (NotaCredito nc : planilla.getNotasCredito()) {
+			if (nc.isNotaCreditoVenta()) {
+				double importe = nc.isAnulado() ? 0.0 : nc.getImporteGs();
+				if (nc.isNotaCreditoVentaContado()) {
+					totalNotaCreditoContado += importe;
+				}
+			}
+		}
+
+		// gastos en efectivo..
+		for (Gasto gasto : planilla.getGastosOrdenado()) {
+			double importe = gasto.isAnulado() ? 0.0 : gasto.getTotalEfectivoGs();
+			totalGastosEfectivo += importe;
+		}
+
+		// pagos con efectivo..
+		for (Recibo pago : planilla.getRecibosOrdenado()) {
+			if (pago.isPago()) {
+				Object[] efectivo = pago.getPagosConEfectivo();
+				if (efectivo != null) {
+					totalPagosEfectivo += (double) efectivo[1];
+				}
+			}
+		}
+
+		double ingresos = totalReposiciones + totalVentaContadoEfectivo + totalCobranzaEfectivo + totalAnticipoEfectivo
+				+ totalCancelacionChequeEfectivo;
+		double egresos = totalNotaCreditoContado + totalGastosEfectivo + totalPagosEfectivo;
+		
+		return ingresos - egresos;
+	}
 
 	public String getNumero() {
 		return numero;

@@ -1,6 +1,6 @@
 <div apply="org.zkoss.bind.BindComposer" 
 	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.periodo.CajaPeriodoSimpleControl')"
-	>
+	style="padding:10px 20px">
 	
 	<grid sclass="vgrid">
 		<columns>
@@ -25,25 +25,44 @@
 			</row>	
 			<row visible="@load(vm.dato.reposicion.pos18)">
 				<field value="Tipo:"/>
-				<label value="IMPORTAR SALDO CAJA CHICA"></label>
+				<label value="IMPORTAR SALDO CAJA ANTERIOR"></label>
 			</row>	
 			<row visible="@load(vm.dato.reposicion.pos18)">
 				<field value="Origen:"/>
-				<bandbox hflex="true" placeholder="SELECCIONAR CAJA.."
+				<bandbox placeholder="SELECCIONAR CAJA.."
 				readonly="true" value="@load(vm.dato.selectedCajaChica[1])"
 				id="bndFF">
 				<bandpopup>
-					<listbox sclass="small-list" width="400px" style="border:none"
+					<listbox sclass="small-list" width="50rem" style="border:none"
 						height="200px" model="@load(vm.dato.saldosCajaChica)"
 						onSelect="@command('setMontoGs')"
-						selectedItem="@bind(vm.dato.selectedCajaChica)">
-						<attribute name="onSelect">bndFF.close();</attribute>						
+						selectedItem="@bind(vm.dato.selectedCajaChica)"
+						emptyMessage="SIN REGISTROS..">
+						<attribute name="onSelect">bndFF.close();</attribute>
+						<auxhead>
+							<auxheader colspan="2">
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.nroPlanilla)" instant="true"
+										placeholder="Buscar por Número.." />
+								</hlayout>
+							</auxheader>
+						</auxhead>	
+						<listhead>
+							<listheader label="Número" />
+							<listheader label="Saldo" />
+						</listhead>					
 						<template name="model">
 							<listitem>
 								<listcell label="@load(each[1])"></listcell>
 								<listcell label="@load(each[2]) @converter(vm.cnv.monedaLocal)"></listcell>
 							</listitem>
 						</template>
+						<listfoot>
+							<listfooter label="ítems"></listfooter>
+						</listfoot>
 					</listbox>
 				</bandpopup>
 			</bandbox>

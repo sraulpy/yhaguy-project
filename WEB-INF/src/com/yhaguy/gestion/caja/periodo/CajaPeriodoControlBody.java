@@ -126,6 +126,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	private Date fechaDesde = new Date();
 	private Date fechaHasta = new Date();
 	private Object[] selectedCajaChica;
+	private String nroPlanilla = "";
 
 	private Window win;
 	
@@ -163,7 +164,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
 				if (this.dto.getDetalles().size() == 0) {
 					try {
-						this.abrirVentanaSaldoCajaChica(ES_REPOSICION, WindowPopup.NUEVO);
+						this.abrirVentanaSaldoCajaChica();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1381,7 +1382,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 	/**
 	 * Despliega el popup del item de reposicion..
 	 */
-	private void abrirVentanaSaldoCajaChica(int tipo, String modo) throws Exception {
+	@Command
+	@NotifyChange("*")
+	public void abrirVentanaSaldoCajaChica() throws Exception {
+		
+		int tipo = ES_REPOSICION; String modo = WindowPopup.NUEVO;
 
 		if (modo.equals(WindowPopup.NUEVO)) {
 
@@ -1397,7 +1402,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.reposicion.setPos4(tc);
 			this.reposicion.setPos5((double) 0);
 			this.reposicion.setPos6((double) 0);
-			this.reposicion.setPos7("SIN SALDO CAJA CHICA ANTERIOR");
+			this.reposicion.setPos7("OBSERVACION SALDO CAJA ANTERIOR");
 			this.reposicion.setPos8((tipo == ES_REPOSICION) ? this.cajaReposicionIngreso
 							: this.cajaReposicionEgreso);
 			this.reposicion.setPos9(this.monedaLocal_);
@@ -1412,7 +1417,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.reposicion.setPos17("");
 		this.reposicion.setPos18(true);
 
-		String titulo = "SALDO CAJA CHICA ANTERIOR";
+		String titulo = "SALDO CAJA ANTERIOR";
 
 		WindowPopup w = new WindowPopup();
 		w.setModo(modo);
@@ -1870,73 +1875,94 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto.setReadonly();
 		this.dto.setEstado(estadoCajaCerrada);
 		
-		if (this.isEmpresaCentral() || this.isEmpresaGroupauto()) {
-			if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
-				double totalEgresos = 0;
-				double totalNotaCreditoCompra = 0;
-				double totalRepEgresos = 0;
-				double totalRepEgresosDtoViatico = 0;
-				double totalReposiciones = 0;
-				double totalRetencionProveedor = 0;
-
-				RegisterDomain rr = RegisterDomain.getInstance();
-				CajaPeriodo planilla = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), this.dto.getId());
-
-				for (CompraLocalFactura compra : planilla.getCompras()) {
-					double importe = compra.getImporteGs();
-					totalEgresos += importe;
-				}
-
-				for (Gasto gasto : planilla.getGastosOrdenado()) {
-					double importe = gasto.isAnulado() ? 0.0 : gasto.getImporteGs();
-					totalEgresos += importe;
-				}
-
-				for (Recibo pago : planilla.getRecibosOrdenado()) {
-					if (pago.isPago()) {
-						double importe = pago.isAnulado() ? 0.0 : pago.getTotalImporteGs();
-						totalEgresos += importe;
-					}
-				}
-
-				for (CajaReposicion rep : planilla.getReposiciones()) {
-					if (!rep.isIngreso()) {
-						totalRepEgresos += rep.getMontoGs();
-						if (rep.getTipoEgreso().getSigla()
-								.equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
-							totalRepEgresosDtoViatico += rep.getMontoGs();
-						}
-					}
-				}
-
-				for (NotaCredito nc : planilla.getNotasCredito()) {
-					if (nc.isNotaCreditoCompra()) {
-						double importe = nc.isAnulado() ? 0.0 : nc.getImporteGs();
-						totalNotaCreditoCompra += importe;
-					}
-				}
-
-				for (CajaReposicion rep : planilla.getReposiciones()) {
-					if (rep.isIngreso()) {
-						double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
-						totalReposiciones += importe;
-					}
-				}
-
-				for (ReciboFormaPago fp : planilla.getRetencionesProveedor()) {
-					totalRetencionProveedor += fp.getMontoGs();
-				}
-
-				double saldo = (totalReposiciones + totalRetencionProveedor)
-						- ((totalEgresos - totalRepEgresosDtoViatico - totalNotaCreditoCompra)
-								+ (totalRepEgresos - totalRepEgresosDtoViatico));
-				this.dto.setSaldoCajaChica(saldo);
-				this.dto.setSaldoCajaChicaAplicado(null);
-			}
+		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+			this.setSaldoCajaChica();
+		}
+		
+		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_VENTA) 
+				|| this.dto.getTipo().equals(CajaPeriodo.TIPO_COBROS)
+						|| this.dto.getTipo().equals(CajaPeriodo.TIPO_COBROS_MOBILE)
+						|| this.dto.getTipo().equals(CajaPeriodo.TIPO_COBROS_MOBILE_INT)) {
+			this.setSaldoCaja();
 		}
 		
 		this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
 		this.mensajePopupTemporal("Caja correctamente cerrada..");
+	}
+	
+	/**
+	 * setea el saldo de caja chica..
+	 */
+	private void setSaldoCajaChica() throws Exception {
+		double totalEgresos = 0;
+		double totalNotaCreditoCompra = 0;
+		double totalRepEgresos = 0;
+		double totalRepEgresosDtoViatico = 0;
+		double totalReposiciones = 0;
+		double totalRetencionProveedor = 0;
+
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CajaPeriodo planilla = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), this.dto.getId());
+
+		for (CompraLocalFactura compra : planilla.getCompras()) {
+			double importe = compra.getImporteGs();
+			totalEgresos += importe;
+		}
+
+		for (Gasto gasto : planilla.getGastosOrdenado()) {
+			double importe = gasto.isAnulado() ? 0.0 : gasto.getImporteGs();
+			totalEgresos += importe;
+		}
+
+		for (Recibo pago : planilla.getRecibosOrdenado()) {
+			if (pago.isPago()) {
+				double importe = pago.isAnulado() ? 0.0 : pago.getTotalImporteGs();
+				totalEgresos += importe;
+			}
+		}
+
+		for (CajaReposicion rep : planilla.getReposiciones()) {
+			if (!rep.isIngreso()) {
+				totalRepEgresos += rep.getMontoGs();
+				if (rep.getTipoEgreso().getSigla().equals(Configuracion.SIGLA_CAJA_REPOSICION_EGRESO_EXCEDENTE)) {
+					totalRepEgresosDtoViatico += rep.getMontoGs();
+				}
+			}
+		}
+
+		for (NotaCredito nc : planilla.getNotasCredito()) {
+			if (nc.isNotaCreditoCompra()) {
+				double importe = nc.isAnulado() ? 0.0 : nc.getImporteGs();
+				totalNotaCreditoCompra += importe;
+			}
+		}
+
+		for (CajaReposicion rep : planilla.getReposiciones()) {
+			if (rep.isIngreso()) {
+				double importe = rep.isAnulado() ? 0.0 : rep.getMontoGs();
+				totalReposiciones += importe;
+			}
+		}
+
+		for (ReciboFormaPago fp : planilla.getRetencionesProveedor()) {
+			totalRetencionProveedor += fp.getMontoGs();
+		}
+
+		double saldo = (totalReposiciones + totalRetencionProveedor)
+				- ((totalEgresos - totalRepEgresosDtoViatico - totalNotaCreditoCompra)
+						+ (totalRepEgresos - totalRepEgresosDtoViatico));
+		this.dto.setSaldoCajaChica(saldo);
+		this.dto.setSaldoCajaChicaAplicado(null);
+	}
+	
+	/**
+	 * setea el saldo de caja..
+	 */
+	private void setSaldoCaja() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CajaPeriodo planilla = (CajaPeriodo) rr.getObject(CajaPeriodo.class.getName(), this.dto.getId());
+		this.dto.setSaldoCajaChica(planilla.getSaldoCaja());
+		this.dto.setSaldoCajaChicaAplicado(null);		
 	}
 
 	/**
@@ -3067,12 +3093,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 		return out;
 	}
 	
-	/**
-	 * @return saldos caja chica
-	 */
+	@DependsOn("nroPlanilla")
 	public List<Object[]> getSaldosCajaChica() throws Exception {
+		if (this.nroPlanilla.trim().isEmpty()) {
+			return new ArrayList<Object[]>();
+		}
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getSaldosCajaChica();
+		return rr.getSaldosCajaChica(this.nroPlanilla);
 	}
 	
 	/**
@@ -3255,6 +3282,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 	public void setSelectedCajaChica(Object[] selectedCajaChica) {
 		this.selectedCajaChica = selectedCajaChica;
+	}
+
+	public String getNroPlanilla() {
+		return nroPlanilla;
+	}
+
+	public void setNroPlanilla(String nroPlanilla) {
+		this.nroPlanilla = nroPlanilla;
 	}
 
 }

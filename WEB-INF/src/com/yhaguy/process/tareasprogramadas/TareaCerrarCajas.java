@@ -25,6 +25,8 @@ public class TareaCerrarCajas {
 					caja.setDbEstado('R');
 					caja.setCierre(new Date());
 					caja.setEstado(rr.getTipoPorSigla("CAJ-PER-CER"));
+					caja.setSaldoCajaChica(caja.getSaldoCaja());
+					caja.setSaldoCajaChicaAplicado(null);
 					rr.saveObject(caja, "sys");
 					cajas_.add(caja);
 					

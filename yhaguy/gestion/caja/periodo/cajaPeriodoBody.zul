@@ -90,11 +90,10 @@
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Reembolsos" 
-				onClick='popReembolso.open(self, "after_start")'/>
+				onClick='popReembolso.open(self, "after_start")'/>	
 			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
-				iconSclass="z-icon-plus-circle"
-				onClick="@command('abrirVentanaReposicion', tipo=2)"
-				disabled="@load(!vm.dto.caja.reposicion or vm.dto.tipo ne 'CAJA CHICA')" label=" Reposición" />	
+				iconSclass="z-icon-plus-circle" disabled="@load(!vm.siempreHabilitado)"
+				onClick='popReposicion.open(self, "after_start")' label=" Reposición" />			
 			<button mold="bs" sclass="btn-warning btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('facturar', tipo=4)"
@@ -266,6 +265,20 @@
 				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 					disabled="@load(!vm.dto.caja.cobro)" label="@load(vm.empresaMRA ? 'Recaudación Central':'Recaudación M.R.A.')"
 					onClick="@command('abrirVentanaRecaudacionMRA', tipo=4)" />
+			</vlayout>
+		</popup>
+		
+		<popup id="popReposicion" width="200px" sclass="rounded">
+			<vlayout>
+				<button mold="bs" sclass="btn-success btn-sm"
+					hflex="true" iconSclass="z-icon-plus-circle"
+					onClick="@command('abrirVentanaReposicion', tipo=2)"
+					label=" Reposición" disabled="@load(!vm.siempreHabilitado)" />
+				<div height="5px"></div>
+				<button mold="bs" sclass="btn-success btn-sm"
+					hflex="true" iconSclass="z-icon-plus-circle"
+					onClick="@command('abrirVentanaSaldoCajaChica')"
+					label=" Saldo Inicial" disabled="@load(!vm.siempreHabilitado)" />
 			</vlayout>
 		</popup>
 
