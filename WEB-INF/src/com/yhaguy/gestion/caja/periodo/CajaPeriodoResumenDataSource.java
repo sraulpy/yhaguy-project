@@ -1021,7 +1021,14 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
 					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo);
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
-			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo - this.totalRepEgresos) * -1);
+			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo
+					- this.totalRepEgresos) * -1);
+		} else if ("TotalRecaudacion".equals(fieldName)) {
+			value = FORMATTER
+					.format(this.totalEfectivo + this.totalChequeTerceroAlDia + this.totalChequeTerceroAdelantado
+							+ this.totalTarjetaCredito + this.totalTarjetaDebito + this.totalRecaudacionMra);
+		}  else if ("TotalVentaContado".equals(fieldName)) {
+			value = FORMATTER.format(this.totalVentaContado);
 		}
 		return value;
 	}
