@@ -74,6 +74,7 @@
 	<field name="TotalGastosEfe" class="java.lang.String"/>
 	<field name="TotalRecaudacion" class="java.lang.String"/>
 	<field name="TotalVentaContado" class="java.lang.String"/>
+	<field name="Diferencia" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<group name="totalizadora" keepTogether="true">
 		<groupExpression><![CDATA[$F{TituloDetalle}]]></groupExpression>
@@ -269,7 +270,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="294">
+		<band height="308">
 			<staticText>
 				<reportElement x="75" y="5" width="513" height="12" uuid="4a009160-ae17-49a4-b490-37de5b0a0347"/>
 				<textElement>
@@ -543,7 +544,7 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="75" y="291" width="462" height="1" uuid="e14925d5-689d-41b8-99e2-d43bf83eb677"/>
+				<reportElement x="75" y="304" width="462" height="1" uuid="e14925d5-689d-41b8-99e2-d43bf83eb677"/>
 			</line>
 			<staticText>
 				<reportElement x="76" y="234" width="119" height="12" uuid="0c720271-81e8-45b8-af69-a5143a93c746"/>
@@ -592,6 +593,21 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TotalVentaContado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="76" y="288" width="119" height="12" uuid="60f12aae-3e6d-478e-b782-e1be903a2de0"/>
+				<textElement>
+					<font fontName="Ubuntu Condensed"/>
+				</textElement>
+				<text><![CDATA[DIFERENCIA]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="195" y="288" width="73" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1103d3c1-68ec-4674-af73-ea4d99f114df"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Diferencia}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
