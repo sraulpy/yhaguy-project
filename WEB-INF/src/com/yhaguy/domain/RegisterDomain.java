@@ -10639,6 +10639,19 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los ingresos bancarios..
+	 */
+	public List<BancoIngreso> getBancoIngresos(String fecha, String banco, String numero, String concepto) throws Exception {
+		String query = "select b from BancoIngreso b where "
+				+ " upper(b.numero) like '%" + numero.toUpperCase() + "%'"
+				+ " and cast (b.fecha as string) like '%" + fecha + "%'"
+				+ " and upper(b.banco.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
+				+ " and b.concepto = '" + concepto + "'"
+				+ " order by b.fecha";
+		return this.hqlLimit(query, 200);
+	}
+	
+	/**
 	 * @return empresas segun ruc..
 	 */
 	public List<Empresa> getEmpresasByRuc(String ruc) throws Exception {
