@@ -118,7 +118,7 @@ public class NotaCreditoDTO extends DTO {
 	 * @return la venta aplicada..
 	 */
 	public MyArray getVentaAplicada() {
-		for (NotaCreditoDetalleDTO item : this.detalles) {
+		for (NotaCreditoDetalleDTO item : this.getDetallesFacturas()) {
 			if (item.getVenta() != null) {
 				return item.getVenta();
 			}
