@@ -14334,6 +14334,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las transferencias (banco origen) segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs 
+	 * [4]:banco 
+	 */
+	public List<Object[]> getCapitalizacionesPorBanco(long idBanco, Date desde, Date hasta, long idMonedaBanco) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select ('CAPITALIZACIÓN DE INTERESES'), "
+				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('CAPITALIZACIÓN INTERESES: ', b.banco.banco.descripcion)"
+				+ " from BancoIngreso b where b.concepto = '" + BancoIngreso.CONCEPTO_CAPITALIZACION_INTERESES + "'"
+				+ " and b.banco.id = " + idBanco
+				+ " and (b.fecha >= '"
+				+ desde_
+				+ "' and b.fecha <= '"
+				+ hasta_
+				+ "')" + " order by b.fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las transferencias externas segun fecha..
 	 */
 	public List<TransferenciaMra> getTransferenciasMra() throws Exception {
@@ -14611,5 +14634,96 @@ public class RegisterDomain extends Register {
 				+ nroPlanilla + "%'";
 		List<Object[]> list = this.hql(query);
 		return list;
+	}
+	
+	/**
+	 * @return las compras.. 
+	 * [0]:fechaOriginal 
+	 * [1]:numero 
+	 * [2]:razonSocial 
+	 * [3]:ruc
+	 * [4]:d.costoGs * d.cantidad 
+	 * [5]:comprador 
+	 * [6]:articulo.codigoInterno
+	 * [7]:d.cantidad
+	 * [8]:articulo.familia
+	 * [9]:totalCompras
+	 * [10]:aux
+	 */
+	public List<Object[]> getComprasLocales(Date desde, Date hasta, String numero, String ruc, String razonSocial,
+			String comprador, String codigo, String familia) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select c.fechaOriginal, c.numero, c.proveedor.empresa.razonSocial, c.proveedor.empresa.ruc,"
+				+ " (d.costoGs * d.cantidad), upper(c.comprador),"
+				+ " d.articulo.codigoInterno, d.cantidad, d.articulo.familia.descripcion,"
+				+ " (select sum(de.cantidad) from CompraLocalFactura cf join cf.detalles de "
+				+ "	where de.articulo.id = d.articulo.id and cf.fechaOriginal >= '" + desde_ + "' and cf.fechaOriginal <= '"+ hasta_ + "' "
+				+ "	and cf.dbEstado = 'R' group by de.articulo.id), 0, 0.0" 
+				+ " from CompraLocalFactura c join c.detalles d "
+				+ " where c.dbEstado != 'D'" + " and (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or " + " c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "')" + " and c.dbEstado = 'R'" + " and c.numero like '%"
+				+ numero + "%' and c.proveedor.empresa.ruc like '%" + ruc + "%'"
+				+ " and upper(c.proveedor.empresa.razonSocial) like '%" + razonSocial.toUpperCase() + "%'"
+				+ " and upper(c.comprador) like '%" + comprador.toUpperCase() + "%'"
+				+ " and upper(d.articulo.codigoInterno) like '%" + codigo.toUpperCase() + "%'"
+				+ " and upper(d.articulo.familia.descripcion) like '%" + familia.toUpperCase() + "%'" 
+				+ " and (c.fechaOriginal >= '"
+				+ desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')" + " order by c.fechaOriginal";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return el detalle de movimientos de ventas segun fecha..
+	 * [0]:articulo.id
+	 * [1]:sum.cantidad
+	 */
+	public List<Object[]> getVentasDetallado(Date desde, Date hasta, String codigo) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, sum(d.cantidad)"
+				+ " from Venta v join v.detalles d where "
+				+ " d.articulo.codigoInterno = '" + codigo + "'"
+				+ " and (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')"
+				+ " group by d.articulo.id";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return el detalle de movimientos de compras segun fecha..
+	 * [0]:articulo.id
+	 * [1]:sum.cantidad
+	 */
+	public List<Object[]> getComprasDetallado(Date desde, Date hasta, String codigo) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select d.articulo.id, sum(d.cantidad * 1.0)"
+				+ " from CompraLocalFactura c join c.detalles d where "
+				+ " d.articulo.codigoInterno = '" + codigo + "'"
+				+ " and (c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or c.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO + "') and c.dbEstado = 'R'"
+				+ " and (c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')"
+				+ " group by d.articulo.id";
+		return this.hql(query);
+	}
+	
+	public static void main(String[] args) {
+		try {
+			Date desde = Utiles.getFecha("01-04-2022 00:00:00");
+			Date hasta = new Date();
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Object[]> l = rr.getVentasDetallado(desde, hasta, "TIN 1734996");
+			System.out.println(l.get(0)[1]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

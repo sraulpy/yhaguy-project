@@ -211,4 +211,8 @@ public class BancoCapitalizacionViewModel extends SimpleViewModel {
 	public void setFilter_origen(String filter_origen) {
 		this.filter_banco = filter_origen;
 	}
+
+	public void setSelected_capitalizacion(BancoIngreso selected_capitalizacion) {
+		this.selected_capitalizacion = selected_capitalizacion;
+	}
 }

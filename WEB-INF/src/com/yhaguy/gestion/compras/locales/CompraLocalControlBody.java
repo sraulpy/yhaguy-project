@@ -634,6 +634,7 @@ public class CompraLocalControlBody extends BodyApp {
 		fac.setTipoCambio(this.dto.getTipoCambio());
 		fac.setSucursal(this.dto.getSucursal());
 		fac.setCondicionPago(this.dto.getCondicionPago());
+		fac.setComprador(this.getUs().getNombre());
 		for (CompraLocalOrdenDetalleDTO item : this.dto.getDetalles()) {
 			CompraLocalFacturaDetalleDTO det = new CompraLocalFacturaDetalleDTO();
 			det.setOrden(item.getOrden());

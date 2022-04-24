@@ -45,6 +45,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 	double totalRecaudacionCentral = 0;
 	double totalTransferenciaCentral = 0;
 	double totalDolares = 0;
+	double totalDolaresGuaranies = 0;
 	double totalValoresRepresentaciones = 0;
 	double totalDiferenciaTipoCambio = 0;
 	double totalOtrosComprobantes = 0;
@@ -860,6 +861,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			// recaudacion en dolares..
 			for (ReciboFormaPago fp : planilla.getRecaudacionDolares()) {
 				this.totalDolares += fp.getMontoDs();
+				this.totalDolaresGuaranies += fp.getMontoGs();
 				MyArray my = new MyArray(fp.getTipo().getDescripcion().toUpperCase(), fp.getDescripcion(), fp.getMontoDs(),
 						"RECAUDACION EN DÓLARES", this.totalDolares);
 				this.values.add(my);
@@ -1023,6 +1025,8 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
 			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo
 					- this.totalRepEgresos) * -1);
+		} else if ("TotalRecUSDGS".equals(fieldName)) {
+			value = FORMATTER.format(this.totalDolaresGuaranies);
 		} else if ("TotalRecaudacion".equals(fieldName)) {
 			value = FORMATTER
 					.format(this.totalVentaContadoEfectivo + this.totalChequeTerceroAlDia + this.totalChequeTerceroAdelantado

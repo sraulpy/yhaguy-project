@@ -301,7 +301,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 				String debe = csv.getDetalleString("DEBE");
 				String haber = csv.getDetalleString("HABER");
 				String fecha = csv.getDetalleString("FECHA");
-				Date fecha_ = Utiles.getFecha(fecha + "/" + Utiles.getDateToString(this.dto.getDesde(), "yyyy"), "dd/MM/yyyy");
+				Date fecha_ = Utiles.getFecha(fecha + "/" + Utiles.getDateToString(this.dto.getDesde(), "yyyy"), "dd/MMM/yyyy");
 				
 				double importe; 
 				double debe_ = 0; 
@@ -487,6 +487,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
 		List<Object[]> extracciones = rr.getExtraccionesPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
+		List<Object[]> capitalizaciones = rr.getCapitalizacionesPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
 		
 		List<Object[]> depositosMRA = new ArrayList<Object[]>();
 		List<Object[]> depositosMRA_ = new ArrayList<Object[]>();
@@ -509,6 +510,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		historicoDEBE.addAll(formasPagoTarjeta);
 		historicoDEBE.addAll(depositosMRA);
 		historicoDEBE.addAll(depositosMRA_);
+		historicoDEBE.addAll(capitalizaciones);
 		
 		historicoHABER.addAll(cheques);
 		historicoHABER.addAll(chequesRechazados);

@@ -1,0 +1,145 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.compras.ExploradorVM')"
+	height="100%" id="win">
+	
+	<div height="5px" />
+	
+	<hlayout sclass="button-container">
+		<navbar mold="bs-pills">
+			<navitem label=" LOCALES" selected="true"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter" 
+				onClick="@command('selectFilter', filter=1)"/>
+			<navitem label=" IMPORTACIONES"
+				style="text-align:center; font-size:12px"
+				iconSclass="z-icon-filter" 
+				onClick="@command('selectFilter', filter=2)" disabled="true" />
+		</navbar>
+		<space></space>
+		<toolbarbutton iconSclass="z-icon-filter" disabled="true" />
+		<field>Compras</field>
+		<separator bar="true" orient="vertical"></separator>
+		<label>Desde:</label>
+		<datebox placeholder="Desde.." value="@bind(vm.desde)"></datebox>
+		<space></space>
+		<label>Hasta:</label>
+		<datebox placeholder="Hasta.." value="@bind(vm.hasta)"></datebox>
+		<space></space>
+		<toolbarbutton iconSclass="z-icon-filter" disabled="true" />
+		<field>Ventas</field>
+		<separator bar="true" orient="vertical"></separator>
+		<label>Desde:</label>
+		<datebox value="@bind(vm.ventasDesde)" placeholder="Desde.."></datebox>
+		<space></space>
+		<label>Hasta:</label>
+		<datebox value="@bind(vm.ventasHasta)" placeholder="Hasta.."></datebox>
+		<a iconSclass="z-icon-check" label=" Procesar" onClick="@command('buscarVentas')"></a>
+		<space hflex="true" />
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-print"
+				label=" Imprimir" />
+	</hlayout>
+	
+	<listbox id="lst" sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.compras)" mold="paging" pageSize="18"
+		onLater="@command('clearProgress', items=lst.model)">
+		<listhead>
+			<listheader label="Fecha" width="100px" />
+			<listheader label="Factura" width="120px" />
+			<listheader label="Proveedor" />	
+			<listheader label="Comprador" width="170px" />
+			<listheader label="Familia" width="150px" />	
+			<listheader label="Código" />
+			<listheader label="Compras" align="right" width="110px" />
+			<listheader label="Ventas" align="right" width="110px" />
+			<listheader label="Rendimiento" align="right" width="110px" />	
+		</listhead>	
+		<auxhead>
+			<auxheader></auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Número.."
+						value="@bind(vm.filterNumero)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Razón Social.."
+						value="@bind(vm.filterRazonSocial)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Comprador.."
+						value="@bind(vm.filterComprador)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Familia.."
+						value="@bind(vm.filterFamilia)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>
+			<auxheader>
+				<hlayout>
+					<textbox hflex="true" 
+						placeholder="Código.."
+						value="@bind(vm.filterCodigo)"
+						instant="true"
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
+				</hlayout>
+			</auxheader>
+			<auxheader />
+			<auxheader />
+			<auxheader />
+		</auxhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0]) @converter('formattedDate', format='dd-MM-yyyy')"/>
+				<listcell label="@load(each[1])" />
+				<listcell label="@load(each[2])" />	
+				<listcell label="@load(each[5])" />	
+				<listcell label="@load(each[8])" />	
+				<listcell label="@load(each[6])" />		
+				<listcell label="@load(each[9])" />		
+				<listcell label="@load(each[10])" />	
+				<listcell style="@load(each[11] gt 70? 'color:green' : 'color:red')">
+					<label value="@load(each[11]) @converter(vm.cnv.monedaExtranjera)" />
+					<html>
+							<i class="fas fa-percentage"></i>
+					</html>
+				</listcell>	
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter span="9">
+				<hlayout>
+					<field value="ítems" />
+					<div hflex="true"></div>
+					<guaranibox value="@load(vm.totalCompras)" readonly="true" />
+					<guaranibox value="@load(vm.totalVentas)" readonly="true" />
+					<dolarbox value="@load(vm.promedio)" readonly="true"
+						style="@load(vm.promedio gt 70? 'color:green; text-align:right' : 'color:red; text-align:right')"></dolarbox>
+				</hlayout>
+			</listfooter>
+		</listfoot>
+	</listbox>
+</window>

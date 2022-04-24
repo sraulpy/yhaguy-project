@@ -67,7 +67,8 @@
 						placeholder="Sucursal.."
 						value="@bind(vm.filterSucursal)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader>
@@ -95,7 +96,8 @@
 						placeholder="Número.."
 						value="@bind(vm.filterNumero)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader>
@@ -104,7 +106,8 @@
 						placeholder="Razón Social.."
 						value="@bind(vm.filterRazonSocial)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader>
@@ -113,7 +116,8 @@
 						placeholder="Ruc.."
 						value="@bind(vm.filterRuc)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader>
@@ -122,7 +126,8 @@
 						placeholder="Descripción.."
 						value="@bind(vm.filterDescripcion)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader>
@@ -131,7 +136,8 @@
 						placeholder="Cuenta.."
 						value="@bind(vm.filterCuenta)"
 						instant="true"
-						sclass="filter"/>
+						style="background-image:url('./core/css/filter.png'); background-repeat:
+								no-repeat; background-position: 98%; background-size: 10px;" />
 				</hlayout>
 			</auxheader>
 			<auxheader>

@@ -30,6 +30,7 @@ public class CompraLocalFacturaDTO extends DTO{
 	private boolean recepcionConfirmada = false;
 	private String cajaPagoNumero = "";
 	private boolean saldoAnticipadoCtaCte = false;
+	private String comprador = "";
 	
 	private ProveedorDTO proveedor = new ProveedorDTO();
 	private MyArray condicionPago = new MyArray();
@@ -325,5 +326,13 @@ public class CompraLocalFacturaDTO extends DTO{
 
 	public void setSaldoAnticipadoCtaCte(boolean saldoAnticipadoCtaCte) {
 		this.saldoAnticipadoCtaCte = saldoAnticipadoCtaCte;
+	}
+
+	public String getComprador() {
+		return comprador;
+	}
+
+	public void setComprador(String comprador) {
+		this.comprador = comprador;
 	}
 }
