@@ -47,8 +47,6 @@ public class ExploradorVM extends SimpleViewModel {
 	private long totalCompras = 0;
 	private long totalVentas = 0;
 	
-	private List<Object[]> items;
-	
 	@Wire
 	private Listbox lst;
 	

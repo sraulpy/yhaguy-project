@@ -10786,6 +10786,7 @@ public class RegisterDomain extends Register {
 				+ " and auxi != '" + BancoDescuentoCheque.PRESTAMO + "'"
 				+ " and auxi != '" + BancoDescuentoCheque.PRESTAMO_ACREEDOR + "'"
 				+ " and auxi != '" + BancoDescuentoCheque.ANTICIPO_UTILIDAD + "'"
+				+ " and auxi != '" + BancoDescuentoCheque.ENVIO + "'"
 				+ " and (b.fecha >= '"
 				+ desde_
 				+ "' and b.fecha <= '"
