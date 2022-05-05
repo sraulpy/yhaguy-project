@@ -134,6 +134,20 @@ public abstract class BodyApp extends Body {
 	}
 	
 	/**
+	 * @return los depositos segun la sucursal operativa..
+	 */
+	public List<MyPair> getDepositosSucursal_() throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Deposito> deps = rr.getDepositos_();
+		for (Deposito deposito : deps) {
+			MyPair dep = new MyPair(deposito.getId(), deposito.getDescripcion());
+			out.add(dep);
+		}
+		return out;
+	}
+	
+	/**
 	 * @return los tipos de iva..
 	 */
 	public List<MyPair> getTiposDeIva() {

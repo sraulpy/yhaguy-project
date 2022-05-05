@@ -42,7 +42,7 @@
 			<row>
 				<vlayout spacing="0" hflex="true">
 					<field value="Depósito" />
-					<combobox model="@load(vm.depositosSucursal)"
+					<combobox model="@load(vm.depositosSucursal_)"
 						value="@load(vm.dto.deposito.text)"
 						selectedItem="@bind(vm.dto.deposito)"
 						instant="true" hflex="true">
