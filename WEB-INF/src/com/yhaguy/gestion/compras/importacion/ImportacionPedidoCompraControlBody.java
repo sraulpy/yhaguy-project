@@ -26,10 +26,6 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Intbox;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listgroup;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
@@ -3349,7 +3345,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public List<MyArray> getItemsCostoFinal(){
 		List<MyArray> out = new ArrayList<MyArray>();	
 		
-		RegisterDomain rr = RegisterDomain.getInstance();
 		for (ImportacionFacturaDTO f : this.dto.getImportacionFactura()) {
 			
 			double coefAutomatico = this.getCoeficienteGasto();
@@ -3362,7 +3357,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				coefGasto = coefAutomatico;
 			}			
 			
-			Map<String, Double> items = new HashMap<String, Double>();
 			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {				
 				
 				double costoGs = d.getCostoGs();
@@ -3388,41 +3382,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					mr.setPos6(costoGs);
 					mr.setPos7(costoDs);
 					out.add(mr);
-					
-					try {
-						ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());
-						if (det != null) {
-							det.setCostoFinalGs(costoFinal);
-							rr.saveObject(det, det.getUsuarioMod());
-							
-							Double cf = items.get(det.getArticulo().getCodigoInterno());
-							if (cf != null) {
-								if (cf.doubleValue() < det.getCostoFinalGs()) {
-									items.put(det.getArticulo().getCodigoInterno(), det.getCostoFinalGs());
-								}
-							} else {
-								items.put(det.getArticulo().getCodigoInterno(), det.getCostoFinalGs());
-							}							
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
 				}			
-			}		
-			
-			for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {
-				if (d.isGastoDescuento() == false) {
-					try {
-						ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());
-						if (det != null) {
-							det.setCostoFinalGs(items.get(det.getArticulo().getCodigoInterno()));
-							rr.saveObject(det, det.getUsuarioMod());
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}	
+			}			
 		}	
 		
 		return out;
@@ -3501,6 +3462,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				return;
 			}
 			try {
+				this.setCostoFinal();
 				this.generarDiferenciaTipoCambio();
 				this.volcarImportacion();
 				this.actualizarEtapaActual(this.getDtoUtil().getImportacionEstadoCerrado());
@@ -3626,6 +3588,55 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 	public boolean isCerrarImportacionDisabled() {
 		return this.isDeshabilitado() || this.dto.getImportacionFactura().size() == 0
 				|| this.dto.getDeposito() == null;
+	}
+	
+	/**
+	 * set costo final en detalle..
+	 */
+	private void setCostoFinal() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			
+			for (ImportacionFacturaDTO f : this.dto.getImportacionFactura()) {
+
+				double coefAutomatico = this.getCoeficienteGasto();
+				double coefManual = this.dto.getResumenGastosDespacho().getCoeficienteAsignado();
+				double coefGasto = 0;
+
+				if (coefManual > 0) {
+					coefGasto = coefManual;
+				} else {
+					coefGasto = coefAutomatico;
+				}
+
+				Map<String, Double> items = new HashMap<String, Double>();
+				for (ImportacionFacturaDetalleDTO d : f.getDetalles()) {
+					double costoDs = d.getCostoDs();				
+					double valorGasto = coefGasto * costoDs;
+					
+					double costoFinalDs = this.getCostoFinal(costoDs, valorGasto, 0);
+					double costoFinal = (costoFinalDs * this.dto.getResumenGastosDespacho().getTipoCambio());
+					
+					ImportacionFacturaDetalle det = rr.getImportacionFacturaDetalleById(d.getId());					
+					if (det != null) {
+						det.setCostoFinalGs(costoFinal);
+						rr.saveObject(det, det.getUsuarioMod());
+						
+						Double cf = items.get(det.getArticulo().getCodigoInterno());
+						if (cf != null) {
+							if (cf.doubleValue() < det.getCostoFinalGs()) {
+								items.put(det.getArticulo().getCodigoInterno(), det.getCostoFinalGs());
+							}
+						} else {
+							items.put(det.getArticulo().getCodigoInterno(), det.getCostoFinalGs());
+						}							
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

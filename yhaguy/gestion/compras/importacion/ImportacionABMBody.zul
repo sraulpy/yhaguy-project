@@ -73,100 +73,77 @@
 		<!-- DATOS GENERALES -->
 
 		<div id="dv_1" width="100%" vflex="true" style="padding:5px 5px 5px 0px">
-			<borderlayout>
-				<center border="none" flex="true">
-					<hbox pack="center" width="100%"
-						style="padding:20px">
-						<vlayout hflex="true" spacing="0">
-							<grid hflex="true" sclass="vgrid">
-								<columns>
-									<column />
-									<column />
-								</columns>
-								<rows>
-									<row>
-										<vlayout spacing="0">
-											<field value="Número / Fecha" />
-											<textbox readonly="true" value="@load(vm.dto.numeroFecha)" hflex="true" />
-										</vlayout>
-										<vlayout spacing="0">
-										<field value="Tipo Importación" />
-										<combobox hflex="true"
-											model="@load(vm.dtoUtil.tiposImportacion)"
-											value="@load(vm.dto.tipo)"
-											selectedItem="@bind(vm.tipoSelected)" instant="true"
-											onSelect="@command('asignarTipoImportacion')">
-											<template name="model">
-												<comboitem
-													label="@load(each.text)" />
-											</template>
-										</combobox>
-										</vlayout>
-										<vlayout spacing="0">
-										<field value="Vía" />
-										<combobox hflex="true"
-											model="@load(vm.vias)"
-											value="@load(vm.dto.via)"
-											selectedItem="@bind(vm.dto.via)" instant="true">
-											<template name="model">
-												<comboitem label="@load(each)" />
-											</template>
-										</combobox>
-										</vlayout>
-									</row>
-									<row>
-										<cell colspan="2">
-											<vlayout spacing="0">
-												<div height="3px"></div>
-												<field value="Proveedor" />
-												<div height="3px"></div>
-												<buscadorProveedor
-													value="@bind(vm.dto)" campo="razonSocial" hflex="true" />
-											</vlayout>
-										</cell>
-										<vlayout spacing="0">
-											<field value="Observación" />
-											<textbox value="@bind(vm.dto.observacion)" hflex="true" />
-										</vlayout>
-									</row>
-									<row>
-									<vlayout spacing="0">
-										<field value="Condición" />
-										<combobox hflex="true"
-											model="@load(vm.dtoUtil.condicionesPago)"
-											value="@load(vm.dto.proveedorCondicionPago.pos1)"
-											selectedItem="@bind(vm.dto.proveedorCondicionPago)"
-											instant="true">
-											<template name="model">
-												<comboitem
-													label="@load(each.pos1)" />
-											</template>
-										</combobox>
-									</vlayout>
-									<vlayout spacing="0">
-										<field value="Moneda" />
-										<combobox id="moneda"
-											hflex="true" model="@load(vm.dtoUtil.monedasConSimbolo)"
-											value="@load(vm.dto.moneda.pos1)"
-											selectedItem="@bind(vm.dto.moneda)" instant="true"
-											onChange="@command('refreshTipoCambio')">
-											<template name="model">
-												<comboitem
-													label="@load(each.pos1)" />
-											</template>
-										</combobox>
-									</vlayout>
-									<vlayout spacing="0">
-										<field value="Tipo de Cambio" />
-										<guaranibox value="@bind(vm.dto.cambio)" hflex="true"
-												onChange="@command('updateTipoCambio')" />
-									</vlayout>
-									</row>
-								</rows>
-							</grid>							
-						</vlayout>
-						<space />
-						<vlayout>
+			
+			<hbox width="100%">
+				<vlayout hflex="true" spacing="15px"
+					style="padding:20px">
+					<vlayout>
+						<field value="Número / Fecha" />
+						<textbox readonly="true"
+							value="@load(vm.dto.numeroFecha)" hflex="true" />
+					</vlayout>
+					<vlayout>
+						<field value="Tipo Importación" />
+						<combobox hflex="true"
+							model="@load(vm.dtoUtil.tiposImportacion)"
+							value="@load(vm.dto.tipo)" selectedItem="@bind(vm.tipoSelected)"
+							instant="true" onSelect="@command('asignarTipoImportacion')">
+							<template name="model">
+								<comboitem label="@load(each.text)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout>
+						<field value="Vía" />
+						<combobox hflex="true" model="@load(vm.vias)"
+							value="@load(vm.dto.via)" selectedItem="@bind(vm.dto.via)"
+							instant="true">
+							<template name="model">
+								<comboitem label="@load(each)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout>
+						<field value="Proveedor" />
+						<buscadorProveedor value="@bind(vm.dto)"
+							campo="razonSocial" hflex="true" />
+					</vlayout>
+					<vlayout>
+						<field value="Observación" />
+						<textbox value="@bind(vm.dto.observacion)"
+							hflex="true" />
+					</vlayout>
+					<vlayout>
+						<field value="Condición" />
+						<combobox hflex="true"
+							model="@load(vm.dtoUtil.condicionesPago)"
+							value="@load(vm.dto.proveedorCondicionPago.pos1)"
+							selectedItem="@bind(vm.dto.proveedorCondicionPago)"
+							instant="true">
+							<template name="model">
+								<comboitem label="@load(each.pos1)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout>
+						<field value="Moneda" />
+						<combobox id="moneda" hflex="true"
+							model="@load(vm.dtoUtil.monedasConSimbolo)"
+							value="@load(vm.dto.moneda.pos1)"
+							selectedItem="@bind(vm.dto.moneda)" instant="true"
+							onChange="@command('refreshTipoCambio')">
+							<template name="model">
+								<comboitem label="@load(each.pos1)" />
+							</template>
+						</combobox>
+					</vlayout>
+					<vlayout>
+						<field value="Tipo de Cambio" />
+						<guaranibox value="@bind(vm.dto.cambio)"
+							hflex="true" onChange="@command('updateTipoCambio')" />
+					</vlayout>
+				</vlayout>
+				<vlayout hflex="true" style="padding:20px" vflex="true">
 						<grid hflex="true" sclass="vgrid">
 							<columns>
 								<column />
@@ -204,7 +181,7 @@
 									value="TRAZABILIDAD DE LA IMPORTACIÓN" />
 							</hlayout>
 							<listbox hflex="true" sclass="small-list"
-								height="560px" model="@load(vm.dto.trazabilidad)"
+								vflex="true" model="@load(vm.dto.trazabilidad)"
 								emptyMessage="SIN REGISTROS..">
 								<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 								<listhead style="text-align:center">
@@ -233,8 +210,7 @@
 							</listbox>
 						</vlayout>
 					</hbox>
-				</center>
-			</borderlayout>
+			
 			<div height="15px" />
 					
 					<popup id="pop_trazabilidad" sclass="rounded">
