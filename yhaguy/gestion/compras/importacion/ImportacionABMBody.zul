@@ -295,7 +295,7 @@
 						model="@load(vm.dto.solicitudCotizaciones)" vflex="true"
 						multiple="true" checkmark="@load(vm.checkmarkOrdenCompra)"
 						selectedItems="@bind(vm.selectedOrdenItems)"
-						emptyMessage="AGREGUE ITEMS AL PEDIDO (CTRL+I)..">
+						emptyMessage="AGREGUE ITEMS AL PEDIDO (CTRL+I).." mold="paging" pageSize="18">
 						<custom-attributes
 							org.zkoss.zul.listbox.autoSort="true" />
 						<listhead menupopup="auto" sizable="true">
@@ -378,7 +378,7 @@
 						model="@load(vm.dto.importacionPedidoCompraDetalle)" vflex="true"
 						multiple="true" checkmark="@load(vm.checkmarkOrdenCompra)"
 						selectedItems="@bind(vm.selectedOrdenItems)"
-						emptyMessage="AGREGUE ITEMS AL PEDIDO (CTRL+I)..">
+						emptyMessage="AGREGUE ITEMS AL PEDIDO (CTRL+I).." mold="paging" pageSize="18">
 						<custom-attributes
 							org.zkoss.zul.listbox.autoSort="true" />
 						<listhead menupopup="auto" sizable="true">
@@ -522,7 +522,8 @@
 						model="@load(vm.selectedImportacionFactura.detalles)" vflex="true"
 						multiple="true" checkmark="@load(vm.checkmarkFactura)"
 						emptyMessage="@load(vm.emptyMsgFactura)"
-						selectedItems="@bind(vm.selectedFacturaItems)">
+						selectedItems="@bind(vm.selectedFacturaItems)"
+						mold="paging" pageSize="18">
 						<custom-attributes
 							org.zkoss.zul.listbox.autoSort="true" />
 						<listhead menupopup="auto" sizable="true">
