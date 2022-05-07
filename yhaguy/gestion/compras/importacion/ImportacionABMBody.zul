@@ -163,100 +163,7 @@
 									</vlayout>
 									</row>
 								</rows>
-							</grid>
-							<hlayout sclass="button-container" style="background:#EEF7FA">
-								<field
-									value="ESTADO DE CUENTA" />
-							</hlayout>
-							<listbox hflex="true" sclass="small-list"
-								height="205px" model="@load(vm.saldosPendientes)"
-								emptyMessage="SIN FACTURAS PENDIENTES..">
-								<listhead>
-									<listheader label="Emisión" width="110px"></listheader>
-									<listheader label="Vencimiento" width="110px"></listheader>
-									<listheader label="Concepto"></listheader>
-									<listheader label="Número" width="120px"></listheader>
-									<listheader label="Saldo USD" align="right" width="120px"></listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell
-											label="@load(each.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each.fechaVencimiento) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each.tipoMovimiento.descripcion)">
-										</listcell>
-										<listcell
-											label="@load(each.nroComprobante)">
-										</listcell>
-										<listcell
-											label="@load(each.saldo) @converter(vm.cnv.monedaLocal)">
-										</listcell>
-									</listitem>
-								</template>
-								<listfoot>
-									<listfooter span="4"></listfooter>
-									<listfooter>
-										<guaranibox
-												style="background:#EEF7FA;text-align:right" hflex="true"
-												value="@load(vm.totalSaldosPendientes)" />
-									</listfooter>
-								</listfoot>
-							</listbox>
-							<hlayout sclass="button-container" style="background:#EEF7FA">
-								<button iconSclass="z-icon-plus"
-									onClick='pop_anticipos.open(self, "after_start")'>
-								</button>
-								<space />
-								<field
-									value="APLICACIÓN DE PAGOS ANTICIPADOS" />
-							</hlayout>
-							<listbox hflex="true" sclass="small-list"
-								height="200px" model="@load(vm.dto.aplicacionAnticipos)"
-								emptyMessage="SIN APLICACIÓN DE ANTICIPOS..">
-								<listhead>
-									<listheader label="Emisión"></listheader>
-									<listheader label="Concepto"></listheader>
-									<listheader label="Número"></listheader>
-									<listheader label="Importe USD" align="right"></listheader>
-									<listheader label="Aplicado USD" align="right"></listheader>
-								</listhead>
-								<template name="model">
-									<listitem>
-										<listcell
-											label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')">
-										</listcell>
-										<listcell
-											label="@load(each.movimiento.tipoMovimiento.pos1)">
-										</listcell>
-										<listcell
-											label="@load(each.movimiento.nroComprobante)">
-										</listcell>
-										<listcell
-											label="@load(each.movimiento.importeOriginal) @converter(vm.cnv.monedaLocal)">
-										</listcell>
-										<listcell
-											label="@load(each.importeDs) @converter(vm.cnv.monedaLocal)">
-										</listcell>
-									</listitem>
-								</template>
-								<listfoot>
-									<listfooter span="5">
-										<hlayout>
-											<space hflex="true"></space>
-											<field
-												value="Dif. Tipo Cambio:" />
-											<guaranibox
-												style="background:#EEF7FA;text-align:right"
-												value="@load(vm.diferenciaTipoCambio)" />
-											<label value="Gs."></label>
-										</hlayout>
-									</listfooter>
-								</listfoot>
-							</listbox>
+							</grid>							
 						</vlayout>
 						<space />
 						<vlayout>
@@ -329,60 +236,6 @@
 				</center>
 			</borderlayout>
 			<div height="15px" />
-			<popup id="pop_anticipos" sclass="rounded">
-						<hbox width="100%"
-							style="border-bottom:solid 1px silver">
-							<label value="ANTICIPOS PENDIENTES" />
-						</hbox>
-						<div height="5px" />
-						<listbox sclass="rounded" width="700px"
-							height="230px" model="@load(vm.anticiposPendientes)"
-							selectedItem="@bind(vm.selectedAnticipo)">
-							<listhead>
-								<listheader label="Emisión"
-									width="100px">
-								</listheader>
-								<listheader label="Concepto"></listheader>
-								<listheader label="Número"
-									width="120px">
-								</listheader>
-								<listheader label="Saldo USD"
-									width="130px" align="right">
-								</listheader>
-								<listheader label="Aplicación USD"
-									width="130px" align="right">
-								</listheader>
-							</listhead>
-							<template name="model">
-								<listitem>
-									<listcell
-										label="@load(each.movimiento.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')">
-									</listcell>
-									<listcell
-										label="@load(each.movimiento.tipoMovimiento.pos1)">
-									</listcell>
-									<listcell
-										label="@load(each.movimiento.nroComprobante)">
-									</listcell>
-									<listcell
-										label="@load(each.movimiento.saldo * -1) @converter(vm.cnv.monedaLocal)">
-									</listcell>
-									<listcell>
-										<guaranibox
-											value="@bind(each.importeDs)" vflex="true" inplace="true" />
-									</listcell>
-								</listitem>
-							</template>
-						</listbox>
-						<div height="5px"></div>
-						<hlayout>
-							<div hflex="true"></div>
-							<button iconSclass="z-icon-check"
-								width="80px"
-								onClick="@command('aplicarAnticipo', comp=pop_anticipos)">
-							</button>
-						</hlayout>
-					</popup>
 					
 					<popup id="pop_trazabilidad" sclass="rounded">
 						<div style="padding:10px;border:solid 1px silver" sclass="rounded">
@@ -1118,33 +971,6 @@
 										<listfoot>
 											<listfooter></listfooter>
 											<listfooter></listfooter>
-											<listfooter></listfooter>
-											<listfooter></listfooter>
-											<listfooter>
-												<guaranibox
-													readonly="true"
-													style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
-													value="@load(vm.dto.totalGastos)" />
-											</listfooter>
-											<listfooter>
-												<dolarbox
-													readonly="true"
-													style="background:#EEF7FA;text-align:right;font-weight:bold" hflex="true" 
-													value="@load(vm.dto.totalGastosDs)" />
-											</listfooter>
-										</listfoot>
-									</listbox>	
-								</tabpanel>
-								<tabpanel vflex="true">
-									<listbox sclass="small-list" vflex="true" emptyMessage="SIN REGISTROS.."
-										id="listbox" style="margin:5px">
-										<listhead>
-											<listheader></listheader>
-											<listheader></listheader>
-											<listheader align="right"></listheader>
-											<listheader align="right"></listheader>
-										</listhead>
-										<listfoot>
 											<listfooter></listfooter>
 											<listfooter></listfooter>
 											<listfooter>

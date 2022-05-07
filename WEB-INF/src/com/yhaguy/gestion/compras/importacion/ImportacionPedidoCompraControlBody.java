@@ -170,16 +170,16 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			this.selectedRecepcion = new ImportacionFacturaDTO();
 		}
 		this.setearValoresDespacho();
-		this.renderizarDesgloseCuentas();
-		this.agruparCantidades();
-		this.desEnmascarar();
+		//this.renderizarDesgloseCuentas();
+		//this.agruparCantidades();
+		//this.desEnmascarar();
 	}
 
 	@Override
 	public DTO nuevoDTO() throws Exception {
 		ImportacionPedidoCompraDTO out = new ImportacionPedidoCompraDTO();			
 		this.sugerirValores(out);
-		this.renderizarDesgloseCuentas();
+		//this.renderizarDesgloseCuentas();
 		return out;
 	}
 
@@ -3160,6 +3160,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				
 				double costoFinalGs = this.getCostoFinal(costoGs, valorGasto, 0);
 				
+				System.out.println("--> " + d.getArticulo().getPos1() + " - coef:" + coefGasto + " - costoGs:" + costoGs + " - costoFinalGs: " + costoFinalGs);
+				
 				if (d.isGastoDescuento() == false) {
 					MyArray mr = new MyArray();
 					mr.setId(idArt);
@@ -3308,58 +3310,6 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 			mr.setPos12(Utiles.obtenerPorcentajeDelValor(margenGs, costoFinalUndIvaInc));
 		}
 		return out;
-	}
-	
-	/**
-	 * test group..
-	 */
-	@Wire
-	private Listbox listbox;
-	private void renderizarDesgloseCuentas() {
-		try {
-			Map<String, List<Object[]>> data = new HashMap<String, List<Object[]>>();
-			Map<String, Double> totales = new HashMap<String, Double>();
-			Map<String, Double> totalesDs = new HashMap<String, Double>();
-			for (Object[] det : this.dto.getGastosDetallado()) {
-				String key = (String) det[2];
-				List<Object[]> items = data.get(key);
-				Double importe = totales.get(key);
-				Double importeDs = totalesDs.get(key);
-				if (items == null) {
-					items = new ArrayList<>();
-					importe = (Double) det[3];
-					importeDs = (Double) det[4];
-				} else {
-					importe += (double) det[3];
-					importeDs += (double) det[4];
-				}
-				items.add(det);
-				data.put(key, items);
-				totales.put(key, importe);
-				totalesDs.put(key, importeDs);
-			}
-			for (String key : data.keySet()) {
-				List<Object[]> items = data.get(key);
-				double importe = totales.get(key);
-				double importeDs = totalesDs.get(key);
-				Listgroup listgroup = new Listgroup(key + " - Gs. " + Utiles.getNumberFormat(importe) + " - U$D. " + Utiles.getNumberFormatDs(importeDs));
-				listgroup.setOpen(false);
-				listgroup.setStyle("font-weight:bold");
-				listgroup.setParent(listbox);
-				for (Object[] det : items) {
-					Listitem listitem = new Listitem();
-					for (int j = 1; j < 5; j++) {
-						if(j == 3) det[j] = Utiles.getNumberFormat((double) det[j]);
-						if(j == 4) det[j] = Utiles.getNumberFormatDs((double) det[j]);
-						Listcell listcell = new Listcell(det[j].toString());
-						listcell.setParent(listitem);
-					}
-					listitem.setParent(listbox);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
