@@ -661,7 +661,8 @@
 											visible="${vm.operacionHabilitada('VerImportacion')}"></button> 
 									</hlayout>
 									<listbox vflex="true" sclass="small-list"
-										model="@load(vm.selectedImportacionFactura.detalles)">
+										model="@load(vm.selectedImportacionFactura.detalles)"
+										mold="paging" pageSize="18">
 										<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 										<listhead>
 											<listheader label="Código" width="120px"
@@ -988,7 +989,8 @@
 							onClick='popFormato_.open(self)'/>
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
-						model="@load(vm.itemsCostoFinal_)">
+						model="@load(vm.itemsCostoFinal_)"
+						mold="paging" pageSize="18">
 						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 						<listhead>
 							<listheader label="Código" style="text-align:center" width="150px" sort="auto(pos1)" onCreate='self.sort(true)' />
@@ -1114,7 +1116,8 @@
 							style="font-size:10pt" />
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
-						model="@load(vm.selectedImportacionFactura.detalles)">
+						model="@load(vm.selectedImportacionFactura.detalles)"
+						mold="paging" pageSize="18">
 						<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 						<listhead>
 							<listheader label="Código" style="text-align:center" width="150px" sort="auto(articulo.pos1)" onCreate='self.sort(true)' />
