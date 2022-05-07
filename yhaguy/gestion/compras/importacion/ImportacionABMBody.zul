@@ -74,9 +74,9 @@
 
 		<div id="dv_1" width="100%" vflex="true" style="padding:5px 5px 5px 0px">
 			
-			<hbox width="100%">
+			<hbox width="100%" vflex="true">
 				<vlayout hflex="true" spacing="15px"
-					style="padding:20px">
+					style="padding:20px" vflex="true">
 					<vlayout>
 						<field value="Número / Fecha" />
 						<textbox readonly="true"
