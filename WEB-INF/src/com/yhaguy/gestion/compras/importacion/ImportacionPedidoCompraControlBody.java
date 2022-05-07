@@ -167,7 +167,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 		this.setearValoresDespacho();
 		//this.renderizarDesgloseCuentas();
-		//this.agruparCantidades();
+		this.agruparCantidades();
 		//this.desEnmascarar();
 	}
 

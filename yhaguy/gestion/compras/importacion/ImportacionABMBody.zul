@@ -915,7 +915,6 @@
 						<tabbox hflex="6" vflex="1">
 							<tabs>
 								<tab label="Gastos" width="170px"></tab>
-								<tab label="Desglose por Cuentas" width="170px"></tab>
 							</tabs>
 							<tabpanels>
 								<tabpanel vflex="true">
