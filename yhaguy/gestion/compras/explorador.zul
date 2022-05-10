@@ -36,8 +36,8 @@
 		<a iconSclass="z-icon-check" label=" Procesar" onClick="@command('buscarVentas')"></a>
 		<space hflex="true" />
 		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
-				iconSclass="z-icon-print"
-				label=" Imprimir" />
+				iconSclass="z-icon-download"
+				label=" Exportar" onClick="@command('exportExcel', items=lst.model)" />
 	</hlayout>
 	
 	<listbox id="lst" sclass="small-list" vflex="true"
@@ -119,7 +119,7 @@
 				<listcell label="@load(each[5])" />	
 				<listcell label="@load(each[8])" />	
 				<listcell label="@load(each[6])" />		
-				<listcell label="@load(each[9])" />		
+				<listcell label="@load(each[7])" />		
 				<listcell label="@load(each[10])" />	
 				<listcell style="@load(each[11] gt 70? 'color:green' : 'color:red')">
 					<label value="@load(each[11]) @converter(vm.cnv.monedaExtranjera)" />

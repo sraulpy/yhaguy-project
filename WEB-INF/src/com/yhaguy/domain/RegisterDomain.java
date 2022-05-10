@@ -14657,10 +14657,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select c.fechaOriginal, c.numero, c.proveedor.empresa.razonSocial, c.proveedor.empresa.ruc,"
 				+ " (d.costoGs * d.cantidad), upper(c.comprador),"
-				+ " d.articulo.codigoInterno, d.cantidad, d.articulo.familia.descripcion,"
-				+ " (select sum(de.cantidad) from CompraLocalFactura cf join cf.detalles de "
-				+ "	where de.articulo.id = d.articulo.id and cf.fechaOriginal >= '" + desde_ + "' and cf.fechaOriginal <= '"+ hasta_ + "' "
-				+ "	and cf.dbEstado = 'R' group by de.articulo.id), 0, 0.0" 
+				+ " d.articulo.codigoInterno, d.cantidad, d.articulo.familia.descripcion, 0, 0, 0.0" 
 				+ " from CompraLocalFactura c join c.detalles d "
 				+ " where c.dbEstado != 'D'" + " and (c.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO + "' or " + " c.tipoMovimiento.sigla = '"
@@ -14671,7 +14668,7 @@ public class RegisterDomain extends Register {
 				+ " and upper(d.articulo.codigoInterno) like '%" + codigo.toUpperCase() + "%'"
 				+ " and upper(d.articulo.familia.descripcion) like '%" + familia.toUpperCase() + "%'" 
 				+ " and (c.fechaOriginal >= '"
-				+ desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')" + " order by c.fechaOriginal";
+				+ desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')" + " order by d.articulo.codigoInterno, c.fechaOriginal";
 		List<Object[]> list = this.hql(query);
 		return list;
 	}

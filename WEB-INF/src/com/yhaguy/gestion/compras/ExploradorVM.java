@@ -1,9 +1,16 @@
 package com.yhaguy.gestion.compras;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -11,11 +18,13 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Timer;
 import org.zkoss.zul.Window;
@@ -103,6 +112,48 @@ public class ExploradorVM extends SimpleViewModel {
 		this.procesarVentas(items);
 	}
 	
+	@Command
+	public void exportExcel(@BindingParam("items") List<Object[]> items) throws Exception {
+		Workbook workbook = new HSSFWorkbook();
+		Sheet listSheet = workbook.createSheet("Rendimiento Compras");
+
+		int rowIndex = 0;
+		Row r = listSheet.createRow(rowIndex++);
+		int cell = 0;
+		r.createCell(cell++).setCellValue("FECHA");
+		r.createCell(cell++).setCellValue("FACTURA");
+		r.createCell(cell++).setCellValue("PROVEEDOR");
+		r.createCell(cell++).setCellValue("COMPRADOR");
+		r.createCell(cell++).setCellValue("FAMILIA");
+		r.createCell(cell++).setCellValue("CODIGO");
+		r.createCell(cell++).setCellValue("COMPRAS");
+		r.createCell(cell++).setCellValue("VENTAS");
+		r.createCell(cell++).setCellValue("RENDIMIENTO");
+		for (Object[] c : items) {
+			Row row = listSheet.createRow(rowIndex++);
+			int cellIndex = 0;
+			row.createCell(cellIndex++).setCellValue(Utiles.getDateToString((Date) c[0], "dd-MM-yyyy") + "");
+			row.createCell(cellIndex++).setCellValue(c[1] + "");
+			row.createCell(cellIndex++).setCellValue(c[2] + "");
+			row.createCell(cellIndex++).setCellValue(c[5] + "");
+			row.createCell(cellIndex++).setCellValue(c[8] + "");
+			row.createCell(cellIndex++).setCellValue(c[6] + "");
+			row.createCell(cellIndex++).setCellValue(c[7] + "");
+			row.createCell(cellIndex++).setCellValue(c[10] + "");
+			row.createCell(cellIndex++).setCellValue(c[11] + "");
+		}
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+			AMedia amedia = new AMedia("RendimientoCompras.xls", "xls", "application/file", baos.toByteArray());
+			Filedownload.save(amedia);
+			baos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * procesa las ventas..
 	 */
@@ -111,15 +162,49 @@ public class ExploradorVM extends SimpleViewModel {
 			return;
 		}
 		this.totalVentas = 0;
+		Map<String, Long> values = new HashMap<String, Long>();
+		Map<String, Integer> indices = new HashMap<String, Integer>();
+		int index = 0;
 		RegisterDomain rr = RegisterDomain.getInstance();
 		for (Object[] item : items) {
 			String cod = (String) item[6];
+			values.put(cod, (long) 0);
+			indices.put(cod, index);
+			index ++;
 			List<Object[]> list = rr.getVentasDetallado(this.ventasDesde, this.ventasHasta, cod);
 			if (list.size() > 0) {
-				item[10] = list.get(0)[1];
-				long c = (long) item[9];
-				long v = (long) item[10];
-				item[11] = Utiles.obtenerPorcentajeDelValor(v, c);
+				long v = (long) list.get(0)[1];
+				values.put(cod, v);
+			}
+		}
+		for (Object[] item : items) {
+			String cod = (String) item[6];
+			
+			long c = Long.parseLong(item[7] + "");
+			long v = values.get(cod);
+			
+			if (v >= c) {
+				item[10] = c;
+			} else {
+				item[10] = v;
+			}
+			
+			item[11] = Utiles.obtenerPorcentajeDelValor(Double.parseDouble(item[10] + ""), c);
+			this.totalVentas += (long) item[10];
+			
+			if (v >= c) {
+				values.put(cod, (v - c));
+			} else {
+				values.put(cod, (long) 0);
+			}
+		}
+		
+		for (String key : values.keySet()) {
+			long v = values.get(key);
+			if (v > 0) {
+				Object[] item = items.get(indices.get(key));
+				long cantV = (long) item[10];
+				item[10] = cantV + v;
 				this.totalVentas += (long) item[10];
 			}
 		}
@@ -156,7 +241,7 @@ public class ExploradorVM extends SimpleViewModel {
 		this.totalVentas = 0;
 		this.promedio = 0;
 		for (Object[] c : out) {
-			this.totalCompras += (long) c[9];
+			this.totalCompras += (int) c[7];
 		}	
 		BindUtils.postNotifyChange(null, null, this, "totalCompras");
 		BindUtils.postNotifyChange(null, null, this, "promedio");
