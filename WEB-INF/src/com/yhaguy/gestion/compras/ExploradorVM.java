@@ -142,6 +142,15 @@ public class ExploradorVM extends SimpleViewModel {
 			row.createCell(cellIndex++).setCellValue(c[10] + "");
 			row.createCell(cellIndex++).setCellValue(c[11] + "");
 		}
+		listSheet.autoSizeColumn(0);
+		listSheet.autoSizeColumn(1);
+		listSheet.autoSizeColumn(2);
+		listSheet.autoSizeColumn(3);
+		listSheet.autoSizeColumn(4);
+		listSheet.autoSizeColumn(5);
+		listSheet.autoSizeColumn(6);
+		listSheet.autoSizeColumn(7);
+		listSheet.autoSizeColumn(8);
 
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
