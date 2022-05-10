@@ -67,6 +67,12 @@ public class ExploradorVM extends SimpleViewModel {
 		try {
 			this.desde = Utiles.getFechaInicioMes();
 			this.hasta = new Date();
+			if (!(this.getLoginNombre().equals("vanesar") 
+					|| this.getLoginNombre().equals("federico")
+					|| this.getLoginNombre().equals("sergio")
+					|| this.getLoginNombre().equals("oscarv"))) {
+				this.saltoDePagina("/");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
