@@ -915,7 +915,7 @@ public class ControlCuentaCorriente {
 		}
 
 		if (ctacte != null) {
-			double hist_ = ((saldo + ajcr) - (ajdb));
+			double hist_ = ((saldo + ajdb) - (ajcr));
 			ctacte.setSaldo(hist_);
 			rr.saveObject(ctacte, ctacte.getUsuarioMod());
 		}
