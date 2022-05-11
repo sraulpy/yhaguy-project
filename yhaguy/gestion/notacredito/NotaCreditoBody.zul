@@ -445,6 +445,9 @@
 					width="120px" iconSclass="z-icon-plus-circle"
 					disabled="@load(vm.addArticuloDisabled)"
 					onClick="@command('insertarDevolucion')" label=" Insertar" />
+				<space />
+				<label>DEVOLUCIÓN:</label>
+				<label value="@load(vm.dto.facturaDevolucion)"></label>
 			</hlayout>
 
 			<listbox model="@load(vm.dto.detallesArticulos)"

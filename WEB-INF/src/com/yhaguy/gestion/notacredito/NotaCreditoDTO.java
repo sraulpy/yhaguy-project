@@ -230,6 +230,21 @@ public class NotaCreditoDTO extends DTO {
 	}
 	
 	/**
+	 * @return la factura devolucion..
+	 */
+	public String getFacturaDevolucion() {
+		String out = "";
+		for (NotaCreditoDetalleDTO item : this.detalles) {
+			if (!item.isDetalleFactura()) {
+				if (item.getVenta() != null) {
+					return item.getVenta().getPos1() + " " + item.getVenta().getPos2();
+				}
+			}
+		}
+		return out;
+	}
+	
+	/**
 	 * @return los detalles que son de tipo factura..
 	 */
 	public List<NotaCreditoDetalleDTO> getDetallesFacturas() {
