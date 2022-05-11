@@ -51,6 +51,15 @@ public class CtaCteEmpresaMovimiento extends Domain {
 	}
 	
 	/**
+	 * @return true si es nota de debito..
+	 */
+	public boolean isNotaDebitoVenta() {
+		if (this.tipoMovimiento == null) return false;
+		return this.tipoMovimiento.getSigla().equals(
+				Configuracion.SIGLA_TM_NOTA_DEBITO_VENTA);
+	}
+	
+	/**
 	 * @return true si es vencido..
 	 */
 	public boolean isVencido() {
