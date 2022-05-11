@@ -12,6 +12,7 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Deposito;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class NotaCreditoDTO extends DTO {
@@ -237,7 +238,8 @@ public class NotaCreditoDTO extends DTO {
 		for (NotaCreditoDetalleDTO item : this.detalles) {
 			if (!item.isDetalleFactura()) {
 				if (item.getVenta() != null) {
-					return item.getVenta().getPos3() + " - " + item.getVenta().getPos1() + " - " + item.getVenta().getPos2();
+					return Utiles.getDateToString((Date) item.getVenta().getPos3(), "dd-MM-yyyy") + " - "
+							+ item.getVenta().getPos1() + " - " + item.getVenta().getPos2();
 				}
 			}
 		}
