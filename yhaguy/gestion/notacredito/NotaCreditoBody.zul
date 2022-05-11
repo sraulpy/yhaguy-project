@@ -446,7 +446,6 @@
 					disabled="@load(vm.addArticuloDisabled)"
 					onClick="@command('insertarDevolucion')" label=" Insertar" />
 				<space />
-				<label>DEVOLUCIÓN:</label>
 				<label value="@load(vm.dto.facturaDevolucion)"></label>
 			</hlayout>
 

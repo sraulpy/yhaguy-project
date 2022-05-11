@@ -237,7 +237,7 @@ public class NotaCreditoDTO extends DTO {
 		for (NotaCreditoDetalleDTO item : this.detalles) {
 			if (!item.isDetalleFactura()) {
 				if (item.getVenta() != null) {
-					return item.getVenta().getPos1() + " " + item.getVenta().getPos2();
+					return item.getVenta().getPos3() + " - " + item.getVenta().getPos1() + " - " + item.getVenta().getPos2();
 				}
 			}
 		}
