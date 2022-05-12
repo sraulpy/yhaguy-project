@@ -1114,6 +1114,11 @@
 							label=" ver archivo Importado" href="@load(vm.proformaCsv)"
 							target="_blank" visible="@load(vm.dto.confirmadoImportacion)" 
 							style="font-size:10pt" />
+						<space />
+						<button mold="bs" sclass="btn-primary btn-sm"
+							width="150px" iconSclass="z-icon-print"
+							label=" Detalle" disabled="@load(!vm.siempreHabilitado)" 
+							onClick='popFormatoPre.open(self)'/>
 					</hlayout>
 					<listbox vflex="true" sclass="small-list"
 						model="@load(vm.selectedImportacionFactura.detalles)"
@@ -1452,6 +1457,26 @@
 				iconSclass="z-icon-check" width="150px" style="margin-right:5px"
 				onClick="@command('addGasto')"></button>
 		</hbox>
+	</popup>
+	
+	<popup id="popFormatoPre" width="250px" sclass="rounded">
+		<vlayout>
+			<field value="Formato:" />
+			<combobox hflex="true" placeholder="Seleccione un Formato.."
+				model="@load(vm.formatos)"
+				selectedItem="@bind(vm.selectedFormato)"
+				buttonVisible="@load(vm.siempreHabilitado)">
+				<template name="model">
+					<comboitem label="@load(each[0])" />
+				</template>	
+			</combobox>
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-print" 
+				label=" Imprimir" hflex="true"
+				disabled="@load(!vm.siempreHabilitado)"
+				onClick="@command('imprimirResumen')" />
+		</vlayout>
 	</popup>
 	
 	<popup id="popFormato" width="250px" sclass="rounded">

@@ -1143,6 +1143,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos7());
 			} else if ("Tot_8".equals(fieldName)) {				
 				value = Utiles.getNumberFormat((double) getTotalesCostoFinal().getPos8());
+			} else if ("PrecioMayorista".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos16());
+			} else if ("PrecioMinorista".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos17());
+			} else if ("PrecioLista".equals(fieldName)) {				
+				value = Utiles.getNumberFormat((double) item.getPos18());
 			}
 			return value;
 		}
@@ -3176,6 +3182,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					mr.setPos13(0.0);
 					mr.setPos14(costoFinalGs);
 					mr.setPos15(d.getArticulo().getPos6().toString());
+					mr.setPos16(d.getPrecioFinalGs());
+					mr.setPos17(d.getMinoristaGs());
+					mr.setPos18(d.getListaGs());
 					out.add(mr);
 					if (!mr.getPos15().equals(ArticuloFamilia.CONTABILIDAD)) {
 						totalCant += cant;
