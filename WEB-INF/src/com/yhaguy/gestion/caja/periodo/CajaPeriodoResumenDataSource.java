@@ -1027,15 +1027,17 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 					- this.totalRepEgresos) * -1);
 		} else if ("TotalRecUSDGS".equals(fieldName)) {
 			value = FORMATTER.format(this.totalDolaresGuaranies);
+		} else if ("TotalDepBancarios_".equals(fieldName)) {
+			value = FORMATTER.format(this.totalDepositoBancario);
 		} else if ("TotalRecaudacion".equals(fieldName)) {
 			value = FORMATTER
 					.format(this.totalVentaContadoEfectivo + this.totalChequeTerceroAlDia + this.totalChequeTerceroAdelantado
-							+ this.totalTarjetaCredito + this.totalTarjetaDebito + this.totalRecaudacionMra);
+							+ this.totalTarjetaCredito + this.totalTarjetaDebito + this.totalRecaudacionMra + this.totalDolaresGuaranies + this.totalDepositoBancario);
 		}  else if ("TotalVentaContado".equals(fieldName)) {
 			value = FORMATTER.format(this.totalVentaContado);
 		}   else if ("Diferencia".equals(fieldName)) {
 			value = FORMATTER.format(this.totalVentaContado - (this.totalVentaContadoEfectivo + this.totalChequeTerceroAlDia + this.totalChequeTerceroAdelantado
-					+ this.totalTarjetaCredito + this.totalTarjetaDebito + this.totalRecaudacionMra));
+					+ this.totalTarjetaCredito + this.totalTarjetaDebito + this.totalRecaudacionMra + this.totalDolaresGuaranies + this.totalDepositoBancario));
 		}
 		return value;
 	}
