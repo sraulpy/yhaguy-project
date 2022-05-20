@@ -238,8 +238,10 @@ public class NotaCreditoDTO extends DTO {
 		for (NotaCreditoDetalleDTO item : this.detalles) {
 			if (!item.isDetalleFactura()) {
 				if (item.getVenta() != null) {
-					return Utiles.getDateToString((Date) item.getVenta().getPos3(), "dd-MM-yyyy") + " - "
-							+ item.getVenta().getPos1() + " - " + item.getVenta().getPos2();
+					if (item.getVenta().getPos3() instanceof Date) {
+						return Utiles.getDateToString((Date) item.getVenta().getPos3(), "dd-MM-yyyy") + " - "
+								+ item.getVenta().getPos1() + " - " + item.getVenta().getPos2();
+					}					
 				}
 			}
 		}
