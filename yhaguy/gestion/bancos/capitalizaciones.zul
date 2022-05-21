@@ -53,7 +53,7 @@
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 				<listcell label="@load(each.banco.descripcion.toUpperCase())"></listcell>
 				<listcell label="@load(each.numero)"></listcell>
-				<listcell label="@load(each.importe) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.importe) @converter(vm.cnv.monedaExtranjera)"></listcell>
 				<listcell label="@load(each.moneda.sigla)"></listcell>
 				<listcell label="@load(each.tipoCambio) @converter(vm.cnv.monedaLocal)"></listcell>
 			</listitem>
