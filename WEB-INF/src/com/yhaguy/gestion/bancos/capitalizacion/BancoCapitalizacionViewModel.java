@@ -85,7 +85,7 @@ public class BancoCapitalizacionViewModel extends SimpleViewModel {
 		if (this.nva_capitalizacion.getMoneda() == null) {
 			out = false;
 		}
-		if (this.nva_capitalizacion.getImporte() <= 001) {
+		if (this.nva_capitalizacion.getImporte() <= 0.001) {
 			out = false;
 		}
 		if ((!this.nva_capitalizacion.isMonedaLocal()) && 
