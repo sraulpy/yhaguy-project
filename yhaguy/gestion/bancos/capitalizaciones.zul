@@ -120,7 +120,7 @@
 				</row>
 				<row>
 					<field value="Importe:" />
-					<guaranibox hflex="true" 
+					<dolarbox hflex="true" 
 						value="@bind(vm.nva_capitalizacion.importe)" />
 				</row>
 			</rows>
