@@ -107,6 +107,7 @@ public class VentaControlBody extends BodyApp {
 	
 	private List<VentaDetalleDTO> selectedItems;
 	private VentaDetalleDTO nvoItem;
+	private VentaDetalleDTO nvoItemMercaderiaUsada = new VentaDetalleDTO();
 	private ReciboFormaPagoDTO nvoFormaPago = new ReciboFormaPagoDTO();
 	
 	private VentaDetalleDTO selectedItem;
@@ -291,8 +292,30 @@ public class VentaControlBody extends BodyApp {
 	
 	@Command
 	@NotifyChange("*")
+	public void insertarMercaderiasUsadas() throws Exception {
+		this.insertUsados();
+		this.bruc.focus();
+	}
+	
+	@Command
+	@NotifyChange("*")
 	public void formaDePago() throws Exception {
 		this.asignarFormaPago();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void insertarUsados(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nvoItemMercaderiaUsada.getArticulo().esNuevo()
+				|| this.nvoItemMercaderiaUsada.getCantidad() <= 0) {
+			return;
+		}
+		this.nvoItemMercaderiaUsada.setTipoIVA(this.getExenta());
+		this.dto.getDetalles().add(this.getNvoItemMercaderiaUsada());
+		this.dto.setAuxi(Venta.MERCADERIAS_USADAS);
+		this.nvoItemMercaderiaUsada = new VentaDetalleDTO();
+		Clients.showNotification("ITEM REGISTRADO.");
+		comp.close();
 	}
 	
 	@Command
@@ -740,7 +763,8 @@ public class VentaControlBody extends BodyApp {
 		
 		for (VentaDetalleDTO item : items) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
-			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
+			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
+					&& !art.getFamilia().getDescripcion().contains("USADAS")) {
 				long idArt = item.getArticulo().getId();
 				long cant = item.getCantidad();
 				long stock = this.ctr.stockDisponible(idArt, idDep);
@@ -867,6 +891,17 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	/**
+	 * inserta un item usados..
+	 */
+	private void insertUsados() throws Exception {
+		boolean exenta = (boolean) this.dto.getCliente().getPos15();
+		this.nvoItem = new VentaDetalleDTO();
+		this.nvoItem.setTipoIVA(exenta ? this.getExenta() : this.getIva10());
+		this.buscarItemsUsados();
+		this.nvoItem = null;
+	}
+	
+	/**
 	 * Buscador de items de servicio..
 	 */
 	private void buscarItemsDeServicio() throws Exception {
@@ -901,6 +936,29 @@ public class VentaControlBody extends BodyApp {
 		b.setTitulo("Ítems de Contabilidad");
 		b.setWidth("600px");
 		b.addWhere("familia.descripcion = '" + ArticuloFamilia.CONTABILIDAD + "' and estado = 'TRUE'");
+		b.setContinuaSiHayUnElemento(false);
+		b.show("%");
+		if (b.isClickAceptar()) {
+			MyArray art = b.getSelectedItem();
+			art.setPos4(art.getPos2());
+			art.setPos5(true);
+			this.nvoItem.setArticulo(art);
+			this.openItem();
+		}
+	}
+	
+	/**
+	 * Buscador de items de contabilidad..
+	 */
+	private void buscarItemsUsados() throws Exception {
+		BuscarElemento b = new BuscarElemento();
+		b.setClase(Articulo.class);
+		b.setAtributos(new String[] { "codigoInterno", "descripcion" });
+		b.setNombresColumnas(new String[] { "Código", "Descripción" });
+		b.setAnchoColumnas(new String[] { "110px", "" });
+		b.setTitulo("Mercaderías Usadas");
+		b.setWidth("600px");
+		b.addWhere("familia.descripcion = '" + ArticuloFamilia.MERCADERIAS_USADAS + "' and estado = 'TRUE'");
 		b.setContinuaSiHayUnElemento(false);
 		b.show("%");
 		if (b.isClickAceptar()) {
@@ -1281,11 +1339,31 @@ public class VentaControlBody extends BodyApp {
 			
 			this.addEventoAgenda(EVENTO_CIERRE_PEDIDO + this.dto.getNumero());
 			this.grabarEventosAgenda();
+			this.addStockUsados();
 			
 		} else {
 			this.mensajeError(this.mensajeError);
 		}
-	}	
+	}
+	
+	/**
+	 * add stock usados..
+	 */
+	private void addStockUsados() throws Exception {
+		for (VentaDetalleDTO item : this.dto.getDetalles()) {
+			if (item.isMercaderiaUsada()) {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				Deposito dep = rr.getDepositoMercaderiasUsadas();
+				if (dep != null) {
+					long idArticulo = item.getArticulo().getId();
+					long idDeposito = dep.getId();
+					long cantidad = item.getCantidad();
+					String user = this.getLoginNombre();
+					ControlArticuloStock.actualizarStock(idArticulo, idDeposito, cantidad, user, true);
+				}				
+			}
+		}
+	}
 	
 	/***********************************************************************************/	
 	
@@ -1860,6 +1938,7 @@ public class VentaControlBody extends BodyApp {
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.RETAIL_SHOP)
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)
+						&& !art.getFamilia().getDescripcion().contains("USADAS")
 						&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL) {
 					double costoGs = art.getCostoGs();
 					double importeGs = item.getImporteGsSinIva();
@@ -2036,6 +2115,21 @@ public class VentaControlBody extends BodyApp {
 			my.setId(vend.getId());
 			my.setPos1(vend.getRazonSocial());
 			out.add(my);
+		}
+		return out;
+	}
+	
+	/**
+	 * @return mercaderias usadas..
+	 */
+	public List<MyArray> getMercaderiasUsadas() throws Exception {
+		List<MyArray> out = new ArrayList<MyArray>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Articulo> list = rr.getMercaderiasUsadas();
+		for (Articulo art : list) {
+			MyArray m = new MyArray(art.getCodigoInterno(), "", "", art.getDescripcion());
+			m.setId(art.getId());
+			out.add(m);
 		}
 		return out;
 	}
@@ -2259,6 +2353,14 @@ public class VentaControlBody extends BodyApp {
 
 	public void setSelectedItem(VentaDetalleDTO selectedItem) {
 		this.selectedItem = selectedItem;
+	}
+
+	public VentaDetalleDTO getNvoItemMercaderiaUsada() {
+		return nvoItemMercaderiaUsada;
+	}
+
+	public void setNvoItemMercaderiaUsada(VentaDetalleDTO nvoItemMercaderiaUsada) {
+		this.nvoItemMercaderiaUsada = nvoItemMercaderiaUsada;
 	}
 }
 

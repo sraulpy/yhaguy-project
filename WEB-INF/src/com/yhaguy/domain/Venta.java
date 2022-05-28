@@ -31,6 +31,8 @@ public class Venta extends Domain {
 	public static final String FORMA_ENTREGA_TRANSPORTADORA = "TRANSPORTADORA";
 	public static final String FORMA_ENTREGA_COLECTIVO = "COLECTIVO";
 	public static final String FORMA_ENTREGA_DELIVERY = "DELIVERY";
+	
+	public static final String MERCADERIAS_USADAS = "MERC.USADAS";
 
 	/** Presupuesto o Pedido */
 	private TipoMovimiento tipoMovimiento;

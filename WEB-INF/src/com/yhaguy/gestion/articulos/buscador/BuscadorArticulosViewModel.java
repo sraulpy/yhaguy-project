@@ -560,6 +560,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
 		List<Object[]> migracion = rr.getMigracionPorArticulo((String) this.selectedItem.getPos1(), this.desde, this.hasta, 0);
+		List<Object[]> usados = rr.getVentasPedidoUsados(this.selectedItem.getId(), this.desde, this.hasta, false);
 		
 		this.historicoEntrada = new ArrayList<Object[]>();
 		this.historicoEntrada.addAll(migracion);
@@ -570,7 +571,10 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		if (!this.isEmpresaGTSA()) {
 			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
 			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
-		}		
+		}
+		if (this.selectedItem.getPos7().toString().contains("USADAS")) {
+			this.historicoEntrada.addAll(usados);
+		}
 		
 		this.historicoSalida = new ArrayList<Object[]>();
 		this.historicoSalida.addAll(ajustStockNeg);

@@ -4444,6 +4444,42 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las ventas donde esta contenida el articulo.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:cantidad 
+	 * [4]:precio 
+	 * [5]:cliente 
+	 * [6]:deposito
+	 * [7]:articulo.codigoInterno
+	 * [8]:articulo.descripcion
+	 * [9]:articulo.marca
+	 * [10]:articulo.proveedor
+	 * [11]:articulo.id
+	 * [12]:sucursal
+	 */
+	public List<Object[]> getVentasPedidoUsados(long idArticulo, Date desde, Date hasta, boolean fechaHora) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
+		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, d.cantidad, d.precioGs, v.cliente.empresa.razonSocial,"
+				+ " v.deposito.descripcion, d.articulo.codigoInterno, d.articulo.descripcion, '- - -',"
+				+ " '- - -',"
+				+ " d.articulo.id, v.sucursal.descripcion"
+				+ " from Venta v join v.detalles d where d.articulo.id = "
+				+ idArticulo
+				+ " and (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_PEDIDO_VENTA
+				+ "') and v.dbEstado != 'D' and v.auxi = '" + Venta.MERCADERIAS_USADAS + "'"
+				+ " and (v.fecha >= '"
+				+ desde_
+				+ "' and v.fecha <= '"
+				+ hasta_
+				+ "')" + " order by v.fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las ventas segun cliente.. 
 	 * [0]:concepto
 	 * [1]:fecha 
@@ -14709,6 +14745,24 @@ public class RegisterDomain extends Register {
 				+ " and (c.fechaOriginal >= '" + desde_ + "' and c.fechaOriginal <= '" + hasta_ + "')"
 				+ " group by d.articulo.id";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return la lista de mercaderias usadas..
+	 */
+	public List<Articulo> getMercaderiasUsadas() throws Exception {
+		String query = "select a from Articulo a where a.familia.descripcion like '%USADAS%'";
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
+	 * @return deposito usados..
+	 */
+	public Deposito getDepositoMercaderiasUsadas() throws Exception {
+		String query = "select d from Deposito d where d.descripcion LIKE '%MERCADERIAS USADAS%'";
+		List<Deposito> list = this.hql(query);
+		Deposito out = list.size() > 0 ? list.get(0) : null;
+		return out;
 	}
 	
 	public static void main(String[] args) {

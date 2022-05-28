@@ -7,6 +7,7 @@ import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.VehiculoMarca;
 import com.yhaguy.domain.VehiculoModelo;
@@ -203,6 +204,21 @@ public class VentaDetalleDTO extends DTO {
 	public long getStockActual(long idDeposito) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getStockDisponible(this.articulo.getId(), idDeposito);
+	}
+	
+	/**
+	 * @return true si es mercaderia usada..
+	 */
+	public boolean isMercaderiaUsada() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Articulo art = rr.getArticuloById(this.getArticulo().getId());
+			System.out.println(art.getCodigoInterno());
+			return art.getFamilia().getDescripcion().contains("USADAS");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	/**
