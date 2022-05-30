@@ -21,6 +21,7 @@
 		<property name="recepcionado"/>
 		<property name="autorizadoPor" />
 		<property name="numeroFactura"/>
+		<property name="requerimiento"/>
 
 		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor" column="idProveedor"
 			lazy="false"/>

@@ -26,6 +26,7 @@ public class CompraLocalOrdenDTO extends DTO{
 	private boolean recepcionado = false;
 	private String autorizadoPor = "...";
 	private String numeroFactura = "- - -";
+	private String requerimiento = "";
 	
 	private ProveedorDTO proveedor = new ProveedorDTO();
 	private MyArray condicionPago = new MyArray();
@@ -292,5 +293,13 @@ public class CompraLocalOrdenDTO extends DTO{
 
 	public void setNumeroFactura(String numeroFactura) {
 		this.numeroFactura = numeroFactura;
+	}
+
+	public String getRequerimiento() {
+		return requerimiento;
+	}
+
+	public void setRequerimiento(String requerimiento) {
+		this.requerimiento = requerimiento;
 	}
 }

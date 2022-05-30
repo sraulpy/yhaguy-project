@@ -74,7 +74,7 @@
 											</template>
 										</combobox>
 									</vlayout>
-									<vlayout spacing="0">
+									<vlayout spacing="0" hflex="true">
 										<field value="Estado"/>
 										<textbox
 											value="@load(vm.dto.estado)" readonly="true" hflex="true"/>
@@ -111,15 +111,23 @@
 											</template>
 										</combobox>
 									</vlayout>	
-									<cell colspan="2">
-										<vlayout spacing="0">
-											<div height="3px"/>
-											<field value="Observación"/>
-											<div height="5px"/>
-											<textbox
-												value="@bind(vm.dto.observacion)" hflex="true" />
-										</vlayout>
-									</cell>											
+									<vlayout spacing="0">
+										<field value="Requerimiento"/>
+										<combobox
+											model="@load(vm.requerimientos)"
+											value="@load(vm.dto.requerimiento)"
+											selectedItem="@bind(vm.dto.requerimiento)" instant="true" hflex="true">
+											<template name="model">
+												<comboitem
+													label="@load(each)" />
+											</template>
+										</combobox>
+									</vlayout>
+									<vlayout spacing="0" hflex="true">
+										<field value="Observación" />
+										<textbox
+											value="@bind(vm.dto.observacion)" hflex="true" />
+									</vlayout>
 								</row>
 							</rows>
 						</grid>						

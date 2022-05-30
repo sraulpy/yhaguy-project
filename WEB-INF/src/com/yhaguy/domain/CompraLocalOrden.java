@@ -11,6 +11,9 @@ import com.coreweb.domain.Tipo;
 
 @SuppressWarnings("serial")
 public class CompraLocalOrden extends Domain {
+	
+	public static String REPOSICION = "REPOSICION";
+	public static String VENTA_CONFIRMADA = "VENTA CONFIRMADA";
 
 	private String numero;
 	private Date fechaCreacion;
@@ -22,6 +25,7 @@ public class CompraLocalOrden extends Domain {
 	private boolean recepcionado;
 	private String autorizadoPor;
 	private String numeroFactura;
+	private String requerimiento;
 
 	private Proveedor proveedor;
 	private CondicionPago condicionPago;
@@ -221,5 +225,13 @@ public class CompraLocalOrden extends Domain {
 
 	public void setNumeroFactura(String numeroFactura) {
 		this.numeroFactura = numeroFactura;
+	}
+
+	public String getRequerimiento() {
+		return requerimiento;
+	}
+
+	public void setRequerimiento(String requerimiento) {
+		this.requerimiento = requerimiento;
 	}
 }

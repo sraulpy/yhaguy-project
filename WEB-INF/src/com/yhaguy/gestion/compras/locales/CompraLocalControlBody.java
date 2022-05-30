@@ -624,6 +624,10 @@ public class CompraLocalControlBody extends BodyApp {
 	 * autorizacion de la Orden de Compra..
 	 */
 	private void autorizarOC() throws Exception {
+		if (this.dto.getRequerimiento().isEmpty()) {
+			Clients.showNotification("DEBE ASIGNAR EL REQUERIMIENTO..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		if (!this.mensajeSiNo("Desea autorizar la Orden de Compra..")) 
 			return;
 		this.dto.setAutorizadoPor(this.getUs().getNombre());
@@ -2023,6 +2027,16 @@ public class CompraLocalControlBody extends BodyApp {
 	 */
 	private double getCoeficienteDescuento(double descGlobal, double importeFactura){			
 		return descGlobal / importeFactura;
+	}
+	
+	/**
+	 * @return requerimientos..
+	 */
+	public List<String> getRequerimientos() {
+		List<String> out = new ArrayList<String>();
+		out.add(CompraLocalOrden.REPOSICION);
+		out.add(CompraLocalOrden.VENTA_CONFIRMADA);
+		return out;
 	}
 	
 	public CompraLocalOrdenDTO getDto() {

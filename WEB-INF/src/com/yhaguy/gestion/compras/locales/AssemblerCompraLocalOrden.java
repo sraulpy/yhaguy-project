@@ -11,7 +11,7 @@ public class AssemblerCompraLocalOrden extends Assembler {
 
 	private static String[] attIguales = { "numero", "fechaCreacion",
 			"tipoCambio", "observacion", "autorizado", "cerrado",
-			"recepcionado", "autorizadoPor", "numeroFactura" };
+			"recepcionado", "autorizadoPor", "numeroFactura", "requerimiento" };
 	private static String[] attMoneda = { "descripcion", "sigla" };
 	private static String[] attCondicion = { "descripcion", "plazo" };
 	private static String[] attTipoMovimiento = { "descripcion" };
