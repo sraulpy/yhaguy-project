@@ -301,7 +301,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 				String debe = csv.getDetalleString("DEBE");
 				String haber = csv.getDetalleString("HABER");
 				String fecha = csv.getDetalleString("FECHA");
-				Date fecha_ = Utiles.getFecha(fecha + "/" + Utiles.getDateToString(this.dto.getDesde(), "yyyy"), "dd/MMM/yyyy");
+				Date fecha_ = Utiles.getFecha(fecha, "ddMMyyyy");
 				
 				double importe; 
 				double debe_ = 0; 
