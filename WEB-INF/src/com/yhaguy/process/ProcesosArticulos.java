@@ -58,6 +58,12 @@ public class ProcesosArticulos {
 	static final String SRC_PRECIOS_MRA = "./WEB-INF/docs/procesos/PRECIOS_MRA.csv";
 	static final String SRC_STOCK_MRA = "./WEB-INF/docs/procesos/STOCK_MRA.csv";
 	
+	static final String SRC_INV_BATERIAS_MRA = "./WEB-INF/docs/procesos/mra/BATERIAS_INVENTARIO.csv";
+	static final String SRC_INV_FILTROS_MRA = "./WEB-INF/docs/procesos/mra/FILTROS_INVENTARIO.csv";
+	static final String SRC_INV_LUBRICANTES_MRA = "./WEB-INF/docs/procesos/mra/LUBRICANTES_INVENTARIO.csv";
+	static final String SRC_INV_CUBIERTAS_MRA = "./WEB-INF/docs/procesos/mra/CUBIERTAS_INVENTARIO.csv";
+	static final String SRC_INV_REPUESTOS_MRA = "./WEB-INF/docs/procesos/mra/REPUESTOS_INVENTARIO.csv";
+	
 	/**
 	 * asigna familia a los articulos..
 	 */
@@ -883,6 +889,92 @@ public class ProcesosArticulos {
 		rr.saveObject(ajuste, "sys");
 	}
 	
+	/**
+	 * ajuste por inventario mra
+	 */
+	public static void addAjusteMRA(String src) throws Exception {
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "STOCK", CSV.STRING }, { "ORIGEN", CSV.STRING } };
+		
+		Map<String, Integer> inventario = new HashMap<String, Integer>();
+		int totalDif = 0;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		Set<AjusteStockDetalle> detsNegativos = new HashSet<AjusteStockDetalle>();
+		Set<AjusteStockDetalle> detsPositivos = new HashSet<AjusteStockDetalle>();
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("CODIGO");	
+			String stock = csv.getDetalleString("STOCK");	
+			String origen = csv.getDetalleString("ORIGEN");
+			
+			if (origen.equals("INVENTARIO")) {
+				Integer cant = Integer.parseInt(stock);
+				inventario.put(codigo, cant);
+			}
+			
+			if (origen.equals("SISTEMA")) {
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					Integer cant = Integer.parseInt(stock);
+					Integer inv = inventario.get(codigo);
+					if (inv != null) {
+						Integer dif = inv - cant;
+						System.out.println(codigo + " " + dif);
+						totalDif += dif;
+						
+						if (dif < 0) {
+							AjusteStockDetalle d = new AjusteStockDetalle();
+							d.setArticulo(art);
+							d.setCantidad(dif);
+							d.setCantidadSistema(0);
+							d.setCostoGs(art.getCostoGs());
+							d.setCostoPromedioGs(art.getCostoGs());
+							detsNegativos.add(d);
+						}
+						
+						if (dif > 0) {
+							AjusteStockDetalle d = new AjusteStockDetalle();
+							d.setArticulo(art);
+							d.setCantidad(dif);
+							d.setCantidadSistema(0);
+							d.setCostoGs(art.getCostoGs());
+							d.setCostoPromedioGs(art.getCostoGs());
+							detsPositivos.add(d);
+						}
+					}
+				}				
+			}
+		}
+		
+		if (detsPositivos.size() > 0) {
+			AjusteStock aj = new AjusteStock();
+			aj.setAutorizadoPor("INVENTARIO 2022 REPUESTOS");
+			aj.setDescripcion("INVENTARIO 2022 REPUESTOS");
+			aj.setDetalles(detsPositivos);
+			aj.setFecha(new Date());
+			aj.setNumero("08");
+			aj.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO));
+			rr.saveObject(aj, "sys");
+		}
+		
+		if (detsNegativos.size() > 0) {
+			AjusteStock aj = new AjusteStock();
+			aj.setAutorizadoPor("INVENTARIO 2022 CUBIERTAS");
+			aj.setDescripcion("INVENTARIO 2022 CUBIERTAS");
+			aj.setDetalles(detsNegativos);
+			aj.setFecha(new Date());
+			aj.setNumero("09");
+			aj.setTipoMovimiento(rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO));
+			rr.saveObject(aj, "sys");
+		}
+		
+		System.out.println(totalDif);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -903,8 +995,9 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.poblarHistoricoMovimientos(SRC_HISTORICO_MOVIMIENTOS);
 			//ProcesosArticulos.setPrecioArticulos(SRC_PRECIOS);
 			//ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
-			ProcesosArticulos.verificarStock(2, 1);
+			//ProcesosArticulos.verificarStock(2, 1);
 			//ProcesosArticulos.migrarStockMra(SRC_STOCK_MRA);
+			ProcesosArticulos.addAjusteMRA(SRC_INV_REPUESTOS_MRA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
