@@ -180,6 +180,7 @@ public class ControlArticuloStock {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Articulo articulo = rr.getArticuloById(idArticulo);
+		Deposito deposito = (Deposito) rr.getObject(Deposito.class.getName(), idDeposito);
 
 		List<Object[]> data = new ArrayList<Object[]>();
 		List<Object[]> historico;
@@ -208,7 +209,9 @@ public class ControlArticuloStock {
 		historicoEntrada.addAll(importaciones);
 		
 		if (articulo.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
-			historicoEntrada.addAll(usados);
+			if (deposito != null && deposito.getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
+				historicoEntrada.addAll(usados);
+			}
 		}
 		
 		for (Object[] movim : ajustStockNeg) {
