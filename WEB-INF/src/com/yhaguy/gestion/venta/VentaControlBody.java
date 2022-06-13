@@ -654,7 +654,8 @@ public class VentaControlBody extends BodyApp {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				for (VentaDetalleDTO item : out.getDetalles()) {
 					Articulo art = rr.getArticuloById(item.getArticulo().getId());
-					if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)) {
+					if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
+							&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
 						ArticuloDeposito adp = rr.getArticuloDeposito(item.getArticulo().getId(), desde.getDeposito().getId());
 						if (adp == null) {
 							adp = new ArticuloDeposito();
@@ -669,6 +670,8 @@ public class VentaControlBody extends BodyApp {
 								* -1, adp.getId(), this.getLoginNombre());
 					}
 				}
+				
+				this.addStockUsados(desde);
 				
 				if (out.isDebitoGroupauto()) {
 					ConnectDBGroupauto db = ConnectDBGroupauto.getInstance();
@@ -1341,7 +1344,6 @@ public class VentaControlBody extends BodyApp {
 			
 			this.addEventoAgenda(EVENTO_CIERRE_PEDIDO + this.dto.getNumero());
 			this.grabarEventosAgenda();
-			this.addStockUsados();
 			
 		} else {
 			this.mensajeError(this.mensajeError);
@@ -1351,8 +1353,8 @@ public class VentaControlBody extends BodyApp {
 	/**
 	 * add stock usados..
 	 */
-	private void addStockUsados() throws Exception {
-		for (VentaDetalleDTO item : this.dto.getDetalles()) {
+	private void addStockUsados(VentaDTO venta) throws Exception {
+		for (VentaDetalleDTO item : venta.getDetalles()) {
 			if (item.isMercaderiaUsada()) {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				Deposito dep = rr.getDepositoMercaderiasUsadas();
