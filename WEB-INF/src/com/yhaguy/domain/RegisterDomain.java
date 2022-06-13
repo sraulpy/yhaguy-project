@@ -4471,7 +4471,7 @@ public class RegisterDomain extends Register {
 				+ " and (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_PEDIDO_VENTA
 				+ "') and v.dbEstado != 'D' and v.auxi = '" + Venta.MERCADERIAS_USADAS + "'"
-				+ " and v.estadoComprobante.sigla = '" + Configuracion.SIGLA_VENTA_ESTADO_FACTURADO + "'"
+				+ " and v.estado.sigla = '" + Configuracion.SIGLA_VENTA_ESTADO_FACTURADO + "'"
 				+ " and (v.fecha >= '"
 				+ desde_
 				+ "' and v.fecha <= '"
