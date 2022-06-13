@@ -9,6 +9,7 @@ import java.util.List;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloStock;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
@@ -195,6 +196,7 @@ public class ControlArticuloStock {
 		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, incluirDepositoVirtual);
 		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, idDeposito, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, incluirDepositoVirtual);
 		List<Object[]> migracion = rr.getMigracionPorArticulo(articulo.getCodigoInterno(), desde, hasta, idDeposito);
+		List<Object[]> usados = rr.getVentasPedidoUsados(idArticulo, desde, hasta, false);
 
 		historicoEntrada = new ArrayList<Object[]>();
 		historicoSalida = new ArrayList<Object[]>();
@@ -204,6 +206,10 @@ public class ControlArticuloStock {
 		historicoEntrada.addAll(ntcsv);
 		historicoEntrada.addAll(compras);
 		historicoEntrada.addAll(importaciones);
+		
+		if (articulo.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
+			historicoEntrada.addAll(usados);
+		}
 		
 		for (Object[] movim : ajustStockNeg) {
 			movim[3] = (int) movim[3] * -1;
