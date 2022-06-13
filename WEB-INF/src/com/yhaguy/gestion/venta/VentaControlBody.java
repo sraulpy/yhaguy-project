@@ -711,40 +711,42 @@ public class VentaControlBody extends BodyApp {
 
 		for (VentaDetalleDTO item : items) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
-			double costoGs = art.getCostoGs();
-			if (art.getCodigoInterno().startsWith("@")) {
-				costoGs = 0;
-			}
-			double costoPromedioGs = rr.getCostoPromedioGs(item.getArticulo().getId());
-			if (costoPromedioGs <= 0.0) {
-				costoPromedioGs = costoGs;
-			}
-			VentaDetalleDTO nvo = new VentaDetalleDTO();
-			nvo.setArticulo(item.getArticulo());
-			nvo.setDescripcion(item.getDescripcion());
-			nvo.setCantidad(item.getCantidad());
-			nvo.setCostoUnitarioGs(costoGs);
-			nvo.setCostoPromedioGs(costoPromedioGs);
-			nvo.setCostoUnitarioDs(item.getCostoUnitarioDs());
-			nvo.setDescuentoUnitarioGs(item.getDescuentoUnitarioGs());
-			nvo.setDescuentoUnitarioDs(item.getDescuentoUnitarioDs());
-			nvo.setImpuestoFinal(item.getImpuestoFinal());
-			nvo.setImpuestoUnitario(item.getImpuestoUnitario());
-			nvo.setPrecioVentaUnitarioGs(item.getPrecioVentaUnitarioGs());
-			nvo.setPrecioVentaUnitarioDs(item.getPrecioVentaUnitarioDs());
-			nvo.setNombreRegla(item.getNombreRegla());
-			nvo.setPrecioVentaFinalGs(item.getPrecioVentaFinalGs());
-			nvo.setPrecioVentaFinalDs(item.getPrecioVentaFinalDs());
-			nvo.setPrecioVentaFinalUnitarioGs(item.getPrecioVentaFinalUnitarioGs());
-			nvo.setPrecioVentaFinalUnitarioDs(item.getPrecioVentaFinalUnitarioDs());
-			nvo.setPrecioGs(item.getPrecioGs());
-			nvo.setTipoIVA(item.getTipoIVA());
-			nvo.setListaPrecio(item.getListaPrecio());
-			nvo.setVehiculoTipo(item.getVehiculoTipo());
-			nvo.setVehiculoMarca(item.getVehiculoMarca());
-			nvo.setVehiculoModelo(item.getVehiculoModelo());
-			
-			out.add(nvo);
+			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
+				double costoGs = art.getCostoGs();
+				if (art.getCodigoInterno().startsWith("@")) {
+					costoGs = 0;
+				}
+				double costoPromedioGs = rr.getCostoPromedioGs(item.getArticulo().getId());
+				if (costoPromedioGs <= 0.0) {
+					costoPromedioGs = costoGs;
+				}
+				VentaDetalleDTO nvo = new VentaDetalleDTO();
+				nvo.setArticulo(item.getArticulo());
+				nvo.setDescripcion(item.getDescripcion());
+				nvo.setCantidad(item.getCantidad());
+				nvo.setCostoUnitarioGs(costoGs);
+				nvo.setCostoPromedioGs(costoPromedioGs);
+				nvo.setCostoUnitarioDs(item.getCostoUnitarioDs());
+				nvo.setDescuentoUnitarioGs(item.getDescuentoUnitarioGs());
+				nvo.setDescuentoUnitarioDs(item.getDescuentoUnitarioDs());
+				nvo.setImpuestoFinal(item.getImpuestoFinal());
+				nvo.setImpuestoUnitario(item.getImpuestoUnitario());
+				nvo.setPrecioVentaUnitarioGs(item.getPrecioVentaUnitarioGs());
+				nvo.setPrecioVentaUnitarioDs(item.getPrecioVentaUnitarioDs());
+				nvo.setNombreRegla(item.getNombreRegla());
+				nvo.setPrecioVentaFinalGs(item.getPrecioVentaFinalGs());
+				nvo.setPrecioVentaFinalDs(item.getPrecioVentaFinalDs());
+				nvo.setPrecioVentaFinalUnitarioGs(item.getPrecioVentaFinalUnitarioGs());
+				nvo.setPrecioVentaFinalUnitarioDs(item.getPrecioVentaFinalUnitarioDs());
+				nvo.setPrecioGs(item.getPrecioGs());
+				nvo.setTipoIVA(item.getTipoIVA());
+				nvo.setListaPrecio(item.getListaPrecio());
+				nvo.setVehiculoTipo(item.getVehiculoTipo());
+				nvo.setVehiculoMarca(item.getVehiculoMarca());
+				nvo.setVehiculoModelo(item.getVehiculoModelo());
+				
+				out.add(nvo);
+			}			
 		}
 		return out;
 	}
