@@ -582,7 +582,7 @@ public class VentaControlBody extends BodyApp {
 		out.setVendedor(desde.getVendedor());
 		out.setTecnico(desde.getTecnico());
 		out.setDebitoGroupauto(desde.isDebitoGroupauto());
-		out.setDetalles(this.crearDetalleDesde(desde.getDetallesDesglose(desglose)));
+		out.setDetalles(this.crearDetalleDesde(desde.getDetallesDesglose(desglose), desde));
 		out.setEstado(estado);
 		out.setFecha(new Date());
 		out.setMoneda(desde.getMoneda());
@@ -707,14 +707,15 @@ public class VentaControlBody extends BodyApp {
 	/**
 	 * @return una Lista de Detalles con el mismo contenido de la que recibe..
 	 */
-	private List<VentaDetalleDTO> crearDetalleDesde(List<VentaDetalleDTO> items)
+	private List<VentaDetalleDTO> crearDetalleDesde(List<VentaDetalleDTO> items, VentaDTO pedido)
 			throws Exception {		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<VentaDetalleDTO> out = new ArrayList<VentaDetalleDTO>();
 
 		for (VentaDetalleDTO item : items) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
-			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
+			if ((!pedido.getAuxi().equals(Venta.MERCADERIAS_USADAS)
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS))) {
 				double costoGs = art.getCostoGs();
 				if (art.getCodigoInterno().startsWith("@")) {
 					costoGs = 0;
