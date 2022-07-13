@@ -854,7 +854,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String CONTROL_CONSUMO_CARGA = "STK-00012";
 		static final String TRANSFERENCIAS_POR_ARTICULO = "STK-00013";
 		static final String HISTORIAL_MOVIMIENTOS_ARTICULO_ = "STK-00014";
-
+		
 		/**
 		 * procesamiento del reporte..
 		 */
@@ -8024,6 +8024,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String SALDOS_POR_FAMILIA = "TES-00060";
 		static final String LISTADO_PAGOS = "TES-00061";
 		static final String CHEQUES_GARANTIAS_RECIBIDAS = "TES-00062";
+		static final String COBRANZAS_ARTICULO = "TES-00063";
 
 		/**
 		 * procesamiento del reporte..
@@ -8282,6 +8283,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case CHEQUES_GARANTIAS_RECIBIDAS:
 				this.chequesGarantiasRecibidas(CHEQUES_GARANTIAS_RECIBIDAS);
+				break;
+				
+			case COBRANZAS_ARTICULO:
+				this.cobranzasPorArticuloDetallado(mobile, COBRANZAS_ARTICULO);
 				break;
 			}
 		}
@@ -12186,6 +12191,78 @@ public class ReportesViewModel extends SimpleViewModel {
 				vp.setBotonImprimir(false);
 				vp.setBotonCancelar(false);
 				vp.showReporte(rep, ReportesViewModel.this); **/
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * TES-00063
+		 */
+		private void cobranzasPorArticuloDetallado(boolean mobile, String codReporte) {
+			try {
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				ArticuloFamilia flia = filtro.getFamilia_();
+				
+				if (flia == null) {
+					Clients.showNotification("DEBE SELECCIONAR UNA FAMILIA..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Recibo> cobros = rr.getCobranzas(desde, hasta, 0, 0, false, false);
+				
+				List<Object[]> data = new ArrayList<Object[]>();
+				Map<String, Double> acum = new HashMap<String, Double>();
+				double total = 0;
+				
+				for (Recibo rec : cobros) {
+					for (ReciboDetalle det : rec.getDetalles()) {
+						Venta vta = det.getVenta();
+						if (vta != null) {							
+							double porc = Utiles.obtenerPorcentajeDelValor(det.getMontoGs(), vta.getTotalImporteGs());	
+							for (VentaDetalle item : vta.getDetalles()) {
+								String cod = item.getArticulo().getCodigoInterno();
+								String desc = item.getArticulo().getDescripcion();
+								if (item.getArticulo().getFamilia() != null) {
+									long idFlia = item.getArticulo().getFamilia().getId().longValue();
+									if (idFlia == flia.getId().longValue()) {
+										double importe = Utiles.obtenerValorDelPorcentaje(item.getImporteGs(), porc);
+										data.add(new Object[] { cod, rec.getNumero(), vta.getNumero(), vta.getDenominacion(),
+												cod, importe, (cod + " - " + desc) });
+										Double ac = acum.get(cod);
+										if (ac == null) {
+											ac = importe;
+										} else {
+											ac += importe;
+										}
+										acum.put(cod, ac);
+										total += importe;
+									}	
+								}															
+							}
+						}
+					}
+				}					
+								
+				double totalCobrado = 0;
+				double totalCobradoSinIva = 0;						
+
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_COBRANZAS_FAMILIA_DETALLADO;
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new CobranzasFamiliaDetallado(data, totalCobrado, totalCobradoSinIva, acum);
+				params.put("Titulo", codReporte + " - Cobranzas por familia / artículo detallado");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Familia", flia.getDescripcion());
+				params.put("TotalCobrado", Utiles.getNumberFormat(total));
+				imprimirJasper(source, params, dataSource, filtro.getFormato());
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -27448,6 +27525,71 @@ class CobranzasVendedorDetallado implements JRDataSource {
 			value = FORMATTER.format(this.totalSinIva);
 		} else if ("TotalIvaInc".equals(fieldName)) {
 			value = FORMATTER.format(this.totalIvaInc);
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * Reporte TES-00063..
+ */
+class CobranzasFamiliaDetallado implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, Double> totales = new HashMap<String, Double>();
+	
+	double totalSinIva = 0;
+	double totalIvaInc = 0;
+	
+	public CobranzasFamiliaDetallado(List<Object[]> values, double totalIvaInc, double totalSinIva, Map<String, Double> totales) {
+		this.values = values;
+		this.totalIvaInc = totalIvaInc;
+		this.totalSinIva = totalSinIva;
+		this.totales = totales;
+		// ordena la lista segun fecha..
+		Collections.sort(this.values, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String cod1 = (String) o1[0];
+				String cod2 = (String) o2[0];
+				return cod1.compareTo(cod2);
+			}
+		});
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+
+		if ("TituloDetalle".equals(fieldName)) {
+			value = det[6];
+		} else if ("Recibo".equals(fieldName)) {
+			value = det[1];
+		} else if ("Factura".equals(fieldName)) {
+			value = det[2];
+		} else if ("Cliente".equals(fieldName)) {
+			value = det[3];
+		} else if ("Codigo".equals(fieldName)) {
+			value = det[4];
+		} else if ("Monto".equals(fieldName)) {
+			value = FORMATTER.format(det[5]);
+		} else if ("Importe".equals(fieldName)) {
+			value = FORMATTER.format(this.totales.get(det[0]));
 		}
 		return value;
 	}
