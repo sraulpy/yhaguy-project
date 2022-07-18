@@ -63,7 +63,7 @@ public class ConnectDBAutocentro {
 				"iddepositoentrada, observacion, idsucursal, " + 
 				"idsucursaldestino, ip_pc, numeroremision) " + 
 				"VALUES (nextval('transferencia_seq'), '', NOW(), '" + usuario + "', 'MRA', '', '" + numero + "', NOW(), NOW(), " + 
-				"NOW(), 7, 3, 4, " + 
+				"NOW(), 7, 3, 2, " + 
 				"1, 2, " + 
 				"'" + observacion + "', 1, 2, " + 
 				"'', '"+ numeroRemision +"');";
