@@ -48,6 +48,7 @@ import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.empresa.ctacte.ControlCtaCteEmpresa;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
+import com.yhaguy.util.ConnectDBAutocentro;
 import com.yhaguy.util.ConnectDBCentral;
 import com.yhaguy.util.ConnectDBMRA;
 import com.yhaguy.util.reporte.ReporteYhaguy;
@@ -322,6 +323,9 @@ public class TransferenciaControlBody extends BodyApp {
 		if (this.isEmpresaCentral() && this.dto.getSucursalDestino().getId().longValue() == SucursalApp.ID_MRA) {
 			this.transferirMra();
 		}
+		if (this.isEmpresaRepresentaciones() && this.dto.getSucursalDestino().getId().longValue() == SucursalApp.ID_AUTOCENTRO) {
+			this.transferirAutocentro();
+		}
 		this.setEstadoABMConsulta();
 		Clients.showNotification("Transferencia Confirmada..");
 	}
@@ -331,6 +335,17 @@ public class TransferenciaControlBody extends BodyApp {
 	 */
 	private void transferirMra() {
 		ConnectDBMRA conn = ConnectDBMRA.getInstance();
+		conn.addTransferencia(this.getLoginNombre(), this.dto.getNumero(), this.dto.getNumeroRemision(), this.dto.getObservacion());
+		for (TransferenciaDetalleDTO det : this.dto.getDetalles()) {
+			conn.addTransferenciaDetalle((String) det.getArticulo().getPos1(), det.getCantidad(), det.getCosto());
+		}
+	}
+	
+	/**
+	 * transferencia..
+	 */
+	private void transferirAutocentro() {
+		ConnectDBAutocentro conn = ConnectDBAutocentro.getInstance();
 		conn.addTransferencia(this.getLoginNombre(), this.dto.getNumero(), this.dto.getNumeroRemision(), this.dto.getObservacion());
 		for (TransferenciaDetalleDTO det : this.dto.getDetalles()) {
 			conn.addTransferenciaDetalle((String) det.getArticulo().getPos1(), det.getCantidad(), det.getCosto());

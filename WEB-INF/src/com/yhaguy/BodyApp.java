@@ -270,4 +270,11 @@ public abstract class BodyApp extends Body {
 	public boolean isEmpresaGroupauto() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO);
 	}
+	
+	/**
+	 * @return true si es Representaciones..
+	 */
+	public boolean isEmpresaRepresentaciones() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS);
+	}
 }
