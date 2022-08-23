@@ -6497,6 +6497,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String medid = (String) art[17];
 					String key = cod + ";" + des + ";" + prove + ";" + marca + ";" + medid + ";" + mes;
 					cants.put(key, 0.0);
+					volumens.put(cod, (Double) art[2]);
 				}
 				
 				for (Object[] venta : ventas) {
