@@ -14665,11 +14665,29 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return las cajas chicas con saldo..
+	 * [0]:id
+	 * [1]:numero
+	 * [2]:saldo
 	 */
 	public List<Object[]> getSaldosCajaChica(String nroPlanilla) throws Exception {
 		String query = "" + " select c.id, c.numero, c.saldoCajaChica " + " from CajaPeriodo c "
 				+ " where c.saldoCajaChica > 0 and (c.saldoCajaChicaAplicado is null or length(c.saldoCajaChicaAplicado) = 0) and lower(c.numero) like '%"
 				+ nroPlanilla + "%'";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return las cajas chicas con saldo..
+	 * [0]:numero
+	 * [1]:apertura
+	 * [2]:cierre
+	 * [3]:cajero
+	 * [4]:saldo
+	 */
+	public List<Object[]> getSaldosCajaChicaPendientes() throws Exception {
+		String query = "" + " select c.numero, c.apertura, c.cierre, c.responsable.empresa.razonSocial, c.saldoCajaChica " + " from CajaPeriodo c "
+				+ " where c.saldoCajaChica > 0 and (c.saldoCajaChicaAplicado is null or length(c.saldoCajaChicaAplicado) = 0) and c.tipo like '%CHICA%'";
 		List<Object[]> list = this.hql(query);
 		return list;
 	}

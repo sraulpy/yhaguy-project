@@ -8025,6 +8025,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String LISTADO_PAGOS = "TES-00061";
 		static final String CHEQUES_GARANTIAS_RECIBIDAS = "TES-00062";
 		static final String COBRANZAS_ARTICULO = "TES-00063";
+		static final String SALDOS_CAJA_CHICA = "TES-00064";
 
 		/**
 		 * procesamiento del reporte..
@@ -8287,6 +8288,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case COBRANZAS_ARTICULO:
 				this.cobranzasPorArticuloDetallado(mobile, COBRANZAS_ARTICULO);
+				break;
+				
+			case SALDOS_CAJA_CHICA:
+				this.listadoSaldosCajaChica(SALDOS_CAJA_CHICA);
 				break;
 			}
 		}
@@ -12263,6 +12268,29 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Familia", flia.getDescripcion());
 				params.put("TotalCobrado", Utiles.getNumberFormat(total));
 				imprimirJasper(source, params, dataSource, filtro.getFormato());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * listado de saldos de caja chica..
+		 */
+		private void listadoSaldosCajaChica(String codReporte) {
+			try {
+				RegisterDomain rr = RegisterDomain.getInstance();
+				List<Object[]> data = rr.getSaldosCajaChicaPendientes();
+
+				ReporteSaldosCajaChica rep = new ReporteSaldosCajaChica();
+				rep.setTitulo(codReporte + " - LISTADO DE SALDOS PENDIENTES DE CAJA CHICA");
+				rep.setDatosReporte(data);
+				rep.setApaisada();
+
+				ViewPdf vp = new ViewPdf();
+				vp.setBotonImprimir(false);
+				vp.setBotonCancelar(false);
+				vp.showReporte(rep, ReportesViewModel.this);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -29026,6 +29054,55 @@ class ReportePagos extends ReporteYhaguy {
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		return out;
+	}
+}
+
+/**
+ * Reporte de saldos de caja chica..
+ */
+class ReporteSaldosCajaChica extends ReporteYhaguy {
+
+	/**
+	 * [0]:numero
+	 * [1]:apertura
+	 * [2]:cierre
+	 * [3]:cajero
+	 * [4]:saldo
+	 */
+	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
+	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 30);
+	static DatosColumnas col2 = new DatosColumnas("Apertura", TIPO_DATE, 30);
+	static DatosColumnas col3 = new DatosColumnas("Cierre", TIPO_DATE, 30);
+	static DatosColumnas col4 = new DatosColumnas("Cajero", TIPO_STRING);
+	static DatosColumnas col5 = new DatosColumnas("Saldo", TIPO_DOUBLE, 30, true);
+
+	public ReporteSaldosCajaChica() {
+	}
+
+	static {
+		cols.add(col1);
+		cols.add(col2);
+		cols.add(col3);
+		cols.add(col4);
+		cols.add(col5);
+	}
+
+	@Override
+	public void informacionReporte() {
+		this.setDirectorio("");
+		this.setNombreArchivo("saldo-");
+		this.setTitulosColumnas(cols);
+		this.setBody(this.getCuerpo());
+	}
+
+	/**
+	 * cabecera del reporte..
+	 */
+	@SuppressWarnings("rawtypes")
+	private ComponentBuilder getCuerpo() {
+		VerticalListBuilder out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 		return out;
 	}

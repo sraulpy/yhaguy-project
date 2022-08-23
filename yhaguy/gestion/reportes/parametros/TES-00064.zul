@@ -1,0 +1,10 @@
+<grid sclass="vgrid">
+	<columns>
+		<column />
+	</columns>
+	<rows>
+		<row>
+			<field value="REPORTE SIN PARÁMETROS" />
+			</row>
+	</rows>
+</grid>
