@@ -25,6 +25,8 @@ public class CajaPeriodo extends Domain {
 	public static final String TIPO_COBROS_MOBILE_INT = "CAJA COBRANZAS MOVILES INTERIOR";
 	public static final String TIPO_COMPRAS_NEUMATICOS = "CAJA COMPRAS NEUMATICOS";
 	public static final String TIPO_DEBITOS_CENTRAL = "CAJA DEBITOS CENTRAL";
+	public static final String TIPO_CHICA_REQUERIMIENTOS = "CAJA CHICA - REQUERIMIENTOS";
+	public static final String TIPO_CHICA_REPOSICION = "CAJA CHICA - REPOSICION";
 
 	private String numero;
 	private Date apertura;
@@ -81,8 +83,7 @@ public class CajaPeriodo extends Domain {
 	 */
 	public static List<String> getTipos() {
 		List<String> out = new ArrayList<String>();
-		out.add(TIPO_VENTA);
-		out.add(TIPO_CHICA);
+		out.add(TIPO_VENTA);		
 		out.add(TIPO_PAGOS);
 		out.add(TIPO_COBROS);
 		out.add(TIPO_COBROS_MOBILE);
@@ -91,6 +92,13 @@ public class CajaPeriodo extends Domain {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
 			out.add(TIPO_COMPRAS_NEUMATICOS);
 			out.add(TIPO_DEBITOS_CENTRAL);
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)
+				|| Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			out.add(TIPO_CHICA_REPOSICION);
+			out.add(TIPO_CHICA_REQUERIMIENTOS);
+		} else {
+			out.add(TIPO_CHICA);
 		}
 		return out;
 	}
@@ -134,7 +142,8 @@ public class CajaPeriodo extends Domain {
 	 * @return si la planilla es de caja chica..
 	 */
 	public boolean isCajaChica() {
-		return this.tipo.equals(TIPO_CHICA);
+		return this.tipo.equals(TIPO_CHICA) || this.tipo.equals(TIPO_CHICA_REQUERIMIENTOS)
+				|| this.tipo.equals(TIPO_CHICA_REPOSICION);
 	}
 	
 	/**

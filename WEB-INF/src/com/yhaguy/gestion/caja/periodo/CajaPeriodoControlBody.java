@@ -161,7 +161,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto = (CajaPeriodoDTO) dto;
 		
 		if (this.isEmpresaCentral() || this.isEmpresaGroupauto()) {
-			if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+			if (this.dto.getTipo().contains(CajaPeriodo.TIPO_CHICA)) {
 				if (this.dto.getDetalles().size() == 0) {
 					try {
 						this.abrirVentanaSaldoCajaChica();
@@ -1875,8 +1875,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 		this.dto.setReadonly();
 		this.dto.setEstado(estadoCajaCerrada);
 		
-		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_CHICA)) {
+		if (this.dto.getTipo().contains(CajaPeriodo.TIPO_CHICA)) {
 			this.setSaldoCajaChica();
+			if (this.dto.getSaldoCajaChica() < 0) {
+				Clients.showNotification("NO SE PERMITEN SALDOS NEGATIVOS", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
 		}
 		
 		if (this.dto.getTipo().equals(CajaPeriodo.TIPO_VENTA) 
