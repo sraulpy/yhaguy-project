@@ -85,6 +85,9 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	private long stockEntrada = 0;
 	private long stock = 0;
 	
+	private double montosPositivos = 0;
+	private double montosNegativos = 0;
+	
 	private Object[] selectedCliente;
 	private double precioDescontado = 0;
 	
@@ -118,6 +121,8 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	
 	@Wire
 	private Popup historial;
+	@Wire
+	private Popup historialMonto;
 	@Wire
 	private Listbox listArt;
 	
@@ -165,8 +170,19 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	public void loadHistoricoPorMonto() throws Exception {
+		this.loadHistoricoPorMonto_();
+		this.historialMonto.open(findArt, "overlap");
+	}
+	
+	@Command
 	public void refreshHistorico() throws Exception {
 		this.loadHistorico_();
+	}
+	
+	@Command
+	public void refreshHistoricoMonto() throws Exception {
+		this.loadHistoricoPorMonto_();
 	}
 	
 	@Command
@@ -615,6 +631,100 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * load historico por monto..
+	 */
+	private void loadHistoricoPorMonto_() throws Exception {
+		if (this.selectedItem == null) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Object[]> ventas = rr.getVentasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsOrigenCentral = rr.getTransferenciasPorArticuloOrigenCentral(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsDestinoCentral = rr.getTransferenciasPorArticuloDestinoCentral(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsOrigenDifInventarioMRA = rr.getTransferenciasPorArticuloOrigenDiferenciaInvMRA2019(this.selectedItem.getId(), desde, hasta, false);
+		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);	
+		List<Object[]> transfsDestinoDifInventarioMRA = rr.getTransferenciasPorArticuloDestinoDiferenciaInvMRA2019(this.selectedItem.getId(), desde, hasta, false);
+		List<Object[]> transfsOrigenDifInventario = rr.getTransferenciasPorArticuloOrigenDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);
+		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> compras = rr.getComprasLocalesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
+		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(this.selectedItem.getId(), this.desde, this.hasta, ID_SUC_PRINCIPAL, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+		List<Object[]> migracion = rr.getMigracionPorArticulo((String) this.selectedItem.getPos1(), this.desde, this.hasta, 0);
+		
+		List<Object[]> historico = new ArrayList<Object[]>();
+		historico.addAll(migracion);
+		historico.addAll(ajustStockPost);		
+		historico.addAll(ntcsv);
+		historico.addAll(compras);
+		historico.addAll(importaciones);
+		if (!this.isEmpresaGTSA()) {
+			historico.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
+			historico.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
+		}
+		historico.addAll(ajustStockNeg);
+		historico.addAll(ventas);
+		historico.addAll(ntcsc);
+		if (!this.isEmpresaGTSA()) {
+			historico.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
+			historico.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
+		}
+		
+		this.historicoEntrada = new ArrayList<Object[]>();		
+		this.historicoSalida = new ArrayList<Object[]>();
+		
+		for (Object[] movim : ntcsv) {
+			double monto = (double) movim[4];
+			movim[4] = monto * -1;
+		}
+		
+		for (Object[] movim : ajustStockNeg) {
+			double monto = (double) movim[4];
+			movim[4] = monto * -1;
+		}
+		
+		for (Object[] movim : historico) {
+			double monto = (double) movim[4];
+			if (monto < 0) {
+				this.historicoSalida.add(movim);
+			} else {
+				this.historicoEntrada.add(movim);
+			}
+		}
+		
+		this.actualizarTotalMonto(this.historicoEntrada, true);
+		this.actualizarTotalMonto(this.historicoSalida, false);
+		
+		// ordena la lista segun fecha..
+		Collections.sort(this.historicoEntrada, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha2.compareTo(fecha1);
+			}
+		});
+		
+		// ordena la lista segun fecha..
+		Collections.sort(this.historicoSalida, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha2.compareTo(fecha1);
+			}
+		});
+		
+		BindUtils.postNotifyChange(null, null, this, "historicoEntrada");
+		BindUtils.postNotifyChange(null, null, this, "historicoSalida");
+		BindUtils.postNotifyChange(null, null, this, "montosPositivos");
+		BindUtils.postNotifyChange(null, null, this, "montosNegativos");
+	}
+	
+	/**
 	 * suma los totales de stock en cada mov de art.
 	 */
 	public void actualizarTotal(List<Object[]> historico, boolean entrada) {
@@ -632,6 +742,28 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 				this.stockSalida += cantidad;
 			}
 		}		
+	}
+	
+	/**
+	 * suma los totales de stock en cada mov de art.
+	 */
+	public void actualizarTotalMonto(List<Object[]> historico, boolean entrada) {
+		if (entrada) {
+			this.montosPositivos = 0;
+			for (Object[] obj : historico) {
+				this.montosPositivos += (Long.parseLong(String.valueOf(obj[3]))
+						* Double.parseDouble(String.valueOf(obj[4])));
+			}
+		} else {
+			this.montosNegativos = 0;
+			for (Object[] obj : historico) {
+				long cantidad = Long.parseLong(String.valueOf(obj[3]));
+				if(cantidad < 0)
+					cantidad = cantidad * -1;
+				this.montosNegativos -= (cantidad
+						* Double.parseDouble(String.valueOf(obj[4])));
+			}
+		}
 	}
 	
 	/**
@@ -1024,5 +1156,21 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 
 	public void setProveedor(String proveedor) {
 		this.proveedor = proveedor;
+	}
+
+	public double getMontosPositivos() {
+		return montosPositivos;
+	}
+
+	public void setMontosPositivos(double montosPositivos) {
+		this.montosPositivos = montosPositivos;
+	}
+
+	public double getMontosNegativos() {
+		return montosNegativos;
+	}
+
+	public void setMontosNegativos(double montosNegativos) {
+		this.montosNegativos = montosNegativos;
 	}
 }
