@@ -19,6 +19,7 @@ import com.yhaguy.domain.CompraLocalFactura;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.Gasto;
+import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.RecaudacionCentral;
@@ -773,6 +774,12 @@ public class ControlCuentaCorriente {
 				}
 			}
 		}
+		if (ctacte.isImportacion()) {
+			ImportacionFactura fac = (ImportacionFactura) rr.getObject(ImportacionFactura.class.getName(), ctacte.getIdMovimientoOriginal()); 
+			if (fac != null) {
+				aplicarSaldoImportacionDs(fac, aplicadoDs);
+			}
+		}
 		if (ctacte.isPrestamoInterno()) {
 			if (ctacte.isMonedaLocal()) {
 				aplicarSaldoPrestamoInternoGs(ctacte, aplicadoGs);
@@ -1006,6 +1013,16 @@ public class ControlCuentaCorriente {
 	 * recalcula los saldos por compra..
 	 */
 	public static void aplicarSaldoCompraDs(CompraLocalFactura compra, double aplicadoDs) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(compra.getId(), compra.getTipoMovimiento().getSigla());
+		ctacte.setSaldo(ctacte.getSaldo() - aplicadoDs);	
+		rr.saveObject(ctacte, ctacte.getUsuarioMod());
+	}
+	
+	/**
+	 * recalcula los saldos por compra..
+	 */
+	public static void aplicarSaldoImportacionDs(ImportacionFactura compra, double aplicadoDs) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(compra.getId(), compra.getTipoMovimiento().getSigla());
 		ctacte.setSaldo(ctacte.getSaldo() - aplicadoDs);	

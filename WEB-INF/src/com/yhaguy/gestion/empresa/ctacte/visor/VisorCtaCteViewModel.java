@@ -647,12 +647,13 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		}
 		rr.saveObject(ajuste, this.getLoginNombre());
 		
-		double importeDs = 0;
+		double importeDs = importe;
 		double importeAplicado = importe;
+		/**
 		if (!(boolean) this.selectedItem_.getPos14()) {
 			importeDs = importe / ajuste.getTipoCambio();
 			importeAplicado = importeDs;
-		}
+		}**/
 		
 		ControlCuentaCorriente.recalcularSaldoCtaCte(deb, importe, importeDs);
 		ControlCuentaCorriente.recalcularSaldoCtaCte(cre, importe, importeDs);
