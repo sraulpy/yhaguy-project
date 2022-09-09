@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GastosPorCuentas" pageWidth="1824" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1784" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb640a0-1440-4d07-a15c-6c29172128a9">
-	<property name="ireport.zoom" value="3.138428376721017"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GastosPorCuentas" pageWidth="1966" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1926" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb640a0-1440-4d07-a15c-6c29172128a9">
+	<property name="ireport.zoom" value="1.0000000000000053"/>
+	<property name="ireport.x" value="688"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -58,7 +58,7 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 	<detail>
 		<band height="15" splitType="Stretch">
 			<frame>
-				<reportElement style="Row" mode="Transparent" x="0" y="0" width="1784" height="15" uuid="c598aab8-e20d-4f76-a474-1237f3c1b469"/>
+				<reportElement style="Row" mode="Transparent" x="0" y="0" width="1926" height="15" uuid="c598aab8-e20d-4f76-a474-1237f3c1b469"/>
 				<textField>
 					<reportElement style="Detail" x="296" y="0" width="251" height="15" uuid="f84a108f-7e6e-4898-b3c0-98479ec7346f"/>
 					<textFieldExpression><![CDATA[$F{RazonSocial}]]></textFieldExpression>
@@ -88,37 +88,37 @@ select '01/01/2015 al 31/01/2015' "Periodo", '3' "Asiento", 'Compras de Mercader
 					<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1487" y="0" width="99" height="15" uuid="b5e9bc6c-7401-4dbd-9daa-397c8b2dec3a"/>
+					<reportElement style="Detail" x="1629" y="0" width="99" height="15" uuid="b5e9bc6c-7401-4dbd-9daa-397c8b2dec3a"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Iva5}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1388" y="0" width="99" height="15" uuid="02228c43-2dd5-4072-8eb8-c29c7c0c613c"/>
+					<reportElement style="Detail" x="1530" y="0" width="99" height="15" uuid="02228c43-2dd5-4072-8eb8-c29c7c0c613c"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Gravada5}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1289" y="0" width="99" height="15" uuid="15b7e4e7-dfde-4e19-82ee-a21610f7e043"/>
+					<reportElement style="Detail" x="1431" y="0" width="99" height="15" uuid="15b7e4e7-dfde-4e19-82ee-a21610f7e043"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Iva10}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1189" y="0" width="100" height="15" uuid="d2e76528-d9b1-454a-ab6a-5c178ec0a279"/>
+					<reportElement style="Detail" x="1331" y="0" width="100" height="15" uuid="d2e76528-d9b1-454a-ab6a-5c178ec0a279"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Gravada10}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1586" y="0" width="99" height="15" uuid="fa4e9850-7953-42c1-8118-7aa537f45e15"/>
+					<reportElement style="Detail" x="1728" y="0" width="99" height="15" uuid="fa4e9850-7953-42c1-8118-7aa537f45e15"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Exenta}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="1685" y="0" width="99" height="15" uuid="aafb2b4a-3219-4afd-afbb-849409c480ef"/>
+					<reportElement style="Detail" x="1827" y="0" width="99" height="15" uuid="aafb2b4a-3219-4afd-afbb-849409c480ef"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement style="Detail" x="898" y="0" width="291" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
+					<reportElement style="Detail" x="898" y="0" width="433" height="15" uuid="1bc5df81-721b-48ae-8cfa-0833353209e4"/>
 					<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 				</textField>
 				<textField>
