@@ -993,7 +993,8 @@ public class ControlCuentaCorriente {
 	public static void aplicarSaldoCompraGs(CompraLocalFactura compra, double aplicadoGs) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(compra.getId(), compra.getTipoMovimiento().getSigla());
-		ctacte.setSaldo(ctacte.getSaldo() - aplicadoGs);	
+		ctacte.setSaldo(ctacte.getSaldo() + aplicadoGs);
+			
 		rr.saveObject(ctacte, ctacte.getUsuarioMod());
 	}
 	
