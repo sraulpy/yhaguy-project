@@ -504,6 +504,9 @@
 			<div>
 				<label value="Importes Negativos : " style="margin-left:5px;font-style:italic;color:red"/>
 				<label value="@load(vm.montosNegativos) @converter(vm.cnv.monedaLocal)" style="margin-left:5px;font-style:italic;color:red"/>
+				<space></space>
+				<label value="Saldo : " style="margin-left:5px;font-style:italic;color:darkblue"/>
+				<label value="@load(vm.montosPositivos - vm.montosNegativos) @converter(vm.cnv.monedaLocal)" style="margin-left:5px;font-style:italic;color:darkblue"/>
 			</div>
 			<listbox sclass="small-list" hflex="true" vflex="true"
 				model="@load(vm.historicoSalida)"
