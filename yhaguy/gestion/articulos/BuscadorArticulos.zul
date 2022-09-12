@@ -464,6 +464,9 @@
 			<field value="Hasta:" />
 			<datebox value="@bind(vm.hasta)"
 				onChange="@command('refreshHistoricoMonto')"/>
+			<space />
+			<button mold="bs" sclass="btn-primary btn-sm"
+				onClick="@command('exportExcel')" iconSclass="z-icon-download" label=" Exportar"></button>
 		</hlayout>
 		<vbox vflex="true">
 			<div>

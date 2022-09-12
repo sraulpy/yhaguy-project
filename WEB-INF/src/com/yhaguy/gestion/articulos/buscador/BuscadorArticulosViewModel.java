@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.articulos.buscador;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -8,6 +9,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -17,6 +22,7 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -24,6 +30,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Popup;
@@ -236,6 +243,50 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		double descuento_ = Utiles.obtenerValorDelPorcentaje(mayorista, descuento);
 		this.precioDescontado = mayorista - descuento_;
 		comp.close();
+	}
+	
+	@Command
+	public void exportExcel() throws Exception {
+		List<Object[]> items = this.getHistoricoEntrada();
+		items.addAll(this.getHistoricoSalida());
+		Workbook workbook = new HSSFWorkbook();
+		Sheet listSheet = workbook.createSheet("Historial Movimientos");
+
+		int rowIndex = 0;
+		Row r = listSheet.createRow(rowIndex++);
+		int cell = 0;
+		r.createCell(cell++).setCellValue("CONCEPTO");
+		r.createCell(cell++).setCellValue("EMPRESA");
+		r.createCell(cell++).setCellValue("FECHA");
+		r.createCell(cell++).setCellValue("NUMERO");
+		r.createCell(cell++).setCellValue("CANTIDAD");
+		r.createCell(cell++).setCellValue("PRECIO");
+		for (Object[] c : items) {
+			Row row = listSheet.createRow(rowIndex++);
+			int cellIndex = 0;
+			row.createCell(cellIndex++).setCellValue(c[0] + "");
+			row.createCell(cellIndex++).setCellValue(c[5] + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getDateToString((Date) c[1], "dd-MM-yyyy") + "");
+			row.createCell(cellIndex++).setCellValue(c[2] + "");
+			row.createCell(cellIndex++).setCellValue(c[3] + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat(Double.parseDouble(c[4] + "")));
+		}
+		listSheet.autoSizeColumn(0);
+		listSheet.autoSizeColumn(1);
+		listSheet.autoSizeColumn(2);
+		listSheet.autoSizeColumn(3);
+		listSheet.autoSizeColumn(4);
+		listSheet.autoSizeColumn(5);
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+			AMedia amedia = new AMedia("Historial.xls", "xls", "application/file", baos.toByteArray());
+			Filedownload.save(amedia);
+			baos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
