@@ -8,7 +8,6 @@ import com.coreweb.control.Control;
 import com.coreweb.dto.Assembler;
 import com.coreweb.login.LoginUsuario;
 import com.coreweb.login.LoginUsuarioDTO;
-import com.yhaguy.util.Utiles;
 
 public class ReportesViewModel_ extends Control {
 
@@ -22,9 +21,9 @@ public class ReportesViewModel_ extends Control {
 
 	@Init(superclass = true)
 	public void init(@QueryParam("usuario") String usuario, @QueryParam("clave") String clave) throws Exception {		
-		String clave_ = Utiles.Desencriptar(clave);		
+		//String clave_ = Utiles.Desencriptar(clave);		
 		LoginUsuario login = new LoginUsuario();
-		LoginUsuarioDTO uDto = login.log(usuario, clave_);
+		LoginUsuarioDTO uDto = login.log(usuario, clave);
 	
 		this.setUs(uDto);
 		this.setAliasFormularioCorriente(Config.ALIAS_HABILITADO_SI_O_SI);

@@ -37,12 +37,12 @@ public class ReportesForward extends SimpleViewModel {
 	 * redirecciona a reportes..
 	 */
 	private void forward() {
-		Misc m = new Misc();
+		//Misc m = new Misc();
 		String url = this.getUrl();
 		String usuario = this.getLoginNombre();
 		String clave = (String) this.getAtributoSession(Config.CLAVE);
-		String clave_ = m.encriptar(clave);
-		if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave_);
+		//String clave_ = m.encriptar(clave);
+		if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave);
 	}
 	
 	/**
