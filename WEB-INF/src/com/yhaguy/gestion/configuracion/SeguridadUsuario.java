@@ -84,14 +84,14 @@ public class SeguridadUsuario extends SimpleViewModel {
 		boolean out = true;
 
 		if (!this.claveNueva.equals(this.claveNuevaVerificar)) {
-			Clients.showNotification("NO COINCIDEN LAS CLAVES.", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			Clients.showNotification("NO COINCIDEN LAS CLAVES.", Clients.NOTIFICATION_TYPE_ERROR, this.mainComponent, null, 0);
 			return false;
 		}
 
 		String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{5,20}$";
 		if (!Utiles.isValidPassword(this.claveNueva, regex)) {
 			Clients.showNotification("LA CLAVE NO CUMPLE CON LOS REQUISITOS, FAVOR VERIFIQUE.",
-					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					Clients.NOTIFICATION_TYPE_ERROR, this.mainComponent, null, 0);
 			return false;
 		}
 		return out;
