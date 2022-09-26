@@ -37,7 +37,7 @@ public class SeguridadUsuario extends SimpleViewModel {
 	}
 	
 	@Command
-	public void test() {
+	public void verificarUsuario() {
 		try {
 			long idFuncionario = this.getAcceso().getFuncionario().getId();
 			long idUsuario = this.getAcceso().getUsuario().getId();
