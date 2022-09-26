@@ -2,12 +2,14 @@ package com.yhaguy.gestion.configuracion;
 
 import java.util.Date;
 
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
@@ -30,13 +32,13 @@ public class SeguridadUsuario extends SimpleViewModel {
 	private String claveNueva;
 	private String claveNuevaVerificar;
 	
-	@Init
+	@Init(superclass = true)
 	public void init() {
 	}
 	
 	@Command
-	public void verificarUsuario() {
-		this.setAliasFormularioCorriente("Bienvenido");
+	public void verificarUsuario(@BindingParam("label") Label label) {
+		label.setValue("Bienvenido");
 		try {
 			long idFuncionario = this.getAcceso().getFuncionario().getId();
 			long idUsuario = this.getAcceso().getUsuario().getId();
@@ -49,7 +51,7 @@ public class SeguridadUsuario extends SimpleViewModel {
 				this.win = (Window) Executions.createComponents(ZUL_SEGURIDAD_USUARIO, this.mainComponent, null);
 				this.win.doModal();
 			}
-			
+			this.setAliasFormularioCorriente("Bienvenido");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}			
