@@ -2,10 +2,8 @@ package com.yhaguy.gestion.configuracion;
 
 import java.util.Date;
 
-import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -32,12 +30,13 @@ public class SeguridadUsuario extends SimpleViewModel {
 	private String claveNueva;
 	private String claveNuevaVerificar;
 	
-	@Init(superclass = true)
-	public void init(@BindingParam("parent") Component parent) {
+	@Init
+	public void init() {
 	}
 	
 	@Command
 	public void verificarUsuario() {
+		this.setAliasFormularioCorriente("Bienvenido");
 		try {
 			long idFuncionario = this.getAcceso().getFuncionario().getId();
 			long idUsuario = this.getAcceso().getUsuario().getId();
