@@ -1,0 +1,67 @@
+<window width="750px" height="480px" border="normal" closable="false"
+	title="Información de Usuario"
+	id="winSeguridad">
+	<caption iconSclass="z-icon-user"></caption>
+	<hlayout vflex="true" valign="top">
+		<vbox vflex="true" hflex="true">
+		
+			<div style="margin:10px">
+				<html>
+					<h4>
+						Se requiere actualizar las credenciales
+					</h4>
+				</html>
+			</div>
+
+			<grid sclass="vgrid" hflex="1" style="margin:10px">
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<field value="Nombre:" />
+						<label value="@load(vmseg.user.nombre)" />
+					</row>
+					<row>
+						<field value="Login:" />
+						<label value="@load(vmseg.user.login)" />
+					</row>
+					<row>
+						<field value="Clave nueva:" />
+						<hlayout>
+							<textbox
+								value="@bind(vmseg.claveNueva)" type="password" hflex="1" />
+						</hlayout>
+					</row>
+					<row>
+						<field value="Verificar Clave nueva:" />
+						<hlayout>
+							<textbox
+								value="@bind(vmseg.claveNuevaVerificar)" type="password" hflex="1" />
+						</hlayout>
+					</row>
+					<row>
+						<field />
+						<button label="Confirmar Clave Nueva" mold="bs"
+							sclass="btn-sm btn-primary"
+							onClick="@command('cambiarPassword', win=winSeguridad)" hflex="1">
+						</button>
+					</row>
+				</rows>
+			</grid>
+			<div style="margin:10px">
+				<html>
+					<h4 style="text-decoration: underline;">Requisitos de Contraseña</h4>
+					<ul>
+						<li>Longitud mínima: 5 caracteres</li>
+						<li>Debe incluir mayúsculas</li>
+						<li>Debe incluir minúsculas</li>
+						<li>Debe incluir letras y números</li>
+						<li>No debe ser igual a las últimas tres contraseñas</li>
+					</ul>
+				</html>
+			</div>
+		</vbox>
+	</hlayout>
+</window>

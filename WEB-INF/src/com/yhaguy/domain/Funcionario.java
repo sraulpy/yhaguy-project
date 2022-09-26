@@ -33,6 +33,8 @@ public class Funcionario extends Domain {
 	private String nombreEmpresa;
 	private String nombreTecnico;
 	
+	private Date ultimoCambioPassword;
+	
 	private Empresa empresa;
 	private Tecnico tecnico_;
 	private Set<AccesoApp> accesos = new HashSet<AccesoApp>();
@@ -364,5 +366,13 @@ public class Funcionario extends Domain {
 
 	public void setPeriodos(Set<FuncionarioPeriodoVacaciones> periodos) {
 		this.periodos = periodos;
+	}
+
+	public Date getUltimoCambioPassword() {
+		return ultimoCambioPassword;
+	}
+
+	public void setUltimoCambioPassword(Date ultimoCambioPassword) {
+		this.ultimoCambioPassword = ultimoCambioPassword;
 	}
 }

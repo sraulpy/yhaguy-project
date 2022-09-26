@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -228,7 +230,10 @@ public class Utiles {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
 			return Utiles.getFecha("01-11-2019 00:00:00");
 		}
-		return Utiles.getFecha("05-10-2018 00:00:00");
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			return Utiles.getFecha("05-10-2018 00:00:00");
+		}
+		return Utiles.getFecha("01-06-2020 00:00:00");
 	}
 	
 	/**
@@ -720,8 +725,26 @@ public class Utiles {
         String first = out.trim().substring(0, 1);
         return out.replaceFirst(first, first.toUpperCase());
     }
+
+    /**
+     * @return validador de password
+     */
+	public static boolean isValidPassword(String password, String regex) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
+	}
+	    
+    public static void main(String[] args) {
+    	try {
+			System.out.println(Utiles.diasEntreFechas(Utiles.getFecha("01-09-2022", "dd-MM-yyyy"), new Date()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-	public static void main(String[] args) {		
+	public static void mainX(String[] args) {		
 		JSONParser parser = new JSONParser();
 		try {
 			Map<String, String> map = new HashMap<String, String>();
