@@ -22,6 +22,7 @@ public class ReportesViewModel_ extends Control {
 	@Init(superclass = true)
 	public void init(@QueryParam("usuario") String usuario, @QueryParam("clave") String clave) throws Exception {		
 		//String clave_ = Utiles.Desencriptar(clave);		
+		System.out.println("usuario: " + usuario + " clave: " + clave);
 		LoginUsuario login = new LoginUsuario();
 		LoginUsuarioDTO uDto = login.log(usuario, clave);
 	
