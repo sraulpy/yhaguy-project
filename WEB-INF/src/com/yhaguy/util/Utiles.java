@@ -737,7 +737,7 @@ public class Utiles {
 	    
     public static void main(String[] args) {
     	try {
-			System.out.println(Utiles.diasEntreFechas(Utiles.getFecha("01-09-2022", "dd-MM-yyyy"), new Date()));
+    		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
