@@ -914,7 +914,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			System.out.println("--- egresos: " + egresos);
 			
 			// total efectivo..
-			this.totalEfectivo = ingresos - egresos - this.totalReposiciones;
+			this.totalEfectivo = ingresos - egresos + this.totalReposiciones;
 
 		} catch (Exception e) {
 			e.printStackTrace();
