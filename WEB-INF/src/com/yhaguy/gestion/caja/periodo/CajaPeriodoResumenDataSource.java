@@ -909,11 +909,12 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			double ingresos = planilla.getTotalEfectivoIngreso();
 			double egresos = planilla.getTotalEfectivoEgreso();
 			
+			
 			System.out.println("--- ingresos: " + ingresos);
 			System.out.println("--- egresos: " + egresos);
 			
 			// total efectivo..
-			this.totalEfectivo = ingresos - egresos;
+			this.totalEfectivo = ingresos - egresos - this.totalReposiciones;
 
 		} catch (Exception e) {
 			e.printStackTrace();
