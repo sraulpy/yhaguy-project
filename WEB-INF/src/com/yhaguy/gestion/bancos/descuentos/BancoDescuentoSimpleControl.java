@@ -114,54 +114,94 @@ public class BancoDescuentoSimpleControl extends SoloViewModel {
 		String siglaFPTC = Configuracion.SIGLA_FORMA_PAGO_TARJETA_CREDITO;
 		String siglaFPTD = Configuracion.SIGLA_FORMA_PAGO_TARJETA_DEBITO;
 		String siglaFPDB = Configuracion.SIGLA_FORMA_PAGO_DEPOSITO_BANCARIO;
-		
-		if(siglaFP.equals(siglaFPTC)){
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
-			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
-			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
-			rwNroComprobante.setVisible(true); rwCuotas.setVisible(true);
-			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
-			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
-			rwTimbradoVencimiento.setVisible(false);
-			dbxGs.setReadonly(false); 
-			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
-			
-		} else if(siglaFP.equals(siglaFPTD)){
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
-			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
-			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
-			rwNroComprobante.setVisible(true); rwCuotas.setVisible(false);
-			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
-			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+		String siglaFPCT = Configuracion.SIGLA_FORMA_PAGO_CHEQUE_TERCERO;
+
+		if (siglaFP.equals(siglaFPTC)) {
+			rwNroCheque.setVisible(false);
+			rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(true);
+			rwEmisor.setVisible(true);
+			rwNroTarjeta.setVisible(true);
+			rwProcesadora.setVisible(true);
+			rwNroComprobante.setVisible(true);
+			rwCuotas.setVisible(true);
+			rwDepositoBanco.setVisible(false);
+			rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false);
+			rwLibrador.setVisible(false);
+			rwNroRetencion.setVisible(false);
+			rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			dbxGs.setReadonly(false);
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
-			
-		} else if(siglaFP.equals(siglaFPDB)){
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
-			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
-			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
-			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
-			rwDepositoBanco.setVisible(true); rwDepositoReferencia.setVisible(true);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
-			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
+
+		} else if (siglaFP.equals(siglaFPTD)) {
+			rwNroCheque.setVisible(false);
+			rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false);
+			rwEmisor.setVisible(false);
+			rwNroTarjeta.setVisible(true);
+			rwProcesadora.setVisible(true);
+			rwNroComprobante.setVisible(true);
+			rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false);
+			rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false);
+			rwLibrador.setVisible(false);
+			rwNroRetencion.setVisible(false);
+			rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
-			dbxGs.setReadonly(false); 
+			dbxGs.setReadonly(false);
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
-		
-		} else {
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+
+		} else if (siglaFP.equals(siglaFPDB)) {
+			rwNroCheque.setVisible(false);
+			rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false);
+			rwEmisor.setVisible(false);
+			rwNroTarjeta.setVisible(false);
+			rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(false);
+			rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(true);
+			rwDepositoReferencia.setVisible(true);
+			rwChequeBanco.setVisible(false);
+			rwLibrador.setVisible(false);
+			rwNroRetencion.setVisible(false);
+			rwTimbradoRetencion.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false);
+			dbxGs.setReadonly(false);
+			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
+
+		} else if (siglaFP.equals(siglaFPCT)) {
+			rwNroCheque.setVisible(true); rwVencimiento.setVisible(true);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
-			dbxGs.setReadonly(false); 
 			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
 			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(true);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
-			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());		
+			rwSaldoFavorCobrado.setVisible(false);
+			dbxGs.setReadonly(false);
+		} else {
+			rwNroCheque.setVisible(false);
+			rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(false);
+			rwEmisor.setVisible(false);
+			dbxGs.setReadonly(false);
+			rwNroTarjeta.setVisible(false);
+			rwProcesadora.setVisible(false);
+			rwNroComprobante.setVisible(false);
+			rwCuotas.setVisible(false);
+			rwDepositoBanco.setVisible(false);
+			rwDepositoReferencia.setVisible(false);
+			rwChequeBanco.setVisible(false);
+			rwLibrador.setVisible(false);
+			rwNroRetencion.setVisible(false);
+			rwTimbradoRetencion.setVisible(false);
+			rwTimbradoVencimiento.setVisible(false);
+			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
 		}
 		this.selectedTarjetaCredito = new MyArray("", new ArrayList<MyPair>());
 		dato.getNvoFormaPago().setTarjetaTipo(new MyPair());
