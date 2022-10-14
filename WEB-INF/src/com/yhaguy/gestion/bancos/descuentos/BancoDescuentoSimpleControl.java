@@ -395,7 +395,6 @@ public class BancoDescuentoSimpleControl extends SoloViewModel {
 		out.remove(this.getUtilDto().getFormaPagoChequePropio());
 		out.remove(this.getUtilDto().getFormaPagoChequeAutoCobranza());
 		out.remove(this.getUtilDto().getFormaPagoDebitoCobranzaCentral());
-		out.remove(this.getUtilDto().getFormaPagoChequeTercero());
 		out.remove(this.getUtilDto().getFormaPagoRetencion());
 		out.remove(this.getUtilDto().getFormaPagoRecaudacionCentral());
 		out.remove(this.getUtilDto().getFormaPagoTransferenciaCentral());
