@@ -4360,6 +4360,11 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Funcionario vendedor = filtro.getVendedor();
 				Object[] formato = filtro.getFormato();
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
 				
 				String vendedor_ = vendedor == null ? "TODOS.." : vendedor.getRazonSocial();
 				long idVendedor = vendedor == null ? 0 : vendedor.getId();
@@ -4371,7 +4376,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 
 				RegisterDomain rr = RegisterDomain.getInstance();				
-				List<Object[]> emps = rr.getClientesPorVendedor(idVendedor);
+				List<Object[]> emps = rr.getClientesPorVendedor(idVendedor, desde, hasta);
 				
 				String format = (String) formato[0];
 				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
@@ -4385,6 +4390,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Usuario", getUs().getNombre());
 				params.put("Titulo", codReporte + " - CLIENTES POR VENDEDOR");
 				params.put("Vendedor", vendedor_);
+				params.put("VentasDesde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("VentasHasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
 				imprimirJasper(source, params, dataSource, formato);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -29162,8 +29169,12 @@ class ClientesVendedorDataSource implements JRDataSource {
 				limiteCredito = (double) 0;				
 			}
 			String ciudad = (String) dato[7];
+			Double ventas = (Double) dato[8];
+			if (ventas == null) {
+				ventas = (double) 0;				
+			}
 			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
-					Utiles.getNumberFormat(limiteCredito), ciudad));
+					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas)));
 		}
 	}
 }

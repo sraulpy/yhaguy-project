@@ -10368,11 +10368,16 @@ public class RegisterDomain extends Register {
 	 * [5]:cliente.rubro
 	 * [6]:cliente.limiteCredito
 	 * [7]:cliente.ciudad
+	 * [8]:cliente.ventas
 	 */
-	public List<Object[]> getClientesPorVendedor(long idVendedor) throws Exception {
+	public List<Object[]> getClientesPorVendedor(long idVendedor, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:00:00";
 		String query = "select e.ruc, e.razonSocial, e.direccion_, e.telefono_, e.vendedor.empresa.razonSocial,"
 				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id),"
-				+ " case when e.ciudad IS NULL then 'SIN CIUDAD' else e.ciudad.descripcion end"	
+				+ " case when e.ciudad IS NULL then 'SIN CIUDAD' else e.ciudad.descripcion end,"
+				+ " (select sum(totalImporteGs) from Venta where tipoMovimiento.id in (18,19) and cliente.empresa.id = e.id"
+				+ " and fecha > '"+ desde_ +"' and fecha < '" + hasta_ + "' and idEstadoComprobante is null)"	
 				+ " from Empresa e where e.vendedor.id = "
 				+ idVendedor + " order by e.razonSocial";
 		return this.hql(query);
