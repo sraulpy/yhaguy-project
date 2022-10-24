@@ -967,9 +967,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 		b.setContinuaSiHayUnElemento(false);
 		// b.show(hoy);
 
+		Map<String, String> args = new HashMap<String, String>();
+		args.put("validez", this.getValidezPedidos());
+		System.out.println(this.getValidezPedidos());
 		this.win = (Window) Executions.createComponents(
 				"/yhaguy/gestion/caja/periodo/buscarFacturas.zul",
-				this.mainComponent, null);
+				this.mainComponent, args);
 		this.win.doModal();
 
 		if (b.isClickAceptar() == true) {
@@ -3127,6 +3130,14 @@ public class CajaPeriodoControlBody extends BodyApp {
 		out.add(new MyPair(gs.getId(), gs.getDescripcion(), gs.getSigla()));
 		out.add(new MyPair(ds.getId(), ds.getDescripcion(), ds.getSigla()));
 		return out;
+	}
+	
+	/**
+	 * @return validez..
+	 */
+	public String getValidezPedidos() {
+		Date valido = Utiles.agregarDias(new Date(), -2);
+		return "after " + Utiles.getDateToString(valido, "yyyyMMdd");
 	}
 
 	public CajaPeriodoDTO getDto() {

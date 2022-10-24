@@ -463,6 +463,15 @@ public class VentaControlBody extends BodyApp {
 	 * pasa a Pedido de Venta..
 	 */
 	private void pasarAPedidoVenta() throws Exception {
+		
+		int validez = this.dto.getValidez();
+		long dias = Utiles.diasEntreFechas(this.dto.getFecha(), new Date());
+		
+		if (dias > validez) {
+			this.mensajeError("EL PRESUPUESTO HA SUPERADO EL PERIODO DE VALIDEZ");
+			return;
+		}
+		
 		// verifica si es posible realizar reservas..
 		Object[] stockDisp = this.verificarStock(this.dto.getDetalles());
 		boolean stockDispOk = (boolean) stockDisp[STOCK_DISPONIBLE_OK];
@@ -1334,6 +1343,14 @@ public class VentaControlBody extends BodyApp {
 	
 	@Command @NotifyChange("*")
 	public void cerrarPedido() throws Exception {
+		
+		int validez = this.dto.getValidez();
+		long dias = Utiles.diasEntreFechas(this.dto.getFecha(), new Date());
+		
+		if (dias > validez) {
+			this.mensajeError("EL PEDIDO HA SUPERADO EL PERIODO DE VALIDEZ");
+			return;
+		}
 		
 		if (this.validarFormulario() == true) {
 			

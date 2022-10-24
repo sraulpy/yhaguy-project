@@ -66,7 +66,7 @@ public class VentaDTO extends DTO {
 	private boolean debitoGroupauto = false;
 	
 	private double tipoCambio;
-	private int validez = 3;
+	private int validez = 2;
 	
 	private String numeroPresupuesto = "";
 	private String numeroPedido = "";

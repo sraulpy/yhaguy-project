@@ -4,7 +4,8 @@
 	
 	<hlayout sclass="button-container">
 		<field value="Desde:" />
-		<datebox value="@bind(vm.fechaDesde)" instant="true"></datebox>
+		<datebox value="@bind(vm.fechaDesde)" instant="true"
+			constraint="${arg.validez}" readonly="true"></datebox>
 		<space/>
 		<field value="Hasta:" />
 		<datebox value="@bind(vm.fechaHasta)" instant="true"></datebox>
