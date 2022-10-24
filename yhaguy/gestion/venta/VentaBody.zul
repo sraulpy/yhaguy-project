@@ -1,5 +1,4 @@
 <zk>
-	
 	<window
 		viewModel="@id('vm') @init('com.yhaguy.gestion.venta.VentaControlBody')"
 		apply="org.zkoss.bind.BindComposer"
@@ -263,10 +262,10 @@
 								hflex="true" />
 						</vlayout>
 					</cell>
-					<vlayout spacing="0" visible="@load(vm.presupuesto)">
+					<vlayout spacing="0">
 						<field value="Validéz" />
 						<hlayout>
-							<spinner value="@bind(vm.dto.validez)"></spinner>
+							<spinner value="@bind(vm.dto.validez)" disabled="@load(!vm.isOperacionHabilitada('ModificarValidez'))"></spinner>
 							<label value="Días"></label>
 						</hlayout>						
 					</vlayout>
