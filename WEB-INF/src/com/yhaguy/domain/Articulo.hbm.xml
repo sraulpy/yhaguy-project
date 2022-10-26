@@ -148,7 +148,7 @@
 			<key>
 				<column name="idArticulo" not-null="false" />
 			</key>
-			<one-to-many class="com.yhaguy.domain.ArticuloUbicacion" />
+			<many-to-many column="idubicacion" class="com.yhaguy.domain.ArticuloUbicacion" />
 		</set>
 
 	</class>
