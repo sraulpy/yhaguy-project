@@ -37,7 +37,7 @@
 	
 	<listbox sclass="small-list" vflex="true"
 		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
-		model="@load(vm.recibos)"
+		model="@load(vm.recibos)" mold="paging" pageSize="15"
 		selectedItem="@bind(vm.selectedItem)">
 		<listhead>
 			<listheader label="Caja" width="120px" />
@@ -133,17 +133,18 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="7">
+			<listfooter span="6">
 				<hlayout hflex="true">
 					<field value="@load(vm.listSize)" />
 					<field value="ítems" />
 					<space hflex="true"></space>
 					<field value="Total Gs.:" />
-					<guaranibox readonly="true"
-						style="text-align:right;background:#EEF7FA;font-weight:bold" 
-						value="@load(vm.totalImporteGs)"/>
-					<space width="30px"></space>
 				</hlayout>
+			</listfooter>
+			<listfooter>
+				<guaranibox readonly="true"
+						style="text-align:right;background:#EEF7FA;font-weight:bold" 
+						value="@load(vm.totalImporteGs)" hflex="1"/>
 			</listfooter>
 		</listfoot>
 	</listbox>

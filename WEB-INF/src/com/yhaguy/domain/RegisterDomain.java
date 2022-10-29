@@ -6738,7 +6738,7 @@ public class RegisterDomain extends Register {
 				+ " and r.numeroPlanilla like '%" + caja + "%'"
 				+ " and upper(r.cobrador) like '%" + cobrador.toUpperCase() + "%'"
 				+ " order by r.fechaEmision, r.numero";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 500);
 	}
 	
 	/**
@@ -6753,7 +6753,7 @@ public class RegisterDomain extends Register {
 				+ " and r.numeroPlanilla like '%" + caja + "%'"
 				+ " and upper(r.cobrador) like '%" + cobrador.toUpperCase() + "%'"
 				+ " order by r.fechaEmision, r.numero";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 500);
 	}
 	
 	/**
@@ -6768,7 +6768,7 @@ public class RegisterDomain extends Register {
 				+ " and r.numeroPlanilla like '%" + caja + "%'"
 				+ " and upper(r.cobrador) like '%" + cobrador.toUpperCase() + "%'"
 				+ " order by r.fechaEmision, r.numero";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 500);
 	}
 	
 	/**
@@ -6783,7 +6783,7 @@ public class RegisterDomain extends Register {
 				+ " and r.numeroPlanilla like '%" + caja + "%'"
 				+ " and upper(r.cobrador) like '%" + cobrador.toUpperCase() + "%'"
 				+ " order by r.fechaEmision, r.numero";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 500);
 	}
 
 	/**
