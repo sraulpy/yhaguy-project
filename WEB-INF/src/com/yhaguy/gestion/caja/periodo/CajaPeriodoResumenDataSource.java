@@ -915,6 +915,9 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			
 			// total efectivo..
 			this.totalEfectivo = ingresos - egresos + this.totalReposiciones;
+			if (planilla.isCajaChica()) {
+				this.totalEfectivo = (this.totalReposiciones + this.totalRetencionProveedor) - ((this.totalCompras + this.totalGastos + this.totalPagos - this.totalRepEgresosDtoViatico - this.totalNotaCreditoCompra) + (this.totalRepEgresos - this.totalRepEgresosDtoViatico));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
