@@ -4051,7 +4051,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									item.getArticulo().getDescripcion(),
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
 									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1,
-									notacred.getVentaAplicada().getNombreTecnico() };
+									notacred.getVentaAplicada().getNombreTecnico(), 
+									notacred.getCliente().getTipoCliente() == null ? "" : notacred.getCliente().getTipoCliente().getDescripcion() };
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
@@ -4082,7 +4083,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									"DESCUENTO CONCEDIDO",
 									notacred.isAnulado() ? 0.0 : (costoPromedio ? notacred.getRentabilidadVentaPromedio() : notacred.getRentabilidadVenta()) * -1,
 									notacred.isAnulado() ? 0.0 : 0.0,
-									notacred.getVentaAplicada().getNombreTecnico() };
+									notacred.getVentaAplicada().getNombreTecnico(),
+									notacred.getCliente().getTipoCliente() == null ? "" : notacred.getCliente().getTipoCliente().getDescripcion()};
 							data.add(nc);
 						}
 					}					
@@ -4110,7 +4112,8 @@ public class ReportesViewModel extends SimpleViewModel {
 									item.getArticulo().getDescripcion(),
 									venta.isAnulado() ? 0.0 : (costoPromedio ? item.getRentabilidadVentaPromedio() : item.getRentabilidadVenta()),
 									venta.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - (costoPromedio ? item.getCostoPromedioTotalGsSinIva() : item.getCostoTotalGsSinIva())),
-									venta.getNombreTecnico() };
+									venta.getNombreTecnico(),
+									venta.getCliente().getTipoCliente() == null ? "" : venta.getCliente().getTipoCliente().getDescripcion()};
 							if (art == null || art.getId().longValue() == item.getArticulo().getId().longValue()) {
 								if (familia == null || idFamilia == item.getArticulo().getFamilia().getId().longValue()) {
 									if (marca == null || idMarca == item.getArticulo().getMarca().getId().longValue()) {
@@ -20815,6 +20818,8 @@ class VentasUtilidadDetallado implements JRDataSource {
 			value = FORMATTER.format(det[16]);
 		}  else if ("Tecnico".equals(fieldName)) {
 			value = det[17];
+		}  else if ("TipoCliente_".equals(fieldName)) {
+			value = det[18];
 		}
 		return value;
 	}
