@@ -16,12 +16,15 @@ public class Cliente extends Domain {
 	public static final int PLAZO_30 = 30;
 	public static final int PLAZO_60 = 60;
 	public static final int PLAZO_90 = 90;
+	public static final String ACTIVO = "ACTIVO";
+	public static final String INACTIVO = "INACTIVO";
 
 	private String idPersonaJedi = "";	
 	private long prioridad = 0;
 	private boolean completo = false;
 	private String observaciones = "";
 	private int plazoVencimiento = PLAZO_30;
+	private String estado = ACTIVO;
 	
 	private boolean ventaCredito;
 	private boolean ventaExenta;
@@ -369,5 +372,13 @@ public class Cliente extends Domain {
 
 	public void setPlazoVencimiento(int plazoVencimiento) {
 		this.plazoVencimiento = plazoVencimiento;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 }

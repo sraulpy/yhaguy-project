@@ -19,7 +19,7 @@ public class AssemblerCliente extends Assembler {
 	private static String[] attListaPrecio = { "descripcion" };
 
 	private static String[] attIgualesCliente = { "prioridad", "completo",
-			"idPersonaJedi", "observaciones", "limiteCredito", "ventaCredito" };
+			"idPersonaJedi", "observaciones", "limiteCredito", "ventaCredito", "estado" };
 
 	@Override
 	public Cliente dtoToDomain(DTO dtoG) throws Exception {

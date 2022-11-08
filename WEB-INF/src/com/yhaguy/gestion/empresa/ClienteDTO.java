@@ -7,6 +7,7 @@ import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Cliente;
 
 @SuppressWarnings("serial")
 public class ClienteDTO extends DTO {
@@ -25,6 +26,8 @@ public class ClienteDTO extends DTO {
 	private double limiteCredito = 0;	
 	private MyArray cobrador;
 	private MyArray listaPrecio;
+	
+	private String estado = Cliente.ACTIVO;
 	
 	private List<ContactoInternoDTO> contactosInternos = new ArrayList<ContactoInternoDTO>();
 	private List<MyArray> chequesRechazados = new ArrayList<MyArray>();
@@ -219,6 +222,14 @@ public class ClienteDTO extends DTO {
 
 	public void setListaPrecio(MyArray listaPrecio) {
 		this.listaPrecio = listaPrecio;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 }

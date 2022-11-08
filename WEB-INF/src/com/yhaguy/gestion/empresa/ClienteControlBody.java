@@ -247,6 +247,16 @@ public class ClienteControlBody extends EmpresaControlBody {
 		return true;
 	}
 	
+	/**
+	 * @return los estados
+	 */
+	public List<String> getEstados() {
+		List<String> out = new ArrayList<String>();
+		out.add(Cliente.ACTIVO);
+		out.add(Cliente.INACTIVO);
+		return out;
+	}
+	
 	public boolean isCtaCteVisible() throws Exception{
 		return !this.isConsultaCtaCteDisabled();
 		

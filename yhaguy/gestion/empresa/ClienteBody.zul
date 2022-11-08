@@ -50,6 +50,16 @@
 					</template>
 				</combobox>
 			</row>
+			<row>
+				<field value="Estado:" />
+				<combobox model="@load(vm.estados)"
+					value="@load(vm.dto.estado)"
+					selectedItem="@bind(vm.dto.estado)" hflex="true">
+					<template name="model">
+						<comboitem label="@load(each)" />
+					</template>
+				</combobox>
+			</row>
 		</rows>
 	</grid>
 	<space></space>
