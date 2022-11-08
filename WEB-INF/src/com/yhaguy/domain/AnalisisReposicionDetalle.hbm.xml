@@ -13,6 +13,7 @@
 		<property name="ranking" />
 		<property name="codigoInterno" />
 		<property name="descripcion" />
+		<property name="familia" />
 		<property name="ventasUnidades" />
 		<property name="ventasImporte" />
 		<property name="pedidoReposicion" />
@@ -21,6 +22,7 @@
 		<property name="devoluciones" />
 		<property name="stock" />
 		<property name="sugerido" />
+		<property name="aprobado" />
 		<property name="observacion" />
 		<property name="promedio" />
 

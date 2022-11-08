@@ -1,15 +1,16 @@
-<window height="90%" width="95%" closable="true"
+<window height="95%" width="98%" closable="true"
 	title="@load(vm.analisis.title)"
 	border="normal">
 
 	<listbox model="@load(vm.analisis.detallesOrdenado)" vflex="true"
-		mold="paging">
+		mold="paging" pageSize="15">
 		<listhead>
 			<listheader label="Ranking" align="right" width="60px"></listheader>
 			<listheader label="Código" width="130px"></listheader>
-			<listheader label="Descripción"></listheader>
+			<listheader label="Descripción" width="350px"></listheader>
+			<listheader label="Familia" width="130px"></listheader>
 			<listheader label="Ventas" align="right" width="80px"></listheader>
-			<listheader label="Promed." align="right" width="80px"></listheader>
+			<listheader label="Promedio Ventas" align="right" width="115px"></listheader>
 			<listheader label="N.Crédito" align="right" width="80px"
 				visible="@load(vm.analisis.incluirDevoluciones)"></listheader>
 			<listheader label="Ped.Rep." align="right" width="80px" tooltiptext="Pedido Reposición"></listheader>
@@ -17,8 +18,9 @@
 			<listheader label="Import." align="right" width="80px"></listheader>
 			<listheader label="Stock" align="right" width="80px"></listheader>
 			<listheader label="Sugerido" align="right" width="90px"></listheader>
+			<listheader label="Aprobado" align="right" width="90px"></listheader>
 			<listheader label="Importe Vtas" align="right" width="100px"></listheader>
-			<listheader label="Observación"></listheader>
+			<listheader label="Observación" width="250px"></listheader>
 		</listhead>
 		<template name="model">
 			<listitem>
@@ -26,6 +28,7 @@
 				<listcell label="@load(each.codigoInterno)" style="font-size:11px;color:black"></listcell>
 				<listcell label="@load(each.descripcion)" style="font-size:11px;color:black;text-overflow: ellipsis;
     white-space: nowrap;"></listcell>
+    			<listcell label="@load(each.familia)" style="font-size:11px;color:black"></listcell>
 				<listcell label="@load(each.ventasUnidades) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.promedio) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.devoluciones) @converter(vm.cnv.monedaLocal)"></listcell>
@@ -33,6 +36,9 @@
 				<listcell label="@load(each.comprasUnidades) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.importacionUnidades) @converter(vm.cnv.monedaLocal)"></listcell>
 				<listcell label="@load(each.stock)"></listcell>
+				<listcell>
+					<guaranibox value="@bind(each.sugerido)" hflex="true" />
+				</listcell>
 				<listcell>
 					<guaranibox value="@bind(each.sugerido)" hflex="true" />
 				</listcell>

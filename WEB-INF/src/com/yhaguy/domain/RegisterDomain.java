@@ -11455,12 +11455,13 @@ public class RegisterDomain extends Register {
 	 * [3]:costoGs
 	 * [4]:costoDs
 	 * [5]:precioGs
+	 * [6]:familia.descripcion
 	 */
 	public Object[] getArticulo(long idArticulo) throws Exception {
 		if (idArticulo < 0) {
 			return null;
 		}
-		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs, a.costoDs, a.precioGs"
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.costoGs, a.costoDs, a.precioGs, a.familia.descripcion"
 				+ " from Articulo a where a.id = " + idArticulo;
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
@@ -11837,12 +11838,13 @@ public class RegisterDomain extends Register {
 	 * [2]:cantidad
 	 * [3]:importe
 	 * [4]:articulo.descripcion
+	 * [5]:articulo.familia.descripcion
 	 */
 	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia, int order) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), "
-				+ " d.articulo.descripcion"
+				+ " d.articulo.descripcion, d.articulo.familia.descripcion"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -11856,7 +11858,7 @@ public class RegisterDomain extends Register {
 				if (idFamilia > 0) {
 					query += " and d.articulo.familia.id = " + idFamilia;
 				}
-				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.descripcion";
+				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.descripcion, d.articulo.familia.descripcion";
 				query += " order by " + order + " desc";
 		return this.hql(query);
 	}

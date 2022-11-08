@@ -1,5 +1,6 @@
 package com.yhaguy.gestion.compras.locales;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -8,18 +9,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Window;
 
-import com.coreweb.componente.ViewPdf;
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.extras.reporte.DatosColumnas;
 import com.coreweb.util.Misc;
@@ -87,6 +93,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	@NotifyChange("analisis")
 	public void updateMeses() {
 		if (this.analisis.getDesde() != null && this.analisis.getHasta() != null) {
+			System.out.println("--- meses: " + Utiles.getNumeroMeses(this.analisis.getDesde(), this.analisis.getHasta()));
 			this.analisis.setCantidadMeses(Utiles.getNumeroMeses(this.analisis.getDesde(), this.analisis.getHasta()));
 		}
 	}
@@ -112,7 +119,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		long idMarca = marca != null ? marca.getId() : 0;
 		long idFlia = flia != null ? flia.getId() : 0;
 		
-		if (desde == null || hasta == null || (prov == null && marca == null && flia == null) || this.selectedDepositos.size() == 0) {
+		if (desde == null || hasta == null || (marca == null) || this.selectedDepositos.size() == 0) {
 			Clients.showNotification("DEBE COMPLETAR LOS PARÁMETROS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
@@ -187,7 +194,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			if (ncs == null) {
 				ncs = 0.0;
 			}
-			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3], imp, venta[4], ncs });
+			data.add(new Object[] { i + 1, venta[1], venta[2], rep, com, venta[3], imp, venta[4], ncs, venta[5] });
 		}
 		
 		for (Object[] item : data) {
@@ -196,6 +203,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 			det.setRanking((int) item[0]);
 			det.setCodigoInterno((String) item[1]);
 			det.setDescripcion((String) item[7]);
+			det.setFamilia((String) item[9]);
 			det.setVentasUnidades((double) item[2]);
 			det.setDevoluciones((double) item[8]);
 			det.setVentasImporte((double) item[5]);
@@ -233,31 +241,83 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 	/**
 	 * print
 	 */
-	private void imprimir(AnalisisReposicion item) {
-		Date desde = item.getDesde();
-		Date hasta = item.getHasta();
-		
+	private void imprimir(AnalisisReposicion item) throws Exception {		
 		List<Object[]> data = new ArrayList<Object[]>();
 		
 		for (AnalisisReposicionDetalle det : item.getDetallesOrdenado()) {
-			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getDescripcion(),
+			data.add(new Object[] { det.getRanking(), det.getCodigoInterno(), det.getDescripcion(), det.getFamilia(),
 					det.getVentasUnidades(), det.getPromedio(), det.getDevoluciones(), det.getPedidoReposicion(), det.getComprasUnidades(),
-					det.getImportacionUnidades(), det.getStock(), det.getSugerido(), det.getVentasImporte(), det.getObservacion() });
+					det.getImportacionUnidades(), det.getStock(), det.getSugerido(), det.getAprobado(), det.getVentasImporte(), det.getObservacion() });
 		}
-		
-		String prov = item.getProveedor() != null ? item.getProveedor().getRazonSocial() : "TODOS..";
-		String marc = item.getMarca() != null ? item.getMarca().getDescripcion() : "TODOS..";
-		String flia = item.getFamilia() != null ? item.getFamilia().getDescripcion() : "TODOS..";
-		ReporteAnalisisReposicion rep = new ReporteAnalisisReposicion(desde,
-				hasta, prov, item.getTipoRanking(), marc, item.getIncluirDevoluciones_(), item.getDepositos(), flia);
-		rep.setDatosReporte(data);
-		rep.setApaisada();
-		rep.setLegal();
-		
-		ViewPdf vp = new ViewPdf();
-		vp.setBotonImprimir(false);
-		vp.setBotonCancelar(false);
-		vp.showReporte(rep, AnalisisReposicionVM.this);
+		this.exportExcel(data);
+	}
+	
+	private void exportExcel(List<Object[]> items) throws Exception {
+		Workbook workbook = new HSSFWorkbook();
+		Sheet listSheet = workbook.createSheet("Análisis Reposición");
+
+		int rowIndex = 0;
+		Row r = listSheet.createRow(rowIndex++);
+		int cell = 0;
+		r.createCell(cell++).setCellValue("RANKING");
+		r.createCell(cell++).setCellValue("CODIGO");
+		r.createCell(cell++).setCellValue("DESCRIPCION");
+		r.createCell(cell++).setCellValue("FAMILIA");
+		r.createCell(cell++).setCellValue("VENTAS");
+		r.createCell(cell++).setCellValue("PROMEDIO VENTAS");
+		r.createCell(cell++).setCellValue("DEVOLUCIONES");
+		r.createCell(cell++).setCellValue("PEDIDOS REPOSICION");
+		r.createCell(cell++).setCellValue("COMPRAS LOCALES");
+		r.createCell(cell++).setCellValue("IMPORTACIONES");
+		r.createCell(cell++).setCellValue("STOCK");
+		r.createCell(cell++).setCellValue("SUGERIDO");
+		r.createCell(cell++).setCellValue("APROBADO");
+		r.createCell(cell++).setCellValue("IMPORTE VENTAS");
+		r.createCell(cell++).setCellValue("OBSERVACIONES");
+		for (Object[] c : items) {
+			Row row = listSheet.createRow(rowIndex++);
+			int cellIndex = 0;
+			row.createCell(cellIndex++).setCellValue(c[0] + "");
+			row.createCell(cellIndex++).setCellValue(c[1] + "");
+			row.createCell(cellIndex++).setCellValue(c[2] + "");
+			row.createCell(cellIndex++).setCellValue(c[3] + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[4]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[5]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[6]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[7]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[8]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[9]));
+			row.createCell(cellIndex++).setCellValue(c[10] + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[11]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[12]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[13]));
+			row.createCell(cellIndex++).setCellValue(c[14] + "");
+		}
+		listSheet.autoSizeColumn(0);
+		listSheet.autoSizeColumn(1);
+		listSheet.autoSizeColumn(2);
+		listSheet.autoSizeColumn(3);
+		listSheet.autoSizeColumn(4);
+		listSheet.autoSizeColumn(5);
+		listSheet.autoSizeColumn(6);
+		listSheet.autoSizeColumn(7);
+		listSheet.autoSizeColumn(8);
+		listSheet.autoSizeColumn(9);
+		listSheet.autoSizeColumn(10);
+		listSheet.autoSizeColumn(11);
+		listSheet.autoSizeColumn(12);
+		listSheet.autoSizeColumn(13);
+		listSheet.autoSizeColumn(14);
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+			AMedia amedia = new AMedia("AnalisisReposicion.xls", "xls", "application/file", baos.toByteArray());
+			Filedownload.save(amedia);
+			baos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

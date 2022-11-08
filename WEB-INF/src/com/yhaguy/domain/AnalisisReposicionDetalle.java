@@ -8,6 +8,7 @@ public class AnalisisReposicionDetalle extends Domain {
 	private int ranking;
 	private String codigoInterno;
 	private String descripcion;
+	private String familia;
 	private double ventasUnidades;
 	private double ventasImporte;
 	private double pedidoReposicion;
@@ -15,6 +16,7 @@ public class AnalisisReposicionDetalle extends Domain {
 	private double importacionUnidades;
 	private double devoluciones;
 	private double sugerido;
+	private double aprobado;
 	private long stock;
 	private String observacion;
 	private double promedio;
@@ -126,5 +128,21 @@ public class AnalisisReposicionDetalle extends Domain {
 
 	public void setPromedio(double promedio) {
 		this.promedio = promedio;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(String familia) {
+		this.familia = familia;
+	}
+
+	public double getAprobado() {
+		return aprobado;
+	}
+
+	public void setAprobado(double aprobado) {
+		this.aprobado = aprobado;
 	}
 }
