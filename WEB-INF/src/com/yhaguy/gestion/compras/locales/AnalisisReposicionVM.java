@@ -119,7 +119,7 @@ public class AnalisisReposicionVM extends SimpleViewModel {
 		long idMarca = marca != null ? marca.getId() : 0;
 		long idFlia = flia != null ? flia.getId() : 0;
 		
-		if (desde == null || hasta == null || (marca == null) || this.selectedDepositos.size() == 0) {
+		if (desde == null || hasta == null || this.selectedDepositos.size() == 0) {
 			Clients.showNotification("DEBE COMPLETAR LOS PARÁMETROS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
