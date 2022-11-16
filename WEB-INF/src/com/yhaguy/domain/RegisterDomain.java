@@ -10369,6 +10369,7 @@ public class RegisterDomain extends Register {
 	 * [6]:cliente.limiteCredito
 	 * [7]:cliente.ciudad
 	 * [8]:cliente.ventas
+	 * [9]:cliente.id
 	 */
 	public List<Object[]> getClientesPorVendedor(long idVendedor, Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -10377,9 +10378,10 @@ public class RegisterDomain extends Register {
 				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id),"
 				+ " case when e.ciudad IS NULL then 'SIN CIUDAD' else e.ciudad.descripcion end,"
 				+ " (select sum(totalImporteGs) from Venta where tipoMovimiento.id in (18,19) and cliente.empresa.id = e.id"
-				+ " and fecha > '"+ desde_ +"' and fecha < '" + hasta_ + "' and idEstadoComprobante is null)"	
-				+ " from Empresa e where e.vendedor.id = "
-				+ idVendedor + " order by e.razonSocial";
+				+ " and fecha > '"+ desde_ +"' and fecha < '" + hasta_ + "' and idEstadoComprobante is null),"
+				+ " (select c.id from Cliente c where c.empresa.id = e.id)"	
+				+ " from Cliente c join c.empresa e where e.vendedor.id = "
+				+ idVendedor + " and c.estado = '"+Cliente.ACTIVO+"' order by e.razonSocial";
 		return this.hql(query);
 	}
 	
@@ -14791,17 +14793,44 @@ public class RegisterDomain extends Register {
 		return out;
 	}
 	
+	/**
+	 * @return 
+	 * [0]:
+	 */
+	public List<Object[]> getProveedoresVentas(Date desde, Date hasta, long idVendedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select distinct(p.empresa.razonSocial), p.id from Venta v join v.detalles d join d.articulo a join a.proveedor p"
+				+ "	where v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
+				+ " and v.estadoComprobante is null"
+				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
+				+ " and v.vendedor.id = " + idVendedor + " order by 1";
+		return this.hql(query);
+	}
+	
+	public Double getVentasProveedor(Date desde, Date hasta, long idCliente, long idProveedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs) "
+				+ " from Venta v join v.detalles d where v.dbEstado != 'D' "
+				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
+				+ " and v.estadoComprobante is null"
+				+ " and v.cliente.id = " + idCliente
+				+ "	and v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
+				+ " and d.articulo.proveedor.id = " + idProveedor;
+		Double out = (Double) this.hqlToObject(query);
+		return out != null ? out : 0.0;
+	}
+	
 	public static void main(String[] args) {
 		try {
-			Date desde = Utiles.getFecha("01-04-2022 00:00:00");
-			Date hasta = new Date();
-			
+			Date desde = Utiles.getFecha("01-07-2022 00:00:00");
+			Date hasta = Utiles.getFecha("10-07-2022 23:00:00");
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Object[]> l = rr.getVentasDetallado(desde, hasta, "TIN 1734996");
-			System.out.println(l.get(0)[1]);
+			Double test = rr.getVentasProveedor(desde, hasta, 21345, 273);
+			System.out.println(Utiles.getNumberFormat(test));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

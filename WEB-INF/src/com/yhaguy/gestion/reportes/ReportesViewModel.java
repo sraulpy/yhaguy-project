@@ -1757,6 +1757,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_COSTO_DETALLADO = "VEN-00053";
 		static final String VENTAS_PRESUPUESTOS_DETALLADO = "VEN-00054";
 		static final String VENTAS_PEDIDOS_DETALLADO = "VEN-00055";
+		static final String VENTAS_CLIENTES_VENDEDOR_MESES = "VEN-00056";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1986,6 +1987,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			
 			case VENTAS_PEDIDOS_DETALLADO:
 				this.pedidosDetallado(mobile);
+				break;
+				
+			case VENTAS_CLIENTES_VENDEDOR_MESES:
+				this.clientesVendedorMeses(mobile, VENTAS_CLIENTES_VENDEDOR_MESES);
 				break;
 			}
 		}
@@ -7878,6 +7883,159 @@ public class ReportesViewModel extends SimpleViewModel {
 					rep.ejecutar();
 					Filedownload.save("/reportes/" + rep.getArchivoSalida(), null);
 				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00056
+		 */
+		private void clientesVendedorMeses(boolean mobile, String codReporte) {
+			try {
+				Funcionario vendedor = filtro.getVendedor();
+				Object[] formato = filtro.getFormato();
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+				
+				long idVendedor = vendedor == null ? 0 : vendedor.getId();
+				
+				if (vendedor == null) {
+					Clients.showNotification("Debe seleccionar un vendedor..", 
+							Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				
+				Map<String, Object[]> values = new HashMap<String, Object[]>();
+				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
+
+				RegisterDomain rr = RegisterDomain.getInstance();				
+				List<Object[]> emps = rr.getClientesPorVendedor(idVendedor, desde, hasta);
+				List<Object[]> provs = new ArrayList<Object[]>();
+				Map<String, String> paramsProv = new HashMap<String, String>();
+				Map<String, Long> idsProv = new HashMap<String, Long>();
+				Map<String, Double> montosProv = new HashMap<String, Double>();
+				
+				provs = rr.getProveedoresVentas(desde, hasta, idVendedor);
+				for (int i = 0; i < provs.size(); i++) {
+					paramsProv.put("Prov" + (i+1), (String) provs.get(i)[0]);
+					idsProv.put("Prov" + (i+1), (Long) provs.get(i)[1]);
+				}
+				
+				for (Object[] cliente : emps) {
+					long idCliente = (long) cliente[9];
+					for (int i = 0; i < provs.size(); i++) {
+						long idProv = idsProv.get("Prov" + (i+1));
+						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv);
+						montosProv.put((String) cliente[1] + "Prov" + (i+1), importe);
+						System.out.println(cliente[1] + "Prov" + (i+1) + " -- " + Utiles.getNumberFormat(importe));
+					}
+				}
+				
+				for (Object[] cliente : emps) {
+					
+					long idCliente = (long) cliente[9];
+					List<Object[]> ventas = rr.get_Ventas(desde, hasta, idCliente);
+					
+					for (Object[] venta : ventas) {
+						Date fecha = (Date) venta[1];
+						double totalImporteGs = (double) venta[6];
+						int mes = Utiles.getNumeroMes(fecha) - 1;
+						String key = idCliente + "-" + mes;
+						
+						Object[] acum = values.get(key);
+						if (acum != null) {
+							double importe = (double) acum[0];
+							importe += totalImporteGs;
+							values.put(key, new Object[] { importe, mes, cliente[1] });
+						} else {
+							values.put(key,
+									new Object[] { totalImporteGs, mes, cliente[1] });
+						}
+						
+					}
+					
+					if (ventas.size() == 0) {
+						String key = idCliente + "-" + 0;
+						values.put(key, new Object[] { 0.0, 0, cliente[1] });
+					}				
+					
+				}
+				
+				
+				List<Object[]> data = new ArrayList<Object[]>();
+				
+				for (String key : values.keySet()) {
+					Object[] value = values.get(key);
+					double importe = (double) value[0];
+					int mes = (int) value[1];
+					String cliente = (String) value[2];
+					
+					double p1 = montosProv.get(cliente + "Prov1") != null ? montosProv.get(cliente + "Prov1") : 0.0;
+					double p2 = montosProv.get(cliente + "Prov2") != null ? montosProv.get(cliente + "Prov2") : 0.0;
+					double p3 = montosProv.get(cliente + "Prov3") != null ? montosProv.get(cliente + "Prov3") : 0.0;
+					double p4 = montosProv.get(cliente + "Prov4") != null ? montosProv.get(cliente + "Prov4") : 0.0;
+					double p5 = montosProv.get(cliente + "Prov5") != null ? montosProv.get(cliente + "Prov5") : 0.0;
+					double p6 = montosProv.get(cliente + "Prov6") != null ? montosProv.get(cliente + "Prov6") : 0.0;
+					double p7 = montosProv.get(cliente + "Prov7") != null ? montosProv.get(cliente + "Prov7") : 0.0;
+					
+					Object[] value_ = values_.get(cliente);
+					if (value_ != null) {
+						value_[mes] = importe;
+						values_.put(cliente, value_);
+					} else {
+						Object[] datos = new Object[] { (double) 0, (double) 0,
+								(double) 0, (double) 0, (double) 0, (double) 0,
+								(double) 0, (double) 0, (double) 0, (double) 0,
+								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7};
+						datos[mes] = importe;
+						values_.put(cliente, datos);
+					}
+				}
+				
+				for (String key : values_.keySet()) {
+					Object[] value_ = values_.get(key);
+					
+					double total = (double) value_[0] + (double) value_[1]
+							+ (double) value_[2] + (double) value_[3]
+							+ (double) value_[4] + (double) value_[5]
+							+ (double) value_[6] + (double) value_[7]
+							+ (double) value_[8] + (double) value_[9]
+							+ (double) value_[10] + (double) value_[11];
+					data.add(new Object[] { key.toUpperCase(), value_[0],
+							value_[1], value_[2], value_[3], value_[4],
+							value_[5], value_[6], value_[7], value_[8],
+							value_[9], value_[10], value_[11], total, 
+							(double) value_[12], (double) value_[13], 
+							(double) value_[14], (double) value_[15], 
+							(double) value_[16], (double) value_[17], (double) value_[18] });
+				}
+				String format = (String) formato[0];
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR;
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR_SIN_CAB;
+				}
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new VentasPorClienteProveedorDataSource(data);
+				params.put("Titulo", codReporte + " - Ventas por Clientes por Proveedor por Mes");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Vendedor", vendedor == null ? "TODOS.." : vendedor.getRazonSocial());
+				params.put("Prov1", paramsProv.get("Prov1") == null ? "NO DEFINIDO" : paramsProv.get("Prov1"));
+				params.put("Prov2", paramsProv.get("Prov2") == null ? "NO DEFINIDO" : paramsProv.get("Prov2"));
+				params.put("Prov3", paramsProv.get("Prov3") == null ? "NO DEFINIDO" : paramsProv.get("Prov3"));
+				params.put("Prov4", paramsProv.get("Prov4") == null ? "NO DEFINIDO" : paramsProv.get("Prov4"));
+				params.put("Prov5", paramsProv.get("Prov5") == null ? "NO DEFINIDO" : paramsProv.get("Prov5"));
+				params.put("Prov6", paramsProv.get("Prov6") == null ? "NO DEFINIDO" : paramsProv.get("Prov6"));
+				params.put("Prov7", paramsProv.get("Prov7") == null ? "NO DEFINIDO" : paramsProv.get("Prov7"));
+				imprimirJasper(source, params, dataSource, formato);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -20747,6 +20905,197 @@ class VentasPorClienteDataSource implements JRDataSource {
 			value = FORMATTER.format(totales.get("Dic"));
 		} else if ("Tot".equals(fieldName)) {
 			value = FORMATTER.format(totales.get("Total"));
+		}
+		return value;
+	}
+
+	@Override
+	public boolean next() throws JRException {
+		if (index < this.values.size() - 1) {
+			index++;
+			return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * DataSource de Ventas por Cliente..
+ */
+class VentasPorClienteProveedorDataSource implements JRDataSource {
+
+	static final NumberFormat FORMATTER = new DecimalFormat("###,###,##0");
+
+	List<Object[]> values = new ArrayList<Object[]>();
+	Map<String, Double> totales = new HashMap<String, Double>();
+	
+	public VentasPorClienteProveedorDataSource(List<Object[]> values) {
+		this.values = values;
+		Collections.sort(this.values, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				String val1 = (String) o1[0];
+				String val2 = (String) o2[0];
+				int compare = val1.compareTo(val2);				
+				return compare;
+			}
+		});
+		totales.put("Ene", 0.0);
+		totales.put("Feb", 0.0);
+		totales.put("Mar", 0.0);
+		totales.put("Abr", 0.0);
+		totales.put("May", 0.0);
+		totales.put("Jun", 0.0);
+		totales.put("Jul", 0.0);
+		totales.put("Ago", 0.0);
+		totales.put("Set", 0.0);
+		totales.put("Oct", 0.0);
+		totales.put("Nov", 0.0);
+		totales.put("Dic", 0.0);
+		totales.put("Total", 0.0);
+		totales.put("P1", 0.0);
+		totales.put("P2", 0.0);
+		totales.put("P3", 0.0);
+		totales.put("P4", 0.0);
+		totales.put("P5", 0.0);
+		totales.put("P6", 0.0);
+		totales.put("P7", 0.0);
+		for (Object[] value : values) {
+			Double ene = totales.get("Ene");
+			Double feb = totales.get("Feb");
+			Double mar = totales.get("Mar");
+			Double abr = totales.get("Abr");
+			Double may = totales.get("May");
+			Double jun = totales.get("Jun");
+			Double jul = totales.get("Jul");
+			Double ago = totales.get("Ago");
+			Double set = totales.get("Set");
+			Double oct = totales.get("Oct");
+			Double nov = totales.get("Nov");
+			Double dic = totales.get("Dic");
+			Double tot = totales.get("Total");
+			Double p1 = totales.get("P1"); Double p2 = totales.get("P2"); Double p3 = totales.get("P3");
+			Double p4 = totales.get("P4"); Double p5 = totales.get("P5"); Double p6 = totales.get("P6");
+			Double p7 = totales.get("P7");
+			ene += (double) value[1];
+			feb += (double) value[2];
+			mar += (double) value[3];
+			abr += (double) value[4];
+			may += (double) value[5];
+			jun += (double) value[6];
+			jul += (double) value[7];
+			ago += (double) value[8];
+			set += (double) value[9];
+			oct += (double) value[10];
+			nov += (double) value[11];
+			dic += (double) value[12];
+			tot += (double) value[13];
+			p1 += (double) value[14]; p2 += (double) value[15]; p3 += (double) value[16];
+			p4 += (double) value[17]; p5 += (double) value[18]; p6 += (double) value[19];
+			p7 += (double) value[20];
+			totales.put("Ene", ene); totales.put("Feb", feb);
+			totales.put("Mar", mar); totales.put("Abr", abr);
+			totales.put("May", may); totales.put("Jun", jun);
+			totales.put("Jul", jul); totales.put("Ago", ago);
+			totales.put("Set", set); totales.put("Oct", oct);
+			totales.put("Nov", nov); totales.put("Dic", dic);
+			totales.put("Total", tot);
+			totales.put("P1", p1); totales.put("P2", p2); totales.put("P3", p3);
+			totales.put("P4", p4); totales.put("P5", p5); totales.put("P6", p6);
+			totales.put("P7", p7);
+		}
+	}
+
+	private int index = -1;
+
+	@Override
+	public Object getFieldValue(JRField field) throws JRException {
+		Object value = null;
+		String fieldName = field.getName();
+		Object[] det = this.values.get(index);
+
+		if ("Cliente".equals(fieldName)) {
+			value = det[0];
+		} else if ("Ene".equals(fieldName)) {
+			value = FORMATTER.format(det[1]);
+		} else if ("Feb".equals(fieldName)) {
+			value = FORMATTER.format(det[2]);
+		} else if ("Mar".equals(fieldName)) {
+			value = FORMATTER.format(det[3]);
+		} else if ("Abr".equals(fieldName)) {
+			value = FORMATTER.format(det[4]);			
+		} else if ("May".equals(fieldName)) {
+			value = FORMATTER.format(det[5]);
+		} else if ("Jun".equals(fieldName)) {
+			value = FORMATTER.format(det[6]);
+		} else if ("Jul".equals(fieldName)) {
+			value = FORMATTER.format(det[7]);
+		} else if ("Ago".equals(fieldName)) {
+			value = FORMATTER.format(det[8]);
+		} else if ("Set".equals(fieldName)) {
+			value = FORMATTER.format(det[9]);
+		} else if ("Oct".equals(fieldName)) {
+			value = FORMATTER.format(det[10]);
+		} else if ("Nov".equals(fieldName)) {
+			value = FORMATTER.format(det[11]);
+		} else if ("Dic".equals(fieldName)) {
+			value = FORMATTER.format(det[12]);
+		} else if ("Total".equals(fieldName)) {
+			value = FORMATTER.format(det[13]);
+		} else if ("Tot_1".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Ene"));
+		} else if ("Tot_2".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Feb"));
+		} else if ("Tot_3".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Mar"));
+		} else if ("Tot_4".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Abr"));
+		} else if ("Tot_5".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("May"));
+		} else if ("Tot_6".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Jun"));
+		} else if ("Tot_7".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Jul"));
+		} else if ("Tot_8".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Ago"));
+		} else if ("Tot_9".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Set"));
+		} else if ("Tot_10".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Oct"));
+		} else if ("Tot_11".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Nov"));
+		} else if ("Tot_12".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Dic"));
+		} else if ("Tot".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("Total"));
+		}  else if ("Prov1".equals(fieldName)) {
+			value = FORMATTER.format(det[14]);
+		}   else if ("Prov2".equals(fieldName)) {
+			value = FORMATTER.format(det[15]);
+		}   else if ("Prov3".equals(fieldName)) {
+			value = FORMATTER.format(det[16]);
+		}   else if ("Prov4".equals(fieldName)) {
+			value = FORMATTER.format(det[17]);
+		}   else if ("Prov5".equals(fieldName)) {
+			value = FORMATTER.format(det[18]);
+		}   else if ("Prov6".equals(fieldName)) {
+			value = FORMATTER.format(det[19]);
+		}   else if ("Prov7".equals(fieldName)) {
+			value = FORMATTER.format(det[20]);
+		}  else if ("TotProv1".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P1"));
+		}  else if ("TotProv2".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P2"));
+		}  else if ("TotProv3".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P3"));
+		}  else if ("TotProv4".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P4"));
+		}  else if ("TotProv5".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P5"));
+		}  else if ("TotProv6".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P6"));
+		}  else if ("TotProv7".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P7"));
 		}
 		return value;
 	}
