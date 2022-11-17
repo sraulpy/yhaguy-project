@@ -8023,7 +8023,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new VentasPorClienteProveedorDataSource(data);
-				params.put("Titulo", codReporte + " - Ventas por Clientes por Proveedor por Mes");
+				params.put("Titulo", codReporte + " - Ventas por Clientes por Mes - Totales por Proveedor del Exterior");
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
