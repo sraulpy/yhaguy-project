@@ -14795,7 +14795,7 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return 
-	 * [0]:
+	 * [0]:proveedor.razonSocial
 	 */
 	public List<Object[]> getProveedoresVentas(Date desde, Date hasta, long idVendedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
@@ -14804,7 +14804,8 @@ public class RegisterDomain extends Register {
 				+ "	where v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
 				+ " and v.estadoComprobante is null"
 				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
-				+ " and v.vendedor.id = " + idVendedor + " order by 1";
+				+ " and v.vendedor.id = " + idVendedor 
+				+ " and p.tipo.tipoProveedor.sigla = '" + Configuracion.SIGLA_PROVEEDOR_TIPO_EXTERIOR + "' order by 1";
 		return this.hql(query);
 	}
 	
