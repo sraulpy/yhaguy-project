@@ -14805,7 +14805,7 @@ public class RegisterDomain extends Register {
 				+ " and v.estadoComprobante is null"
 				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
 				+ " and v.vendedor.id = " + idVendedor 
-				+ " and p.tipo.tipoProveedor.sigla = '" + Configuracion.SIGLA_PROVEEDOR_TIPO_EXTERIOR + "' order by 1";
+				+ " and p.tipoProveedor.sigla = '" + Configuracion.SIGLA_PROVEEDOR_TIPO_EXTERIOR + "' order by 1";
 		return this.hql(query);
 	}
 	
