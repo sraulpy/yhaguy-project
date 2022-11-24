@@ -24,6 +24,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.Selectors;
@@ -124,6 +125,11 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	@AfterCompose
 	public void AfterCompose(@ContextParam(ContextType.VIEW) Component view) {
 		Selectors.wireComponents(view, this, false);
+		String codigo = (String) Executions.getCurrent().getArg().get("codigo");
+		if (codigo != null) {
+			this.codInterno = codigo;
+			Clients.showNotification(codigo);
+		}		
 	}
 	
 	@Wire

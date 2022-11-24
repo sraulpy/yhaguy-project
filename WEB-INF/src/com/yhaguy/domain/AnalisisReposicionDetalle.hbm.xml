@@ -25,6 +25,23 @@
 		<property name="aprobado" />
 		<property name="observacion" />
 		<property name="promedio" />
+		
+		<property name="ene" />
+		<property name="feb" />
+		<property name="mar" />
+		<property name="abr" />
+		<property name="may" />
+		<property name="jun" />
+		<property name="jul" />
+		<property name="ago" />
+		<property name="set" />
+		<property name="oct" />
+		<property name="nov" />
+		<property name="dic" />
+		
+		<property name="cantClientes" />
+		<property name="ultProveedor" />
+		<property name="ultCosto" />
 
 	</class>
 </hibernate-mapping>

@@ -4,18 +4,33 @@
 	
 	<hlayout sclass="button-container">
 		<button mold="bs" sclass="btn-sm btn-success" 
-			iconSclass="z-icon-plus-circle" label="Agregar" width="150px"
+			iconSclass="z-icon-plus-circle" label=" Agregar" width="150px"
 			onClick='pop_params.open(self, "after_start")'></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" 
-			iconSclass="z-icon-edit" label="Modificar" width="150px"
+			iconSclass="z-icon-edit" label=" Modificar" width="150px"
 			disabled="@load(vm.selectedAnalisis eq null)"
 			onClick="@command('modificar')"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-shopping-cart" label=" Generar Orden Compra" width="170px"
+			disabled="@load(vm.selectedAnalisis eq null)"
+			onClick="@command('prepararOrdenCompra', parent=self, popup=pop_oc)"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
 			iconSclass="z-icon-print" label="Imprimir" width="150px"
 			disabled="@load(vm.selectedAnalisis eq null)"
+			onClick="@command('imprimirPDF')"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" 
+			iconSclass="z-icon-download" label=" Exportar a Excel" width="150px"
+			disabled="@load(vm.selectedAnalisis eq null)"
 			onClick="@command('imprimirSeleccionado')"></button>
+		<space></space>
+		<button 
+			id="upImg" upload="true"
+			iconSclass="z-icon-upload" label=" Adjuntar Cotizaciones" width="160px" height="30px"
+			disabled="@load(vm.selectedAnalisis eq null)"></button>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
@@ -23,8 +38,7 @@
 		model="@load(vm.listaAnalisis)" selectedItem="@bind(vm.selectedAnalisis)">
 		<listhead>
 			<listheader label="Fecha"></listheader>
-			<listheader label="Proveedor"></listheader>
-			<listheader label="Marca"></listheader>
+			<listheader label="Familia"></listheader>
 			<listheader label="Ranking"></listheader>
 			<listheader label="Desde"></listheader>
 			<listheader label="Hasta"></listheader>
@@ -43,13 +57,11 @@
 			<auxheader></auxheader>
 			<auxheader></auxheader>
 			<auxheader></auxheader>
-			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
-				<listcell label="@load(each.proveedor.razonSocial)"></listcell>
-				<listcell label="@load(each.marca.descripcion)"></listcell>
+				<listcell label="@load(each.familia.descripcion)"></listcell>
 				<listcell label="@load(each.tipoRanking)"></listcell>
 				<listcell label="@load(each.desde) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 				<listcell label="@load(each.hasta) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
@@ -71,26 +83,19 @@
 			</button>
 		</hbox>
 		<div height="15px"></div>
-		<grid sclass="vgrid" width="500px" style="margin:10px">
+		<grid sclass="vgrid" width="550px" style="margin:10px">
 			<columns>
-				<column width="35%"></column>
+				<column width="45%"></column>
 			</columns>
 			<rows>
 				<row>
 					<field value="Desde:" />
-					<datebox hflex="true" value="@bind(vm.analisis.desde)"
-						onChange="@command('updateMeses')"></datebox>
+					<datebox hflex="true" value="@bind(vm.analisis.desde)"></datebox>
 				</row>	
 				<row>
 					<field value="Hasta:" />
-					<datebox hflex="true" value="@bind(vm.analisis.hasta)"
-						onChange="@command('updateMeses')"></datebox>
+					<datebox hflex="true" value="@bind(vm.analisis.hasta)"></datebox>
 				</row>	
-				<row>
-					<field value="Total Meses (p/ promediar)" />
-					<spinner hflex="true" readonly="true"
-						value="@bind(vm.analisis.cantidadMeses)"></spinner>
-				</row>
 				<row>
 					<field value="Proveedor:" />
 					<bandbox hflex="true" placeholder="TODOS.."
@@ -185,6 +190,28 @@
 					</combobox>
 				</row>
 				<row>
+					<field value="Incluir ventas a Representaciones:" />
+					<combobox hflex="true"
+						value="@load(vm.analisis.incluirRepresentaciones_)"
+						selectedItem="@bind(vm.analisis.incluirRepresentaciones_)"
+						model="@load(vm.listaSN)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
+					<field value="Incluir importaciones Valvoline:" />
+					<combobox hflex="true"
+						value="@load(vm.analisis.incluirValvoline_)"
+						selectedItem="@bind(vm.analisis.incluirValvoline_)"
+						model="@load(vm.listaSN)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+				</row>
+				<row>
 					<field value="Depósitos:" />
 					<chosenbox hflex="true" sclass="rounded"
 						style="margin-top:5px" model="@load(vm.depositos)"
@@ -204,5 +231,61 @@
 				onClick="@command('ejecutar')"></button>
 		</hbox>
 	</popup>
-	
+ 
+ 	<popup id="pop_oc" sclass="rounded">
+		<vlayout width="450px" height="450px" style="padding:10px">
+			<bandbox hflex="true" placeholder="Proveedor.."
+				readonly="true" value="@load(vm.proveedor.razonSocial)"
+				id="bndProv_"
+				onOpen="rs.focus()">
+				<bandpopup>
+					<listbox sclass="small-list" width="400px"
+						height="200px" model="@load(vm.proveedores)"
+						selectedItem="@bind(vm.proveedor)"
+						onSelect="bndProv_.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.razonSocialProveedor)" instant="true"
+										placeholder="Buscar por Razón Social.." 
+										id="rs"/>
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem
+								label="@load(each.razonSocial.toUpperCase())" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+			<div height="5px"></div>
+			<listbox hflex="true" vflex="true"
+				model="@load(vm.detalles)" sclass="rounded">
+				<listhead>
+					<listheader label="Código"></listheader>
+					<listheader label="Cantidad" width="100px"></listheader>
+					<listheader label="Precio Gs." width="100px"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.articulo.codigoInterno)"></listcell>
+						<listcell>
+							<intbox value="@bind(each.cantidad)" hflex="true"></intbox>
+						</listcell>
+						<listcell>
+							<guaranibox value="@bind(each.costoGs)" hflex="true"></guaranibox>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<div height="5px"></div>
+			<button mold="bs" sclass="btn-sm btn-primary" hflex="true" iconSclass="z-icon-check"
+				onClick="@command('generarOrdenCompra', popup=pop_oc)"
+				disabled="@load(vm.proveedor eq null)"></button>
+		</vlayout>
+	</popup>	
 </window>

@@ -16,6 +16,8 @@
 		<property name="cantidadMeses"/>
 		<property name="tipoRanking"/>
 		<property name="incluirDevoluciones"/>
+		<property name="incluirRepresentaciones"/>
+		<property name="incluirValvoline"/>
 		<property name="depositos"/>
 		
 		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"

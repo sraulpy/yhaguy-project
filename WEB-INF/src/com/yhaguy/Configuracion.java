@@ -214,6 +214,7 @@ public class Configuracion extends Config {
 	public static final String RUC_ICATURBO = "80001949-0";
 	public static final String RUC_NF_AUTORREPUESTOS = "80080166-0";
 	public static final String RUC_YHAGUY_REPUESTOS = "80024884-8";
+	public static final String RUC_YHAGUY_REPRESENTACIONES = "80109448-8";
 
 	public static String PROPIETARIO_IMPORTACION_DESCRIPCION = "Importacion";
 	public static String PROPIETARIO_VENTAS_DESCRIPCION = "Ventas";
@@ -289,6 +290,7 @@ public class Configuracion extends Config {
 	public static final long ID_ITEM_RESERVA_LIBERADA = -1000;
 	public static final long ID_PROVEEDOR_YHAGUY = 208;
 	public static final long ID_SUC_ACCESO_SUR = 6922;
+	public static final long ID_PROVEEDOR_VALVOLINE = 203;
 
 	// Id's condiciones de Pago
 	public static long ID_CONDICION_PAGO_CONTADO = 1;

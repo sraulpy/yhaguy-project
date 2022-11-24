@@ -11841,12 +11841,13 @@ public class RegisterDomain extends Register {
 	 * [3]:importe
 	 * [4]:articulo.descripcion
 	 * [5]:articulo.familia.descripcion
+	 * [6]:venta.fecha
 	 */
-	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia, int order) throws Exception {
+	public List<Object[]> getVentasDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia, int order, String rucClienteExcluido) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs), "
-				+ " d.articulo.descripcion, d.articulo.familia.descripcion"
+				+ " d.articulo.descripcion, d.articulo.familia.descripcion, v.fecha"
 				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
@@ -11860,9 +11861,33 @@ public class RegisterDomain extends Register {
 				if (idFamilia > 0) {
 					query += " and d.articulo.familia.id = " + idFamilia;
 				}
-				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.descripcion, d.articulo.familia.descripcion";
+				if (rucClienteExcluido != null) {
+					query += " and v.cliente.empresa.ruc != '" + rucClienteExcluido + "'";
+				}
+				query += " group by d.articulo.id, d.articulo.codigoInterno, d.articulo.descripcion, d.articulo.familia.descripcion, v.fecha";
 				query += " order by " + order + " desc";
 		return this.hql(query);
+	}
+	
+	/**
+	 * @return ids de clientes segun parametro..
+	 */
+	public List<Long> getVentasCantClientes(Date desde, Date hasta, long idArticulo, String rucExcluido) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select distinct(v.cliente.id)"
+				+ " from Venta v join v.detalles d where (v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "') and v.estadoComprobante is null"
+				+ " and (v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "')";
+				if (idArticulo > 0) {
+					query += " and d.articulo.id = " + idArticulo;
+				}
+				if (rucExcluido != null) {
+					query += " and v.cliente.empresa.ruc != '" + rucExcluido + "'";
+				}
+		List<Long> list = this.hql(query);
+		return list != null ? list : new ArrayList<Long>();
 	}
 	
 	/**
@@ -12088,7 +12113,7 @@ public class RegisterDomain extends Register {
 	 * [2]:cantidad
 	 * [3]:importe
 	 */
-	public List<Object[]> getImportacionesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia) throws Exception {
+	public List<Object[]> getImportacionesDetallado_(Date desde, Date hasta, long idProveedor, long idMarca, long idFamilia, long idExcluirProveedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select d.articulo.id, d.articulo.codigoInterno, sum(d.cantidad * 1.0), sum((d.costoGs * d.cantidad))"
@@ -12104,6 +12129,9 @@ public class RegisterDomain extends Register {
 				}
 				if (idFamilia > 0) {
 					query += " and d.articulo.familia.id = " + idFamilia;
+				}
+				if (idExcluirProveedor > 0) {
+					query += " and c.proveedor.id != " + idExcluirProveedor;
 				}
 				query += " group by d.articulo.id, d.articulo.codigoInterno";
 				query += " order by 3 desc";
@@ -14823,13 +14851,54 @@ public class RegisterDomain extends Register {
 		return out != null ? out : 0.0;
 	}
 	
+	/**
+	 * @return datos de la ultima compra
+	 * [0]:cantidad
+	 * [1]:fecha
+	 * [2]:proveedor
+	 * [3]:costoGs
+	 * [4]:costoDs
+	 * [5]:precioGs
+	 */
+	public Object[] getUltimaCompraLocalImportacion(long idArticulo) throws Exception{
+		Object[] loc = this.getUltimaCompraLocal(idArticulo);
+		Object[] imp = this.getUltimaCompraImportacion(idArticulo);
+		
+		if (loc == null && imp != null) {
+			return imp;
+		}
+		
+		if (imp == null && loc != null) {
+			return loc;
+		}
+		
+		if (loc == null && imp == null) {
+			return null;
+		}
+		
+		Date fecha1 = (Date) loc[1];
+		Date fecha2 = (Date) imp[1];		
+		
+		if (fecha1 != null && fecha2 != null) {
+			if (fecha1.compareTo(fecha2) > 0) {
+				return loc;
+			} else {
+				return imp;
+			}
+		}
+		
+		return loc;
+	}
+	
 	public static void main(String[] args) {
 		try {
-			Date desde = Utiles.getFecha("01-07-2022 00:00:00");
-			Date hasta = Utiles.getFecha("10-07-2022 23:00:00");
+			Date desde = Utiles.getFecha("01-08-2022 00:00:00");
+			Date hasta = Utiles.getFecha("30-09-2022 23:00:00");
 			RegisterDomain rr = RegisterDomain.getInstance();
-			Double test = rr.getVentasProveedor(desde, hasta, 21345, 273);
-			System.out.println(Utiles.getNumberFormat(test));
+			List<Long> list = rr.getVentasCantClientes(desde, hasta, 400, null);
+			for (Long obj : list) {
+				System.out.println(obj);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

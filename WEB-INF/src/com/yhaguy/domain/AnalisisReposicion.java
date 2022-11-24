@@ -26,6 +26,10 @@ public class AnalisisReposicion extends Domain {
 	private String tipoRanking;
 	private boolean incluirDevoluciones;
 	private String incluirDevoluciones_;
+	private boolean incluirRepresentaciones;
+	private String incluirRepresentaciones_;
+	private boolean incluirValvoline;
+	private String incluirValvoline_;
 	private String depositos = "";
 	
 	private Proveedor proveedor;
@@ -168,5 +172,45 @@ public class AnalisisReposicion extends Domain {
 
 	public void setFamilia(ArticuloFamilia familia) {
 		this.familia = familia;
+	}
+
+	public boolean isIncluirRepresentaciones() {
+		return incluirRepresentaciones;
+	}
+
+	public void setIncluirRepresentaciones(boolean incluirRepresentaciones) {
+		this.incluirRepresentaciones = incluirRepresentaciones;
+	}
+	
+	public String getIncluirRepresentaciones_() {
+		if (this.incluirRepresentaciones_ == null) {
+			return this.incluirRepresentaciones ? "SI" : "NO";
+		}
+		return incluirRepresentaciones_;
+	}
+
+	public void setIncluirRepresentaciones_(String incluirRepresentaciones_) {
+		this.incluirRepresentaciones_ = incluirRepresentaciones_;
+		this.incluirRepresentaciones = incluirRepresentaciones_.equals("SI");
+	}	
+	
+	public boolean isIncluirValvoline() {
+		return incluirValvoline;
+	}
+
+	public void setIncluirValvoline(boolean incluirValvoline) {
+		this.incluirValvoline = incluirValvoline;
+	}
+	
+	public String getIncluirValvoline_() {
+		if (this.incluirValvoline_ == null) {
+			return this.incluirValvoline ? "SI" : "NO";
+		}
+		return incluirValvoline_;
+	}
+
+	public void setIncluirValvoline_(String incluirValvoline_) {
+		this.incluirValvoline_ = incluirValvoline_;
+		this.incluirValvoline = incluirValvoline_.equals("SI");
 	}
 }
