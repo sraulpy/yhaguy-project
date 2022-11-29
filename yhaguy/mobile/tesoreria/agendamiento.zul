@@ -62,13 +62,16 @@
 			<space></space>
 			<space></space>
 			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.ciudad.descripcion)"></label>
-			
-			<a sclass="mobile" href="bingmaps:?cp=18.551464~73.951399">
-				<a
-					href="http://maps.apple.com/maps?q=18.551464, 73.951399">
-					Abrir Mapa
-				</a>
-			</a>
+			<space></space>
+			<gmaps version="3.26" id="gmaps" hflex="true"
+							lat="-25.3054494" lng="-57.5351386"
+							zoom="9"
+							vflex="true" showSmallCtrl="true" protocol="https">
+							<gmarker id="marker" lat="-25.3054494"
+								lng="-57.5351386" 
+								open="true"
+								content="Ubicación"/>
+						</gmaps>
 
 			</vlayout>
 	</vlayout>
