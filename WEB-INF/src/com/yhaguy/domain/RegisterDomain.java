@@ -14890,6 +14890,19 @@ public class RegisterDomain extends Register {
 		return loc;
 	}
 	
+	/**
+	 * @return las cobranzas detalladas segun fecha
+	 */
+	public List<TareaProgramada> getTareasProgramadas(Date desde, Date hasta, String tarea)
+			throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select t from TareaProgramada t where t.tarea = '"+ tarea +"' and (t.fecha >= '"
+				+ desde_ + "' and t.fecha <= '" + hasta_
+				+ "') order by fecha desc";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			Date desde = Utiles.getFecha("01-08-2022 00:00:00");

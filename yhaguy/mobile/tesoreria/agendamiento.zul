@@ -1,0 +1,68 @@
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.AgendamientoVM')"
+	vflex="true">
+	
+	<vlayout id="vl_fecha">
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Siguiente" height="150px" style="font-size:30pt"
+			dir="normal"
+			onClick='vl_fecha.setVisible(false);vl_tareas.setVisible(true)' />
+		<vlayout style="padding:30px">
+			<label value="Fecha Desde" sclass="mobile" />
+			<datebox hflex="true" placeholder="DESDE"
+				value="@bind(vm.desde)"></datebox>
+			<space></space><space></space>
+			<label value="Fecha Hasta" sclass="mobile" />
+			<datebox hflex="true" placeholder="HASTA"
+				value="@bind(vm.hasta)"></datebox>
+		</vlayout>		
+	</vlayout>
+	
+	<vlayout id="vl_tareas" vflex="true" style="overflow:auto" visible="false">
+		<button id="btn_sel_con" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Seleccionar Tarea" height="150px" style="font-size:30pt"
+			dir="normal"
+			onClick="@command('selectConcepto', comp1=vl_concepto, rec=vl_cliente_rec, ant=vl_cliente_ant, ree=vl_cliente_ree)" />
+		<listbox 
+			style="overflow:auto" vflex="1"
+			model="@load(vm.tareas)">
+			<listhead>
+				<listheader width="30%"></listheader>
+				<listheader></listheader>
+			</listhead>
+			<template name="model">
+			<listitem>
+				<listcell label="@load(each.tarea)" />
+				<listcell label="@load(each.empresa.razonSocial)" />
+			</listitem>
+		</template>
+		</listbox>
+	</vlayout>
+	
+	<style>
+		.z-listheader-content { padding: 15px 20px; }
+		.z-listcell-content, .z-comboitem { text-overflow: ellipsis;
+		white-space: nowrap; line-height:50px; padding:20px; font-size:
+		32pt; } .z-datebox-button, .z-bandbox-button, .z-combobox-button
+		{ min-width: 150px; line-height: 100px; height:90px; font-size:
+		30pt; text-align: center; } .z-spinner-button,
+		.z-doublespinner-button { min-width: 150px; line-height: 45px;
+		height:90px; font-size: 30pt; text-align: center; }
+		.z-timebox-button>a, .z-spinner-button>a,
+		.z-doublespinner-button>a { width: 100%; height: 50%; }
+		.z-toolbarbutton-content { font-size: 30pt; vertical-align: top;
+		} .z-datebox-input, .z-combobox-input, .z-bandbox-input,
+		.z-spinner-input, .z-doublespinner-input { min-width: 150px;
+		height: 90px; font-size: 32pt; } .z-textbox, .z-decimalbox,
+		.z-intbox, .z-longbox, .z-doublebox { font-size: 32pt;
+		line-height:50px; height:90px; } .z-row-content { padding:50px;
+		} .z-calendar { font-size: 34pt; } .z-calendar-cell { font-size:
+		34pt; line-height: 120px; } .mobile { font-size: 36pt; }
+		.z-listbox-emptybody td{ font-size: 30pt }
+		.z-listitem-checkable { height:50px; width:50px }
+		.z-listitem-selected>.z-listcell>.z-listcell-content>.z-listitem-checkable .z-listitem-icon { line-height:50px; }
+		.z-combobox-popup { height:500px }
+	</style>
+</div>
