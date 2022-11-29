@@ -15,6 +15,8 @@ public class AgendamientoVM extends SimpleViewModel {
 	private Date desde;
 	private Date hasta;
 	
+	private TareaProgramada selectedTarea;
+	
 	@Init(superclass = true)
 	public void init() {
 		this.desde = new Date();
@@ -45,5 +47,13 @@ public class AgendamientoVM extends SimpleViewModel {
 
 	public void setHasta(Date hasta) {
 		this.hasta = hasta;
+	}
+
+	public TareaProgramada getSelectedTarea() {
+		return selectedTarea;
+	}
+
+	public void setSelectedTarea(TareaProgramada selectedTarea) {
+		this.selectedTarea = selectedTarea;
 	}
 }

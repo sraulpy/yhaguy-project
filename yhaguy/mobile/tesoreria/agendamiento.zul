@@ -12,7 +12,7 @@
 			<label value="Fecha Desde" sclass="mobile" />
 			<datebox hflex="true" placeholder="DESDE"
 				value="@bind(vm.desde)"></datebox>
-			<space></space><space></space>
+			<space></space><space></space><space></space>
 			<label value="Fecha Hasta" sclass="mobile" />
 			<datebox hflex="true" placeholder="HASTA"
 				value="@bind(vm.hasta)"></datebox>
@@ -24,10 +24,11 @@
 			iconSclass="z-icon-check"
 			label=" Seleccionar Tarea" height="150px" style="font-size:30pt"
 			dir="normal"
-			onClick="@command('selectConcepto', comp1=vl_concepto, rec=vl_cliente_rec, ant=vl_cliente_ant, ree=vl_cliente_ree)" />
+			onClick='vl_tareas.setVisible(false);vl_selected.setVisible(true)' />
 		<listbox 
 			style="overflow:auto" vflex="1"
-			model="@load(vm.tareas)">
+			model="@load(vm.tareas)"
+			selectedItem="@bind(vm.selectedTarea)">
 			<listhead>
 				<listheader></listheader>
 			</listhead>
@@ -42,6 +43,29 @@
 			</listitem>
 		</template>
 		</listbox>
+	</vlayout>
+	
+	<vlayout id="vl_selected" visible="false">
+		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label=" Realizar Tarea" height="150px" style="font-size:30pt"
+			dir="normal" />
+			<vlayout style="padding:60px">
+			
+			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.ruc)"></label>
+			<space></space>
+			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.razonSocial)"></label>
+			<space></space>
+			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.direccion_)"></label>
+			<space></space>
+			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.telefono)"></label>
+			<space></space>
+			<space></space>
+			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.ciudad.descripcion)"></label>
+			
+			<a sclass="mobile" href="https://www.google.com.gt/maps/@14.5824309,-90.5210567,15z" target="_blank">Ubicación</a>
+			
+			</vlayout>
 	</vlayout>
 	
 	<style>
