@@ -29,12 +29,11 @@
 			style="overflow:auto" vflex="1"
 			model="@load(vm.tareas)">
 			<listhead>
-				<listheader width="30%"></listheader>
 				<listheader></listheader>
 			</listhead>
 			<template name="model">
 			<listitem>
-				<listcell label="@load(each.tarea)">
+				<listcell>
 					<vlayout>
 						<label value="@load(each.tarea)" sclass="mobile" />
 						<label value="@load(each.empresa.razonSocial)" sclass="mobile" />
