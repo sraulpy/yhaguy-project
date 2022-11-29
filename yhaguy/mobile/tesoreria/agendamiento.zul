@@ -8,7 +8,7 @@
 			label=" Siguiente" height="150px" style="font-size:30pt"
 			dir="normal"
 			onClick='vl_fecha.setVisible(false);vl_tareas.setVisible(true)' />
-		<vlayout style="padding:30px">
+		<vlayout style="padding:60px">
 			<label value="Fecha Desde" sclass="mobile" />
 			<datebox hflex="true" placeholder="DESDE"
 				value="@bind(vm.desde)"></datebox>
