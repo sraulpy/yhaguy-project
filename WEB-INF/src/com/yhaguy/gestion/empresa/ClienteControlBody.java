@@ -221,6 +221,18 @@ public class ClienteControlBody extends EmpresaControlBody {
 			this.mensajeError += " Debe asignar un vendedor..";
 			return false;
 		}
+		if (this.getDtoEmp().getRuc() == null || this.getDtoEmp().getRuc().trim().isEmpty()) {
+			this.mensajeError += " Debe ingresar el ruc..";
+			return false;
+		}
+		if (this.getDtoEmp().getRubro() == null || this.getDtoEmp().getRubro().esNuevo()) {
+			this.mensajeError += " Debe asignar un rubro..";
+			return false;
+		}
+		if (this.getDtoEmp().getDireccion_() == null || this.getDtoEmp().getDireccion_().trim().isEmpty()) {
+			this.mensajeError += " Debe ingresar la dirección..";
+			return false;
+		}
 		return true;
 	}
 	
