@@ -35,7 +35,7 @@
 			<listitem>
 				<listcell>
 					<vlayout>
-						<label value="@load(each.tarea)" sclass="mobile" />
+						<label value="@load(each.tarea)" sclass="mobile" style="font-weight:bold"/>
 						<label value="@load(each.empresa.razonSocial)" sclass="mobile" />
 					</vlayout>
 				</listcell>
