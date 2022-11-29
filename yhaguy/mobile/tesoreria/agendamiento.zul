@@ -34,8 +34,12 @@
 			</listhead>
 			<template name="model">
 			<listitem>
-				<listcell label="@load(each.tarea)" />
-				<listcell label="@load(each.empresa.razonSocial)" />
+				<listcell label="@load(each.tarea)">
+					<vlayout>
+						<label value="@load(each.tarea)" sclass="mobile" />
+						<label value="@load(each.empresa.razonSocial)" sclass="mobile" />
+					</vlayout>
+				</listcell>
 			</listitem>
 		</template>
 		</listbox>
