@@ -66,7 +66,7 @@
 			<gmaps version="3.26" id="gmaps" hflex="true"
 							lat="-25.3054494" lng="-57.5351386"
 							zoom="9"
-							vflex="true" showSmallCtrl="true" protocol="https">
+							height="400px" showSmallCtrl="true" protocol="https">
 							<gmarker id="marker" lat="-25.3054494"
 								lng="-57.5351386" 
 								open="true"
