@@ -1,6 +1,8 @@
+<zk>
+<script type="text/javascript" content="zk.googleAPIkey='AIzaSyBXZvTr-k5fNF_v1vwj3Ko0-zwei5cJzSs'"/>
 <div apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.mobile.AgendamientoVM')"
-	vflex="true">
+	vflex="true" id="win">
 	
 	<vlayout id="vl_fecha">
 		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
@@ -23,12 +25,13 @@
 		<button id="btn_sel_con" mold="bs" sclass="btn-primary btn-lg" hflex="true"
 			iconSclass="z-icon-check"
 			label=" Seleccionar Tarea" height="150px" style="font-size:30pt"
-			dir="normal"
+			dir="normal" disabled="@load(vm.selectedTarea eq null)"
 			onClick='vl_tareas.setVisible(false);vl_selected.setVisible(true)' />
 		<listbox 
 			style="overflow:auto" vflex="1"
 			model="@load(vm.tareas)"
-			selectedItem="@bind(vm.selectedTarea)">
+			selectedItem="@bind(vm.selectedTarea)"
+			onSelect="@command('selectTarea')">
 			<listhead>
 				<listheader></listheader>
 			</listhead>
@@ -36,8 +39,16 @@
 			<listitem>
 				<listcell>
 					<vlayout>
+						<div height="30px" />
 						<label value="@load(each.tarea)" sclass="mobile" style="font-weight:bold"/>
 						<label value="@load(each.empresa.razonSocial)" sclass="mobile" />
+						<hlayout>
+							<label value="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy hh:mm')" sclass="mobile" style="color:#428bca" />
+							<space hflex="1" />
+							<a label="@load(each.realizado? ' REALIZADO':' PENDIENTE')" sclass="mobile" 
+								style="@load(each.realizado? 'color:#5cb85c':'color:#E14416')" iconSclass="@load(each.realizado? 'z-icon-check':'z-icon-exclamation')" />
+						</hlayout>		
+						<div height="30px" />				
 					</vlayout>
 				</listcell>
 			</listitem>
@@ -49,13 +60,19 @@
 		<button mold="bs" sclass="btn-primary btn-lg" hflex="true"
 			iconSclass="z-icon-check"
 			label=" Realizar Tarea" height="150px" style="font-size:30pt"
-			dir="normal" />
-			<vlayout style="padding:60px">
+			dir="normal" 
+			onClick="@command('realizarTarea')">
+			<attribute name="onClick">
+				det.setVisible(false);
+				end.setVisible(true);
+			</attribute>
+		</button>
+			<vlayout style="padding:60px" id="det">
 			
 			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.ruc)"></label>
 			<space></space>
 			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.razonSocial)"></label>
-			<space></space>
+			<space></space>	
 			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.direccion_)"></label>
 			<space></space>
 			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.telefono)"></label>
@@ -63,16 +80,24 @@
 			<space></space>
 			<label sclass="mobile" value="@load(vm.selectedTarea.empresa.ciudad.descripcion)"></label>
 			<space></space>
-			<gmaps version="3.26" id="gmaps" hflex="true"
-							lat="-25.3054494" lng="-57.5351386"
-							zoom="9"
-							height="400px" showSmallCtrl="true" protocol="https">
-							<gmarker id="marker" lat="-25.3054494"
-								lng="-57.5351386" 
-								open="true"
-								content="Ubicación"/>
-						</gmaps>
-
+			<label sclass="mobile" value="@load(vm.selectedTarea.observacion)"></label>
+			<space></space>
+			<gmaps hflex="true" lat="-25.3054494"
+					lng="-57.5351386" zoom="12" height="800px" showSmallCtrl="true"
+					version="3.26" protocol="https">
+					<gmarker lat="-25.3054494"
+							lng="-57.5351386" open="true"
+							content="@load(vm.selectedTarea.empresa.razonSocial)"
+							 />
+			</gmaps>
+			<space></space>
+			<a sclass="mobile" target='_self'>Abrir en Maps</a>
+			</vlayout>
+			
+			<vlayout style="padding:60px" id="end" visible="false">
+			<space></space><space></space>
+			<label sclass="mobile" value="TAREA REALIZADA"></label>
+			<space></space><space></space>
 			</vlayout>
 	</vlayout>
 	
@@ -101,3 +126,4 @@
 		.z-combobox-popup { height:500px }
 	</style>
 </div>
+</zk>
