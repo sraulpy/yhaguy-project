@@ -1963,8 +1963,8 @@ public class VentaControlBody extends BodyApp {
 						&& !art.getFamilia().getDescripcion().contains("USADAS")
 						&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL) {
 					double costoGs = art.getCostoGs();
-					double importeGs = item.getImporteGsSinIva();
-					if ((importeGs <= costoGs) && art.isRestriccionCosto()) {
+					double precioGs = item.getPrecioGsSinIva();
+					if ((precioGs <= costoGs) && art.isRestriccionCosto()) {
 						out = false;
 						mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
 					}
