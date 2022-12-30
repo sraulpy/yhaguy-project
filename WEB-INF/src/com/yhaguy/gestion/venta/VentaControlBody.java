@@ -1951,7 +1951,7 @@ public class VentaControlBody extends BodyApp {
 		
 		// verificacion de costo y servicio..
 		boolean averiados = this.dto.getDeposito().getText().equals("BATERIAS AVERIADAS")
-				&& (this.isEmpresaMRA() || this.isEmpresaCentral());
+				&& !(this.isEmpresaMRA() || this.isEmpresaCentral());
 		if (!averiados) {
 			for (VentaDetalleDTO item : this.dto.getDetalles()) {
 				Articulo art = rr.getArticuloById(item.getArticulo().getId());
@@ -1966,7 +1966,7 @@ public class VentaControlBody extends BodyApp {
 					double precioGs = item.getPrecioGsSinIva();
 					if ((precioGs <= costoGs) && art.isRestriccionCosto()) {
 						out = false;
-						mensajeError += "\n - ítem " + art.getCodigoInterno() + " importe menor al costo..";
+						mensajeError += "\n - ítem " + art.getCodigoInterno() + " precio menor al costo..";
 					}
 				}
 			}
