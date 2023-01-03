@@ -6,12 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -24,6 +18,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
@@ -39,6 +34,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.gestion.caja.periodo.CajaUtil;
 import com.yhaguy.gestion.caja.recibos.AssemblerRecibo;
 import com.yhaguy.gestion.caja.recibos.ReciboDTO;
 import com.yhaguy.gestion.caja.recibos.ReciboDetalleDTO;
@@ -47,6 +43,12 @@ import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
+
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 @SuppressWarnings("unchecked")
 public class PagosViewModel extends SimpleViewModel {
@@ -212,6 +214,13 @@ public class PagosViewModel extends SimpleViewModel {
 	 * registra los datos del recibo de pago..
 	 */
 	private void registrarRecibo_() throws Exception {	
+		
+		if (CajaUtil.CAJAS_ABIERTAS.get(this.selectedItem.getPos6()) != null) {
+			String msg = "CAJA BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(this.selectedItem.getPos6());
+			Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
 		this.nvoRecibo.setPos1("");
 		this.nvoRecibo.setPos2(new Date());
 		WindowPopup wp = new WindowPopup();
@@ -223,6 +232,13 @@ public class PagosViewModel extends SimpleViewModel {
 		wp.setTitulo("Registrar Recibo de Pago");
 		wp.show(ZUL_REGISTRAR_RECIBO);
 		if (wp.isClickAceptar()) {
+			
+			if (CajaUtil.CAJAS_ABIERTAS.get(this.selectedItem.getPos6()) != null) {
+				String msg = "CAJA BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(this.selectedItem.getPos6());
+				Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+			
 			String numeroRecibo = ((String) this.nvoRecibo.getPos1()).toUpperCase();
 			Date fechaRecibo = (Date) this.nvoRecibo.getPos2();
 			long idOrdenPago = this.selectedItem.getId();
@@ -230,8 +246,7 @@ public class PagosViewModel extends SimpleViewModel {
 			AssemblerRecibo.registrarReciboPago(numeroRecibo, fechaRecibo, idOrdenPago, user, false, false);			
 			this.selectedItem = null;
 			this.mensajePopupTemporal("Recibo Registrado..", 5000);
-		}
-	
+		}	
 	}
 	
 	/**
