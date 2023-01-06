@@ -152,7 +152,9 @@ public class AuditoriaStockViewModel extends SimpleViewModel {
 			List<Deposito> deps = rr.getDepositos_();
 			for (Deposito dep : deps) {
 				if (dep.getId().longValue() != Deposito.ID_MRA_TEMPORAL) {
-					out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+					if (!dep.getAuxi().equals(Deposito.NO_AUDITAR)) {
+						out.add(new MyPair(dep.getId(), dep.getDescripcion()));
+					}					
 				}
 			}
 		}		
