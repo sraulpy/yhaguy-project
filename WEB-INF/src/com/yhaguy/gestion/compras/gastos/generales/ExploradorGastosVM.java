@@ -155,7 +155,9 @@ public class ExploradorGastosVM extends SimpleViewModel {
 		if (ctacte != null) {
 			ctacte.setNroComprobante(this.selectedGasto.getNumeroFactura());
 			ctacte.setImporteOriginal(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
-			ctacte.setSaldo(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
+			if (ctacte.getSaldo() > 0) {
+				ctacte.setSaldo(this.selectedGasto.isMonedaLocal() ? this.selectedGasto.getImporteGs_() : this.selectedGasto.getImporteDs_());
+			}			
 			rr.saveObject(ctacte, this.getLoginNombre());
 		}
 		rr.saveObject(this.selectedGasto, this.getLoginNombre());
