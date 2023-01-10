@@ -445,6 +445,7 @@ public class CompraLocalControlBody extends BodyApp {
 	@Command
 	@NotifyChange("*")
 	public void modificarTimbrado(@BindingParam("comp1") Button comp1, @BindingParam("comp2") Button comp2) throws Exception {
+		this.setTimbrado();
 		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
 		comp1.setVisible(false);
 		comp2.setVisible(true);
