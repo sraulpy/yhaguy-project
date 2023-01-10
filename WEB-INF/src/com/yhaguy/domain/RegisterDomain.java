@@ -925,12 +925,13 @@ public class RegisterDomain extends Register {
 
 	// verifica si existe la factura de Compra Local en la BD..
 	public boolean existeFacturaCompra(long idProveedor, String nroFactura,
-			String nroTimbrado) throws Exception {
+			String nroTimbrado, long idFactura) throws Exception {
 		String query = "select c from CompraLocalFactura c where c.proveedor.id = "
 				+ idProveedor
-				+ " and c.numero like '"
+				+ " and c.numero = '"
 				+ nroFactura
-				+ "' and c.timbrado.numero like '" + nroTimbrado + "'";
+				+ "' and c.timbrado.numero = '" + nroTimbrado + "'"
+				+ " and c.id != " + idFactura;
 		List<Object> list = this.hql(query);
 		if (list.size() == 0) {
 			return false;
@@ -6674,6 +6675,16 @@ public class RegisterDomain extends Register {
 				+ " and c.proveedor.id = " + idProveedor;
 		List<CompraLocalFactura> out = this.hql(query);
 		return out.size() > 0 ? out.get(0) : null;
+	}
+	
+	/**
+	 * @return la factura de compra..
+	 */
+	public List<CompraLocalFactura> getCompraLocalFacturas(String numero, long idProveedor) throws Exception {
+		String query = "select c from CompraLocalFactura c where c.numero = '" + numero + "'"
+				+ " and c.proveedor.id = " + idProveedor;
+		List<CompraLocalFactura> out = this.hql(query);
+		return out;
 	}
 	
 	/**
@@ -14821,6 +14832,14 @@ public class RegisterDomain extends Register {
 		return out;
 	}
 	
+	/**
+	 * @return ordenes de compra por numero..
+	 */
+	public List<CompraLocalOrden> getCompraLocalOrdenes(String numero) throws Exception {
+		String query = "select c from CompraLocalOrden c where c.numero = '" + numero + "'";
+		return this.hql(query);
+	}
+
 	/**
 	 * @return 
 	 * [0]:proveedor.razonSocial
