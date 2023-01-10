@@ -1068,6 +1068,7 @@ public class CompraLocalControlBody extends BodyApp {
 	 * asigna los timbrados a las facturas.
 	 */
 	private void setTimbrado() {
+		System.out.println("timb nuevo: " + this.dto.getFactura().getTimbrado().esNuevo() + " nro: " + this.dto.getFactura().getTimbrado().getPos1());
 		if (this.dto.getFactura().getTimbrado().esNuevo()) {
 			WindowTimbrado w = new WindowTimbrado();
 			w.agregarTimbrado(this.dto.getFactura().getTimbrado(), this.dto.getFactura().getProveedor().getId());
