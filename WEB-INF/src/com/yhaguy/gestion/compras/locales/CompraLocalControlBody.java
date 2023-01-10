@@ -962,6 +962,34 @@ public class CompraLocalControlBody extends BodyApp {
 				return;
 			}
 		}
+		
+		if (this.dto.getFactura().isSaldoAnticipadoCtaCte()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			CtaCteEmpresaMovimiento ctacte = rr.getCtaCteMovimientoByIdMovimiento(this.dto.getFactura().getId(), (String) this.dto.getFactura().getTipoMovimiento().getPos2(),
+					this.dto.getFactura().getProveedor().getEmpresa().getId());
+			
+			System.out.println("--- fac:" + this.dto.getFactura().getId() + " tm:" + this.dto.getTipoMovimiento().getPos2()
+					+ " emp:" + this.dto.getFactura().getProveedor().getEmpresa().getId());
+			
+			if (ctacte != null) {
+				double importeCtaCte = ctacte.getImporteOriginal();
+				double importeFactura = this.dto.getFactura().getTotalImporteGs();
+				if ((importeCtaCte - importeFactura) != 0) {
+					Clients.showNotification("EL SALDO ANTICIPADO NO COINCIDE", Clients.NOTIFICATION_TYPE_ERROR, null,
+							null, 0);
+					return;
+				}
+			}
+		}		
+		
+		Object[] validar = this.validarFactura();
+		boolean valido = (boolean) validar[0];
+		String msg = (String) validar[1];
+		
+		if (!valido) {
+			this.mensajeError(msg);
+			return;
+		}
 
 		if (this.mensajeSiNo("Desea cerrar la compra..") == false)
 			return;
@@ -976,6 +1004,48 @@ public class CompraLocalControlBody extends BodyApp {
 		this.actualizarReposiciones();
 		this.setEstadoABMConsulta();
 		Clients.showNotification("Compra correctamente cerrada..");
+	}
+	
+	/**
+	 * @return factura valida..
+	 */
+	private Object[] validarFactura() throws Exception {
+		boolean out = true;
+		String msg = "Favor Verificar:";
+		
+		if (this.dto.getFactura().getTipoMovimiento().esNuevo()) {
+			out = false;
+			msg += "\n - Debe asignar el Concepto.";
+		}
+		
+		if (this.dto.getFactura().getNumero().trim().isEmpty()) {
+			out = false;
+			msg += "\n - Debe ingresar el Nro. de factura.";
+		}
+		
+		if (this.dto.getFactura().getTimbrado().esNuevo()) {
+			out = false;
+			msg += "\n - Debe ingresar el Timbrado.";
+		}
+		
+		if (this.dto.getFactura().getProveedor().esNuevo()) {
+			out = false;
+			msg += "\n - Debe asignar el Proveedor.";
+		}
+		
+		if (this.dto.getFactura().getCondicionPago().esNuevo()) {
+			out = false;
+			msg += "\n - Debe asignar la Moneda.";
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		if (rr.existeFacturaCompra(this.dto.getFactura().getProveedor().getId(), this.dto.getFactura().getNumero(),
+				(String) this.dto.getFactura().getTimbrado().getPos1(), this.dto.getFactura().getId()) == true) {
+			out = false;
+			msg += "\n - Ya existe en la Base de Datos una Factura con el mismo número y el mismo timbrado..";
+		}
+		
+		return new Object[] { out, msg };
 	}
 	
 	/**
@@ -1605,6 +1675,16 @@ public class CompraLocalControlBody extends BodyApp {
 		
 		if ((!this.dto.esNuevo()) && (this.dto.getFactura() != null) && (!this.dto.getFactura().getNumero().isEmpty())) {
 			this.setTimbrado();
+		}
+		
+		if (this.dto.getRequerimiento().trim().isEmpty()) {
+			out = false;
+			this.mensajeError += "\n - Debe ingresar el requerimiento..";
+		}
+		
+		if (this.dto.getObservacion().trim().isEmpty()) {
+			out = false;
+			this.mensajeError += "\n - Debe ingresar la observación..";
 		}
 		
 		try {
@@ -2349,11 +2429,6 @@ class ValidadorAgregarFactura implements VerificaAceptarCancelar{
 		
 		try {
 
-			RegisterDomain rr = RegisterDomain.getInstance();
-
-			String nroFactura = this.fac.getNumero();
-			String nroTimbrado = (String) this.fac.getTimbrado().getPos1();
-
 			if (this.fac.getTotalAsignadoGs() < 0.001) {
 				out = false;
 				this.mensajeError = mensajeError
@@ -2365,14 +2440,6 @@ class ValidadorAgregarFactura implements VerificaAceptarCancelar{
 				this.mensajeError = mensajeError
 						+ "\n - Esta Orden de Compra ya cuenta con una "
 						+ "factura con el mismo número y el mismo timbrado..";
-			}
-
-			if (rr.existeFacturaCompra(this.ctr.getDto().getId(), nroFactura,
-					nroTimbrado) == true) {
-				out = false;
-				this.mensajeError = mensajeError
-						+ "\n - Ya existe en la Base de Datos una Factura "
-						+ "con el mismo número y el mismo timbrado..";
 			}
 
 			if (((this.fac.getNumero().split("-").length != 3) || !this.ctr.m

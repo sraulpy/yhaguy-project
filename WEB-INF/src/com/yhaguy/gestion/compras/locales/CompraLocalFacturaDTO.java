@@ -20,7 +20,7 @@ public class CompraLocalFacturaDTO extends DTO{
 	private String numero = "";
 	private Date fechaCreacion = new Date();
 	private Date fechaOriginal = new Date();
-	private Date fechaVencimiento;
+	private Date fechaVencimiento = new Date();
 	private double tipoCambio = 0;
 	private String observacion = "";
 	private double descuentoGs = 0;

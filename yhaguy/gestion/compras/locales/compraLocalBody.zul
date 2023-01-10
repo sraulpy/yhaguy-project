@@ -85,14 +85,14 @@
 										<hbox width="100%">
 											<vlayout spacing="0" hflex="true">
 												<div height="6px"/>
-												<field value="Razón Social" />
+												<field value="Razón Social" sclass="mandatory" />
 												<div height="5px"/>
 												<buscadorProveedor
 													value="@bind(vm.dto)" campo="razonSocial" hflex="true" />
 											</vlayout>
 											<vlayout spacing="0">
 												<div height="6px"/>
-												<field value="Ruc" />
+												<field value="Ruc" sclass="mandatory" />
 												<div height="5px"/>
 												<buscadorProveedor
 													value="@bind(vm.dto)" campo="ruc" width="120px" />
@@ -100,7 +100,7 @@
 										</hbox>
 									</cell>
 									<vlayout spacing="0">
-										<field value="Condición"/>
+										<field value="Condición" sclass="mandatory" />
 										<combobox
 											model="@load(vm.dtoUtil.condicionesPago)"
 											value="@load(vm.dto.condicionPago.pos1)"
@@ -112,7 +112,7 @@
 										</combobox>
 									</vlayout>	
 									<vlayout spacing="0">
-										<field value="Requerimiento"/>
+										<field value="Requerimiento" sclass="mandatory" />
 										<combobox
 											model="@load(vm.requerimientos)"
 											value="@load(vm.dto.requerimiento)"
@@ -124,7 +124,7 @@
 										</combobox>
 									</vlayout>
 									<vlayout spacing="0" hflex="true">
-										<field value="Observación" />
+										<field value="Observación" sclass="mandatory" />
 										<textbox
 											value="@bind(vm.dto.observacion)" hflex="true" />
 									</vlayout>
@@ -366,7 +366,7 @@
 							<rows>
 								<row>
 									<vlayout spacing="0">
-										<field value="Concepto" />
+										<field value="Concepto" sclass="mandatory" />
 										<combobox model="@load(vm.tiposMovimiento)"
 											value="@load(vm.dto.factura.tipoMovimiento.pos1)"
 											selectedItem="@bind(vm.dto.factura.tipoMovimiento)"
@@ -378,7 +378,7 @@
 										</combobox>
 									</vlayout>
 									<vlayout spacing="0">
-										<field value="Número Factura"/>
+										<field value="Número Factura" sclass="mandatory"/>
 										<hlayout valign="top">
 											<textbox id="txNro_"
 												value="@bind(vm.dto.factura.numero) @converter(vm.cnv.facturaPy)"
@@ -393,7 +393,7 @@
 										</hlayout>
 									</vlayout>	
 									<vlayout spacing="0">
-										<field value="Timbrado"/>
+										<field value="Timbrado" sclass="mandatory" />
 										<hlayout valign="top">
 											<textbox value="@load(vm.dto.factura.timbrado.pos1)"
 												placeholder="Nro. Timbrado.." readonly="true" hflex="true"/>
@@ -410,7 +410,7 @@
 										</hlayout>
 									</vlayout>
 									<vlayout spacing="0">										
-										<field value="Fecha Emisión"/>
+										<field value="Fecha Emisión" sclass="mandatory" />
 										<hlayout valign="top">
 											<datebox id="dtbox_fecha" hflex="true" value="@bind(vm.dto.factura.fechaOriginal)" 
 												onChange="@command('calcularVencimiento')" 
@@ -429,7 +429,7 @@
 										</hlayout>										
 									</vlayout>
 									<vlayout spacing="0">										
-										<field value="Fecha Vencimiento"/>
+										<field value="Fecha Vencimiento" sclass="mandatory" />
 										<datebox hflex="true" 
 											value="@bind(vm.dto.factura.fechaVencimiento)" />
 									</vlayout>
@@ -439,14 +439,14 @@
 										<hbox width="100%">
 											<vlayout spacing="0" hflex="true">
 												<div height="6px"/>
-												<field value="Razón Social" />
+												<field value="Razón Social" sclass="mandatory" />
 												<div height="4px"/>
 												<textbox value="@load(vm.dto.factura.proveedor.razonSocial)" 
 													readonly="true" hflex="true" />
 											</vlayout>
 											<vlayout spacing="0">
 												<div height="6px"/>
-												<field value="Ruc" />
+												<field value="Ruc" sclass="mandatory" />
 												<div height="4px"/>
 												<textbox value="@load(vm.dto.factura.proveedor.ruc)" 
 													readonly="true" width="120px" />
@@ -454,7 +454,7 @@
 										</hbox>
 									</cell>
 									<vlayout spacing="0">
-										<field value="Moneda"/>
+										<field value="Moneda" sclass="mandatory" />
 										<textbox value="@load(vm.dto.factura.moneda.pos1)" readonly="true" hflex="true"></textbox>
 									</vlayout>
 									<vlayout spacing="0">
@@ -471,7 +471,7 @@
 										</hlayout>
 									</vlayout>
 									<vlayout spacing="0">
-										<field value="Condición"/>
+										<field value="Condición" sclass="mandatory" />
 										<textbox value="@load(vm.dto.factura.condicionPago.pos1)" readonly="true" hflex="true" />
 									</vlayout>										
 								</row>
