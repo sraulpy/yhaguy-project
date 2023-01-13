@@ -540,18 +540,20 @@ public class ReportesFiltros {
 	 * @return los anhos..
 	 */
 	public List<String> getAnhos() {
-		List<String> out = new ArrayList<String>();
-		out.add(Utiles.ANHO_2012);
-		out.add(Utiles.ANHO_2013);
-		out.add(Utiles.ANHO_2014);
-		out.add(Utiles.ANHO_2015);
-		out.add(Utiles.ANHO_2016);
-		out.add(Utiles.ANHO_2017);
+		List<String> out = new ArrayList<String>();		
 		out.add(Utiles.ANHO_2018);
 		out.add(Utiles.ANHO_2019);
 		out.add(Utiles.ANHO_2020);
 		out.add(Utiles.ANHO_2021);
 		out.add(Utiles.ANHO_2022);
+		out.add(Utiles.ANHO_2023);
+		out.add(Utiles.ANHO_2024);
+		out.add(Utiles.ANHO_2025);
+		out.add(Utiles.ANHO_2026);
+		out.add(Utiles.ANHO_2027);
+		out.add(Utiles.ANHO_2028);
+		out.add(Utiles.ANHO_2029);
+		out.add(Utiles.ANHO_2030);
 		return out;
 	}
 	
