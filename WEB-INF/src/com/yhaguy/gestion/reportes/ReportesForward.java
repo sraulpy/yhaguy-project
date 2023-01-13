@@ -9,9 +9,7 @@ import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Iframe;
 
-import com.coreweb.Config;
 import com.coreweb.control.SimpleViewModel;
-import com.coreweb.util.Misc;
 import com.yhaguy.Configuracion;
 
 public class ReportesForward extends SimpleViewModel {
@@ -37,12 +35,9 @@ public class ReportesForward extends SimpleViewModel {
 	 * redirecciona a reportes..
 	 */
 	private void forward() {
-		//Misc m = new Misc();
 		String url = this.getUrl();
 		String usuario = this.getLoginNombre();
-		String clave = (String) this.getAtributoSession(Config.CLAVE);
-		//String clave_ = m.encriptar(clave);
-		if_rep.setSrc(url + "?usuario=" + usuario + "&clave=" + clave);
+		if_rep.setSrc(url + "?usuario=" + usuario);
 	}
 	
 	/**
