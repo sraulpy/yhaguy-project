@@ -28,6 +28,7 @@ import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.FuncionarioDocumento;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
 import com.yhaguy.domain.Identificaciones;
@@ -51,6 +52,7 @@ public class FuncionarioControlBody extends Body {
 	
 	private FuncionarioPeriodoVacaciones nvoPeriodo;
 	private FuncionarioDocumento documento;
+	private FuncionarioDescuento descuento;
 
 	@Init(superclass = true)
 	public void initFuncionarioControlBody() {
@@ -294,7 +296,10 @@ public class FuncionarioControlBody extends Body {
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			this.documento.setAuxi(Configuracion.pathFuncionariosGenerico + name + format);
+			this.documento.setDescripcion(this.documento.getDescripcion().toUpperCase());
 			rr.saveObject(this.documento, this.getLoginNombre());
+			
+			this.documento = null;
 			
 			Clients.showNotification("DOCUMENTO CORRECTAMENTE SUBIDO");
 			
@@ -304,6 +309,46 @@ public class FuncionarioControlBody extends Body {
 					"Hubo un problema al intentar subir el archivo..",
 					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 		}
+	}
+	
+	@Command
+	@NotifyChange("documento")
+	public void openDescuento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) {
+		Funcionario f = new Funcionario();
+		f.setId(this.dto.getId());
+		this.descuento = new FuncionarioDescuento();
+		this.descuento.setFuncionario(f);
+		pop.open(comp, "after_start");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addDescuento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		
+		if (this.descuento.getDescripcion().trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR EL CONCEPTO", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		if (this.descuento.getImporteGs() <= 0) {
+			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.descuento.setDescripcion(this.descuento.getDescripcion().toUpperCase());
+		pop.close();
+		rr.saveObject(this.descuento, this.getLoginNombre());
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void deleteDescuento(@BindingParam("item")FuncionarioDescuento item) throws Exception {
+		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.deleteObject(item);
+			Clients.showNotification("ITEM ELIMINADO");
+		}		
 	}
 
 	List<MyArray> users = new ArrayList<MyArray>();
@@ -344,6 +389,12 @@ public class FuncionarioControlBody extends Body {
 	public List<FuncionarioDocumento> getDocumentos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();	
 		return rr.getFuncionarioDocumentos(this.dto.getId());
+	}
+	
+	@DependsOn("dto")
+	public List<FuncionarioDescuento> getDescuentos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioDescuentos(this.dto.getId());
 	}
 
 	public List<MyArray> getUsers() {
@@ -558,6 +609,14 @@ public class FuncionarioControlBody extends Body {
 
 	public void setDocumento(FuncionarioDocumento documento) {
 		this.documento = documento;
+	}
+
+	public FuncionarioDescuento getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(FuncionarioDescuento descuento) {
+		this.descuento = descuento;
 	}
 }
 

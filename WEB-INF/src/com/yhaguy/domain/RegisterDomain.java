@@ -14940,6 +14940,14 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 50);
 	}
 	
+	/**
+	 * @return descuentos de funcionarios..
+	 */
+	public List<FuncionarioDescuento> getFuncionarioDescuentos(long idFuncionario) throws Exception {
+		String query = "select d from FuncionarioDescuento d where d.funcionario.id = " + idFuncionario;
+		return this.hqlLimit(query, 100);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			Date desde = Utiles.getFecha("01-08-2022 00:00:00");

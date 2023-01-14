@@ -203,41 +203,44 @@
 				
 				<!-- _____________________ DESCUENTOS _____________________ -->
 				
-				<tabpanel vflex="true">
-					
-					<div style="padding:50px 0px 0px 50px">
-						<field value="DESCUENTOS DEL FUNCIONARIO" />
-						<div hflex="true" style="color:#B5D5ED;border-bottom:solid 1px;"></div>
-					</div>
-					
-					<div style="padding:0px 100px 50px 100px" vflex="true">
-						<hlayout valign="top" vflex="true">					
-							<vbox hflex="20%">
-								<space></space>
-								<space></space>
-								<a label="JUSTIFIQUES"></a>
-								<space></space>	
-								<a label="LLAMADOS DE ATENCIÓN"></a>						
-								<space></space>	
-								<a label="AMONESTACIONES"></a>						
-								<space></space>	
-								<a label="SUSPENCIONES"></a>		
-							</vbox>					
-							<vbox hflex="80%" vflex="true" style="margin:50px 100px 50px 100px">
-								<hlayout sclass="button-container">
-									<button mold="bs" sclass="btn-sm btn-success" 
-										iconSclass="z-icon-plus-circle" label="Agregar"
-										width="150px" disabled="@load(vm.dto.esNuevo)"></button>
-								</hlayout>
-								<listbox sclass="small-list" hflex="true" vflex="true">
-									<listhead>
-										<listheader label="Fecha"></listheader>
-										<listheader label="Descripción"></listheader>
-									</listhead>
-								</listbox>
-							</vbox>
+				<tabpanel>
+					<vbox hflex="true" vflex="true" style="margin:20px 30px">
+						<hlayout sclass="button-container">
+							<field value="DESCUENTOS DEL FUNCIONARIO" />
+							<separator orient="vertical" bar="true"></separator>
+							<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle" width="120px"
+								onClick="@command('openDescuento', comp=self, pop=pop_desc)"
+								disabled="@load(vm.dto.esNuevo)"> Agregar</button>
 						</hlayout>
-					</div>
+						<listbox vflex="1"
+							emptyMessage="SIN REGISTROS"
+							model="@load(vm.descuentos)">
+							<listhead>
+								<listheader>Descripción</listheader>
+								<listheader align="right" style="text-align:center">Importe Gs.</listheader>
+								<listheader width="80px" align="center"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+									<listcell>
+										<button iconSclass="z-icon-times" onClick="@command('deleteDescuento', item=each)"
+											mold="bs" sclass="btn-primary btn-xs"></button>
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>		
+					</vbox>
+					
+					<popup id="pop_desc">
+						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
+							<textbox value="@bind(vm.descuento.descripcion)"></textbox>
+							<guaranibox placeholder="Importe" hflex="1"
+								value="@bind(vm.descuento.importeGs)"></guaranibox>
+							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addDescuento', comp=self, pop=pop_desc)"></button>
+						</vlayout>
+					</popup>
 				</tabpanel>
 				
 				<!-- _____________________ VACACIONES _____________________ -->
