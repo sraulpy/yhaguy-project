@@ -39,6 +39,7 @@ public class Funcionario extends Domain {
 	
 	private String estadoCivil;
 	private String gradoAcademico;
+	private int cantidadHijos;
 	
 	private double porc_comision = 0;
 	private double porc_comision_cobros = 0;
@@ -403,5 +404,13 @@ public class Funcionario extends Domain {
 
 	public void setGradoAcademico(String gradoAcademico) {
 		this.gradoAcademico = gradoAcademico;
+	}
+
+	public int getCantidadHijos() {
+		return cantidadHijos;
+	}
+
+	public void setCantidadHijos(int cantidadHijos) {
+		this.cantidadHijos = cantidadHijos;
 	}
 }

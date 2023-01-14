@@ -19,7 +19,7 @@ import com.yhaguy.inicio.AssemblerAcceso;
 
 public class AssemblerFuncionario extends Assembler {
 
-	public static String[] attIguales = { "correoFuncionario", "estadoCivil", "gradoAcademico" };
+	public static String[] attIguales = { "correoFuncionario", "estadoCivil", "gradoAcademico", "cantidadHijos" };
 
 	// para recuperar los contactos internos
 	public static String query = " select ci.id, tipo.descripcion, cli.empresa.nombre"

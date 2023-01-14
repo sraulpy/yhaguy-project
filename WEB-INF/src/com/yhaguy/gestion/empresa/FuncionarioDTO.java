@@ -26,6 +26,7 @@ public class FuncionarioDTO extends DTO {
 	
 	private String estadoCivil;
 	private String gradoAcademico;
+	private int cantidadHijos = 0;
 
 	/*
 	 * 0 = nombre; 1 = direccion, 2 = telefono; 3 = correoPersonal
@@ -237,6 +238,14 @@ public class FuncionarioDTO extends DTO {
 
 	public void setGradoAcademico(String gradoAcademico) {
 		this.gradoAcademico = gradoAcademico;
+	}
+
+	public int getCantidadHijos() {
+		return cantidadHijos;
+	}
+
+	public void setCantidadHijos(int cantidadHijos) {
+		this.cantidadHijos = cantidadHijos;
 	}
 }
 

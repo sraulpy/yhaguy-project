@@ -82,6 +82,8 @@
 								<textbox value="@bind(vm.dto.direccion)" hflex="true" />
 								</vlayout>
 								<vlayout spacing="0" style="margin-left:10px">
+									<field value="Cantidad Hijos" />
+									<intbox value="@bind(vm.dto.cantidadHijos)" hflex="true" />
 								</vlayout>	
 							</row>
 							<row>
@@ -235,9 +237,10 @@
 					
 					<popup id="pop_desc">
 						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
-							<textbox value="@bind(vm.descuento.descripcion)"></textbox>
+							<textbox value="@bind(vm.descuento.descripcion)" hflex="1"
+								placeholder="Concepto"></textbox>
 							<guaranibox placeholder="Importe" hflex="1"
-								value="@bind(vm.descuento.importeGs)"></guaranibox>
+								value="@bind(vm.descuento.importeGs)" placeholder="Importe"></guaranibox>
 							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addDescuento', comp=self, pop=pop_desc)"></button>
 						</vlayout>
 					</popup>
