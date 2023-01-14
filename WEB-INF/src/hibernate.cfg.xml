@@ -8,9 +8,11 @@
 
 		<!-- Postgres -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5433/yhaguy_central_2022</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5433/repre</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">postgres</property>
+		
+		<property name="show_sql">true</property>
 
 		<!-- Fin Postgres -->
 
@@ -55,6 +57,7 @@
 		<mapping resource="com/yhaguy/domain/Funcionario.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioCtaCteDetalle.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioPeriodoVacaciones.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/FuncionarioDocumento.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/VendedorComision.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RuteoVendedor.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/Tecnico.hbm.xml" />
@@ -271,6 +274,7 @@
 		
 		<mapping resource="com/yhaguy/domain/Tarea_Programada.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ControlTalonario.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/Identificaciones.hbm.xml" />
 
 		<!-- Maestro de articulos -->
 		<mapping resource="com/yhaguy/util/migracion/maestro/Maestro.hbm.xml" />		
