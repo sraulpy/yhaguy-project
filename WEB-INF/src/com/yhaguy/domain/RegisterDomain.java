@@ -14922,6 +14922,24 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return datos identificaciones..
+	 */
+	public List<Identificaciones> getIdentificaciones(String cedula, String nombres, String apellidos) throws Exception {
+		String query = "select i from Identificaciones i where i.per_nrodocumento like '%" + cedula + "%'"
+				+ " and i.per_nombres like '%" + nombres.toUpperCase() + "%'"
+				+ " and i.per_apellidos like '%" + apellidos.toUpperCase() + "%'";
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
+	 * @return documentos de funcionarios..
+	 */
+	public List<FuncionarioDocumento> getFuncionarioDocumentos(long idFuncionario) throws Exception {
+		String query = "select d from FuncionarioDocumento d where d.funcionario.id = " + idFuncionario;
+		return this.hqlLimit(query, 50);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			Date desde = Utiles.getFecha("01-08-2022 00:00:00");

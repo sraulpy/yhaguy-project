@@ -12,6 +12,16 @@ import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class Funcionario extends Domain {
+	
+	public static final String ESTADO_CIVIL_CASADO = "CASADO/A";
+	public static final String ESTADO_CIVIL_SOLTERO = "SOLTERO/A";
+	
+	public static final String BACHILLER = "BACHILLER";
+	public static final String LICENCIADO = "LICENCIADO";
+	public static final String MAGISTER = "MAGISTER";
+	public static final String DOCTORADO = "DOCTORADO";
+	public static final String INGENIERO = "INGENIERO";
+	public static final String SIN_ESTUDIOS = "SIN ESTUDIOS";
 
 	private String correoFuncionario = "";
 	private Tipo funcionarioEstado;
@@ -26,6 +36,9 @@ public class Funcionario extends Domain {
 	private boolean chofer;
 	private boolean vendedorMostrador;
 	private long idSucursal;
+	
+	private String estadoCivil;
+	private String gradoAcademico;
 	
 	private double porc_comision = 0;
 	private double porc_comision_cobros = 0;
@@ -374,5 +387,21 @@ public class Funcionario extends Domain {
 
 	public void setUltimoCambioPassword(Date ultimoCambioPassword) {
 		this.ultimoCambioPassword = ultimoCambioPassword;
+	}
+
+	public String getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+	public String getGradoAcademico() {
+		return gradoAcademico;
+	}
+
+	public void setGradoAcademico(String gradoAcademico) {
+		this.gradoAcademico = gradoAcademico;
 	}
 }

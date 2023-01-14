@@ -27,6 +27,7 @@ public class Configuracion extends Config {
 	public static final String URL_IMAGES_PUBLIC_MRA = "http://mra.yhaguyrepuestos.com.py/images/";
 	public static final String URL_IMAGES_PUBLIC_BAT = "http://gestion.gtsa.com.py/images/";
 	public static final String URL_IMAGES_PUBLIC_RPS = "http://mra.yhaguyrepuestos.com.py/representaciones/images/";
+	public static final String URL_IMAGES_PUBLIC_CENT = "https://gestion.yhaguyrepuestos.com.py/central/images/";
 
 	public static String pathProforma = PATH_SESSION + ("/yhaguy/archivos/proformas/") + "/";
 	public static String pathProformaGenerico = "/yhaguy/archivos/proformas/";
@@ -45,6 +46,8 @@ public class Configuracion extends Config {
 	public static String pathReportesJasper = PATH_SESSION + ("/reportes/") + "/";
 	public static String pathCotizaciones = PATH_SESSION + ("/yhaguy/archivos/cotizaciones/") + "/";
 	public static String pathPrecios = PATH_SESSION + ("/yhaguy/archivos/precios/") + "/";
+	public static String pathFuncionarios = PATH_SESSION + ("/yhaguy/archivos/funcionarios/") + "/";
+	public static String pathFuncionariosGenerico = "/yhaguy/archivos/funcionarios/";
 	
 	public static String URL_IMAGENES_ARTICULOS = "/yhaguy/archivos/articulos/img/";
 	public static String URL_ARCHIVOS_IMAGENES = "/yhaguy/archivos/imagenes/";
@@ -115,6 +118,9 @@ public class Configuracion extends Config {
 					+ "/";
 			pathPrecios = Sessions.getCurrent().getWebApp()
 					.getRealPath("/yhaguy/archivos/precios/")
+					+ "/";
+			pathFuncionarios = Sessions.getCurrent().getWebApp()
+					.getRealPath("/yhaguy/archivos/funcionarios/")
 					+ "/";
 		} catch (Exception e) {
 			System.err.println("Sin session ......");

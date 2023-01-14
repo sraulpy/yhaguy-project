@@ -1,5 +1,7 @@
 package com.yhaguy.gestion.empresa;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,8 +9,11 @@ import java.util.List;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Popup;
 
@@ -18,25 +23,41 @@ import com.coreweb.dto.Assembler;
 import com.coreweb.dto.DTO;
 import com.coreweb.extras.browser.Browser;
 import com.coreweb.templateABM.Body;
+import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioDocumento;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
+import com.yhaguy.domain.Identificaciones;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaDTO;
 import com.yhaguy.inicio.AccesoDTO;
+import com.yhaguy.util.Utiles;
 
 public class FuncionarioControlBody extends Body {
+	
+	static final String PATH = Configuracion.pathFuncionarios;
+	
+	private String filterCedula;
+	private String filterNombres;
+	private String filterApellidos;
+	
+	private Identificaciones selectedIdentificaciones;
 
 	private FuncionarioDTO dto = new FuncionarioDTO();
 	private String msjErr = "";
 	
 	private FuncionarioPeriodoVacaciones nvoPeriodo;
+	private FuncionarioDocumento documento;
 
 	@Init(superclass = true)
 	public void initFuncionarioControlBody() {
 		this.nvoPeriodo = new FuncionarioPeriodoVacaciones();
+		this.filterCedula = "";
+		this.filterNombres = "";
+		this.filterApellidos = "";
 	}
 
 	@AfterCompose(superclass = true)
@@ -57,6 +78,7 @@ public class FuncionarioControlBody extends Body {
 	public void setDTOCorriente(DTO dto) {
 		this.selectedAcceso = null;
 		this.dto = (FuncionarioDTO) dto;
+		Clients.evalJavaScript("setImage('" + this.dto.getUrlImagen() + "')");
 	}
 
 	@Override
@@ -241,10 +263,88 @@ public class FuncionarioControlBody extends Body {
 		
 		this.dto = (FuncionarioDTO) this.getDTOById(Funcionario.class.getName(), f.getId());
 	}
+	
+	@Command
+	@NotifyChange("dto")
+	public void selectIdentificaciones() throws Exception {
+		this.dto.setNombre(this.selectedIdentificaciones.getPer_nombres() + " " + this.selectedIdentificaciones.getPer_apellidos());
+		this.dto.setCi(this.selectedIdentificaciones.getPer_nrodocumento());
+		this.dto.setFechaCumpleanhos(Utiles.getFecha(this.selectedIdentificaciones.getPer_fecha_nac(), "yyyy-MM-dd hh:mm:ss"));
+	}
+	
+	@Command
+	@NotifyChange("documento")
+	public void addDocumento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) {
+		Funcionario f = new Funcionario();
+		f.setId(this.dto.getId());
+		this.documento = new FuncionarioDocumento();
+		this.documento.setFuncionario(f);
+		pop.open(comp, "after_start");
+	}
+
+	@Command 
+	@NotifyChange("*")
+	public void uploadFile(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = Utiles.getDateToString(new Date(), "dd_MM_yyyy_hh_mm_ss");
+			InputStream file_ = new ByteArrayInputStream(file.getByteData());
+			String format = "." + file.getFormat();
+			misc.uploadFile(PATH, name, format, file_);
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.documento.setAuxi(Configuracion.pathFuncionariosGenerico + name + format);
+			rr.saveObject(this.documento, this.getLoginNombre());
+			
+			Clients.showNotification("DOCUMENTO CORRECTAMENTE SUBIDO");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
+	}
 
 	List<MyArray> users = new ArrayList<MyArray>();
 	MyArray selectedUser = null;
 	MyArray selectedDepartamento = null;
+	
+	/**
+	 * @return los estados civiles..
+	 */
+	public List<String> getEstadosCiviles() {
+		List<String> out = new ArrayList<String>();
+		out.add(Funcionario.ESTADO_CIVIL_CASADO);
+		out.add(Funcionario.ESTADO_CIVIL_SOLTERO);
+		return out;
+	}
+	
+	/**
+	 * @return los grados academicos..
+	 */
+	public List<String> getGradosAcademicos() {
+		List<String> out = new ArrayList<String>();
+		out.add(Funcionario.BACHILLER);
+		out.add(Funcionario.LICENCIADO);
+		out.add(Funcionario.MAGISTER);
+		out.add(Funcionario.DOCTORADO);
+		out.add(Funcionario.INGENIERO);
+		out.add(Funcionario.SIN_ESTUDIOS);
+		return out;
+	}
+	
+	@DependsOn({ "filterCedula", "filterNombres", "filterApellidos" })
+	public List<Identificaciones> getIdentificaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		return rr.getIdentificaciones(this.filterCedula, this.filterNombres, this.filterApellidos);
+	}
+	
+	@DependsOn("dto")
+	public List<FuncionarioDocumento> getDocumentos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioDocumentos(this.dto.getId());
+	}
 
 	public List<MyArray> getUsers() {
 		return users;
@@ -420,6 +520,45 @@ public class FuncionarioControlBody extends Body {
 		this.nvoPeriodo = nvoPeriodo;
 	}
 
+	public String getFilterCedula() {
+		return filterCedula;
+	}
+
+	public void setFilterCedula(String filterCedula) {
+		this.filterCedula = filterCedula;
+	}
+
+	public String getFilterNombres() {
+		return filterNombres;
+	}
+
+	public void setFilterNombres(String filterNombres) {
+		this.filterNombres = filterNombres;
+	}
+
+	public String getFilterApellidos() {
+		return filterApellidos;
+	}
+
+	public void setFilterApellidos(String filterApellidos) {
+		this.filterApellidos = filterApellidos;
+	}
+
+	public Identificaciones getSelectedIdentificaciones() {
+		return selectedIdentificaciones;
+	}
+
+	public void setSelectedIdentificaciones(Identificaciones selectedIdentificaciones) {
+		this.selectedIdentificaciones = selectedIdentificaciones;
+	}
+
+	public FuncionarioDocumento getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(FuncionarioDocumento documento) {
+		this.documento = documento;
+	}
 }
 
 class ValidadorPopupUsuario implements VerificaAceptarCancelar {

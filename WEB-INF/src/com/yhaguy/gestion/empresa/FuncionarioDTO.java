@@ -8,6 +8,7 @@ import java.util.List;
 import com.coreweb.dto.DTO;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
 import com.yhaguy.domain.RegisterDomain;
@@ -22,6 +23,9 @@ public class FuncionarioDTO extends DTO {
 	private EmpresaDTO empresa = new EmpresaDTO();
 	private List<MyPair> contactosInternos = new ArrayList<MyPair>();
 	private List<AccesoDTO> accesos = new ArrayList<AccesoDTO>();
+	
+	private String estadoCivil;
+	private String gradoAcademico;
 
 	/*
 	 * 0 = nombre; 1 = direccion, 2 = telefono; 3 = correoPersonal
@@ -34,6 +38,19 @@ public class FuncionarioDTO extends DTO {
 		this.datoSuc.setDatos(new MyArray());
 		this.empresa = new EmpresaDTO();
 
+	}
+	
+	/**
+	 * @return la url de la imagen..
+	 */
+	public String getUrlImagen() {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return Configuracion.URL_IMAGES_PUBLIC_RPS + "funcionarios/" + this.getEmpresa().getId() + ".png";
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			return Configuracion.URL_IMAGES_PUBLIC_CENT + "funcionarios/" + this.getEmpresa().getId() + ".png";
+		}
+		return Configuracion.URL_IMAGES_PUBLIC_CENT + "funcionarios/" + this.getEmpresa().getId() + ".png";
 	}
 	
 	/**
@@ -204,6 +221,22 @@ public class FuncionarioDTO extends DTO {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+	public String getGradoAcademico() {
+		return gradoAcademico;
+	}
+
+	public void setGradoAcademico(String gradoAcademico) {
+		this.gradoAcademico = gradoAcademico;
 	}
 }
 
