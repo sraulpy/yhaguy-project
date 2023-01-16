@@ -7,6 +7,7 @@ public class FuncionarioDescuento extends Domain {
 
 	private String descripcion;
 	private double importeGs;
+	private int cuotas;
 	
 	private Funcionario funcionario;
 	
@@ -37,5 +38,13 @@ public class FuncionarioDescuento extends Domain {
 
 	public void setImporteGs(double importeGs) {
 		this.importeGs = importeGs;
+	}
+
+	public int getCuotas() {
+		return cuotas;
+	}
+
+	public void setCuotas(int cuotas) {
+		this.cuotas = cuotas;
 	}
 }

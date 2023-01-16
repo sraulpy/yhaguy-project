@@ -220,12 +220,14 @@
 							<listhead>
 								<listheader>Descripción</listheader>
 								<listheader align="right" style="text-align:center">Importe Gs.</listheader>
+								<listheader align="right" style="text-align:center">Cuotas</listheader>
 								<listheader width="80px" align="center"></listheader>
 							</listhead>
 							<template name="model">
 								<listitem>
 									<listcell label="@load(each.descripcion)"></listcell>
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+									<listcell label="@load(each.cuotas)"></listcell>
 									<listcell>
 										<button iconSclass="z-icon-times" onClick="@command('deleteDescuento', item=each)"
 											mold="bs" sclass="btn-primary btn-xs"></button>
@@ -241,6 +243,7 @@
 								placeholder="Concepto"></textbox>
 							<guaranibox placeholder="Importe" hflex="1"
 								value="@bind(vm.descuento.importeGs)" placeholder="Importe"></guaranibox>
+							<spinner value="@bind(vm.descuento.cuotas)"></spinner>
 							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addDescuento', comp=self, pop=pop_desc)"></button>
 						</vlayout>
 					</popup>
