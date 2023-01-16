@@ -278,7 +278,7 @@ public class FuncionarioControlBody extends Body {
 	@NotifyChange("documento")
 	public void addDocumento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();		
-		Funcionario f = rr.getFuncionario(this.dto.getId());
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
 		this.documento = new FuncionarioDocumento();
 		this.documento.setFuncionario(f);
 		pop.open(comp, "after_start");
@@ -315,7 +315,7 @@ public class FuncionarioControlBody extends Body {
 	@NotifyChange("descuento")
 	public void openDescuento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();		
-		Funcionario f = rr.getFuncionario(this.dto.getId());
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
 		this.descuento = new FuncionarioDescuento();
 		this.descuento.setFuncionario(f);
 		pop.open(comp, "after_start");
