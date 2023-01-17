@@ -105,7 +105,7 @@ public class BancoPrestamosViewModel extends SimpleViewModel {
 					i,
 					Utiles.getFecha(dd + "-" + (mes_ > 9 ? ("" + mes_) : ("0" + mes_)) + "-" + aa + " 00:00:00"),
 					this.nvo_prestamo.getDeudaTotal() / cuotas,
-					this.nvo_prestamo.getInteres() / cuotas };
+					(this.nvo_prestamo.getInteres() + this.nvo_prestamo.getImpuestos()) / cuotas };
 			this.cuotas.add(cuota);
 		}		
 	}
