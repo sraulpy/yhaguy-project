@@ -21,7 +21,8 @@
 			<listheader label="Fecha"></listheader>
 			<listheader label="Banco"></listheader>
 			<listheader label="Número"></listheader>
-			<listheader label="Importe" align="right"></listheader>
+			<listheader label="Capital" align="right"></listheader>
+			<listheader label="Deuda Total" align="right"></listheader>
 		</listhead>
 		<auxhead>
 			<auxheader>
@@ -43,13 +44,15 @@
 					value="@bind(vm.filter_numero)" instant="true"></textbox>
 			</auxheader>
 			<auxheader></auxheader>
+			<auxheader></auxheader>
 		</auxhead>
 		<template name="model">
 			<listitem>
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 				<listcell label="@load(each.banco.banco.descripcion)"></listcell>
 				<listcell label="@load(each.numero)"></listcell>
-				<listcell label="@load(each.capital - each.impuestos - each.gastosAdministrativos) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.capital) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each.deudaTotal) @converter(vm.cnv.monedaLocal)"></listcell>
 			</listitem>
 		</template>
 		<listfoot>
