@@ -261,6 +261,13 @@ public class DescuentoChequesVM extends BodyApp {
 	}
 	
 	/**
+	 * @return el String concatenado..
+	 */
+	public String concat(String uno, String dos) {
+		return uno + " - " + dos;
+	}
+	
+	/**
 	 * Despliega la ventana para asignar las formas de pago..
 	 */
 	private void asignarFormaPago() throws Exception {
@@ -425,6 +432,7 @@ public class DescuentoChequesVM extends BodyApp {
 		for (BancoCta banco : list) {
 			MyArray my = new MyArray(new MyPair(banco.getBanco().getId(), banco.getBanco().getDescripcion().toUpperCase()));
 			my.setId(banco.getId());
+			my.setPos2(banco.getNroCuenta());
 			out.add(my);
 		}
 		return out;

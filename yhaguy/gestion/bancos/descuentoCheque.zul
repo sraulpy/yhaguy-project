@@ -37,7 +37,7 @@
 						model="@load(vm.bancos)"
 						onSelect="@command('addFilter')" instant="true">
 						<template name="model">
-							<comboitem label="@load(each.pos1.text)"></comboitem>
+							<comboitem label="@load(vm.concat(each.pos1.text, each.pos2))"></comboitem>
 						</template>
 					</combobox>
 				</vlayout>
