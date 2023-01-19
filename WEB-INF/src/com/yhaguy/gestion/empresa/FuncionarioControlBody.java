@@ -530,7 +530,7 @@ public class FuncionarioControlBody extends Body {
 			this.msjErr += "\n - Campo nombre vacio.";
 		}
 
-		if (this.dto.getRuc().trim().length() == 0) {
+		if (this.dto.getCi().trim().length() == 0) {
 			out = false;
 			this.msjErr += "\n - Campo número de documento vacio.";
 		}
