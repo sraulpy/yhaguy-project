@@ -28,9 +28,11 @@ import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioAnticipo;
 import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.FuncionarioDocumento;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
+import com.yhaguy.domain.FuncionarioPremio;
 import com.yhaguy.domain.Identificaciones;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.empresa.ctacte.CtaCteEmpresaDTO;
@@ -53,6 +55,8 @@ public class FuncionarioControlBody extends Body {
 	private FuncionarioPeriodoVacaciones nvoPeriodo;
 	private FuncionarioDocumento documento;
 	private FuncionarioDescuento descuento;
+	private FuncionarioAnticipo anticipo;
+	private FuncionarioPremio premio;
 
 	@Init(superclass = true)
 	public void initFuncionarioControlBody() {
@@ -350,6 +354,92 @@ public class FuncionarioControlBody extends Body {
 			Clients.showNotification("ITEM ELIMINADO");
 		}		
 	}
+	
+	@Command
+	@NotifyChange("anticipo")
+	public void openAnticipo(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
+		this.anticipo = new FuncionarioAnticipo();
+		this.anticipo.setFuncionario(f);
+		this.anticipo.setAnho(Integer.parseInt(Utiles.getDateToString(new Date(), "yyyy")));
+		this.anticipo.setMes(Integer.parseInt(Utiles.getDateToString(new Date(), "MM")));
+		pop.open(comp, "after_start");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void deleteAnticipo(@BindingParam("item")FuncionarioAnticipo item) throws Exception {
+		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.deleteObject(item);
+			Clients.showNotification("ITEM ELIMINADO");
+		}		
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addAnticipo(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		
+		if (this.anticipo.getDescripcion().trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR EL CONCEPTO", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		if (this.anticipo.getImporteGs() <= 0) {
+			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.anticipo.setDescripcion(this.anticipo.getDescripcion().toUpperCase());
+		pop.close();
+		rr.saveObject(this.anticipo, this.getLoginNombre());
+	}
+
+	
+	@Command
+	@NotifyChange("premio")
+	public void openPremio(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
+		this.premio = new FuncionarioPremio();
+		this.premio.setFuncionario(f);
+		this.premio.setAnho(Integer.parseInt(Utiles.getDateToString(new Date(), "yyyy")));
+		this.premio.setMes(Integer.parseInt(Utiles.getDateToString(new Date(), "MM")));
+		pop.open(comp, "after_start");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void deletePremio(@BindingParam("item") FuncionarioPremio item) throws Exception {
+		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.deleteObject(item);
+			Clients.showNotification("ITEM ELIMINADO");
+		}		
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addPremio(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		
+		if (this.premio.getDescripcion().trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR EL CONCEPTO", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		if (this.premio.getImporteGs() <= 0) {
+			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.premio.setDescripcion(this.premio.getDescripcion().toUpperCase());
+		pop.close();
+		rr.saveObject(this.premio, this.getLoginNombre());
+	}
+
 
 	List<MyArray> users = new ArrayList<MyArray>();
 	MyArray selectedUser = null;
@@ -395,6 +485,18 @@ public class FuncionarioControlBody extends Body {
 	public List<FuncionarioDescuento> getDescuentos() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();	
 		return rr.getFuncionarioDescuentos(this.dto.getId());
+	}
+	
+	@DependsOn("dto")
+	public List<FuncionarioAnticipo> getAnticipos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioAnticipos(this.dto.getId());
+	}
+	
+	@DependsOn("dto")
+	public List<FuncionarioPremio> getPremios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioPremios(this.dto.getId());
 	}
 
 	public List<MyArray> getUsers() {
@@ -617,6 +719,22 @@ public class FuncionarioControlBody extends Body {
 
 	public void setDescuento(FuncionarioDescuento descuento) {
 		this.descuento = descuento;
+	}
+
+	public FuncionarioAnticipo getAnticipo() {
+		return anticipo;
+	}
+
+	public void setAnticipo(FuncionarioAnticipo anticipo) {
+		this.anticipo = anticipo;
+	}
+
+	public FuncionarioPremio getPremio() {
+		return premio;
+	}
+
+	public void setPremio(FuncionarioPremio premio) {
+		this.premio = premio;
 	}
 }
 

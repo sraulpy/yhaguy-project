@@ -26,7 +26,6 @@ public class FuncionarioBrowser extends Browser {
 
 		ColumnaBrowser col1 = new ColumnaBrowser();
 		ColumnaBrowser col2 = new ColumnaBrowser();
-		ColumnaBrowser col3 = new ColumnaBrowser();
 		ColumnaBrowser col4 = new ColumnaBrowser();
 		ColumnaBrowser col5 = new ColumnaBrowser();
 
@@ -35,9 +34,6 @@ public class FuncionarioBrowser extends Browser {
 
 		col2.setCampo("empresa.ci");
 		col2.setTitulo("C.I.");
-
-		col3.setCampo("empresa.ruc");
-		col3.setTitulo("RUC");
 
 		col4.setCampo("funcionarioCargo.descripcion");
 		col4.setTitulo("Cargo");
@@ -52,7 +48,6 @@ public class FuncionarioBrowser extends Browser {
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
 		columnas.add(col2);
-		columnas.add(col3);
 		columnas.add(col4);
 		columnas.add(col5);
 

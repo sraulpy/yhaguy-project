@@ -14945,7 +14945,23 @@ public class RegisterDomain extends Register {
 	 */
 	public List<FuncionarioDescuento> getFuncionarioDescuentos(long idFuncionario) throws Exception {
 		String query = "select d from FuncionarioDescuento d where d.funcionario.id = " + idFuncionario;
-		return this.hqlLimit(query, 100);
+		return this.hqlLimit(query, 300);
+	}
+	
+	/**
+	 * @return anticipos de funcionarios..
+	 */
+	public List<FuncionarioAnticipo> getFuncionarioAnticipos(long idFuncionario) throws Exception {
+		String query = "select a from FuncionarioAnticipo a where a.funcionario.id = " + idFuncionario;
+		return this.hqlLimit(query, 300);
+	}
+	
+	/**
+	 * @return premios de funcionarios..
+	 */
+	public List<FuncionarioPremio> getFuncionarioPremios(long idFuncionario) throws Exception {
+		String query = "select p from FuncionarioPremio p where p.funcionario.id = " + idFuncionario;
+		return this.hqlLimit(query, 300);
 	}
 	
 	public static void main(String[] args) {

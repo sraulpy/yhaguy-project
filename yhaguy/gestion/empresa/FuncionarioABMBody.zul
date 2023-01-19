@@ -6,10 +6,12 @@
 		
 		<tabbox width="100%" vflex="true">
 			<tabs vflex="true">
-				<tab label="Datos Generales" width="170px" vflex="true"/>
-				<tab label="Documentos" width="170px" vflex="true"/>
-				<tab label="Descuentos" width="170px" vflex="true" />
-				<tab label="Vacaciones" width="170px" vflex="true" />
+				<tab label="Datos Generales" width="130px" vflex="true"/>
+				<tab label="Documentos" width="130px" vflex="true"/>
+				<tab label="Descuentos" width="130px" vflex="true" />
+				<tab label="Anticipos" width="130px" vflex="true" />
+				<tab label="Premios" width="130px" vflex="true" />
+				<tab label="Vacaciones" width="130px" vflex="true" />
 			</tabs>
 			
 			<tabpanels vflex="true">
@@ -229,8 +231,7 @@
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
 									<listcell label="@load(each.cuotas)"></listcell>
 									<listcell>
-										<button iconSclass="z-icon-times" onClick="@command('deleteDescuento', item=each)"
-											mold="bs" sclass="btn-primary btn-xs"></button>
+										<button iconSclass="z-icon-times" onClick="@command('deleteDescuento', item=each)"></button>
 									</listcell>
 								</listitem>
 							</template>
@@ -242,12 +243,124 @@
 							<textbox value="@bind(vm.descuento.descripcion)" hflex="1"
 								placeholder="Concepto"></textbox>
 							<guaranibox placeholder="Importe" hflex="1"
-								value="@bind(vm.descuento.importeGs)" placeholder="Importe"></guaranibox>
+								value="@bind(vm.descuento.importeGs)"></guaranibox>
 							<spinner value="@bind(vm.descuento.cuotas)"></spinner>
 							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addDescuento', comp=self, pop=pop_desc)"></button>
 						</vlayout>
 					</popup>
 				</tabpanel>
+
+				<!-- _____________________ ANTICIPOS _____________________ -->
+				
+				<tabpanel>
+					<vbox hflex="true" vflex="true" style="margin:20px 30px">
+						<hlayout sclass="button-container">
+							<field value="ANTICIPOS DEL FUNCIONARIO" />
+							<separator orient="vertical" bar="true"></separator>
+							<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle" width="120px"
+								onClick="@command('openAnticipo', comp=self, pop=pop_ant)"
+								disabled="@load(vm.dto.esNuevo)"> Agregar</button>
+						</hlayout>
+						<listbox vflex="1"
+							emptyMessage="SIN REGISTROS"
+							model="@load(vm.anticipos)">
+							<listhead>
+								<listheader>Descripción</listheader>
+								<listheader align="right" style="text-align:center">Importe Gs.</listheader>
+								<listheader align="right" style="text-align:center">Periodo</listheader>
+								<listheader width="80px" align="center"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+									<listcell label="@load(each.periodo)"></listcell>
+									<listcell>
+										<button iconSclass="z-icon-times" onClick="@command('deleteAnticipo', item=each)"></button>
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>		
+					</vbox>
+					
+					<popup id="pop_ant">
+						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
+							<textbox value="@bind(vm.anticipo.descripcion)" hflex="1"
+								placeholder="Descripción"></textbox>
+							<hlayout>
+								<label hflex="1">Importe</label>
+								<guaranibox placeholder="Importe" hflex="1"
+									value="@bind(vm.anticipo.importeGs)"></guaranibox>
+							</hlayout>							
+							<hlayout>
+								<label hflex="1">Mes</label>
+								<spinner value="@bind(vm.anticipo.mes)" hflex="1"></spinner>
+							</hlayout>
+							<hlayout>
+								<label hflex="1">Año</label>
+								<spinner value="@bind(vm.anticipo.anho)" hflex="1"></spinner>
+							</hlayout>
+							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addAnticipo', comp=self, pop=pop_premio)"></button>
+						</vlayout>
+					</popup>
+				</tabpanel>
+
+				
+				<!-- _____________________ PREMIOS _____________________ -->
+				
+				<tabpanel>
+					<vbox hflex="true" vflex="true" style="margin:20px 30px">
+						<hlayout sclass="button-container">
+							<field value="PREMIOS DEL FUNCIONARIO" />
+							<separator orient="vertical" bar="true"></separator>
+							<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle" width="120px"
+								onClick="@command('openPremio', comp=self, pop=pop_premio)"
+								disabled="@load(vm.dto.esNuevo)"> Agregar</button>
+						</hlayout>
+						<listbox vflex="1"
+							emptyMessage="SIN REGISTROS"
+							model="@load(vm.premios)">
+							<listhead>
+								<listheader>Descripción</listheader>
+								<listheader align="right" style="text-align:center">Importe Gs.</listheader>
+								<listheader align="right" style="text-align:center">Periodo</listheader>
+								<listheader width="80px" align="center"></listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+									<listcell label="@load(each.periodo)"></listcell>
+									<listcell>
+										<button iconSclass="z-icon-times" onClick="@command('deletePremio', item=each)"></button>
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>		
+					</vbox>
+					
+					<popup id="pop_premio">
+						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
+							<textbox value="@bind(vm.premio.descripcion)" hflex="1"
+								placeholder="Descripción"></textbox>
+							<hlayout>
+								<label hflex="1">Importe</label>
+								<guaranibox placeholder="Importe" hflex="1"
+									value="@bind(vm.premio.importeGs)"></guaranibox>
+							</hlayout>							
+							<hlayout>
+								<label hflex="1">Mes</label>
+								<spinner value="@bind(vm.premio.mes)" hflex="1"></spinner>
+							</hlayout>
+							<hlayout>
+								<label hflex="1">Año</label>
+								<spinner value="@bind(vm.premio.anho)" hflex="1"></spinner>
+							</hlayout>
+							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addPremio', comp=self, pop=pop_premio)"></button>
+						</vlayout>
+					</popup>
+				</tabpanel>
+
 				
 				<!-- _____________________ VACACIONES _____________________ -->
 				
