@@ -14964,6 +14964,14 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 300);
 	}
 	
+	/**
+	 * @return documentos de funcionarios app..
+	 */
+	public List<FuncionarioDocumentoApp> getFuncionarioDocumentosApp(long idEmpresa) throws Exception {
+		String query = "select d from FuncionarioDocumentoApp d where d.idEmpresa = '" + idEmpresa + "'";
+		return this.hqlLimit(query, 100);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			Date desde = Utiles.getFecha("01-08-2022 00:00:00");

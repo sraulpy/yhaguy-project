@@ -58,6 +58,7 @@
 		<mapping resource="com/yhaguy/domain/FuncionarioCtaCteDetalle.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioPeriodoVacaciones.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioDocumento.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/FuncionarioDocumentoApp.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioDescuento.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioAnticipo.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioPremio.hbm.xml" />

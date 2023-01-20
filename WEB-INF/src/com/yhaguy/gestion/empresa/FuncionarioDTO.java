@@ -10,6 +10,7 @@ import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioDocumentoApp;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
@@ -65,6 +66,15 @@ public class FuncionarioDTO extends DTO {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Funcionario f = rr.getFuncionarioById(this.getId());
 		out.addAll(f.getPeriodos());
+		return out;
+	}
+	
+	/**
+	 * @return los documentos app..
+	 */
+	public List<FuncionarioDocumentoApp> getDocumentosApp() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<FuncionarioDocumentoApp> out = rr.getFuncionarioDocumentosApp(this.empresa.getId());
 		return out;
 	}
 

@@ -174,7 +174,9 @@
 								onClick="@command('addDocumento', comp=self, pop=pop_docs)"
 								disabled="@load(vm.dto.esNuevo)"> Agregar</button>
 						</hlayout>
-						<listbox vflex="1"
+						<hbox hflex="1" vflex="1">
+						
+							<listbox vflex="1"
 							emptyMessage="SIN REGISTROS"
 							model="@load(vm.documentos)">
 							<listhead>
@@ -192,7 +194,29 @@
 									</listcell>
 								</listitem>
 							</template>
-						</listbox>		
+							</listbox>
+							<space></space>
+							<listbox vflex="1"
+							emptyMessage="SIN REGISTROS"
+							model="@load(vm.dto.documentosApp)">
+							<listhead>
+								<listheader>Documento subido desde la App</listheader>
+								<listheader align="center">Documento</listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell>
+										<a iconSclass="z-icon-paperclip"
+										label=" ver documento" href="@load(each.path)"
+										target="_blank" 
+										style="font-size:10pt" />
+									</listcell>
+								</listitem>
+							</template>
+							</listbox>
+						
+						</hbox>	
 					</vbox>
 					
 					<popup id="pop_docs">
