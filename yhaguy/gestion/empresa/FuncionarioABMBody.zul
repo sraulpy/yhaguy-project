@@ -8,6 +8,7 @@
 			<tabs vflex="true">
 				<tab label="Datos Generales" width="130px" vflex="true"/>
 				<tab label="Documentos" width="130px" vflex="true"/>
+				<tab label="Salarios" width="130px" vflex="true" />
 				<tab label="Descuentos" width="130px" vflex="true" />
 				<tab label="Premios" width="130px" vflex="true" />
 				<tab label="Vacaciones" width="130px" vflex="true" />
@@ -235,6 +236,10 @@
 						</vlayout>
 					</popup>
 				</tabpanel>
+				
+				<!-- _____________________ SALARIOS _____________________ -->
+				
+				<tabpanel></tabpanel>
 				
 				<!-- _____________________ DESCUENTOS _____________________ -->
 				
