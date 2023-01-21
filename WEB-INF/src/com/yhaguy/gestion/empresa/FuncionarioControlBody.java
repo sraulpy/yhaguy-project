@@ -31,6 +31,7 @@ import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.FuncionarioAnticipo;
 import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.FuncionarioDocumento;
+import com.yhaguy.domain.FuncionarioDocumentoApp;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
 import com.yhaguy.domain.FuncionarioPremio;
 import com.yhaguy.domain.Identificaciones;
@@ -439,7 +440,26 @@ public class FuncionarioControlBody extends Body {
 		pop.close();
 		rr.saveObject(this.premio, this.getLoginNombre());
 	}
+	
+	@Command
+	@NotifyChange("*")
+	public void deleteDocumento(@BindingParam("item") FuncionarioDocumento item) throws Exception {
+		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.deleteObject(item);
+			Clients.showNotification("ITEM ELIMINADO");
+		}		
+	}
 
+	@Command
+	@NotifyChange("*")
+	public void deleteDocumentoApp(@BindingParam("item") FuncionarioDocumentoApp item) throws Exception {
+		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.deleteObject(item);
+			Clients.showNotification("ITEM ELIMINADO");
+		}		
+	}
 
 	List<MyArray> users = new ArrayList<MyArray>();
 	MyArray selectedUser = null;
