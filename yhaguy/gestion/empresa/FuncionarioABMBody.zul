@@ -178,7 +178,7 @@
 						
 							<listbox vflex="1"
 							emptyMessage="SIN REGISTROS"
-							model="@load(vm.documentos)">
+							model="@load(vm.documentos)" sclass="rounded">
 							<listhead>
 								<listheader>Descripción</listheader>
 								<listheader align="center">Documento</listheader>
@@ -202,7 +202,7 @@
 							<space></space>
 							<listbox vflex="1"
 							emptyMessage="SIN REGISTROS"
-							model="@load(vm.dto.documentosApp)">
+							model="@load(vm.dto.documentosApp)" sclass="rounded">
 							<listhead>
 								<listheader>Documento subido desde la App</listheader>
 								<listheader align="center">Documento</listheader>
