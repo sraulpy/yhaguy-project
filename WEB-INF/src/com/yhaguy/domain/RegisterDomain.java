@@ -14949,14 +14949,6 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
-	 * @return anticipos de funcionarios..
-	 */
-	public List<FuncionarioAnticipo> getFuncionarioAnticipos(long idFuncionario) throws Exception {
-		String query = "select a from FuncionarioAnticipo a where a.funcionario.id = " + idFuncionario;
-		return this.hqlLimit(query, 300);
-	}
-	
-	/**
 	 * @return premios de funcionarios..
 	 */
 	public List<FuncionarioPremio> getFuncionarioPremios(long idFuncionario) throws Exception {

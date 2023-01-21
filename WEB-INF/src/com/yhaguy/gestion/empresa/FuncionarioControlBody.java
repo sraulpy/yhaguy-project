@@ -508,12 +508,6 @@ public class FuncionarioControlBody extends Body {
 	}
 	
 	@DependsOn("dto")
-	public List<FuncionarioAnticipo> getAnticipos() throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();	
-		return rr.getFuncionarioAnticipos(this.dto.getId());
-	}
-	
-	@DependsOn("dto")
 	public List<FuncionarioPremio> getPremios() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();	
 		return rr.getFuncionarioPremios(this.dto.getId());
