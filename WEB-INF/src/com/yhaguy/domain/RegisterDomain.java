@@ -14957,6 +14957,30 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return salarios de funcionarios..
+	 */
+	public List<FuncionarioSalario> getFuncionarioSalarios(long idFuncionario) throws Exception {
+		String query = "select s from FuncionarioSalario s where s.auxi = 'SALARIO' and s.funcionario.id = " + idFuncionario + " order by s.fecha desc";
+		return this.hqlLimit(query, 300);
+	}
+	
+	/**
+	 * @return salarios de funcionarios..
+	 */
+	public List<FuncionarioSalario> getFuncionarioBonificacionesFamiliar(long idFuncionario) throws Exception {
+		String query = "select s from FuncionarioSalario s where s.auxi = 'BONIFICACION_FAMILIAR' and s.funcionario.id = " + idFuncionario + " order by s.fecha desc";
+		return this.hqlLimit(query, 300);
+	}
+	
+	/**
+	 * @return salarios de funcionarios..
+	 */
+	public List<FuncionarioSalario> getFuncionarioBonificacionesResponsabilidad(long idFuncionario) throws Exception {
+		String query = "select s from FuncionarioSalario s where s.auxi = 'BONIFICACION_RESPONSABILIDAD' and s.funcionario.id = " + idFuncionario + " order by s.fecha desc";
+		return this.hqlLimit(query, 300);
+	}
+	
+	/**
 	 * @return documentos de funcionarios app..
 	 */
 	public List<FuncionarioDocumentoApp> getFuncionarioDocumentosApp(long idEmpresa) throws Exception {

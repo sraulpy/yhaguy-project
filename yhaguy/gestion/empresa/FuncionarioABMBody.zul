@@ -239,7 +239,177 @@
 				
 				<!-- _____________________ SALARIOS _____________________ -->
 				
-				<tabpanel></tabpanel>
+				<tabpanel>
+				
+				<vbox hflex="true" vflex="true" style="margin:20px 30px">
+					<hbox hflex="1" vflex="1">
+						
+							<vbox hflex="1" vflex="1">
+								<field>Salario Vigente Gs.</field>
+								<hlayout>
+									<guaranibox readonly="true" hflex="1" value="@load(vm.dto.salarioVigente)" />
+									<space hflex="1" />
+								</hlayout>
+								<hlayout sclass="button-container">
+									<field
+										value="SALARIOS DEL FUNCIONARIO" />
+									<separator orient="vertical"
+										bar="true">
+									</separator>
+									<button mold="bs"
+										sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle"
+										width="120px" disabled="@load(vm.dto.esNuevo)" onClick="@command('openSalario', pop=pop_salario, comp=self)">
+										Agregar
+									</button>
+								</hlayout>
+								<listbox vflex="1"
+									emptyMessage="SIN REGISTROS" sclass="rounded"
+									model="@load(vm.salarios)">
+									<listhead>
+										<listheader>Fecha</listheader>
+										<listheader>
+											Descripción
+										</listheader>
+										<listheader align="right">Salario</listheader>
+										<listheader width="60px"
+											align="center">
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+											<listcell label="@load(each.descripcion)"></listcell>
+											<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+											<listcell>
+												<button iconSclass="z-icon-times" onClick="@command('deleteSalario', item=each)"></button>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vbox>
+
+							
+							<vbox hflex="1" vflex="1">
+								<field>Bonificación Familiar Vigente Gs.</field>
+								<hlayout>
+									<guaranibox readonly="true" hflex="1" />
+									<space hflex="1" />
+								</hlayout>
+								<hlayout sclass="button-container">
+									<field
+										value="BONIFICACION FAMILIAR" />
+									<separator orient="vertical"
+										bar="true">
+									</separator>
+									<button mold="bs"
+										sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle"
+										width="120px" disabled="@load(vm.dto.esNuevo)" onClick="@command('openBonificacionFamiliar', pop=pop_bonif_familiar, comp=self)">
+										Agregar
+									</button>
+								</hlayout>
+								<listbox vflex="1"
+									emptyMessage="SIN REGISTROS" sclass="rounded"
+									model="@load(vm.bonificacionesFamiliar)">
+									<listhead>
+										<listheader>Fecha</listheader>
+										<listheader>
+											Descripción
+										</listheader>
+										<listheader align="right">Importe</listheader>
+										<listheader width="60px"
+											align="center">
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+											<listcell label="@load(each.descripcion)"></listcell>
+											<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+											<listcell>
+												<button iconSclass="z-icon-times" onClick="@command('deleteSalario', item=each)"></button>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vbox>
+							
+							<vbox hflex="1" vflex="1">
+								<field>Bonificación por Responsabilidad Vigente Gs.</field>
+								<hlayout>
+									<guaranibox readonly="true" hflex="1" />
+									<space hflex="1" />
+								</hlayout>
+								<hlayout sclass="button-container">
+									<field
+										value="BONIFICACION RESPONSABILIDAD" />
+									<separator orient="vertical"
+										bar="true">
+									</separator>
+									<button mold="bs"
+										sclass="btn-primary btn-sm" iconSclass="z-icon-plus-circle"
+										width="120px" disabled="@load(vm.dto.esNuevo)" onClick="@command('openBonificacionResponsabilidad', pop=pop_bonif_responsabilidad, comp=self)">
+										Agregar
+									</button>
+								</hlayout>
+								<listbox vflex="1"
+									emptyMessage="SIN REGISTROS" sclass="rounded"
+									model="@load(vm.bonificacionesResponsabilidad)">
+									<listhead>
+										<listheader>Fecha</listheader>
+										<listheader>
+											Descripción
+										</listheader>
+										<listheader align="right">Importe</listheader>
+										<listheader width="60px"
+											align="center">
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+											<listcell label="@load(each.descripcion)"></listcell>
+											<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
+											<listcell>
+												<button iconSclass="z-icon-times" onClick="@command('deleteSalario', item=each)"></button>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vbox>											
+						</hbox>	
+				</vbox>
+				
+				<popup id="pop_salario">
+						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
+							<textbox value="@bind(vm.salario.descripcion)" hflex="1"
+								placeholder="Concepto"></textbox>
+							<guaranibox placeholder="Importe" hflex="1"
+								value="@bind(vm.salario.importeGs)"></guaranibox>
+							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addSalario', comp=self, pop=pop_salario)"></button>
+						</vlayout>
+				</popup>
+				
+				<popup id="pop_bonif_familiar">
+						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
+							<textbox value="@bind(vm.bonificacionFamiliar.descripcion)" hflex="1"
+								placeholder="Concepto"></textbox>
+							<guaranibox placeholder="Importe" hflex="1"
+								value="@bind(vm.bonificacionFamiliar.importeGs)"></guaranibox>
+							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addBonificacionFamiliar', comp=self, pop=pop_bonif_familiar)"></button>
+						</vlayout>
+				</popup>
+				
+				<popup id="pop_bonif_responsabilidad">
+						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
+							<textbox value="@bind(vm.bonificacionResponsabilidad.descripcion)" hflex="1"
+								placeholder="Concepto"></textbox>
+							<guaranibox placeholder="Importe" hflex="1"
+								value="@bind(vm.bonificacionesResponsabilidad.importeGs)"></guaranibox>
+							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addBonificacionResponsabilidad', comp=self, pop=pop_bonif_responsabilidad)"></button>
+						</vlayout>
+				</popup>
+				
+				</tabpanel>
 				
 				<!-- _____________________ DESCUENTOS _____________________ -->
 				

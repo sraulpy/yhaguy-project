@@ -6,14 +6,13 @@
 
 <hibernate-mapping>
 
-	<class name="com.yhaguy.domain.FuncionarioAnticipo" table="funcionario_anticipo">
+	<class name="com.yhaguy.domain.FuncionarioSalario" table="funcionario_salario">
 
 		&hibernate-domain; 
 
+		<property name="fecha"/>
 		<property name="descripcion"/>
 		<property name="importeGs"/>
-		<property name="mes"/>
-		<property name="anho"/>
 		
 		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
 			column="idfuncionario" lazy="false"/>

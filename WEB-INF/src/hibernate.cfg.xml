@@ -60,7 +60,7 @@
 		<mapping resource="com/yhaguy/domain/FuncionarioDocumento.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioDocumentoApp.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioDescuento.hbm.xml" />
-		<mapping resource="com/yhaguy/domain/FuncionarioAnticipo.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/FuncionarioSalario.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/FuncionarioPremio.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/VendedorComision.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/RuteoVendedor.hbm.xml" />

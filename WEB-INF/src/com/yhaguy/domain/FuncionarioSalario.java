@@ -1,24 +1,21 @@
 package com.yhaguy.domain;
 
+import java.util.Date;
+
 import com.coreweb.domain.Domain;
 
 @SuppressWarnings("serial")
-public class FuncionarioAnticipo extends Domain {
+public class FuncionarioSalario extends Domain {
 
+	private Date fecha;
 	private String descripcion;
 	private double importeGs;
-	private int mes;
-	private int anho;
 	
 	private Funcionario funcionario;
 	
 	@Override
 	public int compareTo(Object o) {
 		return -1;
-	}
-	
-	public String getPeriodo() {
-		return this.mes + " - " + this.anho;
 	}
 
 	public String getDescripcion() {
@@ -45,19 +42,11 @@ public class FuncionarioAnticipo extends Domain {
 		this.importeGs = importeGs;
 	}
 
-	public int getMes() {
-		return mes;
+	public Date getFecha() {
+		return fecha;
 	}
 
-	public void setMes(int mes) {
-		this.mes = mes;
-	}
-
-	public int getAnho() {
-		return anho;
-	}
-
-	public void setAnho(int anho) {
-		this.anho = anho;
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 }

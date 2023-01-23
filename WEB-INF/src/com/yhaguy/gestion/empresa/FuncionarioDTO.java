@@ -12,6 +12,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.FuncionarioDocumentoApp;
 import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
+import com.yhaguy.domain.FuncionarioSalario;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
 
@@ -76,6 +77,25 @@ public class FuncionarioDTO extends DTO {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<FuncionarioDocumentoApp> out = rr.getFuncionarioDocumentosApp(this.empresa.getId());
 		return out;
+	}
+	
+	/**
+	 * @return salario vigente..
+	 */
+	public Double getSalarioVigente() throws Exception {
+		Double out = 0.0;
+		if (this.getSalarios().size() > 0) {
+			return this.getSalarios().get(0).getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	public List<FuncionarioSalario> getSalarios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioSalarios(this.getId());
 	}
 
 	public String toString() {

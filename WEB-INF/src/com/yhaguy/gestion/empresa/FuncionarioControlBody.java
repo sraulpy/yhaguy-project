@@ -28,7 +28,7 @@ import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Funcionario;
-import com.yhaguy.domain.FuncionarioAnticipo;
+import com.yhaguy.domain.FuncionarioSalario;
 import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.FuncionarioDocumento;
 import com.yhaguy.domain.FuncionarioDocumentoApp;
@@ -56,7 +56,9 @@ public class FuncionarioControlBody extends Body {
 	private FuncionarioPeriodoVacaciones nvoPeriodo;
 	private FuncionarioDocumento documento;
 	private FuncionarioDescuento descuento;
-	private FuncionarioAnticipo anticipo;
+	private FuncionarioSalario salario;
+	private FuncionarioSalario bonificacionFamiliar;
+	private FuncionarioSalario bonificacionResponsabilidad;
 	private FuncionarioPremio premio;
 
 	@Init(superclass = true)
@@ -357,20 +359,41 @@ public class FuncionarioControlBody extends Body {
 	}
 	
 	@Command
-	@NotifyChange("anticipo")
-	public void openAnticipo(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+	@NotifyChange("salario")
+	public void openSalario(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();		
 		Funcionario f = rr.getFuncionarioById(this.dto.getId());
-		this.anticipo = new FuncionarioAnticipo();
-		this.anticipo.setFuncionario(f);
-		this.anticipo.setAnho(Integer.parseInt(Utiles.getDateToString(new Date(), "yyyy")));
-		this.anticipo.setMes(Integer.parseInt(Utiles.getDateToString(new Date(), "MM")));
+		this.salario = new FuncionarioSalario();
+		this.salario.setFuncionario(f);
+		this.salario.setFecha(new Date());
+		pop.open(comp, "after_start");
+	}
+	
+	@Command
+	@NotifyChange("bonificacionFamiliar")
+	public void openBonificacionFamiliar(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
+		this.bonificacionFamiliar = new FuncionarioSalario();
+		this.bonificacionFamiliar.setFuncionario(f);
+		this.bonificacionFamiliar.setFecha(new Date());
+		pop.open(comp, "after_start");
+	}
+	
+	@Command
+	@NotifyChange("bonificacionResponsabilidad")
+	public void openBonificacionResponsabilidad(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		Funcionario f = rr.getFuncionarioById(this.dto.getId());
+		this.bonificacionResponsabilidad = new FuncionarioSalario();
+		this.bonificacionResponsabilidad.setFuncionario(f);
+		this.bonificacionResponsabilidad.setFecha(new Date());
 		pop.open(comp, "after_start");
 	}
 	
 	@Command
 	@NotifyChange("*")
-	public void deleteAnticipo(@BindingParam("item")FuncionarioAnticipo item) throws Exception {
+	public void deleteSalario(@BindingParam("item")FuncionarioSalario item) throws Exception {
 		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			rr.deleteObject(item);
@@ -380,24 +403,66 @@ public class FuncionarioControlBody extends Body {
 	
 	@Command
 	@NotifyChange("*")
-	public void addAnticipo(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+	public void addSalario(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		
-		if (this.anticipo.getDescripcion().trim().isEmpty()) {
-			Clients.showNotification("DEBE INGRESAR EL CONCEPTO", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+		if (this.salario.getDescripcion().trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR LA DESCRIPCION", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
 		
-		if (this.anticipo.getImporteGs() <= 0) {
+		if (this.salario.getImporteGs() <= 0) {
 			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
-		this.anticipo.setDescripcion(this.anticipo.getDescripcion().toUpperCase());
+		this.salario.setAuxi("SALARIO");
+		this.salario.setDescripcion(this.salario.getDescripcion().toUpperCase());
+		rr.saveObject(this.salario, this.getLoginNombre());
 		pop.close();
-		rr.saveObject(this.anticipo, this.getLoginNombre());
 	}
 
+	@Command
+	@NotifyChange("*")
+	public void addBonificacionFamiliar(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		
+		if (this.bonificacionFamiliar.getDescripcion().trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR LA DESCRIPCION", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		if (this.bonificacionFamiliar.getImporteGs() <= 0) {
+			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.bonificacionFamiliar.setAuxi("BONIFICACION_FAMILIAR");
+		this.bonificacionFamiliar.setDescripcion(this.salario.getDescripcion().toUpperCase());
+		rr.saveObject(this.bonificacionFamiliar, this.getLoginNombre());
+		pop.close();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addBonificacionResponsabilidad(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		
+		if (this.bonificacionResponsabilidad.getDescripcion().trim().isEmpty()) {
+			Clients.showNotification("DEBE INGRESAR LA DESCRIPCION", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		if (this.bonificacionResponsabilidad.getImporteGs() <= 0) {
+			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.bonificacionResponsabilidad.setAuxi("BONIFICACION_RESPONSABILIDAD");
+		this.bonificacionResponsabilidad.setDescripcion(this.salario.getDescripcion().toUpperCase());
+		rr.saveObject(this.bonificacionResponsabilidad, this.getLoginNombre());
+		pop.close();
+	}
 	
 	@Command
 	@NotifyChange("premio")
@@ -512,7 +577,25 @@ public class FuncionarioControlBody extends Body {
 		RegisterDomain rr = RegisterDomain.getInstance();	
 		return rr.getFuncionarioPremios(this.dto.getId());
 	}
-
+	
+	@DependsOn("dto")
+	public List<FuncionarioSalario> getSalarios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioSalarios(this.dto.getId());
+	}
+	
+	@DependsOn("dto")
+	public List<FuncionarioSalario> getBonificacionesFamiliar() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioBonificacionesFamiliar(this.dto.getId());
+	}
+	
+	@DependsOn("dto")
+	public List<FuncionarioSalario> getBonificacionesResponsabilidad() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioBonificacionesResponsabilidad(this.dto.getId());
+	}
+	
 	public List<MyArray> getUsers() {
 		return users;
 	}
@@ -735,14 +818,6 @@ public class FuncionarioControlBody extends Body {
 		this.descuento = descuento;
 	}
 
-	public FuncionarioAnticipo getAnticipo() {
-		return anticipo;
-	}
-
-	public void setAnticipo(FuncionarioAnticipo anticipo) {
-		this.anticipo = anticipo;
-	}
-
 	public FuncionarioPremio getPremio() {
 		return premio;
 	}
@@ -750,6 +825,31 @@ public class FuncionarioControlBody extends Body {
 	public void setPremio(FuncionarioPremio premio) {
 		this.premio = premio;
 	}
+
+	public FuncionarioSalario getSalario() {
+		return salario;
+	}
+
+	public void setSalario(FuncionarioSalario salario) {
+		this.salario = salario;
+	}
+
+	public FuncionarioSalario getBonificacionFamiliar() {
+		return bonificacionFamiliar;
+	}
+
+	public void setBonificacionFamiliar(FuncionarioSalario bonificacionFamiliar) {
+		this.bonificacionFamiliar = bonificacionFamiliar;
+	}
+
+	public FuncionarioSalario getBonificacionResponsabilidad() {
+		return bonificacionResponsabilidad;
+	}
+
+	public void setBonificacionResponsabilidad(FuncionarioSalario bonificacionResponsabilidad) {
+		this.bonificacionResponsabilidad = bonificacionResponsabilidad;
+	}
+
 }
 
 class ValidadorPopupUsuario implements VerificaAceptarCancelar {
