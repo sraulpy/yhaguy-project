@@ -292,7 +292,7 @@
 							<vbox hflex="1" vflex="1">
 								<field>Bonificación Familiar Vigente Gs.</field>
 								<hlayout>
-									<guaranibox readonly="true" hflex="1" />
+									<guaranibox readonly="true" hflex="1" value="@load(vm.dto.bonificacionFamiliarVigente)" />
 									<space hflex="1" />
 								</hlayout>
 								<hlayout sclass="button-container">
@@ -336,7 +336,8 @@
 							<vbox hflex="1" vflex="1">
 								<field>Bonificación por Responsabilidad Vigente Gs.</field>
 								<hlayout>
-									<guaranibox readonly="true" hflex="1" />
+									<guaranibox readonly="true" hflex="1" 
+										value="@load(vm.dto.bonificacionResponsabilidadVigente)"/>
 									<space hflex="1" />
 								</hlayout>
 								<hlayout sclass="button-container">
@@ -404,7 +405,7 @@
 							<textbox value="@bind(vm.bonificacionResponsabilidad.descripcion)" hflex="1"
 								placeholder="Concepto"></textbox>
 							<guaranibox placeholder="Importe" hflex="1"
-								value="@bind(vm.bonificacionesResponsabilidad.importeGs)"></guaranibox>
+								value="@bind(vm.bonificacionResponsabilidad.importeGs)"></guaranibox>
 							<button hflex="1" iconSclass="z-icon-check" onClick="@command('addBonificacionResponsabilidad', comp=self, pop=pop_bonif_responsabilidad)"></button>
 						</vlayout>
 				</popup>

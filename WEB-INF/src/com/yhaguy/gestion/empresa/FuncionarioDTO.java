@@ -91,11 +91,49 @@ public class FuncionarioDTO extends DTO {
 	}
 	
 	/**
+	 * @return salario vigente..
+	 */
+	public Double getBonificacionFamiliarVigente() throws Exception {
+		Double out = 0.0;
+		if (this.getBonificacionesFamiliar().size() > 0) {
+			return this.getBonificacionesFamiliar().get(0).getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return salario vigente..
+	 */
+	public Double getBonificacionResponsabilidadVigente() throws Exception {
+		Double out = 0.0;
+		if (this.getBonificacionesResponsabilidad().size() > 0) {
+			return this.getBonificacionesResponsabilidad().get(0).getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
 	 * @return los salarios..
 	 */
 	public List<FuncionarioSalario> getSalarios() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();	
 		return rr.getFuncionarioSalarios(this.getId());
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	public List<FuncionarioSalario> getBonificacionesFamiliar() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioBonificacionesFamiliar(this.getId());
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	public List<FuncionarioSalario> getBonificacionesResponsabilidad() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioBonificacionesResponsabilidad(this.getId());
 	}
 
 	public String toString() {
