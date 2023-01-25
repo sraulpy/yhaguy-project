@@ -17,23 +17,27 @@ public class FuncionarioBrowser extends Browser {
 	public void setingInicial() {
 		this.setWidthWindows("100%");
 		this.setHigthWindows("90%");
-		this.addOrden("funcionarioEstado.descripcion asc, empresa.nombre");
+		this.addOrden("apellidos, nombres");
 	}
 
 	@Override
 	public List<ColumnaBrowser> getColumnasBrowser() {
 		// TODO Auto-generated method stub
 
+		ColumnaBrowser col0 = new ColumnaBrowser();
 		ColumnaBrowser col1 = new ColumnaBrowser();
 		ColumnaBrowser col2 = new ColumnaBrowser();
 		ColumnaBrowser col4 = new ColumnaBrowser();
 		ColumnaBrowser col5 = new ColumnaBrowser();
 
-		col1.setCampo("empresa.nombre");
-		col1.setTitulo("Nombre");
+		col0.setCampo("apellidos");
+		col0.setTitulo("Apellidos");
+		
+		col1.setCampo("nombres");
+		col1.setTitulo("Nombres");
 
 		col2.setCampo("empresa.ci");
-		col2.setTitulo("C.I.");
+		col2.setTitulo("Cédula Identidad");
 
 		col4.setCampo("funcionarioCargo.descripcion");
 		col4.setTitulo("Cargo");
@@ -46,6 +50,7 @@ public class FuncionarioBrowser extends Browser {
 		col5.setWhere("funcionarioEstado.sigla = '" + Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'");
 
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
+		columnas.add(col0);
 		columnas.add(col1);
 		columnas.add(col2);
 		columnas.add(col4);

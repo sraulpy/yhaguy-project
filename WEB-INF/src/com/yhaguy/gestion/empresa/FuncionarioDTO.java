@@ -15,6 +15,7 @@ import com.yhaguy.domain.FuncionarioPeriodoVacaciones;
 import com.yhaguy.domain.FuncionarioSalario;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.inicio.AccesoDTO;
+import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
 public class FuncionarioDTO extends DTO {
@@ -29,6 +30,9 @@ public class FuncionarioDTO extends DTO {
 	private String estadoCivil;
 	private String gradoAcademico;
 	private int cantidadHijos = 0;
+	
+	private String nombres;
+	private String apellidos;
 
 	/*
 	 * 0 = nombre; 1 = direccion, 2 = telefono; 3 = correoPersonal
@@ -41,6 +45,28 @@ public class FuncionarioDTO extends DTO {
 		this.datoSuc.setDatos(new MyArray());
 		this.empresa = new EmpresaDTO();
 
+	}
+	
+	/**
+	 * @return antiguedad..
+	 */
+	public int getAntiguedad() {
+		if (this.getFechaIngreso() == null) {
+			return 0;
+		}
+		return Utiles.getAnhos(this.getFechaIngreso(), new Date());
+	}
+	
+	/**
+	 * @return url ubicacion..
+	 */
+	public String getUrlUbicacion() {
+		String latitud = this.empresa.getLatitud();
+		String longitud = this.empresa.getLongitud();
+		if (latitud.isEmpty() || longitud.isEmpty()) {
+			return null;
+		}
+		return "https://maps.google.com/?q="+ latitud +"," + longitud;
 	}
 	
 	/**
@@ -314,6 +340,22 @@ public class FuncionarioDTO extends DTO {
 
 	public void setCantidadHijos(int cantidadHijos) {
 		this.cantidadHijos = cantidadHijos;
+	}
+
+	public String getNombres() {
+		return nombres;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
 	}
 }
 

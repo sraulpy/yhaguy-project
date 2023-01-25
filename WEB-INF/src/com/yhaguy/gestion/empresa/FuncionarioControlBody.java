@@ -279,6 +279,8 @@ public class FuncionarioControlBody extends Body {
 		this.dto.setNombre(this.selectedIdentificaciones.getPer_nombres() + " " + this.selectedIdentificaciones.getPer_apellidos());
 		this.dto.setCi(this.selectedIdentificaciones.getPer_nrodocumento());
 		this.dto.setFechaCumpleanhos(Utiles.getFecha(this.selectedIdentificaciones.getPer_fecha_nac(), "yyyy-MM-dd hh:mm:ss"));
+		this.dto.setNombres(this.selectedIdentificaciones.getPer_nombres());
+		this.dto.setApellidos(this.selectedIdentificaciones.getPer_apellidos());
 	}
 	
 	@Command
@@ -332,13 +334,18 @@ public class FuncionarioControlBody extends Body {
 	@NotifyChange("*")
 	public void addDescuento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		
-		if (this.descuento.getDescripcion().trim().isEmpty()) {
+		if (this.descuento.getDescripcion() == null || this.descuento.getDescripcion().trim().isEmpty()) {
 			Clients.showNotification("DEBE INGRESAR EL CONCEPTO", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
 		
 		if (this.descuento.getImporteGs() <= 0) {
 			Clients.showNotification("DEBE INGRESAR EL IMPORTE", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
+			return;
+		}
+		
+		if (this.descuento.getCuotas() < 0) {
+			Clients.showNotification("LAS CUOTAS NO PUEDEN SER NEGATIVAS", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
 		
@@ -405,7 +412,7 @@ public class FuncionarioControlBody extends Body {
 	@NotifyChange("*")
 	public void addSalario(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		
-		if (this.salario.getDescripcion().trim().isEmpty()) {
+		if (this.salario.getDescripcion() == null || this.salario.getDescripcion().trim().isEmpty()) {
 			Clients.showNotification("DEBE INGRESAR LA DESCRIPCION", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
@@ -426,7 +433,7 @@ public class FuncionarioControlBody extends Body {
 	@NotifyChange("*")
 	public void addBonificacionFamiliar(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		
-		if (this.bonificacionFamiliar.getDescripcion().trim().isEmpty()) {
+		if (this.bonificacionFamiliar.getDescripcion() == null || this.bonificacionFamiliar.getDescripcion().trim().isEmpty()) {
 			Clients.showNotification("DEBE INGRESAR LA DESCRIPCION", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
@@ -438,7 +445,7 @@ public class FuncionarioControlBody extends Body {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.bonificacionFamiliar.setAuxi("BONIFICACION_FAMILIAR");
-		this.bonificacionFamiliar.setDescripcion(this.salario.getDescripcion().toUpperCase());
+		this.bonificacionFamiliar.setDescripcion(this.bonificacionFamiliar.getDescripcion().toUpperCase());
 		rr.saveObject(this.bonificacionFamiliar, this.getLoginNombre());
 		pop.close();
 	}
@@ -447,7 +454,7 @@ public class FuncionarioControlBody extends Body {
 	@NotifyChange("*")
 	public void addBonificacionResponsabilidad(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
 		
-		if (this.bonificacionResponsabilidad.getDescripcion().trim().isEmpty()) {
+		if (this.bonificacionResponsabilidad.getDescripcion() == null || this.bonificacionResponsabilidad.getDescripcion().trim().isEmpty()) {
 			Clients.showNotification("DEBE INGRESAR LA DESCRIPCION", Clients.NOTIFICATION_TYPE_ERROR, comp, null, 0);
 			return;
 		}
@@ -459,7 +466,7 @@ public class FuncionarioControlBody extends Body {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.bonificacionResponsabilidad.setAuxi("BONIFICACION_RESPONSABILIDAD");
-		this.bonificacionResponsabilidad.setDescripcion(this.salario.getDescripcion().toUpperCase());
+		this.bonificacionResponsabilidad.setDescripcion(this.bonificacionResponsabilidad.getDescripcion().toUpperCase());
 		rr.saveObject(this.bonificacionResponsabilidad, this.getLoginNombre());
 		pop.close();
 	}

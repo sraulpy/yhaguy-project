@@ -16,6 +16,8 @@
 		<property name="nombreEmpresa" />
 		<property name="nombreTecnico" />
 		<property name="cantidadHijos" />
+		<property name="nombres" />
+		<property name="apellidos" />
 		
 		<property name="vendedor">
 			<column name="vendedor" not-null="true" default="false" />
