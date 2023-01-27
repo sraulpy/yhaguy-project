@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="3082" pageHeight="595" orientation="Landscape" columnWidth="3042" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.8531167061100215"/>
-	<property name="ireport.x" value="2219"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="3449" pageHeight="595" orientation="Landscape" columnWidth="3409" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="ireport.zoom" value="2.1435888100000193"/>
+	<property name="ireport.x" value="3143"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -71,6 +71,8 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="Ganancia" class="java.lang.String"/>
 	<field name="Tecnico" class="java.lang.String"/>
 	<field name="TipoCliente_" class="java.lang.String"/>
+	<field name="Ruc" class="java.lang.String"/>
+	<field name="Vendedor_" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -98,74 +100,84 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[CLIENTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="608" y="0" width="244" height="15" uuid="0ccc1060-ec4a-47e5-9142-2bcf45dd5612"/>
+				<reportElement x="750" y="0" width="244" height="15" uuid="0ccc1060-ec4a-47e5-9142-2bcf45dd5612"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[RUBRO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1067" y="0" width="359" height="15" uuid="36ea64ef-f2ad-4e06-834c-9ffb4f67f7ad"/>
+				<reportElement x="1209" y="0" width="306" height="15" uuid="36ea64ef-f2ad-4e06-834c-9ffb4f67f7ad"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[VENDEDOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1426" y="0" width="202" height="15" uuid="2ce873d8-c44f-414a-9c55-e47c7b97e594"/>
+				<reportElement x="1790" y="0" width="202" height="15" uuid="2ce873d8-c44f-414a-9c55-e47c7b97e594"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[CODIGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1628" y="0" width="450" height="15" uuid="48ba8573-f537-4b56-8370-2275ecf2f2de"/>
+				<reportElement x="1992" y="0" width="450" height="15" uuid="48ba8573-f537-4b56-8370-2275ecf2f2de"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2078" y="0" width="216" height="15" uuid="d957ed52-7681-4c1c-a26c-069cb4991c23"/>
+				<reportElement x="2442" y="0" width="216" height="15" uuid="d957ed52-7681-4c1c-a26c-069cb4991c23"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[FAMILIA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2512" y="0" width="81" height="15" uuid="84bba4d3-d15d-48d7-a53a-132e7c90b22c"/>
+				<reportElement x="2876" y="0" width="81" height="15" uuid="84bba4d3-d15d-48d7-a53a-132e7c90b22c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[COSTO UNIT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2593" y="0" width="56" height="15" uuid="08d1aa42-f7d2-405c-8d3f-18a9baa967e1"/>
+				<reportElement x="2957" y="0" width="56" height="15" uuid="08d1aa42-f7d2-405c-8d3f-18a9baa967e1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[CANT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2649" y="0" width="77" height="15" uuid="897b3ba6-b9f5-4369-9551-b6f3103446aa"/>
+				<reportElement x="3013" y="0" width="77" height="15" uuid="897b3ba6-b9f5-4369-9551-b6f3103446aa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[COSTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2726" y="0" width="93" height="15" uuid="220788b5-3277-4466-b5fc-2448472b5e49"/>
+				<reportElement x="3090" y="0" width="93" height="15" uuid="220788b5-3277-4466-b5fc-2448472b5e49"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[IMPORTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2819" y="0" width="93" height="15" uuid="4696976c-2830-43b0-81cb-6689b3b87a8b"/>
+				<reportElement x="3183" y="0" width="93" height="15" uuid="4696976c-2830-43b0-81cb-6689b3b87a8b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[GANANCIA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2912" y="0" width="65" height="15" uuid="b907a993-95f6-4bff-aedb-6beb607979f2"/>
+				<reportElement x="3276" y="0" width="65" height="15" uuid="b907a993-95f6-4bff-aedb-6beb607979f2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[RENT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2977" y="0" width="64" height="15" uuid="2d98707c-0240-4bef-865f-e42b65a514eb"/>
+				<reportElement x="3341" y="0" width="64" height="15" uuid="2d98707c-0240-4bef-865f-e42b65a514eb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[RENT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2294" y="0" width="218" height="15" uuid="4f3ecab9-04b8-4916-a632-5e9278134252"/>
+				<reportElement x="2658" y="0" width="218" height="15" uuid="4f3ecab9-04b8-4916-a632-5e9278134252"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[MARCA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="852" y="0" width="215" height="15" uuid="a04fd1d9-e1ef-460c-819e-7a9773b43cac"/>
+				<reportElement x="994" y="0" width="215" height="15" uuid="a04fd1d9-e1ef-460c-819e-7a9773b43cac"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="608" y="0" width="142" height="15" uuid="98f3e27f-559a-4cf9-af20-b7bb9e5ab193"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[RUC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1514" y="0" width="276" height="15" uuid="3423edb3-a34e-4ed0-9a05-755b1d4859f5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VENDEDOR DEL CLIENTE]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -192,22 +204,22 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="608" y="0" width="244" height="15" uuid="cbb74dbd-d329-4bf0-8d88-4cbda35e5107"/>
+				<reportElement style="Detail" x="750" y="0" width="244" height="15" uuid="cbb74dbd-d329-4bf0-8d88-4cbda35e5107"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TipoCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1426" y="0" width="202" height="15" uuid="f1f1bee2-ee3d-4be9-806a-9aee226e0969"/>
+				<reportElement style="Detail" x="1790" y="0" width="202" height="15" uuid="f1f1bee2-ee3d-4be9-806a-9aee226e0969"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1067" y="0" width="359" height="15" uuid="b79eaf3a-9c8c-4f1a-8bd5-447ac2be908c"/>
+				<reportElement style="Detail" x="1209" y="0" width="306" height="15" uuid="b79eaf3a-9c8c-4f1a-8bd5-447ac2be908c"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Vendedor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement style="Detail" mode="Transparent" x="2078" y="0" width="216" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="72deddba-b120-4d9b-a57e-0c1c2415ccd6"/>
+				<reportElement style="Detail" mode="Transparent" x="2442" y="0" width="216" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="72deddba-b120-4d9b-a57e-0c1c2415ccd6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -215,47 +227,47 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Familia}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2512" y="0" width="81" height="15" uuid="ceca235a-76f5-4405-a5d6-8ebbb21c13d0"/>
+				<reportElement style="Detail" x="2876" y="0" width="81" height="15" uuid="ceca235a-76f5-4405-a5d6-8ebbb21c13d0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{CostoUnit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2593" y="0" width="56" height="15" uuid="3901e494-2852-4c0f-bd23-48d555aa50e3"/>
+				<reportElement style="Detail" x="2957" y="0" width="56" height="15" uuid="3901e494-2852-4c0f-bd23-48d555aa50e3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Cant}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2649" y="0" width="77" height="15" uuid="5f0e3c4f-c790-42a0-a8e5-481469884e03"/>
+				<reportElement style="Detail" x="3013" y="0" width="77" height="15" uuid="5f0e3c4f-c790-42a0-a8e5-481469884e03"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{CostoTotal}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2726" y="0" width="93" height="15" uuid="d2881ed7-8d53-44d9-9e52-85c5670642a2"/>
+				<reportElement style="Detail" x="3090" y="0" width="93" height="15" uuid="d2881ed7-8d53-44d9-9e52-85c5670642a2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2912" y="0" width="65" height="15" uuid="577ffa33-03ca-4361-8012-dc9c3e7150bc"/>
+				<reportElement style="Detail" x="3276" y="0" width="65" height="15" uuid="577ffa33-03ca-4361-8012-dc9c3e7150bc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Rent}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1628" y="0" width="450" height="15" uuid="06b01670-4823-45b9-a5ec-34430d862751"/>
+				<reportElement style="Detail" x="1992" y="0" width="450" height="15" uuid="06b01670-4823-45b9-a5ec-34430d862751"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2977" y="0" width="64" height="15" uuid="b127bef5-7391-4e21-970c-64731ddfbcce"/>
+				<reportElement style="Detail" x="3341" y="0" width="64" height="15" uuid="b127bef5-7391-4e21-970c-64731ddfbcce"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Rent_}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2819" y="0" width="93" height="15" uuid="0e6ffd68-4385-4905-bb9c-45d4640d89fe"/>
+				<reportElement style="Detail" x="3183" y="0" width="93" height="15" uuid="0e6ffd68-4385-4905-bb9c-45d4640d89fe"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Ganancia}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement style="Detail" mode="Transparent" x="2294" y="0" width="218" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6bc974d2-3ed3-42df-97e2-cabc25bef8db"/>
+				<reportElement style="Detail" mode="Transparent" x="2658" y="0" width="218" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6bc974d2-3ed3-42df-97e2-cabc25bef8db"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -263,9 +275,19 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Marca}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="852" y="0" width="215" height="15" uuid="872221fa-9a81-4498-8e86-0d7c2c02fb88"/>
+				<reportElement style="Detail" x="994" y="0" width="215" height="15" uuid="872221fa-9a81-4498-8e86-0d7c2c02fb88"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TipoCliente_}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="608" y="0" width="142" height="15" uuid="28f9ea8d-4376-4a0c-ac1b-b573befe3ab8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Ruc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="1514" y="0" width="276" height="15" uuid="031deb16-8048-4e10-9719-6b0a866a7431"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Vendedor_}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

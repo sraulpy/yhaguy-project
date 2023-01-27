@@ -32,50 +32,24 @@
 	</hlayout>
 	
 	<hlayout vflex="true" width="100%" spacing="1px">
-		<listbox sclass="small-list" vflex="true" width="512px"
+		<listbox sclass="small-list" vflex="true" width="350px"
 			model="@load(vm.planillas)" selectedItem="@bind(vm.selectedPlanilla)"
 			emptyMessage="SIN REGISTROS..">
 			<auxhead>
-				<auxheader colspan="5" label="Funcionario"></auxheader>
+				<auxheader colspan="2" label="Funcionario"></auxheader>
 			</auxhead>
 			<listhead>
 				<listheader label="C.Identidad" width="80px"></listheader>
-				<listheader label="Nombre y Apellido" width="170px"></listheader>
-				<listheader label="Cargo" width="120px"></listheader>
-				<listheader label="Días T." width="70px"
-					tooltiptext="Días trabajados">
-				</listheader>
-				<listheader label="Horas E." width="70px"
-					tooltiptext="Horas extras">
-				</listheader>
+				<listheader label="Nombre y Apellido"></listheader>
 			</listhead>
 			<template name="model">
 				<listitem>
 					<listcell label="@load(each.cedula)"></listcell>
 					<listcell label="@load(each.funcionario)"></listcell>
-					<listcell label="@bind(each.cargo)"
-						onChange="@command('saveItem', item=each)">
-					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
-							inplace="true" value="@bind(each.diasTrabajados)"
-							format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)">
-						</doublebox>
-					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
-							inplace="true" value="@bind(each.cantidadHorasExtras)"
-							format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)">
-						</doublebox>
-					</listcell>
 				</listitem>
 			</template>
 			<listfoot>
 				<listfooter label="ítems"></listfooter>
-				<listfooter></listfooter>
-				<listfooter></listfooter>
 				<listfooter></listfooter>
 				<listfooter></listfooter>
 			</listfoot>
@@ -85,7 +59,8 @@
 			emptyMessage="SIN REGISTROS..">
 			<auxhead>
 				<auxheader colspan="10" label="Haberes"></auxheader>
-				<auxheader colspan="14" label="Descuentos"></auxheader>
+				<auxheader colspan="8" label="Descuentos"></auxheader>
+				<auxheader colspan="3" label="Totales"></auxheader>
 			</auxhead>
 			<listhead>
 				<listheader label="Salarios" width="100px"></listheader>
@@ -106,9 +81,7 @@
 				<listheader label="Total Haberes" width="100px"
 					align="right">
 				</listheader>
-				<listheader label="Seg.Vehículo" width="100px"
-					align="right">
-				</listheader>
+				
 				<listheader label="Préstamos" width="100px"></listheader>
 				<listheader label="Anticipo Sal." width="100px"
 					tooltiptext="Anticipo salario">
@@ -120,8 +93,6 @@
 				<listheader label="Corporativo" width="100px"></listheader>
 				<listheader label="Uniforme" width="100px"></listheader>
 				<listheader label="Repuestos" width="100px"></listheader>
-				<listheader label="Seguro" width="100px"></listheader>
-				<listheader label="Embargo" width="100px"></listheader>
 				<listheader label="Ausencia" width="100px"></listheader>
 				<listheader label="IPS" width="100px" align="right"></listheader>
 				<listheader label="Total Descuentos" width="100px"
@@ -202,13 +173,6 @@
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
-							value="@bind(each.seguroVehicular)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
-						</doublebox>
-					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
 							value="@bind(each.prestamos)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
 							style="background:#FADAD2;text-align:right">
@@ -258,20 +222,6 @@
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
-							value="@bind(each.seguro)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
-						</doublebox>
-					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
-							value="@bind(each.embargo)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
-						</doublebox>
-					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
 							value="@bind(each.ausencia)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
 							style="background:#FADAD2;text-align:right">
@@ -292,11 +242,6 @@
 				</listitem>
 			</template>
 			<listfoot>
-				<listfooter label="ítems"></listfooter>
-				<listfooter></listfooter>
-				<listfooter></listfooter>
-				<listfooter></listfooter>
-				<listfooter></listfooter>
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
@@ -369,14 +314,7 @@
 				</listfooter>
 
 				<!-- DESCUENTOS -->
-
-				<listfooter>
-					<doublebox hflex="true" vflex="true"
-						format="###,###,###,##0" readonly="true"
-						value="@load(vm.totales[19])"
-						style="font-weight:bold;text-align:right;background:#FADAD2">
-					</doublebox>
-				</listfooter>
+				
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
@@ -429,20 +367,6 @@
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
-						value="@load(vm.totales[9])"
-						style="font-weight:bold;text-align:right;background:#FADAD2">
-					</doublebox>
-				</listfooter>
-				<listfooter>
-					<doublebox hflex="true" vflex="true"
-						format="###,###,###,##0" readonly="true"
-						value="@load(vm.totales[10])"
-						style="font-weight:bold;text-align:right;background:#FADAD2">
-					</doublebox>
-				</listfooter>
-				<listfooter>
-					<doublebox hflex="true" vflex="true"
-						format="###,###,###,##0" readonly="true"
 						value="@load(vm.totales[20])"
 						style="font-weight:bold;text-align:right;background:#FADAD2">
 					</doublebox>
@@ -474,7 +398,7 @@
 
 	<popup id="pop_procesar" sclass="rounded">
 		<vbox hflex="true">
-		<listbox sclass="small-list" width="300px" height="300px"
+		<listbox sclass="small-list" width="400px" height="400px"
 			model="@load(vm.funcionarios)" multiple="true" checkmark="true"
 			selectedItems="@bind(vm.selectedFuncionarios)">
 			<listhead>

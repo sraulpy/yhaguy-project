@@ -64,6 +64,71 @@ public class Funcionario extends Domain {
 	}
 	
 	/**
+	 * @return salario vigente..
+	 */
+	public Double getSalarioVigente() throws Exception {
+		Double out = 0.0;
+		if (this.getSalarios().size() > 0) {
+			return this.getSalarios().get(0).getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return salario vigente..
+	 */
+	public Double getBonificacionFamiliarVigente() throws Exception {
+		Double out = 0.0;
+		if (this.getBonificacionesFamiliar().size() > 0) {
+			return this.getBonificacionesFamiliar().get(0).getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return salario vigente..
+	 */
+	public Double getBonificacionResponsabilidadVigente() throws Exception {
+		Double out = 0.0;
+		if (this.getBonificacionesResponsabilidad().size() > 0) {
+			return this.getBonificacionesResponsabilidad().get(0).getImporteGs();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	public List<FuncionarioSalario> getSalarios() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioSalarios(this.getId());
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	public List<FuncionarioSalario> getBonificacionesFamiliar() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioBonificacionesFamiliar(this.getId());
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	public List<FuncionarioSalario> getBonificacionesResponsabilidad() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioBonificacionesResponsabilidad(this.getId());
+	}
+	
+	/**
+	 * @return los descuentos..
+	 */
+	public List<FuncionarioDescuento> getDescuentos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getFuncionarioDescuentos(this.getId());
+	}
+	
+	/**
 	 * @return la meta del funcionario en el mes corriente..
 	 */
 	public double getMetaActual() {

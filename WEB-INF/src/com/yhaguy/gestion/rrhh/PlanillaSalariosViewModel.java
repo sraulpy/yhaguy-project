@@ -18,6 +18,8 @@ import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.util.MyArray;
+import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.RRHHPlanillaSalarios;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
@@ -63,6 +65,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	public void generarPlanilla(@BindingParam("comp") Popup comp) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		for (Object[] func : this.selectedFuncionarios) {
+			Funcionario f = rr.getFuncionarioById((long) func[0]);
 			RRHHPlanillaSalarios pl = new RRHHPlanillaSalarios();
 			pl.setMes(this.selectedMes);
 			pl.setAnho(this.selectedAnho);
@@ -70,6 +73,29 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			pl.setFuncionario((String) func[1]);
 			pl.setCedula((String) func[2]);
 			pl.setCargo((String) func[3]);
+			pl.setSalarios(f.getSalarioVigente());
+			pl.setBonificacion(f.getBonificacionFamiliarVigente());
+			pl.setResponsabilidad(f.getBonificacionResponsabilidadVigente());
+			for (FuncionarioDescuento desc : f.getDescuentos()) {
+				double importe = desc.getImporteGs() * -1;
+				switch (desc.getDescripcion()) {
+				case FuncionarioDescuento.PRESTAMO:
+					pl.setPrestamos(importe);
+					break;
+				case FuncionarioDescuento.CORPORATIVO:
+					pl.setCorporativo(importe);
+					break;
+				case FuncionarioDescuento.OTROS:	
+					pl.setOtrosDescuentos(importe);
+					break;
+				case FuncionarioDescuento.REPUESTOS:	
+					pl.setRepuestos(importe);
+					break;
+				case FuncionarioDescuento.UNIFORME:		
+					pl.setUniforme(importe);
+					break;
+				}
+			}
 			rr.saveObject(pl, this.getLoginNombre());
 			comp.close();
 		}

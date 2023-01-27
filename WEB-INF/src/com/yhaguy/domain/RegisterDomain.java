@@ -13228,9 +13228,9 @@ public class RegisterDomain extends Register {
 	 * [3]: cargo
 	 */
 	public List<Object[]> getFuncionarios_() throws Exception {
-		String query = "select f.id, f.empresa.razonSocial, f.empresa.ci, f.funcionarioCargo.descripcion from Funcionario f"
+		String query = "select f.id, concat(f.apellidos, ', ', f.nombres), f.empresa.ci, f.funcionarioCargo.descripcion from Funcionario f"
 				+ " where f.funcionarioEstado.sigla = '" + Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'"
-				+ " order by f.empresa.razonSocial";
+				+ " order by f.apellidos, f.nombres";
 		return this.hql(query);
 	}
 	
