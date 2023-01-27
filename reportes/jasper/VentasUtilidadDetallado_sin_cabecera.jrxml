@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasUtildadDetallado" pageWidth="3449" pageHeight="595" orientation="Landscape" columnWidth="3409" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.1435888100000193"/>
-	<property name="ireport.x" value="3143"/>
+	<property name="ireport.zoom" value="2.3579476910000228"/>
+	<property name="ireport.x" value="2774"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -105,7 +105,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[RUBRO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1209" y="0" width="306" height="15" uuid="36ea64ef-f2ad-4e06-834c-9ffb4f67f7ad"/>
+				<reportElement x="1209" y="0" width="305" height="15" uuid="36ea64ef-f2ad-4e06-834c-9ffb4f67f7ad"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[VENDEDOR]]></text>
 			</staticText>
@@ -214,7 +214,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="1209" y="0" width="306" height="15" uuid="b79eaf3a-9c8c-4f1a-8bd5-447ac2be908c"/>
+				<reportElement style="Detail" x="1209" y="0" width="305" height="15" uuid="b79eaf3a-9c8c-4f1a-8bd5-447ac2be908c"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Vendedor}]]></textFieldExpression>
 			</textField>
