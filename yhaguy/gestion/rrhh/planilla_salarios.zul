@@ -26,6 +26,11 @@
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimir')"></button>
 		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Recibo"
+			iconSclass="z-icon-print"
+			disabled="@load(vm.selectedPlanilla eq null)"
+			onClick="@command('imprimirRecibo')"></button>
+		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Planilla"
 			iconSclass="z-icon-print"
 			onClick='formato.open(self, "after_end")'></button>

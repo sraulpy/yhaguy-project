@@ -73,29 +73,31 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			pl.setFuncionario((String) func[1]);
 			pl.setCedula((String) func[2]);
 			pl.setCargo((String) func[3]);
-			pl.setSalarios(f.getSalarioVigente());
-			pl.setBonificacion(f.getBonificacionFamiliarVigente());
-			pl.setResponsabilidad(f.getBonificacionResponsabilidadVigente());
-			for (FuncionarioDescuento desc : f.getDescuentos()) {
-				double importe = desc.getImporteGs() * -1;
-				switch (desc.getDescripcion()) {
-				case FuncionarioDescuento.PRESTAMO:
-					pl.setPrestamos(importe);
-					break;
-				case FuncionarioDescuento.CORPORATIVO:
-					pl.setCorporativo(importe);
-					break;
-				case FuncionarioDescuento.OTROS:	
-					pl.setOtrosDescuentos(importe);
-					break;
-				case FuncionarioDescuento.REPUESTOS:	
-					pl.setRepuestos(importe);
-					break;
-				case FuncionarioDescuento.UNIFORME:		
-					pl.setUniforme(importe);
-					break;
+			if (pl.getTipo().equals(RRHHPlanillaSalarios.TIPO_SALARIOS)) {
+				pl.setSalarios(f.getSalarioVigente());
+				pl.setBonificacion(f.getBonificacionFamiliarVigente());
+				pl.setResponsabilidad(f.getBonificacionResponsabilidadVigente());
+				for (FuncionarioDescuento desc : f.getDescuentos()) {
+					double importe = desc.getImporteGs() * -1;
+					switch (desc.getDescripcion()) {
+					case FuncionarioDescuento.PRESTAMO:
+						pl.setPrestamos(importe);
+						break;
+					case FuncionarioDescuento.CORPORATIVO:
+						pl.setCorporativo(importe);
+						break;
+					case FuncionarioDescuento.OTROS:	
+						pl.setOtrosDescuentos(importe);
+						break;
+					case FuncionarioDescuento.REPUESTOS:	
+						pl.setRepuestos(importe);
+						break;
+					case FuncionarioDescuento.UNIFORME:		
+						pl.setUniforme(importe);
+						break;
+					}
 				}
-			}
+			}			
 			rr.saveObject(pl, this.getLoginNombre());
 			comp.close();
 		}
@@ -123,6 +125,31 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	@Command
 	public void imprimirPlanilla() throws Exception {
 		this.imprimirPlanilla_(this.selectedFormato);
+	}
+	
+	@Command
+	public void imprimirRecibo() throws Exception {
+		this.imprimirRecibo_();
+	}
+	
+	/**
+	 * Despliega el Recibo comun..
+	 */
+	private void imprimirRecibo_() throws Exception {		
+		double importe = this.selectedPlanilla.getTotalACobrar();
+		if (importe < 0) importe = importe * -1;
+		String source = ReportesViewModel.SOURCE_RECIBO_COMUN;
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("Fecha", Utiles.getDateToString(new Date(), "dd"));
+		params.put("Funcionario", this.selectedPlanilla.getFuncionario());
+		params.put("ImporteGs", Utiles.getNumberFormat(importe));
+		params.put("ImporteLetras", m.numberToLetter(Utiles.getRedondeo(importe)));
+		params.put("Concepto", "Pago de anticipo de salarios correspondiente al mes de " + this.selectedPlanilla.getMes().toLowerCase() + " " +  this.selectedPlanilla.getAnho());
+		params.put("Cargo", this.selectedPlanilla.getCargo());
+		params.put("Periodo", "Asunción, " + Utiles.getDateToString(new Date(), "dd") + " de " +
+				this.selectedPlanilla.getMes().toLowerCase() + " de " +  this.selectedPlanilla.getAnho());
+		params.put("Usuario", getUs().getNombre());
+		this.imprimirComprobante(source, params, null, ReportesViewModel.FORMAT_PDF);
 	}
 	
 	/**

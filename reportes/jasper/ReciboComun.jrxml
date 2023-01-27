@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReciboLiquidacionSalario" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="ireport.zoom" value="1.6105100000000039"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="8">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{Asentable}.equals("N")]]></conditionExpression>
+			<style isBold="true" pdfFontName="Helvetica-Bold"/>
+		</conditionalStyle>
+	</style>
+	<style name="Row" fontName="Arial" fontSize="8"/>
+	<style name="Resumen" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<parameter name="Empresa" class="java.lang.String"/>
+	<parameter name="Periodo" class="java.lang.String"/>
+	<parameter name="Fecha" class="java.lang.String"/>
+	<parameter name="Logo" class="java.lang.String"/>
+	<parameter name="Cargo" class="java.lang.String"/>
+	<parameter name="Funcionario" class="java.lang.String"/>
+	<parameter name="Usuario" class="java.lang.String"/>
+	<parameter name="Generado" class="java.lang.String"/>
+	<parameter name="ImporteLetras" class="java.lang.String"/>
+	<parameter name="ImporteGs" class="java.lang.String"/>
+	<parameter name="Concepto" class="java.lang.String"/>
+	<field name="Concepto" class="java.lang.String"/>
+	<field name="Descripcion" class="java.lang.String"/>
+	<field name="ImporteLetras" class="java.lang.String"/>
+	<field name="Debitos Periodo" class="java.lang.String"/>
+	<field name="Creditos Periodo" class="java.lang.String"/>
+	<field name="Saldo Periodo" class="java.lang.String"/>
+	<field name="TotalSaldo" class="java.lang.String"/>
+	<field name="TituloDetalle" class="java.lang.String"/>
+	<field name="Asentable" class="java.lang.String"/>
+	<field name="Resumen" class="java.lang.String"/>
+	<field name="ResumenActivo" class="java.lang.String"/>
+	<field name="ResumenPasivo" class="java.lang.String"/>
+	<field name="ResumenIngresos" class="java.lang.String"/>
+	<field name="ResumenEgresos" class="java.lang.String"/>
+	<field name="TotalResumen1" class="java.lang.String"/>
+	<field name="TotalResumen2" class="java.lang.String"/>
+	<field name="TotalEfectivo" class="java.lang.String"/>
+	<field name="TotalChequeTercero" class="java.lang.String"/>
+	<field name="TotalTarjCredito" class="java.lang.String"/>
+	<field name="TotalTarjDebito" class="java.lang.String"/>
+	<field name="TotalImporte" class="java.lang.String"/>
+	<field name="TotalVtaContado" class="java.lang.String"/>
+	<field name="TotalNotaCredCont" class="java.lang.String"/>
+	<field name="TotalCobranzasEfe" class="java.lang.String"/>
+	<field name="TotalTarjDebito_" class="java.lang.String"/>
+	<field name="TotalRetencionCli" class="java.lang.String"/>
+	<field name="TotalReposicion" class="java.lang.String"/>
+	<field name="TotalPagos" class="java.lang.String"/>
+	<field name="TotalGastos" class="java.lang.String"/>
+	<field name="TotalEgresos" class="java.lang.String"/>
+	<field name="TotalRetProv" class="java.lang.String"/>
+	<field name="SaldoCajaChica" class="java.lang.String"/>
+	<field name="TotalDepBancarios" class="java.lang.String"/>
+	<field name="TotalTarjCredito_" class="java.lang.String"/>
+	<field name="TotalCobranzasOtraSuc" class="java.lang.String"/>
+	<field name="TotalCobranzasCheq" class="java.lang.String"/>
+	<field name="TotalVtaContadoCheque" class="java.lang.String"/>
+	<field name="TotalImporteGs" class="java.lang.String"/>
+	<field name="TotalReembolsoEfe" class="java.lang.String"/>
+	<field name="Haberes" class="java.lang.String"/>
+	<field name="Descuentos" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" mode="Transparent" x="4" y="1" width="566" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="89f88eab-4bc7-40d2-8446-d23096c39e1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE DINERO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<summary>
+		<band height="189" splitType="Stretch">
+			<line>
+				<reportElement x="296" y="169" width="236" height="1" uuid="d50ab33c-59ff-4ba8-8f60-35a327e615f4"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement style="Detail" mode="Transparent" x="150" y="85" width="382" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="fe5d195b-6b14-4122-a988-c88cb4bdc3d9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ImporteLetras}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="442" y="14" width="90" height="15" uuid="579e546e-596b-45ba-a7c3-7885a745b93b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ImporteGs}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="30" y="85" width="120" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a63248a0-7c07-4a52-86fb-657fd7deff99"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[La cantidad de Guaraníes:   ]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="296" y="172" width="236" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="55a97d11-5936-43be-bfa8-efd4739f08de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Funcionario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="30" y="60" width="181" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="e078204f-76aa-4a8f-a6e4-39d374cead7c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Recibí de Yhaguy Repuestos S.A.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="407" y="14" width="35" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="10a892d6-4066-4ed0-ac68-eb2bd82d71ee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Gs.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="30" y="112" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5bd55fbc-dcf9-475f-9b8b-a93a946ac055"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[En concepto de ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement style="Detail" mode="Transparent" x="101" y="112" width="431" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="125e55ff-4c01-4637-8092-270819a7af48"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Concepto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="379" y="41" width="153" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5d073495-ad4b-41ce-9ee6-aa565fce524c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Periodo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
