@@ -91,19 +91,19 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 						double importe = desc.getImporteGs() * -1;
 						switch (desc.getDescripcion()) {
 						case FuncionarioDescuento.PRESTAMO:
-							pl.setPrestamos(importe);
+							pl.setPrestamos(pl.getPrestamos() + importe);
 							break;
 						case FuncionarioDescuento.CORPORATIVO:
-							pl.setCorporativo(importe);
+							pl.setCorporativo(pl.getCorporativo() + importe);
 							break;
 						case FuncionarioDescuento.OTROS:	
-							pl.setOtrosDescuentos(importe);
+							pl.setOtrosDescuentos(pl.getOtrosDescuentos() + importe);
 							break;
 						case FuncionarioDescuento.REPUESTOS:	
-							pl.setRepuestos(importe);
+							pl.setRepuestos(pl.getRepuestos() + importe);
 							break;
 						case FuncionarioDescuento.UNIFORME:		
-							pl.setUniforme(importe);
+							pl.setUniforme(pl.getUniforme() + importe);
 							break;
 						}
 					}

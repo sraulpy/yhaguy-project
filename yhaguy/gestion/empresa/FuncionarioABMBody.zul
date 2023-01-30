@@ -459,6 +459,13 @@
 						<vlayout width="300px" style="padding:10px;border-radius:5px" spacing="10px">
 							<textbox value="@bind(vm.descuento.descripcion)" hflex="1"
 								placeholder="Concepto"></textbox>
+							<combobox value="@load(vm.descuento.descripcion)"
+								selectedItem="@bind(vm.descuento.descripcion)"
+								placeholder="Concepto" hflex="1">
+								<template name="model">
+									<comboitem label="@load(each)"></comboitem>
+								</template>
+							</combobox>
 							<guaranibox placeholder="Importe" hflex="1"
 								value="@bind(vm.descuento.importeGs)"></guaranibox>
 							<hlayout>

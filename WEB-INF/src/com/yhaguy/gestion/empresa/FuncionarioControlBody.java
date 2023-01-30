@@ -351,6 +351,7 @@ public class FuncionarioControlBody extends Body {
 		
 		RegisterDomain rr = RegisterDomain.getInstance();
 		this.descuento.setDescripcion(this.descuento.getDescripcion().toUpperCase());
+		this.descuento.setSaldoCuotas(this.descuento.getCuotas());
 		pop.close();
 		rr.saveObject(this.descuento, this.getLoginNombre());
 	}
@@ -559,6 +560,13 @@ public class FuncionarioControlBody extends Body {
 		out.add(Funcionario.INGENIERO);
 		out.add(Funcionario.SIN_ESTUDIOS);
 		return out;
+	}
+	
+	/**
+	 * @return los tipos de descuentos..
+	 */
+	public List<String> getTiposDescuentos() {
+		return FuncionarioDescuento.getTiposDescuentos();
 	}
 	
 	@DependsOn({ "filterCedula", "filterNombres", "filterApellidos" })
