@@ -19,7 +19,6 @@
 	<!-- PAGINA 1 -->
 	
 	<vbox hflex="true" vflex="true" style="margin:30px">
-	<div height="20px"></div>
 	
 	<hlayout>
 		<div width="30px"></div>
@@ -140,11 +139,9 @@
 	</vbox>
 	
 	<!-- PAGINA 2 -->
-	
-	<space height="20px"></space>	
+		
 	
 	<vbox hflex="true" vflex="true" style="margin:30px">
-	<div height="5px"></div>
 	
 	<hlayout>
 		<div width="30px"></div>
