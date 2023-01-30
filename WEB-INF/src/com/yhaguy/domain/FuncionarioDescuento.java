@@ -19,6 +19,7 @@ public class FuncionarioDescuento extends Domain {
 	private String descripcion;
 	private double importeGs;
 	private int cuotas;
+	private int saldoCuotas;
 	
 	private Funcionario funcionario;
 	
@@ -80,5 +81,13 @@ public class FuncionarioDescuento extends Domain {
 		this.permanente = permanente;
 		if (permanente) this.cuotas = 0 ;
 		BindUtils.postNotifyChange(null, null, this, "cuotas");
+	}
+
+	public int getSaldoCuotas() {
+		return saldoCuotas;
+	}
+
+	public void setSaldoCuotas(int saldoCuotas) {
+		this.saldoCuotas = saldoCuotas;
 	}
 }

@@ -20,6 +20,7 @@
 		
 		<property name="diasTrabajados" />
 		<property name="cantidadHorasExtras" />
+		<property name="cantidadHorasExtrasNoc" />
 		
 		<property name="salarios"/>
 		<property name="comision"/>
@@ -42,6 +43,8 @@
 		<property name="ausencia"/>
 		<property name="aguinaldo"/>
 		<property name="anticipoAguinaldo"/>
+		
+		<property name="cerrado"/>
 		
 	</class>
 </hibernate-mapping>

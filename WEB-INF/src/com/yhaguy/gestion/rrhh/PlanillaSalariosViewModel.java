@@ -1,18 +1,26 @@
 package com.yhaguy.gestion.rrhh;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Window;
 
@@ -74,34 +82,42 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			pl.setCedula((String) func[2]);
 			pl.setCargo((String) func[3]);
 			if (pl.getTipo().equals(RRHHPlanillaSalarios.TIPO_SALARIOS)) {
+				pl.setDiasTrabajados(30);
 				pl.setSalarios(f.getSalarioVigente());
 				pl.setBonificacion(f.getBonificacionFamiliarVigente());
 				pl.setResponsabilidad(f.getBonificacionResponsabilidadVigente());
 				for (FuncionarioDescuento desc : f.getDescuentos()) {
-					double importe = desc.getImporteGs() * -1;
-					switch (desc.getDescripcion()) {
-					case FuncionarioDescuento.PRESTAMO:
-						pl.setPrestamos(importe);
-						break;
-					case FuncionarioDescuento.CORPORATIVO:
-						pl.setCorporativo(importe);
-						break;
-					case FuncionarioDescuento.OTROS:	
-						pl.setOtrosDescuentos(importe);
-						break;
-					case FuncionarioDescuento.REPUESTOS:	
-						pl.setRepuestos(importe);
-						break;
-					case FuncionarioDescuento.UNIFORME:		
-						pl.setUniforme(importe);
-						break;
+					if (desc.getCuotas() == 0 || desc.getSaldoCuotas() > 0) {
+						double importe = desc.getImporteGs() * -1;
+						switch (desc.getDescripcion()) {
+						case FuncionarioDescuento.PRESTAMO:
+							pl.setPrestamos(importe);
+							break;
+						case FuncionarioDescuento.CORPORATIVO:
+							pl.setCorporativo(importe);
+							break;
+						case FuncionarioDescuento.OTROS:	
+							pl.setOtrosDescuentos(importe);
+							break;
+						case FuncionarioDescuento.REPUESTOS:	
+							pl.setRepuestos(importe);
+							break;
+						case FuncionarioDescuento.UNIFORME:		
+							pl.setUniforme(importe);
+							break;
+						}
+					}
+					if (desc.getSaldoCuotas() > 0) {
+						desc.setSaldoCuotas(desc.getSaldoCuotas() - 1);
+						rr.saveObject(desc, this.getLoginNombre());
 					}
 				}
-			}			
+			}
 			rr.saveObject(pl, this.getLoginNombre());
 			comp.close();
 		}
 		this.planillas = this.getPlanillas_();
+		this.selectedFuncionarios = new ArrayList<Object[]>();
 	}
 	
 	@Command
@@ -132,11 +148,102 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		this.imprimirRecibo_();
 	}
 	
+	@Command
+	public void exportExcel(@BindingParam("items") List<RRHHPlanillaSalarios> items) throws Exception {
+		Workbook workbook = new HSSFWorkbook();
+		Sheet listSheet = workbook.createSheet("Planilla Salarios");
+
+		int rowIndex = 0;
+		Row r = listSheet.createRow(rowIndex++);
+		int cell = 0;
+		r.createCell(cell++).setCellValue("CEDULA");
+		r.createCell(cell++).setCellValue("APELLIDOS Y NOMBRES");
+		r.createCell(cell++).setCellValue("DIAS TRABAJADOS");
+		r.createCell(cell++).setCellValue("CANT.HS.EXTRAS DIURNAS");
+		r.createCell(cell++).setCellValue("CANT.HS.EXTRAS NOCTURNAS");
+		r.createCell(cell++).setCellValue("SUELDO");
+		r.createCell(cell++).setCellValue("BONIF.RESPONSABILIDAD");
+		r.createCell(cell++).setCellValue("JORNAL DIARIO");
+		r.createCell(cell++).setCellValue("SALARIO");
+		r.createCell(cell++).setCellValue("BONIF.FAMILIAR");
+		r.createCell(cell++).setCellValue("OTROS HABERES");
+		r.createCell(cell++).setCellValue("HS.EXTRAS DIURNAS");
+		r.createCell(cell++).setCellValue("HS.EXTRAS NOCTURNAS");
+		r.createCell(cell++).setCellValue("AGUINALDO");
+		r.createCell(cell++).setCellValue("ANTICIPO COMISION");
+		r.createCell(cell++).setCellValue("COMISION");
+		r.createCell(cell++).setCellValue("VACACIONES");
+		r.createCell(cell++).setCellValue("TOTAL HABERES");
+		
+		r.createCell(cell++).setCellValue("PRESTAMOS");r.createCell(cell++).setCellValue("ANTICIPO SALARIO");
+		r.createCell(cell++).setCellValue("ANTICIPO AGUINALDO");r.createCell(cell++).setCellValue("OTROS DESCUENTOS");
+		r.createCell(cell++).setCellValue("CORPORATIVO");r.createCell(cell++).setCellValue("UNIFORME");
+		r.createCell(cell++).setCellValue("REPUESTOS");r.createCell(cell++).setCellValue("AUSENCIA");
+		r.createCell(cell++).setCellValue("IPS");r.createCell(cell++).setCellValue("TOTAL DESCUENTOS");
+		r.createCell(cell++).setCellValue("TOTAL A COBRAR");
+		for (RRHHPlanillaSalarios p : items) {
+			Row row = listSheet.createRow(rowIndex++);
+			int cellIndex = 0;
+			row.createCell(cellIndex++).setCellValue(p.getCedula() + ""); row.createCell(cellIndex++).setCellValue(p.getFuncionario() + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getDiasTrabajados()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getCantidadHorasExtras()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getCantidadHorasExtrasNoc()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getSalarios()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getResponsabilidad()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getJornalDiario()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getSalarioFinal()) + "");	row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getBonificacion()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getOtrosHaberes()) + "");	row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getExtrasDiurnas()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getExtrasNocturnas()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAguinaldo()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAdelantos()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getComision()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getVacaciones()) + "");row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getTotalHaberes_()) + "");
+			
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getPrestamos()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAnticipo())+ "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAnticipoAguinaldo()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getOtrosDescuentos()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getCorporativo()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getUniforme()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getRepuestos()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAusencia()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getIps()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getTotalADescontar()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getTotalACobrar()) + "");
+		}
+		listSheet.autoSizeColumn(0); listSheet.autoSizeColumn(1);
+		listSheet.autoSizeColumn(2); listSheet.autoSizeColumn(3);
+		listSheet.autoSizeColumn(4); listSheet.autoSizeColumn(5);
+		listSheet.autoSizeColumn(6); listSheet.autoSizeColumn(7);
+		listSheet.autoSizeColumn(8); listSheet.autoSizeColumn(9);
+		listSheet.autoSizeColumn(10); listSheet.autoSizeColumn(11);
+		listSheet.autoSizeColumn(12); listSheet.autoSizeColumn(13);
+		listSheet.autoSizeColumn(14); listSheet.autoSizeColumn(15);
+		listSheet.autoSizeColumn(16); listSheet.autoSizeColumn(17);
+		listSheet.autoSizeColumn(18); listSheet.autoSizeColumn(19);
+		listSheet.autoSizeColumn(20); listSheet.autoSizeColumn(21);
+		listSheet.autoSizeColumn(22); listSheet.autoSizeColumn(23);
+		listSheet.autoSizeColumn(24); listSheet.autoSizeColumn(25);
+		listSheet.autoSizeColumn(26); listSheet.autoSizeColumn(27);
+		listSheet.autoSizeColumn(28);
+		
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+			AMedia amedia = new AMedia("PlanillaSalarios.xls", "xls", "application/file", baos.toByteArray());
+			Filedownload.save(amedia);
+			baos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void cerrarPlanilla() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (RRHHPlanillaSalarios pl : this.getPlanillas()) {
+			pl.setCerrado(true);
+			rr.saveObject(pl, this.getLoginNombre());
+		}
+		Clients.showNotification("PLANILLA CERRADA");
+	}
+	
 	/**
 	 * Despliega el Recibo comun..
 	 */
 	private void imprimirRecibo_() throws Exception {		
-		double importe = this.selectedPlanilla.getTotalACobrar();
+		double importe = this.selectedPlanilla.getAnticipo();
 		if (importe < 0) importe = importe * -1;
 		String source = ReportesViewModel.SOURCE_RECIBO_COMUN;
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -514,7 +621,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				double vac = (double) out[18]; double sev = (double) out[19];
 				double aus = (double) out[20]; double tha = (double) out[21];
 				double agu = (double) out[22]; double ang = (double) out[23];
-				sal += item.getSalarios(); com += item.getComision();
+				sal += item.getSalarioFinal(); com += item.getComision();
 				ant += item.getAnticipo(); bon += item.getBonificacion();
 				hab += item.getOtrosHaberes(); dto += item.getOtrosDescuentos();
 				cor += item.getCorporativo(); uni += item.getUniforme();
@@ -538,8 +645,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		RRHHPlanillaSalarios liquidacion = this.selectedPlanilla;
 		List<MyArray> dets = new ArrayList<MyArray>();
 		
-		if (liquidacion.getSalarios() > 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarios()),
+		if (liquidacion.getSalarioFinal() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarioFinal()),
 					Utiles.getNumberFormat(0.0)));
 		}
 		if (liquidacion.getBonificacion() > 0) {
@@ -550,13 +657,9 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.OTROS_HABERES,
 					Utiles.getNumberFormat(liquidacion.getOtrosHaberes()), Utiles.getNumberFormat(0.0)));
 		}
-		if (liquidacion.getHorasExtras() > 0) {
+		if ((liquidacion.getExtrasDiurnas() + liquidacion.getExtrasNocturnas()) > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.HORAS_EXTRAS,
-					Utiles.getNumberFormat(liquidacion.getHorasExtras()), Utiles.getNumberFormat(0.0)));
-		}
-		if (liquidacion.getResponsabilidad() > 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.RESPONSABILIDAD,
-					Utiles.getNumberFormat(liquidacion.getResponsabilidad()), Utiles.getNumberFormat(0.0)));
+					Utiles.getNumberFormat(liquidacion.getExtrasDiurnas() + liquidacion.getExtrasNocturnas()), Utiles.getNumberFormat(0.0)));
 		}
 		if (liquidacion.getAdelantos() > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ADELANTOS, Utiles.getNumberFormat(liquidacion.getAdelantos()),

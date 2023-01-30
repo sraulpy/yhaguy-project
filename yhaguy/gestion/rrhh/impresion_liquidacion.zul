@@ -1,4 +1,4 @@
-<window height="1247px" width="793px" border="none"
+<window vflex="1" hflex="1" border="none"
 	sclass="printable" position="center,center"
 	id="win_fac">
 	
@@ -14,7 +14,7 @@
 		</attribute>
 	</timer>
 
-	<vbox hflex="true" vflex="true">
+	<hbox hflex="true" vflex="true">
 	
 	<!-- PAGINA 1 -->
 	
@@ -264,7 +264,7 @@
 	
 	</vbox>
 	
-	</vbox>
+	</hbox>
 	
 	<style media="print">
     	body > *:not(.printable) {

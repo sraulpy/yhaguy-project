@@ -44,6 +44,7 @@ public class RRHHPlanillaSalarios extends Domain {
 	
 	private double diasTrabajados;
 	private double cantidadHorasExtras;
+	private double cantidadHorasExtrasNoc;
 	
 	private double salarios;
 	private double comision;
@@ -67,30 +68,58 @@ public class RRHHPlanillaSalarios extends Domain {
 	private double aguinaldo;
 	private double anticipoAguinaldo;
 	
+	private boolean cerrado;
+	
 	@Override
 	public int compareTo(Object arg0) {
 		return -1;
 	}
 	
+	@DependsOn({ "salarios", "responsabilidad" })
+	public double getJornalDiario() {
+		return (this.salarios + this.responsabilidad) / 30;
+	}
+	
+	@DependsOn({ "salarios", "responsabilidad" })
+	public double getJornalHora() {
+		return this.getJornalDiario() / 8;
+	}
+	
+	@DependsOn({ "salarios", "responsabilidad", "diasTrabajados" })
+	public double getSalarioFinal() {
+		return this.getJornalDiario() * this.diasTrabajados;
+	}
+		
+	@DependsOn({ "salarios", "responsabilidad", "cantidadHorasExtras" })
+	public double getExtrasDiurnas() {
+		return this.cantidadHorasExtras * (this.getJornalHora() * 1.50);
+	}
+	
+	@DependsOn({ "salarios", "responsabilidad", "cantidadHorasExtrasNoc" })
+	public double getExtrasNocturnas() {
+		return this.cantidadHorasExtrasNoc * (this.getJornalHora() * 2);
+	}
+	
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
-			"vacaciones", "aguinaldo" })
+			"vacaciones", "aguinaldo", "cantidadHorasExtrasNoc", "cantidadHorasExtras", "diasTrabajados" })
 	public double getTotalHaberes_() {
-		return this.salarios + this.bonificacion + this.otrosHaberes + this.horasExtras + this.responsabilidad
+		return this.getSalarioFinal() + this.bonificacion + this.otrosHaberes + this.getExtrasDiurnas() + this.getExtrasNocturnas()
 				+ this.adelantos + this.comision + this.vacaciones + this.aguinaldo;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
 			"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos", "horasExtras",
-			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia", "aguinaldo", "anticipoAguinaldo" })
+			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia", "aguinaldo", "anticipoAguinaldo",
+			"diasTrabajados", "cantidadHorasExtras", "cantidadHorasExtrasNoc" })
 	public double getTotalACobrar() {
-		return this.salarios + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
+		return this.getSalarioFinal() + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
 				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
-				+ this.getIps() + this.prestamos + this.adelantos + this.horasExtras + this.responsabilidad + this.vacaciones
+				+ this.getIps() + this.prestamos + this.adelantos + this.getExtrasDiurnas() + this.getExtrasNocturnas() + this.vacaciones
 				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo;
 	}
 	
 	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
-			"seguro", "embargo", "ausencia", "anticipoAguinaldo", "ips" })
+			"seguro", "embargo", "ausencia", "anticipoAguinaldo", "ips", "salarios", "responsabilidad", "diasTrabajados" })
 	public double getTotalADescontar() {
 		return this.seguroVehicular + this.prestamos + this.anticipo + this.otrosDescuentos + this.corporativo
 				+ this.uniforme + this.repuestos + this.seguro + this.embargo + this.ausencia + this.anticipoAguinaldo
@@ -347,5 +376,21 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setAnticipoAguinaldo(double anticipoAguinaldo) {
 		this.anticipoAguinaldo = anticipoAguinaldo;
+	}
+
+	public double getCantidadHorasExtrasNoc() {
+		return cantidadHorasExtrasNoc;
+	}
+
+	public void setCantidadHorasExtrasNoc(double cantidadHorasExtrasNoc) {
+		this.cantidadHorasExtrasNoc = cantidadHorasExtrasNoc;
+	}
+
+	public boolean isCerrado() {
+		return cerrado;
+	}
+
+	public void setCerrado(boolean cerrado) {
+		this.cerrado = cerrado;
 	}
 }

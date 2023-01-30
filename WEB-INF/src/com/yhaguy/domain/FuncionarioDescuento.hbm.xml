@@ -13,6 +13,7 @@
 		<property name="descripcion"/>
 		<property name="importeGs"/>
 		<property name="cuotas"/>
+		<property name="saldoCuotas"/>
 		
 		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
 			column="idfuncionario" lazy="false"/>

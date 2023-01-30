@@ -19,64 +19,57 @@
 		<button mold="bs" sclass="btn-sm btn-info" hflex="true" label="Generar Planilla"
 			iconSclass="z-icon-check"
 			onClick='pop_procesar.open(self, "end_before")'
-			disabled="@load(vm.selectedMes eq ''? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))"></button>
+			disabled="@load(vm.planillas.size() ne 0 ? 'true' : vm.selectedMes eq '' ? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))"></button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Liquidación"
 			iconSclass="z-icon-print"
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimir')"></button>
 		<space></space>
-		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Recibo"
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Recibo Anticipo"
 			iconSclass="z-icon-print"
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimirRecibo')"></button>
 		<space></space>
-		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Planilla"
-			iconSclass="z-icon-print"
-			onClick='formato.open(self, "after_end")'></button>
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Exportar a Excel"
+			iconSclass="z-icon-download"
+			onClick="@command('exportExcel', items=vm.planillas)"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Cerrar Planilla"
+			iconSclass="z-icon-check"
+			onClick="@command('cerrarPlanilla')"></button>
 	</hlayout>
 	
-	<hlayout vflex="true" width="100%" spacing="1px">
-		<listbox sclass="small-list" vflex="true" width="350px"
+		<listbox sclass="small-list" vflex="true" width="100%"
 			model="@load(vm.planillas)" selectedItem="@bind(vm.selectedPlanilla)"
-			emptyMessage="SIN REGISTROS..">
+			emptyMessage="SIN REGISTROS..">	
+			<frozen columns="4"></frozen>		
 			<auxhead>
-				<auxheader colspan="2" label="Funcionario"></auxheader>
-			</auxhead>
-			<listhead>
-				<listheader label="C.Identidad" width="80px"></listheader>
-				<listheader label="Nombre y Apellido"></listheader>
-			</listhead>
-			<template name="model">
-				<listitem>
-					<listcell label="@load(each.cedula)"></listcell>
-					<listcell label="@load(each.funcionario)"></listcell>
-				</listitem>
-			</template>
-			<listfoot>
-				<listfooter label="ítems"></listfooter>
-				<listfooter></listfooter>
-				<listfooter></listfooter>
-			</listfoot>
-		</listbox>
-		<listbox sclass="small-list" vflex="true" hflex="true"
-			model="@load(vm.planillas)" selectedItem="@bind(vm.selectedPlanilla)"
-			emptyMessage="SIN REGISTROS..">
-			<auxhead>
-				<auxheader colspan="10" label="Haberes"></auxheader>
+				<auxheader colspan="4" label="Funcionario"></auxheader>
+				<auxheader colspan="13" label="Haberes"></auxheader>
 				<auxheader colspan="8" label="Descuentos"></auxheader>
 				<auxheader colspan="3" label="Totales"></auxheader>
 			</auxhead>
 			<listhead>
-				<listheader label="Salarios" width="100px"></listheader>
+				<listheader label="C.Identidad" width="80px"></listheader>
+				<listheader label="Nombre y Apellido" width="220px"></listheader>
+				<listheader label="Días T." width="70px"
+					tooltiptext="Días trabajados">
+				</listheader>
+				<listheader label="Horas E." width="70px"
+					tooltiptext="Horas extras"></listheader>
+				<listheader label="Sueldo" width="100px" align="right"></listheader>
+				<listheader label="Bonif.Resp." width="100px"
+					tooltiptext="Bonificación responsabilidad" align="right">
+				</listheader>
+				<listheader label="Jornal Diario" width="80px" align="right"></listheader>
+				<listheader label="Salario" width="100px" align="right"></listheader>
 				<listheader label="Bonif.Fliar" width="100px"
-					tooltiptext="Bonificación familiar">
+					tooltiptext="Bonificación familiar" align="right">
 				</listheader>
 				<listheader label="Otros Haberes" width="100px"></listheader>
-				<listheader label="Horas Extras" width="100px"></listheader>
-				<listheader label="Bonif.Resp." width="100px"
-					tooltiptext="Bonificación responsabilidad">
-				</listheader>
+				<listheader label="Hs Extras Diurnas" width="110px" align="right"></listheader>
+				<listheader label="Hs Extras Noctur." width="110px" align="right" tooltiptext="Horas Extras Nocturnas"></listheader>
 				<listheader label="Aguinaldo" width="100px"></listheader>
 				<listheader label="Anticipo Com." width="100px"
 					tooltiptext="Anticipo comisión">
@@ -98,7 +91,7 @@
 				<listheader label="Corporativo" width="100px"></listheader>
 				<listheader label="Uniforme" width="100px"></listheader>
 				<listheader label="Repuestos" width="100px"></listheader>
-				<listheader label="Ausencia" width="100px"></listheader>
+				<listheader label="Ausencia" width="100px" align="right"></listheader>
 				<listheader label="IPS" width="100px" align="right"></listheader>
 				<listheader label="Total Descuentos" width="100px"
 					align="right">
@@ -109,46 +102,74 @@
 			</listhead>
 			<template name="model">
 				<listitem>
+					<listcell label="@load(each.cedula)"></listcell>
+					<listcell label="@load(each.funcionario)"></listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
-							value="@bind(each.salarios)" format="###,###,###,##0"
+							inplace="true" value="@bind(each.diasTrabajados)"
+							format="###,###,###,##0" 
 							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
-						<doublebox hflex="true" vflex="true"
-							value="@bind(each.bonificacion)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
-						</doublebox>
+						<hlayout>
+							<doublebox hflex="true" vflex="true"
+								inplace="true" value="@bind(each.cantidadHorasExtras)"
+								format="###,###,###,##0"
+								onChange="@command('saveItem', item=each)"
+								readonly="@load(each.cerrado)">
+							</doublebox>
+							<doublebox hflex="true" vflex="true"
+								inplace="true" value="@bind(each.cantidadHorasExtrasNoc)"
+								format="###,###,###,##0"
+								onChange="@command('saveItem', item=each)"
+								readonly="@load(each.cerrado)">
+							</doublebox>
+						</hlayout>
+					</listcell>
+					<listcell
+						label="@load(each.salarios) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px">
+					</listcell>
+					<listcell
+						label="@load(each.responsabilidad) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px">
+					</listcell>
+					<listcell
+						label="@load(each.jornalDiario) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px">
+					</listcell>
+					<listcell
+						label="@load(each.salarioFinal) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px;font-weight:bold;color:green">
+					</listcell>
+					<listcell
+						label="@load(each.bonificacion) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px;font-weight:bold;color:green">
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.otrosHaberes)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
+							style="background:#CEEDDC;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
-							value="@bind(each.horasExtras)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
-						</doublebox>
+					<listcell
+							label="@load(each.extrasDiurnas) @converter('formattedNumber', format='###,###,###,##0')"
+							style="font-size:11px;font-weight:bold;color:green">
 					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
-							value="@bind(each.responsabilidad)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
-						</doublebox>
+					<listcell
+							label="@load(each.extrasNocturnas) @converter('formattedNumber', format='###,###,###,##0')"
+							style="font-size:11px;font-weight:bold;color:green">
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.aguinaldo)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
+							style="background:#CEEDDC;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
@@ -162,14 +183,16 @@
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.comision)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
+							style="background:#CEEDDC;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.vacaciones)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#CEEDDC;text-align:right">
+							style="background:#CEEDDC;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell
@@ -180,57 +203,61 @@
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.prestamos)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.anticipo)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.anticipoAguinaldo)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.otrosDescuentos)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.corporativo)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.uniforme)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.repuestos)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
 						</doublebox>
 					</listcell>
-					<listcell>
-						<doublebox hflex="true" vflex="true"
-							value="@bind(each.ausencia)" format="###,###,###,##0"
-							onChange="@command('saveItem', item=each)"
-							style="background:#FADAD2;text-align:right">
-						</doublebox>
+					<listcell
+						label="@load(each.ausencia) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px;color:red">
 					</listcell>
 					<listcell
 						label="@load(each.ips) @converter('formattedNumber', format='###,###,###,##0')"
@@ -247,6 +274,13 @@
 				</listitem>
 			</template>
 			<listfoot>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
@@ -268,20 +302,8 @@
 						style="font-weight:bold;text-align:right;background:#CEEDDC">
 					</doublebox>
 				</listfooter>
-				<listfooter>
-					<doublebox hflex="true" vflex="true"
-						format="###,###,###,##0" readonly="true"
-						value="@load(vm.totales[16])"
-						style="font-weight:bold;text-align:right;background:#CEEDDC">
-					</doublebox>
-				</listfooter>
-				<listfooter>
-					<doublebox hflex="true" vflex="true"
-						format="###,###,###,##0" readonly="true"
-						value="@load(vm.totales[17])"
-						style="font-weight:bold;text-align:right;background:#CEEDDC">
-					</doublebox>
-				</listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
@@ -399,7 +421,6 @@
 				</listfooter>
 			</listfoot>
 		</listbox>
-	</hlayout>
 
 	<popup id="pop_procesar" sclass="rounded">
 		<vbox hflex="true">
