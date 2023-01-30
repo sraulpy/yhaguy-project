@@ -438,6 +438,7 @@
 								<listheader>Descripción</listheader>
 								<listheader align="right" style="text-align:center">Importe Gs.</listheader>
 								<listheader align="right" style="text-align:center">Cuotas</listheader>
+								<listheader align="right" style="text-align:center">Saldo Cuotas</listheader>
 								<listheader width="80px" align="center"></listheader>
 							</listhead>
 							<template name="model">
@@ -445,6 +446,7 @@
 									<listcell label="@load(each.descripcion)"></listcell>
 									<listcell label="@load(each.importeGs) @converter(vm.cnv.monedaLocal)"></listcell>
 									<listcell label="@load(each.cuotas eq 0? 'PERMANENTE' : each.cuotas)"></listcell>
+									<listcell label="@load(each.saldoCuotas)"></listcell>
 									<listcell>
 										<button iconSclass="z-icon-times" onClick="@command('deleteDescuento', item=each)"></button>
 									</listcell>
