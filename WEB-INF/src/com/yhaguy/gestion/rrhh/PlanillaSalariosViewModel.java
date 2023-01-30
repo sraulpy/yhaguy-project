@@ -606,7 +606,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 */
 	public Object[] getTotales() {
 		Object[] out = new Object[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		if (this.planillas != null) {
 			for (RRHHPlanillaSalarios item : this.planillas) {
 				double sal = (double) out[0]; double com = (double) out[1];			
@@ -621,6 +621,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				double vac = (double) out[18]; double sev = (double) out[19];
 				double aus = (double) out[20]; double tha = (double) out[21];
 				double agu = (double) out[22]; double ang = (double) out[23];
+				double hed = (double) out[24]; double hen = (double) out[25];
 				sal += item.getSalarioFinal(); com += item.getComision();
 				ant += item.getAnticipo(); bon += item.getBonificacion();
 				hab += item.getOtrosHaberes(); dto += item.getOtrosDescuentos();
@@ -633,8 +634,9 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				vac += item.getVacaciones(); sev += item.getSeguroVehicular();
 				aus += item.getAusencia(); tha += item.getTotalHaberes_();
 				agu += item.getAguinaldo(); ang += item.getAnticipoAguinaldo();
+				hed += item.getExtrasDiurnas(); hen += item.getExtrasNocturnas();
 				out = new Object[] { sal, com, ant, bon, hab, dto, cor, uni, rep, seg, emb, ips, tco, tde, pre, ade,
-						hex, res, vac, sev, aus, tha, agu, ang };
+						hex, res, vac, sev, aus, tha, agu, ang, hed, hen };
 			}
 		}
 		return out;

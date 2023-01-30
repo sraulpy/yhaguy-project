@@ -302,8 +302,20 @@
 						style="font-weight:bold;text-align:right;background:#CEEDDC">
 					</doublebox>
 				</listfooter>
-				<listfooter></listfooter>
-				<listfooter></listfooter>
+				<listfooter>
+					<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totales[24])"
+						style="font-weight:bold;text-align:right;background:#CEEDDC">
+					</doublebox>
+				</listfooter>
+				<listfooter>
+					<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totales[25])"
+						style="font-weight:bold;text-align:right;background:#CEEDDC">
+					</doublebox>
+				</listfooter>
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
