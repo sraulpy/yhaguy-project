@@ -40,22 +40,5 @@
 				</bandpopup>
 			</bandbox>
 		</row>
-		<row>
-			<cell colspan="2">
-				<div style="border-bottom:solid 1px;margin:5px">
-					<label value="Notas de Crédito por promoción." style="font-style:italic"></label>
-				</div>
-			</cell>
-		</row>
-		<row>
-			<field value="Fecha Desde:" />
-			<datebox value="@bind(vm.dato.filtro.fechaDesde2)"
-				placeholder="Desde.." hflex="true" />
-		</row>
-		<row>
-			<field value="Fecha Hasta:" />
-			<datebox value="@bind(vm.dato.filtro.fechaHasta2)"
-				placeholder="Hasta.." hflex="true" />
-		</row>
 	</rows>
 </grid>

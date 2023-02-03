@@ -5026,7 +5026,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
-				List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde, hasta, 0);
+				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId());
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, Double> valuesNotaCredCont = new HashMap<Long, Double>();
@@ -5079,7 +5079,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (NotaCredito ncred : notasCredito) {
 					if ((!ncred.isAnulado()) && ncred.isNotaCreditoVentaContado()) {
-						long idCliente = ncred.getCliente().getId();
+						long idCliente = ncred.getCliente().getId();						
 						Double total = valuesNotaCredCont.get(idCliente);
 						if(total != null) {
 							total += (double) ncred.getTotalImporteGsSinIva();
@@ -5381,8 +5381,6 @@ public class ReportesViewModel extends SimpleViewModel {
 			try {
 				Date desde = filtro.getFechaDesde();
 				Date hasta = filtro.getFechaHasta();
-				Date desde_ = filtro.getFechaDesde2();
-				Date hasta_ = filtro.getFechaHasta2();
 				Funcionario vendedor = filtro.getVendedor();
 				
 				if (vendedor == null) {
@@ -5392,14 +5390,12 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				if (desde == null) desde = new Date();
 				if (hasta == null) hasta = new Date();
-				if (desde_ == null) desde_ = new Date();
-				if (hasta_ == null) hasta_ = new Date();
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
-				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde_, hasta_, vendedor.getId().longValue(), true);
+				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId().longValue());
 				double totalContado = 0;
 				double totalContadoItems = 0;
 				double totalNCRContado = 0;
@@ -6160,7 +6156,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId().longValue(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId().longValue());
-				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId().longValue(), true);
+				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId().longValue());
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, Double> values_nc = new HashMap<Long, Double>();
