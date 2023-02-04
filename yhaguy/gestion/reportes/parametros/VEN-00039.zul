@@ -21,7 +21,7 @@
 				id="bndVend_" onOpen="tx_filter.focus()">
 				<bandpopup>
 					<listbox sclass="small-list" width="400px"
-						height="200px" model="@load(vm.dato.filtro.vendedores_)"
+						height="200px" model="@load(vm.dato.filtro.vendedores)"
 						selectedItem="@bind(vm.dato.filtro.vendedor)"
 						onSelect="bndVend_.close()">
 						<listhead>
