@@ -5026,7 +5026,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<Object[]> cobros = rr.getCobranzasPorVendedor(desde, hasta, vendedor.getId(), 0);
 				List<Venta> ventas = rr.getVentasContadoPorVendedor(desde, hasta, vendedor.getId());
-				List<NotaCredito> notasCredito = rr.getNotasCreditoPorVendedor(desde, hasta, vendedor.getId());
+				List<NotaCredito> notasCredito = rr.getNotasCreditoVenta(desde, hasta, 0);
 				Map<Long, Double> values = new HashMap<Long, Double>();
 				Map<Long, Double> values_ = new HashMap<Long, Double>();
 				Map<Long, Double> valuesNotaCredCont = new HashMap<Long, Double>();
@@ -5079,7 +5079,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				for (NotaCredito ncred : notasCredito) {
 					if ((!ncred.isAnulado()) && ncred.isNotaCreditoVentaContado()) {
-						long idCliente = ncred.getCliente().getId();						
+						long idCliente = ncred.getCliente().getId();
 						Double total = valuesNotaCredCont.get(idCliente);
 						if(total != null) {
 							total += (double) ncred.getTotalImporteGsSinIva();
@@ -5399,7 +5399,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				double totalContado = 0;
 				double totalContadoItems = 0;
 				double totalNCRContado = 0;
-				double totalNCRCredito = 0;
 				Map<Long, Integer> prov_acum = new HashMap<Long, Integer>();
 				Map<Long, Integer> prov_acum_ = new HashMap<Long, Integer>();
 				Map<Long, Double> values = new HashMap<Long, Double>();
@@ -5499,13 +5498,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (NotaCredito ncr : notasCredito) {
-					System.out.println("----- ncr: " + ncr.getNumero());
 					if (ncr.isNotaCreditoVentaContado()) {
 						totalNCRContado += ncr.getTotalImporteGsSinIva(); 
-						System.out.println("totalNCRContado" + totalNCRContado);
-					} else {
-						totalNCRCredito += ncr.getTotalImporteGsSinIva(); 
-						System.out.println("totalNCRCredito" + totalNCRCredito);
 					}
 				}
 				
@@ -5531,9 +5525,8 @@ public class ReportesViewModel extends SimpleViewModel {
 						data.add(new Object[] { proveedores.get(idProveedor), cobrado_, contado_ });
 					}
 				}
-				totalNCRCredito = Utiles.getRedondeo(totalNCRCredito);
 				totalNCRContado = Utiles.getRedondeo(totalNCRContado);
-				data.add(new Object[] { "NOTAS DE CRÉDITO POR PROMOCIÓN", totalNCRCredito, totalNCRContado });
+				data.add(new Object[] { "NOTAS DE CRÉDITO CONTADO", 0.0, (totalNCRContado * -1) });
 
 				ReporteTotalCobranzasVentasProveedor rep = new ReporteTotalCobranzasVentasProveedor(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
