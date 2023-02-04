@@ -914,7 +914,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			System.out.println("--- egresos: " + egresos);
 			
 			// total efectivo..
-			this.totalEfectivo = ingresos - egresos + this.totalReposiciones;
+			this.totalEfectivo = ingresos - egresos + this.totalReposiciones + this.totalNotaCreditoCompra;
 			if (planilla.isCajaChica()) {
 				this.totalEfectivo = (this.totalReposiciones + this.totalRetencionProveedor) - ((this.totalCompras + this.totalGastos + this.totalPagos - this.totalRepEgresosDtoViatico - this.totalNotaCreditoCompra) + (this.totalRepEgresos - this.totalRepEgresosDtoViatico));
 			}
@@ -975,6 +975,8 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalCobranzaAlDiaOtraSuc);
 		} else if ("TotalRetencionCli".equals(fieldName)) {
 			value = FORMATTER.format(this.totalRetencionCliente * -1);
+		} else if ("TotalNotaCreditoCompra".equals(fieldName)) {
+			value = FORMATTER.format(this.totalNotaCreditoCompra);
 		} else if ("TotalResumen2".equals(fieldName)) {
 			value = FORMATTER
 					.format((this.totalVentaContado
@@ -1025,7 +1027,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 							- (this.totalPagos + this.totalGastos + this.totalCompras + this.totalRepEgresos));
 		} else if ("TotalIngresoEfe".equals(fieldName)) {
 			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
-					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo);
+					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo + this.totalNotaCreditoCompra);
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
 			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo
 					- this.totalRepEgresos) * -1);
