@@ -5498,7 +5498,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (NotaCredito ncr : notasCredito) {
-					if (ncr.isNotaCreditoVentaContado()) {
+					if ((!ncr.isAnulado()) && ncr.isNotaCreditoVentaContado()) {
 						totalNCRContado += ncr.getTotalImporteGsSinIva(); 
 					}
 				}
