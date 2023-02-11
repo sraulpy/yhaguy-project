@@ -173,12 +173,12 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		r.createCell(cell++).setCellValue("HS.EXTRAS DIURNAS");
 		r.createCell(cell++).setCellValue("HS.EXTRAS NOCTURNAS");
 		r.createCell(cell++).setCellValue("AGUINALDO");
-		r.createCell(cell++).setCellValue("ANTICIPO COMISION");
 		r.createCell(cell++).setCellValue("COMISION");
 		r.createCell(cell++).setCellValue("VACACIONES");
 		r.createCell(cell++).setCellValue("TOTAL HABERES");
 		
 		r.createCell(cell++).setCellValue("PRESTAMOS");r.createCell(cell++).setCellValue("ANTICIPO SALARIO");
+		r.createCell(cell++).setCellValue("ANTICIPO COMISION");
 		r.createCell(cell++).setCellValue("ANTICIPO AGUINALDO");r.createCell(cell++).setCellValue("OTROS DESCUENTOS");
 		r.createCell(cell++).setCellValue("CORPORATIVO");r.createCell(cell++).setCellValue("UNIFORME");
 		r.createCell(cell++).setCellValue("REPUESTOS");r.createCell(cell++).setCellValue("AUSENCIA");
@@ -194,10 +194,11 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getSalarioFinal()) + "");	row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getBonificacion()) + "");
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getOtrosHaberes()) + "");	row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getExtrasDiurnas()) + "");
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getExtrasNocturnas()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAguinaldo()) + "");
-			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAdelantos()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getComision()) + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getComision()) + "");
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getVacaciones()) + "");row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getTotalHaberes_()) + "");
 			
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getPrestamos()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAnticipo())+ "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAdelantos()) + "");
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAnticipoAguinaldo()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getOtrosDescuentos()) + "");
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getCorporativo()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getUniforme()) + "");
 			row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getRepuestos()) + ""); row.createCell(cellIndex++).setCellValue(Utiles.getRedondeo(p.getAusencia()) + "");
@@ -670,10 +671,6 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		if ((liquidacion.getExtrasDiurnas() + liquidacion.getExtrasNocturnas()) > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.HORAS_EXTRAS,
 					Utiles.getNumberFormat(liquidacion.getExtrasDiurnas() + liquidacion.getExtrasNocturnas()), Utiles.getNumberFormat(0.0)));
-		}
-		if (liquidacion.getAdelantos() > 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ADELANTOS, Utiles.getNumberFormat(liquidacion.getAdelantos()),
-					Utiles.getNumberFormat(0.0)));
 		}		
 		if (liquidacion.getComision() > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.COMISION, Utiles.getNumberFormat(liquidacion.getComision()),
@@ -701,6 +698,10 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		if (liquidacion.getAnticipo() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ANTICIPO, Utiles.getNumberFormat(0.0),
 					Utiles.getNumberFormat(liquidacion.getAnticipo())));
+		}
+		if (liquidacion.getAdelantos() < 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ADELANTOS, Utiles.getNumberFormat(0.0),
+					Utiles.getNumberFormat(liquidacion.getAdelantos())));
 		}
 		if (liquidacion.getOtrosDescuentos() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.OTROS_DESCUENTOS, Utiles.getNumberFormat(0.0),
