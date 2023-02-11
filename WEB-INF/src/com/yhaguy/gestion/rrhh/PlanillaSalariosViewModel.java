@@ -135,6 +135,9 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	
 	@Command
 	public void imprimir() throws Exception {
+		if (this.selectedPlanilla.getTotalACobrar() < 0) {
+			return;
+		}
 		this.imprimirLiquidacion();
 	}
 	
@@ -243,7 +246,12 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 * Despliega el Recibo comun..
 	 */
 	private void imprimirRecibo_() throws Exception {		
+		String concepto = "salarios";
 		double importe = this.selectedPlanilla.getAnticipo();
+		if (importe == 0) {
+			importe = this.selectedPlanilla.getAdelantos();
+			concepto = "comisiones";
+		}
 		if (importe < 0) importe = importe * -1;
 		String source = ReportesViewModel.SOURCE_RECIBO_COMUN;
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -251,7 +259,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		params.put("Funcionario", this.selectedPlanilla.getFuncionario());
 		params.put("ImporteGs", Utiles.getNumberFormat(importe));
 		params.put("ImporteLetras", m.numberToLetter(Utiles.getRedondeo(importe)));
-		params.put("Concepto", "Pago de anticipo de salarios correspondiente al mes de " + this.selectedPlanilla.getMes().toLowerCase() + " " +  this.selectedPlanilla.getAnho());
+		params.put("Concepto", "Pago de anticipo de " + concepto + " correspondiente al mes de " + this.selectedPlanilla.getMes().toLowerCase() + " " +  this.selectedPlanilla.getAnho());
 		params.put("Cargo", this.selectedPlanilla.getCargo());
 		params.put("Periodo", "Asunción, " + Utiles.getDateToString(new Date(), "dd") + " de " +
 				this.selectedPlanilla.getMes().toLowerCase() + " de " +  this.selectedPlanilla.getAnho());
@@ -775,8 +783,14 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 * @return el tipo de liquidacion..
 	 */
 	public String getTipoLiquidacion() {
-		return this.selectedTipo.equals(RRHHPlanillaSalarios.TIPO_AGUINALDOS) ? "LIQUIDACIÓN DE AGUINALDO"
-				: "LIQUIDACIÓN DE SALARIOS";
+		String out = "LIQUIDACIÓN DE SALARIOS";
+		if (this.selectedTipo.equals(RRHHPlanillaSalarios.TIPO_AGUINALDOS)) {
+			out = "LIQUIDACIÓN DE AGUINALDOS";
+		}
+		if (this.selectedTipo.equals(RRHHPlanillaSalarios.TIPO_COMISIONES)) {
+			out = "LIQUIDACIÓN DE COMISIONES";
+		}
+		return out;
 	}
 	
 	/**

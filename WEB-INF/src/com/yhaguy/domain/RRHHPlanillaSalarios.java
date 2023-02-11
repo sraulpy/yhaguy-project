@@ -100,11 +100,11 @@ public class RRHHPlanillaSalarios extends Domain {
 		return this.cantidadHorasExtrasNoc * (this.getJornalHora() * 2);
 	}
 	
-	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
+	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "comision",
 			"vacaciones", "aguinaldo", "cantidadHorasExtrasNoc", "cantidadHorasExtras", "diasTrabajados" })
 	public double getTotalHaberes_() {
 		return this.getSalarioFinal() + this.bonificacion + this.otrosHaberes + this.getExtrasDiurnas() + this.getExtrasNocturnas()
-				+ this.adelantos + this.comision + this.vacaciones + this.aguinaldo;
+				+ this.comision + this.vacaciones + this.aguinaldo;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
@@ -119,17 +119,18 @@ public class RRHHPlanillaSalarios extends Domain {
 	}
 	
 	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
-			"seguro", "embargo", "ausencia", "anticipoAguinaldo", "ips", "salarios", "responsabilidad", "diasTrabajados" })
+			"seguro", "embargo", "ausencia", "anticipoAguinaldo", "ips", "salarios", "responsabilidad", "diasTrabajados", "adelantos" })
 	public double getTotalADescontar() {
 		return this.seguroVehicular + this.prestamos + this.anticipo + this.otrosDescuentos + this.corporativo
 				+ this.uniforme + this.repuestos + this.seguro + this.embargo + this.ausencia + this.anticipoAguinaldo
+				+ this.adelantos
 				+ this.getIps();
 	}
 	
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
 		"vacaciones", "aguinaldo" })
 	public double getIps() {
-		return ((this.getTotalHaberes_() - (this.adelantos + this.bonificacion + this.aguinaldo)) * 0.09) * -1 ;
+		return ((this.getTotalHaberes_() - (this.bonificacion + this.aguinaldo)) * 0.09) * -1 ;
 	}
 	
 	/**
