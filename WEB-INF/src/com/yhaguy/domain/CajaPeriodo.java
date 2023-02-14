@@ -27,6 +27,7 @@ public class CajaPeriodo extends Domain {
 	public static final String TIPO_DEBITOS_CENTRAL = "CAJA DEBITOS CENTRAL";
 	public static final String TIPO_CHICA_REQUERIMIENTOS = "CAJA CHICA - REQUERIMIENTOS";
 	public static final String TIPO_CHICA_REPOSICION = "CAJA CHICA - REPOSICION";
+	public static final String TIPO_VIATICOS = "CAJA VIATICOS";
 
 	private String numero;
 	private Date apertura;
@@ -143,7 +144,7 @@ public class CajaPeriodo extends Domain {
 	 */
 	public boolean isCajaChica() {
 		return this.tipo.equals(TIPO_CHICA) || this.tipo.equals(TIPO_CHICA_REQUERIMIENTOS)
-				|| this.tipo.equals(TIPO_CHICA_REPOSICION);
+				|| this.tipo.equals(TIPO_CHICA_REPOSICION) || this.tipo.equals(TIPO_VIATICOS);
 	}
 	
 	/**
