@@ -2503,9 +2503,9 @@ public class RegisterDomain extends Register {
 		String query = " select t from Transferencia t where t.transferenciaTipo.id = "
 				+ idTipoTransf
 				+ " and t.transferenciaEstado.id = "
-				+ idEstadoTransf;
+				+ idEstadoTransf + " order by t.fechaCreacion desc";
 
-		List<Transferencia> out = this.hqlLimit(query, 50);
+		List<Transferencia> out = this.hqlLimit(query, 100);
 		return out;
 	}
 
