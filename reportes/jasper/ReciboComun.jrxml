@@ -168,7 +168,7 @@
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{ImporteLetras}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Empresa}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
