@@ -7,7 +7,7 @@
 		selectedItems="@bind(vm.dato.selectedMovimientosReparto)"
 		emptyMessage="No existen movimientos pendientes..."
 		sclass="small-list" vflex="true" checkmark="true" multiple="true"
-		style="overflow:auto">
+		mold="paging" pageSize="17">
 		<custom-attributes org.zkoss.zul.listbox.autoSort="true" />
 		<listhead>
 			<listheader hflex="min" align="center" />
