@@ -21146,7 +21146,7 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			double val = (double) det[12];
 			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Total".equals(fieldName)) {
-			double val = (double) det[12];
+			double val = (double) det[13];
 			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_1".equals(fieldName)) {
 			double val = totales.get("Ene");
