@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasPorCliente" pageWidth="2317" pageHeight="595" orientation="Landscape" columnWidth="2277" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.7715610000000088"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasPorCliente" pageWidth="2705" pageHeight="595" orientation="Landscape" columnWidth="2665" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="ireport.zoom" value="3.1384283767210173"/>
+	<property name="ireport.x" value="7233"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -29,6 +29,9 @@
 	<parameter name="Prov5" class="java.lang.String"/>
 	<parameter name="Prov6" class="java.lang.String"/>
 	<parameter name="Prov7" class="java.lang.String"/>
+	<parameter name="Prov8" class="java.lang.String"/>
+	<parameter name="Prov9" class="java.lang.String"/>
+	<parameter name="Prov10" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '10010001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta", 150000 "Saldo Anterior",  3351450 "Debitos Periodo", 100000 "Creditos Periodo",
 150000 "Saldo Periodo" from plancuenta where id = '1'
@@ -89,6 +92,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 	<field name="TotProv5" class="java.lang.String"/>
 	<field name="TotProv6" class="java.lang.String"/>
 	<field name="TotProv7" class="java.lang.String"/>
+	<field name="TotProv8" class="java.lang.String"/>
+	<field name="TotProv9" class="java.lang.String"/>
+	<field name="TotProv10" class="java.lang.String"/>
+	<field name="Prov8" class="java.lang.String"/>
+	<field name="Prov9" class="java.lang.String"/>
+	<field name="Prov10" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<columnHeader>
 		<band height="18" splitType="Stretch">
@@ -260,6 +269,30 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Prov7}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="2274" y="1" width="130" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="83bf19e2-abc1-43cb-8dbc-c7cc25e12478"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Prov8}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="2404" y="1" width="130" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="1702be19-0cec-48e2-88b8-0d7db08a4129"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Prov9}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="2534" y="1" width="130" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="93a84a4e-9d0a-4c7c-8f9b-ebae6f623104"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Prov10}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
@@ -368,6 +401,21 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement style="Detail" x="2144" y="0" width="130" height="15" uuid="ac17e63e-f130-419e-ab10-78a4de9648d6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Prov7}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2274" y="0" width="130" height="15" uuid="dd2d81d8-8ba9-4215-b861-c2501f883f52"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Prov8}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2404" y="0" width="130" height="15" uuid="f4f58160-355d-4940-82b2-1a1611bd75ef"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Prov9}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="2534" y="0" width="130" height="15" uuid="3e96d562-b48e-4047-b9fa-4ac142556827"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Prov10}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
