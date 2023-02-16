@@ -565,6 +565,14 @@ public class Utiles {
 	}
 	
 	/**
+	 * @return el numero del mes segun parametro..
+	 */
+	public static int getNumeroMes_(Date fecha) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM");
+	    return Integer.parseInt(dateFormat.format(fecha));
+	}
+	
+	/**
 	 * @return el nombre del mes..
 	 */
 	public static String getNombreMes(Date fecha) {

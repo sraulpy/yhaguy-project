@@ -7952,7 +7952,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Long> idsProv = new HashMap<String, Long>();
 				Map<String, Long> idsProvLoc = new HashMap<String, Long>();
 				Map<String, Double> montosProv = new HashMap<String, Double>();
-				
+				Map<String, Double> montosNcr = new HashMap<String, Double>();
 				
 				provs = rr.getProveedoresVentas(desde, hasta, idVendedor);
 				for (int i = 0; i < provs.size(); i++) {
@@ -7970,7 +7970,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					long idCliente = (long) cliente[9];
 					for (int i = 0; i < provs.size(); i++) {
 						long idProv = idsProv.get("Prov" + (i+1));
-						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv);
+						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
 						montosProv.put((String) cliente[1] + "Prov" + (i+1), importe);
 					}
 				}
@@ -7979,7 +7979,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					long idCliente = (long) cliente[9];
 					for (int i = 0; i < provsLocales.size(); i++) {
 						long idProv = idsProvLoc.get("Prov" + (i+1));
-						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv);
+						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
 						montosProv.put((String) cliente[1] + "ProvLocal", importe);
 					}
 				}
@@ -7987,29 +7987,63 @@ public class ReportesViewModel extends SimpleViewModel {
 				for (Object[] cliente : emps) {					
 					long idCliente = (long) cliente[9];
 					List<Object[]> ventas = rr.get_Ventas(desde, hasta, idCliente);
+					List<Object[]> notasCred = rr.get_NotasCredito(desde, hasta, idCliente);
 					
 					for (Object[] venta : ventas) {
-						Date fecha = (Date) venta[1];
-						double totalImporteGs = (double) venta[6];
-						int mes = Utiles.getNumeroMes(fecha) - 1;
-						String key = idCliente + "-" + mes;
-						
-						Object[] acum = values.get(key);
-						if (acum != null) {
-							double importe = (double) acum[0];
-							importe += totalImporteGs;
-							values.put(key, new Object[] { importe, mes, cliente[1] });
-						} else {
-							values.put(key,
-									new Object[] { totalImporteGs, mes, cliente[1] });
-						}						
+						long idVend = (long) venta[7];
+						if (idVend == idVendedor) {
+							Date fecha = (Date) venta[1];
+							double totalImporteGs = (double) venta[6];
+							int mes = Utiles.getNumeroMes_(fecha);
+							String key = idCliente + "-" + mes;
+							
+							System.out.println(key + " " + totalImporteGs);
+							
+							Object[] acum = values.get(key);
+							if (acum != null) {
+								double importe = (double) acum[0];
+								importe += totalImporteGs;
+								values.put(key, new Object[] { importe, mes, cliente[1] });
+							} else {
+								values.put(key,
+										new Object[] { totalImporteGs, mes, cliente[1] });
+							}	
+						}											
+					}
+					
+					for (Object[] nc : notasCred) {
+						long idVend = (long) nc[7];
+						if (idVend == idVendedor) {
+							Date fecha = (Date) nc[1];
+							double totalImporteGs = (double) nc[6];
+							int mes = Utiles.getNumeroMes_(fecha);
+							String key = idCliente + "-" + mes;
+							
+							Object[] acum = values.get(key);
+							if (acum != null) {
+								double importe = (double) acum[0];
+								importe -= totalImporteGs;
+								values.put(key, new Object[] { importe, mes, cliente[1] });
+							} else {
+								values.put(key,
+										new Object[] { (totalImporteGs * -1), mes, cliente[1] });
+							}
+							
+							Double tot = montosNcr.get(cliente[1] + "");
+							if (tot != null) {
+								tot += totalImporteGs;
+								montosNcr.put(cliente[1] + "", tot);
+							} else {
+								montosNcr.put(cliente[1] + "", totalImporteGs);
+							}
+						}											
 					}
 					
 					if (ventas.size() == 0) {
 						String key = idCliente + "-" + 0;
 						values.put(key, new Object[] { 0.0, 0, cliente[1] });
 					}					
-					System.out.println(cliente[1]);					
+					//System.out.println(cliente[1]);					
 				}
 				
 				
@@ -8031,6 +8065,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					double p8 = montosProv.get(cliente + "Prov8") != null ? montosProv.get(cliente + "Prov8") : 0.0;
 					double p9 = montosProv.get(cliente + "Prov9") != null ? montosProv.get(cliente + "Prov9") : 0.0;
 					double p10 = montosProv.get(cliente + "ProvLocal") != null ? montosProv.get(cliente + "ProvLocal") : 0.0;
+					double ncs = montosNcr.get(cliente) != null ? (montosNcr.get(cliente)) : 0.0;
 					
 					Object[] value_ = values_.get(cliente);
 					if (value_ != null) {
@@ -8040,7 +8075,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						Object[] datos = new Object[] { (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
-								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10};
+								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, ncs};
 						datos[mes] = importe;
 						values_.put(cliente, datos);
 					}
@@ -8060,7 +8095,7 @@ public class ReportesViewModel extends SimpleViewModel {
 							value_[5], value_[6], value_[7], value_[8], value_[9], value_[10], value_[11], total,
 							(double) value_[12], (double) value_[13], (double) value_[14], (double) value_[15],
 							(double) value_[16], (double) value_[17], (double) value_[18], (double) value_[19],
-							(double) value_[20], (double) value_[21] });
+							(double) value_[20], (double) value_[21], (double) value_[22] });
 				}
 				String format = (String) formato[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR;
@@ -8071,7 +8106,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new VentasPorClienteProveedorDataSource(data);
-				params.put("Titulo", codReporte + " - Ventas por Clientes por Mes - Totales por Proveedor del Exterior");
+				params.put("Titulo", codReporte + " - Ventas por Clientes por Mes - Totales por Proveedor del Exterior (Importes Sin Iva)");
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
@@ -21014,6 +21049,7 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 		totales.put("P8", 0.0);
 		totales.put("P9", 0.0);
 		totales.put("P10", 0.0);
+		totales.put("NCS", 0.0);
 		for (Object[] value : values) {
 			Double ene = totales.get("Ene");
 			Double feb = totales.get("Feb");
@@ -21031,7 +21067,7 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			Double p1 = totales.get("P1"); Double p2 = totales.get("P2"); Double p3 = totales.get("P3");
 			Double p4 = totales.get("P4"); Double p5 = totales.get("P5"); Double p6 = totales.get("P6");
 			Double p7 = totales.get("P7"); Double p8 = totales.get("P8"); Double p9 = totales.get("P9");
-			Double p10 = totales.get("P10");
+			Double p10 = totales.get("P10"); Double ncs = totales.get("NCS");
 			ene += (double) value[1];
 			feb += (double) value[2];
 			mar += (double) value[3];
@@ -21048,7 +21084,7 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			p1 += (double) value[14]; p2 += (double) value[15]; p3 += (double) value[16];
 			p4 += (double) value[17]; p5 += (double) value[18]; p6 += (double) value[19];
 			p7 += (double) value[20]; p8 += (double) value[21]; p9 += (double) value[22];
-			p10 += (double) value[23];
+			p10 += (double) value[23]; ncs += (double) value[24];
 			totales.put("Ene", ene); totales.put("Feb", feb);
 			totales.put("Mar", mar); totales.put("Abr", abr);
 			totales.put("May", may); totales.put("Jun", jun);
@@ -21059,7 +21095,7 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			totales.put("P1", p1); totales.put("P2", p2); totales.put("P3", p3);
 			totales.put("P4", p4); totales.put("P5", p5); totales.put("P6", p6);
 			totales.put("P7", p7); totales.put("P8", p8); totales.put("P9", p9);
-			totales.put("P10", p10);
+			totales.put("P10", p10); totales.put("NCS", ncs);
 		}
 	}
 
@@ -21074,97 +21110,146 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 		if ("Cliente".equals(fieldName)) {
 			value = det[0];
 		} else if ("Ene".equals(fieldName)) {
-			value = FORMATTER.format(det[1]);
+			double val = (double) det[1];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Feb".equals(fieldName)) {
-			value = FORMATTER.format(det[2]);
+			double val = (double) det[2];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Mar".equals(fieldName)) {
-			value = FORMATTER.format(det[3]);
+			double val = (double) det[3];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Abr".equals(fieldName)) {
-			value = FORMATTER.format(det[4]);			
+			double val = (double) det[4];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));			
 		} else if ("May".equals(fieldName)) {
-			value = FORMATTER.format(det[5]);
+			double val = (double) det[5];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Jun".equals(fieldName)) {
-			value = FORMATTER.format(det[6]);
+			double val = (double) det[6];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Jul".equals(fieldName)) {
-			value = FORMATTER.format(det[7]);
+			double val = (double) det[7];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Ago".equals(fieldName)) {
-			value = FORMATTER.format(det[8]);
+			double val = (double) det[8];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Set".equals(fieldName)) {
-			value = FORMATTER.format(det[9]);
+			double val = (double) det[9];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Oct".equals(fieldName)) {
-			value = FORMATTER.format(det[10]);
+			double val = (double) det[10];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Nov".equals(fieldName)) {
-			value = FORMATTER.format(det[11]);
+			double val = (double) det[11];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Dic".equals(fieldName)) {
-			value = FORMATTER.format(det[12]);
+			double val = (double) det[12];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Total".equals(fieldName)) {
-			value = FORMATTER.format(det[13]);
+			double val = (double) det[12];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_1".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Ene"));
+			double val = totales.get("Ene");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_2".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Feb"));
+			double val = totales.get("Feb");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_3".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Mar"));
+			double val = totales.get("Mar");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_4".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Abr"));
+			double val = totales.get("Abr");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_5".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("May"));
+			double val = totales.get("May");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_6".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Jun"));
+			double val = totales.get("Jun");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_7".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Jul"));
+			double val = totales.get("Jul");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_8".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Ago"));
+			double val = totales.get("Ago");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_9".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Set"));
+			double val = totales.get("Set");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_10".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Oct"));
+			double val = totales.get("Oct");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_11".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Nov"));
+			double val = totales.get("Nov");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot_12".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Dic"));
+			double val = totales.get("Dic");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		} else if ("Tot".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("Total"));
-		}  else if ("Prov1".equals(fieldName)) {
-			value = FORMATTER.format(det[14]);
-		}   else if ("Prov2".equals(fieldName)) {
-			value = FORMATTER.format(det[15]);
-		}   else if ("Prov3".equals(fieldName)) {
-			value = FORMATTER.format(det[16]);
-		}   else if ("Prov4".equals(fieldName)) {
-			value = FORMATTER.format(det[17]);
-		}   else if ("Prov5".equals(fieldName)) {
-			value = FORMATTER.format(det[18]);
-		}   else if ("Prov6".equals(fieldName)) {
-			value = FORMATTER.format(det[19]);
-		}   else if ("Prov7".equals(fieldName)) {
-			value = FORMATTER.format(det[20]);
-		}   else if ("Prov8".equals(fieldName)) {
-			value = FORMATTER.format(det[21]);
-		}   else if ("Prov9".equals(fieldName)) {
-			value = FORMATTER.format(det[22]);
-		}   else if ("Prov10".equals(fieldName)) {
-			value = FORMATTER.format(det[23]);
-		}  else if ("TotProv1".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P1"));
-		}  else if ("TotProv2".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P2"));
-		}  else if ("TotProv3".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P3"));
-		}  else if ("TotProv4".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P4"));
-		}  else if ("TotProv5".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P5"));
-		}  else if ("TotProv6".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P6"));
-		}  else if ("TotProv7".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P7"));
-		}  else if ("TotProv8".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P8"));
-		}  else if ("TotProv9".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P9"));
-		}  else if ("TotProv10".equals(fieldName)) {
-			value = FORMATTER.format(totales.get("P10"));
+			double val = totales.get("Total");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov1".equals(fieldName)) {
+			double val = (double) det[14];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov2".equals(fieldName)) {
+			double val = (double) det[15];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov3".equals(fieldName)) {
+			double val = (double) det[16];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov4".equals(fieldName)) {
+			double val = (double) det[17];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov5".equals(fieldName)) {
+			double val = (double) det[18];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov6".equals(fieldName)) {
+			double val = (double) det[19];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov7".equals(fieldName)) {
+			double val = (double) det[20];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov8".equals(fieldName)) {
+			double val = (double) det[21];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov9".equals(fieldName)) {
+			double val = (double) det[22];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Prov10".equals(fieldName)) {
+			double val = (double) det[23];
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("Ncrs".equals(fieldName)) {
+			double val = (double) det[24];
+			value = FORMATTER.format((val - Utiles.getIVA(val, 10)) * -1);
+		} else if ("TotProv1".equals(fieldName)) {
+			double val = totales.get("P1");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv2".equals(fieldName)) {
+			double val = totales.get("P2");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv3".equals(fieldName)) {
+			double val = totales.get("P3");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv4".equals(fieldName)) {
+			double val = totales.get("P4");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv5".equals(fieldName)) {
+			double val = totales.get("P5");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv6".equals(fieldName)) {
+			double val = totales.get("P6");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv7".equals(fieldName)) {
+			double val = totales.get("P7");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv8".equals(fieldName)) {
+			double val = totales.get("P8");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv9".equals(fieldName)) {
+			double val = totales.get("P9");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		} else if ("TotProv10".equals(fieldName)) {
+			double val = totales.get("P10");
+			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
 		}
 		return value;
 	}
