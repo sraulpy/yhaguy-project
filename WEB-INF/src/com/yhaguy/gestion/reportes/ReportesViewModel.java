@@ -7945,19 +7945,26 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> emps = rr.getClientesPorVendedor(idVendedor, desde, hasta);
-				//List<Object[]> provs = new ArrayList<Object[]>();
+				List<Object[]> provs = new ArrayList<Object[]>();
+				List<Object[]> provsLocales = new ArrayList<Object[]>();
 				Map<String, String> paramsProv = new HashMap<String, String>();
-				//Map<String, Long> idsProv = new HashMap<String, Long>();
+				Map<String, String> paramsProvLoc = new HashMap<String, String>();
+				Map<String, Long> idsProv = new HashMap<String, Long>();
+				Map<String, Long> idsProvLoc = new HashMap<String, Long>();
 				Map<String, Double> montosProv = new HashMap<String, Double>();
 				
-				System.out.println("---SIZE EMPRESAS: " + emps.size());
 				
-				/**
 				provs = rr.getProveedoresVentas(desde, hasta, idVendedor);
 				for (int i = 0; i < provs.size(); i++) {
 					paramsProv.put("Prov" + (i+1), (String) provs.get(i)[0]);
 					idsProv.put("Prov" + (i+1), (Long) provs.get(i)[1]);
-				}				
+				}			
+				
+				provsLocales = rr.getProveedoresLocalesVentas(desde, hasta, idVendedor);
+				for (int i = 0; i < provsLocales.size(); i++) {
+					paramsProvLoc.put("Prov" + (i+1), (String) provsLocales.get(i)[0]);
+					idsProvLoc.put("Prov" + (i+1), (Long) provsLocales.get(i)[1]);
+				}	
 				
 				for (Object[] cliente : emps) {
 					long idCliente = (long) cliente[9];
@@ -7965,12 +7972,19 @@ public class ReportesViewModel extends SimpleViewModel {
 						long idProv = idsProv.get("Prov" + (i+1));
 						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv);
 						montosProv.put((String) cliente[1] + "Prov" + (i+1), importe);
-						System.out.println(cliente[1] + "Prov" + (i+1) + " -- " + Utiles.getNumberFormat(importe));
 					}
-				} **/
+				}
 				
 				for (Object[] cliente : emps) {
-					
+					long idCliente = (long) cliente[9];
+					for (int i = 0; i < provsLocales.size(); i++) {
+						long idProv = idsProvLoc.get("Prov" + (i+1));
+						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv);
+						montosProv.put((String) cliente[1] + "ProvLocal", importe);
+					}
+				}
+				
+				for (Object[] cliente : emps) {					
 					long idCliente = (long) cliente[9];
 					List<Object[]> ventas = rr.get_Ventas(desde, hasta, idCliente);
 					
@@ -7988,17 +8002,14 @@ public class ReportesViewModel extends SimpleViewModel {
 						} else {
 							values.put(key,
 									new Object[] { totalImporteGs, mes, cliente[1] });
-						}
-						
+						}						
 					}
 					
 					if (ventas.size() == 0) {
 						String key = idCliente + "-" + 0;
 						values.put(key, new Object[] { 0.0, 0, cliente[1] });
-					}		
-					
-					System.out.println(cliente[1]);
-					
+					}					
+					System.out.println(cliente[1]);					
 				}
 				
 				
@@ -8017,6 +8028,9 @@ public class ReportesViewModel extends SimpleViewModel {
 					double p5 = montosProv.get(cliente + "Prov5") != null ? montosProv.get(cliente + "Prov5") : 0.0;
 					double p6 = montosProv.get(cliente + "Prov6") != null ? montosProv.get(cliente + "Prov6") : 0.0;
 					double p7 = montosProv.get(cliente + "Prov7") != null ? montosProv.get(cliente + "Prov7") : 0.0;
+					double p8 = montosProv.get(cliente + "Prov8") != null ? montosProv.get(cliente + "Prov8") : 0.0;
+					double p9 = montosProv.get(cliente + "Prov9") != null ? montosProv.get(cliente + "Prov9") : 0.0;
+					double p10 = montosProv.get(cliente + "ProvLocal") != null ? montosProv.get(cliente + "ProvLocal") : 0.0;
 					
 					Object[] value_ = values_.get(cliente);
 					if (value_ != null) {
@@ -8026,7 +8040,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						Object[] datos = new Object[] { (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
-								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7};
+								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10};
 						datos[mes] = importe;
 						values_.put(cliente, datos);
 					}
@@ -8041,13 +8055,12 @@ public class ReportesViewModel extends SimpleViewModel {
 							+ (double) value_[6] + (double) value_[7]
 							+ (double) value_[8] + (double) value_[9]
 							+ (double) value_[10] + (double) value_[11];
-					data.add(new Object[] { key.toUpperCase(), value_[0],
-							value_[1], value_[2], value_[3], value_[4],
-							value_[5], value_[6], value_[7], value_[8],
-							value_[9], value_[10], value_[11], total, 
-							(double) value_[12], (double) value_[13], 
-							(double) value_[14], (double) value_[15], 
-							(double) value_[16], (double) value_[17], (double) value_[18] });
+					data.add(new Object[] { 
+							key.toUpperCase(), value_[0], value_[1], value_[2], value_[3], value_[4],
+							value_[5], value_[6], value_[7], value_[8], value_[9], value_[10], value_[11], total,
+							(double) value_[12], (double) value_[13], (double) value_[14], (double) value_[15],
+							(double) value_[16], (double) value_[17], (double) value_[18], (double) value_[19],
+							(double) value_[20], (double) value_[21] });
 				}
 				String format = (String) formato[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR;
@@ -8070,6 +8083,9 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("Prov5", paramsProv.get("Prov5") == null ? "NO DEFINIDO" : paramsProv.get("Prov5"));
 				params.put("Prov6", paramsProv.get("Prov6") == null ? "NO DEFINIDO" : paramsProv.get("Prov6"));
 				params.put("Prov7", paramsProv.get("Prov7") == null ? "NO DEFINIDO" : paramsProv.get("Prov7"));
+				params.put("Prov8", paramsProv.get("Prov8") == null ? "NO DEFINIDO" : paramsProv.get("Prov8"));
+				params.put("Prov9", paramsProv.get("Prov9") == null ? "NO DEFINIDO" : paramsProv.get("Prov9"));
+				params.put("Prov10", "LOCALES");
 				imprimirJasper(source, params, dataSource, formato);
 
 			} catch (Exception e) {
@@ -20995,6 +21011,9 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 		totales.put("P5", 0.0);
 		totales.put("P6", 0.0);
 		totales.put("P7", 0.0);
+		totales.put("P8", 0.0);
+		totales.put("P9", 0.0);
+		totales.put("P10", 0.0);
 		for (Object[] value : values) {
 			Double ene = totales.get("Ene");
 			Double feb = totales.get("Feb");
@@ -21011,7 +21030,8 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			Double tot = totales.get("Total");
 			Double p1 = totales.get("P1"); Double p2 = totales.get("P2"); Double p3 = totales.get("P3");
 			Double p4 = totales.get("P4"); Double p5 = totales.get("P5"); Double p6 = totales.get("P6");
-			Double p7 = totales.get("P7");
+			Double p7 = totales.get("P7"); Double p8 = totales.get("P8"); Double p9 = totales.get("P9");
+			Double p10 = totales.get("P10");
 			ene += (double) value[1];
 			feb += (double) value[2];
 			mar += (double) value[3];
@@ -21027,7 +21047,8 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			tot += (double) value[13];
 			p1 += (double) value[14]; p2 += (double) value[15]; p3 += (double) value[16];
 			p4 += (double) value[17]; p5 += (double) value[18]; p6 += (double) value[19];
-			p7 += (double) value[20];
+			p7 += (double) value[20]; p8 += (double) value[21]; p9 += (double) value[22];
+			p10 += (double) value[23];
 			totales.put("Ene", ene); totales.put("Feb", feb);
 			totales.put("Mar", mar); totales.put("Abr", abr);
 			totales.put("May", may); totales.put("Jun", jun);
@@ -21037,7 +21058,8 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			totales.put("Total", tot);
 			totales.put("P1", p1); totales.put("P2", p2); totales.put("P3", p3);
 			totales.put("P4", p4); totales.put("P5", p5); totales.put("P6", p6);
-			totales.put("P7", p7);
+			totales.put("P7", p7); totales.put("P8", p8); totales.put("P9", p9);
+			totales.put("P10", p10);
 		}
 	}
 
@@ -21117,6 +21139,12 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			value = FORMATTER.format(det[19]);
 		}   else if ("Prov7".equals(fieldName)) {
 			value = FORMATTER.format(det[20]);
+		}   else if ("Prov8".equals(fieldName)) {
+			value = FORMATTER.format(det[21]);
+		}   else if ("Prov9".equals(fieldName)) {
+			value = FORMATTER.format(det[22]);
+		}   else if ("Prov10".equals(fieldName)) {
+			value = FORMATTER.format(det[23]);
 		}  else if ("TotProv1".equals(fieldName)) {
 			value = FORMATTER.format(totales.get("P1"));
 		}  else if ("TotProv2".equals(fieldName)) {
@@ -21131,6 +21159,12 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 			value = FORMATTER.format(totales.get("P6"));
 		}  else if ("TotProv7".equals(fieldName)) {
 			value = FORMATTER.format(totales.get("P7"));
+		}  else if ("TotProv8".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P8"));
+		}  else if ("TotProv9".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P9"));
+		}  else if ("TotProv10".equals(fieldName)) {
+			value = FORMATTER.format(totales.get("P10"));
 		}
 		return value;
 	}

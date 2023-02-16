@@ -14836,12 +14836,28 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return 
+	 * [0]:proveedor.razonSocial
+	 */
+	public List<Object[]> getProveedoresLocalesVentas(Date desde, Date hasta, long idVendedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select distinct(p.empresa.razonSocial), p.id from Venta v join v.detalles d join d.articulo a join a.proveedor p"
+				+ "	where v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
+				+ " and v.estadoComprobante is null"
+				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
+				+ " and v.vendedor.id = " + idVendedor 
+				+ " and p.tipoProveedor.sigla = '" + Configuracion.SIGLA_PROVEEDOR_TIPO_LOCAL + "' order by 1";
+		return this.hql(query);
+	}
+	
 	public Double getVentasProveedor(Date desde, Date hasta, long idCliente, long idProveedor) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs) "
-				+ " from Venta v join v.detalles d where v.dbEstado != 'D' "
-				+ " and (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
+				+ " from Venta v join v.detalles d where "
+				+ " (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
 				+ " and v.estadoComprobante is null"
 				+ " and v.cliente.id = " + idCliente
 				+ "	and v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
