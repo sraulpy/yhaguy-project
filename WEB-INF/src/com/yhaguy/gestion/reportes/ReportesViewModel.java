@@ -21250,6 +21250,9 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 		} else if ("TotProv10".equals(fieldName)) {
 			double val = totales.get("P10");
 			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
+		}  else if ("TotNcr".equals(fieldName)) {
+			double val = totales.get("NCS");
+			value = FORMATTER.format((val - Utiles.getIVA(val, 10)) * -1);
 		}
 		return value;
 	}
