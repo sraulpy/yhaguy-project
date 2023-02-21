@@ -130,6 +130,9 @@ public class RRHHPlanillaSalarios extends Domain {
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
 		"vacaciones", "aguinaldo" })
 	public double getIps() {
+		if (this.tipo.equals(TIPO_PREMIOS)) {
+			return 0.0;
+		}
 		return ((this.getTotalHaberes_() - (this.bonificacion + this.aguinaldo)) * 0.09) * -1 ;
 	}
 	

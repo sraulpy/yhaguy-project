@@ -247,20 +247,26 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 * Despliega el Recibo comun..
 	 */
 	private void imprimirRecibo_() throws Exception {		
-		String concepto = "salarios";
+		String concepto = "anticipo de salarios";
 		double importe = this.selectedPlanilla.getAnticipo();
 		if (importe == 0) {
 			importe = this.selectedPlanilla.getAdelantos();
-			concepto = "comisiones";
+			concepto = "anticipo de comisiones";
 		}
 		if (importe < 0) importe = importe * -1;
+		
+		if (this.selectedPlanilla.getTipo().equals(RRHHPlanillaSalarios.TIPO_PREMIOS)) {
+			concepto = "premios";
+			importe = this.selectedPlanilla.getOtrosHaberes();
+		}
+		
 		String source = ReportesViewModel.SOURCE_RECIBO_COMUN;
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("Fecha", Utiles.getDateToString(new Date(), "dd"));
 		params.put("Funcionario", this.selectedPlanilla.getFuncionario());
 		params.put("ImporteGs", Utiles.getNumberFormat(importe));
 		params.put("ImporteLetras", m.numberToLetter(Utiles.getRedondeo(importe)));
-		params.put("Concepto", "Pago de anticipo de " + concepto + " correspondiente al mes de " + this.selectedPlanilla.getMes().toLowerCase() + " " +  this.selectedPlanilla.getAnho());
+		params.put("Concepto", "Pago de " + concepto + " correspondiente al mes de " + this.selectedPlanilla.getMes().toLowerCase() + " " +  this.selectedPlanilla.getAnho());
 		params.put("Cargo", this.selectedPlanilla.getCargo());
 		params.put("Periodo", "Asunción, " + Utiles.getDateToString(new Date(), "dd") + " de " +
 				this.selectedPlanilla.getMes().toLowerCase() + " de " +  this.selectedPlanilla.getAnho());
