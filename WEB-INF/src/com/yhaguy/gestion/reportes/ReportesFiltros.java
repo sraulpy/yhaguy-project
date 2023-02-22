@@ -244,6 +244,16 @@ public class ReportesFiltros {
 	}
 	
 	/**
+	 * @return los formatos de reporte..
+	 */
+	public List<Object[]> getFormatos_() {
+		List<Object[]> out = new ArrayList<Object[]>();
+		out.add(ReportesViewModel.FORMAT_XLS);
+		out.add(ReportesViewModel.FORMAT_CSV);
+		return out;
+	}
+	
+	/**
 	 * @return los tipos de migracion..
 	 */
 	public List<String> getTiposSaldoMigracion() {

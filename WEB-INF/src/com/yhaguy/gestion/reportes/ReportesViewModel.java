@@ -13632,7 +13632,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				params.put("dep9", deps.get(9));
 				params.put("dep10", deps.get(10));
 				JRDataSource dataSource = new MovimientoArticulos(list);
-				imprimirJasper(source, params, dataSource, com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV);
+				imprimirJasper(source, params, dataSource, filtro.getFormato());
 				
 			} catch (Exception e) {
 				e.printStackTrace();
