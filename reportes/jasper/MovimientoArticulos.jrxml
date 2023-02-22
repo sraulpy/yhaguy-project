@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MovimientoArticulos" pageWidth="7381" pageHeight="595" orientation="Landscape" columnWidth="7341" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="ireport.zoom" value="1.948717100000019"/>
-	<property name="ireport.x" value="8237"/>
+	<property name="ireport.x" value="12183"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -213,7 +213,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Prov_Ult_CompraLocal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6451" y="0" width="99" height="15" uuid="cae58a33-b1ea-41a2-adff-5ffeedc2ff6c"/>
+				<reportElement x="6451" y="0" width="98" height="15" uuid="cae58a33-b1ea-41a2-adff-5ffeedc2ff6c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Junio]]></text>
 			</staticText>
@@ -512,7 +512,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{ProvLocal}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="6451" y="0" width="99" height="15" uuid="702ba615-5d81-46a0-bccc-25dc899133ce"/>
+				<reportElement style="Detail" x="6451" y="0" width="98" height="15" uuid="702ba615-5d81-46a0-bccc-25dc899133ce"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Junio}]]></textFieldExpression>
 			</textField>
