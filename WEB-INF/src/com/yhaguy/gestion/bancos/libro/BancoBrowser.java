@@ -25,6 +25,7 @@ public class BancoBrowser extends Browser{
 		ColumnaBrowser col2 = new ColumnaBrowser();
 		ColumnaBrowser col3 = new ColumnaBrowser();
 		ColumnaBrowser col4 = new ColumnaBrowser();
+		ColumnaBrowser col5 = new ColumnaBrowser();
 
 		col1.setCampo("nroCuenta"); 	
 		col1.setTitulo("Número de Cuenta");
@@ -42,11 +43,16 @@ public class BancoBrowser extends Browser{
 		col4.setCampo("moneda.descripcion"); 	
 		col4.setTitulo("Moneda");		
 		
+		col5.setCampo("dbEstado");
+		col5.setWhere("dbEstado != 'D'");
+		col5.setWidthColumna("0px");
+		
 		List<ColumnaBrowser> columnas = new ArrayList<ColumnaBrowser>();
 		columnas.add(col1);
 		columnas.add(col2);
 		columnas.add(col3);
 		columnas.add(col4);
+		columnas.add(col5);
 		
 		return columnas;
 	}	

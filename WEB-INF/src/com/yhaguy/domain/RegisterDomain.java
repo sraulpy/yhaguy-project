@@ -7607,7 +7607,7 @@ public class RegisterDomain extends Register {
 	 * @return los bancos..
 	 */
 	public List<BancoCta> getBancosCta() throws Exception {
-		String query = "select b from BancoCta b";
+		String query = "select b from BancoCta b where b.dbEstado != 'D'";
 		return this.hql(query);
 	}
 
