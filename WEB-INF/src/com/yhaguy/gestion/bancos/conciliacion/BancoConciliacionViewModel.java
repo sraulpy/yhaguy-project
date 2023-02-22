@@ -488,6 +488,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
 		List<Object[]> extracciones = rr.getExtraccionesPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
 		List<Object[]> capitalizaciones = rr.getCapitalizacionesPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
+		List<Object[]> reversiones = rr.getReversionesPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
 		
 		List<Object[]> depositosMRA = new ArrayList<Object[]>();
 		List<Object[]> depositosMRA_ = new ArrayList<Object[]>();
@@ -521,6 +522,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		historicoHABER.addAll(debitosDesglosados);
 		historicoHABER.addAll(formasPagoDebito);
 		historicoHABER.addAll(extracciones);
+		historicoHABER.addAll(reversiones);
 
 		for (Object[] movim : historicoDEBE) {
 			movim[0] = "(+)" + movim[0];

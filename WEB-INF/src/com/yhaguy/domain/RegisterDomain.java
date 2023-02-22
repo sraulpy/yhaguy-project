@@ -10722,6 +10722,19 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los egresos bancarios..
+	 */
+	public List<BancoEgreso> getBancoEgresos(String fecha, String banco, String numero, String concepto) throws Exception {
+		String query = "select b from BancoEgreso b where "
+				+ " upper(b.numero) like '%" + numero.toUpperCase() + "%'"
+				+ " and cast (b.fecha as string) like '%" + fecha + "%'"
+				+ " and upper(b.banco.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
+				+ " and b.concepto = '" + concepto + "'"
+				+ " order by b.fecha";
+		return this.hqlLimit(query, 200);
+	}
+	
+	/**
 	 * @return empresas segun ruc..
 	 */
 	public List<Empresa> getEmpresasByRuc(String ruc) throws Exception {
@@ -14435,7 +14448,7 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
-	 * @return las transferencias (banco origen) segun banco.. 
+	 * @return las capitalizaciones (banco origen) segun banco.. 
 	 * [0]:concepto
 	 * [1]:fecha 
 	 * [2]:numero 
@@ -14448,6 +14461,29 @@ public class RegisterDomain extends Register {
 		String query = "select ('CAPITALIZACIÓN DE INTERESES'), "
 				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('CAPITALIZACIÓN INTERESES: ', b.banco.banco.descripcion)"
 				+ " from BancoIngreso b where b.concepto = '" + BancoIngreso.CONCEPTO_CAPITALIZACION_INTERESES + "'"
+				+ " and b.banco.id = " + idBanco
+				+ " and (b.fecha >= '"
+				+ desde_
+				+ "' and b.fecha <= '"
+				+ hasta_
+				+ "')" + " order by b.fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las reversiones (banco origen) segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs 
+	 * [4]:banco 
+	 */
+	public List<Object[]> getReversionesPorBanco(long idBanco, Date desde, Date hasta, long idMonedaBanco) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select ('REVERSIÓN'), "
+				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('REVERSIÓN: ', b.banco.banco.descripcion)"
+				+ " from BancoEgreso b where b.concepto = '" + BancoEgreso.CONCEPTO_REVERSION + "'"
 				+ " and b.banco.id = " + idBanco
 				+ " and (b.fecha >= '"
 				+ desde_

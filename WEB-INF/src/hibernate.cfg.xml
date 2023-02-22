@@ -186,6 +186,7 @@
 		<mapping resource="com/yhaguy/domain/BancoTransferencia.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/BancoExtraccion.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/BancoIngreso.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/BancoEgreso.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/CompraFiscal.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/CompraLocalOrden.hbm.xml" />
