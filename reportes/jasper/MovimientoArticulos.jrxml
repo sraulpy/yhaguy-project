@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MovimientoArticulos" pageWidth="7381" pageHeight="595" orientation="Landscape" columnWidth="7341" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.948717100000019"/>
-	<property name="ireport.x" value="12183"/>
+	<property name="ireport.zoom" value="2.8531167061100287"/>
+	<property name="ireport.x" value="19796"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -143,7 +143,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1636" y="0" width="94" height="15" uuid="37d557da-cf27-4270-a35b-e56f0f0ae55a"/>
+				<reportElement x="1637" y="0" width="93" height="15" uuid="37d557da-cf27-4270-a35b-e56f0f0ae55a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[80/20]]></text>
 			</staticText>
@@ -203,12 +203,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Cant_UltComprLocal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3212" y="0" width="99" height="15" uuid="c20e91c3-9bbd-42e9-9755-11db5e4d6690"/>
+				<reportElement x="3212" y="0" width="98" height="15" uuid="c20e91c3-9bbd-42e9-9755-11db5e4d6690"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Fech_UltComprLocal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3310" y="0" width="325" height="15" uuid="d4fa6e92-ed04-46de-b444-3e570dc1b3e2"/>
+				<reportElement x="3310" y="0" width="324" height="15" uuid="d4fa6e92-ed04-46de-b444-3e570dc1b3e2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Prov_Ult_CompraLocal]]></text>
 			</staticText>
@@ -248,12 +248,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Diciembre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5839" y="0" width="119" height="15" uuid="c84b1d36-8417-40f1-9156-2ff790d22719"/>
+				<reportElement x="5839" y="0" width="118" height="15" uuid="c84b1d36-8417-40f1-9156-2ff790d22719"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[General]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5957" y="0" width="99" height="15" uuid="85254e9b-9191-4d48-be29-d61cd970528c"/>
+				<reportElement x="5957" y="0" width="98" height="15" uuid="85254e9b-9191-4d48-be29-d61cd970528c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Enero]]></text>
 			</staticText>
@@ -288,12 +288,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Maximo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4308" y="0" width="119" height="15" uuid="06304732-494d-4bff-ac1d-b515db7d3de2"/>
+				<reportElement x="4308" y="0" width="118" height="15" uuid="06304732-494d-4bff-ac1d-b515db7d3de2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[UltimoCostoGs]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4426" y="0" width="119" height="15" uuid="9e7bea2a-88ec-4893-a8ac-3ec41e8e5687"/>
+				<reportElement x="4426" y="0" width="118" height="15" uuid="9e7bea2a-88ec-4893-a8ac-3ec41e8e5687"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[CostoPromedioGs]]></text>
 			</staticText>
@@ -308,7 +308,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$P{MES_CLI_VIG}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1148" y="0" width="98" height="15" uuid="f097ae6b-c681-47c0-a6ae-461a5db418dd"/>
+				<reportElement x="1148" y="0" width="97" height="15" uuid="f097ae6b-c681-47c0-a6ae-461a5db418dd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Sub Grupo]]></text>
 			</staticText>
@@ -333,62 +333,62 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Procedencia]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="4768" y="0" width="120" height="15" uuid="2879b13e-525e-4ad5-95da-e71c65888220"/>
+				<reportElement x="4768" y="0" width="119" height="15" uuid="2879b13e-525e-4ad5-95da-e71c65888220"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="4887" y="0" width="120" height="15" uuid="ff69fc1a-6bc8-45c9-a335-58b59fab6ce5"/>
+				<reportElement x="4887" y="0" width="119" height="15" uuid="ff69fc1a-6bc8-45c9-a335-58b59fab6ce5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep3}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5006" y="0" width="120" height="15" uuid="8116841a-00fe-4775-841b-cc313dffe0b8"/>
+				<reportElement x="5006" y="0" width="119" height="15" uuid="8116841a-00fe-4775-841b-cc313dffe0b8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep4}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5125" y="0" width="120" height="15" uuid="927e3c5f-5bd9-4a20-9e93-25bb59382378"/>
+				<reportElement x="5125" y="0" width="119" height="15" uuid="927e3c5f-5bd9-4a20-9e93-25bb59382378"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep5}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5244" y="0" width="120" height="15" uuid="06920fd9-ddd3-4c61-b606-90f1e0080bc9"/>
+				<reportElement x="5244" y="0" width="119" height="15" uuid="06920fd9-ddd3-4c61-b606-90f1e0080bc9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep6}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5363" y="0" width="120" height="15" uuid="4549bede-0c2a-4af0-85de-b7220cd61675"/>
+				<reportElement x="5363" y="0" width="119" height="15" uuid="4549bede-0c2a-4af0-85de-b7220cd61675"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep7}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5482" y="0" width="120" height="15" uuid="5fcedb75-919a-4d22-ba27-1ecd2c1ff742"/>
+				<reportElement x="5482" y="0" width="119" height="15" uuid="5fcedb75-919a-4d22-ba27-1ecd2c1ff742"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep8}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5601" y="0" width="120" height="15" uuid="8d242d3e-029c-425a-87c7-54ba73c6fde3"/>
+				<reportElement x="5601" y="0" width="119" height="15" uuid="8d242d3e-029c-425a-87c7-54ba73c6fde3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep9}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5720" y="0" width="120" height="15" uuid="646c9ab0-5725-49f3-998a-aeba1b1a962d"/>
+				<reportElement x="5720" y="0" width="119" height="15" uuid="646c9ab0-5725-49f3-998a-aeba1b1a962d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="4649" y="0" width="120" height="15" uuid="9e3f6b63-4c48-4285-ab31-07148cbcfcfe"/>
+				<reportElement x="4649" y="0" width="119" height="15" uuid="9e3f6b63-4c48-4285-ab31-07148cbcfcfe"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{dep1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4190" y="0" width="119" height="15" uuid="0a3cf08f-cfe2-40f7-bc3d-3a911a1c1ed7"/>
+				<reportElement x="4190" y="0" width="118" height="15" uuid="0a3cf08f-cfe2-40f7-bc3d-3a911a1c1ed7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Mayorista Gs]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3634" y="0" width="99" height="15" uuid="5cafbeb5-8483-42ad-8f78-4bf16376a200"/>
+				<reportElement x="3634" y="0" width="98" height="15" uuid="5cafbeb5-8483-42ad-8f78-4bf16376a200"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Cant_UltImportacion]]></text>
 			</staticText>
@@ -398,12 +398,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<text><![CDATA[Fech_UltImportacion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3831" y="0" width="360" height="15" uuid="791e35a4-3d47-49c0-8d44-085fafda210b"/>
+				<reportElement x="3831" y="0" width="359" height="15" uuid="791e35a4-3d47-49c0-8d44-085fafda210b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Prov_Ult_Importacion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4544" y="0" width="106" height="15" uuid="f1343bba-b6a2-4afb-abde-5cc3c1db5fa5"/>
+				<reportElement x="4544" y="0" width="105" height="15" uuid="f1343bba-b6a2-4afb-abde-5cc3c1db5fa5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[CostoFobDs]]></text>
 			</staticText>
@@ -442,7 +442,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1636" y="0" width="94" height="15" uuid="d33b916a-6266-4655-b5ff-5e5f0d3fb84e"/>
+				<reportElement style="Detail" x="1637" y="0" width="93" height="15" uuid="d33b916a-6266-4655-b5ff-5e5f0d3fb84e"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{OchentaVeinte}]]></textFieldExpression>
 			</textField>
@@ -502,12 +502,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{CantLocal}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3212" y="0" width="99" height="15" uuid="2ce3221c-3d2b-4d17-a47a-8704f4df09c8"/>
+				<reportElement style="Detail" x="3212" y="0" width="98" height="15" uuid="2ce3221c-3d2b-4d17-a47a-8704f4df09c8"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{FechaLocal}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3310" y="0" width="325" height="15" uuid="b7f3874f-08d4-46ff-b4b1-f8d0015b5305"/>
+				<reportElement style="Detail" x="3310" y="0" width="324" height="15" uuid="b7f3874f-08d4-46ff-b4b1-f8d0015b5305"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ProvLocal}]]></textFieldExpression>
 			</textField>
@@ -547,52 +547,52 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Diciembre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4649" y="0" width="120" height="15" uuid="1dc3e9c3-bdce-453b-99a6-5aebbdb70a63"/>
+				<reportElement style="Detail" x="4649" y="0" width="119" height="15" uuid="1dc3e9c3-bdce-453b-99a6-5aebbdb70a63"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4768" y="0" width="120" height="15" uuid="d4ff33b0-56b9-4f90-b060-71755ead046e"/>
+				<reportElement style="Detail" x="4768" y="0" width="119" height="15" uuid="d4ff33b0-56b9-4f90-b060-71755ead046e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_2}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4887" y="0" width="120" height="15" uuid="f4a2160f-0e40-4b94-a97a-6fc8ebc538a9"/>
+				<reportElement style="Detail" x="4887" y="0" width="119" height="15" uuid="f4a2160f-0e40-4b94-a97a-6fc8ebc538a9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_3}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5006" y="0" width="120" height="15" uuid="dbd30110-51bb-4c99-a732-f47d40d46730"/>
+				<reportElement style="Detail" x="5006" y="0" width="119" height="15" uuid="dbd30110-51bb-4c99-a732-f47d40d46730"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_4}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5125" y="0" width="120" height="15" uuid="73e9fc9d-e42f-47b4-9ebd-963f493b37de"/>
+				<reportElement style="Detail" x="5125" y="0" width="119" height="15" uuid="73e9fc9d-e42f-47b4-9ebd-963f493b37de"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_5}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5244" y="0" width="120" height="15" uuid="0fe60435-4133-48e4-a0fe-658fda26228d"/>
+				<reportElement style="Detail" x="5244" y="0" width="119" height="15" uuid="0fe60435-4133-48e4-a0fe-658fda26228d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_6}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5363" y="0" width="120" height="15" uuid="a757af65-0f69-4c98-8ed1-08f2df8bb475"/>
+				<reportElement style="Detail" x="5363" y="0" width="119" height="15" uuid="a757af65-0f69-4c98-8ed1-08f2df8bb475"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_7}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5482" y="0" width="120" height="15" uuid="84cb998e-4bed-4144-b609-03ba8280a81a"/>
+				<reportElement style="Detail" x="5482" y="0" width="119" height="15" uuid="84cb998e-4bed-4144-b609-03ba8280a81a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_8}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5839" y="0" width="119" height="15" uuid="710795f4-cef9-4876-b25b-9d536e4c9069"/>
+				<reportElement style="Detail" x="5839" y="0" width="118" height="15" uuid="710795f4-cef9-4876-b25b-9d536e4c9069"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_gral}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5957" y="0" width="99" height="15" uuid="59e0e5c6-cdaf-4676-9af3-91123f5b5340"/>
+				<reportElement style="Detail" x="5957" y="0" width="98" height="15" uuid="59e0e5c6-cdaf-4676-9af3-91123f5b5340"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Enero}]]></textFieldExpression>
 			</textField>
@@ -627,12 +627,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Minimo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4426" y="0" width="119" height="15" uuid="d08bd96d-60a3-420d-8289-912bfd92d21a"/>
+				<reportElement style="Detail" x="4426" y="0" width="118" height="15" uuid="d08bd96d-60a3-420d-8289-912bfd92d21a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{CostoPromedioGs}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4308" y="0" width="119" height="15" uuid="1fd42bcc-6cf2-4bcf-9dc2-8c27ea083979"/>
+				<reportElement style="Detail" x="4308" y="0" width="118" height="15" uuid="1fd42bcc-6cf2-4bcf-9dc2-8c27ea083979"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{UltimoCostoGs}]]></textFieldExpression>
 			</textField>
@@ -647,7 +647,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{CantClienteVig}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1148" y="0" width="98" height="15" uuid="2dfaf43f-7b14-43be-90a8-587c67bc7dac"/>
+				<reportElement style="Detail" x="1148" y="0" width="97" height="15" uuid="2dfaf43f-7b14-43be-90a8-587c67bc7dac"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{SubGrupo}]]></textFieldExpression>
 			</textField>
@@ -672,22 +672,22 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{Procedencia}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5601" y="0" width="120" height="15" uuid="d77ef2b5-71f7-492e-a156-1cfd13251354"/>
+				<reportElement style="Detail" x="5601" y="0" width="119" height="15" uuid="d77ef2b5-71f7-492e-a156-1cfd13251354"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_9}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="5720" y="0" width="120" height="15" uuid="b8f062c3-5c1a-433f-b6f7-9f6a1b25254a"/>
+				<reportElement style="Detail" x="5720" y="0" width="119" height="15" uuid="b8f062c3-5c1a-433f-b6f7-9f6a1b25254a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Dep_10}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4190" y="0" width="119" height="15" uuid="ccaf5187-7c02-42f5-afc0-13fc7ee91766"/>
+				<reportElement style="Detail" x="4190" y="0" width="118" height="15" uuid="ccaf5187-7c02-42f5-afc0-13fc7ee91766"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{MayoristaGs}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3634" y="0" width="99" height="15" uuid="5d11e770-fea7-4ff7-af91-f3585bb189a0"/>
+				<reportElement style="Detail" x="3634" y="0" width="98" height="15" uuid="5d11e770-fea7-4ff7-af91-f3585bb189a0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{CantImp}]]></textFieldExpression>
 			</textField>
@@ -697,12 +697,12 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<textFieldExpression><![CDATA[$F{FechaImp}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="3831" y="0" width="360" height="15" uuid="4b7b6481-c3ad-44b8-a434-5f867c587d83"/>
+				<reportElement style="Detail" x="3831" y="0" width="359" height="15" uuid="4b7b6481-c3ad-44b8-a434-5f867c587d83"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ProvImp}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="4544" y="0" width="106" height="15" uuid="c9513688-430c-4965-846b-5f19b22cddad"/>
+				<reportElement style="Detail" x="4544" y="0" width="105" height="15" uuid="c9513688-430c-4965-846b-5f19b22cddad"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{FobDs}]]></textFieldExpression>
 			</textField>
