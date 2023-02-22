@@ -14,7 +14,7 @@
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
-		emptyMessage="SIN REGISTROS DE CAPITALIZACIÓN INTERESES.."
+		emptyMessage="SIN REGISTROS DE REVERSIONES.."
 		model="@load(vm.reversiones)"
 		selectedItem="@bind(vm.selected_reversion)">
 		<listhead>
