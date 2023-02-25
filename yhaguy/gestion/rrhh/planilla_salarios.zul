@@ -10,16 +10,22 @@
 		<combobox placeholder="Año.."
 			model="@load(vm.anhos)" selectedItem="@bind(vm.selectedAnho)"
 			instant="true" onSelect="@command('selectPeriodo')"
-			value="@load(vm.selectedAnho)"></combobox>
+			value="@load(vm.selectedAnho)" width="80px"></combobox>
 		<combobox placeholder="Tipo.."
 			model="@load(vm.tipos)" selectedItem="@bind(vm.selectedTipo)"
 			instant="true" onSelect="@command('selectPeriodo')"
-			value="@load(vm.selectedTipo)"></combobox>
+			value="@load(vm.selectedTipo)" hflex="min"></combobox>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-info" hflex="true" label="Generar Planilla"
 			iconSclass="z-icon-check"
 			onClick='pop_procesar.open(self, "end_before")'
 			disabled="@load(vm.planillas.size() ne 0 ? 'true' : vm.selectedMes eq '' ? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))"></button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-info" hflex="true" label="Agregar"
+			iconSclass="z-icon-plus"
+			onClick='pop_procesar_.open(self, "end_before")'
+			disabled="@load(vm.selectedMes eq '' ? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))">
+		</button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Liquidación"
 			iconSclass="z-icon-print"
@@ -459,6 +465,29 @@
 			onClick="@command('generarPlanilla', comp=pop_procesar)"></button>
 		</vbox>
 	</popup>
+	
+	<popup id="pop_procesar_" sclass="rounded">
+		<vbox hflex="true">
+		<listbox sclass="small-list" width="400px" height="400px"
+			model="@load(vm.funcionarios_)" multiple="true" checkmark="true"
+			selectedItems="@bind(vm.selectedFuncionarios_)">
+			<listhead>
+				<listheader width="50px" align="center"></listheader>
+				<listheader label="Funcionario"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell></listcell>
+					<listcell label="@load(each[1])"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<div height="3px"></div>
+		<button mold="bs" sclass="btn-sm btn-success" iconSclass="z-icon-check" hflex="true"
+			onClick="@command('addPlanilla', comp=pop_procesar_)"></button>
+		</vbox>
+	</popup>
+	
 	<popup id="formato" sclass="rounded">
 		<vlayout width="250px" style="padding:10px">
 			<combobox hflex="true"

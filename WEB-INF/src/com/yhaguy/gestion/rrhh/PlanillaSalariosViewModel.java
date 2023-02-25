@@ -50,7 +50,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	private RRHHPlanillaSalarios selectedPlanilla;
 	
 	private List<Object[]> selectedFuncionarios;
-	private List<RRHHPlanillaSalarios> planillas;
+	private List<Object[]> selectedFuncionarios_;
+	private List<RRHHPlanillaSalarios> planillas = new ArrayList<RRHHPlanillaSalarios>();
 	
 	private Window win;
 	
@@ -118,6 +119,58 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		}
 		this.planillas = this.getPlanillas_();
 		this.selectedFuncionarios = new ArrayList<Object[]>();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void addPlanilla(@BindingParam("comp") Popup comp) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (Object[] func : this.selectedFuncionarios_) {
+			Funcionario f = rr.getFuncionarioById((long) func[0]);
+			RRHHPlanillaSalarios pl = new RRHHPlanillaSalarios();
+			pl.setMes(this.selectedMes);
+			pl.setAnho(this.selectedAnho);
+			pl.setTipo(this.selectedTipo);
+			pl.setFuncionario((String) func[1]);
+			pl.setCedula((String) func[2]);
+			pl.setCargo((String) func[3]);
+			if (pl.getTipo().equals(RRHHPlanillaSalarios.TIPO_SALARIOS)) {
+				pl.setDiasTrabajados(30);
+				pl.setSalarios(f.getSalarioVigente());
+				pl.setBonificacion(f.getBonificacionFamiliarVigente());
+				pl.setResponsabilidad(f.getBonificacionResponsabilidadVigente());
+				for (FuncionarioDescuento desc : f.getDescuentos()) {
+					if (desc.getCuotas() == 0 || desc.getSaldoCuotas() > 0) {
+						double importe = desc.getImporteGs() * -1;
+						switch (desc.getDescripcion()) {
+						case FuncionarioDescuento.PRESTAMO:
+							pl.setPrestamos(pl.getPrestamos() + importe);
+							break;
+						case FuncionarioDescuento.CORPORATIVO:
+							pl.setCorporativo(pl.getCorporativo() + importe);
+							break;
+						case FuncionarioDescuento.OTROS:	
+							pl.setOtrosDescuentos(pl.getOtrosDescuentos() + importe);
+							break;
+						case FuncionarioDescuento.REPUESTOS:	
+							pl.setRepuestos(pl.getRepuestos() + importe);
+							break;
+						case FuncionarioDescuento.UNIFORME:		
+							pl.setUniforme(pl.getUniforme() + importe);
+							break;
+						}
+					}
+					if (desc.getSaldoCuotas() > 0) {
+						desc.setSaldoCuotas(desc.getSaldoCuotas() - 1);
+						rr.saveObject(desc, this.getLoginNombre());
+					}
+				}
+			}
+			rr.saveObject(pl, this.getLoginNombre());
+			comp.close();
+		}
+		this.planillas = this.getPlanillas_();
+		this.selectedFuncionarios_ = new ArrayList<Object[]>();
 	}
 	
 	@Command
@@ -814,6 +867,24 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		return rr.getFuncionarios_();
 	}
 	
+	@DependsOn("planillas")
+	public List<Object[]> getFuncionarios_() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Map<String, String> cis = new HashMap<String, String>();
+		for (RRHHPlanillaSalarios pl : this.getPlanillas()) {
+			cis.put(pl.getCedula(), pl.getCedula());
+		}
+		List<Object[]> list = rr.getFuncionarios_();
+		List<Object[]> out = new ArrayList<Object[]>();
+		for (Object[] l : list) {
+			String ci = (String) l[2];
+			if (cis.get(ci) == null) {
+				out.add(l);
+			}
+		}
+		return out;
+	}
+	
 	public List<String> getMeses() {
 		return Utiles.getMeses_();
 	}
@@ -876,5 +947,13 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 
 	public void setSelectedFormato(Object[] selectedFormato) {
 		this.selectedFormato = selectedFormato;
+	}
+
+	public List<Object[]> getSelectedFuncionarios_() {
+		return selectedFuncionarios_;
+	}
+
+	public void setSelectedFuncionarios_(List<Object[]> selectedFuncionarios_) {
+		this.selectedFuncionarios_ = selectedFuncionarios_;
 	}
 }
