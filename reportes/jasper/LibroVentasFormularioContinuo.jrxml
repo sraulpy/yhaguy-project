@@ -158,7 +158,7 @@
 				<text><![CDATA[Grav. 5%]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="239" y="45" width="528" height="12" uuid="5b49398a-300c-414e-9674-95d2a7fad18f"/>
+				<reportElement x="239" y="45" width="552" height="12" uuid="5b49398a-300c-414e-9674-95d2a7fad18f"/>
 				<textFieldExpression><![CDATA[$F{DireccionEmpresa}]]></textFieldExpression>
 			</textField>
 			<staticText>
