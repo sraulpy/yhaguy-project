@@ -226,6 +226,12 @@ public class ReportesViewModel {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return "80093865-8";
 		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
+			return "80078124-4";
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return "80109448-8";
+		}
 		return "80024884-8";
 	}
 	
