@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroVenta" pageWidth="756" pageHeight="792" columnWidth="748" leftMargin="4" rightMargin="4" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
-	<property name="ireport.zoom" value="3.5369215365000195"/>
-	<property name="ireport.x" value="1734"/>
+	<property name="ireport.zoom" value="1.81500000000001"/>
+	<property name="ireport.x" value="110"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -68,10 +68,58 @@
 	<field name="TotalGravada" class="java.lang.String"/>
 	<field name="TotalImpuesto" class="java.lang.String"/>
 	<field name="TotalImporte" class="java.lang.String"/>
+	<field name="TotalGravada5" class="java.lang.String"/>
+	<field name="TotalImpuesto5" class="java.lang.String"/>
+	<field name="TotalExenta" class="java.lang.String"/>
+	<field name="TotalNDebito" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<pageHeader>
+		<band height="51">
+			<staticText>
+				<reportElement style="Title" mode="Transparent" x="1" y="0" width="309" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="9af4d570-71b6-4853-8206-6abbdbe5baf1"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[LIBRO DE VENTAS MENSUAL]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="1" y="14" width="309" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="39ef57e5-2d5c-4d8a-8154-92b3b0e5c6b0"/>
+				<textElement verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Periodo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="1" y="26" width="166" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b972d6c0-9e06-4000-bec8-cfadede95118"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Empresa}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="167" y="26" width="143" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="d6f3b526-317b-4bc2-822e-b346103f244a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RucEmpresa}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="1" y="38" width="309" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="49a6778a-742d-465e-8e32-081ae0e28241"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DireccionEmpresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
 	<detail>
 		<band height="14" splitType="Stretch">
 			<componentElement>
@@ -81,70 +129,70 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Ventas})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="13" width="747">
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="0" y="1" width="60" height="12" uuid="c59efa30-7fda-4881-8b0d-1ee9ee4ae1d9"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="60" y="1" width="106" height="12" uuid="dc95d3d7-0576-4708-bdb4-a1c17ee0917b"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
 						</textField>
-						<textField>
-							<reportElement x="166" y="1" width="143" height="12" uuid="4f571979-6a8e-45a4-a569-7daa67773db0"/>
+						<textField isStretchWithOverflow="true">
+							<reportElement stretchType="RelativeToBandHeight" x="166" y="1" width="143" height="12" uuid="4f571979-6a8e-45a4-a569-7daa67773db0"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isStretchWithOverflow="true">
 							<reportElement x="309" y="1" width="65" height="12" uuid="7aa8ea60-873b-4a83-bb59-e74472508281"/>
 							<textElement>
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{ruc}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="374" y="1" width="60" height="12" uuid="dd909d89-0bb0-4498-96cc-516a30e6fdcd"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{gravado5}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="494" y="1" width="55" height="12" uuid="90e52218-ac76-450b-837b-d3a2479345e5"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{iva5}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="672" y="1" width="74" height="12" uuid="1c4a5f5d-6c4f-4ebe-a349-54840c69b232"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="549" y="1" width="55" height="12" uuid="40cd8662-d91e-4ed9-99d5-853217009b1d"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{iva10}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="434" y="1" width="60" height="12" uuid="2c5f83c7-4fc8-4144-92bf-e88134c46f3a"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{gravado10}]]></textFieldExpression>
 						</textField>
-						<textField pattern="#,##0">
+						<textField isStretchWithOverflow="true" pattern="#,##0">
 							<reportElement x="604" y="1" width="68" height="12" uuid="0313002c-2fd8-418f-a66f-caefee4236e9"/>
 							<textElement textAlignment="Right">
 								<font size="8"/>
@@ -156,4 +204,90 @@
 			</componentElement>
 		</band>
 	</detail>
+	<summary>
+		<band height="57">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="375" y="0" width="60" height="14" uuid="5b8012d2-39cb-4c1a-8302-75cccaebfe32"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalGravada5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="435" y="0" width="60" height="14" uuid="13f4d959-22f7-48be-b84e-3dca3fd2c1bf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalGravada}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="495" y="0" width="55" height="14" uuid="f3514edd-a473-4f37-bb57-ab72687fade0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalImpuesto5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="550" y="0" width="55" height="14" uuid="c8068144-0b97-42e3-a842-0788e005123a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalImpuesto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="605" y="0" width="68" height="14" uuid="69d4431d-7fc5-4d8a-a76b-d29ac0197df4"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalExenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="673" y="0" width="74" height="14" uuid="4bf7ac46-c4ed-4593-9319-a5a20a81e3fa"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalImporte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="14" width="61" height="14" uuid="117bfabb-97a5-4e9f-9f3b-86395d23c1e3"/>
+				<text><![CDATA[total contado:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="61" y="14" width="106" height="14" uuid="d5ae68a5-2fcc-4ba6-92d3-829eb025f5bd"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalContado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="28" width="61" height="14" uuid="d788c735-d32a-4361-8974-105cae8b5f58"/>
+				<text><![CDATA[total credito:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="61" y="28" width="106" height="14" uuid="3d493ee4-19af-42ce-9982-25989a061f64"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalCredito}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="310" y="0" width="65" height="14" uuid="3f4c2372-a54c-4106-93da-e57a7ef68fcf"/>
+				<text><![CDATA[resumen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="14" width="143" height="14" uuid="d8362707-413b-485c-9732-4b4f4297f4a9"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Total NC Contado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="28" width="143" height="14" uuid="6024bd46-03f0-479b-839b-1cb7519b7619"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Total NC Credito:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="310" y="14" width="65" height="14" uuid="83eb7442-2e3c-44a6-b612-eb88c54ea586"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalNCContado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="310" y="28" width="65" height="14" uuid="8a00c87f-3732-4c87-9453-7683d6c63a15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalNCCredito}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="167" y="42" width="143" height="14" uuid="ec484d5a-69f3-4d6b-ab90-6a0e56cb79a7"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Total N.Debito:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="310" y="42" width="65" height="14" uuid="de71b641-d03c-432d-8cd3-d6788f0f2912"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TotalNDebito}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>
