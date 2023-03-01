@@ -1,17 +1,28 @@
 package com.yhaguy.gestion.bancos.tarjetas;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.domain.Tipo;
@@ -21,7 +32,12 @@ import com.yhaguy.domain.ProcesadoraTarjeta;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SucursalApp;
+import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.util.Utiles;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 public class BancoTarjetaViewModel extends SimpleViewModel {
 	
@@ -44,6 +60,8 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	
 	private List<Object[]> movimientos = new ArrayList<Object[]>();
 	private List<Object[]> selectedMovimientos;
+	
+	private Window win;
 
 	@Init(superclass = true)
 	public void init() {
@@ -64,6 +82,11 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 	public void confirmar(@BindingParam("comp") Popup comp) throws Exception {
 		this.confirmarMovimientos();
 		comp.close();
+	}
+	
+	@Command
+	public void imprimirPDF() throws Exception {
+		this.imprimir();
 	}
 	
 	/**
@@ -108,6 +131,156 @@ public class BancoTarjetaViewModel extends SimpleViewModel {
 		}
 		this.selectedMovimientos = null;
 		Clients.showNotification("REGISTROS CONFIRMADOS..!");
+	}
+	
+	/**
+	 * Despliega el Reporte de Tarjetas..
+	 */
+	private void imprimir() throws Exception {	
+		String source = ReportesViewModel.SOURCE_CONCILIACION_TARJETAS;
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new TarjetasDataSource();
+		params.put("Titulo", "CONCILIACIÓN DE TARJETAS");
+		params.put("Usuario", this.getLoginNombre());
+		params.put("Desde", Utiles.getDateToString(this.getDesde(), "dd-MM-yyyy"));
+		params.put("Hasta", Utiles.getDateToString(this.getHasta(), "dd-MM-yyyy"));
+		params.put("Procesadora", this.selectedProcesadora.getNombre().toUpperCase());
+		params.put("TipoTarjeta", this.selectedFormaPago.getDescripcion().toUpperCase());
+		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
+	}
+	
+	/**
+	 * Despliega el comprobante en un pdf para su impresion..
+	 */
+	public void imprimirComprobante(String source,
+			Map<String, Object> parametros, JRDataSource dataSource, Object[] format) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("source", source);
+		params.put("parametros", parametros);
+		params.put("dataSource", dataSource);
+		params.put("format", format);
+
+		this.win = (Window) Executions.createComponents(
+				ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
+		this.win.doModal();
+	}
+	
+	/**
+	 * DataSource de Tarjetas..
+	 */
+	class TarjetasDataSource implements JRDataSource {
+
+		public TarjetasDataSource() {
+		}
+
+		private int index = -1;
+
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+			Object value = null;
+			String fieldName = field.getName();
+			Object[] item = movimientos.get(index);
+			Object[] totales = getTotales();
+
+			if ("Numero".equals(fieldName)) {
+				value = item[2] + "";
+			} else if ("Fecha".equals(fieldName)) {
+				value = Utiles.getDateToString((Date) item[1], Utiles.DD_MM_YYYY);
+			} else if ("Importe".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[3]);
+			} else if ("Comision".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[4]);
+			} else if ("IvaComision".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[5]);
+			} else if ("Renta".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[6]);
+			} else if ("IvaImporte".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[7]);
+			} else if ("Credito".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) item[8]);
+			} else if ("FechaCredito".equals(fieldName)) {
+				value = Utiles.getDateToString((Date) item[9], Utiles.DD_MM_YYYY);
+			} else if ("NumeroTD".equals(fieldName)) {
+				value = item[10] + "";
+			} else if ("Tot_importe".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) totales[0]);
+			} else if ("Tot_comision".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) totales[1]);
+			} else if ("Tot_ivacomision".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) totales[2]);
+			} else if ("Tot_renta".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) totales[3]);
+			} else if ("Tot_ivaimporte".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) totales[4]);
+			} else if ("Tot_credito".equals(fieldName)) {
+				value = Utiles.getNumberFormat((double) totales[5]);
+			}
+			return value;
+		}
+
+		@Override
+		public boolean next() throws JRException {
+			if (index < movimientos.size() - 1) {
+				index++;
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	@Command
+	public void exportar() throws Exception {
+		Workbook workbook = new HSSFWorkbook();
+		Sheet listSheet = workbook.createSheet("Conciliación Tarjetas");
+
+		int rowIndex = 0;
+		Row r = listSheet.createRow(rowIndex++);
+		int cell = 0;
+		r.createCell(cell++).setCellValue("FECHA");
+		r.createCell(cell++).setCellValue("NRO.OPERACION");
+		r.createCell(cell++).setCellValue("IMPORTE");
+		r.createCell(cell++).setCellValue("COMISION");
+		r.createCell(cell++).setCellValue("IVA COMISION");
+		r.createCell(cell++).setCellValue("RENTA");
+		r.createCell(cell++).setCellValue("IVA IMPORTE");
+		r.createCell(cell++).setCellValue("CREDITO");		
+		r.createCell(cell++).setCellValue("FECHA CREDITO");
+		r.createCell(cell++).setCellValue("NRO.TARJETA DEBITO");
+		for (Object[] c : this.movimientos) {
+			Row row = listSheet.createRow(rowIndex++);
+			int cellIndex = 0;
+			row.createCell(cellIndex++).setCellValue(Utiles.getDateToString((Date) c[1], Utiles.DD_MM_YYYY));
+			row.createCell(cellIndex++).setCellValue(c[2] + "");
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[3]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[4]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[5]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[6]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[7]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getNumberFormat((double) c[8]));
+			row.createCell(cellIndex++).setCellValue(Utiles.getDateToString((Date) c[9], Utiles.DD_MM_YYYY));
+			row.createCell(cellIndex++).setCellValue(c[10] + "");
+		}
+		listSheet.autoSizeColumn(0);
+		listSheet.autoSizeColumn(1);
+		listSheet.autoSizeColumn(2);
+		listSheet.autoSizeColumn(3);
+		listSheet.autoSizeColumn(4);
+		listSheet.autoSizeColumn(5);
+		listSheet.autoSizeColumn(6);
+		listSheet.autoSizeColumn(7);
+		listSheet.autoSizeColumn(8);
+		listSheet.autoSizeColumn(9);
+		listSheet.autoSizeColumn(10);
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+			AMedia amedia = new AMedia("ConciliacionTarjetas.xls", "xls", "application/file", baos.toByteArray());
+			Filedownload.save(amedia);
+			baos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

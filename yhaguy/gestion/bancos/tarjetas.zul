@@ -72,7 +72,13 @@
 		</button>
 		<space></space>
 		<button mold="bs" sclass="btn-sm btn-success" 
-			iconSclass="z-icon-print" label="Imprimir" hflex="true">
+			iconSclass="z-icon-print" label="Imprimir" hflex="true"
+			onClick="@command('imprimirPDF')">
+		</button>
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-success" 
+			iconSclass="z-icon-download" label="Exportar Excel" hflex="true"
+			onClick="@command('exportar')">
 		</button>
 		<space></space>
 		<button 
