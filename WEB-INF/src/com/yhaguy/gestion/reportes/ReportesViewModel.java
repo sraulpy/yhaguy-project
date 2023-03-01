@@ -14520,6 +14520,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			JRDataSource dataSource = new LibroVentasDataSource(ventas, notasCredito, notasDebito, desde, hasta);
 			params.put("Usuario", getUs().getNombre());
 			params.put("Sucursal", suc_);
+			params.put("Empresa", Configuracion.empresa);
 			imprimirJasper(source, params, dataSource, formato);
 		}
 		
