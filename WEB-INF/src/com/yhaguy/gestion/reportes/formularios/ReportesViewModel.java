@@ -239,6 +239,9 @@ public class ReportesViewModel {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return "Avda. Mcal. Estigarribia e/ Blas Garay y Curupayty";
 		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
+			return "Avda. Dr. Guido Boggiani Esquina R.I.5 Gral. Díaz";
+		}
 		return "Av Mariscal José Félix Estigarribia, Fernando De La Mora";
 	}
 
