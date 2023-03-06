@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumenConciliacion" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.948717100000004"/>
-	<property name="ireport.x" value="34"/>
-	<property name="ireport.y" value="38"/>
+	<property name="ireport.zoom" value="1.6105100000000032"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -266,7 +266,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement mode="Transparent" x="0" y="15" width="613" height="1" forecolor="#736343" backcolor="#FFFFFF" uuid="5220905e-1979-4249-aedd-d4067b96dbf1"/>
 			</line>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="207" y="1" width="223" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="e9829c7a-0779-467b-b9e4-f97ecc958940"/>
+				<reportElement style="Column header" mode="Transparent" x="220" y="1" width="210" height="15" forecolor="#736343" backcolor="#FFFFFF" uuid="e9829c7a-0779-467b-b9e4-f97ecc958940"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -301,7 +301,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 					<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" x="207" y="0" width="223" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
+					<reportElement style="Detail" x="220" y="0" width="210" height="15" uuid="a56e2319-e745-4cef-ae79-05a502238fc4"/>
 					<textElement verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{Concepto}]]></textFieldExpression>
 				</textField>
