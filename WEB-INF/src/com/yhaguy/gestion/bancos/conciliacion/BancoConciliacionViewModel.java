@@ -783,10 +783,13 @@ class ResumenConciliacioDataSource implements JRDataSource {
 		} else if ("Concepto".equals(fieldName)) {
 			String concepto = ((String) det[3]).toLowerCase();
 			value = concepto;
+		} else if ("Fecha".equals(fieldName)) {
+			Date fecha = (Date) det[19];
+			value = Utiles.getDateToString(fecha, "dd-MM-yyyy");
 		} else if ("Importe".equals(fieldName)) {
 			double val = (double) det[16];
 			value = Utiles.getNumberFormat(val);
-		}  else if ("Importe_".equals(fieldName)) {
+		} else if ("Importe_".equals(fieldName)) {
 			double val = (double) det[17];
 			value = Utiles.getNumberFormat(val);
 		} else if ("TituloDetalle".equals(fieldName)) {
