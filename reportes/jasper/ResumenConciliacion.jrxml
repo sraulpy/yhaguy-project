@@ -296,7 +296,7 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 		<band height="15" splitType="Stretch">
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="613" height="15" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
-				<textField isStretchWithOverflow="true">
+				<textField>
 					<reportElement style="Detail" x="108" y="0" width="99" height="15" uuid="70419276-bb7f-4952-8ff6-7eda7f4060b6"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
