@@ -23882,7 +23882,7 @@ class ReporteTotalCobranzasVentasCliente extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Cliente", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
-	static DatosColumnas col4 = new DatosColumnas("N.Cred.Promoción S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col4 = new DatosColumnas("Total N.Credito S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalCobranzasVentasCliente(Date desde, Date hasta, String vendedor) {
 		this.desde = desde;
