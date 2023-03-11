@@ -474,6 +474,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> depositos = rr.getDepositosPorBancoByFechaAcreditacion(idBanco, desde, hasta);
 		List<Object[]> descuentos = rr.getDescuentosPorBanco(idBanco, desde, hasta);
 		List<Object[]> prestamosInternos = rr.getPrestamosInternosPorBanco(idBanco, desde, hasta);
+		List<Object[]> prestamosInternosApagar = rr.getPrestamosInternosApagar(idBanco, desde, hasta);
 		List<Object[]> transferenciasEnviadas = rr.getTransferenciasOrigenPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
 		List<Object[]> transferenciasRecibidas = rr.getTransferenciasDestinoPorBanco(idBanco, desde, hasta, this.dto.getBanco().getMoneda().getId());
 		List<Object[]> prestamosBancarios = rr.getPrestamosBancariosPorBanco(idBanco, desde, hasta);
@@ -509,6 +510,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		historicoDEBE.addAll(formasPagoDeposito);
 		historicoDEBE.addAll(formasPagoDeposito_);
 		historicoDEBE.addAll(formasPagoTarjeta);
+		historicoDEBE.addAll(prestamosInternosApagar);
 		historicoDEBE.addAll(depositosMRA);
 		historicoDEBE.addAll(depositosMRA_);
 		historicoDEBE.addAll(capitalizaciones);
