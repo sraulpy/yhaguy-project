@@ -93,7 +93,7 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="27px"></div>
+	<div height="22px"></div>
 	
 	<hlayout>
 		<div width="150px"></div>
@@ -152,9 +152,9 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="55px"></div>
+	<div height="50px"></div>
 	
-	<div height="33px"></div>
+	<div height="30px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
