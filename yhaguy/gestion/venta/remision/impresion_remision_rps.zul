@@ -16,7 +16,7 @@
 	
 	<!-- PAGINA 1 -->
 	
-	<div height="130px"></div>
+	<div height="100px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
