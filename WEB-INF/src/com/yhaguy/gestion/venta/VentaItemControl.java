@@ -363,7 +363,7 @@ public class VentaItemControl extends SoloViewModel {
 		double maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
 		this.det.setDescuentoPorcentajeMax(maxDescuento);
 		
-		// promocion yrsa ymra
+		// promocion yrsa ymra..
 		if ((this.det.getCodigoInterno().equals("CON C-0053")
 				|| this.det.getCodigoInterno().equals("CON C-0054"))
 				&& (this.isEmpresaYRSA() || this.isEmpresaYMRA())) {
