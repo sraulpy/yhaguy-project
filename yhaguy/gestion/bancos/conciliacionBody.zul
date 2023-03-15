@@ -46,9 +46,12 @@
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Saldo Inicial" />
-						<guaranibox hflex="true"
-							value="@bind(vm.dto.saldoInicial)">
-						</guaranibox>
+						<hlayout>
+							<guaranibox hflex="true"
+								value="@bind(vm.dto.saldoInicial)" visible="@load(vm.dto.banco.moneda.id eq 31)"></guaranibox>
+							<dolarbox hflex="true"
+								value="@bind(vm.dto.saldoInicial)" visible="@load(vm.dto.banco.moneda.id eq 32)"></dolarbox>
+						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Resumen" />
@@ -128,32 +131,44 @@
 							<listcell label="@load(each[0])"/>
 							<listcell label="@load(each[2])"/>
 							<listcell label="@load(each[3])"/>
-							<listcell label="@load(each[16]) @converter(vm.cnv.monedaLocal)"/>
-							<listcell label="@load(each[17]) @converter(vm.cnv.monedaLocal)"/>
+							<listcell label="@load(each[16]) @converter(vm.dto.banco.moneda.id eq 31? vm.cnv.monedaLocal:vm.cnv.monedaExtranjera)"/>
+							<listcell label="@load(each[17]) @converter(vm.dto.banco.moneda.id eq 31? vm.cnv.monedaLocal:vm.cnv.monedaExtranjera)"/>
 						</listitem>
 					</template>
 					<listfoot>
-						<listfooter span="7" align="right">
+						<listfooter span="7">
 							<hlayout hflex="true">
 								<field value="Saldo In.:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.dto.saldoInicial)"/>
+									value="@load(vm.dto.saldoInicial)" visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.saldoInicial)" visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 								<space></space>
 								<field value="Debe:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.totalDebe)"/>
+									value="@load(vm.totalDebe)" visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.totalDebe)" visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 								<space></space>
 								<field value="Haber:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.totalHaber)"/>
+									value="@load(vm.totalHaber)" visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.totalHaber)" visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 								<space></space>
 								<field value="Saldo:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load((vm.totalDebe + vm.dto.saldoInicial) - vm.totalHaber)"/>
+									value="@load((vm.totalDebe + vm.dto.saldoInicial) - vm.totalHaber)" visible="@load(vm.dto.banco.moneda.id eq 31)" />
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load((vm.totalDebe + vm.dto.saldoInicial) - vm.totalHaber)" visible="@load(vm.dto.banco.moneda.id eq 32)" />
 							</hlayout>
 						</listfooter>
 					</listfoot>
@@ -214,8 +229,8 @@
 							<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
 							<listcell label="@load(each.numero)"/>
 							<listcell label="@load(each.descripcion)"/>
-							<listcell label="@load(each.debe) @converter(vm.cnv.monedaLocal)" />
-							<listcell label="@load(each.haber) @converter(vm.cnv.monedaLocal)" />
+							<listcell label="@load(each.debe) @converter(vm.dto.banco.moneda.id eq 31? vm.cnv.monedaLocal:vm.cnv.monedaExtranjera)" />
+							<listcell label="@load(each.haber) @converter(vm.dto.banco.moneda.id eq 31? vm.cnv.monedaLocal:vm.cnv.monedaExtranjera)" />
 						</listitem>
 					</template>
 					<listfoot>
@@ -224,22 +239,36 @@
 								<field value="Saldo In.:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.dto.saldoInicial)"/>
+									value="@load(vm.dto.saldoInicial)" visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.saldoInicial)" visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 								<space></space>
 								<field value="Debe:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.dto.totalDebe)"/>
+									value="@load(vm.dto.totalDebe)" visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.totalDebe)" visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 								<space></space>
 								<field value="Haber:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load(vm.dto.totalHaber)"/>
+									value="@load(vm.dto.totalHaber)" visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load(vm.dto.totalHaber)" visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 								<space></space>
 								<field value="Saldo:" />
 								<guaranibox style="background:#EEF7FA; text-align:right; font-weight:bold" 
 									readonly="true" 
-									value="@load((vm.dto.totalHaber + vm.dto.saldoInicial) - vm.dto.totalDebe)"/>
+									value="@load((vm.dto.totalHaber + vm.dto.saldoInicial) - vm.dto.totalDebe)"
+									visible="@load(vm.dto.banco.moneda.id eq 31)"/>
+								<dolarbox style="background:#EEF7FA; text-align:right; font-weight:bold" 
+									readonly="true" 
+									value="@load((vm.dto.totalHaber + vm.dto.saldoInicial) - vm.dto.totalDebe)"
+									visible="@load(vm.dto.banco.moneda.id eq 32)"/>
 							</hlayout>
 						</listfooter>
 					</listfoot>
