@@ -21109,7 +21109,7 @@ class VentasPorClienteProveedorDataSource implements JRDataSource {
 		Object[] det = this.values.get(index);
 
 		if ("Cliente".equals(fieldName)) {
-			value = det[0];
+			value = det[0].toString().replace(",", "");
 		} else if ("Ene".equals(fieldName)) {
 			double val = (double) det[1];
 			value = FORMATTER.format(val - Utiles.getIVA(val, 10));
