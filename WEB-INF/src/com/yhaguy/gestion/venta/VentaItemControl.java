@@ -352,6 +352,10 @@ public class VentaItemControl extends SoloViewModel {
 			this.det.setPrecioGs(precio * this.dto.getTipoCambio());
 			this.det.setPrecioMinimoGs(precio);
 		}
+		
+		this.det.setDescuentoPorcentaje(0);
+		this.det.setDescuentoUnitarioGs(0.0);
+		
 		double dto_mayorista = this.dto.getDescuentoMayorista();
 		double porcentajeDescuento = (double) art[6];
 		int maxDescuentoLista_ = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
