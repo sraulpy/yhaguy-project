@@ -550,4 +550,5 @@
 		.z-listheader-content { font-size:10px }
 		.z-doublebox { min-height:18px; line-height:11px; font-size:11px }
 	</style>
+	
 </window>
