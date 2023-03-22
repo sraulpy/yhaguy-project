@@ -53,7 +53,7 @@
 			<auxhead>
 				<auxheader colspan="4" label="Funcionario"></auxheader>
 				<auxheader colspan="12" label="Haberes"></auxheader>
-				<auxheader colspan="9" label="Descuentos"></auxheader>
+				<auxheader colspan="11" label="Descuentos"></auxheader>
 				<auxheader colspan="3" label="Totales"></auxheader>
 			</auxhead>
 			<listhead>
@@ -90,7 +90,13 @@
 				<listheader label="Anticipo Com." width="100px"
 					tooltiptext="Anticipo comisión">
 				</listheader>
-				<listheader label="Anticipo Ag." width="100px"
+				<listheader label="Anticipo Ag.1" width="100px"
+					tooltiptext="Anticipo aguinaldo">
+				</listheader>
+				<listheader label="Anticipo Ag.2" width="100px"
+					tooltiptext="Anticipo aguinaldo">
+				</listheader>
+				<listheader label="Anticipo Ag.3" width="100px"
 					tooltiptext="Anticipo aguinaldo">
 				</listheader>
 				<listheader label="Otros Dtos." width="100px"></listheader>
@@ -224,6 +230,22 @@
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.anticipoAguinaldo)" format="###,###,###,##0"
+							onChange="@command('saveItem', item=each)"
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
+						</doublebox>
+					</listcell>
+					<listcell>
+						<doublebox hflex="true" vflex="true"
+							value="@bind(each.anticipoAguinaldo2)" format="###,###,###,##0"
+							onChange="@command('saveItem', item=each)"
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
+						</doublebox>
+					</listcell>
+					<listcell>
+						<doublebox hflex="true" vflex="true"
+							value="@bind(each.anticipoAguinaldo3)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
 							style="background:#FADAD2;text-align:right"
 							readonly="@load(each.cerrado)">
@@ -382,6 +404,20 @@
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"
 						value="@load(vm.totales[23])"
+						style="font-weight:bold;text-align:right;background:#FADAD2">
+					</doublebox>
+				</listfooter>
+				<listfooter>
+					<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totales[26])"
+						style="font-weight:bold;text-align:right;background:#FADAD2">
+					</doublebox>
+				</listfooter>
+				<listfooter>
+					<doublebox hflex="true" vflex="true"
+						format="###,###,###,##0" readonly="true"
+						value="@load(vm.totales[27])"
 						style="font-weight:bold;text-align:right;background:#FADAD2">
 					</doublebox>
 				</listfooter>

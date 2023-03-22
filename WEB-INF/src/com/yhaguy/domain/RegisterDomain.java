@@ -7062,8 +7062,9 @@ public class RegisterDomain extends Register {
 				+ cedula.toLowerCase() + "%' and lower(e.razonSocial) like'%"
 				+ razonSocial.toLowerCase() + "%' and lower(e.nombre) like '%"
 				+ nombreFantasia.toLowerCase() + "%'"
-				+ " and e.cliente = 'TRUE' order by e.razonSocial";
-		return this.hqlLimit(query, 50);
+				+ " and exists (from Cliente c where c.empresa = e)"
+				+ " order by e.razonSocial";
+		return this.hqlLimit(query, 100);
 	}
 	
 	/**
@@ -7076,7 +7077,8 @@ public class RegisterDomain extends Register {
 				+ cedula.toLowerCase() + "%' and lower(e.razonSocial) like'%"
 				+ razonSocial.toLowerCase() + "%' and lower(e.nombre) like '%"
 				+ nombreFantasia.toLowerCase() + "%'"
-				+ " and e.proveedor = 'TRUE' order by e.razonSocial";
+				+ " and exists (from Proveedor p where p.empresa = e)"
+				+ " order by e.razonSocial";
 		return this.hqlLimit(query, 50);
 	}
 	
@@ -15001,6 +15003,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return datos ruc set..
+	 */
+	public List<RucSet> getRucSet(String ruc, String razonSocial) throws Exception {
+		String query = "select r from RucSet r where r.ruc like '%" + ruc + "%'"
+				+ " and r.razonSocial like '%" + razonSocial.toUpperCase() + "%'";
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
 	 * @return documentos de funcionarios..
 	 */
 	public List<FuncionarioDocumento> getFuncionarioDocumentos(long idFuncionario) throws Exception {
@@ -15058,13 +15069,11 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			Date desde = Utiles.getFecha("01-08-2022 00:00:00");
-			Date hasta = Utiles.getFecha("30-09-2022 23:00:00");
+			Date desde = Utiles.getFecha("01-01-2023 00:00:00");
+			Date hasta = Utiles.getFecha("30-03-2023 23:00:00");
 			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Long> list = rr.getVentasCantClientes(desde, hasta, 400, null);
-			for (Long obj : list) {
-				System.out.println(obj);
-			}
+			List<Object[]> list = rr.get_NotasCredito(desde, hasta, 20853);
+			System.out.println(list.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

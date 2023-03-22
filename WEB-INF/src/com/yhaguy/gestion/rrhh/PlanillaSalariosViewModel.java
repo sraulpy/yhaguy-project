@@ -313,13 +313,31 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			importe = this.selectedPlanilla.getOtrosHaberes();
 		}
 		
+		if (this.selectedPlanilla.getTipo().equals(RRHHPlanillaSalarios.TIPO_AGUINALDOS)) {
+			importe = this.selectedPlanilla.getAnticipoAguinaldo();
+			if (this.selectedPlanilla.getAnticipoAguinaldo2() > 0) {
+				importe = this.selectedPlanilla.getAnticipoAguinaldo2();
+			}
+			if (this.selectedPlanilla.getAnticipoAguinaldo3() > 0) {
+				importe = this.selectedPlanilla.getAnticipoAguinaldo3();
+			}
+			if (importe > 0) {
+				concepto = "anticipo de aguinaldo";
+			}
+		}
+		
+		String descripcion = "Pago de " + concepto + " correspondiente al mes de "
+				+ this.selectedPlanilla.getMes().toLowerCase() + " " + this.selectedPlanilla.getAnho();
+		String descripcionAnticipoAguinaldo = "Pago de " + concepto + " correspondiente al periodo "
+				+ this.selectedPlanilla.getAnho();
+
 		String source = ReportesViewModel.SOURCE_RECIBO_COMUN;
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("Fecha", Utiles.getDateToString(new Date(), "dd"));
 		params.put("Funcionario", this.selectedPlanilla.getFuncionario());
 		params.put("ImporteGs", Utiles.getNumberFormat(importe));
 		params.put("ImporteLetras", m.numberToLetter(Utiles.getRedondeo(importe)));
-		params.put("Concepto", "Pago de " + concepto + " correspondiente al mes de " + this.selectedPlanilla.getMes().toLowerCase() + " " +  this.selectedPlanilla.getAnho());
+		params.put("Concepto", concepto.equals("anticipo de aguinaldo") ? descripcionAnticipoAguinaldo : descripcion);
 		params.put("Cargo", this.selectedPlanilla.getCargo());
 		params.put("Periodo", "Asunción, " + Utiles.getDateToString(new Date(), "dd") + " de " +
 				this.selectedPlanilla.getMes().toLowerCase() + " de " +  this.selectedPlanilla.getAnho());
@@ -674,7 +692,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	 */
 	public Object[] getTotales() {
 		Object[] out = new Object[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		if (this.planillas != null) {
 			for (RRHHPlanillaSalarios item : this.planillas) {
 				double sal = (double) out[0]; double com = (double) out[1];			
@@ -690,6 +708,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				double aus = (double) out[20]; double tha = (double) out[21];
 				double agu = (double) out[22]; double ang = (double) out[23];
 				double hed = (double) out[24]; double hen = (double) out[25];
+				double an2 = (double) out[26]; double an3 = (double) out[27];
 				sal += item.getSalarioFinal(); com += item.getComision();
 				ant += item.getAnticipo(); bon += item.getBonificacion();
 				hab += item.getOtrosHaberes(); dto += item.getOtrosDescuentos();
@@ -703,8 +722,9 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				aus += item.getAusencia(); tha += item.getTotalHaberes_();
 				agu += item.getAguinaldo(); ang += item.getAnticipoAguinaldo();
 				hed += item.getExtrasDiurnas(); hen += item.getExtrasNocturnas();
+				an2 += item.getAnticipoAguinaldo2(); an3 += item.getAnticipoAguinaldo3();
 				out = new Object[] { sal, com, ant, bon, hab, dto, cor, uni, rep, seg, emb, ips, tco, tde, pre, ade,
-						hex, res, vac, sev, aus, tha, agu, ang, hed, hen };
+						hex, res, vac, sev, aus, tha, agu, ang, hed, hen, an2, an3 };
 			}
 		}
 		return out;
@@ -811,12 +831,15 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	/**
 	 * @return los tipos de salarios..
 	 */
+	@DependsOn("selectedMes")
 	public List<String> getTipos() {
 		List<String> out = new ArrayList<>();
 		out.add(RRHHPlanillaSalarios.TIPO_COMISIONES);
 		out.add(RRHHPlanillaSalarios.TIPO_SALARIOS);
 		out.add(RRHHPlanillaSalarios.TIPO_PREMIOS);
-		out.add(RRHHPlanillaSalarios.TIPO_AGUINALDOS);
+		if (this.selectedMes.equals("DICIEMBRE")) {
+			out.add(RRHHPlanillaSalarios.TIPO_AGUINALDOS);
+		}
 		return out;
 	}
 	

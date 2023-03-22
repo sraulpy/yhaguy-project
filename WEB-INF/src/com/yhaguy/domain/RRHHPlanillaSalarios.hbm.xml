@@ -43,6 +43,8 @@
 		<property name="ausencia"/>
 		<property name="aguinaldo"/>
 		<property name="anticipoAguinaldo"/>
+		<property name="anticipoAguinaldo2"/>
+		<property name="anticipoAguinaldo3"/>
 		
 		<property name="cerrado"/>
 		

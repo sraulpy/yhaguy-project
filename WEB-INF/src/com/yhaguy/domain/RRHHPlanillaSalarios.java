@@ -67,7 +67,8 @@ public class RRHHPlanillaSalarios extends Domain {
 	private double ausencia;
 	private double aguinaldo;
 	private double anticipoAguinaldo;
-	
+	private double anticipoAguinaldo2;
+	private double anticipoAguinaldo3;
 	private boolean cerrado;
 	
 	@Override
@@ -110,12 +111,12 @@ public class RRHHPlanillaSalarios extends Domain {
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
 			"uniforme", "repuestos", "seguro", "embargo", "ips", "prestamos", "adelantos", "horasExtras",
 			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia", "aguinaldo", "anticipoAguinaldo",
-			"diasTrabajados", "cantidadHorasExtras", "cantidadHorasExtrasNoc" })
+			"diasTrabajados", "cantidadHorasExtras", "cantidadHorasExtrasNoc", "anticipoAguinaldo2", "anticipoAguinaldo3" })
 	public double getTotalACobrar() {
 		return this.getSalarioFinal() + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
 				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
 				+ this.getIps() + this.prestamos + this.adelantos + this.getExtrasDiurnas() + this.getExtrasNocturnas() + this.vacaciones
-				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo;
+				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo + this.anticipoAguinaldo2 + this.anticipoAguinaldo3;
 	}
 	
 	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
@@ -123,12 +124,11 @@ public class RRHHPlanillaSalarios extends Domain {
 	public double getTotalADescontar() {
 		return this.seguroVehicular + this.prestamos + this.anticipo + this.otrosDescuentos + this.corporativo
 				+ this.uniforme + this.repuestos + this.seguro + this.embargo + this.ausencia + this.anticipoAguinaldo
-				+ this.adelantos
-				+ this.getIps();
+				+ this.anticipoAguinaldo2 + this.anticipoAguinaldo3 + this.adelantos + this.getIps();
 	}
 	
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
-		"vacaciones", "aguinaldo" })
+		"vacaciones", "aguinaldo", "anticipoAguinaldo2", "anticipoAguinaldo3" })
 	public double getIps() {
 		if (this.tipo.equals(TIPO_PREMIOS)) {
 			return 0.0;
@@ -396,5 +396,21 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setCerrado(boolean cerrado) {
 		this.cerrado = cerrado;
+	}
+
+	public double getAnticipoAguinaldo2() {
+		return anticipoAguinaldo2;
+	}
+
+	public void setAnticipoAguinaldo2(double anticipoAguinaldo2) {
+		this.anticipoAguinaldo2 = anticipoAguinaldo2;
+	}
+
+	public double getAnticipoAguinaldo3() {
+		return anticipoAguinaldo3;
+	}
+
+	public void setAnticipoAguinaldo3(double anticipoAguinaldo3) {
+		this.anticipoAguinaldo3 = anticipoAguinaldo3;
 	}
 }
