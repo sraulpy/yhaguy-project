@@ -140,9 +140,13 @@
 							</doublebox>
 						</hlayout>
 					</listcell>
-					<listcell
-						label="@load(each.salarios) @converter('formattedNumber', format='###,###,###,##0')"
-						style="font-size:11px">
+					<listcell>
+						<doublebox hflex="true" vflex="true"
+							value="@bind(each.salarios)" format="###,###,###,##0"
+							onChange="@command('saveItem', item=each)"
+							style="background:#CEEDDC;text-align:right"
+							readonly="@load(each.cerrado)">
+						</doublebox>
 					</listcell>
 					<listcell
 						label="@load(each.responsabilidad) @converter('formattedNumber', format='###,###,###,##0')"
