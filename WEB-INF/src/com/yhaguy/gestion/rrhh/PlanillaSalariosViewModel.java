@@ -306,7 +306,6 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			importe = this.selectedPlanilla.getAdelantos();
 			concepto = "anticipo de comisiones";
 		}
-		if (importe < 0) importe = importe * -1;
 		
 		if (this.selectedPlanilla.getTipo().equals(RRHHPlanillaSalarios.TIPO_PREMIOS)) {
 			concepto = "premios";
@@ -325,6 +324,8 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 				concepto = "anticipo de aguinaldo";
 			}
 		}
+		
+		if (importe < 0) importe = importe * -1;
 		
 		String descripcion = "Pago de " + concepto + " correspondiente al mes de "
 				+ this.selectedPlanilla.getMes().toLowerCase() + " " + this.selectedPlanilla.getAnho();
