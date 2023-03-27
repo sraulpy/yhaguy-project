@@ -4,12 +4,76 @@
 		width="100%"
 		height="100%">
 		
-		<include src="/yhaguy/gestion/empresa/EmpresaRUC.zul" />
-		<div height="15px"/>
+		<hlayout sclass="button-container">
+			<button iconSclass="z-icon-search" label="Set" mold="bs"
+				sclass="btn-primary btn-sm" width="130px" onClick='pop_set.open(self, "after_start")'></button>
+		</hlayout>
 			
-		<include src="/yhaguy/gestion/empresa/EmpresaBody.zul" visible="@load(vm.tabDatosVisible)"/>		
+		<include src="/yhaguy/gestion/empresa/EmpresaBody.zul" vflex="1"/>		
+
+		<popup id="pop_set">
+			<listbox sclass="small-list" width="500px"
+				model="@load(vm.rucSet)" rows="10"
+				emptyMessage="SIN REGISTROS"
+				selectedItem="@bind(vm.selectedRucSet)"
+				onSelect="@command('selectRucSet', comp=pop_set)">
+				<listhead>
+					<listheader width="100px">
+						<textbox hflex="1" placeholder="Ruc"
+							value="@bind(vm.filterRuc)" instant="true">
+						</textbox>
+					</listheader>
+					<listheader>
+						<textbox hflex="1" placeholder="Razón Social"
+							value="@bind(vm.filterRazonSocial)" instant="true">
+						</textbox>
+					</listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell
+							label="@load(each.ruc)">
+						</listcell>
+						<listcell label="@load(each.razonSocial)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</popup>
 		
-		<solicitarCabecera visible="@load(!vm.tabDatosVisible)"/>
+		<popup id="pop_ident">
+			<listbox sclass="small-list" width="500px"
+				model="@load(vm.identificaciones)" rows="10"
+				emptyMessage="SIN REGISTROS"
+				selectedItem="@bind(vm.selectedIdentificaciones)"
+				onSelect="@command('selectIdentificaciones', comp=pop_ident)">
+				<listhead>
+					<listheader width="100px">
+						<textbox hflex="1" placeholder="Cédula"
+							value="@bind(vm.filterCedula)" instant="true">
+						</textbox>
+					</listheader>
+					<listheader>
+						<textbox hflex="1" placeholder="Nombres"
+							value="@bind(vm.filterNombres)" instant="true">
+						</textbox>
+					</listheader>
+					<listheader>
+						<textbox hflex="1" placeholder="Apellidos"
+							value="@bind(vm.filterApellidos)" instant="true">
+						</textbox>
+					</listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell
+							label="@load(each.per_nrodocumento)">
+						</listcell>
+						<listcell label="@load(each.per_nombres)"></listcell>
+						<listcell label="@load(each.per_apellidos)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</popup>
 
 	</window>
 </zk>

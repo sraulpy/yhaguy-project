@@ -2405,6 +2405,18 @@ public class RegisterDomain extends Register {
 		}
 		return null;
 	}
+	
+	/**
+	 * @return el Cliente segun la cedula..
+	 */
+	public Cliente getClienteByCedula(String ci) throws Exception {
+		String query = "Select c from Cliente c where c.empresa.ci = '" + ci + "'";
+		List<Cliente> out = this.hql(query);
+		if (out.size() > 0) {
+			return out.get(0);
+		}
+		return null;
+	}
 
 	public Date getFechaUltimaMigracion(IiD caja) throws Exception {
 		String query = "select max(m.fechaHasta) from VentaMigracion m where m.idCaja = "

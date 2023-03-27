@@ -23,16 +23,28 @@
 						</columns>
 						<rows>
 							<row>
+								<field value="Nro. Documento:" />
+								<hlayout>
+									<textbox
+										value="@load(vm.dtoEmp.ruc)" 
+										hflex="true" readonly="true" placeholder="RUC" />
+									<textbox
+										value="@load(vm.dtoEmp.ci)"
+										hflex="true" readonly="true" placeholder="CEDULA IDENTIDAD" />
+								</hlayout>
+							</row>
+							<row>
 								<field value="Razon Social:" />
 								<textbox
 									value="@bind(vm.dtoEmp.razonSocial)" id="t1"
 									onChange="@command('copiarRazonSocial')" instant="true"
-									hflex="true" constraint="no empty"/>
+									hflex="true" readonly="true"
+									placeholder="RAZÓN SOCIAL"/>
 							</row>
 							<row>
 								<field value="Nom. Fantasía:" />
 								<textbox value="@bind(vm.dtoEmp.nombre)" id="copy" hflex="true" 
-									constraint="no empty"/>
+									placeholder="NOMBRE FANTASÍA"/>
 							</row>
 							<row>
 								<field value="Rubro:" />
@@ -55,16 +67,17 @@
 								</combobox>
 							</row>
 							<row>
-								<field value="Direccion:" />
-								<textbox value="@bind(vm.dtoEmp.direccion_)" hflex="true" />
+								<field value="Dirección:" />
+								<textbox value="@bind(vm.dtoEmp.direccion_)" hflex="true" 
+									placeholder="DIRECCIÓN" />
 							</row>
 							<row>
-								<field value="Ciudad:" />
+								<field value="Ciudad:" sclass="mandatory" />
 								<combobox hflex="true"
 									model="@load(vm.ciudades)"
 									value="@load(vm.dtoEmp.ciudad.descripcion)"
 									selectedItem="@bind(vm.dtoEmp.ciudad)"
-									instant="true" constraint="no empty">
+									instant="true" placeholder="CIUDAD">
 									<template name="model">
 										<comboitem label="@load(each.descripcion)"></comboitem>
 									</template>
@@ -72,29 +85,33 @@
 							</row>
 							<row>
 								<field value="Departamento:" />
-								<textbox value="@load(vm.dtoEmp.ciudad.sigla)" readonly="true" hflex="true" />
+								<textbox value="@load(vm.dtoEmp.ciudad.sigla)" readonly="true" hflex="true" 
+									placeholder="DEPARTAMENTO" />
 							</row>
 							<row>
 								<field value="Telefono:" />
-								<textbox value="@bind(vm.dtoEmp.telefono_)" hflex="true" />
+								<textbox value="@bind(vm.dtoEmp.telefono_)" hflex="true" 
+									placeholder="TELÉFONO" />
 							</row>
 							<row>
-								<field value="Correo:" />
+								<field value="Correo:" sclass="mandatory" />
 								<textbox value="@bind(vm.dtoEmp.correo_)" hflex="true" 
-									constraint="/.+@.+\.[a-z]+/: Debe ingresar un correo válido"/>
+									placeholder="CORREO"/>
 							</row>
 							<row>
 								<field value="Observación:" />
 								<textbox rows="1"
-									value="@bind(vm.dtoEmp.observacion)" hflex="true" />
+									value="@bind(vm.dtoEmp.observacion)" hflex="true" 
+									placeholder="OBSERVACIÓN" />
 							</row>
-							<row>
-								<field value="Vendedor:" />
+							<row visible="@load(vm.cliente)">
+								<field value="Vendedor:" sclass="mandatory" />
 								<combobox
 									value="@bind(vm.dtoEmp.vendedor.razonSocial)" hflex="true" 
 									readonly="true" instant="true"
 									selectedItem="@bind(vm.dtoEmp.vendedor)"
-									model="@load(vm.vendedores)" constraint="no empty">
+									model="@load(vm.vendedores)"
+									placeholder="VENDEDOR">
 										<template name="model">
 											<comboitem label="@load(each.razonSocial)"></comboitem>
 										</template>
@@ -104,7 +121,7 @@
 					</grid>
 				</vlayout>
 				<groupbox title="Foto del Cliente" mold="3d" hflex="1"
-					vflex="true" style="text-align:center">
+					vflex="true" style="text-align:center" visible="@load(vm.cliente)">
 					<html>
 						<![CDATA[ <img id="foto" style ="height:100%;
 						width:100%;" alt=""

@@ -4,7 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Popup;
 
 import com.coreweb.Config;
 import com.coreweb.dto.Assembler;
@@ -12,24 +18,44 @@ import com.coreweb.dto.DTO;
 import com.coreweb.extras.browser.Browser;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
+import com.yhaguy.Configuracion;
 import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
+import com.yhaguy.domain.EmpresaCartera;
 import com.yhaguy.domain.EmpresaRubro;
+import com.yhaguy.domain.Identificaciones;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.RucSet;
+import com.yhaguy.util.Utiles;
 
 
 public class ProveedorControlBody extends EmpresaControlBody {
 
 	ProveedorDTO dto = new ProveedorDTO();
 	
+	private String filterCedula;
+	private String filterNombres;
+	private String filterApellidos;
+	
+	private String filterRuc;
+	private String filterRazonSocial;
+	
+	private Identificaciones selectedIdentificaciones;
+	private RucSet selectedRucSet;
+	
 
 	@Init(superclass = true)
-	public void initProveeddorControlBody() {
+	public void init() {
+		this.filterCedula = "";
+		this.filterNombres = "";
+		this.filterApellidos = "";
+		this.filterRuc = "";
+		this.filterRazonSocial = "";
 	}
 
 	@AfterCompose(superclass = true)
-	public void afterComposeProveedorControlBody() {
+	public void afterCompose() {
 	}
 
 	public String textoCabecera() {
@@ -79,6 +105,14 @@ public class ProveedorControlBody extends EmpresaControlBody {
 		
 		this.setSelectedSucursal(null);
 		this.setSelectedContacto(null);
+		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			aux.getEmpresa().setCartera((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), 1));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return aux;
 	}
 
@@ -100,6 +134,122 @@ public class ProveedorControlBody extends EmpresaControlBody {
 	
 	public Browser getBrowser(){
 		return new ProveedorBrowser();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void selectIdentificaciones(@BindingParam("comp") Popup comp) throws Exception {
+		String ci = this.selectedIdentificaciones.getPer_nrodocumento();
+		String ruc = "";
+		
+		this.dto.getEmpresa().setRazonSocial("");
+		this.dto.getEmpresa().setCi("");
+		this.dto.getEmpresa().setRuc("");
+		this.dto.getEmpresa().setNombre("");
+		this.dto.getEmpresa().setFechaAniversario(null);
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<RucSet> rucs = rr.getRucSet(ci, "");
+		if (rucs.size() > 0) {
+			String ruc_ = rucs.get(0).getRuc();
+			if (ruc_.split("-")[0].length() == ci.length()) {
+				ruc = ruc_;
+			} else {
+				ruc = Configuracion.RUC_EMPRESA_LOCAL;
+			}
+		} else {
+			ruc = Configuracion.RUC_EMPRESA_LOCAL;
+		}
+		
+		if (!this.validarNumeroDocumento(ruc, ci)) {
+			comp.close();
+			return;
+		}
+		
+		this.dto.getEmpresa().setRazonSocial(this.selectedIdentificaciones.getPer_nombres() + " " + this.selectedIdentificaciones.getPer_apellidos());
+		this.dto.getEmpresa().setCi(ci);
+		this.dto.getEmpresa().setRuc(ruc);
+		this.dto.getEmpresa().setNombre(this.selectedIdentificaciones.getPer_nombres() + " " + this.selectedIdentificaciones.getPer_apellidos());
+		this.dto.getEmpresa().setFechaAniversario(Utiles.getFecha(this.selectedIdentificaciones.getPer_fecha_nac(), "yyyy-MM-dd hh:mm:ss"));
+		
+		comp.close();
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void selectRucSet(@BindingParam("comp") Popup comp) {
+		String ruc = this.selectedRucSet.getRuc();
+		
+		this.dto.getEmpresa().setRazonSocial("");
+		this.dto.getEmpresa().setCi("");
+		this.dto.getEmpresa().setRuc("");
+		this.dto.getEmpresa().setNombre("");
+		this.dto.getEmpresa().setFechaAniversario(null);
+		
+		if (!this.validarNumeroDocumento(ruc, "")) {
+			comp.close();
+			return;
+		}
+		
+		this.dto.getEmpresa().setRazonSocial(this.selectedRucSet.getRazonSocial());
+		this.dto.getEmpresa().setCi("");
+		this.dto.getEmpresa().setRuc(ruc);
+		this.dto.getEmpresa().setNombre(this.selectedRucSet.getRazonSocial());
+		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			String ruc_ = ruc.split("-")[0];
+			List<Identificaciones> ident = rr.getIdentificaciones(ruc_, "", "");
+			if (ident.size() > 0) {
+				String ci = ident.get(0).getPer_nrodocumento();
+				if (ci.equals(ruc_)) {
+					this.dto.getEmpresa().setCi(ci);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		comp.close();
+	}
+	
+	/**
+	 * @return validacion del nro documento..
+	 */
+	private boolean validarNumeroDocumento(String ruc, String ci) {
+		try {		
+			RegisterDomain rr = RegisterDomain.getInstance();
+			
+			if (!ruc.equals(Configuracion.RUC_EMPRESA_LOCAL)) {
+				Proveedor prov = rr.getProveedorByRuc(ruc);
+				if (prov != null) {
+					Clients.showNotification("YA EXISTE UN PROVEEDOR CON EL RUC: " + ruc, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return false;
+				}
+			} else {
+				Proveedor prov = rr.getProveedorByCI(ci);
+				if (prov != null) {
+					Clients.showNotification("YA EXISTE UN PROVEEDOR CON EL NRO. DE CÉDULA: " + ci, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return false;
+				}
+			}			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}		
+		return true;
+	}
+	
+	@DependsOn({ "filterCedula", "filterNombres", "filterApellidos" })
+	public List<Identificaciones> getIdentificaciones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		return rr.getIdentificaciones(this.filterCedula, this.filterNombres, this.filterApellidos);
+	}
+	
+	@DependsOn({ "filterRuc", "filterRazonSocial" })
+	public List<RucSet> getRucSet() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		return rr.getRucSet(this.filterRuc, this.filterRazonSocial);
 	}
 	
 	/**
@@ -351,6 +501,62 @@ public class ProveedorControlBody extends EmpresaControlBody {
 				return false;
 			return true;
 			
+		}
+
+		public Identificaciones getSelectedIdentificaciones() {
+			return selectedIdentificaciones;
+		}
+
+		public void setSelectedIdentificaciones(Identificaciones selectedIdentificaciones) {
+			this.selectedIdentificaciones = selectedIdentificaciones;
+		}
+
+		public RucSet getSelectedRucSet() {
+			return selectedRucSet;
+		}
+
+		public void setSelectedRucSet(RucSet selectedRucSet) {
+			this.selectedRucSet = selectedRucSet;
+		}
+
+		public String getFilterCedula() {
+			return filterCedula;
+		}
+
+		public void setFilterCedula(String filterCedula) {
+			this.filterCedula = filterCedula;
+		}
+
+		public String getFilterNombres() {
+			return filterNombres;
+		}
+
+		public void setFilterNombres(String filterNombres) {
+			this.filterNombres = filterNombres;
+		}
+
+		public String getFilterApellidos() {
+			return filterApellidos;
+		}
+
+		public void setFilterApellidos(String filterApellidos) {
+			this.filterApellidos = filterApellidos;
+		}
+
+		public String getFilterRuc() {
+			return filterRuc;
+		}
+
+		public void setFilterRuc(String filterRuc) {
+			this.filterRuc = filterRuc;
+		}
+
+		public String getFilterRazonSocial() {
+			return filterRazonSocial;
+		}
+
+		public void setFilterRazonSocial(String filterRazonSocial) {
+			this.filterRazonSocial = filterRazonSocial;
 		}
 
 }
