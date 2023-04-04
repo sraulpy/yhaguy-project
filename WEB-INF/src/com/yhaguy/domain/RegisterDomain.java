@@ -7209,6 +7209,15 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los funcionarios activos..
+	 */
+	public List<Funcionario> getFuncionariosActivos() throws Exception {
+		String query = "select f from Funcionario f where f.funcionarioEstado.sigla = '"
+				+ Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "'" + " order by f.apellidos, f.nombres";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return los funcionarios segun id..
 	 */
 	public Funcionario getFuncionarios(long id) throws Exception {
@@ -11471,15 +11480,18 @@ public class RegisterDomain extends Register {
 	
 	/**
 	 * @return las liquidaciones de salarios..
-	 * [0]:id
-	 * [1]:fecha
-	 * [2]:funcionario.razonsocial
-	 * [3]:cargo
-	 * [4]:importeGs
 	 */
-	public List<Object[]> getLiquidaciones() throws Exception {
-		String query = "select l.id, l.fecha, l.funcionario.empresa.razonSocial, l.cargo, l.importeGs from RRHHLiquidacionSalario l";
+	public List<RRHHLiquidacionSalario> getLiquidaciones() throws Exception {
+		String query = "select l from RRHHLiquidacionSalario l order by fecha desc";
 		return this.hqlLimit(query, 300);
+	}
+	
+	/**
+	 * @return las liquidaciones de salarios..
+	 */
+	public List<RRHHLiquidacionSalario> getLiquidaciones(long idFuncionario) throws Exception {
+		String query = "select l from RRHHLiquidacionSalario l where l.funcionario.id = " + idFuncionario;
+		return this.hql(query);
 	}
 	
 	/**
@@ -13281,6 +13293,34 @@ public class RegisterDomain extends Register {
 	 */
 	public List<RRHHPlanillaSalarios> getPlanillaSalarios(String mes, String anho, String tipo) throws Exception {
 		String query = "select p from RRHHPlanillaSalarios p where p.mes = '" + mes + "' and p.anho = '" + anho + "' and p.tipo = '" + tipo + "'"
+				+ " order by p.funcionario";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las planillas de salarios..
+	 */
+	public List<RRHHPlanillaSalarios> getPlanillaSalariosByCedula(String anho, String tipo, String cedula) throws Exception {
+		String query = "select p from RRHHPlanillaSalarios p where p.anho = '" + anho + "' and p.tipo = '" + tipo + "' and p.cedula = '" + cedula + "'"
+				+ " order by p.funcionario";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return las planillas de salarios..
+	 */
+	public List<RRHHPlanillaSalarios> getPlanillaSalariosByCedulaUltimosSeis(String tipo, String cedula) throws Exception {
+		String query = "select p from RRHHPlanillaSalarios p where p.tipo = '" + tipo + "' and p.cedula = '" + cedula + "'"
+				+ " order by p.mes desc";
+		return this.hqlLimit(query, 6);
+	}
+	
+	/**
+	 * @return las planillas de salarios..
+	 */
+	public List<RRHHPlanillaSalarios> getPlanillaSalariosByCedula(String anho, String mes, String tipo, String cedula) throws Exception {
+		String query = "select p from RRHHPlanillaSalarios p where p.anho = '" + anho + "' and p.tipo = '" + tipo + "' and p.cedula = '" + cedula + "'"
+				+ " and p.mes = '" + mes + "'"
 				+ " order by p.funcionario";
 		return this.hql(query);
 	}

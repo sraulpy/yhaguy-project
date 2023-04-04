@@ -52,7 +52,7 @@
 			<frozen columns="4"></frozen>		
 			<auxhead>
 				<auxheader colspan="4" label="Funcionario"></auxheader>
-				<auxheader colspan="12" label="Haberes"></auxheader>
+				<auxheader colspan="14" label="Haberes"></auxheader>
 				<auxheader colspan="11" label="Descuentos"></auxheader>
 				<auxheader colspan="3" label="Totales"></auxheader>
 			</auxhead>
@@ -79,6 +79,8 @@
 				<listheader label="Aguinaldo" width="100px"></listheader>
 				<listheader label="Comisión" width="100px"></listheader>
 				<listheader label="Vacaciones" width="100px"></listheader>
+				<listheader label="Indemnización" width="100px" align="right"></listheader>
+				<listheader label="Preaviso" width="100px" align="right"></listheader>
 				<listheader label="Total Haberes" width="100px"
 					align="right">
 				</listheader>
@@ -203,6 +205,14 @@
 							style="background:#CEEDDC;text-align:right"
 							readonly="@load(each.cerrado)">
 						</doublebox>
+					</listcell>
+					<listcell
+						label="@load(each.indemnizacion) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px;font-weight:bold;color:green">
+					</listcell>
+					<listcell
+						label="@load(each.preaviso) @converter('formattedNumber', format='###,###,###,##0')"
+						style="font-size:11px;font-weight:bold;color:green">
 					</listcell>
 					<listcell
 						label="@load(each.totalHaberes_) @converter('formattedNumber', format='###,###,###,##0')"
@@ -373,6 +383,8 @@
 						style="font-weight:bold;text-align:right;background:#CEEDDC">
 					</doublebox>
 				</listfooter>
+				<listfooter></listfooter>
+				<listfooter></listfooter>
 				<listfooter>
 					<doublebox hflex="true" vflex="true"
 						format="###,###,###,##0" readonly="true"

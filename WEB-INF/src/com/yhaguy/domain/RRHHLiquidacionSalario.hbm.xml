@@ -14,17 +14,19 @@
 		<property name="fecha"/>
 		<property name="cargo"/>
 		<property name="importeGs"/>
+		<property name="fechaIngreso"/>
+		<property name="salario"/>
+		<property name="jornalDiario"/>
+		<property name="diasTrabajados"/>
+		<property name="aguinaldo"/>
+		<property name="diasPreAviso"/>
+		<property name="diasIndemnizacion"/>
+		<property name="vacacionesProporcionales"/>
+		<property name="vacacionesCausadas"/>
+		<property name="motivo"/>
 		
 		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
 			column="id_funcionario" lazy="false" />
-			
-		<set name="detalles" table="rrhh_liquidacion_salario_detalle"
-			inverse="false" lazy="false" fetch="join" cascade="all">
-			<key>
-				<column name="id_liquidacion" not-null="false"/>
-			</key>
-			<one-to-many entity-name="com.yhaguy.domain.RRHHLiquidacionSalarioDetalle"/>
-		</set>
 
 	</class>
 </hibernate-mapping>

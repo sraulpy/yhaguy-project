@@ -45,6 +45,8 @@
 		<property name="anticipoAguinaldo"/>
 		<property name="anticipoAguinaldo2"/>
 		<property name="anticipoAguinaldo3"/>
+		<property name="indemnizacion"/>
+		<property name="preaviso"/>
 		
 		<property name="cerrado"/>
 		

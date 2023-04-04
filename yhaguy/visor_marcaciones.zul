@@ -7,7 +7,7 @@
 		apply="org.zkoss.bind.BindComposer"
 		border="none" vflex="true" hflex="true">
 
-		<label id="nombreFormulario" value=" " multiline="false"
+		<label id="nombreFormulario" value=" " multiline="false" 
 			maxlength="26" visible="false" />
 			
 		<div fulfill="self.onCreate" vflex="true" hflex="true"> 

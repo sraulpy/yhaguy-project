@@ -35,22 +35,6 @@
 	<parameter name="Ingresos" class="java.lang.String"/>
 	<parameter name="Egresos" class="java.lang.String"/>
 	<parameter name="SaldoFinal" class="java.lang.String"/>
-	<queryString language="SQL">
-		<![CDATA[select '10010001' "Cuenta", 'Mercaderias Gravadas 10%' "Desc Cuenta", 150000 "Saldo Anterior",  3351450 "Debitos Periodo", 100000 "Creditos Periodo",
-150000 "Saldo Periodo" from plancuenta where id = '1'
-union all
-select '10010002' "Cuenta", 'Mercaderias Gravadas 5%' "Desc Cuenta", 70000 "Saldo Anterior",  68432130 "Debitos Periodo", 100000 "Creditos Periodo",
-500000 "Saldo Periodo" from plancuenta where id = '1'
-union all
-select '10000001' "Cuenta", 'IVA 10%' "Desc Cuenta", 1000 "Saldo Anterior",  2125510 "Debitos Periodo", 100000 "Creditos Periodo",
-180000 "Saldo Periodo" from plancuenta where id = '1'
-union all
-select '10000003' "Cuenta", 'IVA 5%' "Desc Cuenta", 102500 "Saldo Anterior",  1545100 "Debitos Periodo", 100000 "Creditos Periodo",
-101000 "Saldo Periodo" from plancuenta where id = '1'
-union all
-select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterior",  4568770 "Debitos Periodo", 100000 "Creditos Periodo",
-950000 "Saldo Periodo" from plancuenta where id = '1']]>
-	</queryString>
 	<field name="Concepto" class="java.lang.String"/>
 	<field name="Importe" class="java.lang.String"/>
 	<field name="TituloDetalle" class="java.lang.String"/>

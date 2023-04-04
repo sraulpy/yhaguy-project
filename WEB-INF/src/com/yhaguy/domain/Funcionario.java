@@ -97,6 +97,21 @@ public class Funcionario extends Domain {
 	}
 	
 	/**
+	 * @return ingresos vigente..
+	 */
+	public double getIngresosVigente() throws Exception {
+		return this.getSalarioVigente() + this.getBonificacionResponsabilidadVigente();
+	}
+	
+	/**
+	 * 
+	 * @return jornal vigente..
+	 */
+	public double getJornalVigente() throws Exception {
+		return (this.getIngresosVigente()) / 30;
+	}
+	
+	/**
 	 * @return los salarios..
 	 */
 	public List<FuncionarioSalario> getSalarios() throws Exception {

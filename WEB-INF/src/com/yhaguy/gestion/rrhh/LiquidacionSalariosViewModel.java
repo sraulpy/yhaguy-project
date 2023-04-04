@@ -14,15 +14,16 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.Popup;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.util.MyArray;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.RRHHLiquidacionSalario;
-import com.yhaguy.domain.RRHHLiquidacionSalarioDetalle;
+import com.yhaguy.domain.RRHHPlanillaSalarios;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.util.Utiles;
@@ -35,10 +36,8 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 
 	private String filterRazonSocial = "";
 	
-	private RRHHLiquidacionSalario n_liquidacion;
-	private RRHHLiquidacionSalarioDetalle n_detalle;
-	
-	private Object[] selectedLiquidacion;
+	private RRHHLiquidacionSalario n_liquidacion;	
+	private RRHHLiquidacionSalario selectedLiquidacion;
 	
 	private Window win;
 	
@@ -55,29 +54,81 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
-	public void imprimir() throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		RRHHLiquidacionSalario liquidacion = (RRHHLiquidacionSalario) rr.getObject(RRHHLiquidacionSalario.class.getName(), (long) this.selectedLiquidacion[0]);
+	public void imprimir(@BindingParam("liquidacion") RRHHLiquidacionSalario liquidacion) throws Exception {
 		this.imprimirLiquidacion(liquidacion);
 	}
 	
+	
 	@Command
-	@NotifyChange("*")
-	public void addDetalle() {
-		this.n_liquidacion.getDetalles().add(this.n_detalle);
-		this.n_detalle = new RRHHLiquidacionSalarioDetalle();
-		this.tx_concepto.focus();
+	@NotifyChange("n_liquidacion")
+	public void selectFuncionario() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<RRHHLiquidacionSalario> list = rr.getLiquidaciones(this.n_liquidacion.getFuncionario().getId());
+		if (list.size() > 0) {
+			this.n_liquidacion.setFuncionario(null);
+			Clients.showNotification("YA EXISTE UNA LIQUIDACIÓN PARA EL FUNCIONARIO SELECCIONADO", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		this.n_liquidacion.setFechaIngreso(this.n_liquidacion.getFuncionario().getEmpresa().getFechaIngreso());
+		this.n_liquidacion.setSalario(this.n_liquidacion.getFuncionario().getIngresosVigente());
+		this.n_liquidacion.setJornalDiario(this.getPromedioIngresos() / 30);
+		this.n_liquidacion.setDiasTrabajados(Integer.parseInt(Utiles.getDateToString(new Date(), "dd")));
+		this.n_liquidacion.setAguinaldo(this.getAguinaldoProporcional());
 	}
 	
 	@Command
 	@NotifyChange("*")
-	public void guardarLiquidacion(@BindingParam("comp") Popup comp) throws Exception {
-		RegisterDomain rr = RegisterDomain.getInstance();
-		this.n_liquidacion.setImporteGs(this.n_liquidacion.getImporteGs_());
-		rr.saveObject(this.n_liquidacion, this.getLoginNombre());
-		this.imprimirLiquidacion(this.n_liquidacion);
-		comp.close();
-		this.inicializarDatos();
+	public void confirmar() {
+		if (!this.validar()) {
+			return;
+		}
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.saveObject(this.n_liquidacion, this.getLoginNombre());
+			
+			String anho = Utiles.getDateToString(new Date(), "yyyy");
+			String tipo = RRHHPlanillaSalarios.TIPO_SALARIOS;
+			Funcionario func = this.n_liquidacion.getFuncionario();
+			
+			List<RRHHPlanillaSalarios> list = rr.getPlanillaSalariosByCedula(anho, tipo, func.getCedula());
+			if (list.size() > 0) {
+				rr.deleteObject(list.get(0));
+			}
+			
+			RRHHPlanillaSalarios sal = new RRHHPlanillaSalarios();
+			sal.setTipo(tipo);
+			sal.setAnho(anho);
+			sal.setMes((String) Utiles.getMesCorriente(anho).getPos1());
+			sal.setFuncionario(func.getApellidos() + ", " + func.getNombres());
+			sal.setCedula(func.getCedula());
+			sal.setCargo(func.getFuncionarioCargo().getDescripcion());
+			sal.setDiasTrabajados(this.n_liquidacion.getDiasTrabajados());
+			sal.setSalarios(this.n_liquidacion.getJornalDiario() * 30);
+			sal.setAguinaldo(this.n_liquidacion.getAguinaldo());
+			sal.setIndemnizacion(this.n_liquidacion.getHaberesIndemnizacion());
+			sal.setPreaviso(this.n_liquidacion.getHaberesPreAviso());
+			sal.setVacaciones(this.n_liquidacion.getHaberesVacacionesCausadas() + this.n_liquidacion.getHaberesVacacionesProporcional());
+			rr.saveObject(sal, this.getLoginNombre());
+			
+			this.imprimir(this.n_liquidacion);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	/**
+	 * @return validacion..
+	 */
+	private boolean validar() {
+		boolean out = true;
+		
+		if (this.n_liquidacion.getMotivo() == null || this.n_liquidacion.getMotivo().isEmpty()) {
+			Clients.showNotification("DEBE ASIGNAR EL MOTIVO", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return false;
+		}
+		
+		return out;
 	}
 	
 	/**
@@ -86,21 +137,39 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 	private void inicializarDatos() {
 		this.n_liquidacion = new RRHHLiquidacionSalario();
 		this.n_liquidacion.setFecha(new Date());
-		this.n_detalle = new RRHHLiquidacionSalarioDetalle();
 	}
 	
 	/**
 	 * Despliega el Reporte de Orden de Servicio Tecnico..
 	 */
 	private void imprimirLiquidacion(RRHHLiquidacionSalario liquidacion) throws Exception {		
+		
 		String source = ReportesViewModel.SOURCE_LIQUIDACION_SALARIO;
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new LiquidacionSalarioDataSource(liquidacion);
 		params.put("Fecha", Utiles.getDateToString(liquidacion.getFecha(), Utiles.DD_MM_YYYY));
+		params.put("Ingreso", Utiles.getDateToString(liquidacion.getFechaIngreso(), Utiles.DD_MM_YYYY));
 		params.put("Funcionario", liquidacion.getFuncionario().getRazonSocial());
-		params.put("Cargo", liquidacion.getCargo().toUpperCase());
-		params.put("Periodo", Utiles.getNombreMes(liquidacion.getFecha()) + " " +  Utiles.getDateToString(liquidacion.getFecha(), "yyyy"));
-		params.put("Usuario", getUs().getNombre());
+		params.put("Antiguedad", liquidacion.getAntiguedad() + " meses y " + liquidacion.getAntiguedadDias() + " días");
+		params.put("SalarioPromedio", Utiles.getNumberFormat(this.getPromedioIngresos()));
+		params.put("JornalPromedio", Utiles.getNumberFormat(liquidacion.getJornalDiario()));
+		params.put("DiasPreAviso", Utiles.getNumberFormat(liquidacion.getDiasPreAviso()));
+		params.put("DiasIndemnizacion", Utiles.getNumberFormat(liquidacion.getDiasIndemnizacion()));
+		params.put("HaberesPreAviso", Utiles.getNumberFormat(liquidacion.getHaberesPreAviso()));
+		params.put("HaberesIndemnizacion", Utiles.getNumberFormat(liquidacion.getHaberesIndemnizacion()));
+		params.put("DiasTrabajados", Utiles.getNumberFormat(liquidacion.getDiasTrabajados()));
+		params.put("HaberesDiasTrabajados", Utiles.getNumberFormat(liquidacion.getHaberesDiasTrabajados()));
+		params.put("DiasVacacionesCausadas", Utiles.getNumberFormat(liquidacion.getVacacionesCausadas()));
+		params.put("HaberesVacacionesCausadas", Utiles.getNumberFormat(liquidacion.getHaberesVacacionesCausadas()));
+		params.put("DiasVacacionesProporcional", Utiles.getNumberFormat(liquidacion.getVacacionesProporcionales()));
+		params.put("HaberesVacacionesProporcional", Utiles.getNumberFormat(liquidacion.getHaberesVacacionesProporcional()));
+		params.put("Aguinaldo", Utiles.getNumberFormat(liquidacion.getAguinaldo()));
+		params.put("SubTotales", Utiles.getNumberFormat(liquidacion.getTotalHaberes() + liquidacion.getAguinaldo()));
+		params.put("Ips", "-" + Utiles.getNumberFormat(liquidacion.getIps()));
+		params.put("TotalACobrar", Utiles.getNumberFormat(liquidacion.getTotalACobrar()));
+		params.put("Empresa", Configuracion.empresa);
+		params.put("ImporteLetras", m.numberToLetter(Utiles.getRedondeo(liquidacion.getTotalACobrar())));
+		params.put("Cedula", "C.I. " + liquidacion.getFuncionario().getCedula());
 		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
 	}
 	
@@ -125,18 +194,12 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 	 */
 	class LiquidacionSalarioDataSource implements JRDataSource {
 
-		List<RRHHLiquidacionSalarioDetalle> detalle = new ArrayList<RRHHLiquidacionSalarioDetalle>();
 		List<MyArray> dets = new ArrayList<MyArray>();
 		double totalImporteGs = 0;
 
 		public LiquidacionSalarioDataSource(RRHHLiquidacionSalario liquidacion) {
-			this.totalImporteGs = liquidacion.getImporteGs_();
-			for (RRHHLiquidacionSalarioDetalle item : liquidacion.getDetalles()) {
-				this.dets.add(new MyArray("  ", 
-						item.getConcepto().toUpperCase(),
-						Utiles.getNumberFormat(item.getHaberes()),
-						Utiles.getNumberFormat(item.getDescuentos())));
-			}
+			this.totalImporteGs = 0.0;
+			this.dets.add(new MyArray());
 		}
 
 		private int index = -1;
@@ -176,18 +239,152 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 	 * GETS / SETS
 	 */
 	
-	@DependsOn("filterRazonSocial")
+	/**
+	 * @return los funcionarios activos..
+	 */
 	public List<Funcionario> getFuncionarios() throws Exception {
-		if (this.filterRazonSocial.trim().isEmpty()) {
-			return new ArrayList<Funcionario>();
-		}
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getFuncionarios(this.filterRazonSocial);
+		return rr.getFuncionariosActivos();
 	}
 	
-	public List<Object[]> getLiquidaciones() throws Exception {
+	public List<RRHHLiquidacionSalario> getLiquidaciones() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getLiquidaciones();
+	}
+	
+	/**
+	 * @return los motivos..
+	 */
+	public List<String> getMotivos() {
+		return RRHHLiquidacionSalario.getMotivos();
+	}
+	
+	/**
+	 * @return los salarios..
+	 */
+	@DependsOn("n_liquidacion")
+	public List<RRHHPlanillaSalarios> getSalarios() throws Exception {
+		if (this.n_liquidacion == null || this.n_liquidacion.getFuncionario() == null) {
+			return new ArrayList<RRHHPlanillaSalarios>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getPlanillaSalariosByCedula(Utiles.getDateToString(new Date(), "yyyy"),
+				RRHHPlanillaSalarios.TIPO_SALARIOS, this.n_liquidacion.getFuncionario().getCedula());
+	}
+	
+	/**
+	 * @return ultimos seis salarios..
+	 */
+	private List<RRHHPlanillaSalarios> getUltimosSalarios() throws Exception {
+		if (this.n_liquidacion == null || this.n_liquidacion.getFuncionario() == null) {
+			return new ArrayList<RRHHPlanillaSalarios>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getPlanillaSalariosByCedulaUltimosSeis(RRHHPlanillaSalarios.TIPO_SALARIOS, this.n_liquidacion.getFuncionario().getCedula());
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalSalarios() {
+		double out = 0.0;
+		try {
+			for (RRHHPlanillaSalarios salario : this.getSalarios()) {
+				out += salario.getSalarioFinal();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalSalariosU6() {
+		double out = 0.0;
+		try {
+			for (RRHHPlanillaSalarios salario : this.getUltimosSalarios()) {
+				out += salario.getSalarioFinal();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalOtrosHaberes() {
+		double out = 0.0;
+		try {
+			for (RRHHPlanillaSalarios salario : this.getSalarios()) {
+				out += salario.getOtrosHaberes();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalOtrosHaberesU6() {
+		double out = 0.0;
+		try {
+			for (RRHHPlanillaSalarios salario : this.getUltimosSalarios()) {
+				out += salario.getOtrosHaberes();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalComisiones() {
+		double out = 0.0;
+		try {
+			for (RRHHPlanillaSalarios salario : this.getSalarios()) {
+				out += salario.getComisiones();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalComisionesU6() {
+		double out = 0.0;
+		try {
+			for (RRHHPlanillaSalarios salario : this.getUltimosSalarios()) {
+				out += salario.getComisiones();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalIngresos() {
+		return this.getTotalSalarios() + this.getTotalOtrosHaberes() + this.getTotalComisiones();
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getTotalIngresosU6() {
+		return this.getTotalSalariosU6() + this.getTotalOtrosHaberesU6() + this.getTotalComisionesU6();
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getPromedioIngresos() throws Exception {
+		int size = this.getUltimosSalarios().size();
+		int divisor = size < 6 ? size : 6;
+		return this.getTotalIngresosU6() / divisor;
+	}
+	
+	@DependsOn("n_liquidacion")
+	public double getAguinaldoProporcional() {
+		double out = this.getTotalIngresos();
+		if (out > 0) {
+			return out / 12;
+		}
+		return 0.0;
 	}
 	
 	public RRHHLiquidacionSalario getN_liquidacion() {
@@ -206,19 +403,11 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 		this.filterRazonSocial = filterRazonSocial;
 	}
 
-	public RRHHLiquidacionSalarioDetalle getN_detalle() {
-		return n_detalle;
-	}
-
-	public void setN_detalle(RRHHLiquidacionSalarioDetalle n_detalle) {
-		this.n_detalle = n_detalle;
-	}
-
-	public Object[] getSelectedLiquidacion() {
+	public RRHHLiquidacionSalario getSelectedLiquidacion() {
 		return selectedLiquidacion;
 	}
 
-	public void setSelectedLiquidacion(Object[] selectedLiquidacion) {
+	public void setSelectedLiquidacion(RRHHLiquidacionSalario selectedLiquidacion) {
 		this.selectedLiquidacion = selectedLiquidacion;
 	}
 }

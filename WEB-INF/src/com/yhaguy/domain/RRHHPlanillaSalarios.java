@@ -1,5 +1,7 @@
 package com.yhaguy.domain;
 
+import java.util.List;
+
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.domain.Domain;
@@ -69,6 +71,8 @@ public class RRHHPlanillaSalarios extends Domain {
 	private double anticipoAguinaldo;
 	private double anticipoAguinaldo2;
 	private double anticipoAguinaldo3;
+	private double indemnizacion;
+	private double preaviso;
 	private boolean cerrado;
 	
 	@Override
@@ -105,7 +109,7 @@ public class RRHHPlanillaSalarios extends Domain {
 			"vacaciones", "aguinaldo", "cantidadHorasExtrasNoc", "cantidadHorasExtras", "diasTrabajados" })
 	public double getTotalHaberes_() {
 		return this.getSalarioFinal() + this.bonificacion + this.otrosHaberes + this.getExtrasDiurnas() + this.getExtrasNocturnas()
-				+ this.comision + this.vacaciones + this.aguinaldo;
+				+ this.comision + this.vacaciones + this.aguinaldo + this.indemnizacion + this.preaviso;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
@@ -116,7 +120,8 @@ public class RRHHPlanillaSalarios extends Domain {
 		return this.getSalarioFinal() + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
 				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
 				+ this.getIps() + this.prestamos + this.adelantos + this.getExtrasDiurnas() + this.getExtrasNocturnas() + this.vacaciones
-				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo + this.anticipoAguinaldo2 + this.anticipoAguinaldo3;
+				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo + this.anticipoAguinaldo2 + this.anticipoAguinaldo3
+				+ this.indemnizacion + this.preaviso;
 	}
 	
 	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
@@ -148,6 +153,24 @@ public class RRHHPlanillaSalarios extends Domain {
 	 */
 	public String getTotalACobrarLetras() {
 		return Utiles.numeroAletras(Utiles.getRedondeo(this.getTotalACobrar()));
+	}
+	
+	/**
+	 * 
+	 * @return comisiones
+	 */
+	public double getComisiones() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<RRHHPlanillaSalarios> list = rr.getPlanillaSalariosByCedula(this.anho, this.mes, TIPO_COMISIONES,
+					this.cedula);
+			if (list.size() > 0) {
+				return list.get(0).getTotalHaberes_();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0.0;
 	}
 
 	public String getFuncionario() {
@@ -412,5 +435,21 @@ public class RRHHPlanillaSalarios extends Domain {
 
 	public void setAnticipoAguinaldo3(double anticipoAguinaldo3) {
 		this.anticipoAguinaldo3 = anticipoAguinaldo3;
+	}
+
+	public double getIndemnizacion() {
+		return indemnizacion;
+	}
+
+	public void setIndemnizacion(double indemnizacion) {
+		this.indemnizacion = indemnizacion;
+	}
+
+	public double getPreaviso() {
+		return preaviso;
+	}
+
+	public void setPreaviso(double preaviso) {
+		this.preaviso = preaviso;
 	}
 }
