@@ -737,7 +737,11 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		List<MyArray> dets = new ArrayList<MyArray>();
 		
 		if (liquidacion.getSalarioFinal() > 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarioFinal()),
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarioFinal() - liquidacion.getResponsabilidad()),
+					Utiles.getNumberFormat(0.0)));
+		}
+		if (liquidacion.getResponsabilidad() > 0) {
+			dets.add(new MyArray("  ", RRHHPlanillaSalarios.RESPONSABILIDAD, Utiles.getNumberFormat(liquidacion.getResponsabilidad()),
 					Utiles.getNumberFormat(0.0)));
 		}
 		if (liquidacion.getBonificacion() > 0) {
