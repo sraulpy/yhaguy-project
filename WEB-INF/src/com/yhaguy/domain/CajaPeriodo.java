@@ -191,12 +191,6 @@ public class CajaPeriodo extends Domain {
 				}
 			}			
 		}
-		for (CajaReposicion rep : this.reposiciones) {
-			if(rep.isIngreso() && !rep.isAnulado()) {
-				if(rep.getFormaPago().isEfectivo())
-					out += rep.getFormaPago().getMontoGs();
-			}
-		}
 		return out;
 	}
 	
