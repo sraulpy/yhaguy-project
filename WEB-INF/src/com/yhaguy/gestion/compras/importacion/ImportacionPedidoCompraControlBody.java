@@ -2771,10 +2771,20 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					valorCIFds += item.getImporteDsCalculado();				
 					
 				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)) {
-					valorFOBgs += item.getImporteGsCalculado();
-					valorFOBds += item.getImporteDsCalculado();
-					valorCIFgs += item.getImporteGsCalculado();
-					valorCIFds += item.getImporteDsCalculado();
+					// para representaciones toma el valor bruto..
+					if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+						if (!item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {
+							valorFOBgs += item.getImporteGsCalculado();
+							valorFOBds += item.getImporteDsCalculado();
+							valorCIFgs += item.getImporteGsCalculado();
+							valorCIFds += item.getImporteDsCalculado();	
+						}
+					} else {
+						valorFOBgs += item.getImporteGsCalculado();
+						valorFOBds += item.getImporteDsCalculado();
+						valorCIFgs += item.getImporteGsCalculado();
+						valorCIFds += item.getImporteDsCalculado();
+					}										
 				}
 			}
 		}

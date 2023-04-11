@@ -896,15 +896,17 @@
 												tooltiptext="(Valor Flete + Valor Seguro + Total Gastos) / Valor FOB" />
 											<hlayout
 												sclass="z-valign-middle">
-												<dolarbox
+												<doublebox
 													value="@load(vm.coeficienteGasto)" readonly="true"
-													style="background:#EEF7FA;text-align:right" hflex="true" />
+													style="background:#EEF7FA;text-align:right" hflex="true" 
+													format="###,###,##0.0000"/>
 												<label value="auto"
 													style="font-style:italic" />
 												<space width="30px" />
-												<dolarbox
+												<doublebox
 													value="@bind(vm.dto.resumenGastosDespacho.coeficienteAsignado)"
-													onChange="@command('notificarCambios')" hflex="true" />
+													onChange="@command('notificarCambios')" hflex="true" 
+													format="###,###,##0.0000"/>
 												<label value="manual"
 													style="font-style:italic" />
 											</hlayout>
