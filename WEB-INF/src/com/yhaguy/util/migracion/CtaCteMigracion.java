@@ -75,13 +75,13 @@ public class CtaCteMigracion {
 				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_90);
 				break;
 			case CONDICION_75DIAS:
-				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_OTROS);
+				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_CONTRA_ENTREGA);
 				break;
 			case CONDICION_120DIAS:
-				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_OTROS);
+				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_CONTRA_ENTREGA);
 				break;
 			case CONDICION_CHEQUE:
-				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_OTROS);
+				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_CONTRA_ENTREGA);
 				break;
 			default:
 				condicionPago = rr.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CONTADO);

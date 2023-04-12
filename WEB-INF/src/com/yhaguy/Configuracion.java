@@ -303,7 +303,7 @@ public class Configuracion extends Config {
 	public static long ID_CONDICION_PAGO_CREDITO_30 = 2;
 	public static long ID_CONDICION_PAGO_CREDITO_60 = 3;
 	public static long ID_CONDICION_PAGO_CREDITO_90 = 4;
-	public static long ID_CONDICION_PAGO_OTROS = 5;
+	public static long ID_CONDICION_PAGO_CREDITO_CONTRA_ENTREGA = 5;
 
 	// Importante: estos id's se usan para buscar las ventas
 	// que deben ser por reparto o transferencias remision

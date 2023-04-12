@@ -2211,6 +2211,10 @@ public class VentaControlBody extends BodyApp {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getCondicionPagoContado());
 		out.add(this.getDtoUtil().getCondicionPagoCredito30());
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO) ||
+				Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			out.add(this.getDtoUtil().getCondicionPagoCreditoContraEntrega());
+		}		
 		return out;
 	}
 	

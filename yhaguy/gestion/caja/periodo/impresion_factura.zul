@@ -19,6 +19,8 @@
 	<hlayout>
 		<div hflex="true"></div>
 		<label value="@load(vm.selectedVenta.numero)" sclass="det"></label>
+		<label value="@load(vm.selectedVenta.condicionPago.pos1)" sclass="det"
+			visible="@load(vm.selectedVenta.condicionPago.pos1 eq 'CREDITO CONTRA ENTREGA CHEQUE')"></label>
 		<div width="246px"></div>
 	</hlayout>
 	
