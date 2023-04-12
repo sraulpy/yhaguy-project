@@ -5,10 +5,12 @@
 
 		<hlayout sclass="button-container">
 			<button iconSclass="z-icon-search" label="Set" mold="bs"
-				sclass="btn-primary btn-sm" width="130px" onClick='pop_set.open(self, "after_start")'></button>
+				sclass="btn-primary btn-sm" width="130px" onClick='pop_set.open(self, "after_start")'
+				disabled="@load(!vm.dto.esNuevo())"></button>
 			<space></space>
 			<button iconSclass="z-icon-search" label="Identificaciones" mold="bs"
-				sclass="btn-primary btn-sm" width="130px" onClick='pop_ident.open(self, "after_start")'></button>
+				sclass="btn-primary btn-sm" width="130px" onClick='pop_ident.open(self, "after_start")'
+				disabled="@load(!vm.dto.esNuevo())"></button>
 		</hlayout>
 		<include src="/yhaguy/gestion/empresa/EmpresaBody.zul" vflex="1"/>
 		

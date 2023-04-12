@@ -38,7 +38,7 @@ import com.yhaguy.util.Utiles;
 
 public class ClienteControlBody extends EmpresaControlBody {
 
-	private ClienteDTO dto = new ClienteDTO();
+	private ClienteDTO dto;
 	
 	private String filterCedula;
 	private String filterNombres;

@@ -32,7 +32,7 @@ import com.yhaguy.util.Utiles;
 
 public class ProveedorControlBody extends EmpresaControlBody {
 
-	ProveedorDTO dto = new ProveedorDTO();
+	ProveedorDTO dto;
 	
 	private String filterCedula;
 	private String filterNombres;
