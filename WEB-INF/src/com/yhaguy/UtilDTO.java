@@ -1,6 +1,8 @@
 package com.yhaguy;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -391,6 +393,7 @@ public class UtilDTO extends UtilCoreDTO {
 	MyArray condicionPagoCredito30 = new MyArray();
 	MyArray condicionPagoCredito60 = new MyArray();
 	MyArray condicionPagoCredito90 = new MyArray();
+	MyArray condicionPagoCreditoContraEntrega = new MyArray();
 
 	// Tipos de Iva
 	List<MyArray> tiposDeIva = new ArrayList<MyArray>();
@@ -1315,6 +1318,15 @@ public class UtilDTO extends UtilCoreDTO {
 	}
 
 	public List<MyPair> getPaisEmpresas() {
+		// ordena la lista segun codigo..
+		Collections.sort(this.paisEmpresas, new Comparator<MyPair>() {
+			@Override
+			public int compare(MyPair o1, MyPair o2) {
+				String id1 = o1.getText();
+				String id2 = o2.getText();
+				return id1.compareTo(id2);
+			}
+		});
 		return paisEmpresas;
 	}
 
@@ -3176,5 +3188,13 @@ public class UtilDTO extends UtilCoreDTO {
 
 	public void setTmOtrosComprobantes(MyArray tmOtrosComprobantes) {
 		this.tmOtrosComprobantes = tmOtrosComprobantes;
+	}
+
+	public MyArray getCondicionPagoCreditoContraEntrega() {
+		return condicionPagoCreditoContraEntrega;
+	}
+
+	public void setCondicionPagoCreditoContraEntrega(MyArray condicionPagoCreditoContraEntrega) {
+		this.condicionPagoCreditoContraEntrega = condicionPagoCreditoContraEntrega;
 	}
 }

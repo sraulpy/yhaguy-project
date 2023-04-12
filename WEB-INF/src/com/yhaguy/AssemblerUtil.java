@@ -873,8 +873,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		dto.setEstadoConciliacionDiferencia(diferencia);
 
 		// Paises
-		List<Tipo> paisEmpresas = rr
-				.getTipos(Configuracion.ID_TIPO_PAIS_EMPRESA);
+		List<Tipo> paisEmpresas = rr.getTipos(Configuracion.ID_TIPO_PAIS_EMPRESA);
 		dto.setPaisEmpresas(this.listaTiposToListaMyPair(paisEmpresas));
 		Tipo paisPy = rr.getTipoPorSigla(Configuracion.SIGLA_PAIS_PARAGUAY);
 		dto.setPaisParaguay(this.tipoToMyPair(paisPy));
@@ -1120,6 +1119,8 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 				.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_60);
 		CondicionPago _condicionPagoCredito90 = rr
 				.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_90);
+		CondicionPago _condicionPagoCreditoContraEntrega = rr
+				.getCondicionPagoById(Configuracion.ID_CONDICION_PAGO_CREDITO_CONTRA_ENTREGA);
 
 		MyArray condicionPagoContado = this
 				.condicionPagoToMyArray(_condicionPagoContado);
@@ -1129,11 +1130,14 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 				.condicionPagoToMyArray(_condicionPagoCredito60);
 		MyArray condicionPagoCredito90 = this
 				.condicionPagoToMyArray(_condicionPagoCredito90);
+		MyArray condicionPagoCreditoContraEntrega = this
+				.condicionPagoToMyArray(_condicionPagoCreditoContraEntrega);
 
 		dto.setCondicionPagoContado(condicionPagoContado);
 		dto.setCondicionPagoCredito30(condicionPagoCredito30);
 		dto.setCondicionPagoCredito60(condicionPagoCredito60);
 		dto.setCondicionPagoCredito90(condicionPagoCredito90);
+		dto.setCondicionPagoCreditoContraEntrega(condicionPagoCreditoContraEntrega);
 
 		// Tipos de Iva
 		List<Tipo> tiposIva = rr.getTipos(Configuracion.ID_TIPO_IVA);
