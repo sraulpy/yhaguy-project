@@ -10435,6 +10435,55 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los clientes segun vendedor..
+	 * [0]:cliente.ruc
+	 * [1]:cliente.razonsocial
+	 * [2]:cliente.direccion
+	 * [3]:cliente.telefono
+	 * [4]:cliente.vendedor
+	 * [5]:cliente.rubro
+	 * [6]:cliente.limiteCredito
+	 * [7]:cliente.ciudad
+	 * [8]:cliente.ventas
+	 * [9]:cliente.id
+	 */
+	public List<Object[]> getClientesVentas(long idCliente, Date desde, Date hasta) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:00:00";
+		String query = "select e.ruc, e.razonSocial, e.direccion_, e.telefono_, e.vendedor.empresa.razonSocial,"
+				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id),"
+				+ " case when e.ciudad IS NULL then 'SIN CIUDAD' else e.ciudad.descripcion end,"
+				+ " (select sum(totalImporteGs) from Venta where tipoMovimiento.id in (18,19) and cliente.empresa.id = e.id"
+				+ " and fecha > '"+ desde_ +"' and fecha < '" + hasta_ + "' and idEstadoComprobante is null),"
+				+ " (select c.id from Cliente c where c.empresa.id = e.id)"	
+				+ " from Cliente c join c.empresa e where c.id = "
+				+ idCliente + " and c.estado = '" + Cliente.ACTIVO + "' order by e.razonSocial";
+		return this.hql(query);
+	}
+		
+	/**
+	 * @return los clientes segun vendedor..
+	 * [0]:cliente.ruc
+	 * [1]:cliente.razonsocial
+	 * [2]:cliente.direccion
+	 * [3]:cliente.telefono
+	 * [4]:cliente.vendedor
+	 * [5]:cliente.rubro
+	 * [6]:cliente.limiteCredito
+	 * [7]:cliente.ciudad
+	 * [8]:cliente.ventas
+	 * [9]:cliente.id
+	 */
+	public List<Object[]> getClientesPorVendedorHistorial(long idVendedor) throws Exception {
+		String query = "select c.id, c.empresa.ruc"
+				+ " from Cliente c where EXISTS (select vt.id from Venta vt where vt.tipoMovimiento.id in (18,19) "
+				+ " and vt.fecha > '2022-01-01 00:00:00' and vt.vendedor.id = " + idVendedor + " and vt.cliente.id = c.id) "
+				+ " and c.estado = '" + Cliente.ACTIVO + "' order by c.empresa.razonSocial";
+		System.out.println(query);
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return el plan de cuenta segun codigo..
 	 */
 	public PlanCuenta getPlanCuenta(String codigo) throws Exception {
@@ -15121,11 +15170,7 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			Date desde = Utiles.getFecha("01-01-2023 00:00:00");
-			Date hasta = Utiles.getFecha("30-03-2023 23:00:00");
-			RegisterDomain rr = RegisterDomain.getInstance();
-			List<Object[]> list = rr.get_NotasCredito(desde, hasta, 20853);
-			System.out.println(list.size());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

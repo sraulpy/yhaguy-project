@@ -1758,6 +1758,7 @@ public class ReportesViewModel extends SimpleViewModel {
 		static final String VENTAS_PRESUPUESTOS_DETALLADO = "VEN-00054";
 		static final String VENTAS_PEDIDOS_DETALLADO = "VEN-00055";
 		static final String VENTAS_CLIENTES_VENDEDOR_MESES = "VEN-00056";
+		static final String VENTAS_CLIENTES_VENDEDOR_MESES_HISTORIAL = "VEN-00057";
 		
 		/**
 		 * procesamiento del reporte..
@@ -1991,6 +1992,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 			case VENTAS_CLIENTES_VENDEDOR_MESES:
 				this.clientesVendedorMeses(mobile, VENTAS_CLIENTES_VENDEDOR_MESES);
+				break;
+				
+			case VENTAS_CLIENTES_VENDEDOR_MESES_HISTORIAL:
+				this.clientesVendedorMesesHistorial(mobile, VENTAS_CLIENTES_VENDEDOR_MESES_HISTORIAL);
 				break;
 			}
 		}
@@ -8107,6 +8112,231 @@ public class ReportesViewModel extends SimpleViewModel {
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new VentasPorClienteProveedorDataSource(data);
 				params.put("Titulo", codReporte + " - Ventas por Clientes por Mes - Totales por Proveedor del Exterior (Importes Sin Iva)");
+				params.put("Usuario", getUs().getNombre());
+				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
+				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
+				params.put("Vendedor", vendedor == null ? "TODOS.." : vendedor.getRazonSocial());
+				params.put("Prov1", paramsProv.get("Prov1") == null ? "NO DEFINIDO" : paramsProv.get("Prov1"));
+				params.put("Prov2", paramsProv.get("Prov2") == null ? "NO DEFINIDO" : paramsProv.get("Prov2"));
+				params.put("Prov3", paramsProv.get("Prov3") == null ? "NO DEFINIDO" : paramsProv.get("Prov3"));
+				params.put("Prov4", paramsProv.get("Prov4") == null ? "NO DEFINIDO" : paramsProv.get("Prov4"));
+				params.put("Prov5", paramsProv.get("Prov5") == null ? "NO DEFINIDO" : paramsProv.get("Prov5"));
+				params.put("Prov6", paramsProv.get("Prov6") == null ? "NO DEFINIDO" : paramsProv.get("Prov6"));
+				params.put("Prov7", paramsProv.get("Prov7") == null ? "NO DEFINIDO" : paramsProv.get("Prov7"));
+				params.put("Prov8", paramsProv.get("Prov8") == null ? "NO DEFINIDO" : paramsProv.get("Prov8"));
+				params.put("Prov9", paramsProv.get("Prov9") == null ? "NO DEFINIDO" : paramsProv.get("Prov9"));
+				params.put("Prov10", "LOCALES");
+				imprimirJasper(source, params, dataSource, formato);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * VEN-00057 clientes por vendedor segun historial venta.
+		 */
+		private void clientesVendedorMesesHistorial(boolean mobile, String codReporte) {
+			try {
+				Funcionario vendedor = filtro.getVendedor();
+				Object[] formato = filtro.getFormato();
+				Date desde = filtro.getFechaDesde();
+				Date hasta = filtro.getFechaHasta();
+				
+				if (desde == null) desde = new Date();
+				if (hasta == null) hasta = new Date();
+				
+				long idVendedor = vendedor == null ? 0 : vendedor.getId();
+				
+				if (vendedor == null) {
+					Clients.showNotification("Debe seleccionar un vendedor..", 
+							Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+					return;
+				}
+				
+				Map<String, Object[]> values = new HashMap<String, Object[]>();
+				Map<String, Object[]> values_ = new HashMap<String, Object[]>();
+
+				RegisterDomain rr = RegisterDomain.getInstance();		
+				List<Object[]> clientes = new ArrayList<Object[]>();
+				List<Object[]> emps = new ArrayList<Object[]>();
+				List<Object[]> provs = new ArrayList<Object[]>();
+				List<Object[]> provsLocales = new ArrayList<Object[]>();
+				Map<String, String> paramsProv = new HashMap<String, String>();
+				Map<String, String> paramsProvLoc = new HashMap<String, String>();
+				Map<String, Long> idsProv = new HashMap<String, Long>();
+				Map<String, Long> idsProvLoc = new HashMap<String, Long>();
+				Map<String, Double> montosProv = new HashMap<String, Double>();
+				Map<String, Double> montosNcr = new HashMap<String, Double>();
+				
+				if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+					emps = rr.getClientesPorVendedor(idVendedor, desde, hasta);
+				} else {
+					clientes = rr.getClientesPorVendedorHistorial(idVendedor);
+					System.out.println("--- total clientes: " + emps.size());
+					for (Object[] cli : clientes) {
+						long idCli = (long) cli[0];
+						System.out.println("-- " + idCli);
+						emps.addAll(rr.getClientesVentas(idCli, desde, hasta));
+					}
+				}
+				
+				if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+					provs = rr.getProveedoresVentas(desde, hasta, idVendedor);
+					for (int i = 0; i < provs.size(); i++) {
+						paramsProv.put("Prov" + (i+1), (String) provs.get(i)[0]);
+						idsProv.put("Prov" + (i+1), (Long) provs.get(i)[1]);
+					}			
+					
+					provsLocales = rr.getProveedoresLocalesVentas(desde, hasta, idVendedor);
+					for (int i = 0; i < provsLocales.size(); i++) {
+						paramsProvLoc.put("Prov" + (i+1), (String) provsLocales.get(i)[0]);
+						idsProvLoc.put("Prov" + (i+1), (Long) provsLocales.get(i)[1]);
+					}	
+					
+					for (Object[] cliente : emps) {
+						long idCliente = (long) cliente[9];
+						for (int i = 0; i < provs.size(); i++) {
+							long idProv = idsProv.get("Prov" + (i+1));
+							double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
+							montosProv.put((String) cliente[1] + "Prov" + (i+1), importe);
+						}
+					}
+					
+					for (Object[] cliente : emps) {
+						long idCliente = (long) cliente[9];
+						for (int i = 0; i < provsLocales.size(); i++) {
+							long idProv = idsProvLoc.get("Prov" + (i+1));
+							double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
+							montosProv.put((String) cliente[1] + "ProvLocal", importe);
+						}
+					}
+				}				
+				
+				for (Object[] cliente : emps) {					
+					long idCliente = (long) cliente[9];
+					List<Object[]> ventas = rr.get_Ventas(desde, hasta, idCliente);
+					List<Object[]> notasCred = rr.get_NotasCredito(desde, hasta, idCliente);
+					
+					System.out.println("--- total ventas cliente: " + ventas.size());
+					
+					for (Object[] venta : ventas) {
+						long idVend = (long) venta[7];
+						if (idVend == idVendedor) {
+							Date fecha = (Date) venta[1];
+							double totalImporteGs = (double) venta[6];
+							int mes = Utiles.getNumeroMes_(fecha);
+							String key = idCliente + "-" + mes;
+							
+							System.out.println(key + " " + totalImporteGs);
+							
+							Object[] acum = values.get(key);
+							if (acum != null) {
+								double importe = (double) acum[0];
+								importe += totalImporteGs;
+								values.put(key, new Object[] { importe, mes, cliente[1] });
+							} else {
+								values.put(key,
+										new Object[] { totalImporteGs, mes, cliente[1] });
+							}	
+						}											
+					}
+					
+					for (Object[] nc : notasCred) {
+						long idVend = (long) nc[7];
+						if (idVend == idVendedor) {
+							Date fecha = (Date) nc[1];
+							double totalImporteGs = (double) nc[6];
+							int mes = Utiles.getNumeroMes_(fecha);
+							String key = idCliente + "-" + mes;
+							
+							Object[] acum = values.get(key);
+							if (acum != null) {
+								double importe = (double) acum[0];
+								importe -= totalImporteGs;
+								values.put(key, new Object[] { importe, mes, cliente[1] });
+							} else {
+								values.put(key,
+										new Object[] { (totalImporteGs * -1), mes, cliente[1] });
+							}
+							
+							Double tot = montosNcr.get(cliente[1] + "");
+							if (tot != null) {
+								tot += totalImporteGs;
+								montosNcr.put(cliente[1] + "", tot);
+							} else {
+								montosNcr.put(cliente[1] + "", totalImporteGs);
+							}
+						}											
+					}
+					
+					if (ventas.size() == 0) {
+						String key = idCliente + "-" + 0;
+						values.put(key, new Object[] { 0.0, 0, cliente[1] });
+					}					
+					//System.out.println(cliente[1]);					
+				}				
+				
+				List<Object[]> data = new ArrayList<Object[]>();
+				
+				for (String key : values.keySet()) {
+					Object[] value = values.get(key);
+					double importe = (double) value[0];
+					int mes = (int) value[1];
+					String cliente = (String) value[2];
+					
+					double p1 = montosProv.get(cliente + "Prov1") != null ? montosProv.get(cliente + "Prov1") : 0.0;
+					double p2 = montosProv.get(cliente + "Prov2") != null ? montosProv.get(cliente + "Prov2") : 0.0;
+					double p3 = montosProv.get(cliente + "Prov3") != null ? montosProv.get(cliente + "Prov3") : 0.0;
+					double p4 = montosProv.get(cliente + "Prov4") != null ? montosProv.get(cliente + "Prov4") : 0.0;
+					double p5 = montosProv.get(cliente + "Prov5") != null ? montosProv.get(cliente + "Prov5") : 0.0;
+					double p6 = montosProv.get(cliente + "Prov6") != null ? montosProv.get(cliente + "Prov6") : 0.0;
+					double p7 = montosProv.get(cliente + "Prov7") != null ? montosProv.get(cliente + "Prov7") : 0.0;
+					double p8 = montosProv.get(cliente + "Prov8") != null ? montosProv.get(cliente + "Prov8") : 0.0;
+					double p9 = montosProv.get(cliente + "Prov9") != null ? montosProv.get(cliente + "Prov9") : 0.0;
+					double p10 = montosProv.get(cliente + "ProvLocal") != null ? montosProv.get(cliente + "ProvLocal") : 0.0;
+					double ncs = montosNcr.get(cliente) != null ? (montosNcr.get(cliente)) : 0.0;
+					
+					Object[] value_ = values_.get(cliente);
+					if (value_ != null) {
+						value_[mes] = importe;
+						values_.put(cliente, value_);
+					} else {
+						Object[] datos = new Object[] { (double) 0, (double) 0,
+								(double) 0, (double) 0, (double) 0, (double) 0,
+								(double) 0, (double) 0, (double) 0, (double) 0,
+								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, ncs};
+						datos[mes] = importe;
+						values_.put(cliente, datos);
+					}
+				}
+				
+				for (String key : values_.keySet()) {
+					Object[] value_ = values_.get(key);
+					
+					double total = (double) value_[0] + (double) value_[1]
+							+ (double) value_[2] + (double) value_[3]
+							+ (double) value_[4] + (double) value_[5]
+							+ (double) value_[6] + (double) value_[7]
+							+ (double) value_[8] + (double) value_[9]
+							+ (double) value_[10] + (double) value_[11];
+					data.add(new Object[] { 
+							key.toUpperCase(), value_[0], value_[1], value_[2], value_[3], value_[4],
+							value_[5], value_[6], value_[7], value_[8], value_[9], value_[10], value_[11], total,
+							(double) value_[12], (double) value_[13], (double) value_[14], (double) value_[15],
+							(double) value_[16], (double) value_[17], (double) value_[18], (double) value_[19],
+							(double) value_[20], (double) value_[21], (double) value_[22] });
+				}
+				String format = (String) formato[0];
+				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_HISTORIAL;
+				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
+				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
+				if (format.equals(csv) || format.equals(xls)) {
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_HISTORIAL;
+				}
+				Map<String, Object> params = new HashMap<String, Object>();
+				JRDataSource dataSource = new VentasPorClienteProveedorDataSource(data);
+				params.put("Titulo", codReporte + " - Ventas por Clientes por Mes - Según historial de ventas (Importes Sin Iva)");
 				params.put("Usuario", getUs().getNombre());
 				params.put("Desde", Utiles.getDateToString(desde, Utiles.DD_MM_YYYY));
 				params.put("Hasta", Utiles.getDateToString(hasta, Utiles.DD_MM_YYYY));
