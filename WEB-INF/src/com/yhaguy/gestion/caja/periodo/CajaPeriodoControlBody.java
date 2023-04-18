@@ -42,6 +42,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloFamilia;
+import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Caja;
 import com.yhaguy.domain.CajaPeriodo;
@@ -2684,6 +2685,18 @@ public class CajaPeriodoControlBody extends BodyApp {
 				value = Utiles.getDateToString(item.getFormaPago().getChequeFecha(), Utiles.DD_MM_YYYY);
 			} else if ("DescFactura".equals(fieldName)) {
 				value = item.getFormaPago().getDescripcion();
+				if (item.getFormaPago().isChequePropio()) {					
+					try {
+						RegisterDomain rr = RegisterDomain.getInstance(); 
+						BancoCheque cheq = rr.getChequePropio(item.getFormaPago().getId());
+						if (cheq != null) {
+							value += " - " + cheq.getBeneficiario().toUpperCase();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
 			} else if ("Importe".equals(fieldName)) {
 				double importe = item.getFormaPago().getMontoGs();
 				value = Utiles.getNumberFormat(importe);

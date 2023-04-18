@@ -10479,7 +10479,6 @@ public class RegisterDomain extends Register {
 				+ " from Cliente c where EXISTS (select vt.id from Venta vt where vt.tipoMovimiento.id in (18,19) "
 				+ " and vt.fecha > '2022-01-01 00:00:00' and vt.vendedor.id = " + idVendedor + " and vt.cliente.id = c.id) "
 				+ " and c.estado = '" + Cliente.ACTIVO + "' order by c.empresa.razonSocial";
-		System.out.println(query);
 		return this.hql(query);
 	}
 	
