@@ -798,7 +798,7 @@ public class Configuracion extends Config {
 	public static String SIGLA_IMPORTACION_TIPO_1 = "IMP-FOB";
 	public static String SIGLA_IMPORTACION_TIPO_2 = "IMP-CIF";
 	public static String SIGLA_IMPORTACION_TIPO_3 = "IMP-C&F";
-	public static String SIGLA_IMPORTACION_TIPO_4 = "IMP-EXWORK";
+	public static String SIGLA_IMPORTACION_TIPO_4 = "IMP-EXWORKS";
 	public static String SIGLA_RUBRO_EMPRESA_FUNCIONARIO = "RUB-EMP-FUN";
 	public static String SIGLA_RUBRO_EMPRESA_CONSUMIDOR_FINAL = "RUB-EMP-CON-FIN";
 	public static String SIGLA_RUBRO_EMPRESA_MAYORISTA_BATERIAS = "RUB-EMP-MAY-BAT";
