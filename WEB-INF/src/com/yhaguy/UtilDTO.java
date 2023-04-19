@@ -431,6 +431,7 @@ public class UtilDTO extends UtilCoreDTO {
 	MyPair tipoImportacionFOB = new MyPair();
 	MyPair tipoImportacionCIF = new MyPair();
 	MyPair tipoImportacionCF = new MyPair();
+	MyPair tipoImportacionEXW = new MyPair();
 
 	// Reglas de precios
 	MyPair reglaCliente = new MyPair();
@@ -3196,5 +3197,13 @@ public class UtilDTO extends UtilCoreDTO {
 
 	public void setCondicionPagoCreditoContraEntrega(MyArray condicionPagoCreditoContraEntrega) {
 		this.condicionPagoCreditoContraEntrega = condicionPagoCreditoContraEntrega;
+	}
+
+	public MyPair getTipoImportacionEXW() {
+		return tipoImportacionEXW;
+	}
+
+	public void setTipoImportacionEXW(MyPair tipoImportacionEXW) {
+		this.tipoImportacionEXW = tipoImportacionEXW;
 	}
 }

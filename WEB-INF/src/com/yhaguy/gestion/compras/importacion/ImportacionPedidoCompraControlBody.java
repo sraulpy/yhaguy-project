@@ -1678,6 +1678,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		MyPair tipoSelected = this.tipoSelected;
 		MyPair tipoCIF = utilDto.getTipoImportacionCIF();
 		MyPair tipoFOB = utilDto.getTipoImportacionFOB();
+		MyPair tipoEXW = utilDto.getTipoImportacionEXW();
 		MyPair tipoCF = utilDto.getTipoImportacionCF();
 		boolean prorrateado = this.prorrateado;
 		
@@ -1716,7 +1717,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		}
 		
 		//Si el tipo es FOB
-		if ((tipoSelected.compareTo(tipoFOB) == 0)
+		if (((tipoSelected.compareTo(tipoFOB) == 0) || (tipoSelected.compareTo(tipoEXW) == 0))
 				&& (itemProrrFlete != null || itemProrrSeguro != null
 						|| itemGastoFlete != null || itemGastoSeguro != null)) {
 			out = false;
@@ -2596,9 +2597,10 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		
 		MyPair tipo = this.dto.getTipo();
 		MyPair tipoFOB = utilDto.getTipoImportacionFOB();
+		MyPair tipoEXW = utilDto.getTipoImportacionEXW();
 		double cambio = this.dto.getResumenGastosDespacho().getTipoCambio();
 		
-		if (tipo.compareTo(tipoFOB) == 0) {
+		if (tipo.compareTo(tipoFOB) == 0 || tipo.compareTo(tipoEXW) == 0) {
 			return valorFleteGs;
 		} else {
 			double valor = this.getValorFleteDs();
@@ -2615,8 +2617,9 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		
 		MyPair tipo = this.dto.getTipo();
 		MyPair tipoFOB = utilDto.getTipoImportacionFOB();
+		MyPair tipoEXW = utilDto.getTipoImportacionEXW();
 		
-		if (tipo.compareTo(tipoFOB) == 0) {
+		if (tipo.compareTo(tipoFOB) == 0 || tipo.compareTo(tipoEXW) == 0) {
 			return valorFleteDs;
 		} else {
 			return this.getValoresFromFacturas()[1];
@@ -2770,7 +2773,8 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 					valorCIFgs += item.getImporteGsCalculado();
 					valorCIFds += item.getImporteDsCalculado();				
 					
-				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)) {
+				} else if (this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_FOB)
+						|| this.dto.getTipo().getText().equals(ImportacionPedidoCompra.TIPO_EXW)) {
 					// para representaciones toma el valor bruto..
 					if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
 						if (!item.getArticulo().getPos6().toString().equals(ArticuloFamilia.CONTABILIDAD)) {
@@ -2945,11 +2949,12 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 		
 		MyPair tipo = this.dto.getTipo();
 		MyPair tipoFOB = utilDto.getTipoImportacionFOB();
+		MyPair tipoEXW = utilDto.getTipoImportacionEXW();
 		
 		if (this.isDeshabilitado() == true) {
 			return false;
 		} else {
-			return tipo.compareTo(tipoFOB) == 0;
+			return tipo.compareTo(tipoFOB) == 0 || tipo.compareTo(tipoEXW) == 0;
 		}		
 	}
 	

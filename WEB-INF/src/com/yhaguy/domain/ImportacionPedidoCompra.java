@@ -19,6 +19,7 @@ public class ImportacionPedidoCompra extends Domain {
 	public static final String TIPO_FOB = "FOB";
 	public static final String TIPO_CPT = "CPT";
 	public static final String TIPO_CIP = "CIP";
+	public static final String TIPO_EXW = "EXWORK";
 	
 	private String numeroPedidoCompra;
 	private Date fechaCreacion;

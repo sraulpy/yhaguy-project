@@ -1226,10 +1226,13 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 				.getTipoPorSigla(Configuracion.SIGLA_IMPORTACION_TIPO_2);
 		Tipo tipoImportacion3 = rr
 				.getTipoPorSigla(Configuracion.SIGLA_IMPORTACION_TIPO_3);
+		Tipo tipoImportacion4 = rr
+				.getTipoPorSigla(Configuracion.SIGLA_IMPORTACION_TIPO_4);
 
 		dto.setTipoImportacionFOB(this.tipoToMyPair(tipoImportacion1));
 		dto.setTipoImportacionCIF(this.tipoToMyPair(tipoImportacion2));
 		dto.setTipoImportacionCF(this.tipoToMyPair(tipoImportacion3));
+		dto.setTipoImportacionEXW(this.tipoToMyPair(tipoImportacion4));
 
 		// Motivos de Nota de Crédito
 		List<Tipo> motivosNotaCredito = rr
