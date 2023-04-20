@@ -9,6 +9,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
@@ -174,7 +175,7 @@ public class ClienteControlBody extends EmpresaControlBody {
 	
 	@Command
 	@NotifyChange("*")
-	public void selectRucSet(@BindingParam("comp") Popup comp) {
+	public void selectRucSet(@BindingParam("comp") Popup comp, @BindingParam("validar") boolean validar) {
 		String ruc = this.selectedRucSet.getRuc();
 		
 		this.dto.getEmpresa().setRazonSocial("");
@@ -183,10 +184,12 @@ public class ClienteControlBody extends EmpresaControlBody {
 		this.dto.getEmpresa().setNombre("");
 		this.dto.getEmpresa().setFechaAniversario(null);
 		
-		if (!this.validarNumeroDocumento(ruc, "")) {
-			comp.close();
-			return;
-		}
+		if (validar) {
+			if (!this.validarNumeroDocumento(ruc, "")) {
+				comp.close();
+				return;
+			}
+		}		
 		
 		this.dto.getEmpresa().setRazonSocial(this.selectedRucSet.getRazonSocial());
 		this.dto.getEmpresa().setCi("");
@@ -207,6 +210,13 @@ public class ClienteControlBody extends EmpresaControlBody {
 			e.printStackTrace();
 		}		
 		comp.close();
+	}
+	
+	@Command
+	@NotifyChange("filterRuc")
+	public void openVerificar(@BindingParam("pop") Popup pop, @BindingParam("parent") Component parent) {
+		this.filterRuc = this.getDtoEmp().getRuc();
+		pop.open(parent, "after_start");		
 	}
 	
 	/**
@@ -396,6 +406,12 @@ public class ClienteControlBody extends EmpresaControlBody {
 		if (this.operacionHabilitada("ConsultarCtaCteClientesABM", ID.F_CLIENTE_ABM_BODY))
 			return false;
 		return true;
+	}
+	
+	@DependsOn({ "deshabilitado", "dto" })
+	public boolean isVerificarDisabled() throws Exception {
+		return this.isDeshabilitado() || this.dto.esNuevo() || this.dto.getRuc().isEmpty()
+				|| this.dto.getRuc().equals(Configuracion.RUC_EMPRESA_LOCAL);
 	}
 	
 	/**

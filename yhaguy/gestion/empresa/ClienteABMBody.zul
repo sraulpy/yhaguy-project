@@ -11,6 +11,11 @@
 			<button iconSclass="z-icon-search" label="Identificaciones" mold="bs"
 				sclass="btn-primary btn-sm" width="130px" onClick='pop_ident.open(self, "after_start")'
 				disabled="@load(!vm.dto.esNuevo())"></button>
+			<space></space>
+			<button iconSclass="z-icon-check" label="Verificar" mold="bs"
+				sclass="btn-primary btn-sm" width="130px" onClick="@command('openVerificar', pop=pop_verif, parent=self)"
+				disabled="@load(vm.verificarDisabled)"></button>
+			<space></space>
 		</hlayout>
 		<include src="/yhaguy/gestion/empresa/EmpresaBody.zul" vflex="1"/>
 		
@@ -19,7 +24,7 @@
 				model="@load(vm.rucSet)" rows="10"
 				emptyMessage="SIN REGISTROS"
 				selectedItem="@bind(vm.selectedRucSet)"
-				onSelect="@command('selectRucSet', comp=pop_set)">
+				onSelect="@command('selectRucSet', comp=pop_set, validar=true)">
 				<listhead>
 					<listheader width="100px">
 						<textbox hflex="1" placeholder="Ruc"
@@ -30,6 +35,33 @@
 						<textbox hflex="1" placeholder="Razón Social"
 							value="@bind(vm.filterRazonSocial)" instant="true">
 						</textbox>
+					</listheader>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell
+							label="@load(each.ruc)">
+						</listcell>
+						<listcell label="@load(each.razonSocial)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</popup>
+		
+		<popup id="pop_verif">
+			<listbox sclass="small-list" width="500px"
+				model="@load(vm.rucSet)" rows="10"
+				emptyMessage="SIN REGISTROS"
+				selectedItem="@bind(vm.selectedRucSet)"
+				onSelect="@command('selectRucSet', comp=pop_verif, validar=false)">
+				<listhead>
+					<listheader width="100px">
+						<textbox hflex="1" placeholder="Ruc"
+							value="@bind(vm.filterRuc)" instant="true"
+							readonly="true">
+						</textbox>
+					</listheader>
+					<listheader>
 					</listheader>
 				</listhead>
 				<template name="model">
