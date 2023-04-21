@@ -320,7 +320,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 			if (this.selectedPlanilla.getAnticipoAguinaldo3() > 0) {
 				importe = this.selectedPlanilla.getAnticipoAguinaldo3();
 			}
-			if (importe > 0) {
+			if (importe < 0) {
 				concepto = "anticipo de aguinaldo";
 			}
 		}
