@@ -46,6 +46,20 @@ public class CompraLocalFactura extends Domain {
 	}
 	
 	/**
+	 * @return la orden de compra..
+	 */
+	public CompraLocalOrden getOrdenCompra() {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			System.out.println("-- id: " + this.id);
+			return rr.getOrdenCompraByFactura(this.id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * recalcula los costos segun cotizacion..
 	 */
 	public void recalcularCotizacion() {

@@ -6659,7 +6659,7 @@ public class RegisterDomain extends Register {
 	 */
 	public CompraLocalOrden getOrdenCompraByFactura(long idFactura)
 			throws Exception {
-		String query = "select c from CompraLocalOrden c join c.facturas f where f in elements(c.facturas) and f.id = "
+		String query = "select c from CompraLocalOrden c where c.factura.id = "
 				+ idFactura;
 		List<CompraLocalOrden> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
@@ -15169,7 +15169,9 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			CompraLocalOrden c = rr.getOrdenCompraByFactura(1280);
+			System.out.println(c.getNumero());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -8160,12 +8160,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();		
 				List<Object[]> clientes = new ArrayList<Object[]>();
 				List<Object[]> emps = new ArrayList<Object[]>();
-				List<Object[]> provs = new ArrayList<Object[]>();
-				List<Object[]> provsLocales = new ArrayList<Object[]>();
 				Map<String, String> paramsProv = new HashMap<String, String>();
-				Map<String, String> paramsProvLoc = new HashMap<String, String>();
-				Map<String, Long> idsProv = new HashMap<String, Long>();
-				Map<String, Long> idsProvLoc = new HashMap<String, Long>();
 				Map<String, Double> montosProv = new HashMap<String, Double>();
 				Map<String, Double> montosNcr = new HashMap<String, Double>();
 				
@@ -12940,9 +12935,9 @@ public class ReportesViewModel extends SimpleViewModel {
 							m.dateToString(compra.getFechaOriginal(),
 									Utiles.DD_MM_YY), compra.getNumero(),
 							compra.getCondicionPago().getDescripcion().toUpperCase().substring(0, 3),
-							compra.getSucursal().getDescripcion(),
 							compra.getProveedor().getRazonSocial(),
-							Utiles.getRedondeo(compra.getImporteGs()) };
+							Utiles.getRedondeo(compra.getImporteGs()),
+							compra.getOrdenCompra().getObservacion().toUpperCase() };
 					data.add(cmp);
 				}
 				
@@ -12953,16 +12948,17 @@ public class ReportesViewModel extends SimpleViewModel {
 									m.dateToString(nc.getFechaEmision(),
 											Utiles.DD_MM_YY), nc.getNumero(),
 									"NC-" + nc.getCompraAplicada().getCondicionPago().getDescripcion().toUpperCase().substring(0, 3),
-									nc.getSucursal().getDescripcion(),
 									nc.getProveedor().getRazonSocial(),
-									Utiles.getRedondeo(nc.getImporteGs() * -1) };
+									Utiles.getRedondeo(nc.getImporteGs() * -1),
+									nc.getObservacion().toUpperCase() };
 							data.add(cmp);
 						}					
 					}
 				}
 
 				ReporteComprasGenerico rep = new ReporteComprasGenerico(desde, hasta);
-				rep.setDatosReporte(data);			
+				rep.setDatosReporte(data);	
+				rep.setApaisada();
 
 				ViewPdf vp = new ViewPdf();
 				vp.setBotonImprimir(false);
@@ -17478,9 +17474,9 @@ class ReporteComprasGenerico extends ReporteYhaguy {
 	static DatosColumnas col0 = new DatosColumnas("Fecha", TIPO_STRING, 25);
 	static DatosColumnas col1 = new DatosColumnas("Número", TIPO_STRING, 45);
 	static DatosColumnas col2 = new DatosColumnas("Cond.", TIPO_STRING, 25);
-	static DatosColumnas col3 = new DatosColumnas("Suc.", TIPO_STRING, 30);
 	static DatosColumnas col4 = new DatosColumnas("Razón Social", TIPO_STRING);
 	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
+	static DatosColumnas col7 = new DatosColumnas("Observaciones", TIPO_STRING);
 
 	public ReporteComprasGenerico(Date desde, Date hasta) {
 		this.desde = desde;
@@ -17491,9 +17487,9 @@ class ReporteComprasGenerico extends ReporteYhaguy {
 		cols.add(col0);
 		cols.add(col1);
 		cols.add(col2);
-		cols.add(col3);
 		cols.add(col4);
 		cols.add(col6);
+		cols.add(col7);
 	}
 
 	@Override
