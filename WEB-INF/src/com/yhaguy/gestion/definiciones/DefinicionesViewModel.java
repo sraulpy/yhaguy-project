@@ -99,6 +99,12 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	private AssemblerUtil ass = new AssemblerUtil();
 	
 	/**
+	 * Atributos de Compras
+	 */
+	private Tipo selectedCiudad;
+	private Tipo nuevaCiudad = new Tipo();
+	
+	/**
 	 * Atributos de Ventas
 	 */
 	private Tipo selectedZona;
@@ -158,6 +164,21 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	@Command
 	public void editTalonario() throws Exception {
 		this.showTalonario(false);
+	}
+	
+	@Command
+	@NotifyChange({ "ciudades", "nuevaCiudad", "selectedCiudad" })
+	public void addCiudad(@BindingParam("comp") Popup comp) throws Exception {
+		if (this.nuevaCiudad.getDescripcion() == null || this.nuevaCiudad.getDescripcion().trim().isEmpty()) {
+			return;
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		this.nuevaCiudad.setDescripcion(this.nuevaCiudad.getDescripcion().toUpperCase());
+		this.nuevaCiudad.setTipoTipo(rr.getTipoTipoPorDescripcion(Configuracion.ID_TIPO_CIUDADES));
+		rr.saveObject(this.nuevaCiudad, this.getLoginNombre());
+		this.nuevaCiudad = new Tipo();
+		comp.close();
+		Clients.showNotification("REGISTRO AGREGADO..");
 	}
 	
 	@Command
@@ -1437,6 +1458,24 @@ public class DefinicionesViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * @return las ciudades..
+	 */
+	public List<Tipo> getCiudades() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getTipos(Configuracion.ID_TIPO_CIUDADES, "descripcion");
+	}
+	
+	/**
+	 * @return los departamentos..
+	 */
+	public List<String> getDepartamentos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<String> out = rr.getDepartamentos();
+		out.add("EXTERIOR");
+		return out;
+	}
+	
+	/**
 	 * @return las zonas..
 	 */
 	public List<Tipo> getZonas() throws Exception {
@@ -1971,5 +2010,21 @@ public class DefinicionesViewModel extends SimpleViewModel {
 
 	public void setNuevaUbicacion(ArticuloUbicacion nuevaUbicacion) {
 		this.nuevaUbicacion = nuevaUbicacion;
+	}
+
+	public Tipo getSelectedCiudad() {
+		return selectedCiudad;
+	}
+
+	public void setSelectedCiudad(Tipo selectedCiudad) {
+		this.selectedCiudad = selectedCiudad;
+	}
+
+	public Tipo getNuevaCiudad() {
+		return nuevaCiudad;
+	}
+
+	public void setNuevaCiudad(Tipo nuevaCiudad) {
+		this.nuevaCiudad = nuevaCiudad;
 	}
 }

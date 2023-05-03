@@ -15167,6 +15167,14 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 100);
 	}
 	
+	/**
+	 * @return la lista de departamentos..
+	 */
+	public List<String> getDepartamentos() throws Exception {
+		String query = "select distinct(t.sigla) from Tipo t where t.tipoTipo.descripcion = '" + Configuracion.ID_TIPO_CIUDADES + "' order by 1";
+		return this.hql(query);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

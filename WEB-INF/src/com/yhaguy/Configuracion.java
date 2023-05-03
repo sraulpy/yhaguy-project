@@ -290,6 +290,7 @@ public class Configuracion extends Config {
 	public static final String ID_TIPO_BANCO_TARJETA_EXTRACTO_DETALLE = "Tipo de Detalle Banco Tarjeta Extracto";
 	public static final String ID_TIPO_ZONAS = "Zonas";
 	public static final String ID_TIPO_MARCAS_BATERIAS = "Marcas de Baterias";
+	public static final String ID_TIPO_CIUDADES = "CIUDADES";
 
 	public static final long ID_DEPOSITO_IMPORTACION = 2;
 	public static final long ID_DEPOSITO_PRINCIPAL = 2;

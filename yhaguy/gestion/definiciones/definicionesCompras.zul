@@ -4,8 +4,53 @@
 		<tab label="Ítems de Gastos" />
 	</tabs>
 	<tabpanels>
-		<tabpanel>
-			DEFINICIONES DE PROVEEDORES..
+		<tabpanel style="padding:10px">
+			<tabbox vflex="1">
+				<tabs>
+					<tab label="Ciudades" width="100px" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<hlayout sclass="button-container">
+							<button mold="bs"
+								sclass="btn-primary btn-sm" width="130px"
+								iconSclass="z-icon-plus" label=" Agregar"
+								onClick='pop_add_ciudad.open(self, "after_start")' />
+						</hlayout>
+						<listbox vflex="1" sclass="small-list"
+							model="@load(vm.ciudades)"
+							mold="paging" pageSize="18">
+							<listhead>
+								<listheader>Descripción</listheader>
+								<listheader>Departamento</listheader>
+							</listhead>
+							<template name="model">
+								<listitem>
+									<listcell label="@load(each.descripcion)"></listcell>
+									<listcell label="@load(each.sigla)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+			<popup id="pop_add_ciudad" width="400px" sclass="rounded">
+				<hlayout>
+					<textbox hflex="true" placeholder="Descripción.."
+						value="@bind(vm.nuevaCiudad.descripcion)">
+					</textbox>
+					<combobox hflex="true" placeholder="Departamento"
+						value="@bind(vm.nuevaCiudad.sigla)"
+						model="@load(vm.departamentos)">
+						<template name="model">
+							<comboitem label="@load(each)"></comboitem>
+						</template>
+					</combobox>
+					<button mold="bs" sclass="btn-success btn-xs"
+						width="50px" iconSclass="z-icon-check" vflex="true"
+						onClick="@command('addCiudad', comp=pop_add_ciudad)" />
+				</hlayout>
+			</popup>
 		</tabpanel>
 		<tabpanel>
 			DEFINICIONES ÍTEMS DE GASTOS..
