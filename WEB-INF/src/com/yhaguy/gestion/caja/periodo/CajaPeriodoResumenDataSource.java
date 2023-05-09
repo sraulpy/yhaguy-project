@@ -1032,7 +1032,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			double repEgresos = this.totalRepEgresos;
 			if (repEgresos > 0) repEgresos = repEgresos * -1; 
 			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo
-					- this.totalRepEgresos) * -1);
+					+ repEgresos) * -1);
 		} else if ("TotalRecUSDGS".equals(fieldName)) {
 			value = FORMATTER.format(this.totalDolaresGuaranies);
 		} else if ("TotalDepBancarios_".equals(fieldName)) {
