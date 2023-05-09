@@ -1014,7 +1014,7 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 		} else if ("TotalGastosEfe".equals(fieldName)) {
 			value = FORMATTER.format(this.totalGastosEfectivo * -1);
 		} else if ("TotalEgresos".equals(fieldName)) {
-			value = FORMATTER.format(this.totalRepEgresos);
+			value = FORMATTER.format(this.totalRepEgresos * -1);
 		} else if ("TotalRecMra".equals(fieldName)) {
 			value = FORMATTER.format(this.totalRecaudacionMra);
 		} else if ("TotalRetProv".equals(fieldName)) {
@@ -1029,6 +1029,8 @@ public class CajaPeriodoResumenDataSource implements JRDataSource {
 			value = FORMATTER.format(this.totalVentaContadoEfectivo + this.totalCobranzaEfectivo
 					+ this.totalAnticipoEfectivo + this.totalCancelacionChequeEfectivo + this.totalNotaCreditoCompra);
 		} else if ("TotalEgresoEfe".equals(fieldName)) {
+			double repEgresos = this.totalRepEgresos;
+			if (repEgresos > 0) repEgresos = repEgresos * -1; 
 			value = FORMATTER.format((this.totalNotaCreditoContado + this.totalGastosEfectivo + this.totalPagosEfectivo
 					- this.totalRepEgresos) * -1);
 		} else if ("TotalRecUSDGS".equals(fieldName)) {
