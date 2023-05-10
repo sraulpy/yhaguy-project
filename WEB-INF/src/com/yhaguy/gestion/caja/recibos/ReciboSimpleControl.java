@@ -142,6 +142,9 @@ public class ReciboSimpleControl extends SoloViewModel {
 	@Command
 	@NotifyChange("*")
 	public void addDetalleCuentaContable(@BindingParam("comp") Popup comp) {
+		if (!this.dato.getReciboDTO().isMonedaLocal()) {
+			this.nvoItem_ct.setMontoGs(this.nvoItem_ct.getMontoDs() * this.dato.getReciboDTO().getTipoCambio());
+		}
 		this.dato.getReciboDTO().getDetalles().add(this.nvoItem_ct);
 		this.inicializarItemCuentaContable();
 		comp.close();

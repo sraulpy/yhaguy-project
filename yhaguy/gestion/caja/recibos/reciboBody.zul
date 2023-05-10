@@ -16,6 +16,7 @@
 						readonly="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')"
 						visible="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')" />
 				</vlayout>
+				<hlayout>
 				<vlayout spacing="0">
 					<field value="Fecha" />
 					<datebox
@@ -42,6 +43,7 @@
 							hflex="true" />
 					</hlayout>
 				</vlayout>
+				</hlayout>
 				<hlayout>
 					<vlayout spacing="0" hflex="true">
 						<field value="T. Cambio" />
@@ -61,6 +63,10 @@
 						</combobox>
 					</vlayout>
 				</hlayout>
+				<vlayout spacing="0">
+					<field value="Observación" />
+					<textbox hflex="true" />
+				</vlayout>
 			</row>
 
 			<row>
@@ -367,8 +373,15 @@
 						</listbox>
 					</bandpopup>
 				</bandbox>
-				<doublebox id="dbx_monto" value="@bind(vm.nvoItem_ct.montoGs)" format="###,###,###" />
-				<field value="Gs." />
+				<doublebox id="dbx_monto" value="@bind(vm.nvoItem_ct.montoGs)" 
+					format="###,###,###" 
+					visible="@load(vm.dato.reciboDTO.monedaLocal)" />
+				<doublebox value="@bind(vm.nvoItem_ct.montoDs)" 
+					format="###,###,###.##" 
+					visible="@load(!vm.dato.reciboDTO.monedaLocal)" />
+				<field value="@load(vm.dato.reciboDTO.monedaLocal ? 'Gs.' : 'U$D')" />
+				<space></space>
+				
 			</hlayout>
 			<div height="5px"></div>
 			<button mold="bs" sclass="btn-primary btn-sm"
