@@ -28,6 +28,7 @@ public class CajaPeriodo extends Domain {
 	public static final String TIPO_CHICA_REQUERIMIENTOS = "CAJA CHICA - REQUERIMIENTOS";
 	public static final String TIPO_CHICA_REPOSICION = "CAJA CHICA - REPOSICION";
 	public static final String TIPO_VIATICOS = "CAJA VIATICOS";
+	public static final String TIPO_PAGOS_DEPURACION = "DEPURACION DE PAGOS";
 
 	private String numero;
 	private Date apertura;
@@ -90,6 +91,7 @@ public class CajaPeriodo extends Domain {
 		out.add(TIPO_COBROS_MOBILE);
 		out.add(TIPO_COBROS_MOBILE_INT);
 		out.add(TIPO_PAGOS_EXTERIOR);
+		out.add(TIPO_PAGOS_DEPURACION);
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
 			out.add(TIPO_COMPRAS_NEUMATICOS);
 			out.add(TIPO_DEBITOS_CENTRAL);

@@ -2605,9 +2605,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 								+ AutoNumeroControl.getAutoNumero(Configuracion.NRO_CANCELACION_CHEQUE_RECHAZADO, 5);
 						rec.setNumero(nro);
 					} else {
-						String nro = Configuracion.NRO_RECIBO_PAGO
+						String pref = this.dto.getTipo().equals(CajaPeriodo.TIPO_PAGOS_DEPURACION) ? 
+								Configuracion.NRO_RECIBO_PAGO : Configuracion.NRO_RECIBO_PAGO_DEPURACION;
+						String nro = pref
 								+ "-"
-								+ AutoNumeroControl.getAutoNumero(Configuracion.NRO_RECIBO_PAGO, 5);
+								+ AutoNumeroControl.getAutoNumero(pref, 5);
 						rec.setNumero(nro);
 						for (ReciboFormaPagoDTO fp : rec.getFormasPago()) {
 							if (fp.isChequePropio()) {
