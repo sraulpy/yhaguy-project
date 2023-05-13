@@ -13,7 +13,7 @@ public class Configuracion extends Config {
 	/********************************************************************************************/
 	public static String PATH_SESSION = ".";
 
-	public static String empresa = Configuracion.EMPRESA_YRSA;
+	public static String empresa = Configuracion.EMPRESA_GRUPAUTO;
 	
 	public static final String EMPRESA_GTSA = "Grupo Toyo S.A.";
 	public static final String EMPRESA_YRSA = "Yhaguy Repuestos S.A.";
@@ -181,6 +181,7 @@ public class Configuracion extends Config {
 	public static final String NRO_TRANSFERENCIA_INTERNA = "TRF-INT";
 	public static final String NRO_TRANSFERENCIA_EXTERNA = "TRF-EXT";
 	public static final String NRO_RECIBO_PAGO = "REC-PAG";
+	public static final String NRO_RECIBO_PAGO_DEPURACION = "REC-PAG-DEP";
 	public static final String NRO_RECIBO_COBRO = "REC-COB";
 	public static final String NRO_RECIBO_COBRO_MOBILE = "REC-COB-MOB";
 	public static final String NRO_CANCELACION_CHEQUE_RECHAZADO = "CAN-CHQ";
