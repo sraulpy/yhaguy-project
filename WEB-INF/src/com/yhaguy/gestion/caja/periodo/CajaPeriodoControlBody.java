@@ -2606,7 +2606,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 						rec.setNumero(nro);
 					} else {
 						String pref = this.dto.getTipo().equals(CajaPeriodo.TIPO_PAGOS_DEPURACION) ? 
-								Configuracion.NRO_RECIBO_PAGO : Configuracion.NRO_RECIBO_PAGO_DEPURACION;
+								Configuracion.NRO_RECIBO_PAGO_DEPURACION : Configuracion.NRO_RECIBO_PAGO;
 						String nro = pref
 								+ "-"
 								+ AutoNumeroControl.getAutoNumero(pref, 5);
