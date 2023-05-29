@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo " pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
 	<property name="ireport.zoom" value="1.8150000000000015"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="34"/>
 	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -27,6 +27,7 @@
 	<parameter name="Generado" class="java.lang.String"/>
 	<parameter name="Moneda" class="java.lang.String"/>
 	<parameter name="Moneda_" class="java.lang.String"/>
+	<parameter name="Emision" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '1' "Cuenta", '1' "Nivel", 'Activo' "Desc Cuenta", null "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
 from plancuenta where id = '1'
@@ -90,7 +91,7 @@ from plancuenta where id = '1']]>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="104" splitType="Stretch">
+		<band height="118" splitType="Stretch">
 			<image>
 				<reportElement x="1" y="0" width="152" height="31" uuid="429de492-610d-438e-ab36-c3bdc07e7cd4"/>
 				<imageExpression><![CDATA[$F{logo}]]></imageExpression>
@@ -173,6 +174,18 @@ from plancuenta where id = '1']]>
 				</textElement>
 				<text><![CDATA[Importe:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="2" y="99" width="58" height="15" forecolor="#736343" uuid="0eeb98a4-2081-4414-9368-d8bcc294dae6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[Emisión:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="99" width="111" height="15" uuid="7d9eaa8f-713a-408c-b56f-371091acb56f"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Emision}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
