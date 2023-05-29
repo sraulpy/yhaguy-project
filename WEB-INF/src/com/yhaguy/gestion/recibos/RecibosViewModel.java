@@ -45,14 +45,24 @@ import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
 import com.yhaguy.inicio.AccesoDTO;
 import com.yhaguy.process.ProcesosTesoreria;
+import com.yhaguy.util.EnviarCorreo;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @SuppressWarnings("unchecked")
 public class RecibosViewModel extends SimpleViewModel {
@@ -86,7 +96,7 @@ public class RecibosViewModel extends SimpleViewModel {
 	private Date fechaCierre;
 	
 	private Window win;
-	
+		
 	@Wire
 	private Popup popDetalleRecibo;
 
@@ -252,6 +262,36 @@ public class RecibosViewModel extends SimpleViewModel {
 		Clients.showNotification("RECIBO ANULADO");
 	}
 	
+	@Command
+	public void sendRecibo() {		
+		String destino = (String) this.selectedItem.getPos14();
+		boolean valido = true;
+		if (!valido) {
+			return;
+		}
+		
+		String[] send = new String[] { destino };
+		String[] sendCC = new String[] { "estelap@yhaguyrepuestos.com.py", "vanesar@yhaguyrepuestos.com.py",
+				"rodrigol@yhaguyrepuestos.com.py", "lportillo@yhaguyrepuestos.com.py" };
+		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		try {		
+			
+			this.generatePDF();
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");			
+			EnviarCorreo enviarCorreo = new EnviarCorreo();			
+			enviarCorreo.sendMessage(send, sendCC, sendCCO,
+					"Recibo Digital - Yhaguy Repuestos S.A.", "Estimado Cliente: " + this.selectedItem.getPos3()
+					+ "\n Adjunto el Recibo Nro. " + this.reciboDto.getNumero()
+					+ "\n de fecha: " + Utiles.getDateToString((Date) this.selectedItem.getPos1(), "dd-MM-yyyy") + "\n"
+					+ "\n Yhaguy Repuestos S.A. - Recibo Digital",
+					"", "", "ReciboDigital" + ".pdf",
+					root + "/yhaguy/archivos/recibos/" + this.reciboDto.getNumero() + ".pdf");	
+			Clients.showNotification("Correo Enviado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@DependsOn({ "filterFechaDD", "filterFechaMM", "filterFechaAA",
 			"filterNumero", "filterRazonSocial", "filterRuc", 
 			"filterCaja", "selectedFiltro", "filterCobrador" })
@@ -326,6 +366,7 @@ public class RecibosViewModel extends SimpleViewModel {
 			my.setPos11(recibo.getCobrador());
 			my.setPos12(recibo.getMoneda().getDescripcion());
 			my.setPos13(recibo.getTipoCambio());
+			my.setPos14(recibo.getCliente().getEmpresa().getCorreo_());
 			out.add(my);
 			this.totalImporteGs += recibo.getTotalImporteGs();
 		}
@@ -382,6 +423,39 @@ public class RecibosViewModel extends SimpleViewModel {
 	}
 	
 	/**
+	 * genera el PDF.
+	 */
+	private void generatePDF() throws Exception {
+		this.reciboDto = (ReciboDTO) this.getDTOById(Recibo.class.getName(), this.selectedItem.getId(), new AssemblerRecibo());
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("title", "RECIBO DIGITAL");
+		params.put("fieldRazonSocial", this.reciboDto.isCobro() ? "Recibí de:" : "A la Orden de:");
+		params.put("RazonSocial", this.reciboDto.getRazonSocial());
+		params.put("Ruc", this.reciboDto.getRuc());
+		params.put("NroRecibo", this.reciboDto.getNumero());
+		params.put("ImporteEnLetra", this.reciboDto.getImporteEnLetras());
+		params.put("TotalImporteGs", Utiles.getNumberFormat(this.reciboDto.getTotalImporteGs()));
+		
+		try {
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");
+			JasperDesign jasperDesign = JRXmlLoader.load(root + "/reportes/jasper/ReciboDigital.jrxml");
+            JasperReport jasperReport =(JasperReport)JasperCompileManager.compileReport(jasperDesign);
+            
+            DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
+            JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.awt.ignore.missing.font","true");
+            
+            JRDataSource dataSource = new ReciboDataSource();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource);
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, root + "/yhaguy/archivos/recibos/" + this.reciboDto.getNumero() + ".pdf");
+	        
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	/**
 	 * Despliega el comprobante en un pdf para su impresion..
 	 */
 	public void imprimirComprobante(String source,
@@ -403,6 +477,8 @@ public class RecibosViewModel extends SimpleViewModel {
 	class ReciboDataSource implements JRDataSource {
 
 		List<MyArray> detalle = new ArrayList<MyArray>();
+		
+		String root = Sessions.getCurrent().getWebApp().getRealPath("/");
 
 		public ReciboDataSource() {
 			for (ReciboDetalleDTO item : reciboDto.getDetalles()) {
@@ -443,6 +519,11 @@ public class RecibosViewModel extends SimpleViewModel {
 				value = Utiles.getNumberFormat(importe);
 			} else if ("TipoDetalle".equals(fieldName)) {
 				value = item.getPos4();
+			}  else if ("logo".equals(fieldName)) {
+				value = root + "/logo.png";
+			} else if ("dCarQR".equals(fieldName)) {
+				value = getCurrentURL() + "/archivos/recibos/" + reciboDto.getNumero() + ".pdf";
+				System.out.println(value);
 			}
 			return value;
 		}
@@ -578,6 +659,17 @@ public class RecibosViewModel extends SimpleViewModel {
 		if (this.filterFechaMM.isEmpty() && this.filterFechaDD.isEmpty())
 			return this.filterFechaAA;
 		return this.filterFechaAA + "-" + this.filterFechaMM + "-" + this.filterFechaDD;
+	}
+	
+	/**
+	 * @return url
+	 */
+	private String getCurrentURL() {
+		String port = (Executions.getCurrent().getServerPort() == 80) ? ""
+				: (":" + Executions.getCurrent().getServerPort());
+		String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port
+				+ Executions.getCurrent().getContextPath();
+		return url;
 	}
 	
 	@DependsOn({ "detalle", "fechaCierre" })

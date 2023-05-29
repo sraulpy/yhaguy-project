@@ -22,20 +22,20 @@ import com.yhaguy.domain.Tarea_Programada;
 public class EnviarCorreo {
 	
 	static final String SMTP_HOST_NAME_GMAIL = "smtp.gmail.com";
-	static final String SMTP_PORT_GMAIL = "587";
+	static final String SMTP_PORT_GMAIL = "465";
 	static final String SMTP_START_TLS_ENABLE_GMAIL = "true";
 	static final String EMAIL_FROM_GMAIL = "yhaguysys@gmail.com";
-	static final String EMAIL_FROM_PASSWORD_GMAIL = "yhaguyserversystem123";
+	static final String EMAIL_FROM_PASSWORD_GMAIL = "iljwvytmzwdbcusz";
 	
-	private static String SMTP_HOST_NAME = "mail.yhaguyrepuestos.com.py";
-	private static String SMTP_PORT = "465";
-	private static String SMTP_START_TLS_ENABLE = "true";
+	//private static String SMTP_HOST_NAME = "mail.yhaguyrepuestos.com.py";
+	//private static String SMTP_PORT = "465";
+	//private static String SMTP_START_TLS_ENABLE = "true";
 	private static String EMAIL_FROM = "sistemagestion@yhaguyrepuestos.com.py";
 	private static String EMAIL_FROM_PASSWORD = "YhagY_1820";
 	
-	private static final String SMTP_HOST_NAME_GT = "mail.gtsa.com.py";
-	private static final String SMTP_PORT_GT = "465";
-	private static final String SMTP_START_TLS_ENABLE_GT = "true";
+	//private static final String SMTP_HOST_NAME_GT = "mail.gtsa.com.py";
+	//private static final String SMTP_PORT_GT = "465";
+	//private static final String SMTP_START_TLS_ENABLE_GT = "true";
 	private static final String EMAIL_FROM_GT = "sistema@gtsa.com.py";
 	private static final String EMAIL_FROM_PASSWORD_GT = "gtsa0985";
 	
@@ -46,9 +46,9 @@ public class EnviarCorreo {
 	
 	public EnviarCorreo() {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
-			SMTP_HOST_NAME = SMTP_HOST_NAME_GT;
-			SMTP_PORT = SMTP_PORT_GT;
-			SMTP_START_TLS_ENABLE = SMTP_START_TLS_ENABLE_GT;
+			//SMTP_HOST_NAME = SMTP_HOST_NAME_GT;
+			//SMTP_PORT = SMTP_PORT_GT;
+			//SMTP_START_TLS_ENABLE = SMTP_START_TLS_ENABLE_GT;
 			EMAIL_FROM = EMAIL_FROM_GT;
 			EMAIL_FROM_PASSWORD = EMAIL_FROM_PASSWORD_GT;
 		}
@@ -57,9 +57,9 @@ public class EnviarCorreo {
 	public EnviarCorreo(Tarea_Programada tarea) {
 		this.tarea = tarea;
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
-			SMTP_HOST_NAME = SMTP_HOST_NAME_GT;
-			SMTP_PORT = SMTP_PORT_GT;
-			SMTP_START_TLS_ENABLE = SMTP_START_TLS_ENABLE_GT;
+			//SMTP_HOST_NAME = SMTP_HOST_NAME_GT;
+			//SMTP_PORT = SMTP_PORT_GT;
+			//SMTP_START_TLS_ENABLE = SMTP_START_TLS_ENABLE_GT;
 			EMAIL_FROM = EMAIL_FROM_GT;
 			EMAIL_FROM_PASSWORD = EMAIL_FROM_PASSWORD_GT;
 		}
@@ -81,9 +81,9 @@ public class EnviarCorreo {
 		boolean debug = false;
 		Properties props = new Properties();
 		
-		props.put("mail.smtp.host", SMTP_HOST_NAME);
-		props.put("mail.smtp.port", SMTP_PORT);
-		props.put("mail.smtp.starttls.enable", SMTP_START_TLS_ENABLE);
+		props.put("mail.smtp.host", SMTP_HOST_NAME_GMAIL);
+		props.put("mail.smtp.port", SMTP_PORT_GMAIL);
+		props.put("mail.smtp.starttls.enable", SMTP_START_TLS_ENABLE_GMAIL);
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.ssl.enable", "true");
 		props.setProperty("proxySet","true");
@@ -97,7 +97,7 @@ public class EnviarCorreo {
 				
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(EMAIL_FROM, EMAIL_FROM_PASSWORD);
+				return new PasswordAuthentication(EMAIL_FROM_GMAIL, EMAIL_FROM_PASSWORD_GMAIL);
 			}
 		});
 
@@ -117,7 +117,7 @@ public class EnviarCorreo {
 		}
 
 		Message msg = new MimeMessage(session);
-		InternetAddress addressFrom = new InternetAddress(from);
+		InternetAddress addressFrom = new InternetAddress(EMAIL_FROM_GMAIL);
 		msg.setFrom(addressFrom);
 
 		InternetAddress[] addressTo = new InternetAddress[recipients.length];

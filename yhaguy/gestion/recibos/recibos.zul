@@ -33,6 +33,12 @@
 				onClick='popFormato.open(self)'
 				label=" Imprimir Recibo" 
 				disabled="@load(vm.selectedItem eq null)"/>
+		<space/>
+		<button mold="bs" sclass="btn-warning btn-sm" width="150px"
+				iconSclass="z-icon-envelope"
+				onClick='popEmail.open(self, "after_end")'
+				label=" Recibo Digital" 
+				disabled="@load(vm.selectedItem eq null)"/>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
@@ -164,6 +170,18 @@
 				iconSclass="z-icon-print" 
 				label=" Imprimir" hflex="true"
 				onClick="@command('imprimirItem')" />
+		</vlayout>
+	</popup>
+	
+	<popup id="popEmail" width="300px" sclass="rounded">
+		<vlayout>
+			<field value="Correo:" />
+			<textbox value="@bind(vm.selectedItem.pos14)" hflex="1"></textbox>
+			<space />
+			<button mold="bs" sclass="btn-success btn-sm"
+				iconSclass="z-icon-check" 
+				label=" Enviar" hflex="true"
+				onClick="@command('sendRecibo')" />
 		</vlayout>
 	</popup>
 	
