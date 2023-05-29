@@ -272,7 +272,7 @@ public class RecibosViewModel extends SimpleViewModel {
 		
 		String[] send = new String[] { destino };
 		String[] sendCC = new String[] { "estelap@yhaguyrepuestos.com.py", "vanesar@yhaguyrepuestos.com.py",
-				"rodrigol@yhaguyrepuestos.com.py", "lportillo@yhaguyrepuestos.com.py" };
+				"rodrigol@yhaguyrepuestos.com.py", "laurap@yhaguyrepuestos.com.py" };
 		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 		try {		
 			
