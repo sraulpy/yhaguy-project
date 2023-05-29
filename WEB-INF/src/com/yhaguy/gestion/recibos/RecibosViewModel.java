@@ -522,7 +522,7 @@ public class RecibosViewModel extends SimpleViewModel {
 			}  else if ("logo".equals(fieldName)) {
 				value = root + "/logo.png";
 			} else if ("dCarQR".equals(fieldName)) {
-				value = getCurrentURL() + "/archivos/recibos/" + reciboDto.getNumero() + ".pdf";
+				value = getCurrentURL() + "/yhaguy/archivos/recibos/" + reciboDto.getNumero() + ".pdf";
 				System.out.println(value);
 			}
 			return value;
