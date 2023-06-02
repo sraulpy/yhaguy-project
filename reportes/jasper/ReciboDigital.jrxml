@@ -91,7 +91,7 @@ from plancuenta where id = '1']]>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="118" splitType="Stretch">
+		<band height="120" splitType="Stretch">
 			<image>
 				<reportElement x="1" y="0" width="152" height="31" uuid="429de492-610d-438e-ab36-c3bdc07e7cd4"/>
 				<imageExpression><![CDATA[$F{logo}]]></imageExpression>

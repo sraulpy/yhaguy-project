@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.internet.InternetAddress;
+
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -265,8 +267,9 @@ public class RecibosViewModel extends SimpleViewModel {
 	@Command
 	public void sendRecibo() {		
 		String destino = (String) this.selectedItem.getPos14();
-		boolean valido = true;
+		boolean valido = this.isValido(destino);
 		if (!valido) {
+			Clients.showNotification("Correo no válido", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 			return;
 		}
 		
@@ -277,13 +280,14 @@ public class RecibosViewModel extends SimpleViewModel {
 		try {		
 			
 			this.generatePDF();
+			String asunto = "Recibo Digital - " + Configuracion.empresa;
 			String root = Sessions.getCurrent().getWebApp().getRealPath("/");			
 			EnviarCorreo enviarCorreo = new EnviarCorreo();			
 			enviarCorreo.sendMessage(send, sendCC, sendCCO,
-					"Recibo Digital - Yhaguy Repuestos S.A.", "Estimado Cliente: " + this.selectedItem.getPos3()
-					+ "\n Adjunto el Recibo Nro. " + this.reciboDto.getNumero()
-					+ "\n de fecha: " + Utiles.getDateToString((Date) this.selectedItem.getPos1(), "dd-MM-yyyy") + "\n"
-					+ "\n Yhaguy Repuestos S.A. - Recibo Digital",
+					asunto, "Estimado Cliente: " + this.selectedItem.getPos3()
+					+ "\nAdjunto el Recibo Nro. " + this.reciboDto.getNumero()
+					+ "\nde fecha: " + Utiles.getDateToString((Date) this.selectedItem.getPos1(), "dd-MM-yyyy") + "\n"
+					+ "\n" + asunto,
 					"", "", "ReciboDigital" + ".pdf",
 					root + "/yhaguy/archivos/recibos/" + this.reciboDto.getNumero() + ".pdf");	
 			Clients.showNotification("Correo Enviado");
@@ -671,6 +675,20 @@ public class RecibosViewModel extends SimpleViewModel {
 		String url = Executions.getCurrent().getScheme() + "://" + Executions.getCurrent().getServerName() + port
 				+ Executions.getCurrent().getContextPath();
 		return url;
+	}
+	
+	/**
+	 * @return correo valido..
+	 */
+	private boolean isValido(String correo) {
+		try {
+			InternetAddress emailAddr = new InternetAddress(correo);
+		    emailAddr.validate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	@DependsOn({ "detalle", "fechaCierre" })
