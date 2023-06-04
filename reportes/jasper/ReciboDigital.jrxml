@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo " pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
 	<property name="ireport.zoom" value="1.8150000000000015"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="34"/>
+	<property name="ireport.y" value="207"/>
 	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -28,6 +28,7 @@
 	<parameter name="Moneda" class="java.lang.String"/>
 	<parameter name="Moneda_" class="java.lang.String"/>
 	<parameter name="Emision" class="java.lang.String"/>
+	<parameter name="Footer" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '1' "Cuenta", '1' "Nivel", 'Activo' "Desc Cuenta", null "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
 from plancuenta where id = '1'
@@ -240,13 +241,6 @@ from plancuenta where id = '1']]>
 	</detail>
 	<summary>
 		<band height="82">
-			<staticText>
-				<reportElement style="Column header" x="153" y="29" width="313" height="15" forecolor="#736343" uuid="b8c190e0-b47f-4515-8f47-03a33931b901"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10"/>
-				</textElement>
-				<text><![CDATA[Yhaguy Repuestos S.A. - Ruta Mcal Estigarribia Km 9.5]]></text>
-			</staticText>
 			<image scaleImage="FillFrame" isLazy="true" onErrorType="Blank" evaluationTime="Report">
 				<reportElement x="26" y="0" width="91" height="82" printWhenGroupChanges="Recibo" uuid="359058df-ac68-4184-99d6-a9742035f785">
 					<property name="com.jaspersoft.studio.unit.width" value="mm"/>
@@ -255,6 +249,11 @@ from plancuenta where id = '1']]>
 				<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
 					new com.google.zxing.qrcode.QRCodeWriter().encode($F{dCarQR}, com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="153" y="31" width="279" height="15" uuid="9c23719b-ac9c-40ae-ab80-2f00e1fc7472"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{Footer}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 	<noData>

@@ -88,6 +88,7 @@ public class EnviarCorreo {
 		props.put("mail.smtp.starttls.enable", SMTP_START_TLS_ENABLE);
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.ssl.enable", "true");
+		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 		props.setProperty("proxySet","true");
         props.setProperty("socksProxyHost","10.25.5.1");
         props.setProperty("socksProxyPort","1080");
