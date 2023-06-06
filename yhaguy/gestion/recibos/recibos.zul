@@ -39,6 +39,7 @@
 				onClick='popEmail.open(self, "after_end")'
 				label=" Recibo Digital" 
 				disabled="@load(vm.selectedItem eq null)"/>
+        
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
@@ -54,6 +55,7 @@
 			<listheader label="Cobrador" width="120px" />
 			<listheader label="Importe Gs." align="right" width="120px" />
 			<listheader label="Detalle" align="center" width="70px"/>
+			<listheader label="Digital" width="120px" align="center" />
 		</listhead>	
 		<auxhead>
 			<auxheader>
@@ -122,6 +124,7 @@
 			</auxheader>
 			<auxheader />
 			<auxheader />
+			<auxheader />
 		</auxhead>
 		<template name="model">
 			<listitem style="@load(each.pos10? 'text-decoration:line-through; color:red' : '')">
@@ -135,7 +138,11 @@
 				<listcell>
 						<a label="ítems"
 							onClick="@command('verItems', item=each, parent=self)"/>
-					</listcell>
+				</listcell>
+				<listcell>
+					<a label=" Link Digital" onClick="@command('copy', numero=each.pos2)"
+						visible="@load(each.pos15 eq 'RECIBO DIGITAL')" iconSclass="z-icon-copy"/>
+				</listcell>
 			</listitem>
 		</template>
 		<listfoot>
@@ -176,7 +183,8 @@
 	<popup id="popEmail" width="300px" sclass="rounded">
 		<vlayout>
 			<field value="Correo:" />
-			<textbox value="@bind(vm.selectedItem.pos14)" hflex="1"></textbox>
+			<textbox value="@bind(vm.selectedItem.pos14)" hflex="1" visible="@load(!vm.sinCorreo)"></textbox>
+			<checkbox label=" Sin Correo" checked="@bind(vm.sinCorreo)"></checkbox>
 			<space />
 			<button mold="bs" sclass="btn-success btn-sm"
 				iconSclass="z-icon-check" 
@@ -276,6 +284,13 @@
 		</listbox>
 		</hlayout>
 	</popup>
+	<script type='text/javascript'><![CDATA[
+		function writeToClipboard(value) {
+			return navigator.clipboard.writeText(value).then(() => {
+				zAu.cmd0.showNotification('ENLACE COPIADO PARA SU ENVÍO', 'info', null, null, null, null, 0);
+			});
+		}
+    ]]></script>
 	<style>
 		.custom-tbox {margin-right:5px; background:lightyellow}
 	</style>

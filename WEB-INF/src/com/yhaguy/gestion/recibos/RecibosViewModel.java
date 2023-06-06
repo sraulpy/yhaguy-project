@@ -96,6 +96,7 @@ public class RecibosViewModel extends SimpleViewModel {
 	private Object[] selectedFormato;
 	
 	private Date fechaCierre;
+	private boolean sinCorreo;
 	
 	private Window win;
 		
@@ -105,6 +106,7 @@ public class RecibosViewModel extends SimpleViewModel {
 	@Init(superclass = true)
 	public void init(){
 		try {
+			this.sinCorreo = false;
 			this.filterFechaMM = "" + Utiles.getNumeroMesCorriente();
 			this.filterFechaAA = Utiles.getAnhoActual();
 			if (this.filterFechaMM.length() == 1) {
@@ -265,12 +267,25 @@ public class RecibosViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+    public void copy(@BindingParam("numero") String numero) {
+      Clients.evalJavaScript("writeToClipboard('"+ this.getUrl(numero) +"')");
+    }
+	
+	@Command
+	@NotifyChange("selectedItem")
 	public void sendRecibo() {		
 		String destino = (String) this.selectedItem.getPos14();
-		boolean valido = this.isValido(destino);
-		if (!valido) {
-			Clients.showNotification("Correo no válido", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-			return;
+		
+		if (!destino.trim().isEmpty()) {
+			boolean valido = this.isValido(destino);
+			if (!valido) {
+				Clients.showNotification("Correo no válido", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+		}		
+		
+		if (destino.trim().isEmpty()) {
+			destino = "laurap@yhaguyrepuestos.com.py";
 		}
 		
 		String[] send = new String[] { destino };
@@ -278,7 +293,6 @@ public class RecibosViewModel extends SimpleViewModel {
 				"rodrigol@yhaguyrepuestos.com.py", "laurap@yhaguyrepuestos.com.py" };
 		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 		try {		
-			
 			this.generatePDF();
 			String asunto = "Recibo Digital - " + Configuracion.empresa;
 			String root = Sessions.getCurrent().getWebApp().getRealPath("/");			
@@ -371,6 +385,7 @@ public class RecibosViewModel extends SimpleViewModel {
 			my.setPos12(recibo.getMoneda().getDescripcion());
 			my.setPos13(recibo.getTipoCambio());
 			my.setPos14(recibo.getCliente().getEmpresa().getCorreo_());
+			my.setPos15(recibo.getObservacion());
 			out.add(my);
 			this.totalImporteGs += recibo.getTotalImporteGs();
 		}
@@ -431,6 +446,10 @@ public class RecibosViewModel extends SimpleViewModel {
 	 */
 	private void generatePDF() throws Exception {
 		this.reciboDto = (ReciboDTO) this.getDTOById(Recibo.class.getName(), this.selectedItem.getId(), new AssemblerRecibo());
+		
+		this.reciboDto.setObservacion("RECIBO DIGITAL");
+		this.saveDTO(this.reciboDto, new AssemblerRecibo());
+		this.selectedItem.setPos15("RECIBO DIGITAL");
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("title", "RECIBO DIGITAL");
@@ -692,6 +711,13 @@ public class RecibosViewModel extends SimpleViewModel {
 		return true;
 	}
 	
+	/**
+	 * @return url digital
+	 */
+	public String getUrl(String numero) {
+		return this.getCurrentURL() + "/yhaguy/archivos/recibos/" + numero + ".pdf";
+	}
+	
 	@DependsOn({ "detalle", "fechaCierre" })
 	public boolean isGuardarHabilitado() {
 		if (this.detalle == null) {
@@ -854,6 +880,14 @@ public class RecibosViewModel extends SimpleViewModel {
 
 	public void setFechaCierre(Date fechaCierre) {
 		this.fechaCierre = fechaCierre;
+	}
+
+	public boolean isSinCorreo() {
+		return sinCorreo;
+	}
+
+	public void setSinCorreo(boolean sinCorreo) {
+		this.sinCorreo = sinCorreo;
 	}
 }
 

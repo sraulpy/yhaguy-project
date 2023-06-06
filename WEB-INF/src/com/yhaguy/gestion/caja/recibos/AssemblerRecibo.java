@@ -21,12 +21,12 @@ public class AssemblerRecibo extends Assembler {
 	private static String[] attIguales = { "numero", "idUsuarioCarga", "nombreUsuarioCarga", "fechaEmision",
 			"totalImporteGs", "totalImporteDs", "tipoCambio", "movimientoBancoActualizado", "motivoAnulacion",
 			"cobroExterno", "tesaka", "numeroPlanilla", "entregado", "numeroRecibo", "fechaRecibo", "nro", "cobrador",
-			"saldodeudor", "saldoAcobrar", "numeroImportacion" };
+			"saldodeudor", "saldoAcobrar", "numeroImportacion", "observacion" };
 	
 	private static String[] attEmpresa = { "codigoEmpresa", "razonSocial", "ruc", "idEmpresa" };	
 	
 	private static String[] attMoneda = { "descripcion", "sigla" };
-	private static String[] attTipoMovimiento = { "descripcion", "sigla", };
+	private static String[] attTipoMovimiento = { "descripcion", "sigla" };
 	
 	/**
 	 * registra el recibo de pago..

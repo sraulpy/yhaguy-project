@@ -37,6 +37,8 @@ public class Recibo extends Domain {
 	private String numeroImportacion;
 	private Date fechaRecibo;
 	
+	private String observacion;
+	
 	/** Para saber si requiere actualizar el movimiento de banco **/
 	private boolean movimientoBancoActualizado;
 	
@@ -990,5 +992,13 @@ public class Recibo extends Domain {
 
 	public void setNumeroImportacion(String numeroImportacion) {
 		this.numeroImportacion = numeroImportacion;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
 	}
 }
