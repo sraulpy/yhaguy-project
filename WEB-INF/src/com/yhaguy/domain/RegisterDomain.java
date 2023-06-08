@@ -15179,7 +15179,7 @@ public class RegisterDomain extends Register {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			CompraLocalOrden c = rr.getOrdenCompraByFactura(1280);
-			System.out.println(c.getNumero());
+			System.out.println(c.getNumero()); //--
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
