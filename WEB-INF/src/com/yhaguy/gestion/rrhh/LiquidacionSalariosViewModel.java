@@ -22,6 +22,7 @@ import com.coreweb.control.SimpleViewModel;
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.RRHHLiquidacionSalario;
 import com.yhaguy.domain.RRHHPlanillaSalarios;
 import com.yhaguy.domain.RegisterDomain;
@@ -74,6 +75,7 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 		this.n_liquidacion.setJornalDiario(this.getPromedioIngresos() / 30);
 		this.n_liquidacion.setDiasTrabajados(Integer.parseInt(Utiles.getDateToString(new Date(), "dd")));
 		this.n_liquidacion.setAguinaldo(this.getAguinaldoProporcional());
+		this.n_liquidacion.setOtrosDescuentos(this.getTotalOtrosDescuentos());
 	}
 	
 	@Command
@@ -108,6 +110,7 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 			sal.setIndemnizacion(this.n_liquidacion.getHaberesIndemnizacion());
 			sal.setPreaviso(this.n_liquidacion.getHaberesPreAviso());
 			sal.setVacaciones(this.n_liquidacion.getHaberesVacacionesCausadas() + this.n_liquidacion.getHaberesVacacionesProporcional());
+			sal.setOtrosDescuentos(this.n_liquidacion.getOtrosDescuentos());
 			rr.saveObject(sal, this.getLoginNombre());
 			
 			this.imprimir(this.n_liquidacion);
@@ -166,6 +169,7 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 		params.put("Aguinaldo", Utiles.getNumberFormat(liquidacion.getAguinaldo()));
 		params.put("SubTotales", Utiles.getNumberFormat(liquidacion.getTotalHaberes() + liquidacion.getAguinaldo()));
 		params.put("Ips", "-" + Utiles.getNumberFormat(liquidacion.getIps()));
+		params.put("OtrosDescuentos",  "-" + Utiles.getNumberFormat(liquidacion.getOtrosDescuentos()));
 		params.put("TotalACobrar", Utiles.getNumberFormat(liquidacion.getTotalACobrar()));
 		params.put("Empresa", Configuracion.empresa);
 		params.put("ImporteLetras", m.numberToLetter(Utiles.getRedondeo(liquidacion.getTotalACobrar())));
@@ -355,6 +359,29 @@ public class LiquidacionSalariosViewModel extends SimpleViewModel {
 			for (RRHHPlanillaSalarios salario : this.getUltimosSalarios()) {
 				out += salario.getComisiones();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return total otros descuentos
+	 */
+	private double getTotalOtrosDescuentos() {
+		double out = 0.0;
+		try {
+			Funcionario f = this.n_liquidacion.getFuncionario();
+			if (f != null) {
+				for (FuncionarioDescuento desc : f.getDescuentos()) {
+					if (desc.getSaldoCuotas() > 0) {
+						out += desc.getImporteGs() * desc.getSaldoCuotas();						
+					}		
+					if (desc.getCuotas() == 0 || desc.getSaldoCuotas() > 0) {
+						out += desc.getImporteGs();						
+					}
+				}
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

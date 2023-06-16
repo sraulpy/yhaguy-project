@@ -24,6 +24,7 @@
 		<property name="vacacionesProporcionales"/>
 		<property name="vacacionesCausadas"/>
 		<property name="motivo"/>
+		<property name="otrosDescuentos"/>
 		
 		<many-to-one name="funcionario" class="com.yhaguy.domain.Funcionario"
 			column="id_funcionario" lazy="false" />

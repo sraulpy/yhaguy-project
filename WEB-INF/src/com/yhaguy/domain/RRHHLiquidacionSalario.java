@@ -29,6 +29,7 @@ public class RRHHLiquidacionSalario extends Domain {
 	private int vacacionesProporcionales;
 	private int vacacionesCausadas;
 	private String motivo;
+	private double otrosDescuentos;
 	
 	private Funcionario funcionario;
 	
@@ -94,7 +95,7 @@ public class RRHHLiquidacionSalario extends Domain {
 	
 	@DependsOn({ "jornalDiario", "diasTrabajados", "diasPreAviso", "diasIndemnizacion", "vacacionesProporcionales", "vacacionesCausadas", "aguinaldo" })
 	public double getTotalACobrar() {
-		return this.getTotalHaberes() + this.getAguinaldo() - this.getIps();
+		return (this.getTotalHaberes() + this.getAguinaldo() - this.getIps()) - this.getOtrosDescuentos();
 	}
 	
 	/**
@@ -216,5 +217,13 @@ public class RRHHLiquidacionSalario extends Domain {
 
 	public void setMotivo(String motivo) {
 		this.motivo = motivo;
+	}
+
+	public double getOtrosDescuentos() {
+		return otrosDescuentos;
+	}
+
+	public void setOtrosDescuentos(double otrosDescuentos) {
+		this.otrosDescuentos = otrosDescuentos;
 	}
 }

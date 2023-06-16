@@ -117,7 +117,7 @@
 				</row>
 			</rows>
 			</grid>
-			<listbox height="320px" sclass="rounded">
+			<listbox height="330px" sclass="rounded">
 			<listhead>
 				<listheader label="Concepto"></listheader>
 				<listheader label="Cant." width="60px" align="right"></listheader>
@@ -184,6 +184,16 @@
 				<listcell></listcell>
 				<listcell label="0"></listcell>
 				<listcell label="@load(vm.n_liquidacion.ips) @converter('formattedNumber', format='###,###,###,##0')" />
+			</listitem>
+			<listitem>
+				<listcell label="OTROS DESCUENTOS"/>	
+				<listcell></listcell>
+				<listcell label="0"></listcell>
+				<listcell>
+					<doublebox hflex="true" vflex="true" format="###,###,###,##0"
+						value="@bind(vm.n_liquidacion.otrosDescuentos)">
+					</doublebox>
+				</listcell>
 			</listitem>
 			<listfoot>
 				<listfooter></listfooter>
