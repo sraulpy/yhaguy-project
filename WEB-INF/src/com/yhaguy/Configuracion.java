@@ -20,6 +20,7 @@ public class Configuracion extends Config {
 	public static final String EMPRESA_YMRA = "Yhaguy Repuestos S.A. MRA";
 	public static final String EMPRESA_YRPS = "Yhaguy Representaciones S.A.";
 	public static final String EMPRESA_GRUPAUTO = "Groupauto Paraguay S.A.";
+	public static final String EMPRESA_AUTOCENTRO = "Yhaguy Autocentro S.A.";
 	public static final String USER_MOBILE = "sergio";
 	public static final long ID_EMPRESA_YRPS = 29336;
 	public static final long ID_EMPRESA_YRSA = 21360;

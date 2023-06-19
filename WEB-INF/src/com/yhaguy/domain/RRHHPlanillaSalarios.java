@@ -5,6 +5,7 @@ import java.util.List;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.domain.Domain;
+import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
 @SuppressWarnings("serial")
@@ -82,6 +83,10 @@ public class RRHHPlanillaSalarios extends Domain {
 	
 	@DependsOn({ "salarios", "responsabilidad" })
 	public double getJornalDiario() {
+		if(Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)
+				|| Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			return (this.salarios) / 30;
+		}
 		return (this.salarios + this.responsabilidad) / 30;
 	}
 	
@@ -108,8 +113,13 @@ public class RRHHPlanillaSalarios extends Domain {
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "comision",
 			"vacaciones", "aguinaldo", "cantidadHorasExtrasNoc", "cantidadHorasExtras", "diasTrabajados" })
 	public double getTotalHaberes_() {
+		double add = 0;
+		if(Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)
+				|| Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			add = this.responsabilidad;
+		}
 		return this.getSalarioFinal() + this.bonificacion + this.otrosHaberes + this.getExtrasDiurnas() + this.getExtrasNocturnas()
-				+ this.comision + this.vacaciones + this.aguinaldo + this.indemnizacion + this.preaviso;
+				+ this.comision + this.vacaciones + this.aguinaldo + this.indemnizacion + this.preaviso + add;
 	}
 	
 	@DependsOn({ "salarios", "comision", "anticipo", "bonificacion", "otrosHaberes", "otrosDescuentos", "corporativo",
@@ -117,11 +127,16 @@ public class RRHHPlanillaSalarios extends Domain {
 			"responsabilidad", "vacaciones", "seguroVehicular", "ausencia", "aguinaldo", "anticipoAguinaldo",
 			"diasTrabajados", "cantidadHorasExtras", "cantidadHorasExtrasNoc", "anticipoAguinaldo2", "anticipoAguinaldo3" })
 	public double getTotalACobrar() {
+		double add = 0;
+		if(Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)
+				|| Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			add = this.responsabilidad;
+		}
 		return this.getSalarioFinal() + this.comision + this.anticipo + this.bonificacion + this.otrosHaberes
 				+ this.otrosDescuentos + this.corporativo + this.uniforme + this.repuestos + this.seguro + this.embargo
 				+ this.getIps() + this.prestamos + this.adelantos + this.getExtrasDiurnas() + this.getExtrasNocturnas() + this.vacaciones
 				+ this.seguroVehicular + this.ausencia + this.aguinaldo + this.anticipoAguinaldo + this.anticipoAguinaldo2 + this.anticipoAguinaldo3
-				+ this.indemnizacion + this.preaviso;
+				+ this.indemnizacion + this.preaviso + add;
 	}
 	
 	@DependsOn({ "seguroVehicular", "prestamos", "anticipo", "otrosDescuentos", "corporativo", "uniforme", "repuestos",
