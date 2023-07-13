@@ -1952,16 +1952,20 @@ public class VentaControlBody extends BodyApp {
 		// verificacion de costo y servicio..
 		boolean averiados = this.dto.getDeposito().getText().equals("BATERIAS AVERIADAS")
 				&& !(this.isEmpresaMRA() || this.isEmpresaCentral());
+		boolean depositoAveriados = this.dto.getDeposito().getText().equals("BATERIAS AVERIADAS");
 		if (!averiados) {
 			for (VentaDetalleDTO item : this.dto.getDetalles()) {
 				Articulo art = rr.getArticuloById(item.getArticulo().getId());
+				boolean excluir1 = depositoAveriados && art.getCodigoInterno().equals("REIF DIS-P45VKSD");
+				boolean excluir2 = depositoAveriados && art.getCodigoInterno().equals("MAX MXB-60D");
 				if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MARKETING)
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.RETAIL_SHOP)
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
 						&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.VENTAS_ESPECIALES)
 						&& !art.getFamilia().getDescripcion().contains("USADAS")
-						&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL) {
+						&& this.dto.getSucursal().getId().longValue() != SucursalApp.ID_MCAL
+						&& !(excluir1) && !(excluir2)) {
 					double costoGs = art.getCostoGs();
 					double precioGs = item.getPrecioGsSinIva();
 					if ((precioGs <= costoGs) && art.isRestriccionCosto()) {
