@@ -160,6 +160,14 @@ public class ReciboFormaPago extends Domain {
 	}
 	
 	/**
+	 * @return true si es debito bancario..
+	 */
+	public boolean isDebitoBancario() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA);
+	}
+	
+	/**
 	 * @return true si es retencion cliente..
 	 */
 	public boolean isRetencion() {
@@ -282,6 +290,9 @@ public class ReciboFormaPago extends Domain {
 	public String getDescripcion() {
 		String formaPago = this.tipo.getDescripcion();
 		if(this.descripcion == null) return formaPago;
+		if (this.isDebitoBancario()) {
+			this.descripcion = formaPago + " - " + this.depositoBancoCta.getDescripcion();
+		}
 		return this.descripcion.isEmpty() ? formaPago : this.descripcion;
 	}
 	

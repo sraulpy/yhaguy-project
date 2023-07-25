@@ -335,9 +335,6 @@ public class PagosViewModel extends SimpleViewModel {
 				MyArray my = new MyArray();
 				my.setPos1(m.dateToString(item.getModificado(), Misc.DD_MM_YYYY));
 				my.setPos2(item.getDescripcion());
-				if (!item.getDepositoBancoCta().esNuevo()) {
-					my.setPos2(item.getDescripcion() + " - " + item.getDepositoBancoCta().getPos1() + " - " + item.getDepositoBancoCta().getPos2());
-				}
 				my.setPos3(pagoDto.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs());
 				my.setPos4("Formas de Pago");
 				this.detalle.add(my);
