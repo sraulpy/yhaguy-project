@@ -2798,8 +2798,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 				MyArray my = new MyArray();
 				my.setPos1(m.dateToString(item.getModificado(), Misc.DD_MM_YYYY));
 				my.setPos2(item.getDescripcion());
-				if (!item.getBancoCta().esNuevo()) {
-					my.setPos2(item.getDescripcion() + " " + item.getBancoCta().getBancoDescripcion() + " " + item.getBancoCta().getNroCuenta());
+				if (!item.getDepositoBancoCta().esNuevo()) {
+					my.setPos2(item.getDescripcion() + " - " + item.getDepositoBancoCta().getPos1() + " - " + item.getDepositoBancoCta().getPos2());
 				}
 				my.setPos3(reciboDTO.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs());
 				my.setPos4("Formas de Pago");
