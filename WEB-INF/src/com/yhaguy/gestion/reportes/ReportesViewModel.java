@@ -15125,6 +15125,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<NotaCredito> notasCredito = rr.getNotasCreditoVentaAnuladas(desde, hasta);
 				List<Venta> ventasContado = rr.getVentasContadoAnuladas(desde, hasta);
 				List<Venta> ventasCredito = rr.getVentasCreditoAnuladas(desde, hasta);
+				List<Transferencia> transferencias = rr.getTransferenciasAnuladas(desde, hasta);
 				
 				for (NotaCredito nc : notasCredito) {
 					if (nc.isAnulado()) {
@@ -15152,6 +15153,16 @@ public class ReportesViewModel extends SimpleViewModel {
 								Utiles.getDateToString(venta.getFecha(), "dd/MM/yyyy"),
 								venta.getTipoMovimiento().getDescripcion().toUpperCase(),
 								venta.getNumero(), venta.getTimbrado(),
+								"ANULADO" });
+					}
+				}
+				
+				for (Transferencia tr : transferencias) {
+					if (tr.isAnulado()) {
+						data.add(new Object[] {
+								Utiles.getDateToString(tr.getFechaCreacion(), "dd/MM/yyyy"),
+								tr.getTransferenciaTipo().getDescripcion().toUpperCase(),
+								tr.getNumeroRemision(), "",
 								"ANULADO" });
 					}
 				}
