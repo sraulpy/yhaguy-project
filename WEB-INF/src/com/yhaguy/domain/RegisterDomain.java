@@ -4044,7 +4044,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<Transferencia> getTransferenciasAnuladas(Date desde, Date hasta) throws Exception {
 		String query = "select t from Transferencia t where t.dbEstado != 'D'"
-				+ " and t.estadoComprobante.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and t.transferenciaEstado.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and t.transferenciaTipo.sigla = '" + Configuracion.SIGLA_TM_TRANSF_EXTERNA + "'"
 				+ " and (t.fechaCreacion between ? and ?)";
 		query += " order by t.fechaCreacion";
