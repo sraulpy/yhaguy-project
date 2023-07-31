@@ -4038,6 +4038,28 @@ public class RegisterDomain extends Register {
 
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return las transferencias anuladas segun fecha
+	 */
+	public List<Transferencia> getTransferenciasAnuladas(Date desde, Date hasta) throws Exception {
+		String query = "select t from Transferencia t where t.dbEstado != 'D'"
+				+ " and t.estadoComprobante.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and t.transferenciaTipo.sigla = '" + Configuracion.SIGLA_TM_TRANSF_EXTERNA + "'"
+				+ " and (t.fechaCreacion between ? and ?)";
+		query += " order by t.fechaCreacion";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+
+		return this.hql(query, params);
+	}
 
 	/**
 	 * @return los gastos segun fecha..
@@ -5219,7 +5241,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
-				+ " from Transferencia t join t.detalles d where t.dbEstado = 'R' and d.articulo.id = "
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
 				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
@@ -5252,7 +5274,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion"
-				+ " from Transferencia t join t.detalles d where t.dbEstado = 'R' and d.articulo.id = "
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
 				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
@@ -5467,7 +5489,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id, d.costo"
-				+ " from Transferencia t join t.detalles d where t.dbEstado = 'R' and d.articulo.id = "
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
 				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
@@ -5500,7 +5522,7 @@ public class RegisterDomain extends Register {
 		String hasta_ = fechaHora ? Utiles.getDateToString(hasta, "yyyy-MM-dd HH:mm:ss") : misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:59";
 		String query = "select t.transferenciaTipo.descripcion, t.fechaCreacion, t.numero, d.cantidad, d.costo, t.sucursalDestino.descripcion, t.sucursal.id,"
 				+ " t.depositoSalida.id, t.depositoEntrada.id, '--', '--', '--', t.sucursal.descripcion, d.costoPromedioGs, t.id, d.costo"
-				+ " from Transferencia t join t.detalles d where t.dbEstado = 'R' and d.articulo.id = "
+				+ " from Transferencia t join t.detalles d where t.dbEstado != 'D' and d.dbEstado != 'D' and d.articulo.id = "
 				+ idArticulo
 				+ " and (t.transferenciaTipo.sigla = '"
 				+ Configuracion.ID_TIPO_TRANSFERENCIA_EXTERNA
@@ -12535,6 +12557,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return notas de credito compra segun fecha..
+	 */
+	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta, long idProveedor, boolean proveedor) throws Exception {
+		String query = "select nc from NotaCredito nc where nc.dbEstado != 'D'"
+				+ " and nc.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA + "'"
+				+ " and nc.fechaEmision between ? and ?";
+				if (idProveedor > 0) {
+					query += " and nc.proveedor.id = " + idProveedor;
+				}
+				query += " order by nc.fechaEmision";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+		return this.hql(query, params);
+	}
+	
+	/**
 	 * @return libro compras importacion indistinto segun fecha..
 	 */
 	public List<ImportacionFactura> getLibroComprasImportacion(Date desde, Date hasta, Date creacionDesde, Date creacionHasta) throws Exception {
@@ -15173,29 +15218,6 @@ public class RegisterDomain extends Register {
 	public List<String> getDepartamentos() throws Exception {
 		String query = "select distinct(t.sigla) from Tipo t where t.tipoTipo.descripcion = '" + Configuracion.ID_TIPO_CIUDADES + "' order by 1";
 		return this.hql(query);
-	}
-	
-	/**
-	 * @return notas de credito compra segun fecha..
-	 */
-	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta, long idProveedor, boolean proveedor) throws Exception {
-		String query = "select nc from NotaCredito nc where nc.dbEstado != 'D'"
-				+ " and nc.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA + "'"
-				+ " and nc.fechaEmision between ? and ?";
-				if (idProveedor > 0) {
-					query += " and nc.proveedor.id = " + idProveedor;
-				}
-				query += " order by nc.fechaEmision";
-
-		List<Object> listParams = new ArrayList<Object>();
-		listParams.add(desde);
-		listParams.add(hasta);
-
-		Object[] params = new Object[listParams.size()];
-		for (int i = 0; i < listParams.size(); i++) {
-			params[i] = listParams.get(i);
-		}
-		return this.hql(query, params);
 	}
 	
 	public static void main(String[] args) {
