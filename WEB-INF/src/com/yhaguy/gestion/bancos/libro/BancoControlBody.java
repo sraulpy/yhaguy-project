@@ -240,6 +240,7 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> debitosDesglosados = rr.getGastosBancariosDebitoDesglosadoPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta, guaranies);
+		List<Object[]> formasPagoDebito_ = rr.getFormasPagoDebitoBancarioReposicionPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
@@ -279,6 +280,7 @@ public class BancoControlBody extends BodyApp {
 		historicoHABER.addAll(gastos);
 		historicoHABER.addAll(debitosDesglosados);
 		historicoHABER.addAll(formasPagoDebito);
+		historicoHABER.addAll(formasPagoDebito_);
 		historicoHABER.addAll(extracciones);
 		historicoHABER.addAll(reversiones);
 

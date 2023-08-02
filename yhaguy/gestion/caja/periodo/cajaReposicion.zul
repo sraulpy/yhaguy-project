@@ -137,7 +137,7 @@
 				</hlayout>
 			</row>		
 			<row visible="@load(!vm.dato.reposicion.pos18)">
-				<field value="Tipo de Pago:"/>
+				<field value="Forma de Pago:"/>
 				<hlayout>
 					<combobox
 						value="@load(vm.dato.reposicion.pos14.tipo.text.toUpperCase())"
@@ -152,9 +152,21 @@
 						</template>
 					</combobox>
 				</hlayout>
+			</row>
+			<row visible="@load(vm.debitoBancario)">
+				<field value="Banco:"/>
+				<combobox readonly="true"
+					value="@load(vm.dato.reposicion.pos14.depositoBancoCta.pos1)"
+					model="@load(vm.bancos)" hflex="true"
+					selectedItem="@bind(vm.dato.reposicion.pos14.depositoBancoCta)"
+					instant="true">
+					<template name="model">
+						<comboitem label="@load(each.pos1)" />
+					</template>
+				</combobox>
 			</row>	
 			<row visible="@load(vm.dato.reposicion.pos18)">
-				<field value="Tipo de Pago:"/>
+				<field value="Forma de Pago:"/>
 				<textbox value="@load(vm.dato.reposicion.pos14.tipo.text.toUpperCase())" hflex="true" readonly="true"></textbox>
 			</row>
 			<row visible="@load(!vm.dato.reposicion.pos18)">

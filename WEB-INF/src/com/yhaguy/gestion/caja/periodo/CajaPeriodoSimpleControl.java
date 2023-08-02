@@ -38,10 +38,13 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 	private CajaPeriodoControlBody dato = new CajaPeriodoControlBody();	
 	
 	private List<ReciboFormaPagoDTO> selectedFormasPago;
+	
+	private boolean debitoBancario;
 
 	@Init(superclass=true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) CajaPeriodoControlBody dato){
 		this.dato = dato;		
+		this.debitoBancario = false;
 		
 		String labelF = this.getUs().formLabel(ID.F_CAJA_PLANILLA_ABM);
 		this.setAliasFormularioCorriente(ID.F_CAJA_PLANILLA_ABM);		
@@ -296,14 +299,19 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 	@Command
 	@NotifyChange("*")
 	public void seleccionarFormaPagoEgreso() throws Exception {
-		ReciboFormaPagoDTO formaPago = (ReciboFormaPagoDTO) this.dato
-				.getReposicion().getPos14();
+		ReciboFormaPagoDTO formaPago = (ReciboFormaPagoDTO) this.dato.getReposicion().getPos14();
 		this.reloadFormaPago(formaPago);
 		String siglaFP = formaPago.getTipo().getSigla();
 		String siglaFPCH = Configuracion.SIGLA_FORMA_PAGO_CHEQUE_PROPIO;
+		String siglaFPDB = Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA;
 
 		if (siglaFP.equals(siglaFPCH)) {
 			this.showChequeEgreso(formaPago);
+		}
+		if (siglaFP.equals(siglaFPDB)) {
+			this.debitoBancario = true;
+		} else {
+			this.debitoBancario = false;
 		}
 	}
 	
@@ -714,6 +722,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		List<MyPair> out = new ArrayList<MyPair>();
 		out.add(this.getUtilDto().getFormaPagoEfectivo());
 		out.add(this.getUtilDto().getFormaPagoChequePropio());
+		out.add(this.getUtilDto().getFormaPagoDebitoEnCuentaBancaria());
 		return out;
 	}
 	
@@ -773,5 +782,13 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 
 	public void setSelectedFormasPago(List<ReciboFormaPagoDTO> selectedFormasPago) {
 		this.selectedFormasPago = selectedFormasPago;
+	}
+
+	public boolean isDebitoBancario() {
+		return debitoBancario;
+	}
+
+	public void setDebitoBancario(boolean debitoBancario) {
+		this.debitoBancario = debitoBancario;
 	}
 }

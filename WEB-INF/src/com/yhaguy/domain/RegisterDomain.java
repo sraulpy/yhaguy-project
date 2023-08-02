@@ -11165,6 +11165,29 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las formas de pago debito en cta. segun banco.. 
+	 * [0]:concepto
+	 * [1]:fecha 
+	 * [2]:numero 
+	 * [3]:totalImporteGs 
+	 * [4]:banco 
+	 */
+	public List<Object[]> getFormasPagoDebitoBancarioReposicionPorBanco(long idBanco, Date desde, Date hasta, boolean gs) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select ('DEBITO CTA. BANCARIA'), "
+				+ " r.fechaEmision, r.numero, " + ( gs ? "r.formaPago.montoGs" : "r.formaPago.montoDs") + ", r.formaPago.depositoBancoCta.banco.descripcion, concat(r.numero, ' - ', r.numeroPlanilla)"
+				+ " from CajaReposicion r where r.formaPago.tipo.sigla = '" + Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA + "'"
+				+ " and r.formaPago.depositoBancoCta.id = " + idBanco
+				+ " and (r.fechaEmision >= '"
+				+ desde_
+				+ "' and r.fechaEmision <= '"
+				+ hasta_
+				+ "')" + " order by r.fechaEmision desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return las formas de pago deposito en cta. segun banco.. 
 	 * [0]:concepto
 	 * [1]:fecha 

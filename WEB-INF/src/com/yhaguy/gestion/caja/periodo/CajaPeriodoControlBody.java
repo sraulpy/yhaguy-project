@@ -1367,7 +1367,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		w.setDato(this);
 		w.setTitulo(titulo);
 		w.setWidth("450px");
-		w.setHigth((tipo == ES_REPOSICION) ? "340px" : "380px");
+		w.setHigth((tipo == ES_REPOSICION) ? "400px" : "400px");
 		w.setCheckAC(new ValidadorEgreso(this.reposicion));
 		if (modo.equals(WindowPopup.SOLO_LECTURA))
 			w.setSoloBotonCerrar();
@@ -1428,7 +1428,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		w.setDato(this);
 		w.setTitulo(titulo);
 		w.setWidth("450px");
-		w.setHigth((tipo == ES_REPOSICION) ? "400px" : "400px");
+		w.setHigth((tipo == ES_REPOSICION) ? "430px" : "430px");
 		//w.setCheckAC(new ValidadorEgreso(this.reposicion));
 		if (modo.equals(WindowPopup.SOLO_LECTURA))
 			w.setSoloBotonCerrar();
@@ -2065,7 +2065,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		WindowPopup wp = new WindowPopup();
 		wp.setTitulo("Reposición de Caja");
 		wp.setDato(this);
-		wp.setHigth("200px");
+		wp.setHigth("400px");
 		wp.setWidth("400px");
 		wp.setModo(WindowPopup.NUEVO);
 		wp.show(Configuracion.CAJA_REPOSICION_ZUL);
