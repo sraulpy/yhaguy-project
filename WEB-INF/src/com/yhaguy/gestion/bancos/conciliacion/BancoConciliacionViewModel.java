@@ -44,7 +44,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 public class BancoConciliacionViewModel extends BodyApp {
-	//siempreHabilitado
+	
 	static final String PATH = Configuracion.pathConciliaciones;
 	final static String KEY_NRO = "CONCI";
 
@@ -484,6 +484,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> gastos = rr.getGastosBancariosPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> debitosDesglosados = rr.getGastosBancariosDebitoDesglosadoPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDebito = rr.getFormasPagoDebitoBancarioPorBanco(idBanco, desde, hasta, guaranies);
+		List<Object[]> formasPagoDebito_ = rr.getFormasPagoDebitoBancarioReposicionPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoDeposito = rr.getFormasPagoDepositoBancarioEnRecibosPorBanco(idBanco, desde, hasta);
 		List<Object[]> formasPagoDeposito_ = rr.getFormasPagoDepositoBancarioEnVentasPorBanco(idBanco, desde, hasta, guaranies);
 		List<Object[]> formasPagoTarjeta = rr.getFormasPagoTarjetaPorBanco(idBanco, desde, hasta);
@@ -523,6 +524,7 @@ public class BancoConciliacionViewModel extends BodyApp {
 		historicoHABER.addAll(gastos);
 		historicoHABER.addAll(debitosDesglosados);
 		historicoHABER.addAll(formasPagoDebito);
+		historicoHABER.addAll(formasPagoDebito_);
 		historicoHABER.addAll(extracciones);
 		historicoHABER.addAll(reversiones);
 

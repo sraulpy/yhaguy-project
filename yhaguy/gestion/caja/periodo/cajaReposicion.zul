@@ -153,6 +153,7 @@
 					</combobox>
 				</hlayout>
 			</row>
+			<!-- DEBITO BANCARIO -->
 			<row visible="@load(vm.debitoBancario)">
 				<field value="Banco:"/>
 				<combobox readonly="true"
