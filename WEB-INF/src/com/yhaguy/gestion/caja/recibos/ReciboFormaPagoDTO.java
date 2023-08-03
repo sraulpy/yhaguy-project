@@ -162,6 +162,14 @@ public class ReciboFormaPagoDTO extends DTO {
 		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_PAGARE);
 	}
 	
+	/**
+	 * @return true si es debito bancario..
+	 */
+	public boolean isDebitoBancario() {
+		String sigla = this.tipo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_FORMA_PAGO_DEBITO_CTA_BANCARIA);
+	}
+	
 	public void setChequePropio(BancoChequeDTO bch, String banco) {		
 		this.setMontoGs(bch.getMonto());
 		this.setChequeNumero(String.valueOf(bch.getNumero()));
@@ -209,6 +217,10 @@ public class ReciboFormaPagoDTO extends DTO {
 			return "RETENCIÓN IVA" + " - " + this.retencionNumero;		
 		if(this.isEfectivo())
 			return "EFECTIVO";
+		if (this.isDebitoBancario()) {
+			return this.tipo.getText() + " - " + this.depositoBancoCta.getPos1();
+		}
+		
 		return descripcion;
 	}
 
