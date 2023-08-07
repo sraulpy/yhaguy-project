@@ -26,6 +26,7 @@ import org.zkoss.zul.Window;
 
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.util.MyArray;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.FuncionarioDescuento;
 import com.yhaguy.domain.RRHHPlanillaSalarios;
@@ -737,9 +738,16 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		List<MyArray> dets = new ArrayList<MyArray>();
 		
 		if (liquidacion.getSalarioFinal() > 0) {
-			dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarioFinal() - liquidacion.getResponsabilidad()),
-					Utiles.getNumberFormat(0.0)));
+			if(Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)
+					|| Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+				dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarioFinal()),
+						Utiles.getNumberFormat(0.0)));
+			} else {
+				dets.add(new MyArray("  ", RRHHPlanillaSalarios.SALARIOS, Utiles.getNumberFormat(liquidacion.getSalarioFinal() - liquidacion.getResponsabilidad()),
+						Utiles.getNumberFormat(0.0)));
+			}		
 		}
+		
 		if (liquidacion.getResponsabilidad() > 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.RESPONSABILIDAD, Utiles.getNumberFormat(liquidacion.getResponsabilidad()),
 					Utiles.getNumberFormat(0.0)));
