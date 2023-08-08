@@ -513,7 +513,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 			return new ArrayList<TareaProgramada>();
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Date desde = Utiles.getFechaInicioMes();		
+		Date desde = Utiles.agregarDias(new Date(), -30);	
 		List<TareaProgramada> tareas = rr.getTareasProgramadasPendientes(desde, new Date(), "PASAR A COBRAR", (long) this.dato.getReciboDTO().getCliente().getPos4());			
 		return tareas;
 	}

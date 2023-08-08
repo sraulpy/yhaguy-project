@@ -410,7 +410,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	@DependsOn({ "selectedEmpresa" })
 	public List<TareaProgramada> getTareas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		Date desde = Utiles.getFechaInicioMes();
+		Date desde = Utiles.agregarDias(new Date(), -30);
 		if (this.selectedEmpresa != null) {
 			List<TareaProgramada> tareas = rr.getTareasProgramadasPendientes(desde, this.hasta, "PASAR A COBRAR", this.selectedEmpresa.getId());			
 			return tareas;
