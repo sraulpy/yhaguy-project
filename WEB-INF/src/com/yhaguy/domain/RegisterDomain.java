@@ -15161,6 +15161,20 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las tareas programadas pendientes..
+	 */
+	public List<TareaProgramada> getTareasProgramadasPendientes(Date desde, Date hasta, String tarea, long idEmpresa)
+			throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select t from TareaProgramada t where t.tarea = '"+ tarea +"'"
+				+ " and t.realizado = 'FALSE' and t.empresa.id = " + idEmpresa + " and (t.fecha >= '"
+				+ desde_ + "' and t.fecha <= '" + hasta_
+				+ "') order by fecha desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return datos identificaciones..
 	 */
 	public List<Identificaciones> getIdentificaciones(String cedula, String nombres, String apellidos) throws Exception {

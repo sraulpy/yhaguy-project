@@ -1,23 +1,26 @@
 <div apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.caja.recibos.ReciboSimpleControl')"
-	style="padding: 10px" height="100%">
+	style="padding: 10px" height="100%"
+	id="dv_rec">
 
 	<grid sclass="vgrid">
 		<rows>
 			<row>
-				<vlayout spacing="0">
+				<hbox hflex="1">
+				<vlayout spacing="0" hflex="1">
 					<field value="Número" />
 					<textbox value="@bind(vm.dato.reciboDTO.numero)" 
-						hflex="true" 
+						hflex="1" 
 						readonly="@load((vm.dato.reciboDTO.cobro and !vm.dato.reciboDTO.recaudacionMra) ? 'false' : 'true')"
 						visible="@load(vm.dato.reciboDTO.cobro ? 'true' : 'false')" />
 					<textbox value="@bind(vm.dato.reciboDTO.numero)" 
-						hflex="true" 
+						hflex="1" 
 						readonly="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')"
 						visible="@load(vm.dato.reciboDTO.cobro ? 'false' : 'true')" />
 				</vlayout>
-				<hlayout>
-				<vlayout spacing="0">
+				</hbox>
+				<hbox hflex="1">
+				<vlayout spacing="0" hflex="1">
 					<field value="Fecha" />
 					<datebox
 						value="@bind(vm.dato.reciboDTO.fechaEmision)"
@@ -25,7 +28,7 @@
 						hflex="true"
 						constraint="@load(vm.constraintFecha)" />
 				</vlayout>
-				<vlayout spacing="0">
+				<vlayout spacing="0" hflex="1">
 					<field value="Moneda" />
 					<combobox
 						value="@load(vm.dato.reciboDTO.moneda.pos1)"
@@ -43,7 +46,7 @@
 							hflex="true" />
 					</hlayout>
 				</vlayout>
-				</hlayout>
+				</hbox>
 				<hlayout>
 					<vlayout spacing="0" hflex="true">
 						<field value="T. Cambio" />
@@ -88,7 +91,8 @@
 								valign="top" hflex="true">
 								<buscadorCliente
 									value="@bind(vm.dato.reciboDTO)" campo="ruc" width="100px"
-									buttonVisible="false" />
+									buttonVisible="false">
+								</buscadorCliente>
 								<buscadorCliente
 									value="@bind(vm.dato.reciboDTO)" campo="razonSocial"
 									hflex="true" />

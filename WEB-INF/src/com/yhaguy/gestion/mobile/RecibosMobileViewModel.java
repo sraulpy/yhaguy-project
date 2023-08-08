@@ -32,6 +32,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.TareaProgramada;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
@@ -52,6 +53,7 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 	private double tipoCambio = 0;
 	
 	private TipoMovimiento selectedConcepto;
+	private TareaProgramada selectedTarea;
 	
 	private String razonSocial = "";
 	private String razonSocialCobrador = "";
@@ -229,6 +231,12 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 			caja.getRecibos().add(recibo);
 			rr.saveObject(caja, "mobile");
 		}
+		if (this.selectedTarea != null) {
+			this.selectedTarea.setRealizado(true);
+			this.selectedTarea.setRealizadoPor("mobile: " + Utiles.getDateToString(new Date(), "dd-MM-yyyy hh:mm:ss"));
+			rr.saveObject(this.selectedTarea, "mobile");
+		}
+		
 		this.mensaje = this.selectedConcepto.getDescripcion() + " " + recibo.getNumero() + " CORRECTAMENTE GENERADO..";
 		Clients.showNotification(this.selectedConcepto.getDescripcion() + " GENERADO..!");
 		comp1.setVisible(false);
@@ -394,6 +402,20 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 		out.add(ant);
 		out.add(ree);
 		return out;
+	}
+	
+	/**
+	 * @return las tareas programadas..
+	 */
+	@DependsOn({ "selectedEmpresa" })
+	public List<TareaProgramada> getTareas() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Date desde = Utiles.getFechaInicioMes();
+		if (this.selectedEmpresa != null) {
+			List<TareaProgramada> tareas = rr.getTareasProgramadasPendientes(desde, this.hasta, "PASAR A COBRAR", this.selectedEmpresa.getId());			
+			return tareas;
+		}
+		return new ArrayList<TareaProgramada>();
 	}
 	
 	@DependsOn("selectedConcepto")
@@ -739,5 +761,21 @@ public class RecibosMobileViewModel extends SimpleViewModel {
 
 	public void setSelectedConcepto(TipoMovimiento selectedConcepto) {
 		this.selectedConcepto = selectedConcepto;
+	}
+
+	public Date getHasta() {
+		return hasta;
+	}
+
+	public void setHasta(Date hasta) {
+		this.hasta = hasta;
+	}
+
+	public TareaProgramada getSelectedTarea() {
+		return selectedTarea;
+	}
+
+	public void setSelectedTarea(TareaProgramada selectedTarea) {
+		this.selectedTarea = selectedTarea;
 	}
 }

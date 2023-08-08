@@ -4,12 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -20,6 +24,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Row;
@@ -45,6 +50,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.TareaProgramada;
 import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.cheques.WindowCheque;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
@@ -58,6 +64,7 @@ public class ReciboSimpleControl extends SoloViewModel {
 	
 	static final String ADD_ITEM_ZUL = "/yhaguy/gestion/caja/recibos/insertarItem.zul";
 	static final String SALDO_A_FAVOR_ZUL = "/yhaguy/gestion/caja/recibos/saldoafavor.zul";
+	static final String ZUL_ASIGNAR_TAREA = "/yhaguy/gestion/caja/recibos/asignarTarea.zul";
 	
 	private CajaPeriodoControlBody dato = new CajaPeriodoControlBody();	
 	private ReciboDetalleDTO nvoItem;
@@ -78,6 +85,14 @@ public class ReciboSimpleControl extends SoloViewModel {
 	private Object[] selectedCuenta;
 	
 	private Date fechaCierre;
+	
+	private TareaProgramada tarea;
+	
+	@Wire
+	private Div dv_rec;
+	
+	@Wire
+	private Popup pop_dif_tc;
             
 	@Init(superclass=true)
 	public void init(@ExecutionArgParam(Configuracion.DATO_SOLO_VIEW_MODEL) CajaPeriodoControlBody dato) {
@@ -98,13 +113,27 @@ public class ReciboSimpleControl extends SoloViewModel {
 	}
 	
 	@AfterCompose(superclass=true)
-	public void afterCompose() {
+	public void AfterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
 	}
 	
 	@Override
 	public String getAliasFormularioCorriente() {
 		return ID.F_RECIBO_INSERCION_DETALLE;
 	}	
+	
+	@GlobalCommand
+	public void asignarTarea() {
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("rec", this.dato.getReciboDTO());   
+		w = (Window) Executions.createComponents(ZUL_ASIGNAR_TAREA, this.mainComponent, args);
+		w.doOverlapped();
+	}
+	
+	@Command
+	public void test(@BindingParam("item") TareaProgramada tarea) {
+		this.dato.getReciboDTO().setTarea(tarea);
+	}
 	
 	@Command
 	@NotifyChange("*")
@@ -474,6 +503,19 @@ public class ReciboSimpleControl extends SoloViewModel {
 			}
 		}		
 		return false;
+	}
+	
+	/**
+	 * @return las tareas pendientes..
+	 */
+	public List<TareaProgramada> getTareas() throws Exception {
+		if (this.dato.getReciboDTO().getCliente().esNuevo()) {
+			return new ArrayList<TareaProgramada>();
+		}
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Date desde = Utiles.getFechaInicioMes();		
+		List<TareaProgramada> tareas = rr.getTareasProgramadasPendientes(desde, new Date(), "PASAR A COBRAR", (long) this.dato.getReciboDTO().getCliente().getPos4());			
+		return tareas;
 	}
 	
 	/***************************************************/	
@@ -2084,5 +2126,13 @@ public class ReciboSimpleControl extends SoloViewModel {
 
 	public void setFilterFirmante(String filterFirmante) {
 		this.filterFirmante = filterFirmante;
+	}
+
+	public TareaProgramada getTarea() {
+		return tarea;
+	}
+
+	public void setTarea(TareaProgramada tarea) {
+		this.tarea = tarea;
 	}
 }

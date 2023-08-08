@@ -31,7 +31,8 @@
 			style="overflow:auto" vflex="1"
 			model="@load(vm.tareas)"
 			selectedItem="@bind(vm.selectedTarea)"
-			onSelect="@command('selectTarea')">
+			onSelect="@command('selectTarea')"
+			emptyMessage="SIN TAREAS ASIGNADAS">
 			<listhead>
 				<listheader></listheader>
 			</listhead>

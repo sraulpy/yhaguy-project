@@ -324,7 +324,13 @@
 			disabled="@load(vm.selectedCobrador eq null? 'true':'false')"
 			label=" Seleccionar Cobrador" height="150px" style="font-size:30pt"
 			dir="normal" visible="false"
-			onClick="btn_formaPago.setVisible(true); lstMovimientos.setVisible(true); lstCobradores.setVisible(false); self.setVisible(false)" />
+			onClick="btn_selec_tarea.setVisible(true); lstTareas.setVisible(true); lstCobradores.setVisible(false); self.setVisible(false)" />
+			
+		<button id="btn_selec_tarea" mold="bs" sclass="btn-primary btn-lg" hflex="true"
+			iconSclass="z-icon-check"
+			label="@load(vm.tareas.size() eq 0? 'Sin Tareas Pendientes':'Seleccionar Tarea')" height="150px" style="font-size:30pt"
+			dir="normal" visible="false"
+			onClick="btn_formaPago.setVisible(true); lstMovimientos.setVisible(true); lstTareas.setVisible(false); self.setVisible(false)" />
 			
 		<button id="btn_formaPago" mold="bs" sclass="btn-success btn-lg" hflex="true"
 			iconSclass="z-icon-money"
@@ -438,6 +444,35 @@
 			<template name="model">
 			<listitem>
 				<listcell label="@load(each.razonSocial)" />
+			</listitem>
+		</template>
+		</listbox>
+		
+		<!-- LISTA DE TAREAS -->
+		<listbox id="lstTareas" 
+			style="overflow:auto" vflex="1"
+			model="@load(vm.tareas)"
+			visible="false" emptyMessage="SIN TAREAS ASIGNADAS"
+			selectedItem="@bind(vm.selectedTarea)">
+			<listhead>
+				<listheader></listheader>
+			</listhead>
+			<template name="model">
+			<listitem>
+				<listcell>
+					<vlayout>
+						<div height="30px" />
+						<label value="@load(each.tarea)" sclass="mobile" style="font-weight:bold"/>
+						<label value="@load(each.empresa.razonSocial)" sclass="mobile" />
+						<hlayout>
+							<label value="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy hh:mm')" sclass="mobile" style="color:#428bca" />
+							<space hflex="1" />
+							<a label="@load(each.realizado? ' REALIZADO':' PENDIENTE')" sclass="mobile" 
+								style="@load(each.realizado? 'color:#5cb85c':'color:#E14416')" iconSclass="@load(each.realizado? 'z-icon-check':'z-icon-exclamation')" />
+						</hlayout>		
+						<div height="30px" />				
+					</vlayout>
+				</listcell>
 			</listitem>
 		</template>
 		</listbox>

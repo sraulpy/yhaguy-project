@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.dto.DTO;
@@ -12,6 +13,7 @@ import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.BancoChequeTercero;
 import com.yhaguy.domain.Funcionario;
+import com.yhaguy.domain.TareaProgramada;
 import com.yhaguy.gestion.contabilidad.retencion.RetencionIvaDTO;
 import com.yhaguy.gestion.empresa.AssemblerFuncionario;
 import com.yhaguy.gestion.empresa.FuncionarioDTO;
@@ -69,6 +71,8 @@ public class ReciboDTO extends DTO {
 	private RetencionIvaDTO retencion;
 	
 	private List<BancoChequeTercero> chequesEliminar = new ArrayList<BancoChequeTercero>();
+	
+	private TareaProgramada tarea;
 
 	public boolean isDetalleVacio() {
 		return this.detalles.size() == 0;
@@ -466,6 +470,7 @@ public class ReciboDTO extends DTO {
 
 	public void setCliente(MyArray cliente) {
 		this.cliente = cliente;
+		BindUtils.postGlobalCommand(null, null, "asignarTarea", null);
 	}
 
 	public boolean isImputar() {
@@ -637,5 +642,14 @@ public class ReciboDTO extends DTO {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public TareaProgramada getTarea() {
+		return tarea;
+	}
+
+	public void setTarea(TareaProgramada tarea) {
+		System.out.println("-- SET TAREA --");
+		this.tarea = tarea;
 	}
 }

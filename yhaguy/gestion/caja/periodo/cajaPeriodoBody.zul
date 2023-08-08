@@ -85,7 +85,7 @@
 			id="botonera">
 			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
-				onClick='popCobros.open(self, "after_start")'
+				onClick="@command('abrirVentanaRecibo', tipo=4)"
 				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Cobro" />
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"

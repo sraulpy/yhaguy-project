@@ -69,6 +69,7 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.SaldoVale;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Talonario;
+import com.yhaguy.domain.TareaProgramada;
 import com.yhaguy.domain.Tecnico;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
@@ -872,6 +873,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 			}
 			if (this.reciboDTO.isRecaudacionMra()) {
 				this.reciboDTO.setNumero(AutoNumeroControl.getAutoNumeroKey(this.isEmpresaMRA()? "REC-CEN":"REC-MRA", 7));
+			}
+			if (this.reciboDTO.getTarea() != null) {
+				TareaProgramada t = this.reciboDTO.getTarea();
+				t.setRealizado(true);
+				t.setRealizadoPor(this.reciboDTO.getCobrador() + " " + Utiles.getDateToString(new Date(), "dd-MM-yyyy hh:mm:ss"));
+				rr.saveObject(t, this.getLoginNombre());
 			}
 			
 			this.asignarNumeros();

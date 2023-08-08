@@ -1,0 +1,27 @@
+<window height="180px" width="350px" title="Asignar Tarea"
+	border="normal" closable="true" position="center, center"
+	id="w_tarea">
+	<div style="padding:5px" hflex="true" vflex="true">
+	<listbox model="@load(vm.tareas)"
+		emptyMessage="SIN TAREAS PENDIENTES" sclass="small-list"
+		checkmark="true"
+		selectedItem="${arg.rec.tarea}"
+		onSelect="@command('test', item=self.selectedItem.value)">
+		<attribute name="onSelect">
+			w_tarea.detach();
+		</attribute>
+		<listhead>
+			<listheader width="40px" align="center"></listheader>
+			<listheader></listheader>
+			<listheader></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell></listcell>
+				<listcell label="@load(each.tarea)"></listcell>
+				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy hh:mm')"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+	</div>
+</window>
