@@ -12780,7 +12780,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					String dia = Utiles.getDia(fecha_);
 					
 					if (tipo.equals("ENTRADA")) { 
-						Date horario = Utiles.getFecha(fecha + " " + RRHHMarcaciones.ENTRADA, "dd-MM-yyyy HH:mm:ss");
+						Date horario = Utiles.getFecha(fecha + " " + RRHHMarcaciones.getEntrada(), "dd-MM-yyyy HH:mm:ss");
 						Object[] retraso_ = Utiles.diferenciaTiempo(fecha_, horario);
 						String retraso = retraso_[0] + ":" + retraso_[1] + ":" + retraso_[2];
 						if(((long)retraso_[0]) < 0 || ((long)retraso_[1]) < 0 || ((long)retraso_[2]) < 0) retraso = "";

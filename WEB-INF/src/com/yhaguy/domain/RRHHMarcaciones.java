@@ -1,6 +1,7 @@
 package com.yhaguy.domain;
 
 import com.coreweb.domain.Domain;
+import com.yhaguy.Configuracion;
 
 
 @SuppressWarnings("serial")
@@ -27,6 +28,16 @@ public class RRHHMarcaciones extends Domain {
 		} else {
 			return -1;
 		}
+	}
+	
+	/**
+	 * @return horario entrada segun empresa..
+	 */
+	public static String getEntrada() {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			return ENTRADA_AUTOCENTRO;
+		}
+		return ENTRADA;
 	}
 
 	public String getTipo() {
