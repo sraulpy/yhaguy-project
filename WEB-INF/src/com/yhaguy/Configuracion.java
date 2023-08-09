@@ -29,6 +29,7 @@ public class Configuracion extends Config {
 	public static final String URL_IMAGES_PUBLIC_BAT = "http://gestion.gtsa.com.py/images/";
 	public static final String URL_IMAGES_PUBLIC_RPS = "https://gestion.yhaguyrepuestos.com.py/representaciones/images/";
 	public static final String URL_IMAGES_PUBLIC_CENT = "https://gestion.yhaguyrepuestos.com.py/central/images/";
+	public static final String URL_IMAGES_PUBLIC_AUT = "https://gestion.yhaguyrepuestos.com.py/autocentro/images/";
 
 	public static String pathProforma = PATH_SESSION + ("/yhaguy/archivos/proformas/") + "/";
 	public static String pathProformaGenerico = "/yhaguy/archivos/proformas/";

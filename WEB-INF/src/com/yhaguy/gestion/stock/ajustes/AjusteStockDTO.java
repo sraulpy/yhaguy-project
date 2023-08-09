@@ -47,7 +47,10 @@ public class AjusteStockDTO extends DTO {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
 			return Configuracion.URL_IMAGES_PUBLIC_RPS + "ajustes/" + this.getId() + ".png";
 		}
-		return Configuracion.URL_IMAGES_PUBLIC_BAT + "ajustes/" + this.getId() + ".png";
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			return Configuracion.URL_IMAGES_PUBLIC_AUT + "ajustes/" + this.getId() + ".png";
+		}
+		return Configuracion.URL_IMAGES_PUBLIC_CENT + "ajustes/" + this.getId() + ".png";
 	}
 	
 	public boolean isAjustePositivo() {
