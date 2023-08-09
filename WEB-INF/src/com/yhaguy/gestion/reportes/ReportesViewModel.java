@@ -30030,7 +30030,7 @@ class ReporteMarcaciones extends ReporteYhaguy {
 	private ComponentBuilder getCuerpo() {
 		VerticalListBuilder out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList()
-				.add(this.textoParValor("Horario Entrada", RRHHMarcaciones.ENTRADA))
+				.add(this.textoParValor("Horario Entrada", RRHHMarcaciones.getEntrada()))
 				.add(this.textoParValor("Horario Salida", RRHHMarcaciones.SALIDA))
 				.add(this.textoParValor("Desde", Utiles.getDateToString(this.desde, Utiles.DD_MM_YYYY)))
 				.add(this.textoParValor("Hasta", Utiles.getDateToString(this.hasta, Utiles.DD_MM_YYYY))));
