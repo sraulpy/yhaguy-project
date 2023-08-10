@@ -495,11 +495,12 @@ public class BancoConciliacionViewModel extends BodyApp {
 		List<Object[]> depositosMRA = new ArrayList<Object[]>();
 		List<Object[]> depositosMRA_ = new ArrayList<Object[]>();
 		
+		/**
 		if (this.isEmpresaCentral() && idBanco == 25) {
 			ConnectDBMRA conn = ConnectDBMRA.getInstance();
 			depositosMRA = conn.getDepositosBancariosRecibos(desde, hasta);
 			depositosMRA_ = conn.getDepositosBancariosVentas(desde, hasta);
-		}
+		}**/
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
