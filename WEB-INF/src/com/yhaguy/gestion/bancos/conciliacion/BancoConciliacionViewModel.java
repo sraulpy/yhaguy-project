@@ -36,7 +36,6 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.AssemblerBancoCtaCte;
 import com.yhaguy.gestion.bancos.libro.BancoCtaDTO;
 import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
-import com.yhaguy.util.ConnectDBMRA;
 import com.yhaguy.util.Utiles;
 
 import net.sf.jasperreports.engine.JRDataSource;

@@ -28,7 +28,6 @@ import com.yhaguy.domain.BancoMovimiento;
 import com.yhaguy.domain.CuentaContable;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
-import com.yhaguy.util.ConnectDBMRA;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
@@ -250,11 +249,12 @@ public class BancoControlBody extends BodyApp {
 		List<Object[]> capitalizaciones = rr.getCapitalizacionesPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
 		List<Object[]> reversiones = rr.getReversionesPorBanco(idBanco, desde, hasta, this.dto.getMoneda().getId());
 		
+		/**
 		if (this.isEmpresaCentral() && this.dto.getId() == 25) {
 			ConnectDBMRA conn = ConnectDBMRA.getInstance();
 			depositosMRA = conn.getDepositosBancariosRecibos(desde, hasta);
 			depositosMRA_ = conn.getDepositosBancariosVentas(desde, hasta);
-		}
+		}**/
 
 		historicoDEBE = new ArrayList<Object[]>();
 		historicoHABER = new ArrayList<Object[]>();
