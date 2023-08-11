@@ -12928,7 +12928,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, idSuc, idPrv, idCon);
-				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta, idSuc);
+				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta, idPrv, true);
 
 				for (CompraLocalFactura compra : compras) {
 					Object[] cmp = new Object[] {
