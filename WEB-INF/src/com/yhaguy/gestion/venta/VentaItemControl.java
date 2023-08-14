@@ -42,7 +42,6 @@ import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.RegisterDomain;
-import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.VehiculoMarca;
 import com.yhaguy.domain.VehiculoModelo;
@@ -363,6 +362,14 @@ public class VentaItemControl extends SoloViewModel {
 		double maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
 		this.det.setDescuentoPorcentajeMax(maxDescuento);
 		
+		// ticket 8144
+		if (this.getLoginNombre().equals("josem") || this.getLoginNombre().equals("dayala")) {
+			if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) {
+				maxDescuento = 30;
+				this.det.setDescuentoPorcentajeMax(maxDescuento);
+			}
+		}
+		
 		// promocion yrsa ymra..
 		if ((this.det.getCodigoInterno().equals("CON C-0053")
 				|| this.det.getCodigoInterno().equals("CON C-0054"))
@@ -591,13 +598,7 @@ public class VentaItemControl extends SoloViewModel {
 	
 	@Command @NotifyChange("*") 
 	public void validarDescuento(@BindingParam("cmp") Component cmp) throws Exception {
-		if (this.getLoginNombre().equals("milva") || this.getLoginNombre().equals("claudiar")) {
-			return;
-		}
-		if (this.getAcceso().getSucursalOperativa().getId().equals(SucursalApp.ID_MCAL)
-				|| this.getLoginNombre().equals("servicio")
-				|| this.getLoginNombre().equals("valezcav") 
-				|| this.getLoginNombre().equals("josem")) {
+		if (this.getLoginNombre().equals("milva")) {
 			return;
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
