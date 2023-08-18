@@ -3519,12 +3519,6 @@ class ValidadorGasto implements VerificaAceptarCancelar {
 		double totalFac = this.gasto.getImporteGs();
 		double totalFP = this.gasto.getImporteFormaPagoGs();
 
-		String nroFactura = this.gasto.getNumeroFactura();
-		String nroTimbrado = this.gasto.getTimbrado();
-		String[] tipos = { Config.TIPO_STRING, Config.TIPO_NUMERICO };
-		String[] campos = { "numeroFactura", "timbrado.id" };
-		String[] values = { nroFactura, nroTimbrado };
-
 		RegisterDomain rr = RegisterDomain.getInstance();
 
 		try {
