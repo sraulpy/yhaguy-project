@@ -306,10 +306,10 @@ public class BancoConciliacionViewModel extends BodyApp {
 				double debe_ = 0; 
 				double haber_ = 0;
 				if (!debe.equals("0")) {
-					importe = Double.parseDouble(debe.replace(".", ""));
+					importe = Double.parseDouble(debe);
 					debe_ = importe;
 				} else {
-					importe = Double.parseDouble(haber.replace(".", ""));
+					importe = Double.parseDouble(haber);
 					haber_ = importe;
 				}
 				
