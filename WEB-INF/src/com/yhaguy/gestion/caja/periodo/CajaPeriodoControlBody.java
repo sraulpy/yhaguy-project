@@ -3564,7 +3564,7 @@ class ValidadorGasto implements VerificaAceptarCancelar {
 			}
 
 			// Valida si la factura ya existe..
-			if (rr.existe(Gasto.class, campos, tipos, values, this.gasto) == true) {
+			if (rr.getGastoByNumero(this.gasto.getNumeroFactura(), this.gasto.getTimbrado()) != null) {
 				out = false;
 				mensaje += "\n - Ya existe en la Base de Datos una Factura "
 						+ "con el mismo número y el mismo timbrado..";
