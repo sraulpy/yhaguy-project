@@ -1,5 +1,6 @@
 package com.yhaguy.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,6 +24,9 @@ import java.util.regex.Pattern;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.time.DateUtils;
@@ -30,6 +34,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.coreweb.util.MyArray;
 import com.yhaguy.Configuracion;
@@ -779,6 +785,21 @@ public class Utiles {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+    
+    /**
+	 * parse xml
+	 */
+	public static String parseXML(String xmlPath, String tag) {
+		DocumentBuilder dBuilder;
+		try {
+			dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = dBuilder.parse(new File(xmlPath));
+			return doc.getElementsByTagName(tag).item(0).getTextContent();
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
+        return null;
 	}
 	
 	public static void mainX(String[] args) {		

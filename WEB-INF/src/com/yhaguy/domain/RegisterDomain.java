@@ -6230,17 +6230,48 @@ public class RegisterDomain extends Register {
 	 * [2]:numero
 	 * [3]:costoPromedio
 	 * [4]:cliente
+	 * [7]:cliente.ruc
+	 * [8]:id
 	 */
 	public List<Object[]> getVentas(Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, 0.0, v.cliente.empresa.razonSocial,"
-				+ " 0.0, 0.0 from Venta v where v.estadoComprobante is null"
+				+ " 0.0, 0.0, v.cliente.empresa.ruc, v.id from Venta v where v.estadoComprobante is null"
 				+ " and (v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CONTADO
 				+ "' or "
 				+ " v.tipoMovimiento.sigla = '"
 				+ Configuracion.SIGLA_TM_FAC_VENTA_CREDITO
+				+ "')"
+				+ " and (v.fecha >= '"
+				+ desde_
+				+ "' and v.fecha <= '"
+				+ hasta_
+				+ "')"
+				+ " order by v.fecha";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return las ventas.. 
+	 * [0]:concepto
+	 * [1]:fecha
+	 * [2]:numero
+	 * [3]:costoPromedio
+	 * [4]:cliente
+	 * [7]:cliente.ruc
+	 * [8]:id
+	 * [9]:respuestaSet
+	 */
+	public List<Object[]> getVentas(Date desde, Date hasta, String tipoMovimiento) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, 0.0, v.cliente.empresa.razonSocial,"
+				+ " 0.0, 0.0, v.cliente.empresa.ruc, v.id, v.respuestaSET, v.url from Venta v where v.estadoComprobante is null"
+				+ " and (v.tipoMovimiento.sigla = '"
+				+ tipoMovimiento
 				+ "')"
 				+ " and (v.fecha >= '"
 				+ desde_

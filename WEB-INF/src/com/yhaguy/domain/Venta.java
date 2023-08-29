@@ -133,6 +133,11 @@ public class Venta extends Domain {
 	private VehiculoTipo vehiculoTipo;
 	private VehiculoMarca vehiculoMarca;
 	private VehiculoModelo vehiculoModelo;
+	
+	private String cdc;
+	private String respuestaSET = "Pendiente";
+	private String observacionSET;
+	private String url;
 
 	private Set<VentaDetalle> detalles = new HashSet<VentaDetalle>();
 	
@@ -1117,5 +1122,37 @@ public class Venta extends Domain {
 
 	public void setDebitoGroupauto(boolean debitoGroupauto) {
 		this.debitoGroupauto = debitoGroupauto;
+	}
+
+	public String getCdc() {
+		return cdc;
+	}
+
+	public void setCdc(String cdc) {
+		this.cdc = cdc;
+	}
+
+	public String getRespuestaSET() {
+		return respuestaSET;
+	}
+
+	public void setRespuestaSET(String respuestaSET) {
+		this.respuestaSET = respuestaSET;
+	}
+
+	public String getObservacionSET() {
+		return observacionSET;
+	}
+
+	public void setObservacionSET(String observacionSET) {
+		this.observacionSET = observacionSET;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

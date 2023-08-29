@@ -348,7 +348,7 @@ public class Articulo extends Domain {
 		return precioGs;
 	}
 
-	public void setPrecioGs(double precioGs) {
+	public void setPrecioGs(double precioGs) throws Exception {		
 		this.precioGs = precioGs;
 	}
 

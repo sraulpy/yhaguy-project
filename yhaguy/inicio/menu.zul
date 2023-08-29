@@ -2,7 +2,7 @@
 	<menubar id="menubar" visible="@load(vm.menuVisible)">
 
 		<menu label=" Finanzas" iconSclass="z-icon-briefcase">
-			<menupopup sclass="rounded" width="170px">
+			<menupopup sclass="rounded" width="220px">
 				
 				<menu label=" Tesorería" iconSclass="z-icon-briefcase" style="margin-bottom:15px;margin-top:15px">
 					<menupopup sclass="rounded">
@@ -86,6 +86,14 @@
 					</menupopup>
 				</menu>
 				
+				<menu label=" Facturación Electrónica"
+					iconSclass="z-icon-qrcode"
+					style="margin-bottom:15px;margin-top:15px">
+					<menupopup sclass="rounded">
+						<zk forEach="${vm.menuItem(self,'FacturacionElectronica')}" />
+					</menupopup>
+				</menu>
+
 			</menupopup>
 		</menu>
 
@@ -100,15 +108,15 @@
 				<zk forEach="${vm.menuItem(self,'Importacion')}" />
 				<zk forEach="${vm.menuItem(self,'ComprasExplorador')}" />
 				<zk
-					forEach="${vm.menuItem(self, 'NotaCreditoCompra', 'tipo=compra')}" />
+					forEach="${vm.menuItem(self,'NotaCreditoCompra','tipo=compra')}" />
 				<menuseparator />
 				<zk forEach="${vm.menuItem(self,'OrdenPedidoGasto')}" />
 				<zk forEach="${vm.menuItem(self,'ExploradorGastos')}" />
 				<zk forEach="${vm.menuItem(self,'OrdenCompra')}" />
 				<menuseparator />				
-				<zk forEach="${vm.menuItem(self, 'CompraDefiniciones')}" />
-				<zk forEach="${vm.menuItem(self, 'ArticuloPivot')}" />
-				<zk forEach="${vm.menuItem(self, 'ArticuloPivotGenerado')}" />
+				<zk forEach="${vm.menuItem(self,'CompraDefiniciones')}" />
+				<zk forEach="${vm.menuItem(self,'ArticuloPivot')}" />
+				<zk forEach="${vm.menuItem(self,'ArticuloPivotGenerado')}" />
 			</menupopup>
 		</menu>
 
@@ -175,6 +183,7 @@
 				<menuitem label="EVALUACIÓN DEL PERSONAL" iconSclass="z-icon-caret-right"
 					onClick='Clients.showNotification("LA CONFIGURACIÓN PREVIA AÚN ESTÁ PENDIENTE")'/>
 				<zk forEach="${vm.menuItem(self,'PlanillaSalarios')}" />
+				<menuitem label="PLANILLA IPS" iconSclass="z-icon-caret-right"/>
 				<zk forEach="${vm.menuItem(self,'LiquidacionSalarios')}" />
 				<zk forEach="${vm.menuItem(self,'Marcaciones')}" />
 				<zk forEach="${vm.menuItem(self,'VisorMarcaciones')}" />

@@ -35,6 +35,11 @@
 		<property name="costoPromedioGs"/>
 		<property name="costoUltimoGs"/>
 		
+		<property name="cdc"/>
+		<property name="respuestaSET"/>
+		<property name="observacionSET"/>
+		<property name="url"/>
+		
 		<property name="validez">
 			<column name="validez" default="0" />
 		</property>
