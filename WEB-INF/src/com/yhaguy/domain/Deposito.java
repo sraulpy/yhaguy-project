@@ -27,13 +27,14 @@ public class Deposito extends Domain {
 	public static final long ID_MAYORISTA = 7;
 	public static final long ID_MAYORISTA_TEMPORAL = 8;
 	public static final long ID_MRA_TEMPORAL = 9;
-	public static final long ID_MRA = 11;
+	public static final long ID_AVERIADOS_GRAN_ALMACEN = 11;
 	public static final long ID_VIRTUAL_INVENTARIO = 10;
 	public static final long ID_REFACTURACIONES = 12;
 	public static final long ID_MAYORISTA_CENTRAL = 13;
 	public static final long ID_DIFERENCIA_INV_2019 = 10;
 	public static final long ID_DIFERENCIA_INV_MRA_2019 = 9;
 	public static final long ID_IMP_BATERIAS = 16;
+	public static final long ID_IMPORTACIONES = 22;
 	
 	public static final String TEMPORAL = "TEMPORAL";
 	public static final Character VIRTUAL = 'V';
