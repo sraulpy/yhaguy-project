@@ -513,6 +513,10 @@ public class VentaItemControl extends SoloViewModel {
 			return;
 		}
 		
+		if (this.isEmpresaAutocentro() && this.getUs().getLogin().equals("administrativo")) {
+			return;
+		}
+		
 		if ((precio - costoGs) >= costoGs) {
 			Clients.showNotification("Utilidad mayor al 100 %..",
 					Clients.NOTIFICATION_TYPE_ERROR, comp, null, 2000);
@@ -857,6 +861,10 @@ public class VentaItemControl extends SoloViewModel {
 	
 	public boolean isEmpresaYMRA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+	}
+	
+	public boolean isEmpresaAutocentro() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO);
 	}
 	
 	public UtilDTO getUtilDto(){
