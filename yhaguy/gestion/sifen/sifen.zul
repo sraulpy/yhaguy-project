@@ -7,15 +7,16 @@
 	<tabbox vflex="1">
 		<tabs hflex="1">
 			<tab label="Facturas" width="25%"></tab>
-			<tab label="Notas de Remisión" width="25%"></tab>
-			<tab label="Notas de Créditos" width="25%"></tab>
-			<tab label="Notas de Débitos" width="25%"></tab>
+			<tab label="Notas de Remisión" width="25%" disabled="true"></tab>
+			<tab label="Notas de Créditos" width="25%" disabled="true"></tab>
+			<tab label="Notas de Débitos" width="25%" disabled="true"></tab>
 		</tabs>
 		<tabpanels vflex="1">
 			<tabpanel>
 				<hlayout sclass="button-container">
 					<button mold="bs" sclass="btn-success btn-sm"
-						width="150px" iconSclass="z-icon-refresh" label=" Actualizar" />
+						width="150px" iconSclass="z-icon-refresh" label=" Actualizar" 
+						onClick="@command('actualizar')"/>
 					<space></space>
 					<datebox value="@bind(vm.filterDesde)"></datebox>
 					<datebox value="@bind(vm.filterHasta)"></datebox>

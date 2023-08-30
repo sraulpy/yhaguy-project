@@ -17,8 +17,10 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.util.Clients;
 
 import com.coreweb.control.SimpleViewModel;
 import com.roshka.sifen.core.SifenConfig;
@@ -83,6 +85,12 @@ public class SifenViewModel extends SimpleViewModel {
 		Venta venta = (Venta) rr.getObject(Venta.class.getName(), (long) bean[8]);
 		this.generarPDFFE(venta);
 		Executions.getCurrent().sendRedirect(this.getUrl(venta.getNumero()), "_blank");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void actualizar() {
+		Clients.showNotification("DATOS ACTUALIZADOS");
 	}
 	
 	/**
@@ -417,6 +425,10 @@ public class SifenViewModel extends SimpleViewModel {
 	}
 
 	public void setFilterDesde(Date filterDesde) {
+		if (Utiles.diasEntreFechas(filterDesde, this.filterHasta) > 30) {
+			Clients.showNotification("RANGO PERMITIDO HASTA 30 DÍAS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		this.filterDesde = filterDesde;
 	}
 
@@ -425,6 +437,10 @@ public class SifenViewModel extends SimpleViewModel {
 	}
 
 	public void setFilterHasta(Date filterHasta) {
+		if (Utiles.diasEntreFechas(this.filterDesde, filterHasta) > 30) {
+			Clients.showNotification("RANGO PERMITIDO HASTA 30 DÍAS..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
 		this.filterHasta = filterHasta;
 	}
 }
