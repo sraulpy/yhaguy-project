@@ -73,6 +73,7 @@ public class SifenViewModel extends SimpleViewModel {
 			this.generarPDFFE(venta);			
 			rr.saveObject(venta, this.getLoginNombre());
 			bean[9] = venta.getRespuestaSET();
+			bean[10] = venta.getUrl();
 			BindUtils.postNotifyChange(null, null, bean, "*");
 		} catch (Exception e) {
 			e.printStackTrace();
