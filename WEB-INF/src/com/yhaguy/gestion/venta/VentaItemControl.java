@@ -513,10 +513,6 @@ public class VentaItemControl extends SoloViewModel {
 			return;
 		}
 		
-		if (this.isEmpresaAutocentro() && this.getUs().getLogin().equals("administrativo")) {
-			return;
-		}
-		
 		if ((precio - costoGs) >= costoGs) {
 			Clients.showNotification("Utilidad mayor al 100 %..",
 					Clients.NOTIFICATION_TYPE_ERROR, comp, null, 2000);
