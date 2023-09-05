@@ -29888,11 +29888,12 @@ class ClientesVendedorDataSource implements JRDataSource {
 			}
 			String ciudad = (String) dato[7];
 			Double ventas = (Double) dato[8];
+			String dpto = (String) dato[10];
 			if (ventas == null) {
 				ventas = (double) 0;				
 			}
 			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
-					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas)));
+					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas), dpto));
 		}
 	}
 }
