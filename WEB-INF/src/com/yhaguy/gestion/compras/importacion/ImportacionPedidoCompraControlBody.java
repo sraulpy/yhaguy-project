@@ -5234,8 +5234,8 @@ class ReporteDiferenciaImportacion extends ReporteYhaguy {
 	@Override
 	public ComponentBuilder getFooterPropioReporte() {
 		VerticalListBuilder main = cmp.verticalList();
-		main.add(cmp.text("\t\t\t - - - - - - - - - - - - - - - - - - \t\t\t - - - - - - - - - - - - - - - - - - - - - -"));
-		main.add(cmp.text("\t\t\t Encargado de Depósito \t\t\t Encargado de Abastecimiento"));
+		main.add(cmp.text("\t\t\t - - - - - - - - - - - - - - - - - - \t\t - - - - - - - - - - - - - - - - - - - - - -"));
+		main.add(cmp.text("\t\t\t Encargado de Depósito \t\t Encargado de Abastecimiento"));
 		main.add(cmp.text(""));
 		main.add(cmp.text(""));
 		main.add(cmp.line());
