@@ -447,7 +447,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				conteo = "1er Conteo";
 				int dif = item.getConteo1() - item.getCantidad_acum();
 				if (dif != 0) {
-					Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getConteo1(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo1() };
+					Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getCantidad(), item.getConteo1(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo1() };
 					data.add(obj);
 				}
 			} else if (this.dto.isConteo1() && this.dto.isConteo2() && !this.dto.isConteo3()) {
@@ -456,7 +456,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				int dif = item.getConteo2() - item.getCantidad_acum();
 				if (dif1 != 0) {
 					if (dif != 0) {
-						Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo2()};
+						Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getCantidad(), item.getConteo2(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo2()};
 						data.add(obj);
 					}
 				}				
@@ -468,7 +468,7 @@ public class ImportacionPedidoCompraControlBody extends BodyApp {
 				if (dif1 != 0) {
 					if (dif2 != 0) {
 						if (dif != 0) {
-							Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo3()};
+							Object[] obj = mostrar ? new Object[] { item.getArticulo().getPos1(), item.getCantidad(), item.getConteo3(), dif } : new Object[] { item.getArticulo().getPos1(), item.getConteo3()};
 							data.add(obj);
 						}
 					}					
@@ -5183,8 +5183,9 @@ class ReporteDiferenciaImportacion extends ReporteYhaguy {
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Conteo", TIPO_INTEGER, 30);
-	static DatosColumnas col4 = new DatosColumnas("Diferencia", TIPO_INTEGER, 30);
+	static DatosColumnas col3 = new DatosColumnas("Cant.Factura", TIPO_INTEGER, 30);
+	static DatosColumnas col4 = new DatosColumnas("Conteo", TIPO_INTEGER, 30);
+	static DatosColumnas col5 = new DatosColumnas("Diferencia", TIPO_INTEGER, 30);
 	
 	public ReporteDiferenciaImportacion(ImportacionPedidoCompraDTO importacion, String conteo) {
 		this.importacion = importacion;
@@ -5195,6 +5196,7 @@ class ReporteDiferenciaImportacion extends ReporteYhaguy {
 		cols.add(col1);
 		cols.add(col3);
 		cols.add(col4);
+		cols.add(col5);
 	}
 
 	@Override
@@ -5204,6 +5206,7 @@ class ReporteDiferenciaImportacion extends ReporteYhaguy {
 		this.setNombreArchivo("Importacion-");
 		this.setTitulosColumnas(cols);
 		this.setBody(this.getCuerpo());
+		this.setFooterPropioReporte(true);
 	}
 	
 	/**
@@ -5217,11 +5220,27 @@ class ReporteDiferenciaImportacion extends ReporteYhaguy {
 		VerticalListBuilder out = cmp.verticalList();
 		out.add(cmp.horizontalFlowList()
 				.add(this.textoParValor("Nro. Importación", numero))
-				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial()))
+				.add(this.textoParValor("Proveedor", this.importacion.getProveedor().getRazonSocial())));
+		out.add(cmp.horizontalFlowList().add(this.texto("")));
+		out.add(cmp.horizontalFlowList()
+				.add(this.textoParValor("Nro. Factura Comercial", this.importacion.getImportacionFactura().get(0).getNumero()))
 				.add(this.textoParValor("Conteo Nro.", conteo)));
 		out.add(cmp.horizontalFlowList().add(this.texto("")));
 
 		return out;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public ComponentBuilder getFooterPropioReporte() {
+		VerticalListBuilder main = cmp.verticalList();
+		main.add(cmp.text("\t\t\t - - - - - - - - - - - - - - - - - - \t\t\t - - - - - - - - - - - - - - - - - - - - - -"));
+		main.add(cmp.text("\t\t\t Encargado de Depósito \t\t\t Encargado de Abastecimiento"));
+		main.add(cmp.text(""));
+		main.add(cmp.text(""));
+		main.add(cmp.line());
+		main.add(cmp.verticalGap(10));
+		return main;
 	}
 }
 
