@@ -6209,16 +6209,18 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (NotaCredito ncr : notasCredito) {
-					Cliente cli = ncr.getCliente();
-					long idCliente = cli.getId().longValue();
-					Double total = values_nc.get(idCliente);
-					if (total != null) {
-						total += ncr.getTotalImporteGsSinIva();
-					} else {
-						total = ncr.getTotalImporteGsSinIva();
-					}
-					values_nc.put(idCliente, total);
-					clientes.put(idCliente, cli.getRazonSocial());
+					if ((!ncr.isAnulado()) && ncr.isNotaCreditoVentaContado()) {
+						Cliente cli = ncr.getCliente();
+						long idCliente = cli.getId().longValue();
+						Double total = values_nc.get(idCliente);
+						if (total != null) {
+							total += ncr.getTotalImporteGsSinIva();
+						} else {
+							total = ncr.getTotalImporteGsSinIva();
+						}
+						values_nc.put(idCliente, total);
+						clientes.put(idCliente, cli.getRazonSocial());
+					}					
 				}
 				
 				for (NotaCredito ncr : notasCredito) {
@@ -6243,7 +6245,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						data.add(new Object[] { clientes.get(idCliente), cobrado_, contado_, notacre_ });
 					}
 				}
-				data.add(new Object[] { "NOTAS DE CRÉDITO CONTADO", 0.0, (totalNCRContado * -1), 0.0 });
+				data.add(new Object[] { "NOTAS DE CRÉDITO CONTADO", 0.0, Utiles.getRedondeo((totalNCRContado * -1)), 0.0 });
 
 				ReporteTotalCobranzasVentasCliente rep = new ReporteTotalCobranzasVentasCliente(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
@@ -24089,7 +24091,7 @@ class ReporteTotalCobranzasVentasCliente extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Cliente", TIPO_STRING);
 	static DatosColumnas col2 = new DatosColumnas("Total Cobrado S/iva", TIPO_DOUBLE_GS, 35, true);
 	static DatosColumnas col3 = new DatosColumnas("Total Contado S/iva", TIPO_DOUBLE_GS, 35, true);
-	static DatosColumnas col4 = new DatosColumnas("Total N.Credito S/iva", TIPO_DOUBLE_GS, 35, true);
+	static DatosColumnas col4 = new DatosColumnas("Total N.Cred.Cont S/iva", TIPO_DOUBLE_GS, 35, true);
 
 	public ReporteTotalCobranzasVentasCliente(Date desde, Date hasta, String vendedor) {
 		this.desde = desde;
