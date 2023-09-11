@@ -6142,6 +6142,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				Funcionario vendedor = filtro.getVendedor();
 				
+				double totalNCRContado = 0.0;
+				
 				if (vendedor == null) {
 					Clients.showNotification("DEBE SELECCIONAR UN VENDEDOR..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 					return;
@@ -6218,6 +6220,12 @@ public class ReportesViewModel extends SimpleViewModel {
 					values_nc.put(idCliente, total);
 					clientes.put(idCliente, cli.getRazonSocial());
 				}
+				
+				for (NotaCredito ncr : notasCredito) {
+					if ((!ncr.isAnulado()) && ncr.isNotaCreditoVentaContado()) {
+						totalNCRContado += ncr.getTotalImporteGsSinIva(); 
+					}
+				}
 
 				for (Long idCliente : clientes.keySet()) {
 					Double cobrado = values.get(idCliente);
@@ -6234,7 +6242,8 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (cobrado != null || contado != null || notacre != null) {
 						data.add(new Object[] { clientes.get(idCliente), cobrado_, contado_, notacre_ });
 					}
-				}				
+				}
+				data.add(new Object[] { "NOTAS DE CRÉDITO CONTADO", 0.0, (totalNCRContado * -1), 0.0 });
 
 				ReporteTotalCobranzasVentasCliente rep = new ReporteTotalCobranzasVentasCliente(desde, hasta, vendedor.getRazonSocial());
 				rep.setDatosReporte(data);
