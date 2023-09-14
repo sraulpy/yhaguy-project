@@ -21,6 +21,7 @@ import com.coreweb.componente.BuscarElemento;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SimpleViewModel;
 import com.coreweb.domain.Tipo;
+import com.coreweb.util.AutoNumeroControl;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.Configuracion;
@@ -411,11 +412,15 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		MyArray moneda = new MyArray();
 		moneda.setId(moneda_.getId());
 		moneda.setPos1(moneda_.getText());
+		
+		String key = Configuracion.NRO_CAJA_REPOSICION;
 
 		WindowCheque w = new WindowCheque();
 		w.getChequeDTO().setBeneficiario(beneficiario);
 		w.getChequeDTO().setMoneda(moneda);
 		w.getChequeDTO().setMonto(monto);
+		w.getChequeDTO().setNumeroCaja(this.dato.getDto().getNumero());
+		w.getChequeDTO().setNumeroOrdenPago(key + "-" + AutoNumeroControl.getAutoNumero(key, 5, true));
 		w.setMontoRecibo(monto);
 		w.show(WindowPopup.NUEVO);
 
