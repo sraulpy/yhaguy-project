@@ -1774,7 +1774,7 @@ public class CompraLocalControlBody extends BodyApp {
 	 * @return la restriccion de fecha..
 	 */
 	public String getConstraintFecha() {
-	    return "no future, after " + new SimpleDateFormat("yyyyMMdd").format(this.getFechaCierre());
+	    return "no future, after " + new SimpleDateFormat("yyyyMMdd").format(this.getMaxFecha());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -2119,6 +2119,13 @@ public class CompraLocalControlBody extends BodyApp {
 		out.add(CompraLocalOrden.REPOSICION);
 		out.add(CompraLocalOrden.VENTA_CONFIRMADA);
 		return out;
+	}
+	
+	/**
+	 * @return fecha maxima anterior a la carga..
+	 */
+	private Date getMaxFecha() {
+		return Utiles.agregarDias(new Date(), -30);
 	}
 	
 	public CompraLocalOrdenDTO getDto() {

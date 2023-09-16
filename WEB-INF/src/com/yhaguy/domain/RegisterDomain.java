@@ -3009,7 +3009,7 @@ public class RegisterDomain extends Register {
 	 */
 	public List<CompraLocalFactura> getComprasLocales(Date desde, Date hasta, long idSucursal, long idProveedor, long idCondicion)
 			throws Exception {
-		String query = "select c from CompraLocalFactura c where c.dbEstado != 'D' and (c.tipoMovimiento.sigla = ? or c.tipoMovimiento.sigla = ?)"
+		String query = "select c from CompraLocalFactura c where c.dbEstado = 'R' and (c.tipoMovimiento.sigla = ? or c.tipoMovimiento.sigla = ?)"
 				+ " and c.fechaOriginal between ? and ?";
 				if (idSucursal > 0) {
 					query += " and c.sucursal.id = " + idSucursal;
@@ -12571,7 +12571,7 @@ public class RegisterDomain extends Register {
 	 * @return libro compras indistinto segun fecha..
 	 */
 	public List<CompraLocalFactura> getLibroComprasLocales(Date desde, Date hasta, long idSucursal) throws Exception {
-		String query = "select c from CompraLocalFactura c where c.dbEstado != 'D'"
+		String query = "select c from CompraLocalFactura c where c.dbEstado = 'R'"
 				+ " and c.fechaOriginal between ? and ?";
 				if (idSucursal > 0) {
 					query += " and c.sucursal.id = " + idSucursal;
