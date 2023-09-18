@@ -70,11 +70,15 @@
 							value="@load(vm.dto.deposito.text)"
 							selectedItem="@bind(vm.dto.deposito)"
 							hflex="true" instant="true"
-							onChange="@command('setDeposito')">
+							onChange="@command('setDeposito')"
+							visible="@load(vm.dto.detalles.size() eq 0)">
 							<template name="model">
 								<comboitem label="@load(each.text)"/>
 							</template>
 						</combobox>
+						<textbox value="@load(vm.dto.deposito.text)"
+							readonly="true" 
+							hflex="true" visible="@load(vm.dto.detalles.size() gt 0)" />
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">

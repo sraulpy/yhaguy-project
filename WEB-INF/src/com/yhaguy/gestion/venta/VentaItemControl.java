@@ -41,6 +41,7 @@ import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
 import com.yhaguy.domain.ArticuloUbicacion;
+import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.TipoMovimiento;
 import com.yhaguy.domain.VehiculoMarca;
@@ -368,6 +369,12 @@ public class VentaItemControl extends SoloViewModel {
 				maxDescuento = 30;
 				this.det.setDescuentoPorcentajeMax(maxDescuento);
 			}
+		}
+		
+		// ticket 8379
+		if (this.dto.getDeposito().getText().equals(Deposito.TRANSITORIO)) {
+			maxDescuento = 5;
+			this.det.setDescuentoPorcentajeMax(maxDescuento);
 		}
 		
 		// promocion yrsa ymra..
@@ -792,13 +799,20 @@ public class VentaItemControl extends SoloViewModel {
 			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_MAYORISTA)) {
 				if (precio.getDescripcion().contains("MAYORISTA")) {
 					out.remove(mprecio);
-				}
+				} 
 			}
 			if (!this.isOperacionHabilitada(Permisos.VER_PRECIO_BATERIAS)) {
 				if (precio.getDescripcion().contains("BATERIAS")) {
 					out.remove(mprecio);
 				}
 			}
+		}
+		if (this.dto.getDeposito().getText().equals(Deposito.TRANSITORIO)) {
+			ArticuloListaPrecio precio = rr.getListaDePrecio(2);
+			out.clear();
+			MyArray mprecio = new MyArray(precio.getDescripcion(), precio.getMargen(), precio.getFormula());
+			mprecio.setId(precio.getId());
+			out.add(mprecio);
 		}
 		return out;
 	}

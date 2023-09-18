@@ -39,6 +39,7 @@ public class Deposito extends Domain {
 	public static final String TEMPORAL = "TEMPORAL";
 	public static final Character VIRTUAL = 'V';
 	public static final String NO_AUDITAR = "NO_AUDIT";
+	public static final String TRANSITORIO = "TRANSITORIO";
 	
 	private String observacion;
 	
