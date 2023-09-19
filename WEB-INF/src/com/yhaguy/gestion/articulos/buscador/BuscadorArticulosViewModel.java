@@ -873,17 +873,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 					out.add(new MyPair(dep.getId(), dep.getDescripcion()));
 				}
 			}
-		}
-		//ticket 8330
-		if (this.getLoginNombre().equals("federico") || this.getLoginNombre().equals("patricia")
-				|| this.getLoginNombre().equals("vanesar") || this.getLoginNombre().equals("marcelov")
-				|| this.getLoginNombre().equals("juanr") || this.getLoginNombre().equals("sergio")) {
-			Deposito tr = (Deposito) rr.getObject(Deposito.class.getName(), 21);
-			if (tr != null) {
-				out.add(new MyPair(tr.getId(), tr.getDescripcion()));
-			}
-		}
-		
+		}		
 		return out;
 	}
 
