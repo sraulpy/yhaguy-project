@@ -6294,14 +6294,16 @@ public class ReportesViewModel extends SimpleViewModel {
 					long may = art[7] != null ? (long) art[7] : (long) 0;
 					long mac = art[11] != null ? (long) art[11] : (long) 0;
 					long bat = art[14] != null ? (long) art[14] : (long) 0;
+					long imp = art[16] != null ? (long) art[16] : (long) 0;
+					long tran = art[17] != null ? (long) art[17] : (long) 0;
 					if (stock) {
-						if (min > 0 || may > 0 || mac > 0) {
+						if (min > 0 || may > 0 || mac > 0 || imp > 0 || tran > 0) {
 							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 45), art[15], min, may,
-									bat, Utiles.getRedondeo((double) art[3]), Utiles.getRedondeo((double) art[13]) });
+									bat, imp, tran, Utiles.getRedondeo((double) art[3]), Utiles.getRedondeo((double) art[13]) });
 						}
 					} else {
 						data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 45), art[15], min, may,
-								bat, Utiles.getRedondeo((double) art[3]), Utiles.getRedondeo((double) art[13]) });
+								bat, imp, tran, Utiles.getRedondeo((double) art[3]), Utiles.getRedondeo((double) art[13]) });
 					}
 				}
 				
@@ -13538,7 +13540,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					long id6 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_PRODUCCION : Deposito.ID_IMPORTACIONES;
 					long id7 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_RECLAMOS : Deposito.ID_MAYORISTA;
 					long id8 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SECAS : Deposito.ID_MAYORISTA_TEMPORAL;
-					long id9 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO : Deposito.ID_MAYORISTA_CENTRAL;
+					long id9 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_TRANSITORIO_GTSA : Deposito.ID_MAYORISTA_CENTRAL;
 					long id10 = isEmpresaBaterias() ? Deposito.ID_DEPOSITO_SC1 : Deposito.ID_AVERIADOS_GRAN_ALMACEN;
 					Deposito d1 = (Deposito) rr.getObject(Deposito.class.getName(), id1);
 					Deposito d2 = (Deposito) rr.getObject(Deposito.class.getName(), id2);
@@ -27959,8 +27961,10 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 	static DatosColumnas col4 = new DatosColumnas("Min.", TIPO_LONG, 15);
 	static DatosColumnas col5 = new DatosColumnas("May.", TIPO_LONG, 15);	
 	static DatosColumnas col6 = new DatosColumnas("Imp.Bat.", TIPO_LONG, 20);
-	static DatosColumnas col7 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 30);
-	static DatosColumnas col8 = new DatosColumnas("Bat.Gs.", TIPO_DOUBLE_GS, 30);
+	static DatosColumnas col7 = new DatosColumnas("Import", TIPO_LONG, 20);
+	static DatosColumnas col8 = new DatosColumnas("Transi", TIPO_LONG, 20);
+	static DatosColumnas col9 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 30);
+	static DatosColumnas col10 = new DatosColumnas("Bat.Gs.", TIPO_DOUBLE_GS, 30);
 
 	public ReporteListaPrecioPorDeposito_(String proveedor) {
 		this.proveedor = proveedor;
@@ -27975,6 +27979,8 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 		cols.add(col6);
 		cols.add(col7);
 		cols.add(col8);
+		cols.add(col9);
+		cols.add(col10);
 	}
 
 	@Override

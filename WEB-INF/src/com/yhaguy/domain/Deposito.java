@@ -13,7 +13,7 @@ public class Deposito extends Domain {
 	public static final long ID_DEPOSITO_FALLADOS = 8;
 	public static final long ID_DEPOSITO_RECLAMOS = 9;
 	public static final long ID_DEPOSITO_SECAS = 10;
-	public static final long ID_DEPOSITO_TRANSITORIO = 11;
+	public static final long ID_DEPOSITO_TRANSITORIO_GTSA = 11;
 	public static final long ID_DEPOSITO_PRODUCCION = 12;
 	public static final long ID_DEPOSITO_SC1 = 1;
 	
@@ -35,6 +35,7 @@ public class Deposito extends Domain {
 	public static final long ID_DIFERENCIA_INV_MRA_2019 = 9;
 	public static final long ID_IMP_BATERIAS = 16;
 	public static final long ID_IMPORTACIONES = 22;
+	public static final long ID_DEPOSITO_TRANSITORIO_YRSA = 21;
 	
 	public static final String TEMPORAL = "TEMPORAL";
 	public static final Character VIRTUAL = 'V';
