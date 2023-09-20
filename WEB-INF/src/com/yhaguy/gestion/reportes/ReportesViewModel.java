@@ -27955,9 +27955,9 @@ class ReporteListaPrecioPorDeposito_ extends ReporteYhaguy {
 	private String proveedor;
 
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 35);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Línea", TIPO_STRING, 30);
+	static DatosColumnas col3 = new DatosColumnas("Línea", TIPO_STRING, 20);
 	static DatosColumnas col4 = new DatosColumnas("Min.", TIPO_LONG, 15);
 	static DatosColumnas col5 = new DatosColumnas("May.", TIPO_LONG, 15);	
 	static DatosColumnas col6 = new DatosColumnas("Imp.Bat.", TIPO_LONG, 20);
