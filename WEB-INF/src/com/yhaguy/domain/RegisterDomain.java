@@ -12882,6 +12882,52 @@ public class RegisterDomain extends Register {
 	 * @return los articulos..
 	 * [0]:articulo.id
 	 * [1]:articulo.codigoInterno
+	 * [2]:articulo.codigoInterno
+	 * [3]:mayorista gs
+	 * [4]:minorista gs
+	 * [5]:lista gs
+	 * [6]:stock minorista
+	 * [7]:stock mayorista
+	 * [8]:stock mcal
+	 * [9]:costo gs
+	 * [10]:articulo.familia
+	 * [11]:stock mayorista central
+	 * [12]:transportadora
+	 * [13]:precioBaterias
+	 * [14]:stock imp baterias
+	 * [15]:articulo.linea
+	 * [16]:stock importaciones
+	 * [17]:stock transitorio
+	 */
+	public List<Object[]> getArticulos_(long idProveedor, long idMarca, long idFamilia) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion, a.precioGs, a.precioMinoristaGs, a.precioListaGs, "
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MINORISTA + "),"
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MAYORISTA + "),"
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MCAL_LOPEZ + "),"
+				+ " a.costoGs, a.familia.descripcion,"
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_MAYORISTA_CENTRAL + "),"
+				+ " a.precioTransportadora, a.precioBaterias,"
+				+ " (select stock from ArticuloDeposito where idarticulo = a.id and iddeposito = " + Deposito.ID_IMP_BATERIAS + "),"
+				+ " a.articuloLinea.descripcion,"
+				+ " 0, 0"
+				+ " from Articulo a where a.dbEstado != 'D'";
+		if (idProveedor > 0) {
+			query += " and a.proveedor.id = " + idProveedor;
+		}
+		if (idMarca > 0) {
+			query += " and a.marca.id = " + idMarca;
+		}
+		if (idFamilia > 0) {
+			query += " and a.familia.id = " + idFamilia;
+		}
+		query += " order by a.codigoInterno";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los articulos..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
 	 * [2]:articulo.descripcion
 	 * [3]:mayorista gs
 	 * [4]:minorista gs

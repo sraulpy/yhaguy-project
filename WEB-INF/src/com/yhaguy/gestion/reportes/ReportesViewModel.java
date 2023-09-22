@@ -6288,7 +6288,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 
-				List<Object[]> arts = rr.getArticulos(idProveedor, idMarca, idFamilia, "");
+				List<Object[]> arts = ReportesViewModel.this.isEmpresaYRSA() ? 
+						rr.getArticulos(idProveedor, idMarca, idFamilia, "") : rr.getArticulos_(idProveedor, idMarca, idFamilia);
 				for (Object[] art : arts) {
 					long min = art[6] != null ? (long) art[6] : (long) 0;
 					long may = art[7] != null ? (long) art[7] : (long) 0;
@@ -16630,6 +16631,13 @@ public class ReportesViewModel extends SimpleViewModel {
 
 	public void setFiltro(ReportesFiltros filtro) {
 		this.filtro = filtro;
+	}
+	
+	/**
+	 * @return true si es baterias..
+	 */
+	public boolean isEmpresaYRSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
 	}
 
 	/**
