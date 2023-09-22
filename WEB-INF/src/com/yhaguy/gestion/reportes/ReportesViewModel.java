@@ -6287,16 +6287,20 @@ public class ReportesViewModel extends SimpleViewModel {
 
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
+				
+				boolean yrsa = ReportesViewModel.this.isEmpresaYRSA();
 
-				List<Object[]> arts = ReportesViewModel.this.isEmpresaYRSA() ? 
-						rr.getArticulos(idProveedor, idMarca, idFamilia, "") : rr.getArticulos_(idProveedor, idMarca, idFamilia);
+				List<Object[]> arts = yrsa ? rr.getArticulos(idProveedor, idMarca, idFamilia, "") : rr.getArticulos_(idProveedor, idMarca, idFamilia);
 				for (Object[] art : arts) {
 					long min = art[6] != null ? (long) art[6] : (long) 0;
 					long may = art[7] != null ? (long) art[7] : (long) 0;
 					long mac = art[11] != null ? (long) art[11] : (long) 0;
 					long bat = art[14] != null ? (long) art[14] : (long) 0;
-					long imp = art[16] != null ? (long) art[16] : (long) 0;
-					long tran = art[17] != null ? (long) art[17] : (long) 0;
+					long imp = 0; long tran = 0;
+					if (yrsa) {
+						imp = art[16] != null ? (long) art[16] : (long) 0;
+						tran = art[17] != null ? (long) art[17] : (long) 0;
+					}					
 					if (stock) {
 						if (min > 0 || may > 0 || mac > 0 || imp > 0 || tran > 0) {
 							data.add(new Object[] { art[1], Utiles.getMaxLength((String) art[2], 45), art[15], min, may,
