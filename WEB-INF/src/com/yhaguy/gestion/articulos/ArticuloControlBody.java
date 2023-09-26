@@ -47,6 +47,7 @@ import com.yhaguy.domain.ArticuloUbicacion;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.util.Barcode;
+import com.yhaguy.util.EnviarCorreo;
 
 @SuppressWarnings("unchecked")
 public class ArticuloControlBody extends BodyApp {
@@ -223,6 +224,27 @@ public class ArticuloControlBody extends BodyApp {
 	@Listen("onUpload=#upImg")
 	public void uploadImage(UploadEvent event) throws IOException {
 		this.subirImagen(event);
+	}
+	
+	@Command
+	public void notificar() {
+		if (this.isEmpresaCentral() || this.isEmpresaGroupauto()) {
+			if (this.dto.isRestriccionCosto()) {
+				return;
+			}
+			String[] send = new String[] { "vanesar@yhaguyrepuestos.com.py" };
+			String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+			try {
+				String asunto = "Notificación Restricción Costos - " + Configuracion.empresa;
+				EnviarCorreo enviarCorreo = new EnviarCorreo();
+				enviarCorreo.sendMessage(send, null, sendCCO, asunto,
+						"Se registra un clic para inactivar la restricción de costo del código: "
+								+ this.dto.getCodigoInterno() + " por el usuario: " + this.getLoginNombre(),
+						"", "", "", "");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/******************************************************/
