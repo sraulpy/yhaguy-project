@@ -237,10 +237,10 @@ public class ArticuloControlBody extends BodyApp {
 			try {
 				String asunto = "Notificación Restricción Costos - " + Configuracion.empresa;
 				EnviarCorreo enviarCorreo = new EnviarCorreo();
-				enviarCorreo.sendMessage(send, send, sendCCO, asunto,
+				enviarCorreo.sendMessage(send, sendCCO, asunto,
 						"Se registra un clic para inactivar la restricción de costo del código: "
 								+ this.dto.getCodigoInterno() + " por el usuario: " + this.getLoginNombre(),
-						"", "", "", "");
+						"Notificacion.pdf", null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
