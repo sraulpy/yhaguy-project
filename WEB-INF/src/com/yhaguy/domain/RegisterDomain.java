@@ -15341,6 +15341,14 @@ public class RegisterDomain extends Register {
 		return this.hql(query);
 	}
 	
+	/**
+	 * @return articulos sin restriccion..
+	 */
+	public List<Articulo> getArticulosSinRestriccion() throws Exception {
+		String query = "select a from Articulo a where a.restriccionCosto = FALSE";
+		return this.hqlLimit(query, 100);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
