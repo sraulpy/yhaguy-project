@@ -642,7 +642,8 @@
 										<row>
 											<field value="Restringir Costo:" />
 											<checkbox checked="@bind(vm.dto.restriccionCosto)"
-												onCheck="@command('notificar')"></checkbox>
+												onCheck="@command('notificar')"
+												readonly="@load(!vm.isOperacionHabilitada('ModificarPrecioVenta'))"></checkbox>
 										</row>
 										<row>
 											<field value="Porcentaje de descuento:" />
