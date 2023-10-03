@@ -62,6 +62,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 	private MyArray condicionContado = utilDto.getCondicionPagoContado();
 	private MyArray condicionCredito30 = utilDto.getCondicionPagoCredito30();
 	private MyArray otrosComprobantes = utilDto.getTmOtrosComprobantes();
+	private MyArray facturaGastoExterior = utilDto.getTmFacturaGastoExterior();
 	
 	private String mensajeError = "";
 	
@@ -324,6 +325,7 @@ public class GastoSimpleControl extends SoloViewModel implements VerificaAceptar
 		this.movimientosDeGasto.add(this.boletaVenta);
 		this.movimientosDeGasto.add(this.facturaGastoCredito);
 		this.movimientosDeGasto.add(this.otrosComprobantes);
+		this.movimientosDeGasto.add(this.facturaGastoExterior);
 		return this.movimientosDeGasto;
 	}
 	

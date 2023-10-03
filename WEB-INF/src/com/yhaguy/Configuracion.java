@@ -955,6 +955,7 @@ public class Configuracion extends Config {
 	public final static String SIGLA_TM_ORDEN_GASTO = "MOV-GTO-CBI-OGT";
 	public final static String SIGLA_TM_OTROS_COMPROBANTES = "MOV-GTO-OTR-CBT";
 	public final static String SIGLA_TM_OTROS_PAGOS = "MOV-GTO-OTR-PAG";
+	public final static String SIGLA_TM_FAC_GASTO_EXTERIOR = "MOV-GTO-FAC-EXT";
 
 	// Siglas de movimientos de Pago
 	public final static String SIGLA_TM_RECIBO_PAGO = "MOV-PAG-REC";

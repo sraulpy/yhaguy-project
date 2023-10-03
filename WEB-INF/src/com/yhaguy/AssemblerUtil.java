@@ -653,6 +653,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		TipoMovimiento _transferenciaInterna = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_TRANS_MERCADERIA);
 		TipoMovimiento _otrosComprobantes = rr
 				.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_OTROS_COMPROBANTES);
+		TipoMovimiento _facGastoExterior = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_GASTO_EXTERIOR);
 
 		TipoMovimiento _ajustePositivo = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
 		TipoMovimiento _ajusteNegativo = rr.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
@@ -729,6 +730,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		MyArray ajusteNegativo = this.tipoMovToMyArray(_ajusteNegativo);
 		MyArray inventario = this.tipoMovToMyArray(_inventario);
 		MyArray otrosComprobantes = this.tipoMovToMyArray(_otrosComprobantes);
+		MyArray facGastoExterior = this.tipoMovToMyArray(_facGastoExterior);
 
 		dto.setOperacionCompra(operacionCompra);
 		dto.setOperacionGasto(operacionGasto);
@@ -783,6 +785,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		dto.setTmAjusteNegativo(ajusteNegativo);
 		dto.setTmInventario(inventario);
 		dto.setTmOtrosComprobantes(otrosComprobantes);
+		dto.setTmFacturaGastoExterior(facGastoExterior);
 
 		dto.setTmBancoEmisionCheque(chequePropio);
 		dto.setTmBancoDepositoBancario(depositoEfectivo);

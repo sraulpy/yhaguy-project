@@ -285,6 +285,7 @@ public class UtilDTO extends UtilCoreDTO {
 	MyArray tmBoletaVenta = new MyArray();
 	MyArray tmOrdenGasto = new MyArray();
 	MyArray tmOtrosComprobantes = new MyArray();
+	MyArray tmFacturaGastoExterior = new MyArray();
 
 	// Movimientos de Pago
 	MyArray tmReciboPago = new MyArray();
@@ -3205,5 +3206,13 @@ public class UtilDTO extends UtilCoreDTO {
 
 	public void setTipoImportacionEXW(MyPair tipoImportacionEXW) {
 		this.tipoImportacionEXW = tipoImportacionEXW;
+	}
+
+	public MyArray getTmFacturaGastoExterior() {
+		return tmFacturaGastoExterior;
+	}
+
+	public void setTmFacturaGastoExterior(MyArray tmFacturaGastoExterior) {
+		this.tmFacturaGastoExterior = tmFacturaGastoExterior;
 	}
 }
