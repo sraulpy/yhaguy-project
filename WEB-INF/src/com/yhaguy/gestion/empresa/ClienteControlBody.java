@@ -108,6 +108,7 @@ public class ClienteControlBody extends EmpresaControlBody {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			aux.getEmpresa().setCartera((EmpresaCartera) rr.getObject(EmpresaCartera.class.getName(), 1));
+			aux.getEmpresa().setVendedor(rr.getFuncionario("ADMINISTRACION"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
