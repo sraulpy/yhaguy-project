@@ -8849,6 +8849,18 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los cheques de terceros..
+	 */
+	public List<BancoChequeTercero> getChequesTercero(String numero, long idBanco)
+			throws Exception {
+		String query = "select c from BancoChequeTercero c where c.dbEstado != 'D'"
+				+ " and c.anulado = 'FALSE'"
+				+ " and upper(c.numero) = '"
+				+ numero.toUpperCase() + "' and c.banco.id = " + idBanco;
+		return this.hqlLimit(query, 50);
+	}
+	
+	/**
 	 * @return los cheques diferidos a depositar..
 	 */
 	public List<BancoChequeTercero> getChequesTerceroDiferidosAdepositar(

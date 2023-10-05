@@ -429,11 +429,13 @@ public class ControlBancoMovimiento extends Control {
 		}
 		
 		if (tipoFP == cheqTerAut) {
-			BancoChequeTercero bct = rr.getChequesTercero(rfpDto.getChequeNumero()).get(0);
-			bct.setDescontado(true);
-			bct.setObservacion("Descontado por AutoCobranza..");
-			bct.setNumeroDescuento(recibo);
-			rr.saveObject(bct, this.getLoginNombre());
+			BancoChequeTercero bct = rr.getChequesTercero(rfpDto.getChequeNumero(), rfpDto.getChequeBanco().getId()).get(0);
+			if (bct != null) {
+				bct.setDescontado(true);
+				bct.setObservacion("Descontado por AutoCobranza..");
+				bct.setNumeroDescuento(recibo);
+				rr.saveObject(bct, this.getLoginNombre());
+			}			
 		}
 
 		/*
