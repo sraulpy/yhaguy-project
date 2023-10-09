@@ -6,6 +6,7 @@
 		<tab label="@load(vm.tabContactoLabel)" closable="false"
 			width="150px" />
 		<tab label="@load(vm.cliente ? 'Datos Cliente' : 'Datos Proveedor')" closable="false" width="150px" />
+		<tab label="Geolocalización" closable="false" width="150px" visible="@load(vm.cliente)" />
 		<tab label="Cuenta Corriente" closable="false" width="150px" visible="false" />
 	</tabs>
 
@@ -359,6 +360,17 @@
 		<tabpanel style="padding:15px">
 			<include
 				src="@load(vm.cliente? '/yhaguy/gestion/empresa/ClienteBody.zul' : '/yhaguy/gestion/empresa/ProveedorBody.zul')" />
+		</tabpanel>
+		
+		<tabpanel style="padding:15px">
+			<vlayout vflex="1">
+				<gmaps id="map" version="3.26" hflex="true" lat="-25.3054494"
+					lng="-57.5351386" zoom="8" vflex="1" showSmallCtrl="true">
+					<gmarker lat="@load(vm.dtoEmp.latitud)"
+							lng="@load(vm.dtoEmp.longitud)" open="true"
+							content="@load(vm.dtoEmp.razonSocial)" />	
+				</gmaps>
+			</vlayout>
 		</tabpanel>
 
 		<tabpanel>
