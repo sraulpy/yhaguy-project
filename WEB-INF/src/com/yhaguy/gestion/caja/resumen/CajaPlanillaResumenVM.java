@@ -277,6 +277,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.nvoDeposito.setDbEstado('R');
 		this.nvoDeposito.setCerrado(true);
 		this.nvoDeposito.setTotalImporte_gs(this.nvoDeposito.getTotalImporteGs());
+		this.nvoDeposito.setFechaAcreditacion(this.nvoDeposito.getFecha());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito, this.getLoginNombre());
 		
@@ -296,6 +297,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 		this.nvoDeposito_.setDbEstado('R');
 		this.nvoDeposito_.setCerrado(true);
 		this.nvoDeposito_.setTotalImporte_gs(this.nvoDeposito_.getTotalImporteGs());
+		this.nvoDeposito_.setFechaAcreditacion(this.nvoDeposito.getFecha());
 		ControlBancoMovimiento.addMovimientoDepositoBancario(this.nvoDeposito_, this.getLoginNombre());
 		rr.saveObject(this.nvoDeposito_, this.getLoginNombre());
 		
@@ -365,6 +367,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 	private void inicializarDeposito() throws Exception {
 		this.nvoDeposito = new BancoBoletaDeposito();
 		this.nvoDeposito.setFecha(new Date());
+		this.nvoDeposito.setFechaAcreditacion(new Date());
 		this.nvoDeposito.setNroCuenta(this.getBancoCuentas().get(0));
 		this.nvoDeposito.setObservacion("CAJAS: " + this.selectedResumen_.getNumeroPlanillas_());
 		this.nvoDeposito.setTotalEfectivo(this.selectedResumen_.getResumenEfectivo_());
@@ -381,6 +384,7 @@ public class CajaPlanillaResumenVM extends SimpleViewModel {
 	private void inicializarDepositoDiferido() throws Exception {
 		this.nvoDeposito_ = new BancoBoletaDeposito();
 		this.nvoDeposito_.setFecha(new Date());
+		this.nvoDeposito_.setFechaAcreditacion(new Date());
 		this.nvoDeposito_.setNroCuenta(this.getBancoCuentas().get(0));
 		this.nvoDeposito_.setObservacion("CAJAS: " + this.selectedResumen_.getNumeroPlanillas_() + " DEPOSITO DIFERIDOS..");
 		this.nvoDeposito_.setTotalEfectivo(0);

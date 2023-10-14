@@ -37,6 +37,9 @@ public class AssemblerBancoBoletaDeposito extends Assembler {
 		this.hijoDtoToHijoDomain(dto, domain, "nroCuenta", new AssemblerBancoCtaCte(), false);
 		
 		domain.setTotalImporte_gs(domain.getTotalImporteGs());
+		if (domain.getFechaAcreditacion() == null) {
+			domain.setFechaAcreditacion(domain.getFecha());
+		}
 
 		return domain;
 	}
