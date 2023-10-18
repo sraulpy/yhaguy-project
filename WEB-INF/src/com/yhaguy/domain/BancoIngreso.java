@@ -1,6 +1,8 @@
 package com.yhaguy.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
@@ -10,6 +12,7 @@ import com.yhaguy.Configuracion;
 public class BancoIngreso extends Domain {
 
 	public static final String CONCEPTO_CAPITALIZACION_INTERESES = "CAPITALIZACIÓN DE INTERESES";
+	public static final String CONCEPTO_REVERSION = "REVERSIÓN DE EGRESO";
 	
 	private Date fecha;
 	private String numero;
@@ -30,6 +33,16 @@ public class BancoIngreso extends Domain {
 	 */
 	public boolean isMonedaLocal() {
 		return this.moneda.getSigla().equals(Configuracion.SIGLA_MONEDA_GUARANI);
+	}
+	
+	/**
+	 * @return conceptos..
+	 */
+	public static List<String> getConceptos() {
+		List<String> out = new ArrayList<>();
+		out.add(CONCEPTO_CAPITALIZACION_INTERESES);
+		out.add(CONCEPTO_REVERSION);
+		return out;
 	}
 
 	public Date getFecha() {

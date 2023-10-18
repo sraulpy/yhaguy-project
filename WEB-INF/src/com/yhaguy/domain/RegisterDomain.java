@@ -10854,9 +10854,9 @@ public class RegisterDomain extends Register {
 				+ " upper(b.numero) like '%" + numero.toUpperCase() + "%'"
 				+ " and cast (b.fecha as string) like '%" + fecha + "%'"
 				+ " and upper(b.banco.banco.descripcion) like '%" + banco.toUpperCase() + "%'"
-				+ " and b.concepto = '" + concepto + "'"
+				+ " and b.concepto like '%" + concepto + "%'"
 				+ " order by b.fecha";
-		return this.hqlLimit(query, 200);
+		return this.hqlLimit(query, 500);
 	}
 	
 	/**
@@ -14724,10 +14724,10 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getCapitalizacionesPorBanco(long idBanco, Date desde, Date hasta, long idMonedaBanco) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
-		String query = "select ('CAPITALIZACIÓN DE INTERESES'), "
-				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat('CAPITALIZACIÓN INTERESES: ', b.banco.banco.descripcion)"
-				+ " from BancoIngreso b where b.concepto = '" + BancoIngreso.CONCEPTO_CAPITALIZACION_INTERESES + "'"
-				+ " and b.banco.id = " + idBanco
+		String query = "select b.concepto, "
+				+ " b.fecha, b.numero, (case when b.moneda.id = " + idMonedaBanco + " then (b.importe) else (b.importe * b.tipoCambio) end), b.banco.banco.descripcion, concat(b.concepto, ' ', b.banco.banco.descripcion)"
+				+ " from BancoIngreso b where"
+				+ " b.banco.id = " + idBanco
 				+ " and (b.fecha >= '"
 				+ desde_
 				+ "' and b.fecha <= '"

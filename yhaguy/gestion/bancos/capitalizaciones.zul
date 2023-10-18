@@ -19,6 +19,7 @@
 		selectedItem="@bind(vm.selected_capitalizacion)">
 		<listhead>
 			<listheader label="Fecha" width="130px"></listheader>
+			<listheader label="Concepto"></listheader>
 			<listheader label="Banco"></listheader>
 			<listheader label="Número Operación"></listheader>
 			<listheader label="Importe" align="right" width="120px"></listheader>
@@ -36,6 +37,7 @@
 						value="@bind(vm.filterFechaAA)" instant="true"></textbox>
 				</hlayout>
 			</auxheader>
+			<auxheader></auxheader>
 			<auxheader>
 				<textbox hflex="true" sclass="filter" placeholder="Banco.."
 					value="@bind(vm.filter_banco)" instant="true"></textbox>
@@ -51,6 +53,7 @@
 		<template name="model">
 			<listitem>
 				<listcell label="@load(each.fecha) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+				<listcell label="@load(each.concepto)"></listcell>
 				<listcell label="@load(each.banco.descripcion.toUpperCase())"></listcell>
 				<listcell label="@load(each.numero)"></listcell>
 				<listcell label="@load(each.importe) @converter(vm.cnv.monedaExtranjera)"></listcell>
@@ -84,6 +87,17 @@
 					<datebox hflex="true"
 						value="@bind(vm.nva_capitalizacion.fecha)"
 						onChange="@command('verificarCotizacion')"></datebox>
+				</row>
+				<row>
+					<field value="Concepto:" />
+					<combobox hflex="true"
+						value="@load(vm.nva_capitalizacion.concepto)"
+						model="@load(vm.nva_capitalizacion.getConceptos())"
+						selectedItem="@bind(vm.nva_capitalizacion.concepto)" instant="true">
+						<template name="model">
+							<comboitem label="@load(each)" />
+						</template>	
+					</combobox>
 				</row>
 				<row>
 					<field value="Banco:" />

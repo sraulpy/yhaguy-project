@@ -104,7 +104,7 @@ public class BancoCapitalizacionViewModel extends SimpleViewModel {
 		this.nva_capitalizacion.setFecha(new Date());
 		this.nva_capitalizacion.setMoneda(rr.getTipoPorSigla(Configuracion.SIGLA_MONEDA_GUARANI));
 		this.nva_capitalizacion.setNumero("");
-		this.nva_capitalizacion.setConcepto(BancoIngreso.CONCEPTO_CAPITALIZACION_INTERESES);
+		this.nva_capitalizacion.setConcepto("");
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class BancoCapitalizacionViewModel extends SimpleViewModel {
 	@DependsOn({ "filter_banco", "filter_numero", "filterFechaDD", "filterFechaMM", "filterFechaAA" })
 	public List<BancoIngreso> getCapitalizaciones() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getBancoIngresos(this.getFilterFecha(), this.filter_banco, this.filter_numero, BancoIngreso.CONCEPTO_CAPITALIZACION_INTERESES);
+		return rr.getBancoIngresos(this.getFilterFecha(), this.filter_banco, this.filter_numero, "");
 	}
 	
 	/**
