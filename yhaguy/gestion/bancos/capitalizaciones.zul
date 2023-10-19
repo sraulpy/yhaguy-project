@@ -70,7 +70,7 @@
 		<hbox align="end" pack="end" width="100%">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
 				style="border-bottom:solid 1px silver">
-				<field value="AGREGAR REGISTRO DE CAPITALIZACIÓN INTERESES" />
+				<field value="AGREGAR REGISTRO DE INGRESOS" />
 			</hbox>
 			<button onClick="pop_capitalizacion.close()"
 				iconSclass="z-icon-times">
@@ -151,7 +151,7 @@
 		<hbox align="end" pack="end" width="100%">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
 				style="border-bottom:solid 1px silver">
-				<field value="CONSULTA REGISTRO DE CAPITALIZACIÓN DE INTERESES" />
+				<field value="CONSULTA REGISTRO DE INGRESOS" />
 			</hbox>
 			<button onClick="pop_selected.close()"
 				iconSclass="z-icon-times">

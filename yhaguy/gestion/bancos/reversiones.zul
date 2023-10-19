@@ -67,7 +67,7 @@
 		<hbox align="end" pack="end" width="100%">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
 				style="border-bottom:solid 1px silver">
-				<field value="AGREGAR REGISTRO DE REVERSIÓN" />
+				<field value="AGREGAR REGISTRO DE EGRESOS" />
 			</hbox>
 			<button onClick="pop_reversion.close()"
 				iconSclass="z-icon-times">
@@ -137,7 +137,7 @@
 		<hbox align="end" pack="end" width="100%">
 			<hbox pack="start" align="center" hflex="true" vflex="true"
 				style="border-bottom:solid 1px silver">
-				<field value="CONSULTA REGISTRO DE REVERSIONES" />
+				<field value="CONSULTA REGISTRO DE EGRESOS" />
 			</hbox>
 			<button onClick="pop_selected.close()"
 				iconSclass="z-icon-times">
