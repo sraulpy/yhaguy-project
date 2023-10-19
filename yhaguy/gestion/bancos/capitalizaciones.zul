@@ -14,7 +14,7 @@
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
-		emptyMessage="SIN REGISTROS DE CAPITALIZACIÓN INTERESES.."
+		emptyMessage="SIN REGISTROS DE INGRESOS.."
 		model="@load(vm.capitalizaciones)"
 		selectedItem="@bind(vm.selected_capitalizacion)">
 		<listhead>
