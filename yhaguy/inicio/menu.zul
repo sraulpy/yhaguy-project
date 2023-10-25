@@ -183,7 +183,7 @@
 				<menuitem label="EVALUACIÓN DEL PERSONAL" iconSclass="z-icon-caret-right"
 					onClick='Clients.showNotification("LA CONFIGURACIÓN PREVIA AÚN ESTÁ PENDIENTE")'/>
 				<zk forEach="${vm.menuItem(self,'PlanillaSalarios')}" />
-				<menuitem label="PLANILLA IPS" iconSclass="z-icon-caret-right"/>
+				<zk forEach="${vm.menuItem(self,'PlanillaIps')}" />
 				<zk forEach="${vm.menuItem(self,'LiquidacionSalarios')}" />
 				<zk forEach="${vm.menuItem(self,'Marcaciones')}" />
 				<zk forEach="${vm.menuItem(self,'VisorMarcaciones')}" />
