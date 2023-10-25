@@ -412,7 +412,7 @@ public class SifenTest {
         	TgPaConEIni gPaConEIni = new TgPaConEIni();
             gPaConEIni.setiTiPago(TiTiPago.EFECTIVO);
             gPaConEIni.setdDesTiPag(gPaConEIni.getiTiPago().getDescripcion());
-            gPaConEIni.setdMonTiPag(new BigDecimal(240000.00));
+            gPaConEIni.setdMonTiPag(DE.getgTotSub().getdTotOpe());
             gPaConEIni.setcMoneTiPag(CMondT.PYG);
             List<TgPaConEIni> fps = new ArrayList<TgPaConEIni>();
             fps.add(gPaConEIni);
