@@ -6265,14 +6265,12 @@ public class RegisterDomain extends Register {
 	 * [8]:id
 	 * [9]:respuestaSet
 	 */
-	public List<Object[]> getVentas(Date desde, Date hasta, String tipoMovimiento) throws Exception {
+	public List<Object[]> getSifenVentas(Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, 0.0, v.cliente.empresa.razonSocial,"
 				+ " 0.0, 0.0, v.cliente.empresa.ruc, v.id, v.respuestaSET, v.url from Venta v where v.estadoComprobante is null"
-				+ " and (v.tipoMovimiento.sigla = '"
-				+ tipoMovimiento
-				+ "')"
+				+ " and v.tipoMovimiento.sigla IN ('" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "', '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "')"
 				+ " and (v.fecha >= '"
 				+ desde_
 				+ "' and v.fecha <= '"

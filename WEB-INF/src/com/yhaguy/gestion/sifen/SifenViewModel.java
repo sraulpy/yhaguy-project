@@ -29,7 +29,6 @@ import com.roshka.sifen.core.exceptions.SifenException;
 import com.roshka.sifen.core.fields.request.de.TgActEco;
 import com.roshka.sifen.core.fields.request.de.TgCamItem;
 import com.roshka.sifen.core.types.TTiDE;
-import com.yhaguy.Configuracion;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.sifen.SifenParams;
@@ -242,7 +241,11 @@ public class SifenViewModel extends SimpleViewModel {
 			} else if ("dCuotas".equals(fieldName)) {
 				value = dCuotas;
 			} else if ("dPlazoCre".equals(fieldName)) {
-				value = this.DE.getgDtipDE().getgCamCond().getgPagCred().getdPlazoCre();
+				if (this.DE.getgDtipDE().getgCamCond().getiCondOpe().getDescripcion().equals("Contado")) {
+					value = "";
+				} else {
+					value = this.DE.getgDtipDE().getgCamCond().getgPagCred().getdPlazoCre();
+				}
 			} else if ("dDirRec".equals(fieldName)) {
 				value = this.DE.getgDatGralOpe().getgDatRec().getdDirRec();
 			} else if ("dTelRec".equals(fieldName)) {
@@ -418,7 +421,7 @@ public class SifenViewModel extends SimpleViewModel {
 	@DependsOn({ "filterDesde", "filterHasta" })
 	public List<Object[]> getVentas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
-		return rr.getVentas(this.filterDesde, this.filterHasta, Configuracion.SIGLA_TM_FAC_VENTA_CREDITO);
+		return rr.getSifenVentas(this.filterDesde, this.filterHasta);
 	}
 
 	public Date getFilterDesde() {
