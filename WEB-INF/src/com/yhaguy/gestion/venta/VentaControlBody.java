@@ -1012,7 +1012,7 @@ public class VentaControlBody extends BodyApp {
 		if (this.dto.isPresupuesto()) {
 			for (VentaDetalleDTO item : this.dto.getDetalles()) {
 				Object[] obj1 = new Object[] { item.getArticulo().getPos1(), item.getArticulo().getPos4(),
-						item.getCantidad(), item.getPrecioGs(), item.getImporteGs() };
+						item.getCantidad(), item.getPrecioGs(), item.getDescuentoUnitarioGs(), item.getImporteGs() };
 				data.add(obj1);
 			}
 		} else {
@@ -2559,11 +2559,12 @@ class ReporteVentaPresupuesto extends ReporteYhaguy {
 	private VentaDTO venta;
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
-	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 50);
+	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 40);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_LONG, 30, false);
+	static DatosColumnas col3 = new DatosColumnas("Cant.", TIPO_LONG, 15, false);
 	static DatosColumnas col4 = new DatosColumnas("Precio", TIPO_DOUBLE, 30, false);
-	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
+	static DatosColumnas col5 = new DatosColumnas("Descuento", TIPO_DOUBLE, 30, false);
+	static DatosColumnas col6 = new DatosColumnas("Importe", TIPO_DOUBLE, 30, true);
 	
 	public ReporteVentaPresupuesto(VentaDTO venta) {
 		this.venta = venta;
@@ -2575,6 +2576,7 @@ class ReporteVentaPresupuesto extends ReporteYhaguy {
 		cols.add(col3);
 		cols.add(col4);
 		cols.add(col5);
+		cols.add(col6);
 	}
 
 	@Override
