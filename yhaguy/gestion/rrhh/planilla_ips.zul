@@ -12,6 +12,10 @@
 			model="@load(vm.anhos)" selectedItem="@bind(vm.selectedAnho)"
 			instant="true"
 			value="@load(vm.selectedAnho)" width="80px"></combobox>	
+		<space></space>
+		<button mold="bs" sclass="btn-sm btn-primary" width="140px" label="Exportar a Excel"
+			iconSclass="z-icon-download"
+			onClick="@command('exportExcel')"></button>
 	</hlayout>
 	
 	<listbox sclass="small-list" vflex="true"
@@ -40,10 +44,16 @@
 			</listitem>
 		</template>
 		<listfoot>
-			<listfooter span="2"></listfooter>
-			<listfooter label="IPS 25.5%" align="right"></listfooter>
+			<listfooter></listfooter>
+			<listfooter align="right">
+				<hlayout>
+					<label>IPS 25%</label>
+					<guaranibox value="@load(vm.totales[5])" readonly="true" style="font-weight:bold;text-align:right" />
+				</hlayout>
+			</listfooter>
+			<listfooter></listfooter>
 			<listfooter>
-				<guaranibox value="@load(vm.totales[4])" hflex="1" readonly="true" style="font-weight:bold;text-align:right" />
+				<guaranibox value="@load(vm.totales[4])" hflex="1" readonly="true" />
 			</listfooter>			
 			<listfooter>
 				<guaranibox value="@load(vm.totales[0])" hflex="1" readonly="true" />
