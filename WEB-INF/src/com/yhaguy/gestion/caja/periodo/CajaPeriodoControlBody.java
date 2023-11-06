@@ -1033,6 +1033,18 @@ public class CajaPeriodoControlBody extends BodyApp {
 			return;
 		}
 		
+		if (pedido.isCondicionContado()) {			
+			double totalFormaPago = pedido.getTotalFormaPago();
+			double totalImporte = pedido.getTotalImporteGs();
+			
+			if (totalFormaPago != totalImporte) {
+				Clients.showNotification(
+						"NO COINCIDEN EL TOTAL DE LA FACTURA Y LAS FORMAS DE PAGO.",
+						Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}			
+		}
+		
 		// verifica el saldo disponible..
 		double importeVenta = pedido.getTotalImporteGs();
 		double disponible = pedido.getCreditoDisponible();

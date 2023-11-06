@@ -295,6 +295,15 @@ public class VentaDTO extends DTO {
 		return 0;
 	}
 	
+	@DependsOn("detalles")
+	public double getTotalFormaPago() {
+		double out = 0;		
+		for (ReciboFormaPagoDTO item : this.formasPago) {
+			out += item.getMontoGs();
+		}		
+		return Utiles.getRedondeo(out);
+	}
+	
 	/**
 	 * @return los cheques pendientes..
 	 */
