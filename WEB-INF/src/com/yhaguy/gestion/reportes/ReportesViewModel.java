@@ -5946,10 +5946,10 @@ public class ReportesViewModel extends SimpleViewModel {
 					if (stock) {	
 						long min = art[6] != null ? (long) art[6] : (long) 0;
 						if (min > 0) {
-							data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9], art[11] });
+							data.add(new Object[] { art[1], art[2], art[6], art[3], art[12], art[4], art[5], art[9], art[11] });
 						}
 					} else {
-						data.add(new Object[] { art[1], art[2], art[6], art[3], art[4], art[5], art[9], art[11] });
+						data.add(new Object[] { art[1], art[2], art[6], art[3], art[12], art[4], art[5], art[9], art[11] });
 					}					
 				}
 				
