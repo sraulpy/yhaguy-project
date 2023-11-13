@@ -19993,7 +19993,7 @@ class LibroComprasIndistintoDataSource implements JRDataSource {
 				double gravada5 = nc.getTotalGravado5() * -1;
 				double exenta = nc.getTotalExenta() * -1;
 				double iva10 = nc.getTotalIva10() * -1;
-				double iva5 = nc.getTotalIva10() * -1;
+				double iva5 = nc.getTotalIva5() * -1;
 				double total = gravada10 + gravada5 + iva10 + iva5 + exenta;
 				double baseImponible = 0.0;
 				String cuenta1 = (nc.getObservacion().contains("COMISIONES") || nc.getObservacion().contains("TELEFONIA") || nc.getObservacion().contains("CT:")) ? 
