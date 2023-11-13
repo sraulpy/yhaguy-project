@@ -16,6 +16,7 @@ public class ArticuloFamilia extends Domain {
 	public static final String CONTABILIDAD = "CONTABILIDAD";
 	public static final String VENTAS_ESPECIALES = "VENTAS ESPECIALES";
 	public static final String MERCADERIAS_USADAS = "MERCADERIAS USADAS";
+	public static final String BATERIAS_DISTRIBUIDOR = "BATERIAS DISTRIBUIDOR";
 
 	private String descripcion;
 	

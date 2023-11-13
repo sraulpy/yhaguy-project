@@ -30,8 +30,10 @@ import com.roshka.sifen.core.fields.request.de.TgActEco;
 import com.roshka.sifen.core.fields.request.de.TgCamItem;
 import com.roshka.sifen.core.types.TTiDE;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.sifen.SifenParams;
+import com.yhaguy.sifen.SifenREM;
 import com.yhaguy.sifen.SifenTest;
 import com.yhaguy.util.Utiles;
 
@@ -73,6 +75,23 @@ public class SifenViewModel extends SimpleViewModel {
 			rr.saveObject(venta, this.getLoginNombre());
 			bean[9] = venta.getRespuestaSET();
 			bean[10] = venta.getUrl();
+			BindUtils.postNotifyChange(null, null, bean, "*");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	public void generarNRE(@BindingParam("bean") Object[] bean) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Remision rem = (Remision) rr.getObject(Remision.class.getName(), (long) bean[8]);
+			SifenREM sf = new SifenREM();
+			sf.testRecepcionDE(rem, false);
+			this.generarPDFNRE(rem);			
+			rr.saveObject(rem, this.getLoginNombre());
+			bean[9] = rem.getRespuestaSET();
+			bean[10] = rem.getUrl();
 			BindUtils.postNotifyChange(null, null, bean, "*");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,6 +150,31 @@ public class SifenViewModel extends SimpleViewModel {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 			JasperExportManager.exportReportToPdfFile(jasperPrint,
 					root + "/yhaguy/archivos/sifen/FE/" + bean.getNumero() + ".pdf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	/**
+	 * genera el PDF de la NRE..
+	 */
+	private void generarPDFNRE(Remision bean) {
+		try {
+			String path = SifenParams.PATH_NOTAS_REMISION + bean.getNumero() + ".xml";
+			String xml = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+			DocumentoElectronico DE = new DocumentoElectronico(xml);
+			DE.setEnlaceQR(Utiles.parseXML(path, "dCarQR"));
+			JRDataSource dataSource = new FacturaDataSource(DE);
+
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");
+
+			JasperDesign jasperDesign = JRXmlLoader.load(root + "/reportes/jasper/NotaRemision.jrxml");
+			JasperReport jasperReport = (JasperReport) JasperCompileManager.compileReport(jasperDesign);
+			Map<String, Object> parameters = new HashMap<String, Object>();
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+			JasperExportManager.exportReportToPdfFile(jasperPrint,
+					root + "/yhaguy/archivos/sifen/NRE/" + bean.getNumero() + ".pdf");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -422,6 +466,12 @@ public class SifenViewModel extends SimpleViewModel {
 	public List<Object[]> getVentas() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getSifenVentas(this.filterDesde, this.filterHasta);
+	}
+	
+	@DependsOn({ "filterDesde", "filterHasta" })
+	public List<Object[]> getRemisiones() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getSifenRemisiones(this.filterDesde, this.filterHasta);
 	}
 
 	public Date getFilterDesde() {

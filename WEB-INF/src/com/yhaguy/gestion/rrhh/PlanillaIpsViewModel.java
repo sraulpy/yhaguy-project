@@ -47,7 +47,8 @@ public class PlanillaIpsViewModel extends SimpleViewModel {
 	public void selectPeriodo() throws Exception {
 		this.planillas = new ArrayList<>();
 		for (RRHHPlanillaSalarios item : this.getPlanillaSalarios()) {
-			this.planillas.add(new BeanIps(item.getCedula(), item.getFuncionario(), item.getDiasTrabajados(), item.getBonificacion(), item.getSalarioFinal()));
+			this.planillas.add(new BeanIps(item.getCedula(), item.getFuncionario(), item.getDiasTrabajados(),
+					item.getBonificacion(), (item.getTotalHaberes_() - item.getBonificacion() - item.getAguinaldo())));
 		}
 		Map<String, Double> map = new HashMap<>();
 		for (RRHHPlanillaSalarios item : this.getPlanillaComisiones()) {

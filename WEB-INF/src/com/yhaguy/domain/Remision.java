@@ -15,6 +15,11 @@ public class Remision extends Domain {
 	private String observacion = "";
 	private String vehiculo = "";
 	
+	private String cdc;
+	private String respuestaSET = "Pendiente";
+	private String observacionSET;
+	private String url;
+	
 	private Venta venta;
 	private Set<RemisionDetalle> detalles = new HashSet<RemisionDetalle>();
 
@@ -77,6 +82,38 @@ public class Remision extends Domain {
 
 	public void setVehiculo(String vehiculo) {
 		this.vehiculo = vehiculo;
+	}
+
+	public String getCdc() {
+		return cdc;
+	}
+
+	public void setCdc(String cdc) {
+		this.cdc = cdc;
+	}
+
+	public String getRespuestaSET() {
+		return respuestaSET;
+	}
+
+	public void setRespuestaSET(String respuestaSET) {
+		this.respuestaSET = respuestaSET;
+	}
+
+	public String getObservacionSET() {
+		return observacionSET;
+	}
+
+	public void setObservacionSET(String observacionSET) {
+		this.observacionSET = observacionSET;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

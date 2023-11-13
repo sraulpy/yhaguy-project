@@ -78,7 +78,6 @@ public class SifenTest {
 			dv = data.getCliente().getRuc().split("-")[1];
 		}       
         
-
         // Grupo A
         DocumentoElectronico DE = new DocumentoElectronico();
         DE.setdFecFirma(currentDate);

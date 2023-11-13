@@ -327,10 +327,17 @@ public class ControlArticuloStock {
 		return data;
 	}
 	
+	public static Object[] getHistoricoEntrada(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return getHistoricoEntradaYRPS(idArticulo, codigo, desde, hasta, idSucursal);
+		}
+		return getHistoricoEntrada_(idArticulo, codigo, desde, hasta, idSucursal);
+	}
+	
 	/**
 	 * recupera el historico de movimientos del articulo..
 	 */
-	public static Object[] getHistoricoEntrada(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+	private static Object[] getHistoricoEntrada_(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		boolean fechaHora = true;
@@ -394,7 +401,55 @@ public class ControlArticuloStock {
 	/**
 	 * recupera el historico de movimientos del articulo..
 	 */
+	private static Object[] getHistoricoEntradaYRPS(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		long total = 0;
+		boolean fechaHora = true;
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		List<Object[]> ntcsv = rr.getNotasCreditoVtaPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> compras = rr.getComprasLocalesPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> importaciones = rr.getComprasImportacionPorArticuloFechaCierre(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ajustStockPost = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_POSITIVO, fechaHora);
+		List<Object[]> transfsOrigenExt = rr.getTransferenciasPorArticuloOrigenAUT(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> migracion = rr.getMigracionesPorArticulo(codigo, desde, hasta);
+		
+		out.addAll(migracion);
+		out.addAll(ajustStockPost);		
+		out.addAll(ntcsv);
+		out.addAll(compras);
+		out.addAll(importaciones);
+		out.addAll(transfsOrigenExt);
+		
+		Object[] cierre = null;
+		
+		for (Object[] item : out) {
+			total += Long.parseLong(item[3] + "");
+		}		
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		return new Object[] { out, total, importaciones, cierre };
+	}
+	
 	public static Object[] getHistoricoSalida(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return getHistoricoSalidaYRPS(idArticulo, codigo, desde, hasta, idSucursal);
+		}
+		return getHistoricoSalida_(idArticulo, codigo, desde, hasta, idSucursal);
+	}
+	
+	/**
+	 * recupera el historico de movimientos del articulo..
+	 */
+	private static Object[] getHistoricoSalida_(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		boolean fechaHora = true;
@@ -419,6 +474,45 @@ public class ControlArticuloStock {
 			out.addAll(mra ? transfsDestinoCentral : transfsDestinoMRA);
 			out.addAll(mra ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
 		}		
+		out.addAll(ajustStockNeg);
+		
+		for (Object[] item : out) {
+			total += Long.parseLong(item[3] + "");
+		}
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		return new Object[] { out, total };
+	}
+	
+	/**
+	 * recupera el historico de movimientos del articulo..
+	 */
+	private static Object[] getHistoricoSalidaYRPS(long idArticulo, String codigo, Date desde, Date hasta, long idSucursal) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		long total = 0;
+		boolean fechaHora = true;
+		boolean mra = Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+		if (mra) idSucursal = SucursalApp.ID_MRA_MRA ;
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> transfsDestinoAUT = rr.getTransferenciasPorArticuloDestinoAUT(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
+		
+		for (Object[] item : ajustStockNeg) {
+			item[3] = (Long.parseLong(item[3] + "") * -1);
+		}
+		out.addAll(ventas);
+		out.addAll(ntcsc);
+		out.addAll(transfsDestinoAUT);		
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {

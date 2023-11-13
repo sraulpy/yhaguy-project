@@ -244,10 +244,17 @@ public class StockValorizadoVM extends SimpleViewModel {
 		return new Object[] { out, total, importaciones, cierre };
 	}
 	
+	private Object[] getHistoricoSalida(long idArticulo, String codigo, Date hasta) throws Exception {
+		if (this.isEmpresaYRPS()) {
+			return this.getHistoricoSalidaYRPS(idArticulo, codigo, hasta);
+		}
+		return this.getHistoricoSalida_(idArticulo, codigo, hasta);
+	}
+	
 	/**
 	 * recupera el historico de movimientos del articulo..
 	 */
-	private Object[] getHistoricoSalida(long idArticulo, String codigo, Date hasta) throws Exception {
+	private Object[] getHistoricoSalida_(long idArticulo, String codigo, Date hasta) throws Exception {
 		List<Object[]> out = new ArrayList<Object[]>();
 		long total = 0;
 		Date desde = this.getFechaDesde();
@@ -272,6 +279,45 @@ public class StockValorizadoVM extends SimpleViewModel {
 			out.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
 			out.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
 		}		
+		out.addAll(ajustStockNeg);
+		
+		for (Object[] item : out) {
+			total += Long.parseLong(item[3] + "");
+		}
+		// ordena la lista segun fecha..
+		Collections.sort(out, new Comparator<Object[]>() {
+			@Override
+			public int compare(Object[] o1, Object[] o2) {
+				Date fecha1 = (Date) o1[1];
+				Date fecha2 = (Date) o2[1];
+				return fecha1.compareTo(fecha2);
+			}
+		});
+		
+		return new Object[] { out, total };
+	}
+	
+	/**
+	 * recupera el historico de movimientos del articulo..
+	 */
+	private Object[] getHistoricoSalidaYRPS(long idArticulo, String codigo, Date hasta) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		long total = 0;
+		Date desde = this.getFechaDesde();
+		boolean fechaHora = true;
+		long idSucursal = this.selectedSucursal.getId();
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		List<Object[]> ventas = rr.getVentasPorArticuloCosto(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(idArticulo, desde, hasta, fechaHora, idSucursal);
+		List<Object[]> transfsDestinoAUT = rr.getTransferenciasPorArticuloDestinoAUT(idArticulo, desde, hasta, fechaHora);
+		List<Object[]> ajustStockNeg = rr.getAjustesPorArticulo(idArticulo, desde, hasta, idSucursal, Configuracion.SIGLA_TM_AJUSTE_NEGATIVO, fechaHora);
+		
+		for (Object[] item : ajustStockNeg) {
+			item[3] = (Long.parseLong(item[3] + "") * -1);
+		}
+		out.addAll(ventas);
+		out.addAll(ntcsc);
+		out.addAll(transfsDestinoAUT);		
 		out.addAll(ajustStockNeg);
 		
 		for (Object[] item : out) {
@@ -504,6 +550,13 @@ public class StockValorizadoVM extends SimpleViewModel {
 	 */
 	public boolean isEmpresaGTSA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA);
+	}
+	
+	/**
+	 * @return true si es repre..
+	 */
+	public boolean isEmpresaYRPS() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS);
 	}
 	
 	@DependsOn({ "saldoInicial", "totalIngresos" })

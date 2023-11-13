@@ -15,6 +15,10 @@
 		<property name="importeGs"/>
 		<property name="observacion"/>
 		<property name="vehiculo"/>
+		<property name="cdc"/>
+		<property name="respuestaSET"/>
+		<property name="observacionSET"/>
+		<property name="url"/>
 		
 		<many-to-one name="venta" class="com.yhaguy.domain.Venta"
 			column="id_venta" lazy="false"/>		

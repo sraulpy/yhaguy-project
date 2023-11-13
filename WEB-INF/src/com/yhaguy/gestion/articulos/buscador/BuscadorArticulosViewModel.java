@@ -619,9 +619,16 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		List<Object[]> ventas = rr.getVentasPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
 		List<Object[]> ntcsc = rr.getNotasCreditoCompraPorArticulo(this.selectedItem.getId(), this.desde, this.hasta);
-		List<Object[]> transfsOrigenMRA = rr.getTransferenciasPorArticuloOrigenMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsOrigenExt = new ArrayList<>();
 		List<Object[]> transfsOrigenCentral = rr.getTransferenciasPorArticuloOrigenCentral(this.selectedItem.getId(), this.desde, this.hasta, false);
-		List<Object[]> transfsDestinoMRA = rr.getTransferenciasPorArticuloDestinoMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		List<Object[]> transfsDestinoExt = new ArrayList<>();
+		if (this.isEmpresaYRPS()) {
+			transfsDestinoExt = rr.getTransferenciasPorArticuloDestinoAUT(this.selectedItem.getId(), this.desde, this.hasta, false);
+			transfsOrigenExt = rr.getTransferenciasPorArticuloOrigenAUT(this.selectedItem.getId(), this.desde, this.hasta, false);
+		} else {
+			transfsDestinoExt = rr.getTransferenciasPorArticuloDestinoMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+			transfsOrigenExt = rr.getTransferenciasPorArticuloOrigenMRA(this.selectedItem.getId(), this.desde, this.hasta, false);
+		}
 		List<Object[]> transfsDestinoCentral = rr.getTransferenciasPorArticuloDestinoCentral(this.selectedItem.getId(), this.desde, this.hasta, false);
 		List<Object[]> transfsOrigenDifInventarioMRA = rr.getTransferenciasPorArticuloOrigenDiferenciaInvMRA2019(this.selectedItem.getId(), desde, hasta, false);
 		List<Object[]> transfsDestinoDifInventario = rr.getTransferenciasPorArticuloDestinoDiferenciaInv2019(this.selectedItem.getId(), desde, hasta, false);	
@@ -642,7 +649,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoEntrada.addAll(compras);
 		this.historicoEntrada.addAll(importaciones);
 		if (!this.isEmpresaGTSA()) {
-			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenMRA);
+			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenCentral : transfsOrigenExt);
 			this.historicoEntrada.addAll(this.isEmpresaMRA() ? transfsOrigenDifInventarioMRA : transfsOrigenDifInventario);
 		}
 		if (this.selectedItem.getPos7().toString().contains("USADAS")) {
@@ -655,7 +662,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		this.historicoSalida.addAll(ntcsc);
 		if (!this.isEmpresaGTSA()) {
 			this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoDifInventarioMRA : transfsDestinoDifInventario);
-			this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoMRA);
+			this.historicoSalida.addAll(this.isEmpresaMRA() ? transfsDestinoCentral : transfsDestinoExt);
 		}
 		
 		this.actualizarTotal(this.historicoEntrada, true);
@@ -980,6 +987,13 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 	 */
 	public boolean isEmpresaMRA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_YMRA);
+	}
+	
+	/**
+	 * @return true si es repre..
+	 */
+	public boolean isEmpresaYRPS() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS);
 	}
 	
 	public String getSiglaEstadoAnulado() {
