@@ -38,6 +38,7 @@ public class Articulo extends Domain {
 	private double precioTransportadora;
 	private double precioBaterias;
 	private double precioPromocion;
+	private double precioMayoristaContadoGs;
 	private Date fechaAlta; 
 	private Date fechaUltimaCompra;
 	private int cantUltimaCompra;
@@ -710,5 +711,13 @@ public class Articulo extends Domain {
 
 	public void setPrecioPromocion(double precioPromocion) {
 		this.precioPromocion = precioPromocion;
+	}
+
+	public double getPrecioMayoristaContadoGs() {
+		return precioMayoristaContadoGs;
+	}
+
+	public void setPrecioMayoristaContadoGs(double precioMayoristaContadoGs) {
+		this.precioMayoristaContadoGs = precioMayoristaContadoGs;
 	}
 }

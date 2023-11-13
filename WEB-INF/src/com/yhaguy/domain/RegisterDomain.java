@@ -2525,7 +2525,7 @@ public class RegisterDomain extends Register {
 	 * @return las listas de precio activas..
 	 */
 	public List<ArticuloListaPrecio> getListasDePrecio() throws Exception {
-		String query = "select l from ArticuloListaPrecio l where l.dbEstado != 'D' and l.activo = 'TRUE' order by l.id";
+		String query = "select l from ArticuloListaPrecio l where l.dbEstado != 'D' and l.activo = 'TRUE' order by l.orden";
 		return this.hql(query);
 	}
 	
@@ -11742,10 +11742,12 @@ public class RegisterDomain extends Register {
 	 * [7]: precio transportadora
 	 * [8]: precio imp baterias
 	 * [9]: precio promocion
+	 * [10]: precio mayorista contado
 	 */
 	public Object[] getArticulo_(long idArticulo) throws Exception {
-		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs, "
-				+ "a.porcentajeDescuento, a.precioTransportadora, a.precioBaterias, a.precioPromocion from Articulo a where a.id = " + idArticulo + "";
+		String query = "select a.id, a.codigoInterno, a.precioListaGs, a.precioMinoristaGs, a.precioGs, a.precioDs,"
+				+ "a.porcentajeDescuento, a.precioTransportadora, a.precioBaterias, a.precioPromocion, a.precioMayoristaContadoGs"
+				+ " from Articulo a where a.id = " + idArticulo + "";
 		List<Object[]> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
 	}

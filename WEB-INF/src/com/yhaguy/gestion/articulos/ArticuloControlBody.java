@@ -551,6 +551,13 @@ public class ArticuloControlBody extends BodyApp {
 	}
 	
 	/**
+	 * @return true si precio contado visible
+	 */
+	public boolean isPrecioContadoVisible() {
+		return this.isEmpresaRepresentaciones();
+	}
+	
+	/**
 	 * @return las marcas..
 	 */
 	public List<ArticuloMarca> getMarcas() throws Exception {

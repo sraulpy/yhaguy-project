@@ -30,6 +30,7 @@
 		<property name="precioTransportadora" />
 		<property name="precioBaterias" />
 		<property name="precioPromocion" />
+		<property name="precioMayoristaContadoGs" />
 		<property name="fechaAlta" />
 		<property name="fechaUltimaCompra" />
 		<property name="cantUltimaCompra" />

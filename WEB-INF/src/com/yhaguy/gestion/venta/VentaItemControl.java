@@ -342,6 +342,7 @@ public class VentaItemControl extends SoloViewModel {
 		if (idListaPrecio == ArticuloListaPrecio.ID_TRANSPORTADORA) precio = (double) art[7];
 		if (idListaPrecio == ArticuloListaPrecio.ID_IMP_BATERIAS) precio = (double) art[8];
 		if (idListaPrecio == ArticuloListaPrecio.ID_PROMOCION) precio = (double) art[9];
+		if (idListaPrecio == ArticuloListaPrecio.ID_MAYORISTA_CONTADO) precio = (double) art[10];
 		if (this.det.isExenta()) {
 			precio = precio - Utiles.getIVA(precio, 10);
 		}
@@ -356,11 +357,27 @@ public class VentaItemControl extends SoloViewModel {
 		this.det.setDescuentoPorcentaje(0);
 		this.det.setDescuentoUnitarioGs(0.0);
 		
-		double dto_mayorista = this.dto.getDescuentoMayorista();
-		double porcentajeDescuento = (double) art[6];
-		int maxDescuentoLista_ = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
-		Double maxDescuentoLista = Double.valueOf(maxDescuentoLista_);
-		double maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
+		double maxDescuento = 0.0;
+		double dto_mayorista = 0.0;
+		
+		if (this.isEmpresaYRPS()) {
+			dto_mayorista = this.dto.getDescuentoMayorista();
+			double porcentajeDescuento = (double) art[6];
+			maxDescuento = porcentajeDescuento > dto_mayorista ? porcentajeDescuento : dto_mayorista;
+			if (this.getLoginNombre().equals("liliana")) {
+				maxDescuento = 5;
+			}		
+			if (this.getLoginNombre().equals("liliana") && ((String) art[1]).startsWith("MKT")) {
+				maxDescuento = 100;
+			}			
+		} else {
+			dto_mayorista = this.dto.getDescuentoMayorista();
+			double porcentajeDescuento = (double) art[6];
+			int maxDescuentoLista_ = rr.getMaximoDescuento(this.det.getListaPrecio().getId());
+			Double maxDescuentoLista = Double.valueOf(maxDescuentoLista_);
+			maxDescuento = porcentajeDescuento > maxDescuentoLista ? porcentajeDescuento : maxDescuentoLista;
+		}	
+		
 		this.det.setDescuentoPorcentajeMax(maxDescuento);
 		
 		// ticket 8144
@@ -875,6 +892,10 @@ public class VentaItemControl extends SoloViewModel {
 	
 	public boolean isEmpresaAutocentro() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO);
+	}
+	
+	public boolean isEmpresaYRPS() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS);
 	}
 	
 	public UtilDTO getUtilDto(){

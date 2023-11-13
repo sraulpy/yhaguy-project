@@ -594,13 +594,20 @@
 									vflex="true">
 									<columns>
 										<column width="30%" />
-										<column />
+										<column width="30%" />
+										<column></column>
 									</columns>
 									<rows>
 										<row>
 											<field value="Mayorista Gs.:" />
 											<doublebox hflex="true" vflex="true"
 												value="@bind(vm.dto.precioGs)" format="###,###,##0"
+												readonly="@load(!vm.isOperacionHabilitada('VerImportacion'))"></doublebox>
+										</row>
+										<row visible="@load(vm.precioContadoVisible)">
+											<field value="Mayorista Contado Gs.:" />
+											<doublebox hflex="true" vflex="true"
+												value="@bind(vm.dto.precioMayoristaContadoGs)" format="###,###,##0"
 												readonly="@load(!vm.isOperacionHabilitada('VerImportacion'))"></doublebox>
 										</row>
 										<row>
@@ -639,26 +646,28 @@
 												value="@bind(vm.dto.precioPromocion)" format="###,###,##0"
 												readonly="@load(!vm.isOperacionHabilitada('VerImportacion'))"></doublebox>
 										</row>
-										<row>
-											<field value="Restringir Costo:" />
+										<row>									
+											<field value="Porcentaje de descuento:" />
+											<doublebox hflex="true"
+												value="@bind(vm.dto.porcentajeDescuento)" format="###,###,##0.00"
+												readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))">
+											</doublebox>
+											<hlayout valign="middle">
 											<checkbox checked="@bind(vm.dto.restriccionCosto)"
 												onCheck="@command('notificar')"
-												disabled="@load(!vm.isOperacionHabilitada('ModificarPrecioVenta'))"></checkbox>
-										</row>
-										<row>
-											<field value="Porcentaje de descuento:" />
-											<doublebox hflex="true" vflex="true"
-												value="@bind(vm.dto.porcentajeDescuento)" format="###,###,##0.00"
-												readonly="@load(!vm.isOperacionHabilitada('ModificarDescuento'))"></doublebox>
-										</row>
-										<row>
-											<field value="Promocion:" />
-											<checkbox checked="@bind(vm.dto.promocion)"></checkbox>
+												disabled="@load(!vm.isOperacionHabilitada('ModificarPrecioVenta'))">										
+											</checkbox>	
+											<field value="Restringir Costo" />										
+											</hlayout>
 										</row>
 										<row>
 											<field value="Descripcion promocion:" />
 											<textbox hflex="true"
 												value="@bind(vm.dto.descripcionPromocion)"></textbox>
+											<hlayout valign="middle">
+											<checkbox checked="@bind(vm.dto.promocion)"></checkbox>
+											<field value="Promoción" />
+											</hlayout>																			
 										</row>
 									</rows>
 								</grid>
