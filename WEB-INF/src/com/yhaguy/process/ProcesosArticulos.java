@@ -22,9 +22,13 @@ import com.yhaguy.domain.ArticuloCosto;
 import com.yhaguy.domain.ArticuloDeposito;
 import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloMarca;
+import com.yhaguy.domain.CompraLocalFacturaDetalle;
+import com.yhaguy.domain.CompraLocalOrden;
+import com.yhaguy.domain.CompraLocalOrdenDetalle;
 import com.yhaguy.domain.Deposito;
 import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.HistoricoMovimientoArticulo;
+import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.ProveedorArticulo;
 import com.yhaguy.domain.RegisterDomain;
@@ -63,6 +67,8 @@ public class ProcesosArticulos {
 	static final String SRC_INV_LUBRICANTES_MRA = "./WEB-INF/docs/procesos/mra/LUBRICANTES_INVENTARIO.csv";
 	static final String SRC_INV_CUBIERTAS_MRA = "./WEB-INF/docs/procesos/mra/CUBIERTAS_INVENTARIO.csv";
 	static final String SRC_INV_REPUESTOS_MRA = "./WEB-INF/docs/procesos/mra/REPUESTOS_INVENTARIO.csv";
+	
+	static final String SRC_INV_CUBIERTAS_AUT = "./WEB-INF/docs/procesos/autocentro/cubiertas.csv";
 	
 	/**
 	 * asigna familia a los articulos..
@@ -804,9 +810,57 @@ public class ProcesosArticulos {
 			
 			long stock = rr.getStockArticulo((String) art[1]);
 			
-			if (saldo != stock) {
-				System.out.println("---> ITEM: " + art[1] + " SALDO: " + ((long) ent[1] - (long) sal[1]) + " STOCK: " + stock);
-				out.add(new Object[] { art[1], stock, saldo });
+			if (saldo != stock) {				
+				if (saldo < 0) {
+					if (stock > 0) {
+						System.out.println("---> ITEM: " + art[1] + " SALDO: " + ((long) ent[1] - (long) sal[1]) + " STOCK: " + stock);
+						out.add(new Object[] { art[1], stock, saldo });
+					}
+				} else {
+					System.out.println("---> ITEM: " + art[1] + " SALDO: " + ((long) ent[1] - (long) sal[1]) + " STOCK: " + stock);
+					out.add(new Object[] { art[1], stock, saldo });
+				}				
+			}			
+		}		
+		return out;
+	}
+	
+	/**
+	 * verifica si existen articulos que necesiten recalculo de stock.
+	 * [0]: articulo.codigoInterno
+	 * [1]: deposito.descripcion
+	 * [2]: deposito.stock
+	 * [3]: historial.saldo
+	 */
+	public static List<Object[]> verificarStockGroupauto(long idSucursal, long idFamilia) throws Exception {
+		List<Object[]> out = new ArrayList<Object[]>();
+		RegisterDomain rr = RegisterDomain.getInstance();
+		List<Deposito> deps = rr.getDepositos_();
+		
+		for (Object[] art : rr.getArticulos(0, idFamilia)) {
+			long idArticulo = (long) art[0];
+			
+			for (Deposito dep : deps) {		
+				long stock = 0;
+				long saldo = 0;
+				
+				List<Object[]> historial = ControlArticuloStock.getHistorialMovimientos(idArticulo, dep.getId(), idSucursal, true, new Date(), false);
+				String hist = historial.size() > 0 ? (String) historial.get(historial.size() - 1)[7] : "0";
+				
+				stock += rr.getStockDisponible(idArticulo, dep.getId());
+				saldo += Long.parseLong(hist);		
+				
+				if (stock != saldo) {				
+					if (stock <= 0) {
+						if (saldo > 0) {
+							System.out.println("---> ITEM: " + art[1] + " SALDO: " + saldo + " STOCK: " + stock);
+							out.add(new Object[] { art[1], stock, saldo });
+						}
+					} else {
+						System.out.println("---> ITEM: " + art[1] + " SALDO: " + saldo + " STOCK: " + stock);
+						out.add(new Object[] { art[1], stock, saldo });
+					}				
+				}
 			}			
 		}		
 		return out;
@@ -975,6 +1029,76 @@ public class ProcesosArticulos {
 		System.out.println(totalDif);
 	}
 	
+	/**
+	 * inventario autocentro
+	 */
+	public static void addInventarioAutocentro(String src) throws Exception {
+		
+		String[][] cab = { { "Empresa", CSV.STRING } };
+		String[][] det = { { "CODIGO", CSV.STRING }, { "CANTIDAD", CSV.STRING }, { "CONCEPTO", CSV.STRING }, { "COSTO", CSV.STRING } };
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		
+		Set<CompraLocalOrdenDetalle> detOrden = new HashSet<CompraLocalOrdenDetalle>();
+		Set<CompraLocalFacturaDetalle> detCompras = new HashSet<CompraLocalFacturaDetalle>();
+		Set<NotaCreditoDetalle> detNotaCred = new HashSet<NotaCreditoDetalle>();
+		
+		CSV csv = new CSV(cab, det, src);
+		csv.start();
+		while (csv.hashNext()) {
+			String codigo = csv.getDetalleString("CODIGO");	
+			String cantidad = csv.getDetalleString("CANTIDAD");	
+			String concepto = csv.getDetalleString("CONCEPTO");
+			String costo = csv.getDetalleString("COSTO");
+			
+			if (concepto.equals("FACTURACION")) {
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					System.out.println(art.getCodigoInterno());
+					CompraLocalOrdenDetalle d = new CompraLocalOrdenDetalle();
+					d.setArticulo(art);
+					d.setCantidad(Integer.parseInt(cantidad));
+					d.setCantidadRecibida(Integer.parseInt(cantidad));
+					d.setCostoDs(0);
+					d.setCostoGs(Double.parseDouble(costo));
+					d.setIva(rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10));
+					detOrden.add(d);
+					
+					CompraLocalFacturaDetalle df = new CompraLocalFacturaDetalle();
+					df.setArticulo(art);
+					df.setCantidad(Integer.parseInt(cantidad));
+					df.setCantidadRecibida(Integer.parseInt(cantidad));
+					df.setCostoDs(0);
+					df.setCostoFinalGs(Double.parseDouble(costo));
+					df.setCostoGs(Double.parseDouble(costo));
+					df.setCostoPromedioGs(Double.parseDouble(costo));
+					df.setIva(rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10));
+					df.setListaGs(art.getPrecioListaGs());
+					df.setMinoristaGs(art.getPrecioMinoristaGs());
+					df.setPrecioFinalGs(art.getPrecioGs());
+					detCompras.add(df);
+				}				
+			} else {
+				Articulo art = rr.getArticulo(codigo);
+				if (art != null) {
+					int cant = Integer.parseInt(cantidad);
+					if (cant > 0) {
+						NotaCreditoDetalle d = new NotaCreditoDetalle();
+						d.setArticulo(art);
+						d.setCantidad(Integer.parseInt(cantidad));
+						d.setMontoGs(Double.parseDouble(costo));
+						detNotaCred.add(d);	
+					}									
+				}				
+			}
+		}
+		CompraLocalOrden oc = new CompraLocalOrden();
+		oc.setFechaCreacion(new Date());
+		oc.setNumero("OCL-00001");
+		oc.setDetalles(detOrden);
+		rr.saveObject(oc, "sys");		
+	}
+	
 	public static void main(String[] args) {
 		try {
 			//ProcesosArticulos.setFamiliaArticulos(SRC_BATERIAS);
@@ -997,7 +1121,9 @@ public class ProcesosArticulos {
 			//ProcesosArticulos.setFamiliaMarca(SRC_MARCAS_FAMILIAS);
 			//ProcesosArticulos.verificarStock(2, 1);
 			//ProcesosArticulos.migrarStockMra(SRC_STOCK_MRA);
-			ProcesosArticulos.addAjusteMRA(SRC_INV_REPUESTOS_MRA);
+			//ProcesosArticulos.addAjusteMRA(SRC_INV_REPUESTOS_MRA);
+			//ProcesosArticulos.addInventarioAutocentro(SRC_INV_CUBIERTAS_AUT);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
