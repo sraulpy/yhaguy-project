@@ -27914,11 +27914,12 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 30);
 	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
 	static DatosColumnas col3 = new DatosColumnas("Stock", TIPO_LONG, 15);
-	static DatosColumnas col4 = new DatosColumnas("May.Gs.", TIPO_DOUBLE_GS, 18);
-	static DatosColumnas col5 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 18);
-	static DatosColumnas col6 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 18);
-	static DatosColumnas col7 = new DatosColumnas("Tra.Gs.", TIPO_DOUBLE_GS, 18);
-	static DatosColumnas col8 = new DatosColumnas("Pro.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col4 = new DatosColumnas("May.Cre.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col5 = new DatosColumnas("May.Con.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col6 = new DatosColumnas("Min.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col7 = new DatosColumnas("Lis.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col8 = new DatosColumnas("Tra.Gs.", TIPO_DOUBLE_GS, 18);
+	static DatosColumnas col9 = new DatosColumnas("Pro.Gs.", TIPO_DOUBLE_GS, 18);
 
 	public ReporteListaPrecioPorDeposito(String deposito) {
 		this.deposito = deposito;
@@ -27933,6 +27934,7 @@ class ReporteListaPrecioPorDeposito extends ReporteYhaguy {
 		cols.add(col6);
 		cols.add(col7);
 		cols.add(col8);
+		cols.add(col9);
 	}
 
 	@Override
