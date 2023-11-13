@@ -345,7 +345,7 @@ public class NotaCredito extends Domain {
 		if (this.isMotivoDescuento()) {
 			for (NotaCreditoDetalle item : this.detalles) {
 				if (item.isDetalleFactura()) {
-					if (!item.isExenta()) {
+					if (item.isIva10()) {
 						out += item.getImporteGs();
 					}
 				}
@@ -353,13 +353,40 @@ public class NotaCredito extends Domain {
 		} else {
 			for (NotaCreditoDetalle item : this.detalles) {
 				if (!item.isDetalleFactura()) {
-					if (!item.isExenta()) {
+					if (item.isIva10()) {
 						out += item.getImporteGs();
 					}
 				}
 			}
 		}		
 		return Math.rint(misc.calcularIVA(out, 10) * 1) / 1;
+	}
+	
+	/**
+	 * @return el total iva 5..
+	 */
+	public double getTotalIva5() {
+		if (this.isExenta() && !this.isGravada()) return 0.0;
+		Misc misc = new Misc();	
+		double out = 0;
+		if (this.isMotivoDescuento()) {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (item.isDetalleFactura()) {
+					if (item.isIva5()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+		} else {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (!item.isDetalleFactura()) {
+					if (item.isIva5()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+		}		
+		return Math.rint(misc.calcularIVA(out, 5) * 1) / 1;
 	}
 	
 	/**
@@ -372,7 +399,7 @@ public class NotaCredito extends Domain {
 		if (this.isMotivoDescuento()) {
 			for (NotaCreditoDetalle item : this.detalles) {
 				if (item.isDetalleFactura()) {
-					if (!item.isExenta()) {
+					if (item.isIva10()) {
 						out += item.getImporteGs();
 					}
 				}
@@ -380,13 +407,40 @@ public class NotaCredito extends Domain {
 		} else {
 			for (NotaCreditoDetalle item : this.detalles) {
 				if (!item.isDetalleFactura()) {
-					if (!item.isExenta()) {
+					if (item.isIva10()) {
 						out += item.getImporteGs();
 					}
 				}
 			}
 		}		
 		return Math.rint(misc.calcularGravado(out, 10) * 1) / 1;
+	}
+	
+	/**
+	 * @return el total gravado 5..
+	 */
+	public double getTotalGravado5() {
+		if (this.isExenta() && !this.isGravada()) return 0.0;
+		Misc misc = new Misc();	
+		double out = 0;
+		if (this.isMotivoDescuento()) {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (item.isDetalleFactura()) {
+					if (item.isIva5()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+		} else {
+			for (NotaCreditoDetalle item : this.detalles) {
+				if (!item.isDetalleFactura()) {
+					if (item.isIva5()) {
+						out += item.getImporteGs();
+					}
+				}
+			}
+		}		
+		return Math.rint(misc.calcularGravado(out, 5) * 1) / 1;
 	}
 	
 	/**

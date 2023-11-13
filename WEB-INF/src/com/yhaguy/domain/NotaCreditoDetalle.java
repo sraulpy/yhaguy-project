@@ -71,6 +71,20 @@ public class NotaCreditoDetalle extends Domain{
 	}
 	
 	/**
+	 * @return true si es iva 5..
+	 */
+	public boolean isIva5() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_5);
+	}
+	
+	/**
+	 * @return true si es iva 10..
+	 */
+	public boolean isIva10() {
+		return this.tipoIva.getSigla().equals(Configuracion.SIGLA_IVA_10);
+	}
+	
+	/**
 	 * @return true si corresponde a flia articulo..
 	 */
 	public boolean isFamilia(long idFamilia) {
