@@ -107,6 +107,14 @@ public class SifenViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	public void imprimirNRE(@BindingParam("bean") Object[] bean) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Remision rem = (Remision) rr.getObject(Remision.class.getName(), (long) bean[8]);
+		this.generarPDFNRE(rem);
+		Executions.getCurrent().sendRedirect(this.getUrlNRE(rem.getNumero()), "_blank");
+	}
+	
+	@Command
 	@NotifyChange("*")
 	public void actualizar() {
 		Clients.showNotification("DATOS ACTUALIZADOS");
@@ -128,6 +136,13 @@ public class SifenViewModel extends SimpleViewModel {
 	 */
 	public String getUrl(String numero) {
 		return this.getCurrentURL() + "/yhaguy/archivos/sifen/FE/" + numero + ".pdf";
+	}
+	
+	/**
+	 * @return url digital
+	 */
+	public String getUrlNRE(String numero) {
+		return this.getCurrentURL() + "/yhaguy/archivos/sifen/NRE/" + numero + ".pdf";
 	}
 	
 	/**
@@ -406,7 +421,11 @@ public class SifenViewModel extends SimpleViewModel {
 			}  else if ("iRespFlete".equals(fieldName)) {
 				value = "Emisor de la factura";
 			}  else if ("cCondNeg".equals(fieldName)) {
-				value = this.DE.getgDtipDE().getgTransp().getcCondNeg().getDescripcion();
+				if (this.DE.getgDtipDE().getgTransp().getcCondNeg() != null) {
+					value = this.DE.getgDtipDE().getgTransp().getcCondNeg().getDescripcion();
+				} else {
+					value = "";
+				}
 			}  else if ("dMarVeh".equals(fieldName)) {
 				value = this.DE.getgDtipDE().getgTransp().getgVehTrasList().get(0).getdMarVeh();
 			}  else if ("dNroIDVeh".equals(fieldName)) {

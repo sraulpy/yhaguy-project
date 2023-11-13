@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Remision" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e16c87eb-7253-4a85-ab69-7cc7f103ff20">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src/DE/DataAdapter.xml"/>
-	<property name="ireport.zoom" value="3.1384283767210044"/>
-	<property name="ireport.x" value="288"/>
-	<property name="ireport.y" value="1440"/>
+	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ambiente" class="java.lang.String"/>
 	<parameter name="LOGO_URL" class="java.lang.String" isForPrompting="false"/>
 	<queryString language="XPath">
@@ -616,7 +616,6 @@
 	</variable>
 	<background>
 		<band height="646" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<line>
 				<reportElement x="0" y="551" width="1" height="93" uuid="bdf223ef-c53a-44d7-a86c-e96144b0b9fe">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -803,8 +802,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{dDesActEco}]]></textFieldExpression>
 				</textField>
-				<image scaleImage="FillFrame" vAlign="Middle" onErrorType="Blank">
-					<reportElement x="2" y="36" width="126" height="29" uuid="35c64550-2363-4272-b3ad-d0c746431656">
+				<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" onErrorType="Blank">
+					<reportElement x="18" y="31" width="92" height="40" uuid="35c64550-2363-4272-b3ad-d0c746431656">
 						<property name="com.jaspersoft.studio.unit.width" value="mm"/>
 						<property name="com.jaspersoft.studio.unit.height" value="mm"/>
 					</reportElement>
@@ -1387,7 +1386,6 @@
 	</detail>
 	<pageFooter>
 		<band height="159" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<frame>
 				<reportElement x="0" y="5" width="555" height="136" uuid="c56e4000-dfc4-4052-8e37-6eb82843fc54">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>

@@ -6362,7 +6362,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select (select t.descripcion from TipoMovimiento t where t.sigla = '" + Configuracion.SIGLA_TM_NOTA_REMISION + "'), r.fecha, r.numero, 0.0, r.venta.cliente.empresa.razonSocial,"
-				+ " 0.0, 0.0, r.venta.cliente.empresa.ruc, r.id, '', '' from Remision r where "
+				+ " 0.0, 0.0, r.venta.cliente.empresa.ruc, r.id, r.respuestaSET, r.url from Remision r where "
 				+ " (r.fecha >= '"
 				+ desde_
 				+ "' and r.fecha <= '"
