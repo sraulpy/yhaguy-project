@@ -66,6 +66,8 @@ import com.yhaguy.domain.Proveedor;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Remision;
+import com.yhaguy.domain.RemisionDetalle;
 import com.yhaguy.domain.SaldoVale;
 import com.yhaguy.domain.SucursalApp;
 import com.yhaguy.domain.Talonario;
@@ -108,6 +110,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 public class CajaPeriodoControlBody extends BodyApp {
+	
+	//test git..
 	
 	static final String ZUL_IMPRESION_FACTURA_BAT = "/yhaguy/gestion/caja/periodo/impresion_factura.zul";
 	static final String ZUL_IMPRESION_FACTURA = "/yhaguy/gestion/caja/periodo/impresion_factura.zul";
@@ -1078,6 +1082,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 			MyArray facVenta = new MyArray();
 			facVenta.setId(venta.getId());
 			this.dto.getVentas().add(facVenta);
+			
+			if (venta.getFormaEntrega().equals(Venta.FORMA_ENTREGA_REPARTO)) {
+				this.generarRemision(venta);
+			}
+			
 		}
 		this.dto.setVentas_a_imputar(ventas);
 		this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
@@ -1133,6 +1142,36 @@ public class CajaPeriodoControlBody extends BodyApp {
 		if (wp.isClickAceptar() == true) {
 			this.generarFacturaVenta(venta);
 		}
+	}
+	
+	/**
+	 * genera la nota de remision..
+	 */
+	private void generarRemision(VentaDTO venta) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Venta v = (Venta) rr.getObject(Venta.class.getName(), venta.getId());
+			Remision r = new Remision();
+			r.setFecha(new Date());
+			r.setImporteGs(venta.getTotalImporteGs());
+			r.setNumero(venta.getNumero());
+			r.setObservacion("AUTO GENERADO");
+			r.setVenta(v);
+			
+			Set<RemisionDetalle> dets = new HashSet<RemisionDetalle>();
+			for (VentaDetalle item : v.getDetalles()) {
+				RemisionDetalle d = new RemisionDetalle();
+				d.setArticulo(item.getArticulo());
+				d.setCantidad(Integer.parseInt(item.getCantidad() + ""));
+				dets.add(d);
+			}
+			r.getDetalles().addAll(dets);
+			rr.saveObject(r, this.getLoginNombre());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
