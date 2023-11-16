@@ -68,7 +68,9 @@
 				</hlayout>
 				<vlayout spacing="0">
 					<field value="Observación" />
-					<textbox hflex="true" />
+					<textbox
+						value="@bind(vm.dato.reciboDTO.observacion)"
+						hflex="true" placeholder="Ingresar la observación." />
 				</vlayout>
 			</row>
 
