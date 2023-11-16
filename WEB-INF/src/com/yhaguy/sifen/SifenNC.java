@@ -195,7 +195,7 @@ public class SifenNC {
         gDtipDE.setgCamCond(gCamCond);
 
         List<TgCamItem> gCamItemList = new ArrayList<>();
-        for (NotaCreditoDetalle d : data.getDetalles()) {
+        for (NotaCreditoDetalle d : data.getDetallesArticulos_()) {
             TgCamItem gCamItem = new TgCamItem();
             gCamItem.setdCodInt(d.getArticulo().getCodigoInterno());
             gCamItem.setdDesProSer(d.getArticulo().getDescripcion());
