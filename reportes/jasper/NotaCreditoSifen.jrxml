@@ -481,7 +481,7 @@
 	</group>
 	<background>
 		<band height="615" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			
 			<line>
 				<reportElement x="0" y="241" width="1" height="352" uuid="5fff0385-80cc-494c-8c84-a68824ed8c43">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -600,7 +600,7 @@
 				<textField>
 					<reportElement x="456" y="32" width="96" height="10" uuid="2b0edba4-b265-4cca-bde3-06c7c4256055">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -610,7 +610,7 @@
 				<textField evaluationTime="Report" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement x="474" y="43" width="78" height="10" uuid="0b62e7e6-019e-44ec-8ba0-f7aef077135d">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -620,7 +620,7 @@
 				<textField>
 					<reportElement x="139" y="31" width="260" height="10" uuid="c88eb7aa-44d6-443c-8f59-263b8878ca11">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -630,7 +630,7 @@
 				<textField>
 					<reportElement x="139" y="15" width="260" height="15" uuid="c8d85172-c306-48bb-a4cc-5764755aebbc">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="9"/>
@@ -640,7 +640,7 @@
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="139" y="42" width="260" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="e57527ab-7a16-4324-a290-26bd1897942c">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -651,7 +651,7 @@
 				<textField>
 					<reportElement x="139" y="53" width="260" height="10" uuid="b140cb72-54ce-4f6f-80c7-c07f39d60f81">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -661,7 +661,7 @@
 				<textField>
 					<reportElement x="139" y="64" width="260" height="10" uuid="e47a00f1-9b8c-4ebf-bff3-8e41d69e822b">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -671,7 +671,7 @@
 				<textField evaluationTime="Report">
 					<reportElement x="425" y="20" width="127" height="10" uuid="98d826c9-d69e-4628-a9a6-57d9f76ecc8c">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -697,7 +697,7 @@
 				<textField>
 					<reportElement x="399" y="54" width="152" height="15" uuid="092f98bc-9004-445f-b398-5beffe67e4c4">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -707,7 +707,7 @@
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="214" y="75" width="185" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d9acbe5c-a69b-4af7-9884-20111281010f">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -732,7 +732,7 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="214" y="85" width="185" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="b5714a4e-8ea3-44e2-bd7c-a9a826dd3a58">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -801,7 +801,7 @@
 				<textField pattern="#,###.###;(#,###.###-)">
 					<reportElement x="46" y="49" width="54" height="10" uuid="eb66d775-0aa7-4e31-bcb7-e662812dc084">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="7"/>
@@ -1120,12 +1120,12 @@
 		<band height="210" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="0" width="555" height="55" backcolor="#CFCFCF" uuid="f4748a21-1f50-411d-82c4-75e25c382030">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					
 				</reportElement>
 			</rectangle>
 			<frame>
 				<reportElement x="0" y="60" width="555" height="136" uuid="48078fe4-e55e-4b6f-a0db-ebc7fa2580a1">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					
 				</reportElement>
 				<box>
 					<pen lineWidth="1.0"/>
@@ -1147,7 +1147,7 @@
 				<staticText>
 					<reportElement x="148" y="107" width="352" height="15" uuid="d4453e60-9b5d-41b2-bded-b2a4a0c3aa0a">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement>
 						<font size="9"/>
@@ -1157,7 +1157,7 @@
 				<staticText>
 					<reportElement x="148" y="10" width="404" height="30" uuid="1a4c2b98-c791-4925-93b6-3397ed6c692e">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement>
 						<font size="11"/>
@@ -1168,7 +1168,7 @@
 					<reportElement x="148" y="42" width="303" height="15" uuid="3cce0000-f600-4692-9932-ec3e7af81222">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement>
 						<font size="11"/>
@@ -1199,7 +1199,7 @@
 				<textField>
 					<reportElement x="179" y="60" width="295" height="20" uuid="418c3c6c-64df-4445-a0c0-47fcb96a26fe">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="11"/>
@@ -1208,7 +1208,7 @@
 				</textField>
 				<textField>
 					<reportElement x="148" y="82" width="400" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="03a9e2f0-005d-4dc3-893c-5284fa441999">
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						
 					</reportElement>
 					<textElement verticalAlignment="Middle">
 						<font size="10"/>
