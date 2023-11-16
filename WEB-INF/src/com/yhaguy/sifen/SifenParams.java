@@ -15,7 +15,7 @@ public class SifenParams {
 	public static final String SIFEN_DIR = "C:\\sifen\\";
 
 	public static final String PATH_FACTURAS = "C:\\facturacionelectronica\\";
-	public static final String PATH_NOTAS_CREDITO = "C:\\notascreditodebito\\";
+	public static final String PATH_NOTAS_CREDITO = "C:\\notascredito\\";
 	public static final String PATH_NOTAS_DEBITO = "C:\\notasdebito\\";
 	public static final String PATH_NOTAS_REMISION = "C:\\notasremision\\";
 	

@@ -6374,6 +6374,33 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return las ventas.. 
+	 * [0]:concepto
+	 * [1]:fecha
+	 * [2]:numero
+	 * [3]:costoPromedio
+	 * [4]:cliente
+	 * [7]:cliente.ruc
+	 * [8]:id
+	 * [9]:respuestaSet
+	 */
+	public List<Object[]> getSifenNotasCredito(Date desde, Date hasta) throws Exception {
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, 0.0, n.cliente.empresa.razonSocial,"
+				+ " 0.0, 0.0, n.cliente.empresa.ruc, n.id, n.respuestaSET, n.url from NotaCredito n where "
+				+ " n.tipoMovimiento.sigla IN ('" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')"
+				+ " and (n.fechaEmision >= '"
+				+ desde_
+				+ "' and n.fechaEmision <= '"
+				+ hasta_
+				+ "')"
+				+ " order by n.fechaEmision";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
 	 * @return las notas de credito.. 
 	 * [0]:concepto
 	 * [1]:fecha

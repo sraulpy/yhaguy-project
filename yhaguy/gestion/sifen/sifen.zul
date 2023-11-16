@@ -8,8 +8,8 @@
 		<tabs hflex="1">
 			<tab label="Facturas" width="25%"></tab>
 			<tab label="Notas de Remisión" width="25%"></tab>
-			<tab label="Notas de Créditos" width="25%" disabled="true"></tab>
-			<tab label="Notas de Débitos" width="25%" disabled="true"></tab>
+			<tab label="Notas de Créditos" width="25%"></tab>
+			<tab label="Notas de Débitos" width="25%"></tab>
 		</tabs>
 		<tabpanels vflex="1">
 			<tabpanel>
@@ -109,6 +109,60 @@
 									<button iconSclass="z-icon-print" mold="bs" sclass="btn-primary btn-xs"
 										tooltiptext="Imprimir" hflex="1"
 										onClick="@command('imprimirNRE', bean=each)"
+										disabled="@load(each[9] ne 'Aprobado')"></button>
+									<button iconSclass="z-icon-envelope-o"
+										mold="bs" sclass="btn-primary btn-xs"
+										disabled="@load(each[9] ne 'Aprobado')"
+										hflex="1"></button>
+								</hlayout>
+							</listcell>							
+						</listitem>
+					</template>
+				</listbox>
+			</tabpanel>
+			<tabpanel>
+				<hlayout sclass="button-container">
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="150px" iconSclass="z-icon-refresh" label=" Actualizar" 
+						onClick="@command('actualizar')"/>
+					<space></space>
+					<datebox value="@bind(vm.filterDesde)"></datebox>
+					<datebox value="@bind(vm.filterHasta)"></datebox>
+				</hlayout>
+				<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
+					model="@load(vm.notasCredito)" mold="paging" autopaging="true">
+					<listhead>
+						<listheader label="Fecha" width="100px"></listheader>
+						<listheader label="Número" width="140px"></listheader>
+						<listheader label="Concepto" width="180px"></listheader>
+						<listheader label="Ruc" width="100px"></listheader>
+						<listheader label="Cliente"></listheader>
+						<listheader label="Estado" width="100px"></listheader>
+						<listheader label="Link" width="100px" align="center"></listheader>
+						<listheader label="Acciones" width="150px" align="center"></listheader>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each[1]) @converter('formattedDate', format='dd-MM-yyyy')"></listcell>
+							<listcell label="@load(each[2])"></listcell>
+							<listcell label="@load(each[0])"></listcell>
+							<listcell label="@load(each[7])"></listcell>
+							<listcell label="@load(each[4])"></listcell>
+							<listcell label="@load(each[9].toString().toUpperCase())"
+								style="@load(each[9] eq 'Aprobado' ? 'color:green':'color:red')"></listcell>
+							<listcell>
+								<a iconSclass="z-icon-link"
+									href="@load(each[10])" target="_blank"> LINK</a>
+							</listcell>
+							<listcell>
+								<hlayout>
+									<button iconSclass="z-icon-upload" mold="bs" sclass="btn-primary btn-xs"
+										tooltiptext="Enviar a la SET" hflex="1"
+										onClick="@command('generarNCR', bean=each)"
+										disabled="@load(each[9] eq 'Aprobado')"></button>
+									<button iconSclass="z-icon-print" mold="bs" sclass="btn-primary btn-xs"
+										tooltiptext="Imprimir" hflex="1"
+										onClick="@command('imprimirNCR', bean=each)"
 										disabled="@load(each[9] ne 'Aprobado')"></button>
 									<button iconSclass="z-icon-envelope-o"
 										mold="bs" sclass="btn-primary btn-xs"

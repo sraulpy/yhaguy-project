@@ -9,6 +9,7 @@ import java.util.Set;
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
 import com.coreweb.util.Misc;
+import com.roshka.sifen.core.types.TiMotEmi;
 import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
@@ -41,6 +42,11 @@ public class NotaCredito extends Domain {
 	
 	/** El nro de Solicitud que genero la N.C. ó viceversa **/
 	private String enlace;
+	
+	private String cdc;
+	private String respuestaSET = "Pendiente";
+	private String observacionSET;
+	private String url;
 	
 	/** El nro de timbrado del documento **/
 	private Timbrado timbrado;
@@ -87,6 +93,19 @@ public class NotaCredito extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	/**
+	 * @return el motivo del descuento..
+	 */
+	public TiMotEmi getMotivoNC() {
+		switch (this.motivo.getSigla()) {
+		case Configuracion.SIGLA_TIPO_NC_MOTIVO_DESCUENTO:
+			return TiMotEmi.DESCUENTO;
+		case Configuracion.SIGLA_TIPO_NC_MOTIVO_DEVOLUCION:
+			return TiMotEmi.DEVOLUCION;
+		}
+		return null;
 	}
 	
 	/**
@@ -1061,5 +1080,37 @@ public class NotaCredito extends Domain {
 
 	public void setFamilia(String familia) {
 		this.familia = familia;
+	}
+
+	public String getCdc() {
+		return cdc;
+	}
+
+	public void setCdc(String cdc) {
+		this.cdc = cdc;
+	}
+
+	public String getRespuestaSET() {
+		return respuestaSET;
+	}
+
+	public void setRespuestaSET(String respuestaSET) {
+		this.respuestaSET = respuestaSET;
+	}
+
+	public String getObservacionSET() {
+		return observacionSET;
+	}
+
+	public void setObservacionSET(String observacionSET) {
+		this.observacionSET = observacionSET;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

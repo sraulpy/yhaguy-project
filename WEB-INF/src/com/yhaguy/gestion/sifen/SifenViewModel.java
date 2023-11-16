@@ -29,9 +29,11 @@ import com.roshka.sifen.core.exceptions.SifenException;
 import com.roshka.sifen.core.fields.request.de.TgActEco;
 import com.roshka.sifen.core.fields.request.de.TgCamItem;
 import com.roshka.sifen.core.types.TTiDE;
+import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.sifen.SifenNC;
 import com.yhaguy.sifen.SifenParams;
 import com.yhaguy.sifen.SifenREM;
 import com.yhaguy.sifen.SifenTest;
@@ -99,6 +101,23 @@ public class SifenViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	public void generarNCR(@BindingParam("bean") Object[] bean) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			NotaCredito ncred = (NotaCredito) rr.getObject(NotaCredito.class.getName(), (long) bean[8]);
+			SifenNC test = new SifenNC();
+			test.testRecepcionDE(ncred);
+			this.generarPDFNCR(ncred);			
+			rr.saveObject(ncred, this.getLoginNombre());
+			bean[9] = ncred.getRespuestaSET();
+			bean[10] = ncred.getUrl();
+			BindUtils.postNotifyChange(null, null, bean, "*");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
 	public void imprimirFE(@BindingParam("bean") Object[] bean) throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		Venta venta = (Venta) rr.getObject(Venta.class.getName(), (long) bean[8]);
@@ -112,6 +131,14 @@ public class SifenViewModel extends SimpleViewModel {
 		Remision rem = (Remision) rr.getObject(Remision.class.getName(), (long) bean[8]);
 		this.generarPDFNRE(rem);
 		Executions.getCurrent().sendRedirect(this.getUrlNRE(rem.getNumero()), "_blank");
+	}
+	
+	@Command
+	public void imprimirNCR(@BindingParam("bean") Object[] bean) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		NotaCredito ncr = (NotaCredito) rr.getObject(NotaCredito.class.getName(), (long) bean[8]);
+		this.generarPDFNCR(ncr);
+		Executions.getCurrent().sendRedirect(this.getUrlNCR(ncr.getNumero()), "_blank");
 	}
 	
 	@Command
@@ -143,6 +170,13 @@ public class SifenViewModel extends SimpleViewModel {
 	 */
 	public String getUrlNRE(String numero) {
 		return this.getCurrentURL() + "/yhaguy/archivos/sifen/NRE/" + numero + ".pdf";
+	}
+	
+	/**
+	 * @return url digital
+	 */
+	public String getUrlNCR(String numero) {
+		return this.getCurrentURL() + "/yhaguy/archivos/sifen/NCR/" + numero + ".pdf";
 	}
 	
 	/**
@@ -190,6 +224,31 @@ public class SifenViewModel extends SimpleViewModel {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 			JasperExportManager.exportReportToPdfFile(jasperPrint,
 					root + "/yhaguy/archivos/sifen/NRE/" + bean.getNumero() + ".pdf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	/**
+	 * genera el PDF de la FE..
+	 */
+	private void generarPDFNCR(NotaCredito bean) {
+		try {
+			String path = SifenParams.PATH_NOTAS_CREDITO + bean.getNumero() + ".xml";
+			String xml = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+			DocumentoElectronico DE = new DocumentoElectronico(xml);
+			DE.setEnlaceQR(Utiles.parseXML(path, "dCarQR"));
+			JRDataSource dataSource = new FacturaDataSource(DE);
+
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");
+
+			JasperDesign jasperDesign = JRXmlLoader.load(root + "/reportes/jasper/NotaCreditoSifen.jrxml");
+			JasperReport jasperReport = (JasperReport) JasperCompileManager.compileReport(jasperDesign);
+			Map<String, Object> parameters = new HashMap<String, Object>();
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+			JasperExportManager.exportReportToPdfFile(jasperPrint,
+					root + "/yhaguy/archivos/sifen/NCR/" + bean.getNumero() + ".pdf");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -491,6 +550,12 @@ public class SifenViewModel extends SimpleViewModel {
 	public List<Object[]> getRemisiones() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getSifenRemisiones(this.filterDesde, this.filterHasta);
+	}
+	
+	@DependsOn({ "filterDesde", "filterHasta" })
+	public List<Object[]> getNotasCredito() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		return rr.getSifenNotasCredito(this.filterDesde, this.filterHasta);
 	}
 
 	public Date getFilterDesde() {

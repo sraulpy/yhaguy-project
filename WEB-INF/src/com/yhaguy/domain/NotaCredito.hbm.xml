@@ -23,6 +23,11 @@
 		<property name="planillaCajaNro"/>
 		<property name="cajero"/>
 		<property name="familia"/>
+		
+		<property name="cdc"/>
+		<property name="respuestaSET"/>
+		<property name="observacionSET"/>
+		<property name="url"/>
 				
 		<property name="promocion">
 			<column name="promocion" not-null="true" default="false" />

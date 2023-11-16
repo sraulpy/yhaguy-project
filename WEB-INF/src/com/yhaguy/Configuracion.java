@@ -852,8 +852,8 @@ public class Configuracion extends Config {
 	public static String SIGLA_TIPO_CARGO_ENCARGADO_DEPOSITO = "FUN-CRG-ENC-DEP";
 	public static final String SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO = "FUN-EST-ACT";
 	public static final String SIGLA_TIPO_FUNCIONARIO_ESTADO_INACTIVO = "FUN-EST-INA";
-	public static String SIGLA_TIPO_NC_MOTIVO_DESCUENTO = "NCR-MOT-DES";
-	public static String SIGLA_TIPO_NC_MOTIVO_DEVOLUCION = "NCR-MOT-DEV";
+	public static final String SIGLA_TIPO_NC_MOTIVO_DESCUENTO = "NCR-MOT-DES";
+	public static final String SIGLA_TIPO_NC_MOTIVO_DEVOLUCION = "NCR-MOT-DEV";
 	public static String SIGLA_TIPO_NC_MOTIVO_DIF_PRECIO = "NCR-MOT-DIF-PRE";
 	public static String SIGLA_TIPO_NC_MOTIVO_RECLAMO = "NCR-MOT-REC";
 	public static String SIGLA_TIPO_NC_DETALLE_FACTURA = "NCR-DET-FAC";
