@@ -100,6 +100,7 @@ public class CajaPeriodo extends Domain {
 				|| Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
 			out.add(TIPO_CHICA_REPOSICION);
 			out.add(TIPO_CHICA_REQUERIMIENTOS);
+			out.add(TIPO_VIATICOS);
 		} else {
 			out.add(TIPO_CHICA);
 		}

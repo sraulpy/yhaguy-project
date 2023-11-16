@@ -723,8 +723,12 @@ public class VentaControlBody extends BodyApp {
 
 		for (VentaDetalleDTO item : items) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
-			if ((!pedido.getAuxi().equals(Venta.MERCADERIAS_USADAS)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS))) {
+			boolean add = true;
+			if ((art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS))
+					&& pedido.getAuxi().equals(Venta.MERCADERIAS_USADAS)) {
+				add = false;
+			}
+			if (add) {
 				double costoGs = art.getCostoGs();
 				if (art.getCodigoInterno().startsWith("@")) {
 					costoGs = 0;
@@ -759,7 +763,7 @@ public class VentaControlBody extends BodyApp {
 				nvo.setVehiculoModelo(item.getVehiculoModelo());
 				
 				out.add(nvo);
-			}			
+			}
 		}
 		return out;
 	}
@@ -779,7 +783,8 @@ public class VentaControlBody extends BodyApp {
 		for (VentaDetalleDTO item : items) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
 			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
-					&& !art.getFamilia().getDescripcion().contains("USADAS")) {
+					&& !art.getFamilia().getDescripcion().contains("USADAS")
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)) {
 				long idArt = item.getArticulo().getId();
 				long cant = item.getCantidad();
 				long stock = this.ctr.stockDisponible(idArt, idDep);

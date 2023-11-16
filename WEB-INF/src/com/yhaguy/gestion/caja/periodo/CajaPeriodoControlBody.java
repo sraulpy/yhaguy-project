@@ -1136,7 +1136,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 		wp.setHigth("400px");
 		wp.setWidth("600px");
 		wp.setDato(this);
-		wp.setCheckAC(new ValidadorFormaPagoVenta(this));
+		wp.setCheckAC(new ValidadorFormaPagoVenta(this, venta));
 		wp.show(Configuracion.VENTA_LISTA_FORMA_PAGO_ZUL);
 
 		if (wp.isClickAceptar() == true) {
@@ -1183,7 +1183,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 		for (VentaDetalleDTO item : pedido.getDetalles()) {
 			Articulo art = rr.getArticuloById(item.getArticulo().getId());
 			if (!art.getFamilia().getDescripcion().equals(ArticuloFamilia.CONTABILIDAD)
-					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)) {
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.SERVICIOS)
+					&& !art.getFamilia().getDescripcion().equals(ArticuloFamilia.MERCADERIAS_USADAS)) {
 				long stock = rr.getStockDisponible(item.getArticulo().getId(), idDeposito);
 				if (stock < item.getCantidad()) {
 					return false;
@@ -3440,6 +3441,11 @@ class ValidadorAgregarRecibo implements VerificaAceptarCancelar {
 			mensaje += "\n - Debe ingresar el número de recibo..";
 		}
 		
+		if (this.recibo.getObservacion() == null || this.recibo.getObservacion().trim().isEmpty()) {
+			out = false;
+			mensaje += "\n - Debe ingresar la observación..";
+		}
+		
 		if ((!this.recibo.isRecaudacionMra()) && this.recibo.isCobro() && ((this.recibo.getNumero().length() != 15) || (this.recibo.getNumero().charAt(3) != '-') || (this.recibo.getNumero().charAt(7) != '-')
 				|| !Utiles.validarNumeroFactura(this.recibo.getNumero()))) {
 			out = false;
@@ -3705,18 +3711,18 @@ class ValidadorArqueoCaja implements VerificaAceptarCancelar {
 class ValidadorFormaPagoVenta implements VerificaAceptarCancelar {
 
 	private CajaPeriodoControlBody ctr;
+	private VentaDTO venta;
 	private String mensaje;
 
-	public ValidadorFormaPagoVenta(CajaPeriodoControlBody ctr) {
+	public ValidadorFormaPagoVenta(CajaPeriodoControlBody ctr, VentaDTO venta) {
 		this.ctr = ctr;
+		this.venta = venta;
 	}
 
 	@Override
 	public boolean verificarAceptar() {
 		boolean valido = true;
 		this.mensaje = "No se puede continuar la operación debido a: \n";
-
-		VentaDTO venta = this.ctr.getSelectedVenta();
 
 		double totalVT = venta.isMonedaLocal() ? venta.getTotalImporteGs() : venta.getTotalImporteDs();
 		double totalFP = 0;
@@ -3727,9 +3733,10 @@ class ValidadorFormaPagoVenta implements VerificaAceptarCancelar {
 			totalFP += venta.isMonedaLocal() ? item.getMontoGs() : item.getMontoDs();
 		}
 
-		if ((totalVT != totalFP)) {
+		if ((Utiles.getRedondeo(totalVT) != Utiles.getRedondeo(totalFP))) {
+			valido = false;
 			this.mensaje += "\n - El importe de las Formas de Pago debe ser: "
-					+ totalVT_ + venta.getMoneda().getPos1();
+					+ totalVT_ + " " +venta.getMoneda().getPos1();
 		}
 
 		return valido;

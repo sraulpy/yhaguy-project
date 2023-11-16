@@ -335,6 +335,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 
 		String source = ReportesViewModel.SOURCE_RECIBO_COMUN;
 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("Empresa", Configuracion.empresa);
 		params.put("Fecha", Utiles.getDateToString(new Date(), "dd"));
 		params.put("Funcionario", this.selectedPlanilla.getFuncionario());
 		params.put("ImporteGs", Utiles.getNumberFormat(importe));

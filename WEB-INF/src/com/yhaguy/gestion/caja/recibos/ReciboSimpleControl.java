@@ -33,6 +33,7 @@ import org.zkoss.zul.Window;
 import com.coreweb.componente.ViewPdf;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
+import com.coreweb.domain.Tipo;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
@@ -1912,6 +1913,12 @@ public class ReciboSimpleControl extends SoloViewModel {
 	public List<Pagare> getPagares() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getPagaresPendientes(this.filterNro, this.filterFirmante);
+	}
+	
+	public MyPair getFormaPagoRetencionesApagar() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		Tipo t = rr.getTipoPorSigla("FP-TIP-RET-PAG");
+		return new MyPair(t.getId(), t.getDescripcion(), t.getSigla());
 	}
 	
 	public CajaPeriodoControlBody getDato() {
