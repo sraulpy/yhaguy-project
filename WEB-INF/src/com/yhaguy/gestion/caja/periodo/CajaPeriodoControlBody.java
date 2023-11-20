@@ -3443,7 +3443,7 @@ class ValidadorAgregarRecibo implements VerificaAceptarCancelar {
 		
 		if (this.recibo.getObservacion() == null || this.recibo.getObservacion().trim().isEmpty()) {
 			out = false;
-			mensaje += "\n - Debe ingresar la observación..";
+			mensaje += "\n - Debe ingresar la observación del recibo..";
 		}
 		
 		if ((!this.recibo.isRecaudacionMra()) && this.recibo.isCobro() && ((this.recibo.getNumero().length() != 15) || (this.recibo.getNumero().charAt(3) != '-') || (this.recibo.getNumero().charAt(7) != '-')
