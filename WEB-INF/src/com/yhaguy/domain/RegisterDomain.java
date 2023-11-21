@@ -35,7 +35,7 @@ import com.yhaguy.util.Utiles;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class RegisterDomain extends Register {
 
-	// El register tiene que ser un sigleton..
+	// El register tiene que ser un sigleton.. git
 	private RegisterDomain() {
 		super();
 	}
@@ -7412,7 +7412,7 @@ public class RegisterDomain extends Register {
 		String query = "select f from Funcionario f where lower(f.empresa.razonSocial) like '%"
 				+ razonSocial.toLowerCase()
 				+ "%' and (f.vendedor = true or f.vendedorMostrador = true) and f.funcionarioEstado.sigla = '"
-				+ Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "' order by f.nombreEmpresa";
+				+ Configuracion.SIGLA_TIPO_FUNCIONARIO_ESTADO_ACTIVO + "' or f.empresa.observacion = 'LISTAR_VENTAS' order by f.nombreEmpresa";
 		return this.hql(query);
 	}
 	
