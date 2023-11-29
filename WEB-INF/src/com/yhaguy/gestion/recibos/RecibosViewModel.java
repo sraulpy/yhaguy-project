@@ -303,7 +303,7 @@ public class RecibosViewModel extends SimpleViewModel {
 					+ "\nde fecha: " + Utiles.getDateToString((Date) this.selectedItem.getPos1(), "dd-MM-yyyy") + "\n"
 					+ "\n" + asunto,
 					"", "", "ReciboDigital" + ".pdf",
-					root + "/yhaguy/archivos/recibos/" + this.reciboDto.getNumero() + ".pdf");	
+					root + "/yhaguy/archivos/recibos/" + this.reciboDto.getNumero() + ".pdf", null, null);	
 			Clients.showNotification("Correo Enviado");
 		} catch (Exception e) {
 			e.printStackTrace();

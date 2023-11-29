@@ -21,11 +21,11 @@ import com.yhaguy.domain.Tarea_Programada;
 
 public class EnviarCorreo {
 	
-	//static final String SMTP_HOST_NAME_GMAIL = "smtp.gmail.com";
-	//static final String SMTP_PORT_GMAIL = "465";
-	//static final String SMTP_START_TLS_ENABLE_GMAIL = "true";
-	//static final String EMAIL_FROM_GMAIL = "yhaguysys@gmail.com";
-	//static final String EMAIL_FROM_PASSWORD_GMAIL = "iljwvytmzwdbcusz";
+	static final String SMTP_HOST_NAME_GMAIL = "smtp.gmail.com";
+	static final String SMTP_PORT_GMAIL = "465";
+	static final String SMTP_START_TLS_ENABLE_GMAIL = "true";
+	static final String EMAIL_FROM_GMAIL = "app.gestionyhaguy@gmail.com";
+	static final String EMAIL_FROM_PASSWORD_GMAIL = "hbkyjchbtweialgv";
 	
 	private static String SMTP_HOST_NAME = "mail.yhaguyrepuestos.com.py";
 	private static String SMTP_PORT = "465";
@@ -54,6 +54,16 @@ public class EnviarCorreo {
 			EMAIL_FROM = "sistema@groupauto.com.py";
 			EMAIL_FROM_PASSWORD = "Sistema0985";
 		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			SMTP_HOST_NAME = SMTP_HOST_NAME_GMAIL;
+			EMAIL_FROM = EMAIL_FROM_GMAIL;
+			EMAIL_FROM_PASSWORD = EMAIL_FROM_PASSWORD_GMAIL;
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			SMTP_HOST_NAME = SMTP_HOST_NAME_GMAIL;
+			EMAIL_FROM = EMAIL_FROM_GMAIL;
+			EMAIL_FROM_PASSWORD = EMAIL_FROM_PASSWORD_GMAIL;
+		}
 	}
 	
 	public EnviarCorreo(Tarea_Programada tarea) {
@@ -71,14 +81,14 @@ public class EnviarCorreo {
 			String subject, String message, String fileName, String path)
 			throws Exception {
 
-		sendMessage(recipients, new String[] { "" }, recipientsCCO, subject, message, 
+		sendMessage(recipients, new String[] {""}, recipientsCCO, subject, message, 
 				EMAIL_FROM, EMAIL_FROM_PASSWORD,
-				fileName, path);
+				fileName, path, null, null);
 	}
 
 	public void sendMessage(String[] recipients, String[] recipientsCC,
 			String[] recipientsCCO, String subject, String message,
-			String from, String pass, String fileName, String path)
+			String from, String pass, String fileName, String path, String fileName2, String path2)
 			throws Exception {
 		boolean debug = false;
 		Properties props = new Properties();
@@ -116,6 +126,13 @@ public class EnviarCorreo {
 			BodyPart adjunto = new MimeBodyPart();
 			adjunto.setDataHandler(new DataHandler(new FileDataSource(path)));
 			adjunto.setFileName(fileName);
+			multiParte.addBodyPart(adjunto);
+		}
+		
+		if (path2 != null) {
+			BodyPart adjunto = new MimeBodyPart();
+			adjunto.setDataHandler(new DataHandler(new FileDataSource(path2)));
+			adjunto.setFileName(fileName2);
 			multiParte.addBodyPart(adjunto);
 		}
 

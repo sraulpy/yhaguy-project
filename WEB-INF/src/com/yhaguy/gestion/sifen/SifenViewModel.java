@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.internet.InternetAddress;
+
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -18,9 +20,11 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Popup;
 
 import com.coreweb.control.SimpleViewModel;
 import com.roshka.sifen.core.SifenConfig;
@@ -29,14 +33,18 @@ import com.roshka.sifen.core.exceptions.SifenException;
 import com.roshka.sifen.core.fields.request.de.TgActEco;
 import com.roshka.sifen.core.fields.request.de.TgCamItem;
 import com.roshka.sifen.core.types.TTiDE;
+import com.yhaguy.Configuracion;
+import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.domain.Remision;
+import com.yhaguy.domain.Vehiculo;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.sifen.SifenNC;
 import com.yhaguy.sifen.SifenParams;
 import com.yhaguy.sifen.SifenREM;
 import com.yhaguy.sifen.SifenTest;
+import com.yhaguy.util.EnviarCorreo;
 import com.yhaguy.util.Utiles;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -54,11 +62,23 @@ public class SifenViewModel extends SimpleViewModel {
 	
 	private Date filterDesde;
 	private Date filterHasta;
+	
+	private Object[] selectedItem;
+	
+	private List<Funcionario> choferes;
+	private List<Vehiculo> vehiculos;
 
 	@Init(superclass = true)
 	public void init() {
 		this.filterDesde = new Date();
-		this.filterHasta = new Date();
+		this.filterHasta = new Date();		
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.choferes = rr.getChoferes("");
+			this.vehiculos = rr.getVehiculosSucursal(2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.configSifen();
 	}
 	
@@ -88,6 +108,8 @@ public class SifenViewModel extends SimpleViewModel {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Remision rem = (Remision) rr.getObject(Remision.class.getName(), (long) bean[8]);
+			rem.setChofer((Funcionario) bean[11]);
+			rem.setVehiculo_((Vehiculo) bean[12]);
 			SifenREM sf = new SifenREM();
 			sf.testRecepcionDE(rem, false);
 			this.generarPDFNRE(rem);			
@@ -145,6 +167,139 @@ public class SifenViewModel extends SimpleViewModel {
 	@NotifyChange("*")
 	public void actualizar() {
 		Clients.showNotification("DATOS ACTUALIZADOS");
+	}
+	
+	@Command
+	@NotifyChange("selectedItem")
+	public void openPopup(@BindingParam("bean") Object[] bean, @BindingParam("pop") Popup pop,
+			@BindingParam("parent") Component parent) {
+		this.selectedItem = bean;
+		pop.open(parent, "after_end");
+	}
+	
+	@Command
+	@NotifyChange("selectedItem")
+	public void sendFE() {		
+		String destino = (String) this.selectedItem[11];
+		
+		if (!destino.trim().isEmpty()) {
+			boolean valido = this.isValido(destino);
+			if (!valido) {
+				Clients.showNotification("Correo no válido", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+		}		
+		
+		if (destino.trim().isEmpty()) {
+			destino = "sergioa@yhaguyrepuestos.com.py";
+		}
+		
+		String[] send = new String[] { destino };
+		String[] sendCC = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		try {
+			String asunto = "Factura Electrónica - " + Configuracion.empresa;
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");			
+			EnviarCorreo enviarCorreo = new EnviarCorreo();			
+			enviarCorreo.sendMessage(send, sendCC, sendCCO,
+					asunto, "Estimado Cliente: " + this.selectedItem[12]
+					+ "\nAdjunto su comprobante electrónico " + this.selectedItem[2]
+					+ "\n" + asunto, "", "", "FacturaElectronica" + ".pdf",
+					root + "/yhaguy/archivos/sifen/FE/" + this.selectedItem[2] + ".pdf", 
+					"FacturaElectronica" + ".xml",
+					"C:\\facturacionelectronica\\" + this.selectedItem[2] + ".xml");
+			Clients.showNotification("Correo Enviado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	@NotifyChange("selectedItem")
+	public void sendNRE() {		
+		String destino = (String) this.selectedItem[13];
+		
+		if (!destino.trim().isEmpty()) {
+			boolean valido = this.isValido(destino);
+			if (!valido) {
+				Clients.showNotification("Correo no válido", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+		}		
+		
+		if (destino.trim().isEmpty()) {
+			destino = "sergioa@yhaguyrepuestos.com.py";
+		}
+		
+		String[] send = new String[] { destino };
+		String[] sendCC = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		try {
+			String asunto = "Nota de Remisión Electrónica - " + Configuracion.empresa;
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");			
+			EnviarCorreo enviarCorreo = new EnviarCorreo();			
+			enviarCorreo.sendMessage(send, sendCC, sendCCO,
+					asunto, "Estimado Cliente: " + this.selectedItem[4]
+					+ "\nAdjunto su comprobante electrónico " + this.selectedItem[2]
+					+ "\n" + asunto, "", "", "NotaRemisionElectronica" + ".pdf",
+					root + "/yhaguy/archivos/sifen/NRE/" + this.selectedItem[2] + ".pdf", 
+					"NotaRemisionElectronica" + ".xml",
+					"C:\\notasremision\\" + this.selectedItem[2] + ".xml");
+			Clients.showNotification("Correo Enviado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	@NotifyChange("selectedItem")
+	public void sendNCR() {		
+		String destino = (String) this.selectedItem[11];
+		
+		if (!destino.trim().isEmpty()) {
+			boolean valido = this.isValido(destino);
+			if (!valido) {
+				Clients.showNotification("Correo no válido", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+		}		
+		
+		if (destino.trim().isEmpty()) {
+			destino = "sergioa@yhaguyrepuestos.com.py";
+		}
+		
+		String[] send = new String[] { destino };
+		String[] sendCC = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		try {
+			String asunto = "Nota de Crédito Electrónica - " + Configuracion.empresa;
+			String root = Sessions.getCurrent().getWebApp().getRealPath("/");			
+			EnviarCorreo enviarCorreo = new EnviarCorreo();			
+			enviarCorreo.sendMessage(send, sendCC, sendCCO,
+					asunto, "Estimado Cliente: " + this.selectedItem[4]
+					+ "\nAdjunto su comprobante electrónico " + this.selectedItem[2]
+					+ "\n" + asunto, "", "", "NotaCreditoElectronica" + ".pdf",
+					root + "/yhaguy/archivos/sifen/NCR/" + this.selectedItem[2] + ".pdf", 
+					"NotaCreditoElectronica" + ".xml",
+					"C:\\notascredito\\" + this.selectedItem[2] + ".xml");
+			Clients.showNotification("Correo Enviado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @return correo valido..
+	 */
+	private boolean isValido(String correo) {
+		try {
+			InternetAddress emailAddr = new InternetAddress(correo);
+		    emailAddr.validate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -556,7 +711,7 @@ public class SifenViewModel extends SimpleViewModel {
 	public List<Object[]> getNotasCredito() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getSifenNotasCredito(this.filterDesde, this.filterHasta);
-	}
+	}  
 
 	public Date getFilterDesde() {
 		return filterDesde;
@@ -580,5 +735,29 @@ public class SifenViewModel extends SimpleViewModel {
 			return;
 		}
 		this.filterHasta = filterHasta;
+	}
+
+	public Object[] getSelectedItem() {
+		return selectedItem;
+	}
+
+	public void setSelectedItem(Object[] selectedItem) {
+		this.selectedItem = selectedItem;
+	}
+
+	public List<Funcionario> getChoferes() {
+		return choferes;
+	}
+
+	public void setChoferes(List<Funcionario> choferes) {
+		this.choferes = choferes;
+	}
+
+	public List<Vehiculo> getVehiculos() {
+		return vehiculos;
+	}
+
+	public void setVehiculos(List<Vehiculo> vehiculos) {
+		this.vehiculos = vehiculos;
 	}
 }

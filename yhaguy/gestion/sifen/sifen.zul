@@ -1,6 +1,6 @@
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.yhaguy.gestion.sifen.SifenViewModel')"
-	height="100%">
+	height="100%" id="win_sifen">
 	
 	<div height="5px" />
 	
@@ -47,7 +47,7 @@
 									href="@load(each[10])" target="_blank"> LINK</a>
 							</listcell>
 							<listcell>
-								<hlayout>
+								<hlayout>									
 									<button iconSclass="z-icon-upload" mold="bs" sclass="btn-primary btn-xs"
 										tooltiptext="Enviar a la SET" hflex="1"
 										onClick="@command('generarFE', bean=each)"
@@ -59,7 +59,8 @@
 									<button iconSclass="z-icon-envelope-o"
 										mold="bs" sclass="btn-primary btn-xs"
 										disabled="@load(each[9] ne 'Aprobado')"
-										hflex="1"></button>
+										hflex="1"
+										onClick="@command('openPopup', pop=pop_email, parent=self, bean=each)"></button>
 								</hlayout>
 							</listcell>							
 						</listitem>
@@ -76,7 +77,8 @@
 					<datebox value="@bind(vm.filterHasta)"></datebox>
 				</hlayout>
 				<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
-					model="@load(vm.remisiones)" mold="paging" autopaging="true">
+					model="@load(vm.remisiones)" mold="paging" autopaging="true"
+					selectedItem="@bind(vm.selectedItem)">
 					<listhead>
 						<listheader label="Fecha" width="100px"></listheader>
 						<listheader label="Número" width="140px"></listheader>
@@ -85,7 +87,7 @@
 						<listheader label="Cliente"></listheader>
 						<listheader label="Estado" width="100px"></listheader>
 						<listheader label="Link" width="100px" align="center"></listheader>
-						<listheader label="Acciones" width="150px" align="center"></listheader>
+						<listheader label="Acciones" width="170px" align="center"></listheader>
 					</listhead>
 					<template name="model">
 						<listitem>
@@ -101,20 +103,29 @@
 									href="@load(each[10])" target="_blank"> LINK</a>
 							</listcell>
 							<listcell>
-								<hlayout>
+								<hbox hflex="1">
+									<button iconSclass="z-icon-truck" mold="bs" sclass="btn-primary btn-xs"
+										tooltiptext="Datos del Traslado" hflex="1"
+										disabled="@load(each[9] eq 'Aprobado')"
+										onClick="@command('openPopup', pop=pop_camion, parent=self, bean=each)">
+									</button>
 									<button iconSclass="z-icon-upload" mold="bs" sclass="btn-primary btn-xs"
 										tooltiptext="Enviar a la SET" hflex="1"
 										onClick="@command('generarNRE', bean=each)"
-										disabled="@load(each[9] eq 'Aprobado')"></button>
+										disabled="@load(each[9] eq 'Aprobado' or (each[11] eq '' or each[12] eq ''))">
+									</button>
 									<button iconSclass="z-icon-print" mold="bs" sclass="btn-primary btn-xs"
 										tooltiptext="Imprimir" hflex="1"
 										onClick="@command('imprimirNRE', bean=each)"
-										disabled="@load(each[9] ne 'Aprobado')"></button>
+										disabled="@load(each[9] ne 'Aprobado')">
+									</button>
 									<button iconSclass="z-icon-envelope-o"
 										mold="bs" sclass="btn-primary btn-xs"
 										disabled="@load(each[9] ne 'Aprobado')"
-										hflex="1"></button>
-								</hlayout>
+										hflex="1"
+										onClick="@command('openPopup', pop=pop_email_nre, parent=self, bean=each)">
+									</button>
+								</hbox>
 							</listcell>							
 						</listitem>
 					</template>
@@ -167,15 +178,74 @@
 									<button iconSclass="z-icon-envelope-o"
 										mold="bs" sclass="btn-primary btn-xs"
 										disabled="@load(each[9] ne 'Aprobado')"
-										hflex="1"></button>
+										hflex="1"
+										onClick="@command('openPopup', pop=pop_email_nc, parent=self, bean=each)"></button>
 								</hlayout>
 							</listcell>							
 						</listitem>
 					</template>
 				</listbox>
 			</tabpanel>
-		</tabpanels>
+		</tabpanels>		
 	</tabbox>
+	
+	<popup id="pop_camion" sclass="rounded">
+		<vlayout width="300px" style="padding:10px">
+			<combobox placeholder="CHOFER" hflex="1"
+				model="@load(vm.choferes)"
+				selectedItem="@bind(vm.selectedItem[11])">
+				<template name="model">
+					<comboitem label="@load(each.razonSocial)"></comboitem>
+				</template>	
+			</combobox>
+			<div height="5px"></div>
+			<combobox placeholder="VEHÍCULO" hflex="1"
+				model="@load(vm.vehiculos)"
+				selectedItem="@bind(vm.selectedItem[12])">
+				<template name="model">
+					<comboitem label="@load(each.marcaChapa)"></comboitem>
+				</template>	
+			</combobox>
+			<div height="5px"></div>
+			<button iconSclass="z-icon-check" mold="bs"
+				sclass="btn-primary btn-xs" hflex="1"
+				onClick="pop_camion.close();">
+			</button>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_email" sclass="rounded">
+		<vlayout width="300px" style="padding:10px">
+			<textbox placeholder="CORREO" hflex="1" value="@bind(vm.selectedItem[11])"></textbox>
+			<div height="5px"></div>
+			<button iconSclass="z-icon-check" mold="bs"
+				sclass="btn-primary btn-xs" hflex="1"
+				onClick="@command('sendFE')">
+			</button>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_email_nre" sclass="rounded">
+		<vlayout width="300px" style="padding:10px">
+			<textbox placeholder="CORREO" hflex="1" value="@bind(vm.selectedItem[13])"></textbox>
+			<div height="5px"></div>
+			<button iconSclass="z-icon-check" mold="bs"
+				sclass="btn-primary btn-xs" hflex="1"
+				onClick="@command('sendNRE')">
+			</button>
+		</vlayout>
+	</popup>
+	
+	<popup id="pop_email_nc" sclass="rounded">
+		<vlayout width="300px" style="padding:10px">
+			<textbox placeholder="CORREO" hflex="1" value="@bind(vm.selectedItem[11])"></textbox>
+			<div height="5px"></div>
+			<button iconSclass="z-icon-check" mold="bs"
+				sclass="btn-primary btn-xs" hflex="1"
+				onClick="@command('sendNCR')">
+			</button>
+		</vlayout>
+	</popup>
 	
 	<style>
 		.custom-tbox {margin-right:5px; background:lightyellow}

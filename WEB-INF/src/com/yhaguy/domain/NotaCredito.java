@@ -680,7 +680,7 @@ public class NotaCredito extends Domain {
 	 * @return la venta aplicada..
 	 */
 	public Venta getVentaAplicada() {
-		for (NotaCreditoDetalle item : this.detalles) {
+		for (NotaCreditoDetalle item : this.getDetallesFacturas()) {
 			if (item.getVenta() != null) {
 				return item.getVenta();
 			}
@@ -826,6 +826,7 @@ public class NotaCredito extends Domain {
 				d.setCantidad(1);
 				d.setTipoIva(rr.getTipoPorSigla(Configuracion.SIGLA_IVA_10));
 				d.setImporteGs(this.getImporteGs());
+				d.setMontoGs(this.getImporteGs());
 				out.add(d);
 			}
 		} catch (Exception e) {

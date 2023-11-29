@@ -6330,12 +6330,15 @@ public class RegisterDomain extends Register {
 	 * [7]:cliente.ruc
 	 * [8]:id
 	 * [9]:respuestaSet
+	 * [10]:respuestaSet
+	 * [11]:correo
+	 * [12]:razon social
 	 */
 	public List<Object[]> getSifenVentas(Date desde, Date hasta) throws Exception {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select v.tipoMovimiento.descripcion, v.fecha, v.numero, 0.0, v.cliente.empresa.razonSocial,"
-				+ " 0.0, 0.0, v.cliente.empresa.ruc, v.id, v.respuestaSET, v.url from Venta v where v.estadoComprobante is null"
+				+ " 0.0, 0.0, v.cliente.empresa.ruc, v.id, v.respuestaSET, v.url, v.cliente.empresa.correo_, v.cliente.empresa.razonSocial from Venta v where v.estadoComprobante is null"
 				+ " and v.tipoMovimiento.sigla IN ('" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "', '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "')"
 				+ " and (v.fecha >= '"
 				+ desde_
@@ -6362,7 +6365,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select (select t.descripcion from TipoMovimiento t where t.sigla = '" + Configuracion.SIGLA_TM_NOTA_REMISION + "'), r.fecha, r.numero, 0.0, r.venta.cliente.empresa.razonSocial,"
-				+ " 0.0, 0.0, r.venta.cliente.empresa.ruc, r.id, r.respuestaSET, r.url from Remision r where "
+				+ " 0.0, 0.0, r.venta.cliente.empresa.ruc, r.id, r.respuestaSET, r.url, '', '', r.venta.cliente.empresa.correo_ from Remision r where "
 				+ " (r.fecha >= '"
 				+ desde_
 				+ "' and r.fecha <= '"
@@ -6388,7 +6391,7 @@ public class RegisterDomain extends Register {
 		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 		String query = "select n.tipoMovimiento.descripcion, n.fechaEmision, n.numero, 0.0, n.cliente.empresa.razonSocial,"
-				+ " 0.0, 0.0, n.cliente.empresa.ruc, n.id, n.respuestaSET, n.url from NotaCredito n where "
+				+ " 0.0, 0.0, n.cliente.empresa.ruc, n.id, n.respuestaSET, n.url, n.cliente.empresa.correo_ from NotaCredito n where "
 				+ " n.tipoMovimiento.sigla IN ('" + Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "')"
 				+ " and (n.fechaEmision >= '"
 				+ desde_

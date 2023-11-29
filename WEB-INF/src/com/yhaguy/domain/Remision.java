@@ -20,6 +20,9 @@ public class Remision extends Domain {
 	private String observacionSET;
 	private String url;
 	
+	private Funcionario chofer;
+	private Vehiculo vehiculo_;
+	
 	private Venta venta;
 	private Set<RemisionDetalle> detalles = new HashSet<RemisionDetalle>();
 
@@ -114,6 +117,22 @@ public class Remision extends Domain {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public Funcionario getChofer() {
+		return chofer;
+	}
+
+	public void setChofer(Funcionario chofer) {
+		this.chofer = chofer;
+	}
+
+	public Vehiculo getVehiculo_() {
+		return vehiculo_;
+	}
+
+	public void setVehiculo_(Vehiculo vehiculo_) {
+		this.vehiculo_ = vehiculo_;
 	}
 
 }

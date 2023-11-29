@@ -203,7 +203,7 @@ public class SifenNC {
             gCamItem.setdCantProSer(BigDecimal.valueOf(d.getCantidad()));
 
             TgValorItem gValorItem = new TgValorItem();
-            gValorItem.setdPUniProSer(BigDecimal.valueOf(d.getImporteGs()));
+            gValorItem.setdPUniProSer(BigDecimal.valueOf(d.getMontoGs()));
 
             TgValorRestaItem gValorRestaItem = new TgValorRestaItem();
             gValorItem.setgValorRestaItem(gValorRestaItem);

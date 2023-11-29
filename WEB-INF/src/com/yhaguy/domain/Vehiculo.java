@@ -34,6 +34,10 @@ public class Vehiculo extends Domain {
 		this.marcaModelo = this.marca + " " + this.modelo;
 		return marcaModelo;
 	}
+	
+	public String getMarcaChapa() {
+		return this.marca + " " + this.chapa;
+	}
 
 	public void setMarcaModelo(String marcaModelo) {
 

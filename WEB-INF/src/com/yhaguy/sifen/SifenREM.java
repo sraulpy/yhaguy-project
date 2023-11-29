@@ -277,10 +277,10 @@ public class SifenREM {
         
         TgVehTras gVehTras = new TgVehTras();
         gVehTras.setdTiVehTras("Terrestre");
-        gVehTras.setdMarVeh("Mercedes");
+        gVehTras.setdMarVeh(data.getVehiculo_().getMarca());
         gVehTras.setdTipIdenVeh((short)2);
         gVehTras.setdNroIDVeh("9999");
-        gVehTras.setdNroMatVeh("9999");
+        gVehTras.setdNroMatVeh(data.getVehiculo_().getChapa());
         List<TgVehTras> gVehTrasList = new ArrayList<TgVehTras>();
         gVehTrasList.add(gVehTras);
         
@@ -290,8 +290,8 @@ public class SifenREM {
         gCamTrans.setdRucTrans("80024884");
         gCamTrans.setdDVTrans((short) 8);
         gCamTrans.setdDomFisc("ESTIGARRIBIA Nº 287 KM 9 1/2");
-        gCamTrans.setdNumIDChof("9999");
-        gCamTrans.setdNomChof("Innominado");
+        gCamTrans.setdNumIDChof(data.getChofer().getCedula());
+        gCamTrans.setdNomChof(data.getChofer().getRazonSocial());
         gCamTrans.setdDirChof("Innominado");
         
         gTransp.setgCamSal(gCamSal);   
