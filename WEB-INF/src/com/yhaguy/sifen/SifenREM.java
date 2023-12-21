@@ -71,6 +71,7 @@ import com.roshka.sifen.core.types.TiTipCont;
 import com.roshka.sifen.core.types.TiTipDocAso;
 import com.roshka.sifen.core.types.TiTipDocRec;
 import com.roshka.sifen.internal.ctx.GenerationCtx;
+import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.VentaDetalle;
 import com.yhaguy.util.Utiles;
@@ -107,11 +108,11 @@ public class SifenREM {
         // Grupo C
         TgTimb gTimb = new TgTimb();
         gTimb.setiTiDE(TTiDE.NOTA_DE_REMISION_ELECTRONICA);
-        gTimb.setdNumTim(SifenParams.TIMBRADO_TEST);
+        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT);
         gTimb.setdEst("001");
         gTimb.setdPunExp(data.getNumero().split("-")[1]);
         gTimb.setdNumDoc(data.getNumero().split("-")[2]);
-        gTimb.setdFeIniT(SifenParams.VIGENCIA_TEST);
+        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
         DE.setgTimb(gTimb);
 
         // Grupo D
@@ -131,17 +132,17 @@ public class SifenREM {
         gCamNRE.setdFecEm(LocalDate.parse(Utiles.getDateToString(new Date(), "yyyy-MM-dd")));
 
         TgEmis gEmis = new TgEmis();
-        gEmis.setdRucEm("80024884");
-        gEmis.setdDVEmi("8");
+        gEmis.setdRucEm(isEmpresaYRSA() ? SifenParams.YRSA_RUC_EMI : SifenParams.GRPT_RUC_EMI);
+        gEmis.setdDVEmi(isEmpresaYRSA() ? SifenParams.YRSA_DV_EMI : SifenParams.GRPT_DV_EMI);
         gEmis.setiTipCont(TiTipCont.PERSONA_JURIDICA);
-        gEmis.setdNomEmi("YHAGUY REPUESTOS SA");
-        gEmis.setdDirEmi("ESTIGARRIBIA Nº 287 KM 9 1/2");
+        gEmis.setdNomEmi(isEmpresaYRSA() ? SifenParams.YRSA_NOM_EMI : SifenParams.GRPT_NOM_EMI);
+        gEmis.setdDirEmi(isEmpresaYRSA() ? SifenParams.YRSA_DIR_EMI : SifenParams.GRPT_DIR_EMI);
         gEmis.setdNumCas("670");
         gEmis.setcDepEmi(TDepartamento.CAPITAL);
         gEmis.setcCiuEmi(1);
         gEmis.setdDesCiuEmi("ASUNCION (DISTRITO)");
-        gEmis.setdTelEmi("021 507 857");
-        gEmis.setdEmailE("info@yhaguyrepuestos.com.py");
+        gEmis.setdTelEmi(isEmpresaYRSA() ? SifenParams.YRSA_TEL_EMI : SifenParams.GRPT_TEL_EMI);
+        gEmis.setdEmailE(isEmpresaYRSA() ? SifenParams.YRSA_EMAIL_EMI : SifenParams.GRPT_EMAIL_EMI);
 
         List<TgActEco> gActEcoList = new ArrayList<>();
         TgActEco gActEco = new TgActEco();
@@ -245,8 +246,8 @@ public class SifenREM {
         gCamDEAsoc.setdPExpDocAso(data.getVenta().getNumero().split("-")[1]);
         gCamDEAsoc.setdNumDocAso(data.getVenta().getNumero().split("-")[2]);
         gCamDEAsoc.setiTipoDocAso(TiTIpoDoc.FACTURA);
-        gCamDEAsoc.setdFecEmiDI(SifenParams.VIGENCIA_TEST);
-        gCamDEAsoc.setdNTimDI(SifenParams.TIMBRADO_TEST + "");
+        gCamDEAsoc.setdFecEmiDI(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
+        gCamDEAsoc.setdNTimDI((isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT) + "");
         gCamDEAsocList.add(gCamDEAsoc);
         DE.setgCamDEAsocList(gCamDEAsocList);
         
@@ -258,9 +259,9 @@ public class SifenREM {
         gTransp.setdFinTras(LocalDate.parse(Utiles.getDateToString(new Date(), "yyyy-MM-dd")));
         
         TgCamSal gCamSal = new TgCamSal();
-        gCamSal.setdDirLocSal("Estigarribia Nro 287 KM 9 1/2");
+        gCamSal.setdDirLocSal(isEmpresaYRSA() ? SifenParams.YRSA_DIR_EMI : SifenParams.GRPT_DIR_EMI);
         gCamSal.setdNumCasSal((short) 670);
-        gCamSal.setdComp1Sal("Avda. Mcal Estigarribia");
+        gCamSal.setdComp1Sal(isEmpresaYRSA() ? SifenParams.YRSA_DIR_EMI : SifenParams.GRPT_DIR_EMI);
         gCamSal.setcDepSal(TDepartamento.CAPITAL);
         gCamSal.setcCiuSal(1);
         gCamSal.setdDesCiuSal("ASUNCION (DISTRITO)");
@@ -286,10 +287,10 @@ public class SifenREM {
         
         TgCamTrans gCamTrans = new TgCamTrans();
         gCamTrans.setiNatTrans(TiNatRec.CONTRIBUYENTE);
-        gCamTrans.setdNomTrans("YHAGUY REPUESTOS SA");
-        gCamTrans.setdRucTrans("80024884");
-        gCamTrans.setdDVTrans((short) 8);
-        gCamTrans.setdDomFisc("ESTIGARRIBIA Nº 287 KM 9 1/2");
+        gCamTrans.setdNomTrans(isEmpresaYRSA() ? SifenParams.YRSA_NOM_EMI : SifenParams.GRPT_NOM_EMI);
+        gCamTrans.setdRucTrans(isEmpresaYRSA() ? SifenParams.YRSA_RUC_EMI : SifenParams.GRPT_RUC_EMI);
+        gCamTrans.setdDVTrans(isEmpresaYRSA() ? (short) 8 : (short) 4);
+        gCamTrans.setdDomFisc(isEmpresaYRSA() ? SifenParams.YRSA_DIR_EMI : SifenParams.GRPT_DIR_EMI);
         gCamTrans.setdNumIDChof(data.getChofer().getCedula());
         gCamTrans.setdNomChof(data.getChofer().getRazonSocial());
         gCamTrans.setdDirChof("Innominado");
@@ -343,4 +344,8 @@ public class SifenREM {
 			e.printStackTrace();
 		}
     }
+	
+	public boolean isEmpresaYRSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
+	}
 }

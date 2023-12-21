@@ -414,11 +414,21 @@ public class SifenViewModel extends SimpleViewModel {
 	 */
 	private void configSifen() {
 		try {
-			SifenConfig config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
-					"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
-					SifenConfig.TipoCertificadoCliente.PFX, 
-					SifenParams.SIFEN_DIR + "firma_yrsa.p12", // 
-					"lelis1357");
+			SifenConfig config = null;			
+			
+			if (this.isEmpresaYRSA()) {
+				config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
+						"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
+						SifenConfig.TipoCertificadoCliente.PFX, 
+						SifenParams.SIFEN_DIR + "firma_yrsa.p12", // 
+						"lelis1357");
+			} else {
+				config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
+						"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
+						SifenConfig.TipoCertificadoCliente.PFX, 
+						SifenParams.SIFEN_DIR + "groupauto.p12", // 
+						"gr80124to");
+			}			
 			config.setHabilitarNotaTecnica13(true);
 			com.roshka.sifen.Sifen.setSifenConfig(config);
 			
@@ -597,7 +607,7 @@ public class SifenViewModel extends SimpleViewModel {
 			}  else if ("Id".equals(fieldName)) {
 				value = this.DE.getId();
 			}  else if ("logo".equals(fieldName)) {
-				value = SifenParams.SIFEN_LOGO_PATH;
+				value = getPathLogo();
 			}  else if ("dDesMotEmiNR".equals(fieldName)) {
 				value = this.DE.getgDtipDE().getgCamNRE().getiMotEmiNR().getDescripcion();
 			}  else if ("dDesRespEmiNR".equals(fieldName)) {
@@ -712,6 +722,20 @@ public class SifenViewModel extends SimpleViewModel {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getSifenNotasCredito(this.filterDesde, this.filterHasta);
 	}  
+	
+	/**
+	 * @return empresa yrsa
+	 */
+	public boolean isEmpresaYRSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
+	}
+	
+	/**
+	 * @return path del logo..
+	 */
+	public String getPathLogo() {
+		return this.isEmpresaYRSA() ? SifenParams.SIFEN_LOGO_PATH : SifenParams.SIFEN_LOGO_PATH_GRPT;
+	}
 
 	public Date getFilterDesde() {
 		return filterDesde;

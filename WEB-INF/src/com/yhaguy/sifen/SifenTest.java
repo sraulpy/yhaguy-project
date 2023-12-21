@@ -91,11 +91,11 @@ public class SifenTest {
         // Grupo C
         TgTimb gTimb = new TgTimb();
         gTimb.setiTiDE(TTiDE.FACTURA_ELECTRONICA);
-        gTimb.setdNumTim(SifenParams.TIMBRADO_TEST);
+        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT);
         gTimb.setdEst("001");
         gTimb.setdPunExp(data.getNumero().split("-")[1]);
         gTimb.setdNumDoc(data.getNumero().split("-")[2]);
-        gTimb.setdFeIniT(SifenParams.VIGENCIA_TEST);
+        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
         DE.setgTimb(gTimb);
 
         // Grupo D
@@ -113,17 +113,17 @@ public class SifenTest {
         dDatGralOpe.setgOpeCom(gOpeCom);
 
         TgEmis gEmis = new TgEmis();
-        gEmis.setdRucEm("80024884");
-        gEmis.setdDVEmi("8");
+        gEmis.setdRucEm(isEmpresaYRSA() ? SifenParams.YRSA_RUC_EMI : SifenParams.GRPT_RUC_EMI);
+        gEmis.setdDVEmi(isEmpresaYRSA() ? SifenParams.YRSA_DV_EMI : SifenParams.GRPT_DV_EMI);
         gEmis.setiTipCont(TiTipCont.PERSONA_JURIDICA);
-        gEmis.setdNomEmi("YHAGUY REPUESTOS SA");
-        gEmis.setdDirEmi("ESTIGARRIBIA Nº 287 KM 9 1/2");
+        gEmis.setdNomEmi(isEmpresaYRSA() ? SifenParams.YRSA_NOM_EMI : SifenParams.GRPT_NOM_EMI);
+        gEmis.setdDirEmi(isEmpresaYRSA() ? SifenParams.YRSA_DIR_EMI : SifenParams.GRPT_DIR_EMI);
         gEmis.setdNumCas("670");
         gEmis.setcDepEmi(TDepartamento.CAPITAL);
         gEmis.setcCiuEmi(1);
         gEmis.setdDesCiuEmi("ASUNCION (DISTRITO)");
-        gEmis.setdTelEmi("021 507 857");
-        gEmis.setdEmailE("info@yhaguyrepuestos.com.py");
+        gEmis.setdTelEmi(isEmpresaYRSA() ? SifenParams.YRSA_TEL_EMI : SifenParams.GRPT_TEL_EMI);
+        gEmis.setdEmailE(isEmpresaYRSA() ? SifenParams.YRSA_EMAIL_EMI : SifenParams.GRPT_EMAIL_EMI);
 
         List<TgActEco> gActEcoList = new ArrayList<>();
         TgActEco gActEco = new TgActEco();
@@ -321,11 +321,11 @@ public class SifenTest {
      // Grupo C
         TgTimb gTimb = new TgTimb();
         gTimb.setiTiDE(TTiDE.FACTURA_ELECTRONICA);
-        gTimb.setdNumTim(SifenParams.TIMBRADO_TEST);
+        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT);
         gTimb.setdEst("001");
         gTimb.setdPunExp(data.getNumero().split("-")[1]);
         gTimb.setdNumDoc(data.getNumero().split("-")[2]);
-        gTimb.setdFeIniT(SifenParams.VIGENCIA_TEST);
+        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
         DE.setgTimb(gTimb);
 
         // Grupo D
@@ -447,4 +447,8 @@ public class SifenTest {
 			e.printStackTrace();
 		}
     }
+	
+	public boolean isEmpresaYRSA() {
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
+	}
 }
