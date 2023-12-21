@@ -9,8 +9,8 @@ public class SifenParams {
 	public static final int TIMBRADO_TEST_GRPT = 80078124;
 	
 	public static final LocalDate VIGENCIA_PROD = LocalDate.parse("2023-06-26");
-	public static final LocalDate VIGENCIA_TEST_YRSA = LocalDate.parse("2023-12-19");
-	public static final LocalDate VIGENCIA_TEST_GRPT = LocalDate.parse("2023-03-30");
+	public static final LocalDate VIGENCIA_TEST_YRSA = LocalDate.parse("2023-03-30");
+	public static final LocalDate VIGENCIA_TEST_GRPT = LocalDate.parse("2023-12-19");
 	
 	public static final String YRSA_RUC_EMI = "80024884";
 	public static final String YRSA_DV_EMI = "8";
