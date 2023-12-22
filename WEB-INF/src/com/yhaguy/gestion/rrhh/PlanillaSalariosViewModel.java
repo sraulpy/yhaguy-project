@@ -830,7 +830,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		}
 		if (liquidacion.getAnticipoAguinaldo() < 0) {
 			dets.add(new MyArray("  ", RRHHPlanillaSalarios.ANTICIPO_AGUINALDO, Utiles.getNumberFormat(0.0),
-					Utiles.getNumberFormat(liquidacion.getAnticipoAguinaldo())));
+					Utiles.getNumberFormat(liquidacion.getAnticipoAguinaldo() + liquidacion.getAnticipoAguinaldo2() + liquidacion.getAnticipoAguinaldo3())));
 		}
 		return dets;
 	}	
