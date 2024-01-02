@@ -53,7 +53,7 @@
 			<auxhead>
 				<auxheader colspan="4" label="Funcionario"></auxheader>
 				<auxheader colspan="14" label="Haberes"></auxheader>
-				<auxheader colspan="11" label="Descuentos"></auxheader>
+				<auxheader colspan="12" label="Descuentos"></auxheader>
 				<auxheader colspan="3" label="Totales"></auxheader>
 			</auxhead>
 			<listhead>
