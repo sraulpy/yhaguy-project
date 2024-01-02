@@ -106,6 +106,7 @@
 				<listheader label="Uniforme" width="100px"></listheader>
 				<listheader label="Repuestos" width="100px"></listheader>
 				<listheader label="Ausencia" width="100px" align="right"></listheader>
+				<listheader label="Embargo" width="100px" align="right"></listheader>
 				<listheader label="IPS" width="100px" align="right"></listheader>
 				<listheader label="Total Descuentos" width="100px"
 					align="right">
@@ -300,6 +301,14 @@
 					<listcell>
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.ausencia)" format="###,###,###,##0"
+							onChange="@command('saveItem', item=each)"
+							style="background:#FADAD2;text-align:right"
+							readonly="@load(each.cerrado)">
+						</doublebox>
+					</listcell>
+					<listcell>
+						<doublebox hflex="true" vflex="true"
+							value="@bind(each.embargo)" format="###,###,###,##0"
 							onChange="@command('saveItem', item=each)"
 							style="background:#FADAD2;text-align:right"
 							readonly="@load(each.cerrado)">
