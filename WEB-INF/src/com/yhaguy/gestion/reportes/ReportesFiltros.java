@@ -551,6 +551,9 @@ public class ReportesFiltros {
 	 */
 	public List<String> getAnhos() {
 		List<String> out = new ArrayList<String>();		
+		out.add(Utiles.ANHO_2013); out.add(Utiles.ANHO_2014);
+		out.add(Utiles.ANHO_2015); out.add(Utiles.ANHO_2016);
+		out.add(Utiles.ANHO_2017);
 		out.add(Utiles.ANHO_2018);
 		out.add(Utiles.ANHO_2019);
 		out.add(Utiles.ANHO_2020);
