@@ -25,6 +25,11 @@
 				placeholder="Hasta.." hflex="true" />
 		</row>
 		<row>
+			<field value="Incluir Facturas Electrónicas:" />
+			<checkbox
+				checked="@bind(vm.dato.filtro.documentosElectronicos)" />
+		</row>
+		<row>
 			<field value="Sucursal:" />
 			<combobox hflex="true"
 				model="@load(vm.dato.filtro.sucursales)"

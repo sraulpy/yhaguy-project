@@ -12607,7 +12607,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras indistinto segun fecha..
 	 */
-	public List<Gasto> getLibroComprasIndistinto(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
+	public List<Gasto> getLibroComprasIndistinto(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal, boolean incluirElectronicos) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?)"
@@ -12615,6 +12615,9 @@ public class RegisterDomain extends Register {
 				+ " and g.tipoMovimiento.sigla != '" + Configuracion.SIGLA_TM_OTROS_COMPROBANTES + "'";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
+				}
+				if (!incluirElectronicos) {
+					query += " and g.documentoElectronico = false";
 				}
 				query += " and g.idImportacion < 0" + " order by g.fecha";
 
@@ -12634,7 +12637,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras indistinto segun fecha (solo otros comprobantes)..
 	 */
-	public List<Gasto> getLibroComprasIndistinto_(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
+	public List<Gasto> getLibroComprasIndistinto_(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal, boolean incluirElectronicos) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?)"
@@ -12642,6 +12645,9 @@ public class RegisterDomain extends Register {
 				+ " or g.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_OTROS_COMPROBANTES + "')";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
+				}
+				if (!incluirElectronicos) {
+					query += " and g.documentoElectronico = false";
 				}
 				query += " and g.idImportacion < 0" + " order by g.fecha";
 
@@ -12661,12 +12667,15 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras indistinto segun fecha..
 	 */
-	public List<Gasto> getLibroComprasDespacho(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal) throws Exception {
+	public List<Gasto> getLibroComprasDespacho(Date desde, Date hasta, Date creacionDesde, Date creacionHasta, long idSucursal, boolean incluirElectronicos) throws Exception {
 		String query = "select g from Gasto g where g.dbEstado != 'D'"
 				+ " and g.estadoComprobante.sigla != '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
 				+ " and (g.fecha between ? and ?) and (g.fechaCarga between ? and ?) ";
 				if (idSucursal > 0) {
 					query += " and g.sucursal.id = " + idSucursal;
+				}
+				if (!incluirElectronicos) {
+					query += " and g.documentoElectronico = false";
 				}
 				query += " and g.idImportacion >= 0" + " order by g.fecha";
 
@@ -12712,11 +12721,14 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return libro compras indistinto segun fecha..
 	 */
-	public List<CompraLocalFactura> getLibroComprasLocales(Date desde, Date hasta, long idSucursal) throws Exception {
+	public List<CompraLocalFactura> getLibroComprasLocales(Date desde, Date hasta, long idSucursal, boolean incluirElectronicos) throws Exception {
 		String query = "select c from CompraLocalFactura c where c.dbEstado = 'R'"
 				+ " and c.fechaOriginal between ? and ?";
 				if (idSucursal > 0) {
 					query += " and c.sucursal.id = " + idSucursal;
+				}
+				if (!incluirElectronicos) {
+					query += " and c.documentoElectronico = false";
 				}
 				query += " order by c.fechaOriginal";
 
@@ -12734,12 +12746,15 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return notas de credito compra segun fecha..
 	 */
-	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta, long idSucursal) throws Exception {
+	public List<NotaCredito> getNotasCreditoCompra(Date desde, Date hasta, long idSucursal, boolean incluirElectronicos, String aux) throws Exception {
 		String query = "select nc from NotaCredito nc where nc.dbEstado != 'D'"
 				+ " and nc.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA + "'"
 				+ " and nc.fechaEmision between ? and ?";
 				if (idSucursal > 0) {
 					query += " and nc.sucursal.id = " + idSucursal;
+				}
+				if (!incluirElectronicos) {
+					query += " and nc.documentoElectronico = false";
 				}
 				query += " order by nc.fechaEmision";
 

@@ -40,6 +40,11 @@
 			<checkbox checked="@bind(vm.dato.filtro.fraccionado)"></checkbox>
 		</row>
 		<row>
+			<field value="Incluir Facturas Electrónicas:" />
+			<checkbox
+				checked="@bind(vm.dato.filtro.documentosElectronicos)" />
+		</row>
+		<row>
 			<field value="Formato:" />
 			<combobox model="@load(vm.dato.filtro.formatos)"
 				selectedItem="@bind(vm.dato.filtro.formato)" hflex="true">

@@ -22,5 +22,10 @@
 			<field value="Notas de Crédito:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)" />
 		</row>
+		<row>
+			<field value="Incluir Facturas Electrónicas:" />
+			<checkbox
+				checked="@bind(vm.dato.filtro.documentosElectronicos)" />
+		</row>
 	</rows>
 </grid>

@@ -107,6 +107,7 @@ public class ReportesFiltros {
 	
 	private Object[] formato;
 	private boolean formularioContinuo = false;
+	private boolean documentosElectronicos = true;
 	private MyArray selectedMes;
 	private String selectedAnho = Utiles.getAnhoActual();
 	
@@ -1739,5 +1740,13 @@ public class ReportesFiltros {
 
 	public void setDeposito2(Deposito deposito2) {
 		this.deposito2 = deposito2;
+	}
+
+	public boolean isDocumentosElectronicos() {
+		return documentosElectronicos;
+	}
+
+	public void setDocumentosElectronicos(boolean documentosElectronicos) {
+		this.documentosElectronicos = documentosElectronicos;
 	}
 }
