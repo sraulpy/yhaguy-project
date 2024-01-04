@@ -8315,7 +8315,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, ncs};
-						datos[mes - 1] = importe;
+						datos[mes] = importe;
 						values_.put(cliente, datos);
 					}
 				}
