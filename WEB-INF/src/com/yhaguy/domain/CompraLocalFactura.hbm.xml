@@ -36,6 +36,10 @@
 		<property name="saldoAnticipadoCtaCte">
 			<column name="saldoAnticipadoCtaCte" not-null="true" default="false" />
 		</property>
+		
+		<property name="documentoElectronico">
+			<column name="documentoElectronico" not-null="true" default="false" />
+		</property>
 
 		<many-to-one name="proveedor" class="com.yhaguy.domain.Proveedor"
 			column="idProveedor" lazy="false"/>

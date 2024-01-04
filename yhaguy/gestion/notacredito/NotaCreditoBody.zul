@@ -371,6 +371,10 @@
 					onClick="@command('buscarFacturasConSaldo')" label=" Aplicar Importe" 
 					disabled="@load(vm.dto.detallesArticulos.size() > 0 ? 'false':'true')" 
 					visible="@load(vm.dto.notaCreditoVenta and vm.dto.motivoDevolucion)"/>
+					
+				<space></space>
+				<checkbox checked="@bind(vm.dto.documentoElectronico)" visible="@load(vm.dto.notaCreditoCompra)"></checkbox>
+				<label value="N.Cred. Electrónica" visible="@load(vm.dto.notaCreditoCompra)"></label>
 			</hlayout>
 
 			<listbox vflex="true" sclass="small-list"

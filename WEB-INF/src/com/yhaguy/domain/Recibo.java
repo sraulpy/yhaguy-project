@@ -200,6 +200,14 @@ public class Recibo extends Domain {
 		return sigla.equals(Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO);
 	}
 	
+	/**
+	 * @return true si es una cancelacion de cheque rechazado..
+	 */
+	public boolean isCancelacionChequeProv() {
+		String sigla = (String) this.tipoMovimiento.getSigla();
+		return sigla.equals(Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO_PROV);
+	}
+	
 	
 	/**
 	 * @return true si es un reembolso de prestamo..

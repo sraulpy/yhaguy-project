@@ -35,6 +35,8 @@ public class NotaCreditoDTO extends DTO {
 	private String planillaCajaNro = "";
 	private String cajero = "";
 	
+	private boolean documentoElectronico = false;
+	
 	private MyPair moneda = new MyPair();
 	private MyArray tipoMovimiento = new MyArray();	
 	private MyPair estadoComprobante = new MyPair();
@@ -621,5 +623,13 @@ public class NotaCreditoDTO extends DTO {
 
 	public void setFamilia(String familia) {
 		this.familia = familia;
+	}
+
+	public boolean isDocumentoElectronico() {
+		return documentoElectronico;
+	}
+
+	public void setDocumentoElectronico(boolean documentoElectronico) {
+		this.documentoElectronico = documentoElectronico;
 	}
 }

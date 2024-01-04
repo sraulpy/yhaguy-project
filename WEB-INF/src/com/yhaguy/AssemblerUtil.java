@@ -626,6 +626,8 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 				.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_RETENCION);
 		TipoMovimiento _anticipoPago = rr
 				.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_ANTICIPO_PAGO);
+		TipoMovimiento _cancelacionChequeProv = rr
+				.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO_PROV);
 		TipoMovimiento _facVentaContado = rr
 				.getTipoMovimientoBySigla(Configuracion.SIGLA_TM_FAC_VENTA_CONTADO);
 		TipoMovimiento _facVentaCredito = rr
@@ -709,6 +711,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		MyArray pagare = this.tipoMovToMyArray(_pagare);
 		MyArray retencionIva = this.tipoMovToMyArray(_retencionIva);
 		MyArray anticipoPago = this.tipoMovToMyArray(_anticipoPago);
+		MyArray cancelacionChequeProv = this.tipoMovToMyArray(_cancelacionChequeProv);
 		MyArray facVentaContado = this.tipoMovToMyArray(_facVentaContado);
 		MyArray facVentaCredito = this.tipoMovToMyArray(_facVentaCredito);
 		MyArray notaCreditoVenta = this.tipoMovToMyArray(_notaCreditoVenta);
@@ -768,6 +771,7 @@ public class AssemblerUtil extends AssemblerCoreUtil {
 		dto.setTmPagare(pagare);
 		dto.setTmRetencionIva(retencionIva);
 		dto.setTmAnticipoPago(anticipoPago);
+		dto.setTmCancelacionChequeRechazadoProv(cancelacionChequeProv);
 		dto.setTmFacturaVentaContado(facVentaContado);
 		dto.setTmFacturaVentaCredito(facVentaCredito);
 		dto.setTmNotaCreditoVenta(notaCreditoVenta);

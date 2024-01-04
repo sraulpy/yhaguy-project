@@ -17,7 +17,7 @@ public class AssemblerGasto extends Assembler {
 			"motivoComprobanteFisico", "cajaPagoNumero", "observacion",
 			"beneficiario", "idImportacion", "importeGs", "importeDs",
 			"importeIva10", "importeIva5", "numeroImportacion", "despachante",
-			"debitoBancario", "no_generar_saldo", "timbrado" };
+			"debitoBancario", "no_generar_saldo", "timbrado", "documentoElectronico" };
 
 	final static String[] ATT_PROVEEDOR = { "codigoEmpresa", "razonSocial", "ruc" };
 	final static String[] ATT_MONEDA = { "descripcion", "sigla" };

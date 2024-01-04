@@ -15,7 +15,7 @@ public class AssemblerCompraLocalFactura extends Assembler {
 			"fechaOriginal", "fechaVencimiento", "tipoCambio", "observacion",
 			"descuentoGs", "descuentoDs", "totalAsignadoGs", "totalAsignadoDs",
 			"recepcionConfirmada", "importeGs", "importeDs", "importeIva10",
-			"importeIva5", "cajaPagoNumero", "saldoAnticipadoCtaCte", "comprador" };
+			"importeIva5", "cajaPagoNumero", "saldoAnticipadoCtaCte", "comprador", "documentoElectronico" };
 	private static String[] attMoneda = { "descripcion", "sigla" };
 	private static String[] attTipoMovimiento = { "descripcion", "sigla" };
 	private static String[] attCondicion = { "descripcion", "plazo" };

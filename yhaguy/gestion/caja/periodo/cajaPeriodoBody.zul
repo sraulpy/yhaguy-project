@@ -98,11 +98,11 @@
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('facturar', tipo=4)"
 				disabled="@load(!vm.dto.caja.facturacion or vm.dto.tipo ne 'CAJA VENTAS')" label=" Facturación" />
-			<space width="30px" />
-			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
+			<space width="30px" />	
+			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
-				onClick="@command('abrirVentanaRecibo', tipo=1)"
-				disabled="@load(!vm.dto.caja.pago)" label=" Pago" />	
+				disabled="@load(!vm.dto.caja.pago)" label=" Pagos" 
+				onClick='popPagos.open(self, "after_start")'/>
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('showFormGastos')"
@@ -279,6 +279,21 @@
 					hflex="true" iconSclass="z-icon-plus-circle"
 					onClick="@command('abrirVentanaSaldoCajaChica')"
 					label=" Importar Saldo Caja" disabled="@load(!vm.siempreHabilitado)" />
+			</vlayout>
+		</popup>
+		
+		<popup id="popPagos" width="200px" sclass="rounded">
+			<vlayout>
+				<button mold="bs" sclass="btn-primary btn-sm"
+					hflex="true"
+					label="Órden de Pago"
+					onClick="@command('abrirVentanaRecibo', tipo=1)"
+					disabled="@load(!vm.siempreHabilitado)" />
+				<div height="5px"></div>
+				<button mold="bs" sclass="btn-info btn-sm" hflex="true"
+					label="Cheques Rechazados"
+					onClick="@command('abrirVentanaRecibo', tipo=14)"
+					disabled="@load(!vm.siempreHabilitado)" />
 			</vlayout>
 		</popup>
 

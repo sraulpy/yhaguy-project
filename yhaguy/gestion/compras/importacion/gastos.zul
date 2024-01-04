@@ -61,10 +61,14 @@
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Timbrado" />
-						<textbox hflex="true"
-							style="text-align:right"
-							placeholder="Nro. Timbrado.." 
-							value="@bind(vm.nvoGasto.timbrado)"/>
+						<hlayout>
+							<textbox hflex="true"
+								style="text-align:right"
+								placeholder="Nro. Timbrado.." 
+								value="@bind(vm.nvoGasto.timbrado)"/>
+							<checkbox checked="@bind(vm.nvoGasto.documentoElectronico)"></checkbox>
+							<label value="Fact. Electrónica"></label>
+						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Moneda" />

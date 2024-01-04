@@ -422,6 +422,11 @@ public class CajaPeriodoAssembler extends Assembler {
 				if (rec.isImputar() && rec.isAnticipoPago()) {
 					this.actualizarCtaCteRecibo(rec);
 				}
+				
+				// si es pago anticipado..actualiza la ctacte..
+				if (rec.isImputar() && rec.isCancelacionChequeRechazadoProv()) {
+					this.actualizarCtaCteRecibo(rec);
+				}
 
 				// si es pago anticipado..actualiza la ctacte..
 				if (rec.isImputar() && rec.isOrdenPago() && rec.isSaldoAcobrar()) {
@@ -464,6 +469,10 @@ public class CajaPeriodoAssembler extends Assembler {
 					rec.isSaldoAcobrar());
 			ControlCuentaCorriente.addReciboDePagoAnticipado(rec.getId(), this.getLogin(),
 					(String) rec.getMoneda().getPos2(), rec.getNumeroImportacion());
+		}
+		// reembolso cheques rechazados proveedores..
+		if (rec.isCancelacionChequeRechazadoProv()) {
+			ControlCuentaCorriente.addReciboDePago(rec.getId(), this.getLogin(), false);
 		}
 		// desbloqueo automatico
 		if (rec.isCobro()) {

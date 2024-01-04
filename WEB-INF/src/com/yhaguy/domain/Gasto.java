@@ -62,6 +62,9 @@ public class Gasto extends Domain {
 	/** gastos contado opcion no generar saldo **/
 	private boolean no_generar_saldo;
 	
+	/** facturas electronicas **/
+	private boolean documentoElectronico;
+	
 	private Proveedor proveedor;
 	private Tipo moneda;	
 	private TipoMovimiento tipoMovimiento;	
@@ -747,5 +750,13 @@ public class Gasto extends Domain {
 
 	public void setFechaRecibo(Date fechaRecibo) {
 		this.fechaRecibo = fechaRecibo;
+	}
+
+	public boolean isDocumentoElectronico() {
+		return documentoElectronico;
+	}
+
+	public void setDocumentoElectronico(boolean documentoElectronico) {
+		this.documentoElectronico = documentoElectronico;
 	}
 }

@@ -48,7 +48,7 @@ public class BancoPrestamo extends Domain {
 	
 	@DependsOn({ "capital", "interes", "impuestos" })
 	public double getDeudaTotal() {
-		return this.capital + this.interes + this.impuestos;
+		return this.capital + this.interes;
 	}
 	
 	@DependsOn({ "capital", "impuestos", "gastosAdministrativos", "acreditacionImpuesto", "cancelacionAnticipada" })

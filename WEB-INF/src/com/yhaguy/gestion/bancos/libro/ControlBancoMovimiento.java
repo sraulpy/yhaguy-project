@@ -194,6 +194,22 @@ public class ControlBancoMovimiento extends Control {
 	}
 	
 	/**
+	 * reembolso de cheques rechazados..
+	 */
+	public static void reembolsoChequeRechazadoProv(Recibo reembolso, String user) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();
+		for (ReciboDetalle det : reembolso.getDetalles()) {
+			long idCheque = det.getMovimiento().getIdMovimientoOriginal();
+			BancoCheque cheque = (BancoCheque) rr.getObject(BancoCheque.class.getName(), idCheque);
+			if (cheque != null) {
+				cheque.setReembolsado(true);
+				cheque.setNumeroReembolso(reembolso.getNumero());
+				rr.saveObject(cheque, user);
+			}			
+		}
+	}
+	
+	/**
 	 * registra el cheque de tercero manual..
 	 */
 	public static void registrarChequeTerceroManual(MyArray cheque, String user, long idMoneda) throws Exception {
@@ -429,13 +445,11 @@ public class ControlBancoMovimiento extends Control {
 		}
 		
 		if (tipoFP == cheqTerAut) {
-			BancoChequeTercero bct = rr.getChequesTercero(rfpDto.getChequeNumero(), rfpDto.getChequeBanco().getId()).get(0);
-			if (bct != null) {
-				bct.setDescontado(true);
-				bct.setObservacion("Descontado por AutoCobranza..");
-				bct.setNumeroDescuento(recibo);
-				rr.saveObject(bct, this.getLoginNombre());
-			}			
+			BancoChequeTercero bct = rr.getChequesTercero(rfpDto.getChequeNumero()).get(0);
+			bct.setDescontado(true);
+			bct.setObservacion("Descontado por AutoCobranza..");
+			bct.setNumeroDescuento(recibo);
+			rr.saveObject(bct, this.getLoginNombre());
 		}
 
 		/*

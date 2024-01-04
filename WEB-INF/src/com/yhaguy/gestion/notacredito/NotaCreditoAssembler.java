@@ -17,7 +17,7 @@ public class NotaCreditoAssembler extends Assembler {
 
 	static String[] attIguales = { "numero", "timbrado_", "observacion", "fechaEmision",
 			"importeGs", "importeDs", "importeIva", "tipoCambio", "enlace",
-			"cajaNro", "planillaCajaNro", "cajero", "promocion", "familia" };
+			"cajaNro", "planillaCajaNro", "cajero", "promocion", "familia", "documentoElectronico" };
 	static String[] attTipoMovimiento = { "descripcion", "sigla", "clase", "tipoIva" };
 	static String[] attEmpresa = { "codigoEmpresa", "razonSocial", "ruc", "idEmpresa", "direccion", "telefono" };
 	static String[] attTipos = { "descripcion", "sigla" };	

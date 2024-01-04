@@ -37,6 +37,9 @@ public class BancoCheque extends Domain {
 	private boolean rechazado;
 	private String motivoRechazo = "";
 	
+	private boolean reembolsado;
+	private String numeroReembolso = "";
+	
 	/**
 	 * @return true si es cheque al dia..
 	 */
@@ -226,5 +229,21 @@ public class BancoCheque extends Domain {
 
 	public void setMotivoRechazo(String motivoRechazo) {
 		this.motivoRechazo = motivoRechazo;
+	}
+
+	public boolean isReembolsado() {
+		return reembolsado;
+	}
+
+	public void setReembolsado(boolean reembolsado) {
+		this.reembolsado = reembolsado;
+	}
+
+	public String getNumeroReembolso() {
+		return numeroReembolso;
+	}
+
+	public void setNumeroReembolso(String numeroReembolso) {
+		this.numeroReembolso = numeroReembolso;
 	}
 }

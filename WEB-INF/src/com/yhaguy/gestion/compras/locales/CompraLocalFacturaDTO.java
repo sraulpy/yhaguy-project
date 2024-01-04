@@ -30,6 +30,7 @@ public class CompraLocalFacturaDTO extends DTO{
 	private boolean recepcionConfirmada = false;
 	private String cajaPagoNumero = "";
 	private boolean saldoAnticipadoCtaCte = false;
+	private boolean documentoElectronico = false;
 	private String comprador = "";
 	
 	private ProveedorDTO proveedor = new ProveedorDTO();
@@ -334,5 +335,13 @@ public class CompraLocalFacturaDTO extends DTO{
 
 	public void setComprador(String comprador) {
 		this.comprador = comprador;
+	}
+
+	public boolean isDocumentoElectronico() {
+		return documentoElectronico;
+	}
+
+	public void setDocumentoElectronico(boolean documentoElectronico) {
+		this.documentoElectronico = documentoElectronico;
 	}
 }

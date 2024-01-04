@@ -376,8 +376,11 @@
 							<label value="Gasto Importación"></label>
 							<space></space>
 							<checkbox checked="@bind(vm.dtoGasto.no_generar_saldo)"></checkbox>
-							<label value="No generar saldo en Cta.Cte."
+							<label value="No generar saldo Cta.Cte."
 								tooltiptext="Ej: Facturas Contado que se debitan de la Cta.Cte.."></label>
+							<space></space>
+							<checkbox checked="@bind(vm.dtoGasto.documentoElectronico)"></checkbox>
+							<label value="Fact. Electrónica"></label>
 							<space></space>
 						<hlayout valign="middle" visible="@load(vm.dtoGasto.gastoImportacion)">
 							<bandbox width="120px" placeholder="Importación Nro."
@@ -419,7 +422,7 @@
 						</hbox>
 						<space hflex="true"></space>
 						<field>Caja:</field>
-						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="200px" disabled="@load(!vm.siempreHabilitado)"
+						<bandbox id="bnd_caja" placeholder="Aplicar a Caja.." width="100px" disabled="@load(!vm.siempreHabilitado)"
 							value="@load(vm.dtoGasto.cajaPagoNumero)" readonly="true"
 							onOpen="tx_filter.focus()">
 							<bandpopup>

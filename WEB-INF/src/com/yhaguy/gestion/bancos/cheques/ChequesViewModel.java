@@ -286,6 +286,7 @@ public class ChequesViewModel extends SimpleViewModel {
 			my.setPos14(cheque.getMoneda().getSigla());
 			my.setPos15(cheque.isMonedaLocal());
 			my.setPos16(cheque.isRechazado());
+			my.setPos17(cheque.isReembolsado());
 			if (this.selectedFiltro.equals(FILTRO_AL_DIA) && cheque.isChequeAlDia()) {
 				out.add(my);
 				this.totalImporteGs += cheque.getMonto();

@@ -178,6 +178,11 @@ public class ControlCuentaCorriente {
 				rr.saveObject(ctmCompra, user);
 			}
 		}	
+		
+		if (pago.isCancelacionChequeProv()) {
+			ControlBancoMovimiento.reembolsoChequeRechazadoProv(pago, user);
+		}
+		
 		rr.saveObject(ctm, user);
 	}
 	

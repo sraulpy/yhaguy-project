@@ -34,6 +34,7 @@ public class NotaCredito extends Domain {
 	
 	private double tipoCambio;
 	private boolean promocion;
+	private boolean documentoElectronico;
 	
 	/** atributos que se usan como informacion adicional **/
 	private String cajaNro = "";
@@ -1113,5 +1114,13 @@ public class NotaCredito extends Domain {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public boolean isDocumentoElectronico() {
+		return documentoElectronico;
+	}
+
+	public void setDocumentoElectronico(boolean documentoElectronico) {
+		this.documentoElectronico = documentoElectronico;
 	}
 }

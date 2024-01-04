@@ -133,6 +133,9 @@
 					iconSclass="z-icon-plus-circle"
 					onClick="@command('abrirVentanaInsertarItem')"
 					label=" Insertar" />
+				<space></space>
+				<checkbox checked="@bind(vm.dto.documentoElectronico)"></checkbox>
+				<label value="Factura Electrónica"></label>
 			</hlayout>
 			<listbox id="detalleGasto" sclass="small-list" vflex="true"
 				model="@load(vm.dto.detalles)" multiple="true"

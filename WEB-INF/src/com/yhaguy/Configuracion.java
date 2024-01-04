@@ -964,6 +964,7 @@ public class Configuracion extends Config {
 	public final static String SIGLA_TM_ANTICIPO_PAGO = "MOV-PAG-ANT";
 	public final static String SIGLA_TM_CHEQUE_PAGO = "MOV-PAG-CHQ";
 	public final static String SIGLA_TM_PRESTAMO_INTERNO = "MOV-PRT-CCT";
+	public final static String SIGLA_TM_CANCELACION_CHEQ_RECHAZADO_PROV = "MOV-PAG-CCR";
 
 	// Siglas de movimientos de Venta
 	public final static String SIGLA_TM_FAC_VENTA_CONTADO = "MOV-VTA-FAC-CON";

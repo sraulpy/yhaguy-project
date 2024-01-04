@@ -21,6 +21,7 @@
 		<property name="numeroOrdenPago" />
 		<property name="fechaCobro" />
 		<property name="motivoRechazo" />
+		<property name="numeroReembolso" />
 		
 		<property name="anulado">
 			<column name="anulado" not-null="true" default="false" />
@@ -32,6 +33,10 @@
 		
 		<property name="rechazado">
 			<column name="rechazado" not-null="true" default="false" />
+		</property>
+		
+		<property name="reembolsado">
+			<column name="reembolsado" not-null="true" default="false" />
 		</property>
 
 		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"

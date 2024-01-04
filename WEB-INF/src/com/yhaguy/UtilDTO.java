@@ -292,6 +292,7 @@ public class UtilDTO extends UtilCoreDTO {
 	MyArray tmPagare = new MyArray();
 	MyArray tmRetencionIva = new MyArray();
 	MyArray tmAnticipoPago = new MyArray();
+	MyArray tmCancelacionChequeRechazadoProv = new MyArray();
 
 	// Movimientos de Venta
 	MyArray tmFacturaVentaContado = new MyArray();
@@ -3214,5 +3215,13 @@ public class UtilDTO extends UtilCoreDTO {
 
 	public void setTmFacturaGastoExterior(MyArray tmFacturaGastoExterior) {
 		this.tmFacturaGastoExterior = tmFacturaGastoExterior;
+	}
+
+	public MyArray getTmCancelacionChequeRechazadoProv() {
+		return tmCancelacionChequeRechazadoProv;
+	}
+
+	public void setTmCancelacionChequeRechazadoProv(MyArray tmCancelacionChequeRechazadoProv) {
+		this.tmCancelacionChequeRechazadoProv = tmCancelacionChequeRechazadoProv;
 	}
 }

@@ -25,6 +25,7 @@ public class CompraLocalFactura extends Domain {
 	private boolean ivaRetenido;
 	private String cajaPagoNumero;
 	private boolean saldoAnticipadoCtaCte;
+	private boolean documentoElectronico;
 	private String comprador;
 	
 	private double importeGs;
@@ -396,5 +397,13 @@ public class CompraLocalFactura extends Domain {
 
 	public void setComprador(String comprador) {
 		this.comprador = comprador;
+	}
+
+	public boolean isDocumentoElectronico() {
+		return documentoElectronico;
+	}
+
+	public void setDocumentoElectronico(boolean documentoElectronico) {
+		this.documentoElectronico = documentoElectronico;
 	}	
 }

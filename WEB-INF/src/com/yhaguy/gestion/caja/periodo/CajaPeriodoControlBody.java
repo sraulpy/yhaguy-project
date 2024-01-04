@@ -535,6 +535,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	public static final int ES_NOTA_CREDITO_COMPRA = 11;
 	public static final int ES_COMPRA = 12;
 	public static final int ES_DEVOLUCION_ANTICIPO = 13;
+	public static final int ES_CANC_CHQ_RECHAZADO_PROV = 14;
 
 	public static String getStrTipo(int tipo) {
 		String out = "	-- error tipo (" + tipo + ")--";
@@ -747,6 +748,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 			tituloDet = "Préstamos a reembolsar";
 			labelEmp = "Acreedor";
 			tipoMovto = this.tipoMvtoReembolsoPrestamo;
+			break;
+			
+		case ES_CANC_CHQ_RECHAZADO_PROV:
+			titulo = "Reembolso de cheques rechazados";
+			tituloDet = "Cheques a cancelar";
+			labelEmp = "Proveedor";
+			tipoMovto = this.tipoMvtoCancelacionChequeProv;
 			break;
 		}
 
@@ -2048,6 +2056,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 	private MyArray tipoMvtoPago = utilDto.getTmReciboPago();
 	private MyArray tipoMvtoCobro = utilDto.getTmReciboCobro();
 	private MyArray tipoMvtoCancelacionCheque = utilDto.getTmCancelacionChequeRechazado();
+	private MyArray tipoMvtoCancelacionChequeProv = utilDto.getTmCancelacionChequeRechazadoProv();
 	private MyArray tipoMvtoReembolsoPrestamo = utilDto.getTmReembolsoPrestamo();
 	private MyArray tipoMvtoGastoContado = utilDto.getTmFacturaGastoContado();
 	private MyArray monedaLocal = utilDto.getMonedaGuaraniConSimbolo();
@@ -2151,6 +2160,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 	
 	public boolean isReembolsoPrestamo() {
 		return this.reciboDTO.isReembolsoPrestamo();
+	}
+	
+	public boolean isCancelacionChequeProv() {
+		return this.reciboDTO.isCancelacionChequeRechazadoProv();
 	}
 
 	/**
@@ -2658,7 +2671,7 @@ public class CajaPeriodoControlBody extends BodyApp {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			for (ReciboDTO rec : this.dto.getRecibos()) {
 				if (rec.esNuevo() && !rec.isCobro()) {
-					if (rec.isCancelacionChequeRechazado() || rec.isReembolsoPrestamo()) {
+					if (rec.isCancelacionChequeRechazado() || rec.isReembolsoPrestamo() || rec.isCancelacionChequeRechazadoProv()) {
 						String nro = Configuracion.NRO_CANCELACION_CHEQUE_RECHAZADO
 								+ "-"
 								+ AutoNumeroControl.getAutoNumero(Configuracion.NRO_CANCELACION_CHEQUE_RECHAZADO, 5);

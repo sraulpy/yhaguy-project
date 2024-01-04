@@ -394,6 +394,10 @@ public class ReciboSimpleControl extends SoloViewModel {
 					if (sigla.equals(Configuracion.SIGLA_TM_PRESTAMO_INTERNO)) {
 						this.movimientosPendientes.add(opd);
 					}
+				} else if (this.dato.isCancelacionChequeProv()) {
+					if (sigla.equals(Configuracion.SIGLA_TM_CHEQUE_RECHAZADO)) {
+						this.movimientosPendientes.add(opd);
+					}
 				} else {
 					this.movimientosPendientes.add(opd);
 				}

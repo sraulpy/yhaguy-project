@@ -138,6 +138,13 @@ public class ReciboDTO extends DTO {
 	}
 	
 	@DependsOn("tipoMovimiento")
+	public boolean isCancelacionChequeRechazadoProv() {
+		String sigla = (String) this.getTipoMovimiento().getPos2();
+		return sigla.equals(Configuracion.SIGLA_TM_CANCELACION_CHEQ_RECHAZADO_PROV);
+
+	}
+	
+	@DependsOn("tipoMovimiento")
 	public boolean isReembolsoPrestamo() {
 		String sigla = (String) this.getTipoMovimiento().getPos2();
 		return sigla.equals(Configuracion.SIGLA_TM_REEMBOLSO_PRESTAMO);

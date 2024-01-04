@@ -50,6 +50,9 @@ public class GastoDTO extends DTO{
 	/** Booleano que indica si es un Gasto de Fondo Fijo **/
 	private boolean fondoFijo = false;
 	
+	/** Booleano que indica si es un Gasto de Factura electronica **/
+	private boolean documentoElectronico = false;
+	
 	private MyArray proveedor = new MyArray(); //pos1:codigo - pos2:razonSocial - pos3:ruc
 	private MyArray moneda = new MyArray();
 	private MyArray tipoMovimiento = new MyArray();
@@ -469,5 +472,13 @@ public class GastoDTO extends DTO{
 
 	public void setTimbrado(String timbrado) {
 		this.timbrado = timbrado;
+	}
+
+	public boolean isDocumentoElectronico() {
+		return documentoElectronico;
+	}
+
+	public void setDocumentoElectronico(boolean documentoElectronico) {
+		this.documentoElectronico = documentoElectronico;
 	}
 }

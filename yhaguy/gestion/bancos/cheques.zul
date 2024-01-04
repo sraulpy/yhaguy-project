@@ -173,17 +173,17 @@
 		</auxhead>
 		<template name="model">
 			<listitem style="@load(each.pos12? 'text-decoration:line-through; color:red' : '')">
-				<listcell label="@load(each.pos9)" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos10)" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos2.toString().toUpperCase())" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos3)" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos4) @converter('formattedDate', format='dd-MM-yyyy')" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos5) @converter('formattedDate', format='dd-MM-yyyy')" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos13) @converter('formattedDate', format='dd-MM-yyyy')" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos8 ? 'AL DÍA' : 'DIFERIDO')" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos6.toString().toUpperCase())" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" style="@load(each.pos16? 'color:red':'')" />
-				<listcell label="@load(each.pos14)" style="@load(each.pos16? 'color:red':'')"/>
+				<listcell label="@load(each.pos9)" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos10)" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos2.toString().toUpperCase())" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos3)" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos4) @converter('formattedDate', format='dd-MM-yyyy')" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos5) @converter('formattedDate', format='dd-MM-yyyy')" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos13) @converter('formattedDate', format='dd-MM-yyyy')" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos8 ? 'AL DÍA' : 'DIFERIDO')" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos6.toString().toUpperCase())" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos7) @converter(vm.cnv.monedaLocal)" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')" />
+				<listcell label="@load(each.pos14)" style="@load(each.pos16? (each.pos17? 'color:green':'color:red'):'')"/>
 				<listcell>
 					<div onClick="@command('openChequeCobrado', popup=popCob, cheque=each, comp=self)">
 						<label value="SI" class="label label-success" visible="@load(each.pos11)" />
