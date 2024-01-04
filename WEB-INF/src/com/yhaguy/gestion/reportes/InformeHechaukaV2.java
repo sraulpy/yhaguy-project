@@ -49,7 +49,7 @@ public class InformeHechaukaV2 {
 						doc = ced;
 						tipoDoc = "12";
 					} else {
-						doc = Configuracion.RUC_EMPRESA_LOCAL;
+						doc = "X";
 						rSocial = "SIN NOMBRE";
 						tipoDoc = "15";
 					}
@@ -127,7 +127,7 @@ public class InformeHechaukaV2 {
 				String col10 = FORMATTER.format(gravada5 + iva5) + "";
 				String col11 = FORMATTER.format(exenta) + "";
 				String col12 = FORMATTER.format(importe) + "";	
-				String col13 = "2";
+				String col13 = "1";
 				String col14 = "N";
 				String col15 = "S";
 				String col16 = "N";
@@ -207,7 +207,7 @@ public class InformeHechaukaV2 {
 				String col10 = FORMATTER.format(0.0) + "";
 				String col11 = FORMATTER.format(exenta) + "";
 				String col12 = FORMATTER.format(importe) + "";	
-				String col13 = "2";
+				String col13 = "1";
 				String col14 = nc.isMonedaLocal() ? "N" : "S";
 				String col15 = "S";
 				String col16 = "N";
@@ -287,13 +287,14 @@ public class InformeHechaukaV2 {
 			String col15 = "S";
 			String col16 = "N";
 			String col17 = "N";
-			String col18 = "";
+			String col18 = "N";
 			String col19 = "";
+			String col20 = "";
 
 			String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 					+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
-					+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
-					+ col19 + "" + "\r\n";
+					+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t" + col19 + "" + "\t"
+					+ col20 + "" + "\r\n";
 			objects.add(object);
 			registros++;
 			montoTotal += importe;
@@ -337,13 +338,14 @@ public class InformeHechaukaV2 {
 					String col15 = "S";
 					String col16 = "N";
 					String col17 = "N";
-					String col18 = "";
+					String col18 = "N";
 					String col19 = "";
+					String col20 = "";
 
 					String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 							+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
-							+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
-							+ col19 + "" + "\r\n";
+							+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t" + col19 + "" + "\t"
+							+ col20 + "" + "\r\n";
 					
 					objects.add(object);
 					registros++;
@@ -369,7 +371,7 @@ public class InformeHechaukaV2 {
 					double gravada5 = redondear(gasto.getGravada5());
 					double iva5 = redondear(gasto.getIva5());
 					double importe = redondear(gravada10 + iva10 + gravada5 + iva5 + exenta);
-					long cond = 2;
+					long cond = 1;
 					
 					String col1 = "2";
 					String col2 = "17";
@@ -388,13 +390,14 @@ public class InformeHechaukaV2 {
 					String col15 = "S";
 					String col16 = "N";
 					String col17 = "N";
-					String col18 = "";
+					String col18 = "N";
 					String col19 = "";
+					String col20 = "";
 
 					String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 							+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
-							+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
-							+ col19 + "" + "\r\n";
+							+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t" + col19 + "" + "\t"
+							+ col20 + "" + "\r\n";
 					
 					objects.add(object);
 					registros++;
@@ -414,7 +417,7 @@ public class InformeHechaukaV2 {
 			String nro = compra.getNumero();
 			String fecha = misc.dateToString(compra.getFechaOriginal(), Misc.DD_MM_YYYY).replace("-", "/");
 			double importe = redondear(compra.getTotalImporteDs() * compra.getPorcProrrateo());
-			long cond = 2;
+			long cond = 1;
 			
 			String col1 = "2";
 			String col2 = "17";
@@ -433,13 +436,14 @@ public class InformeHechaukaV2 {
 			String col15 = "S";
 			String col16 = "N";
 			String col17 = "N";
-			String col18 = "";
+			String col18 = "N";
 			String col19 = "";
+			String col20 = "";
 
 			String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 					+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
-					+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
-					+ col19 + "" + "\r\n";
+					+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t" + col19 + "" + "\t"
+					+ col20 + "" + "\r\n";
 			
 			objects.add(object);
 			registros++;
@@ -482,7 +486,7 @@ public class InformeHechaukaV2 {
 				double iva10 = redondear(nc.getTotalIva10());
 				double gravada = redondear(nc.getTotalGravado10());
 				double exenta = redondear(nc.getTotalExenta()); 
-				long cond = nc.isNotaCreditoVentaContado() ? 1 : 2;
+				long cond = 1;
 				
 				String col1 = "2";
 				String col2 = tipoDoc;
@@ -501,13 +505,14 @@ public class InformeHechaukaV2 {
 				String col15 = "S";
 				String col16 = "N";
 				String col17 = "N";
-				String col18 = aplicado;
-				String col19 = aplicadoTimbrado;
+				String col18 = "N";
+				String col19 = aplicado;
+				String col20 = aplicadoTimbrado;
 
 				String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 						+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
-						+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
-						+ col19 + "" + "\r\n";
+						+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t" + col19 + "" + "\t"
+						+ col20 + "" + "\r\n";
 				
 				objects.add(object);
 				registros++;

@@ -72,7 +72,10 @@
 						</hlayout>
 					</vlayout>
 				</cell>
-				<cell></cell>				
+				<vlayout spacing="0">
+					<field value="Nota de Crédito Aplicado" />
+					<bandbox readonly="true" hflex="true"/>
+				</vlayout>				
 			</row>
 		</rows>
 	</grid>

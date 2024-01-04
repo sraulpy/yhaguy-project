@@ -28,6 +28,8 @@ public class NotaDebitoDTO extends DTO {
 	private ClienteDTO cliente = new ClienteDTO();
 	private List<NotaDebitoDetalleDTO> detalles = new ArrayList<NotaDebitoDetalleDTO>();
 	
+	private MyPair notaCredito = new MyPair();
+	
 	/**
 	 * @return el importe total
 	 */
@@ -159,5 +161,13 @@ public class NotaDebitoDTO extends DTO {
 
 	public void setImporteDs(double importeDs) {
 		this.importeDs = importeDs;
+	}
+
+	public MyPair getNotaCredito() {
+		return notaCredito;
+	}
+
+	public void setNotaCredito(MyPair notaCredito) {
+		this.notaCredito = notaCredito;
 	}
 }
