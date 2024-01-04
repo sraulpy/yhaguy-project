@@ -10669,10 +10669,11 @@ public class RegisterDomain extends Register {
 	 * [8]:cliente.ventas
 	 * [9]:cliente.id
 	 */
-	public List<Object[]> getClientesPorVendedorHistorial(long idVendedor) throws Exception {
+	public List<Object[]> getClientesPorVendedorHistorial(long idVendedor, Date desde) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String query = "select c.id, c.empresa.ruc"
 				+ " from Cliente c where EXISTS (select vt.id from Venta vt where vt.tipoMovimiento.id in (18,19) "
-				+ " and vt.fecha > '2022-01-01 00:00:00' and vt.vendedor.id = " + idVendedor + " and vt.cliente.id = c.id) "
+				+ " and vt.fecha > '" + desde_ + "' and vt.vendedor.id = " + idVendedor + " and vt.cliente.id = c.id) "
 				+ " and c.estado = '" + Cliente.ACTIVO + "' order by c.empresa.razonSocial";
 		return this.hql(query);
 	}

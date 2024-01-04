@@ -8178,16 +8178,51 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();		
 				List<Object[]> clientes = new ArrayList<Object[]>();
 				List<Object[]> emps = new ArrayList<Object[]>();
+				List<Object[]> provs = new ArrayList<Object[]>();
+				List<Object[]> provsLocales = new ArrayList<Object[]>();
 				Map<String, String> paramsProv = new HashMap<String, String>();
+				Map<String, String> paramsProvLoc = new HashMap<String, String>();
+				Map<String, Long> idsProv = new HashMap<String, Long>();
+				Map<String, Long> idsProvLoc = new HashMap<String, Long>();
 				Map<String, Double> montosProv = new HashMap<String, Double>();
 				Map<String, Double> montosNcr = new HashMap<String, Double>();
 				
-				clientes = rr.getClientesPorVendedorHistorial(idVendedor);
+				provs = rr.getProveedoresVentas(desde, hasta, idVendedor);
+				for (int i = 0; i < provs.size(); i++) {
+					paramsProv.put("Prov" + (i+1), (String) provs.get(i)[0]);
+					idsProv.put("Prov" + (i+1), (Long) provs.get(i)[1]);
+				}			
+				
+				provsLocales = rr.getProveedoresLocalesVentas(desde, hasta, idVendedor);
+				for (int i = 0; i < provsLocales.size(); i++) {
+					paramsProvLoc.put("Prov" + (i+1), (String) provsLocales.get(i)[0]);
+					idsProvLoc.put("Prov" + (i+1), (Long) provsLocales.get(i)[1]);
+				}
+				
+				clientes = rr.getClientesPorVendedorHistorial(idVendedor, desde);
 				System.out.println("--- total clientes: " + emps.size());
 				for (Object[] cli : clientes) {
 					long idCli = (long) cli[0];
 					emps.addAll(rr.getClientesVentas(idCli, desde, hasta));
-				}				
+				}	
+				
+				for (Object[] cliente : emps) {
+					long idCliente = (long) cliente[9];
+					for (int i = 0; i < provs.size(); i++) {
+						long idProv = idsProv.get("Prov" + (i+1));
+						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
+						montosProv.put((String) cliente[1] + "Prov" + (i+1), importe);
+					}
+				}
+				
+				for (Object[] cliente : emps) {
+					long idCliente = (long) cliente[9];
+					for (int i = 0; i < provsLocales.size(); i++) {
+						long idProv = idsProvLoc.get("Prov" + (i+1));
+						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
+						montosProv.put((String) cliente[1] + "ProvLocal", importe);
+					}
+				}
 				
 				for (Object[] cliente : emps) {					
 					long idCliente = (long) cliente[9];
