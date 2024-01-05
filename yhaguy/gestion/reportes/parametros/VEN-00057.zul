@@ -10,8 +10,8 @@
 				readonly="true" value="@load(vm.dato.filtro.vendedor.razonSocial)"
 				id="bndVend">
 				<bandpopup>
-					<listbox sclass="small-list" width="300px"
-						height="200px" model="@load(vm.dato.filtro.vendedores)"
+					<listbox sclass="small-list" width="400px"
+						height="300px" model="@load(vm.dato.filtro.vendedores)"
 						selectedItem="@bind(vm.dato.filtro.vendedor)"
 						onSelect="bndVend.close()">
 						<listhead>

@@ -8200,7 +8200,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				clientes = rr.getClientesPorVendedorHistorial(idVendedor, desde);
-				System.out.println("--- total clientes: " + emps.size());
+				System.out.println("--- total clientes: " + clientes.size());
 				for (Object[] cli : clientes) {
 					long idCli = (long) cli[0];
 					emps.addAll(rr.getClientesVentas(idCli, desde, hasta));
@@ -8245,8 +8245,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								importe += totalImporteGs;
 								values.put(key, new Object[] { importe, mes, cliente[1] });
 							} else {
-								values.put(key,
-										new Object[] { totalImporteGs, mes, cliente[1] });
+								values.put(key, new Object[] { totalImporteGs, mes, cliente[1] });
 							}	
 						}											
 					}
@@ -8265,8 +8264,7 @@ public class ReportesViewModel extends SimpleViewModel {
 								importe -= totalImporteGs;
 								values.put(key, new Object[] { importe, mes, cliente[1] });
 							} else {
-								values.put(key,
-										new Object[] { (totalImporteGs * -1), mes, cliente[1] });
+								values.put(key, new Object[] { (totalImporteGs * -1), mes, cliente[1] });
 							}
 							
 							Double tot = montosNcr.get(cliente[1] + "");
@@ -8311,7 +8309,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						value_[mes] = importe;
 						values_.put(cliente, value_);
 					} else {
-						Object[] datos = new Object[] { (double) 0, (double) 0,
+						Object[] datos = new Object[] { 0.0, (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, (double) 0, (double) 0,
 								(double) 0, (double) 0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, ncs};
@@ -8328,20 +8326,19 @@ public class ReportesViewModel extends SimpleViewModel {
 							+ (double) value_[4] + (double) value_[5]
 							+ (double) value_[6] + (double) value_[7]
 							+ (double) value_[8] + (double) value_[9]
-							+ (double) value_[10] + (double) value_[11];
-					data.add(new Object[] { 
-							key.toUpperCase(), value_[0], value_[1], value_[2], value_[3], value_[4],
-							value_[5], value_[6], value_[7], value_[8], value_[9], value_[10], value_[11], total,
-							(double) value_[12], (double) value_[13], (double) value_[14], (double) value_[15],
+							+ (double) value_[10] + (double) value_[11] + (double) value_[12];
+					data.add(new Object[] { key.toUpperCase(), value_[1], value_[2], value_[3], value_[4], value_[5],
+							value_[6], value_[7], value_[8], value_[9], value_[10], value_[11], value_[12], total,
+							(double) value_[13], (double) value_[14], (double) value_[15],
 							(double) value_[16], (double) value_[17], (double) value_[18], (double) value_[19],
-							(double) value_[20], (double) value_[21], (double) value_[22] });
+							(double) value_[20], (double) value_[21], (double) value_[22], (double) value_[23] });
 				}
 				String format = (String) formato[0];
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_HISTORIAL;
 				String csv = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_CSV[0];
 				String xls = (String) com.yhaguy.gestion.reportes.formularios.ReportesViewModel.FORMAT_XLS[0];
 				if (format.equals(csv) || format.equals(xls)) {
-					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_HISTORIAL;
+					source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR_SIN_CAB;
 				}
 				Map<String, Object> params = new HashMap<String, Object>();
 				JRDataSource dataSource = new VentasPorClienteProveedorDataSource(data);

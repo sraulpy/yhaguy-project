@@ -578,6 +578,10 @@ public class Utiles {
 	    return Integer.parseInt(dateFormat.format(fecha));
 	}
 	
+	public static void main(String[] args) {
+		System.out.println(Utiles.getNumeroMes_(new Date()));
+	}
+	
 	/**
 	 * @return el nombre del mes..
 	 */
@@ -777,15 +781,6 @@ public class Utiles {
         cal.setTime(date);
         return cal;
     }
-	    
-    public static void main(String[] args) {
-    	try {
-    		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
     
     /**
 	 * parse xml
