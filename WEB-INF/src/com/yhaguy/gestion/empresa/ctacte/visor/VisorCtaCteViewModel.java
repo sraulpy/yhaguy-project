@@ -452,6 +452,11 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	}
 	
 	@Command
+	@NotifyChange("movimientos")
+	public void refresh() {
+	}
+	
+	@Command
 	@NotifyChange("cliente")
 	public void actualizarDatos() {
 		if ((this.habilitarLinea || this.updateLineaCredito) && this.motivo.trim().isEmpty()) {
