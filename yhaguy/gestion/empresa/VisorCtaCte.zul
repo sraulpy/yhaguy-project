@@ -123,8 +123,7 @@
 		</hlayout>
 
 		<hlayout sclass="button-container">
-			<datebox placeholder="Desde.." value="@bind(vm.desde)"
-				instant="true" width="100px" />
+			<datebox placeholder="Desde.." value="@bind(vm.desde)" width="100px" />
 			<datebox placeholder="Hasta.." value="@bind(vm.hasta)"
 				instant="true" visible="@load(vm.desde eq null ? 'false' : 'true')"
 				width="100px" />
