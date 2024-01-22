@@ -365,7 +365,10 @@ public class VentaItemControl extends SoloViewModel {
 			double porcentajeDescuento = (double) art[6];
 			maxDescuento = porcentajeDescuento > dto_mayorista ? porcentajeDescuento : dto_mayorista;
 			if (this.getLoginNombre().equals("liliana")) {
-				maxDescuento = 5;
+				String cod = (String) art[1];
+				if (!cod.equals("96024") && !cod.equals("61024") && !cod.equals("C-0053")) {
+					maxDescuento = 5;
+				}
 			}		
 			if (this.getLoginNombre().equals("liliana") && ((String) art[1]).startsWith("MKT")) {
 				maxDescuento = 100;
