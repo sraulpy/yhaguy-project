@@ -62,7 +62,7 @@
 				<listheader label="Días T." width="70px"
 					tooltiptext="Días trabajados">
 				</listheader>
-				<listheader label="Horas E." width="70px"
+				<listheader label="Horas E." width="80px"
 					tooltiptext="Horas extras"></listheader>
 				<listheader label="Sueldo" width="100px" align="right"></listheader>
 				<listheader label="Bonif.Resp." width="100px"
