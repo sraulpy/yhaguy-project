@@ -134,6 +134,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR = "/reportes/jasper/VentasPorClienteProveedor.jasper";
 	public static final String SOURCE_VENTAS_POR_CLIENTES_PROVEEDOR_SIN_CAB = "/reportes/jasper/VentasPorClienteProveedor_.jasper";
 	public static final String SOURCE_VENTAS_POR_CLIENTES_HISTORIAL = "/reportes/jasper/VentasPorClienteHistorial.jasper";
+	public static final String SOURCE_VENTAS_POR_CLIENTES_HISTORIAL_ = "/reportes/jasper/VentasPorClienteHistorial_.jasper";
 	public static final String SOURCE_ANALISIS_REPOSICION = "/reportes/jasper/AnalisisReposicion.jasper";
 	public static final String SOURCE_RECIBO_COMUN = "/reportes/jasper/ReciboComun.jasper";
 	public static final String SOURCE_CONCILIACION_TARJETAS = "/reportes/jasper/ConciliacionTarjetas.jasper";

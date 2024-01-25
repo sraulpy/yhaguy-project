@@ -127,7 +127,7 @@
 				onOK="@command('refresh')" />
 			<datebox placeholder="Hasta.." value="@bind(vm.hasta)"
 				instant="true" visible="@load(vm.desde eq null ? 'false' : 'true')"
-				width="100px" />
+				width="100px" onOK="@command('refresh')" />
 			<space />
 			<navbar mold="bs-pills">
 				<navitem label=" TODOS" selected="true"

@@ -368,6 +368,8 @@ public class VentaItemControl extends SoloViewModel {
 				String cod = (String) art[1];
 				if (!cod.equals("96024") && !cod.equals("61024") && !cod.equals("C-0053")) {
 					maxDescuento = 5;
+				} else {
+					maxDescuento = 100;
 				}
 			}		
 			if (this.getLoginNombre().equals("liliana") && ((String) art[1]).startsWith("MKT")) {

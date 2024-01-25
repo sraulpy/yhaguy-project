@@ -55,6 +55,34 @@
 			</combobox>
 		</row>
 		<row>
+			<field value="Cobrador:" />
+			<bandbox hflex="true" placeholder="TODOS.."
+				readonly="true" value="@load(vm.dato.filtro.vendedor.razonSocial)"
+				id="bndVend">
+				<bandpopup>
+					<listbox sclass="small-list" width="300px"
+						height="200px" model="@load(vm.dato.filtro.vendedores)"
+						selectedItem="@bind(vm.dato.filtro.vendedor)"
+						onSelect="bndVend.close()">
+						<listhead>
+							<listheader>
+								<hlayout>
+									<toolbarbutton
+										iconSclass="z-icon-filter" disabled="true" />
+									<textbox hflex="true"
+										value="@bind(vm.dato.filtro.razonSocialVendedor)"
+										instant="true" placeholder="Buscar.." />
+								</hlayout>
+							</listheader>
+						</listhead>
+						<template name="model">
+							<listitem label="@load(each.razonSocial)" />
+						</template>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</row>
+		<row>
 			<field value="Recibos:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirREC)"></checkbox>
 		</row>
@@ -69,18 +97,10 @@
 		<row>
 			<field value="Reembolsos Cheques:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirCHQ_RECH)"></checkbox>
-		</row>		
-		<row>
-			<field value="Cobranzas (otra Suc):" />
-			<checkbox checked="@bind(vm.dato.filtro.incluirCobroExterno)"></checkbox>
 		</row>
 		<row>
 			<field value="Notas de Crédito Contado:" />
 			<checkbox checked="@bind(vm.dato.filtro.incluirNCR)"></checkbox>
-		</row>
-		<row>
-			<field value="Iva Incluído:" />
-			<checkbox checked="@bind(vm.dato.filtro.ivaIncluido)"></checkbox>
 		</row>
 	</rows>
 </grid>

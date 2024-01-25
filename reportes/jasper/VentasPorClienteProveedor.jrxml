@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VentasPorCliente" pageWidth="2851" pageHeight="595" orientation="Landscape" columnWidth="2811" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="1.9487171000000116"/>
-	<property name="ireport.x" value="4296"/>
+	<property name="ireport.zoom" value="1.6105100000000097"/>
+	<property name="ireport.x" value="3325"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -630,47 +630,47 @@ select '20010001' "Cuenta", 'Otros Egresos' "Desc Cuenta", 800000 "Saldo Anterio
 				<reportElement x="426" y="9" width="2368" height="1" uuid="d3b7d21a-4106-4855-b659-53b5de0e40ba"/>
 			</line>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1362" y="15" width="131" height="15" uuid="7fa497cf-8962-471f-9b55-38a5928e7f40"/>
+				<reportElement style="Detail" x="1385" y="15" width="131" height="15" uuid="7fa497cf-8962-471f-9b55-38a5928e7f40"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1493" y="15" width="131" height="15" uuid="a315ae11-51e4-489f-90ba-56f86799a203"/>
+				<reportElement style="Detail" x="1516" y="15" width="131" height="15" uuid="a315ae11-51e4-489f-90ba-56f86799a203"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv2}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1622" y="15" width="131" height="15" uuid="a44d25fe-5c65-4192-b41a-d9ccdd7e5d41"/>
+				<reportElement style="Detail" x="1645" y="15" width="131" height="15" uuid="a44d25fe-5c65-4192-b41a-d9ccdd7e5d41"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv3}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1753" y="15" width="131" height="15" uuid="2998c9f9-8526-4b34-8fde-4001d1cadeb2"/>
+				<reportElement style="Detail" x="1776" y="15" width="131" height="15" uuid="2998c9f9-8526-4b34-8fde-4001d1cadeb2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv4}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="1883" y="15" width="131" height="15" uuid="b6c1ec4b-a2d9-4f32-8adc-3baf1ba3ba39"/>
+				<reportElement style="Detail" x="1906" y="15" width="131" height="15" uuid="b6c1ec4b-a2d9-4f32-8adc-3baf1ba3ba39"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv5}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2013" y="15" width="131" height="15" uuid="113254a3-87db-444c-bb8f-54af372f4dbc"/>
+				<reportElement style="Detail" x="2036" y="15" width="131" height="15" uuid="113254a3-87db-444c-bb8f-54af372f4dbc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv6}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2143" y="15" width="131" height="15" uuid="770217f3-0dff-436c-b23a-37fa309ab2d5"/>
+				<reportElement style="Detail" x="2166" y="15" width="131" height="15" uuid="770217f3-0dff-436c-b23a-37fa309ab2d5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv7}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2274" y="15" width="130" height="15" uuid="3312253f-6339-407a-a5a6-f20d435b1625"/>
+				<reportElement style="Detail" x="2297" y="15" width="130" height="15" uuid="3312253f-6339-407a-a5a6-f20d435b1625"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv8}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement style="Detail" x="2404" y="15" width="130" height="15" uuid="10e01abe-c672-452d-b050-26f9ab875372"/>
+				<reportElement style="Detail" x="2427" y="15" width="130" height="15" uuid="10e01abe-c672-452d-b050-26f9ab875372"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{TotProv9}]]></textFieldExpression>
 			</textField>

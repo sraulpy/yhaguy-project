@@ -131,13 +131,13 @@
 						<hlayout>
 							<doublebox hflex="true" vflex="true"
 								inplace="true" value="@bind(each.cantidadHorasExtras)"
-								format="###,###,###,##0"
+								format="###,###,###,##0.00"
 								onChange="@command('saveItem', item=each)"
 								readonly="@load(each.cerrado)">
 							</doublebox>
 							<doublebox hflex="true" vflex="true"
 								inplace="true" value="@bind(each.cantidadHorasExtrasNoc)"
-								format="###,###,###,##0"
+								format="###,###,###,##0.00"
 								onChange="@command('saveItem', item=each)"
 								readonly="@load(each.cerrado)">
 							</doublebox>

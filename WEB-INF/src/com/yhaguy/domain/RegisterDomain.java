@@ -3714,7 +3714,7 @@ public class RegisterDomain extends Register {
 	/**
 	 * @return las notas de credito de venta segun fecha
 	 */
-	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idSucursal, String sucursal) throws Exception {
+	public List<NotaCredito> getNotasCreditoVenta(Date desde, Date hasta, long idCliente, long idSucursal, String sucursal, long idVendedor) throws Exception {
 		String query = "select n from NotaCredito n where n.dbEstado != 'D' and n.tipoMovimiento.sigla = ?"
 				+ " and (n.fechaEmision between ? and ?)";
 		if (idCliente != 0) {
@@ -3722,6 +3722,9 @@ public class RegisterDomain extends Register {
 		}
 		if (idSucursal != 0) {
 			query += " and n.sucursal.id = " + idSucursal;
+		}
+		if (idVendedor != 0) {
+			query += " and n.vendedor.id = " + idVendedor;
 		}
 		query += " order by n.numero";
 
@@ -7064,7 +7067,7 @@ public class RegisterDomain extends Register {
 	 * @return las cobranzas segun fecha
 	 */
 	public List<Recibo> getCobranzas(Date desde, Date hasta, long idSucursal, long idCliente, boolean incluirAnticipos,
-			boolean cobrosExternos) throws Exception {
+			boolean cobrosExternos, String cobrador) throws Exception {
 
 		String query = "select r from Recibo r where r.dbEstado != 'D' and (r.tipoMovimiento.sigla = ? or r.tipoMovimiento.sigla = ?)"
 				+ " and (r.fechaEmision between ? and ?) and r.cobroExterno = " + cobrosExternos;
@@ -7077,6 +7080,10 @@ public class RegisterDomain extends Register {
 			query += " and r.cliente.id = " + idCliente;
 		}
 
+		if (cobrador != null && !cobrador.isEmpty()) {
+			query += " and r.cobrador = '" + cobrador + "'";
+		}
+		
 		query += " order by r.fechaEmision, r.numero";
 
 		String anticipo = incluirAnticipos ? Configuracion.SIGLA_TM_ANTICIPO_COBRO
@@ -7201,7 +7208,7 @@ public class RegisterDomain extends Register {
 	 * [4]: idVendedor
 	 */
 	public List<Object[]> getCobranzasPorVendedor(Date desde, Date hasta, long idVendedor, long idSucursal) throws Exception {
-		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true, false);
+		List<Recibo> cobros = this.getCobranzas(desde, hasta, idSucursal, 0, true, false, "");
 		List<Object[]> out = new ArrayList<Object[]>();
 
 		for (Recibo recibo : cobros) {
@@ -10660,20 +10667,13 @@ public class RegisterDomain extends Register {
 	 * @return los clientes segun vendedor..
 	 * [0]:cliente.ruc
 	 * [1]:cliente.razonsocial
-	 * [2]:cliente.direccion
-	 * [3]:cliente.telefono
-	 * [4]:cliente.vendedor
-	 * [5]:cliente.rubro
-	 * [6]:cliente.limiteCredito
-	 * [7]:cliente.ciudad
-	 * [8]:cliente.ventas
-	 * [9]:cliente.id
+	 * [2]:cliente.vendedor
 	 */
 	public List<Object[]> getClientesPorVendedorHistorial(long idVendedor, Date desde) throws Exception {
-		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
-		String query = "select c.id, c.empresa.ruc"
+		String query = "select c.id, c.empresa.ruc, c.empresa.vendedor.empresa.razonSocial"
 				+ " from Cliente c where EXISTS (select vt.id from Venta vt where vt.tipoMovimiento.id in (18,19) "
-				+ " and vt.fecha > '" + desde_ + "' and vt.vendedor.id = " + idVendedor + " and vt.cliente.id = c.id) "
+				+ " and vt.fecha > '2020-01-01 00:00:00' and vt.vendedor.id = " + idVendedor + " and vt.cliente.id = c.id) "
+				+ " or c.empresa.vendedor.id = " + idVendedor
 				+ " and c.estado = '" + Cliente.ACTIVO + "' order by c.empresa.razonSocial";
 		return this.hql(query);
 	}
@@ -15347,6 +15347,21 @@ public class RegisterDomain extends Register {
 				+ "	and v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
 				+ " and d.articulo.proveedor.id = " + idProveedor
 				+ " and v.vendedor.id = " + idVendedor;
+		Double out = (Double) this.hqlToObject(query);
+		return out != null ? out : 0.0;
+	}
+	
+	public Double getVentasProveedorNotIn(Date desde, Date hasta, long idCliente, long idProveedor, long idVendedor) throws Exception {
+		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		String query = "select sum((d.precioGs * d.cantidad) - d.descuentoUnitarioGs) "
+				+ " from Venta v join v.detalles d where "
+				+ " (v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CONTADO + "' or v.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "')"
+				+ " and v.estadoComprobante is null"
+				+ " and v.cliente.id = " + idCliente
+				+ "	and v.fecha > '"+ desde_ +"' and v.fecha < '" + hasta_ + "'"
+				+ " and d.articulo.proveedor.id = " + idProveedor
+				+ " and v.vendedor.id != " + idVendedor;
 		Double out = (Double) this.hqlToObject(query);
 		return out != null ? out : 0.0;
 	}
