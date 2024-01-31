@@ -14885,7 +14885,7 @@ public class ReportesViewModel extends SimpleViewModel {
 						String rs2 = (String) o2[0];
 						return rs1.compareTo(rs2);
 					}
-				});;
+				});
 
 				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
 					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, expedicion, idDeposito);
@@ -30360,11 +30360,12 @@ class ClientesVendedorDataSource implements JRDataSource {
 			String ciudad = (String) dato[7];
 			Double ventas = (Double) dato[8];
 			String dpto = (String) dato[10];
+			String nombre = (String) dato[11];
 			if (ventas == null) {
 				ventas = (double) 0;				
 			}
 			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
-					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas), dpto));
+					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas), dpto, nombre));
 		}
 	}
 }
