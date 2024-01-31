@@ -14854,24 +14854,16 @@ public class ReportesViewModel extends SimpleViewModel {
 				if (filtro.isIncluirNCR() || filtro.isIncluirNCR_CRED()) {
 					List<NotaCredito> ncs = rr.getNotasCreditoVenta_(desde, hasta, idCliente, idSucursal, expedicion, idDeposito);
 					for (NotaCredito notacred : ncs) {
-						int length = notacred.getCliente().getRazonSocial()
-								.length();
+						int length = notacred.getCliente().getRazonSocial().length();
 						int maxlength = length > 25 ? 25 : length;
-						String motivo = notacred.getMotivo().getDescripcion()
-								.substring(0, 3).toUpperCase()
-								+ ".";
+						String motivo = notacred.getMotivo().getDescripcion().substring(0, 3).toUpperCase() + ".";
 						Object[] nc = new Object[] {
-								m.dateToString(notacred.getFechaEmision(),
-										"dd-MM-yy"),
+								m.dateToString(notacred.getFechaEmision(), "dd-MM-yy"),
 								notacred.getNumero(),
-								notacred.getCliente().getRazonSocial()
-										.substring(0, maxlength)
-										+ "..",
+								notacred.getCliente().getRazonSocial().substring(0, maxlength) + "..",
 								notacred.getCliente().getRuc(),
-								notacred.isNotaCreditoVentaContado() ? "NC-CO "
-										+ motivo : "NC-CR " + motivo,
-								notacred.isAnulado() ? 0.0 : notacred
-										.getImporteGs(familias) * -1 };
+								notacred.isNotaCreditoVentaContado() ? "NC-CO " + motivo : "NC-CR " + motivo,
+								notacred.isAnulado() ? 0.0 : notacred.getImporteGs(familias) * -1 };
 
 						if (filtro.isIncluirNCR()
 								&& notacred.isNotaCreditoVentaContado()) {
@@ -14886,6 +14878,14 @@ public class ReportesViewModel extends SimpleViewModel {
 						}
 					}
 				}
+				Collections.sort(data, new Comparator<Object[]>() {
+					@Override
+					public int compare(Object[] o1, Object[] o2) {
+						String rs1 = (String) o1[0];
+						String rs2 = (String) o2[0];
+						return rs1.compareTo(rs2);
+					}
+				});;
 
 				if (filtro.isIncluirVCR() && filtro.isIncluirVCT()) {
 					List<Venta> ventas = rr.getVentas_(desde, hasta, idCliente, idSucursal, expedicion, idDeposito);
