@@ -307,7 +307,7 @@ public class BuscadorArticulosViewModel extends SimpleViewModel {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
 			return Configuracion.URL_IMAGES_PUBLIC_RPS + "articulos/" + this.selectedItem.getId() + ".png";
 		}
-		return Configuracion.URL_IMAGES_PUBLIC_BAT + "articulos/" + this.selectedItem.getId() + ".png";
+		return Configuracion.URL_IMAGES_PUBLIC_CENT + "articulos/" + this.selectedItem.getId() + ".png";
 	}
 	
 	/**

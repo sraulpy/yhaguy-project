@@ -127,7 +127,7 @@ public class ArticuloDTO extends DTO {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return Configuracion.URL_IMAGES_PUBLIC_MRA + "articulos/" + this.getId() + ".png";
 		}
-		return Configuracion.URL_IMAGES_PUBLIC_BAT + "articulos/" + this.getId() + ".png";
+		return Configuracion.URL_IMAGES_PUBLIC_CENT + "articulos/" + this.getId() + ".png";
 	}
 	
 	/**

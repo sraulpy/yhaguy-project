@@ -151,6 +151,18 @@
 			</key>
 			<many-to-many column="idubicacion" class="com.yhaguy.domain.ArticuloUbicacion" />
 		</set>
+		
+		<!-- REPUESTOS Y GROUPAUTO 
+		
+		<set name="ubicaciones" table="articulo_ubicacion"
+			inverse="false" lazy="false" fetch="join" cascade="all">
+			<key>
+				<column name="idArticulo" not-null="false" />
+			</key>
+			<one-to-many class="com.yhaguy.domain.ArticuloUbicacion" />
+		</set>
+		
+		-->
 
 	</class>
 </hibernate-mapping>
