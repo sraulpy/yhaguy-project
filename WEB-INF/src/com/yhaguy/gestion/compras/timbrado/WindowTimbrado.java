@@ -235,12 +235,6 @@ public class WindowTimbrado extends SoloViewModel implements VerificaAceptarCanc
 			this.mensajeVerificarAceptar += "\n - La fecha de Vencimiento del Timbrado no puede quedar vacío..";
 		}
 
-		if (rr.existe(Timbrado.class, "numero", Config.TIPO_STRING, nro,
-				this.selectedTimbrado) == true) {
-			out = false;
-			this.mensajeVerificarAceptar += "\n - Ya existe este número de Timbrado en la Base de Datos..";
-		}
-
 		return out;
 	}
 }
