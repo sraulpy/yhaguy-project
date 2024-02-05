@@ -15,7 +15,6 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Textbox;
 
-import com.coreweb.Config;
 import com.coreweb.componente.VerificaAceptarCancelar;
 import com.coreweb.componente.WindowPopup;
 import com.coreweb.control.SoloViewModel;
@@ -215,8 +214,6 @@ public class WindowTimbrado extends SoloViewModel implements VerificaAceptarCanc
 	private boolean validarTimbrado() throws Exception {
 		boolean out = true;
 		this.mensajeVerificarAceptar = "No se puede completar la operación debido a: ";
-
-		RegisterDomain rr = RegisterDomain.getInstance();
 
 		if (this.selectedTimbrado == null) {
 			this.mensajeVerificarAceptar += "\n - Debe seleccionar un Timbrado..";

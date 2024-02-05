@@ -10,7 +10,7 @@
 		<property name="connection.driver_class">org.postgresql.Driver</property>
 		<property name="connection.url">jdbc:postgresql://localhost:5433/central</property>
 		<property name="connection.username">postgres</property>
-		<property name="connection.password">postgres</property>
+		<property name="connection.password">Yrsa0985</property>
 		
 		<property name="show_sql">true</property>
 
@@ -41,6 +41,7 @@
 		<mapping resource="com/yhaguy/domain/EmpresaRubro.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/EmpresaObservacion.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/EmpresaCartera.hbm.xml" />
+		<mapping resource="com/yhaguy/domain/EmpresaDocumento.hbm.xml" />
 
 		<mapping resource="com/yhaguy/domain/Cliente.hbm.xml" />
 		<mapping resource="com/yhaguy/domain/ContactoInterno.hbm.xml" />

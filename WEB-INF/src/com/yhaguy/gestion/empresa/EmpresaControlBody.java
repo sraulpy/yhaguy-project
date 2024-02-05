@@ -1,5 +1,7 @@
 package com.yhaguy.gestion.empresa;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +13,11 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -21,6 +27,7 @@ import com.coreweb.componente.WindowPopup;
 import com.coreweb.domain.IiD;
 import com.coreweb.domain.Tipo;
 import com.coreweb.extras.agenda.ControlAgendaEvento;
+import com.coreweb.util.Misc;
 import com.coreweb.util.MyArray;
 import com.coreweb.util.MyPair;
 import com.yhaguy.BodyApp;
@@ -29,6 +36,7 @@ import com.yhaguy.ID;
 import com.yhaguy.domain.CtaCteEmpresaMovimiento;
 import com.yhaguy.domain.Empresa;
 import com.yhaguy.domain.EmpresaCartera;
+import com.yhaguy.domain.EmpresaDocumento;
 import com.yhaguy.domain.EmpresaGrupoSociedad;
 import com.yhaguy.domain.EmpresaRubro;
 import com.yhaguy.domain.Funcionario;
@@ -43,12 +51,17 @@ import com.yhaguy.gestion.empresa.ctacte.CuentasCobrarControlBody;
 import com.yhaguy.gestion.empresa.ctacte.CuentasPagarControlBody;
 import com.yhaguy.gestion.empresa.ctacte.FiltroCtaCteMovimientos;
 import com.yhaguy.gestion.empresa.ctacte.ReporteMovimientosCtaCte;
+import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 public abstract class EmpresaControlBody extends BodyApp {
 
+	static final String PATH = Configuracion.pathEmpresas;
+	
 	private static int TIPO_CLIENTE = 1;
 	private static int TIPO_PROVEEDOR = 2;
+	
+	private EmpresaDocumento documento;
 
 	@Init(superclass = true)
 	public void initEmpresaControlBody() {
@@ -562,7 +575,53 @@ public abstract class EmpresaControlBody extends BodyApp {
 	@NotifyChange({ "movimientos" })
 	public void changeFilter() throws Exception {
 		this.movimientos = this.getFilterMovs(this.filtroMovimiento);
-
+	}
+	
+	@Command
+	@NotifyChange("documento")
+	public void addDocumento(@BindingParam("comp") Component comp, @BindingParam("pop") Popup pop) throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();		
+		Empresa e = rr.getEmpresaById(this.dtoEmp.getId());
+		this.documento = new EmpresaDocumento();
+		this.documento.setEmpresa(e);
+		pop.open(comp, "after_start");
+	}
+	
+	@Command
+	@NotifyChange("*")
+	public void deleteDocumento(@BindingParam("item") EmpresaDocumento item) throws Exception {
+		if (this.mensajeSiNo("Desea eliminar el ítem seleccionado?")) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			rr.deleteObject(item);
+			Clients.showNotification("ITEM ELIMINADO");
+		}		
+	}
+	
+	@Command 
+	@NotifyChange("*")
+	public void uploadFile(@BindingParam("file") Media file) {
+		try {
+			Misc misc = new Misc();
+			String name = Utiles.getDateToString(new Date(), "dd_MM_yyyy_hh_mm_ss");
+			InputStream file_ = new ByteArrayInputStream(file.getByteData());
+			String format = "." + file.getFormat();
+			misc.uploadFile(PATH, name, format, file_);
+			
+			RegisterDomain rr = RegisterDomain.getInstance();
+			this.documento.setAuxi(Configuracion.pathEmpresasGenerico + name + format);
+			this.documento.setDescripcion(this.documento.getDescripcion().toUpperCase());
+			rr.saveObject(this.documento, this.getLoginNombre());
+			
+			this.documento = null;
+			
+			Clients.showNotification("DOCUMENTO CORRECTAMENTE SUBIDO");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Clients.showNotification(
+					"Hubo un problema al intentar subir el archivo..",
+					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+		}
 	}
 
 	public List<MyArray> getFilterMovs(FiltroCtaCteMovimientos filtroMov) throws Exception {
@@ -631,6 +690,12 @@ public abstract class EmpresaControlBody extends BodyApp {
 	public List<Tipo> getCiudades() throws Exception {
 		RegisterDomain rr = RegisterDomain.getInstance();
 		return rr.getTipos("CIUDADES", "descripcion");
+	}
+	
+	@DependsOn("dto")
+	public List<EmpresaDocumento> getDocumentos() throws Exception {
+		RegisterDomain rr = RegisterDomain.getInstance();	
+		return rr.getEmpresaDocumentos(this.dtoEmp.getId());
 	}
 
 	public CtaCteEmpresaMovimientoDTO getSelectedMov() {
@@ -1043,5 +1108,13 @@ public abstract class EmpresaControlBody extends BodyApp {
 		evento[3] = texto;
 		evento[4] = link;
 		this.eventosAgenda.add(evento);
+	}
+
+	public EmpresaDocumento getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(EmpresaDocumento documento) {
+		this.documento = documento;
 	}
 }

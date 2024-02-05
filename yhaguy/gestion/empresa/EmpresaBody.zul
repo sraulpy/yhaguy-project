@@ -8,6 +8,7 @@
 		<tab label="@load(vm.cliente ? 'Datos Cliente' : 'Datos Proveedor')" closable="false" width="150px" />
 		<tab label="Geolocalización" closable="false" width="150px" visible="@load(vm.cliente)" />
 		<tab label="Cuenta Corriente" closable="false" width="150px" visible="false" />
+		<tab label="Documentos" closable="false" width="150px" />
 	</tabs>
 
 	<tabpanels>
@@ -377,6 +378,95 @@
 			<include
 				src="@load(vm.tipoControl eq 1? '/yhaguy/gestion/empresa/CtaCteClienteBody.zul' : '/yhaguy/gestion/empresa/CtaCteProveedorBody.zul')" />
 
+		</tabpanel>
+
+		<!-- _____________________ DOCUMENTOS _____________________ -->
+
+		<tabpanel>
+			<vbox hflex="true" vflex="true" style="margin:20px 30px">
+				<hlayout sclass="button-container">
+					<field value="DOCUMENTOS DIGITALIZADOS" />
+					<separator orient="vertical" bar="true"></separator>
+					<button mold="bs" sclass="btn-primary btn-sm"
+						iconSclass="z-icon-plus-circle" width="120px"
+						onClick="@command('addDocumento', comp=self, pop=pop_docs)"
+						disabled="@load(vm.dto.esNuevo)">
+						Agregar
+					</button>
+				</hlayout>
+				<hbox hflex="1" vflex="1">
+
+					<listbox vflex="1" emptyMessage="SIN REGISTROS"
+						model="@load(vm.documentos)" sclass="rounded">
+						<listhead>
+							<listheader>Descripción</listheader>
+							<listheader align="center">
+								Documento
+							</listheader>
+							<listheader width="60px" align="center"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell
+									label="@load(each.descripcion)">
+								</listcell>
+								<listcell>
+									<a iconSclass="z-icon-paperclip"
+										label=" ver documento" href="@load(each.auxi)" target="_blank"
+										style="font-size:10pt" />
+								</listcell>
+								<listcell>
+									<button iconSclass="z-icon-times"
+										onClick="@command('deleteDocumento', item=each)">
+									</button>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<space></space>
+					<listbox vflex="1" emptyMessage="SIN REGISTROS" sclass="rounded">
+						<listhead>
+							<listheader>
+								Documento subido desde la App
+							</listheader>
+							<listheader align="center">
+								Documento
+							</listheader>
+							<listheader width="60px" align="center"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell
+									label="@load(each.descripcion)">
+								</listcell>
+								<listcell>
+									<a iconSclass="z-icon-paperclip"
+										label=" ver documento" href="@load(each.path)" target="_blank"
+										style="font-size:10pt" />
+								</listcell>
+								<listcell>
+									<button iconSclass="z-icon-times">
+									</button>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+				</hbox>
+			</vbox>
+
+			<popup id="pop_docs">
+				<vlayout width="300px"
+					style="padding:10px;border-radius:5px" spacing="10px">
+					<textbox placeholder="DESCRIPCION" hflex="1"
+						value="@bind(vm.documento.descripcion)">
+					</textbox>
+					<button upload="true" label="Subir Documento"
+						hflex="1" iconSclass="z-icon-upload"
+						onUpload="@command('uploadFile', file=event.media)">
+					</button>
+				</vlayout>
+			</popup>
 		</tabpanel>
 
 	</tabpanels>

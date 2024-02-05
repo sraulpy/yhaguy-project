@@ -15525,6 +15525,14 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 100);
 	}
 	
+	/**
+	 * @return documentos de empresas..
+	 */
+	public List<EmpresaDocumento> getEmpresaDocumentos(long idEmpresa) throws Exception {
+		String query = "select d from EmpresaDocumento d where d.empresa.id = " + idEmpresa;
+		return this.hqlLimit(query, 50);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();

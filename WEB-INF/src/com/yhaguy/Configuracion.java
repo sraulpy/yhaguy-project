@@ -52,6 +52,8 @@ public class Configuracion extends Config {
 	public static String pathPrecios = PATH_SESSION + ("/yhaguy/archivos/precios/") + "/";
 	public static String pathFuncionarios = PATH_SESSION + ("/yhaguy/archivos/funcionarios/") + "/";
 	public static String pathFuncionariosGenerico = "/yhaguy/archivos/funcionarios/";
+	public static String pathEmpresas = PATH_SESSION + ("/yhaguy/archivos/empresas/") + "/";
+	public static String pathEmpresasGenerico = "/yhaguy/archivos/empresas/";
 	
 	public static String URL_IMAGENES_ARTICULOS = "/yhaguy/archivos/articulos/img/";
 	public static String URL_ARCHIVOS_IMAGENES = "/yhaguy/archivos/imagenes/";
@@ -125,6 +127,9 @@ public class Configuracion extends Config {
 					+ "/";
 			pathFuncionarios = Sessions.getCurrent().getWebApp()
 					.getRealPath("/yhaguy/archivos/funcionarios/")
+					+ "/";
+			pathEmpresas = Sessions.getCurrent().getWebApp()
+					.getRealPath("/yhaguy/archivos/empresas/")
 					+ "/";
 		} catch (Exception e) {
 			System.err.println("Sin session ......");
