@@ -627,7 +627,8 @@ public class VentaItemControl extends SoloViewModel {
 	
 	@Command @NotifyChange("*") 
 	public void validarDescuento(@BindingParam("cmp") Component cmp) throws Exception {
-		if (this.getLoginNombre().equals("milva")) {
+		if (this.getLoginNombre().equals("milva")
+				|| this.getLoginNombre().equals("lorenzom") || this.getLoginNombre().equals("administrativo")) {
 			return;
 		}
 		RegisterDomain rr = RegisterDomain.getInstance();
