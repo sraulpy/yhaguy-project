@@ -77,7 +77,7 @@ public class VentaDTO extends DTO {
 	private List<String> numerosFacturas = new ArrayList<String>();
 	private List<SaldoVale> valesGenerados = new ArrayList<SaldoVale>();
 	
-	// Datos que van en la impresion de la factura remision..
+	// Datos que van en la impresion de la factura remision.
 	private String puntoPartida = "";
 	private String fechaTraslado = "";
 	private String fechaFinTraslado = "";
