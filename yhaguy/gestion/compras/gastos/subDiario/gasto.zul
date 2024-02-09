@@ -90,7 +90,7 @@
 					<hlayout>
 						<textbox id="timb"
 							value="@bind(vm.dto.timbrado)" hflex="true"
-							style="text-align:right"
+							style="text-align:right" constraint="no empty"
 							placeholder="Nro. Timbrado.." />
 					</hlayout>
 				</vlayout>

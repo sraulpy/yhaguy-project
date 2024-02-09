@@ -1000,9 +1000,20 @@ public class CompraLocalControlBody extends BodyApp {
 		this.dto.getFactura().setSucursal(this.dto.getSucursal());
 		this.dto.getFactura().setFechaCreacion(new Date());
 		this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		CompraLocalFactura fac = rr.getCompraLocalFactura(this.dto.getFactura().getId());
+		if (fac.getTimbrado() == null || fac.getTimbrado().getNumero().trim().isEmpty()) {
+			this.mensajeError("El timbrado no puede quedar vacío.");
+			this.dto.setCerrado(false);
+			this.dto.setDbEstado(' ');
+			this.dto = (CompraLocalOrdenDTO) this.saveDTO(this.dto);
+			return;
+		}
+		
 		this.volcarCompra();
 		this.actualizarReposiciones();
-		this.setEstadoABMConsulta();
+		this.setEstadoABMConsulta();		
 		Clients.showNotification("Compra correctamente cerrada..");
 	}
 	

@@ -563,6 +563,12 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 	 * confirmacion del gasto..
 	 */
 	private void confirmar() throws Exception {
+		
+		if (this.dtoGasto.getTimbrado().trim().isEmpty()) {
+			this.mensajeError("Debe ingresar el timbrado.");
+			return;
+		}
+		
 		if(this.mensajeSiNo("Desea confirmar el Gasto..") == false)
 			return;		
 		this.dtoGasto.setEstadoComprobante(this.getEstadoComprobanteCerrado());
@@ -573,6 +579,7 @@ public class OrdenPedidoGastoControlBody extends BodyApp {
 			this.dtoGasto.setTipoCambio(tc);
 		}
 		this.dtoGasto = (GastoDTO) this.saveDTO(this.dtoGasto, new AssemblerGasto());
+		
 		this.dto.setReadonly();
 		this.dto.setConfirmado(true);
 		this.dto.getGastos().add(this.dtoGasto);

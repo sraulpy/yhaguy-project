@@ -3641,6 +3641,11 @@ class ValidadorGasto implements VerificaAceptarCancelar {
 				mensaje += "- Debe especificar el motivo por el cual no "
 						+ "se cuenta con el Comprobante físico.. \n";
 			}
+			
+			if (this.gasto.getDetalles().size() == 0) {
+				out = false;
+				mensaje += "- Debe ingresar el Detalle.";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
