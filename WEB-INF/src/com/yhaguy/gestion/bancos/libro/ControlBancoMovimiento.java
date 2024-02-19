@@ -445,7 +445,7 @@ public class ControlBancoMovimiento extends Control {
 		}
 		
 		if (tipoFP == cheqTerAut) {
-			BancoChequeTercero bct = rr.getChequesTercero(rfpDto.getChequeNumero()).get(0);
+			BancoChequeTercero bct = rr.getChequesTercero(rfpDto.getChequeNumero(), rfpDto.getChequeBanco().getId()).get(0);
 			bct.setDescontado(true);
 			bct.setObservacion("Descontado por AutoCobranza..");
 			bct.setNumeroDescuento(recibo);
