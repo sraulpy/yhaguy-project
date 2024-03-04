@@ -113,7 +113,7 @@ public class NotaCreditoDTO extends DTO {
 	
 	@DependsOn("motivo")
 	public List<NotaCreditoDetalleDTO> getDetallesByMotivo() {
-		return this.isMotivoDescuento() ? this.getDetallesFacturas() : this
+		return (this.isMotivoDescuento() || this.isMotivoIncobrable()) ? this.getDetallesFacturas() : this
 				.getDetallesArticulos();
 	}
 	
@@ -222,6 +222,14 @@ public class NotaCreditoDTO extends DTO {
 	public boolean isMotivoDiferenciaPrecio(){
 		String sigla = (String) this.motivo.getSigla();
 		return sigla.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_DIF_PRECIO);	
+	}
+	
+	/**
+	 * @return true si el motivo es por incobrable..
+	 */
+	public boolean isMotivoIncobrable() {
+		String sigla = (String) this.motivo.getSigla();
+		return sigla.equals(Configuracion.SIGLA_TIPO_NC_MOTIVO_INCOBRABLE);	
 	}
 	
 	/**

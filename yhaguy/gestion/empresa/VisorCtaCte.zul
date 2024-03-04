@@ -155,7 +155,7 @@
 				label="@load(vm.selectedItem.pos5 eq 'true'? ' Desbloquear Cuenta':' Bloquear Cuenta')"
 				visible="@load(vm.tipoCliente)" />
 			<button mold="bs" sclass="btn-success btn-sm" width="150px"
-				iconSclass="z-icon-print" onClick='pop_impresion.open(self, "after_end")'
+				iconSclass="z-icon-print" onClick="@command('imprimir')"
 				label=" Imprimir Cuenta" />
 			<button mold="bs" sclass="btn-warning btn-sm"
 				iconSclass="z-icon-sort-amount-desc"

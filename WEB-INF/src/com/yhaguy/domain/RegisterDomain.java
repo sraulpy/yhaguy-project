@@ -7323,6 +7323,7 @@ public class RegisterDomain extends Register {
 		return list;
 	}
 	
+	
 	/**
 	 * @return los movimientos de cta cte.
 	 */

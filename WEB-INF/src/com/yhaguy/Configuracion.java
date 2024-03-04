@@ -13,7 +13,7 @@ public class Configuracion extends Config {
 	/********************************************************************************************/
 	public static String PATH_SESSION = ".";
 
-	public static String empresa = Configuracion.EMPRESA_GRUPAUTO;
+	public static String empresa = Configuracion.EMPRESA_YRSA;
 	
 	public static final String EMPRESA_GTSA = "Grupo Toyo S.A.";
 	public static final String EMPRESA_YRSA = "Yhaguy Repuestos S.A.";
@@ -160,7 +160,7 @@ public class Configuracion extends Config {
 	public static final int IMPORTE_TIPO_IVA_5 = 2;
 	public static final int IMPORTE_TIPO_EXENTA = 3;
 	
-	public static final int LIMITE_ITEMS_FACTURA_VENTA = 8;
+	public static final int LIMITE_ITEMS_FACTURA_VENTA = 7;
 	public static final int LIMITE_ITEMS_FACTURA_VENTA_BAT = 7;
 	public static final int LIMITE_ITEMS_RECIBO_COBRO = 100;
 
@@ -859,6 +859,7 @@ public class Configuracion extends Config {
 	public static final String SIGLA_TIPO_FUNCIONARIO_ESTADO_INACTIVO = "FUN-EST-INA";
 	public static final String SIGLA_TIPO_NC_MOTIVO_DESCUENTO = "NCR-MOT-DES";
 	public static final String SIGLA_TIPO_NC_MOTIVO_DEVOLUCION = "NCR-MOT-DEV";
+	public static final String SIGLA_TIPO_NC_MOTIVO_INCOBRABLE = "NCR-MOT-INC";
 	public static String SIGLA_TIPO_NC_MOTIVO_DIF_PRECIO = "NCR-MOT-DIF-PRE";
 	public static String SIGLA_TIPO_NC_MOTIVO_RECLAMO = "NCR-MOT-REC";
 	public static String SIGLA_TIPO_NC_DETALLE_FACTURA = "NCR-DET-FAC";

@@ -389,13 +389,13 @@
 						style="text-align:center" />
 					<listheader label="@load(vm.labelMonto)"
 						style="text-align:center" align="right" 
-						visible="@load(vm.dto.motivoDescuento)"/>
+						visible="@load(vm.dto.motivoDescuento or vm.dto.motivoIncobrable)"/>
 				</listhead>
 				<template name="model">
 					<listitem>
 						<listcell />
 						<listcell label="@load(each.descripcion)" />
-						<listcell visible="@load(vm.dto.motivoDescuento)">
+						<listcell visible="@load(vm.dto.motivoDescuento or vm.dto.motivoIncobrable)">
 							<label
 								value="@load(each.montoGs) @converter(vm.cnv.monedaLocal)"
 								visible="@load(vm.dto.monedaLocal)" />
@@ -407,12 +407,12 @@
 				</template>
 				<listfoot>
 					<listfooter span="3">
-						<hlayout visible="@load(!vm.dto.motivoDescuento)">
+						<hlayout visible="@load(!vm.dto.motivoDescuento and !vm.dto.motivoIncobrable)">
 							<field value="@load(vm.dto.detallesFacturas.size())" />
 							<field value="ítems" />
 							<space hflex="true"/>
 						</hlayout>
-						<hlayout visible="@load(vm.dto.motivoDescuento)">
+						<hlayout visible="@load(vm.dto.motivoDescuento or vm.dto.motivoIncobrable)">
 							<field value="@load(vm.dto.detallesFacturas.size())" />
 							<field value="ítems" />
 							<space hflex="true" />

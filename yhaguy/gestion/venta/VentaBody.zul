@@ -133,7 +133,7 @@
 									iconSclass="@load(vm.addClienteOcasionalIcono[0])"
 									onClick="@command('addClienteOcasional')"
 									tooltiptext="@load(vm.addClienteOcasionalIcono[1])"
-									width="30px" height="25px" />
+									width="30px" height="25px" disabled="true" />
 								<div width="5px"/>
 							</hlayout>
 						</vlayout>

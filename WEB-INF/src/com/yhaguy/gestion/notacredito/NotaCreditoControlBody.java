@@ -247,7 +247,7 @@ public class NotaCreditoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void buscarFacturas() throws Exception {
 		if (this.dto.isNotaCreditoVenta()) {
-			if (this.dto.isMotivoDescuento() && this.mensajeSiNo("Aplicar a venta crédito?")) {
+			if ((this.dto.isMotivoDescuento() || this.dto.isMotivoIncobrable()) && this.mensajeSiNo("Aplicar a venta crédito?")) {
 				this.win = (Window) Executions.createComponents(ADD_APLICACION, this.mainComponent, null);
 				this.win.doModal();
 			} else if (this.dto.isMotivoDevolucion() || this.dto.isMotivoReclamo()) {
@@ -464,7 +464,9 @@ public class NotaCreditoControlBody extends BodyApp {
 
 			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false, false);
 
-			if (this.dto.isMotivoDescuento()) {
+			System.out.println("---> " + this.dto.getMotivo().getSigla());
+			
+			if (this.dto.isMotivoDescuento() || this.dto.isMotivoIncobrable()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
 
 			} else {
@@ -523,7 +525,7 @@ public class NotaCreditoControlBody extends BodyApp {
 			vta.setId(cm.getIdMovimientoOriginal());
 			this.nvoItem = this.crearDetalleDesde(vta, true, false, false, false);
 
-			if (this.dto.isMotivoDescuento()) {
+			if (this.dto.isMotivoDescuento() || this.dto.isMotivoIncobrable()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
 
 			} else {
@@ -585,7 +587,7 @@ public class NotaCreditoControlBody extends BodyApp {
 
 			this.nvoItem = this.crearDetalleDesde(b.getSelectedItem(), true, false, false, false);
 
-			if (this.dto.isMotivoDescuento()) {
+			if (this.dto.isMotivoDescuento() || this.dto.isMotivoIncobrable()) {
 				this.abrirPopupDetalle(ZUL_DETALLE_FACTURA);
 
 			} else {
@@ -1101,7 +1103,7 @@ public class NotaCreditoControlBody extends BodyApp {
 			this.msgError += "\n - Debe ingresar el número..";
 		}
 		
-		if((this.dto.isMotivoDescuento() == false)
+		if((this.dto.isMotivoDescuento() == false && this.dto.isMotivoIncobrable() == false)
 				&& (this.dto.getDetallesArticulos().size() == 0)) {
 			out = false;
 			this.msgError += "\n - Debe ingresar al menos un ítem..";
@@ -1402,10 +1404,10 @@ public class NotaCreditoControlBody extends BodyApp {
 	 * Actualiza el importe de la cabecera
 	 */
 	private void updateImporte() {
-		double importeGs = (double) (this.dto.isMotivoDescuento() ? this.dto
+		double importeGs = (double) ((this.dto.isMotivoDescuento() || this.dto.isMotivoIncobrable()) ? this.dto
 				.getImportesFacturas()[0]
 				: this.dto.getImportesDevoluciones()[0]);
-		double importeDs = (double) (this.dto.isMotivoDescuento() ? this.dto
+		double importeDs = (double) ((this.dto.isMotivoDescuento() || this.dto.isMotivoIncobrable()) ? this.dto
 				.getImportesFacturas()[1]
 				: this.dto.getImportesDevoluciones()[1]);
 		this.dto.setImporteGs(importeGs);
