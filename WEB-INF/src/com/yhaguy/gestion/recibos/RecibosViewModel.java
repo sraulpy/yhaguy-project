@@ -461,6 +461,8 @@ public class RecibosViewModel extends SimpleViewModel {
 		params.put("TotalImporteGs", Utiles.getNumberFormat(this.reciboDto.getTotalImporteGs()));
 		params.put("Emision", Utiles.getDateToString(this.reciboDto.getFechaEmision(), "dd-MM-yyyy"));
 		params.put("Footer", Configuracion.empresa + " - " + "Ruta Mcal. Estigarribia Km 9.5");
+		params.put("Empresa", Configuracion.empresa);
+		params.put("RucEmpresa", Utiles.getRucEmpresa());
 		
 		try {
 			String root = Sessions.getCurrent().getWebApp().getRealPath("/");

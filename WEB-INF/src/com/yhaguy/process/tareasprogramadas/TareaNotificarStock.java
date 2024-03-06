@@ -38,7 +38,7 @@ public class TareaNotificarStock {
 			String texto = "Es necesario recalcular el stock de los siguientes códigos:";		
 			
 			List<Object[]> arts = new ArrayList<>();
-			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
+			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO)) {
 				arts = ProcesosArticulos.verificarStockGroupauto(2, idFamilia);
 			} else {
 				arts = ProcesosArticulos.verificarStock(2, idFamilia);

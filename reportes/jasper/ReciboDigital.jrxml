@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo " pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bda7b4d1-2372-4fef-9c52-f5d49003bc73">
 	<property name="ireport.zoom" value="1.8150000000000015"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="207"/>
+	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
 	<style name="Title" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -29,6 +29,7 @@
 	<parameter name="Moneda_" class="java.lang.String"/>
 	<parameter name="Emision" class="java.lang.String"/>
 	<parameter name="Footer" class="java.lang.String"/>
+	<parameter name="RucEmpresa" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select '1' "Cuenta", '1' "Nivel", 'Activo' "Desc Cuenta", null "Cuenta Totalizadora",  'A' "Tipo", 'S' "Asentable"
 from plancuenta where id = '1'
@@ -159,14 +160,14 @@ from plancuenta where id = '1']]>
 				<textFieldExpression><![CDATA[$P{fieldRazonSocial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="406" y="18" width="163" height="12" uuid="1640e2e2-9cb8-44de-b2f5-5a6541783f95"/>
+				<reportElement x="432" y="18" width="137" height="12" uuid="1640e2e2-9cb8-44de-b2f5-5a6541783f95"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Generado: " + $P{Generado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Ruc: " + $P{RucEmpresa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="406" y="0" width="163" height="12" uuid="911760eb-a418-47ac-8619-18e74df56112"/>
+				<reportElement x="432" y="4" width="137" height="12" uuid="911760eb-a418-47ac-8619-18e74df56112"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Usuario: " + $P{Usuario}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Empresa: " + $P{Empresa}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="Column header" x="2" y="82" width="58" height="15" forecolor="#736343" uuid="96900baf-c3e2-4f3c-bbe6-b492c4f011e7"/>

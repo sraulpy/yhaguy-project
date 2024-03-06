@@ -797,6 +797,26 @@ public class Utiles {
         return null;
 	}
 	
+	/**
+	 * @return ruc según empresa..
+	 */
+	public static String getRucEmpresa() {
+		switch (Configuracion.empresa) {
+		case Configuracion.EMPRESA_YRSA:
+			return Configuracion.RUC_YHAGUY_REPUESTOS;
+			
+		case Configuracion.EMPRESA_GROUPAUTO:
+			return Configuracion.RUC_GROUPAUTO;
+			
+		case Configuracion.EMPRESA_YRPS:
+			return Configuracion.RUC_YHAGUY_REPRESENTACIONES;
+			
+		case Configuracion.EMPRESA_AUTOCENTRO:
+			return Configuracion.RUC_YHAGUY_REPRESENTACIONES;
+		}
+		return "";
+	}
+	
 	public static void mainX(String[] args) {		
 		JSONParser parser = new JSONParser();
 		try {

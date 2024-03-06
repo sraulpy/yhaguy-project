@@ -27,6 +27,7 @@ public class Recibo extends Domain {
 	private String cobrador;
 	private boolean saldodeudor;
 	private boolean saldoAcobrar;
+	private boolean vencidoSinCobrar;
 	
 	private double totalImporteGs;
 	private double totalImporteDs;
@@ -1008,5 +1009,13 @@ public class Recibo extends Domain {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public boolean isVencidoSinCobrar() {
+		return vencidoSinCobrar;
+	}
+
+	public void setVencidoSinCobrar(boolean vencidoSinCobrar) {
+		this.vencidoSinCobrar = vencidoSinCobrar;
 	}
 }

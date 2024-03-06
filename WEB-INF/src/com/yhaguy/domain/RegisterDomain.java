@@ -7549,8 +7549,8 @@ public class RegisterDomain extends Register {
 			String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
 			query += " and (c.fechaEmision >= '" + desde_ + "' and c.fechaEmision <= '" + hasta_ + "')";
 		}
-		query += " order by c.numero";
-		return this.hqlLimit(query, 300);
+		query += " order by c.fechaVencimiento desc";
+		return this.hqlLimit(query, 1000);
 	}
 	
 	/**

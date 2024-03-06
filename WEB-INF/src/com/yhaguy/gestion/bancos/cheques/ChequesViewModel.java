@@ -2,6 +2,7 @@ package com.yhaguy.gestion.bancos.cheques;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.zkoss.bind.BindUtils;
@@ -31,6 +32,8 @@ import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.BancoCheque;
 import com.yhaguy.domain.BancoCta;
 import com.yhaguy.domain.Empresa;
+import com.yhaguy.domain.Recibo;
+import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.libro.ControlBancoMovimiento;
@@ -87,6 +90,11 @@ public class ChequesViewModel extends SimpleViewModel {
 	
 	@Init(superclass = true)
 	public void init() {
+		try {
+			this.filterFechaAA = Utiles.getAnhoActual();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 
 	@AfterCompose(superclass = true)
@@ -143,6 +151,52 @@ public class ChequesViewModel extends SimpleViewModel {
 	
 	@Command
 	@NotifyChange("*")
+	public void setChequeVencidoSinCobrar(@BindingParam("item") MyArray item) throws Exception {
+		if (!this.mensajeSiNo("Desea marcar el cheque como no cobrado?")) {
+			return;
+		}
+		
+		RegisterDomain rr = RegisterDomain.getInstance();
+		BancoCheque cheque = rr.getChequeById(item.getId());
+		
+		if (cheque.getReciboFormaPago() == null) {
+			Clients.showNotification("EL CHEQUE NO TIENE ASOCIADO UNA ORDEN DE PAGO", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
+		Recibo op = rr.getRecibo(cheque.getReciboFormaPago().getId());
+		
+		if (op == null) {
+			Clients.showNotification("EL CHEQUE NO TIENE ASOCIADO UNA ORDEN DE PAGO", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
+		if (!op.isEntregado()) {
+			Clients.showNotification("LA ORDEN DE PAGO NO TIENE RECIBO APLICADO", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+			return;
+		}
+		
+		op.setVencidoSinCobrar(true);
+		for (ReciboDetalle d : op.getDetalles()) {
+			if (d.getMovimiento() != null) {
+				d.getMovimiento().setSaldo(d.getMovimiento().getSaldo() + (op.isMonedaLocal() ? d.getMontoGs() : d.getMontoDs()));
+				rr.saveObject(d.getMovimiento(), this.getLoginNombre());
+			}
+		}
+		for (ReciboDetalle d : op.getDetalles()) {
+			rr.deleteObject(d);
+		}
+		op.setDetalles(new HashSet<>());
+		rr.saveObject(op, this.getLoginNombre());
+		
+		cheque.setVencidoSinCobrar(true);
+		rr.saveObject(cheque, this.getLoginNombre());
+		
+		Clients.showNotification("REGISTRO GUARDADO");
+	}
+	
+	@Command
+	@NotifyChange("*")
 	public void rechazarCheque(@BindingParam("comp") Popup comp) throws Exception {
 		if (this.motivoRechazo.isEmpty()) {
 			Clients.showNotification("Debe ingresar el motivo..", Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
@@ -159,6 +213,10 @@ public class ChequesViewModel extends SimpleViewModel {
 	public void openChequeCobrado(@BindingParam("cheque") MyArray cheque,
 			@BindingParam("popup") Popup popup,
 			@BindingParam("comp") Component comp) {
+		boolean vencidoSinCobrar = (boolean) cheque.getPos18();
+		if (vencidoSinCobrar) {
+			return;
+		}
 		this.selectedItem_ = cheque;
 		popup.open(comp, "start_before");
 	}
@@ -287,6 +345,7 @@ public class ChequesViewModel extends SimpleViewModel {
 			my.setPos15(cheque.isMonedaLocal());
 			my.setPos16(cheque.isRechazado());
 			my.setPos17(cheque.isReembolsado());
+			my.setPos18(cheque.isVencidoSinCobrar());
 			if (this.selectedFiltro.equals(FILTRO_AL_DIA) && cheque.isChequeAlDia()) {
 				out.add(my);
 				this.totalImporteGs += cheque.getMonto();

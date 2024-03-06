@@ -86,35 +86,43 @@
 			<button mold="bs" sclass="btn-info btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('abrirVentanaRecibo', tipo=4)"
-				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Cobro" />
+				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Cobro" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				disabled="@load(!vm.dto.caja.cobro or vm.dto.tipo ne 'CAJA COBRANZAS')" label=" Reembolsos" 
-				onClick='popReembolso.open(self, "after_start")'/>	
+				onClick='popReembolso.open(self, "after_start")'
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')"/>	
 			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle" disabled="@load(!vm.siempreHabilitado)"
-				onClick='popReposicion.open(self, "after_start")' label=" Reposición" />			
+				onClick='popReposicion.open(self, "after_start")' label=" Reposición" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />			
 			<button mold="bs" sclass="btn-warning btn-sm" hflex="true"
 				iconSclass="z-icon-plus-circle"
 				onClick="@command('facturar', tipo=4)"
-				disabled="@load(!vm.dto.caja.facturacion or vm.dto.tipo ne 'CAJA VENTAS')" label=" Facturación" />
+				disabled="@load(!vm.dto.caja.facturacion or vm.dto.tipo ne 'CAJA VENTAS')" label=" Facturación" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />
 			<space width="30px" />	
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				disabled="@load(!vm.dto.caja.pago)" label=" Pagos" 
-				onClick='popPagos.open(self, "after_start")'/>
+				onClick='popPagos.open(self, "after_start")'
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('showFormGastos')"
-				disabled="@load(!vm.dto.caja.gasto)" label=" Gasto" />
+				disabled="@load(!vm.dto.caja.gasto)" label=" Gasto" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />
 			<button mold="bs" sclass="btn-success btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('abrirVentanaReposicion', tipo=3)"
-				disabled="@load(!vm.dto.caja.egreso)" label=" Egreso" />	
+				disabled="@load(!vm.dto.caja.egreso)" label=" Egreso" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />	
 			<button mold="bs" sclass="btn-warning btn-sm" hflex="true"
 				iconSclass="z-icon-minus-circle"
 				onClick="@command('devolucionConNotaDeCredito')"
-				disabled="@load(!vm.dto.caja.notaCredito or vm.dto.tipo ne 'CAJA VENTAS')" label=" N. Crédito" />			
+				disabled="@load(!vm.dto.caja.notaCredito or vm.dto.tipo ne 'CAJA VENTAS')" label=" N. Crédito" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />			
 			<space hflex="true" />
 			<button mold="bs" sclass="btn-primary btn-sm" hflex="true"
 				iconSclass="z-icon-print"
@@ -123,7 +131,8 @@
 			<button mold="bs" sclass="btn-danger btn-sm" hflex="true"
 				iconSclass="z-icon-lock"
 				onClick="@command('cerrarCaja')"
-				disabled="@load(vm.dto.detalles.size() eq 0 or vm.abrirCajaDisabled)" label=" Cerrar" />	
+				disabled="@load(vm.dto.detalles.size() eq 0 or vm.abrirCajaDisabled)" label=" Cerrar" 
+				visible="@load(vm.dto.tipo ne 'CAJA COBRANZAS MOVILES' and vm.dto.tipo ne 'CAJA COBRANZAS MOVILES INTERIOR')" />	
 		</hlayout>
 		
 		<hlayout sclass="button-container"

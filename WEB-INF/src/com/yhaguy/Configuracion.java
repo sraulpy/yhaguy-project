@@ -19,7 +19,7 @@ public class Configuracion extends Config {
 	public static final String EMPRESA_YRSA = "Yhaguy Repuestos S.A.";
 	public static final String EMPRESA_YMRA = "Yhaguy Repuestos S.A. MRA";
 	public static final String EMPRESA_YRPS = "Yhaguy Representaciones S.A.";
-	public static final String EMPRESA_GRUPAUTO = "Groupauto Paraguay S.A.";
+	public static final String EMPRESA_GROUPAUTO = "Groupauto Paraguay S.A.";
 	public static final String EMPRESA_AUTOCENTRO = "Yhaguy Autocentro S.A.";
 	public static final String USER_MOBILE = "sergio";
 	public static final long ID_EMPRESA_YRPS = 29336;
@@ -231,6 +231,7 @@ public class Configuracion extends Config {
 	public static final String RUC_NF_AUTORREPUESTOS = "80080166-0";
 	public static final String RUC_YHAGUY_REPUESTOS = "80024884-8";
 	public static final String RUC_YHAGUY_REPRESENTACIONES = "80109448-8";
+	public static final String RUC_GROUPAUTO = "80078124-4";
 
 	public static String PROPIETARIO_IMPORTACION_DESCRIPCION = "Importacion";
 	public static String PROPIETARIO_VENTAS_DESCRIPCION = "Ventas";

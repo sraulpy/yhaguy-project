@@ -268,7 +268,7 @@ public abstract class BodyApp extends Body {
 	 * @return true si es Groupauto..
 	 */
 	public boolean isEmpresaGroupauto() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO);
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO);
 	}
 	
 	/**

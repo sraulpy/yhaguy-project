@@ -92,11 +92,14 @@ public class CajaPeriodo extends Domain {
 		out.add(TIPO_COBROS_MOBILE_INT);
 		out.add(TIPO_PAGOS_EXTERIOR);
 		out.add(TIPO_PAGOS_DEPURACION);
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_AUTOCENTRO)) {
+			out.add(TIPO_COMPRAS_NEUMATICOS);
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO)) {
 			out.add(TIPO_COMPRAS_NEUMATICOS);
 			out.add(TIPO_DEBITOS_CENTRAL);
 		}
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO)
 				|| Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
 			out.add(TIPO_CHICA_REPOSICION);
 			out.add(TIPO_CHICA_REQUERIMIENTOS);

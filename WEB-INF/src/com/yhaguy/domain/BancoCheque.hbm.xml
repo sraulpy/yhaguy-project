@@ -38,6 +38,10 @@
 		<property name="reembolsado">
 			<column name="reembolsado" not-null="true" default="false" />
 		</property>
+		
+		<property name="vencidoSinCobrar">
+			<column name="vencidoSinCobrar" not-null="true" default="false" />
+		</property>
 
 		<many-to-one name="moneda" class="com.coreweb.domain.Tipo"
 			column="idMoneda" lazy="false" />

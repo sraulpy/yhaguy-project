@@ -2083,7 +2083,7 @@ public class VentaControlBody extends BodyApp {
 	 * @return true si es empresa groupauto..
 	 */
 	public boolean isGroupauto() {
-		return Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO);
+		return Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO);
 	}
 	
 	/**
@@ -2215,7 +2215,7 @@ public class VentaControlBody extends BodyApp {
 		List<MyArray> out = new ArrayList<MyArray>();
 		out.add(this.getDtoUtil().getCondicionPagoContado());
 		out.add(this.getDtoUtil().getCondicionPagoCredito30());
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO) ||
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO) ||
 				Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
 			out.add(this.getDtoUtil().getCondicionPagoCreditoContraEntrega());
 		}		

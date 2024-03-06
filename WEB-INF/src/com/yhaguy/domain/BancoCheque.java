@@ -40,6 +40,8 @@ public class BancoCheque extends Domain {
 	private boolean reembolsado;
 	private String numeroReembolso = "";
 	
+	private boolean vencidoSinCobrar;
+	
 	/**
 	 * @return true si es cheque al dia..
 	 */
@@ -245,5 +247,13 @@ public class BancoCheque extends Domain {
 
 	public void setNumeroReembolso(String numeroReembolso) {
 		this.numeroReembolso = numeroReembolso;
+	}
+
+	public boolean isVencidoSinCobrar() {
+		return vencidoSinCobrar;
+	}
+
+	public void setVencidoSinCobrar(boolean vencidoSinCobrar) {
+		this.vencidoSinCobrar = vencidoSinCobrar;
 	}
 }

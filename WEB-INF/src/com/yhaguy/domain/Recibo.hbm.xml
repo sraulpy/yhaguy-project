@@ -44,6 +44,10 @@
 			<column name="entregado" default="false" />
 		</property>
 		
+		<property name="vencidoSinCobrar">
+			<column name="vencidoSinCobrar" not-null="true" default="false" />
+		</property>
+		
 		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
 			column="idEstadoComprobante" lazy="false"/>
 

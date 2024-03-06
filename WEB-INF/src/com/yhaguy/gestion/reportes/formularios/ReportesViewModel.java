@@ -228,7 +228,7 @@ public class ReportesViewModel {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return "80093865-8";
 		}
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO)) {
 			return "80078124-4";
 		}
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
@@ -241,7 +241,7 @@ public class ReportesViewModel {
 		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
 			return "Avda. Mcal. Estigarribia e/ Blas Garay y Curupayty";
 		}
-		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GRUPAUTO)) {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO)) {
 			return "Avda. Dr. Guido Boggiani Esquina R.I.5 Gral. Díaz";
 		}
 		return "Av Mariscal José Félix Estigarribia, Fernando De La Mora";
