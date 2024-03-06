@@ -218,8 +218,7 @@ public class AjusteStockViewModel extends BodyApp {
 
 		for (AjusteStockDetalleDTO item : this.dto.getDetalles()) {
 			Object[] obj1 = new Object[] { item.getArticulo().getPos1(),
-					item.getArticulo().getPos2(), item.getArticulo().getPos3(),
-					item.getArticulo().getPos4(), item.getCantidad() };
+					item.getArticulo().getPos4(), item.getCantidad(), item.getCostoGs(), item.getTotalCostoGs() };
 			data.add(obj1);
 		}
 
@@ -472,10 +471,10 @@ class AjusteStockReporte extends ReporteYhaguy {
 	
 	static List<DatosColumnas> cols = new ArrayList<DatosColumnas>();
 	static DatosColumnas col1 = new DatosColumnas("Código", TIPO_STRING, 50);
-	static DatosColumnas col2 = new DatosColumnas("Código Proveedor", TIPO_STRING, 50);
-	static DatosColumnas col3 = new DatosColumnas("Código Original", TIPO_STRING, 50);
-	static DatosColumnas col4 = new DatosColumnas("Descripción", TIPO_STRING);
-	static DatosColumnas col5 = new DatosColumnas("Cantidad", TIPO_INTEGER, 30, false);
+	static DatosColumnas col2 = new DatosColumnas("Descripción", TIPO_STRING);
+	static DatosColumnas col3 = new DatosColumnas("Cantidad", TIPO_INTEGER, 30, false);
+	static DatosColumnas col4 = new DatosColumnas("Costo", TIPO_DOUBLE_GS, 30, false);
+	static DatosColumnas col5 = new DatosColumnas("Importe", TIPO_DOUBLE_GS, 30, true);
 	
 	public AjusteStockReporte(AjusteStockDTO ajuste) {
 		this.ajuste = ajuste;
