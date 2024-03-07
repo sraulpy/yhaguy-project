@@ -105,7 +105,7 @@ from plancuenta where id = '1']]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="170" y="4" width="202" height="14" uuid="162dd6c1-b87b-4229-a017-26920ad50465"/>
+				<reportElement x="170" y="4" width="208" height="14" uuid="162dd6c1-b87b-4229-a017-26920ad50465"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -146,7 +146,7 @@ from plancuenta where id = '1']]>
 				<textFieldExpression><![CDATA[$P{TotalImporteGs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="170" y="16" width="202" height="14" uuid="77fd9c48-5f12-4609-a770-17a9a857bb9b"/>
+				<reportElement x="170" y="16" width="208" height="14" uuid="77fd9c48-5f12-4609-a770-17a9a857bb9b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
