@@ -159,14 +159,20 @@ from plancuenta where id = '1']]>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fieldRazonSocial}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="432" y="18" width="137" height="12" uuid="1640e2e2-9cb8-44de-b2f5-5a6541783f95"/>
-				<textElement textAlignment="Right"/>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="432" y="18" width="137" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1640e2e2-9cb8-44de-b2f5-5a6541783f95"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Ruc: " + $P{RucEmpresa}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="432" y="4" width="137" height="12" uuid="911760eb-a418-47ac-8619-18e74df56112"/>
-				<textElement textAlignment="Right"/>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="432" y="4" width="137" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="911760eb-a418-47ac-8619-18e74df56112"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Empresa: " + $P{Empresa}]]></textFieldExpression>
 			</textField>
 			<staticText>
