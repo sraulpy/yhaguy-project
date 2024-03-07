@@ -4060,7 +4060,7 @@ public class ReportesViewModel extends SimpleViewModel {
 									notacred.isAnulado() ? 0.0 : (costoPromedio ? item.getRentabilidadPromedio() : item.getRentabilidad()) * -1,
 									item.getArticulo().getDescripcion(),
 									notacred.isAnulado() ? 0.0 : notacred.getRentabilidadVenta() * -1,
-									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - item.getCostoTotalGsSinIva()) * -1,
+									notacred.isAnulado() ? 0.0 : (item.getImporteGsSinIva() - (costoPromedio ? item.getCostoPromedioTotalGsSinIva() : item.getCostoTotalGsSinIva())) * -1,
 									notacred.getVentaAplicada().getNombreTecnico(), 
 									notacred.getCliente().getTipoCliente() == null ? "" : notacred.getCliente().getTipoCliente().getDescripcion(),
 									notacred.getCliente().getEmpresa().getVendedor().getRazonSocial(),
