@@ -88,11 +88,12 @@ public class InformeHechaukaV2 {
 				String col17 = "N";
 				String col18 = "";
 				String col19 = "";
+				String col20 = "";
 
 				String object = col1 + " \t" + col2 + " \t" + col3 + " \t" + col4 + " \t" + col5 + " \t" + col6 + " \t"
 						+ col7 + " \t" + col8 + " \t" + col9 + " \t" + col10 + " \t" + col11 + " \t" + col12 + " \t"
 						+ col13 + " \t" + col14 + " \t" + col15 + " \t" + col16 + " \t" + col17 + " \t" + col18 + "" + "\t"
-						+ col19 + "" + "\r\n";
+						+ col19 + "\t" + col20 + "\r\n";
 				objects.add(object);
 				registros++;
 				montoTotal += importe;
@@ -106,6 +107,8 @@ public class InformeHechaukaV2 {
 				String rSocial = nd.getCliente().getRazonSocial();
 				String ruc = nd.getCliente().getRuc();
 				String nro = nd.getNumero();
+				String ncr = nd.getNotaCredito() != null ? nd.getNotaCredito().getNumero() : "";
+				String timbNcr = nd.getNotaCredito() != null ? nd.getNotaCredito().getTimbrado_() : "";
 				String fecha = misc.dateToString(nd.getFecha(), Misc.DD_MM_YYYY).replace("-", "/");
 				periodo = Utiles.getDateToString(nd.getFecha(), "yyyyMM");
 				double iva10 = redondear(nd.getTotalIva10());
@@ -133,7 +136,8 @@ public class InformeHechaukaV2 {
 				String col16 = "N";
 				String col17 = "N";
 				String col18 = "";
-				String col19 = "";
+				String col19 = ncr;
+				String col20 = timbNcr;
 				
 				String object = col1 
 						+ " \t" + col2 + " \t" + col3 + " \t" + col4
@@ -142,7 +146,7 @@ public class InformeHechaukaV2 {
 						+ " \t" + col11 + " \t" + col12 + " \t" + col13
 						+ " \t" + col14 + " \t" + col15 + " \t" + col16
 						+ " \t" + col17
-						+ " \t" + col18 + "" + "\t" + col19 + "" + "\r\n";
+						+ " \t" + col18 + "\t" + col19 + "\t" + col20 + "\r\n";
 				
 				objects.add(object);
 				registros++;
@@ -214,6 +218,7 @@ public class InformeHechaukaV2 {
 				String col17 = "N";
 				String col18 = aplicado;
 				String col19 = aplicadoTimbrado;
+				String col20 = "";
 				
 				String object = col1 
 						+ " \t" + col2 + " \t" + col3 + " \t" + col4
@@ -222,7 +227,7 @@ public class InformeHechaukaV2 {
 						+ " \t" + col11 + " \t" + col12 + " \t" + col13
 						+ " \t" + col14 + " \t" + col15 + " \t" + col16
 						+ " \t" + col17
-						+ " \t" + col18 + "" + "\t" + col19 + "" + "\r\n";
+						+ " \t" + col18 + "" + "\t" + col19 + "\t" + col20 + "\r\n";
 				
 				objects.add(object);
 				registros++;

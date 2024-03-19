@@ -338,11 +338,12 @@ public class NotaDebitoControlBody extends BodyApp {
 	/**
 	 * GETS / SETS
 	 */	
-	@DependsOn({ "dto.cliente", "dto.numero", "dto.timbrado" })
+	@DependsOn({ "dto.cliente", "dto.numero", "dto.timbrado", "dto.notaCredito" })
 	public boolean isDetalleVisible() {
 		return (this.dto.getCliente().esNuevo() == false)
 					&& (!this.dto.getNumero().isEmpty())
-					&& (!this.dto.getTimbrado().isEmpty());
+					&& (!this.dto.getTimbrado().isEmpty())
+					&& (!this.dto.getNotaCredito().esNuevo());
 	}
 	
 	@DependsOn({ "deshabilitado", "dto.detalles" })
