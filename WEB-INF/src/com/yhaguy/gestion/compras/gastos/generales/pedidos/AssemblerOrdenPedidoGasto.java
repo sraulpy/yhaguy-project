@@ -57,6 +57,7 @@ public class AssemblerOrdenPedidoGasto extends Assembler {
 		for (GastoDTO gasto : dto.getGastos()) {
 			domain.setNumeroFactura(gasto.getNumeroFactura());
 			domain.setNumeroImportacion(gasto.getNumeroImportacion());
+			domain.setOrden("idGasto:" + gasto.getId());
 		}
 		
 		for (OrdenPedidoGastoDetalleDTO det : dto.getOrdenPedidoGastoDetalle()) {

@@ -21,6 +21,7 @@ public class NotaDebitoAssembler extends Assembler {
 		this.myPairToDomain(dto, domain, "sucursal");
 		this.myPairToDomain(dto, domain, "moneda");
 		this.myPairToDomain(dto, domain, "estadoComprobante");
+		this.myPairToDomain(dto, domain, "notaCredito");
 		this.myArrayToDomain(dto, domain, "tipoMovimiento");
 		
 		this.hijoDtoToHijoDomain(dto, domain, "cliente", new AssemblerCliente(), false);
@@ -38,6 +39,7 @@ public class NotaDebitoAssembler extends Assembler {
 		this.domainToMyPair(domain, dto, "sucursal");
 		this.domainToMyPair(domain, dto, "moneda");
 		this.domainToMyPair(domain, dto, "estadoComprobante");
+		this.domainToMyPair(domain, dto, "notaCredito");
 		this.domainToMyArray(domain, dto, "tipoMovimiento", attTipoMovimiento);
 		
 		this.hijoDomainToHijoDTO(domain, dto, "cliente", new AssemblerCliente());

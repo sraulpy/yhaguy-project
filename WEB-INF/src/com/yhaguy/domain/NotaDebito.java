@@ -25,6 +25,8 @@ public class NotaDebito extends Domain {
 	private TipoMovimiento tipoMovimiento;
 	private Tipo estadoComprobante;
 	private Cliente cliente;
+	private NotaCredito notaCredito;
+	
 	private Set<NotaDebitoDetalle> detalles = new HashSet<NotaDebitoDetalle>();
 
 	@Override
@@ -194,5 +196,13 @@ public class NotaDebito extends Domain {
 
 	public void setMoneda(Tipo moneda) {
 		this.moneda = moneda;
+	}
+
+	public NotaCredito getNotaCredito() {
+		return notaCredito;
+	}
+
+	public void setNotaCredito(NotaCredito notaCredito) {
+		this.notaCredito = notaCredito;
 	}
 }

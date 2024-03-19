@@ -97,6 +97,13 @@ public class NotaCredito extends Domain {
 	}
 	
 	/**
+	 * @return descripcion..
+	 */
+	public String getDescripcion() {
+		return this.numero + " - " + Utiles.getDateToString(this.fechaEmision, "dd-MM-yyyy");
+	}
+	
+	/**
 	 * @return el motivo del descuento..
 	 */
 	public TiMotEmi getMotivoNC() {
@@ -834,6 +841,9 @@ public class NotaCredito extends Domain {
 			e.printStackTrace();
 		}
 		return out;
+	}
+	
+	public void setDescripcion(String numero) {
 	}
 
 	public String getNumero() {

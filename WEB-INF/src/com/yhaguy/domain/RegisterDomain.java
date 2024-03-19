@@ -15068,6 +15068,17 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return notas de creditos por proveedor..
+	 */
+	public List<Object[]> getNotasCreditosVenta(long idCliente) throws Exception {
+		String query = "select n.id, n.numero, n.fechaEmision from NotaCredito n where n.tipoMovimiento.sigla = '"
+				+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA + "' and n.cliente.id = " + idCliente
+				+ " and n.estadoComprobante.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_CERRADO + "'"
+				+ " order by n.fechaEmision desc";
+		return this.hql(query);
+	}
+	
+	/**
 	 * @return compras por proveedor..
 	 */
 	public List<CompraLocalFactura> getCompraLocalFacturas(long idProveedor) throws Exception {

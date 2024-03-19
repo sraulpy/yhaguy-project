@@ -72,10 +72,27 @@
 						</hlayout>
 					</vlayout>
 				</cell>
+				<cell colspan="2">
 				<vlayout spacing="0">
-					<field value="Nota de Crédito Aplicado" />
-					<bandbox readonly="true" hflex="true"/>
-				</vlayout>				
+					<field value="Aplicación Nota de Crédito" />
+					<div height="5px"></div>
+					<bandbox readonly="true" hflex="true"
+						id="bnd_ncs" value="@load(vm.dto.notaCredito.text)">
+						<bandpopup>
+							<listbox sclass="small-list" width="350px"
+								model="@load(vm.notasCredito)"
+								selectedItem="@bind(vm.dto.notaCredito)"
+								onSelect='bnd_ncs.close()'>
+								<template name="model">
+									<listitem>
+										<listcell label="@load(each.text)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+				</vlayout>	
+				</cell>			
 			</row>
 		</rows>
 	</grid>

@@ -1,6 +1,7 @@
 package com.yhaguy.gestion.notadebito;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.annotation.AfterCompose;
@@ -23,6 +24,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.comun.ControlCuentaCorriente;
+import com.yhaguy.util.Utiles;
 
 public class NotaDebitoControlBody extends BodyApp {
 	
@@ -111,6 +113,22 @@ public class NotaDebitoControlBody extends BodyApp {
 	@NotifyChange("*")
 	public void confirmar() {
 		this.confirmar_();
+	}
+	
+	@DependsOn("dto.cliente")
+	public List<MyPair> getNotasCredito() throws Exception {
+		List<MyPair> out = new ArrayList<MyPair>();
+		if (!this.dto.getCliente().esNuevo()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			List<Object[]> list = rr.getNotasCreditosVenta(this.dto.getCliente().getId());
+			for (Object[] nc : list) {
+				long id = (long) nc[0];
+				String nro = (String) nc[1];
+				Date fecha = (Date) nc[2];
+				out.add(new MyPair(id, (nro + " - " + Utiles.getDateToString(fecha, "dd-MM-yyyy"))));
+			}
+		}		
+		return out;
 	}
 	
 	/**

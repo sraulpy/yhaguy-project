@@ -13,7 +13,7 @@ public class ConnectDBAutocentro {
 
 	final static String DB_CONNECTION = "jdbc:postgresql://localhost:5433/autocentro";
 	final static String DB_USER = "postgres";
-	final static String DB_PASS = "postgres";
+	final static String DB_PASS = "Yrsa0985*";
 	
 	private static ConnectDBAutocentro instance = new ConnectDBAutocentro();
 	private static Connection connection = null;

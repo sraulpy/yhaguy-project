@@ -32,6 +32,9 @@
 			
 		<many-to-one name="cliente" class="com.yhaguy.domain.Cliente"
 			column="idcliente" lazy="false"/>
+			
+		<many-to-one name="notaCredito" class="com.yhaguy.domain.NotaCredito"
+			column="idNotaCredito" lazy="false"/>
 		
 		<set name="detalles" table="notadebitodetalle"
 			inverse="false" lazy="false" fetch="join"
