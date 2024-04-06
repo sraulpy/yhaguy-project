@@ -15545,11 +15545,53 @@ public class RegisterDomain extends Register {
 		return this.hqlLimit(query, 50);
 	}
 	
+	/**
+	 * @return resumen cobranzas..
+	 */
+	public List<Object[]> getResumenCobranzas(String desde, String hasta, String tipoCaja) throws Exception {
+		String query = "select CAST(r.fechaEmision AS date), sum(r.totalImporteGs)"
+				+ " from CajaPeriodo c join c.recibos r"
+				+ " where r.fechaEmision > '" + desde + "' and r.fechaEmision < '" + hasta + "'"
+				+ " and c.tipo = '" + tipoCaja + "'"
+				+ " group by CAST(r.fechaEmision AS date) order by 1";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return resumen contado..
+	 */
+	public List<Object[]> getResumenContado(String desde, String hasta) throws Exception {
+		String query = "select CAST(v.fecha AS date), sum(v.totalImporteGs)"
+				+ " from Venta v"
+				+ " where v.fecha > '" + desde + "' and v.fecha < '" + hasta + "'"
+				+ " and v.tipoMovimiento.id = 18 and v.estadoComprobante is null"
+				+ " group by CAST(v.fecha AS date) order by 1";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return resumen nota credito contado..
+	 */
+	public List<Object[]> getResumenNotaCreditoContado(String desde, String hasta) throws Exception {
+		String query = "select CAST(n.fechaEmision AS date), sum(n.importeGs)"
+				+ " from NotaCredito n"
+				+ " where n.fechaEmision > '" + desde + "' and n.fechaEmision < '" + hasta + "'"
+				+ " and n.tipoMovimiento.id = 20 and n.estadoComprobante != 218"
+				+ " and n.auxi = 'NCR-CON'"
+				+ " group by CAST(n.fechaEmision AS date) order by 1";
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			RegisterDomain rr = RegisterDomain.getInstance();
-			CompraLocalOrden c = rr.getOrdenCompraByFactura(1280);
-			System.out.println(c.getNumero()); //--
+			String desde = "2024-02-01 00:00:00";
+			String hasta = "2024-02-01 00:00:00";
+			List<Object[]> list = rr.getResumenCobranzas(desde, hasta, "");
+			System.out.println(list.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

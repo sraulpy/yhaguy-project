@@ -20,6 +20,7 @@
 						<zk forEach="${vm.menuItem(self,'CuentasCobrar')}" />
 						<zk forEach="${vm.menuItem(self,'GestionCobro')}" />
 						<zk forEach="${vm.menuItem(self,'AuditoriaSaldos')}" />
+						<zk forEach="${vm.menuItem(self,'ResumenDiarioCobranzas')}" />
 					</menupopup>
 				</menu>
 				

@@ -1,0 +1,64 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.cobranzas.ResumenDiarioVM')"
+	height="100%">
+	
+	<div height="5px" />
+	<hlayout sclass="button-container">
+		<combobox placeholder="Mes.."
+			model="@load(vm.meses)" selectedItem="@bind(vm.mes)"
+			instant="true"
+			value="@load(vm.mes)"></combobox>
+		<combobox placeholder="Año.."
+			model="@load(vm.anhos)" selectedItem="@bind(vm.anho)"
+			instant="true"
+			value="@load(vm.anho)" width="80px"></combobox>		
+		<space hflex="true"></space>
+		<button mold="bs" sclass="btn-primary btn-sm" width="150px"
+				iconSclass="z-icon-download"
+				onClick="@command('exportExcel')"
+				label=" Exportar a Excel" />        
+	</hlayout>
+	
+	<listbox sclass="small-list" vflex="true"
+		emptyMessage="INGRESE UN CRITERIO DE BÚSQUEDA.."
+		model="@load(vm.resumen)">
+		<listhead>
+			<listheader label="Fecha" />
+			<listheader label="Contado" align="right" />
+			<listheader label="Móviles Capital" align="right" />
+			<listheader label="Móviles Interior" align="right" />
+			<listheader label="Administración" align="right" />
+			<listheader label="Total Día" align="right" />
+		</listhead>	
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each[0])"></listcell>
+				<listcell label="@load(each[1]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[2]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[3]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[4]) @converter(vm.cnv.monedaLocal)"></listcell>
+				<listcell label="@load(each[5]) @converter(vm.cnv.monedaLocal)"
+					style="background:beige"></listcell>
+			</listitem>
+		</template>
+		<listfoot>
+			<listfooter></listfooter>
+			<listfooter>
+				<label value="@load(vm.totalContado) @converter(vm.cnv.monedaLocal)" style="font-weight:bold"></label>
+			</listfooter>
+			<listfooter>
+				<label value="@load(vm.totalCobroCap) @converter(vm.cnv.monedaLocal)" style="font-weight:bold"></label>
+			</listfooter>
+			<listfooter>
+				<label value="@load(vm.totalCobroInt) @converter(vm.cnv.monedaLocal)" style="font-weight:bold"></label>
+			</listfooter>
+			<listfooter>
+				<label value="@load(vm.totalCobroAdm) @converter(vm.cnv.monedaLocal)" style="font-weight:bold"></label>
+			</listfooter>
+			<listfooter style="background:#ACE1AF">
+				<label value="@load(vm.total) @converter(vm.cnv.monedaLocal)" style="font-weight:bold"></label>
+			</listfooter>
+		</listfoot>
+	</listbox>	
+
+</window>

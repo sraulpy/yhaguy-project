@@ -578,10 +578,6 @@ public class Utiles {
 	    return Integer.parseInt(dateFormat.format(fecha));
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(Utiles.getNumeroMes_(new Date()));
-	}
-	
 	/**
 	 * @return el nombre del mes..
 	 */
@@ -676,17 +672,17 @@ public class Utiles {
 	 */
 	public static List<String> getAnhos() {
 		List<String> out = new ArrayList<String>();
-		out.add(ANHO_2015);
-		out.add(ANHO_2016);
-		out.add(ANHO_2017);
-		out.add(ANHO_2018);
-		out.add(ANHO_2019);
 		out.add(ANHO_2020);
 		out.add(ANHO_2021);
 		out.add(ANHO_2022);
 		out.add(ANHO_2023);
 		out.add(ANHO_2024);
 		out.add(ANHO_2025);
+		out.add(ANHO_2026);
+		out.add(ANHO_2027);
+		out.add(ANHO_2028);
+		out.add(ANHO_2029);
+		out.add(ANHO_2030);
 		return out;
 	}
 	
@@ -815,6 +811,37 @@ public class Utiles {
 			return Configuracion.RUC_YHAGUY_REPRESENTACIONES;
 		}
 		return "";
+	}
+	
+	/**
+	 * @return getUltimoDiaMes..
+	 */
+	public static int getUltimoDiaMes(int anho, int mes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, anho);
+        calendar.set(Calendar.MONTH, mes - 1); // (0-based index)
+        int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);        
+        return lastDayOfMonth;
+	}
+	
+	/**
+	 * @return nro de mes..
+	 */
+	public static int getNumeroMes(String mes) {
+		Map<String, Integer> monthMap = new HashMap<>();
+		monthMap.put("enero", 1);
+		monthMap.put("febrero", 2);
+		monthMap.put("marzo", 3);
+		monthMap.put("abril", 4);
+		monthMap.put("mayo", 5);
+		monthMap.put("junio", 6);
+		monthMap.put("julio", 7);
+		monthMap.put("agosto", 8);
+		monthMap.put("septiembre", 9);
+		monthMap.put("octubre", 10);
+		monthMap.put("noviembre", 11);
+		monthMap.put("diciembre", 12);
+		return monthMap.get(mes.toLowerCase());
 	}
 	
 	public static void mainX(String[] args) {		

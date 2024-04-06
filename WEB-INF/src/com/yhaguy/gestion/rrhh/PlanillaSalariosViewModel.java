@@ -60,7 +60,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	public void init() {
 		try {
 			this.selectedAnho = Utiles.getAnhoActual();
-			this.selectedMes = (String) Utiles.getMesCorriente(this.selectedAnho).getPos2();
+			this.selectedMes = (String) Utiles.getNombreMes(new Date());
 			this.planillas = this.getPlanillas_();
 		} catch (Exception e) {
 		}
