@@ -33,8 +33,9 @@
 						<zk forEach="${vm.menuItem(self,'CuentasPagar')}" />
 					</menupopup>
 				</menu>	
-				
-				<menu label=" Bancos" iconSclass="z-icon-building" style="margin-bottom:15px;margin-top:15px">
+
+				<menu label=" Bancos" iconSclass="fas fa-university" style="margin-bottom:15px;margin-top:15px">
+					
 					<menupopup sclass="rounded">
 						<zk forEach="${vm.menuItem(self,'BancoChequeras')}" />
 						<zk forEach="${vm.menuItem(self,'Cheques')}" />
