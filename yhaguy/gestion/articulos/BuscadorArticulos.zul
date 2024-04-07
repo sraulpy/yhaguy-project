@@ -214,6 +214,8 @@
 				<auxhead>
 					<auxheader label="Ubicación" colspan="2"></auxheader>
 				</auxhead>
+				
+				<!-- REPUESTOS -->
 				<listhead style="text-align:center">
 					<listheader label="Depósito" />
 					<listheader label="Ubicación" />
@@ -224,6 +226,23 @@
 						<listcell label="@load(each.fila)"></listcell>
 					</listitem>
 				</template>
+				
+				<!-- REPRESENTACIONES -->
+				<!--  
+				<listhead style="text-align:center">
+					<listheader label="Estante" />
+					<listheader label="Fila" />
+					<listheader label="Columna" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.estante)"></listcell>
+						<listcell label="@load(each.fila)"></listcell>
+						<listcell label="@load(each.columna)"></listcell>
+					</listitem>
+				</template>
+				-->
+				
 			</listbox>
 		</vlayout>
 		<listbox rows="5" hflex="true" sclass="small-list"
