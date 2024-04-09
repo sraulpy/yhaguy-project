@@ -199,7 +199,7 @@ public class DescuentoChequesVM extends BodyApp {
 		b.setAssembler(new AssemblerBancoCheque());
 		b.setAtributos(ATT_CHEQUE_PROPIO);
 		b.setNombresColumnas(COLS_CHEQUE_PROPIO);
-		b.setTipos(new String[]{ Config.TIPO_NUMERICO, Config.TIPO_STRING });
+		b.setTipos(new String[]{ Config.TIPO_NUMERICO, Config.TIPO_STRING, Config.TIPO_STRING });
 		b.setAnchoColumnas(new String[]{ "120px", "", "" });
 		b.setTitulo("Cheques Propios");
 		b.setWidth("600px");
