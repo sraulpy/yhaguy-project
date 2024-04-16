@@ -33,6 +33,7 @@ public class TareaBloqueoClientes {
 			
 			RegisterDomain rr = RegisterDomain.getInstance();
 			List<CtaCteEmpresaMovimiento> saldos = rr.getCtaCteMovimientosConSaldo();
+			boolean bloqueos = false;
 			for (CtaCteEmpresaMovimiento movim : saldos) {
 				Date emi = movim.getFechaEmision();
 				Cliente cl = rr.getClienteByIdEmpresa(movim.getIdEmpresa());
@@ -40,6 +41,7 @@ public class TareaBloqueoClientes {
 				if (dias >= cl.getPlazoVencimiento()) {
 					Empresa emp = rr.getEmpresaById(movim.getIdEmpresa());
 					if (emp != null) {
+						bloqueos = true;
 						ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
 						HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
 						bloqueo.setFecha(new Date());
@@ -54,12 +56,13 @@ public class TareaBloqueoClientes {
 					}					
 				}			
 			}
-			
-			String[] send = SEND_GRP;
-			String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
-			String asunto = "Bloqueo Automático Clientes - " + Configuracion.empresa;
-			EnviarCorreo enviarCorreo = new EnviarCorreo();
-			enviarCorreo.sendMessage(send, sendCCO, asunto, texto, "Notificacion.pdf", null);
+			if (bloqueos) {
+				String[] send = SEND_GRP;
+				String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+				String asunto = "Bloqueo Automático Clientes - " + Configuracion.empresa;
+				EnviarCorreo enviarCorreo = new EnviarCorreo();
+				enviarCorreo.sendMessage(send, sendCCO, asunto, texto, "Notificacion.pdf", null);
+			}			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
