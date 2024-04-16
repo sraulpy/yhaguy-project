@@ -10384,6 +10384,19 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los movimientos de cta cte. de una empresa
+	 */
+	public List<CtaCteEmpresaMovimiento> getCtaCteMovimientosConSaldo() throws Exception {
+		String query = "select c from CtaCteEmpresaMovimiento c where"
+				+ " c.anulado != 'TRUE'"
+				+ " and c.saldo > 0.5"
+				+ " and c.tipoMovimiento.sigla = '" + Configuracion.SIGLA_TM_FAC_VENTA_CREDITO + "'"
+				+ " order by c.fechaVencimiento asc";
+		List<CtaCteEmpresaMovimiento> list = this.hql(query);
+		return list;
+	}
+	
+	/**
 	 * @return el registro de bloqueo de clientes..
 	 */
 	public List<HistoricoBloqueoClientes> getHistoricoBloqueoClientes(Date desde, Date hasta) throws Exception {
