@@ -53,7 +53,7 @@ public class TareaBloqueoClientes {
 							bloqueo.setMotivo(MOTIVO);
 							rr.saveObject(bloqueo, "sys");
 							System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + (dias - cl.getPlazoVencimiento()));
-							texto += "\n - Días mora: " + dias + " - " + emp.getRazonSocial();
+							texto += "\n - Días mora: " + (dias - cl.getPlazoVencimiento()) + " - " + emp.getRazonSocial();
 						}						
 					}					
 				}			
