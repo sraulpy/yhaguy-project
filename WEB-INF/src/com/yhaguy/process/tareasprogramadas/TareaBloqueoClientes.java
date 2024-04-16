@@ -41,18 +41,20 @@ public class TareaBloqueoClientes {
 				if (dias >= cl.getPlazoVencimiento()) {
 					Empresa emp = rr.getEmpresaById(movim.getIdEmpresa());
 					if (emp != null) {
-						bloqueos = true;
-						ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
-						HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
-						bloqueo.setFecha(new Date());
-						bloqueo.setVencimiento(movim.getFechaVencimiento());						
-						bloqueo.setCliente(emp.getRazonSocial());
-						bloqueo.setNumeroFactura(movim.getNroComprobante_());
-						bloqueo.setDiasVencimiento(dias);
-						bloqueo.setMotivo(MOTIVO);
-						rr.saveObject(bloqueo, "sys");
-						System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
-						texto += "\n - Días mora: " + dias + " - " + emp.getRazonSocial();
+						if (!emp.isCuentaBloqueada()) {
+							bloqueos = true;
+							ControlCuentaCorriente.bloquearCliente(movim.getIdEmpresa(), MOTIVO, "sys");
+							HistoricoBloqueoClientes bloqueo = new HistoricoBloqueoClientes();
+							bloqueo.setFecha(new Date());
+							bloqueo.setVencimiento(movim.getFechaVencimiento());						
+							bloqueo.setCliente(emp.getRazonSocial());
+							bloqueo.setNumeroFactura(movim.getNroComprobante_());
+							bloqueo.setDiasVencimiento(dias);
+							bloqueo.setMotivo(MOTIVO);
+							rr.saveObject(bloqueo, "sys");
+							System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
+							texto += "\n - Días mora: " + dias + " - " + emp.getRazonSocial();
+						}						
 					}					
 				}			
 			}
