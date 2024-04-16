@@ -49,10 +49,10 @@ public class TareaBloqueoClientes {
 							bloqueo.setVencimiento(movim.getFechaVencimiento());						
 							bloqueo.setCliente(emp.getRazonSocial());
 							bloqueo.setNumeroFactura(movim.getNroComprobante_());
-							bloqueo.setDiasVencimiento(dias);
+							bloqueo.setDiasVencimiento(dias - cl.getPlazoVencimiento());
 							bloqueo.setMotivo(MOTIVO);
 							rr.saveObject(bloqueo, "sys");
-							System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + dias);
+							System.out.println("BLOQUEADO: " + bloqueo.getCliente() + " - DIAS: " + (dias - cl.getPlazoVencimiento()));
 							texto += "\n - Días mora: " + dias + " - " + emp.getRazonSocial();
 						}						
 					}					
