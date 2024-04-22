@@ -9839,10 +9839,31 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return los pagos de la importacion..
+	 */
+	public List<Object[]> getPagosByImportacion(long idImportacion, long idTipoMovimiento) throws Exception {
+		String query = "select r, d from Recibo r join r.detalles d where d.movimiento.idMovimientoOriginal = " + idImportacion
+				+ " and d.movimiento.tipoMovimiento.id = " + idTipoMovimiento;
+		List<Object[]> list = this.hql(query);
+		return list;
+	}
+	
+	/**
 	 * @return las notas de credito de la compra..
 	 */
 	public List<NotaCredito> getNotaCreditosByCompra(long idCompra) throws Exception {
 		String query = "select n from NotaCredito n join n.detalles d where d.compra.id = " + idCompra
+				+ " and n.tipoMovimiento.sigla = '"+ Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA +"'"
+				+ " and d.articulo is null";
+		List<NotaCredito> list = this.hql(query);
+		return list;
+	}
+	
+	/**
+	 * @return las notas de credito de la importacion..
+	 */
+	public List<NotaCredito> getNotaCreditosByImportacion(long idImportacion) throws Exception {
+		String query = "select n from NotaCredito n join n.detalles d where d.importacion.id = " + idImportacion
 				+ " and n.tipoMovimiento.sigla = '"+ Configuracion.SIGLA_TM_NOTA_CREDITO_COMPRA +"'"
 				+ " and d.articulo is null";
 		List<NotaCredito> list = this.hql(query);
