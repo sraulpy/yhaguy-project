@@ -714,7 +714,7 @@
 						<listfoot>
 							<listfooter span="8">
 								<hbox hflex="true" pack="end">
-									<field value="Saldo Gs." />
+									<field value="Saldo" />
 									<doublebox
 									style="background:#EEF7FA;text-align:right;font-weight:bold"
 									format="###,###,###,##0" 
