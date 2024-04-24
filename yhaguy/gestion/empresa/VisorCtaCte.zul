@@ -594,7 +594,7 @@
 			<tabs>
 				<tab label="@load(vm.detalle.notaCredito ? 'Nota de Crédito' : 'Factura')" width="150px" id="tabFacP"></tab>
 				<tab label="Aplicaciones" width="150px"
-					visible="@load(vm.detalle.ventaCredito or vm.detalle.notaCredito or vm.detalle.anticipoCobro or vm.detalle.compra or vm.detalle.gasto)"
+					visible="@load(vm.detalle.ventaCredito or vm.detalle.notaCredito or vm.detalle.anticipoCobro or vm.detalle.compra or vm.detalle.gasto or vm.detalle.importacion)"
 					onClick="@command('verAplicacionesProveedor')"></tab>
 			</tabs>
 			<tabpanels>

@@ -136,9 +136,9 @@
 				<space />
 				<button mold="bs" sclass="btn-info btn-sm"
 					iconSclass="z-icon-plus-circle" label=" Cheque Propio" width="150px" 
-					visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo')"
+					visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo' or vm.tipo eq 'descuento')"
 					onClick="@command('buscarChequePropio')"/>
-				<space visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo')" />
+				<space visible="@load(vm.tipo eq 'anticipo' or vm.tipo eq 'prestamo' or vm.tipo eq 'descuento')" />
 				<button mold="bs" sclass="btn-warning btn-sm"
 					iconSclass="z-icon-money" label=" Otros Valores" width="150px" 
 					visible="@load(vm.tipo eq 'prestamo' or vm.tipo eq 'prestamo_acreedor')" 
@@ -171,7 +171,7 @@
 					<listheader label="" width="40px" align="center" />
 					<listheader label="Fecha" sort="auto(pos1)" onCreate="self.sort(true)" />
 					<listheader label="Banco" />
-					<listheader label="Número de Cheque" sort="auto(pos3)" />
+					<listheader label="Nro. Cheque" sort="auto(pos3)" />
 					<listheader label="Cliente" sort="auto(pos9)" width="25%"/>
 					<listheader label="Librado Por" sort="auto(pos4)" width="25%"/>
 					<listheader label="Depositado" width="100px"

@@ -63,6 +63,7 @@ import com.yhaguy.domain.Funcionario;
 import com.yhaguy.domain.Gasto;
 import com.yhaguy.domain.GastoDetalle;
 import com.yhaguy.domain.HistoricoLineaCredito;
+import com.yhaguy.domain.ImportacionFactura;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.Proveedor;
@@ -366,7 +367,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 			this.popDetalleRecibo.open(parent, "start_before");
 		} else if (this.isChequeRechazado(String.valueOf(item.getPos8()))) {
 			this.popDetalleCheque.open(parent, "start_before");
-		} else if (this.isCompra(String.valueOf(item.getPos8())) || this.isGasto(String.valueOf(item.getPos8()))) {
+		} else if (this.isCompra(String.valueOf(item.getPos8())) || this.isGasto(String.valueOf(item.getPos8()))
+				|| this.isImportacion(String.valueOf(item.getPos8()))) {
 			this.popDetalleProveedores.open(this.visorCtaCte, "middle_center");
 		} else {
 			this.popDetalle.open(parent, "start_before");
@@ -1310,6 +1312,81 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				out.add(det);
 			}
 			 
+		}
+		
+		// importaciones..
+		if (this.isImportacion(sigla)) {
+			ImportacionFactura imp = (ImportacionFactura) rr.getObject(ImportacionFactura.class.getName(), idmovimiento);
+			movim.setNumero(imp.getNumero());
+			movim.setImporteGs(imp.getTotalImporteDs());
+			movim.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+			movim.setIdMovimiento(imp.getId());
+			List<NotaCredito> ncs = rr.getNotaCreditosByImportacion(imp.getId());
+			for (NotaCredito nc : ncs) {
+				if (!nc.isAnulado()) {
+					DetalleMovimiento det = new DetalleMovimiento();
+					det.setEmision(nc.getFechaEmision());
+					det.setNumero(nc.getNumero());
+					det.setSigla(nc.getTipoMovimiento().getSigla());
+					det.setTipoMovimiento(nc.getTipoMovimiento().getDescripcion() + " - "
+							+ nc.getMotivo().getDescripcion().toUpperCase());
+					det.setTipoMovimiento_(nc.getTipoMovimiento().getDescripcion());
+					det.setImporteGs(nc.getImporteDs());
+					det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+					det.setIdMovimiento(nc.getId());
+					if ((this.isNotaCredito(sigla) && !nc.getNumero().equals(movim.getNumero()))
+							|| !this.isNotaCredito(sigla)) {
+						out.add(det);
+					}
+				}
+			}
+			List<Object[]> pagos = rr.getPagosByImportacion(imp.getId(), imp.getTipoMovimiento().getId());
+			for (Object[] op : pagos) {
+				Recibo pago = (Recibo) op[0];
+				ReciboDetalle rdet = (ReciboDetalle) op[1];
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(pago.getFechaEmision());
+				det.setNumero(pago.getNumero());
+				det.setNumeroRecibo(pago.getNumeroRecibo());
+				det.setEntregado(pago.isEntregado());
+				det.setSigla(pago.getTipoMovimiento().getSigla());
+				det.setTipoMovimiento(pago.getTipoMovimiento().getDescripcion());
+				det.setTipoMovimiento_(pago.getTipoMovimiento().getDescripcion());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setImporteGs(pago.isEntregado() ? rdet.getMontoDs() : 0.0);
+				det.setIdMovimiento(pago.getId());
+				out.add(det);
+			}
+
+			List<AjusteCtaCte> ajustes = rr.getAjustesCredito(imp.getId(), imp.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getDebito().getNroComprobante());
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_POSITIVO);
+				det.setTipoMovimiento("CREDITO CTA.CTE.");
+				det.setTipoMovimiento_(det.getTipoMovimiento());
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getDebito().getIdMovimientoOriginal());
+				det.setSigla_(ajuste.getDebito().getTipoMovimiento().getSigla());
+				out.add(det);
+			}
+
+			List<AjusteCtaCte> ajustes_ = rr.getAjustesDebito(imp.getId(), imp.getTipoMovimiento().getId());
+			for (AjusteCtaCte ajuste : ajustes_) {
+				DetalleMovimiento det = new DetalleMovimiento();
+				det.setEmision(ajuste.getFecha());
+				det.setNumero(ajuste.getCredito().getNroComprobante());
+				det.setSigla(Configuracion.SIGLA_TM_AJUSTE_NEGATIVO);
+				det.setTipoMovimiento("DEBITO CTA.CTE.");
+				det.setTipoMovimiento_(det.getTipoMovimiento());
+				det.setImporteGs(ajuste.getImporte());
+				det.setDescripcion(movim.getTipoMovimiento() + " - " + movim.getNumero());
+				det.setIdMovimiento(ajuste.getCredito().getIdMovimientoOriginal());
+				det.setSigla_(ajuste.getCredito().getTipoMovimiento().getSigla());
+				out.add(det);
+			}
 		}
 		
 		double saldo = 0;
@@ -2458,7 +2535,8 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 		 * @return el debe..
 		 */
 		public double getDebe() {
-			return this.isVentaCredito() || this.isAjusteDebito() || this.isCompra() || this.isGasto() ? this.importeGs : 0.0;
+			return this.isVentaCredito() || this.isAjusteDebito() || this.isCompra() || this.isGasto()
+					|| this.isImportacion() ? this.importeGs : 0.0;
 		}
 		
 		/**
@@ -2555,6 +2633,16 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 				return false;
 			return sigla.equals(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO)
 					|| sigla.equals(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO);
+		}
+		
+		/**
+		 * @return true si es importacion..
+		 */
+		public boolean isImportacion() {
+			if (sigla == null)
+				return false;
+			return sigla.equals(Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO)
+					|| sigla.equals(Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO);
 		}
 		
 		/**
@@ -2926,6 +3014,14 @@ public class VisorCtaCteViewModel extends SimpleViewModel {
 	private boolean isCompra(String sigla) {
 		return sigla.equals(Configuracion.SIGLA_TM_FAC_COMPRA_CONTADO)
 				|| sigla.equals(Configuracion.SIGLA_TM_FAC_COMPRA_CREDITO);
+	}
+	
+	/**
+	 * @return true si es un movimiento de importacion..
+	 */
+	private boolean isImportacion(String sigla) {
+		return sigla.equals(Configuracion.SIGLA_TM_FAC_IMPORT_CONTADO)
+				|| sigla.equals(Configuracion.SIGLA_TM_FAC_IMPORT_CREDITO);
 	}
 	
 	/**
