@@ -1,4 +1,4 @@
-<window height="1135px" width="813px" border="none"
+<window height="1150px" width="813px" border="none"
 	sclass="printable" position="center,center"
 	id="win_fac">
 	
@@ -8,13 +8,13 @@
 		</attribute>
 	</timer>
 	
-	<timer delay="1800" repeats="false">
+	<timer delay="2500" repeats="false">
 		<attribute name="onTimer">
 			win_fac.detach();
 		</attribute>
 	</timer>
 	
-	<div height="40px"></div>
+	<div height="50px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -22,42 +22,42 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="37px"></div>
+	<div height="42px"></div>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.cliente.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos3.toString().toLowerCase())" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.cliente.pos5.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.ventaAplicada.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos6.toString().toLowerCase())" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
-	<div height="20px"></div>
+	<div height="25px"></div>
 	
 	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="115px">
 		<template name="children">
@@ -121,42 +121,42 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="37px"></div>
+	<div height="42px"></div>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.cliente.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos3.toString().toLowerCase())" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.cliente.pos5.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.ventaAplicada.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos6.toString().toLowerCase())" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
-	<div height="17px"></div>
+	<div height="20px"></div>
 	
 	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="115px">
 		<template name="children">
@@ -212,7 +212,7 @@
 	
 	<!-- PAGINA 3 -->
 	
-	<div height="125px"></div>
+	<div height="130px"></div>
 	
 	<hlayout>
 		<div hflex="true"></div>
@@ -220,42 +220,42 @@
 		<div width="246px"></div>
 	</hlayout>
 	
-	<div height="37px"></div>
+	<div height="42px"></div>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.cliente.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos3.toString().toLowerCase())" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.cliente.pos5.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.fechaEmision) @converter('formattedDate', format='dd-MM-yyyy')" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
 	<hlayout>
-		<div width="90px"></div>
+		<div width="95px"></div>
 		<div hflex="true">
 			<label value="@load(vm.selectedNotaCredito.ventaAplicada.pos2.toString().toLowerCase())" maxlength="38" sclass="det"></label>
 		</div>	
 		<div>
 			<label value="@load(vm.selectedNotaCredito.cliente.pos6.toString().toLowerCase())" sclass="det"></label>
 		</div>	
-		<div width="120px"></div>
+		<div width="160px"></div>
 	</hlayout>
 	
-	<div height="17px"></div>
+	<div height="23px"></div>
 	
 	<vbox children="@load(vm.selectedNotaCredito.detallesArticulos)" spacing="0px" height="115px">
 		<template name="children">
