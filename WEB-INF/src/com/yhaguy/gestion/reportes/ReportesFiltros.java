@@ -107,7 +107,8 @@ public class ReportesFiltros {
 	
 	private Object[] formato;
 	private boolean formularioContinuo = false;
-	private boolean documentosElectronicos = true;
+	private boolean documentosElectronicos = false;
+	private boolean excluirElectronicos = false;
 	private MyArray selectedMes;
 	private String selectedAnho = Utiles.getAnhoActual();
 	
@@ -1748,5 +1749,13 @@ public class ReportesFiltros {
 
 	public void setDocumentosElectronicos(boolean documentosElectronicos) {
 		this.documentosElectronicos = documentosElectronicos;
+	}
+
+	public boolean isExcluirElectronicos() {
+		return excluirElectronicos;
+	}
+
+	public void setExcluirElectronicos(boolean excluirElectronicos) {
+		this.excluirElectronicos = excluirElectronicos;
 	}
 }

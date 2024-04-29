@@ -14242,7 +14242,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				RegisterDomain rr = RegisterDomain.getInstance();
 				List<Object[]> data = new ArrayList<Object[]>();
 				List<CompraLocalFactura> compras = rr.getComprasLocales(desde, hasta, 0, idProveedor, 0);
-				List<NotaCredito> ncs = rr.getNotasCreditoCompra(desde, hasta, 0, true, "");
+				List<NotaCredito> ncs = rr.getNotasCreditoCompra(desde, hasta, 0, false, "", false);
 				
 				for (CompraLocalFactura factura : compras) {
 					for (CompraLocalFacturaDetalle item : factura.getDetalles()) {
@@ -14691,7 +14691,7 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Venta> ventas = new ArrayList<>();
 			if (incluirVTA) ventas = rr.getVentas(desde, hasta, 0, 0);
 			List<NotaCredito> notasCredito = new ArrayList<NotaCredito>();
-			if (incluirNCR) notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0, true, "");
+			if (incluirNCR) notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0, false, "", false);
 			List<NotaDebito> notasDebito = new ArrayList<NotaDebito>();
 			notasDebito = rr.getNotasDebito(desde, hasta, 0, 0);
 			InformeHechauka.generarInformeHechauka(ventas, notasCredito, notasDebito);
@@ -14707,12 +14707,13 @@ public class ReportesViewModel extends SimpleViewModel {
 			Date hasta = filtro.getFechaHasta();
 			boolean incluirVTA = filtro.isIncluirVCT();
 			boolean incluirNCR = filtro.isIncluirNCR();
-			boolean incluirElectronicos = filtro.isDocumentosElectronicos();
+			boolean electronicos = filtro.isDocumentosElectronicos();
+			boolean excluirElectronicos = filtro.isExcluirElectronicos();
 
 			List<Venta> ventas = new ArrayList<>();
-			if (incluirVTA) ventas = rr.getVentas(desde, hasta, 0, 0);
+			if (incluirVTA && !electronicos) ventas = rr.getVentas(desde, hasta, 0, 0);
 			List<NotaCredito> notasCredito = new ArrayList<NotaCredito>();
-			if (incluirNCR) notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0, incluirElectronicos, "");
+			if (incluirNCR || electronicos) notasCredito = rr.getNotasCreditoCompra(desde, hasta, 0, electronicos, "", excluirElectronicos);
 			List<NotaDebito> notasDebito = new ArrayList<NotaDebito>();
 			notasDebito = rr.getNotasDebito(desde, hasta, 0, 0);
 			InformeHechaukaV2.generarInformeHechauka(ventas, notasCredito, notasDebito);
@@ -14735,11 +14736,11 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<NotaCredito> ncs = new ArrayList<NotaCredito>();
 			if (incluirNC) ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
 			List<CompraLocalFactura> compras = new ArrayList<>();
-			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0, true);
+			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0, false, false);
 			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, inicio, new Date());
 			List<Gasto> gastos = new ArrayList<Gasto>();
 			if (incluirGA) {
-				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, inicio, new Date(), 0, true);
+				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, inicio, new Date(), 0, false, false);
 				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
 				gastos.addAll(gastosIndistinto);
 				gastos.addAll(gastosDespacho);	
@@ -14764,21 +14765,26 @@ public class ReportesViewModel extends SimpleViewModel {
 			boolean incluirCO = filtro.isIncluirCOM();
 			boolean incluirGA = filtro.isIncluirGastos();
 			boolean incluirBI = filtro.isIncluirBaseImponible();
-			boolean incluirElectronicos = filtro.isDocumentosElectronicos();
+			boolean electronicos = filtro.isDocumentosElectronicos();
+			boolean excluirElectronicos = filtro.isExcluirElectronicos();
 
 			List<NotaCredito> ncs = new ArrayList<NotaCredito>();
-			if (incluirNC) ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
+			if (incluirNC && !electronicos) ncs = rr.getNotasCreditoVenta(desde, hasta, 0);
 			List<CompraLocalFactura> compras = new ArrayList<>();
-			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0, incluirElectronicos);
-			List<ImportacionFactura> importaciones = rr.getLibroComprasImportacion(desde, hasta, inicio, new Date());
+			if (incluirCO) compras = rr.getLibroComprasLocales(desde, hasta, 0, electronicos, excluirElectronicos);
+			List<ImportacionFactura> importaciones = new ArrayList<>();
+			if (!electronicos) importaciones = rr.getLibroComprasImportacion(desde, hasta, inicio, new Date());
 			List<Gasto> gastos = new ArrayList<Gasto>();
-			if (incluirGA) {
-				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, inicio, new Date(), 0, incluirElectronicos);
-				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
+			if (incluirGA || electronicos) {
+				List<Gasto> gastosIndistinto = rr.getLibroComprasIndistinto(desde, hasta, inicio, new Date(), 0, electronicos, excluirElectronicos);
+				List<Gasto> gastosDespacho = new ArrayList<>();
+				if (!electronicos) {
+					gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
+				}
 				gastos.addAll(gastosIndistinto);
 				gastos.addAll(gastosDespacho);	
 			}
-			if (incluirBI && !incluirGA) {
+			if (incluirBI && !incluirGA && !electronicos) {
 				List<Gasto> gastosDespacho = rr.getLibroComprasDespacho_(desde, hasta, inicio, new Date(), 0);
 				gastos.addAll(gastosDespacho);
 			}
@@ -15319,10 +15325,10 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
 			List<Recibo> pagos = new ArrayList<Recibo>();
 			if (otrosComprobantes) {
-				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal, true);
+				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal, false, false);
 			} else {
-				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, true);
-				notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, true, "");
+				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, false, false);
+				notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, false, "", false);
 				pagos = rr.getPagos(desde, hasta);
 			}
 
@@ -15391,11 +15397,11 @@ public class ReportesViewModel extends SimpleViewModel {
 			List<Object[]> data = new ArrayList<Object[]>();
 			Map<String, Object[]> values = new HashMap<String, Object[]>();
 			if (otrosComprobantes) {
-				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal, true);
+				gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal, false, false);
 			} else {
-				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, true);
+				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, false, false);
 				if (cuenta == null) {
-					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, true, "");
+					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, false, "", false);
 				}
 			}
 
@@ -16214,7 +16220,8 @@ public class ReportesViewModel extends SimpleViewModel {
 				boolean otrosComprobantes = filtro.isFraccionado();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Object[] formato = filtro.getFormato();
-				boolean incluirElectronicos = filtro.isDocumentosElectronicos();
+				boolean electronicos = filtro.isDocumentosElectronicos();
+				boolean excluirElectronicos = filtro.isExcluirElectronicos();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
@@ -16222,10 +16229,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Gasto> gastos = new ArrayList<Gasto>();
 				List<NotaCredito> notascredito = new ArrayList<NotaCredito>();
 				if (otrosComprobantes) {
-					gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal, incluirElectronicos);
+					gastos = rr.getLibroComprasIndistinto_(desde, hasta, desde_, hasta_, idSucursal, electronicos, excluirElectronicos);
 				} else {
-					gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, incluirElectronicos);
-					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, incluirElectronicos, "");
+					gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, electronicos, excluirElectronicos);
+					notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, electronicos, "", excluirElectronicos);
 				}
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_INDISTINTO;
@@ -16254,16 +16261,17 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta_ = filtro.getFechaHasta2();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Object[] formato = filtro.getFormato();
-				boolean incluirElectronicos = filtro.isDocumentosElectronicos();
+				boolean electronicos = filtro.isDocumentosElectronicos();
+				boolean excluirElectronicos = filtro.isExcluirElectronicos();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
-				List<Gasto> gastos = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal, incluirElectronicos);
+				List<Gasto> gastos = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal, electronicos, excluirElectronicos);
 				List<ImportacionFactura> importaciones = new ArrayList<ImportacionFactura>();
-				List<NotaCredito> notasCreditos = rr.getNotasCreditoCompra(desde, hasta, idSucursal, incluirElectronicos, "");
+				List<NotaCredito> notasCreditos = rr.getNotasCreditoCompra(desde, hasta, idSucursal, electronicos, "", excluirElectronicos);
 				
-				if (suc.getId().longValue() == SucursalApp.ID_CENTRAL) {
+				if (suc.getId().longValue() == SucursalApp.ID_CENTRAL && !electronicos) {
 					importaciones = rr.getLibroComprasImportacion(desde, hasta, desde_, hasta_);
 				}
 				
@@ -16291,13 +16299,14 @@ public class ReportesViewModel extends SimpleViewModel {
 				Date hasta = filtro.getFechaHasta();
 				SucursalApp suc = filtro.getSelectedSucursal();
 				Object[] formato = filtro.getFormato();
-				boolean incluirElectronicos = filtro.isDocumentosElectronicos();
+				boolean electronicos = filtro.isDocumentosElectronicos();
+				boolean excluirElectronicos = filtro.isExcluirElectronicos();
 				
 				RegisterDomain rr = RegisterDomain.getInstance();
 				String sucursal = suc != null ? suc.getDescripcion() : "TODOS..";
 				long idSucursal = suc != null ? suc.getId() : 0;
-				List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, idSucursal, incluirElectronicos);
-				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta, idSucursal, incluirElectronicos, "");
+				List<CompraLocalFactura> compras = rr.getLibroComprasLocales(desde, hasta, idSucursal, electronicos, excluirElectronicos);
+				List<NotaCredito> ncreditos = rr.getNotasCreditoCompra(desde, hasta, idSucursal, electronicos, "", excluirElectronicos);
 				
 				String source = com.yhaguy.gestion.reportes.formularios.ReportesViewModel.SOURCE_LIBRO_COMPRAS_IVA_DIRECTO;
 				Map<String, Object> params = new HashMap<String, Object>();
@@ -16471,10 +16480,10 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Gasto> despacho = new ArrayList<Gasto>();
 				List<ImportacionFactura> importaciones = new ArrayList<ImportacionFactura>();
 				
-				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, true);
-				despacho = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal, true);
-				notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, true, "");
-				compras = rr.getLibroComprasLocales(desde, hasta, idSucursal, true);
+				gastos = rr.getLibroComprasIndistinto(desde, hasta, desde_, hasta_, idSucursal, false, false);
+				despacho = rr.getLibroComprasDespacho(desde, hasta, desde_, hasta_, idSucursal, false, false);
+				notascredito = rr.getNotasCreditoCompra(desde, hasta, idSucursal, false, "", false);
+				compras = rr.getLibroComprasLocales(desde, hasta, idSucursal, false, false);
 				gastos.addAll(despacho);
 			
 				if (suc != null && suc.getId().longValue() == SucursalApp.ID_CENTRAL) {

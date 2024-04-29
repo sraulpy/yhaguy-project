@@ -25,9 +25,14 @@
 				placeholder="Hasta.." hflex="true" />
 		</row>
 		<row>
-			<field value="Incluir Facturas Electrónicas:" />
+			<field value="Listar solo Doc. Electrónicos:" />
 			<checkbox
 				checked="@bind(vm.dato.filtro.documentosElectronicos)" />
+		</row>
+		<row>
+			<field value="Excluir Doc. Electrónicos:" />
+			<checkbox
+				checked="@bind(vm.dato.filtro.excluirElectronicos)" />
 		</row>
 		<row>
 			<field value="Sucursal:" />
