@@ -160,7 +160,7 @@ public class Configuracion extends Config {
 	public static final int IMPORTE_TIPO_IVA_5 = 2;
 	public static final int IMPORTE_TIPO_EXENTA = 3;
 	
-	public static final int LIMITE_ITEMS_FACTURA_VENTA = 7;
+	public static final int LIMITE_ITEMS_FACTURA_VENTA = 8;
 	public static final int LIMITE_ITEMS_FACTURA_VENTA_BAT = 7;
 	public static final int LIMITE_ITEMS_RECIBO_COBRO = 100;
 
