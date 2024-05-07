@@ -197,6 +197,14 @@ public class CajaPeriodo extends Domain {
 				}
 			}			
 		}
+		for (Recibo cobro : this.recibos) {
+			if(cobro.isReembolsoPrestamo()) {
+				for (ReciboFormaPago fp : cobro.getFormasPago()) {
+					if(fp.isEfectivo() && fp.isMonedaLocal())
+						out += fp.getMontoGs();
+				}
+			}			
+		}
 		return out;
 	}
 	
