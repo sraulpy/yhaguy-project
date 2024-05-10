@@ -13045,6 +13045,21 @@ public class RegisterDomain extends Register {
 	 * @return los articulos..
 	 * [0]:articulo.id
 	 * [1]:articulo.codigoInterno
+	 */
+	public List<Object[]> getArticulosByFamilia(long idFamilia) throws Exception {
+		String query = "select a.id, a.codigoInterno, a.descripcion"
+				+ " from Articulo a where a.dbEstado != 'D'";
+		if (idFamilia > 0) {
+			query += " and a.familia.id = " + idFamilia;
+		}
+				query += " order by a.descripcion";
+		return this.hql(query);
+	}
+	
+	/**
+	 * @return los articulos..
+	 * [0]:articulo.id
+	 * [1]:articulo.codigoInterno
 	 * [2]:articulo.codigoInterno
 	 * [3]:mayorista gs
 	 * [4]:minorista gs

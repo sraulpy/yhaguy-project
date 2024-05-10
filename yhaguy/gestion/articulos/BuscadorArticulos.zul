@@ -216,6 +216,7 @@
 				</auxhead>
 				
 				<!-- REPUESTOS -->
+				<!--
 				<listhead style="text-align:center">
 					<listheader label="Depósito" />
 					<listheader label="Ubicación" />
@@ -226,9 +227,9 @@
 						<listcell label="@load(each.fila)"></listcell>
 					</listitem>
 				</template>
+				-->
 				
-				<!-- REPRESENTACIONES -->
-				<!--  
+				<!-- REPRESENTACIONES --> 
 				<listhead style="text-align:center">
 					<listheader label="Estante" />
 					<listheader label="Fila" />
@@ -241,8 +242,6 @@
 						<listcell label="@load(each.columna)"></listcell>
 					</listitem>
 				</template>
-				-->
-				
 			</listbox>
 		</vlayout>
 		<listbox rows="5" hflex="true" sclass="small-list"
