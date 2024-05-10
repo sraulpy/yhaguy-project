@@ -26,7 +26,7 @@ public class TareaNotificarStock {
 	/**
 	 * notificacion por email de auditoria de stock..
 	 */
-	public static void enviarCorreoAuditoriaStock(long idFamilia) {	
+	public static List<Object[]> enviarCorreoAuditoriaStock(long idFamilia) {	
 		
 		Map<Long, String> flias = new HashMap<Long, String>();
 		flias.put((long) 1, ArticuloFamilia.FILTROS);
@@ -34,39 +34,49 @@ public class TareaNotificarStock {
 		flias.put((long) 3, ArticuloFamilia.CUBIERTAS);
 		flias.put((long) 11, ArticuloFamilia.BATERIAS_DISTRIBUIDOR);
 		
-		try {
-			String texto = "Es necesario recalcular el stock de los siguientes códigos:";		
-			
+		try {			
 			List<Object[]> arts = new ArrayList<>();
 			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GROUPAUTO)) {
 				arts = ProcesosArticulos.verificarStockGroupauto(2, idFamilia);
 			} else {
 				arts = ProcesosArticulos.verificarStock(2, idFamilia);
-			}
-			
-			for (Object[] art : arts) {
-				texto += "\n " + art[0];
-			}
-			
-			if (arts.size() == 0) {
-				texto += "\n (Todos los ítems estan correctos)";
 			}			
-			
-			String[] send = SEND_GRP;
-			String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
-			String asunto = "Notificación Auditoría de Stock - " + Configuracion.empresa + " - " + flias.get(idFamilia);
-			EnviarCorreo enviarCorreo = new EnviarCorreo();
-			enviarCorreo.sendMessage(send, sendCCO, asunto, texto, "Notificacion.pdf", null);
+			return arts;			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
+		return new ArrayList<>();
 	}	
 	
 	public static void main(String[] args) {
-		TareaNotificarStock.enviarCorreoAuditoriaStock(1);
-		TareaNotificarStock.enviarCorreoAuditoriaStock(2);
-		TareaNotificarStock.enviarCorreoAuditoriaStock(3);
-		TareaNotificarStock.enviarCorreoAuditoriaStock(11);
+		List<Object[]> arts = new ArrayList<>();
+		
+		arts.addAll(TareaNotificarStock.enviarCorreoAuditoriaStock(1));
+		arts.addAll(TareaNotificarStock.enviarCorreoAuditoriaStock(2));
+		arts.addAll(TareaNotificarStock.enviarCorreoAuditoriaStock(3));
+		arts.addAll(TareaNotificarStock.enviarCorreoAuditoriaStock(11));
+		
+		String texto = "Es necesario recalcular el stock de los siguientes códigos:";
+		
+		for (Object[] art : arts) {
+			texto += "\n " + art[0];
+			System.out.println(art[0]);
+		}
+		
+		if (arts.size() == 0) {
+			texto += "\n (Todos los ítems estan correctos)";
+		}
+		
+		String[] send = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String asunto = "Notificación Auditoría de Stock - " + Configuracion.empresa;
+		EnviarCorreo enviarCorreo = new EnviarCorreo();
+		try {
+			enviarCorreo.sendMessage(send, sendCCO, asunto, texto, "Notificacion.pdf", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

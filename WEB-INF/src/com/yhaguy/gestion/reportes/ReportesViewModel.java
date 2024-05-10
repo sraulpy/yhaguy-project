@@ -4387,12 +4387,6 @@ public class ReportesViewModel extends SimpleViewModel {
 				
 				String vendedor_ = vendedor == null ? "TODOS.." : vendedor.getRazonSocial();
 				long idVendedor = vendedor == null ? 0 : vendedor.getId();
-				
-				if (vendedor == null) {
-					Clients.showNotification("Debe seleccionar un vendedor..", 
-							Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
-					return;
-				}
 
 				RegisterDomain rr = RegisterDomain.getInstance();				
 				List<Object[]> emps = rr.getClientesPorVendedor(idVendedor, desde, hasta);
@@ -30361,6 +30355,7 @@ class ClientesVendedorDataSource implements JRDataSource {
 			String razonSocial = (String) dato[1];
 			String direccion = (String) dato[2];
 			String telefono = (String) dato[3];
+			String vendedor = (String) dato[4];
 			String rubro = (String) dato[5];
 			Double limiteCredito = (Double) dato[6];
 			if (limiteCredito == null) {
@@ -30374,7 +30369,7 @@ class ClientesVendedorDataSource implements JRDataSource {
 				ventas = (double) 0;				
 			}
 			this.values.add(new ClienteBean(ruc, razonSocial, direccion, telefono, rubro,
-					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas), dpto, nombre));
+					Utiles.getNumberFormat(limiteCredito), ciudad, Utiles.getNumberFormat(ventas), dpto, nombre, vendedor));
 		}
 	}
 }

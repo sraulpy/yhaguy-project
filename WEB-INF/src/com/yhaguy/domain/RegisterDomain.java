@@ -10660,17 +10660,33 @@ public class RegisterDomain extends Register {
 	public List<Object[]> getClientesPorVendedor(long idVendedor, Date desde, Date hasta) throws Exception {
 		String desde_ = Utiles.getDateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
 		String hasta_ = Utiles.getDateToString(hasta, Misc.YYYY_MM_DD) + " 23:00:00";
-		String query = "select e.ruc, e.razonSocial, e.direccion_, e.telefono_, e.vendedor.empresa.razonSocial,"
-				+ " e.rubro.descripcion, (select c.limiteCredito from Cliente c where c.empresa.id = e.id),"
-				+ " case when e.ciudad IS NULL then 'SIN CIUDAD' else e.ciudad.descripcion end,"
-				+ " (select sum(totalImporteGs) from Venta where tipoMovimiento.id in (18,19) and cliente.empresa.id = e.id"
-				+ " and fecha > '"+ desde_ +"' and fecha < '" + hasta_ + "' and idEstadoComprobante is null),"
-				+ " (select c.id from Cliente c where c.empresa.id = e.id),"	
-				+ " case when e.ciudad IS NULL then 'SIN DPTO' else e.ciudad.sigla end,"
-				+ " c.empresa.nombre"
-				+ " from Cliente c join c.empresa e where e.vendedor.id = "
-				+ idVendedor + " and c.estado = '"+Cliente.ACTIVO+"' order by e.razonSocial";
-		return this.hql(query);
+		String query = ""
+				+ " WITH ventas AS (" + 
+				"    select idcliente as cli, sum(totalImporteGs) as imp" + 
+				"    from venta where idtipomovimiento in (18,19) and idestadocomprobante is null" + 
+				"    and fecha >= '"+ desde_ +"' and fecha <= '" + hasta_ + "' group by idcliente)"
+				+ " select e.ruc, e.razonSocial, e.direccion_, e.telefono_, f.nombreEmpresa, r.descripcion, c.limiteCredito,"
+				+ " (case when e.idciudad IS NULL then 'SIN CIUDAD' else cd.descripcion end) as desc,"
+				+ " COALESCE((select imp from ventas where cli = c.id), 0.0),"
+				+ " c.id,"
+				+ " (case when e.idciudad IS NULL then 'SIN DPTO' else cd.sigla end) as dpto,"
+				+ " e.nombre"
+				+ " from empresa e inner join funcionario f on e.idvendedor = f.id"
+				+ " inner join empresa_rubro r on e.idrubro = r.id"
+				+ " inner join cliente c on c.idempresa = e.id"
+				+ " left join tipo cd on e.idciudad = cd.id"
+				+ " where c.estado = '" + Cliente.ACTIVO + "'";
+				if (idVendedor > 0) {
+					query += " and e.idvendedor = " + idVendedor;
+				}
+				query += " order by f.nombreEmpresa, e.razonSocial";
+		
+		Session s = this.SESSIONgetSession();
+		s.beginTransaction();
+		List<Object[]> list = s.createSQLQuery(query).list();
+		s.getTransaction().commit();
+		s.close();
+		return list;
 	}
 	
 	/**
@@ -15651,11 +15667,6 @@ public class RegisterDomain extends Register {
 	
 	public static void main(String[] args) {
 		try {
-			RegisterDomain rr = RegisterDomain.getInstance();
-			String desde = "2024-02-01 00:00:00";
-			String hasta = "2024-02-01 00:00:00";
-			List<Object[]> list = rr.getResumenCobranzas(desde, hasta, "");
-			System.out.println(list.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

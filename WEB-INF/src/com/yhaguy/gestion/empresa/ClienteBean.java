@@ -12,9 +12,10 @@ public class ClienteBean {
 	private String ventas;
 	private String departamento;
 	private String nombreFantasia;
+	private String vendedor;
 	
 	public ClienteBean(String ruc, String razonSocial, String direccion, String telefono, String rubro,
-			String limiteCredito, String ciudad, String ventas, String departamento, String nombreFantasia) {
+			String limiteCredito, String ciudad, String ventas, String departamento, String nombreFantasia, String vendedor) {
 		this.ruc = ruc;
 		this.razonSocial = razonSocial;
 		this.direccion = direccion;
@@ -25,6 +26,7 @@ public class ClienteBean {
 		this.ventas = ventas;
 		this.departamento = departamento;
 		this.nombreFantasia = nombreFantasia;
+		this.vendedor = vendedor;
 	}
 
 	public String getRuc() {
@@ -105,5 +107,13 @@ public class ClienteBean {
 
 	public void setNombreFantasia(String nombreFantasia) {
 		this.nombreFantasia = nombreFantasia;
+	}
+
+	public String getVendedor() {
+		return vendedor;
+	}
+
+	public void setVendedor(String vendedor) {
+		this.vendedor = vendedor;
 	}
 }
