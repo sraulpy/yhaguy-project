@@ -212,7 +212,7 @@
 				emptyMessage="SIN UBICACIÓN.."
 				model="@load(vm.ubicaciones)">
 				<auxhead>
-					<auxheader label="Ubicación" colspan="2"></auxheader>
+					<auxheader label="Ubicación" colspan="3"></auxheader>
 				</auxhead>
 				
 				<!-- REPUESTOS -->
