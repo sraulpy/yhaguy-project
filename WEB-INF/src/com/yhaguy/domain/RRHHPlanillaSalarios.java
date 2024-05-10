@@ -37,6 +37,7 @@ public class RRHHPlanillaSalarios extends Domain {
 	public static final String TIPO_SALARIOS = "SALARIOS";
 	public static final String TIPO_PREMIOS = "PREMIOS";
 	public static final String TIPO_AGUINALDOS = "AGUINALDOS";
+	public static final String TIPO_COMISIONES_SIN_IPS = "COMISIONES SIN IPS";
 	
 	private String mes;
 	private String anho;
@@ -150,7 +151,7 @@ public class RRHHPlanillaSalarios extends Domain {
 	@DependsOn({ "salarios", "bonificacion", "otrosHaberes", "horasExtras", "responsabilidad", "adelantos", "comision",
 		"vacaciones", "aguinaldo", "anticipoAguinaldo2", "anticipoAguinaldo3" })
 	public double getIps() {
-		if (this.tipo.equals(TIPO_PREMIOS)) {
+		if (this.tipo.equals(TIPO_PREMIOS) || this.tipo.equals(TIPO_COMISIONES_SIN_IPS)) {
 			return 0.0;
 		}
 		return ((this.getTotalHaberes_() - (this.bonificacion + this.aguinaldo)) * 0.09) * -1 ;

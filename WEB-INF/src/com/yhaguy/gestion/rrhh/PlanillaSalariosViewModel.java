@@ -197,7 +197,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	
 	@Command
 	public void imprimirPlanilla() throws Exception {
-		this.imprimirPlanilla_(this.selectedFormato);
+		this.imprimirPlanilla_();
 	}
 	
 	@Command
@@ -368,15 +368,14 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 	/**
 	 * Despliega el Reporte de planilla de salario..
 	 */
-	private void imprimirPlanilla_(Object[] formato) throws Exception {		
-		String pdf = (String) formato[1];
-		String source = pdf.equals(ReportesViewModel.FORMAT_PDF[1]) ? ReportesViewModel.SOURCE_PLANILLA_SALARIOS : ReportesViewModel.SOURCE_PLANILLA_SALARIOS_;
+	private void imprimirPlanilla_() throws Exception {		
+		String source = ReportesViewModel.SOURCE_PLANILLA_SALARIOS;
 		Map<String, Object> params = new HashMap<String, Object>();
 		JRDataSource dataSource = new PlanillaSalariosDataSource(this.planillas, this.getTotales());
 		params.put("Periodo", this.getSelectedMes() + " " +  this.getSelectedAnho() + " - " + this.selectedTipo);
 		params.put("Usuario", getUs().getNombre());
-		params.put("Titulo", "Planilla de Salarios");
-		this.imprimirComprobante(source, params, dataSource, formato);
+		params.put("Titulo", "PLANILLA DE " + this.selectedTipo.toUpperCase());
+		this.imprimirComprobante(source, params, dataSource, ReportesViewModel.FORMAT_PDF);
 	}
 	
 	/**
@@ -851,6 +850,7 @@ public class PlanillaSalariosViewModel extends SimpleViewModel {
 		out.add(RRHHPlanillaSalarios.TIPO_COMISIONES);
 		out.add(RRHHPlanillaSalarios.TIPO_SALARIOS);
 		out.add(RRHHPlanillaSalarios.TIPO_PREMIOS);
+		out.add(RRHHPlanillaSalarios.TIPO_COMISIONES_SIN_IPS);
 		if (this.selectedMes.equals("DICIEMBRE")) {
 			out.add(RRHHPlanillaSalarios.TIPO_AGUINALDOS);
 		}

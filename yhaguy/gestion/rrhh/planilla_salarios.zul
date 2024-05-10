@@ -20,27 +20,31 @@
 			iconSclass="z-icon-check"
 			onClick='pop_procesar.open(self, "end_before")'
 			disabled="@load(vm.planillas.size() ne 0 ? 'true' : vm.selectedMes eq '' ? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))"></button>
-		<space></space>
+		
 		<button mold="bs" sclass="btn-sm btn-info" hflex="true" label="Agregar"
 			iconSclass="z-icon-plus"
 			onClick='pop_procesar_.open(self, "end_before")'
 			disabled="@load(vm.selectedMes eq '' ? 'true' : (vm.selectedTipo eq ''? 'true' : 'false'))">
 		</button>
-		<space></space>
-		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Imprimir Liquidación"
+		
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Impr. Liquidación"
 			iconSclass="z-icon-print"
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimir')"></button>
-		<space></space>
+		
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Recibo Común"
 			iconSclass="z-icon-print"
 			disabled="@load(vm.selectedPlanilla eq null)"
 			onClick="@command('imprimirRecibo')"></button>
-		<space></space>
+		
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Exportar a Excel"
 			iconSclass="z-icon-download"
 			onClick="@command('exportExcel', items=vm.planillas)"></button>
-		<space></space>
+		
+		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Impr. Planilla"
+			iconSclass="z-icon-print"
+			onClick="@command('imprimirPlanilla')"></button>
+		
 		<button mold="bs" sclass="btn-sm btn-primary" hflex="true" label="Cerrar Planilla"
 			iconSclass="z-icon-check"
 			onClick="@command('cerrarPlanilla')"></button>
