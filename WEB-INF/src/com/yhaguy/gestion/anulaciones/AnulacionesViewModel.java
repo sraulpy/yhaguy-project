@@ -20,6 +20,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.AjusteStock;
 import com.yhaguy.domain.CierreDocumento;
+import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaDebito;
 import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.RegisterDomain;
@@ -113,11 +114,21 @@ public class AnulacionesViewModel extends SimpleViewModel {
 
 	@Command
 	@NotifyChange("*")
-	public void anularMovimiento() {
+	public void anularMovimiento() throws Exception {
 		if (this.isVentaContado() || this.isVentaCredito() || this.isNotaCreditoVenta() || this.isOrdenPago()) {
 			String caja = (String) this.selectedMovimiento.getPos6();
 			if (CajaUtil.CAJAS_ABIERTAS.get(caja) != null) {
 				String msg = "CAJA " + caja + " BLOQUEADA POR USUARIO: " + CajaUtil.CAJAS_ABIERTAS.get(caja);
+				Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
+				return;
+			}
+		}
+		
+		if (this.isVentaContado() || this.isVentaCredito()) {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			NotaCredito nc = rr.getNotaCreditoByVenta(this.selectedMovimiento.getId());
+			if (nc != null) {
+				String msg = "La venta tiene una nota de Crédito Aplicada: " + nc.getNumero();
 				Clients.showNotification(msg, Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 				return;
 			}

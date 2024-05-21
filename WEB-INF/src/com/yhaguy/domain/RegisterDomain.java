@@ -9801,7 +9801,7 @@ public class RegisterDomain extends Register {
 	 * @return la nota de credito de la venta..
 	 */
 	public NotaCredito getNotaCreditoByVenta(long idVenta) throws Exception {
-		String query = "select n from NotaCredito n join n.detalles d where d.venta.id = " + idVenta
+		String query = "select n from NotaCredito n join n.detalles d where n.estadoComprobante.id != 218 and d.venta.id = " + idVenta
 				+ " and n.tipoMovimiento.sigla = '"+ Configuracion.SIGLA_TM_NOTA_CREDITO_VENTA +"'";
 		List<NotaCredito> list = this.hql(query);
 		return list.size() > 0 ? list.get(0) : null;
