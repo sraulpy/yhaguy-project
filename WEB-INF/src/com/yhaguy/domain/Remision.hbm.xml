@@ -21,7 +21,10 @@
 		<property name="url"/>
 		
 		<many-to-one name="venta" class="com.yhaguy.domain.Venta"
-			column="id_venta" lazy="false"/>		
+			column="id_venta" lazy="false"/>	
+			
+		<many-to-one name="estadoComprobante" class="com.coreweb.domain.Tipo"
+			column="idestadoComprobante" lazy="false"/>	
 		
 		<set name="detalles" table="remision_detalle"
 			inverse="false" lazy="false" fetch="join"

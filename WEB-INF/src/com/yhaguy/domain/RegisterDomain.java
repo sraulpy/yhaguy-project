@@ -4063,6 +4063,28 @@ public class RegisterDomain extends Register {
 
 		return this.hql(query, params);
 	}
+	
+	/**
+	 * @return las remisiones anuladas segun fecha
+	 */
+	public List<Remision> getRemisionesAnuladas(Date desde, Date hasta) throws Exception {
+
+		String query = "select n from Remision n where n.dbEstado != 'D'"
+				+ " and n.estadoComprobante.sigla = '" + Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO + "'"
+				+ " and (n.fecha between ? and ?)";
+		query += " order by n.numero";
+
+		List<Object> listParams = new ArrayList<Object>();
+		listParams.add(desde);
+		listParams.add(hasta);
+
+		Object[] params = new Object[listParams.size()];
+		for (int i = 0; i < listParams.size(); i++) {
+			params[i] = listParams.get(i);
+		}
+
+		return this.hql(query, params);
+	}
 
 	/**
 	 * @return los gastos segun fecha..

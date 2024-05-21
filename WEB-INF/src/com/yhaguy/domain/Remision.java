@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.coreweb.domain.Domain;
+import com.coreweb.domain.Tipo;
+import com.yhaguy.Configuracion;
 
 @SuppressWarnings("serial")
 public class Remision extends Domain {
@@ -22,6 +24,7 @@ public class Remision extends Domain {
 	
 	private Funcionario chofer;
 	private Vehiculo vehiculo_;
+	private Tipo estadoComprobante;
 	
 	private Venta venta;
 	private Set<RemisionDetalle> detalles = new HashSet<RemisionDetalle>();
@@ -29,6 +32,16 @@ public class Remision extends Domain {
 	@Override
 	public int compareTo(Object o) {
 		return -1;
+	}
+	
+	/**
+	 * @return true si es anulado..
+	 */
+	public boolean isAnulado() {
+		if(this.estadoComprobante == null)
+			return false;
+		String sigla = this.estadoComprobante.getSigla();
+		return sigla.equals(Configuracion.SIGLA_ESTADO_COMPROBANTE_ANULADO);
 	}
 
 	public Date getFecha() {
@@ -133,6 +146,14 @@ public class Remision extends Domain {
 
 	public void setVehiculo_(Vehiculo vehiculo_) {
 		this.vehiculo_ = vehiculo_;
+	}
+
+	public Tipo getEstadoComprobante() {
+		return estadoComprobante;
+	}
+
+	public void setEstadoComprobante(Tipo estadoComprobante) {
+		this.estadoComprobante = estadoComprobante;
 	}
 
 }

@@ -104,6 +104,7 @@ import com.yhaguy.domain.Recibo;
 import com.yhaguy.domain.ReciboDetalle;
 import com.yhaguy.domain.ReciboFormaPago;
 import com.yhaguy.domain.RegisterDomain;
+import com.yhaguy.domain.Remision;
 import com.yhaguy.domain.Reparto;
 import com.yhaguy.domain.RepartoDetalle;
 import com.yhaguy.domain.RepartoEntrega;
@@ -15231,6 +15232,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				List<Venta> ventasContado = rr.getVentasContadoAnuladas(desde, hasta);
 				List<Venta> ventasCredito = rr.getVentasCreditoAnuladas(desde, hasta);
 				List<Transferencia> transferencias = rr.getTransferenciasAnuladas(desde, hasta);
+				List<Remision> remisiones = rr.getRemisionesAnuladas(desde, hasta);
 				
 				for (NotaCredito nc : notasCredito) {
 					if (nc.isAnulado()) {
@@ -15268,6 +15270,16 @@ public class ReportesViewModel extends SimpleViewModel {
 								Utiles.getDateToString(tr.getFechaCreacion(), "dd/MM/yyyy"),
 								tr.getTransferenciaTipo().getDescripcion().toUpperCase(),
 								tr.getNumeroRemision(), "",
+								"ANULADO" });
+					}
+				}
+				
+				for (Remision rm : remisiones) {
+					if (rm.isAnulado()) {
+						data.add(new Object[] {
+								Utiles.getDateToString(rm.getFecha(), "dd/MM/yyyy"),
+								"NOTA DE REMISIÓN A CLIENTES",
+								rm.getNumero(), rm.getVenta().getTimbrado(),
 								"ANULADO" });
 					}
 				}
