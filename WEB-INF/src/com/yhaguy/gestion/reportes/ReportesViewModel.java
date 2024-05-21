@@ -7984,7 +7984,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}	
 				
 				for (Object[] cliente : emps) {
-					long idCliente = (long) cliente[9];
+					long idCliente = Long.parseLong(cliente[9] + "");
 					for (int i = 0; i < provs.size(); i++) {
 						long idProv = idsProv.get("Prov" + (i+1));
 						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
@@ -7993,7 +7993,7 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (Object[] cliente : emps) {
-					long idCliente = (long) cliente[9];
+					long idCliente = Long.parseLong(cliente[9] + "");
 					for (int i = 0; i < provsLocales.size(); i++) {
 						long idProv = idsProvLoc.get("Prov" + (i+1));
 						double importe = rr.getVentasProveedor(desde, hasta, idCliente, idProv, idVendedor);
@@ -8002,12 +8002,12 @@ public class ReportesViewModel extends SimpleViewModel {
 				}
 				
 				for (Object[] cliente : emps) {					
-					long idCliente = (long) cliente[9];
+					long idCliente = Long.parseLong(cliente[9] + "");
 					List<Object[]> ventas = rr.get_Ventas(desde, hasta, idCliente);
 					List<Object[]> notasCred = rr.get_NotasCredito(desde, hasta, idCliente);
 					
 					for (Object[] venta : ventas) {
-						long idVend = (long) venta[7];
+						long idVend = Long.parseLong(venta[7] + "");
 						if (idVend == idVendedor) {
 							Date fecha = (Date) venta[1];
 							double totalImporteGs = (double) venta[6];
@@ -8029,7 +8029,7 @@ public class ReportesViewModel extends SimpleViewModel {
 					}
 					
 					for (Object[] nc : notasCred) {
-						long idVend = (long) nc[7];
+						long idVend = Long.parseLong(nc[7] + "");
 						if (idVend == idVendedor) {
 							Date fecha = (Date) nc[1];
 							double totalImporteGs = (double) nc[6];
