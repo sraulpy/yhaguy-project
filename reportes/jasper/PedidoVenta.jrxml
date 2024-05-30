@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumenConciliacion" pageWidth="655" pageHeight="792" columnWidth="615" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
-	<property name="ireport.zoom" value="2.8531167061100082"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResumenConciliacion" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb76ced7-1ea7-44e5-87ee-27dd578948e7">
+	<property name="ireport.zoom" value="1.948717100000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -113,14 +113,14 @@
 				<imageExpression><![CDATA[$P{Logo}.toString()]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="412" y="22" width="197" height="15" uuid="5a904cf1-601e-4bb0-a868-2caddc943c55"/>
+				<reportElement x="373" y="22" width="197" height="15" uuid="5a904cf1-601e-4bb0-a868-2caddc943c55"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Generado: " + $P{Generado}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="412" y="4" width="197" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5ccec959-843e-4d37-8b2e-656f5793bc5c"/>
+				<reportElement mode="Transparent" x="373" y="4" width="197" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5ccec959-843e-4d37-8b2e-656f5793bc5c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -143,7 +143,7 @@
 				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="1" y="39" width="613" height="1" uuid="f2b86370-f3f3-4eda-8c5b-0c1dcf867652"/>
+				<reportElement x="1" y="39" width="571" height="1" uuid="f2b86370-f3f3-4eda-8c5b-0c1dcf867652"/>
 			</line>
 			<staticText>
 				<reportElement style="Column header" mode="Transparent" x="318" y="52" width="63" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8afb7b88-0998-47d9-80d2-b3c927401e7b"/>
@@ -186,7 +186,7 @@
 				<text><![CDATA[DIRECCIÓN:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="381" y="72" width="231" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="00b9683a-5613-4db2-9a23-7ce432327191"/>
+				<reportElement mode="Transparent" x="381" y="72" width="191" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="00b9683a-5613-4db2-9a23-7ce432327191"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -218,7 +218,7 @@
 				<textFieldExpression><![CDATA[$P{Vendedor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="73" y="111" width="536" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="aa135840-34ef-49cb-9071-cb120af7dd23"/>
+				<reportElement mode="Transparent" x="73" y="111" width="499" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="aa135840-34ef-49cb-9071-cb120af7dd23"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -264,9 +264,9 @@
 	<detail>
 		<band height="55" splitType="Stretch">
 			<frame>
-				<reportElement style="Row" mode="Opaque" x="3" y="0" width="612" height="48" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="571" height="48" uuid="1851ffef-2f53-4951-b631-d59ce3f5ba68"/>
 				<componentElement>
-					<reportElement key="table" style="table" x="0" y="8" width="610" height="24" uuid="cb5e9050-77d1-499c-91b6-6849b2c3814d"/>
+					<reportElement key="table" style="table" x="0" y="8" width="569" height="24" uuid="cb5e9050-77d1-499c-91b6-6849b2c3814d"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="dataset1" uuid="8771ecbf-9d2e-4a14-ad06-6ed6a6a208ac">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Materiales})]]></dataSourceExpression>
@@ -292,10 +292,10 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="288" uuid="b97862c7-784c-498e-8fd1-bcf8391c0b0b">
+						<jr:column width="255" uuid="b97862c7-784c-498e-8fd1-bcf8391c0b0b">
 							<jr:columnHeader style="table_CH" height="21" rowSpan="1">
 								<staticText>
-									<reportElement mode="Transparent" x="0" y="0" width="288" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e68ded4f-ba14-40ae-b52d-d24e2666c083"/>
+									<reportElement mode="Transparent" x="0" y="0" width="255" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e68ded4f-ba14-40ae-b52d-d24e2666c083"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 										<font fontName="Ubuntu Condensed" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 										<paragraph lineSpacing="Single"/>
@@ -305,7 +305,7 @@
 							</jr:columnHeader>
 							<jr:detailCell style="table_TD" height="24" rowSpan="1">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="2" y="0" width="286" height="20" uuid="ad0c2fd9-2dbb-4dfa-8172-aa0e2afc6353"/>
+									<reportElement x="2" y="0" width="253" height="20" uuid="ad0c2fd9-2dbb-4dfa-8172-aa0e2afc6353"/>
 									<textElement verticalAlignment="Middle">
 										<font fontName="Ubuntu Condensed" size="10"/>
 									</textElement>
