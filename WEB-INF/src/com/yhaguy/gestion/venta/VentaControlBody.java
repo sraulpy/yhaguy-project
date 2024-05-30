@@ -2,8 +2,10 @@ package com.yhaguy.gestion.venta;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -15,12 +17,14 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 import com.coreweb.Config;
 import com.coreweb.componente.BuscarElemento;
@@ -68,12 +72,17 @@ import com.yhaguy.gestion.comun.ControlLogica;
 import com.yhaguy.gestion.comun.ReservaDTO;
 import com.yhaguy.gestion.comun.ReservaDetalleDTO;
 import com.yhaguy.gestion.empresa.ClienteDTO;
+import com.yhaguy.gestion.reportes.formularios.ReportesViewModel;
+import com.yhaguy.util.BeanDetalle;
 import com.yhaguy.util.ConnectDBGroupauto;
 import com.yhaguy.util.Utiles;
 import com.yhaguy.util.reporte.ReporteYhaguy;
 
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 
 public class VentaControlBody extends BodyApp {	
 	
@@ -120,6 +129,8 @@ public class VentaControlBody extends BodyApp {
 	
 	@Wire
 	private Button btnFormaPago;
+	
+	private Window win;
 
 	@Init(superclass = true)
 	public void init(@ExecutionParam(TIPO_PARAM) String tipo) {
@@ -234,13 +245,17 @@ public class VentaControlBody extends BodyApp {
 	}
 	
 	@Override
-	public void showImprimir() {
-		boolean imprimirPrecio = this.mensajeSiNo("Imprimir Precios e Importes..?");
+	public void showImprimir() {	
 		try {
-			this.imprimirVenta(imprimirPrecio);
+			if (this.isPresupuesto()) {
+				boolean imprimirPrecio = this.mensajeSiNo("Imprimir Precios e Importes..?");
+				this.imprimirVenta(imprimirPrecio);
+			} else {
+				this.imprimirPedido();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}		
 	}
 	
 	
@@ -448,10 +463,92 @@ public class VentaControlBody extends BodyApp {
 		Clients.showNotification("REGISTRO GUARDADO");
 	}
 	
+	/**
+	 * Despliega impresion Pedido..
+	 */
+	private void imprimirPedido() throws Exception {
+		String source = ReportesViewModel.SOURCE_PEDIDO_VENTA;
+		Map<String, Object> params = new HashMap<String, Object>();
+		JRDataSource dataSource = new PedidoDataSource(this.dto);
+		params.put("Fecha", this.dto.getFechaEmision());
+		params.put("Numero", this.dto.getNumero() + " - " + this.dto.getFormaEntrega());
+		params.put("Cliente", this.dto.getCliente().getPos2());
+		params.put("Direccion", this.dto.getDireccion());
+		params.put("Vendedor", this.dto.getVendedor_());
+		params.put("Observacion", this.dto.getObservacion().toUpperCase());
+		params.put("Condicion", this.dto.getCondicionPago().getPos1().toString().toUpperCase());
+		params.put("TotalImporte", this.dto.getNumero());
+		params.put("Usuario", getUs().getNombre());
+
+		this.imprimirComprobante(source, params, dataSource);
+	}
+	
+	/**
+	 * Despliega el comprobante en un pdf para su impresion..
+	 */
+	private void imprimirComprobante(String source,
+			Map<String, Object> parametros, JRDataSource dataSource) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("source", source);
+		params.put("parametros", parametros);
+		params.put("dataSource", dataSource);
+
+		this.win = (Window) Executions.createComponents(ReportesViewModel.ZUL_REPORTES, this.mainComponent, params);
+		this.win.doModal();
+	}
+	
 	@Command
 	@NotifyChange("*")
 	public void refresh() {	
 		//
+	}
+	
+	/**
+	 * DataSource de PedidoDataSource..
+	 */
+	class PedidoDataSource implements JRDataSource {
+
+		private List<BeanDetalle> detalles;
+		
+		private int index = -1;
+		
+		public PedidoDataSource(VentaDTO venta) {
+			this.detalles = new ArrayList<BeanDetalle>();
+			RegisterDomain rr = RegisterDomain.getInstance();
+			
+			try {
+				for (VentaDetalleDTO item : venta.getDetallesConDescuento()) {
+					long stock = rr.getStockDisponible(item.getArticulo().getId(), venta.getDeposito().getId());				
+					BeanDetalle det = new BeanDetalle(item.getDescripcionArticulo(), item.getCantidad(),
+							0.0, item.getPrecioGs(), item.getImporteGsSinDescuento(), item.getCodigoInterno(), item.getUbicacion(), stock + "");
+					this.detalles.add(det);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
+		public Object getFieldValue(JRField field) throws JRException {
+			Object value = null;
+			String fieldName = field.getName();
+
+			if ("TituloDetalle".equals(fieldName)) {
+				value = "DETALLES";
+			} else if ("Materiales".equals(fieldName)) {
+				value = this.detalles;
+			} 		
+			return value;
+		}
+
+		@Override
+		public boolean next() throws JRException {
+			if (index < 0) {
+				index++;
+				return true;
+			}
+			return false;
+		}		
 	}
 	
 	/***************************************************************/

@@ -38,6 +38,7 @@ public class ReportesViewModel {
 	public static final String SOURCE_RECIBO = "/reportes/jasper/Recibo.jasper";
 	public static final String SOURCE_RECIBO_COBRO = "/reportes/jasper/ReciboCobro.jasper";
 	public static final String SOURCE_RETENCION = "/reportes/jasper/Retencion.jasper";
+	public static final String SOURCE_PEDIDO_VENTA = "/reportes/jasper/PedidoVenta.jasper";
 	public static final String SOURCE_VENTA = "/reportes/jasper/FacturaVenta.jasper";
 	public static final String SOURCE_VENTA_ = "/reportes/jasper/FacturaVenta_.jasper";
 	public static final String SOURCE_VENTA_BATERIAS = "/reportes/jasper/FacturaVentaBaterias.jasper";
