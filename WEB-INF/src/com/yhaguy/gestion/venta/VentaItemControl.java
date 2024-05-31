@@ -385,39 +385,18 @@ public class VentaItemControl extends SoloViewModel {
 		
 		this.det.setDescuentoPorcentajeMax(maxDescuento);
 		
-		// ticket 8144
+		// ticket 8144 -- cambia en ticket 9676
 		if (this.getLoginNombre().equals("josem") || this.getLoginNombre().equals("dayala")) {
 			if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) {
-				maxDescuento = 30;
+				maxDescuento = 20;
 				this.det.setDescuentoPorcentajeMax(maxDescuento);
 			}
 		}
 		
-		// ticket 8379
+		// ticket 8379 -- cambia en ticket 9676
 		if (this.dto.getDeposito().getText().equals(Deposito.TRANSITORIO)) {
-			maxDescuento = 5;
+			maxDescuento = 3;
 			this.det.setDescuentoPorcentajeMax(maxDescuento);
-		}
-		
-		// promocion yrsa ymra..
-		if ((this.det.getCodigoInterno().equals("CON C-0053")
-				|| this.det.getCodigoInterno().equals("CON C-0054"))
-				&& (this.isEmpresaYRSA() || this.isEmpresaYMRA())) {
-			if (this.det.getCantidad() >= 24) {
-				this.det.setDescuentoPorcentaje(8.0);
-				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), 8.0));
-				this.det.setDescuentoPorcentajeMax(8.0);
-			}
-			if (this.det.getCantidad() >= 36) {
-				this.det.setDescuentoPorcentaje(10);
-				this.det.setDescuentoUnitarioGs(Utiles.obtenerValorDelPorcentaje((this.det.getPrecioGs() * this.det.getCantidad()), 10));
-				this.det.setDescuentoPorcentajeMax(10);
-			}
-			if (this.det.getCantidad() < 24) {
-				this.det.setDescuentoPorcentaje(0);
-				this.det.setDescuentoUnitarioGs(0.0);
-				this.det.setDescuentoPorcentajeMax(maxDescuento);
-			}
 		}
 		
 		//this.det.setDescuentoPorcentaje(porcentajeDescuento);
