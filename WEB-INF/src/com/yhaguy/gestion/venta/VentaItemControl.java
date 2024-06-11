@@ -37,6 +37,7 @@ import com.yhaguy.ID;
 import com.yhaguy.UtilDTO;
 import com.yhaguy.domain.Articulo;
 import com.yhaguy.domain.ArticuloDeposito;
+import com.yhaguy.domain.ArticuloFamilia;
 import com.yhaguy.domain.ArticuloListaPrecio;
 import com.yhaguy.domain.ArticuloListaPrecioDetalle;
 import com.yhaguy.domain.ArticuloPrecioMinimo;
@@ -397,6 +398,15 @@ public class VentaItemControl extends SoloViewModel {
 		if (this.dto.getDeposito().getText().equals(Deposito.TRANSITORIO)) {
 			maxDescuento = 3;
 			this.det.setDescuentoPorcentajeMax(maxDescuento);
+		}
+		
+		// ticket 9727
+		String flia = (String) art[11];
+		if (flia.equals(ArticuloFamilia.CUBIERTAS)) {
+			if (idListaPrecio == ArticuloListaPrecio.ID_LISTA) {
+				maxDescuento = 20;
+				this.det.setDescuentoPorcentajeMax(maxDescuento);
+			}			
 		}
 		
 		//this.det.setDescuentoPorcentaje(porcentajeDescuento);

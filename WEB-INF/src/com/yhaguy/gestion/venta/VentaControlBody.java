@@ -473,7 +473,7 @@ public class VentaControlBody extends BodyApp {
 		params.put("Fecha", this.dto.getFechaEmision());
 		params.put("Numero", this.dto.getNumero() + " - " + this.dto.getFormaEntrega());
 		params.put("Cliente", this.dto.getCliente().getPos2());
-		params.put("Direccion", this.dto.getDireccion());
+		params.put("Direccion", this.dto.getDireccion().toUpperCase());
 		params.put("Vendedor", this.dto.getVendedor_());
 		params.put("Observacion", this.dto.getObservacion().toUpperCase());
 		params.put("Condicion", this.dto.getCondicionPago().getPos1().toString().toUpperCase());
