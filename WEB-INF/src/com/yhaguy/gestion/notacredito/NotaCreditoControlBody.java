@@ -1699,15 +1699,28 @@ public class NotaCreditoControlBody extends BodyApp {
 
 		public SolicitudNotaCreditoDataSource() {
 			this.observacion = dto.getObservacion();
-			for (NotaCreditoDetalleDTO item : dto.getDetallesArticulos()) {
-				this.dets.add(new MyArray("ÍTEMS", 
-						item.getArticulo().getPos1(),
-						item.getArticulo().getPos2(), 
-						item.getCantidad() + "",
-						dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getMontoGs()) : Utiles.getNumberFormatDs(item.getMontoDs()),
-						dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getImporteGs()) : Utiles.getNumberFormatDs(item.getImporteDs()),
-						dto.isMonedaLocal() ? Utiles.getNumberFormat(dto.getImporteGs()) : Utiles.getNumberFormatDs(dto.getImporteDs())));
+			if (dto.getDetallesArticulos().size() > 0) {
+				for (NotaCreditoDetalleDTO item : dto.getDetallesArticulos()) {
+					this.dets.add(new MyArray("ÍTEMS", 
+							item.getArticulo().getPos1(),
+							item.getArticulo().getPos2(), 
+							item.getCantidad() + "",
+							dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getMontoGs()) : Utiles.getNumberFormatDs(item.getMontoDs()),
+							dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getImporteGs()) : Utiles.getNumberFormatDs(item.getImporteDs()),
+							dto.isMonedaLocal() ? Utiles.getNumberFormat(dto.getImporteGs()) : Utiles.getNumberFormatDs(dto.getImporteDs())));
+				}
+			} else {
+				for (NotaCreditoDetalleDTO item : dto.getDetallesFacturas()) {
+					this.dets.add(new MyArray("ÍTEMS", 
+							item.getDescripcion(),
+							dto.getMotivo().getText(),
+							item.getCantidad() + "",
+							dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getMontoGs()) : Utiles.getNumberFormatDs(item.getMontoDs()),
+							dto.isMonedaLocal() ? Utiles.getNumberFormat(item.getImporteGs()) : Utiles.getNumberFormatDs(item.getImporteDs()),
+							dto.isMonedaLocal() ? Utiles.getNumberFormat(dto.getImporteGs()) : Utiles.getNumberFormatDs(dto.getImporteDs())));
+				}
 			}
+			
 		}
 
 		private int index = -1;
