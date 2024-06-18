@@ -1,7 +1,8 @@
 <window border="normal" title="Forma de Pago" width="600px"
 	position="center, center">
+	<div width="590px" style="padding:10px">
 	
-	<grid sclass="vgrid" hflex="1">
+	<grid sclass="vgrid" hflex="true">
 		<columns>
 			<column width="170px"/>
 			<column/>
@@ -233,7 +234,7 @@
 			</row>
 		</rows>
 	</grid>
-	
+	</div>
 	<toolbar align="center" style="margin-top:15px">
 		<hlayout>
 			<button label="ACEPTAR" tooltiptext="Aceptar"
