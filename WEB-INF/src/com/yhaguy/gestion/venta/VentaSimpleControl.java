@@ -172,24 +172,24 @@ public class VentaSimpleControl extends SoloViewModel {
 		String siglaFPOC = Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES;
 		
 		if(siglaFP.equals(siglaFPTC)) {
-			rwNroCheque.setVisible(true); rwVencimiento.setVisible(false);
-			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwTarjeta.setVisible(true); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
 			rwNroComprobante.setVisible(true); rwCuotas.setVisible(true);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(false);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
 			
 		} else if(siglaFP.equals(siglaFPTD)) {
-			rwNroCheque.setVisible(true); rwVencimiento.setVisible(false);
+			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
 			rwNroComprobante.setVisible(true); rwCuotas.setVisible(false);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(false);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);

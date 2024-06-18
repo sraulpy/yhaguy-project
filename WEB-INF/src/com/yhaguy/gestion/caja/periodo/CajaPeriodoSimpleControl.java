@@ -198,25 +198,25 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 		
 		if (siglaFP.equals(siglaFPCH)) {
 			showCheque();
-			rwBanco.setVisible(true); rwChequera.setVisible(true);
+			rwBanco.setVisible(false); rwChequera.setVisible(true);
 			rwNroCheque.setVisible(true); rwVencimiento.setVisible(true);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(false); rwProcesadora.setVisible(false);
 			rwNroComprobante.setVisible(false); rwCuotas.setVisible(false);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(false);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			dbxGs.setReadonly(true); dbxUS.setReadonly(true);
 			
 		} else if(siglaFP.equals(siglaFPTC)){
-			rwBanco.setVisible(true); rwChequera.setVisible(false);
+			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
 			rwNroComprobante.setVisible(true); rwCuotas.setVisible(true);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(false);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
