@@ -1,8 +1,7 @@
-<window border="normal" title="Forma de Pago" width="420px"
+<window border="normal" title="Forma de Pago" width="600px"
 	position="center, center">
-	<div width="400px" style="padding:10px">
 	
-	<grid sclass="vgrid" hflex="true">
+	<grid sclass="vgrid" hflex="1">
 		<columns>
 			<column width="170px"/>
 			<column/>
