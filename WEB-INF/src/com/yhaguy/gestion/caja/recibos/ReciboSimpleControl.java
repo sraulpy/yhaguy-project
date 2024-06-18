@@ -830,20 +830,15 @@ public class ReciboSimpleControl extends SoloViewModel {
 				valido = false;
 				mensaje += "\n - Debe seleccionar el Tipo de Tarjeta..";
 			}
-			
-			if (this.nvoFormaPago.getTarjetaTipo().esNuevo() == true) {
-				valido = false;
-				mensaje += "\n - Debe seleccionar el Emisor de la Tarjeta..";
-			}
-			
+						
 			if (this.nvoFormaPago.getTarjetaProcesadora().esNuevo() == true) {
 				valido = false;
 				mensaje += "\n - Debe seleccionar la Procesadora..";
 			}
 			
-			if (this.nvoFormaPago.getTarjetaNumero().trim().length() == 0) {
+			if (this.nvoFormaPago.getTarjetaNumero().isEmpty() || this.nvoFormaPago.getTarjetaNumero().length() < 14) {
 				valido = false;
-				mensaje += "\n - Debe ingresar el Número de Tarjeta..";
+				mensaje += "\n - Debe completar el Número de Tarjeta..";
 			}
 			
 			if (this.nvoFormaPago.getTarjetaNumeroComprobante().trim().length() == 0) {

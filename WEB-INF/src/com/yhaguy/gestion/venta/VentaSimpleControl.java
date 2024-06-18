@@ -394,11 +394,6 @@ public class VentaSimpleControl extends SoloViewModel {
 				valido = false;
 				mensaje += "\n - Debe seleccionar el Tipo de Tarjeta..";
 			}
-
-			if (formaPago.getTarjetaTipo().esNuevo() == true) {
-				valido = false;
-				mensaje += "\n - Debe seleccionar el Emisor de la Tarjeta..";
-			}
 			
 			if (formaPago.getTarjetaProcesadora().esNuevo() == true) {
 				valido = false;
@@ -436,6 +431,11 @@ public class VentaSimpleControl extends SoloViewModel {
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número del Comprobante..";
+			}
+			
+			if (formaPago.getChequeBanco().esNuevo() == true) {
+				valido = false;
+				mensaje += "\n - Debe seleccionar un Banco..";
 			}
 		
 		// Forma de Pago con Retencion..
