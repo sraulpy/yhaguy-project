@@ -33,6 +33,7 @@ import com.yhaguy.domain.RegisterDomain;
 import com.yhaguy.gestion.bancos.cheques.BancoChequeDTO;
 import com.yhaguy.gestion.bancos.cheques.WindowCheque;
 import com.yhaguy.gestion.caja.recibos.ReciboFormaPagoDTO;
+import com.yhaguy.util.Utiles;
 
 public class CajaPeriodoSimpleControl extends SimpleViewModel {
 	
@@ -223,13 +224,13 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
 			
 		} else if(siglaFP.equals(siglaFPTD)){
-			rwBanco.setVisible(true); rwChequera.setVisible(false);
+			rwBanco.setVisible(false); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
 			rwNroComprobante.setVisible(true); rwCuotas.setVisible(false);
 			rwDepositoBanco.setVisible(false); rwDepositoReferencia.setVisible(false);
-			rwChequeBanco.setVisible(false); rwLibrador.setVisible(false);
+			rwChequeBanco.setVisible(true); rwLibrador.setVisible(false);
 			rwNroRetencion.setVisible(false); rwTimbradoRetencion.setVisible(false);
 			rwTimbradoVencimiento.setVisible(false);
 			dbxGs.setReadonly(false); dbxUS.setReadonly(false);
@@ -531,6 +532,11 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 				valido = false;
 				mensaje += "\n - Debe completar el Número de Tarjeta..";
 			}
+			
+			if (!Utiles.containsOnlyNumbers(formaPago.getTarjetaNumero())) {
+				valido = false;
+				mensaje += "\n - Solo se admiten números para la Tarjeta..";
+			}
 
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
 				valido = false;
@@ -553,6 +559,11 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			if (formaPago.getTarjetaNumero().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número de Tarjeta..";
+			}
+			
+			if (!Utiles.containsOnlyNumbers(formaPago.getTarjetaNumero())) {
+				valido = false;
+				mensaje += "\n - Solo se admiten números para la Tarjeta..";
 			}
 
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
