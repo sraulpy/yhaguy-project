@@ -102,7 +102,7 @@
 				<hlayout>
 					<textbox value="@bind(vm.nvoFormaPago.tarjetaNumero)" 
 						hflex="true" sclass="formato-numerico"/>
-					<label value="últimos 4 dígitos"
+					<label value="Ingresar Todos los dígitos"
 						style="color:red;font-style:oblique"/>
 				</hlayout>				
 			</row>

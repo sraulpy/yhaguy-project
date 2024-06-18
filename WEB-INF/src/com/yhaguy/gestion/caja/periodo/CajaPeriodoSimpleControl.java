@@ -210,7 +210,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			dbxGs.setReadonly(true); dbxUS.setReadonly(true);
 			
 		} else if(siglaFP.equals(siglaFPTC)){
-			rwBanco.setVisible(false); rwChequera.setVisible(false);
+			rwBanco.setVisible(true); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
@@ -223,7 +223,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
 			
 		} else if(siglaFP.equals(siglaFPTD)){
-			rwBanco.setVisible(false); rwChequera.setVisible(false);
+			rwBanco.setVisible(true); rwChequera.setVisible(false);
 			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
@@ -532,14 +532,19 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 				mensaje += "\n - Debe seleccionar la Procesadora de la Tarjeta..";
 			}
 
-			if (formaPago.getTarjetaNumero().isEmpty()) {
+			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 14) {
 				valido = false;
-				mensaje += "\n - Debe ingresar el Número de Tarjeta..";
+				mensaje += "\n - Debe completar el Número de Tarjeta..";
 			}
 
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número del Comprobante..";
+			}
+			
+			if (formaPago.getChequeBanco().esNuevo() == true) {
+				valido = false;
+				mensaje += "\n - Debe seleccionar un Banco..";
 			}
 		
 		// Forma de pago con tarjeta de debito..
@@ -558,6 +563,11 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número del Comprobante..";
+			}
+			
+			if (formaPago.getChequeBanco().esNuevo() == true) {
+				valido = false;
+				mensaje += "\n - Debe seleccionar un Banco..";
 			}
 		
 		// Forma de Pago con Retencion..

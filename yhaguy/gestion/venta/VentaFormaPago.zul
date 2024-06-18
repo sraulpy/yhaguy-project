@@ -84,7 +84,7 @@
 					@converter(vm.cnv.creditCard)" 
 					hflex="true" sclass="formato-numerico"/>
 				<labelConstrain/>
-				<label value="últimos 4 dígitos"
+				<label value="Ingresar Todos los dígitos"
 						style="color:red;font-style:oblique"/>
 				</hlayout>
 			</row>

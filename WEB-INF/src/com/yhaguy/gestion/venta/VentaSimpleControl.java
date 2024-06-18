@@ -172,7 +172,7 @@ public class VentaSimpleControl extends SoloViewModel {
 		String siglaFPOC = Configuracion.SIGLA_FORMA_PAGO_OTROS_COMPROBANTES;
 		
 		if(siglaFP.equals(siglaFPTC)) {
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwNroCheque.setVisible(true); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(true); rwEmisor.setVisible(true);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
 			rwNroComprobante.setVisible(true); rwCuotas.setVisible(true);
@@ -184,7 +184,7 @@ public class VentaSimpleControl extends SoloViewModel {
 			dato.getNvoFormaPago().setDescripcion(dato.getNvoFormaPago().getTipo().getText());
 			
 		} else if(siglaFP.equals(siglaFPTD)) {
-			rwNroCheque.setVisible(false); rwVencimiento.setVisible(false);
+			rwNroCheque.setVisible(true); rwVencimiento.setVisible(false);
 			rwTarjeta.setVisible(false); rwEmisor.setVisible(false);
 			rwNroTarjeta.setVisible(true); rwProcesadora.setVisible(true);
 			rwNroComprobante.setVisible(true); rwCuotas.setVisible(false);
@@ -405,7 +405,7 @@ public class VentaSimpleControl extends SoloViewModel {
 				mensaje += "\n - Debe seleccionar la Procesadora de la Tarjeta..";
 			}
 
-			if (formaPago.getTarjetaNumero().isEmpty()) {
+			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 14) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número de Tarjeta..";
 			}
@@ -413,6 +413,11 @@ public class VentaSimpleControl extends SoloViewModel {
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número del Comprobante..";
+			}
+			
+			if (formaPago.getChequeBanco().esNuevo() == true) {
+				valido = false;
+				mensaje += "\n - Debe seleccionar un Banco..";
 			}
 		
 		// Forma de pago con tarjeta de debito..
