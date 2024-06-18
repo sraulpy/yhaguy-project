@@ -233,7 +233,7 @@
 			</row>
 		</rows>
 	</grid>
-	</div>
+	
 	<toolbar align="center" style="margin-top:15px">
 		<hlayout>
 			<button label="ACEPTAR" tooltiptext="Aceptar"

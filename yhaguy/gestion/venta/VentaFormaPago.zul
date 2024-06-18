@@ -226,7 +226,6 @@
 			</row>
 		</rows>
 	</grid>
-	</div>
 	<space></space>
 	<hbox pack="center" width="100%"
 		style="margin-top:10px;margin-bottom:5px">
