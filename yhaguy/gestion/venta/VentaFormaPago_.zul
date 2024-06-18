@@ -84,8 +84,6 @@
 					@converter(vm.cnv.creditCard)" 
 					width="85px" sclass="formato-numerico"/>
 				<labelConstrain/>
-				<label value="Ingresar Todos los dígitos"
-						style="color:red;font-style:oblique"/>
 				</hlayout>
 			</row>
 			<row id="rwNroComprobante" visible="false">
