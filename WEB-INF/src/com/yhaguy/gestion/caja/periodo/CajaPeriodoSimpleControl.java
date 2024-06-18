@@ -528,7 +528,7 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 				mensaje += "\n - Debe seleccionar la Procesadora de la Tarjeta..";
 			}
 
-			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 14) {
+			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 4) {
 				valido = false;
 				mensaje += "\n - Debe completar el Número de Tarjeta..";
 			}

@@ -400,9 +400,14 @@ public class VentaSimpleControl extends SoloViewModel {
 				mensaje += "\n - Debe seleccionar la Procesadora de la Tarjeta..";
 			}
 
-			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 14) {
+			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 4) {
 				valido = false;
-				mensaje += "\n - Debe completar el Número de Tarjeta..";
+				mensaje += "\n - Debe ingresar al menos los últimos 4 Dígitos de la Tarjeta..";
+			}
+			
+			if (!Utiles.containsOnlyNumbers(formaPago.getTarjetaNumero())) {
+				valido = false;
+				mensaje += "\n - Solo se admiten números para la Tarjeta..";
 			}
 
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
@@ -426,6 +431,11 @@ public class VentaSimpleControl extends SoloViewModel {
 			if (formaPago.getTarjetaNumero().isEmpty()) {
 				valido = false;
 				mensaje += "\n - Debe ingresar el Número de Tarjeta..";
+			}
+			
+			if (!Utiles.containsOnlyNumbers(formaPago.getTarjetaNumero())) {
+				valido = false;
+				mensaje += "\n - Solo se admiten números para la Tarjeta..";
 			}
 
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {
