@@ -79,7 +79,7 @@
 			</row>
 			<row id="rwNroTarjeta" visible="false">
 				<field value="Número de Tarjeta:"/>
-				<hlayout>
+				<hlayout hflex="1">
 				<textbox value="@bind(vm.dato.nvoFormaPago.tarjetaNumero)
 					@converter(vm.cnv.creditCard)" 
 					hflex="true" sclass="formato-numerico"/>
@@ -88,7 +88,7 @@
 			</row>
 			<row id="rwNroComprobante" visible="false">
 				<field value="Número de Comprobante:"/>
-				<hlayout>
+				<hlayout hflex="1">
 				<textbox value="@bind(vm.dato.nvoFormaPago.tarjetaNumeroComprobante)"
 					hflex="true" sclass="formato-numerico"/>
 				<labelConstrain/>

@@ -407,7 +407,7 @@ public class VentaSimpleControl extends SoloViewModel {
 
 			if (formaPago.getTarjetaNumero().isEmpty() || formaPago.getTarjetaNumero().length() < 14) {
 				valido = false;
-				mensaje += "\n - Debe ingresar el Número de Tarjeta..";
+				mensaje += "\n - Debe completar el Número de Tarjeta..";
 			}
 
 			if (formaPago.getTarjetaNumeroComprobante().isEmpty()) {

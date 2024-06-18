@@ -521,11 +521,6 @@ public class CajaPeriodoSimpleControl extends SimpleViewModel {
 				valido = false;
 				mensaje += "\n - Debe seleccionar el Tipo de Tarjeta..";
 			}
-
-			if (formaPago.getTarjetaTipo().esNuevo() == true) {
-				valido = false;
-				mensaje += "\n - Debe seleccionar el Emisor de la Tarjeta..";
-			}
 			
 			if (formaPago.getTarjetaProcesadora().esNuevo() == true) {
 				valido = false;
