@@ -365,7 +365,7 @@ public class VentaItemControl extends SoloViewModel {
 			dto_mayorista = this.dto.getDescuentoMayorista();
 			double porcentajeDescuento = (double) art[6];
 			maxDescuento = porcentajeDescuento > dto_mayorista ? porcentajeDescuento : dto_mayorista;
-			if (this.getLoginNombre().equals("liliana")) {
+			if (this.getLoginNombre().equals("liliana") || this.getLoginNombre().equals("nfranco")) {
 				String cod = (String) art[1];
 				if (!cod.equals("96024") && !cod.equals("61024") && !cod.equals("C-0053")) {
 					maxDescuento = 5;
@@ -373,7 +373,7 @@ public class VentaItemControl extends SoloViewModel {
 					maxDescuento = 100;
 				}
 			}		
-			if (this.getLoginNombre().equals("liliana") && ((String) art[1]).startsWith("MKT")) {
+			if ((this.getLoginNombre().equals("liliana") || this.getLoginNombre().equals("nfranco")) && ((String) art[1]).startsWith("MKT")) {
 				maxDescuento = 100;
 			}			
 		} else {
