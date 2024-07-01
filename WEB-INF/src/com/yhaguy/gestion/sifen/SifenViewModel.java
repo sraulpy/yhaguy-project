@@ -68,8 +68,8 @@ public class SifenViewModel extends SimpleViewModel {
 	private List<Funcionario> choferes;
 	private List<Vehiculo> vehiculos;
 	
-	private String selectedChofer;
-	private String selectedVehiculo;
+	private Funcionario selectedChofer;
+	private Vehiculo selectedVehiculo;
 
 	@Init(superclass = true)
 	public void init() {
@@ -806,19 +806,19 @@ public class SifenViewModel extends SimpleViewModel {
 		this.vehiculos = vehiculos;
 	}
 
-	public String getSelectedChofer() {
+	public Funcionario getSelectedChofer() {
 		return selectedChofer;
 	}
 
-	public void setSelectedChofer(String selectedChofer) {
+	public void setSelectedChofer(Funcionario selectedChofer) {
 		this.selectedChofer = selectedChofer;
 	}
 
-	public String getSelectedVehiculo() {
+	public Vehiculo getSelectedVehiculo() {
 		return selectedVehiculo;
 	}
 
-	public void setSelectedVehiculo(String selectedVehiculo) {
+	public void setSelectedVehiculo(Vehiculo selectedVehiculo) {
 		this.selectedVehiculo = selectedVehiculo;
 	}
 }
