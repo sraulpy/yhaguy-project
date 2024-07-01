@@ -296,7 +296,6 @@ public class SifenViewModel extends SimpleViewModel {
 	public void checkDatosRemision(@BindingParam("pop") Popup pop) {
 		this.selectedItem[11] = this.selectedChofer;
 		this.selectedItem[12] = this.selectedVehiculo;
-		System.out.println("--chofer: " + this.selectedItem[11] + " --vehic: " + this.selectedItem[12]);
 		pop.close();
 	}
 	
