@@ -193,7 +193,7 @@
 		<vlayout width="300px" style="padding:10px">
 			<combobox placeholder="CHOFER" hflex="1"
 				model="@load(vm.choferes)"
-				selectedItem="@bind(vm.selectedItem[11])">
+				selectedItem="@bind(vm.selectedChofer)">
 				<template name="model">
 					<comboitem label="@load(each.razonSocial)"></comboitem>
 				</template>	
@@ -201,7 +201,7 @@
 			<div height="5px"></div>
 			<combobox placeholder="VEHÍCULO" hflex="1"
 				model="@load(vm.vehiculos)"
-				selectedItem="@bind(vm.selectedItem[12])">
+				selectedItem="@bind(vm.selectedVehiculo)">
 				<template name="model">
 					<comboitem label="@load(each.marcaChapa)"></comboitem>
 				</template>	
@@ -209,7 +209,7 @@
 			<div height="5px"></div>
 			<button iconSclass="z-icon-check" mold="bs"
 				sclass="btn-primary btn-xs" hflex="1"
-				onClick="pop_camion.close();">
+				onClick="@command('checkDatosRemision', pop=pop_camion)">
 			</button>
 		</vlayout>
 	</popup>

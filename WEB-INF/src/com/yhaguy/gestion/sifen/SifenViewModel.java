@@ -67,6 +67,9 @@ public class SifenViewModel extends SimpleViewModel {
 	
 	private List<Funcionario> choferes;
 	private List<Vehiculo> vehiculos;
+	
+	private String selectedChofer;
+	private String selectedVehiculo;
 
 	@Init(superclass = true)
 	public void init() {
@@ -288,6 +291,15 @@ public class SifenViewModel extends SimpleViewModel {
 		}
 	}
 	
+	@Command
+	@NotifyChange("selectedItem")
+	public void checkDatosRemision(@BindingParam("pop") Popup pop) {
+		this.selectedItem[11] = this.selectedChofer;
+		this.selectedItem[12] = this.selectedVehiculo;
+		System.out.println("--chofer: " + this.selectedItem[11] + " --vehic: " + this.selectedItem[12]);
+		pop.close();
+	}
+	
 	/**
 	 * @return correo valido..
 	 */
@@ -417,11 +429,20 @@ public class SifenViewModel extends SimpleViewModel {
 			SifenConfig config = null;			
 			
 			if (this.isEmpresaYRSA()) {
+				
+				/**
 				config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
 						"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
 						SifenConfig.TipoCertificadoCliente.PFX, 
 						SifenParams.SIFEN_DIR + "firma_yrsa.p12", // 
+						"saturnina"); 
+				**/
+				
+				config = new SifenConfig(SifenConfig.TipoAmbiente.PROD, "0001", // ID CSC
+						"Dc9458D44421F13B398E2A29f6D292c7", // CSC
+						SifenConfig.TipoCertificadoCliente.PFX, SifenParams.SIFEN_DIR + "firma_yrsa.p12",
 						"saturnina");
+			
 			} else {
 				config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
 						"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
@@ -783,5 +804,21 @@ public class SifenViewModel extends SimpleViewModel {
 
 	public void setVehiculos(List<Vehiculo> vehiculos) {
 		this.vehiculos = vehiculos;
+	}
+
+	public String getSelectedChofer() {
+		return selectedChofer;
+	}
+
+	public void setSelectedChofer(String selectedChofer) {
+		this.selectedChofer = selectedChofer;
+	}
+
+	public String getSelectedVehiculo() {
+		return selectedVehiculo;
+	}
+
+	public void setSelectedVehiculo(String selectedVehiculo) {
+		this.selectedVehiculo = selectedVehiculo;
 	}
 }

@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 public class SifenParams {
 
-	public static final int TIMBRADO_PROD = 16497164;
+	public static final int TIMBRADO_PROD = 17272838;
 	public static final int TIMBRADO_TEST_YRSA = 12560724;
 	public static final int TIMBRADO_TEST_GRPT = 80078124;
 	
-	public static final LocalDate VIGENCIA_PROD = LocalDate.parse("2023-06-26");
+	public static final LocalDate VIGENCIA_PROD = LocalDate.parse("2024-06-06");
 	public static final LocalDate VIGENCIA_TEST_YRSA = LocalDate.parse("2023-03-30");
 	public static final LocalDate VIGENCIA_TEST_GRPT = LocalDate.parse("2023-12-19");
 	

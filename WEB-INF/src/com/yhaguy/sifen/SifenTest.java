@@ -91,11 +91,11 @@ public class SifenTest {
         // Grupo C
         TgTimb gTimb = new TgTimb();
         gTimb.setiTiDE(TTiDE.FACTURA_ELECTRONICA);
-        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT);
+        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_PROD : SifenParams.TIMBRADO_TEST_GRPT);
         gTimb.setdEst("001");
         gTimb.setdPunExp(data.getNumero().split("-")[1]);
         gTimb.setdNumDoc(data.getNumero().split("-")[2]);
-        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
+        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_PROD : SifenParams.VIGENCIA_TEST_GRPT);
         DE.setgTimb(gTimb);
 
         // Grupo D
