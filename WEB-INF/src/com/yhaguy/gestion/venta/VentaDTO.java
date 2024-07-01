@@ -345,6 +345,9 @@ public class VentaDTO extends DTO {
 		int size = this.getDetalles().size();
 		int limite = Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA) ? 
 				Configuracion.LIMITE_ITEMS_FACTURA_VENTA_BAT : Configuracion.LIMITE_ITEMS_FACTURA_VENTA;
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			limite = 100;
+		}
 		Double division = (double) ((double) size / limite);
 		int entero = division.intValue();
 		double decimal = division - entero;

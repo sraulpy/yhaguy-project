@@ -198,7 +198,8 @@ public class SifenViewModel extends SimpleViewModel {
 		}
 		
 		String[] send = new String[] { destino };
-		String[] sendCC = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCC = new String[] { "estelap@yhaguyrepuestos.com.py", "vanesar@yhaguyrepuestos.com.py",
+				"rodrigol@yhaguyrepuestos.com.py" };
 		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 		try {
 			String asunto = "Factura Electrónica - " + Configuracion.empresa;
@@ -235,7 +236,8 @@ public class SifenViewModel extends SimpleViewModel {
 		}
 		
 		String[] send = new String[] { destino };
-		String[] sendCC = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCC = new String[] { "estelap@yhaguyrepuestos.com.py", "vanesar@yhaguyrepuestos.com.py",
+		"rodrigol@yhaguyrepuestos.com.py" };
 		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 		try {
 			String asunto = "Nota de Remisión Electrónica - " + Configuracion.empresa;
@@ -272,7 +274,8 @@ public class SifenViewModel extends SimpleViewModel {
 		}
 		
 		String[] send = new String[] { destino };
-		String[] sendCC = new String[] { "sergioa@yhaguyrepuestos.com.py" };
+		String[] sendCC = new String[] { "estelap@yhaguyrepuestos.com.py", "vanesar@yhaguyrepuestos.com.py",
+		"rodrigol@yhaguyrepuestos.com.py" };
 		String[] sendCCO = new String[] { "sergioa@yhaguyrepuestos.com.py" };
 		try {
 			String asunto = "Nota de Crédito Electrónica - " + Configuracion.empresa;

@@ -1066,9 +1066,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 					Clients.NOTIFICATION_TYPE_ERROR, null, null, 0);
 		}
 		
-		if (!this.mensajeSiNo("EL NRO. DE FACTURA A GENERAR ES EL: "
-				+ this.getNumeroVentaProvisorio() + " \n ES EL CORRECTO..?")) {
-			return;
+		if (!this.isEmpresaCentral()) {
+			if (!this.mensajeSiNo("EL NRO. DE FACTURA A GENERAR ES EL: "
+					+ this.getNumeroVentaProvisorio() + " \n ES EL CORRECTO..?")) {
+				return;
+			}
 		}
 
 		// generacion de los nros de factura..
@@ -1078,7 +1080,12 @@ public class CajaPeriodoControlBody extends BodyApp {
 
 		VentaControlBody ctr = new VentaControlBody();
 		List<VentaDTO> ventas = null;
-		String timbrado = this.getTalonarioVentas().getTimbrado().getNumero();
+		String timbrado;
+		if (this.isEmpresaCentral()) {
+			timbrado = "17272838";
+		} else {
+			timbrado = this.getTalonarioVentas().getTimbrado().getNumero();
+		}
 
 		if (pedido.isCondicionContado() == true) {
 			ventas = ctr.crearFacturaContadoDesdePedido(pedido, true, this.dto.getNumero(), timbrado);
@@ -1123,15 +1130,16 @@ public class CajaPeriodoControlBody extends BodyApp {
 		ProcesosHistoricos.updateHistoricoVentaMeta(total_vtas, 0, servicio);
 		ProcesosHistoricos.updateHistoricoVentaDiaria(new Date(), total_vtas, 0);
 		ControlCuentaCorriente.verificarBloqueoTemporal((long) pedido.getCliente().getPos4(), pedido.getCliente().getId(), this.getLoginNombre());
-		Control.updateControlTalonario(this.getLoginNombre(), ventas.size());
-
-		for (VentaDTO venta : ventas) {
-			this.addMovimientoBanco(venta);
-			this.imprimirVenta(venta);
-			for (SaldoVale vale : venta.getValesGenerados()) {
-				this.imprimirVale(vale);
+		if (!this.isEmpresaCentral()) {
+			Control.updateControlTalonario(this.getLoginNombre(), ventas.size());
+			for (VentaDTO venta : ventas) {
+				this.addMovimientoBanco(venta);
+				this.imprimirVenta(venta);
+				for (SaldoVale vale : venta.getValesGenerados()) {
+					this.imprimirVale(vale);
+				}
 			}
-		}
+		}		
 	}
 
 	/**
@@ -1312,7 +1320,11 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.selectedNotaCredito = nc;
 
 			nc.setNumeroNotaCredito(this.getNumeroNotaCredito());
-			nc.setTimbrado_(this.getTalonarioNotasCredito().getTimbrado().getNumero());
+			if (this.isEmpresaCentral()) {
+				nc.setTimbrado_(this.getTalonarioNotasCredito().getTimbrado().getNumero());
+			} else {
+				nc.setTimbrado_("17272838");
+			}			
 			nc.setCajaNro(this.dto.getCaja().getNumero());
 			nc.setPlanillaCajaNro(this.dto.getNumero());
 			nc.setCajero((String) this.dto.getResponsable().getPos1());
@@ -2404,6 +2416,9 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * impresion nota credito en laser..
 	 */
 	private void imprimirNotaCredito_(NotaCreditoDTO nc) throws Exception {
+		if (this.isEmpresaCentral()) {
+			return;
+		}
 		Date fechaFac = (Date) nc.getDetallesFacturas().get(0).getVenta().getPos3();
 		String fechaFac_ = this.m.dateToString(fechaFac, Misc.DD_MM_YYYY);
 		String condicion = (String) nc.getDetallesFacturas().get(0).getVenta().getPos6();
@@ -3059,6 +3074,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * @return el prefijo del talonario de venta..
 	 */
 	private String getNumeroVenta() throws Exception {
+		if (this.isEmpresaCentral()) {
+			String nro = AutoNumeroControl.getAutoNumero("FE", 7);
+			return "001-001-" + nro;
+		}
 		MyArray talonario = this.dto.getCaja().getTalonarioVentas();
 		int boca = (int) talonario.getPos2();
 		int punto = (int) talonario.getPos3();
@@ -3088,6 +3107,10 @@ public class CajaPeriodoControlBody extends BodyApp {
 	 * @return el prefijo del talonario de venta..
 	 */
 	private String getNumeroNotaCredito() throws Exception {
+		if (this.isEmpresaCentral()) {
+			String nro = AutoNumeroControl.getAutoNumero("NCE", 7);
+			return "001-001-" + nro;
+		}
 		MyArray talonario = this.dto.getCaja().getTalonarioNotasCredito();
 		int boca = (int) talonario.getPos2();
 		int punto = (int) talonario.getPos3();
