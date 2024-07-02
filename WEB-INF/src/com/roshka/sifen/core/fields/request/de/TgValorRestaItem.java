@@ -31,11 +31,13 @@ public class TgValorRestaItem extends SifenObjectBase {
     public void setupSOAPElements(SOAPElement gValorItem, TTiDE iTiDE, TTImp iTImp, TdCondTiCam dCondTiCam, BigDecimal dTiCamIt,
                                   BigDecimal dPUniProSer, BigDecimal dCantProSer, CMondT cMoneOpe) throws SOAPException {
         SOAPElement gValorRestaItem = gValorItem.addChildElement("gValorRestaItem");
+        
+        int scale = cMoneOpe.name().equals("PYG") ? 0 : 2;
 
         if (this.dDescItem != null) {
             gValorRestaItem.addChildElement("dDescItem").setTextContent(String.valueOf(this.dDescItem));
 
-            this.dPorcDesIt = this.dDescItem.multiply(BigDecimal.valueOf(100)).divide(dPUniProSer, 2, RoundingMode.HALF_UP);
+            this.dPorcDesIt = this.dDescItem.multiply(BigDecimal.valueOf(100)).divide(dPUniProSer, scale, RoundingMode.HALF_UP);
             gValorRestaItem.addChildElement("dPorcDesIt").setTextContent(String.valueOf(this.dPorcDesIt));
         }
 
@@ -56,7 +58,6 @@ public class TgValorRestaItem extends SifenObjectBase {
         }
 //        gValorRestaItem.addChildElement("dTotOpeItem").setTextContent(String.valueOf(this.dTotOpeItem));
         //am 22_11
-        int scale = cMoneOpe.name().equals("PYG") ? 0 : 2;
         gValorRestaItem.addChildElement("dTotOpeItem").setTextContent(String.valueOf(this.dTotOpeItem.setScale(scale, RoundingMode.HALF_UP)));
 
         if (dCondTiCam != null && dCondTiCam.getVal() == 2) {

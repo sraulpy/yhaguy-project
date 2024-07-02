@@ -141,6 +141,11 @@ public class DocumentoElectronico extends SifenObjectBase {
      * @throws SifenException Si alguno de los campos necesarios para el cálculo del CDC no se encuentra.
      */
     public String obtenerCDC() throws SifenException {
+    	
+    	if (this.Id != null && !this.Id.trim().isEmpty()) {
+			return this.Id;
+		}
+    	
         // Se intenta la generación del CDC
         String CDC;
         try {

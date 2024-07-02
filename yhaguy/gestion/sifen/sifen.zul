@@ -31,7 +31,7 @@
 						<listheader label="Cliente"></listheader>
 						<listheader label="Estado" width="100px"></listheader>
 						<listheader label="Link" width="100px" align="center"></listheader>
-						<listheader label="Acciones" width="150px" align="center"></listheader>
+						<listheader label="Acciones" width="170px" align="center"></listheader>
 					</listhead>
 					<template name="model">
 						<listitem>
@@ -47,7 +47,7 @@
 									href="@load(each[10])" target="_blank"> LINK</a>
 							</listcell>
 							<listcell>
-								<hlayout>									
+								<hlayout hflex="1">									
 									<button iconSclass="z-icon-upload" mold="bs" sclass="btn-primary btn-xs"
 										tooltiptext="Enviar a la SET" hflex="1"
 										onClick="@command('generarFE', bean=each)"
@@ -61,6 +61,11 @@
 										disabled="@load(each[9] ne 'Aprobado')"
 										hflex="1"
 										onClick="@command('openPopup', pop=pop_email, parent=self, bean=each)"></button>
+									<button mold="bs" sclass="btn-primary btn-xs"
+										iconSclass="z-icon-chain-broken" hflex="1"
+										tooltiptext="DE Asíncrono"
+										onClick="@command('generarFEAsync', bean=each)"
+										disabled="@load(each[9] eq 'Aprobado' or each[9] eq 'Anulado')" />
 								</hlayout>
 							</listcell>							
 						</listitem>
@@ -87,7 +92,7 @@
 						<listheader label="Cliente"></listheader>
 						<listheader label="Estado" width="100px"></listheader>
 						<listheader label="Link" width="100px" align="center"></listheader>
-						<listheader label="Acciones" width="170px" align="center"></listheader>
+						<listheader label="Acciones" width="190px" align="center"></listheader>
 					</listhead>
 					<template name="model">
 						<listitem>
@@ -125,6 +130,11 @@
 										hflex="1"
 										onClick="@command('openPopup', pop=pop_email_nre, parent=self, bean=each)">
 									</button>
+									<button mold="bs" sclass="btn-primary btn-xs"
+										iconSclass="z-icon-chain-broken" hflex="1"
+										tooltiptext="DE Asíncrono"
+										onClick="@command('generarNREAsync', bean=each)"
+										disabled="@load(each[9] eq 'Aprobado' or each[9] eq 'Anulado')" />
 								</hbox>
 							</listcell>							
 						</listitem>

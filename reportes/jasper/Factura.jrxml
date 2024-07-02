@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="ireport.zoom" value="1.8150000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="4"/>
+	<property name="ireport.y" value="244"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -1254,6 +1254,13 @@
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dSubExe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###.###;(#,###.###-)">
+				<reportElement x="360" y="1" width="45" height="13" uuid="85abd9e6-cb4d-4017-baed-d5d47a0dd0e1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dTotDesc}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

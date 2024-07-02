@@ -65,7 +65,7 @@ public class SifenTest {
 
 	private final static Logger logger = Logger.getLogger(SifenTest.class.toString());
 	
-	public void testRecepcionDE(Venta data, boolean async) throws SifenException {
+	public void testRecepcionDE(Venta data, boolean async, boolean testing) throws SifenException {
 		Date in = data.getFecha();
 		LocalDateTime currentDate = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
         
@@ -86,16 +86,17 @@ public class SifenTest {
         // Grupo B
         TgOpeDE gOpeDE = new TgOpeDE();
         gOpeDE.setiTipEmi(TTipEmi.NORMAL);
+        gOpeDE.setdCodSeg("000000001");
         DE.setgOpeDE(gOpeDE);
 
         // Grupo C
         TgTimb gTimb = new TgTimb();
         gTimb.setiTiDE(TTiDE.FACTURA_ELECTRONICA);
-        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_PROD : SifenParams.TIMBRADO_TEST_GRPT);
+        gTimb.setdNumTim(isEmpresaYRSA() ? (testing ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_PROD) : SifenParams.TIMBRADO_TEST_GRPT);
         gTimb.setdEst("001");
         gTimb.setdPunExp(data.getNumero().split("-")[1]);
         gTimb.setdNumDoc(data.getNumero().split("-")[2]);
-        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_PROD : SifenParams.VIGENCIA_TEST_GRPT);
+        gTimb.setdFeIniT(isEmpresaYRSA() ? (testing ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_PROD) : SifenParams.VIGENCIA_TEST_GRPT);
         DE.setgTimb(gTimb);
 
         // Grupo D
@@ -198,6 +199,8 @@ public class SifenTest {
         gDtipDE.setgCamCond(gCamCond);
 
         List<TgCamItem> gCamItemList = new ArrayList<>();
+        int scale = data.isMonedaLocal() ? 0 : 2;
+        
         for (VentaDetalle d : data.getDetalles()) {
             TgCamItem gCamItem = new TgCamItem();
             gCamItem.setdCodInt(d.getArticulo().getCodigoInterno());
@@ -206,10 +209,13 @@ public class SifenTest {
             gCamItem.setdCantProSer(BigDecimal.valueOf(d.getCantidad()));
 
             TgValorItem gValorItem = new TgValorItem();
-            gValorItem.setdPUniProSer(BigDecimal.valueOf(d.getPrecioGs()).setScale(2, RoundingMode.HALF_UP));
+            gValorItem.setdPUniProSer(BigDecimal.valueOf(d.getPrecioGs()).setScale(scale, RoundingMode.HALF_UP));
 
             TgValorRestaItem gValorRestaItem = new TgValorRestaItem();
             gValorItem.setgValorRestaItem(gValorRestaItem);
+            if (d.getDescuentoUnitarioGs() > 0) {
+            	gValorRestaItem.setdDescItem(BigDecimal.valueOf(d.getDescuentoUnitarioGs() / d.getCantidad()).setScale(scale, RoundingMode.HALF_UP));
+			}            
             gCamItem.setgValorItem(gValorItem);
 
             TgCamIVA gCamIVA = new TgCamIVA();

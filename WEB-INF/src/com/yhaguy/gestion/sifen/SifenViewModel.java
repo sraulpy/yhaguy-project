@@ -60,6 +60,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class SifenViewModel extends SimpleViewModel {
 	
+	static final boolean TESTING = false;
+	
 	private Date filterDesde;
 	private Date filterHasta;
 	
@@ -82,7 +84,7 @@ public class SifenViewModel extends SimpleViewModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.configSifen();
+		this.configSifen(TESTING);
 	}
 	
 	@AfterCompose(superclass = true)
@@ -95,12 +97,25 @@ public class SifenViewModel extends SimpleViewModel {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			Venta venta = (Venta) rr.getObject(Venta.class.getName(), (long) bean[8]);
 			SifenTest test = new SifenTest();
-			test.testRecepcionDE(venta, false);
+			test.testRecepcionDE(venta, false, TESTING);
 			this.generarPDFFE(venta);			
 			rr.saveObject(venta, this.getLoginNombre());
 			bean[9] = venta.getRespuestaSET();
 			bean[10] = venta.getUrl();
 			BindUtils.postNotifyChange(null, null, bean, "*");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	public void generarFEAsync(@BindingParam("bean") Object[] bean) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Venta venta = (Venta) rr.getObject(Venta.class.getName(), (long) bean[8]);
+			SifenTest test = new SifenTest();
+			test.testRecepcionDE(venta, true, TESTING);
+			this.imprimirFE(bean);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,6 +135,21 @@ public class SifenViewModel extends SimpleViewModel {
 			bean[9] = rem.getRespuestaSET();
 			bean[10] = rem.getUrl();
 			BindUtils.postNotifyChange(null, null, bean, "*");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Command
+	public void generarNREAsync(@BindingParam("bean") Object[] bean) {
+		try {
+			RegisterDomain rr = RegisterDomain.getInstance();
+			Remision rem = (Remision) rr.getObject(Remision.class.getName(), (long) bean[8]);
+			rem.setChofer((Funcionario) bean[11]);
+			rem.setVehiculo_((Vehiculo) bean[12]);
+			SifenREM sf = new SifenREM();
+			sf.testRecepcionDE(rem, true);
+			this.generarPDFNRE(rem);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -354,6 +384,8 @@ public class SifenViewModel extends SimpleViewModel {
 	private void generarPDFFE(Venta bean) {
 		try {
 			String path = SifenParams.PATH_FACTURAS + bean.getNumero() + ".xml";
+			
+			
 			String xml = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			DocumentoElectronico DE = new DocumentoElectronico(xml);
 			DE.setEnlaceQR(Utiles.parseXML(path, "dCarQR"));
@@ -426,25 +458,25 @@ public class SifenViewModel extends SimpleViewModel {
 	/**
 	 * config sifen
 	 */
-	private void configSifen() {
+	private void configSifen(boolean testing) {
 		try {
 			SifenConfig config = null;			
 			
 			if (this.isEmpresaYRSA()) {
 				
-				/**
-				config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
-						"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
-						SifenConfig.TipoCertificadoCliente.PFX, 
-						SifenParams.SIFEN_DIR + "firma_yrsa.p12", // 
-						"saturnina"); 
-				**/
-				
-				config = new SifenConfig(SifenConfig.TipoAmbiente.PROD, "0001", // ID CSC
-						"Dc9458D44421F13B398E2A29f6D292c7", // CSC
-						SifenConfig.TipoCertificadoCliente.PFX, SifenParams.SIFEN_DIR + "firma_yrsa.p12",
-						"saturnina");
-			
+				if (!testing) {
+					config = new SifenConfig(SifenConfig.TipoAmbiente.PROD, "0001", // ID CSC
+							"Dc9458D44421F13B398E2A29f6D292c7", // CSC
+							SifenConfig.TipoCertificadoCliente.PFX, SifenParams.SIFEN_DIR + "firma_yrsa.p12",
+							"saturnina");
+				} else {
+					config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
+							"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
+							SifenConfig.TipoCertificadoCliente.PFX, 
+							SifenParams.SIFEN_DIR + "firma_yrsa.p12", // 
+							"saturnina");
+				}		
+							
 			} else {
 				config = new SifenConfig(SifenConfig.TipoAmbiente.DEV, "0001", // ID CSC
 						"ABCD0000000000000000000000000000", // CSC EFGH0000000000000000000000000000
@@ -593,7 +625,9 @@ public class SifenViewModel extends SimpleViewModel {
 					value = Double.parseDouble(item.getdCantProSer() + "");
 				}				
 			}  else if ("dDescItem".equals(fieldName)) {
-				value = 0.0;
+				value = Double.parseDouble(item.getgValorItem().getgValorRestaItem().getdDescItem() + "");
+			}  else if ("dTotDesc".equals(fieldName)) {
+				value = Double.parseDouble(this.DE.getgTotSub().getdTotDesc() + "");
 			}  else if ("dTasaIVA".equals(fieldName)) {
 				value = Integer.parseInt(item.getgCamIVA().getdTasaIVA().intValueExact() + "");
 			}  else if ("dTotOpeItem".equals(fieldName)) {
