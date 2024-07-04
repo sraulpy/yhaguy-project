@@ -147,6 +147,7 @@ public class SifenViewModel extends SimpleViewModel {
 			Remision rem = (Remision) rr.getObject(Remision.class.getName(), (long) bean[8]);
 			rem.setChofer((Funcionario) bean[11]);
 			rem.setVehiculo_((Vehiculo) bean[12]);
+			rr.saveObject(rem, this.getLoginNombre());
 			SifenREM sf = new SifenREM();
 			sf.testRecepcionDE(rem, true);
 			this.imprimirNRE(bean);
