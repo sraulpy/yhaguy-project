@@ -149,7 +149,7 @@ public class SifenViewModel extends SimpleViewModel {
 			rem.setVehiculo_((Vehiculo) bean[12]);
 			SifenREM sf = new SifenREM();
 			sf.testRecepcionDE(rem, true);
-			this.generarPDFNRE(rem);
+			this.imprimirNRE(bean);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
