@@ -7,7 +7,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.admin.model.Sifen;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
