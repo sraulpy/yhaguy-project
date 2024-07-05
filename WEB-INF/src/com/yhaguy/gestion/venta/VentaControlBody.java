@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.admin.model.Sifen;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -745,6 +746,7 @@ public class VentaControlBody extends BodyApp {
 		}
 
 		if (grabar == true) {
+			this.checkFecha(out);
 			out = (VentaDTO) this.saveDTO(out, new AssemblerVenta());
 			desde.setEstado(crearPedido ? estado_Pasado_a_Pedido
 					: estado_PedidoFacturado);
@@ -807,6 +809,19 @@ public class VentaControlBody extends BodyApp {
 		}
 
 		return out;
+	}
+	
+	/**
+	 * prevent ms eq 00
+	 */
+	private void checkFecha(VentaDTO bean) {
+		String ms = Utiles.getDateToString(bean.getFecha(), "ss");
+		if (ms.equals("00")) {
+			bean.setFecha(new Date());
+			this.checkFecha(bean);
+		} else {
+			return;
+		}
 	}
 	
 	

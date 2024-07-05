@@ -1,7 +1,16 @@
 package com.roshka.sifen.core.fields.request.de;
 
+import static com.roshka.sifen.core.fields.util.FieldFormatUtil.formattdCRed;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
+
+import org.w3c.dom.Node;
+
 import com.roshka.sifen.core.exceptions.SifenException;
-import com.roshka.sifen.core.fields.util.RedondeoUtil;
 import com.roshka.sifen.core.types.CMondT;
 import com.roshka.sifen.core.types.TTImp;
 import com.roshka.sifen.core.types.TTiDE;
@@ -9,14 +18,6 @@ import com.roshka.sifen.core.types.TdCondTiCam;
 import com.roshka.sifen.internal.response.SifenObjectBase;
 import com.roshka.sifen.internal.util.ResponseUtil;
 import com.roshka.sifen.internal.util.SifenUtil;
-import org.w3c.dom.Node;
-
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import static com.roshka.sifen.core.fields.util.FieldFormatUtil.formattdCRed;
 
 public class TgTotSub extends SifenObjectBase {
     private BigDecimal dSubExe = BigDecimal.ZERO;
@@ -109,7 +110,8 @@ public class TgTotSub extends SifenObjectBase {
         //this.dPorcDescTotal = this.dDescTotal.multiply(BigDecimal.valueOf(100)).divide(this.dTotOpe.add(this.dDescTotal), 2, RoundingMode.HALF_UP); para descto global
         this.dAnticipo = this.dTotAntItem.add(this.dTotAnt);
 
-        this.dRedon = RedondeoUtil.redondeoOficialSET(cMoneOpe, this.dTotOpe);
+        //this.dRedon = RedondeoUtil.redondeoOficialSET(cMoneOpe, this.dTotOpe);
+        this.dRedon = BigDecimal.ZERO;
         this.dTotGralOpe = this.dTotOpe.subtract(this.dRedon).add(SifenUtil.coalesce(this.dComi, BigDecimal.ZERO));
         this.dRedon = this.dRedon.abs();
 
