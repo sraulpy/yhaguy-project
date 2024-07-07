@@ -1320,11 +1320,13 @@ public class CajaPeriodoControlBody extends BodyApp {
 			this.selectedNotaCredito = nc;
 
 			nc.setNumeroNotaCredito(this.getNumeroNotaCredito());
+			String timbrado;
 			if (this.isEmpresaCentral()) {
-				nc.setTimbrado_(this.getTalonarioNotasCredito().getTimbrado().getNumero());
+				timbrado = "17272838";
 			} else {
-				nc.setTimbrado_("17272838");
-			}			
+				timbrado = this.getTalonarioNotasCredito().getTimbrado().getNumero();
+			}
+			nc.setTimbrado_(timbrado);		
 			nc.setCajaNro(this.dto.getCaja().getNumero());
 			nc.setPlanillaCajaNro(this.dto.getNumero());
 			nc.setCajero((String) this.dto.getResponsable().getPos1());
@@ -1353,13 +1355,8 @@ public class CajaPeriodoControlBody extends BodyApp {
 				ProcesosHistoricos.updateHistoricoCobranzaDiaria(new Date(), tot_nc * -1);
 			}
 
-			this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);
-			
-			if (Configuracion.empresa.equals(Configuracion.EMPRESA_GTSA)) {
-				this.imprimirNotaCredito_(this.selectedNotaCredito);
-			} else {
-				this.imprimirNotaCredito_(this.selectedNotaCredito);
-			}
+			this.dto = (CajaPeriodoDTO) this.saveDTO(this.dto);			
+			this.imprimirNotaCredito_(this.selectedNotaCredito);
 		}
 	}
 	

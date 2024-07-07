@@ -129,7 +129,7 @@ public class SifenViewModel extends SimpleViewModel {
 			rem.setChofer((Funcionario) bean[11]);
 			rem.setVehiculo_((Vehiculo) bean[12]);
 			SifenREM sf = new SifenREM();
-			sf.testRecepcionDE(rem, false);
+			sf.testRecepcionDE(rem, false, TESTING);
 			this.generarPDFNRE(rem);			
 			rr.saveObject(rem, this.getLoginNombre());
 			bean[9] = rem.getRespuestaSET();
@@ -149,7 +149,7 @@ public class SifenViewModel extends SimpleViewModel {
 			rem.setVehiculo_((Vehiculo) bean[12]);
 			rr.saveObject(rem, this.getLoginNombre());
 			SifenREM sf = new SifenREM();
-			sf.testRecepcionDE(rem, true);
+			sf.testRecepcionDE(rem, true, TESTING);
 			this.imprimirNRE(bean);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,7 +162,7 @@ public class SifenViewModel extends SimpleViewModel {
 			RegisterDomain rr = RegisterDomain.getInstance();
 			NotaCredito ncred = (NotaCredito) rr.getObject(NotaCredito.class.getName(), (long) bean[8]);
 			SifenNC test = new SifenNC();
-			test.testRecepcionDE(ncred);
+			test.testRecepcionDE(ncred, TESTING);
 			this.generarPDFNCR(ncred);			
 			rr.saveObject(ncred, this.getLoginNombre());
 			bean[9] = ncred.getRespuestaSET();

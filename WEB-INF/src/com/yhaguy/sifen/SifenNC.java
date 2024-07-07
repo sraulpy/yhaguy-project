@@ -68,7 +68,7 @@ public class SifenNC {
 
 	private final static Logger logger = Logger.getLogger(SifenNC.class.toString());
 	
-	public void testRecepcionDE(NotaCredito data) throws SifenException {
+	public void testRecepcionDE(NotaCredito data, boolean testing) throws SifenException {
 		Date in = data.getFechaEmision();
 		LocalDateTime currentDate = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
         
@@ -96,11 +96,11 @@ public class SifenNC {
         // Grupo C
         TgTimb gTimb = new TgTimb();
         gTimb.setiTiDE(TTiDE.NOTA_DE_CREDITO_ELECTRONICA);
-        gTimb.setdNumTim(isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT);
+        gTimb.setdNumTim(isEmpresaYRSA() ? (testing ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_PROD) : SifenParams.TIMBRADO_TEST_GRPT);
         gTimb.setdEst("001");
         gTimb.setdPunExp(data.getNumero().split("-")[1]);
         gTimb.setdNumDoc(data.getNumero().split("-")[2]);
-        gTimb.setdFeIniT(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
+        gTimb.setdFeIniT(isEmpresaYRSA() ? (testing ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_PROD) : SifenParams.VIGENCIA_TEST_GRPT);
         DE.setgTimb(gTimb);
 
         // Grupo D

@@ -844,6 +844,13 @@ public class Utiles {
 		return monthMap.get(mes.toLowerCase());
 	}
 	
+	/**
+	 * @return only numbers..
+	 */
+	public static boolean containsOnlyNumbers(String str) {
+        return str.matches("\\d+");
+    }
+	
 	public static void mainX(String[] args) {		
 		JSONParser parser = new JSONParser();
 		try {
