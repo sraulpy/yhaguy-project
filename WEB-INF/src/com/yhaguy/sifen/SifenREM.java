@@ -179,7 +179,10 @@ public class SifenREM {
         gDatRec.setcCiuRec(1);
         gDatRec.setdDesCiuRec("ASUNCION (DISTRITO)");
         dDatGralOpe.setgDatRec(gDatRec);
-        gDatRec.setdDirRec("021 500 500");
+        gDatRec.setdDirRec("ASUNCION (DISTRITO)");
+        if (!data.getVenta().getCliente().getEmpresa().getDireccion_().trim().isEmpty()) {
+        	gDatRec.setdDirRec(data.getVenta().getCliente().getEmpresa().getDireccion_());
+		}
         DE.setgDatGralOpe(dDatGralOpe);
 
         // Grupo E

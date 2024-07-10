@@ -156,16 +156,19 @@ public class SifenTest {
 	        gDatRec.setiTipIDRec(TiTipDocRec.CEDULA_PARAGUAYA);
 	        gDatRec.setdNumIDRec(data.getCliente().getRuc());
 	        gDatRec.setdNomRec(data.getCliente().getRazonSocial());
-		}        
+		} 
         gDatRec.setcDepRec(TDepartamento.CAPITAL);
         gDatRec.setcCiuRec(1);
         gDatRec.setdDesCiuRec("ASUNCION (DISTRITO)");
-        gDatRec.setdTelRec("021 500 500");
+        gDatRec.setdTelRec("021 999 999");
         if (!data.getCliente().getEmpresa().getCorreo_().trim().isEmpty()) {
         	gDatRec.setdEmailRec(data.getCliente().getEmpresa().getCorreo_());
 		}
-        if (!data.getCliente().getEmpresa().getDireccion().trim().isEmpty()) {
-        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion());
+        if (!data.getCliente().getEmpresa().getDireccion_().trim().isEmpty()) {
+        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion_());
+		}
+        if (!data.getCliente().getEmpresa().getTelefono_().trim().isEmpty()) {
+        	gDatRec.setdTelRec(data.getCliente().getEmpresa().getTelefono_());
 		}
         dDatGralOpe.setgDatRec(gDatRec);
         DE.setgDatGralOpe(dDatGralOpe);

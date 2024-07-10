@@ -164,7 +164,15 @@ public class SifenNC {
         gDatRec.setcCiuRec(1);
         gDatRec.setdDesCiuRec("ASUNCION (DISTRITO)");
         dDatGralOpe.setgDatRec(gDatRec);
-        gDatRec.setdDirRec("021 500 500");
+        gDatRec.setdDirRec("021 999 999");
+        
+        if (!data.getCliente().getEmpresa().getDireccion_().trim().isEmpty()) {
+        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion_());
+		}
+        if (!data.getCliente().getEmpresa().getTelefono_().trim().isEmpty()) {
+        	gDatRec.setdTelRec(data.getCliente().getEmpresa().getTelefono_());
+		}
+        
         DE.setgDatGralOpe(dDatGralOpe);
 
         // Grupo E
