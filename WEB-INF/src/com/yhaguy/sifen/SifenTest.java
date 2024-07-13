@@ -163,13 +163,13 @@ public class SifenTest {
         gDatRec.setdDesCiuRec("ASUNCION (DISTRITO)");
         gDatRec.setdTelRec("021 999 999");
         if (!data.getCliente().getEmpresa().getCorreo_().trim().isEmpty()) {
-        	gDatRec.setdEmailRec(data.getCliente().getEmpresa().getCorreo_());
+        	gDatRec.setdEmailRec(data.getCliente().getEmpresa().getCorreo_().trim());
 		}
         if (!data.getCliente().getEmpresa().getDireccion_().trim().isEmpty()) {
-        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion_());
+        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion_().trim());
 		}
         if (!data.getCliente().getEmpresa().getTelefono_().trim().isEmpty()) {
-        	gDatRec.setdTelRec(data.getCliente().getEmpresa().getTelefono_());
+        	gDatRec.setdTelRec(data.getCliente().getEmpresa().getTelefono_().trim());
 		}
         dDatGralOpe.setgDatRec(gDatRec);
         DE.setgDatGralOpe(dDatGralOpe);

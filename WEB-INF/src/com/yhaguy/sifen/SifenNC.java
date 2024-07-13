@@ -168,10 +168,10 @@ public class SifenNC {
         gDatRec.setdDirRec("021 999 999");
         
         if (!data.getCliente().getEmpresa().getDireccion_().trim().isEmpty()) {
-        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion_());
+        	gDatRec.setdDirRec(data.getCliente().getEmpresa().getDireccion_().trim());
 		}
         if (!data.getCliente().getEmpresa().getTelefono_().trim().isEmpty()) {
-        	gDatRec.setdTelRec(data.getCliente().getEmpresa().getTelefono_());
+        	gDatRec.setdTelRec(data.getCliente().getEmpresa().getTelefono_().trim());
 		}
         
         DE.setgDatGralOpe(dDatGralOpe);

@@ -182,7 +182,7 @@ public class SifenREM {
         dDatGralOpe.setgDatRec(gDatRec);
         gDatRec.setdDirRec("ASUNCION (DISTRITO)");
         if (!data.getVenta().getCliente().getEmpresa().getDireccion_().trim().isEmpty()) {
-        	gDatRec.setdDirRec(data.getVenta().getCliente().getEmpresa().getDireccion_());
+        	gDatRec.setdDirRec(data.getVenta().getCliente().getEmpresa().getDireccion_().trim());
 		}
         DE.setgDatGralOpe(dDatGralOpe);
 
