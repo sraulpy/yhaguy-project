@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="ireport.zoom" value="1.6500000000000106"/>
 	<property name="ireport.x" value="543"/>
-	<property name="ireport.y" value="706"/>
+	<property name="ireport.y" value="1042"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -438,9 +438,9 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="454" y="122" width="1" height="236" uuid="7d9e4465-f1aa-4df6-9f2f-833ffce58438"/>
+				<reportElement x="455" y="122" width="1" height="236" uuid="7d9e4465-f1aa-4df6-9f2f-833ffce58438"/>
 				<graphicElement>
-					<pen lineWidth="1.0"/>
+					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
