@@ -9,9 +9,9 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="ireport.zoom" value="1.6500000000000106"/>
-	<property name="ireport.x" value="543"/>
-	<property name="ireport.y" value="1042"/>
+	<property name="ireport.zoom" value="1.3636363636363742"/>
+	<property name="ireport.x" value="275"/>
+	<property name="ireport.y" value="432"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -426,25 +426,25 @@
 	<background>
 		<band height="572">
 			<line>
-				<reportElement x="435" y="122" width="1" height="236" uuid="57fd8d6f-b6aa-4b5c-b094-d2a5b0108a5b"/>
+				<reportElement x="434" y="122" width="1" height="236" uuid="57fd8d6f-b6aa-4b5c-b094-d2a5b0108a5b"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="-1" y="122" width="1" height="236" uuid="14d6d3ae-1818-48a5-9a3e-a2d128498a5e"/>
+				<reportElement x="0" y="122" width="1" height="236" uuid="14d6d3ae-1818-48a5-9a3e-a2d128498a5e"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="453" y="122" width="1" height="236" uuid="7d9e4465-f1aa-4df6-9f2f-833ffce58438"/>
+				<reportElement x="454" y="122" width="1" height="236" uuid="7d9e4465-f1aa-4df6-9f2f-833ffce58438"/>
 				<graphicElement>
-					<pen lineWidth="0.5"/>
+					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="901" y="122" width="1" height="236" uuid="5fb4d28b-21df-463c-9985-74a02bec9cb5"/>
+				<reportElement x="902" y="122" width="1" height="236" uuid="5fb4d28b-21df-463c-9985-74a02bec9cb5"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
@@ -486,7 +486,7 @@
 					<textFieldExpression><![CDATA[$F{dEst}+ "-" +   $F{dPunExp} + "-" +$F{dNumDoc}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="105" y="1" width="205" height="13" uuid="d669db72-7bab-4ccc-b493-3c5177ecd403"/>
+					<reportElement x="94" y="1" width="216" height="13" uuid="d669db72-7bab-4ccc-b493-3c5177ecd403"/>
 					<textElement>
 						<font size="10" isBold="true"/>
 					</textElement>
@@ -1485,7 +1485,11 @@
 			<frame>
 				<reportElement x="0" y="0" width="435" height="56" printWhenGroupChanges="dDesUniMed" uuid="70f90018-3143-43f2-86ba-711c21f76884"/>
 				<box>
-					<pen lineWidth="1.5"/>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField pattern="#,##0.###;(#,##0.###-)">
 					<reportElement x="345" y="40" width="87" height="13" uuid="b2568557-852f-42f2-afbd-6208e6d9d380"/>
@@ -1505,7 +1509,11 @@
 			<frame>
 				<reportElement x="0" y="61" width="435" height="138" uuid="93454f57-5570-467b-a66d-afd30bd54b55"/>
 				<box>
-					<pen lineWidth="1.5"/>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField pattern="#### #### #### #### #### #### #### #### #### ####">
 					<reportElement x="142" y="55" width="289" height="17" uuid="364e5fb7-db8a-4473-a9e5-f1d145e10453">
@@ -1858,7 +1866,11 @@
 			<frame>
 				<reportElement x="454" y="61" width="448" height="138" uuid="84cf20db-b84d-454c-9362-21c69bed9308"/>
 				<box>
-					<pen lineWidth="1.5"/>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
 				</box>
 			</frame>
 			<staticText>

@@ -72,7 +72,8 @@ public class SifenTest {
         boolean contribuyente = true;
         String dv = "";
         
-        if (!data.getCliente().getRuc().contains("-")) {
+        if (!data.getCliente().getRuc().contains("-")
+        		|| data.getCliente().getRuc().equals(Configuracion.RUC_EMPRESA_LOCAL)) {
 			contribuyente = false;
 		} else {
 			dv = data.getCliente().getRuc().split("-")[1];
@@ -154,7 +155,7 @@ public class SifenTest {
 	        gDatRec.setiTiOpe(TiTiOpe.B2C);
 	        gDatRec.setcPaisRec(PaisType.PRY);
 	        gDatRec.setiTipIDRec(TiTipDocRec.CEDULA_PARAGUAYA);
-	        gDatRec.setdNumIDRec(data.getCliente().getRuc());
+	        gDatRec.setdNumIDRec(data.getCliente().getEmpresa().getCi());
 	        gDatRec.setdNomRec(data.getCliente().getRazonSocial());
 		} 
         gDatRec.setcDepRec(TDepartamento.CAPITAL);

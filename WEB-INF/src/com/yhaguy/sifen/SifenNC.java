@@ -77,7 +77,8 @@ public class SifenNC {
         boolean contribuyente = true;
         String dv = "";
         
-        if (!data.getCliente().getRuc().contains("-")) {
+        if (!data.getCliente().getRuc().contains("-")
+        		|| data.getCliente().getRuc().equals(Configuracion.RUC_EMPRESA_LOCAL)) {
 			contribuyente = false;
 		} else {
 			dv = data.getCliente().getRuc().split("-")[1];

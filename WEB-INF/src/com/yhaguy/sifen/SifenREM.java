@@ -87,7 +87,8 @@ public class SifenREM {
         boolean contribuyente = true;
         String dv = "";
         
-        if (!data.getVenta().getCliente().getRuc().contains("-")) {
+        if (!data.getVenta().getCliente().getRuc().contains("-")
+        		|| data.getVenta().getCliente().getRuc().equals(Configuracion.RUC_EMPRESA_LOCAL)) {
 			contribuyente = false;
 		} else {
 			dv = data.getVenta().getCliente().getRuc().split("-")[1];
