@@ -10,6 +10,9 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -849,6 +852,15 @@ public class Utiles {
 	 */
 	public static boolean containsOnlyNumbers(String str) {
         return str.matches("\\d+");
+    }
+	
+	/**
+	 * @return date to LocalDate
+	 */
+	public static LocalDate convertToLocalDate(Date date) {
+        Instant instant = date.toInstant();        
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();        
+        return localDate;
     }
 	
 	public static void mainX(String[] args) {		

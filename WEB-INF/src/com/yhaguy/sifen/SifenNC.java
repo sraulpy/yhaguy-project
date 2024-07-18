@@ -63,6 +63,7 @@ import com.yhaguy.Configuracion;
 import com.yhaguy.domain.NotaCredito;
 import com.yhaguy.domain.NotaCreditoDetalle;
 import com.yhaguy.domain.Venta;
+import com.yhaguy.util.Utiles;
 
 public class SifenNC {
 
@@ -240,8 +241,8 @@ public class SifenNC {
         gCamDEAsoc.setdPExpDocAso(venta.getNumero().split("-")[1]);
         gCamDEAsoc.setdNumDocAso(venta.getNumero().split("-")[2]);
         gCamDEAsoc.setiTipoDocAso(TiTIpoDoc.FACTURA);
-        gCamDEAsoc.setdFecEmiDI(isEmpresaYRSA() ? SifenParams.VIGENCIA_TEST_YRSA : SifenParams.VIGENCIA_TEST_GRPT);
-        gCamDEAsoc.setdNTimDI((isEmpresaYRSA() ? SifenParams.TIMBRADO_TEST_YRSA : SifenParams.TIMBRADO_TEST_GRPT) + "");
+        gCamDEAsoc.setdFecEmiDI(Utiles.convertToLocalDate(venta.getFecha()));
+        gCamDEAsoc.setdNTimDI(venta.getTimbrado());
         gCamDEAsocList.add(gCamDEAsoc);
         DE.setgCamDEAsocList(gCamDEAsocList);
 
