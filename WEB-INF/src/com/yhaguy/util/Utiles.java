@@ -247,6 +247,19 @@ public class Utiles {
 	}
 	
 	/**
+	 * @return la fecha de inicio de sifen..
+	 */
+	public static Date getFechaInicioSifen() throws Exception {
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRPS)) {
+			return Utiles.getFecha("01-07-2024 00:00:00");
+		}
+		if (Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA)) {
+			return Utiles.getFecha("01-07-2024 00:00:00");
+		}
+		return Utiles.getFecha("01-07-2024 00:00:00");
+	}
+	
+	/**
 	 * @return true si es despues del horario dado..
 	 */
 	public static boolean after(Date horario) {

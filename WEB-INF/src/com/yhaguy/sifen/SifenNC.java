@@ -235,7 +235,7 @@ public class SifenNC {
         
         List<TgCamDEAsoc> gCamDEAsocList = new ArrayList<TgCamDEAsoc>();
         TgCamDEAsoc gCamDEAsoc = new TgCamDEAsoc();
-        gCamDEAsoc.setiTipDocAso(TiTipDocAso.ELECTRONICO);
+        gCamDEAsoc.setiTipDocAso(this.getTipoDocAsociado(venta.getFecha()));
         gCamDEAsoc.setdCdCDERef(venta.getCdc());
         gCamDEAsoc.setdEstDocAso(venta.getNumero().split("-")[0]);
         gCamDEAsoc.setdPExpDocAso(venta.getNumero().split("-")[1]);
@@ -288,5 +288,19 @@ public class SifenNC {
 	
 	public boolean isEmpresaYRSA() {
 		return Configuracion.empresa.equals(Configuracion.EMPRESA_YRSA);
+	}
+	
+	/**
+	 * @return tipo doc asociado..
+	 */
+	public TiTipDocAso getTipoDocAsociado(Date fecha) {
+		try {
+			if (fecha.before(Utiles.getFechaInicioSifen())) {
+				return TiTipDocAso.IMPRESO;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return TiTipDocAso.ELECTRONICO;
 	}
 }
