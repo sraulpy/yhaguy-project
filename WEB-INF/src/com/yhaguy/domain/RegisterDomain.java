@@ -15747,7 +15747,7 @@ public class RegisterDomain extends Register {
 						query += " and a.id_familia = " + idFamilia + " ";
 					}
 					query += "and v.idtipomovimiento in (18,19) and v.idestadocomprobante is null " + "group by 1,2 "
-					+ "order by 3 desc";
+					+ "order by 3 desc limit 100";
 			System.out.println(query);
 			Session s = this.SESSIONgetSession();
 			s.beginTransaction();
