@@ -136,6 +136,7 @@
 				<zk forEach="${vm.menuItem(self,'NotaCreditoVenta','tipo=venta')}" />
 				<zk forEach="${vm.menuItem(self,'NotaDebito')}" />
 				<menuseparator />
+				<zk forEach="${vm.menuItem(self,'VentaRanking')}" />
 				<zk forEach="${vm.menuItem(self,'ListaPrecio')}" />
 				<zk forEach="${vm.menuItem(self,'VentaMeta')}" />
 				<zk forEach="${vm.menuItem(self,'PreparacionPedidos')}" />

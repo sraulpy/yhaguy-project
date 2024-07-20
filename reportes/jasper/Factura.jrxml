@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="ireport.zoom" value="1.3636363636363742"/>
 	<property name="ireport.x" value="275"/>
-	<property name="ireport.y" value="432"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -805,10 +805,10 @@
 					</textElement>
 					<textFieldExpression><![CDATA[($F{iNatRec} == 1?  "RUC: " +  $F{dRucRec}+ "-" + $F{dDVRec}  : "Documento de identidad:  "+ $F{dNumIDRec})]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="273" y="22" width="159" height="13" uuid="7a1d805e-61c3-40e3-9c7d-2bc0ef952988"/>
 					<textElement>
-						<font size="8"/>
+						<font size="6"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{dNomRec}]]></textFieldExpression>
 				</textField>
@@ -963,10 +963,10 @@
 					</textElement>
 					<textFieldExpression><![CDATA[($F{iNatRec} == 1?  "RUC: " +  $F{dRucRec}+ "-" + $F{dDVRec}  : "Documento de identidad:  "+ $F{dNumIDRec})]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="275" y="21" width="168" height="13" uuid="3b37f90d-9ae3-46b9-adc9-a0d6b3931ed3"/>
 					<textElement>
-						<font size="8"/>
+						<font size="6"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{dNomRec}]]></textFieldExpression>
 				</textField>

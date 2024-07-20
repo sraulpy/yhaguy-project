@@ -15688,6 +15688,78 @@ public class RegisterDomain extends Register {
 		return list;
 	}
 	
+	/**
+	 * @return ranking de clientes..
+	 */
+	public List<Object[]> getRankingClientes(Date desde, Date hasta, long idVendedor) {
+		List<Object[]> out = new ArrayList<>();
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		try {
+			String query = "with ncs as (select e.razonsocial as denominacion, e.ruc, sum(importegs) as importe "
+					+ "from notacredito n inner join cliente c on n.idcliente = c.id inner join empresa e on c.idempresa = e.id "
+					+ "where n.fechaemision >= '" + desde_ + "' and n.fechaemision <= '" + hasta_ + "' and n.idtipomovimiento = 20 "
+					+ "and n.idestadocomprobante != 218 group by 1,2) "
+					+ "select e.razonsocial, e.ruc, round(sum(v.totalimportegs) - COALESCE((select importe from ncs where denominacion = e.razonsocial),0.0)) as imp "
+					+ "from venta v inner join cliente c on v.idcliente = c.id inner join empresa e on c.idempresa = e.id "
+					+ "where v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta + "' ";
+					if (idVendedor > 0) {
+						query += " and v.idvendedor = " + idVendedor + " ";
+					}
+					query += "and v.idtipomovimiento in (18,19) and v.idestadocomprobante is null group by 1,2 order by 3 desc limit 100";
+			System.out.println(query);
+			Session s = this.SESSIONgetSession();
+			s.beginTransaction();
+			out = s.createSQLQuery(query).list();
+			s.getTransaction().commit();
+			s.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return out;
+	}
+	
+	/**
+	 * @return ranking de articulos..
+	 */
+	public List<Object[]> getRankingArticulos(Date desde, Date hasta, long idVendedor, long idFamilia) {
+		List<Object[]> out = new ArrayList<>();
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		try {
+			String query = "with ncs as (select a.codigointerno as codigo, a.descripcion, sum(d.montogs * d.cantidad) as importe "
+					+ "from notacredito n inner join cliente c on n.idcliente = c.id "
+					+ "inner join empresa e on c.idempresa = e.id "
+					+ "inner join notacreditodetalle d on d.idnotacredito = n.id "
+					+ "inner join articulo a on d.idarticulo = a.id "
+					+ "where n.fechaemision >= '" + desde_ + "' and n.fechaemision <= '" + hasta_ + "' and n.idtipomovimiento = 20 and n.idestadocomprobante != 218 "
+					+ "group by 1,2) "
+					+ "select a.codigointerno, a.descripcion, round(sum(d.preciogs * d.cantidad) - COALESCE((select importe from ncs where codigo = a.codigointerno),0.0)) as imp "
+					+ "from venta v " + "inner join cliente c on v.idcliente = c.id "
+					+ "inner join empresa e on c.idempresa = e.id " + "inner join ventadetalle d on d.venta = v.id "
+					+ "inner join articulo a on d.idarticulo = a.id "
+					+ "where v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta + "' ";
+					if (idVendedor > 0) {
+						query += " and v.idvendedor = " + idVendedor + " ";
+					}
+					if (idFamilia > 0) {
+						query += " and a.id_familia = " + idFamilia + " ";
+					}
+					query += "and v.idtipomovimiento in (18,19) and v.idestadocomprobante is null " + "group by 1,2 "
+					+ "order by 3 desc";
+			System.out.println(query);
+			Session s = this.SESSIONgetSession();
+			s.beginTransaction();
+			out = s.createSQLQuery(query).list();
+			s.getTransaction().commit();
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return out;
+	}
+	
 	public static void main(String[] args) {
 		try {
 		} catch (Exception e) {

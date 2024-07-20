@@ -1,0 +1,110 @@
+<window width="100%" height="100%" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.yhaguy.gestion.venta.ranking.RankingVentasVM')">
+
+		<tabbox vflex="1">
+			<tabs hflex="1">
+				<tab label="Ranking Por Clientes" width="25%"></tab>
+				<tab label="Ranking Por Productos" width="25%"></tab>
+			</tabs>
+			<tabpanels vflex="1">
+			
+				<tabpanel>
+				<hlayout sclass="button-container">
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="150px" iconSclass="z-icon-refresh" label=" Actualizar"
+						onClick="@command('loadRankingClientes')" />
+					<space></space>
+					<datebox placeholder="Desde"
+						value="@bind(vm.desde)"></datebox>
+					<space></space>
+					<datebox placeholder="Hasta"
+						value="@bind(vm.hasta)"></datebox>
+					<space></space>
+					<combobox placeholder="Vendedor"
+						model="@load(vm.vendedores)"
+						selectedItem="@bind(vm.vendedor)">
+						<template name="model">
+							<comboitem label="@load(each.razonSocial)"></comboitem>
+						</template>
+					</combobox>
+					<a iconSclass="z-icon-refresh"
+						onClick="@command('refreshVendedor')" disabled="@load(vm.vendedor eq null)"></a>
+				</hlayout>	
+				<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
+					mold="paging" autopaging="true"
+					model="@load(vm.rankingClientes)">
+					<listhead>
+						<listheader label="Número" width="100px" align="center"></listheader>
+						<listheader label="Denominación"></listheader>
+						<listheader label="Ruc"></listheader>
+						<listheader label="Importe" align="right"></listheader>
+					</listhead>
+					<template name="model" status="status">
+						<listitem>
+							<listcell label="@load(status.index + 1)"></listcell>
+							<listcell label="@load(each[0])"></listcell>
+							<listcell label="@load(each[1])"></listcell>
+							<listcell label="@load(each[2]) @converter(vm.cnv.monedaLocal)"></listcell>
+						</listitem>
+					</template>
+				</listbox>
+							
+				</tabpanel>		
+			
+				<tabpanel>
+				<hlayout sclass="button-container">
+					<button mold="bs" sclass="btn-success btn-sm"
+						width="150px" iconSclass="z-icon-refresh" label=" Actualizar"
+						onClick="@command('loadRankingArticulos')" />
+					<space></space>
+					<datebox placeholder="Desde"
+						value="@bind(vm.desde)"></datebox>
+					<space></space>
+					<datebox placeholder="Hasta"
+						value="@bind(vm.hasta)"></datebox>
+					<space></space>
+					<combobox placeholder="Vendedor"
+						model="@load(vm.vendedores)"
+						selectedItem="@bind(vm.vendedor)">
+						<template name="model">
+							<comboitem label="@load(each.razonSocial)"></comboitem>
+						</template>
+					</combobox>
+					<a iconSclass="z-icon-refresh"
+						onClick="@command('refreshVendedor')" disabled="@load(vm.vendedor eq null)"></a>
+					<space></space>
+					<combobox placeholder="Familia"
+						model="@load(vm.familias)"
+						selectedItem="@bind(vm.familia)">
+						<template name="model">
+							<comboitem label="@load(each.descripcion)"></comboitem>
+						</template>
+					</combobox>
+					<a iconSclass="z-icon-refresh"
+						onClick="@command('refreshFamilia')" disabled="@load(vm.familia eq null)"></a>
+				</hlayout>	
+				<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
+					mold="paging" autopaging="true"
+					model="@load(vm.rankingArticulos)">
+					<listhead>
+						<listheader label="Número" width="100px" align="center"></listheader>
+						<listheader label="Código"></listheader>
+						<listheader label="Descripción"></listheader>
+						<listheader label="Importe" align="right"></listheader>
+					</listhead>
+					<template name="model" status="status">
+						<listitem>
+							<listcell label="@load(status.index + 1)"></listcell>
+							<listcell label="@load(each[0])"></listcell>
+							<listcell label="@load(each[1])"></listcell>
+							<listcell label="@load(each[2]) @converter(vm.cnv.monedaLocal)"></listcell>
+						</listitem>
+					</template>
+				</listbox>
+							
+				</tabpanel>	
+				
+			</tabpanels>
+		</tabbox>
+
+</window>

@@ -55,7 +55,7 @@
 			lazy="false"/>
 			
 		<set name="solicitudCotizaciones" table="importacionpedidocompradetalle"
-			inverse="false" lazy="false" fetch="join" cascade="all">
+			inverse="false" lazy="false" fetch="select" cascade="all">
 			<key>
 				<column name="id_importacion" not-null="false"/>
 			</key>
@@ -63,7 +63,7 @@
 		</set>
 
 		<set name="importacionPedidoCompraDetalle" table="ImportacionPedidoCompraDetalle"
-			inverse="false" lazy="false" fetch="join" cascade="all">
+			inverse="false" lazy="false" fetch="select" cascade="all">
 			<key>
 				<column name="idImportacionPedidoCompra" not-null="false"/>
 			</key>
@@ -81,7 +81,7 @@
 		</set>
 		
 		<set name="gastosImprevistos" table="importaciongastoimprevisto" inverse="false"
-			lazy="false" fetch="join" cascade="all">
+			lazy="false" fetch="select" cascade="all">
 			<key>
 				<column name="idOrdenCompra" not-null="false"/>
 			</key>
@@ -89,7 +89,7 @@
 		</set>
 		
 		<set name="aplicacionAnticipos" table="importacion_aplicacion_anticipo" inverse="false"
-			lazy="false" fetch="join" cascade="all">
+			lazy="false" fetch="select" cascade="all">
 			<key>
 				<column name="id_importacion" not-null="false"/>
 			</key>
@@ -97,7 +97,7 @@
 		</set>
 		
 		<set name="trazabilidad" table="importacion_trazabilidad" inverse="false"
-			lazy="false" fetch="join" cascade="all">
+			lazy="false" fetch="select" cascade="all">
 			<key>
 				<column name="id_importacion" not-null="false"/>
 			</key>
