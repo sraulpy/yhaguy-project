@@ -7712,6 +7712,17 @@ public class RegisterDomain extends Register {
 	}
 	
 	/**
+	 * @return la lista de clientes segun razonsocial y ruc..
+	 */
+	public List<Object[]> getClientesByRazonSocial(String razonSocial, String ruc) throws Exception {
+		String query = "select c.id, c.empresa.ruc, c.empresa.razonSocial from Cliente c where lower(c.empresa.razonSocial) like '%"
+				+ razonSocial.toLowerCase() + "%' "
+				+ " and lower(c.empresa.ruc) like '%" + ruc.toLowerCase() + "%'"
+				+ " order by c.empresa.razonSocial";
+		return this.hqlLimit(query, 100);
+	}
+	
+	/**
 	 * @return la lista de clientes segun ruc..
 	 */
 	public List<Cliente> getClientesByRuc(String ruc) throws Exception {
@@ -15748,6 +15759,54 @@ public class RegisterDomain extends Register {
 					}
 					query += "and v.idtipomovimiento in (18,19) and v.idestadocomprobante is null " + "group by 1,2 "
 					+ "order by 3 desc limit 100";
+			System.out.println(query);
+			Session s = this.SESSIONgetSession();
+			s.beginTransaction();
+			out = s.createSQLQuery(query).list();
+			s.getTransaction().commit();
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return out;
+	}
+	
+	/**
+	 * @return ranking de clientes y articulos..
+	 */
+	public List<Object[]> getRankingClientesArticulos(Date desde, Date hasta, long idVendedor, long idFamilia, long idCliente) {
+		List<Object[]> out = new ArrayList<>();
+		String desde_ = misc.dateToString(desde, Misc.YYYY_MM_DD) + " 00:00:00";
+		String hasta_ = misc.dateToString(hasta, Misc.YYYY_MM_DD) + " 23:59:00";
+		try {
+			String query = "with ncs as (select e.razonsocial as denominacion, e.ruc, sum(n.importegs) as importe  "
+					+ "from notacredito n inner join cliente c on n.idcliente = c.id "
+					+ "inner join empresa e on c.idempresa = e.id "
+					+ "where n.fechaemision >= '" + desde_ + "' and n.fechaemision <= '" + hasta_ + "' and n.idtipomovimiento = 20 and n.idestadocomprobante != 218 "
+					+ "group by 1,2), "
+					+ "vtas as (select e.razonsocial as denominacion, e.ruc, sum(v.totalimportegs) as importe " 
+					+ "from venta v inner join cliente c on v.idcliente = c.id " 
+					+ "inner join empresa e on c.idempresa = e.id " 
+					+ "where v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta_ + "' and v.idtipomovimiento in (18,19) and v.idestadocomprobante is null " 
+					+ "group by 1,2) "
+					+ "select e.razonsocial, a.codigointerno, a.descripcion, round(sum(d.preciogs * d.cantidad)) as imp, "
+					+ "round(COALESCE((select importe from vtas where denominacion = e.razonsocial),0.0) - COALESCE((select importe from ncs where denominacion = e.razonsocial),0.0)) "
+					+ "from venta v " + "inner join cliente c on v.idcliente = c.id "
+					+ "inner join empresa e on c.idempresa = e.id " 
+					+ "inner join ventadetalle d on d.venta = v.id "
+					+ "inner join articulo a on d.idarticulo = a.id "
+					+ "where v.fecha >= '" + desde_ + "' and v.fecha <= '" + hasta + "' ";
+					if (idVendedor > 0) {
+						query += " and v.idvendedor = " + idVendedor + " ";
+					}
+					if (idFamilia > 0) {
+						query += " and a.id_familia = " + idFamilia + " ";
+					}
+					if (idCliente > 0) {
+						query += " and v.idcliente = " + idCliente + " ";
+					}
+					query += "and v.idtipomovimiento in (18,19) and v.idestadocomprobante is null " + "group by 1,2,3 "
+					+ "order by 5 desc, 4 desc limit 300";
 			System.out.println(query);
 			Session s = this.SESSIONgetSession();
 			s.beginTransaction();

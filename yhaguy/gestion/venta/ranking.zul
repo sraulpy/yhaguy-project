@@ -5,6 +5,7 @@
 			<tabs hflex="1">
 				<tab label="Ranking Por Clientes" width="25%"></tab>
 				<tab label="Ranking Por Productos" width="25%"></tab>
+				<tab label="Ranking Por Clientes / Productos" width="25%"></tab>
 			</tabs>
 			<tabpanels vflex="1">
 			
@@ -29,6 +30,9 @@
 					</combobox>
 					<a iconSclass="z-icon-refresh"
 						onClick="@command('refreshVendedor')" disabled="@load(vm.vendedor eq null)"></a>
+					<space hflex="1"></space>
+						<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-download"
+							onClick="@command('exportRankingClientes')"></button>
 				</hlayout>	
 				<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
 					mold="paging" autopaging="true"
@@ -82,6 +86,9 @@
 					</combobox>
 					<a iconSclass="z-icon-refresh"
 						onClick="@command('refreshFamilia')" disabled="@load(vm.familia eq null)"></a>
+					<space hflex="1"></space>
+						<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-download"
+							onClick="@command('exportRankingArticulos')"></button>
 				</hlayout>	
 				<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
 					mold="paging" autopaging="true"
@@ -103,6 +110,104 @@
 				</listbox>
 							
 				</tabpanel>	
+				
+				<tabpanel>
+					<hlayout sclass="button-container">
+						<button mold="bs" sclass="btn-success btn-sm"
+							width="150px" iconSclass="z-icon-refresh" label=" Actualizar"
+							onClick="@command('loadRankingClientesArticulos')" />
+						<space></space>
+						<datebox placeholder="Desde"
+							value="@bind(vm.desde)">
+						</datebox>
+						<space></space>
+						<datebox placeholder="Hasta"
+							value="@bind(vm.hasta)">
+						</datebox>
+						<space></space>
+						<combobox placeholder="Vendedor"
+							model="@load(vm.vendedores)" selectedItem="@bind(vm.vendedor)">
+							<template name="model">
+								<comboitem
+									label="@load(each.razonSocial)">
+								</comboitem>
+							</template>
+						</combobox>
+						<a iconSclass="z-icon-refresh"
+							onClick="@command('refreshVendedor')"
+							disabled="@load(vm.vendedor eq null)">
+						</a>
+						<space></space>
+						<combobox placeholder="Familia"
+							model="@load(vm.familias)" selectedItem="@bind(vm.familia)">
+							<template name="model">
+								<comboitem
+									label="@load(each.descripcion)">
+								</comboitem>
+							</template>
+						</combobox>
+						<a iconSclass="z-icon-refresh"
+							onClick="@command('refreshFamilia')"
+							disabled="@load(vm.familia eq null)">
+						</a>
+						<space></space>
+						<bandbox placeholder="Cliente" readonly="true"
+							value="@load(vm.cliente[2])" id="bndCli">
+							<bandpopup>
+								<listbox width="400px" rows="8" sclass="small-list"
+									model="@load(vm.clientes)"
+									selectedItem="@bind(vm.cliente)" onSelect='bndCli.close()'
+									emptyMessage="SIN REGISTROS">
+									<listhead>
+										<listheader width="30%">
+											<textbox placeholder="Ruc"
+												value="@bind(vm.filterRuc)" onOK="@command('refreshFilter')"
+												hflex="1"></textbox>
+										</listheader>
+										<listheader>
+											<textbox placeholder="Razón Social"
+												value="@bind(vm.filterRazonSocial)" onOK="@command('refreshFilter')"
+												hflex="1"></textbox>
+										</listheader>
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell label="@load(each[1])"></listcell>
+											<listcell label="@load(each[2])"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</bandpopup>
+						</bandbox>
+						<a iconSclass="z-icon-refresh"
+							onClick="@command('refreshCliente')"
+							disabled="@load(vm.cliente eq null)">
+						</a>
+						<space hflex="1"></space>
+						<button mold="bs" sclass="btn-sm btn-primary" iconSclass="z-icon-download"
+							onClick="@command('exportRankingClientesArticulos')"></button>
+					</hlayout>
+					<listbox sclass="rounded" vflex="1" emptyMessage="SIN REGISTROS"
+						mold="paging" autopaging="true"
+						model="@load(vm.rankingClientesArticulos)">
+					<listhead>
+						<listheader label="Cliente"></listheader>
+						<listheader label="Número" width="100px" align="center"></listheader>
+						<listheader label="Código"></listheader>
+						<listheader label="Descripción"></listheader>
+						<listheader label="Importe" align="right"></listheader>
+					</listhead>
+					<template name="model" status="status">
+						<listitem>
+							<listcell label="@load(each[0])" style="background:beige"></listcell>
+							<listcell label="@load(status.index + 1)"></listcell>							
+							<listcell label="@load(each[1])"></listcell>
+							<listcell label="@load(each[2])"></listcell>
+							<listcell label="@load(each[3]) @converter(vm.cnv.monedaLocal)"></listcell>
+						</listitem>
+					</template>
+					</listbox>
+				</tabpanel>
 				
 			</tabpanels>
 		</tabbox>
