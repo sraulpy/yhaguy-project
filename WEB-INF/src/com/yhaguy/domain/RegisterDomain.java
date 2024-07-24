@@ -9093,7 +9093,7 @@ public class RegisterDomain extends Register {
 					String emiHasta_ = Utiles.getDateToString(emisionHasta, Misc.YYYY_MM_DD) + " 23:59:00";
 					query += " and (c.emision >= '" + emiDesde_ + "' and c.emision <= '" + emiHasta_ + "')";
 				}
-				query += " order by c.fecha, c.emision";
+				query += " order by c.fecha desc, c.emision desc";
 		return limit ? this.hqlLimit(query, 300) : this.hql(query);
 	}
 	
