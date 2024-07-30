@@ -15,15 +15,17 @@
 				<row>
 					<vlayout spacing="0">
 						<field value="Tipo Movimiento" />
-						<label value="@load(vm.labelTipoMovimiento[0])"
-							style="@load(vm.labelTipoMovimiento[1])" />
+						<hlayout valign="top">
+							<label value="@load(vm.labelTipoMovimiento[0])"
+							style="@load(vm.labelTipoMovimiento[1])" />							
+						</hlayout>						
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Número" />
 						<hlayout valign="top">
 						<textbox id="txNro" readonly="true"
 							value="@bind(vm.dto.numero)"
-							hflex="true"/>
+							hflex="1"/>
 						<button mold="bs" id="btn_edit" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 							onClick="@command('modificarNumero', comp1=self, comp2=btn_edit_)"
@@ -34,10 +36,10 @@
 						</hlayout>
 					</vlayout>
 					<vlayout spacing="0">
-						<field value="Emisión" />
+						<field value="Emisión / Vencimiento" />
 						<hlayout>
 						<datebox id="dtFecha" value="@bind(vm.dto.fecha)"
-							readonly="true" hflex="true" />
+							readonly="true" hflex="true" format="dd-MM-yy" />
 						<button mold="bs" id="btn_editf" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 							onClick="@command('modificarFecha', comp1=self, comp2=btn_editf_)"
@@ -45,12 +47,7 @@
 						<button mold="bs" id="btn_editf_" iconSclass="z-icon-pencil" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 							onClick="dtFecha.setReadonly(false); dtFecha.setButtonVisible(true); dtFecha.focus(); btn_editf.setVisible(true); self.setVisible(false)"
 							sclass="btn-xs btn-info" width="30px"></button>
-						</hlayout>
-					</vlayout>
-					<vlayout spacing="0">
-						<field value="Vencimiento" />
-						<hlayout>
-						<datebox id="dtVto" value="@bind(vm.dto.vencimiento)" hflex="true" readonly="true" />
+						<datebox id="dtVto" value="@bind(vm.dto.vencimiento)" hflex="true" readonly="true" format="dd-MM-yy" />
 						<button mold="bs" id="btn_editV_" iconSclass="z-icon-check"
 							visible="false" disabled="@load(!vm.isOperacionHabilitada('ModificarRecibo'))"
 							onClick="@command('modificarVencimiento', comp1=self, comp2=btn_editV)"
@@ -59,6 +56,16 @@
 							onClick="dtVto.setReadonly(false); dtVto.setButtonVisible(true); dtVto.focus(); btn_editV_.setVisible(true); self.setVisible(false)"
 							sclass="btn-xs btn-info" width="30px"></button>
 						</hlayout>
+					</vlayout>
+					<vlayout spacing="0">
+						<field value="Tipo Transacción" />
+						<combobox value="@load(vm.dto.tipoTransaccion)" hflex="1"
+							model="@load(vm.tiposTransacciones)"
+							selectedItem="@bind(vm.dto.tipoTransaccion)">
+							<template name="model">
+								<comboitem label="@load(each)"></comboitem>	
+							</template>
+						</combobox>
 					</vlayout>
 					<vlayout spacing="0">
 						<field value="Sucursal / Depósito" />
@@ -331,6 +338,9 @@
 				iconSclass="z-icon-plus-circle"
 				visible="@load(!vm.presupuesto)" label=" Mercaderías Usadas" 
 				onClick='pop_usados.open(self, "after_end")'/>
+			<button mold="bs" sclass="btn-primary btn-sm" iconSclass="z-icon-download"
+				tooltiptext="Descargar en Excel"
+				disabled="@load(!vm.siempreHabilitado)"></button>
 		</hlayout>
 
 		<!-- ______________________________ DETALLE ______________________________ -->
@@ -406,7 +416,7 @@
 						<doublebox hflex="true" vflex="true"
 							value="@bind(each.precioGs)"
 							format="###,###,###,##0"
-							readonly="${!vm.operacionHabilitada('ModificarPrecioVenta')}"
+							readonly="@load(!vm.isOperacionHabilitada('ModificarPrecioVenta'))"
 							visible="@load(vm.ventaMonedaLocal)"
 							onChange="@command('refresh')" >
 						</doublebox>						

@@ -74,6 +74,8 @@ public class VentaDTO extends DTO {
 	private String numeroPlanillaCaja = "";
 	private String numeroReparto = "";
 	
+	private String tipoTransaccion = Venta.TIPO_TRANSACCION_VTA_MERCADERIAS;
+	
 	private List<String> numerosFacturas = new ArrayList<String>();
 	private List<SaldoVale> valesGenerados = new ArrayList<SaldoVale>();
 	
@@ -1060,5 +1062,13 @@ public class VentaDTO extends DTO {
 
 	public void setDebitoGroupauto(boolean debitoGroupauto) {
 		this.debitoGroupauto = debitoGroupauto;
+	}
+
+	public String getTipoTransaccion() {
+		return tipoTransaccion;
+	}
+
+	public void setTipoTransaccion(String tipoTransaccion) {
+		this.tipoTransaccion = tipoTransaccion;
 	}
 }

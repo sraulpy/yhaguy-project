@@ -707,6 +707,7 @@ public class VentaControlBody extends BodyApp {
 		out.setChapaVehiculo(desde.getChapaVehiculo());
 		out.setDenominacion(desde.isDebitoGroupauto() ? out.getCliente().getPos2() + "" : desde.getDenominacion());
 		out.setNumeroPlanillaCaja(numeroPlanillaCaja);
+		out.setTipoTransaccion(desde.getTipoTransaccion());
 		out.setPreparadoPor(desde.getPreparadoPor());
 		out.setTimbrado(timbrado);
 		out.setVehiculoTipo(desde.getVehiculoTipo());
@@ -2276,6 +2277,13 @@ public class VentaControlBody extends BodyApp {
 	 */
 	public List<String> getFormasEntrega() {
 		return Venta.getFormasEntrega();
+	}
+	
+	/**
+	 * @return tipos transacciones..
+	 */
+	public List<String> getTiposTransacciones() {
+		return Venta.getTiposTransacciones();
 	}
 	
 	/**

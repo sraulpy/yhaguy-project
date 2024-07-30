@@ -16,6 +16,7 @@ import org.zkoss.bind.annotation.DependsOn;
 
 import com.coreweb.domain.Domain;
 import com.coreweb.domain.Tipo;
+import com.roshka.sifen.core.types.TTipTra;
 import com.yhaguy.Configuracion;
 import com.yhaguy.util.Utiles;
 
@@ -33,6 +34,9 @@ public class Venta extends Domain {
 	public static final String FORMA_ENTREGA_DELIVERY = "DELIVERY";
 	
 	public static final String MERCADERIAS_USADAS = "MERC.USADAS";
+	
+	public static final String TIPO_TRANSACCION_VTA_MERCADERIAS = "VENTA MERCADERIAS";
+	public static final String TIPO_TRANSACCION_ANTICIPO = "ANTICIPO";
 
 	/** Presupuesto o Pedido */
 	private TipoMovimiento tipoMovimiento;
@@ -116,6 +120,8 @@ public class Venta extends Domain {
 	private String numeroReciboCobro;
 	private String numeroPlanillaCaja;
 	private String numeroReparto;
+	
+	private String tipoTransaccion;
 	
 	/** Modos de venta: ej. 'venta mostrador', 'venta externa', otros */
 	private Tipo modoVenta;
@@ -659,6 +665,29 @@ public class Venta extends Domain {
 		return out;
 	}
 	
+	/**
+	 * @return los tipos de transacciones..
+	 */
+	public static List<String> getTiposTransacciones() {
+		List<String> out = new ArrayList<String>();
+		out.add(TIPO_TRANSACCION_VTA_MERCADERIAS);
+		out.add(TIPO_TRANSACCION_ANTICIPO);
+		return out;
+	}
+	
+	/**
+	 * @return el tipo de transaccion
+	 */
+	public TTipTra getTipoTransaccionSifen() {
+		switch (this.tipoTransaccion) {
+		case TIPO_TRANSACCION_VTA_MERCADERIAS:
+			return TTipTra.VENTA_MERCADERIA;
+		case TIPO_TRANSACCION_ANTICIPO:
+			return TTipTra.ANTICIPO;
+		}
+		return null;
+	}
+	
 	public void setDescripcionTipoMovimiento(String descripcion) {
 	}
 	
@@ -1154,5 +1183,13 @@ public class Venta extends Domain {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getTipoTransaccion() {
+		return tipoTransaccion;
+	}
+
+	public void setTipoTransaccion(String tipoTransaccion) {
+		this.tipoTransaccion = tipoTransaccion;
 	}
 }

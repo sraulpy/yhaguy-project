@@ -105,7 +105,7 @@ public class SifenTest {
         dDatGralOpe.setdFeEmiDE(currentDate);
 
         TgOpeCom gOpeCom = new TgOpeCom();
-        gOpeCom.setiTipTra(TTipTra.VENTA_MERCADERIA);
+        gOpeCom.setiTipTra(data.getTipoTransaccionSifen());
         gOpeCom.setiTImp(TTImp.IVA);
         gOpeCom.setcMoneOpe(CMondT.PYG);
         if (data.getMoneda().getId().longValue() != Configuracion.ID_MONEDA_GUARANIES) {

@@ -40,6 +40,8 @@
 		<property name="observacionSET"/>
 		<property name="url"/>
 		
+		<property name="tipoTransaccion" />
+		
 		<property name="validez">
 			<column name="validez" default="0" />
 		</property>

@@ -27,7 +27,7 @@ public class AssemblerVenta extends Assembler {
 			"timbrado", "tipoCambio", "observacion", "preparadoPor", "numeroPresupuesto", "numeroPedido",
 			"numeroFactura", "numeroPlanillaCaja", "totalImporteGs", "totalImporteDs", "reparto", "puntoPartida",
 			"fechaTraslado", "fechaFinTraslado", "repartidor", "cedulaRepartidor", "marcaVehiculo", "chapaVehiculo",
-			"denominacion", "validez", "formaEntrega", "cartera", "numeroReparto", "debitoGroupauto" };
+			"denominacion", "validez", "formaEntrega", "cartera", "numeroReparto", "debitoGroupauto", "tipoTransaccion" };
 
 	private static String[] attCliente = { "codigoEmpresa", "razonSocial", "ruc", "idEmpresa", "tipoCliente",
 			"direccion", "telefono", "nombreFantasia", "cuentaBloqueada", "nombre", "ventaCredito", "limiteCredito",
