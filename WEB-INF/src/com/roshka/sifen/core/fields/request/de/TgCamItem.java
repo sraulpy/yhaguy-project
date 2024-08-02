@@ -93,7 +93,6 @@ public class TgCamItem extends SifenObjectBase {
             gCamItem.addChildElement("dPorQuiMer").setTextContent(String.valueOf(this.dPorQuiMer));
 
         if ((iTipTra != null && iTipTra.getVal() == 9) || this.dCDCAnticipo != null)
-            gCamItem.addChildElement("dCDCAnticipo").setTextContent(this.dCDCAnticipo);
         	System.out.println("anticipo");
         	//gCamItem.addChildElement("dCDCAnticipo").setTextContent(this.dCDCAnticipo);
     
