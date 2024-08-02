@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="NotaDeDebito" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ef5a6b1-b7e0-4139-8c18-7c72bbfd7642">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src/DE/NotaDebito.xml"/>
 	<property name="ireport.zoom" value="1.9487171000000014"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="129"/>
+	<property name="ireport.y" value="672"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -1118,40 +1118,31 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<staticText>
-					<reportElement x="148" y="60" width="45" height="20" uuid="0eaa7753-c681-4a99-8245-cd9e8f7fa0b9">
+					<reportElement x="148" y="45" width="31" height="20" uuid="0eaa7753-c681-4a99-8245-cd9e8f7fa0b9">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
-						<font size="11"/>
+						<font size="10"/>
 					</textElement>
 					<text><![CDATA[CDC: ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="148" y="107" width="352" height="15" uuid="d4453e60-9b5d-41b2-bded-b2a4a0c3aa0a">
+					<reportElement x="148" y="10" width="404" height="17" uuid="1a4c2b98-c791-4925-93b6-3397ed6c692e">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					</reportElement>
 					<textElement>
-						<font size="9"/>
+						<font size="10"/>
 					</textElement>
-					<text><![CDATA[Informacion de interes del facturador electronico emisor]]></text>
+					<text><![CDATA[Consulte la validez de esta Nota de Crédito Electrónica con el número de CDC]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="148" y="10" width="404" height="30" uuid="1a4c2b98-c791-4925-93b6-3397ed6c692e">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
-					</reportElement>
-					<textElement>
-						<font size="11"/>
-					</textElement>
-					<text><![CDATA[Consulte la validez de esta Nota de Crédito Electrónica con el número de CDC impreso abajo en:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="148" y="42" width="303" height="15" uuid="3cce0000-f600-4692-9932-ec3e7af81222">
+					<reportElement x="148" y="29" width="303" height="15" uuid="3cce0000-f600-4692-9932-ec3e7af81222">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					</reportElement>
 					<textElement>
-						<font size="11"/>
+						<font size="10"/>
 					</textElement>
 					<text><![CDATA[https://ekuatia.set.gov.py/consultas]]></text>
 				</staticText>
@@ -1177,21 +1168,54 @@
 )]]></imageExpression>
 				</image>
 				<textField>
-					<reportElement x="179" y="60" width="295" height="20" uuid="418c3c6c-64df-4445-a0c0-47fcb96a26fe">
+					<reportElement x="179" y="45" width="373" height="20" uuid="418c3c6c-64df-4445-a0c0-47fcb96a26fe">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e983057f-222d-422b-bd60-858cc93e6cf1"/>
 					</reportElement>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="11"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Id} .replaceAll("(?s).{4}(?!$)", "$0 ");]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="148" y="82" width="400" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="03a9e2f0-005d-4dc3-893c-5284fa441999"/>
+					<reportElement x="148" y="65" width="404" height="19" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="03a9e2f0-005d-4dc3-893c-5284fa441999"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["ESTE DOCUMENTO ES UNA REPRESENTACIÓN GRÁFICA DE UN DOCUMENTO ELECTRÓNICO (XML)"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Este documento es una representación gráfica de un Documento Electrónico (XML)"]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="148" y="97" width="122" height="15" uuid="43b7be53-760d-41c0-97e9-8454a5240031">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<text><![CDATA[Firma del Cliente: ____________]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="279" y="97" width="122" height="15" uuid="08fe9537-1156-477c-b40d-c765403d7de5">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<text><![CDATA[C.I. del Cliente: ____________]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="419" y="97" width="122" height="15" uuid="27a9b025-1bd5-475a-a7cb-bceeeab86e01">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<text><![CDATA[Aclaración: ____________]]></text>
+				</staticText>
 			</frame>
 			<textField>
 				<reportElement x="1" y="198" width="555" height="12" uuid="0a6db1fd-0ad9-4c01-9289-ba264f2be22f"/>

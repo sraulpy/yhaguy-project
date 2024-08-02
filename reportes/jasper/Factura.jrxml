@@ -10,8 +10,8 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="ireport.zoom" value="1.3636363636363742"/>
-	<property name="ireport.x" value="275"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="25"/>
+	<property name="ireport.y" value="429"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -1516,21 +1516,21 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField pattern="#### #### #### #### #### #### #### #### #### ####">
-					<reportElement x="142" y="55" width="289" height="17" uuid="364e5fb7-db8a-4473-a9e5-f1d145e10453">
+					<reportElement x="130" y="55" width="301" height="17" uuid="364e5fb7-db8a-4473-a9e5-f1d145e10453">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Id} .replaceAll("(?s).{4}(?!$)", "$0 ");]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="106" y="55" width="41" height="17" uuid="65fc93ba-e57d-4cb1-9c21-e93ca359a4b5">
+					<reportElement x="106" y="55" width="24" height="17" uuid="65fc93ba-e57d-4cb1-9c21-e93ca359a4b5">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="8"/>
 					</textElement>
 					<text><![CDATA[CDC: ]]></text>
 				</staticText>
@@ -1567,7 +1567,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="10"/>
+					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Consulte la validez de esta Factura Electrónica con el número de CDC.]]></text>
 			</staticText>
@@ -1578,7 +1578,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="10"/>
+					<font size="8"/>
 				</textElement>
 				<text><![CDATA[https://ekuatia.set.gov.py/consultas]]></text>
 			</staticText>
@@ -1879,7 +1879,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="10"/>
+					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Consulte la validez de esta Factura Electrónica con el número de CDC.]]></text>
 			</staticText>
@@ -1899,7 +1899,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="10"/>
+					<font size="8"/>
 				</textElement>
 				<text><![CDATA[https://ekuatia.set.gov.py/consultas]]></text>
 			</staticText>
@@ -1944,11 +1944,11 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#### #### #### #### #### #### #### #### #### ####">
-				<reportElement x="598" y="116" width="300" height="17" uuid="71b91095-2c27-4488-a63c-af80d9db9188">
+				<reportElement x="585" y="116" width="313" height="17" uuid="71b91095-2c27-4488-a63c-af80d9db9188">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Id} .replaceAll("(?s).{4}(?!$)", "$0 ");]]></textFieldExpression>
 			</textField>
@@ -1970,12 +1970,12 @@
 				<textFieldExpression><![CDATA["Este documento es una representación gráfica de un Documento Electrónico (XML)"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="557" y="116" width="41" height="17" uuid="04dc445b-3c78-4f25-a8d8-b08c308b9bf8">
+				<reportElement x="557" y="116" width="28" height="17" uuid="04dc445b-3c78-4f25-a8d8-b08c308b9bf8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="8"/>
 				</textElement>
 				<text><![CDATA[CDC: ]]></text>
 			</staticText>
