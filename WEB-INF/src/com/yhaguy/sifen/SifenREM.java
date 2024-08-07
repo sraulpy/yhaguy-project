@@ -130,7 +130,7 @@ public class SifenREM {
         gCamNRE.setiMotEmiNR(TiMotivTras.TRASLADO_POR_VENTAS);
         gCamNRE.setiRespEmiNR(TiRespEmiNR.EMISOR_FACTURA);
         gCamNRE.setdKmR(10);
-        gCamNRE.setdFecEm(LocalDate.parse(Utiles.getDateToString(new Date(), "yyyy-MM-dd")));
+        gCamNRE.setdFecEm(LocalDate.parse(Utiles.getDateToString(data.getFecha(), "yyyy-MM-dd")));
 
         TgEmis gEmis = new TgEmis();
         gEmis.setdRucEm(isEmpresaYRSA() ? SifenParams.YRSA_RUC_EMI : SifenParams.GRPT_RUC_EMI);
