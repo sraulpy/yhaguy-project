@@ -209,7 +209,7 @@ public class SifenREM {
 
         TgPagCred gPagCred = new TgPagCred();
         gPagCred.setiCondCred(TiCondCred.PLAZO);
-        gPagCred.setdPlazoCre("30 días");
+        gPagCred.setdPlazoCre(Utiles.getCantidadDias(data.getVenta().getFecha(), data.getVenta().getVencimiento()) + " días");
 
         gCamCond.setgPagCred(gPagCred);
         gDtipDE.setgCamCond(gCamCond);
@@ -259,8 +259,8 @@ public class SifenREM {
         gTransp.setiTipTrans(TiTTrans.PROPIO);
         gTransp.setiModTrans(TiModTrans.TERRESTRE);
         gTransp.setiRespFlete(TiRespFlete.EMISOR_FACTURA_ELECTRONICA);
-        gTransp.setdIniTras(LocalDate.parse(Utiles.getDateToString(new Date(), "yyyy-MM-dd")));
-        gTransp.setdFinTras(LocalDate.parse(Utiles.getDateToString(new Date(), "yyyy-MM-dd")));
+        gTransp.setdIniTras(LocalDate.parse(Utiles.getDateToString(data.getFecha(), "yyyy-MM-dd")));
+        gTransp.setdFinTras(LocalDate.parse(Utiles.getDateToString(data.getFecha(), "yyyy-MM-dd")));
         
         TgCamSal gCamSal = new TgCamSal();
         gCamSal.setdDirLocSal(isEmpresaYRSA() ? SifenParams.YRSA_DIR_EMI : SifenParams.GRPT_DIR_EMI);
