@@ -10,8 +10,8 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="ireport.zoom" value="1.3636363636363742"/>
-	<property name="ireport.x" value="25"/>
-	<property name="ireport.y" value="429"/>
+	<property name="ireport.x" value="13"/>
+	<property name="ireport.y" value="141"/>
 	<parameter name="ambiente" class="java.lang.String">
 		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
 	</parameter>
@@ -405,6 +405,7 @@
 	</field>
 	<field name="fsc" class="java.lang.String"/>
 	<field name="tc" class="java.lang.String"/>
+	<field name="vencimiento" class="java.lang.String"/>
 	<group name="dCodInt">
 		<groupExpression><![CDATA[$F{dCodInt}]]></groupExpression>
 	</group>
@@ -820,7 +821,7 @@
 					<textFieldExpression><![CDATA[$F{dTelRec}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="221" y="22" width="38" height="13" uuid="c188d8e9-cc07-4026-aa55-17392ac08084"/>
+					<reportElement x="221" y="22" width="52" height="13" uuid="c188d8e9-cc07-4026-aa55-17392ac08084"/>
 					<textElement>
 						<font size="8" isBold="false"/>
 					</textElement>
@@ -886,7 +887,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement>
-					<font size="8"/>
+					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dDirRec}]]></textFieldExpression>
 			</textField>
@@ -978,7 +979,7 @@
 					<textFieldExpression><![CDATA[$F{dTelRec}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="223" y="21" width="47" height="13" uuid="26762e8f-31dc-4a27-bd0e-39a31db79f5a"/>
+					<reportElement x="223" y="21" width="53" height="13" uuid="26762e8f-31dc-4a27-bd0e-39a31db79f5a"/>
 					<textElement>
 						<font size="8" isBold="false"/>
 					</textElement>
@@ -1093,7 +1094,7 @@
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<textElement>
-						<font size="8"/>
+						<font size="6"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{dDirRec}]]></textFieldExpression>
 				</textField>
@@ -1516,7 +1517,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField pattern="#### #### #### #### #### #### #### #### #### ####">
-					<reportElement x="130" y="55" width="301" height="17" uuid="364e5fb7-db8a-4473-a9e5-f1d145e10453">
+					<reportElement x="130" y="47" width="301" height="17" uuid="364e5fb7-db8a-4473-a9e5-f1d145e10453">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
@@ -1525,7 +1526,7 @@
 					<textFieldExpression><![CDATA[$F{Id} .replaceAll("(?s).{4}(?!$)", "$0 ");]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="106" y="55" width="24" height="17" uuid="65fc93ba-e57d-4cb1-9c21-e93ca359a4b5">
+					<reportElement x="106" y="47" width="24" height="17" uuid="65fc93ba-e57d-4cb1-9c21-e93ca359a4b5">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					</reportElement>
@@ -1541,7 +1542,7 @@
 					<textElement>
 						<font size="6"/>
 					</textElement>
-					<text><![CDATA[ Si su documento electrónico tiene algún error, solicitar la modificación dentro de las 72 hs siguientes de la emisión.]]></text>
+					<text><![CDATA[ Si su documento electrónico tiene algún error, solicitar la modificación dentro de las 48 hs siguientes de la emisión.]]></text>
 				</staticText>
 				<image scaleImage="FillFrame" isLazy="true" onErrorType="Blank" evaluationTime="Report">
 					<reportElement x="8" y="22" width="88" height="89" printWhenGroupChanges="dCodInt" uuid="4cebc4fc-9070-493e-86ab-7e5cee408c10">
@@ -1552,13 +1553,22 @@
 					new com.google.zxing.qrcode.QRCodeWriter().encode($F{dCarQR}, com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
 				</image>
 				<textField>
-					<reportElement x="106" y="75" width="325" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="daaf26f1-465b-4327-95cb-b003fcf1af1b">
+					<reportElement x="106" y="67" width="325" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="daaf26f1-465b-4327-95cb-b003fcf1af1b">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Este documento es una representación gráfica de un Documento Electrónico (XML)"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report" pattern="dd/MM/yyyy h:mm:ss" isBlankWhenNull="true">
+					<reportElement x="164" y="85" width="102" height="13" uuid="9771df3a-3110-4d8e-a2be-4a7dd411b993">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vencimiento}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>
@@ -1705,7 +1715,7 @@
 				<textFieldExpression><![CDATA[$F{dTotDesc}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="107" y="162" width="115" height="15" uuid="cd076be0-1301-47cf-acf7-877e046ab07e">
+				<reportElement x="107" y="164" width="115" height="15" uuid="cd076be0-1301-47cf-acf7-877e046ab07e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -1716,7 +1726,7 @@
 				<text><![CDATA[Firma del Cliente: ____________]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="162" width="110" height="15" uuid="a1b3c0c2-1ce4-41d4-8327-b0254e270730">
+				<reportElement x="222" y="164" width="110" height="15" uuid="a1b3c0c2-1ce4-41d4-8327-b0254e270730">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -1727,7 +1737,7 @@
 				<text><![CDATA[C.I. del Cliente:____________]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="333" y="162" width="102" height="15" uuid="71bde550-0930-4c92-b89b-d3849fd5128a">
+				<reportElement x="333" y="164" width="102" height="15" uuid="71bde550-0930-4c92-b89b-d3849fd5128a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -1872,9 +1882,18 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textField evaluationTime="Report" pattern="dd/MM/yyyy h:mm:ss" isBlankWhenNull="true">
+					<reportElement x="161" y="84" width="102" height="13" uuid="e518cbde-89a6-45b9-8d29-af302df2f921">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vencimiento}]]></textFieldExpression>
+				</textField>
 			</frame>
 			<staticText>
-				<reportElement x="557" y="74" width="342" height="15" uuid="828ea55a-0cc2-43ad-9eed-20337b57a65c">
+				<reportElement x="558" y="74" width="342" height="15" uuid="828ea55a-0cc2-43ad-9eed-20337b57a65c">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1890,7 +1909,7 @@
 				<textElement>
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[ Si su documento electrónico tiene algún error, solicitar la modificación dentro de las 72 hs siguientes de la emisión.]]></text>
+				<text><![CDATA[ Si su documento electrónico tiene algún error, solicitar la modificación dentro de las 48 hs siguientes de la emisión.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="557" y="91" width="184" height="15" uuid="104283ad-0a25-4eac-8d60-11a99d8d7f62">
@@ -1944,7 +1963,7 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#### #### #### #### #### #### #### #### #### ####">
-				<reportElement x="585" y="116" width="313" height="17" uuid="71b91095-2c27-4488-a63c-af80d9db9188">
+				<reportElement x="585" y="108" width="313" height="17" uuid="71b91095-2c27-4488-a63c-af80d9db9188">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -1961,7 +1980,7 @@
 					new com.google.zxing.qrcode.QRCodeWriter().encode($F{dCarQR}, com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="557" y="136" width="339" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="918429bb-f679-4090-bcb9-c6f9465e267a">
+				<reportElement x="557" y="128" width="339" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="918429bb-f679-4090-bcb9-c6f9465e267a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -1970,7 +1989,7 @@
 				<textFieldExpression><![CDATA["Este documento es una representación gráfica de un Documento Electrónico (XML)"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="557" y="116" width="28" height="17" uuid="04dc445b-3c78-4f25-a8d8-b08c308b9bf8">
+				<reportElement x="557" y="108" width="28" height="17" uuid="04dc445b-3c78-4f25-a8d8-b08c308b9bf8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
@@ -1978,6 +1997,28 @@
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[CDC: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="107" y="145" width="57" height="15" uuid="f9e5bf79-a39f-4bb8-b6b6-a36402623afb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Vencimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="558" y="144" width="57" height="15" uuid="ac515aa2-c06a-4759-a7eb-5bb548cd69f8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f58474-1738-49aa-a73d-37a6cbf3d577"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Vencimiento:]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

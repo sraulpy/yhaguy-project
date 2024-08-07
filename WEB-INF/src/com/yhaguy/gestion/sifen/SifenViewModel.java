@@ -385,12 +385,12 @@ public class SifenViewModel extends SimpleViewModel {
 	private void generarPDFFE(Venta bean) {
 		try {
 			String path = SifenParams.PATH_FACTURAS + bean.getNumero() + ".xml";
-			
+			String vencimiento = bean.isVentaContado() ? "" : Utiles.getDateToString(bean.getVencimiento(), "dd-MM-yyyy");
 			
 			String xml = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			DocumentoElectronico DE = new DocumentoElectronico(xml);
 			DE.setEnlaceQR(Utiles.parseXML(path, "dCarQR"));
-			JRDataSource dataSource = new FacturaDataSource(DE);
+			JRDataSource dataSource = new FacturaDataSource(DE, vencimiento);
 
 			String root = Sessions.getCurrent().getWebApp().getRealPath("/");
 
@@ -415,7 +415,7 @@ public class SifenViewModel extends SimpleViewModel {
 			String xml = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			DocumentoElectronico DE = new DocumentoElectronico(xml);
 			DE.setEnlaceQR(Utiles.parseXML(path, "dCarQR"));
-			JRDataSource dataSource = new FacturaDataSource(DE);
+			JRDataSource dataSource = new FacturaDataSource(DE, "");
 
 			String root = Sessions.getCurrent().getWebApp().getRealPath("/");
 
@@ -440,7 +440,7 @@ public class SifenViewModel extends SimpleViewModel {
 			String xml = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			DocumentoElectronico DE = new DocumentoElectronico(xml);
 			DE.setEnlaceQR(Utiles.parseXML(path, "dCarQR"));
-			JRDataSource dataSource = new FacturaDataSource(DE);
+			JRDataSource dataSource = new FacturaDataSource(DE, "");
 
 			String root = Sessions.getCurrent().getWebApp().getRealPath("/");
 
@@ -500,13 +500,15 @@ public class SifenViewModel extends SimpleViewModel {
 
 		DocumentoElectronico DE;		
 		String dCuotas = "1"; 
-		String dPlazoCre = "30 días"; 
+		String dPlazoCre = ""; 
+		String vencimiento = "";
 		
 		List<TgCamItem> detalle = new ArrayList<TgCamItem>();
 
-		public FacturaDataSource(DocumentoElectronico DE) {
+		public FacturaDataSource(DocumentoElectronico DE, String vencimiento) {
 			this.DE = DE; 
 			this.detalle = this.DE.getgDtipDE().getgCamItemList();
+			this.vencimiento = vencimiento;
 		}
 
 		private int index = -1;		
@@ -744,7 +746,9 @@ public class SifenViewModel extends SimpleViewModel {
 				value = this.DE.getgCamDEAsocList().get(0).getdNumDocAso();
 			}  else if ("fsc".equals(fieldName)) {
 				value = this.DE.getFsc();
-			}    
+			}  else if ("vencimiento".equals(fieldName)) {
+				value = this.vencimiento;
+			}     
 			return value;           
 		}
 

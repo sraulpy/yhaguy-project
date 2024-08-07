@@ -60,6 +60,7 @@ import com.roshka.sifen.internal.ctx.GenerationCtx;
 import com.yhaguy.Configuracion;
 import com.yhaguy.domain.Venta;
 import com.yhaguy.domain.VentaDetalle;
+import com.yhaguy.util.Utiles;
 
 public class SifenTest {
 
@@ -197,7 +198,7 @@ public class SifenTest {
 
         TgPagCred gPagCred = new TgPagCred();
         gPagCred.setiCondCred(TiCondCred.PLAZO);
-        gPagCred.setdPlazoCre("30 días");
+        gPagCred.setdPlazoCre(Utiles.getCantidadDias(data.getFecha(), data.getVencimiento()) + " días"); 
 
         gCamCond.setgPagCred(gPagCred);
         gDtipDE.setgCamCond(gCamCond);
@@ -430,7 +431,7 @@ public class SifenTest {
 
         TgPagCred gPagCred = new TgPagCred();
         gPagCred.setiCondCred(TiCondCred.PLAZO);
-        gPagCred.setdPlazoCre("30 días");
+        gPagCred.setdPlazoCre(Utiles.getCantidadDias(data.getFecha(), data.getVencimiento()) + " días");
 
         gCamCond.setgPagCred(gPagCred);
         gDtipDE.setgCamCond(gCamCond);

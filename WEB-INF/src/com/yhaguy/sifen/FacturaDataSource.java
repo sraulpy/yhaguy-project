@@ -25,7 +25,7 @@ public class FacturaDataSource implements JRDataSource {
 	String iNatRec = "2"; String dRucRec = "";
 	String dDVRec = ""; String dNumIDRec = "4579993";
 	String dNomRec = "Martin Zarza"; String iCondCred = "1";
-	String dCuotas = "1"; String dPlazoCre = "30 días";
+	String dCuotas = "1"; String dPlazoCre = "";
 	String dDirRec = ""; int iCondOpe = 2; 
 	String dDCondCred = "Plazo"; String cMoneOpe = "PYG";
 	String dTelRec = ""; String dDesTipTra = "Venta de mercadería";

@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -875,6 +876,16 @@ public class Utiles {
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();        
         return localDate;
     }
+	
+	/**
+	 * @return cantidad dias..
+	 */
+	public static long getCantidadDias(Date inicio, Date fin) {
+		LocalDate startDate = Instant.ofEpochMilli(inicio.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate endDate = Instant.ofEpochMilli(fin.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+		return daysBetween;
+	}
 	
 	public static void mainX(String[] args) {		
 		JSONParser parser = new JSONParser();

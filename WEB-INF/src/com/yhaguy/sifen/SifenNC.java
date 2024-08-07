@@ -200,7 +200,7 @@ public class SifenNC {
 
         TgPagCred gPagCred = new TgPagCred();
         gPagCred.setiCondCred(TiCondCred.PLAZO);
-        gPagCred.setdPlazoCre("30 días");
+        gPagCred.setdPlazoCre(Utiles.getCantidadDias(data.getFechaEmision(), data.getFechaEmision()) + " días");
 
         gCamCond.setgPagCred(gPagCred);
         gDtipDE.setgCamCond(gCamCond);
